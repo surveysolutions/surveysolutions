@@ -144,8 +144,14 @@
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
     <value>{0} Assignment(s) are going to be changed</value>
   </data>
+  <data name="SelectResponsible" xml:space="preserve">
+    <value>Select responsible</value>
+  </data>
   <data name="ShowArchived" xml:space="preserve">
     <value>Archived status</value>
+  </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>Unarchive</value>
   </data>
   <data name="Unlimited" xml:space="preserve">
     <value>Unlimited</value>

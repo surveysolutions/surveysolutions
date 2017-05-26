@@ -33,10 +33,12 @@ export default {
   },
   methods: {
     reload: function (data) {
-      this.table.ajax.data = data;
+      this.table.ajax.data = data
+      this.table.rows().deselect();
       this.table.ajax.reload()
     },
     onTableInitComplete: function () {
+      var self = this;
       $(this.$el).parent('.dataTables_wrapper').find('.dataTables_filter label').on('click', function (e) {
         if (e.target !== this)
           return;
@@ -45,6 +47,22 @@ export default {
         }
         else {
           $(this).addClass("active");
+          $(this).children("input[type='search']").delay(200).queue(function () { $(this).focus(); $(this).dequeue(); });
+        }
+      });
+      var firstHeader = this.table.column(0).header();
+      $(firstHeader).html('<input class="double-checkbox" id="check-all" type="checkbox">' +
+        '<label for="check-all">' +
+        '<span class="tick"></span>' +
+        '</label>')
+      $('#check-all').change(function () {
+        if (!this.checked) {
+          self.table.rows().deselect()
+          $(self.table.rows).find(".checkbox-filter").prop('checked', false)
+        }
+        else {
+          self.table.rows().select()
+          $(self.table.rows).find(".checkbox-filter").prop('checked', true)
         }
       });
     }
@@ -76,11 +94,11 @@ export default {
 
     this.table = $(this.$el).DataTable(options)
     this.table.on('init.dt', this.onTableInitComplete);
-    this.table.on('select', function(e, dt, type, indexes){
-        self.$emit('select', e, dt, type, indexes)
+    this.table.on('select', function (e, dt, type, indexes) {
+      self.$emit('select', e, dt, type, indexes)
     });
-    this.table.on('deselect', function(e, dt, type, indexes){
-        self.$emit('deselect', e, dt, type, indexes)
+    this.table.on('deselect', function (e, dt, type, indexes) {
+      self.$emit('deselect', e, dt, type, indexes)
     });
     this.$emit('DataTableRef', this.table)
   },
