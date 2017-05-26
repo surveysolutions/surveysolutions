@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
 
 		public bool IsAnswered(RosterVector answer) => answer != null;
 
-		public bool IsAnswered(YesNoAnswers answer) => !(answer.Yes.Length == 0 && answer.No.Length == 0);
+		public bool IsAnswered(YesNoAndAnswersMissings answer) => !(answer.Yes.Length == 0 && answer.No.Length == 0);
 
 		public ");
             

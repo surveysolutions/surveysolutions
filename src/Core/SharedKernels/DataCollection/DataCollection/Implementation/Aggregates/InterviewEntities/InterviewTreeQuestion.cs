@@ -303,7 +303,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             
             var options = sourceNodes
                 .Where(x => !x.IsDisabled())
-                .Where(x => (x as InterviewTreeQuestion)?.IsAnswered() ?? true)
+                .Where(x => (x as InterviewTreeQuestion)?.IsAnswered() ?? !string.IsNullOrWhiteSpace((x as InterviewTreeRoster)?.RosterTitle))
                 .Select(x => new LinkedOptionAndParent {
                     Option = x.Identity.RosterVector,
                     ParenRoster = x is InterviewTreeRoster? x.Identity : x.Parents.LastOrDefault(p => p is InterviewTreeRoster)?.Identity

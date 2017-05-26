@@ -4,7 +4,6 @@ using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.Services;
 
 namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
