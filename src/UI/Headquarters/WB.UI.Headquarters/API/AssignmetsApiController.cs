@@ -84,9 +84,11 @@ namespace WB.UI.Headquarters.API
             return this.Ok();
         }
 
+        [HttpPost]
+        [Route("Assign")]
         public IHttpActionResult Assign([FromBody] AssignRequest request)
         {
-            foreach (var idToAssign in request.ids)
+            foreach (var idToAssign in request.Ids)
             {
                 Assignment assignment = this.assignmentsStorage.GetById(idToAssign);
                 assignment.Reassign(request.ResponsibleId);
@@ -99,7 +101,7 @@ namespace WB.UI.Headquarters.API
         {
             public Guid ResponsibleId { get; set; }
 
-            public int[] ids { get; set; }
+            public int[] Ids { get; set; }
         }
 
         public class AssignmetsDataTableResponse : DataTableResponse<AssignmentRow>
