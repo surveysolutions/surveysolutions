@@ -42,10 +42,11 @@ export default {
         if (e.target !== this)
           return;
         if ($(this).hasClass("active")) {
-          $(this).removeClass("active");
+            $(this).removeClass("active");
         }
         else {
-          $(this).addClass("active");
+            $(this).addClass("active");
+            $(this).children("input[type='search']").delay(200).queue(function () { $(this).focus(); $(this).dequeue(); });
         }
       });
     }
