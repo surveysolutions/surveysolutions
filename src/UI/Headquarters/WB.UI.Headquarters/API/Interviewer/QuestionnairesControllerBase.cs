@@ -79,7 +79,6 @@ namespace WB.UI.Headquarters.API.Interviewer
                 return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
             }
 
-
             JsonSerializerSettings JsonSerializerSettingsNewToOld = new JsonSerializerSettings()
             {
                 TypeNameHandling = TypeNameHandling.Objects,
@@ -100,7 +99,8 @@ namespace WB.UI.Headquarters.API.Interviewer
             };
 
             var response = this.Request.CreateResponse(resultValue);
-            response.Headers.CacheControl = new CacheControlHeaderValue()
+
+            response.Headers.CacheControl = new CacheControlHeaderValue
             {
                 Public = true,
                 MaxAge = TimeSpan.FromDays(10)

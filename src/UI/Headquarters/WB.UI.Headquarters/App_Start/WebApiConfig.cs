@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.API.Interviewer;
+using WB.UI.Headquarters.API.Interviewer.v2;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters
@@ -119,6 +120,7 @@ namespace WB.UI.Headquarters
                 c => c.Action<InterviewsApiV2Controller>(x => x.PostImage(Param.Any<PostFileRequest>())));
             config.TypedRoute("api/interviewer/v2/attachments/{id}",
                 c => c.Action<AttachmentsApiV2Controller>(x => x.GetAttachmentContent(Param.Any<string>())));
+            config.TypedRoute("api/interviewer/v2/assignments", c => c.Action<AssignmentsController>(x => x.List()));
         }
         #pragma warning restore 4014
     }

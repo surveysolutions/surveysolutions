@@ -593,6 +593,9 @@ for further instructions</value>
   </data>
   <data name="Synchronization_Check_Obsolete_Questionnaires" xml:space="preserve">
     <value>Check for obsolete questionnaires</value>
+  </data>  
+  <data name="Synchronization_Of_Assignments" xml:space="preserve">
+    <value>Check for new assignments</value>
   </data>
   <data name="Synchronization_Check_Obsolete_Questionnaires_Description" xml:space="preserve">
     <value>Removing {0} questionnaire out of {1}</value>

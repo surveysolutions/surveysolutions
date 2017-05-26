@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
@@ -29,6 +30,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual int? Capacity { get; protected set; }
 
+        public virtual long Completed { get; protected set; }
+
         public virtual bool Archived { get; protected set; }
 
         public virtual DateTime CreatedAtUtc { get; protected set; }
@@ -38,6 +41,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public virtual QuestionnaireIdentity QuestionnaireId { get; set; }
 
         public virtual IList<IdentifyingAnswer> IdentifyingData { get; protected set; }
+
+        public virtual ISet<InterviewSummary>InterviewSummaries { get; protected set; }
 
         public virtual void Archive()
         {
@@ -51,6 +56,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.UpdatedAtUtc = DateTime.UtcNow;
         }
 
+        public virtual void UpdateCompletedCount(long count)
+        {
+            this.Completed = count;
+            this.UpdatedAtUtc = DateTime.UtcNow;
+        }
+
         public virtual void Reassign(Guid responsibleId)
         {
             this.ResponsibleId = responsibleId;
@@ -60,6 +71,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public virtual void SetAnswers(IList<IdentifyingAnswer> identifyingAnswers)
         {
             IdentifyingData = identifyingAnswers;
+            this.UpdatedAtUtc = DateTime.UtcNow;
+        }
+
+        public virtual void Unarchive()
+        {
+            this.Archived = false;
             this.UpdatedAtUtc = DateTime.UtcNow;
         }
     }
