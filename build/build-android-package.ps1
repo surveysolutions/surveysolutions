@@ -98,14 +98,11 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
 							  "/v:m",
 							  "/nologo",
 							  "/p:CodeContractsRunCodeAnalysis=false",
-							  "/p:DefineConstants=""EXCLUDEEXTENSIONS""",
+							  "/p:DefineConstants=|"EXCLUDEEXTENSIONS|"",
 							  "/p:Configuration=$BuildConfiguration")	
 	    	
-	    $params = "$AndroidProject /t:PackageForAndroid /v:m /nologo /p:CodeContractsRunCodeAnalysis=false /p:Configuration=$BuildConfiguration /p:DefineConstants=`"EXCLUDEEXTENSIONS`""
-				
-		Write-Host "##teamcity[message text='Building with args : $collectionOfArgs]"
-		
-	    $expression = (GetPathToMSBuild) + " $AndroidProject /t:PackageForAndroid /v:m /nologo /p:CodeContractsRunCodeAnalysis=false /p:Configuration=$BuildConfiguration /p:DefineConstants=""EXCLUDEEXTENSIONS"""
+	    
+	    $expression = """ + (GetPathToMSBuild) + """ $AndroidProject /t:PackageForAndroid /v:m /nologo /p:CodeContractsRunCodeAnalysis=false /p:Configuration=$BuildConfiguration /p:DefineConstants=""EXCLUDEEXTENSIONS"""
 		
 		Write-Host "##teamcity[message text='Building with args : $expression]"
 		
