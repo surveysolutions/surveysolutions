@@ -635,7 +635,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 // too much
                 IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
                 var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
-                expressionStorage.Initialize(new InterviewStateForExpressions(this.tree, interviewPropertiesForExpressions));
+                expressionStorage.Initialize(new InterviewStateForExpressions(this.tree, questionnaire, interviewPropertiesForExpressions));
                 var question = this.tree.GetQuestion(questionIdentity);
                 var nearestRoster = question.Parents.OfType<InterviewTreeRoster>().LastOrDefault()?.Identity ?? new Identity(this.QuestionnaireIdentity.QuestionnaireId, RosterVector.Empty);
                 var level = expressionStorage.GetLevel(nearestRoster);
@@ -2351,7 +2351,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
                 var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
-                expressionStorage.Initialize(new InterviewStateForExpressions(changedInterviewTree, interviewPropertiesForExpressions));
+                expressionStorage.Initialize(new InterviewStateForExpressions(changedInterviewTree, questionnaire, interviewPropertiesForExpressions));
 
                 var playOrder = questionnaire.GetExpressionsPlayOrder();
                 var questionnaireLevelIdentity = new Identity(this.QuestionnaireIdentity.QuestionnaireId, RosterVector.Empty);
@@ -2387,6 +2387,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                 List<Identity> disabledChildNodes = (entity as InterviewTreeGroup).DisableChildNodes();
                                 disabledChildNodes.ForEach(x => disabledNodes.Add(x));
                             }
+                        }
+
+                        if (entity is InterviewTreeRoster)
+                        {
+                            var roster = entity as InterviewTreeRoster;
+                            roster.UpdateRosterTitle((questionId, answerOptionValue) => questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title);
                         }
 
                         if (entity is InterviewTreeQuestion)

@@ -108,10 +108,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private Dictionary<Guid, List<Guid>> BuildRosterDependencies(QuestionnaireDocument questionnaire)
         {
-            return questionnaire.Find<Group>(x => x.IsRoster && x.RosterSizeSource == RosterSizeSourceType.Question)
-                .Where(x => x.RosterSizeQuestionId.HasValue)
-                .GroupBy(x => x.RosterSizeQuestionId.Value)
-                .ToDictionary(x => x.Key, x => x.Select(r => r.PublicKey).ToList());
+            var rosterDependencies = 
+                (questionnaire.Find<Group>(x => x.IsRoster && x.RosterSizeSource == RosterSizeSourceType.Question)
+                    .Where(x => x.RosterSizeQuestionId.HasValue)
+                    .Select(x => new { Key = x.RosterSizeQuestionId.Value, Value = x.PublicKey }))
+                .Union(questionnaire
+                    .Find<Group>(x => x.IsRoster && x.RosterSizeSource == RosterSizeSourceType.Question)
+                    .Where(x => x.RosterTitleQuestionId.HasValue)
+                    .Select(x => new { Key = x.RosterTitleQuestionId.Value, Value = x.PublicKey }))
+                .GroupBy(x => x.Key)
+                .ToDictionary(x => x.Key, x => x.Select(r => r.Value).ToList());
+
+            return rosterDependencies;
         }
 
         public Dictionary<Guid, List<Guid>> BuildConditionalDependencies(QuestionnaireDocument questionnaireDocument)
