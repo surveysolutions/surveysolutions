@@ -62,5 +62,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             IdentifyingData = identifyingAnswers;
             this.UpdatedAtUtc = DateTime.UtcNow;
         }
+
+        public virtual void Unarchive()
+        {
+            this.Archived = false;
+            this.UpdatedAtUtc = DateTime.UtcNow;
+        }
     }
 }

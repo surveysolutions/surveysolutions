@@ -160,6 +160,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unarchive.
+        /// </summary>
+        public static string Unarchive {
+            get {
+                return ResourceManager.GetString("Unarchive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unlimited.
         /// </summary>
         public static string Unlimited {

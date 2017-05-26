@@ -150,6 +150,9 @@
   <data name="ShowArchived" xml:space="preserve">
     <value>Archived status</value>
   </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>Unarchive</value>
+  </data>
   <data name="Unlimited" xml:space="preserve">
     <value>Unlimited</value>
   </data>

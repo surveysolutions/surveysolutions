@@ -84,10 +84,26 @@ namespace WB.UI.Headquarters.API
             return this.Ok();
         }
 
+        [Route("Unarchive")]
+        [HttpPost]
+        public IHttpActionResult Unarchive([FromBody]int[] ids)
+        {
+            if (ids == null) return this.BadRequest();
+
+            foreach (var id in ids)
+            {
+                Assignment assignment = this.assignmentsStorage.GetById(id);
+                assignment.Unarchive();
+            }
+
+            return this.Ok();
+        }
+
         [HttpPost]
         [Route("Assign")]
         public IHttpActionResult Assign([FromBody] AssignRequest request)
         {
+            if (request?.Ids == null) return this.BadRequest();
             foreach (var idToAssign in request.Ids)
             {
                 Assignment assignment = this.assignmentsStorage.GetById(idToAssign);

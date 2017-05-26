@@ -115,66 +115,74 @@
                 isLoading: false,
                 tableOptions: tableOptions,
                 selectedRows: [],
-                showArchive: "false",
+                showArchive: false,
                 newResponsibleId: null
             },
             methods: {
-                addParamsToRequest: function (requestData) {
+                addParamsToRequest: function(requestData) {
                     requestData.responsibleId = (this.responsibleId || {}).key;
                     requestData.questionnaireId = (this.questionnaireId || {}).key;
                     requestData.showArchive = this.showArchive;
                 },
-                responseProcessor: function (response) {
+                responseProcessor: function(response) {
                     this.isLoading = false;
                 },
-                userSelected: function (newValue) {
+                userSelected: function(newValue) {
                     this.responsibleId = newValue;
                 },
-                questionnaireSelected: function (newValue) {
+                questionnaireSelected: function(newValue) {
                     this.questionnaireId = newValue;
                 },
-                newResponsibleSelected: function (newValue) {
+                newResponsibleSelected: function(newValue) {
                     this.newResponsibleId = newValue;
                 },
-                startWatchers: function (props, watcher) {
-                    var iterator = function (prop) {
+                startWatchers: function(props, watcher) {
+                    var iterator = function(prop) {
                         this.$watch(prop, watcher);
                     };
                     props.forEach(iterator, this);
                 },
-                reloadTable: function () {
+                reloadTable: function() {
                     var self = this;
                     this.isLoading = true;
                     this.selectedRows.splice(0, this.selectedRows.length);
                     this.$refs.table.reload(self.reloadTable);
                 },
-                removeSelected: function () {
+                archiveSelected: function() {
                     this.$http.delete(assignmentsEndpoint,
                             {
                                 body: this.selectedRows
                             })
-                        .then(function () {
+                        .then(function() {
                             this.reloadTable();
                         });
                 },
-                assignSelected: function () {
+                unarchiveSelected: function() {
+                    this.$http.post(assignmentsEndpoint + "/Unarchive",
+                            this.selectedRows
+                        )
+                        .then(function() {
+                            this.reloadTable();
+                        });
+                },
+                assignSelected: function() {
                     $('#assignModal').modal({
                         keyboard: false
                     });
                 },
-                assign: function () {
+                assign: function() {
                     this.$http.post(assignmentsEndpoint + "/Assign",
                         {
                             responsibleId: this.newResponsibleId.key,
                             ids: this.selectedRows
-                        }).then(function () {
-                            $('#assignModal').modal('hide');
-                            this.newResponsibleId = null;
-                            this.reloadTable();
-                        });
+                        }).then(function() {
+                        $('#assignModal').modal('hide');
+                        this.newResponsibleId = null;
+                        this.reloadTable();
+                    });
                 }
             },
-            mounted: function () {
+            mounted: function() {
                 var self = this;
                 document.querySelector("main").classList.remove("hold-transition");
                 document.querySelector("footer").classList.add("footer-adaptive");
@@ -182,20 +190,20 @@
                 this.startWatchers(['responsibleId', 'questionnaireId', 'showArchive'], this.reloadTable.bind(self));
                 this.reloadTable();
                 this.$refs.table.$on('select',
-                    function (e, dt) {
+                    function(e, dt) {
                         if (dt.id) {
                             self.selectedRows.push(parseInt(dt.id()));
                         }
                     });
                 this.$refs.table.$on('deselect',
-                    function (e, dt) {
+                    function(e, dt) {
                         if (dt.id) Vue.set(self, "selectedRows", _.without(self.selectedRows, parseInt(dt.id())));
                     });
                 $('.ddl').selectpicker('refresh');
             }
         });
 
-        window.onload = function () {
+        window.onload = function() {
             Vue.http.headers.common['Authorization'] = input.settings.acsrf.token;
 
             app.$mount('#app');
@@ -269,8 +277,9 @@
                                 <span class="tick"></span>
                                 @string.Format(Assignments.AssignmentsSelected, "{{selectedRows.length}}")
                             </label>
-                            <button class="btn btn-lg btn-primary" v-on:click="assignSelected">@Common.Assign</button>
-                            <button class="btn btn-lg btn-danger" v-on:click="removeSelected">@Assignments.Archive</button>
+                            <button class="btn btn-lg btn-primary" v-if="showArchive" v-on:click="unarchiveSelected">@Assignments.Unarchive</button>
+                            <button class="btn btn-lg btn-primary" v-if="!showArchive" v-on:click="assignSelected">@Common.Assign</button>
+                            <button class="btn btn-lg btn-danger" v-if="!showArchive" v-on:click="archiveSelected">@Assignments.Archive</button>
                         </div>
                     </div>
                 </div>

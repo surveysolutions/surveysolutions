@@ -150,6 +150,9 @@
   <data name="ShowArchived" xml:space="preserve">
     <value>Статус</value>
   </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>Разархивировать</value>
+  </data>
   <data name="Unlimited" xml:space="preserve">
     <value>Не ограничено</value>
   </data>
