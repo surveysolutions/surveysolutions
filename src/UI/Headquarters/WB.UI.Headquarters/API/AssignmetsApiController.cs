@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -13,18 +14,24 @@ namespace WB.UI.Headquarters.API
 {
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     [CamelCase]
+    [RoutePrefix("api/Assignments")]
     public class AssignmetsApiController : ApiController
     {
         private readonly IAssignmentViewFactory assignmentViewFactory;
         private readonly IAuthorizedUser authorizedUser;
+        private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
 
         public AssignmetsApiController(IAssignmentViewFactory assignmentViewFactory,
-            IAuthorizedUser authorizedUser)
+            IAuthorizedUser authorizedUser,
+            IPlainStorageAccessor<Assignment> assignmentsStorage)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.authorizedUser = authorizedUser;
+            this.assignmentsStorage = assignmentsStorage;
         }
         
+        [Route("")]
+        [HttpGet]
         public IHttpActionResult Get([FromUri]AssignmentsDataTableRequest request)
         {
             QuestionnaireIdentity questionnaireIdentity = null;
@@ -41,7 +48,8 @@ namespace WB.UI.Headquarters.API
                 SearchBy = request.Search.Value,
                 QuestionnaireId = questionnaireIdentity?.QuestionnaireId,
                 QuestionnaireVersion = questionnaireIdentity?.Version,
-                ResponsibleId = request.ResponsibleId
+                ResponsibleId = request.ResponsibleId,
+                ShowArchive = request.ShowArchive
             };
 
             if (this.authorizedUser.IsSupervisor)
@@ -60,6 +68,40 @@ namespace WB.UI.Headquarters.API
             return this.Ok(response);
         }
 
+        
+        [Route("")]
+        [HttpDelete]
+        public IHttpActionResult Delete([FromBody]int[] ids)
+        {
+            if (ids == null) return this.BadRequest();
+
+            foreach (var id in ids)
+            {
+                Assignment assignment = this.assignmentsStorage.GetById(id);
+                assignment.Archive();
+            }
+
+            return this.Ok();
+        }
+
+        public IHttpActionResult Assign([FromBody] AssignRequest request)
+        {
+            foreach (var idToAssign in request.ids)
+            {
+                Assignment assignment = this.assignmentsStorage.GetById(idToAssign);
+                assignment.Reassign(request.ResponsibleId);
+            }
+
+            return this.Ok();
+        }
+
+        public class AssignRequest
+        {
+            public Guid ResponsibleId { get; set; }
+
+            public int[] ids { get; set; }
+        }
+
         public class AssignmetsDataTableResponse : DataTableResponse<AssignmentRow>
         {
         }
@@ -68,6 +110,8 @@ namespace WB.UI.Headquarters.API
         {
             public string QuestionnaireId { get; set; }
             public Guid? ResponsibleId { get; set; }
+
+            public bool ShowArchive { get; set; }
         }
     }
 }
