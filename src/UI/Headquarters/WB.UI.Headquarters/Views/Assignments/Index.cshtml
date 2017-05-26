@@ -7,6 +7,15 @@
 
 @section scripts
 {
+    <style>
+        .modal {
+            overflow: visible;
+        }
+
+        .modal-body {
+            overflow-y: visible !important;
+        }
+    </style>
     @Scripts.Render("~/js/common")
     @Scripts.Render("~/js/assignments")
 
@@ -114,7 +123,8 @@
                 isLoading: false,
                 tableOptions: tableOptions,
                 selectedRows: [],
-                showArchive: "false"
+                showArchive: "false",
+                newResponsibleId: null
             },
             methods: {
                 addParamsToRequest: function(requestData) {
@@ -131,13 +141,17 @@
                 questionnaireSelected: function(newValue) {
                     this.questionnaireId = newValue;
                 },
+                newResponsibleSelected: function(newValue) {
+                    this.newResponsibleId = newValue;
+                },
                 startWatchers: function(props, watcher) {
                     var iterator = function(prop) {
                         this.$watch(prop, watcher);
                     };
                     props.forEach(iterator, this);
                 },
-                reloadTable: function() {
+                reloadTable: function () {
+                    var self = this;
                     this.isLoading = true;
                     this.selectedRows.splice(0, this.selectedRows.length);
                     this.$refs.table.reload(self.reloadTable);
@@ -155,6 +169,17 @@
                     $('#assignModal').modal({
                         keyboard: false
                     });
+                },
+                assign: function() {
+                    this.$http.post(assignmentsEndpoint + "/Assign",
+                        {
+                            responsibleId: this.newResponsibleId.key,
+                            ids: this.selectedRows
+                        }).then(function() {
+                        $('#assignModal').modal('hide');
+                        this.newResponsibleId = null;
+                        this.reloadTable();
+                    });
                 }
             },
             mounted: function() {
@@ -166,11 +191,13 @@
                 this.reloadTable();
                 this.$refs.table.$on('select',
                     function(e, dt) {
-                        self.selectedRows.push(parseInt(dt.id()));
+                        if (dt.id) {
+                            self.selectedRows.push(parseInt(dt.id()));
+                        }
                     });
                 this.$refs.table.$on('deselect',
                     function(e, dt) {
-                        Vue.set(self, "selectedRows", _.without(self.selectedRows, parseInt(dt.id())));
+                        if (dt.id) Vue.set(self, "selectedRows", _.without(self.selectedRows, parseInt(dt.id())));
                     });
                 $('.ddl').selectpicker('refresh');
             }
@@ -180,7 +207,7 @@
             Vue.http.headers.common['Authorization'] = input.settings.acsrf.token;
 
             app.$mount('#app');
-            
+
         }
     </script>
 }
@@ -215,8 +242,8 @@
                                    :value="responsibleId"
                                    :ajax-params="{ }"
                                    v-on:selected="userSelected"
-                                   fetch-url="@(Model.IsSupervisor ? 
-                                                    Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"}) : 
+                                   fetch-url="@(Model.IsSupervisor ?
+                                                    Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"}) :
                                                     Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"}))"></typeahead>
                     </div>
                     <div class="block-filter">
@@ -242,14 +269,14 @@
                                            :response-processor="responseProcessor"
                                            :table-options="tableOptions"></assignments-table>
                     </div>
-                    
+
                     <div class="panel panel-table" v-if="selectedRows.length">
                         <div class="panel-body">
                             <input class="double-checkbox-white" type="checkbox" checked="" disabled>
                             <label>
-                                <span class="tick"></span> 
+                                <span class="tick"></span>
                                 @string.Format(Assignments.AssignmentsSelected, "{{selectedRows.length}}")
-                            </label> 
+                            </label>
                             <button class="btn btn-lg btn-primary" v-on:click="assignSelected">@Common.Assign</button>
                             <button class="btn btn-lg btn-danger" v-on:click="removeSelected">@Assignments.Archive</button>
                         </div>
@@ -268,18 +295,20 @@
                 <div class="modal-body">
                     <h3>@string.Format(Assignments.NumberOfAssignmentsAffected, "{{selectedRows.length}}")</h3>
                     <p>
+                        Select new responsible
                         <typeahead placeholder="@Common.Responsible"
-                                   control-id="responsibleId"
-                                   :value="responsibleId"
+                                   control-id="newResponsibleId"
+                                   :value="newResponsibleId"
                                    :ajax-params="{ }"
-                                   v-on:selected="userSelected"
+                                   v-on:selected="newResponsibleSelected"
                                    fetch-url="@(Model.IsSupervisor ?
                                                     Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"}) :
                                                     Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"}))"></typeahead>
                     </p>
-                  
+
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" v-on:click="assign" :disabled="!newResponsibleId">@Common.Assign</button>
                     <button type="button" class="btn btn-link" data-dismiss="modal">close</button>
                 </div>
             </div>
