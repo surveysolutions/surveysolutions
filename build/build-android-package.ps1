@@ -93,7 +93,11 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
 	{
 	    Write-Host "##teamcity[message text='Building apk excluding extra']"
 	
-		& (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' /p:CodeContractsRunCodeAnalysis=false "/p:Configuration=$BuildConfiguration" /p:DefineConstants="`"EXCLUDEEXTENSIONS`"" | Write-Host
+	    $BuildParams = "$AndroidProject /t:PackageForAndroid /v:m /nologo /p:CodeContractsRunCodeAnalysis=false /p:Configuration=$BuildConfiguration /p:DefineConstants=`"EXCLUDEEXTENSIONS`""
+	
+	    Write-Host "##teamcity[message text='Building with params : `"$BuildParams`"]"
+	
+		& (GetPathToMSBuild) $BuildParams | Write-Host
 	}
 	else
 	{
