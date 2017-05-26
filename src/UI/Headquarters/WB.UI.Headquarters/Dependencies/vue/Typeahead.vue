@@ -72,7 +72,7 @@
             },
             fetchOptions: function (filter = "") {
                 this.isLoading = true;
-                var requestParams = Object.assign({ query: filter }, this.ajaxParams);
+                var requestParams = Object.assign({ query: filter, cache: false }, this.ajaxParams);
                 this.$http.get(this.fetchUrl, {params: requestParams})
                     .then(response => {
                         this.options = response.body.options || [];

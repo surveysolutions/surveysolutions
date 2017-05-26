@@ -1,4 +1,8 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -11,6 +15,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public class PrefilledQuestionsViewModel : BasePrefilledQuestionsViewModel
     {
+        private readonly QuestionnaireDownloadViewModel questionnaireDownloader;
+
         public PrefilledQuestionsViewModel(
             IInterviewViewModelFactory interviewViewModelFactory,
             IQuestionnaireStorage questionnaireRepository,
@@ -20,7 +26,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IPrincipal principal,
             ICommandService commandService,
             ICompositeCollectionInflationService compositeCollectionInflationService,
-            VibrationViewModel vibrationViewModel)
+            VibrationViewModel vibrationViewModel,
+            QuestionnaireDownloadViewModel questionnaireDownloader)
             : base(
                 interviewViewModelFactory,
                 questionnaireRepository,
@@ -30,9 +37,38 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 principal,
                 commandService,
                 compositeCollectionInflationService,
-                vibrationViewModel) {}
+                vibrationViewModel)
+        {
+            this.questionnaireDownloader = questionnaireDownloader;
+        }
 
         public override IMvxCommand ReloadCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToPrefilledQuestions(this.interviewId));
+
+        public IMvxAsyncCommand ReloadQuestionnaireCommand => new MvxAsyncCommand(this.ReloadQuestionnaire, () => !this.IsInProgress);
+
+        private async Task ReloadQuestionnaire()
+        {
+            if (this.IsInProgress) return;
+
+            this.IsInProgress = true;
+            try
+            {
+                var interview = this.interviewRepository.Get(this.interviewId);
+                string questionnaireId = interview.QuestionnaireIdentity.QuestionnaireId.FormatGuid();
+
+                bool succeeded = await this.questionnaireDownloader.ReloadQuestionnaireAsync(
+                    questionnaireId, this.QuestionnaireTitle, interview, new NavigationIdentity() { TargetScreen = ScreenType.PrefieldScreen}, 
+                    new Progress<string>(), CancellationToken.None);
+
+                if (!succeeded) return;
+
+                this.Dispose();
+            }
+            finally
+            {
+                this.IsInProgress = false;
+            }
+        }
 
         public IMvxCommand NavigateToDashboardCommand => new MvxCommand(() =>
         {

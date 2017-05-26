@@ -94,11 +94,12 @@
 
                 $scope.activeQuestion.questionScope = question.isPreFilled ? 'Identifying' : question.questionScope;
 
-                $scope.setQuestionType(question.type);
-
                 $scope.setLinkSource(question.linkedToEntityId, question.linkedFilterExpression);
                 $scope.setCascadeSource(question.cascadeFromQuestionId);
+                $scope.setQuestionType(question.type);
 
+                $rootScope.updateVariableTypes($scope.activeQuestion);
+                
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = false;
 
                 if (!_.isNull($scope.questionForm) && !_.isUndefined($scope.questionForm)) {
@@ -124,8 +125,7 @@
                         $scope.initialQuestion = angular.copy(data);
                         dataBind(data);
                         utilityService.scrollToValidationCondition($state.params.indexOfEntityInProperty);
-
-
+                        
                         var focusId = null;
                         switch ($state.params.property) {
                             case 'Title':
@@ -183,7 +183,10 @@
                             hasValidation: hasQuestionValidations($scope.activeQuestion),
                             title: $scope.activeQuestion.title,
                             variable: $scope.activeQuestion.variable,
-                            hideIfDisabled: $scope.activeQuestion.hideIfDisabled
+                            hideIfDisabled: $scope.activeQuestion.hideIfDisabled,
+                            yesNoView: $scope.activeQuestion.yesNoView,
+                            isInteger: $scope.activeQuestion.isInteger,
+                            linkedToType: $scope.activeQuestion.linkedToEntity == null ? null : $scope.activeQuestion.linkedToEntity.type
                         });
 
                         var notIsFilteredCombobox = !$scope.activeQuestion.isFilteredCombobox;
@@ -265,6 +268,7 @@
                 }
 
                 markFormAsChanged();
+
             };
 
             $scope.cancelQuestion = function () {

@@ -142,14 +142,14 @@
     <value>{0} (v{1})</value>
   </data>
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
-    <value>Законченные {0}</value>
+    <value>Законченные ({0})</value>
   </data>
   <data name="Dashboard_CreateInterview" xml:space="preserve">
     <value>Создать
 интервью</value>
   </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
-    <value>Новые {0}</value>
+    <value>Новые ({0})</value>
   </data>
   <data name="Dashboard_NoInterviewsSyncButton" xml:space="preserve">
     <value>Синхронизировать</value>
@@ -169,10 +169,10 @@
     <value>Это интервью завершено. Хотите переоткрыть его?</value>
   </data>
   <data name="Dashboard_RejectedLinkText" xml:space="preserve">
-    <value>Отклоненные {0}</value>
+    <value>Отклоненные ({0})</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
-    <value>Начатые {0}</value>
+    <value>Начатые ({0})</value>
   </data>
   <data name="Dashboard_Title" xml:space="preserve">
     <value>{0} интервью для {1}</value>
@@ -592,7 +592,7 @@
     <value>Удаление {0} опросника из {1}</value>
   </data>
   <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
-    <value>Ваша версия приложения не поддерживается сервером. Пожалуйста, удалите приложение Interviewer  и поставьте заново в Вашего веб сайта Survey Solutions Supervisor</value>
+    <value>Ваша версия приложения не поддерживается сервером. Пожалуйста, удалите приложение Interviewer  и поставьте заново в Вашего веб сайта Survey Solutions Headquarters</value>
   </data>
   <data name="Interview_Loading" xml:space="preserve">
     <value>Открытие</value>
@@ -610,9 +610,36 @@
     <value>Не удалось открыть интервью</value>
   </data>
   <data name="UnacceptableSSLCertificate" xml:space="preserve">
-    <value>Невозможно проверить сертификат. Проверьте адрес приложения Супервизор и верность текущей даты на устройстве</value>
+    <value>Невозможно проверить сертификат. Проверьте адрес приложения Headquarters и верность текущей даты на устройстве</value>
   </data>
   <data name="Synchronization_DownloadingLogo" xml:space="preserve">
     <value>Загрузка логотипа</value>
+  </data>
+  <data name="Synchronization_Done" xml:space="preserve">
+    <value>Завершить</value>
+  </data>
+  <data name="Synchronization_Of_Assignments" xml:space="preserve">
+    <value>Проверка на наличие новых заданий</value>
+  </data>
+  <data name="Dashboard_CreateNewLinkText" xml:space="preserve">
+    <value>Создать новое</value>
+  </data>
+  <data name="Dashboard_CreateNewTabText" xml:space="preserve">
+    <value>Создать новое интервью используя шаблон (Census режим)</value>
+  </data>
+  <data name="Dashboard_StartedTabText" xml:space="preserve">
+    <value>Интервью которые были начаты, но не закончены 
+Вам нужно закончить их перед отправкой на сервер</value>
+  </data>
+  <data name="Dashboard_RejectedTabText" xml:space="preserve">
+    <value>Интервью которые были возвращены супервизором
+Вам необходимо учеть замечания супервизора на обложке интервью</value>
+  </data>
+  <data name="Dashboard_CompletedTabText" xml:space="preserve">
+    <value>Завершенные интервью, будут загружены на сервер
+при следующей синхронизации</value>
+  </data>
+  <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
+    <value>Вы можете создать новое интервью используя пустой census опросник (Census режим)</value>
   </data>
 </root>

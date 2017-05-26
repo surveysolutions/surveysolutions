@@ -14,10 +14,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public bool CanUnapprove { get; set; }
         public Guid QuestionnaireId { get; set; }
         public long QuestionnaireVersion { set; get; }
-
         public string Key { get; set; }
-
         public bool ReceivedByInterviewer { get; set; }
+        public string TeamLeadName { get; set; }
     }
 
     public class InterviewListItem

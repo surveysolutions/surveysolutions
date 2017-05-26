@@ -9,6 +9,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         public int PageSize { get; set; }
         public IEnumerable<OrderRequestItem> SortOrder { get; set; }
 
-        public string Filter { get; set; }
+        public string SeachFor { get; set; }
     }
 }

@@ -35,14 +35,15 @@ namespace support
 
         public async Task<object> RunAsync(CommandLineProcessor processor, IConsoleHost host)
         {
-            try
+            var pathToHq = this.PathToHeadquarters.Trim('"').TrimEnd('\\');
+            if (!Directory.Exists(pathToHq))
             {
-                _configurationManagerSettings.SetPhysicalPathToWebsite(this.PathToHeadquarters);
+                host.WriteLine("Headquarters website settings not found. " +
+                               "Please, ensure that you enter correct path to Headquarters website");
+                return null;
             }
-            catch (Exception e)
-            {
-                this._logger.Error(e);
-            }
+
+            _configurationManagerSettings.SetPhysicalPathToWebsite(pathToHq);
 
             var elmahConfigSection = ConfigurationManager.GetSection("elmah/errorLog") as Hashtable;
             var nlogConfigSection = ConfigurationManager.GetSection("nlog") as XmlLoggingConfiguration;
@@ -54,56 +55,64 @@ namespace support
             var hasNlogSettings = nlogConfigSection != null &&
                                   (nlogConfigSection.Variables?.ContainsKey(nlogLogPathFormat) ?? false);
 
-            if (!hasElmahSettings || !hasNlogSettings)
-                host.WriteLine("Headquarters website settings not found. " +
-                               "Please, ensure that you enter correct path to Headquarters website");
-            else
+            string pathToElmahLogs = "";
+
+            if (hasElmahSettings)
+                pathToElmahLogs = ((string) elmahConfigSection[elmahRelativeLogPath]).Replace("~", pathToHq).Replace("/", "\\");
+
+            string pathToNlogLogs = "";
+            if (hasNlogSettings)
+                pathToNlogLogs = nlogConfigSection.Variables[nlogLogPathFormat]
+                                     .Text.Replace("${basedir}", pathToHq)
+                                     .Replace("/", "\\")
+                                     .TrimEnd('\\') + "\\logs";
+
+            _totalLogFilesCount = 0;
+            if (Directory.Exists(pathToElmahLogs))
+                _totalLogFilesCount += Directory.EnumerateFiles(pathToElmahLogs).Count();
+
+            if (Directory.Exists(pathToNlogLogs))
+                _totalLogFilesCount += Directory.EnumerateFiles(pathToNlogLogs).Count();
+
+            if (_totalLogFilesCount == 0)
             {
-                var pathToElmahLogs = ((string) elmahConfigSection[elmahRelativeLogPath])
-                    .Replace("~", this.PathToHeadquarters).Replace("/", "\\");
-
-                var pathToNlogLogs = nlogConfigSection.Variables[nlogLogPathFormat]
-                                         .Text.Replace("${basedir}", this.PathToHeadquarters)
-                                         .Replace("/", "\\")
-                                         .TrimEnd('\\') + "\\logs";
-
-                var tempSupportDirectory = Path.Combine(Path.GetTempPath(), "Survey Solutions Support");
-                var tempLogsDirectory = Path.Combine(tempSupportDirectory, "logs");
-                var archiveFileName = $"{DateTime.Now:yyyy-MM-ddThhmmss}-headquarters-logs.zip";
-
-                _totalLogFilesCount = Directory.EnumerateFiles(pathToElmahLogs).Count() +
-                                      Directory.EnumerateFiles(pathToNlogLogs).Count();
-
-                try
-                {
-                    await MoveLogFilesToTempDirAsync(pathToElmahLogs, tempLogsDirectory, "elmah");
-                    await MoveLogFilesToTempDirAsync(pathToNlogLogs, tempLogsDirectory, "nlog");
-                }
-                catch (Exception e)
-                {
-                    _logger.Error(e, "Unexpected exception");
-                    host.WriteError("Unexpected exception. See error log for more details");
-                }
-
-                host.WriteLine();
-
-                try
-                {
-                    host.WriteMessage("Archiving files: ");
-                    ArchiveWithProgress(tempLogsDirectory, archiveFileName);
-                    DeleteTemporaryDirectoryWithLogFiles(tempLogsDirectory);
-                    host.WriteLine();
-                    host.WriteLine($"Archived to {Path.Combine(tempSupportDirectory, archiveFileName)}");
-                }
-                catch (Exception e)
-                {
-                    _logger.Error(e, "Unexpected exception");
-                    host.WriteError("Unexpected exception. See error log for more details");
-                }
-
-                host.WriteLine();
+                host.WriteLine("No logs found");
+                return null;
             }
 
+            var tempSupportDirectory = Path.Combine(Path.GetTempPath(), "Survey Solutions Support");
+            var tempLogsDirectory = Path.Combine(tempSupportDirectory, "logs");
+            var archiveFileName = $"{DateTime.Now:yyyy-MM-ddThhmmss}-headquarters-logs.zip";
+
+            try
+            {
+                await MoveLogFilesToTempDirAsync(pathToElmahLogs, tempLogsDirectory, "elmah");
+                await MoveLogFilesToTempDirAsync(pathToNlogLogs, tempLogsDirectory, "nlog");
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Unexpected exception");
+                host.WriteError("Unexpected exception. See error log for more details");
+            }
+
+            host.WriteLine();
+
+            try
+            {
+                host.WriteMessage("Archiving files: ");
+                ArchiveWithProgress(tempLogsDirectory, archiveFileName);
+                DeleteTemporaryDirectoryWithLogFiles(tempLogsDirectory);
+                host.WriteLine();
+                host.WriteLine($"Archived to {Path.Combine(tempSupportDirectory, archiveFileName)}");
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Unexpected exception");
+                host.WriteError("Unexpected exception. See error log for more details");
+            }
+
+            host.WriteLine();
+            
             return null;
         }
 
@@ -117,6 +126,7 @@ namespace support
 
         private async Task MoveLogFilesToTempDirAsync(string logsDirectory, string tempDirectory, string logTypeName)
         {
+            if (!Directory.Exists(logsDirectory)) return;
             if (!Directory.Exists(tempDirectory)) Directory.CreateDirectory(tempDirectory);
 
             foreach (var filename in Directory.EnumerateFiles(logsDirectory))

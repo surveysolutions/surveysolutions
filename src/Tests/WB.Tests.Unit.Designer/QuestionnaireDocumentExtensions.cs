@@ -38,7 +38,6 @@ namespace WB.Tests.Unit.Designer
             string variableName = "variableName",
             List<Answer> options = null,
             Order answerOrder = Order.AsIs,
-            bool capital = false,
             bool featured = false)
         {
 
@@ -70,7 +69,6 @@ namespace WB.Tests.Unit.Designer
             question.PublicKey = questionId;
             question.QuestionType = type;
             question.AnswerOrder = answerOrder;
-            question.Capital = capital;
             question.Featured = featured;
             question.Answers = options;
 

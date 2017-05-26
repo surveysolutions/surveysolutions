@@ -121,21 +121,24 @@
     <value>用户名或密码不正确。</value>
   </data>
   <data name="Questionnaire_verification_failed" xml:space="preserve">
-    <value>请求的问卷"{0}"存在错误。请在问卷设计网站上验证问卷。</value>
+    <value>问卷"{0}"存在编译错误。请在问卷设计网站上验证问卷。</value>
   </data>
   <data name="RequestTimeout" xml:space="preserve">
     <value>连接到问卷设计网站超时。请检查网络连接。</value>
   </data>
   <data name="ServerError" xml:space="preserve">
-    <value>服务器内部出现了错误。请联系Survey Solutions客户支持。</value>
+    <value>服务器出现内部错误。请联系Survey Solutions客户支持。</value>
   </data>
   <data name="ServiceUnavailable" xml:space="preserve">
-    <value>服务器不可用。请确保问卷设计网站可用且没有处于维护模式</value>
+    <value>问卷设计网站不可用。请确保问卷设计网站可用且没有处于维护模式</value>
   </data>
   <data name="SiteAccessNotAllowed" xml:space="preserve">
-    <value>您不能访问这个网站。请联系管理员。</value>
+    <value>您没有权限访问这个网站。请联系管理员。</value>
   </data>
   <data name="TemplateNotFound" xml:space="preserve">
-    <value>找不到请求的问卷"{0}"。请刷新问卷列表。</value>
+    <value>找不到问卷"{0}"。请刷新问卷列表。</value>
+  </data>
+  <data name="PleaseFillCaptcha" xml:space="preserve">
+    <value>请填写验证码</value>
   </data>
 </root>

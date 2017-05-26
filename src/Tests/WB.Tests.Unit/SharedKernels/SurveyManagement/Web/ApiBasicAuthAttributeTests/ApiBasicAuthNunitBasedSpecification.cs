@@ -8,7 +8,6 @@ using Microsoft.Owin.Security;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Tests.Abc;

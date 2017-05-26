@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.UI.Headquarters.Controllers;
 
 namespace WB.UI.Headquarters.Services
@@ -23,5 +24,6 @@ namespace WB.UI.Headquarters.Services
         public double ElapsedTime { get; set; }
         public double EstimatedTime { get; set; }
         public InterviewImportState State { get; set; }
+        public PreloadedContentType PreloadedContentType { get; set; }
     }
 }

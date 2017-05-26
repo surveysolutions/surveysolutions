@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             var childRosterSizeQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
-                new NumericQuestion() {PublicKey = rosterSizeQuestionId, IsInteger = true, StataExportCaption ="var1"},
+                Create.NumericIntegerQuestion(rosterSizeQuestionId, variable: "var1"),
                 new Group()
                 {
                     PublicKey = rosterGroupId1,
@@ -31,14 +31,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     RosterSizeQuestionId = rosterSizeQuestionId,
                     Children = new List<IComposite>()
                     {
-                        new NumericQuestion() {PublicKey = childRosterSizeQuestionId, IsInteger = true, StataExportCaption = "var2"},
-                        new SingleQuestion()
-                        {
-                            PublicKey = questionWithSubstitutionsId,
-                            StataExportCaption = "var3",
-                            QuestionText = string.Format("hello %{0}%", underDeeperRosterLevelQuestionVariableName),
-                            Answers = { new Answer(){ AnswerValue = "1", AnswerText = "opt 1" }, new Answer(){ AnswerValue = "2", AnswerText = "opt 2" }}
-                        },
+                        Create.NumericIntegerQuestion(childRosterSizeQuestionId, variable: "var2"),
+                        Create.SingleOptionQuestion(
+                            questionWithSubstitutionsId,
+                            variable: "var3",
+                            title: $"hello %{underDeeperRosterLevelQuestionVariableName}%",
+                            answers: new List<Answer> { new Answer(){ AnswerValue = "1", AnswerText = "opt 1" }, new Answer(){ AnswerValue = "2", AnswerText = "opt 2" }}
+                        ),
                         new Group()
                         {
                             PublicKey = rosterGroupId2,
@@ -47,11 +46,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                             RosterSizeQuestionId = childRosterSizeQuestionId,
                             Children = new List<IComposite>()
                             {
-                                new NumericQuestion()
-                                {
-                                    PublicKey = underDeeperRosterLevelQuestionId,
-                                    StataExportCaption = underDeeperRosterLevelQuestionVariableName
-                                }
+                                Create.NumericRealQuestion(
+                                    underDeeperRosterLevelQuestionId,
+                                    variable: underDeeperRosterLevelQuestionVariableName
+                                )
                             }.ToReadOnlyCollection()
 
                         }

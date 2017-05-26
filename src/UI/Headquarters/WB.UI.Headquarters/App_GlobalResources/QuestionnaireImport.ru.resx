@@ -123,9 +123,6 @@
   <data name="DesignerQuestionnaires" xml:space="preserve">
     <value>Вопросники</value>
   </data>
-  <data name="Import" xml:space="preserve">
-    <value>Импорт</value>
-  </data>
   <data name="ImportInCensus" xml:space="preserve">
     <value>Импорт как "перепись"</value>
   </data>
@@ -181,9 +178,12 @@
     <value>Создать новую #{0} версию опросника</value>
   </data>
   <data name="RegularImportTitle" xml:space="preserve">
-    <value>Импортировать опросник как шаблон для индивидуальных назначений </value>
+    <value>Импортировать опросник</value>
   </data>
   <data name="RegularImportSubTitle" xml:space="preserve">
     <value>Эта функция позволит Вам создать индивидуальное назначение, которое может содержать идентифицирующие вопросы. Только эти назначения появятся на планшете в приложении Interviewer. </value>
+  </data>
+  <data name="MyQuestionnairesTitle" xml:space="preserve">
+    <value>Designer: Мои опросники</value>
   </data>
 </root>

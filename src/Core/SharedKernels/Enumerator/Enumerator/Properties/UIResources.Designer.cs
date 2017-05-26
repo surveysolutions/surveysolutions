@@ -154,6 +154,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your user account is locked. Please contact the support team at support@mysurvey.solutions..
         /// </summary>
         public static string ErrorMessage_AccountIsLockedOnServer {
@@ -879,6 +888,33 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string MissingPermissions_Storage {
             get {
                 return ResourceManager.GetString("MissingPermissions_Storage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pick from gallery.
+        /// </summary>
+        public static string Multimedia_PickFromGallery {
+            get {
+                return ResourceManager.GetString("Multimedia_PickFromGallery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select an option.
+        /// </summary>
+        public static string Multimedia_PictureSource {
+            get {
+                return ResourceManager.GetString("Multimedia_PictureSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Take photo.
+        /// </summary>
+        public static string Multimedia_TakePhoto {
+            get {
+                return ResourceManager.GetString("Multimedia_TakePhoto", resourceCulture);
             }
         }
         

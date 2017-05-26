@@ -13,6 +13,7 @@ $ProjectWebInterview = 'src\UI\Headquarters\WB.UI.Headquarters.Interview'
 $ProjectDesigner = 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj'
 $ProjectHeadquarters = 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj'
 $MainSolution = 'src\WB.sln'
+$SupportToolSolution = 'src\Tools\support\support.sln'
 
 
 $versionString = (GetVersionString 'src\core')
@@ -79,6 +80,8 @@ try {
 	If (Test-Path "$artifactsFolder"){
 		Remove-Item "$artifactsFolder" -Force -Recurse
 	}
+	
+	BuildAndDeploySupportTool $SupportToolSolution $BuildConfiguration | %{ if (-not $_) { Exit } }
 	
 	$webpackStats = "src\UI\Headquarters\WB.UI.Headquarters\InterviewApp\stats.html"
 	MoveArtifacts $webpackStats -folder "BuildStats"

@@ -131,7 +131,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             var restCredentials = new RestCredentials {Login = this.UserName};
             this.IsInProgress = true;
-
+            this.ErrorMessage = String.Empty;
+            
             try
             {
                 var token = await this.synchronizationService.LoginAsync(new LogonInfo

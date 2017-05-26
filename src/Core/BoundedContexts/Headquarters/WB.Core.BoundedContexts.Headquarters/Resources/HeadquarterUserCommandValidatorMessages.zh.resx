@@ -121,9 +121,12 @@
     <value>不能更新用户信息，因为当前用户不存在</value>
   </data>
   <data name="UserNameIsTakenByArchivedUsersFormat" xml:space="preserve">
-    <value>用户名'{0}'已被归档用户使用</value>
+    <value>用户名'{0}'已被归档用户占用。请选择一个不同的用户名。</value>
   </data>
   <data name="UserNameIsTakenFormat" xml:space="preserve">
-    <value>用户名'{0}'已被使用</value>
+    <value>用户名'{0}'已被占用。请选择一个不同的用户名。</value>
+  </data>
+  <data name="YouCantUnarchiveInterviewerUntilSupervisorIsArchivedFormat" xml:space="preserve">
+    <value>在取消归档督导员之前，您不能将调查员{0}取消归档</value>
   </data>
 </root>

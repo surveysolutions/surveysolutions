@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Preloading
 {
     public interface IInterviewImportDataParsingService
     {
-        InterviewImportData[] GetInterviewsImportDataForSample(string interviewImportProcessId, QuestionnaireIdentity questionnaireIdentity);
+        AssignmentImportData[] GetAssignmentsImportDataForSample(string interviewImportProcessId, QuestionnaireIdentity questionnaireIdentity);
         InterviewImportData[] GetInterviewsImportDataForPanel(string interviewImportProcessId, QuestionnaireIdentity questionnaireIdentity);
     }
 
@@ -15,5 +15,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Preloading
         public Guid? SupervisorId { get; set; }
         public Guid? InterviewerId { get; set; }
         public PreloadedDataDto PreloadedData { get; set; }
+    }
+
+    public class AssignmentImportData : InterviewImportData
+    {
+        public int? Quantity { get; set; }
     }
 }

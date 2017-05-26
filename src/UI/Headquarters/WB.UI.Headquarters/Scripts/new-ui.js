@@ -32,7 +32,8 @@ $(function() {
         $(this).parents('.row').toggleClass("fullscreen-hidden-filters");
     });
     $("main").removeClass("hold-transition");
-    $("footer").removeClass("hold-transition");
+    $("footer").removeClass("hold-transition");
+
     $(".navbar-toggle").click(function() {
         $(".navbar-collapse").fadeToggle();
         $(".navbar-collapse").animate({ height: '100%' }, 0);

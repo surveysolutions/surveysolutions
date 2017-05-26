@@ -51,14 +51,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.interviewDetailsViewFactory = interviewDetailsViewFactory;
         }
 
-        public ActionResult Details(Guid id, InterviewDetailsFilter? filter, string currentGroupId)
+        public ActionResult Details(Guid id, InterviewDetailsFilter? questionsTypes, string currentGroupId)
         {
-            if (!filter.HasValue)
+            if (!questionsTypes.HasValue)
                 return this.RedirectToAction("Details",
                     new
                     {
                         id = id,
-                        filter = InterviewDetailsFilter.All,
+                        questionsTypes = InterviewDetailsFilter.All,
                         currentGroupId = this.interviewDetailsViewFactory.GetFirstChapterId(id).FormatGuid()
                     });
 
@@ -81,7 +81,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 return HttpNotFound();
 
             var detailsViewModel = interviewDetailsViewFactory.GetInterviewDetails(interviewId: id,
-                filter: filter ?? InterviewDetailsFilter.All,
+                questionsTypes: questionsTypes ?? InterviewDetailsFilter.All,
                 currentGroupIdentity: string.IsNullOrEmpty(currentGroupId) ? null : Identity.Parse(currentGroupId));
 
             return View(detailsViewModel);

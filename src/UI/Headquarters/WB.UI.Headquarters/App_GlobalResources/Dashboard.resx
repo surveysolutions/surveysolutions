@@ -135,9 +135,6 @@
   <data name="ApprovedDataStata" xml:space="preserve">
     <value>Approved data Stata</value>
   </data>
-  <data name="BatchUpload" xml:space="preserve">
-    <value>Batch upload</value>
-  </data>
   <data name="BinaryData" xml:space="preserve">
     <value>Binary data</value>
   </data>
@@ -191,5 +188,8 @@
   </data>
   <data name="WebInterviewSetup" xml:space="preserve">
     <value>Web interview setup</value>
+  </data>
+  <data name="UploadAssignments" xml:space="preserve">
+    <value>Upload assignments</value>
   </data>
 </root>

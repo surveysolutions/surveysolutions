@@ -26,14 +26,13 @@ namespace WB.UI.Tester.Ninject
 
                 new NcqrsModule().AsNinject(),
                 new InfrastructureModuleMobile().AsNinject(),
-                new DataCollectionInfrastructureModule(basePath).AsNinject(),
 
                 new DataCollectionSharedKernelModule().AsNinject(),
                 new EnumeratorSharedKernelModule(),
                 new EnumeratorInfrastructureModule(),
 
                 new TesterBoundedContextModule().AsNinject(),
-                new TesterInfrastructureModule(),
+                new TesterInfrastructureModule(basePath),
                 new EnumeratorUIModule(),
                 new TesterUIModule());
         }

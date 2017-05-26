@@ -9,8 +9,6 @@ namespace support
         {
             if (this._isInitialized) return;
 
-            path = path.Trim('"').TrimEnd('\\');
-
             NConfigurator.UsingFiles($@"{path}\Configuration\Headquarters.Web.config",
                 $@"{path}\Web.config").SetAsSystemDefault();
             this._isInitialized = true;

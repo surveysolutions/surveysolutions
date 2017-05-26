@@ -61,6 +61,7 @@ using WB.UI.Headquarters.Injections;
 using WB.UI.Headquarters.Migrations.PlainStore;
 using WB.UI.Headquarters.Migrations.ReadSide;
 using WB.UI.Headquarters.Migrations.Users;
+using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Captcha;
@@ -263,6 +264,7 @@ namespace WB.UI.Headquarters
             var autoMapperConfig = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new WebInterviewAutoMapProfile());
+                cfg.AddProfile(new AssignmentProfile());
             });
             kernel.Bind<IMapper>().ToConstant(autoMapperConfig.CreateMapper());
             kernel.Bind<JsonSerializer>().ToConstant(JsonSerializer.Create(new JsonSerializerSettings

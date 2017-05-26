@@ -31,6 +31,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         public bool IsAdminMode { get; set; }
         public Guid ViewerId { get; set; }
         public bool IsPublic { get; set; }
-        public string Filter { get; set; }
+        public string SearchFor { get; set; }
     }
 }

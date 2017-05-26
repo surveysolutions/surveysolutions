@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             this.rosterStructureService = rosterStructureService;
         }
 
-        public VerificationStatus VerifySample(Guid questionnaireId, long version, PreloadedDataByFile data)
+        public VerificationStatus VerifyAssignmentsSample(Guid questionnaireId, long version, PreloadedDataByFile data)
         {
             VerificationStatus status = new VerificationStatus(); 
 
@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 errors.AddRange(this.Verifier(this.ColumnDuplications)(datas, preloadedDataService));
 
             status.Errors = errors.Count > 100 ? errors.Take(100).ToList() : errors;
-            status.InterviewsCount = datas.FirstOrDefault()?.Content.Length ?? 0;
+            status.EntitiesCount = datas.FirstOrDefault()?.Content.Length ?? 0;
             if (!status.Errors.Any())
             {
                 CountResposiblesInDataFile(datas, preloadedDataService, status);
@@ -174,7 +174,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
             var topLevel = preloadedDataService.GetTopLevelData(data);
 
-            status.InterviewsCount = topLevel?.Content?.Length ?? 0;
+            status.EntitiesCount = topLevel?.Content?.Length ?? 0;
             if (!status.Errors.Any() && topLevel!=null)
             {
                 CountResposiblesInDataFile(topLevel.ToEnumerable().ToArray(), preloadedDataService, status);
@@ -319,6 +319,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             if (levelExportStructure.LevelScopeVector == null || levelExportStructure.LevelScopeVector.Length == 0)
             {
                 yield return ServiceColumns.ResponsibleColumnName;
+                yield return ServiceColumns.AssignmentsCountColumnName;
             }
             
         }

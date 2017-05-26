@@ -70,7 +70,7 @@ var config = {
 };
 
 gulp.task('vueify', wrapPipe(function (success, error) {
-    glob('./vue/*.js', function (err, files) {
+    glob('./vue/**/*.js', function (err, files) {
         if (err) error();
         var tasks = files.map(function (entry) {
             var b = browserify({
@@ -120,7 +120,7 @@ gulp.task('watch-vue', wrapPipe(function (success, error) {
     if (config.production) {
         return util.noop();
     }
-    gulp.watch('./vue/*.*', ['vueify']);
+    gulp.watch('./vue/**/*.*', ['vueify']);
     gulp.watch(config.cssFilesToWatch, ['styles']);
 }));
 
@@ -209,5 +209,5 @@ gulp.task('clean', function () {
 });
 
 gulp.task('default', ['clean'], function () {
-    gulp.start('move-bootstrap-fonts', 'styles', 'bowerCss', 'bowerJs', 'inject', 'vueify', 'vue-libs');
+    gulp.start('move-bootstrap-fonts', 'styles', 'bowerCss', 'bowerJs', 'inject', 'vueify', 'vue-libs', 'watch-vue');
 });

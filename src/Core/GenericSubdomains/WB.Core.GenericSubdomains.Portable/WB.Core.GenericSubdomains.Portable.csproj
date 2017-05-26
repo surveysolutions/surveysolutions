@@ -45,7 +45,6 @@
     <Compile Include="ApiAuthenticationScheme.cs" />
     <Compile Include="ArrayExtensions.cs" />
     <Compile Include="CustomCollections\ConcurrentHashSet.cs" />
-    <Compile Include="CustomCollections\OrderedAdditiveSet.cs" />
     <Compile Include="EmptyArray.cs" />
     <Compile Include="Implementation\Services\HttpStatistician.cs" />
     <Compile Include="IPasswordPolicy.cs" />
@@ -119,7 +118,6 @@
     <Compile Include="Services\ISubstitutionService.cs" />
     <Compile Include="Services\ServiceLocatorLoggerProvider.cs" />
     <Compile Include="StringExtensions.cs" />
-    <Compile Include="SyncStatusCode.cs" />
     <Compile Include="Tasks\ProggressAggregator.cs" />
     <Compile Include="Tree.cs" />
     <Compile Include="TwoWayDictionaryAdapter.cs" />

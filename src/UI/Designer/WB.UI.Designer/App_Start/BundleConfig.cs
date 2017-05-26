@@ -28,45 +28,21 @@ namespace WB.UI.Designer
 
             bundles.Add(
                 new ScriptBundle("~/simplepage").Include(
-                    "~/questionnaire/vendor/jquery/dist/jquery.js",
+                    "~/questionnaire/vendor/jquery/dist/jquery.min.js",
                     "~/questionnaire/vendor/bootstrap/dist/bootstrap.js"));
 
             bundles.Add(
                 new ScriptBundle("~/editform").Include(
-                    "~/Scripts/jquery.validate.js", 
-                    "~/Scripts/jquery.validate.unobtrusive-custom-for-bootstrap.js", 
-                    "~/Scripts/bootstrap3-unobtrusive-hack.js",
+                    "~/questionnaire/vendor/jquery-validation/dist/jquery.validate.js",
+                    "~/Scripts/custom/jquery.validate.unobtrusive-custom-for-bootstrap.js",
+                    "~/Scripts/custom/bootstrap3-unobtrusive-hack.js",
                     "~/questionnaire/vendor/jquery-placeholder/jquery.placeholder.js",
-                    "~/Scripts/editForm.js"
-                    ));
-
+                    "~/Scripts/custom/editForm.js"));
             bundles.Add(
                 new ScriptBundle("~/list").Include(
                     "~/questionnaire/vendor/jquery-mousewheel/jquery.mousewheel.js",
                     "~/questionnaire/vendor/perfect-scrollbar/js/perfect-scrollbar.jquery.js",
-                    "~/Scripts/common.js"));
-
-            bundles.Add(
-                new ScriptBundle("~/readsidebundle").Include(
-                    "~/Scripts/knockout-{version}.js",
-                    "~/Scripts/lodash.underscore.js",
-                    "~/Scripts/moment.js",
-                    "~/Scripts/components/moment-duration-format.js",
-                    "~/Scripts/components/bindings.js",
-                    "~/Scripts/viewmodels/designer.framework.js",
-                    "~/Scripts/viewmodels/viewmodelbase.js",
-                    "~/Scripts/viewmodels/pagebase.js",
-                    "~/Scripts/viewmodels/pages/controlpanel/readside.js"));
-
-            bundles.Add(
-                new ScriptBundle("~/login").Include(
-                    "~/Scripts/knockout-{version}.js",
-                    "~/Scripts/lodash.underscore.js",
-                    "~/Scripts/components/query-string.js",
-                    "~/Scripts/viewmodels/designer.framework.js",
-                    "~/Scripts/viewmodels/viewmodelbase.js",
-                    "~/Scripts/viewmodels/pagebase.js",
-                    "~/Scripts/viewmodels/pages/login.js"));
+                    "~/Scripts/custom/common.js"));
         }
     }
 }

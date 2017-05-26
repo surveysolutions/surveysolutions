@@ -124,15 +124,6 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Batch upload.
-        /// </summary>
-        internal static string BatchUpload {
-            get {
-                return ResourceManager.GetString("BatchUpload", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Binary data.
         /// </summary>
         internal static string BinaryData {
@@ -264,6 +255,15 @@ namespace Resources {
         internal static string Title {
             get {
                 return ResourceManager.GetString("Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload assignments.
+        /// </summary>
+        internal static string UploadAssignments {
+            get {
+                return ResourceManager.GetString("UploadAssignments", resourceCulture);
             }
         }
         

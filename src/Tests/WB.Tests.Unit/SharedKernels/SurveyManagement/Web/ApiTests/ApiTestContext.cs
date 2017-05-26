@@ -19,6 +19,8 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
+using WB.UI.Headquarters.API.PublicApi;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 {
@@ -40,7 +42,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         {
             return new UsersController(
                 logger ?? Mock.Of<ILogger>(),
-                userViewViewFactory ?? Mock.Of<IUserViewFactory>());
+                userViewViewFactory ?? Mock.Of<IUserViewFactory>(),
+                null);
         }
 
         protected static QuestionnairesController CreateQuestionnairesController(

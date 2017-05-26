@@ -2,8 +2,10 @@
 using System.Web.Http;
 using System.Web.Http.Results;
 using Machine.Specifications;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.API;
+using WB.UI.Headquarters.API.PublicApi;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
@@ -15,7 +17,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
             controller = CreateExportController();
         };
 
-        Because of = () => result = controller.StartProcess(new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1).ToString(), "ddi");
+        Because of = () => result = controller.StartProcess(new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1).ToString(), DataExportFormat.DDI);
 
         It should_return_http_bad_request_response = () =>
             result.ShouldBeOfExactType<BadRequestErrorMessageResult>();

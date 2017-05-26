@@ -9219,19 +9219,6 @@ table tr th .census-icon, table tr td .census-icon {
   height: 600px;
   padding: 10px; }
 
-table.jqplot-table-legend {
-  width: 90%;
-  border: none; }
-
-td.jqplot-table-legend.jqplot-table-legend-swatch.jqplot-seriesToggle {
-  width: 20px; }
-
-div.jqplot-table-legend-swatch-outline {
-  border: none; }
-
-.jqplot-table-legend-swatch {
-  border-width: 10px; }
-
 .block-filter .logo-wrapper {
   max-width: 300px;
   max-height: 300px; }

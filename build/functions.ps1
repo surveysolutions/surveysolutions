@@ -361,3 +361,30 @@ function UpdateProjectVersion([string]$BuildNumber, [string]$ver)
 		UpdateSourceVersion -Version $ver -BuildNumber $BuildNumber -file $file
 	}
 }
+
+function CreateZip($sourceFolder, $zipfile)
+{
+	If(Test-path $zipfile) {Remove-item $zipfile}
+	
+	Add-Type -assembly "system.io.compression.filesystem"	
+	[io.compression.zipfile]::CreateFromDirectory($sourceFolder, $zipfile)
+}
+
+function BuildAndDeploySupportTool($SupportToolSolution, $BuildConfiguration)
+{
+	Write-Host "##teamcity[blockOpened name='Building and deploying support console application']"
+	BuildSolution `
+                -Solution $SupportToolSolution `
+                -BuildConfiguration $BuildConfiguration
+				
+    $file = get-childitem $SupportToolSolution
+	
+	$binDir = $file.directoryname + "\bin\"
+	$sourceDir = $binDir + $BuildConfiguration
+	$destZipFile = $binDir + "support.zip"
+	
+	CreateZip $sourceDir $destZipFile
+	MoveArtifacts $destZipFile "Tools"
+	
+	Write-Host "##teamcity[blockClosed name='Building and deploying support console application']"
+}

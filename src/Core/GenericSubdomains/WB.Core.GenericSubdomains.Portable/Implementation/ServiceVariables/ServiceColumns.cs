@@ -9,6 +9,7 @@
         public const string ParentId = "ParentId";
 
         public const string ResponsibleColumnName = "_responsible";
+        public const string AssignmentsCountColumnName = "_quantity";
 
         //system generated
 

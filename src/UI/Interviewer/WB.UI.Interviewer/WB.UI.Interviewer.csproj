@@ -46,12 +46,12 @@
     <AndroidSupportedAbis>armeabi;armeabi-v7a;x86;arm64-v8a</AndroidSupportedAbis>
     <MandroidI18n>CJK,Mideast,Rare,West,Other</MandroidI18n>
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
+    <Debugger>Xamarin</Debugger>
     <AndroidEnableMultiDex>False</AndroidEnableMultiDex>
     <DevInstrumentationEnabled>True</DevInstrumentationEnabled>
     <AotAssemblies>False</AotAssemblies>
     <EnableLLVM>False</EnableLLVM>
     <EnableProguard>False</EnableProguard>
-    <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -381,12 +381,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activities\DashboardActivity.cs" />
+    <Compile Include="Activities\DashboardCompletednterviewsFragment.cs" />
+    <Compile Include="Activities\DashboardNewInterviewsFragment.cs" />
+    <Compile Include="Activities\DashboardQuestionnairesFragment.cs" />
+    <Compile Include="Activities\DashboardRejectednterviewsFragment.cs" />
+    <Compile Include="Activities\DashboardStartedInterviewsFragment.cs" />
     <Compile Include="Activities\DiagnosticsActivity.cs" />
     <Compile Include="Activities\InterviewActivity.cs" />
     <Compile Include="Activities\FinishInstallationActivity.cs" />
     <Compile Include="Activities\LoadingActivity.cs" />
+    <Compile Include="Activities\MvxFragmentStatePagerAdapter.cs" />
     <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
     <Compile Include="Activities\PrefsActivity.cs" />
+    <Compile Include="Activities\RecyclerViewFragment.cs" />
     <Compile Include="Activities\RelinkDeviceActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
     <Compile Include="AndroidDataCollectionSharedKernelModule.cs" />
@@ -474,7 +481,7 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\relink.axml">
-      <SubType>AndroidResource</SubType>
+      <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\dashboard_census_questionnare_item.axml" />
     <AndroidResource Include="Resources\Layout\synchronization_panel.axml">
@@ -492,6 +499,12 @@
     <AndroidResource Include="Resources\Layout\diagnostics__backup_restore.axml" />
     <AndroidResource Include="Resources\Layout\diagnostics__test_bandwidth_to_server.axml" />
     <AndroidResource Include="Resources\Layout\loading.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\fragment_dashboard_tab.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\fragment_dashboard_tab_new.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
@@ -648,10 +661,6 @@
     <ProjectReference Include="..\..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
       <Project>{d6616c1d-7c3a-4576-b82b-098721cd4417}</Project>
       <Name>WB.Core.SharedKernels.Questionnaire</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
-      <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
-      <Name>WB.Core.SharedKernel.Structures</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Infrastructure\Enumerator\WB.Infrastructure.Shared.Enumerator.csproj">
       <Project>{e41deb5c-2ad6-463f-9f76-10299fc2d9d1}</Project>

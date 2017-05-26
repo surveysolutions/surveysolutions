@@ -362,13 +362,12 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             if (string.IsNullOrEmpty(searchTerm)) return questionnaireTitle;
 
             var index = CultureInfo.CurrentCulture.CompareInfo.IndexOf(questionnaireTitle, searchTerm, CompareOptions.IgnoreCase);
-                //questionnaireTitle.IndexOf(searchTerm, StringComparison.CurrentCultureIgnoreCase);
 
             string title;
             if (index >= 0)
             {
                 var substringToHightlight =  questionnaireTitle.Substring(index, searchTerm.Length);
-                title = Regex.Replace(questionnaireTitle, searchTerm, "<b>" + substringToHightlight + "</b>", RegexOptions.IgnoreCase);
+                title = Regex.Replace(questionnaireTitle, Regex.Escape(searchTerm), "<b>" + substringToHightlight + "</b>", RegexOptions.IgnoreCase);
             }
             else
             {

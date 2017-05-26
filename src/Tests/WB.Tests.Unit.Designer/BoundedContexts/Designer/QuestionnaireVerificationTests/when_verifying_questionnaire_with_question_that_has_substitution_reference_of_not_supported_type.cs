@@ -4,7 +4,6 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 
@@ -16,20 +15,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
             questionWithSubstitutionReferenceToNotSupportedTypeId = Guid.Parse("10000000000000000000000000000000");
             questionSubstitutionReferencerOfNotSupportedTypeId = Guid.Parse("13333333333333333333333333333333");
-            questionnaire = CreateQuestionnaireDocument(new MultyOptionsQuestion()
-            {
-                PublicKey = questionSubstitutionReferencerOfNotSupportedTypeId,
-                StataExportCaption = unsupported,
-                QuestionType = QuestionType.MultyOption,
-                Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
-            },
-            new SingleQuestion()
-            {
-                PublicKey = questionWithSubstitutionReferenceToNotSupportedTypeId,
-                StataExportCaption = "var",
-                QuestionText = string.Format("hello %{0}%!", unsupported),
-                Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
-            });
+            questionnaire = CreateQuestionnaireDocument(
+                Create.MultyOptionsQuestion(
+                questionSubstitutionReferencerOfNotSupportedTypeId,
+                variable: unsupported,
+                options: new List<Answer> { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
+            ),
+            Create.SingleQuestion(
+                questionWithSubstitutionReferenceToNotSupportedTypeId,
+                variable: "var",
+                title: $"hello %{unsupported}%!",
+                options: new List<Answer>() { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
+            ));
 
             verifier = CreateQuestionnaireVerifier();
         };

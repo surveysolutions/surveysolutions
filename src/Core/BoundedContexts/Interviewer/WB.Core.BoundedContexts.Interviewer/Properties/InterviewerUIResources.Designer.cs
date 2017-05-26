@@ -98,11 +98,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Completed {0}.
+        ///   Looks up a localized string similar to Completed ({0}).
         /// </summary>
         public static string Dashboard_CompletedLinkText {
             get {
                 return ResourceManager.GetString("Dashboard_CompletedLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Completed interviews, will be uploaded during 
+        ///your next synchronization.
+        /// </summary>
+        public static string Dashboard_CompletedTabText {
+            get {
+                return ResourceManager.GetString("Dashboard_CompletedTabText", resourceCulture);
             }
         }
         
@@ -117,7 +127,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New {0}.
+        ///   Looks up a localized string similar to Create New.
+        /// </summary>
+        public static string Dashboard_CreateNewLinkText {
+            get {
+                return ResourceManager.GetString("Dashboard_CreateNewLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create new interview using templates (Census mode).
+        /// </summary>
+        public static string Dashboard_CreateNewTabText {
+            get {
+                return ResourceManager.GetString("Dashboard_CreateNewTabText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New ({0}).
         /// </summary>
         public static string Dashboard_NewItemsLinkText {
             get {
@@ -164,6 +192,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can create new interviews using 
+        ///empty census templates (Census mode).
+        /// </summary>
+        public static string Dashboard_QuestionnairesTabText {
+            get {
+                return ResourceManager.GetString("Dashboard_QuestionnairesTabText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This interview is completed. Do you want to restart the interview?.
         /// </summary>
         public static string Dashboard_Reinitialize_Interview_Message {
@@ -173,11 +211,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rejected {0}.
+        ///   Looks up a localized string similar to Rejected ({0}).
         /// </summary>
         public static string Dashboard_RejectedLinkText {
             get {
                 return ResourceManager.GetString("Dashboard_RejectedLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviews which have been rejected by supervisor
+        ///You need to address issues noted on cover.
+        /// </summary>
+        public static string Dashboard_RejectedTabText {
+            get {
+                return ResourceManager.GetString("Dashboard_RejectedTabText", resourceCulture);
             }
         }
         
@@ -191,11 +239,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Started {0}.
+        ///   Looks up a localized string similar to Started ({0}).
         /// </summary>
         public static string Dashboard_StartedLinkText {
             get {
                 return ResourceManager.GetString("Dashboard_StartedLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviews which have been started but not completed
+        ///You need complete it to be synchronized.
+        /// </summary>
+        public static string Dashboard_StartedTabText {
+            get {
+                return ResourceManager.GetString("Dashboard_StartedTabText", resourceCulture);
             }
         }
         
@@ -794,7 +852,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have incompatible version of Interviewer application. Please, uninstall it and install again from your Survey Solutions Supervisor website.
+        ///   Looks up a localized string similar to You have incompatible version of Interviewer application. Please, uninstall it and install again from your Survey Solutions Headquarters website.
         /// </summary>
         public static string NotSupportedServerSyncProtocolVersion {
             get {
@@ -1001,6 +1059,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Done.
+        /// </summary>
+        public static string Synchronization_Done {
+            get {
+                return ResourceManager.GetString("Synchronization_Done", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Synchronization completed with errors.
         /// </summary>
         public static string Synchronization_DoneWithErrors_Title {
@@ -1123,6 +1190,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Synchronization_LockedAssignments_Text {
             get {
                 return ResourceManager.GetString("Synchronization_LockedAssignments_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check for new assignments.
+        /// </summary>
+        public static string Synchronization_Of_Assignments {
+            get {
+                return ResourceManager.GetString("Synchronization_Of_Assignments", resourceCulture);
             }
         }
         
@@ -1496,7 +1572,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to verify certificate for target URL. Please, check if Supervisor website address is valid and your device has corrent current date and time.
+        ///   Looks up a localized string similar to Failed to verify certificate for target URL. Please, check if Headquarters website address is valid and your device has corrent current date and time.
         /// </summary>
         public static string UnacceptableSSLCertificate {
             get {
