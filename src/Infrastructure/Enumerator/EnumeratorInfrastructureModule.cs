@@ -49,6 +49,10 @@ namespace WB.Infrastructure.Shared.Enumerator
             this.Bind<IMedia>().ToMethod(context => CrossMedia.Current);
             this.Bind<IPermissions>().ToMethod(context => CrossPermissions.Current);
 
+            FlurlHttp.Configure(c => {
+                c.HttpClientFactory = new ModernHttpClientFactory();
+            });
+
             this.Bind<IAttachmentContentStorage>().To<AttachmentContentStorage>().InSingletonScope();
             this.Bind<ITranslationStorage>().To<TranslationsStorage>();
             this.Bind<IPasswordHasher>().To<DevicePasswordHasher>().InSingletonScope();

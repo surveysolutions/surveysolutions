@@ -34,15 +34,52 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             this.rosterStructureService = rosterStructureService;
         }
 
-        public InterviewImportData[] GetInterviewsImportDataForSample(string interviewImportProcessId, QuestionnaireIdentity questionnaireIdentity)
+        public AssignmentImportData[] GetAssignmentsImportDataForSample(string interviewImportProcessId, QuestionnaireIdentity questionnaireIdentity)
         {
-            return this.GetInterviewsImport(interviewImportProcessId, questionnaireIdentity, false);
+            var preloadedDataService = this.GetPreloadedDataService(questionnaireIdentity);
+
+            AssignmentPreloadedDataRecord[] dataToPreload = preloadedDataService.CreatePreloadedDataDtoFromAssignmentData(this.preloadedDataRepository.GetPreloadedDataOfSample(interviewImportProcessId));
+
+            return dataToPreload.Select(d => new AssignmentImportData()
+            {
+                PreloadedData = d.PreloadedDataDto,
+                InterviewerId = d.InterviewerId,
+                SupervisorId = d.SupervisorId,
+                Quantity = d.Quantity
+            }).ToArray();
         }
 
         public InterviewImportData[] GetInterviewsImportDataForPanel(string interviewImportProcessId, QuestionnaireIdentity questionnaireIdentity)
         {
-            return this.GetInterviewsImport(interviewImportProcessId, questionnaireIdentity, true);
+            var preloadedDataService = this.GetPreloadedDataService(questionnaireIdentity);
+
+            PreloadedDataRecord[] dataToPreload = preloadedDataService.CreatePreloadedDataDtosFromPanelData(this.preloadedDataRepository.GetPreloadedDataOfPanel(interviewImportProcessId));
+
+            return dataToPreload.Select(d => new InterviewImportData()
+            {
+                PreloadedData = d.PreloadedDataDto,
+                InterviewerId = d.InterviewerId,
+                SupervisorId = d.SupervisorId
+            }).ToArray();
         }
+
+        private IPreloadedDataService GetPreloadedDataService(QuestionnaireIdentity questionnaireIdentity)
+        {
+            var bigTemplateObject = this.plainTransactionManagerProvider.GetPlainTransactionManager().ExecuteInPlainTransaction(
+                () => this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
+
+            if (bigTemplateObject == null)
+                throw new Exception("Questionnaire was not found");
+
+            var questionnaireExportStructure = this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
+
+            var questionnaireRosterStructure = this.rosterStructureService.GetRosterScopes(bigTemplateObject);
+
+            var preloadedDataService = this.preloadedDataServiceFactory.CreatePreloadedDataService(
+                questionnaireExportStructure, questionnaireRosterStructure, bigTemplateObject);
+            return preloadedDataService;
+        }
+
 
         private InterviewImportData[] GetInterviewsImport(string interviewImportProcessId, QuestionnaireIdentity questionnaireIdentity, bool isPanel)
         {
@@ -62,7 +99,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
             PreloadedDataRecord[] dataToPreload = isPanel 
                 ? preloadedDataService.CreatePreloadedDataDtosFromPanelData(this.preloadedDataRepository.GetPreloadedDataOfPanel(interviewImportProcessId)) 
-                : preloadedDataService.CreatePreloadedDataDtoFromSampleData(this.preloadedDataRepository.GetPreloadedDataOfSample(interviewImportProcessId));
+                : preloadedDataService.CreatePreloadedDataDtoFromAssignmentData(this.preloadedDataRepository.GetPreloadedDataOfSample(interviewImportProcessId));
 
             return
                 dataToPreload.Select(

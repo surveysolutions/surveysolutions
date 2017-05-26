@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         }
 
         private InterviewSummary CreateInterviewSummary(Guid userId, Guid questionnaireId, long questionnaireVersion,
-            Guid eventSourceId, DateTime eventTimeStamp, bool wasCreatedOnClient)
+            Guid eventSourceId, DateTime eventTimeStamp, bool wasCreatedOnClient, int? assignmentId)
         {
             var responsible = this.users.GetUser(new UserViewInputModel(userId));
             var questionnarie = this.GetQuestionnaire(questionnaireId, questionnaireVersion);
@@ -114,7 +114,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 QuestionnaireTitle = questionnarie.Title,
                 ResponsibleId = userId, // Creator is responsible
                 ResponsibleName = responsible != null ? responsible.UserName : "<UNKNOWN USER>",
-                ResponsibleRole = responsible.Roles.First()
+                ResponsibleRole = responsible.Roles.First(),
+                AssignmentId = assignmentId
             };
 
             return interviewSummary;
@@ -136,19 +137,19 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewCreated> @event)
         {
             return this.CreateInterviewSummary(@event.Payload.UserId, @event.Payload.QuestionnaireId,
-                @event.Payload.QuestionnaireVersion, @event.EventSourceId, @event.EventTimeStamp, wasCreatedOnClient: false);
+                @event.Payload.QuestionnaireVersion, @event.EventSourceId, @event.EventTimeStamp, false, @event.Payload.AssignmentId);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewFromPreloadedDataCreated> @event)
         {
             return this.CreateInterviewSummary(@event.Payload.UserId, @event.Payload.QuestionnaireId,
-                @event.Payload.QuestionnaireVersion, @event.EventSourceId, @event.EventTimeStamp, wasCreatedOnClient: false);
+                @event.Payload.QuestionnaireVersion, @event.EventSourceId, @event.EventTimeStamp, false, null);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewOnClientCreated> @event)
         {
             return this.CreateInterviewSummary(@event.Payload.UserId, @event.Payload.QuestionnaireId,
-             @event.Payload.QuestionnaireVersion, @event.EventSourceId, @event.EventTimeStamp, wasCreatedOnClient: true);
+             @event.Payload.QuestionnaireVersion, @event.EventSourceId, @event.EventTimeStamp, wasCreatedOnClient: true, assignmentId: @event.Payload.AssignmentId);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewStatusChanged> @event)

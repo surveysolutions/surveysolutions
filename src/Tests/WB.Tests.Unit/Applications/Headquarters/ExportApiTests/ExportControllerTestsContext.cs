@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.Infrastructure.FileSystem;
 using WB.UI.Headquarters.API;
+using WB.UI.Headquarters.API.PublicApi;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
 {

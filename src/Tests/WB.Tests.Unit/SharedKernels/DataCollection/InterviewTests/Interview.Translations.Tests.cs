@@ -121,7 +121,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.SwitchTranslation(Create.Command.SwitchTranslation(ruTranslationName));
             //assert
             Assert.That(interview.GetTitleText(staticTextIdentity), Is.EqualTo(ruText));
-            Assert.That(interview.GetFailedValidationMessages(staticTextIdentity),
+            Assert.That(interview.GetFailedValidationMessages(staticTextIdentity, "Error"),
                 Is.EquivalentTo(new[] {$"{ruValidationMessages[0].Message} [1]", $"{ruValidationMessages[1].Message} [2]"}));
         }
 
@@ -221,7 +221,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.SwitchTranslation(Create.Command.SwitchTranslation(ruTranslationName));
             //assert
             Assert.That(interview.GetTitleText(staticTextIdentity), Is.EqualTo(ruText + defaultSubst));
-            Assert.That(interview.GetFailedValidationMessages(staticTextIdentity),
+            Assert.That(interview.GetFailedValidationMessages(staticTextIdentity, "Error"),
                 Is.EquivalentTo(new[] { $"{ruValidationMessages[0].Message} [1]", $"{ruValidationMessages[1].Message} [2]" }));
         }
 
@@ -263,7 +263,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.SwitchTranslation(Create.Command.SwitchTranslation(ruTranslationName));
             //assert
             Assert.That(interview.GetTitleText(questionIdentity), Is.EqualTo(ruText));
-            Assert.That(interview.GetFailedValidationMessages(questionIdentity),
+            Assert.That(interview.GetFailedValidationMessages(questionIdentity, "Error"),
                 Is.EquivalentTo(new[] {$"{ruValidationMessages[0].Message} [1]", $"{ruValidationMessages[1].Message} [2]"}));
         }
 
@@ -321,7 +321,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.SwitchTranslation(Create.Command.SwitchTranslation(ruTranslationName));
             //assert
             Assert.That(interview.GetTitleText(questionIdentity), Is.EqualTo(ruText + defaultSubst));
-            Assert.That(interview.GetFailedValidationMessages(questionIdentity),
+            Assert.That(interview.GetFailedValidationMessages(questionIdentity, "Error"),
                 Is.EquivalentTo(new[] { $"{ruValidationMessages[0].Message} [1]", $"{ruValidationMessages[1].Message} [2]" }));
         }
     }

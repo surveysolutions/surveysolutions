@@ -61,7 +61,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Before log in, please make sure that the &apos;Designer&apos; website is available.
+        ///   Looks up a localized string similar to Before logging in, please make sure that the &apos;Designer&apos; website is available.
         /// </summary>
         internal static string BeforeSignInToDesigner {
             get {
@@ -70,7 +70,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This will allow interviewers to create assignments in the field, and the questionnaire will be downloaded on all devices..
+        ///   Looks up a localized string similar to This will allow interviewers to create assignments in the field. The questionnaire will be downloaded on all devices..
         /// </summary>
         internal static string CensusImportSubTitle {
             get {
@@ -120,15 +120,6 @@ namespace Resources {
         internal static string Gropus {
             get {
                 return ResourceManager.GetString("Gropus", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Import in Sample mode.
-        /// </summary>
-        internal static string Import {
-            get {
-                return ResourceManager.GetString("Import", resourceCulture);
             }
         }
         
@@ -196,6 +187,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Designer: My Questionnaires.
+        /// </summary>
+        internal static string MyQuestionnairesTitle {
+            get {
+                return ResourceManager.GetString("MyQuestionnairesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have already imported this questionnaire.
         /// </summary>
         internal static string QuestionnaireExists {
@@ -223,7 +223,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This will allow you to create individual assignments that may contain identifying data, and only those assignments will appear on interviewer devices..
+        ///   Looks up a localized string similar to This will allow you to create individual assignments that may contain identifying data. Only those assignments will appear on interviewer devices..
         /// </summary>
         internal static string RegularImportSubTitle {
             get {
@@ -232,7 +232,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sample mode import.
+        ///   Looks up a localized string similar to Import.
         /// </summary>
         internal static string RegularImportTitle {
             get {
@@ -250,7 +250,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please sign in to designer.
+        ///   Looks up a localized string similar to Please sign in to Designer.
         /// </summary>
         internal static string SignInToDesigner {
             get {
@@ -259,7 +259,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sign in to designer.
+        ///   Looks up a localized string similar to Sign in to Designer.
         /// </summary>
         internal static string SignInToDesignerTitle {
             get {

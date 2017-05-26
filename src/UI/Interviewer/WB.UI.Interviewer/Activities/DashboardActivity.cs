@@ -1,17 +1,15 @@
-﻿using System;
-using System.Threading;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Android.App;
 using Android.Content;
-using Android.Content.PM;
 using Android.OS;
+using Android.Support.Design.Widget;
+using Android.Support.V4.View;
 using Android.Support.V7.Widget;
 using Android.Views;
-using MvvmCross.Binding.Droid.BindingContext;
-using MvvmCross.Droid.Support.V7.RecyclerView;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
-using WB.UI.Interviewer.CustomControls;
 using WB.UI.Interviewer.Services;
 using WB.UI.Shared.Enumerator.Activities;
 
@@ -26,17 +24,68 @@ namespace WB.UI.Interviewer.Activities
         protected override int ViewResourceId => Resource.Layout.dashboard;
 
         public SyncServiceBinder Binder { get; set; }
-
+        
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
             this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
 
-            var recyclerView = this.FindViewById<MvxRecyclerView>(Resource.Id.interviewsList);
-            var layoutManager = new LinearLayoutManager(this);
-            recyclerView.SetLayoutManager(layoutManager);
-            recyclerView.HasFixedSize = true;
+            var viewPager = this.FindViewById<ViewPager>(Resource.Id.pager);
+            var fragments = new List<MvxFragmentStatePagerAdapter.FragmentInfo>
+            {
+                new MvxFragmentStatePagerAdapter.FragmentInfo
+                {
+                    FragmentType = typeof(DashboardStartedInterviewsFragment),
+                    ViewModel = ViewModel.StartedInterviews,
+                    Title = ViewModel.StartedInterviews.Title
+                },
+                new MvxFragmentStatePagerAdapter.FragmentInfo
+                {
+                    FragmentType = typeof(DashboardNewInterviewsFragment),
+                    ViewModel = ViewModel.NewInterviews,
+                    Title = ViewModel.NewInterviews.Title
+                },
+                new MvxFragmentStatePagerAdapter.FragmentInfo
+                {
+                    FragmentType = typeof(DashboardRejectednterviewsFragment),
+                    ViewModel = ViewModel.RejectedInterviews,
+                    Title = ViewModel.RejectedInterviews.Title
+                },
+                new MvxFragmentStatePagerAdapter.FragmentInfo
+                {
+                    FragmentType = typeof(DashboardCompletednterviewsFragment),
+                    ViewModel = ViewModel.CompletedInterviews,
+                    Title = ViewModel.CompletedInterviews.Title
+                },
+                new MvxFragmentStatePagerAdapter.FragmentInfo
+                {
+                    FragmentType = typeof(DashboardQuestionnairesFragment),
+                    ViewModel = ViewModel.Questionnaires,
+                    Title = ViewModel.Questionnaires.Title
+                },
+            };
+
+            var fragmentStatePagerAdapter = new MvxFragmentStatePagerAdapter(this, this.SupportFragmentManager, fragments);
+            viewPager.Adapter = fragmentStatePagerAdapter;
+            viewPager.PageSelected += (s, e) =>
+            {
+                ViewModel.TypeOfInterviews = ((InterviewTabPanel) fragments[e.Position].ViewModel).InterviewStatus;
+            };
+
+            var tabLayout = this.FindViewById<TabLayout>(Resource.Id.tabs);
+            tabLayout.SetupWithViewPager(viewPager);
+
+            for (int fragmentIndex = 0; fragmentIndex < fragments.Count; fragmentIndex++)
+            {
+                fragments[fragmentIndex].ViewModel.PropertyChanged += (s, e) =>
+                {
+                    if (e.PropertyName != nameof(InterviewTabPanel.Title)) return;
+
+                    var tabIndex = fragments.FindIndex(fragmentInfo => fragmentInfo.ViewModel == s);
+                    tabLayout.GetTabAt(tabIndex).SetText(((InterviewTabPanel)s).Title);
+                };
+            }
         }
 
         protected override void OnStart()

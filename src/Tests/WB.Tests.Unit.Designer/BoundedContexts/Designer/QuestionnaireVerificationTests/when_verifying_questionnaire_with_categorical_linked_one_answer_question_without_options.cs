@@ -44,12 +44,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                             }
                         }.ToReadOnlyCollection()
                     },
-                    new SingleQuestion()
-                    {
-                        StataExportCaption = "var3",
-                        PublicKey = questionId,
-                        LinkedToQuestionId = linkedQuestionId
-                    }
+                    Create.SingleQuestion(
+                        variable: "var3",
+                        id: questionId,
+                        linkedToQuestionId: linkedQuestionId
+                    )
                 );
 
             verifier = CreateQuestionnaireVerifier();

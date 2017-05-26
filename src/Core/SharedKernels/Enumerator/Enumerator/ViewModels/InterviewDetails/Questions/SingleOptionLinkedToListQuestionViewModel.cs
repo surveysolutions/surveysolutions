@@ -204,7 +204,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Handle(AnswersRemoved @event)
         {
             if (@event.Questions.Contains(this.Identity))
-                this.options.FirstOrDefault(option => option.Selected).Selected = false;
+            {
+                var optionToDeselect = this.Options.FirstOrDefault(option => option.Selected);
+                if (optionToDeselect != null)
+                {
+                    optionToDeselect.Selected = false;
+                }
+            }
 
             if (@event.Questions.Any(question => question.Id == this.linkedToQuestionId))
                 this.ClearOptions();

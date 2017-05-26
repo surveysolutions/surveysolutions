@@ -13,7 +13,6 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Resources;
-using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -40,7 +39,6 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
         public async Task<ActionResult> Create(UserModel model)

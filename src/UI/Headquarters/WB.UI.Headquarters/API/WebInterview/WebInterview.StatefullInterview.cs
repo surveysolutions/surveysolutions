@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.UI.Headquarters.Resources;
 using GpsAnswer = WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers.GpsAnswer;
 
 namespace WB.UI.Headquarters.API.WebInterview
@@ -634,7 +635,8 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         private void PutValidationMessages(Validity validity, IStatefulInterview callerInterview, Identity identity)
         {
-            validity.Messages = callerInterview.GetFailedValidationMessages(identity).ToArray();
+            validity.Messages = callerInterview.GetFailedValidationMessages(identity, Strings.Error)
+                .ToArray();
         }
 
         private void ApplyDisablement(InterviewEntity result, Identity identity)

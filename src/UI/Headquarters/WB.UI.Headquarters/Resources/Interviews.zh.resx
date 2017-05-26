@@ -129,10 +129,10 @@
     <value>应用到调查员已经收到的{0}个访谈</value>
   </data>
   <data name="ContinueConfirmMessage" xml:space="preserve">
-    <value>您想要继续吗？</value>
+    <value>您要继续吗？</value>
   </data>
   <data name="ContinueConfirmMessageHQ" xml:space="preserve">
-    <value>您想要继续吗？</value>
+    <value>您要继续吗？</value>
   </data>
   <data name="DeleteConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将被删除。&lt;/h3&gt;
@@ -153,5 +153,21 @@
   <data name="ApproveConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将通过审核。&lt;/h3&gt;
 &lt;b&gt;注意！&lt;/b&gt;您只能通过审核处于以下状态的访谈：&lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2}&lt;/i&gt;。</value>
+  </data>
+  <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve">
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将被分配。&lt;/h3&gt;
+&lt;b&gt;注意！&lt;/b&gt;只有状态未处于&lt;i&gt;{1}&lt;/i&gt;和&lt;i&gt;{2}&lt;/i&gt;状态的问卷可以被重新分配。</value>
+  </data>
+  <data name="ChooseResponsibleInterviewer" xml:space="preserve">
+    <value>一些访谈没有选择负责人。请选择一个调查员。</value>
+  </data>
+  <data name="ImportInterviews_FailedToImportInterview_NoSupervisor" xml:space="preserve">
+    <value>导入访谈失败：{0}。未指定督导员</value>
+  </data>
+  <data name="ImportInterviews_GenericError" xml:space="preserve">
+    <value>导入访谈失败：{0}。InterviewerId {1}, QuestionnaireId {2}, Exception: {3}</value>
+  </data>
+  <data name="ImportInterviews_IncorrectDatafile" xml:space="preserve">
+    <value>数据文件不正确</value>
   </data>
 </root>

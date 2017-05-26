@@ -895,4 +895,45 @@
   <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
     <value>Подключен к планшету</value>
   </data>
+  <data name="InterviewerProfile_Sync_Activity_Title" xml:space="preserve">
+    <value>Последние данные по синхронизации</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Started_Interview_Desc" xml:space="preserve">
+    <value>Количество незаконченных или не синхронизированных интервью на устройстве в каждый момент синхронизации</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Failed_Sync" xml:space="preserve">
+    <value>Сбой при попытке синхронизации</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Nothing_To_Sync" xml:space="preserve">
+    <value>Успешное соединение, нечего синхронизировать</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Uploaded_Interview_Desc" xml:space="preserve">
+    <value>Загруженные на сервер для подтверждения</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Census_Timeline_Desc" xml:space="preserve">
+    <value>Обновление опросников</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Downloaded_Interview_Desc" xml:space="preserve">
+    <value>Скачанные интервью</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Census_Desc" xml:space="preserve">
+    <value>Скачанные опросники</value>
+  </data>
+  <data name="InterviewerProfile_DeviceAssignmentDate" xml:space="preserve">
+    <value>Дата подключения устройства</value>
+    <comment>Дата подключения устройства</comment>
+  </data>
+  <data name="InterviewerProfile_LastSyncronizationDate" xml:space="preserve">
+    <value>Дата последнего соединения</value>
+  </data>
+  <data name="Assignments_PageTitle" xml:space="preserve">
+    <value>Задачи</value>
+  </data>
+  <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
+    <value>(вер. {1}) {0} </value>
+    <comment>{0} - Questionnaire name, {1} - Questionnaire version</comment>
+  </data>
+  <data name="ConfirmationNeededTitle" xml:space="preserve">
+    <value>Требуется подверждение</value>
+  </data>
 </root>

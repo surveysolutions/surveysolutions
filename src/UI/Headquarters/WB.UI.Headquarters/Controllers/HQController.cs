@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
-using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Survey;
 using WB.Core.BoundedContexts.Headquarters.Views.TakeNew;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
@@ -20,10 +18,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Filters;
-using WB.UI.Headquarters.Models.ComponentModels;
-using WB.UI.Headquarters.Models.Reports;
 using WB.UI.Shared.Web.Extensions;
-using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -34,7 +29,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
         private readonly IAuthorizedUser authorizedUser;
         private readonly ITakeNewInterviewViewFactory takeNewInterviewViewFactory;
-        private readonly IMapReport mapReport;
+        
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
 
@@ -44,8 +39,7 @@ namespace WB.UI.Headquarters.Controllers
             ITakeNewInterviewViewFactory takeNewInterviewViewFactory,
             IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, 
-            IQuestionnaireVersionProvider questionnaireVersionProvider, 
-            IMapReport mapReport)
+            IQuestionnaireVersionProvider questionnaireVersionProvider)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
@@ -53,7 +47,6 @@ namespace WB.UI.Headquarters.Controllers
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.questionnaireVersionProvider = questionnaireVersionProvider;
-            this.mapReport = mapReport;
         }
 
         public ActionResult Index()
@@ -99,7 +92,6 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
         [Authorize(Roles = "Administrator")]
@@ -143,54 +135,12 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(model);
         }
 
-        public ActionResult SurveysAndStatuses()
-        {
-            this.ViewBag.ActivePage = MenuItem.Surveys;
-
-            return this.View();
-        }
-
-        public ActionResult SupervisorsAndStatuses()
-        {
-            this.ViewBag.ActivePage = MenuItem.Summary;
-
-            AllUsersAndQuestionnairesView usersAndQuestionnaires =
-                this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
-
-            return this.View(usersAndQuestionnaires.Questionnaires);
-        }
-
-        public ActionResult MapReport()
-        {
-            this.ViewBag.ActivePage = MenuItem.MapReport;
-
-            var questionnaires = this.mapReport.GetQuestionnaireIdentitiesWithPoints();
-
-            return this.View(new MapReportModel
-            {
-                Questionnaires = new ComboboxModel(questionnaires.Select(x => new ComboboxOptionModel(x.Id, $"(ver. {x.Version}) {x.Title}")).ToArray(), questionnaires.Count)
-            });
-        }
-
-        public ActionResult InterviewsChart()
-        {
-            this.ViewBag.ActivePage = MenuItem.InterviewsChart;
-
-            return this.View(this.Filters());
-        }
-
-        public ActionResult Status()
-        {
-            this.ViewBag.ActivePage = MenuItem.Statuses;
-            return this.View(StatusHelper.GetOnlyActualSurveyStatusViewItems(this.authorizedUser.IsSupervisor));
-        }
-
         private DocumentFilter Filters()
         {
             IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.authorizedUser.IsSupervisor);
 
             AllUsersAndQuestionnairesView usersAndQuestionnaires =
-                this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
+                this.allUsersAndQuestionnairesFactory.Load();
 
             return new DocumentFilter
             {

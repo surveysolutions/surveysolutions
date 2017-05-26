@@ -9,7 +9,6 @@ namespace Main.Core.Entities.SubEntities
     {
         List<Answer> Answers { get; set; }
         Order? AnswerOrder { get; set; }
-        bool Capital { get; set; }
         bool Featured { get; set; }
         string Instructions { get; set; }
         QuestionProperties Properties { get; set; }

@@ -107,7 +107,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Error<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionIsTooLong, "WB0104", index => string.Format(VerificationMessages.WB0104_ValidationConditionIsTooLong, index)),
             ErrorForTranslation<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsTooLong, "WB0105", index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index)),
             Error<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionIsEmpty, "WB0106", index => string.Format(VerificationMessages.WB0106_ValidationConditionIsEmpty, index)),
-            ErrorForTranslation<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsEmpty, "WB0107", index => string.Format(VerificationMessages.WB0107_ValidationMessageIsEmpty, index)),
+            
             Error<IQuestion>(OptionFilterExpressionHasLengthMoreThan10000Characters, "WB0028", VerificationMessages.WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters),
             Error<IQuestion>(QuestionWithOptionsFilterCannotBePrefilled, "WB0029", VerificationMessages.WB0029_QuestionWithOptionsFilterCannotBePrefilled),
             ErrorForTranslation<IQuestion>(QuestionTitleIsTooLong, "WB0259", VerificationMessages.WB0259_QuestionTitleIsTooLong),
@@ -137,17 +137,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.CriticalForLookupTable(LookupTableMoreThan10Columns, "WB0043", VerificationMessages.WB0043_LookupTableMoreThan11Columns),
             this.CriticalForLookupTable(LookupTableMoreThan5000Rows, "WB0044", VerificationMessages.WB0044_LookupTableMoreThan5000Rows),
             this.CriticalForLookupTable(LookupTableNotUniqueRowcodeValues, "WB0047", VerificationMessages.WB0047_LookupTableNotUniqueRowcodeValues),
-
             ErrorForAttachment(AttachmentHasEmptyContent, "WB0111", VerificationMessages.WB0111_AttachmentHasEmptyContent),
-
             ErrorForTranslation(TranslationNameIsInvalid, "WB0256", VerificationMessages.WB0256_TranslationNameIsInvalid),
             ErrorForTranslation(TranslationHasEmptyContent, "WB0257", VerificationMessages.WB0257_TranslationHasEmptyContent),
             ErrorForTranslation(TranslationsHasDuplicatedNames, "WB0258", VerificationMessages.WB0258_TranslationsHaveDuplicatedNames),
-
             Error(QuestionnaireHasRostersPropagationsExededLimit, "WB0261", VerificationMessages.WB0261_RosterStructureTooExplosive),
             Error<IGroup>(RosterHasPropagationExededLimit, "WB0262", VerificationMessages.WB0262_RosterHasTooBigPropagation),
             Error<IGroup>(FirstChapterHasEnablingCondition, "WB0263", VerificationMessages.WB0263_FirstChapterHasEnablingCondition),
             ErrorForTranslation<IComposite>(this.IsNotSupportSubstitution, "WB0268", VerificationMessages.WB0268_DoesNotSupportSubstitution),
+            Error<IQuestion>(QuestionTitleEmpty, "WB0269", VerificationMessages.WB0269_QuestionTitleIsEmpty),
 
             Error_ManyGpsPrefilledQuestions_WB0006,
             ErrorsByCircularReferences,
@@ -1277,14 +1275,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool QuestionTitleIsTooLong(IQuestion question)
             => question.QuestionText?.Length > 500;
 
+        private static bool QuestionTitleEmpty(IQuestion question)
+            => string.IsNullOrWhiteSpace(question.QuestionText);
+
         private static bool GroupTitleIsTooLong(IGroup group)
             => group.Title?.Length > 500;
 
         private static bool ValidationConditionIsEmpty(ValidationCondition validationCondition)
             => string.IsNullOrWhiteSpace(validationCondition.Expression);
 
-        private static bool ValidationMessageIsEmpty(ValidationCondition validationCondition)
-            => string.IsNullOrWhiteSpace(validationCondition.Message);
+        /*private static bool ValidationMessageIsEmpty(ValidationCondition validationCondition)
+            => string.IsNullOrWhiteSpace(validationCondition.Message);*/
 
         private static bool IsQuestionAllowedToBeRosterSizeSource(IQuestion question)
             => IsNumericRosterSizeQuestion(question) ||

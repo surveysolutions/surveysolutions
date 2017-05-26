@@ -146,7 +146,7 @@ namespace WB.UI.Designer.Api.Headquarters
                     Page = request.PageIndex,
                     PageSize = request.PageSize,
                     Order = request.SortOrder,
-                    Filter = request.Filter
+                    SearchFor = request.SearchFor
                 });
 
             return new PagedQuestionnaireCommunicationPackage()

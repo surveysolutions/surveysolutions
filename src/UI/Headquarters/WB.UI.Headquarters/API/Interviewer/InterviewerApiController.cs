@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -8,13 +9,15 @@ using System.Web.Hosting;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Resources;
 
@@ -32,7 +35,10 @@ namespace WB.UI.Headquarters.API.Interviewer
         private readonly IAndroidPackageReader androidPackageReader;
         private readonly ISyncProtocolVersionProvider syncVersionProvider;
         private readonly IAuthorizedUser authorizedUser;
+        private readonly IProductVersion productVersion;
+        private readonly IAssignmentsService assignmentsService;
         private readonly HqSignInManager signInManager;
+        private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
 
         public InterviewerApiController(
             IFileSystemAccessor fileSystemAccessor,
@@ -41,7 +47,10 @@ namespace WB.UI.Headquarters.API.Interviewer
             IAndroidPackageReader androidPackageReader,
             ISyncProtocolVersionProvider syncVersionProvider,
             IAuthorizedUser authorizedUser,
-            HqSignInManager signInManager)
+            IProductVersion productVersion,
+            HqSignInManager signInManager,
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+            IAssignmentsService assignmentsService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.tabletInformationService = tabletInformationService;
@@ -49,7 +58,10 @@ namespace WB.UI.Headquarters.API.Interviewer
             this.androidPackageReader = androidPackageReader;
             this.syncVersionProvider = syncVersionProvider;
             this.authorizedUser = authorizedUser;
+            this.productVersion = productVersion;
             this.signInManager = signInManager;
+            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.assignmentsService = assignmentsService;
         }
 
         [HttpGet]
@@ -60,13 +72,10 @@ namespace WB.UI.Headquarters.API.Interviewer
             if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerApp))
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
 
-            var response = new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new StreamContent(this.fileSystemAccessor.ReadFile(pathToInterviewerApp))
-            };
+            Stream fileStream = new FileStream(pathToInterviewerApp, FileMode.Open, FileAccess.Read);
+            var response = new ProgressiveDownload(this.Request).ResultMessage(fileStream, @"application/vnd.android.package-archive");
 
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.android.package-archive");
-            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
             {
                 FileName = RESPONSEAPPLICATIONFILENAME
             };
@@ -106,11 +115,11 @@ namespace WB.UI.Headquarters.API.Interviewer
             var httpContent = multipartMemoryStreamProvider.Contents.Single();
             var fileContent = await httpContent.ReadAsByteArrayAsync();
 
-            var deviceId = this.Request.Headers.GetValues("DeviceId").Single();
+            var deviceId = this.Request.Headers.GetValues(@"DeviceId").Single();
             var userId = User.Identity.GetUserId();
 
             var user = userId != null 
-                ? this.userViewFactory.GetUser(new UserViewInputModel(Guid.Parse(userId))) 
+                ? this.userViewFactory.GetUser(new UserViewInputModel(Guid.Parse(userId)))
                 : null;
 
             this.tabletInformationService.SaveTabletInformation(
@@ -132,12 +141,44 @@ namespace WB.UI.Headquarters.API.Interviewer
             if (deviceSyncProtocolVersion < lastNonUpdatableSyncProtocolVersion)
                 return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
 
-            if (deviceSyncProtocolVersion != serverSyncProtocolVersion)
+            var currentVersion = new Version(this.productVersion.ToString().Split(' ')[0]);
+            var interviewerVersion = GetInterviewerVersionFromUserAgent(this.Request);
+
+            if (interviewerVersion != null && interviewerVersion > currentVersion)
+            {
                 return this.Request.CreateResponse(HttpStatusCode.NotAcceptable);
-            
+            }
+
+            if (deviceSyncProtocolVersion == 7050 /* PRE assignment devices, that still allowed to connect*/)
+            {
+                var interviewerAssignments = this.assignmentsService.GetAssignments(this.authorizedUser.Id);
+                var assignedQuestionarries = this.questionnaireBrowseViewFactory.GetByIds(interviewerAssignments.Select(ia => ia.QuestionnaireId).ToArray());
+
+                if (assignedQuestionarries.Any(aq => aq.AllowAssignments))
+                {
+                    return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
+                }
+            } else if (deviceSyncProtocolVersion != serverSyncProtocolVersion)
+            {
+                return this.Request.CreateResponse(HttpStatusCode.NotAcceptable);
+            }
+
             return this.authorizedUser.DeviceId != deviceId
                 ? this.Request.CreateResponse(HttpStatusCode.Forbidden)
-                : this.Request.CreateResponse(HttpStatusCode.OK, "449634775");
+                : this.Request.CreateResponse(HttpStatusCode.OK, @"449634775");
+        }
+        
+        private Version GetInterviewerVersionFromUserAgent(HttpRequestMessage request)
+        {
+            foreach (var product in request.Headers.UserAgent)
+            {
+                if (product.Product.Name.Equals(@"org.worldbank.solutions.interviewer", StringComparison.OrdinalIgnoreCase))
+                {
+                    return new Version(product.Product.Version);
+                }
+            }
+
+            return null;
         }
     }
 }

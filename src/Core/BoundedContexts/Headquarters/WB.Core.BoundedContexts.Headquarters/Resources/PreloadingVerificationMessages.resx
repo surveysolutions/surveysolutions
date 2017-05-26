@@ -157,10 +157,10 @@
     <value>Provided value is null or empty</value>
   </data>
   <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
-    <value>[PL0014] Value not allowed for this question in questionnaire</value>
+    <value>Provided question value not allowed.</value>
   </data>
   <data name="PL0015_QuestionTypeIsIncorrect" xml:space="preserve">
-    <value>[PL0015] Type of question is not correct.</value>
+    <value>Type of question is not correct.</value>
   </data>
   <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
     <value>Invalid Date or Time value entered in the date question.</value>

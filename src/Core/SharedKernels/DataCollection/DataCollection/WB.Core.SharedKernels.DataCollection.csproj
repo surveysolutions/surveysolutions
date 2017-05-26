@@ -73,6 +73,7 @@
     <Compile Include="Aggregates\IStatefulInterview.cs" />
     <Compile Include="Commands\Interview\AnswerAreaQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerYesNoQuestion.cs" />
+    <Compile Include="Commands\Interview\CreateInterviewFromSnapshotCommand.cs" />
     <Compile Include="Commands\Interview\MarkInterviewAsReceivedByInterviewer.cs" />
     <Compile Include="Commands\Interview\RejectInterviewToInterviewerCommand.cs" />
     <Compile Include="Commands\Interview\SwitchTranslation.cs" />
@@ -139,6 +140,7 @@
     <Compile Include="Implementation\Aggregates\InterviewEntities\SubstitutionVariables.cs" />
     <Compile Include="Implementation\Aggregates\Invariants\InterviewQuestionInvariants.cs" />
     <Compile Include="Implementation\Aggregates\StatefulInterview.cs" />
+    <Compile Include="Implementation\Entities\AssignmentApiView.cs" />
     <Compile Include="Implementation\Repositories\StatefulInterviewRepository.cs" />
     <Compile Include="Repositories\IStatefulInterviewRepository.cs" />
     <Compile Include="Services\ISubstitionTextFactory.cs" />

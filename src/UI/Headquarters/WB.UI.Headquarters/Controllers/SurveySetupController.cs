@@ -189,13 +189,13 @@ namespace WB.UI.Headquarters.Controllers
                 QuestionnaireId = model.QuestionnaireId,
                 Version = model.QuestionnaireVersion,
                 QuestionnaireTitle = questionnaireInfo?.Title,
-                WasSupervsorProvided = verificationStatus.WasResponsibleProvided,
+                WasSupervisorProvided = verificationStatus.WasResponsibleProvided,
                 Id = preloadedMetadata.Id,
                 PreloadedContentType = PreloadedContentType.Panel,
                 FileName = model.File.FileName,
                 EnumeratorsCount = verificationStatus.EnumeratorsCount,
                 SupervisorsCount = verificationStatus.SupervisorsCount,
-                InterviewsCount = verificationStatus.InterviewsCount
+                EntitiesCount = verificationStatus.EntitiesCount
             };
 
             return RedirectToAction("InterviewImportConfirmation", new { id = preloadedMetadata.Id, questionnaireId = model.QuestionnaireId, version = model.QuestionnaireVersion });
@@ -204,7 +204,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        public ActionResult SampleBatchUploadAndVerify(BatchUploadModel model)
+        public ActionResult AssignmentsBatchUploadAndVerify(BatchUploadModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
@@ -221,7 +221,7 @@ namespace WB.UI.Headquarters.Controllers
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion));
 
             var extension = this.fileSystemAccessor.GetFileExtension(model.File.FileName).ToLower();
-            if (extension != ".tab" && extension != ".txt")
+            if (extension != ".tab" && extension != ".txt" && extension != ".zip")
             {
                 return this.View("InterviewImportVerificationErrors",
                     PreloadedDataVerificationErrorsView.CreatePrerequisiteError(
@@ -250,7 +250,7 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             // save in future
-            var verificationStatus = this.preloadedDataVerifier.VerifySample(model.QuestionnaireId, model.QuestionnaireVersion, preloadedSample);
+            var verificationStatus = this.preloadedDataVerifier.VerifyAssignmentsSample(model.QuestionnaireId, model.QuestionnaireVersion, preloadedSample);
 
             //clean up for security reasons
             if (verificationStatus.Errors.Any())
@@ -265,7 +265,7 @@ namespace WB.UI.Headquarters.Controllers
                     verificationStatus.Errors.ToArray(),
                     verificationStatus.WasResponsibleProvided,
                     preloadedMetadata?.Id,
-                    PreloadedContentType.Sample,
+                    PreloadedContentType.Assignments,
                     preloadedSample?.FileName));
             }
 
@@ -274,17 +274,16 @@ namespace WB.UI.Headquarters.Controllers
                 QuestionnaireId = model.QuestionnaireId,
                 Version = model.QuestionnaireVersion,
                 QuestionnaireTitle = questionnaireInfo?.Title,
-                WasSupervsorProvided = verificationStatus.WasResponsibleProvided,
+                WasSupervisorProvided = verificationStatus.WasResponsibleProvided,
                 Id = preloadedMetadata.Id,
-                PreloadedContentType = PreloadedContentType.Sample,
+                PreloadedContentType = PreloadedContentType.Assignments,
                 FileName = preloadedSample.FileName,
                 EnumeratorsCount = verificationStatus.EnumeratorsCount,
                 SupervisorsCount = verificationStatus.SupervisorsCount,
-                InterviewsCount = verificationStatus.InterviewsCount
+                EntitiesCount = verificationStatus.EntitiesCount
             };
 
             return this.RedirectToAction("InterviewImportConfirmation", new { id = preloadedMetadata.Id, questionnaireId = model.QuestionnaireId, version = model.QuestionnaireVersion });
-
         }
 
         [HttpGet]
@@ -301,7 +300,7 @@ namespace WB.UI.Headquarters.Controllers
                     Version = version,
                     Title = questionnaireInfo?.Title
                 },
-                CurrentProcessId = this.interviewImportService.Status.InterviewImportProcessId
+                CurrentProcessId = this.interviewImportService.Status.InterviewImportProcessId,
             });
         }
 
@@ -364,10 +363,20 @@ namespace WB.UI.Headquarters.Controllers
 
                 try
                 {
-                    this.interviewImportService.ImportInterviews(supervisorId: model.SupervisorId,
-                        questionnaireIdentity: questionnaireIdentity, interviewImportProcessId: model.Id,
-                        isPanel: model.PreloadedContentType == PreloadedContentType.Panel,
-                        headquartersId: headquartersId);
+                    if (model.PreloadedContentType == PreloadedContentType.Assignments)
+                    {
+                        this.interviewImportService.ImportAssignments(supervisorId: model.SupervisorId,
+                            questionnaireIdentity: questionnaireIdentity, 
+                            interviewImportProcessId: model.Id,
+                            headquartersId: headquartersId);
+                    }
+                    else
+                    {
+                        this.interviewImportService.ImportInterviews(supervisorId: model.SupervisorId,
+                            questionnaireIdentity: questionnaireIdentity, 
+                            interviewImportProcessId: model.Id,
+                            headquartersId: headquartersId);
+                    }
                 }
                 finally
                 {
@@ -399,7 +408,7 @@ namespace WB.UI.Headquarters.Controllers
                 Status = status,
                 QuestionnaireId = questionnaireInfo.QuestionnaireId,
                 Version = questionnaireInfo.Version,
-                QuestionnaireTitle = questionnaireInfo.Title
+                QuestionnaireTitle = questionnaireInfo.Title,
             });
         }
     }

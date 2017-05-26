@@ -70,6 +70,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assignments.
+        /// </summary>
+        internal static string Assignments {
+            get {
+                return ResourceManager.GetString("Assignments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cumulative Interview Chart.
         /// </summary>
         internal static string CumulativeChart {
@@ -151,7 +160,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Survey Setup.
+        ///   Looks up a localized string similar to Questionnaires.
         /// </summary>
         internal static string Questionnaires {
             get {
@@ -160,7 +169,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of synchronized interviews, but unprocessed yet.
+        ///   Looks up a localized string similar to Number of interviews synchronized but not yet processed.
         /// </summary>
         internal static string QueueSizeTitle {
             get {
@@ -201,6 +210,15 @@ namespace Resources {
         internal static string SurveysAndStatuses {
             get {
                 return ResourceManager.GetString("SurveysAndStatuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Survey Setup.
+        /// </summary>
+        internal static string SurveySetup {
+            get {
+                return ResourceManager.GetString("SurveySetup", resourceCulture);
             }
         }
         

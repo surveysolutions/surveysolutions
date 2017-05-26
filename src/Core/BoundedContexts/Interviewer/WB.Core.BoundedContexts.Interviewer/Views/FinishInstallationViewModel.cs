@@ -97,10 +97,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set { this.isInProgress = value; RaisePropertyChanged(); }
         }
 
-        private IMvxCommand signInCommand;
-        public IMvxCommand SignInCommand
+        private IMvxAsyncCommand signInCommand;
+        public IMvxAsyncCommand SignInCommand
         {
-            get { return this.signInCommand ?? (this.signInCommand = new MvxCommand(async () => await this.SignInAsync().ConfigureAwait(false), () => !IsInProgress)); }
+            get { return this.signInCommand ?? (this.signInCommand = new MvxAsyncCommand(this.SignInAsync, () => !IsInProgress)); }
         }
 
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateTo<DiagnosticsViewModel>());

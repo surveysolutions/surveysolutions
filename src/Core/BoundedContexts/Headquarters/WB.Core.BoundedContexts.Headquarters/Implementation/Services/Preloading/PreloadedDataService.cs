@@ -281,18 +281,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             return result.ToArray();
         }
 
-        public PreloadedDataRecord[] CreatePreloadedDataDtoFromSampleData(PreloadedDataByFile sampleDataFile)
+        public AssignmentPreloadedDataRecord[] CreatePreloadedDataDtoFromAssignmentData(PreloadedDataByFile sampleDataFile)
         {
-            var result = new List<PreloadedDataRecord>();
+            var result = new List<AssignmentPreloadedDataRecord>();
             var supervisorsCache = new Dictionary<string, Guid>();
 
             var interviewersCache = new Dictionary<string, UserView>();
 
             var responsibleNameIndex = this.GetResponsibleNameIndex(sampleDataFile);
+            var quantityIndex = this.GetQuantityIndex(sampleDataFile);
             var topLevelFileName = this.GetValidFileNameForTopLevelQuestionnaire();
             foreach (var contentRow in sampleDataFile.Content)
             {
                 var answersToFeaturedQuestions = this.BuildAnswerForLevel(contentRow, sampleDataFile.Header, topLevelFileName);
+
+                int? quantity = this.CheckAndGetQuantityForLevel(contentRow, quantityIndex); 
 
                 var responsibleName = this.CheckAndGetSupervisorNameForLevel(contentRow, responsibleNameIndex);
                 Guid? interviewerId = null;
@@ -307,12 +310,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 {
                     supervisorId = this.GetSupervisorIdAndUpdateCache(supervisorsCache, responsibleName);
                 }
-                result.Add(new PreloadedDataRecord
-                    {
+
+                result.Add(new AssignmentPreloadedDataRecord
+                {
                         PreloadedDataDto = new PreloadedDataDto(new[] { new PreloadedLevelDto(new decimal[0], answersToFeaturedQuestions)}),
                         SupervisorId = supervisorId,
-                        InterviewerId = interviewerId
-                    });
+                        InterviewerId = interviewerId,
+                        Quantity = quantity
+                });
             }
             return result.ToArray();
         }
@@ -322,9 +327,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             return dataFile.Header.ToList().FindIndex(header => string.Equals(header, ServiceColumns.ResponsibleColumnName, StringComparison.InvariantCultureIgnoreCase));
         }
 
+        private int GetQuantityIndex(PreloadedDataByFile dataFile)
+        {
+            return dataFile.Header.ToList().FindIndex(header => string.Equals(header, ServiceColumns.AssignmentsCountColumnName, StringComparison.InvariantCultureIgnoreCase));
+        }
+
         private string CheckAndGetSupervisorNameForLevel(string[] row, int supervisorNameIndex)
         {
             return (supervisorNameIndex >= 0) ? row[supervisorNameIndex] : string.Empty;
+        }
+
+        private int? CheckAndGetQuantityForLevel(string[] row, int quantityIndex)
+        {
+            const int defaultQuantityValue = 1;
+
+            if (quantityIndex < 0)
+                return defaultQuantityValue;
+
+            var quantityString = row[quantityIndex];
+
+            int quantity;
+            if (int.TryParse(quantityString, out quantity))
+                return quantity;
+            return defaultQuantityValue;
         }
 
         public string GetValidFileNameForTopLevelQuestionnaire()

@@ -123,9 +123,6 @@
   <data name="DesignerQuestionnaires" xml:space="preserve">
     <value>Questionnaires du site Designer</value>
   </data>
-  <data name="Import" xml:space="preserve">
-    <value>Importer</value>
-  </data>
   <data name="ImportInCensus" xml:space="preserve">
     <value>Importer en lmode recensement</value>
   </data>

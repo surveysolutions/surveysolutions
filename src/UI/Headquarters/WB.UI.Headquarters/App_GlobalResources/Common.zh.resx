@@ -228,4 +228,25 @@
   <data name="НasErrors" xml:space="preserve">
     <value>有错误</value>
   </data>
+  <data name="Assign" xml:space="preserve">
+    <value>分配</value>
+  </data>
+  <data name="HideIdentifying" xml:space="preserve">
+    <value>隐藏</value>
+  </data>
+  <data name="InterviewKey" xml:space="preserve">
+    <value>访谈键</value>
+  </data>
+  <data name="NewVersionAvailable" xml:space="preserve">
+    <value>有新版本：</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>否</value>
+  </data>
+  <data name="ShowIdentifying" xml:space="preserve">
+    <value>显示识别</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>是</value>
+  </data>
 </root>

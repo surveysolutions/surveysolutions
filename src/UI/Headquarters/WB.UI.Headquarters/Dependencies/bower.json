@@ -32,7 +32,8 @@
     "vue": "^2.2.2",
     "vue-resource": "^1.2.1",
     "flatpickr": "2.4.4",
-    "vee-validate": "2.0.0-beta.22"
+    "vee-validate": "2.0.0-beta.22",
+    "jquery.validate.unobtrusive.bootstrap": "*"
   },
   "devDependencies": {},
   "overrides": {

@@ -33,7 +33,6 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.MaskFormatter;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization;
-using WB.Core.Synchronization.Implementation.ImportManager;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
@@ -70,7 +69,6 @@ namespace WB.UI.Headquarters.Injections
             this.Kernel.Bind<ISupportedVersionProvider>().To<SupportedVersionProvider>();
             this.Kernel.Bind<IDataExportProcessDetails>().To<DataExportProcessDetails>();
             
-            this.Kernel.Bind<IBackupManager>().To<DefaultBackupManager>();
             this.Kernel.Bind<IRecordsAccessor>().To<CsvRecordsAccessor>();
             this.Kernel.Bind<IExceptionFilter>().To<HandleUIExceptionAttribute>();
 

@@ -1,0 +1,108 @@
+﻿<template>
+  <table class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews">
+    <thead>
+    </thead>
+    <tbody></tbody>
+  </table>
+</template>
+
+<script>
+export default {
+  props: {
+    addParamsToRequest: {
+      type: Function,
+      default: (d) => { return d }
+    },
+    responseProcessor: {
+      type: Function,
+      default: (r) => { return r }
+    },
+    tableOptions: {
+      type: Object,
+      default: () => { return {} }
+    }
+  },
+  data() {
+    return {
+      table: null
+    }
+  },
+  computed: {
+  },
+  watch: {
+  },
+  methods: {
+    reload: function (data) {
+      this.table.ajax.data = data
+      this.table.rows().deselect();
+      this.table.ajax.reload()
+    },
+    onTableInitComplete: function () {
+      var self = this;
+      $(this.$el).parent('.dataTables_wrapper').find('.dataTables_filter label').on('click', function (e) {
+        if (e.target !== this)
+          return;
+        if ($(this).hasClass("active")) {
+          $(this).removeClass("active");
+        }
+        else {
+          $(this).addClass("active");
+          $(this).children("input[type='search']").delay(200).queue(function () { $(this).focus(); $(this).dequeue(); });
+        }
+      });
+      var firstHeader = this.table.column(0).header();
+      $(firstHeader).html('<input class="double-checkbox" id="check-all" type="checkbox">' +
+        '<label for="check-all">' +
+        '<span class="tick"></span>' +
+        '</label>')
+      $('#check-all').change(function () {
+        if (!this.checked) {
+          self.table.rows().deselect()
+          $(self.table.rows).find(".checkbox-filter").prop('checked', false)
+        }
+        else {
+          self.table.rows().select()
+          $(self.table.rows).find(".checkbox-filter").prop('checked', true)
+        }
+      });
+    }
+  },
+  mounted() {
+    const self = this
+    var options = Object.assign({
+      processing: true,
+      serverSide: true,
+      language:
+      {
+        "url": window.input.settings.config.dataTableTranslationsUrl,
+      },
+      searchHighlight: true,
+      pagingType: "full_numbers",
+      lengthChange: false, // do not show page size selector
+      pageLength: 20, // page size
+      dom: "frtp",
+      conditionalPaging: true
+    }, this.tableOptions)
+
+    options.ajax.data = function (d) {
+      self.addParamsToRequest(d);
+    };
+
+    options.ajax.complete = function (response) {
+      self.responseProcessor(response.responseJSON);
+    };
+
+    this.table = $(this.$el).DataTable(options)
+    this.table.on('init.dt', this.onTableInitComplete);
+    this.table.on('select', function (e, dt, type, indexes) {
+      self.$emit('select', e, dt, type, indexes)
+    });
+    this.table.on('deselect', function (e, dt, type, indexes) {
+      self.$emit('deselect', e, dt, type, indexes)
+    });
+    this.$emit('DataTableRef', this.table)
+  },
+  destroyed() {
+  }
+}
+</script>

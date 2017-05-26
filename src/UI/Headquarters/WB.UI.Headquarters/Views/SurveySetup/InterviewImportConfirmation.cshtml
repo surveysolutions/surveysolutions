@@ -1,4 +1,5 @@
-﻿@model WB.UI.Headquarters.Models.PreloadedDataConfirmationModel
+﻿@using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData
+@model WB.UI.Headquarters.Models.PreloadedDataConfirmationModel
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = BatchUpload.VerifySampleData;
@@ -51,10 +52,10 @@
         <div class="row">
             <div class="page-header">
                 <ol class="breadcrumb">
-                    <li>@Html.ActionLink(MainMenu.Questionnaires, "Index", "SurveySetup")</li>
+                    <li>@Html.ActionLink(MainMenu.SurveySetup, "Index", "SurveySetup")</li>
                     <li>@Html.ActionLink(BatchUpload.BreadCrumbs_CreatingMultipleInterviews, "BatchUpload", "SurveySetup", new { id = Model.QuestionnaireId, version = Model.Version }, new { })</li>
                 </ol>
-                <h1>@BatchUpload.CreatingMultipleInterviews</h1>
+                <h1>@(Model.PreloadedContentType == PreloadedContentType.Panel ? BatchUpload.CreatingMultipleInterviews : BatchUpload.CreatingMultipleAssignments)</h1>
             </div>
         </div>
         <div class="row">
@@ -69,9 +70,16 @@
                 <div class="import-progress">
                     <p class="success-text">@BatchUpload.VerificationCompleted</p>
                     <p>
-                        @(Model.InterviewsCount == 1 ? BatchUpload.DataForSingleInterviewFound : string.Format(BatchUpload.DataForMultipleInterviewsFound, Model.InterviewsCount))
+                        @if (Model.PreloadedContentType == PreloadedContentType.Panel)
+                        {
+                            @(Model.EntitiesCount == 1 ? BatchUpload.DataForSingleInterviewFound : string.Format(BatchUpload.DataForMultipleInterviewsFound, Model.EntitiesCount))
+                        }
+                        else
+                        {
+                            @(Model.EntitiesCount == 1 ? BatchUpload.DataForSingleAssignmentFound : string.Format(BatchUpload.DataForMultipleAssignmentsFound, Model.EntitiesCount))
+                        }
                     </p>
-                    @if (Model.WasSupervsorProvided)
+                    @if (Model.WasSupervisorProvided)
                     {
                         <p>
                             @(Model.SupervisorsCount == 1 ? BatchUpload.AssignedToSingleSupervisor : string.Format(BatchUpload.AssignedToMultipleSupervisors, Model.SupervisorsCount))
@@ -84,11 +92,11 @@
                 @using (Html.BeginForm("InterviewImportConfirmation", "SurveySetup", new { Id = Model.Id, questionnaireId = Model.QuestionnaireId, version = Model.Version }, FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
-                    @Html.HiddenFor(x => x.InterviewsCount)
+                    @Html.HiddenFor(x => x.EntitiesCount)
                     @Html.HiddenFor(x => x.EnumeratorsCount)
                     @Html.HiddenFor(x => x.SupervisorsCount)
                     @Html.HiddenFor(x => x.FileName)
-                    @Html.HiddenFor(x => x.WasSupervsorProvided)
+                    @Html.HiddenFor(x => x.WasSupervisorProvided)
                     @Html.HiddenFor(x => x.PreloadedContentType)
 
                     <input id="supervisorId" name="supervisorId" type="hidden" data-bind="value: selectedSupervisorId">
@@ -98,7 +106,7 @@
                             @Html.ValidationSummary(true)
                         </div>
                     }
-                    if (!Model.WasSupervsorProvided)
+                    if (!Model.WasSupervisorProvided)
                     {
                         <div class="form-group @(modelState.Keys.Contains("SupervisorId") ? "has-error" : "")">
                             <label class="control-label">@BatchUpload.SelectSupervisorToAssign</label>
@@ -113,7 +121,9 @@
                         </div>
                     }
                     <div class="action-buttons">
-                        <button type="submit" class="btn btn-success" data-bind="@if (!Model.WasSupervsorProvided) { <text>enable: isSupervisorSelected</text> }">@BatchUpload.CreateInterviews</button>
+                        <button type="submit" class="btn btn-success" data-bind="@if (!Model.WasSupervisorProvided) { <text>enable: isSupervisorSelected</text> }">
+                             @(Model.PreloadedContentType == PreloadedContentType.Panel ? BatchUpload.CreateInterviews : BatchUpload.CreateAssignments)
+                        </button>
                         <a href="@Url.Action("BatchUpload", "SurveySetup", new {id = Model.QuestionnaireId, version = Model.Version})" class="back-link">
                             @BatchUpload.BackToImport
                         </a>

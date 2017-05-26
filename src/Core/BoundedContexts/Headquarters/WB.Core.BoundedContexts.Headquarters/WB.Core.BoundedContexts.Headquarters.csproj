@@ -184,7 +184,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aggregates\ReadonlyUser.cs" />
     <Compile Include="Aggregates\Tablet.cs" />
+    <Compile Include="Assignments\Assignment.cs" />
+    <Compile Include="Assignments\AssignmentMap.cs" />
+    <Compile Include="Assignments\AssignmentRow.cs" />
+    <Compile Include="Assignments\AssignmentsInputModel.cs" />
+    <Compile Include="Assignments\AssignmentsService.cs" />
+    <Compile Include="Assignments\AssignmentsWithoutIdentifingData.cs" />
+    <Compile Include="Assignments\AssignmentViewFactory.cs" />
+    <Compile Include="Assignments\IAssignmentsService.cs" />
+    <Compile Include="Assignments\IAssignmentViewFactory.cs" />
+    <Compile Include="Assignments\IdentifyingAnswer.cs" />
     <Compile Include="ClientIdentifier.cs" />
     <Compile Include="Commands\CloneQuestionnaire.cs" />
     <Compile Include="Commands\DeleteQuestionnaire.cs" />
@@ -294,7 +305,6 @@
     <Compile Include="Factories\IPreloadedDataServiceFactory.cs" />
     <Compile Include="Factories\IQuestionnaireBrowseViewFactory.cs" />
     <Compile Include="Factories\IRecordsAccessorFactory.cs" />
-    <Compile Include="IBackupManager.cs" />
     <Compile Include="Implementation\Aggregates\Questionnaire.cs" />
     <Compile Include="Implementation\ExportSettings.cs" />
     <Compile Include="Implementation\Factories\ChartStatisticsViewFactory.cs" />
@@ -305,7 +315,6 @@
     <Compile Include="Implementation\Factories\PreloadedDataServiceFactory.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireBrowseInputModel.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireBrowseViewFactory.cs" />
-    <Compile Include="Implementation\ImportManager\DefaultBackupManager.cs" />
     <Compile Include="Implementation\IRecordsAccessor.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireQuestionOptionsRepository.cs" />
     <Compile Include="Implementation\Repositories\FilebasedPreloadedDataRepository.cs" />
@@ -346,6 +355,7 @@
     <Compile Include="Implementation\Services\SurveyManagementInterviewCommandValidator.cs" />
     <Compile Include="Implementation\Services\SynchronizationLogViewFactory.cs" />
     <Compile Include="Implementation\Services\TabletInformation\FileBasedTabletInformationService.cs" />
+    <Compile Include="Mappings\ReadonlyUserMap.cs" />
     <Compile Include="Troubleshooting\IInterviewLogSummaryReader.cs" />
     <Compile Include="Troubleshooting\InterviewLogSummaryReader.cs" />
     <Compile Include="Troubleshooting\TroubleshootingService.cs" />
@@ -487,8 +497,6 @@
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\SyncPackagesProcessorBackgroundJob.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundSchedulerTask.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\SyncPackagesProcessorBackgroundJobSetting.cs" />
-    <Compile Include="SyncProvider\ISyncEventHandler.cs" />
-    <Compile Include="SyncProvider\SyncEventHandler.cs" />
     <Compile Include="SyncSettings.cs" />
     <Compile Include="UserPreloading\Dto\UserPreloadingDataRecord.cs" />
     <Compile Include="UserPreloading\Dto\UserPreloadingProcess.cs" />
@@ -546,6 +554,7 @@
     <Compile Include="Views\DetailsStatisticView.cs" />
     <Compile Include="Views\DetailsViewModel.cs" />
     <Compile Include="Views\Device\DeviceSyncInfo.cs" />
+    <Compile Include="Views\Device\SynchronizationActivity.cs" />
     <Compile Include="Views\IInterviewDataAndQuestionnaireMerger.cs" />
     <Compile Include="Views\IListView.cs" />
     <Compile Include="Views\InterviewDataAndQuestionnaireMerger.cs" />
@@ -767,7 +776,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Interviews\Denormalizers\" />
     <Folder Include="Synchronization\Questionnaire\" />
   </ItemGroup>
   <ItemGroup>
@@ -828,6 +836,7 @@
       <LastGenOutput>TroubleshootingMessages.ru.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TroubleshootingMessages.zh.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.fr.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.pt.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.resx">

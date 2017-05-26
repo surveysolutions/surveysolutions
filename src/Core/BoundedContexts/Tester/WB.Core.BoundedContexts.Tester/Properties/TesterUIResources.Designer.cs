@@ -339,5 +339,14 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
                 return ResourceManager.GetString("Prefs_VersionTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview data can&apos;t be applied to new version of questionnaire. We will open empty interview.
+        /// </summary>
+        public static string ReloadInterviewErrorMessage {
+            get {
+                return ResourceManager.GetString("ReloadInterviewErrorMessage", resourceCulture);
+            }
+        }
     }
 }

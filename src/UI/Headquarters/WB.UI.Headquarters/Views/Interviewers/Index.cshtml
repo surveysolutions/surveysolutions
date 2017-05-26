@@ -1,204 +1,38 @@
 ﻿@using Microsoft.Practices.ServiceLocation
 @using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.BoundedContexts.Headquarters.Views.User
-
-@model WB.Core.SharedKernels.SurveyManagement.Web.Models.InterviewersModel
-    
+  
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = Pages.Interviewers_Title;
     var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
+    
+    bool isVisibleSupervisorColumn = authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator;
+    bool isAdmin = authorizedUser.IsAdministrator; 
 }
-
-@{ bool isVisibleSupervisorColumn = authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator; }
-@{ bool isAdmin = authorizedUser.IsAdministrator; }
-
 
 @section scripts
 {
     @Scripts.Render("~/js/main-no-libs")
+    @Scripts.Render("~/js/common")
     @Scripts.Render("~/js/list")
     @Scripts.Render("~/js/interviewers")
-    @Scripts.Render("~/js/common")
 
     <script type="text/javascript">
-        'use strict';
 
-        Supervisor.VM.InterviewersNew = function (listViewUrl,
-            archiveUsersUrl,
-            interviewersPageUrl,
-            supervisorsUrl,
-            ajax,
-            notifier) {
-            Supervisor.VM.InterviewersNew.superclass.constructor.apply(this, []);
+        var allInterviewersApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "AllInterviewers"})';
+        var $impersonateUrl = '@Url.Action("ObservePerson", "Account", new { area = string.Empty })';
+        var $archiveUsersUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "ArchiveUsers"})';
+        var $interviewersPageUrl = '@Html.Raw(@Url.Action("Index", "Interviewers", new { }, Request.Url.Scheme))';
+        var $supervisorsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Supervisors"})';
 
-            var self = this;
+        var notifier = new Notifier();
+        var ajax = new Ajax(notifier);
 
-            self.Url = new Url();
-            self.SupervisorUrl = supervisorsUrl;
-            self.IsSupervisorsLoading = ko.observable(false);
-            self.Supervisors = function(query, sync, pageSize) {
-                self.IsSupervisorsLoading(true);
-                self.SendRequest(self.SupervisorUrl,
-                    { query: query, pageSize: pageSize, showLocked: true },
-                    function(response) {
-                        sync(response.Users, response.TotalCountByQuery);
-                    },
-                    true,
-                    true,
-                    function() {
-                        self.IsSupervisorsLoading(false);
-                    });
-            }
-            self.SelectedSupervisor = ko.observable();
-
-            self.Archived = ko.observable(false);
-            self.InterviewerOptionFilter = ko.observable('');
-
-            self.SelectedItems = ko.observableArray([]);
-
-            self.getConfirmAndSendRequest = function(confirmMessage, archive) {
-                notifier.confirm("@Pages.ConfirmationNeededTitle",
-                    confirmMessage,
-                    // confirm
-                    function() {
-                        var request = {
-                            userIds: self.SelectedItems(),
-                            archive: archive
-                        };
-
-                        ajax.sendRequest(archiveUsersUrl, "post", request, false,
-                            // onSuccess
-                            function (data) {
-                                var failedCommands = ko.utils.arrayFilter(data.CommandStatuses, function (cmd) {
-                                    return !cmd.IsSuccess;
-                                });
-
-                                if (failedCommands.length > 0) {
-                                    var failedDomainExceptions = ko.utils.arrayMap(failedCommands, function (failedCommand) {
-                                        if (!Supervisor.Framework.Objects.isUndefined(failedCommand.DomainException) && failedCommand.DomainException !== null)
-                                            return failedCommand.DomainException;
-                                        else {
-                                            return input.settings.messages.unhandledExceptionMessage;
-                                        }
-                                    });
-
-                                    $.each(failedDomainExceptions, function (index, message) {
-                                        notifier.showError("@Pages.OperationFailedTitle", message);
-                                    });
-                                }
-
-                                self.updater();
-                            });
-                    },
-                    // cancel
-                    function() {});
-            }
-
-            self.unarchiveInterviewers = function() {
-                self.getConfirmAndSendRequest("@Archived.UnarchiveInterviewerWarning \r\n @Pages.Interviewers_ArchiveInterviewersConfirm", false);
-            };
-
-            self.archiveInterviewers = function() {
-                self.getConfirmAndSendRequest("@Pages.Interviewers_ArchiveInterviewersConfirmMessage", true);
-            }
-
-            self.updater = function() {};
-
-            self.load = function(updater) {
-                self.updater = updater;
-
-                if (self.QueryString['supervisor'] != null) {
-                    self.SelectedSupervisor({ UserName: self.QueryString['supervisor'] });
-                }
-
-                self.Archived(self.QueryString['archived']);
-                self.InterviewerOptionFilter(self.QueryString['InterviewerOptionFilter']);
-
-                self.Url.query['supervisor'] = self.QueryString['supervisor'] || "";
-                self.Url.query['archived'] = self.QueryString['archived'] || "";
-                self.Url.query['InterviewerOptionFilter'] = self.QueryString['InterviewerOptionFilter'] || "";
-
-                self.SelectedSupervisor.subscribe(updater);
-                self.Archived.subscribe(updater);
-                self.InterviewerOptionFilter.subscribe(updater);
-            };
-
-            self.IsNothingSelected = ko.computed(function() {
-                return $(self.SelectedItems()).length === 0;
-            });
-        };
-
-        Supervisor.Framework.Classes.inherit(Supervisor.VM.InterviewersNew, Supervisor.VM.BasePage);
-
-        var InterviewersListModel = function(ajax, notifier) {
-
-            var allInterviewersApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "AllInterviewers"})';
-            var editUrl = '@Url.Action("Profile", "Interviewer", new {area = string.Empty})';
-            var $interviewersPageUrl = '@Html.Raw(@Url.Action("Index", "Interviewers", new {}, Request.Url.Scheme))';
-            var $interviewersApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "AllInterviewers"})';
-            var $supervisorsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Supervisors"})';
-            var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "ExecuteCommands"})';
-            var $archiveUsersUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "ArchiveUsers"})';
-
-            var model = new Supervisor.VM.InterviewersNew(
-                $interviewersApiUrl,
-                $archiveUsersUrl,
-                $interviewersPageUrl,
-                $supervisorsUrl,
-                ajax,
-                notifier);
-            ko.applyBindings(model);
-
-            var requestHeaders = {};
-            requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
-
-            var onTableInitComplete = function() {
-                $('.dataTables_filter label')
-                    .on('click',
-                        function(e) {
-                            if (e.target !== this)
-                                return;
-                            $(this).toggleClass("active");
-                            $(this).children("input[type='search']").delay(200).queue(function () { $(this).focus(); $(this).dequeue(); });
-
-                            $(".column-questionnaire-title").toggleClass("padding-left-slide");
-                        });
-            };
-
-            $.fn.dataTable.ext.errMode = 'none';
-
-            var table = $('table#interviewers')
-                .on('init.dt', onTableInitComplete)
-                .on('xhr.dt', function (e, settings, json, xhr) {
-                    if (xhr.status === 401)
-                        location.reload();
-                    else if (xhr.status != undefined && xhr.status !== 200)
-                        notifier.showError("@Pages.OperationFailedTitle", "@Pages.OperationFailedDescription");
-                })
-                .DataTable({
-                    processing: true,
-                    language:
-                    {
-                        "url": window.input.settings.config.dataTableTranslationsUrl,
-                        searchPlaceholder: "@Pages.Search"
-                    },
-                    serverSide: true,
-                    ajax: {
-                        url: allInterviewersApiUrl,
-                        type: "POST",
-                        headers: requestHeaders,
-                        "data": function(d) {
-                            model.SelectedItems.removeAll(); // move to before filter event
-
-                            d.SupervisorName = _.isUndefined(model.SelectedSupervisor())
-                                ? null
-                                : model.SelectedSupervisor().UserName;
-                            d.Archived = model.Archived();
-                            d.InterviewerOptionFilter = model.InterviewerOptionFilter();
-                        }
-                    },
-                    columns: [
+        $(function () {
+            var model = new Supervisor.VM.Interviewers(allInterviewersApiUrl, $archiveUsersUrl, ajax, $interviewersPageUrl, $supervisorsUrl);
+            model.getDataTableColumns = function () {
+                return [
                         @if (isAdmin)
                         {
                             <text>
@@ -221,10 +55,7 @@
                             data: "userName",
                             name: "UserName", // case-sensitive!
                             render: function (data, type, row) {
-                                if(!row.isArchived)
-                                    return "<a href=" + editUrl + "/" + row.userId + ">" + data + "</a>";
-                                else
-                                    return data;
+                                return !row.isArchived ? "<a href='@Url.Action("Profile", "Interviewer")/" + row.userId + "'>" + data + "</a>" : data;
                             }
                         },
                         {
@@ -267,82 +98,72 @@
                             "defaultContent": "@HttpUtility.JavaScriptStringEncode(Pages.Interviewers_InterviewerNeverConnected)",
                             "class": "changed-recently"
                         }
-                    ],
-                    searchHighlight: true,
-                    rowId: 'userId',
-                    pagingType: "full_numbers",
-                    lengthChange: false, // do not show page size selector
-                    pageLength: 50, // page size
-                    "order": [[1, 'asc']],
-                    conditionalPaging: true
-                });
+                    ];
+            };
 
-            var updater = function() {
+            model.unarchiveInterviewers = function () {
+                model.getConfirmAndSendRequest(notifier,
+                    "@Pages.ConfirmationNeededTitle",
+                    "@Archived.UnarchiveInterviewerWarning \r\n @Pages.Interviewers_ArchiveInterviewersConfirm",
+                    "@Pages.OperationFailedTitle",
+                    false);
+            };
 
-                table.ajax.reload();
+            model.archiveInterviewers = function () {
+                model.getConfirmAndSendRequest(notifier,
+                    "@Pages.ConfirmationNeededTitle",
+                    "@Pages.Interviewers_ArchiveInterviewersConfirmMessage",
+                    "@Pages.OperationFailedTitle",
+                    true);
             }
 
-            model.load(updater);
+            @if (authorizedUser.IsObserver)
+            {
+            <text>
+            model.onTableInitCompleteExtra = function () {
 
-            // Handle click on "Select all" control
-            $('#check-all')
-                .on('click',
-                    function() {
-                        // Get all rows with search applied
-                        var rows = table.rows({ 'search': 'applied' }).nodes();
-                        // Check/uncheck checkboxes for all rows in the table
+                var selectRowAndGetData = function (selectedItem) {
+                    var rowIndex = selectedItem.parent().children().index(selectedItem);
+                    model.Datatable.row(rowIndex).select();
+                    var selectedRows = model.Datatable.rows({ selected: true }).data()[0];
+                    return selectedRows;
+                }
 
-                        var checkboxes = $('input[type="checkbox"]', rows);
+                var impersonateAsUser = function (key, opt) {
+                    var selectedRow = selectRowAndGetData(opt.$trigger);
+                    window.location.href = $impersonateUrl + '?personName=' + selectedRow.userName;
+                };
 
-                        var newState = this.checked;
+                var buildMenuItem = function (selectedRow) {
+                    var items = {}
 
-                        _.forEach(checkboxes,
-                            function(checkbox) {
-                                if (newState) {
-                                    if (!checkbox.checked) {
-                                        model.SelectedItems.push(checkbox.value);
-                                    }
-                                } else {
-                                    if (checkbox.checked) {
-                                        var indexOfInterviewer = model.SelectedItems.indexOf(checkbox.value);
-                                        model.SelectedItems.splice(indexOfInterviewer, 1);
-                                    }
-                                }
-                         });
+                    items["impersonate"] =
+                    {
+                        name: "@Users.ImpersonateAsUser",
+                        callback: impersonateAsUser
+                    };
+                    return items;
+                };
 
-                        checkboxes.prop('checked', newState);
+                var contextMenuOptions = {
+                    selector: "table#data_holder .with-context-menu",
+                    autoHide: false,
+                    build: function ($trigger, e) {
+                        var selectedRow = selectRowAndGetData($trigger);
+                        var items = buildMenuItem(selectedRow);
+                        return { items: items };
+                    },
+                    trigger: 'left'
+                };
 
-                    });
+                $.contextMenu(contextMenuOptions);
+            };
+            </text>
+            }
 
-            // Handle click on checkbox to set state of "Select all" control
-            $('#interviewers tbody')
-                .on('change',
-                    'input[type="checkbox"]',
-                    function() {
-                        // If checkbox is not checked
-                        if (!this.checked) {
-                            var indexOfInterviewer = model.SelectedItems.indexOf(this.value);
-                            model.SelectedItems.splice(indexOfInterviewer, 1);
-
-                            var el = $('#check-all').get(0);
-                            // If "Select all" control is checked and has 'indeterminate' property
-                            if (el && el.checked && ('indeterminate' in el)) {
-                                // Set visual state of "Select all" control
-                                // as 'indeterminate'
-                                el.indeterminate = true;
-                            }
-                        } else {
-                            model.SelectedItems.push(this.value);
-                        }
-                    });
-
-        };
-
-        $(function() {
-            var notifier = new Notifier();
-            var interviewersModel = new InterviewersListModel(new Ajax(notifier), notifier);
+            ko.applyBindings(model);
+            model.load();
         });
-
     </script>
 }
 
@@ -395,7 +216,7 @@
                 @Html.Partial("_alerts")
                 <div class="page-header clearfix">
                     <div>
-                        <h1>@Pages.Interviewers_Header</h1>
+                        <h1>@Html.Raw(string.Format(Users.InterviewersCountDescription, @"<span data-bind='text: UsersCount'></span>"))</h1>
                         @if (isVisibleSupervisorColumn && !authorizedUser.IsObserving)
                         {
                             <a class="btn btn-success" href="@Url.Action("Create", "Interviewer", new {area = string.Empty})">
@@ -404,7 +225,8 @@
                         }
                     </div>
                 </div>
-                <table id="interviewers" class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes">
+                <table id="data_holder" class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes"
+                       data-order="[[ 1, &quot;asc&quot; ]]" data-searching="true">
                     <thead>
                     <tr>
                         @if (isAdmin)

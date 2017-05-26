@@ -12,22 +12,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_TextList_question_that_marked_as_filled_by_supervisor : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             supervisorTextListquestionId = Guid.Parse("10000000000000000000000000000000");
-            textQuestionId = Guid.Parse("20000000000000000000000000000000"); 
+            textQuestionId = Guid.Parse("20000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument(
-                new TextListQuestion()
-            {
-                PublicKey = supervisorTextListquestionId,
-                StataExportCaption = "var1",
-                QuestionScope = QuestionScope.Supervisor
-            },
-                new TextListQuestion()
-            {
-                StataExportCaption = "var2",
-                PublicKey = textQuestionId
-            });
+                Create.TextListQuestion(
+                    supervisorTextListquestionId,
+                    variable: "var1",
+                    scope: QuestionScope.Supervisor
+                ),
+                Create.TextListQuestion(
+                    variable: "var2",
+                    questionId: textQuestionId
+                ));
 
             verifier = CreateQuestionnaireVerifier();
         };
