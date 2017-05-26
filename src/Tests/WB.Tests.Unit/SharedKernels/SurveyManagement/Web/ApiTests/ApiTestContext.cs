@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
             return new UsersController(
                 logger ?? Mock.Of<ILogger>(),
                 userViewViewFactory ?? Mock.Of<IUserViewFactory>(),
-                Mock.Of<HqUserManager>());
+                null);
         }
 
         protected static QuestionnairesController CreateQuestionnairesController(
