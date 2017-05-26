@@ -1,4 +1,6 @@
-﻿using Main.Core.Documents;
+﻿using System;
+using System.IO;
+using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
@@ -8,6 +10,8 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -21,6 +25,7 @@ using WB.UI.Tester.Infrastructure.Internals.Security;
 using WB.UI.Tester.Infrastructure.Internals.Settings;
 using WB.UI.Tester.Infrastructure.Internals.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using WB.Infrastructure.Shared.Enumerator.Internals;
 
@@ -28,10 +33,12 @@ namespace WB.UI.Tester.Infrastructure
 {
     public class TesterInfrastructureModule : NinjectModule
     {
+        private readonly string basePath;
         private readonly string questionnaireAssembliesFolder;
 
-        public TesterInfrastructureModule(string questionnaireAssembliesFolder = "assemblies")
+        public TesterInfrastructureModule(string basePath, string questionnaireAssembliesFolder = "assemblies")
         {
+            this.basePath = basePath;
             this.questionnaireAssembliesFolder = questionnaireAssembliesFolder;
         }
 
@@ -72,6 +79,11 @@ namespace WB.UI.Tester.Infrastructure
 
             this.Bind<IQuestionnaireAssemblyAccessor>().To<TesterQuestionnaireAssemblyAccessor>().InSingletonScope()
                 .WithConstructorArgument("assemblyStorageDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory(this.questionnaireAssembliesFolder));
+
+            this.Bind<IPlainInterviewFileStorage>().To<TesterPlainInterviewFileStorage>().InSingletonScope()
+                .WithConstructorArgument("rootDirectoryPath", basePath);
+            this.Bind<IQuestionnaireTranslator>().To<QuestionnaireTranslator>();
+            this.Bind<IQuestionnaireStorage>().To<QuestionnaireStorage>().InSingletonScope();
         }
     }
 }
