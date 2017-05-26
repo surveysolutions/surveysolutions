@@ -34,7 +34,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;$(Constants)</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
@@ -57,8 +57,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants>$(Constants)</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
@@ -669,24 +668,22 @@
     <ProjectReference Include="..\..\Shared\WB.UI.Shared.Enumerator\WB.UI.Shared.Enumerator.csproj">
       <Project>{5DAA7EAF-9A68-4302-AE74-EF0DAA0BD169}</Project>
       <Name>WB.UI.Shared.Enumerator</Name>
-    </ProjectReference>    
+    </ProjectReference>
   </ItemGroup>
-  
   <Choose>
     <When Condition="!$(DefineConstants.Contains('EXCLUDEEXTENSIONS'))">
-	  <ItemGroup>
+      <ItemGroup>
         <ProjectReference Include="..\..\Shared\WB.UI.Shared.Extensions\WB.UI.Shared.Extensions.csproj">
           <Project>{f69d3c48-f648-4b9f-9b4f-ba44e014224c}</Project>
           <Name>WB.UI.Shared.Extensions</Name>
-        </ProjectReference>      
+        </ProjectReference>
       </ItemGroup>
     </When>
     <Otherwise>
-      <ItemGroup>      
+      <ItemGroup>
       </ItemGroup>
     </Otherwise>
-  </Choose> 
-  
+  </Choose>
   <ItemGroup>
     <Folder Include="Assets\" />
   </ItemGroup>
