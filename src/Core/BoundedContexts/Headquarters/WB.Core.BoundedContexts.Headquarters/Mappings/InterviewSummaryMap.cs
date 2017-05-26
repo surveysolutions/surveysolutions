@@ -27,6 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.IsDeleted);
             Property(x => x.Key);
             Property(x => x.HasErrors);
+            Property(x => x.AssignmentId);
             Property(x => x.ReceivedByInterviewer, pm => pm.Column(cm =>
             {
                 cm.Default(false);

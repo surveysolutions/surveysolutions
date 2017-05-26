@@ -13,7 +13,8 @@ namespace WB.UI.Headquarters.Models.Api
                 .ForMember(x => x.Capacity, opts => opts.MapFrom(x => x.Capacity))
                 .ForMember(x => x.Completed, opts => opts.MapFrom(x => x.Completed))
                 .ForMember(x => x.QuestionnaireId, opts => opts.MapFrom(x => x.QuestionnaireId))
-                .ForMember(x => x.IdentifyingData, opts => opts.MapFrom(x => x.IdentifyingData));
+                .ForMember(x => x.IdentifyingData, opts => opts.MapFrom(x => x.IdentifyingData))
+                .ForMember(x => x.Completed, opts => opts.MapFrom(x => x.InterviewSummaries.Count));
 
             this.CreateMap<IdentifyingAnswer, AssignmentApiView.IdentifyingAnswer>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.Answer))
