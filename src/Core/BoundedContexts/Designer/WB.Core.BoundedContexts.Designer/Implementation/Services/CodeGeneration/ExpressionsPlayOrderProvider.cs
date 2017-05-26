@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -32,9 +31,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public List<Guid> GetExpressionsPlayOrder(ReadOnlyQuestionnaireDocument questionnaire)
         {
-            Dictionary<Guid, List<Guid>> conditionalDependencies = BuildConditionalDependencies(questionnaire.Questionnaire);
-            Dictionary<Guid, List<Guid>> structuralDependencies = BuildStructuralDependencies(questionnaire.Questionnaire);
-            Dictionary<Guid, List<Guid>> rosterDependencies = BuildRosterDependencies(questionnaire.Questionnaire);
+            Dictionary<Guid, List<Guid>> conditionalDependencies = BuildConditionalDependencies(questionnaire);
+            Dictionary<Guid, List<Guid>> structuralDependencies = BuildStructuralDependencies(questionnaire);
+            Dictionary<Guid, List<Guid>> rosterDependencies = BuildRosterDependencies(questionnaire);
             Dictionary<Guid, Guid> linkedQuestionByRosterDependencies = BuildLinkedQuestionByRosterDependencies(questionnaire);
 
             var mergedDependencies = new Dictionary<Guid, List<Guid>>();
@@ -99,14 +98,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 .ToDictionary(x => x.PublicKey, x => x.LinkedToQuestionId ?? x.LinkedToRosterId.Value);
         }
 
-        private Dictionary<Guid, List<Guid>> BuildStructuralDependencies(QuestionnaireDocument questionnaire)
+        private Dictionary<Guid, List<Guid>> BuildStructuralDependencies(ReadOnlyQuestionnaireDocument questionnaire)
         {
             return questionnaire
-                .GetAllGroups()
+                .Find<IGroup>() //GetAllGroups()
                 .ToDictionary(group => @group.PublicKey, group => @group.Children.Select(x => x.PublicKey).ToList());
         }
 
-        private Dictionary<Guid, List<Guid>> BuildRosterDependencies(QuestionnaireDocument questionnaire)
+        private Dictionary<Guid, List<Guid>> BuildRosterDependencies(ReadOnlyQuestionnaireDocument questionnaire)
         {
             var rosterDependencies = 
                 (questionnaire.Find<Group>(x => x.IsRoster && x.RosterSizeSource == RosterSizeSourceType.Question)
@@ -122,7 +121,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return rosterDependencies;
         }
 
-        public Dictionary<Guid, List<Guid>> BuildConditionalDependencies(QuestionnaireDocument questionnaireDocument)
+        public Dictionary<Guid, List<Guid>> BuildConditionalDependencies(ReadOnlyQuestionnaireDocument questionnaireDocument)
         {
             var dependencies = new Dictionary<Guid, List<Guid>>();
 
@@ -158,7 +157,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return dependencies;
         }
 
-        private static Dictionary<string, Guid> GetAllVariableNames(QuestionnaireDocument questionnaireDocument)
+        private static Dictionary<string, Guid> GetAllVariableNames(ReadOnlyQuestionnaireDocument questionnaireDocument)
         {
             var variablesOfQuestions = questionnaireDocument
                 .Find<IQuestion>(x => !string.IsNullOrWhiteSpace(x.StataExportCaption))

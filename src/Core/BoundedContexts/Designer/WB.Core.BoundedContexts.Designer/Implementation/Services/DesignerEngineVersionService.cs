@@ -50,9 +50,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     }
                 }
             },
-             new QuestionnaireContentVersion
+            new QuestionnaireContentVersion
             {
-                Version = ApiVersion.MaxQuestionnaireVersion, /*When will be added new version, it should be changed to previous value of ApiVersion.MaxQuestionnaireVersion*/
+                Version = 19,
                 NewFeatures = new []
                 {
                     new QuestionnaireFeature
@@ -67,8 +67,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                           Description = "Usage of @rowindex in expressions"
                     }
                 }
-            }
-             
+            },
+            //new QuestionnaireContentVersion
+            //{
+            //    Version = ApiVersion.MaxQuestionnaireVersion, /*When will be added new version, it should be changed to previous value of ApiVersion.MaxQuestionnaireVersion*/
+            //    NewFeatures = new []
+            //    {
+            //        new QuestionnaireFeature
+            //        {
+            //              HasQuestionnaire = questionnaire => true,
+            //              Description = "New expression storage"
+            //        }
+            //    }
+            //}
         };
 
         public int LatestSupportedVersion => this.questionnaireContentVersions.Last().Version;

@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireDocument questionnaire, int targetVersion)
         {
-            return targetVersion > 20 
+            return targetVersion >= 20 
                 ? this.codeGeneratorV2.Generate(questionnaire, targetVersion) 
                 : this.codeGenerator.Generate(questionnaire, targetVersion);
         }
