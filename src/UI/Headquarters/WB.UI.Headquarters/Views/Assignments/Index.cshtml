@@ -115,6 +115,7 @@
                 isLoading: false,
                 tableOptions: tableOptions,
                 selectedRows: [],
+                totalRows: 0,
                 showArchive: false,
                 newResponsibleId: null
             },
@@ -126,6 +127,7 @@
                 },
                 responseProcessor: function(response) {
                     this.isLoading = false;
+                    this.totalRows = response.recordsTotal;
                 },
                 userSelected: function(newValue) {
                     this.responsibleId = newValue;
@@ -259,7 +261,7 @@
             <div class="main-information">
                 <div class="page-header clearfix">
                     <h1>
-                        @Assignments.AssignmentsHeader
+                        @Assignments.AssignmentsHeader ({{totalRows}})
                     </h1>
                 </div>
                 <div class="interviews-info">
