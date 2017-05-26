@@ -9,6 +9,8 @@ using System.Web.Hosting;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
@@ -34,7 +36,9 @@ namespace WB.UI.Headquarters.API.Interviewer
         private readonly ISyncProtocolVersionProvider syncVersionProvider;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IProductVersion productVersion;
+        private readonly IAssignmentsService assignmentsService;
         private readonly HqSignInManager signInManager;
+        private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
 
         public InterviewerApiController(
             IFileSystemAccessor fileSystemAccessor,
@@ -44,7 +48,9 @@ namespace WB.UI.Headquarters.API.Interviewer
             ISyncProtocolVersionProvider syncVersionProvider,
             IAuthorizedUser authorizedUser,
             IProductVersion productVersion,
-            HqSignInManager signInManager)
+            HqSignInManager signInManager,
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+            IAssignmentsService assignmentsService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.tabletInformationService = tabletInformationService;
@@ -54,6 +60,8 @@ namespace WB.UI.Headquarters.API.Interviewer
             this.authorizedUser = authorizedUser;
             this.productVersion = productVersion;
             this.signInManager = signInManager;
+            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.assignmentsService = assignmentsService;
         }
 
         [HttpGet]
@@ -111,7 +119,7 @@ namespace WB.UI.Headquarters.API.Interviewer
             var userId = User.Identity.GetUserId();
 
             var user = userId != null 
-                ? this.userViewFactory.GetUser(new UserViewInputModel(Guid.Parse(userId))) 
+                ? this.userViewFactory.GetUser(new UserViewInputModel(Guid.Parse(userId)))
                 : null;
 
             this.tabletInformationService.SaveTabletInformation(
@@ -133,13 +141,24 @@ namespace WB.UI.Headquarters.API.Interviewer
             if (deviceSyncProtocolVersion < lastNonUpdatableSyncProtocolVersion)
                 return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
 
-            if (deviceSyncProtocolVersion != serverSyncProtocolVersion)
-                return this.Request.CreateResponse(HttpStatusCode.NotAcceptable);
-
             var currentVersion = new Version(this.productVersion.ToString().Split(' ')[0]);
             var interviewerVersion = GetInterviewerVersionFromUserAgent(this.Request);
 
             if (interviewerVersion != null && interviewerVersion > currentVersion)
+            {
+                return this.Request.CreateResponse(HttpStatusCode.NotAcceptable);
+            }
+
+            if (deviceSyncProtocolVersion == 7050 /* PRE assignment devices, that still allowed to connect*/)
+            {
+                var interviewerAssignments = this.assignmentsService.GetAssignments(this.authorizedUser.Id);
+                var assignedQuestionarries = this.questionnaireBrowseViewFactory.GetByIds(interviewerAssignments.Select(ia => ia.QuestionnaireId).ToArray());
+
+                if (assignedQuestionarries.Any(aq => aq.AllowAssignments))
+                {
+                    return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
+                }
+            } else if (deviceSyncProtocolVersion != serverSyncProtocolVersion)
             {
                 return this.Request.CreateResponse(HttpStatusCode.NotAcceptable);
             }
@@ -157,7 +176,7 @@ namespace WB.UI.Headquarters.API.Interviewer
                 {
                     return new Version(product.Product.Version);
                 }
-            }   
+            }
 
             return null;
         }

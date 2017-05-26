@@ -355,7 +355,7 @@
     <value>manual mode</value>
   </data>
   <data name="SimpleDescription" xml:space="preserve">
-    <value>Upload tab separated file with necessary identifying data. Optionally, specify usernames of supervisors or enumerators in the _responsible column.</value>
+    <value>Upload tab separated file with necessary identifying data. Optionally, specify usernames of supervisors or enumerators in the _responsible column, in _quantity column you can specify capacity of assignment.</value>
   </data>
   <data name="SimpleTitle" xml:space="preserve">
     <value>Identifying data only</value>

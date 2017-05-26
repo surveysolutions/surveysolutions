@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -75,6 +76,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
         public QuestionnaireBrowseItem GetById(QuestionnaireIdentity identity)
         {
             return this.reader.GetById(identity.ToString());
+        }
+
+        public List<QuestionnaireBrowseItem> GetByIds(params QuestionnaireIdentity[] identities)
+        {
+            var ids = identities.Select(id => id.ToString()).ToArray();
+            return this.reader.Query(x => x.Where(qbi => ids.Contains(qbi.Id))).ToList();
         }
     }
 }

@@ -84,9 +84,27 @@ namespace WB.UI.Headquarters.API
             return this.Ok();
         }
 
+        [Route("Unarchive")]
+        [HttpPost]
+        public IHttpActionResult Unarchive([FromBody]int[] ids)
+        {
+            if (ids == null) return this.BadRequest();
+
+            foreach (var id in ids)
+            {
+                Assignment assignment = this.assignmentsStorage.GetById(id);
+                assignment.Unarchive();
+            }
+
+            return this.Ok();
+        }
+
+        [HttpPost]
+        [Route("Assign")]
         public IHttpActionResult Assign([FromBody] AssignRequest request)
         {
-            foreach (var idToAssign in request.ids)
+            if (request?.Ids == null) return this.BadRequest();
+            foreach (var idToAssign in request.Ids)
             {
                 Assignment assignment = this.assignmentsStorage.GetById(idToAssign);
                 assignment.Reassign(request.ResponsibleId);
@@ -99,7 +117,7 @@ namespace WB.UI.Headquarters.API
         {
             public Guid ResponsibleId { get; set; }
 
-            public int[] ids { get; set; }
+            public int[] Ids { get; set; }
         }
 
         public class AssignmetsDataTableResponse : DataTableResponse<AssignmentRow>
