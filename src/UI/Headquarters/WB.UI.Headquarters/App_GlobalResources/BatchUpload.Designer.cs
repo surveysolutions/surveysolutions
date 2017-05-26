@@ -961,7 +961,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload tab separated file with necessary identifying data. Optionally, specify usernames of supervisors or enumerators in the _responsible column..
+        ///   Looks up a localized string similar to Upload tab separated file with necessary identifying data. Optionally, specify usernames of supervisors or enumerators in the _responsible column, in _quantity column you can specify capacity of assignment..
         /// </summary>
         internal static string SimpleDescription {
             get {

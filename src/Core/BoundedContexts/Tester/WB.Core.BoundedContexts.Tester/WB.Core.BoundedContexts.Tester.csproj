@@ -40,6 +40,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Implementation\Services\IDesignerApiService.cs" />
+    <Compile Include="Implementation\Services\TesterPlainInterviewFileStorage.cs" />
     <Compile Include="Implementation\Services\QuestionnaireImportService.cs" />
     <Compile Include="Properties\TesterUIResources.id-ID.Designer.cs">
       <AutoGen>True</AutoGen>
