@@ -56,12 +56,7 @@
                     title: "@Assignments.Capacity",
                     orderable: true,
                     searchable: false,
-                    render: function(data) {
-                        if (data == null) {
-                            return "<span>@Assignments.Unlimited</span>";
-                        }
-                        return data;
-                    }
+                    "defaultContent": "<span>@Assignments.Unlimited</span>"
                 },
                 {
                     data: "identifyingQuestions",
@@ -108,9 +103,6 @@
             select: {
                 style: 'multi',
                 selector: 'td>label'
-            },
-            fixedColumns: {
-                leftColumns: 1
             }
         };
 
@@ -127,25 +119,25 @@
                 newResponsibleId: null
             },
             methods: {
-                addParamsToRequest: function(requestData) {
+                addParamsToRequest: function (requestData) {
                     requestData.responsibleId = (this.responsibleId || {}).key;
                     requestData.questionnaireId = (this.questionnaireId || {}).key;
                     requestData.showArchive = this.showArchive;
                 },
-                responseProcessor: function(response) {
+                responseProcessor: function (response) {
                     this.isLoading = false;
                 },
-                userSelected: function(newValue) {
+                userSelected: function (newValue) {
                     this.responsibleId = newValue;
                 },
-                questionnaireSelected: function(newValue) {
+                questionnaireSelected: function (newValue) {
                     this.questionnaireId = newValue;
                 },
-                newResponsibleSelected: function(newValue) {
+                newResponsibleSelected: function (newValue) {
                     this.newResponsibleId = newValue;
                 },
-                startWatchers: function(props, watcher) {
-                    var iterator = function(prop) {
+                startWatchers: function (props, watcher) {
+                    var iterator = function (prop) {
                         this.$watch(prop, watcher);
                     };
                     props.forEach(iterator, this);
@@ -156,33 +148,33 @@
                     this.selectedRows.splice(0, this.selectedRows.length);
                     this.$refs.table.reload(self.reloadTable);
                 },
-                removeSelected: function() {
+                removeSelected: function () {
                     this.$http.delete(assignmentsEndpoint,
                             {
                                 body: this.selectedRows
                             })
-                        .then(function() {
+                        .then(function () {
                             this.reloadTable();
                         });
                 },
-                assignSelected: function() {
+                assignSelected: function () {
                     $('#assignModal').modal({
                         keyboard: false
                     });
                 },
-                assign: function() {
+                assign: function () {
                     this.$http.post(assignmentsEndpoint + "/Assign",
                         {
                             responsibleId: this.newResponsibleId.key,
                             ids: this.selectedRows
-                        }).then(function() {
-                        $('#assignModal').modal('hide');
-                        this.newResponsibleId = null;
-                        this.reloadTable();
-                    });
+                        }).then(function () {
+                            $('#assignModal').modal('hide');
+                            this.newResponsibleId = null;
+                            this.reloadTable();
+                        });
                 }
             },
-            mounted: function() {
+            mounted: function () {
                 var self = this;
                 document.querySelector("main").classList.remove("hold-transition");
                 document.querySelector("footer").classList.add("footer-adaptive");
@@ -190,20 +182,20 @@
                 this.startWatchers(['responsibleId', 'questionnaireId', 'showArchive'], this.reloadTable.bind(self));
                 this.reloadTable();
                 this.$refs.table.$on('select',
-                    function(e, dt) {
+                    function (e, dt) {
                         if (dt.id) {
                             self.selectedRows.push(parseInt(dt.id()));
                         }
                     });
                 this.$refs.table.$on('deselect',
-                    function(e, dt) {
+                    function (e, dt) {
                         if (dt.id) Vue.set(self, "selectedRows", _.without(self.selectedRows, parseInt(dt.id())));
                     });
                 $('.ddl').selectpicker('refresh');
             }
         });
 
-        window.onload = function() {
+        window.onload = function () {
             Vue.http.headers.common['Authorization'] = input.settings.acsrf.token;
 
             app.$mount('#app');
@@ -263,7 +255,7 @@
                     </h1>
                 </div>
                 <div class="interviews-info">
-                    <div class="table-wrapper interviews-large-screen">
+                    <div class="table-wrapper">
                         <assignments-table ref="table"
                                            :add-params-to-request="addParamsToRequest"
                                            :response-processor="responseProcessor"
@@ -295,7 +287,7 @@
                 <div class="modal-body">
                     <h3>@string.Format(Assignments.NumberOfAssignmentsAffected, "{{selectedRows.length}}")</h3>
                     <p>
-                        Select new responsible
+                        @Assignments.SelectResponsible
                         <typeahead placeholder="@Common.Responsible"
                                    control-id="newResponsibleId"
                                    :value="newResponsibleId"
@@ -303,13 +295,14 @@
                                    v-on:selected="newResponsibleSelected"
                                    fetch-url="@(Model.IsSupervisor ?
                                                     Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"}) :
-                                                    Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"}))"></typeahead>
+                                                    Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"}))">
+                        </typeahead>
                     </p>
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" v-on:click="assign" :disabled="!newResponsibleId">@Common.Assign</button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal">close</button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal">@Common.Cancel</button>
                 </div>
             </div>
         </div>

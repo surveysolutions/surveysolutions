@@ -142,6 +142,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select responsible.
+        /// </summary>
+        public static string SelectResponsible {
+            get {
+                return ResourceManager.GetString("SelectResponsible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Archived status.
         /// </summary>
         public static string ShowArchived {
