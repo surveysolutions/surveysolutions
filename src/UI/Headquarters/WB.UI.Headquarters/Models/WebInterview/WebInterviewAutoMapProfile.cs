@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using AutoMapper;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 

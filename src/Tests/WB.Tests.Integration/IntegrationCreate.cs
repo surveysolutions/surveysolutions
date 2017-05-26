@@ -173,8 +173,7 @@ namespace WB.Tests.Integration
         {
             var interview = new StatefulInterview(
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                expressionProcessorStatePrototypeProvider ??
-                Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
+                expressionProcessorStatePrototypeProvider ?? Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
                 Create.Service.SubstitionTextFactory());
 
             interview.CreateInterview(

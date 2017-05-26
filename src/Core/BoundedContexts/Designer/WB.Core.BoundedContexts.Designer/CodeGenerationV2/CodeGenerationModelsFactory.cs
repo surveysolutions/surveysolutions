@@ -241,7 +241,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                 case QuestionType.MultyOption:
                     var multiOtion = question as MultyOptionsQuestion;
                     if (multiOtion != null && multiOtion.YesNoView)
-                        return typeof(YesNoAnswers).Name;
+                        return typeof(YesNoAndAnswersMissings).Name;
 
                     if (question.LinkedToQuestionId == null && question.LinkedToRosterId == null)
                         return "int[]";

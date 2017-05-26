@@ -95,6 +95,7 @@ namespace WB.Tests.Integration.InterviewTests
             QuestionnaireIdentity questionnaireIdentity = null,
             IQuestionnaireStorage questionnaireStorage = null)
         {
+            return SetupStatefullInterviewWithExpressionStorage(questionnaireDocument, events, answersOnPrefilledQuestions, questionnaireIdentity, questionnaireStorage);
             questionnaireIdentity = questionnaireIdentity ?? new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1);
 
             ILatestInterviewExpressionState state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument, useLatestEngine);
@@ -116,10 +117,40 @@ namespace WB.Tests.Integration.InterviewTests
             return interview;
         }
 
-        protected static Interview SetupInterviewWithExpressionStorage(
+        protected static StatefulInterview SetupStatefullInterviewWithExpressionStorage(
             QuestionnaireDocument questionnaireDocument,
             IEnumerable<object> events = null,
-            IInterviewExpressionStorage precompiledState = null)
+            Dictionary<Guid, AbstractAnswer> answersOnPrefilledQuestions = null,
+            QuestionnaireIdentity questionnaireIdentity = null,
+            IQuestionnaireStorage questionnaireStorage = null)
+        {
+            questionnaireIdentity = questionnaireIdentity ?? new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1);
+            questionnaireDocument.IsUsingExpressionStorage = true;
+            questionnaireDocument.ExpressionsPlayOrder = IntegrationCreate.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(questionnaireDocument.AsReadOnly());
+
+            var state = GetLatestExpressionStorage(questionnaireDocument);
+
+            var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionProcessor(It.IsAny<QuestionnaireIdentity>()) == state);
+
+            var questionnaireRepository = questionnaireStorage ?? Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
+                questionnaireIdentity.QuestionnaireId,
+                Create.Entity.PlainQuestionnaire(questionnaireDocument),
+                questionnaireIdentity.Version);
+
+            var interview = IntegrationCreate.StatefulInterview(
+                questionnaireIdentity,
+                expressionProcessorStatePrototypeProvider: statePrototypeProvider,
+                answersOnPrefilledQuestions: answersOnPrefilledQuestions,
+                questionnaireRepository: questionnaireRepository);
+
+            ApplyAllEvents(interview, events);
+
+            return interview;
+        }
+
+        protected static Interview SetupInterviewWithExpressionStorage(
+            QuestionnaireDocument questionnaireDocument,
+            IEnumerable<object> events = null)
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
             questionnaireDocument.IsUsingExpressionStorage = true;
@@ -131,7 +162,7 @@ namespace WB.Tests.Integration.InterviewTests
             Setup.InstanceToMockedServiceLocator(questionnaireRepository);
             Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
 
-            var state = GetLatestExpressionStorage(questionnaireDocument, precompiledState);
+            var state = GetLatestExpressionStorage(questionnaireDocument);
 
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionProcessor(It.IsAny<QuestionnaireIdentity>()) == state);
 
@@ -144,14 +175,14 @@ namespace WB.Tests.Integration.InterviewTests
 
         protected static Interview SetupInterview(QuestionnaireDocument questionnaireDocument)
         {
-            return SetupInterviewWithExpressionStorage(questionnaireDocument, null, null);
+            return SetupInterviewWithExpressionStorage(questionnaireDocument, null);
         }
 
         protected static Interview SetupInterview(
             QuestionnaireDocument questionnaireDocument,
             IEnumerable<object> events)
         {
-            return SetupInterviewWithExpressionStorage(questionnaireDocument, events, null);
+            return SetupInterviewWithExpressionStorage(questionnaireDocument, events);
         }
 
         private static IInterviewExpressionStorage GetLatestExpressionStorage(

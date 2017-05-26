@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
@@ -9,10 +10,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class InterviewStateForExpressions : IInterviewStateForExpressions
     {
         private readonly InterviewTree tree;
+        private readonly IQuestionnaire questionnaire;
 
-        public InterviewStateForExpressions(InterviewTree tree, IInterviewPropertiesForExpressions interviewProperties)
+        public InterviewStateForExpressions(InterviewTree tree, IQuestionnaire questionnaire, IInterviewPropertiesForExpressions interviewProperties)
         {
             this.tree = tree;
+            this.questionnaire = questionnaire;
             this.Properties = interviewProperties;
         }
 
@@ -20,7 +23,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             var question = this.tree.GetQuestion(questionId, new RosterVector(rosterVector));
 
-            if (!question.IsAnswered() || question.IsDisabled())
+            if ((!question.IsAnswered() || question.IsDisabled()) && !question.IsYesNo) // because of missing field
                 return default(T);
 
             if (question.IsInteger) return question.AsInteger.GetAnswer().Value.To<T>(); //"int?"
@@ -28,7 +31,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             if (question.IsSingleFixedOption) return question.AsSingleFixedOption.GetAnswer().SelectedValue.To<T>();//int?
             if (question.IsMultiFixedOption) return question.AsMultiFixedOption.GetAnswer().ToInts().ToArray().To<T>();//int[]
-            if (question.IsYesNo) return question.AsYesNo.GetAnswer().ToYesNoAnswers().To<T>(); //YesNoAnswers
+            if (question.IsYesNo)
+            {
+                return new YesNoAndAnswersMissings(
+                    this.questionnaire.GetOptionsForQuestion(questionId, null, "").Select(x => x.Value), 
+                    question.AsYesNo.GetAnswer().CheckedOptions).To<T>(); //YesNoAndAnswersMissings
+            }
 
             if (question.IsSingleLinkedOption) return question.AsSingleLinkedOption.GetAnswer().SelectedValue.To<T>();//RosterVector
             if (question.IsMultiLinkedOption) return question.AsMultiLinkedOption.GetAnswer().CheckedValues.ToArray().To<T>();//RosterVector[]
