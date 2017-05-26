@@ -113,7 +113,7 @@ namespace WB.UI.Designer.Api.Headquarters
             questionnaire.Macros = null;
             questionnaire.LookupTables = null;
             questionnaire.IsUsingExpressionStorage = true;
-            questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(questionnaire.AsReadOnly());
+            questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(questionnaireView.Source.AsReadOnly());
 
             return new QuestionnaireCommunicationPackage
             {

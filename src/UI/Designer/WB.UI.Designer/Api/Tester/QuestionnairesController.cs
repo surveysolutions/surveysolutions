@@ -68,7 +68,8 @@ namespace WB.UI.Designer.Api.Tester
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
             }
 
-            var questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source);
+            // 20 - to use expression storage
+            var questionnaireContentVersion = Math.Max(20, this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source));
 
             string resultAssembly;
             try
@@ -86,9 +87,9 @@ namespace WB.UI.Designer.Api.Tester
             }
 
             var questionnaire = questionnaireView.Source.Clone();
+            questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(questionnaireView.Source.AsReadOnly());
             questionnaire.Macros = null;
             questionnaire.IsUsingExpressionStorage = true;
-            questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(questionnaire.AsReadOnly());
 
             return new Questionnaire
             {
