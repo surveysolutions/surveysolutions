@@ -1,5 +1,6 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
@@ -15,6 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             Property(x => x.Archived);
             Property(x => x.CreatedAtUtc);
             Property(x => x.UpdatedAtUtc);
+            Property(x => x.Completed);
 
             Component(x => x.QuestionnaireId, cmp =>
             {
@@ -22,6 +24,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 cmp.Property(x => x.QuestionnaireId);
                 cmp.Property(x => x.Version, ptp => ptp.Column("QuestionnaireVersion"));
             });
+
+            Set(x => x.InterviewSummaries, set =>
+            {
+                set.Key(key =>
+                {
+                    key.Column("assignmentid");
+                });
+                set.Lazy(CollectionLazy.NoLazy);
+                set.Cascade(Cascade.All | Cascade.DeleteOrphans);
+            },
+            relation => relation.OneToMany());
 
             List(x => x.IdentifyingData, mapper =>
             {
@@ -43,6 +56,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 mto.Update(false);
                 mto.Insert(false);
             });
+        }
+    }
+
+    [PlainStorage]
+    public class InterviewSummaryMap : ClassMapping<InterviewSummary>
+    {
+        public InterviewSummaryMap()
+        {
+            Schema("readside");
+            this.Table("InterviewSummaries");
+            this.DynamicUpdate(true);
+            Id(x => x.SummaryId);
+            Property(x => x.AssignmentId);
         }
     }
 }

@@ -933,4 +933,7 @@
     <value>(вер. {1}) {0} </value>
     <comment>{0} - Questionnaire name, {1} - Questionnaire version</comment>
   </data>
+  <data name="ConfirmationNeededTitle" xml:space="preserve">
+    <value>Требуется подверждение</value>
+  </data>
 </root>

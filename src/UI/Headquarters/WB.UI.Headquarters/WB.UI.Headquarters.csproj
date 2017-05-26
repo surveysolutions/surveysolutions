@@ -1452,6 +1452,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\AdminSettingsController.cs" />
+    <Compile Include="API\Interviewer\v2\AssignmentsController.cs" />
     <Compile Include="API\AssignmetsApiController.cs" />
     <Compile Include="API\PublicApi\BaseApiServiceController.cs" />
     <Compile Include="API\PublicApi\IncludeOnlyPublicApiDocumentFilter.cs" />
@@ -1642,11 +1643,14 @@
     <Compile Include="Migrations\PlainStore\M001-100\M010_AddAssignmentsTables.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M011_RenamePrefilledQuestionsToIdentifyingOnAssignments.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M012_AddAllowAssignmentsColumnToQuestionnaireBrowseItem.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M013_AddCompletedCountToAssignments.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M009_AddAssignmentIdToInterview.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M010_Add_index_for_interviewSummary_assignmentid.cs" />
     <Compile Include="Migrations\Users\M004_RemoveOldMigrationSchemas.cs" />
     <Compile Include="Models\Account\FinishIntallationModel.cs" />
     <Compile Include="Models\Account\IPasswordRequired.cs" />
     <Compile Include="Models\Account\UserModelBase.cs" />
+    <Compile Include="Models\Api\AssignmentProfile.cs" />
     <Compile Include="Models\Api\TeamsAndStatusesReportResponse.cs" />
     <Compile Include="Migrations\Users\M001_AddUsersHqIdentityModel.cs" />
     <Compile Include="Migrations\Users\M002_MigrateUsersFromUserDocumentStore.cs" />

@@ -360,6 +360,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             
             this.Bind<IDeviceSyncInfoRepository>().To<DeviceSyncInfoRepository>();
             this.Bind<IAssignmentViewFactory>().To<AssignmentViewFactory>();
+            this.Bind<IAssignmentsService>().To<AssignmentsService>();
         }
     }
 }
