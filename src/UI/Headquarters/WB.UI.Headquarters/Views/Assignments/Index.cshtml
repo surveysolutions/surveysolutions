@@ -102,7 +102,7 @@
             },
             select: {
                 style: 'multi',
-                selector: 'td>label'
+                selector: 'td>.checkbox-filter'
             }
         };
 
@@ -182,6 +182,20 @@
                         this.newResponsibleId = null;
                         this.reloadTable();
                     });
+                },
+                rowsSelected: function(e, dt, type, ar) {
+                    for (var i = 0; i < ar.length; i++) {
+                        var rowId = parseInt(dt.row(ar[i]).id());
+                        if (!_.includes(this.selectedRows, rowId)) {
+                            this.selectedRows.push(rowId);
+                        }
+                    }
+                },
+                rowsDeselected: function(e, dt, type, ar) {
+                    for (var i = 0; i < ar.length; i++) {
+                        var rowId = dt.row(ar[i]).id();
+                        Vue.set(this, "selectedRows", _.without(this.selectedRows, parseInt(rowId)));
+                    }
                 }
             },
             mounted: function() {
@@ -191,16 +205,7 @@
 
                 this.startWatchers(['responsibleId', 'questionnaireId', 'showArchive'], this.reloadTable.bind(self));
                 this.reloadTable();
-                this.$refs.table.$on('select',
-                    function(e, dt) {
-                        if (dt.id) {
-                            self.selectedRows.push(parseInt(dt.id()));
-                        }
-                    });
-                this.$refs.table.$on('deselect',
-                    function(e, dt) {
-                        if (dt.id) Vue.set(self, "selectedRows", _.without(self.selectedRows, parseInt(dt.id())));
-                    });
+
                 $('.ddl').selectpicker('refresh');
             }
         });
@@ -269,7 +274,9 @@
                         <assignments-table ref="table"
                                            :add-params-to-request="addParamsToRequest"
                                            :response-processor="responseProcessor"
-                                           :table-options="tableOptions"></assignments-table>
+                                           :table-options="tableOptions"
+                                           v-on:select="rowsSelected"
+                                           v-on:deselect="rowsDeselected"></assignments-table>
                     </div>
 
                     <div class="panel panel-table" v-if="selectedRows.length">
