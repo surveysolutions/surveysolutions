@@ -117,10 +117,43 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Active" xml:space="preserve">
+    <value>Активные</value>
+  </data>
+  <data name="Archive" xml:space="preserve">
+    <value>Архивировать</value>
+  </data>
+  <data name="Archived" xml:space="preserve">
+    <value>Архивные</value>
+  </data>
   <data name="AssignmentsHeader" xml:space="preserve">
     <value>Задачи</value>
   </data>
+  <data name="AssignmentsSelected" xml:space="preserve">
+    <value>{0} Задач выбрано </value>
+  </data>
+  <data name="Capacity" xml:space="preserve">
+    <value>Количество</value>
+  </data>
   <data name="CreatedAt" xml:space="preserve">
     <value>Создан</value>
+  </data>
+  <data name="IdentifyingQuestions" xml:space="preserve">
+    <value>Идентификационные вопросы</value>
+  </data>
+  <data name="NumberOfAssignmentsAffected" xml:space="preserve">
+    <value>{0} Задач будет изменено</value>
+  </data>
+  <data name="SelectResponsible" xml:space="preserve">
+    <value>Выбор ответственного</value>
+  </data>
+  <data name="ShowArchived" xml:space="preserve">
+    <value>Статус</value>
+  </data>
+  <data name="Unlimited" xml:space="preserve">
+    <value>Не ограничено</value>
+  </data>
+  <data name="UpdatedAt" xml:space="preserve">
+    <value>Обновлено</value>
   </data>
 </root>
