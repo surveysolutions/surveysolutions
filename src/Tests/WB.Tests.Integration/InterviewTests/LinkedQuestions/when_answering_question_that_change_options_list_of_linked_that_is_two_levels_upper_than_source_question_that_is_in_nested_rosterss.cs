@@ -46,9 +46,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     })
                 });
 
-                ILatestInterviewExpressionState interviewState = GetInterviewExpressionState(questionnaireDocument);
-
-                var interview = SetupStatefullInterview(questionnaireDocument, precompiledState: interviewState);
+                var interview = SetupStatefullInterview(questionnaireDocument);
 
                 interview.AnswerMultipleOptionsQuestion(userId, q1Id, Abc.Create.Entity.RosterVector(new[] {1, 1}), DateTime.Now, new[] { 1, 2, 3 });
                 interview.AnswerMultipleOptionsQuestion(userId, q1Id, Abc.Create.Entity.RosterVector(new[] {1, 2}), DateTime.Now, new[] { 1, 3, 4 });

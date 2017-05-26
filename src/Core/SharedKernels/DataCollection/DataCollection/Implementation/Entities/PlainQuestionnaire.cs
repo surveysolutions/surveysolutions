@@ -1574,12 +1574,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.QuestionnaireDocument.ExpressionsPlayOrder;
         }
 
-        public int CountOfCascadingOptionsForSelectedParentOption(Guid cascadingQuestionId, Guid parenQuestionId,
+        public bool HasAnyCascadingOptionsForSelectedParentOption(Guid cascadingQuestionId, Guid parenQuestionId,
             int selectedParentValue)
         {
             IQuestion question = this.GetQuestionOrThrow(cascadingQuestionId);
             // might be slow
-            return question.Answers.Count(x => x.GetParsedParentValue() == selectedParentValue);
+            return GetOptionsForQuestion(cascadingQuestionId, selectedParentValue, String.Empty).Any();
         }
     }
 }
