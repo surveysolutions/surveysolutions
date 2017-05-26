@@ -7,12 +7,12 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
     {
         public override void Up()
         {
-            Create.Column("assignmentid").OnTable("interviewsummaries").AsInt32().Nullable();
+            Create.Column(@"assignmentid").OnTable(@"interviewsummaries").AsInt32().Nullable();
         }
 
         public override void Down()
         {
-            Delete.Column("assignmentid").FromTable("interviewsummaries");
+            Delete.Column(@"assignmentid").FromTable(@"interviewsummaries");
         }
     }
 }

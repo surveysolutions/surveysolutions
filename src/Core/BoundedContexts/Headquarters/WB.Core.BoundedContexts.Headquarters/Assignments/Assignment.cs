@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
@@ -40,6 +41,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public virtual QuestionnaireIdentity QuestionnaireId { get; set; }
 
         public virtual IList<IdentifyingAnswer> IdentifyingData { get; protected set; }
+
+        public virtual ISet<InterviewSummary>InterviewSummaries { get; protected set; }
 
         public virtual void Archive()
         {
