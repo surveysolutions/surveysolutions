@@ -36,9 +36,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     Abc.Create.Entity.MultyOptionsQuestion(q3Id, variable: "q3", linkedToQuestionId: q2Id, linkedFilter:"q4>1")
                 });
                 
-                ILatestInterviewExpressionState interviewState = GetInterviewExpressionState(questionnaireDocument, false);
-
-                var interview = SetupStatefullInterview(questionnaireDocument, precompiledState: interviewState);
+                var interview = SetupStatefullInterview(questionnaireDocument);
 
                 interview.AnswerNumericIntegerQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 3);
                 interview.AnswerTextQuestion(userId, q2Id, Abc.Create.Entity.RosterVector(new[] {0}), DateTime.Now, "test");

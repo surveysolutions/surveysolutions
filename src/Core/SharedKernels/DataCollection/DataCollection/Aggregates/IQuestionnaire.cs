@@ -256,6 +256,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsUsingExpressionStorage();
 
         List<Guid> GetExpressionsPlayOrder();
-        int CountOfCascadingOptionsForSelectedParentOption(Guid cascadingQuestionId, Guid parenQuestionId, int selectedParentValue);
+        bool HasAnyCascadingOptionsForSelectedParentOption(Guid cascadingQuestionId, Guid parenQuestionId, int selectedParentValue);
     }
 }

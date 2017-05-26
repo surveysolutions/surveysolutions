@@ -46,21 +46,21 @@ namespace WB.Tests.Integration.InterviewTests
         protected static StatefulInterview SetupPreloadedInterview(
             PreloadedDataDto preloadedData,
             QuestionnaireDocument questionnaireDocument,
-            IEnumerable<object> events = null,
-            ILatestInterviewExpressionState precompiledState = null)
+            IEnumerable<object> events = null)
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
+            questionnaireDocument.IsUsingExpressionStorage = true;
+            questionnaireDocument.ExpressionsPlayOrder = IntegrationCreate.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(questionnaireDocument.AsReadOnly());
 
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
                 => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1, null));
 
-
             Setup.InstanceToMockedServiceLocator(questionnaireRepository);
             Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
 
-            var state = GetLatestInterviewExpressionState(questionnaireDocument, precompiledState);
+            var state = GetLatestExpressionStorage(questionnaireDocument);
 
-            var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
+            var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionProcessor(It.IsAny<QuestionnaireIdentity>()) == state);
 
             var interview = IntegrationCreate.PreloadedInterview(
                 preloadedData, questionnaireId, questionnaireRepository, statePrototypeProvider);
