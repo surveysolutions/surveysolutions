@@ -1,7 +1,6 @@
 .table{
     color: $gray-text;
     width: 100% !important;
-    // font: 16px/18px "RobotoRegular";
     font: 14px/16px Arial, sans-serif; 
     td.type-numeric{
         text-align: right;
@@ -23,7 +22,7 @@
             }
         }
         &.selected{
-            background-color: $table-selected !important;
+            background-color: #e1e3e3 !important;
             td.without-break{
                 &:before{
                     @include gradient-horizontal(transparent, $table-selected, 0%, 70%);
@@ -65,7 +64,6 @@
         }
         @include transition(all, 0.2s);
         td{
-            /* word-break: break-all; */
             word-wrap: break-word;
             overflow-wrap: break-word;
         }
@@ -107,7 +105,6 @@
                 border-top: none;
                 &.date{
                     font: 14px/16px "TrebuchetMS";
-                    // font-style: italic;
                 }
                 &.parameters{
                     font-family: "TrebuchetMSBold";
@@ -313,7 +310,6 @@
         tr{
             &:hover, &:focus{
                 background-color: $blue-super-light;
-                // color: #000;
                 a{
                     color: #000;
                 }
@@ -444,8 +440,6 @@
         .paginate_button{
             padding: 6px 12px;
             cursor: pointer;
-            &:hover{
-            }
             &.disabled, &.disabled:hover, &.disabled:active{
                 color: $gray_light;
                 text-decoration: none;
@@ -615,8 +609,6 @@
     .table{
         tr{
             td, th{
-                //font-size: 10px;
-                //line-height: 12px;
                 &.for-tablets{
                     display: none;
                 }
@@ -648,15 +640,6 @@
              tr th.column-questionnaire-title{
                 padding-left: 10px;
             }
-/*             tr th{
-                &:after{
-                    border-width: 4px;
-                    border-top: 6px solid $gray_form;
-                }
-                &.sorting_desc:after{
-                    border-bottom: 6px solid $blue;
-                } 
-            } */
         }
     }
 }
