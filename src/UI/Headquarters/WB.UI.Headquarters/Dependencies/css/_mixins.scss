@@ -181,9 +181,7 @@
 }
 %font-header{
     color: $white;
-    font-family: "RobotoLight";
-    font-size: 18px;
-    line-height: 20px;
+    font: 18px/20px "RobotoLight";
 }
 %default-logo-size{
     @include size(365px, 329px);
@@ -202,12 +200,12 @@
     color: $gray_text;
     margin-bottom: 22px;
 }
-%tick{
-    display: inline-block;
-    @include size(25px, 30px);
-    background: transparent url("#{$assetsPath}/img/pretty-checkable-sprites.png") no-repeat;
-    vertical-align: middle;
-}
+// %tick{
+//     display: inline-block;
+//     @include size(25px, 30px);
+//     background: transparent url("#{$assetsPath}/img/pretty-checkable-sprites.png") no-repeat;
+//     vertical-align: middle;
+// }
 %uppercase-font{
     font: 12px/14px "TrebuchetMSBold";
     text-transform: uppercase;
@@ -328,28 +326,28 @@
         box-shadow: none;
     }
 }
-@mixin focus-for-inputs(){
-    display: block;
-    height: 0;
-    position: absolute;
-    @include opacity(0);
-    & + label .tick:before{
-        @extend %visibility-hidden;
-        display: block;
-        content: "";
-        width: 26px;
-        height: 26px;
-        border: 2px solid $gray_form;
-        position: absolute;
-        top: -4px;
-        right: -6px;
-        border-radius: 5px;
-        @include transition(all, 0.2s);
-    }
-    &:focus + label .tick:before{
-        @extend %visibility-visible;
-    }
-}
+// @mixin focus-for-inputs(){
+//     display: block;
+//     height: 0;
+//     position: absolute;
+//     @include opacity(0);
+//     & + label .tick:before{
+//         @extend %visibility-hidden;
+//         display: block;
+//         content: "";
+//         width: 26px;
+//         height: 26px;
+//         border: 2px solid $gray_form;
+//         position: absolute;
+//         top: -4px;
+//         right: -6px;
+//         border-radius: 5px;
+//         @include transition(all, 0.2s);
+//     }
+//     &:focus + label .tick:before{
+//         @extend %visibility-visible;
+//     }
+// }
 @mixin fullscreen-hidden-filter($block){
     .fullscreen-hidden-filters .#{$block}{
         margin-left: 0;
