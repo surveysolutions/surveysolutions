@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Headquarters.API.PublicApi.Models;
@@ -10,15 +12,19 @@ using WB.UI.Headquarters.Code;
 namespace WB.UI.Headquarters.API.PublicApi
 {
     [ApiBasicAuth(new[] { UserRoles.ApiUser, UserRoles.Administrator  }, TreatPasswordAsPlain = true)]
+    [RoutePrefix("api/v1")]
     public class UsersController : BaseApiServiceController
     {
         private readonly IUserViewFactory usersFactory;
+        private readonly HqUserManager userManager;
 
         public UsersController(ILogger logger,
-            IUserViewFactory usersFactory)
+            IUserViewFactory usersFactory, 
+            HqUserManager userManager)
             :base(logger)
         {
             this.usersFactory = usersFactory;
+            this.userManager = userManager;
         }
 
         /// <summary>
@@ -27,7 +33,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <param name="limit"></param>
         /// <param name="offset"></param>
         [HttpGet]
-        [Route("api/v1/supervisors")]
+        [Route("supervisors")]
         public UserApiView Supervisors(int limit = 10, int offset = 1)
             => new UserApiView(this.usersFactory.GetUsersByRole(offset, limit, null, null, false, UserRoles.Supervisor));
 
@@ -38,7 +44,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <param name="limit"></param>
         /// <param name="offset"></param>
         [HttpGet]
-        [Route("api/v1/supervisors/{supervisorId:guid}/interviewers")]
+        [Route("supervisors/{supervisorId:guid}/interviewers")]
         public UserApiView Interviewers(Guid supervisorId, int limit = 10, int offset = 1)
             => new UserApiView(this.usersFactory.GetInterviewers(offset, limit, null, null, false, InterviewerOptionFilter.Any, null, supervisorId));
 
@@ -47,8 +53,8 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// </summary>
         /// <param name="id">User id</param>
         [HttpGet]
-        [Route("api/v1/supervisors/{id:guid}")]
-        [Route("api/v1/users/{id:guid}")]
+        [Route("supervisors/{id:guid}")]
+        [Route("users/{id:guid}")]
         public UserApiDetails Details(Guid id)
         {
             var user = this.usersFactory.GetUser(new UserViewInputModel(id));
@@ -69,7 +75,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="200"></response>
         /// <response code="404">Interviewer was not found</response>
         [HttpGet]
-        [Route("api/v1/interviewers/{id:guid}")]
+        [Route("interviewers/{id:guid}")]
         public InterviewerUserApiDetails InterviewerDetails(Guid id)
         {
             var user = this.usersFactory.GetUser(new UserViewInputModel(id));
@@ -80,6 +86,63 @@ namespace WB.UI.Headquarters.API.PublicApi
             }
 
             return new InterviewerUserApiDetails(user);
+        }
+
+        /// <summary>
+        /// Archives interviewer or supervisor with all his interviewers
+        /// </summary>
+        /// <param name="id">User id</param>
+        /// <response code="200">User archived</response>
+        /// <response code="404">User with provided id does not exist</response>
+        /// <response code="406">User is not an interviewer or supervisor</response>
+        [HttpPost]
+        [Route("users/{id:guid}/Archive")]
+        public async Task<IHttpActionResult> Archive(Guid id)
+        {
+            var user = this.usersFactory.GetUser(new UserViewInputModel(id));
+            if (user == null)
+            {
+                return this.NotFound();
+            }
+            if (!user.Roles.Contains(UserRoles.Interviewer) || user.Roles.Contains(UserRoles.Supervisor))
+            {
+                return this.BadRequest();
+            }
+
+            if (user.IsSupervisor())
+            {
+                await this.userManager.ArchiveSupervisorAndDependentInterviewersAsync(id);
+            }
+            else
+            {
+                await this.userManager.ArchiveUsersAsync(new[] { id });
+            }
+            return this.Ok();
+        }
+
+        /// <summary>
+        /// Unarchives single user
+        /// </summary>
+        /// <param name="id">User id</param>
+        /// <response code="200">User unarchived</response>
+        /// <response code="404">User with provided id does not exist</response>
+        /// <response code="406">User is not an interviewer or supervisor</response>
+        [HttpPost]
+        [Route("users/{id:guid}/Unarchive")]
+        public async Task<IHttpActionResult> UnArchive(Guid id)
+        {
+            var user = this.usersFactory.GetUser(new UserViewInputModel(id));
+            if (user == null)
+            {
+                return this.NotFound();
+            }
+            if (!user.Roles.Contains(UserRoles.Interviewer))
+            {
+                return this.BadRequest();
+            }
+
+            await this.userManager.UnarchiveUsersAsync(new[] { id });
+            return this.Ok();
         }
     }
 }
