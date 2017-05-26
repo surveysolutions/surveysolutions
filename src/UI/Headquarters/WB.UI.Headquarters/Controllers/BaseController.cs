@@ -1,4 +1,9 @@
-﻿using WB.Core.BoundedContexts.Headquarters.Services;
+﻿using System.Text;
+using System.Web.Mvc;
+using Microsoft.Practices.ServiceLocation;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Shared.Web.Controllers;
@@ -15,6 +20,22 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.CommandService = commandService;
             this.Logger = logger;
+        }
+
+        protected ActionResult JsonCamelCase(object result)
+        {
+            var response = JsonConvert.SerializeObject(
+                result,
+                new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                });
+            return new ContentResult
+            {
+                ContentType = "application/json",
+                Content = response,
+                ContentEncoding = Encoding.UTF8
+            };
         }
     }
 }

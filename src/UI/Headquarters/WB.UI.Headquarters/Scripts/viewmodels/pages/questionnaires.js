@@ -1,27 +1,84 @@
-﻿Supervisor.VM.Questionnaires = function(listViewUrl, deleteQuestionnaireUrl) {
+﻿Supervisor.VM.Questionnaires = function (listViewUrl, notifier, ajax, $newInterviewUrl, $batchUploadUrl, $cloneQuestionnaireUrl, $deleteQuestionnaireUrl, $webInterviewUrl) {
     Supervisor.VM.Questionnaires.superclass.constructor.apply(this, arguments);
 
     var self = this;
+    self.Url = new Url(window.location.href);
 
-    self.Query = ko.observable('');
+    self.onDataTableDataReceived = function (data) {};
 
-    self.GetFilterMethod = function() {
-        return {
-            Filter: self.Query()
-        };
-    };
-    self.load = function() {
-        self.search();
+    self.load = function () {
+
+        self.initDataTable(this.onDataTableDataReceived, this.onTableInitComplete);
+        self.reloadDataTable();
     };
 
-    self.deleteQuestionnaire = function (questionnaireViewItem) {
-        if (confirm(input.settings.messages.deleteQuestionnaireConfirmationMessage)) {
-            var deleteQuestionnaireCommand = { questionnaireId: questionnaireViewItem.QuestionnaireId(), version: questionnaireViewItem.Version() };
+    self.onTableInitCompleteExtra = function () { };
 
-            self.SendCommand(deleteQuestionnaireCommand, function () {
-                setTimeout(function() { self.search(); }, 100);
-            });   
-        }
+    self.onTableInitComplete = function () {
+
+        $('#data_holder_filter label').on('click', function (e) {
+                if (e.target !== this)
+                    return;
+                if ($(this).hasClass("active")) {
+                    $(this).removeClass("active");
+                }
+                else {
+                    $(this).addClass("active");
+                }
+                $(".column-questionnaire-title").toggleClass("padding-left-slide");
+            });
+        
+        self.onTableInitCompleteExtra();
     };
-}
+
+    self.selectRowAndGetData = function (selectedItem) {
+        self.Datatable.rows().deselect();
+        var rowIndex = selectedItem.parent().children().index(selectedItem);
+        self.Datatable.row(rowIndex).select();
+        var selectedRows = self.Datatable.rows({ selected: true }).data()[0];
+        return selectedRows;
+    }
+
+    self.sendDeleteQuestionnaireCommand = function (item) {
+        ajax.sendRequest($deleteQuestionnaireUrl, "post", { questionnaireId: item.questionnaireId, version: item.version }, false,
+            // onSuccess
+            function () {
+                setTimeout(function () { self.reloadDataTable();; }, 1000);
+            });
+    }
+
+    self.addNewInterview = function (key, opt) {
+        var selectedRow = self.selectRowAndGetData(opt.$trigger);
+        window.location.href = $newInterviewUrl + '/' + selectedRow.questionnaireId + '?version=' + selectedRow.version;
+        console.log(selectedRow);
+    };
+
+    self.webInterviewSetup = function (key, opt) {
+        var selectedRow = self.selectRowAndGetData(opt.$trigger);
+        var questionnaireId = selectedRow.questionnaireId + '$' + selectedRow.version;
+        window.location.href = $webInterviewUrl + '/' + encodeURI(questionnaireId);
+        console.log(selectedRow);
+    };
+
+    self.interviewsBatchUpload = function (key, opt) {
+        var selectedRow = self.selectRowAndGetData(opt.$trigger);
+        window.location.href = $batchUploadUrl + '/' + selectedRow.questionnaireId + '?version=' + selectedRow.version;
+    };
+
+    self.cloneQuestionnaire = function (key, opt) {
+        var selectedRow = self.selectRowAndGetData(opt.$trigger);
+        window.location.href = $cloneQuestionnaireUrl + '/' + selectedRow.questionnaireId + '?version=' + selectedRow.version;
+    };
+
+    self.deleteQuestionnaire = function (key, opt) {
+        var selectedRow = self.selectRowAndGetData(opt.$trigger);
+
+        notifier.confirm('Confirmation Needed', input.settings.messages.deleteQuestionnaireConfirmationMessage,
+            // confirm
+            function () { self.sendDeleteQuestionnaireCommand(selectedRow); },
+            // cancel
+            function () { });
+    };
+};
+
 Supervisor.Framework.Classes.inherit(Supervisor.VM.Questionnaires, Supervisor.VM.ListView);

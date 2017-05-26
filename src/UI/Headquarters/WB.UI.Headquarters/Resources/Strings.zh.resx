@@ -183,4 +183,13 @@
   <data name="ViewHelpers_Invalid_property" xml:space="preserve">
     <value>无效属性</value>
   </data>
+  <data name="HQ_AccountController_AccountPasswordChangedSuccessfully" xml:space="preserve">
+    <value>成功更新了账户密码</value>
+  </data>
+  <data name="HQ_AccountController_AccountPasswordChangedSuccessfullyFormat" xml:space="preserve">
+    <value>成功更新了账户&lt;b&gt;{0}&lt;/b&gt;的密码</value>
+  </data>
+  <data name="HQ_AccountController_AccountUpdatedSuccessfullyFormat" xml:space="preserve">
+    <value>成功更新了&lt;b&gt;{0}&lt;/b&gt;的信息</value>
+  </data>
 </root>

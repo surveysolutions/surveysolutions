@@ -438,6 +438,10 @@
     <item name="android:indeterminateDrawable">@drawable/question_save_answer_progress_bar</item>
   </style>
 
+  <style name="Progress_Indicator" parent="Interview_Question_Progress_Indicator">
+    <item name="android:layout_height">@dimen/Progress_Indicator_height</item>
+  </style>
+
   <style name="Interview_Previous_Group_Navigation_Layout">
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_width">match_parent</item>

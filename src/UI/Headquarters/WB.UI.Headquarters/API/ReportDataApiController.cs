@@ -71,22 +71,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpPost]
         [CamelCase]
-        public TeamsAndStatusesReportResponse SupervisorTeamMembersAndStatusesReport(TeamsAndStatusesFilter filter)
+        public TeamsAndStatusesReportResponse SupervisorTeamMembersAndStatusesReport(TeamsAndStatusesFilter teamsAndStatusesFilter)
         {
             var input = new TeamsAndStatusesInputModel
             {
                 ViewerId = this.authorizedUser.Id,
-                Orders = filter.GetSortOrderRequestItems(),
-                Page = filter.PageIndex,
-                PageSize = filter.PageSize,
-                TemplateId = filter.TemplateId,
-                TemplateVersion = filter.TemplateVersion
+                Orders = teamsAndStatusesFilter.GetSortOrderRequestItems(),
+                Page = teamsAndStatusesFilter.PageIndex,
+                PageSize = teamsAndStatusesFilter.PageSize,
+                TemplateId = teamsAndStatusesFilter.TemplateId,
+                TemplateVersion = teamsAndStatusesFilter.TemplateVersion
             };
 
             var view = this.supervisorTeamsAndStatusesReport.Load(input);
             return new TeamsAndStatusesReportResponse
             {
-                Draw = filter.Draw + 1,
+                Draw = teamsAndStatusesFilter.Draw + 1,
                 RecordsTotal = view.TotalCount,
                 RecordsFiltered = view.TotalCount,
                 Data = view.Items,
@@ -248,21 +248,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpPost]
         [CamelCase]
-        public DataTableResponse<TeamsAndStatusesReportLine> HeadquarterSupervisorsAndStatusesReport(TeamsAndStatusesFilter filter)
+        public DataTableResponse<TeamsAndStatusesReportLine> HeadquarterSupervisorsAndStatusesReport(TeamsAndStatusesFilter teamsAndStatusesFilter)
         {
             var input = new TeamsAndStatusesInputModel
             {
-                Orders = filter.GetSortOrderRequestItems(),
-                Page = filter.PageIndex,
-                PageSize = filter.PageSize,
-                TemplateId = filter.TemplateId,
-                TemplateVersion = filter.TemplateVersion
+                Orders = teamsAndStatusesFilter.GetSortOrderRequestItems(),
+                Page = teamsAndStatusesFilter.PageIndex,
+                PageSize = teamsAndStatusesFilter.PageSize,
+                TemplateId = teamsAndStatusesFilter.TemplateId,
+                TemplateVersion = teamsAndStatusesFilter.TemplateVersion
             };
 
             var view = this.headquartersTeamsAndStatusesReport.Load(input);
             return new TeamsAndStatusesReportResponse
             {
-                Draw = filter.Draw + 1,
+                Draw = teamsAndStatusesFilter.Draw + 1,
                 RecordsTotal = view.TotalCount,
                 RecordsFiltered = view.TotalCount,
                 Data = view.Items,
@@ -272,22 +272,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpPost]
         [CamelCase]
-        public SurveysAndStatusesDataTableResponse SupervisorSurveysAndStatusesReport(SurveysAndStatusesFilter filter)
+        public SurveysAndStatusesDataTableResponse SupervisorSurveysAndStatusesReport(SurveysAndStatusesFilter surveysAndStatusesFilter)
         {
             var teamLeadName = this.authorizedUser.UserName;
 
             var view = this.surveysAndStatusesReport.Load(new SurveysAndStatusesReportInputModel
             {
                 TeamLeadName = teamLeadName,
-                Page = filter.PageIndex,
-                PageSize = filter.PageSize,
-                Orders = filter.GetSortOrderRequestItems(),
-                ResponsibleName = filter.ResponsibleName == teamLeadName ? null : filter.ResponsibleName
+                Page = surveysAndStatusesFilter.PageIndex,
+                PageSize = surveysAndStatusesFilter.PageSize,
+                Orders = surveysAndStatusesFilter.GetSortOrderRequestItems(),
+                ResponsibleName = surveysAndStatusesFilter.ResponsibleName == teamLeadName ? null : surveysAndStatusesFilter.ResponsibleName
             });
 
             return new SurveysAndStatusesDataTableResponse
             {
-                Draw = filter.Draw + 1,
+                Draw = surveysAndStatusesFilter.Draw + 1,
                 RecordsTotal = view.TotalCount,
                 RecordsFiltered = view.TotalCount,
                 Data = view.Items,
@@ -298,19 +298,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpPost]
         [CamelCase]
-        public SurveysAndStatusesDataTableResponse HeadquarterSurveysAndStatusesReport(SurveysAndStatusesFilter filter)
+        public SurveysAndStatusesDataTableResponse HeadquarterSurveysAndStatusesReport(SurveysAndStatusesFilter surveysAndStatusesFilter)
         {
             var view = this.surveysAndStatusesReport.Load(new SurveysAndStatusesReportInputModel
             {
-                Orders = filter.GetSortOrderRequestItems(),
-                Page = filter.PageIndex,
-                PageSize = filter.PageSize,
-                TeamLeadName = filter.ResponsibleName
+                Orders = surveysAndStatusesFilter.GetSortOrderRequestItems(),
+                Page = surveysAndStatusesFilter.PageIndex,
+                PageSize = surveysAndStatusesFilter.PageSize,
+                TeamLeadName = surveysAndStatusesFilter.ResponsibleName
             });
 
             return new SurveysAndStatusesDataTableResponse
             {
-                Draw = filter.Draw + 1,
+                Draw = surveysAndStatusesFilter.Draw + 1,
                 RecordsTotal = view.TotalCount,
                 RecordsFiltered = view.TotalCount,
                 Data = view.Items,

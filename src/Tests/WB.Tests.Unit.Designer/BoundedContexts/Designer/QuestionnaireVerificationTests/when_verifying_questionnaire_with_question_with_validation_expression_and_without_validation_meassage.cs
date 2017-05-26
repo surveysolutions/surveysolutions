@@ -17,33 +17,29 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             questionId = Guid.Parse("1111CCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new NumericQuestion
-                {
-                    PublicKey = questionId,
-                    ValidationExpression = validationExpression,
-                    StataExportCaption = "var1"
-                });
+                Create.NumericRealQuestion(
+                    questionId,
+                    validationExpression: validationExpression,
+                    variable: "var1"
+                ));
 
             verifier = CreateQuestionnaireVerifier();
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
-
-        It should_return_1_message = () =>
-            verificationMessages.Count().ShouldEqual(1);
+            verificationMessages = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
         It should_return_messages_each_with_code__WB00107__ = () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0107");
+            verificationMessages.ShouldContain(x =>x.Code == "WB0107");
 
         It should_return_messages_each_having_single_reference = () =>
-            verificationMessages.Single().References.Count().ShouldEqual(1);
+            verificationMessages.Single(x => x.Code == "WB0107").References.Count().ShouldEqual(1);
 
         It should_return_messages_each_referencing_question = () =>
-            verificationMessages.Single().References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.Single(x => x.Code == "WB0107").References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         It should_return_message_referencing_first_incorrect_question = () =>
-            verificationMessages.Single().References.Single().Id.ShouldEqual(questionId);
+            verificationMessages.Single(x => x.Code == "WB0107").References.Single().Id.ShouldEqual(questionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

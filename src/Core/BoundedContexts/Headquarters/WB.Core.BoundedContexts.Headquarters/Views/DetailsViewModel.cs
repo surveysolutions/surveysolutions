@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
 {
     public class DetailsViewModel
     {
-        public InterviewDetailsFilter Filter { get; set; }
+        public InterviewDetailsFilter QuestionsTypes { get; set; }
         public Identity SelectedGroupId { get; set; }
         public decimal[] SelectedGroupRosterVector { get; set; }
         public InterviewDetailsView InterviewDetails { get; set; }

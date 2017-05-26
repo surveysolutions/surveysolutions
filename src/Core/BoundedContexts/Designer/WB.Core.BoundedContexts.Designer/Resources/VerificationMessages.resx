@@ -273,9 +273,6 @@
   <data name="WB0071_StaticTextIsEmpty" xml:space="preserve">
     <value>Static text cannot be empty.</value>
   </data>
-  <data name="WB0072_ChapterItemsLimit" xml:space="preserve">
-    <value>Section cannot contain more than 500 child items.</value>
-  </data>
   <data name="WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
     <value>Option titles must be unique.</value>
   </data>
@@ -644,5 +641,8 @@
   </data>
   <data name="WB0268_DoesNotSupportSubstitution" xml:space="preserve">
     <value>You try to use substitution for unsupported entity.</value>
+  </data>
+  <data name="WB0269_QuestionTitleIsEmpty" xml:space="preserve">
+    <value>Question cannot have empty text.</value>
   </data>
 </root>

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Survey;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
@@ -34,13 +33,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.teamUsersAndQuestionnairesFactory = teamUsersAndQuestionnairesFactory;
         }
 
-        public ActionResult Index()
-        {
-            this.ViewBag.ActivePage = MenuItem.Surveys;
-            
-            return this.View();
-        }
-
         public ActionResult Interviews()
         {
             this.ViewBag.ActivePage = MenuItem.Docs;
@@ -50,20 +42,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 UserName = this.authorizedUser.UserName
             };
             return this.View(this.Filters());
-        }
-
-        public ActionResult TeamMembersAndStatuses()
-        {
-            this.ViewBag.ActivePage = MenuItem.Summary;
-            TeamUsersAndQuestionnairesView usersAndQuestionnaires =
-                this.teamUsersAndQuestionnairesFactory.Load(new TeamUsersAndQuestionnairesInputModel(this.authorizedUser.Id));
-            return this.View(usersAndQuestionnaires.Questionnaires);
-        }
-
-        public ActionResult Status()
-        {
-            this.ViewBag.ActivePage = MenuItem.Statuses;
-            return this.View(StatusHelper.GetOnlyActualSurveyStatusViewItems(this.authorizedUser.IsSupervisor));
         }
 
         private DocumentFilter Filters()

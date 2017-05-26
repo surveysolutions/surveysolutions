@@ -143,9 +143,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public static CategoricalLinkedMultiOptionAnswer FromRosterVectors(IEnumerable<RosterVector> checkedValues)
             => checkedValues == null ? null : new CategoricalLinkedMultiOptionAnswer(checkedValues);
 
-        public static CategoricalLinkedMultiOptionAnswer FromIntegerArrayArray(int[][] integers)
-            => integers == null ? null : new CategoricalLinkedMultiOptionAnswer(integers.Select(intArray => (RosterVector) intArray));
-
         public RosterVector[] ToRosterVectorArray() => this.CheckedValues.ToArray();
 
         public override string ToString() => string.Join(", ", CheckedValues);

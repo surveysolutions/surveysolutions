@@ -1,21 +1,22 @@
 ﻿using System.Web.Mvc;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
-using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Tests.Abc;
+using WB.UI.Headquarters.Controllers;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PeriodicStatusReportTests
 {
-    internal class when_request_quantity_report_by_supervisors : PeriodicStatusReportControllerTestContext
+    internal class when_request_quantity_report_by_supervisors
     {
         Establish context = () =>
         {
-            periodicStatusReportController = CreatePeriodicStatusReportController();
+            reportController = Create.Controller.ReportsController();
         };
 
         Because of = () =>
-            result = periodicStatusReportController.QuantityBySupervisors(PeriodiceReportType.NumberOfCompletedInterviews) as ViewResult;
+            result = reportController.QuantityBySupervisors(PeriodiceReportType.NumberOfCompletedInterviews) as ViewResult;
 
         It should_active_page_be_NumberOfCompletedInterviews = () =>
             ((MenuItem)result.ViewBag.ActivePage).ShouldEqual(MenuItem.NumberOfCompletedInterviews);
@@ -32,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PeriodicStatusReportTests
         It should_ReportName_be_Quantity = () =>
            ((PeriodicStatusReportModel)result.Model).ReportName.ShouldEqual("Quantity");
 
-        private static PeriodicStatusReportController periodicStatusReportController;
+        private static ReportsController reportController;
         private static ViewResult result;
     }
 }

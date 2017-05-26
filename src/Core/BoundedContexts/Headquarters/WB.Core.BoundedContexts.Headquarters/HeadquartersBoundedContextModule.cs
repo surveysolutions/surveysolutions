@@ -60,12 +60,12 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations.Impl;
 using WB.Core.BoundedContexts.Headquarters.Services.Internal;
 using WB.Core.BoundedContexts.Headquarters.Troubleshooting;
-using WB.Core.Synchronization.Implementation.ImportManager;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -122,7 +122,6 @@ namespace WB.Core.BoundedContexts.Headquarters
                     typeof(DataCollectionSharedKernelAssemblyMarker).Assembly,
                     typeof(HeadquartersBoundedContextModule).Assembly));
 
-            this.Bind<IBackupManager>().To<DefaultBackupManager>();
             this.Bind<SyncSettings>().ToConstant(this.syncSettings);
 
             CommandRegistry.Setup<Tablet>()
@@ -360,6 +359,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IWebInterviewConfigProvider>().To<WebInterviewConfigProvider>();
             
             this.Bind<IDeviceSyncInfoRepository>().To<DeviceSyncInfoRepository>();
+            this.Bind<IAssignmentViewFactory>().To<AssignmentViewFactory>();
+            this.Bind<IAssignmentsService>().To<AssignmentsService>();
         }
     }
 }

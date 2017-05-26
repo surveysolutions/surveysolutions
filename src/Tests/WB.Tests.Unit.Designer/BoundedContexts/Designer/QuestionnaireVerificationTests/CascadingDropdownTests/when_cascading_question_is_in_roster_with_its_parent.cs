@@ -65,7 +65,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         Because of = () => verificationErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_not_return_WB0084_verification_error = () => verificationErrors.ShouldBeEmpty();
+        It should_not_return_WB0084_verification_error = () => verificationErrors.ShouldNotContainError("WB0084");
 
         static QuestionnaireDocument questionnaire;
         static Guid childCascadedComboboxId;

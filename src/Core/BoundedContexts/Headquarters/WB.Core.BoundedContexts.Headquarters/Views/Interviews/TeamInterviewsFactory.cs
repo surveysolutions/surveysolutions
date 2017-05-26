@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
                     CanReject = x.Status == InterviewStatus.Completed || x.Status == InterviewStatus.RejectedByHeadquarters,
                     IsNeedInterviewerAssign = !x.IsAssignedToInterviewer,
                     CreatedOnClient = x.WasCreatedOnClient,
-                    ReceivedByInterviewer = x.ReceivedByInterviewer
+                    ReceivedByInterviewer = x.ReceivedByInterviewer,
                 }).ToList();
             return new TeamInterviewsView
             {

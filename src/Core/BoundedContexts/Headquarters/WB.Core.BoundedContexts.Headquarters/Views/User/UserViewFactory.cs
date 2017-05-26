@@ -81,7 +81,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public UserListView GetUsersByRole(int pageIndex, int pageSize, string orderBy, string searchBy, bool archived, UserRoles role)
         {
             Func<IQueryable<HqUser>, IQueryable<InterviewersItem>> query =
-                allUsers => ApplyFilter(allUsers, searchBy, role, archived)
+                allUsers => ApplyFilter(allUsers, searchBy, archived, role)
                     .Select(x => new InterviewersItem
                     {
                         UserId = x.Id,
@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         {
             Func<IQueryable<HqUser>, IQueryable<HqUser>> query = users =>
             {
-                users = ApplyFilter(users, searchBy, UserRoles.Interviewer, archived)
+                users = ApplyFilter(users, searchBy, archived, UserRoles.Interviewer)
                     .Where(user => !user.IsLockedBySupervisor && !user.IsLockedByHeadquaters);
 
                 if (supervisorId.HasValue)
@@ -146,7 +146,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         {
             Func<IQueryable<HqUser>, IQueryable<InterviewersItem>> query = allUsers =>
             {
-                var interviewers = ApplyFilter(allUsers, searchBy, UserRoles.Interviewer, archived);
+                var interviewers = ApplyFilter(allUsers, searchBy, archived, UserRoles.Interviewer);
 
                 switch (interviewerOptionFilter)
                 {
@@ -198,10 +198,33 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
         }
 
+        public UsersView GetAllResponsibles(int pageSize, string searchBy, bool showLocked = false)
+        {
+            Func<IQueryable<HqUser>, IQueryable<HqUser>> query = users =>
+                ApplyFilter(users, searchBy, false, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Headquarter)
+                    .Where(user => showLocked || !user.IsLockedByHeadquaters);
+
+            var filteredUsers = query
+                .PagedAndOrderedQuery(nameof(HqUser.UserName), 1, pageSize)
+                .Invoke(this.UserRepository.Users)
+                .ToList()
+                .Select(x => new UsersViewItem
+                {
+                    UserId = x.Id,
+                    UserName = x.UserName
+                });
+
+            return new UsersView
+            {
+                TotalCountByQuery = query.Invoke(this.UserRepository.Users).Count(),
+                Users = filteredUsers.ToList()
+            };
+        }
+
         public UsersView GetAllSupervisors(int pageSize, string searchBy, bool showLocked = false)
         {
             Func<IQueryable<HqUser>, IQueryable<HqUser>> query = users =>
-                ApplyFilter(users, searchBy, UserRoles.Supervisor, false)
+                ApplyFilter(users, searchBy, false, UserRoles.Supervisor)
                     .Where(user => showLocked || !user.IsLockedByHeadquaters);
 
             var filteredUsers = query
@@ -224,7 +247,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public SupervisorsView GetSupervisors(int pageIndex, int pageSize, string orderBy, string searchBy, bool? archived = null)
         {
             Func<IQueryable<HqUser>, IQueryable<SupervisorsQueryItem>> query =
-                allUsers => ApplyFilter(allUsers, searchBy, UserRoles.Supervisor, archived)
+                allUsers => ApplyFilter(allUsers, searchBy, archived, UserRoles.Supervisor)
                     .Select(supervisor => new SupervisorsQueryItem
                     {
                         IsLockedBySupervisor = supervisor.IsLockedBySupervisor,
@@ -260,11 +283,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
         }
 
-        private static IQueryable<HqUser> ApplyFilter(IQueryable<HqUser> _, string searchBy, UserRoles role, bool? archived)
+        private static IQueryable<HqUser> ApplyFilter(IQueryable<HqUser> _, string searchBy, bool? archived, params UserRoles[] role)
         {
-            var selectedRoleId = role.ToUserId();
+            var selectedRoleId = role.Select(x => x.ToUserId());
 
-            var allUsers = _.Where(x => x.Roles.FirstOrDefault().RoleId == selectedRoleId);
+            var allUsers = _.Where(x => selectedRoleId.Contains(x.Roles.FirstOrDefault().RoleId));
 
             if (archived.HasValue)
                 allUsers = allUsers.Where(x => x.IsArchived == archived.Value);

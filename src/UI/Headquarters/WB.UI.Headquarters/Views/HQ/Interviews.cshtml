@@ -21,7 +21,7 @@
     <script type="text/javascript">
         var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "HQ", new {area = ""}, Request.Url.Scheme))';
         var $detailsUrl = '@Url.Action("Details", "Interview")';
-        var $surveysUrl = '@Url.Action("SurveysAndStatuses", "HQ")';
+        var $surveysUrl = '@Url.Action("SurveysAndStatuses", "Reports")';
         var $profileUrl = '@Url.Action("Profile", "Interviewer")';
         var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "ExecuteCommands"})';
         var statistics = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "AllInterviews"})';
@@ -252,7 +252,7 @@
                 <input class="form-control with-clear-btn" placeholder="@Common.Any" data-bind="typeahead: Users.AssignTo, typeaheadOptions: {source: Users.LoadUsers, displayText: function(item){return item.UserName}, afterSelect: StoreInteviewer }, valueupdate:'afterkeydown'" type="text" />
                 <span data-bind="spinner: Users.IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
                 <div class="input-group-btn" data-bind="click: ClearAssignTo">
-                    <div class="btn btn-default"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                    <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
                 </div>
             </div>
             <br />

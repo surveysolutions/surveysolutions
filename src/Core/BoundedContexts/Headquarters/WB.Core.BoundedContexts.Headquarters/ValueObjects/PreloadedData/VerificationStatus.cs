@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData
 
         public bool WasResponsibleProvided { set; get; }
 
-        public int InterviewsCount { get; set; }
+        public int EntitiesCount { get; set; }
 
         public int EnumeratorsCount { get; set; }
 

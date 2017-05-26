@@ -22,13 +22,13 @@
                   local:MvxBind="Text Localization('Synchronization_DoneWithErrors_Title');" />
       </LinearLayout>
       
-      <RelativeLayout style="@style/FullWidthWrappingLayout" 
-                      local:MvxBind="Visible Synchronization.IsSynchronizationInProgress">
+      <RelativeLayout style="@style/FullWidthWrappingLayout">
           <TextView style="@style/Dashboard_Synchronization_Lock_Text"
-                    local:MvxBind="Text Localization('Synchronization_LockedAssignments_Text')" />
+                    local:MvxBind="Text Localization('Synchronization_LockedAssignments_Text');Visible Synchronization.IsSynchronizationInProgress" />
           <TextView style="@style/Dashboard_Synchronization_Cancel_Text"
                     local:MvxBind="Text Localization('Synchronization_Cancel'); Click Synchronization.CancelSynchronizationCommand; Visible Synchronization.IsSynchronizationInProgress"/>
-        
+          <TextView style="@style/Dashboard_Synchronization_Cancel_Text"
+                    local:MvxBind="Text Localization('Synchronization_Done'); Click Synchronization.HideSynchronizationCommand; Visible Not(Synchronization.IsSynchronizationInProgress)"/>
       </RelativeLayout>
       <RelativeLayout style="@style/FullWidthWrappingLayout">
         <LinearLayout style="@style/Dashboard_Synchronization_Statistics_Holder"

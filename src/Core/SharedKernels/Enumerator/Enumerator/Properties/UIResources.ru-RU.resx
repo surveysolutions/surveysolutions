@@ -458,6 +458,18 @@
   <data name="MissingPermissions_Storage" xml:space="preserve">
     <value>Приложению необходимо разрешение на использование хранилища для ответа на данный вопрос</value>
   </data>
+  <data name="Multimedia_PickFromGallery" xml:space="preserve">
+    <value>Выбрать из галереи</value>
+  </data>
+  <data name="Multimedia_PictureSource" xml:space="preserve">
+    <value>Выберите опцию</value>
+  </data>
+  <data name="Multimedia_TakePhoto" xml:space="preserve">
+    <value>Сделать фото</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
   <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
     <value>Редактировать область</value>
   </data>

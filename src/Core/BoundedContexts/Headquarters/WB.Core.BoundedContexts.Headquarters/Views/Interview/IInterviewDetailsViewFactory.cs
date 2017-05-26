@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
     public interface IInterviewDetailsViewFactory
     {
-        DetailsViewModel GetInterviewDetails(Guid interviewId, InterviewDetailsFilter filter, Identity currentGroupIdentity = null);
+        DetailsViewModel GetInterviewDetails(Guid interviewId, InterviewDetailsFilter questionsTypes, Identity currentGroupIdentity = null);
 
         Guid GetFirstChapterId(Guid id);
     }

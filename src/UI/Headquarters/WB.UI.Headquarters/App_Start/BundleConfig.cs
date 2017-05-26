@@ -19,6 +19,14 @@ namespace WB.UI.Headquarters
                 "~/Dependencies/js/searchHighlight.js"
              ));
 
+
+            bundles.Add(new ScriptBundle("~/js/assignments").Include(
+                "~/Dependencies/build/vue-libs.js",
+                "~/Dependencies/build/vue/assignments/assignments.js",
+                "~/Dependencies/js/dataTables.conditionalPaging.js"
+            ));
+
+
             //libs.js:
             //vendor\jquery\dist\jquery.js
             //vendor\bootstrap - sass\assets\javascripts\bootstrap.js
@@ -249,14 +257,7 @@ namespace WB.UI.Headquarters
                 "~/Scripts/knockout/ko.typeahead.js",
                 "~/Scripts/viewmodels/pages/create-interviewer.js"
                 ));
-            bundles.Add(new ScriptBundle("~/js/interviewers").Include(
-                "~/Scripts/bootstrap3-typeahead.js",
-                "~/Scripts/components/typeahead-extended.js",
-                "~/Scripts/knockout/ko.typeahead.js",
-                "~/Scripts/viewmodels/pages/interviewers.js",
-                "~/Scripts/query-string.js"
-                ));
-
+            
             bundles.Add(new ScriptBundle("~/js/users").Include(
                 "~/Scripts/viewmodels/pages/users.js"
                 ));
@@ -312,8 +313,34 @@ namespace WB.UI.Headquarters
                 "~/Scripts/pages/export-settings.js"
                 ));
 
-            bundles.Add(new ScriptBundle("~/js/new-ui.js").Include(
+            bundles.Add(new ScriptBundle("~/js/new-ui").Include(
                 "~/Scripts/new-ui.js"));
+
+            bundles.Add(new ScriptBundle("~/js/supervisors").Include(
+                "~/Scripts/viewmodels/pages/supervisors.js"));
+
+            bundles.Add(new ScriptBundle("~/js/users").Include(
+                "~/Scripts/viewmodels/pages/users.js"));
+
+            bundles.Add(new ScriptBundle("~/js/editableusers").Include(
+                "~/Scripts/viewmodels/pages/users.js",
+                "~/Scripts/viewmodels/pages/editable-users.js"));
+
+            bundles.Add(new ScriptBundle("~/js/interviewers").Include(
+                "~/Scripts/bootstrap3-typeahead.js",
+                "~/Scripts/components/typeahead-extended.js",
+                "~/Scripts/knockout/ko.typeahead.js",
+                "~/Scripts/query-string.js",
+                "~/Scripts/viewmodels/pages/users.js",
+                "~/Scripts/viewmodels/pages/editable-users.js",
+                "~/Scripts/viewmodels/pages/interviewers.js"
+                ));
+
+            bundles.Add(new ScriptBundle("~/js/importquestionaires").Include(
+                "~/Scripts/viewmodels/pages/importquestionaires.js"));
+
+            bundles.Add(new ScriptBundle("~/js/questionnaires").Include(
+                "~/Scripts/viewmodels/pages/questionnaires.js"));
         }
     }
 }

@@ -23,7 +23,7 @@ namespace WB.UI.Designer.Code
             int? pageIndex = null, 
             string sortBy = null, 
             int? sortOrder = null, 
-            string filter = null)
+            string searchFor = null)
         {
             QuestionnaireListView model = this.GetQuestionnaireView(
                 viewerId: viewerId, 
@@ -32,7 +32,7 @@ namespace WB.UI.Designer.Code
                 sortBy: sortBy, 
                 isAdmin:isAdmin,
                 sortOrder: sortOrder, 
-                filter: filter);
+                searchFor: searchFor);
 
             return model.Items.Select(x => this.GetPublicQuestionnaire(x, viewerId, isAdmin))
                         .ToPagedList(page: model.Page, pageSize: model.PageSize, totalCount: model.TotalCount);
@@ -44,7 +44,7 @@ namespace WB.UI.Designer.Code
             int? pageIndex = null, 
             string sortBy = null, 
             int? sortOrder = null, 
-            string filter = null)
+            string searchFor = null)
         {
             QuestionnaireListView model = this.GetQuestionnaireView(
                 viewerId: viewerId, 
@@ -53,7 +53,7 @@ namespace WB.UI.Designer.Code
                 pageIndex: pageIndex, 
                 sortBy: sortBy, 
                 sortOrder: sortOrder, 
-                filter: filter);
+                searchFor: searchFor);
 
             var result = model.Items.Select(x => this.GetQuestionnaire(x, viewerId, isAdmin)).ToPagedList(page: model.Page, pageSize: model.PageSize, totalCount: model.TotalCount);
             return result;
@@ -120,7 +120,7 @@ namespace WB.UI.Designer.Code
             int? pageIndex = null, 
             string sortBy = null, 
             int? sortOrder = null, 
-            string filter = null)
+            string searchFor = null)
         {
             return
                 this.viewFactory.Load(
@@ -133,7 +133,7 @@ namespace WB.UI.Designer.Code
                                 Page = pageIndex ?? 1,
                                 PageSize = GlobalHelper.GridPageItemsCount, 
                                 Order = sortBy, 
-                                Filter = filter
+                                SearchFor = searchFor
                             });
         }
     }

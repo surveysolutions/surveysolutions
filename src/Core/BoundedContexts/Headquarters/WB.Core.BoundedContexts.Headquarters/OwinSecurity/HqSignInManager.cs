@@ -89,9 +89,17 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             switch (basicCredentials.Scheme)
             {
                 case ApiAuthenticationScheme.Basic:
-                    if (treatPasswordAsPlain && !UserManager.CheckPassword(userInfo, basicCredentials.Password)
-                        || !treatPasswordAsPlain && !CheckHashedPassword(userInfo, basicCredentials))
+                    if (treatPasswordAsPlain && !this.UserManager.CheckPassword(userInfo, basicCredentials.Password))
                     {
+                        return IdentityResult.Failed();
+                    }
+                    else if (!treatPasswordAsPlain && !this.CheckHashedPassword(userInfo, basicCredentials))
+                    {
+                        if (!IsInCompatibilityMode(userInfo))
+                        {
+                            return IdentityResult.Failed("UpgradeRequired");
+                        }
+
                         return IdentityResult.Failed();
                     }
                     break;
@@ -156,11 +164,15 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             return this.ApiTokenProvider.ValidateTokenAsync(userId, token);
         }
 
-        private bool CheckHashedPassword(HqUser userInfo, BasicCredentials basicCredentials)
+        private bool IsInCompatibilityMode(HqUser userInfo)
         {
             var compatibilityProvider = ServiceLocator.Current.GetInstance<IHashCompatibilityProvider>();
+            return compatibilityProvider.IsInSha1CompatibilityMode() && userInfo.IsInRole(UserRoles.Interviewer);
+        }
 
-            if (compatibilityProvider.IsInSha1CompatibilityMode() && userInfo.IsInRole(UserRoles.Interviewer))
+        private bool CheckHashedPassword(HqUser userInfo, BasicCredentials basicCredentials)
+        {
+            if (this.IsInCompatibilityMode(userInfo))
             {
                 return userInfo.PasswordHashSha1 == basicCredentials.Password;
             }

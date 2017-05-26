@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             
             var mockOfSamplePreloadingDataParsingService = new Mock<IInterviewImportDataParsingService>();
 
-            mockOfSamplePreloadingDataParsingService.Setup(x => x.GetInterviewsImportDataForSample("sampleId", questionnaireIdentity))
+            mockOfSamplePreloadingDataParsingService.Setup(x => x.GetInterviewsImportDataForPanel("sampleId", questionnaireIdentity))
                 .Returns((InterviewImportData[])null);
 
             interviewImportService =
@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
         };
 
         Because of = () => 
-            interviewImportService.ImportInterviews(questionnaireIdentity, "sampleId", false, null, Guid.Parse("22222222222222222222222222222222"));
+            interviewImportService.ImportInterviews(questionnaireIdentity, "sampleId", null, Guid.Parse("22222222222222222222222222222222"));
 
         It should_in_progress_be_false = () =>
             interviewImportService.Status.IsInProgress.ShouldBeFalse();

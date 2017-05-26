@@ -148,14 +148,17 @@
     <value>{0} (v{1})</value>
   </data>
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
-    <value>Completed {0}</value>
+    <value>Completed ({0})</value>
+  </data>
+  <data name="Dashboard_CreateNewLinkText" xml:space="preserve">
+    <value>Create New</value>
   </data>
   <data name="Dashboard_CreateInterview" xml:space="preserve">
     <value>Create
 interview</value>
   </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
-    <value>New {0}</value>
+    <value>New ({0})</value>
   </data>
   <data name="Dashboard_NoInterviewsSyncButton" xml:space="preserve">
     <value>Synchronize</value>
@@ -175,13 +178,13 @@ for further instructions</value>
     <value>This interview is completed. Do you want to restart the interview?</value>
   </data>
   <data name="Dashboard_RejectedLinkText" xml:space="preserve">
-    <value>Rejected {0}</value>
+    <value>Rejected ({0})</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
     <value>Are you sure you want to delete this interview "{0}" ?</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
-    <value>Started {0}</value>
+    <value>Started ({0})</value>
   </data>
   <data name="Dashboard_Title" xml:space="preserve">
     <value>{0} assignments for {1}</value>
@@ -263,6 +266,9 @@ for further instructions</value>
   </data>
   <data name="Synchronization_Cancel" xml:space="preserve">
     <value>Cancel</value>
+  </data>
+  <data name="Synchronization_Done" xml:space="preserve">
+    <value>Done</value>
   </data>
   <data name="Synchronization_Download_Description_Format" xml:space="preserve">
     <value>{0} of {1} {2} done</value>
@@ -587,12 +593,15 @@ for further instructions</value>
   </data>
   <data name="Synchronization_Check_Obsolete_Questionnaires" xml:space="preserve">
     <value>Check for obsolete questionnaires</value>
+  </data>  
+  <data name="Synchronization_Of_Assignments" xml:space="preserve">
+    <value>Check for new assignments</value>
   </data>
   <data name="Synchronization_Check_Obsolete_Questionnaires_Description" xml:space="preserve">
     <value>Removing {0} questionnaire out of {1}</value>
   </data>
   <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
-    <value>You have incompatible version of Interviewer application. Please, uninstall it and install again from your Survey Solutions Supervisor website</value>
+    <value>You have incompatible version of Interviewer application. Please, uninstall it and install again from your Survey Solutions Headquarters website</value>
   </data>
   <data name="Interview_Loading" xml:space="preserve">
     <value>Loading</value>
@@ -607,9 +616,28 @@ for further instructions</value>
     <value>Failed to open interview</value>
   </data>
   <data name="UnacceptableSSLCertificate" xml:space="preserve">
-    <value>Failed to verify certificate for target URL. Please, check if Supervisor website address is valid and your device has corrent current date and time</value>
+    <value>Failed to verify certificate for target URL. Please, check if Headquarters website address is valid and your device has corrent current date and time</value>
   </data>
   <data name="Synchronization_DownloadingLogo" xml:space="preserve">
     <value>Downloading logo</value>
+  </data>
+  <data name="Dashboard_CreateNewTabText" xml:space="preserve">
+    <value>Create new interview using templates (Census mode)</value>
+  </data>
+  <data name="Dashboard_StartedTabText" xml:space="preserve">
+    <value>Interviews which have been started but not completed
+You need complete it to be synchronized</value>
+  </data>
+  <data name="Dashboard_RejectedTabText" xml:space="preserve">
+    <value>Interviews which have been rejected by supervisor
+You need to address issues noted on cover</value>
+  </data>
+  <data name="Dashboard_CompletedTabText" xml:space="preserve">
+    <value>Completed interviews, will be uploaded during 
+your next synchronization</value>
+  </data>
+  <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
+    <value>You can create new interviews using 
+empty census templates (Census mode)</value>
   </data>
 </root>

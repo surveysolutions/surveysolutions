@@ -1,0 +1,329 @@
+﻿@model WB.UI.Headquarters.Controllers.AssignmentsFilters
+
+@{
+    ViewBag.Title = Pages.Assignments_PageTitle;
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@section scripts
+{
+    <style>
+        .modal {
+            overflow: visible;
+        }
+
+        .modal-body {
+            overflow-y: visible !important;
+        }
+    </style>
+    @Scripts.Render("~/js/common")
+    @Scripts.Render("~/js/assignments")
+
+    <script type="text/javascript">
+        var assignmentsEndpoint = "@Url.Content("~/api/Assignments")";
+
+        var tableOptions = {
+            rowId: "id",
+            deferLoading: 0,
+            order: [[5, 'desc']],
+            columns: [
+                {
+                    orderable: false,
+                    className: 'checkbox-cell',
+                    render: function(data, type, row) {
+                        var checkboxId = 'check-' + row.id;
+                        var compiled =
+                            _.template(
+                                '<input class="checkbox-filter" type="checkbox" value="<%= id %>" id="<%= checkboxId %>"><label for="<%= checkboxId %>"><span class="tick"></span></label>');
+
+                        return compiled({ 'id': row.id, 'checkboxId': checkboxId });
+                    }
+                },
+                {
+                    data: "id",
+                    name: "Id",
+                    title: "Id"
+                },
+                {
+                    data: "responsible",
+                    name: "Responsible.Name",
+                    title: "@Common.Responsible"
+                },
+                {
+                    data: "capacity",
+                    name: "Capacity",
+                    "class": "type-numeric",
+                    title: "@Assignments.Capacity",
+                    orderable: true,
+                    searchable: false,
+                    "defaultContent": "<span>@Assignments.Unlimited</span>"
+                },
+                {
+                    data: "identifyingQuestions",
+                    title: "@Assignments.IdentifyingQuestions",
+                    "class": "prefield-column first-identifying last-identifying sorting_disabled visible",
+                    orderable: false,
+                    searchable: false,
+                    render: function(data) {
+                        var strings = [];
+                        for (var questionText in data) {
+                            if (data.hasOwnProperty(questionText)) {
+                                strings.push(questionText + ": " + data[questionText]);
+                            }
+                        }
+                        return _.join(strings, ", ");
+                    }
+                },
+                {
+                    data: "updatedAtUtc",
+                    name: "UpdatedAtUtc",
+                    title: "@Assignments.UpdatedAt",
+                    searchable: false,
+                    render: function(data) {
+                        var date = moment.utc(data);
+                        return date.local().format('lll');
+                    }
+                },
+                {
+                    data: "createdAtUtc",
+                    name: "CreatedAtUtc",
+                    title: "@Assignments.CreatedAt",
+                    searchable: false,
+                    render: function(data) {
+                        var date = moment.utc(data);
+                        return date.local().format('lll');
+                    }
+                }
+            ],
+            ajax: {
+                url: assignmentsEndpoint,
+                type: "GET",
+                contentType: 'application/json'
+            },
+            select: {
+                style: 'multi',
+                selector: 'td>.checkbox-filter'
+            }
+        };
+
+        var app = new Vue({
+            data: {
+                responsibleId: null,
+                questionnaireId: null,
+                wasInitialized: false,
+                questionnaireParams: { censusOnly: false },
+                isLoading: false,
+                tableOptions: tableOptions,
+                selectedRows: [],
+                totalRows: 0,
+                showArchive: false,
+                newResponsibleId: null
+            },
+            methods: {
+                addParamsToRequest: function(requestData) {
+                    requestData.responsibleId = (this.responsibleId || {}).key;
+                    requestData.questionnaireId = (this.questionnaireId || {}).key;
+                    requestData.showArchive = this.showArchive;
+                },
+                responseProcessor: function(response) {
+                    this.isLoading = false;
+                    this.totalRows = response.recordsTotal;
+                },
+                userSelected: function(newValue) {
+                    this.responsibleId = newValue;
+                },
+                questionnaireSelected: function(newValue) {
+                    this.questionnaireId = newValue;
+                },
+                newResponsibleSelected: function(newValue) {
+                    this.newResponsibleId = newValue;
+                },
+                startWatchers: function(props, watcher) {
+                    var iterator = function(prop) {
+                        this.$watch(prop, watcher);
+                    };
+                    props.forEach(iterator, this);
+                },
+                reloadTable: function() {
+                    var self = this;
+                    this.isLoading = true;
+                    this.selectedRows.splice(0, this.selectedRows.length);
+                    this.$refs.table.reload(self.reloadTable);
+                },
+                archiveSelected: function() {
+                    this.$http.delete(assignmentsEndpoint,
+                            {
+                                body: this.selectedRows
+                            })
+                        .then(function() {
+                            this.reloadTable();
+                        });
+                },
+                unarchiveSelected: function() {
+                    this.$http.post(assignmentsEndpoint + "/Unarchive",
+                            this.selectedRows
+                        )
+                        .then(function() {
+                            this.reloadTable();
+                        });
+                },
+                assignSelected: function() {
+                    $('#assignModal').modal({
+                        keyboard: false
+                    });
+                },
+                assign: function() {
+                    this.$http.post(assignmentsEndpoint + "/Assign",
+                        {
+                            responsibleId: this.newResponsibleId.key,
+                            ids: this.selectedRows
+                        }).then(function() {
+                        $('#assignModal').modal('hide');
+                        this.newResponsibleId = null;
+                        this.reloadTable();
+                    });
+                },
+                rowsSelected: function(e, dt, type, ar) {
+                    for (var i = 0; i < ar.length; i++) {
+                        var rowId = parseInt(dt.row(ar[i]).id());
+                        if (!_.includes(this.selectedRows, rowId)) {
+                            this.selectedRows.push(rowId);
+                        }
+                    }
+                },
+                rowsDeselected: function(e, dt, type, ar) {
+                    for (var i = 0; i < ar.length; i++) {
+                        var rowId = dt.row(ar[i]).id();
+                        Vue.set(this, "selectedRows", _.without(this.selectedRows, parseInt(rowId)));
+                    }
+                }
+            },
+            mounted: function() {
+                var self = this;
+                document.querySelector("main").classList.remove("hold-transition");
+                document.querySelector("footer").classList.add("footer-adaptive");
+
+                this.startWatchers(['responsibleId', 'questionnaireId', 'showArchive'], this.reloadTable.bind(self));
+                this.reloadTable();
+
+                $('.ddl').selectpicker('refresh');
+            }
+        });
+
+        window.onload = function() {
+            Vue.http.headers.common['Authorization'] = input.settings.acsrf.token;
+
+            app.$mount('#app');
+
+        }
+    </script>
+}
+
+
+<main class="hold-transition" id="app">
+    <div class="container-fluid">
+        <div class="row">
+            <aside class="filters">
+                <div class="foldback-button" id="hide-filters">
+                    <span class="arrow"></span>
+                    <span class="arrow"></span>
+                    <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
+                </div>
+                <div class="filters-container">
+                    <h4>@Pages.FilterTitle</h4>
+                    <div class="block-filter">
+                        <h5>@Pages.Template</h5>
+                        <typeahead data-vv-name="questionnaireId"
+                                   data-vv-as="questionnaire"
+                                   placeholder="@Common.Any"
+                                   control-id="questionnaireId"
+                                   :ajax-params="questionnaireParams"
+                                   :value="questionnaireId"
+                                   v-on:selected="questionnaireSelected"
+                                   fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesCombobox"})"></typeahead>
+                    </div>
+                    <div class="block-filter">
+                        <h5>@Common.Responsible</h5>
+                        <typeahead placeholder="@Common.Any"
+                                   control-id="responsibleId"
+                                   :value="responsibleId"
+                                   :ajax-params="{ }"
+                                   v-on:selected="userSelected"
+                                   fetch-url="@(Model.IsSupervisor ?
+                                                    Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"}) :
+                                                    Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"}))"></typeahead>
+                    </div>
+                    <div class="block-filter">
+                        <h5>@Assignments.ShowArchived</h5>
+                        <select class="ddl" v-model="showArchive">
+                            <option value="false">@Assignments.Active</option>
+                            <option value="true">@Assignments.Archived</option>
+                        </select>
+                    </div>
+                </div>
+            </aside>
+
+            <div class="main-information">
+                <div class="page-header clearfix">
+                    <h1>
+                        @Assignments.AssignmentsHeader ({{totalRows}})
+                    </h1>
+                </div>
+                <div class="interviews-info">
+                    <div class="table-wrapper">
+                        <assignments-table ref="table"
+                                           :add-params-to-request="addParamsToRequest"
+                                           :response-processor="responseProcessor"
+                                           :table-options="tableOptions"
+                                           v-on:select="rowsSelected"
+                                           v-on:deselect="rowsDeselected"></assignments-table>
+                    </div>
+
+                    <div class="panel panel-table" v-if="selectedRows.length">
+                        <div class="panel-body">
+                            <input class="double-checkbox-white" type="checkbox" checked="" disabled>
+                            <label>
+                                <span class="tick"></span>
+                                @string.Format(Assignments.AssignmentsSelected, "{{selectedRows.length}}")
+                            </label>
+                            <button class="btn btn-lg btn-primary" v-if="showArchive" v-on:click="unarchiveSelected">@Assignments.Unarchive</button>
+                            <button class="btn btn-lg btn-primary" v-if="!showArchive" v-on:click="assignSelected">@Common.Assign</button>
+                            <button class="btn btn-lg btn-danger" v-if="!showArchive" v-on:click="archiveSelected">@Assignments.Archive</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="assignModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+                    <h3>@Pages.ConfirmationNeededTitle</h3>
+                </div>
+                <div class="modal-body">
+                    <h3>@string.Format(Assignments.NumberOfAssignmentsAffected, "{{selectedRows.length}}")</h3>
+                    <p>
+                        @Assignments.SelectResponsible
+                        <typeahead placeholder="@Common.Responsible"
+                                   control-id="newResponsibleId"
+                                   :value="newResponsibleId"
+                                   :ajax-params="{ }"
+                                   v-on:selected="newResponsibleSelected"
+                                   fetch-url="@(Model.IsSupervisor ?
+                                                    Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"}) :
+                                                    Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"}))">
+                        </typeahead>
+                    </p>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" v-on:click="assign" :disabled="!newResponsibleId">@Common.Assign</button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal">@Common.Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>

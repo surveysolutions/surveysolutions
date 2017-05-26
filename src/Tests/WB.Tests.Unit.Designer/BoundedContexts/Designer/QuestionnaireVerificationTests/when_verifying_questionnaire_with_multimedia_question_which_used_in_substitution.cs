@@ -11,13 +11,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_multimedia_question_which_used_in_substitution : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireDocument(new MultimediaQuestion()
-            {
-                PublicKey = multimediaQuestionId,
-                StataExportCaption = "var"
-            }, new TextQuestion() { PublicKey = questionWhichUsesMultimediaInSubstitutionId, QuestionText = "%var% substitution", StataExportCaption = "var1" });
+            questionnaire = CreateQuestionnaireDocument(
+                Create.MultimediaQuestion(
+                    multimediaQuestionId,
+                    variable: "var"
+                ), 
+                Create.TextQuestion(
+                    questionWhichUsesMultimediaInSubstitutionId,
+                    text: "%var% substitution",
+                    variable: "var1"
+                ));
 
             verifier = CreateQuestionnaireVerifier();
         };

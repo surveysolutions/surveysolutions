@@ -32,7 +32,7 @@
             <div class="page-header">
                 <ol class="breadcrumb">
                     <li>
-                        @Html.ActionLink(MainMenu.Questionnaires, "Index", "SurveySetup")
+                        @Html.ActionLink(MainMenu.SurveySetup, "Index", "SurveySetup")
                     </li>
                 </ol>
                 <h1>@BatchUpload.CreatingMultipleInterviews</h1>
@@ -96,7 +96,7 @@
                     </div>
                     <div>
                         <a href="@Url.Action("SimpleTemplateDownload", "SurveySetup", new {id = Model.QuestionnaireId, version = Model.QuestionnaireVersion})">@BatchUpload.DownloadTabTemplate</a>
-                        @using (Html.BeginForm("SampleBatchUploadAndVerify", "SurveySetup", new {questionnaireId = Model.QuestionnaireId, version = Model.QuestionnaireVersion}, FormMethod.Post, new {enctype = "multipart/form-data"}))
+                        @using (Html.BeginForm("AssignmentsBatchUploadAndVerify", "SurveySetup", new {questionnaireId = Model.QuestionnaireId, version = Model.QuestionnaireVersion}, FormMethod.Post, new {enctype = "multipart/form-data"}))
                         {
                             @Html.AntiForgeryToken()
                             @Html.HiddenFor(x => x.QuestionnaireId)

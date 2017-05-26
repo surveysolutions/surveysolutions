@@ -24,20 +24,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     fixedTitles: new[] {"fixed title 1", "fixed title 2"},
                     children: new IComposite[]
                     {
-                        new TextQuestion()
+                        new TextQuestion("test")
                         {
                             PublicKey = linkedSourceQuestionId,
                             QuestionType = QuestionType.Text,
                             StataExportCaption = "var"
                         }
                     }),
-                new MultyOptionsQuestion()
+                new MultyOptionsQuestion("test")
                 {
                     PublicKey = categoricalQuestionId,
                     StataExportCaption = "var1",
                     LinkedToQuestionId = linkedSourceQuestionId
                 },
-                new Group()
+                new Group("test")
                 {
                     PublicKey = groupWithEnablementConditionId,
                     ConditionExpression = "some condition",

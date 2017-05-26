@@ -130,13 +130,13 @@
     <value>เวอร์ชันที่ใช้อยู่ไม่ตรงกับเซิร์ฟเวอร์ กรุณาปรับปรุง Survey Solutions Interviewer</value>
   </data>
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
-    <value>เสร็จสมบูรณ์ : {0}</value>
+    <value>เสร็จสมบูรณ์ : ({0})</value>
   </data>
   <data name="Dashboard_CreateInterview" xml:space="preserve">
     <value>สร้างการสัมภาษณ์</value>
   </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
-    <value>งานใหม่ : {0}</value>
+    <value>งานใหม่ : ({0})</value>
   </data>
   <data name="Dashboard_NoInterviewsSyncButton" xml:space="preserve">
     <value>ซิงโครไนส์</value>
@@ -154,13 +154,13 @@
     <value>สัมภาษณ์เสร็จสมบูรณ์ ต้องการกลับไปแก้ไขเพิ่มเติมหรือไม่</value>
   </data>
   <data name="Dashboard_RejectedLinkText" xml:space="preserve">
-    <value>ถูกปฏิเสธ : {0} </value>
+    <value>ถูกปฏิเสธ : ({0})</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
     <value>ต้องการลบข้อมูลการสัมภาษณ์ของ "{0}" หรือไม่</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
-    <value>เริ่มสัมภาษณ์ : {0}</value>
+    <value>เริ่มสัมภาษณ์ : ({0})</value>
   </data>
   <data name="Dashboard_Title" xml:space="preserve">
     <value>งานที่ได้รับมอบหมายให้ {1} : {0}</value>
