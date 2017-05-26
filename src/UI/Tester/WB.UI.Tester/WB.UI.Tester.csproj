@@ -26,7 +26,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>TRACE;DEBUG;</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;$(Constants)</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidLinkMode>None</AndroidLinkMode>
@@ -67,8 +67,7 @@
     <AndroidEnableMultiDex>False</AndroidEnableMultiDex>
     <EnableProguard>False</EnableProguard>
     <DevInstrumentationEnabled>False</DevInstrumentationEnabled>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants>$(Constants)</DefineConstants>
     <DebugSymbols>False</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
@@ -479,24 +478,22 @@
     <ProjectReference Include="..\..\Shared\WB.UI.Shared.Enumerator\WB.UI.Shared.Enumerator.csproj">
       <Project>{5daa7eaf-9a68-4302-ae74-ef0daa0bd169}</Project>
       <Name>WB.UI.Shared.Enumerator</Name>
-    </ProjectReference>    
+    </ProjectReference>
   </ItemGroup>
-  
   <Choose>
     <When Condition="!$(DefineConstants.Contains('EXCLUDEEXTENSIONS'))">
-	  <ItemGroup>
+      <ItemGroup>
         <ProjectReference Include="..\..\Shared\WB.UI.Shared.Extensions\WB.UI.Shared.Extensions.csproj">
           <Project>{f69d3c48-f648-4b9f-9b4f-ba44e014224c}</Project>
           <Name>WB.UI.Shared.Extensions</Name>
-        </ProjectReference>      
+        </ProjectReference>
       </ItemGroup>
     </When>
     <Otherwise>
-      <ItemGroup>      
+      <ItemGroup>
       </ItemGroup>
     </Otherwise>
-  </Choose>  
-  
+  </Choose>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
