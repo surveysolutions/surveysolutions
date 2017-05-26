@@ -72,7 +72,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         Because of = () => interview.CreateInterviewFromSnapshot(command);
 
         It should_return_empty_failed_condition_messages = () => 
-            interview.GetFailedValidationMessages(questionIdentity).Count().ShouldEqual(0);
+            interview.GetFailedValidationMessages(questionIdentity, "Error").Count().ShouldEqual(0);
 
         It should_create_roster_instance = () => 
             interview.GetRoster(fixedRosterIdentity).ShouldNotBeNull();
