@@ -90,25 +90,23 @@ namespace WB.UI.Headquarters.Implementation.Services
 
                     var questionnaireBrowseItem = this.plainTransactionManager.ExecuteInQueryTransaction(
                         () => this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity));
-                    bool isSupportAssignments = questionnaireBrowseItem.AllowAssignments;
 
-                    if (isSupportAssignments)
+                    var responsibleId = assignmentRecord.InterviewerId ?? responsibleSupervisorId;
+                    var topLevelAnswers = assignmentRecord.PreloadedData.Data.First();
+                    var assignment = new Assignment(questionnaireIdentity, responsibleId,
+                        assignmentRecord.Quantity);
+                    var identifyingAnswers = topLevelAnswers.Answers.Select(a => new IdentifyingAnswer(assignment)
                     {
-                        var responsibleId = assignmentRecord.InterviewerId ?? responsibleSupervisorId;
-                        var topLevelAnswers = assignmentRecord.PreloadedData.Data.First();
-                        var assignment = new Assignment(questionnaireIdentity, responsibleId,
-                            assignmentRecord.Quantity);
-                        var identifyingAnswers = topLevelAnswers.Answers.Select(a => new IdentifyingAnswer(assignment)
-                        {
-                            QuestionId = a.Key,
-                            Answer = a.Value.ToString()
-                        }).ToList();
-                        assignment.SetAnswers(identifyingAnswers);
+                        QuestionId = a.Key,
+                        Answer = a.Value.ToString()
+                    }).ToList();
+                    assignment.SetAnswers(identifyingAnswers);
 
-                        this.plainTransactionManager.ExecuteInPlainTransaction(
-                            () => assignmentPlainStorageAccessor.Store(assignment, null));
-                    }
-                    else
+                    this.plainTransactionManager.ExecuteInPlainTransaction(
+                        () => assignmentPlainStorageAccessor.Store(assignment, null));
+
+                    bool isSupportAssignments = questionnaireBrowseItem.AllowAssignments;
+                    if (!isSupportAssignments)
                     {
                         this.transactionManagerProvider.GetTransactionManager().ExecuteInQueryTransaction(() =>
                             this.plainTransactionManager.ExecuteInPlainTransaction(
