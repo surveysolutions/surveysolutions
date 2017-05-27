@@ -11,6 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public AssignmentMap()
         {
             Id(x => x.Id, mapper => mapper.Generator(Generators.Identity));
+            DynamicUpdate(true);
             Property(x => x.ResponsibleId);
             Property(x => x.Capacity);
             Property(x => x.Archived);
@@ -31,8 +32,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 {
                     key.Column("assignmentid");
                 });
-                set.Lazy(CollectionLazy.NoLazy);
-                set.Cascade(Cascade.All | Cascade.DeleteOrphans);
+                set.Lazy(CollectionLazy.Lazy);
+                set.Cascade(Cascade.None);
             },
             relation => relation.OneToMany());
 

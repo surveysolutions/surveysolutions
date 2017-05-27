@@ -34,7 +34,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                     .ToList();
 
                 var neededItems = _.Where(x => ids.Contains(x.Id));
-                var list = this.DefineOrderBy(neededItems, input).Fetch(x =>x.IdentifyingData).Fetch(x => x.Responsible).ToList();
+                var list = this.DefineOrderBy(neededItems, input)
+                                .Fetch(x =>x.IdentifyingData)
+                                .Fetch(x => x.Responsible)
+                                .Fetch(x => x.InterviewSummaries)
+                                .ToList();
 
                 return list;
             });
@@ -49,7 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                     ResponsibleId = x.ResponsibleId,
                     UpdatedAtUtc = x.UpdatedAtUtc,
                     Capacity = x.Capacity,
-                    InterviewsCount = 5,
+                    InterviewsCount = x.InterviewSummaries.Count,
                     Id = x.Id,
                     Responsible = x.Responsible.Name,
                     IdentifyingQuestions = this.GetIdentifyingColumnText(x)
@@ -76,6 +80,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             if (orderBy == null)
             {
                 return query.OrderByDescending(x => x.UpdatedAtUtc);
+            }
+
+            if (orderBy.Field.Contains("InterviewsCount"))
+            {
+                if (orderBy.Direction == OrderDirection.Asc)
+                {
+                    return query.OrderBy(x => x.InterviewSummaries.Count);
+                }
+                else
+                {
+                    return query.OrderByDescending(x => x.InterviewSummaries.Count);
+                }
             }
             return query.OrderUsingSortExpression(model.Order).AsQueryable();
         }
