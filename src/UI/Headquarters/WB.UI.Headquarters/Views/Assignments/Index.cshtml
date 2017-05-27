@@ -25,7 +25,7 @@
         var tableOptions = {
             rowId: "id",
             deferLoading: 0,
-            order: [[5, 'desc']],
+            order: [[6, 'desc']],
             columns: [
                 {
                     orderable: false,
@@ -48,6 +48,11 @@
                     data: "responsible",
                     name: "Responsible.Name",
                     title: "@Common.Responsible"
+                },
+                {
+                    data: "interviewsCount",
+                    name: "InterviewsCount",
+                    title: "Interviews count"
                 },
                 {
                     data: "capacity",
