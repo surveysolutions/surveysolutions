@@ -23,7 +23,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IMvxMessenger messenger;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
-        private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly IExternalAppLauncher externalAppLauncher;
 
         public AssignmentDashboardItemViewModel(
@@ -32,7 +31,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             IViewModelNavigationService viewModelNavigationService,
             IMvxMessenger messenger,
             IPlainStorage<InterviewView> interviewViewRepository,
-            IPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IExternalAppLauncher externalAppLauncher)
         {
             this.commandService = commandService;
@@ -40,7 +38,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.viewModelNavigationService = viewModelNavigationService;
             this.messenger = messenger;
             this.interviewViewRepository = interviewViewRepository;
-            this.questionnaireViewRepository = questionnaireViewRepository;
             this.externalAppLauncher = externalAppLauncher;
         }
 
@@ -48,10 +45,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public void Init(AssignmentDocument assignment)
         {
-            var questionnaireView = this.questionnaireViewRepository.GetById(assignment.QuestionnaireId);
-
+            this.AssignmentId = assignment.Id;
             this.questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
-            this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, questionnaireView.Title, this.questionnaireIdentity.Version);
+            this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, assignment.Title, this.questionnaireIdentity.Version);
 
             PrefilledQuestions = GetPrefilledQuestions(assignment.IdentifyingData);
 
@@ -66,14 +62,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             {
                 this.Comment = InterviewerUIResources.DashboardItem_AssignmentCreatedComment.FormatString(interviewsByAssignmentCount);
             }
+
+            this.GpsLocation = this.GetAssignmentLocation(assignment);
         }
 
         public DashboardInterviewStatus Status => DashboardInterviewStatus.New;
-        public string QuestionnaireName { get; set; }
-        public string Comment { get; set; }
+        public string QuestionnaireName { get; private set; }
+        public string Comment { get; private set; }
         public List<PrefilledQuestion> PrefilledQuestions { get; private set; }
         public InterviewGpsCoordinatesView GpsLocation { get; private set; }
         public bool HasGpsLocation => this.GpsLocation != null;
+        public string AssignmentId { get; private set; }
 
 
         public IMvxCommand CreateNewInterviewCommand
@@ -90,7 +89,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
                 interviewerIdentity.UserId, this.questionnaireIdentity, DateTime.UtcNow,
                 interviewerIdentity.SupervisorId,
-                null);
+                null,
+                int.Parse(AssignmentId));
             await this.commandService.ExecuteAsync(createInterviewOnClientCommand);
             this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
         }
@@ -105,18 +105,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             return identifyingAnswers.Select(fi => new PrefilledQuestion
                 {
                     Answer = fi.Answer,
-                    Question = fi.QuestionId.ToString()
-                }).ToList();
+                    Question = fi.Question
+                }).Take(3).ToList();
         }
 
-        private InterviewGpsCoordinatesView GetInterviewLocation(InterviewView interview)
+        private InterviewGpsCoordinatesView GetAssignmentLocation(AssignmentDocument assignment)
         {
-            if (interview.LocationQuestionId.HasValue && interview.LocationLatitude.HasValue && interview.LocationLongitude.HasValue)
+            if (assignment.LocationQuestionId.HasValue && assignment.LocationLatitude.HasValue && assignment.LocationLongitude.HasValue)
             {
                 return new InterviewGpsCoordinatesView
                 {
-                    Latitude = interview.LocationLatitude ?? 0,
-                    Longitude = interview.LocationLongitude ?? 0
+                    Latitude = assignment.LocationLatitude ?? 0,
+                    Longitude = assignment.LocationLongitude ?? 0
                 };
             }
 

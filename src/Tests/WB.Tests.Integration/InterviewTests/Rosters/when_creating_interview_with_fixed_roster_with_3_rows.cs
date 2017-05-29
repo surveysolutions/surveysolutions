@@ -50,7 +50,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                         Stub<IInterviewExpressionStatePrototypeProvider>.Returning(expressionState),
                         Create.Service.SubstitionTextFactory());
 
-                    interview.CreateInterviewOnClient(questionnaireIdentity, Guid.NewGuid(), DateTime.Now, Guid.NewGuid(), null);
+                    interview.CreateInterviewOnClient(questionnaireIdentity, Guid.NewGuid(), DateTime.Now, Guid.NewGuid(), null, null);
 
                     return new InvokeResults
                     {
