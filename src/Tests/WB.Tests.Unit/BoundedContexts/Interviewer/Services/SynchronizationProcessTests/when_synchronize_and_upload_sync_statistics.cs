@@ -67,7 +67,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             synchronizationServiceMock.Setup(x => x.GetInterviewsAsync(Moq.It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new List<InterviewApiView>());
             synchronizationServiceMock.Setup(x => x.GetAssignmentsAsync(Moq.It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<AssignmentDocument>());
+                .ReturnsAsync(new List<AssignmentApiView>());
 
             var interviewerQuestionnaireAccessor = Mock.Of<IInterviewerQuestionnaireAccessor>(
                 x => x.GetCensusQuestionnaireIdentities() == new List<QuestionnaireIdentity>(new[] { questionnaireIdentity })
