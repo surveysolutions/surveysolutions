@@ -135,6 +135,13 @@
   <data name="Capacity" xml:space="preserve">
     <value>Количество</value>
   </data>
+  <data name="CapacityExplanation" xml:space="preserve">
+    <value>Изменение количества интервью, которые будут созданы согласно этой задаче</value>
+  </data>
+  <data name="ChangeCapacityModalTitle" xml:space="preserve">
+    <value>Редактировать количество интервью для задачи {0}</value>
+    <comment>{0} - id of the assignment</comment>
+  </data>
   <data name="CreatedAt" xml:space="preserve">
     <value>Создан</value>
   </data>
