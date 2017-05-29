@@ -113,6 +113,20 @@ namespace WB.UI.Headquarters.API
             return this.Ok();
         }
 
+        [HttpPatch]
+        [Route("{id:int}/SetCapacity")]
+        public IHttpActionResult SetCapacity(int id, [FromBody] UpdateAssignmentRequest request)
+        {
+            var assignment = this.assignmentsStorage.GetById(id);
+            assignment.UpdateCapacity(request.Capacity);
+            return this.Ok();
+        }
+
+        public class UpdateAssignmentRequest
+        {
+            public int? Capacity { get; set; }
+        }
+
         public class AssignRequest
         {
             public Guid ResponsibleId { get; set; }

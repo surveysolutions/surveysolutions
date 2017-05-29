@@ -6127,7 +6127,8 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   min-width: 40px !important;
   width: 40px !important;
   text-align: center;
-  padding: 0; }
+  padding: 0;
+  outline: none; }
 
 .table-with-checkboxes thead tr th.checkbox-cell, .table-with-checkboxes tbody tr th.checkbox-cell {
   padding-top: 12px;

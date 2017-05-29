@@ -100,7 +100,17 @@ export default {
     this.table.on('deselect', function (e, dt, type, indexes) {
       self.$emit('deselect', e, dt, type, indexes)
     });
-    this.$emit('DataTableRef', this.table)
+    this.table.on('click', 'tbody td', function() {
+        var cell = self.table.cell(this)
+
+        if (cell.index().column > 0) {
+            var rowId = self.table.row(this).id()
+            var columns = self.table.settings().init().columns;
+
+            self.$emit('cell-clicked', columns[this.cellIndex].name, rowId, cell.data())
+        }
+    });
+    this.$emit('DataTableRef', this.table);
   },
   destroyed() {
   }
