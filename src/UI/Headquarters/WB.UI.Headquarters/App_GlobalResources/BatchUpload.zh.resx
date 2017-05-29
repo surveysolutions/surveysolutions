@@ -465,9 +465,6 @@
   <data name="SupervisorMustBeSelected" xml:space="preserve">
     <value>必须选择督导员</value>
   </data>
-  <data name="UploadDescription" xml:space="preserve">
-    <value>上传一个包含识别数据的文件以创建新的访谈。指定督导员或调查员用户名来批量分配调查任务。</value>
-  </data>
   <data name="UploadTabFile" xml:space="preserve">
     <value>上传.tab文件</value>
   </data>
