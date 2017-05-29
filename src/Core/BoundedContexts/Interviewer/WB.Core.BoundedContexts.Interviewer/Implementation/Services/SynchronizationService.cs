@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     request: logonInfo,
                     credentials: credentials,
                     token: token));
-                
+
                 return authToken;
             }
             catch (RestException ex)

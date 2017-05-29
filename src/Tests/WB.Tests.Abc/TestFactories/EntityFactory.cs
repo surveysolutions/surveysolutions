@@ -1559,12 +1559,13 @@ namespace WB.Tests.Abc.TestFactories
             public AssignmentApiView Build() => this._entity;
         }
 
-        public AssignmentDocumentBuilder AssignmentDocument(string id, int? capacity, string questionnaireIdentity)
+        public AssignmentDocumentBuilder AssignmentDocument(string id, int? capacity, int quantity = 0, string questionnaireIdentity = null)
         {
             return new AssignmentDocumentBuilder(new AssignmentDocument
             {
                 Id = id ?? Guid.NewGuid().ToString(),
                 Capacity = capacity,
+                Quantity = quantity,
                 QuestionnaireId = questionnaireIdentity
             });
         }

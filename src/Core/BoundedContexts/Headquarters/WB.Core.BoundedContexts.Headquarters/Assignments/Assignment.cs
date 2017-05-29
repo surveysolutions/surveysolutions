@@ -29,9 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public virtual ReadonlyUser Responsible { get; protected set; }
 
         public virtual int? Capacity { get; protected set; }
-
-        public virtual long Completed { get; protected set; }
-
+                
         public virtual bool Archived { get; protected set; }
 
         public virtual DateTime CreatedAtUtc { get; protected set; }
@@ -42,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual IList<IdentifyingAnswer> IdentifyingData { get; protected set; }
 
-        public virtual ISet<InterviewSummary>InterviewSummaries { get; protected set; }
+        public virtual ISet<InterviewSummary> InterviewSummaries { get; protected set; }
 
         public virtual void Archive()
         {
@@ -55,13 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.Capacity = capacity;
             this.UpdatedAtUtc = DateTime.UtcNow;
         }
-
-        public virtual void UpdateCompletedCount(long count)
-        {
-            this.Completed = count;
-            this.UpdatedAtUtc = DateTime.UtcNow;
-        }
-
+        
         public virtual void Reassign(Guid responsibleId)
         {
             this.ResponsibleId = responsibleId;
