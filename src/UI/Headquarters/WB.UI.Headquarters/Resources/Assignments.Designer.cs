@@ -133,6 +133,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interviews quantity.
+        /// </summary>
+        public static string InterviewsCount {
+            get {
+                return ResourceManager.GetString("InterviewsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} Assignment(s) are going to be changed.
         /// </summary>
         public static string NumberOfAssignmentsAffected {
