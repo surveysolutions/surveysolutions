@@ -46,6 +46,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         Task<CompanyLogoInfo> GetCompanyLogo(string storedClientEtag, CancellationToken cancellationToken);
         Task SendSyncStatisticsAsync(SyncStatisticsApiView statistics, CancellationToken token, RestCredentials credentials);
         Task SendUnexpectedExceptionAsync(UnexpectedExceptionApiView exception, CancellationToken token);
-        Task<List<AssignmentDocument>> GetAssignmentsAsync(CancellationToken cancellationToken);
+        Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken);
     }
 }

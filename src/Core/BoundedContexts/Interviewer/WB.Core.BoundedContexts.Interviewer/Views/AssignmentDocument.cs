@@ -17,7 +17,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     ? null
                     : JsonConvert.DeserializeObject<List<IdentifyingAnswer>>(this.IdentifyingDataValue);
             }
-
             set { this.IdentifyingDataValue = JsonConvert.SerializeObject(value); }
         }
 
@@ -27,14 +26,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public virtual string Id { get; set; }
 
         public int? Capacity { get; set; }
+
         public int Quantity { get; set; }
 
         public string QuestionnaireId { get; set; }
+
+        public string Title { get; set; }
 
         public class IdentifyingAnswer
         {
             public string Answer { get; set; }
             public Guid QuestionId { get; set; }
+            public string Question { get; set; }
         }
     }
 }

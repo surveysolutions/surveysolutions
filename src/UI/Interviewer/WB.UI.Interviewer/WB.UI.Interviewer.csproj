@@ -508,6 +508,7 @@
     <AndroidResource Include="Resources\Layout\fragment_dashboard_tab_new.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\Layout\dashboard_assignment_questionnare_item.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\ErrorScreen.axml">
