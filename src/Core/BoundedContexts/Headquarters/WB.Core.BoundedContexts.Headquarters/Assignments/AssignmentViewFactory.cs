@@ -6,6 +6,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
@@ -70,7 +71,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             QuestionnaireIdentity assignmentQuestionnaireId = assignment.QuestionnaireId;
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(assignmentQuestionnaireId, null);
 
-            Dictionary<string, string> identifyingColumnText = assignment.IdentifyingData.ToDictionary(_ => questionnaire.GetQuestionTitle(_.QuestionId), _ => _.Answer);
+            Dictionary<string, string> identifyingColumnText = 
+                assignment.IdentifyingData.ToDictionary(_ => questionnaire.GetQuestionTitle(_.QuestionId).RemoveHtmlTags(), _ => _.Answer);
             return identifyingColumnText;
         }
 
