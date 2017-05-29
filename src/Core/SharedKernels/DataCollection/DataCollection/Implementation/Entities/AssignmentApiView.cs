@@ -8,7 +8,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public string Id { get; set; }
         public QuestionnaireIdentity QuestionnaireId { get; set; }
         public int? Capacity { get; set; }
-        public long Completed { get; set; }
+        public long Quantity { get; set; }
+
         public List<IdentifyingAnswer> IdentifyingData { get; set; } = new List<IdentifyingAnswer>();
 
         public class IdentifyingAnswer

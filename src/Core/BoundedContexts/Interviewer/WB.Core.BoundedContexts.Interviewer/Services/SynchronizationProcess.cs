@@ -5,8 +5,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
-using MvvmCross.Platform;
-using MvvmCross.Platform.Exceptions;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
@@ -15,7 +13,6 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -351,12 +348,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 }
 
                 local.Capacity = remote.Capacity;
-                local.Completed = remote.Completed;
+                local.Quantity = remote.Quantity;
 
                 this.assignmentsRepository.Store(local);
             }
         }
-        
+
         private async Task CheckObsoleteQuestionnairesAsync(IProgress<SyncProgressInfo> progress, SychronizationStatistics statistics, CancellationToken cancellationToken)
         {
             progress.Report(new SyncProgressInfo
@@ -368,9 +365,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
             var serverQuestionnaires = await this.synchronizationService.GetServerQuestionnairesAsync(cancellationToken);
             var localQuestionnaires = this.questionnairesAccessor.GetAllQuestionnaireIdentities();
-            
+
             var questionnairesToRemove = localQuestionnaires.Except(serverQuestionnaires).ToList();
-            
+
             int removedQuestionnairesCounter = 0;
             foreach (var questionnaireIdentity in questionnairesToRemove)
             {
