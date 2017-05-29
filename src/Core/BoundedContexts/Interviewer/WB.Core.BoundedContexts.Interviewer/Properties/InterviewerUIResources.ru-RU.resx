@@ -642,4 +642,12 @@
   <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
     <value>Вы можете создать новое интервью используя пустой опросник</value>
   </data>
+  <data name="DashboardItem_AssignmentLeftComment" xml:space="preserve">
+    <value>осталось создать {0} интервью</value>
+    <comment>осталось создать {0} интервью</comment>
+  </data>
+  <data name="DashboardItem_AssignmentCreatedComment" xml:space="preserve">
+    <value>Создано интервью: {0}</value>
+    <comment>Создано интервью: {0}</comment>
+  </data>
 </root>
