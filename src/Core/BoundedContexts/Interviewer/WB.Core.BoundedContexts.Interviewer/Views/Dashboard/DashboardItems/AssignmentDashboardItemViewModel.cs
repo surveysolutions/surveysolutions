@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
             if (assignment.Capacity.HasValue)
             {
-                var interviewsLeftByAssignmentCount = assignment.Capacity.Value - assignment.Completed - interviewsByAssignmentCount;
+                var interviewsLeftByAssignmentCount = assignment.Capacity.Value - assignment.Quantity - interviewsByAssignmentCount;
                 this.Comment = InterviewerUIResources.DashboardItem_AssignmentLeftComment.FormatString(interviewsLeftByAssignmentCount);
             }
             else

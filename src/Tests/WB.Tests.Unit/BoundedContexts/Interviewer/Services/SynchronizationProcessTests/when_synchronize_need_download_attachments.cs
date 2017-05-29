@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 && x.GetAttachmentContentAsync("1", Moq.It.IsAny<Action<decimal, long, long>>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(Create.Entity.AttachmentContent_Enumerator("1"))
                 && x.GetAttachmentContentAsync("5", Moq.It.IsAny<Action<decimal, long, long>>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(Create.Entity.AttachmentContent_Enumerator("5"))
                 && x.GetQuestionnaireTranslationAsync(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new List<TranslationDto>())
-                && x.GetAssignmentsAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new List<AssignmentDocument>())
+                && x.GetAssignmentsAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new List<AssignmentApiView>())
                 );
 
             interviewerQuestionnaireAccessor = Mock.Of<IInterviewerQuestionnaireAccessor>(
