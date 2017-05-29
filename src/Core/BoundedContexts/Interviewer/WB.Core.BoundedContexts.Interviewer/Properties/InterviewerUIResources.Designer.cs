@@ -276,6 +276,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interviews created: {0}.
+        /// </summary>
+        public static string DashboardItem_AssignmentCreatedComment {
+            get {
+                return ResourceManager.GetString("DashboardItem_AssignmentCreatedComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} interviews left to create.
+        /// </summary>
+        public static string DashboardItem_AssignmentLeftComment {
+            get {
+                return ResourceManager.GetString("DashboardItem_AssignmentLeftComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Census mode, Interviews created: {0}.
         /// </summary>
         public static string DashboardItem_CensusModeComment {

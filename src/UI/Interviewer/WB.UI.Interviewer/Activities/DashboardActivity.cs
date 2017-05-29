@@ -61,8 +61,8 @@ namespace WB.UI.Interviewer.Activities
                 new MvxFragmentStatePagerAdapter.FragmentInfo
                 {
                     FragmentType = typeof(DashboardQuestionnairesFragment),
-                    ViewModel = ViewModel.Questionnaires,
-                    Title = ViewModel.Questionnaires.Title
+                    ViewModel = ViewModel.CreateNew,
+                    Title = ViewModel.CreateNew.Title
                 },
             };
 
