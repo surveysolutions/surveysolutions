@@ -129,6 +129,7 @@
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\CompanyLogoInfo.cs" />
+    <Compile Include="Services\IArchivePatcherService.cs" />
     <Compile Include="Services\IBattery.cs" />
     <Compile Include="Services\IDeviceInformationService.cs" />
     <Compile Include="Services\IDeviceOrientation.cs" />
