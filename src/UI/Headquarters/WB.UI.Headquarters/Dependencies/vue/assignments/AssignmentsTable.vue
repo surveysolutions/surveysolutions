@@ -1,5 +1,5 @@
 ﻿<template>
-  <table class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews">
+  <table class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews responsive">
     <thead>
     </thead>
     <tbody></tbody>

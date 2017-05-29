@@ -37,22 +37,25 @@
                                 '<input class="checkbox-filter" type="checkbox" value="<%= id %>" id="<%= checkboxId %>"><label for="<%= checkboxId %>"><span class="tick"></span></label>');
 
                         return compiled({ 'id': row.id, 'checkboxId': checkboxId });
-                    }
+                    },
+                    responsivePriority: 1
                 },
                 {
                     data: "id",
                     name: "Id",
-                    title: "Id"
+                    title: "Id",
+                    responsivePriority: 2
                 },
                 {
                     data: "responsible",
                     name: "Responsible.Name",
-                    title: "@Common.Responsible"
+                    title: "@Common.Responsible",
+                    responsivePriority: 3
                 },
                 {
                     data: "interviewsCount",
                     name: "InterviewsCount",
-                    title: "Interviews count"
+                    title: "@Assignments.InterviewsCount"
                 },
                 {
                     data: "capacity",
@@ -77,7 +80,8 @@
                             }
                         }
                         return _.join(strings, ", ");
-                    }
+                    },
+                    responsivePriority: 4
                 },
                 {
                     data: "updatedAtUtc",
