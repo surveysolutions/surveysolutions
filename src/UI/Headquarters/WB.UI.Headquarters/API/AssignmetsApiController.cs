@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -74,6 +75,8 @@ namespace WB.UI.Headquarters.API
         public IHttpActionResult Delete([FromBody]int[] ids)
         {
             if (ids == null) return this.BadRequest();
+            if (!this.authorizedUser.IsAdministrator || !this.authorizedUser.IsHeadquarter)
+                return this.StatusCode(HttpStatusCode.Forbidden);
 
             foreach (var id in ids)
             {
@@ -89,6 +92,8 @@ namespace WB.UI.Headquarters.API
         public IHttpActionResult Unarchive([FromBody]int[] ids)
         {
             if (ids == null) return this.BadRequest();
+            if (!this.authorizedUser.IsAdministrator || !this.authorizedUser.IsHeadquarter)
+                return this.StatusCode(HttpStatusCode.Forbidden);
 
             foreach (var id in ids)
             {
@@ -117,6 +122,9 @@ namespace WB.UI.Headquarters.API
         [Route("{id:int}/SetCapacity")]
         public IHttpActionResult SetCapacity(int id, [FromBody] UpdateAssignmentRequest request)
         {
+            if (!this.authorizedUser.IsAdministrator || !this.authorizedUser.IsHeadquarter)
+                return this.StatusCode(HttpStatusCode.Forbidden);
+
             var assignment = this.assignmentsStorage.GetById(id);
             assignment.UpdateCapacity(request.Capacity);
             return this.Ok();

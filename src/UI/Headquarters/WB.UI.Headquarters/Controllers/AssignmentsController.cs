@@ -30,6 +30,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             var model = new AssignmentsFilters();
             model.IsSupervisor = this.currentUser.IsSupervisor;
+            model.IsHeadquarter = this.currentUser.IsHeadquarter || this.currentUser.IsAdministrator;
 
             return View(model);
         }
@@ -37,6 +38,7 @@ namespace WB.UI.Headquarters.Controllers
 
     public class AssignmentsFilters
     {
+        public bool IsHeadquarter { get; set; }
         public bool IsSupervisor { get; set; }
     }
 }
