@@ -209,8 +209,9 @@
                         Vue.set(this, "selectedRows", _.without(this.selectedRows, parseInt(rowId)));
                     }
                 },
-                cellClicked: function(columnName, rowId, cellData) {
-                    if (columnName === 'Capacity') {
+                cellClicked: function (columnName, rowId, cellData) {
+                    var isHq = @Model.IsHeadquarter.ToString().ToLower();
+                    if (columnName === 'Capacity' && isHq) {
                         this.editedRowId = rowId;
                         this.editedCapacity = cellData;
                         $('#editCapacityModal').modal('show');
@@ -325,9 +326,15 @@
                                 <span class="tick"></span>
                                 @string.Format(Assignments.AssignmentsSelected, "{{selectedRows.length}}")
                             </label>
-                            <button class="btn btn-lg btn-primary" v-if="showArchive" v-on:click="unarchiveSelected">@Assignments.Unarchive</button>
+                            @if (Model.IsHeadquarter) {
+                                <button class="btn btn-lg btn-primary" v-if="showArchive" v-on:click="unarchiveSelected">@Assignments.Unarchive</button>
+                            }
+
                             <button class="btn btn-lg btn-primary" v-if="!showArchive" v-on:click="assignSelected">@Common.Assign</button>
-                            <button class="btn btn-lg btn-danger" v-if="!showArchive" v-on:click="archiveSelected">@Assignments.Archive</button>
+                            
+                            @if (Model.IsHeadquarter) {
+                                <button class="btn btn-lg btn-danger" v-if="!showArchive" v-on:click="archiveSelected">@Assignments.Archive</button>
+                            }
                         </div>
                     </div>
                 </div>
