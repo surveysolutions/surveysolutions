@@ -108,7 +108,7 @@ namespace WB.UI.Headquarters.Controllers
             var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
                 interviewer.PublicKey, questionnaireId, DateTime.UtcNow,
                 interviewer.Supervisor.Id,
-                this.keyGenerator.Get());
+                this.keyGenerator.Get(), null);
 
             this.commandService.Execute(createInterviewOnClientCommand);
             return interviewId.FormatGuid();

@@ -188,7 +188,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 questionnaireIdentity: questionnaireIdentity,
                 answersTime: DateTime.UtcNow,
                 supervisorId: Guid.NewGuid(),
-                interviewKey: null));
+                interviewKey: null,
+                assignmentId: null));
 
             return interviewId;
         }
