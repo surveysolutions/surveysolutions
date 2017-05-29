@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
     {
         private List<AssignmentDocument> LocalAssignments;
 
-        private List<AssignmentDocument> RemoteAssignments;
+        private List<AssignmentApiView> RemoteAssignments;
         private IPlainStorage<AssignmentDocument> localAssignmentsRepo;
         private Mock<IProgress<SyncProgressInfo>> progressInfo;
 
@@ -42,15 +42,15 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                     .Build()
             };
 
-            this.RemoteAssignments = new List<AssignmentDocument>
+            this.RemoteAssignments = new List<AssignmentApiView>
             {
                 Create.Entity
-                    .AssignmentDocument(Id.g1.ToString(), 20, 10, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
+                    .AssignmentApiView(Id.g1.ToString(), 20, 10, Create.Entity.QuestionnaireIdentity(Id.gA))
                     .WithAnswer(Guid.NewGuid(), "1")
                     .WithAnswer(Guid.NewGuid(), "2")
                     .Build(),
                 Create.Entity
-                    .AssignmentDocument(Id.g3.ToString(), 20, 20, Create.Entity.QuestionnaireIdentity(Id.gC).ToString())
+                    .AssignmentApiView(Id.g3.ToString(), 20, 20, Create.Entity.QuestionnaireIdentity(Id.gC))
                     .WithAnswer(Guid.NewGuid(), "1")
                     .WithAnswer(Guid.NewGuid(), "2")
                     .Build()

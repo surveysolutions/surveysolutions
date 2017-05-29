@@ -17,14 +17,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
     public class when_query_for_assignments_from_synchronization_service
     {
         private AssignmentApiView assignment;
-        private List<AssignmentDocument> assignments;
+        private List<AssignmentApiView> assignments;
         private SynchronizationService synchronizationService;
 
         [OneTimeSetUp]
         public async Task Context()
         {
             this.assignment = Create.Entity
-                .AssignmentApiView(Guid.NewGuid().ToString(), 5, Create.Entity.QuestionnaireIdentity(Id.g1))
+                .AssignmentApiView(Guid.NewGuid().ToString(), 5, 1, Create.Entity.QuestionnaireIdentity(Id.g1))
                 .WithAnswer(Guid.NewGuid(), "123")
                 .WithAnswer(Guid.NewGuid(), "456")
                 .Build();

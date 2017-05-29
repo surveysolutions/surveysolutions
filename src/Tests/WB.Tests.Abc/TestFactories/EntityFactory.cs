@@ -1531,13 +1531,14 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
-        public AssignmentApiViewBuilder AssignmentApiView(string id, int? capacity, QuestionnaireIdentity questionnaireIdentity)
+        public AssignmentApiViewBuilder AssignmentApiView(string id, int? capacity, int quantity = 0, QuestionnaireIdentity questionnaireIdentity = null)
         {
             return new AssignmentApiViewBuilder(new AssignmentApiView
             {
                 Id = id ?? Guid.NewGuid().ToString(),
                 Capacity = capacity,
-                QuestionnaireId = questionnaireIdentity
+                QuestionnaireId = questionnaireIdentity,
+                Quantity = quantity
             });
         }
 
