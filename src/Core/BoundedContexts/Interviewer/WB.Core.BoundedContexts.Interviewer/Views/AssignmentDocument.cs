@@ -33,6 +33,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public string Title { get; set; }
 
+        public Guid? LocationQuestionId { get; set; }
+
+        public double? LocationLatitude { get; set; }
+        public double? LocationLongitude { get; set; }
+
         public class IdentifyingAnswer
         {
             public string Answer { get; set; }

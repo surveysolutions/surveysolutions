@@ -783,8 +783,31 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                         Id = remote.Id,
                         QuestionnaireId = questionnaireId,
                         Title = questionnaireDocument.Title,
-                        IdentifyingData = remote.IdentifyingData.Select(answer => this.ToIdentifyingAnswer(answer, questionnaireDocument)).ToList()
+                        IdentifyingData = new List<AssignmentDocument.IdentifyingAnswer>()
                     };
+
+                    foreach (var identifyingAnswer in remote.IdentifyingData)
+                    {
+                        var question = questionnaireDocument.Find<IQuestion>(identifyingAnswer.QuestionId);
+
+                        local.IdentifyingData.Add(new AssignmentDocument.IdentifyingAnswer
+                        {
+                            QuestionId = identifyingAnswer.QuestionId,
+                            Answer = identifyingAnswer.Answer,
+                            Question = question.QuestionText
+                        });
+
+                        if (question.QuestionType == QuestionType.GpsCoordinates)
+                        {
+                            local.LocationQuestionId = question.PublicKey;
+                            var geoPositionAnswer = GeoPosition.FromString(identifyingAnswer.Answer);
+                            if (geoPositionAnswer != null)
+                            {
+                                local.LocationLatitude = geoPositionAnswer.Latitude;
+                                local.LocationLongitude = geoPositionAnswer.Longitude;
+                            }
+                        }
+                    }
 
                     statistics.NewAssignmentsCount += 1;
                 }
@@ -795,7 +818,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 this.assignmentsRepository.Store(local);
             }
         }
-
 
         private async Task SyncronizeCensusQuestionnaires(IProgress<SyncProgressInfo> progress,
             SychronizationStatistics statistics,
@@ -911,18 +933,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
         private AssignmentDocument.IdentifyingAnswer ToIdentifyingAnswer(AssignmentApiView.IdentifyingAnswer answer,
             QuestionnaireDocument questionnaireDocument)
-
         {
             var question = questionnaireDocument.Find<IQuestion>(answer.QuestionId);
 
-
             return new AssignmentDocument.IdentifyingAnswer
-
             {
                 QuestionId = answer.QuestionId,
-
                 Answer = answer.Answer,
-
                 Question = question.QuestionText
             };
         }
@@ -1104,12 +1121,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
                     this.interviewFactory.RemoveInterview(completedInterview.InterviewId);
 
-
                     statistics.SuccessfullyUploadedInterviewsCount++;
                 }
 
                 catch (Exception syncException)
-
                 {
                     statistics.FailedToUploadInterviwesCount++;
 
@@ -1122,21 +1137,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             }
         }
 
-
         private async Task UploadImagesByCompletedInterviewAsync(Guid interviewId, IProgress<SyncProgressInfo> progress,
             CancellationToken cancellationToken)
-
         {
             var imageViews = this.interviewMultimediaViewStorage.Where(image => image.InterviewId == interviewId);
 
-
             foreach (var imageView in imageViews)
-
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
                 var fileView = this.interviewFileViewStorage.GetById(imageView.FileId);
-
                 await this.synchronizationService.UploadInterviewImageAsync(
                     imageView.InterviewId,
                     imageView.FileName,
@@ -1145,7 +1155,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     cancellationToken);
 
                 this.interviewMultimediaViewStorage.Remove(imageView.Id);
-
                 this.interviewFileViewStorage.Remove(fileView.Id);
             }
         }

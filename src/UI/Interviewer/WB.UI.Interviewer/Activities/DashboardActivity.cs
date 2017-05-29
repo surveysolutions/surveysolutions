@@ -36,6 +36,12 @@ namespace WB.UI.Interviewer.Activities
             {
                 new MvxFragmentStatePagerAdapter.FragmentInfo
                 {
+                    FragmentType = typeof(DashboardQuestionnairesFragment),
+                    ViewModel = ViewModel.CreateNew,
+                    Title = ViewModel.CreateNew.Title
+                },
+                new MvxFragmentStatePagerAdapter.FragmentInfo
+                {
                     FragmentType = typeof(DashboardStartedInterviewsFragment),
                     ViewModel = ViewModel.StartedInterviews,
                     Title = ViewModel.StartedInterviews.Title
@@ -57,12 +63,6 @@ namespace WB.UI.Interviewer.Activities
                     FragmentType = typeof(DashboardCompletednterviewsFragment),
                     ViewModel = ViewModel.CompletedInterviews,
                     Title = ViewModel.CompletedInterviews.Title
-                },
-                new MvxFragmentStatePagerAdapter.FragmentInfo
-                {
-                    FragmentType = typeof(DashboardQuestionnairesFragment),
-                    ViewModel = ViewModel.CreateNew,
-                    Title = ViewModel.CreateNew.Title
                 },
             };
 
