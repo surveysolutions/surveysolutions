@@ -126,9 +126,6 @@
   <data name="DownloadTitle" xml:space="preserve">
     <value>下载{0}</value>
   </data>
-  <data name="ExportTitle" xml:space="preserve">
-    <value>您可以下载状态为“已分配调查员”的问卷，并把链接发送给受访者</value>
-  </data>
   <data name="SelectInterviwer" xml:space="preserve">
     <value>选择调查员</value>
   </data>
