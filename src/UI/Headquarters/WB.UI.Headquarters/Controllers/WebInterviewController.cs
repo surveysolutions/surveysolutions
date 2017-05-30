@@ -28,7 +28,6 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Captcha;
-using Filter = NLog.Filters.Filter;
 using WebInterview = WB.UI.Headquarters.Resources.WebInterview;
 
 namespace WB.UI.Headquarters.Controllers
@@ -98,22 +97,21 @@ namespace WB.UI.Headquarters.Controllers
             this.assignments = assignments;
         }
 
-        private string CreateInterview(QuestionnaireIdentity questionnaireId)
+        private string CreateInterview(Assignment assignment)
         {
-            var webInterviewConfig = this.configProvider.Get(questionnaireId);
+            var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
             if (!webInterviewConfig.Started)
                 throw new InvalidOperationException(@"Web interview is not started for this questionnaire");
-            var responsibleId = webInterviewConfig.ResponsibleId;
-            if (!responsibleId.HasValue)
-                throw new InvalidOperationException("Web interview configuration has no responsible for census interview creation");
 
-            var interviewer = this.usersRepository.GetUser(new UserViewInputModel(responsibleId.Value));
+            var interviewer = this.usersRepository.GetUser(new UserViewInputModel(assignment.ResponsibleId));
+            if (!interviewer.IsInterviewer())
+                throw new InvalidOperationException($"Assignment {assignment.Id} has responsible that is not an interviewer. Interview cannot be created");
 
             var interviewId = Guid.NewGuid();
             var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
-                interviewer.PublicKey, questionnaireId, DateTime.UtcNow,
+                interviewer.PublicKey, assignment.QuestionnaireId, DateTime.UtcNow,
                 interviewer.Supervisor.Id,
-                this.keyGenerator.Get(), null);
+                this.keyGenerator.Get(), assignment.Id);
 
             this.commandService.Execute(createInterviewOnClientCommand);
             return interviewId.FormatGuid();
@@ -268,16 +266,16 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ActionName("Start")]
         [ValidateAntiForgeryToken]
-        public ActionResult StartPost(string id)
+        public ActionResult StartPost(int id)
         {
-            var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
-            var webInterviewConfig = this.configProvider.Get(questionnaireIdentity);
+            var assignment = this.assignments.GetById(id);
+            var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
             if (!webInterviewConfig.Started)
                 throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
 
             if (!this.connectionLimiter.CanConnect())
             {
-                var model = this.GetStartModel(questionnaireIdentity, webInterviewConfig);
+                var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig);
                 model.ServerUnderLoad = true;
                 return this.View(model);
             }
@@ -286,13 +284,13 @@ namespace WB.UI.Headquarters.Controllers
             {
                 if (!this.captchaProvider.IsCaptchaValid(this))
                 {
-                    var model = this.GetStartModel(questionnaireIdentity, webInterviewConfig);
+                    var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig);
                     this.ModelState.AddModelError("InvalidCaptcha", WebInterview.PleaseFillCaptcha);
                     return this.View(model);
                 }
             }
 
-            var interviewId = this.CreateInterview(questionnaireIdentity);
+            var interviewId = this.CreateInterview(assignment);
 
             RememberCapchaFilled(interviewId);
 
