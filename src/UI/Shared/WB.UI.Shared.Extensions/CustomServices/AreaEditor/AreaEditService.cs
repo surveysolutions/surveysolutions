@@ -55,7 +55,14 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
                     waitEditAreaResetEvent.WaitOne();
 
-                    return result != null ? new AreaEditResult() { Geometry = result.Geometry, MapName = result.MapName, Area = result.Area} : null;
+                    return result == null 
+                        ? null 
+                        : new AreaEditResult(){
+                            Geometry = result.Geometry,
+                            MapName = result.MapName,
+                            Area = result.Area,
+                            Length = result.Length,
+                            DistanceToEditor = result.DistanceToEditor};
                 }
                 catch (Exception)
                 {

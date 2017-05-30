@@ -248,7 +248,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 MapName = this.SelectedMap,
                 Area = GeometryEngine.AreaGeodetic(result),
                 Length = GeometryEngine.LengthGeodetic(result),
-                Distance = dist
+                DistanceToEditor = dist
             };
             handler?.Invoke(resultArea);
 

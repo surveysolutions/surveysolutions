@@ -4,8 +4,8 @@
     {
         public string Geometry { set; get; }
         public string MapName { set; get; }
-        public double Area { set; get; }
-        public double Length { set; get; }
-        public double? Distance { set; get; }
+        public double? Area { set; get; }
+        public double? Length { set; get; }
+        public double? DistanceToEditor { set; get; }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
-using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
@@ -8,15 +7,19 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     {
         public string Geometry { set; get; }
         public string MapName { set; get; }
-        public double AreaSize { set; get; }
+        public double? AreaSize { set; get; }
+        public double? Length { set; get; }
+        public double? DistanceToEditor { set; get; }
 
         public AreaQuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector,
-                                    DateTime answerTimeUtc, string geometry, string mapName, double areaSize)
+                                    DateTime answerTimeUtc, string geometry, string mapName, double? areaSize, double? length, double? distanceToEditor)
             : base(userId, questionId, rosterVector, answerTimeUtc)
         {
             this.Geometry = geometry;
             this.MapName = mapName;
             this.AreaSize = areaSize;
+            this.Length = length;
+            this.DistanceToEditor = distanceToEditor;
         }
     }
 }
