@@ -39,7 +39,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public IPublishedEvent<InterviewFromPreloadedDataCreated> InterviewFromPreloadedDataCreated(
             Guid? interviewId = null, string userId = null, string questionnaireId = null, long questionnaireVersion = 0)
-            => new InterviewFromPreloadedDataCreated(ToGuid(userId) ?? Guid.NewGuid(), ToGuid(questionnaireId) ?? Guid.NewGuid(), questionnaireVersion)
+            => new InterviewFromPreloadedDataCreated(ToGuid(userId) ?? Guid.NewGuid(), ToGuid(questionnaireId) ?? Guid.NewGuid(), questionnaireVersion, null)
                 .ToPublishedEvent(eventSourceId: interviewId);
 
         public IPublishedEvent<InterviewHardDeleted> InterviewHardDeleted(string userId = null, Guid? interviewId = null)

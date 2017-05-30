@@ -8,6 +8,9 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
+using ReflectionMagic;
+using WB.Core.BoundedContexts.Headquarters.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
@@ -412,6 +415,8 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewSummary InterviewSummary()
             => new InterviewSummary();
+
+
 
         public InterviewSummary InterviewSummary(
             Guid? interviewId = null,
@@ -1531,13 +1536,14 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
-        public AssignmentApiViewBuilder AssignmentApiView(string id, int? capacity, QuestionnaireIdentity questionnaireIdentity)
+        public AssignmentApiViewBuilder AssignmentApiView(string id, int? capacity, int quantity = 0, QuestionnaireIdentity questionnaireIdentity = null)
         {
             return new AssignmentApiViewBuilder(new AssignmentApiView
             {
                 Id = id ?? Guid.NewGuid().ToString(),
                 Capacity = capacity,
-                QuestionnaireId = questionnaireIdentity
+                QuestionnaireId = questionnaireIdentity,
+                Quantity = quantity
             });
         }
 
@@ -1559,12 +1565,30 @@ namespace WB.Tests.Abc.TestFactories
             public AssignmentApiView Build() => this._entity;
         }
 
-        public AssignmentDocumentBuilder AssignmentDocument(string id, int? capacity, string questionnaireIdentity)
+        public Assignment Assignment(int? id = null,
+            QuestionnaireIdentity questionnaireIdentity = null,
+            Guid? assigneeSupervisorId = null)
+        {
+            var result = new Assignment();
+            var asDynamic = result.AsDynamic();
+            asDynamic.Id = id ?? 0;
+            result.QuestionnaireId = questionnaireIdentity;
+            var readonlyUser = new ReadonlyUser();
+            var readonlyProfile = new ReadonlyProfile();
+            readonlyProfile.AsDynamic().SupervisorId = assigneeSupervisorId;
+            readonlyUser.AsDynamic().ReadonlyProfile = readonlyProfile;
+            asDynamic.Responsible = readonlyUser;
+
+            return result;
+        }
+
+        public AssignmentDocumentBuilder AssignmentDocument(string id, int? capacity, int quantity = 0, string questionnaireIdentity = null)
         {
             return new AssignmentDocumentBuilder(new AssignmentDocument
             {
                 Id = id ?? Guid.NewGuid().ToString(),
                 Capacity = capacity,
+                Quantity = quantity,
                 QuestionnaireId = questionnaireIdentity
             });
         }

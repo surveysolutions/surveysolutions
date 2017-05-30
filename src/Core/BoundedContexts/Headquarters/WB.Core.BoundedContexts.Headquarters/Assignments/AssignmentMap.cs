@@ -11,12 +11,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public AssignmentMap()
         {
             Id(x => x.Id, mapper => mapper.Generator(Generators.Identity));
+            DynamicUpdate(true);
             Property(x => x.ResponsibleId);
             Property(x => x.Capacity);
             Property(x => x.Archived);
             Property(x => x.CreatedAtUtc);
             Property(x => x.UpdatedAtUtc);
-            Property(x => x.Completed);
 
             Component(x => x.QuestionnaireId, cmp =>
             {
@@ -27,13 +27,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
             Set(x => x.InterviewSummaries, set =>
             {
-                set.Key(key =>
-                {
-                    key.Column("assignmentid");
-                });
-                set.Lazy(CollectionLazy.NoLazy);
-                set.Cascade(Cascade.All | Cascade.DeleteOrphans);
+                set.Key(key => key.Column("assignmentid"));
+                set.Lazy(CollectionLazy.Lazy);
+                set.Cascade(Cascade.None);
             },
+
             relation => relation.OneToMany());
 
             List(x => x.IdentifyingData, mapper =>

@@ -22,10 +22,15 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
             this.Email = userView.Email;
             this.CreationDate = userView.CreationDate;
             this.IsLocked = userView.IsLockedBySupervisor || userView.IsLockedByHQ;
+            this.IsArchived = userView.IsArchived;
             this.Roles = userView.Roles.ToList();
             this.FullName = userView.PersonName;
             this.PhoneNumber = userView.PhoneNumber;
         }
+
+        [DataMember]
+        [Required]
+        public bool IsArchived { get; set; }
 
         [DataMember]
         [Required]

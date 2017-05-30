@@ -89,7 +89,7 @@ namespace WB.Tests.Abc.TestFactories
 
             if (shouldBeInitialized)
             {
-                statefulInterview.CreateInterviewOnClient(Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), Guid.NewGuid(), DateTime.Now, userId ?? Guid.NewGuid(), null);
+                statefulInterview.CreateInterviewOnClient(Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), Guid.NewGuid(), DateTime.Now, userId ?? Guid.NewGuid(), null, null);
             }
 
             return statefulInterview;
@@ -111,7 +111,7 @@ namespace WB.Tests.Abc.TestFactories
 
             if (shouldBeInitialized)
             {
-                statefulInterview.CreateInterviewOnClient(Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), Guid.NewGuid(), DateTime.Now, userId ?? Guid.NewGuid(), null);
+                statefulInterview.CreateInterviewOnClient(Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), Guid.NewGuid(), DateTime.Now, userId ?? Guid.NewGuid(), null, null);
             }
 
             return statefulInterview;

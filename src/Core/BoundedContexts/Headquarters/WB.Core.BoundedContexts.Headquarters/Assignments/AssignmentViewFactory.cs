@@ -6,6 +6,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
@@ -34,7 +35,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                     .ToList();
 
                 var neededItems = _.Where(x => ids.Contains(x.Id));
-                var list = this.DefineOrderBy(neededItems, input).Fetch(x =>x.IdentifyingData).Fetch(x => x.Responsible).ToList();
+                var list = this.DefineOrderBy(neededItems, input)
+                                .Fetch(x =>x.IdentifyingData)
+                                .Fetch(x => x.Responsible)
+                                .Fetch(x => x.InterviewSummaries)
+                                .ToList();
 
                 return list;
             });
@@ -49,7 +54,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                     ResponsibleId = x.ResponsibleId,
                     UpdatedAtUtc = x.UpdatedAtUtc,
                     Capacity = x.Capacity,
-                    InterviewsCount = 5,
+                    InterviewsCount = x.InterviewSummaries.Count,
                     Id = x.Id,
                     Responsible = x.Responsible.Name,
                     IdentifyingQuestions = this.GetIdentifyingColumnText(x)
@@ -66,7 +71,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             QuestionnaireIdentity assignmentQuestionnaireId = assignment.QuestionnaireId;
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(assignmentQuestionnaireId, null);
 
-            Dictionary<string, string> identifyingColumnText = assignment.IdentifyingData.ToDictionary(_ => questionnaire.GetQuestionTitle(_.QuestionId), _ => _.Answer);
+            Dictionary<string, string> identifyingColumnText = 
+                assignment.IdentifyingData.ToDictionary(_ => questionnaire.GetQuestionTitle(_.QuestionId).RemoveHtmlTags(), _ => _.Answer);
             return identifyingColumnText;
         }
 
@@ -76,6 +82,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             if (orderBy == null)
             {
                 return query.OrderByDescending(x => x.UpdatedAtUtc);
+            }
+
+            if (orderBy.Field.Contains("InterviewsCount"))
+            {
+                if (orderBy.Direction == OrderDirection.Asc)
+                {
+                    return query.OrderBy(x => x.InterviewSummaries.Count);
+                }
+                else
+                {
+                    return query.OrderByDescending(x => x.InterviewSummaries.Count);
+                }
             }
             return query.OrderUsingSortExpression(model.Order).AsQueryable();
         }

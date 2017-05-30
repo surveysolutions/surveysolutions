@@ -129,6 +129,7 @@
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\CompanyLogoInfo.cs" />
+    <Compile Include="Services\IArchivePatcherService.cs" />
     <Compile Include="Services\IBattery.cs" />
     <Compile Include="Services\IDeviceInformationService.cs" />
     <Compile Include="Services\IDeviceOrientation.cs" />
@@ -154,9 +155,10 @@
     <Compile Include="Views\BandwidthTestViewModel.cs" />
     <Compile Include="Views\CompanyLogo.cs" />
     <Compile Include="Views\Dashboard\CompletedInterviewsViewModel.cs" />
+    <Compile Include="Views\Dashboard\DashboardItems\AssignmentDashboardItemViewModel.cs" />
     <Compile Include="Views\Dashboard\ListViewModel.cs" />
     <Compile Include="Views\Dashboard\NewInterviewsViewModel.cs" />
-    <Compile Include="Views\Dashboard\QuestionnairesViewModel.cs" />
+    <Compile Include="Views\Dashboard\CreateNewViewModel.cs" />
     <Compile Include="Views\Dashboard\RejectedInterviewsViewModel.cs" />
     <Compile Include="Views\Dashboard\StartedInterviewsViewModel.cs" />
     <Compile Include="Views\Dashboard\PrefilledQuestionView.cs" />

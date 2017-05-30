@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
                 interviewerIdentity.UserId, this.questionnaireIdentity, DateTime.UtcNow,
                 interviewerIdentity.SupervisorId,
-                null);
+                null, null);
             await this.commandService.ExecuteAsync(createInterviewOnClientCommand);
             this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
         }
