@@ -179,6 +179,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Fetching\EagerFetch.cs" />
+    <Compile Include="Fetching\FetchRequest.cs" />
+    <Compile Include="Fetching\NhFetchingProvider.cs" />
     <Compile Include="InitializationException.cs" />
     <Compile Include="Files\FileInfrastructureModule.cs" />
     <Compile Include="Files\Implementation\FileSystem\FileSystemIOAccessor.cs" />
