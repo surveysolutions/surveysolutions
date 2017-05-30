@@ -2451,11 +2451,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                 }
                                 else
                                 {
-                                    var selectedParentValue =
-                                        cascadingParent.AsSingleFixedOption.GetAnswer().SelectedValue;
-                                    if (
-                                        questionnaire.HasAnyCascadingOptionsForSelectedParentOption(entityId,
-                                            cascadingParent.Identity.Id, selectedParentValue))
+                                    var selectedParentValue = cascadingParent.AsSingleFixedOption.GetAnswer().SelectedValue;
+                                    if (!questionnaire.HasAnyCascadingOptionsForSelectedParentOption(entityId, cascadingParent.Identity.Id, selectedParentValue))
                                     {
                                         question.Disable();
                                     }

@@ -109,6 +109,8 @@ namespace WB.Tests.Integration.InterviewTests
             questionnaireDocument.IsUsingExpressionStorage = true;
             questionnaireDocument.ExpressionsPlayOrder = IntegrationCreate.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(questionnaireDocument.AsReadOnly());
 
+          
+
             var state = GetLatestExpressionStorage(questionnaireDocument);
 
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionProcessor(It.IsAny<QuestionnaireIdentity>()) == state);
@@ -117,6 +119,8 @@ namespace WB.Tests.Integration.InterviewTests
                 questionnaireIdentity.QuestionnaireId,
                 Create.Entity.PlainQuestionnaire(questionnaireDocument),
                 questionnaireIdentity.Version);
+
+            Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
 
             var interview = IntegrationCreate.StatefulInterview(
                 questionnaireIdentity,
@@ -139,6 +143,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
                 => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1, null));
+
 
             Setup.InstanceToMockedServiceLocator(questionnaireRepository);
             Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
