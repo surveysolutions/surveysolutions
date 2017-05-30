@@ -77,7 +77,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 false,
                 evnt.Payload.InterviewerAssignedDateTime,
                 null,
-                evnt.Payload.RejectedDateTime, null);
+                evnt.Payload.RejectedDateTime,
+                null);
         }
 
 
@@ -269,7 +270,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 canBeDeleted: false,
                 assignedDateTime: evnt.Payload.InterviewData.InterviewerAssignedDateTime,
                 startedDateTime: null,
-                rejectedDateTime: evnt.Payload.InterviewData.RejectDateTime, assignmentId: null);
+                rejectedDateTime: evnt.Payload.InterviewData.RejectDateTime, 
+                assignmentId: null);
         }
 
         public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
