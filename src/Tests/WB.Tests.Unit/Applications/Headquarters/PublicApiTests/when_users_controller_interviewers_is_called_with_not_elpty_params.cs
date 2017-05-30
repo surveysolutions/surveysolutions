@@ -1,6 +1,6 @@
 ﻿using System;
-using Machine.Specifications;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.PublicApi.Models;
@@ -10,22 +10,21 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {
     internal class when_users_controller_interviewers_is_called_with_not_elpty_params : ApiTestContext
     {
-        private Establish context = () =>
+        [OneTimeSetUp]
+        public void context()
         {
             interviewersFactoryMock = new Mock<IUserViewFactory>();
-
             controller = CreateUsersController(userViewViewFactory: interviewersFactoryMock.Object);
-        };
 
-        Because of = () =>
-        {
             actionResult = controller.Interviewers(supervisorId, 10, 1);
-        };
+        }
 
-        It should_return_UserApiView = () =>
-            actionResult.ShouldBeOfExactType<UserApiView>();
+        [Test]
+        public void should_return_UserApiView() =>
+            Assert.That(actionResult, Is.InstanceOf<UserApiView>());
 
-        It should_call_factory_load_once = () =>
+        [Test]
+        public void should_call_factory_load_once() =>
             interviewersFactoryMock.Verify(x => x.GetInterviewers(
                 Moq.It.IsAny<int>(), 
                 Moq.It.IsAny<int>(), 
