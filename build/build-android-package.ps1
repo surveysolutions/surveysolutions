@@ -101,6 +101,7 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
 			'/p:CodeContractsRunCodeAnalysis=false',
 			'/p:Constants=\"EXCLUDEEXTENSIONS\"',			
 			"/p:Configuration=$BuildConfiguration"
+			)
 						
 	    ./echoargs $arguments	
 	
