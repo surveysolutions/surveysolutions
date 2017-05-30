@@ -2,6 +2,7 @@
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Templates;
 
+
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
     internal class CodeGenerationSettings

@@ -2,17 +2,16 @@
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
-    internal class when_answering_linked_single_option_question_which_links_to_real_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1 : InterviewTestsContext
+    internal class when_answering_linked_single_option_question_which_links_to_real_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1
+        : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -40,21 +39,16 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             var triggerQuestionId = Guid.NewGuid();
             var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
             {
-                 Abc.Create.Entity.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
-                Abc.Create.Entity.Roster(rosterId: rosterAId, rosterSizeSourceType: RosterSizeSourceType.Question,
-                    rosterSizeQuestionId: triggerQuestionId, rosterTitleQuestionId: questionId, variable: "ros1",
-                    children: new IComposite[]
-                    {
-                         Abc.Create.Entity.SingleQuestion(id: questionId, linkedToQuestionId: linkedToQuestionId,
-                            variable: "link_single")
-                    }),
-                Abc.Create.Entity.Roster(rosterId: rosterBId, rosterSizeSourceType: RosterSizeSourceType.Question,
-                    rosterSizeQuestionId: triggerQuestionId, variable: "ros2", rosterTitleQuestionId: questionId),
-                Abc.Create.Entity.Roster(rosterId: linkedToRosterId, variable: "ros3", fixedRosterTitles: new [] { IntegrationCreate.FixedTitle(0), IntegrationCreate.FixedTitle(1), IntegrationCreate.FixedTitle(2)},
-                    children: new IComposite[]
-                    {
-                         Abc.Create.Entity.NumericRealQuestion(id: linkedToQuestionId, variable: "link_source"),
-                    })
+                Abc.Create.Entity.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
+                Abc.Create.Entity.NumericRoster(rosterId: rosterAId, rosterSizeQuestionId: triggerQuestionId, rosterTitleQuestionId: questionId, variable: "ros1", children: new IComposite[]
+                {
+                    Abc.Create.Entity.SingleQuestion(id: questionId, linkedToQuestionId: linkedToQuestionId, variable: "link_single")
+                }),
+                Abc.Create.Entity.NumericRoster(rosterId: rosterBId, rosterSizeQuestionId: triggerQuestionId, variable: "ros2", rosterTitleQuestionId: questionId),
+                Abc.Create.Entity.FixedRoster(rosterId: linkedToRosterId, variable: "ros3", fixedTitles: new [] { IntegrationCreate.FixedTitle(0), IntegrationCreate.FixedTitle(1), IntegrationCreate.FixedTitle(2)}, children: new IComposite[]
+                {
+                    Abc.Create.Entity.NumericRealQuestion(id: linkedToQuestionId, variable: "link_source"),
+                })
             });
 
             interview = SetupInterview(questionnaireDocument: questionnaireDocument);

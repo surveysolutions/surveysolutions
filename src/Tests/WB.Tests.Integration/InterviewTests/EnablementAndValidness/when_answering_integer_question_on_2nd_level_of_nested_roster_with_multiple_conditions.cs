@@ -54,19 +54,19 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                                children: new IComposite[]
                                {
                                    Abc.Create.Entity.NumericIntegerQuestion(id: petsAgeQuestionId, 
-                                                                 variable: "pet_age",
-                                                                 validationConditions: new List<ValidationCondition>()
-                                                                    {
-                                                                         new ValidationCondition("pet_age > 10", "pet_age > 10"),
-                                                                         new ValidationCondition("pet_age > 20", "pet_age > 20"),
-                                                                         new ValidationCondition("pet_age > 30", "pet_age > 30"),
-                                                                    }
-                                                                 )
+                                        variable: "pet_age",
+                                        validationConditions: new List<ValidationCondition>()
+                                        {
+                                                new ValidationCondition("pet_age > 10", "pet_age > 10"),
+                                                new ValidationCondition("pet_age > 20", "pet_age > 20"),
+                                                new ValidationCondition("pet_age > 30", "pet_age > 30"),
+                                        }
+                                        )
                                })
                        })
                    );
 
-               var interview = SetupInterview(questionnaireDocument);
+               var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
 
                interview.AnswerNumericIntegerQuestion(userId, numericQuestionId, RosterVector.Empty, DateTime.Now, 1);
                interview.AnswerNumericIntegerQuestion(userId, petsQuestionId, new decimal[] { 0 }, DateTime.Now, 2);

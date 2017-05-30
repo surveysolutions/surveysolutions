@@ -5,11 +5,10 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 {
@@ -27,34 +26,31 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                 var options = new List<Answer>
                 {
-                    Abc.Create.Entity.Option("1"),
-                    Abc.Create.Entity.Option("2"),
-                    Abc.Create.Entity.Option("3"),
-                    Abc.Create.Entity.Option("12")
+                    Create.Entity.Option(1),
+                    Create.Entity.Option(2),
+                    Create.Entity.Option(3),
+                    Create.Entity.Option(12)
                 };
 
-                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
+                var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, new IComposite[]
                 {
-                    Abc.Create.Entity.NumericIntegerQuestion(q1Id, variable: "q1"),
-                    Abc.Create.Entity.MultyOptionsQuestion(q2Id, variable: "q2", options: options, optionsFilter: "@optioncode < q1"),
-                    Abc.Create.Entity.Roster(rosterId, variable:"r1", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
+                    Create.Entity.NumericIntegerQuestion(q1Id, "q1"),
+                    Create.Entity.MultyOptionsQuestion(q2Id, variable: "q2", options: options, optionsFilter: "@optioncode < q1"),
+                    Create.Entity.MultiRoster(rosterId, variable:"r1", rosterSizeQuestionId: q2Id, children: new IComposite[]
                     {
-                        Abc.Create.Entity.NumericIntegerQuestion(q3Id, variable: "age"),
+                        Create.Entity.NumericIntegerQuestion(q3Id, "age")
                     }),
-                    Abc.Create.Entity.MultyOptionsQuestion(q4Id, variable: "q4", linkedToQuestionId: q3Id),
-                    Abc.Create.Entity.TextQuestion(questionId: q5Id, variable: "q5",
-                        enablementCondition: "q4.Length > 2")
+                    Create.Entity.MultyOptionsQuestion(q4Id, variable: "q4", linkedToQuestionId: q3Id),
+                    Create.Entity.TextQuestion(q5Id, variable: "q5", enablementCondition: "q4.Length > 2")
                 });
 
-                ILatestInterviewExpressionState interviewState = GetInterviewExpressionState(questionnaireDocument);
-
-                var interview = SetupInterview(questionnaireDocument, precompiledState: interviewState);
+                var interview = SetupInterview(questionnaireDocument);
 
                 interview.AnswerNumericIntegerQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 10);
                 interview.AnswerMultipleOptionsQuestion(userId, q2Id, RosterVector.Empty, DateTime.Now, new[] { 1, 2, 3 });
-                interview.AnswerNumericIntegerQuestion(userId, q3Id, Abc.Create.Entity.RosterVector(new[] {1}), DateTime.Now, 20);
-                interview.AnswerNumericIntegerQuestion(userId, q3Id, Abc.Create.Entity.RosterVector(new[] {2}), DateTime.Now, 15);
-                interview.AnswerNumericIntegerQuestion(userId, q3Id, Abc.Create.Entity.RosterVector(new[] {3}), DateTime.Now, 35);
+                interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(1), DateTime.Now, 20);
+                interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(2), DateTime.Now, 15);
+                interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(3), DateTime.Now, 35);
                 interview.AnswerMultipleOptionsLinkedQuestion(userId, q4Id, RosterVector.Empty, DateTime.Now, new RosterVector[]
                 {
                     new [] { 2m }, new[] { 1m }, new[] { 3m }

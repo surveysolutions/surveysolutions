@@ -9,7 +9,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
 {
@@ -25,13 +24,13 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
             {
                 Setup.MockedServiceLocator();
 
-                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+                var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]
                 {
-                    Abc.Create.Entity.Roster(rosterId: roster1Id, fixedRosterTitles: new []
+                    Create.Entity.Roster(roster1Id, fixedRosterTitles: new []
                     {
                         IntegrationCreate.FixedTitle(1),
                         IntegrationCreate.FixedTitle(2),
-                        IntegrationCreate.FixedTitle(3),
+                        IntegrationCreate.FixedTitle(3)
                     })
                 });
 
@@ -39,23 +38,14 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 {
                     var questionnaireIdentity = new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1);
 
-                    ILatestInterviewExpressionState expressionState = GetInterviewExpressionState(questionnaireDocument);
-
-                    var interview = new StatefulInterview(
-                        Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
-                            questionnaireIdentity.QuestionnaireId,
-                            Create.Entity.PlainQuestionnaire(questionnaireDocument),
-                            questionnaireIdentity.Version
-                        ),
-                        Stub<IInterviewExpressionStatePrototypeProvider>.Returning(expressionState),
-                        Create.Service.SubstitionTextFactory());
+                    var interview = SetupStatefullInterview(questionnaireDocument);
 
                     interview.CreateInterviewOnClient(questionnaireIdentity, Guid.NewGuid(), DateTime.Now, Guid.NewGuid(), null, null);
 
                     return new InvokeResults
                     {
                         SomeRosterWasAdded = eventContext.AnyEvent<RosterInstancesAdded>(x => x.Instances.Any(r => r.GroupId == roster1Id)),
-                        CountOfAddedRosters = eventContext.GetSingleEventOrNull<RosterInstancesAdded>()?.Instances.Length ?? 0,
+                        CountOfAddedRosters = eventContext.GetSingleEventOrNull<RosterInstancesAdded>()?.Instances.Length ?? 0
                     };
                 }
             });

@@ -10,12 +10,12 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Tool.hbm2ddl;
+using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
@@ -34,7 +34,6 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -45,7 +44,6 @@ using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
-using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 using WB.Tests.Abc;
@@ -68,6 +66,27 @@ namespace WB.Tests.Integration
                 GetCompilerSettingsStub());
         }
 
+        public static CodeGeneratorV2 CodeGeneratorV2()
+        {
+            return new CodeGeneratorV2(CodeGenerationModelsFactory());
+        }
+
+        public static CodeGenerationModelsFactory CodeGenerationModelsFactory()
+        {
+            return new CodeGenerationModelsFactory(
+                    DefaultMacrosSubstitutionService(),
+                    ServiceLocator.Current.GetInstance<ILookupTableService>());
+        }
+
+        public static ExpressionsPlayOrderProvider ExpressionsPlayOrderProvider(
+            IExpressionProcessor expressionProcessor = null,
+            IMacrosSubstitutionService macrosSubstitutionService = null)
+        {
+            return new ExpressionsPlayOrderProvider(
+                expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
+                macrosSubstitutionService ?? DefaultMacrosSubstitutionService());
+        }
+
         private static ICompilerSettings GetCompilerSettingsStub()
             => System.Environment.MachineName.ToLower() == "powerglide" // TLK's :)
                 ? Mock.Of<ICompilerSettings>(settings
@@ -88,8 +107,10 @@ namespace WB.Tests.Integration
             return macrosSubstitutionServiceMock.Object;
         }
 
-        public static Interview Interview(Guid? questionnaireId = null,
-            IQuestionnaireStorage questionnaireRepository = null, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
+        public static Interview Interview(
+            Guid? questionnaireId = null,
+            IQuestionnaireStorage questionnaireRepository = null, 
+            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
             var interview = new Interview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
@@ -153,8 +174,7 @@ namespace WB.Tests.Integration
         {
             var interview = new StatefulInterview(
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                expressionProcessorStatePrototypeProvider ??
-                Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
+                expressionProcessorStatePrototypeProvider ?? Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
                 Create.Service.SubstitionTextFactory());
 
             interview.CreateInterview(

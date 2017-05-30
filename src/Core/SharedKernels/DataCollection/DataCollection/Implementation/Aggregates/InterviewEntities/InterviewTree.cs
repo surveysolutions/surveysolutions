@@ -5,6 +5,8 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
@@ -55,6 +57,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeQuestion GetQuestion(Identity identity)
             => this.GetNodeByIdentity(identity) as InterviewTreeQuestion;
+
+        public InterviewTreeQuestion GetQuestion(Guid id, RosterVector rosterVector)
+            => this.GetNodeByIdentity(new Identity(id, rosterVector)) as InterviewTreeQuestion;
 
         internal InterviewTreeGroup GetGroup(Identity identity)
             => this.GetNodeByIdentity(identity) as InterviewTreeGroup;
@@ -451,12 +456,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return null;
         }
 
-        public IEnumerable<Identity> FindQuestionsFromSameOrDeeperLevel(Guid entityId, Identity questionIdentity)
+        public IEnumerable<Identity> FindEntitiesFromSameOrDeeperLevel(Guid entityIdToSearch, Identity startingSearchPointIdentity)
         {
-            var rosterVectorLength = questionIdentity.RosterVector.Length;
-            return this.FindEntity(entityId)
+            var rosterVectorLength = startingSearchPointIdentity.RosterVector.Length;
+            return this.FindEntity(entityIdToSearch)
                 .Select(x => x.Identity)
-                .Where(x => x.RosterVector.Take(rosterVectorLength).SequenceEqual(questionIdentity.RosterVector));
+                .Where(x => x.RosterVector.Take(rosterVectorLength).SequenceEqual(startingSearchPointIdentity.RosterVector));
         }
 
         public void ReplaceSubstitutions()
@@ -515,6 +520,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             return new RosterVector(address.Reverse<int>());
         }
+
     }
 
     public interface IInterviewTreeNode

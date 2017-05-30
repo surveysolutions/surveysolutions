@@ -9,13 +9,15 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public long QuestionnaireVersion { get; }
 
         public int? AssignmentId { get; }
+        public bool UsesExpressionStorage { get; set; }
 
-        public InterviewOnClientCreated(Guid userId, Guid questionnaireId, long questionnaireVersion, int? assignmentId)
+        public InterviewOnClientCreated(Guid userId, Guid questionnaireId, long questionnaireVersion, int? assignmentId, bool usesExpressionStorage = false)
             : base(userId)
         {
             this.QuestionnaireId = questionnaireId;
             this.QuestionnaireVersion = questionnaireVersion;
             this.AssignmentId = assignmentId;
+            this.UsesExpressionStorage = usesExpressionStorage;
         }
     }
 }
