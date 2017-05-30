@@ -107,7 +107,11 @@ namespace WB.UI.Designer.Api.Headquarters
 
             var questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source);
 
-            var resultAssembly = this.GetQuestionnaireAssemblyOrThrow(questionnaireView, Math.Max(questionnaireContentVersion, minSupportedQuestionnaireVersion.GetValueOrDefault()));
+            var versionToCompileAssembly = clientQuestionnaireContentVersion > 19 
+                ? Math.Max(20, questionnaireContentVersion)
+                : Math.Max(questionnaireContentVersion, minSupportedQuestionnaireVersion.GetValueOrDefault());
+
+            var resultAssembly = this.GetQuestionnaireAssemblyOrThrow(questionnaireView, versionToCompileAssembly);
 
             var questionnaire = questionnaireView.Source.Clone();
             questionnaire.Macros = null;
@@ -119,7 +123,7 @@ namespace WB.UI.Designer.Api.Headquarters
             {
                 Questionnaire = this.zipUtils.CompressString(this.serializer.Serialize(questionnaire)), // use binder to serialize to the old namespaces and assembly
                 QuestionnaireAssembly = resultAssembly,
-                QuestionnaireContentVersion = questionnaireContentVersion
+                QuestionnaireContentVersion = versionToCompileAssembly
             };
         }
 
