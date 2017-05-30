@@ -103,7 +103,7 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
 			"/p:Configuration=$BuildConfiguration"
 			)
 						
-	    ./echoargs $arguments	
+	    Write-Host $arguments	
 	
 		& (GetPathToMSBuild) $arguments | Write-Host
 	}
