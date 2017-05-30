@@ -1,31 +1,28 @@
 ﻿using System;
-using System.Net.Http;
-using Machine.Specifications;
-using Moq;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using It = Machine.Specifications.It;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
+using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.Services;
+using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.PublicApi.Models;
+using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
+namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {
-    internal class when_intervews_controller_approving_interview : ApiTestContext
+    internal class when_intervews_controller_hqunapproving_interview : ApiTestContext
     {
         private Establish context = () =>
         {
             var interviewReferences =
-                Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>(
-                    y => y.GetById(Moq.It.IsAny<string>()) == new InterviewReferences(interviewId, Guid.NewGuid(), 1));
+               Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>(
+                   y => y.GetById(Moq.It.IsAny<string>()) == new InterviewReferences(interviewId, Guid.NewGuid(), 1));
 
             var userViewFactory =
                 Mock.Of<IUserViewFactory>(
@@ -40,14 +37,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 
         Because of = () =>
         {
-            httpResponseMessage = controller.Approve(new StatusChangeApiModel() {Id = interviewId});
+            httpResponseMessage = controller.HQUnapprove(new StatusChangeApiModel() {Id = interviewId});
         };
 
         It should_return_OK_status_code = () =>
             httpResponseMessage.StatusCode.ShouldEqual(HttpStatusCode.OK);
 
         It should_execute_AssignInterviewerCommand_with_specified_UserId = () =>
-            commandService.Verify(command => command.Execute(Moq.It.Is<ApproveInterviewCommand>(cp => cp.InterviewId == interviewId), Moq.It.IsAny<string>()));
+            commandService.Verify(command => command.Execute(Moq.It.Is<UnapproveByHeadquartersCommand>(cp => cp.InterviewId == interviewId), Moq.It.IsAny<string>()));
 
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static Guid responsibleId = Guid.Parse("22111111111111111111111111111111");

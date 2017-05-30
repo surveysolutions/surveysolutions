@@ -1,11 +1,8 @@
 ﻿using System;
-using Moq;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api;
-using WB.Core.Infrastructure.CommandBus;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Hosting;
+using Moq;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.HealthCheck;
@@ -14,15 +11,17 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
 using WB.UI.Headquarters.API.PublicApi;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
+namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {
     internal class ApiTestContext
     {

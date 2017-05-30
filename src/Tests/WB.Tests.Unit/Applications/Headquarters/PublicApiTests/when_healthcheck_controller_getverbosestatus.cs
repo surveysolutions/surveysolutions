@@ -5,7 +5,7 @@ using WB.Core.BoundedContexts.Headquarters.ValueObjects.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
+namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {
     internal class when_healthcheck_controller_getverbosestatus : ApiTestContext
     {
