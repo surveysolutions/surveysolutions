@@ -2,15 +2,12 @@
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Filters;
@@ -60,7 +57,7 @@ namespace WB.UI.Headquarters.Controllers
             
             var model = new SetupModel();
             model.QuestionnaireTitle = questionnaire.Title;
-            model.QuestionnaireVersion = questionnaire.Version;
+            model.QuestionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
             model.UseCaptcha = true;
 
             return View(model);
@@ -79,21 +76,10 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             model.QuestionnaireTitle = questionnaire.Title;
-            model.QuestionnaireVersion = questionnaire.Version;
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
 
-            if (model.ResponsibleId.HasValue)
-            {
-                this.configurator.Start(questionnaireIdentity, model.ResponsibleId.Value, model.UseCaptcha);
-                return RedirectToAction("Started", new {id = questionnaireIdentity.ToString()});
-            }
-            if(!questionnaire.AllowCensusMode)
-            {
-                this.configurator.Start(questionnaireIdentity, null, model.UseCaptcha);
-                return this.RedirectToAction("Started", new { id = questionnaireIdentity.ToString() });
-            }
-
-            return View(model);
+            this.configurator.Start(questionnaireIdentity, model.UseCaptcha);
+            return this.RedirectToAction("Started", new { id = questionnaireIdentity.ToString() });
         }
 
         public ActionResult Started(string id)
@@ -110,7 +96,6 @@ namespace WB.UI.Headquarters.Controllers
             var model = new SetupModel
             {
                 QuestionnaireTitle = questionnaire.Title,
-                QuestionnaireVersion = questionnaire.Version,
                 QuestionnaireIdentity = questionnaireIdentity
             };
 
