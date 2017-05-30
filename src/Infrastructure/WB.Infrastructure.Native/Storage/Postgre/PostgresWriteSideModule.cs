@@ -31,7 +31,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 throw;
             }
 
-
             this.Kernel.Bind<IStreamableEventStore>().ToMethod(_ => this.GetEventStore()).InSingletonScope();
             this.Kernel.Bind<IEventStore>().ToMethod(context => context.Kernel.Get<IStreamableEventStore>());
         }
