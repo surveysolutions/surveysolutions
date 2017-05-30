@@ -115,6 +115,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can set number of interviews that should be created from this assignment.
+        /// </summary>
+        public static string CapacityExplanation {
+            get {
+                return ResourceManager.GetString("CapacityExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit capacity for assignment {0}.
+        /// </summary>
+        public static string ChangeCapacityModalTitle {
+            get {
+                return ResourceManager.GetString("ChangeCapacityModalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created at.
         /// </summary>
         public static string CreatedAt {
@@ -129,6 +147,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string IdentifyingQuestions {
             get {
                 return ResourceManager.GetString("IdentifyingQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviews quantity.
+        /// </summary>
+        public static string InterviewsCount {
+            get {
+                return ResourceManager.GetString("InterviewsCount", resourceCulture);
             }
         }
         

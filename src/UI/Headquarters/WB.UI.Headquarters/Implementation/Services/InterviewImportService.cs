@@ -120,7 +120,8 @@ namespace WB.UI.Headquarters.Implementation.Services
                                         interviewerId: assignmentRecord.InterviewerId,
                                         answersTime: DateTime.UtcNow,
                                         preloadedDataDto: assignmentRecord.PreloadedData,
-                                        interviewKey: this.interviewKeyGenerator.Get()))));
+                                        interviewKey: this.interviewKeyGenerator.Get(),
+                                        assignmentId: assignment.Id))));
                     }
                 });
         }
@@ -159,7 +160,8 @@ namespace WB.UI.Headquarters.Implementation.Services
                                         interviewerId: importedInterview.InterviewerId,
                                         answersTime: DateTime.UtcNow,
                                         preloadedDataDto: importedInterview.PreloadedData,
-                                        interviewKey: this.interviewKeyGenerator.Get()))));
+                                        interviewKey: this.interviewKeyGenerator.Get(),
+                                        assignmentId: null))));
                 });
         }
 

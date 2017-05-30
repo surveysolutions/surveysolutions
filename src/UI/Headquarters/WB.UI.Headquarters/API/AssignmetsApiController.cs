@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -7,12 +8,12 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API
 {
-    [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     [CamelCase]
     [RoutePrefix("api/Assignments")]
     public class AssignmetsApiController : ApiController
@@ -32,6 +33,7 @@ namespace WB.UI.Headquarters.API
         
         [Route("")]
         [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public IHttpActionResult Get([FromUri]AssignmentsDataTableRequest request)
         {
             QuestionnaireIdentity questionnaireIdentity = null;
@@ -71,6 +73,8 @@ namespace WB.UI.Headquarters.API
         
         [Route("")]
         [HttpDelete]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        [ObserverNotAllowedApi]
         public IHttpActionResult Delete([FromBody]int[] ids)
         {
             if (ids == null) return this.BadRequest();
@@ -86,10 +90,12 @@ namespace WB.UI.Headquarters.API
 
         [Route("Unarchive")]
         [HttpPost]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        [ObserverNotAllowedApi]
         public IHttpActionResult Unarchive([FromBody]int[] ids)
         {
             if (ids == null) return this.BadRequest();
-
+            
             foreach (var id in ids)
             {
                 Assignment assignment = this.assignmentsStorage.GetById(id);
@@ -101,6 +107,7 @@ namespace WB.UI.Headquarters.API
 
         [HttpPost]
         [Route("Assign")]
+        [ObserverNotAllowedApi]
         public IHttpActionResult Assign([FromBody] AssignRequest request)
         {
             if (request?.Ids == null) return this.BadRequest();
@@ -111,6 +118,22 @@ namespace WB.UI.Headquarters.API
             }
 
             return this.Ok();
+        }
+
+        [HttpPatch]
+        [Route("{id:int}/SetCapacity")]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        [ObserverNotAllowedApi]
+        public IHttpActionResult SetCapacity(int id, [FromBody] UpdateAssignmentRequest request)
+        {
+            var assignment = this.assignmentsStorage.GetById(id);
+            assignment.UpdateCapacity(request.Capacity);
+            return this.Ok();
+        }
+
+        public class UpdateAssignmentRequest
+        {
+            public int? Capacity { get; set; }
         }
 
         public class AssignRequest

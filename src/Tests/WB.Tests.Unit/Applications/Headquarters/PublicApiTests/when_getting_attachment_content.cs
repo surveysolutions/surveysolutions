@@ -1,19 +1,13 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Net.Http;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
-using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
+namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {
     internal class when_getting_attachment_content : ApiTestContext
     {

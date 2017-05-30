@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     principal: principal ?? Mock.Of<IInterviewerPrincipal>(),
                     synchronization: synchronization ?? Substitute.For<SynchronizationViewModel>(),
                     messenger: messenger ?? Mock.Of<IMvxMessenger>(),
-                    questionnairesViewModel: DashboardQuestionnairesViewModel(),
+                    createNewViewModel: DashboardQuestionnairesViewModel(),
                     startedInterviewsViewModel: DashboardStartedInterviewsViewModel(),
                     completedInterviewsViewModel: DashboardCompletedInterviewsViewModel(),
                     rejectedInterviewsViewModel: DashboardRejectedInterviewsViewModel(),
@@ -66,10 +66,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                 Substitute.For<IPlainStorage<QuestionnaireView>>(), Substitute.For<IPlainStorage<InterviewView>>(),
                 Substitute.For<IInterviewViewModelFactory>(), Substitute.For<IPrincipal>());
 
-        private static QuestionnairesViewModel DashboardQuestionnairesViewModel()
-            => new QuestionnairesViewModel(
+        private static CreateNewViewModel DashboardQuestionnairesViewModel()
+            => new CreateNewViewModel(
                 Substitute.For<IPlainStorage<QuestionnaireView>>(), 
-                Substitute.For<IInterviewViewModelFactory>());
+                Substitute.For<IInterviewViewModelFactory>(),
+                Substitute.For<IPlainStorage<AssignmentDocument>>());
 
         private static StartedInterviewsViewModel DashboardStartedInterviewsViewModel()
             => new StartedInterviewsViewModel(Substitute.For<IPlainStorage<InterviewView>>(),

@@ -17,14 +17,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             get
             {
                 var statefulInterview = this.GetCallerInterview();
-                var responsibleId = this.webInterviewConfigProvider.Get(statefulInterview.QuestionnaireIdentity)
-                    .ResponsibleId;
-                if (responsibleId != null)
-                    return responsibleId.Value;
-                else
-                {
-                    return statefulInterview.CurrentResponsibleId;
-                }
+                return statefulInterview.CurrentResponsibleId;
             }
         }
 

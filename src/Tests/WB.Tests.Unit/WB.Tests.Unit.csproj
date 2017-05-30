@@ -213,8 +213,9 @@
       <HintPath>..\..\..\packages\NSubstitute.1.10.0.0\lib\net45\NSubstitute.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="nunit.framework, Version=3.6.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NUnit.3.6.1\lib\net45\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework, Version=3.7.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\NUnit.3.7.0\lib\net45\nunit.framework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
@@ -1648,33 +1649,33 @@
     <Compile Include="SharedKernels\SurveyManagement\HealthCheckTests\when_healthcheck_service_check_when_there_are_any_errors.cs" />
     <Compile Include="SharedKernels\SurveyManagement\HealthCheckTests\when_healthcheck_service_check_when_there_are_any_warnings.cs" />
     <Compile Include="SharedKernels\SurveyManagement\HealthCheckTests\when_healthcheck_service_check.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\ApiTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\InterviewerInterviewsControllerTests\v2\InterviewsApiV2ControllerTestsContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\InterviewerInterviewsControllerTests\v2\when_getting_interviews.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\InterviewerInterviewsControllerTests\v2\when_marking_interview_as_received.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\InterviewerInterviewsControllerTests\v2\when_posting_image_by_interview.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\InterviewerInterviewsControllerTests\v2\when_posting_sync_package.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_getting_questionnaire_attachments.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_healthcheck_controller_getstatus.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_healthcheck_controller_getverbosestatus.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_intervews_controller_hqunapproving_interview.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_intervews_controller_hqapproving_interview.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_intervews_controller_hqrejecting_interview.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_intervews_controller_rejecting_interview.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_intervews_controller_approving_interview.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_intervews_controller_interviews_filtered_with_empty_params.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_intervews_controller_interviews_filtered_with_not_empty_params.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_intervews_controller_assigning_interview.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_questionnaires_controller_interviews_with_not_empty_params.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\ApiTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\InterviewerInterviewsControllerTests\v2\InterviewsApiV2ControllerTestsContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\InterviewerInterviewsControllerTests\v2\when_getting_interviews.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\InterviewerInterviewsControllerTests\v2\when_marking_interview_as_received.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\InterviewerInterviewsControllerTests\v2\when_posting_image_by_interview.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\InterviewerInterviewsControllerTests\v2\when_posting_sync_package.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\when_getting_questionnaire_attachments.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\when_healthcheck_controller_getstatus.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\when_healthcheck_controller_getverbosestatus.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\when_intervews_controller_hqunapproving_interview.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\when_intervews_controller_hqapproving_interview.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\when_intervews_controller_hqrejecting_interview.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\when_intervews_controller_rejecting_interview.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\when_intervews_controller_approving_interview.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\when_intervews_controller_interviews_filtered_with_empty_params.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\when_intervews_controller_interviews_filtered_with_not_empty_params.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\when_intervews_controller_assigning_interview.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\when_questionnaires_controller_interviews_with_not_empty_params.cs" />
     <Compile Include="SharedKernels\SurveyManagement\HealthCheckTests\when_healthcheck_service_check_when_all_is_ok.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_intervews_controller_interview_details_with_not_empty_params.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_getting_attachment_content.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_questionnaires_controller_questionnaries_by_id.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_questionnaires_controller_questionnaries_statuses.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_questionnaires_controller_questionnaries_with_not_empty_params.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_users_controller_details_is_called_with_not_emty_params.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_users_controller_interviewers_is_called_with_not_elpty_params.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_users_controller_supervisors_is_called_with_not_empty_params.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\when_intervews_controller_interview_details_with_not_empty_params.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\when_getting_attachment_content.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\when_questionnaires_controller_questionnaries_by_id.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\when_questionnaires_controller_questionnaries_statuses.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\when_questionnaires_controller_questionnaries_with_not_empty_params.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\when_users_controller_details_is_called_with_not_emty_params.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\when_users_controller_interviewers_is_called_with_not_elpty_params.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\when_users_controller_supervisors_is_called_with_not_empty_params.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\CommandTransformatorTests\CommandTransformatorTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\CommandTransformatorTests\when_need_to_transform_CreateInterviewControllerCommand.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\TabletReportControllerTestContext.cs" />
@@ -1689,6 +1690,7 @@
     <Compile Include="VerifierExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Applications\Headquarters\PublicApiTests\ApiTests\" />
     <Folder Include="GenericSubdomains\Utils\HttpStatisticiantTests\" />
     <Folder Include="Resources\" />
     <Folder Include="SharedKernels\Enumerator\Services\QuestionnaireModelBuilderTests\" />

@@ -1,39 +1,36 @@
-﻿using System;
-using Machine.Specifications;
+using System;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.PublicApi.Models;
-using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
+namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {
     internal class when_users_controller_details_is_called_with_not_emty_params : ApiTestContext
     {
-        private Establish context = () =>
+        [OneTimeSetUp]
+        public void context()
         {
             var userViewFactoryMock =
                 Mock.Of<IUserViewFactory>(x => x.GetUser(Moq.It.IsAny<UserViewInputModel>()) == CreateUserView(userId, userName));
             
             controller = CreateUsersController(userViewViewFactory: userViewFactoryMock);
-        };
 
-        Because of = () =>
-        {
             actionResult = controller.Details(userId);
-        };
+        }
 
-        It should_return_UserApiDetails = () =>
-            actionResult.ShouldBeOfExactType<UserApiDetails>();
+        [Test]
+        public void should_return_UserApiDetails() =>
+            Assert.That(actionResult, Is.InstanceOf<UserApiDetails>());
 
-        It should_return_correct_user_id = () =>
-            actionResult.UserId.ShouldEqual(userId);
+        [Test]
+        public void should_return_correct_user_id() =>
+            Assert.That(actionResult.UserId, Is.EqualTo(userId));
 
-        It should_return_correct_user_name = () =>
-            actionResult.UserName.ShouldEqual(userName);
+        [Test]
+        public void should_return_correct_user_name() =>
+            Assert.That(actionResult.UserName, Is.EqualTo(userName));
 
         private static Guid userId = Guid.Parse("11111111111111111111111111111111");
         private static string userName = "user";

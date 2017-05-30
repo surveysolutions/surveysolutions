@@ -124,6 +124,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download list of assignments ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;.
+        /// </summary>
+        public static string GetAssignmentsFormat {
+            get {
+                return ResourceManager.GetString("GetAssignmentsFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download attachment content: {0}.
         /// </summary>
         public static string GetAttachmentContent {

@@ -225,7 +225,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #region Command handlers
 
-        public void CreateInterviewOnClient(QuestionnaireIdentity questionnaireIdentity, Guid supervisorId, DateTime answersTime, Guid userId, InterviewKey key)
+        public void CreateInterviewOnClient(QuestionnaireIdentity questionnaireIdentity, Guid supervisorId, DateTime answersTime, Guid userId, InterviewKey key, int? assignmentId)
         {
             this.QuestionnaireIdentity = questionnaireIdentity;
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
@@ -238,7 +238,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             //apply events
-            this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireIdentity.QuestionnaireId, questionnaire.Version, null, questionnaire.IsUsingExpressionStorage()));
+            this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireIdentity.QuestionnaireId, questionnaire.Version, assignmentId, questionnaire.IsUsingExpressionStorage()));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
             this.ApplyEvents(treeDifference, userId);
@@ -552,7 +552,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (question?.FailedValidations != null)
             {
                 var questionValidationMassages = question.ValidationMessages
-                    .Select(substitutionText => substitutionText.Text)
+                    .Select(substitutionText => string.IsNullOrWhiteSpace(substitutionText.Text) ? defaltErrorMessageFallback : substitutionText.Text)
                     .ToList();
 
                 if (questionValidationMassages.Count == 1) return new[] {questionValidationMassages[0]};
@@ -567,7 +567,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (staticText?.FailedValidations != null)
             {
                 var staticTextValidationMassages = staticText.ValidationMessages
-                    .Select(substitutionText => substitutionText.Text)
+                    .Select(substitutionText => string.IsNullOrWhiteSpace(substitutionText.Text) ? defaltErrorMessageFallback : substitutionText.Text)
                     .ToList();
 
                 if (staticTextValidationMassages.Count == 1) return new[] {staticTextValidationMassages[0]};
