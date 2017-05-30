@@ -4,6 +4,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
     {
         public string Geometry { get; set; }
         public string MapName { get; set; }
-        public double Area { get; set; }
+        public double? Area { get; set; }
+        public double? Length { set; get; }
+        public double? DistanceToEditor { set; get; }
     }
 }

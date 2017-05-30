@@ -242,8 +242,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Value = area;
         }
 
-        //public static AreaAnswer FromGeoPosition(GeoPosition value) => value != null ? new AreaAnswer(value) : null;
-
         public Area Value { get; }
 
         public static AreaAnswer FromArea(Area area) => area!= null ? new AreaAnswer(area) : null;

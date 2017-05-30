@@ -96,7 +96,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (areaQuestion.IsAnswered)
             {
                 var answer = areaQuestion.GetAnswer().Value;
-                this.Answer = new Area(answer.Geometry, answer.MapName, answer.AreaSize );
+                this.Answer = new Area(answer.Geometry, answer.MapName, answer.AreaSize, answer.Length, answer.DistanceToEditor );
             }
 
             this.eventRegistry.Subscribe(this, interviewId);
@@ -119,11 +119,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         answerTime: DateTime.UtcNow,
                         geometry: answerArea.Geometry,
                         mapName: answerArea.MapName,
-                        area : answerArea.Area);
+                        area : answerArea.Area,
+                        length: answerArea.Length,
+                        distanceToEditor:answerArea.DistanceToEditor);
 
                     await this.Answering.SendAnswerQuestionCommandAsync(command);
                     this.QuestionState.Validity.ExecutedWithoutExceptions();
-                    this.Answer = new Area(answerArea.Geometry, answerArea.MapName, answerArea.Area);
+                    this.Answer = new Area(answerArea.Geometry, answerArea.MapName, answerArea.Area, answerArea.Length, answerArea.DistanceToEditor);
                 }
             }
             catch (MissingPermissionsException)
