@@ -56,7 +56,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                        })
                    );
 
-               var interview = SetupInterview(questionnaireDocument);
+               var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
 
                interview.AnswerNumericIntegerQuestion(userId, numericQuestionId, RosterVector.Empty, DateTime.Now, 1);
 

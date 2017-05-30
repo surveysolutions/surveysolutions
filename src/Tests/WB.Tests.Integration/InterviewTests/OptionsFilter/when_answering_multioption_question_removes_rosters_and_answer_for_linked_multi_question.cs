@@ -8,7 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 {
@@ -26,22 +26,20 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                 var options = new List<Answer>
                 {
-                    Abc.Create.Entity.Option("2"), Abc.Create.Entity.Option("22")
+                    Create.Entity.Option("2"), Create.Entity.Option("22")
                 };
 
-                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
+                var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, new IComposite[]
                 {
-                    Abc.Create.Entity.MultyOptionsQuestion(q2Id, variable: "q2", options: options),
-                    Abc.Create.Entity.Roster(rosterId, variable:"r1", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
+                    Create.Entity.MultyOptionsQuestion(q2Id, variable: "q2", options: options),
+                    Create.Entity.Roster(rosterId, variable:"r1", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                     {
-                        Abc.Create.Entity.NumericIntegerQuestion(q3Id, variable: "age", enablementCondition:"@rowindex == 1"),
+                        Create.Entity.NumericIntegerQuestion(q3Id, "age", "@rowindex == 1")
                     }),
-                    Abc.Create.Entity.MultyOptionsQuestion(q4Id, variable: "q4", linkedToRosterId: rosterId)
+                    Create.Entity.MultyOptionsQuestion(q4Id, variable: "q4", linkedToRosterId: rosterId)
                 });
 
-                ILatestInterviewExpressionState interviewState = GetInterviewExpressionState(questionnaireDocument);
-
-                var interview = SetupInterview(questionnaireDocument, precompiledState: interviewState);
+                var interview = SetupInterview(questionnaireDocument);
 
                 interview.AnswerMultipleOptionsQuestion(userId, q2Id, RosterVector.Empty, DateTime.Now, new[] { 2 });
                 interview.AnswerMultipleOptionsQuestion(userId, q2Id, RosterVector.Empty, DateTime.Now, new[] { 2, 22 });

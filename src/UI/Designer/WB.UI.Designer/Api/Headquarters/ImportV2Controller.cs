@@ -65,6 +65,7 @@ namespace WB.UI.Designer.Api.Headquarters
             var questionnaire = questionnaireView.Source.Clone();
             questionnaire.Macros = null;
             questionnaire.LookupTables = null;
+            questionnaire.IsUsingExpressionStorage = true;
 
             return new QuestionnaireCommunicationPackage
             {

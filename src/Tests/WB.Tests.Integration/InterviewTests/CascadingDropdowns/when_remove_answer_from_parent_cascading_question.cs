@@ -10,6 +10,7 @@ using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 {
@@ -32,17 +33,17 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 childCascadingQuestionId = Guid.Parse("21111111111111111111111111111111");
                 childOfChildCascadingQuestionId = Guid.Parse("31111111111111111111111111111111");
 
-                QuestionnaireDocument questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
+                QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
                     children: new IComposite[]
                     {
-                        Abc.Create.Entity.SingleQuestion(id: parentCascadingQuestion, variable: "par",
-                            options: new List<Answer>() {IntegrationCreate.Answer("1", 1), IntegrationCreate.Answer("2", 2)}),
-                        Abc.Create.Entity.SingleQuestion(id: childCascadingQuestionId, variable: "chil",
+                        Create.Entity.SingleQuestion(parentCascadingQuestion, "par",
+                            options: new List<Answer> {IntegrationCreate.Answer("1", 1), IntegrationCreate.Answer("2", 2)}),
+                        Create.Entity.SingleQuestion(childCascadingQuestionId, "chil",
                             cascadeFromQuestionId: parentCascadingQuestion,
-                            options: new List<Answer>() {IntegrationCreate.Answer("11", 11, 1), IntegrationCreate.Answer("21", 21, 2)}),
-                        Abc.Create.Entity.SingleQuestion(id: childOfChildCascadingQuestionId, variable: "chilchil",
+                            options: new List<Answer> {IntegrationCreate.Answer("11", 11, 1), IntegrationCreate.Answer("21", 21, 2)}),
+                        Create.Entity.SingleQuestion(childOfChildCascadingQuestionId, "chilchil",
                             cascadeFromQuestionId: childCascadingQuestionId,
-                            options: new List<Answer>() {IntegrationCreate.Answer("111", 111, 11), IntegrationCreate.Answer("211", 211, 21)})
+                            options: new List<Answer> {IntegrationCreate.Answer("111", 111, 11), IntegrationCreate.Answer("211", 211, 21)})
                     });
 
                 interview = SetupInterview(questionnaire);

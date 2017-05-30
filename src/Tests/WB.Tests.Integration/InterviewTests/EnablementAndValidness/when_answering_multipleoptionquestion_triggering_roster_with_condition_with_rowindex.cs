@@ -41,7 +41,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     Abc.Create.Entity.Roster(rosterId, variable: "about_jobs", 
                         enablementCondition: "@rowindex == 0", rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSwitcherQuestionId));
 
-                var interview = SetupInterview(questionnaireDocument);
+                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
 
                 interview.AnswerMultipleOptionsQuestion(userId, rosterSwitcherQuestionId, new decimal[0], DateTime.Now, new int[] {1});
 
