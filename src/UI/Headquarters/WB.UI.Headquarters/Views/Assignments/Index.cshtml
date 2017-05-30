@@ -295,8 +295,8 @@
                     <div class="block-filter">
                         <h5>@Assignments.ShowArchived</h5>
                         <select class="ddl" v-model="showArchive">
-                            <option value="false">@Assignments.Active</option>
-                            <option value="true">@Assignments.Archived</option>
+                            <option v-bind:value="false">@Assignments.Active</option>
+                            <option v-bind:value="true">@Assignments.Archived</option>
                         </select>
                     </div>
                 </div>
