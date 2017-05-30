@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -42,10 +43,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set { this.answer = value; this.RaisePropertyChanged(); }
         }
 
-        private ICommand saveAnswerCommand;
-        public ICommand SaveAnswerCommand
+        private IMvxAsyncCommand saveAnswerCommand;
+        public IMvxAsyncCommand SaveAnswerCommand
         {
-            get { return this.saveAnswerCommand ?? (this.saveAnswerCommand = new MvxCommand(this.SaveAnswer, () => !this.IsInProgress)); }
+            get { return this.saveAnswerCommand ?? (this.saveAnswerCommand = new MvxAsyncCommand(this.SaveAnswer, () => !this.IsInProgress)); }
         }
 
         private readonly Guid userId;
@@ -101,7 +102,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
-        private async void SaveAnswer()
+        private async Task SaveAnswer()
         {
             this.IsInProgress = true;
             try
