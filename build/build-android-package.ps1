@@ -105,7 +105,7 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
 						
 	    Write-Host $arguments	
 	
-		& (GetPathToMSBuild) $arguments | Write-Host
+		& (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' /p:CodeContractsRunCodeAnalysis=false "/p:Configuration=$BuildConfiguration" --% /p:Constants="EXCLUDEEXTENSIONS" | Write-Host
 	}
 	else
 	{
