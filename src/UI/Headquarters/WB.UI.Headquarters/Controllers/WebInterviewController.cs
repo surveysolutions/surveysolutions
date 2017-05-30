@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
@@ -14,6 +15,7 @@ using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -43,6 +45,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IUserViewFactory usersRepository;
         private readonly IInterviewUniqueKeyGenerator keyGenerator;
         private readonly ICaptchaProvider captchaProvider;
+        private readonly IPlainStorageAccessor<Assignment> assignments;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IImageProcessingService imageProcessingService;
         private readonly IConnectionLimiter connectionLimiter;
@@ -76,7 +79,8 @@ namespace WB.UI.Headquarters.Controllers
             IWebInterviewNotificationService webInterviewNotificationService,
             ILogger logger, IUserViewFactory usersRepository,
             IInterviewUniqueKeyGenerator keyGenerator,
-            ICaptchaProvider captchaProvider)
+            ICaptchaProvider captchaProvider,
+            IPlainStorageAccessor<Assignment> assignments)
             : base(commandService, logger)
         {
             this.commandService = commandService;
@@ -91,6 +95,7 @@ namespace WB.UI.Headquarters.Controllers
             this.usersRepository = usersRepository;
             this.keyGenerator = keyGenerator;
             this.captchaProvider = captchaProvider;
+            this.assignments = assignments;
         }
 
         private string CreateInterview(QuestionnaireIdentity questionnaireId)
@@ -238,14 +243,24 @@ namespace WB.UI.Headquarters.Controllers
             return $@"~/WebInterview/{interviewId}/{action}" + (string.IsNullOrWhiteSpace(sectionId) ? "" : $@"/{sectionId}");
         }
 
-        public ActionResult Start(string id)
+        public ActionResult Start(int id)
         {
-            var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
-            var webInterviewConfig = this.configProvider.Get(questionnaireIdentity);
+            var assignment = this.assignments.GetById(id);
+            if (assignment == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            if (assignment.Archived || assignment.InterviewSummaries.Count >= assignment.Capacity)
+            {
+                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+            }
+
+            var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
             if (!webInterviewConfig.Started)
                 throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
 
-            var model = this.GetStartModel(questionnaireIdentity, webInterviewConfig);
+            var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig);
             model.ServerUnderLoad = !this.connectionLimiter.CanConnect();
             return this.View(model);
         }

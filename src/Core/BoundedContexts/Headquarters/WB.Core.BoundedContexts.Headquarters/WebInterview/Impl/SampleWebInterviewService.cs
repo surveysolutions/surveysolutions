@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
             CsvWriter csvWriter,
             string baseUrl)
         {
-                csvWriter.WriteField($"{baseUrl}/{assignment.Id}/Cover");
+                csvWriter.WriteField($"{baseUrl}/{assignment.Id}/Start");
                 csvWriter.WriteField(assignment.Id);
 
                 foreach (var prefilledQuestion in assignment.IdentifyingData)
