@@ -229,7 +229,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
             this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
 
-            this.Tree.GetQuestion(questionIdentity).AsArea.SetAnswer(AreaAnswer.FromArea(new Area(@event.Geometry, @event.MapName, @event.AreaSize)));
+            this.Tree.GetQuestion(questionIdentity).AsArea.SetAnswer(AreaAnswer.FromArea(new Area(@event.Geometry, @event.MapName, @event.AreaSize, @event.Length, @event.DistanceToEditor)));
         }
 
         public virtual void Apply(TextListQuestionAnswered @event)
@@ -1174,7 +1174,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var changedInterviewTree = this.Tree.Clone();
 
-            var answer = new Area(command.Geometry, command.MapName, command.Area);
+            var answer = new Area(command.Geometry, command.MapName, command.Area, command.Length, command.DistanceToEditor);
             changedInterviewTree.GetQuestion(questionIdentity).AsArea.SetAnswer(AreaAnswer.FromArea(answer));
 
             this.UpdateTreeWithDependentChanges(changedInterviewTree, new[] { questionIdentity }, questionnaire);
@@ -2064,7 +2064,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     var answer = changedQuestion.AsArea.GetAnswer().Value;
                     this.ApplyEvent(new AreaQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, answer.Geometry, answer.MapName, answer.AreaSize));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, answer.Geometry, answer.MapName, answer.AreaSize, answer.Length, answer.DistanceToEditor));
                 }
             }
         }
