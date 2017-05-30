@@ -546,8 +546,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             string resultAssembly;
 
+            var questionnaireVersionToCompileAssembly = Math.Max(20, this.engineVersionService.GetQuestionnaireContentVersion(questionnaire));
+
             return this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
-                questionnaire, this.engineVersionService.GetQuestionnaireContentVersion(questionnaire),
+                questionnaire, questionnaireVersionToCompileAssembly,
                 out resultAssembly);
         }
 
