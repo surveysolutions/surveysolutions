@@ -136,7 +136,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create new interview using templates (Census mode).
+        ///   Looks up a localized string similar to Create new interview using templates.
         /// </summary>
         public static string Dashboard_CreateNewTabText {
             get {
@@ -193,7 +193,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to You can create new interviews using 
-        ///empty census templates (Census mode).
+        ///empty census templates.
         /// </summary>
         public static string Dashboard_QuestionnairesTabText {
             get {
@@ -221,7 +221,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to Interviews which have been rejected by supervisor
-        ///You need to address issues noted on cover.
+        ///You need to resolve issues noted on cover.
         /// </summary>
         public static string Dashboard_RejectedTabText {
             get {
@@ -249,7 +249,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to Interviews which have been started but not completed
-        ///You need complete it to be synchronized.
+        ///You need to complete it to be synchronized.
         /// </summary>
         public static string Dashboard_StartedTabText {
             get {
@@ -272,6 +272,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string DashboardItem_AssignedOn {
             get {
                 return ResourceManager.GetString("DashboardItem_AssignedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviews created: {0}.
+        /// </summary>
+        public static string DashboardItem_AssignmentCreatedComment {
+            get {
+                return ResourceManager.GetString("DashboardItem_AssignmentCreatedComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} interviews left to create.
+        /// </summary>
+        public static string DashboardItem_AssignmentLeftComment {
+            get {
+                return ResourceManager.GetString("DashboardItem_AssignmentLeftComment", resourceCulture);
             }
         }
         

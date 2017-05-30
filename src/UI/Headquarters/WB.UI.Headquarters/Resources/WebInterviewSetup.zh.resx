@@ -126,9 +126,6 @@
   <data name="DownloadTitle" xml:space="preserve">
     <value>下载{0}</value>
   </data>
-  <data name="ExportTitle" xml:space="preserve">
-    <value>您可以下载状态为“已分配调查员”的问卷，并把链接发送给受访者</value>
-  </data>
   <data name="SelectInterviwer" xml:space="preserve">
     <value>选择调查员</value>
   </data>
@@ -147,9 +144,6 @@
   <data name="UseCaptcha" xml:space="preserve">
     <value>启用垃圾保护</value>
   </data>
-  <data name="WebInterviewSetup_Description" xml:space="preserve">
-    <value>请选择调查员以开始网络访谈</value>
-  </data>
   <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
     <value>网络访谈设置</value>
   </data>
@@ -158,8 +152,5 @@
   </data>
   <data name="WebInterviewStarted" xml:space="preserve">
     <value>{0}的网络访谈已经开始</value>
-  </data>
-  <data name="WebLinkTitle" xml:space="preserve">
-    <value>使用这个链接开始访谈</value>
   </data>
 </root>

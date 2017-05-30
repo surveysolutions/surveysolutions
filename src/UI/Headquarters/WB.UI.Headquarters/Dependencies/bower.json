@@ -29,11 +29,12 @@
     "bootstrap-select": "^1.12.2",
     "jQuery-contextMenu": "^2.4.2",
     "jquery-highlight": "^3.3.0",
-    "vue": "^2.2.2",
-    "vue-resource": "^1.2.1",
+    "vue": "^2.3.3",
+    "vue-resource": "^1.3.3",
     "flatpickr": "2.4.4",
-    "vee-validate": "2.0.0-beta.22",
-    "jquery.validate.unobtrusive.bootstrap": "*"
+    "vee-validate": "2.0.0-rc.5",
+    "jquery.validate.unobtrusive.bootstrap": "*",
+    "datatables.net-responsive": "^2.1.1"
   },
   "devDependencies": {},
   "overrides": {

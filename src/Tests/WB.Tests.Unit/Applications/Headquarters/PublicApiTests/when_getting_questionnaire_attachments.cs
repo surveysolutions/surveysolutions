@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using Machine.Specifications;
@@ -13,7 +12,7 @@ using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
+namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {
     internal class when_getting_questionnaire_attachments : ApiTestContext
     {

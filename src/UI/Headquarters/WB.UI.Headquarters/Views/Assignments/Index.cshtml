@@ -25,7 +25,7 @@
         var tableOptions = {
             rowId: "id",
             deferLoading: 0,
-            order: [[5, 'desc']],
+            order: [[6, 'desc']],
             columns: [
                 {
                     orderable: false,
@@ -37,17 +37,25 @@
                                 '<input class="checkbox-filter" type="checkbox" value="<%= id %>" id="<%= checkboxId %>"><label for="<%= checkboxId %>"><span class="tick"></span></label>');
 
                         return compiled({ 'id': row.id, 'checkboxId': checkboxId });
-                    }
+                    },
+                    responsivePriority: 1
                 },
                 {
                     data: "id",
                     name: "Id",
-                    title: "Id"
+                    title: "Id",
+                    responsivePriority: 2
                 },
                 {
                     data: "responsible",
                     name: "Responsible.Name",
-                    title: "@Common.Responsible"
+                    title: "@Common.Responsible",
+                    responsivePriority: 3
+                },
+                {
+                    data: "interviewsCount",
+                    name: "InterviewsCount",
+                    title: "@Assignments.InterviewsCount"
                 },
                 {
                     data: "capacity",
@@ -72,7 +80,8 @@
                             }
                         }
                         return _.join(strings, ", ");
-                    }
+                    },
+                    responsivePriority: 4
                 },
                 {
                     data: "updatedAtUtc",
@@ -103,7 +112,8 @@
             select: {
                 style: 'multi',
                 selector: 'td>.checkbox-filter'
-            }
+            },
+            sDom: 'f<"table-with-scroll"t>ip'
         };
 
         var app = new Vue({
@@ -117,7 +127,9 @@
                 selectedRows: [],
                 totalRows: 0,
                 showArchive: false,
-                newResponsibleId: null
+                newResponsibleId: null,
+                editedRowId: null,
+                editedCapacity: null
             },
             methods: {
                 addParamsToRequest: function(requestData) {
@@ -196,6 +208,30 @@
                         var rowId = dt.row(ar[i]).id();
                         Vue.set(this, "selectedRows", _.without(this.selectedRows, parseInt(rowId)));
                     }
+                },
+                cellClicked: function (columnName, rowId, cellData) {
+                    var isHq = @Model.IsHeadquarter.ToString().ToLower();
+                    if (columnName === 'Capacity' && isHq) {
+                        this.editedRowId = rowId;
+                        this.editedCapacity = cellData;
+                        $('#editCapacityModal').modal('show');
+                    }
+                },
+                updateCapacity: function () {
+                    var self = this;
+                    this.$validator.validateAll().then(function() {
+                        var patchCapacityUrl = assignmentsEndpoint + "/" + self.editedRowId + "/SetCapacity";
+                        self.$http.patch(patchCapacityUrl,
+                                {
+                                    capacity: self.editedCapacity
+                                })
+                            .then(function() {
+                                $('#editCapacityModal').modal('hide');
+                                self.editedCapacity = self.editedRowId = null;
+                                self.reloadTable();
+                            });
+                    });
+                    return false;
                 }
             },
             mounted: function() {
@@ -215,6 +251,9 @@
 
             app.$mount('#app');
 
+            $('#editCapacityModal').on('shown.bs.modal', function () {
+                $('#newCapacity').focus();
+            })
         }
     </script>
 }
@@ -256,8 +295,8 @@
                     <div class="block-filter">
                         <h5>@Assignments.ShowArchived</h5>
                         <select class="ddl" v-model="showArchive">
-                            <option value="false">@Assignments.Active</option>
-                            <option value="true">@Assignments.Archived</option>
+                            <option v-bind:value="false">@Assignments.Active</option>
+                            <option v-bind:value="true">@Assignments.Archived</option>
                         </select>
                     </div>
                 </div>
@@ -276,7 +315,8 @@
                                            :response-processor="responseProcessor"
                                            :table-options="tableOptions"
                                            v-on:select="rowsSelected"
-                                           v-on:deselect="rowsDeselected"></assignments-table>
+                                           v-on:deselect="rowsDeselected"
+                                           v-on:cell-clicked="cellClicked"></assignments-table>
                     </div>
 
                     <div class="panel panel-table" v-if="selectedRows.length">
@@ -286,9 +326,15 @@
                                 <span class="tick"></span>
                                 @string.Format(Assignments.AssignmentsSelected, "{{selectedRows.length}}")
                             </label>
-                            <button class="btn btn-lg btn-primary" v-if="showArchive" v-on:click="unarchiveSelected">@Assignments.Unarchive</button>
+                            @if (Model.IsHeadquarter) {
+                                <button class="btn btn-lg btn-primary" v-if="showArchive" v-on:click="unarchiveSelected">@Assignments.Unarchive</button>
+                            }
+
                             <button class="btn btn-lg btn-primary" v-if="!showArchive" v-on:click="assignSelected">@Common.Assign</button>
-                            <button class="btn btn-lg btn-danger" v-if="!showArchive" v-on:click="archiveSelected">@Assignments.Archive</button>
+                            
+                            @if (Model.IsHeadquarter) {
+                                <button class="btn btn-lg btn-danger" v-if="!showArchive" v-on:click="archiveSelected">@Assignments.Archive</button>
+                            }
                         </div>
                     </div>
                 </div>
@@ -303,20 +349,21 @@
                     <h3>@Pages.ConfirmationNeededTitle</h3>
                 </div>
                 <div class="modal-body">
-                    <h3>@string.Format(Assignments.NumberOfAssignmentsAffected, "{{selectedRows.length}}")</h3>
-                    <p>
-                        @Assignments.SelectResponsible
-                        <typeahead placeholder="@Common.Responsible"
-                                   control-id="newResponsibleId"
-                                   :value="newResponsibleId"
-                                   :ajax-params="{ }"
-                                   v-on:selected="newResponsibleSelected"
-                                   fetch-url="@(Model.IsSupervisor ?
-                                                    Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"}) :
-                                                    Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"}))">
-                        </typeahead>
-                    </p>
-
+                    <p>@string.Format(Assignments.NumberOfAssignmentsAffected, "{{selectedRows.length}}")</p>
+                    <form onsubmit="return false;">
+                        <div class="form-group">
+                            <label class="control-label" for="newResponsibleId">@Assignments.SelectResponsible</label>
+                            <typeahead placeholder="@Common.Responsible"
+                                       control-id="newResponsibleId"
+                                       :value="newResponsibleId"
+                                       :ajax-params="{ }"
+                                       v-on:selected="newResponsibleSelected"
+                                       fetch-url="@(Model.IsSupervisor ?
+                                                        Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"}) :
+                                                        Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"}))">
+                            </typeahead>
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" v-on:click="assign" :disabled="!newResponsibleId">@Common.Assign</button>
@@ -325,5 +372,38 @@
             </div>
         </div>
     </div>
-
+    
+    <div class="modal fade" id="editCapacityModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+                    <h3>@string.Format(Assignments.ChangeCapacityModalTitle, "{{editedRowId}}")</h3>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        @Assignments.CapacityExplanation
+                    </p>
+                    <form onsubmit="return false;">
+                        <div class="form-group" v-bind:class="{'has-error': errors.has('editedCapacity')}">
+                            <label class="control-label" for="newCapacity">@Assignments.Capacity</label>
+                            <input type="text" class="form-control"
+                                   v-model.trim="editedCapacity"
+                                   name="editedCapacity"
+                                   v-validate="'numeric'"
+                                   maxlength="9"
+                                   autocomplete="off"
+                                   v-on:keyup.enter="updateCapacity"
+                                   id="newCapacity"
+                                   placeholder="@Assignments.Unlimited">
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" v-on:click="updateCapacity">@Common.Save</button>
+                        <button type="button" class="btn btn-link" data-dismiss="modal">@Common.Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>

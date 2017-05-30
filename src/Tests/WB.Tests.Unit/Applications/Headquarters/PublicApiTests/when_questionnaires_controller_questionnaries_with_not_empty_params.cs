@@ -2,15 +2,11 @@
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
-using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
+namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {
     internal class when_questionnaires_controller_questionnaries_with_not_empty_params : ApiTestContext
     {

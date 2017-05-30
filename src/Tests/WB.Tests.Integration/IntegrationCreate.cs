@@ -146,7 +146,8 @@ namespace WB.Tests.Integration
                 answersTime: new DateTime(2012, 12, 20),
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),
-                interviewKey: Create.Entity.InterviewKey()));
+                interviewKey: Create.Entity.InterviewKey(),
+                assignmentId: null));
 
             return interview;
         }

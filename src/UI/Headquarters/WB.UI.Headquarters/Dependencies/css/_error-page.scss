@@ -7,13 +7,11 @@
     background-size: 12px 100%;
     padding-left: 30px;
     .alert{
-        font-size: 18px;
-        line-height: 20px;
+        @include font(18px, 20px);
         margin-bottom: 15px;
     }
     p{
-        font-size: 14px;
-        line-height: 16px;
+        @include font(14px, 16px);
     }
 }
 header > .red-line{

@@ -3,15 +3,12 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
+namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {
     internal class when_intervews_controller_interview_details_with_not_empty_params : ApiTestContext
     {

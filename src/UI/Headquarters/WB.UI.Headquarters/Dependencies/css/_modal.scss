@@ -1,5 +1,4 @@
-body > .ui-pnotify
-{
+body > .ui-pnotify{
     z-index: 100050;
 }
 .ui-pnotify-modal-overlay, .modal-backdrop{
@@ -157,15 +156,14 @@ body > .ui-pnotify
   display: inline-block;
   text-align: left;
   vertical-align: middle;
-  max-height: 85%;
+  //max-height: 85%;
   width: 660px;
-  overflow-y: auto;
-  @extend %modal-window;
+  //overflow-y: auto;
+//   @extend %modal-window;
 }
 .modal-content{
 	padding: 20px;
-    //padding-left: 25px;
-    overflow: hidden;
+    //overflow: hidden;
     border: none;
     box-shadow: none;
     h3{
@@ -192,7 +190,6 @@ body > .ui-pnotify
 	.modal-body{
 		padding: 0 0 10px;
         .bootbox-body{
-            //padding: 40px;
             h3{
                 font: 18px/20px RobotoRegular;
             }

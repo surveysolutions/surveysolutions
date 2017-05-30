@@ -1,15 +1,14 @@
-﻿using Machine.Specifications;
+﻿using System;
+using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
+namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {
-    internal class when_intervews_controller_interviews_filtered_with_empty_params : ApiTestContext
+    internal class when_intervews_controller_interviews_filtered_with_not_empty_params : ApiTestContext
     {
         private Establish context = () =>
         {
@@ -19,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 
         Because of = () =>
         {
-            actionResult = controller.InterviewsFiltered();
+            actionResult = controller.InterviewsFiltered(questionnaireId, questionnaireVersion);
         };
 
         It should_return_InterviewApiView = () =>
@@ -30,6 +29,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 
         private static InterviewApiView actionResult;
         private static InterviewsController controller;
+
+        private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
+        private static long questionnaireVersion = 1;
 
         private static Mock<IAllInterviewsFactory> allInterviewsViewFactory;
     }
