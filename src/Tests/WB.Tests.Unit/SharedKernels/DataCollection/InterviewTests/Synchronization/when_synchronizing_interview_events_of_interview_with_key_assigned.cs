@@ -14,6 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
     {
         private EventContext eventContext = null;
         private readonly Guid userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        private readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
 
         [Test]
         public void Should_not_change_interview_id()
@@ -23,7 +24,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
             interview.Apply(new InterviewerAssigned(userId, userId, DateTime.Now));
             interview.Apply(new InterviewKeyAssigned(Create.Entity.InterviewKey(6)));
 
-            var command = Create.Command.SynchronizeInterviewEventsCommand(interviewKey: Create.Entity.InterviewKey(8));
+            var command = Create.Command.SynchronizeInterviewEventsCommand(
+                interviewKey: Create.Entity.InterviewKey(8),
+                questionnaireId: questionnaireId,
+                questionnaireVersion: 1);
 
             this.eventContext = new EventContext();
             interview.SynchronizeInterviewEvents(command);
