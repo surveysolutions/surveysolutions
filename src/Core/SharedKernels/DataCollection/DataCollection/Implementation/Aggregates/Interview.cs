@@ -1337,7 +1337,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.UserId,
                 this.QuestionnaireIdentity.QuestionnaireId, 
                 this.QuestionnaireIdentity.Version, 
-                command.AssignmentId
+                command.AssignmentId,
                 questionnaire.IsUsingExpressionStorage()));
 
             this.ApplyEvents(treeDifference, command.UserId);
