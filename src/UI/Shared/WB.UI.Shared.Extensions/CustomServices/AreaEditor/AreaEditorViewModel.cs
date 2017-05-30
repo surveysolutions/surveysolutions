@@ -82,6 +82,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
         public void UpdateBaseMap(string pathToMap)
         {
+
             if (pathToMap != null)
             {
                 var map = new Map();
@@ -156,6 +157,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             var command = this.MapView.SketchEditor.CompleteCommand;
             if (this.MapView.SketchEditor.CompleteCommand.CanExecute(command))
             {
+                
                 /*if(!GeometryEngine.IsSimple(this.MapView.SketchEditor.Geometry))
                 {
                     userInteractionService.ShowToast("Area is invalid. Please fix.");
@@ -174,7 +176,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         public IMvxCommand SwitchLocatorCommand => new MvxCommand(() =>
         {
             if(!this.MapView.LocationDisplay.IsEnabled)
-                this.MapView.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.CompassNavigation;
+                this.MapView.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.Off;
 
             this.MapView.LocationDisplay.IsEnabled = !this.MapView.LocationDisplay.IsEnabled;
         });
@@ -231,12 +233,24 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
             //save
             var handler = this.OnAreaEditCompleted;
-            handler?.Invoke(new AreaEditorResult()
+            var position = this.MapView.LocationDisplay.Location.Position;
+
+            double? dist = null;
+            if (position != null)
+            {
+                var point = new MapPoint(position.X, position.Y, position.Z, this.MapView.SpatialReference);
+                dist = GeometryEngine.Distance(result, point);
+            }
+
+            var resultArea = new AreaEditorResult()
             {
                 Geometry = result?.ToJson(),
                 MapName = this.SelectedMap,
-                Area = GeometryEngine.AreaGeodetic(result)
-            });
+                Area = GeometryEngine.AreaGeodetic(result),
+                Length = GeometryEngine.LengthGeodetic(result),
+                Distance = dist
+            };
+            handler?.Invoke(resultArea);
 
             this.IsEditing = false;
             Close(this);
