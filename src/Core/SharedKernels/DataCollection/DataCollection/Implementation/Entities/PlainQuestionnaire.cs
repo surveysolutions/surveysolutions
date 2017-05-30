@@ -1577,9 +1577,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public bool HasAnyCascadingOptionsForSelectedParentOption(Guid cascadingQuestionId, Guid parenQuestionId,
             int selectedParentValue)
         {
-            IQuestion question = this.GetQuestionOrThrow(cascadingQuestionId);
-            // might be slow
-            return GetOptionsForQuestion(cascadingQuestionId, selectedParentValue, String.Empty).Any();
+            var options = this.GetOptionsForQuestion(cascadingQuestionId, selectedParentValue, string.Empty);
+            return options.Any();
         }
     }
 }
