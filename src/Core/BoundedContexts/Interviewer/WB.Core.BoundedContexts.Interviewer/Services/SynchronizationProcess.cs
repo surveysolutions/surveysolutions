@@ -783,14 +783,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                         Id = remote.Id,
                         QuestionnaireId = questionnaireId,
                         Title = questionnaireDocument.Title,
-                        IdentifyingData = new List<AssignmentDocument.IdentifyingAnswer>()
                     };
+
+                    var identifyingData = new List<AssignmentDocument.IdentifyingAnswer>();
 
                     foreach (var identifyingAnswer in remote.IdentifyingData)
                     {
                         var question = questionnaireDocument.Find<IQuestion>(identifyingAnswer.QuestionId);
 
-                        local.IdentifyingData.Add(new AssignmentDocument.IdentifyingAnswer
+                        identifyingData.Add(new AssignmentDocument.IdentifyingAnswer
                         {
                             QuestionId = identifyingAnswer.QuestionId,
                             Answer = identifyingAnswer.Answer,
@@ -808,6 +809,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                             }
                         }
                     }
+
+                    local.IdentifyingData = identifyingData;
 
                     statistics.NewAssignmentsCount += 1;
                 }
