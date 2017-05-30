@@ -153,7 +153,4 @@
   <data name="WebInterviewStarted" xml:space="preserve">
     <value>{0}的网络访谈已经开始</value>
   </data>
-  <data name="WebLinkTitle" xml:space="preserve">
-    <value>使用这个链接开始访谈</value>
-  </data>
 </root>
