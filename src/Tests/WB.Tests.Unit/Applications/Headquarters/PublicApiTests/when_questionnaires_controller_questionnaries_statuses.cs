@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.UI.Headquarters.API.PublicApi;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
+namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {
     internal class when_questionnaires_controller_questionnaries_statuses : ApiTestContext
     {
