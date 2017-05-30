@@ -1,11 +1,13 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -25,7 +27,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IWebInterviewConfigurator configurator;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewsInfo;
+        private readonly IPlainStorageAccessor<Assignment> assignments;
 
         // GET: WebInterviewSetup
         public WebInterviewSetupController(ICommandService commandService,
@@ -33,14 +35,14 @@ namespace WB.UI.Headquarters.Controllers
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IWebInterviewConfigurator configurator,
             IWebInterviewConfigProvider webInterviewConfigProvider,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewsInfo)
+            IPlainStorageAccessor<Assignment> assignments)
             : base(commandService, 
                   logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.configurator = configurator;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
-            this.interviewsInfo = interviewsInfo;
+            this.assignments = assignments;
         }
 
         public ActionResult Start(string id)
@@ -60,7 +62,6 @@ namespace WB.UI.Headquarters.Controllers
             model.QuestionnaireTitle = questionnaire.Title;
             model.QuestionnaireVersion = questionnaire.Version;
             model.UseCaptcha = true;
-            model.IsCensus = questionnaire.AllowCensusMode;
 
             return View(model);
         }
@@ -110,22 +111,13 @@ namespace WB.UI.Headquarters.Controllers
             {
                 QuestionnaireTitle = questionnaire.Title,
                 QuestionnaireVersion = questionnaire.Version,
-                IsCensus = questionnaire.AllowCensusMode,
                 QuestionnaireIdentity = questionnaireIdentity
             };
 
-            if (questionnaire.AllowCensusMode)
-            {
-                var baseUrl = this.Url.Action("Start", "WebInterview", new {id = ""}, this.Request.Url.Scheme);
-                model.WebInterviewLink = $"{baseUrl}/{questionnaireIdentity}";
-            }
-            else
-            {
-                model.InterviewsCount = this.interviewsInfo.Query(_ => _.Count(
-                    x => x.Status == InterviewStatus.InterviewerAssigned &&
-                        x.QuestionnaireId == questionnaire.QuestionnaireId &&
-                        x.QuestionnaireVersion == questionnaire.Version));
-            }
+            model.AssignmentsCount = this.assignments.Query(_ => _.Count(
+                x => x.QuestionnaireId.QuestionnaireId == questionnaire.QuestionnaireId &&
+                    x.QuestionnaireId.Version == questionnaire.Version &&
+                    x.Responsible.ReadonlyProfile.SupervisorId != null));
 
             return this.View(model);
         }

@@ -88,11 +88,11 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can download interviews in status `Interviewer Assigned` to deliver links to respondents.
+        ///   Looks up a localized string similar to You can download list of created assignments that are assigned to interviewer in order to deliver web links to respondents.
         /// </summary>
-        public static string ExportTitle {
+        public static string ExportAssignmentsTitle {
             get {
-                return ResourceManager.GetString("ExportTitle", resourceCulture);
+                return ResourceManager.GetString("ExportAssignmentsTitle", resourceCulture);
             }
         }
         
@@ -151,15 +151,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To start web interview select interviewer that is going to be used as assignee.
-        /// </summary>
-        public static string WebInterviewSetup_Description {
-            get {
-                return ResourceManager.GetString("WebInterviewSetup_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Web interview setup.
         /// </summary>
         public static string WebInterviewSetup_PageHeader {
@@ -183,15 +174,6 @@ namespace WB.UI.Headquarters.Resources {
         public static string WebInterviewStarted {
             get {
                 return ResourceManager.GetString("WebInterviewStarted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Use this link to start interview.
-        /// </summary>
-        public static string WebLinkTitle {
-            get {
-                return ResourceManager.GetString("WebLinkTitle", resourceCulture);
             }
         }
     }
