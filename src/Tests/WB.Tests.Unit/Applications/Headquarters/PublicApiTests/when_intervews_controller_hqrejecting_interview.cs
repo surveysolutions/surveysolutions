@@ -1,23 +1,20 @@
 ﻿using System;
-using System.Net.Http;
-using Machine.Specifications;
-using Moq;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using It = Machine.Specifications.It;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
+using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.Services;
+using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.PublicApi.Models;
+using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
+namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {
     internal class when_intervews_controller_hqrejecting_interview : ApiTestContext
     {

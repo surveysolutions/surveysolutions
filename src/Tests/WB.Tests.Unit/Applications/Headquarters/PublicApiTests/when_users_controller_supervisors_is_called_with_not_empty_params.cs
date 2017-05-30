@@ -2,14 +2,12 @@
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using It = Machine.Specifications.It;
 
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
+namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {
     internal class when_users_controller_supervisors_is_called_with_not_empty_params : ApiTestContext
     {
