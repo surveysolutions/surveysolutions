@@ -92,8 +92,19 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
 	if($ExcludeExtensions)
 	{
 	    Write-Host "##teamcity[message text='Building apk excluding extra']"
+		
+		[string[]]$arguments = @(
+			$AndroidProject
+			'/t:PackageForAndroid',
+			'/v:m',
+			'/nologo',
+			'/p:CodeContractsRunCodeAnalysis=false',
+			'/p:Constants=\"EXCLUDEEXTENSIONS\"',			
+			"/p:Configuration=$BuildConfiguration"
+						
+	    ./echoargs $arguments	
 	
-		& (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' '/p:CodeContractsRunCodeAnalysis=false' "/p:Constants=\`"EXCLUDEEXTENSIONS\`"" "/p:Configuration=$BuildConfiguration" | Write-Host
+		& (GetPathToMSBuild) $arguments | Write-Host
 	}
 	else
 	{
