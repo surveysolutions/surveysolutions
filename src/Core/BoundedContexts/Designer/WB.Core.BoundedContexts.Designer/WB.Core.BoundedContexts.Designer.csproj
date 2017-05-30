@@ -243,6 +243,12 @@
     <Compile Include="Aggregates\IAccountView.cs" />
     <Compile Include="Aggregates\Questionnaire.cs" />
     <Compile Include="Aggregates\Snapshots\QuestionnaireState.cs" />
+    <Compile Include="CodeGenerationV2\CodeTemplates\LookupTablesTemplate.cs">
+      <DependentUpon>LookupTablesTemplate.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="CodeGenerationV2\CodeTemplates\Extentions\LookupTablesTemplate.Extended.cs" />
     <Compile Include="Commands\Account\UserCommand.cs" />
     <Compile Include="Commands\Account\AssignUserRole.cs" />
     <Compile Include="Commands\Account\ChangeUserPassword.cs" />
@@ -321,6 +327,24 @@
     <Compile Include="Commands\Questionnaire\Variable\UpdateVariable.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="Implementation\Repositories\UserRepository.cs" />
+    <Compile Include="CodeGenerationV2\Models\CodeGenerationModel.cs" />
+    <Compile Include="CodeGenerationV2\CodeGenerationModelsFactory.cs" />
+    <Compile Include="CodeGenerationV2\CodeGeneratorV2.cs" />
+    <Compile Include="CodeGenerationV2\Models\ConditionMethodModel.cs" />
+    <Compile Include="CodeGenerationV2\ICodeGenerationModelsFactory.cs" />
+    <Compile Include="CodeGenerationV2\ICodeGeneratorV2.cs" />
+    <Compile Include="CodeGenerationV2\Models\LevelModel.cs" />
+    <Compile Include="CodeGenerationV2\Models\LinkedFilterMethodModel.cs" />
+    <Compile Include="CodeGenerationV2\Models\OptionsFilterMethodModel.cs" />
+    <Compile Include="CodeGenerationV2\Models\QuestionModel.cs" />
+    <Compile Include="CodeGenerationV2\Models\RosterModel.cs" />
+    <Compile Include="CodeGenerationV2\Models\StaticTextModel.cs" />
+    <Compile Include="CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.cs">
+      <DependentUpon>ConditionMethodTemplate.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="CodeGenerationV2\CodeTemplates\Extentions\ConditionMethodTemplate.Extended.cs" />
     <Compile Include="Implementation\Services\Accounts\AccountPasswordInfo.cs" />
     <Compile Include="Implementation\Services\Accounts\DesignerMembershipUser.cs" />
     <Compile Include="Implementation\Services\Accounts\MembershipEventType.cs" />
@@ -338,6 +362,31 @@
     <Compile Include="Implementation\Services\Accounts\PasswordStrategies\HashPasswordStrategy.cs" />
     <Compile Include="Implementation\Services\Accounts\PasswordStrategies\PasswordPolicyExtensions.cs" />
     <Compile Include="Implementation\Services\Accounts\PasswordStrategies\TripleDesStrategy.cs" />
+    <Compile Include="CodeGenerationV2\CodeTemplates\LevelTemplate.cs">
+      <DependentUpon>LevelTemplate.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.cs">
+      <DependentUpon>InterviewExpressionStorageTemplate.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="CodeGenerationV2\CodeTemplates\Extentions\InterviewExpressionStorageTemplate.Extended.cs" />
+    <Compile Include="CodeGenerationV2\CodeTemplates\LinkedFilterMethodTemplate.cs">
+      <DependentUpon>LinkedFilterMethodTemplate.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="CodeGenerationV2\CodeTemplates\Extentions\LinkedFilterMethodTemplate.Extended.cs" />
+    <Compile Include="CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.cs">
+      <DependentUpon>OptionsFilterMethodTemplate.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="CodeGenerationV2\CodeTemplates\Extentions\OptionsFilterMethodTemplate.Extended.cs" />
+    <Compile Include="CodeGenerationV2\Models\VariableModel.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\ExpressionsPlayOrderProvider.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Helpers\GuidExtensions.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\LazyHashSetGeneratedVariable.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\GeneratedVariable.cs" />
@@ -648,6 +697,11 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>InterviewExpressionStorageTemplate.cs</LastGenOutput>
+    </None>
+    <Compile Include="CodeGenerationV2\CodeTemplates\Extentions\LevelTemplate.Extended.cs" />
     <None Include="Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>InterviewExpressionStateTemplate.cs</LastGenOutput>
@@ -721,6 +775,26 @@
     <Analyzer Include="..\..\..\..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="CodeGenerationV2\CodeTemplates\LevelTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>LevelTemplate.cs</LastGenOutput>
+    </None>
+    <None Include="CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>OptionsFilterMethodTemplate.cs</LastGenOutput>
+    </None>
+    <None Include="CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ConditionMethodTemplate.cs</LastGenOutput>
+    </None>
+    <None Include="CodeGenerationV2\CodeTemplates\LinkedFilterMethodTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>LinkedFilterMethodTemplate.cs</LastGenOutput>
+    </None>
+    <Content Include="CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>LookupTablesTemplate.cs</LastGenOutput>
+    </Content>
     <Content Include="Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>LookupTablesTemplateV5.cs</LastGenOutput>

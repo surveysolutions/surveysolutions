@@ -6,6 +6,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using TextListAnswerRow = WB.UI.Headquarters.Models.WebInterview.TextListAnswerRow;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {

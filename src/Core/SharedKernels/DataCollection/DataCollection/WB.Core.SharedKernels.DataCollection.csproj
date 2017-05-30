@@ -122,6 +122,8 @@
     <Compile Include="Exceptions\InterviewDomainExceptionType.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\Answers.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewProperties.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewPropertiesForExpressions.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewStateForExpressions.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTree.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeGroup.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeGroupDiff.cs" />

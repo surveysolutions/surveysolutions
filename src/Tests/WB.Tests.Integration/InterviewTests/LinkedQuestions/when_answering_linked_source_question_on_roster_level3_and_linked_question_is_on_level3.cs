@@ -32,9 +32,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 }),
             });
 
-            ILatestInterviewExpressionState interviewState = GetInterviewExpressionState(questionnaireDocument, false);
-
-            interview = SetupStatefullInterview(questionnaireDocument, precompiledState: interviewState);
+            interview = SetupStatefullInterview(questionnaireDocument);
 
             interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion1Id, RosterVector.Empty, DateTime.UtcNow, new[]
             {

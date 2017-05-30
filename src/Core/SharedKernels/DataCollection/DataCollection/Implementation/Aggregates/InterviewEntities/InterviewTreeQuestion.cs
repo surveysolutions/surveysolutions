@@ -274,9 +274,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                $"{(this.IsDisabled() ? "Disabled" : "Enabled")}. " +
                $"{(this.IsValid ? "Valid" : "Invalid")}";
 
-        public void CalculateLinkedOptions()
+        public class LinkedOptionAndParent
         {
-            if (!this.IsLinked) return;
+            public RosterVector Option { get; set; }
+            public Identity ParenRoster { get; set; }
+        }
+        public LinkedOptionAndParent[] GetCalculatedLinkedOptions()
+        {
+            if (!this.IsLinked) return null;
 
             InterviewTreeLinkedToRosterQuestion linkedQuestion = this.AsLinked;
 
@@ -298,10 +303,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             
             var options = sourceNodes
                 .Where(x => !x.IsDisabled())
-                .Where(x => (x as InterviewTreeQuestion)?.IsAnswered() ?? true)
-                .Select(x => x.Identity.RosterVector).ToArray();
+                .Where(x => (x as InterviewTreeQuestion)?.IsAnswered() ?? !string.IsNullOrWhiteSpace((x as InterviewTreeRoster)?.RosterTitle))
+                .Select(x => new LinkedOptionAndParent {
+                    Option = x.Identity.RosterVector,
+                    ParenRoster = x is InterviewTreeRoster? x.Identity : x.Parents.LastOrDefault(p => p is InterviewTreeRoster)?.Identity
+                }).ToArray();
 
-            this.UpdateLinkedOptionsAndResetAnswerIfNeeded(options);
+            return options;
         }
 
         public void CalculateLinkedToListOptions(bool resetAnswerOnOptionChange = true)
@@ -1030,6 +1038,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return (this.question.Parent as InterviewTreeGroup)
                 ?.GetQuestionFromThisOrUpperLevel(this.cascadingParentQuestionId)
                 .AsSingleFixedOption;
+        }
+
+        public InterviewTreeQuestion GetCascadingParentTreeQuestion()
+        {
+            return (this.question.Parent as InterviewTreeGroup)?.GetQuestionFromThisOrUpperLevel(this.cascadingParentQuestionId);
         }
 
         public Guid CascadingParentQuestionId => this.cascadingParentQuestionId;

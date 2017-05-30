@@ -1,12 +1,9 @@
 using System;
-using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
@@ -35,9 +32,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                         }),
                 });
 
-                ILatestInterviewExpressionState interviewState = GetInterviewExpressionState(questionnaireDocument, false);
-
-                var interview = SetupStatefullInterview(questionnaireDocument, precompiledState: interviewState);
+                var interview = SetupStatefullInterview(questionnaireDocument);
 
                 return new InvokeResults
                 {
