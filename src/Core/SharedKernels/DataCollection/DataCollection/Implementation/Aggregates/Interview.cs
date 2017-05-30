@@ -1269,7 +1269,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             //apply events
             this.ApplyEvent(new InterviewFromPreloadedDataCreated(command.UserId,
-                this.QuestionnaireIdentity.QuestionnaireId, this.QuestionnaireIdentity.Version));
+                this.QuestionnaireIdentity.QuestionnaireId, this.QuestionnaireIdentity.Version, command.AssignmentId));
 
             this.ApplyEvents(treeDifference, command.UserId);
 
