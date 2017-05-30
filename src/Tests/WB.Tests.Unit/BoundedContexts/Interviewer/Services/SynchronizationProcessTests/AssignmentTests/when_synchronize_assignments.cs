@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Main.Core.Entities.Composite;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -45,12 +46,12 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             this.RemoteAssignments = new List<AssignmentApiView>
             {
                 Create.Entity
-                    .AssignmentApiView(Id.g1.ToString(), 20, 10, Create.Entity.QuestionnaireIdentity(Id.gA))
+                    .AssignmentApiView(Id.g1.ToString(), 20, 0, Create.Entity.QuestionnaireIdentity(Id.gA))
                     .WithAnswer(Guid.NewGuid(), "1")
                     .WithAnswer(Guid.NewGuid(), "2")
                     .Build(),
                 Create.Entity
-                    .AssignmentApiView(Id.g3.ToString(), 20, 20, Create.Entity.QuestionnaireIdentity(Id.gC))
+                    .AssignmentApiView(Id.g3.ToString(), 20, 0, Create.Entity.QuestionnaireIdentity(Id.gC))
                     .WithAnswer(Guid.NewGuid(), "1")
                     .WithAnswer(Guid.NewGuid(), "2")
                     .Build()
@@ -72,9 +73,17 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 Create.Entity.QuestionnaireIdentity(Id.gC)
             };
 
+            var questionnaire = Create.Entity.QuestionnaireDocument(Id.gC, children: new IComposite[]
+            {
+                Create.Entity.TextQuestion(RemoteAssignments[1].IdentifyingData[0].QuestionId, text: "text 1"),
+                Create.Entity.TextQuestion(RemoteAssignments[1].IdentifyingData[1].QuestionId, text: "title 2"),
+            });
+            questionnaire.Title = "title";
+
             var interviewerQuestionnaireAccessor = Mock.Of<IInterviewerQuestionnaireAccessor>(
                 x => x.GetCensusQuestionnaireIdentities() == new List<QuestionnaireIdentity>(questionaries) &&
-                     x.GetAllQuestionnaireIdentities() == new List<QuestionnaireIdentity>(questionaries)
+                     x.GetAllQuestionnaireIdentities() == new List<QuestionnaireIdentity>(questionaries) &&
+                     x.GetQuestionnaire(questionaries[2]) == questionnaire
             );
 
             var synchronizationService = Mock.Of<ISynchronizationService>(
@@ -139,7 +148,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
                 Assert.That(remote.Capacity, Is.EqualTo(local.Capacity));
                 Assert.That(remote.Quantity, Is.EqualTo(local.Quantity));
-                Assert.That(remote.QuestionnaireId, Is.EqualTo(local.QuestionnaireId));
+                Assert.That(remote.QuestionnaireId.ToString(), Is.EqualTo(local.QuestionnaireId));
             }
         }
 

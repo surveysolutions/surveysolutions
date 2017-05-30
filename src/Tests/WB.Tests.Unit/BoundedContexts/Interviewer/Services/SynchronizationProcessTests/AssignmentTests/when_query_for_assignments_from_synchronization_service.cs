@@ -56,6 +56,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         public void should_be_able_to_deserialize_id() => Assert.That(assignments.Single().Id, Is.EqualTo(assignment.Id));
 
         [Test]
-        public void should_be_able_to_deserialize_questionnaireId() => Assert.That(assignments.Single().QuestionnaireId, Is.EqualTo(assignment.QuestionnaireId.ToString()));
+        public void should_be_able_to_deserialize_questionnaireId() => Assert.That(assignments.Single().QuestionnaireId, Is.EqualTo(assignment.QuestionnaireId));
     }
 }
