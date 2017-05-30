@@ -13,11 +13,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical" />
-    <!--<Esri.ArcGISRuntime.UI.MapView
-            android:id="@+id/AreaMapView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            local:MvxBind="Map Map" />-->
         <ProgressBar
             android:layout_alignParentTop="true"
             style="@style/Progress_Indicator"
@@ -77,7 +72,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center">
-        <!--android:background="#CCFFFFFF"-->
             <Button
                 style="@style/Area_Screen_Button"
                 android:id="@+id/areaEditor_Start_Edit"
