@@ -45,35 +45,52 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public void Init(AssignmentDocument assignment)
         {
-            this.AssignmentId = assignment.Id;
+            this.Assignment = assignment;
             this.questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
-            this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, assignment.Title, this.questionnaireIdentity.Version);
 
-            PrefilledQuestions = GetPrefilledQuestions(assignment.IdentifyingData);
-
-            var interviewsByAssignmentCount = this.interviewViewRepository.Count(interview => interview.Assignment == assignment.Id);
-
-            if (assignment.Capacity.HasValue)
-            {
-                var interviewsLeftByAssignmentCount = assignment.Capacity.Value - assignment.Quantity - interviewsByAssignmentCount;
-                this.Comment = InterviewerUIResources.DashboardItem_AssignmentLeftComment.FormatString(interviewsLeftByAssignmentCount);
-            }
-            else
-            {
-                this.Comment = InterviewerUIResources.DashboardItem_AssignmentCreatedComment.FormatString(interviewsByAssignmentCount);
-            }
-
+            this.PrefilledQuestions = GetPrefilledQuestions(assignment.IdentifyingData);
             this.GpsLocation = this.GetAssignmentLocation(assignment);
         }
 
-        public DashboardInterviewStatus Status => DashboardInterviewStatus.New;
-        public string QuestionnaireName { get; private set; }
-        public string Comment { get; private set; }
+        private AssignmentDocument Assignment { get; set; }
+        public string AssignmentId => Assignment.Id;
+
+        public string QuestionnaireName => string.Format(InterviewerUIResources.DashboardItem_Title, Assignment.Title, this.questionnaireIdentity.Version);
+        public string Comment
+        {
+            get
+            {
+                var interviewsByAssignmentCount = this.interviewViewRepository.Count(interview => interview.Assignment == Assignment.Id);
+
+                if (Assignment.Capacity.HasValue)
+                {
+                    var interviewsLeftByAssignmentCount = Assignment.Capacity.Value - Assignment.Quantity - interviewsByAssignmentCount;
+                    return InterviewerUIResources.DashboardItem_AssignmentLeftComment.FormatString(interviewsLeftByAssignmentCount);
+                }
+                else
+                {
+                    return InterviewerUIResources.DashboardItem_AssignmentCreatedComment.FormatString(interviewsByAssignmentCount);
+                }
+            }
+        }
+
         public List<PrefilledQuestion> PrefilledQuestions { get; private set; }
         public InterviewGpsCoordinatesView GpsLocation { get; private set; }
         public bool HasGpsLocation => this.GpsLocation != null;
-        public string AssignmentId { get; private set; }
 
+        public bool AllowToCreateNewInterview
+        {
+            get
+            {
+                if (Assignment.Capacity.HasValue)
+                {
+                    var interviewsByAssignmentCount = this.interviewViewRepository.Count(interview => interview.Assignment == Assignment.Id);
+                    var interviewsLeftByAssignmentCount = Assignment.Capacity.Value - Assignment.Quantity - interviewsByAssignmentCount;
+                    return interviewsLeftByAssignmentCount > 0;
+                }
+                return true;
+            }
+        } 
 
         public IMvxCommand CreateNewInterviewCommand
         {
