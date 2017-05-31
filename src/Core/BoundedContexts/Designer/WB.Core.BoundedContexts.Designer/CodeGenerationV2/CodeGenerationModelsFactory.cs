@@ -149,10 +149,10 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                 foreach (var rosterScopePairs in rosterScopes)
                 {
                     var rosterScope = rosterScopePairs.Key;
-                    if (!rosterScope.IsSameOrParentScopeFor(level.RosterScope) )
+                    if (rosterScope.Length > 1 && !rosterScope.IsSameOrParentScopeFor(level.RosterScope))
                     {
                         if (!rosterScope.IsChildScopeFor(level.RosterScope, 1))
-                        continue;
+                            continue;
                     }
 
                     var rosters = rosterScopePairs.Value.Where(x => x.IsRoster);
