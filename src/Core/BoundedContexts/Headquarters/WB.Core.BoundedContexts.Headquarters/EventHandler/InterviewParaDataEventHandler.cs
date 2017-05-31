@@ -635,7 +635,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AreaQuestionAnswered> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, @event.Payload.AnswerTimeUtc,
-            this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(new Area(@event.Payload.Geometry, @event.Payload.MapName, @event.Payload.AreaSize)),
+            this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(
+                new Area(@event.Payload.Geometry, @event.Payload.MapName, @event.Payload.AreaSize, @event.Payload.Length, @event.Payload.DistanceToEditor)),
             @event.Payload.RosterVector));
 
             return view;
