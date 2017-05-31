@@ -156,8 +156,8 @@
   <data name="LastEntryDate" xml:space="preserve">
     <value>Обновлен</value>
   </data>
-  <data name="NewInterview" xml:space="preserve">
-    <value>Новое интервью</value>
+  <data name="NewAssignment" xml:space="preserve">
+    <value>Новая задача</value>
   </data>
   <data name="Questionnaires" xml:space="preserve">
     <value>Опросники</value>

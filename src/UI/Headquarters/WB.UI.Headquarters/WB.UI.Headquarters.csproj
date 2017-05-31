@@ -404,6 +404,7 @@
     </Content>
     <Content Include="App_GlobalResources\Common.ru.resx">
       <DependentUpon>Common.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\Common.zh.resx">
       <DependentUpon>Common.resx</DependentUpon>
@@ -1198,7 +1199,7 @@
     <Content Include="Scripts\viewmodels\pages\interview\new\datacontext.js" />
     <Content Include="Scripts\viewmodels\pages\interview\new\mapper.js" />
     <Content Include="Scripts\viewmodels\pages\interview\new\model.js" />
-    <Content Include="Scripts\viewmodels\pages\interview\new\newinterview.js" />
+    <Content Include="Scripts\viewmodels\pages\interview\new\new-assignment.js" />
     <Content Include="Scripts\viewmodels\pages\interview\sv.interviews.js" />
     <Content Include="Scripts\viewmodels\pages\mapreport.js" />
     <Content Include="Scripts\viewmodels\pages\editable-users.js" />

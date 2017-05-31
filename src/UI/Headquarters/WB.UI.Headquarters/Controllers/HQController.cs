@@ -14,6 +14,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -28,25 +29,25 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
         private readonly IAuthorizedUser authorizedUser;
-        private readonly ITakeNewInterviewViewFactory takeNewInterviewViewFactory;
         
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
         public HQController(ICommandService commandService, 
             IAuthorizedUser authorizedUser, 
             ILogger logger,
-            ITakeNewInterviewViewFactory takeNewInterviewViewFactory,
             IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, 
-            IQuestionnaireVersionProvider questionnaireVersionProvider)
+            IQuestionnaireVersionProvider questionnaireVersionProvider,
+            IQuestionnaireStorage questionnaireStorage)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
-            this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.questionnaireVersionProvider = questionnaireVersionProvider;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         public ActionResult Index()
@@ -128,11 +129,10 @@ namespace WB.UI.Headquarters.Controllers
             return this.RedirectToAction("Index", "SurveySetup");
         }
 
-        public ActionResult TakeNew(Guid id, long? version)
+        public ActionResult TakeNew(Guid id, long version)
         {
-            Guid key = id;
-            TakeNewInterviewView model = this.takeNewInterviewViewFactory.Load(new TakeNewInterviewInputModel(key, version, this.authorizedUser.Id));
-            return this.View(model);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(id, version);
+            return this.View(new TakeNewAssignmentView(questionnaire, version));
         }
 
         private DocumentFilter Filters()

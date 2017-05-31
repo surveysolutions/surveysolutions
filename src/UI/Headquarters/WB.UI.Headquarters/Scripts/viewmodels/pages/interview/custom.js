@@ -23,6 +23,10 @@ ko.validation.rules['notempty'] = {
 
 ko.validation.rules['numericValidator'] = {
     validator: function (val, countOfDecimalPlaces) {
+
+        if (val == undefined || val === "")
+            return true;
+
         var comma = ',';
         var period = '.';
 
@@ -59,6 +63,9 @@ ko.validation.rules['numberLengthValidator'] = {
     validator: function (val, numberType) {
         var comma = ',';
         var period = '.';
+
+        if (val == undefined || val === "")
+            return true;
 
         var isIntegerType = numberType == 'integer';
         var isRealType = numberType == 'real';
