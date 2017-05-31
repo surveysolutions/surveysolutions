@@ -215,13 +215,7 @@ namespace WB.Tests.Abc.TestFactories
         public FailedValidationCondition FailedValidationCondition(int? failedConditionIndex = null)
             => new FailedValidationCondition(failedConditionIndex ?? 1117);
 
-        public Group FixedRoster(Guid? rosterId = null,
-            string enablementCondition = null,
-            IEnumerable<string> obsoleteFixedTitles = null,
-            IEnumerable<IComposite> children = null, 
-            string variable = "roster_var", 
-            string title = "Roster X", 
-            FixedRosterTitle[] fixedTitles = null)
+        public Group FixedRoster(Guid? rosterId = null, IEnumerable<string> obsoleteFixedTitles = null, IEnumerable<IComposite> children = null, string variable = "roster_var", string title = "Roster X", FixedRosterTitle[] fixedTitles = null)
             => Create.Entity.Roster(
                 rosterId: rosterId,
                 children: children,
@@ -1574,7 +1568,9 @@ namespace WB.Tests.Abc.TestFactories
 
         public Assignment Assignment(int? id = null,
             QuestionnaireIdentity questionnaireIdentity = null,
-            Guid? assigneeSupervisorId = null)
+            Guid? assigneeSupervisorId = null,
+            string responsibleName = null,
+            ISet<InterviewSummary> interviewSummary = null)
         {
             var result = new Assignment();
             var asDynamic = result.AsDynamic();
@@ -1587,6 +1583,8 @@ namespace WB.Tests.Abc.TestFactories
                 var readonlyProfile = new ReadonlyProfile();
                 readonlyProfile.AsDynamic().SupervisorId = assigneeSupervisorId;
                 readonlyUser.AsDynamic().ReadonlyProfile = readonlyProfile;
+            readonlyUser.AsDynamic().Name = responsibleName;
+            result.AsDynamic().InterviewSummaries = interviewSummary;
                 asDynamic.Responsible = readonlyUser;
             }
 
