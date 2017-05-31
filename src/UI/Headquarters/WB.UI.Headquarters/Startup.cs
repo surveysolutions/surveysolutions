@@ -48,7 +48,7 @@ namespace WB.UI.Headquarters
         static Startup()
         {
             SetupNConfig();
-            HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
+            //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
         }
 
         public void Configuration(IAppBuilder app)

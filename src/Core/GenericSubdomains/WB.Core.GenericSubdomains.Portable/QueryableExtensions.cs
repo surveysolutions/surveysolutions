@@ -55,7 +55,6 @@ namespace WB.Core.GenericSubdomains.Portable
             this Func<IQueryable<TInput>, IQueryable<TOutput>> query, string orderBy, int pageIndex, int pageSize) where TInput : class where TOutput: class
             => filter => query(filter).OrderUsingSortExpression(orderBy).Skip((pageIndex - 1) * pageSize).Take(pageSize);
 
-
         public static IEnumerable<OrderRequestItem> ParseSortExpression(string sortExpression)
         {
             string[] orderFields = sortExpression.Split(new [] { "," }, StringSplitOptions.RemoveEmptyEntries);
