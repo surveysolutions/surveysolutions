@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.Properties;
@@ -10,7 +13,11 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
@@ -18,6 +25,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 {
     public class AssignmentDashboardItemViewModel : IDashboardItem
     {
+        private readonly IQuestionnaireStorage questionnaireRepository;
+        private readonly IIdentifyingAnswerConverter identifyingAnswerConverter;
         private readonly ICommandService commandService;
         private readonly IInterviewerPrincipal principal;
         private readonly IViewModelNavigationService viewModelNavigationService;
@@ -31,8 +40,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             IViewModelNavigationService viewModelNavigationService,
             IMvxMessenger messenger,
             IPlainStorage<InterviewView> interviewViewRepository,
-            IExternalAppLauncher externalAppLauncher)
+            IExternalAppLauncher externalAppLauncher,
+            IQuestionnaireStorage questionnaireRepository,
+            IIdentifyingAnswerConverter identifyingAnswerConverter)
         {
+            this.questionnaireRepository = questionnaireRepository;
+            this.identifyingAnswerConverter = identifyingAnswerConverter;
             this.commandService = commandService;
             this.principal = principal;
             this.viewModelNavigationService = viewModelNavigationService;
@@ -103,13 +116,35 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             var interviewId = Guid.NewGuid();
             var interviewerIdentity = this.principal.CurrentUserIdentity;
 
-            var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
-                interviewerIdentity.UserId, this.questionnaireIdentity, DateTime.UtcNow,
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(QuestionnaireIdentity.Parse(this.Assignment.QuestionnaireId), null);
+            var prefilledQuestions = questionnaire.GetPrefilledQuestions();
+
+            var answersToIdentifyingQuestions = GetAnswersToIdentifyingQuestions(Assignment.IdentifyingData);
+
+            ICommand createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
+                interviewerIdentity.UserId, 
+                this.questionnaireIdentity, 
+                DateTime.UtcNow,
                 interviewerIdentity.SupervisorId,
                 null,
-                int.Parse(AssignmentId));
+                int.Parse(AssignmentId),
+                answersToIdentifyingQuestions
+                );
             await this.commandService.ExecuteAsync(createInterviewOnClientCommand);
             this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
+        }
+
+        private Dictionary<Guid, AbstractAnswer> GetAnswersToIdentifyingQuestions(List<AssignmentDocument.IdentifyingAnswer> identifyingAnswers)
+        {
+            var questionnaireDocument = this.questionnaireRepository.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(this.Assignment.QuestionnaireId));
+            var elements = identifyingAnswers.ToDictionary(ia => ia.QuestionId, ia => ConvertToAbstractAnswer(ia, questionnaireDocument));
+            return elements;
+        }
+
+        private AbstractAnswer ConvertToAbstractAnswer(AssignmentDocument.IdentifyingAnswer identifyingAnswer, QuestionnaireDocument questionnaireDocument)
+        {
+            var question = questionnaireDocument.Find<IQuestion>(identifyingAnswer.QuestionId);
+            return this.identifyingAnswerConverter.GetAbstractAnswer(question, identifyingAnswer.Answer);
         }
 
         private void RaiseStartingLongOperation()

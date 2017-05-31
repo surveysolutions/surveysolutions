@@ -40,7 +40,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                     var interview = SetupStatefullInterview(questionnaireDocument);
 
-                    interview.CreateInterviewOnClient(questionnaireIdentity, Guid.NewGuid(), DateTime.Now, Guid.NewGuid(), null, null);
+                    interview.CreateInterviewOnClient(questionnaireIdentity, Guid.NewGuid(), DateTime.Now, Guid.NewGuid(), null, null, null);
 
                     return new InvokeResults
                     {
