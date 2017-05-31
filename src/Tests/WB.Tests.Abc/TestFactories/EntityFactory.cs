@@ -215,12 +215,19 @@ namespace WB.Tests.Abc.TestFactories
         public FailedValidationCondition FailedValidationCondition(int? failedConditionIndex = null)
             => new FailedValidationCondition(failedConditionIndex ?? 1117);
 
-        public Group FixedRoster(Guid? rosterId = null, IEnumerable<string> obsoleteFixedTitles = null, IEnumerable<IComposite> children = null, string variable = "roster_var", string title = "Roster X", FixedRosterTitle[] fixedTitles = null)
+        public Group FixedRoster(Guid? rosterId = null,
+            string enablementCondition = null,
+            IEnumerable<string> obsoleteFixedTitles = null,
+            IEnumerable<IComposite> children = null, 
+            string variable = "roster_var", 
+            string title = "Roster X", 
+            FixedRosterTitle[] fixedTitles = null)
             => Create.Entity.Roster(
                 rosterId: rosterId,
                 children: children,
                 title: title,
                 variable: variable,
+                enablementCondition: enablementCondition,
                 fixedRosterTitles: fixedTitles,
                 fixedTitles: obsoleteFixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
 
