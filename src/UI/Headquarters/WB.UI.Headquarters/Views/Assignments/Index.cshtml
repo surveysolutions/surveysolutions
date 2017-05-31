@@ -206,7 +206,7 @@
                 },
                 cellClicked: function (columnName, rowId, cellData) {
                     var isHq = @Model.IsHeadquarter.ToString().ToLower();
-                    if (columnName === 'Capacity' && isHq) {
+                    if (columnName === 'Capacity' && isHq && !this.showArchive) {
                         this.editedRowId = rowId;
                         this.editedCapacity = cellData;
                         $('#editCapacityModal').modal('show');
