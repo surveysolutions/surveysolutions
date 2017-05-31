@@ -73,12 +73,12 @@ namespace WB.UI.Headquarters.API.PublicApi
             {
                 questionnaireId = null;
             }
-            
+
             AssignmentsWithoutIdentifingData result = this.assignmentViewFactory.Load(new AssignmentsInputModel
             {
                 QuestionnaireId = questionnaireId?.QuestionnaireId,
                 QuestionnaireVersion = questionnaireId?.Version,
-                ResponsibleId = GetResponsiblePersonFromRequestValue(filter.Responsible, throwOnError: false),
+                ResponsibleId = this.GetResponsibleIdPersonFromRequestValue(filter.Responsible),
                 Order = filter.Order,
                 Page = Math.Max(filter.Page, 1),
                 PageSize = filter.PageSize,
@@ -97,7 +97,12 @@ namespace WB.UI.Headquarters.API.PublicApi
         [Route]
         public HttpResponseMessage Create(CreateAssignmentRequest createItem)
         {
-            var responsible = GetResponsiblePersonFromRequestValue(createItem.Responsible);
+            var responsible = this.GetResponsibleIdPersonFromRequestValue(createItem.Responsible);
+
+            if (responsible == null)
+            {
+                throw new ArgumentException(nameof(CreateAssignmentRequest.Responsible), "Cannot identify user from argument: " + createItem.Responsible);
+            }
 
             var assignment = new Assignment(QuestionnaireIdentity.Parse(createItem.QuestionnaireId), responsible.Value, createItem.Capacity);
 
@@ -136,7 +141,12 @@ namespace WB.UI.Headquarters.API.PublicApi
         {
             var assignment = assignmentsStorage.GetById(id);
 
-            var responsibleUserId = GetResponsiblePersonFromRequestValue(responsible.Responsible);
+            var responsibleUserId = this.GetResponsibleIdPersonFromRequestValue(responsible.Responsible);
+
+            if (responsibleUserId == null)
+            {
+                throw new ArgumentException(nameof(AssignmentAssignRequest.Responsible), "Cannot identify user from argument: " + responsible.Responsible);
+            }
 
             assignment.Reassign(responsibleUserId.Value);
 
@@ -145,16 +155,10 @@ namespace WB.UI.Headquarters.API.PublicApi
             return this.mapper.Map<AssignmentDetails>(assignmentsStorage.GetById(id));
         }
 
-        private Guid? GetResponsiblePersonFromRequestValue(string responsible, bool throwOnError = true)
+        private Guid? GetResponsibleIdPersonFromRequestValue(string responsible)
         {
             if (string.IsNullOrWhiteSpace(responsible))
             {
-                if (throwOnError)
-                {
-                    throw new ArgumentException(nameof(responsible),
-                        "Cannot identify user from argument: " + responsible);
-                }
-
                 return null;
             }
 
@@ -166,12 +170,6 @@ namespace WB.UI.Headquarters.API.PublicApi
 
                 if (user == null)
                 {
-                    if (throwOnError)
-                    {
-                        throw new ArgumentException(nameof(responsible),
-                            "Cannot identify user from argument: " + responsible);
-                    }
-
                     return null;
                 }
 
