@@ -17,6 +17,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual string Answer { get; set; }
 
+        public string VariableName { get; set; }
+
         public virtual  Assignment Assignment { get; protected set; }
     }
 }

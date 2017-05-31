@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
@@ -12,6 +13,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public int InterviewsCount { get; set; }
         public int Id { get; set; }
         public string Responsible { get; set; }
+        public QuestionnaireIdentity QuestionnaireId { get; set; }
+        public bool Archived { get; set; }
 
         public List<AssignmentIdentifyingQuestionRow> IdentifyingQuestions { get; set; }
     }
