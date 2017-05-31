@@ -1,10 +1,19 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions
 {
     public static class Extensions
     {
         public static bool InRange(this int? value, int? low, int? high)
+        {
+            if (value < low) return false;
+            if (value > high) return false;
+            return true;
+        }
+
+        // backward compatibility
+        public static bool InRange(this int? value, double? low, double? high)
         {
             if (value < low) return false;
             if (value > high) return false;
@@ -23,6 +32,12 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions
             if (valuesList.Length == 0) return true;
 
             return valuesList.All(multichoice.Contains);
+        }
+
+        // backward compatibility
+        public static bool ContainsAll(this int[] multichoice, params decimal[] valuesList)
+        {
+            return ContainsAll(multichoice, valuesList?.Select(Convert.ToInt32).ToArray() ?? new int[0]);
         }
 
         public static bool ContainsAny(this int[] multichoice, params int[] valuesList)
