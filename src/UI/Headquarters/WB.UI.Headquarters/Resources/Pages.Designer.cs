@@ -1303,7 +1303,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Census template update.
+        ///   Looks up a localized string similar to Questionnaires update.
         /// </summary>
         public static string InterviewerProfile_Sync_Activity_Census_Desc {
             get {
@@ -1312,7 +1312,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Census templates updates.
+        ///   Looks up a localized string similar to Questionnaires updates.
         /// </summary>
         public static string InterviewerProfile_Sync_Activity_Census_Timeline_Desc {
             get {
@@ -1456,7 +1456,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If the interviewer has completed interviews in census mode on his tablet then the data will be lost..
+        ///   Looks up a localized string similar to If the interviewer has completed interviews on his tablet then the data will be lost..
         /// </summary>
         public static string Interviewers_ArchiveInterviewersConfirmMessage {
             get {
@@ -2177,7 +2177,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If the interviewer has completed interviews in census mode on his tablet then the data will be lost..
+        ///   Looks up a localized string similar to If the interviewer has completed interviews on his tablet then the data will be lost..
         /// </summary>
         public static string Supervisors_ArchiveSupervisorsConfirmMessage {
             get {

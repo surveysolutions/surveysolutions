@@ -192,8 +192,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can create new interviews using 
-        ///empty census templates.
+        ///   Looks up a localized string similar to You can create new interviews using assignments.
         /// </summary>
         public static string Dashboard_QuestionnairesTabText {
             get {

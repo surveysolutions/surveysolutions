@@ -643,7 +643,6 @@ You need to resolve issues noted on cover</value>
 your next synchronization</value>
   </data>
   <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
-    <value>You can create new interviews using 
-empty census templates</value>
+    <value>You can create new interviews using assignments</value>
   </data>
 </root>
