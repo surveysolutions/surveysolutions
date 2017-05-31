@@ -706,8 +706,7 @@
     <Compile Include="Views\TakeNew\FeaturedAnswerView.cs" />
     <Compile Include="Views\TakeNew\FeaturedQuestionView.cs" />
     <Compile Include="Views\TakeNew\TakeNewInterviewInputModel.cs" />
-    <Compile Include="Views\TakeNew\TakeNewInterviewView.cs" />
-    <Compile Include="Views\TakeNew\TakeNewInterviewViewFactory.cs" />
+    <Compile Include="Views\TakeNew\TakeNewAssignmentView.cs" />
     <Compile Include="Views\TemplateLight.cs" />
     <Compile Include="Views\Template\DesignerQuestionnaireListViewItem.cs" />
     <Compile Include="Views\UsersAndQuestionnaires\AllUsersAndQuestionnairesFactory.cs" />

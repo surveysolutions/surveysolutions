@@ -1,17 +1,17 @@
-﻿Supervisor.VM.NewInterview = function (commandExecutionUrl, questionnaire, interviewListUrl, supervisorsUrl) {
-    Supervisor.VM.NewInterview.superclass.constructor.apply(this, [commandExecutionUrl]);
+﻿Supervisor.VM.NewAssignment = function (questionnaire, assignmentListUrl, supervisorsUrl, assignmentsApiUrl) {
+    Supervisor.VM.NewAssignment.superclass.constructor.apply(this);
 
     var self = this;
     
     var datacontext = new DataContext(new Mapper(new Model()));
     datacontext.parseData(questionnaire);
-    
-    self.InterviewListUrl = interviewListUrl;
 
+    self.assignmentListUrl = assignmentListUrl;
     self.submitting = false;
     self.submitSuccess = false;
     self.questionnaire = ko.observable();
     self.responsible = ko.observable().extend({ required: true });
+    self.capacity = ko.observable(1).extend({ digit: true }).extend({ min: 1 });
     self.questions = ko.observableArray();
     self.isSupervisorsLoading = ko.observable(false);
     self.supervisors = function (query, sync, pageSize) {
@@ -36,20 +36,19 @@
             if (!self.submitting && !self.submitSuccess) {
                 self.submitting = true;
 
-                var command = {
-                    type: "CreateInterviewCommand",
-                    command: ko.toJSON({
+                var request = {
                         supervisorId: self.responsible().UserId,
                         questionnaireId: self.questionnaire().templateId,
                         questionnaireVersion: self.questionnaire().templateVersion,
-                        answersToFeaturedQuestions: datacontext.prepareQuestion()
-                    })
+                        answersToFeaturedQuestions: ko.toJSON(datacontext.prepareQuestion()),
+                        capacity: self.capacity()
                 };
-                self.SendCommand(command, function (data) {
+
+                self.SendRequest(assignmentsApiUrl, request, function () {
                     self.submitSuccess = true;
-                    window.location = self.InterviewListUrl.concat("?templateId=",
-                        datacontext.questionnaire.templateId, "&templateVersion=",
-                        datacontext.questionnaire.templateVersion);
+                    window.location = self.assignmentListUrl + "?templateId=" +
+                        datacontext.questionnaire.templateId + "&templateVersion=" +
+                        datacontext.questionnaire.templateVersion;
                 }, function() {
                     self.submitting = false;
                 });
@@ -79,4 +78,4 @@
         };
     };
 };
-Supervisor.Framework.Classes.inherit(Supervisor.VM.NewInterview, Supervisor.VM.BasePage);
+Supervisor.Framework.Classes.inherit(Supervisor.VM.NewAssignment, Supervisor.VM.BasePage);

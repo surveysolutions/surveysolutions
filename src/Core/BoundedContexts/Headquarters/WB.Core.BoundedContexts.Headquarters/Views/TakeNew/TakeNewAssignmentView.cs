@@ -5,9 +5,9 @@ using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.TakeNew
 {
-    public class TakeNewInterviewView
+    public class TakeNewAssignmentView
     {
-        public TakeNewInterviewView(IQuestionnaireDocument questionnaire, long questionnaireVersion)
+        public TakeNewAssignmentView(IQuestionnaireDocument questionnaire, long questionnaireVersion)
         {
             this.QuestionnaireTitle = questionnaire.Title;
             this.QuestionnaireId = questionnaire.PublicKey;

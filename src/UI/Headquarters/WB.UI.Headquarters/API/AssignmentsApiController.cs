@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Shared.Web.Filters;
@@ -129,6 +133,49 @@ namespace WB.UI.Headquarters.API
             var assignment = this.assignmentsStorage.GetById(id);
             assignment.UpdateCapacity(request.Capacity);
             return this.Ok();
+        }
+
+        [HttpPost]
+        [Route("Create")]
+        public IHttpActionResult Create([FromBody] CreateAssignmentRequest request)
+        {
+            if (!this.authorizedUser.IsAdministrator && !this.authorizedUser.IsHeadquarter)
+                return this.StatusCode(HttpStatusCode.Forbidden);
+
+            if (request == null)
+                return this.BadRequest();
+
+            var questionnaireIdentity =
+                new QuestionnaireIdentity(request.QuestionnaireId, request.QuestionnaireVersion);
+
+            var assignment = new Assignment(questionnaireIdentity,
+                request.SupervisorId, request.Capacity);
+
+            var untypedQuestionAnswers =
+                JsonConvert.DeserializeObject<List<UntypedQuestionAnswer>>(request.AnswersToFeaturedQuestions);
+
+            var identifyingAnswers = untypedQuestionAnswers
+                .Select(CommandTransformator.ParseQuestionAnswer)
+                .Select(answer => new IdentifyingAnswer(assignment)
+                {
+                    QuestionId = answer.Key,
+                    Answer = answer.Value.ToString()
+                })
+                .ToArray();
+            assignment.SetAnswers(identifyingAnswers);
+            
+            this.assignmentsStorage.Store(assignment, Guid.NewGuid());
+
+            return this.Ok(new {});
+        }
+
+        public class CreateAssignmentRequest
+        {
+            public Guid QuestionnaireId { get; set; }
+            public long QuestionnaireVersion { get; set; }
+            public Guid SupervisorId { get; set; }
+            public string AnswersToFeaturedQuestions { get; set; }
+            public int? Capacity { get; set; }
         }
 
         public class UpdateAssignmentRequest

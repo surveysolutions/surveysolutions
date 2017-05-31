@@ -156,8 +156,8 @@
   <data name="LastEntryDate" xml:space="preserve">
     <value>Last Entry Date</value>
   </data>
-  <data name="NewInterview" xml:space="preserve">
-    <value>New interview</value>
+  <data name="NewAssignment" xml:space="preserve">
+    <value>New assignment</value>
   </data>
   <data name="Questionnaires" xml:space="preserve">
     <value>Questionnaires</value>

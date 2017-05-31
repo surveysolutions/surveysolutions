@@ -159,8 +159,8 @@
   <data name="LastEntryDate" xml:space="preserve">
     <value>Dernière date d’entrée</value>
   </data>
-  <data name="NewInterview" xml:space="preserve">
-    <value>Nouveau entretien</value>
+  <data name="NewAssignment" xml:space="preserve">
+    <value/>
   </data>
   <data name="Questionnaires" xml:space="preserve">
     <value>Questionnaires</value>
