@@ -1,24 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Machine.Specifications;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
-using Moq;
-using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
-using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
-using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
-using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
-using WB.Tests.Integration.TeamInterviewsFactoryTests;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.TeamInterviewsFactoryTests

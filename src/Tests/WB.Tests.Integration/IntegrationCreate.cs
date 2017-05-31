@@ -268,7 +268,7 @@ namespace WB.Tests.Integration
                 new EntitySerializer<TEntity>());
         }
 
-        public static ISessionFactory SessionFactory(string connectionString, IEnumerable<Type> painStorageEntityMapTypes)
+        public static ISessionFactory SessionFactory(string connectionString, IEnumerable<Type> painStorageEntityMapTypes, bool executeSchemaUpdate, string schemaName = null)
         {
             var cfg = new Configuration();
             cfg.DataBaseIntegration(db =>
@@ -279,8 +279,15 @@ namespace WB.Tests.Integration
             });
 
             cfg.AddDeserializedMapping(GetMappingsFor(painStorageEntityMapTypes), "Plain");
-            var update = new SchemaUpdate(cfg);
-            update.Execute(true, true);
+            if (executeSchemaUpdate)
+            {
+                var update = new SchemaUpdate(cfg);
+                update.Execute(true, true);
+            }
+            if (schemaName != null)
+            {
+                cfg.SetProperty(NHibernate.Cfg.Environment.DefaultSchema, schemaName);
+            }
 
             return cfg.BuildSessionFactory();
         }
