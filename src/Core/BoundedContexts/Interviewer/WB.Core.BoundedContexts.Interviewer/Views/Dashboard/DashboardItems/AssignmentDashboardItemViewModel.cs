@@ -118,19 +118,33 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(QuestionnaireIdentity.Parse(this.Assignment.QuestionnaireId), null);
             var prefilledQuestions = questionnaire.GetPrefilledQuestions();
-
             var answersToIdentifyingQuestions = GetAnswersToIdentifyingQuestions(Assignment.IdentifyingData);
+            bool hasEmptyAnswers = prefilledQuestions.Count > answersToIdentifyingQuestions.Count;
 
-            ICommand createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
-                interviewerIdentity.UserId, 
-                this.questionnaireIdentity, 
-                DateTime.UtcNow,
-                interviewerIdentity.SupervisorId,
-                null,
-                int.Parse(AssignmentId),
-                answersToIdentifyingQuestions
+            ICommand createInterviewCommand;
+            
+            if (hasEmptyAnswers)
+                createInterviewCommand = new CreateInterviewOnClientCommand(interviewId,
+                    interviewerIdentity.UserId,
+                    this.questionnaireIdentity,
+                    DateTime.UtcNow,
+                    interviewerIdentity.SupervisorId,
+                    null,
+                    int.Parse(AssignmentId),
+                    answersToIdentifyingQuestions
                 );
-            await this.commandService.ExecuteAsync(createInterviewOnClientCommand);
+            else
+                createInterviewCommand = new CreateInterviewCommand(interviewId,
+                    interviewerIdentity.UserId,
+                    this.questionnaireIdentity.QuestionnaireId,
+                    answersToIdentifyingQuestions,
+                    DateTime.UtcNow,
+                    interviewerIdentity.SupervisorId,
+                    this.questionnaireIdentity.Version,
+                    null
+                );
+
+            await this.commandService.ExecuteAsync(createInterviewCommand);
             this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
         }
 
