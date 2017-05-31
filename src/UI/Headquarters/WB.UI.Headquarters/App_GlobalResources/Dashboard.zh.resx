@@ -141,9 +141,6 @@
   <data name="BinaryData" xml:space="preserve">
     <value>二进制数据</value>
   </data>
-  <data name="Census" xml:space="preserve">
-    <value>普查</value>
-  </data>
   <data name="CloneQuestionnaire" xml:space="preserve">
     <value>复制问卷</value>
   </data>

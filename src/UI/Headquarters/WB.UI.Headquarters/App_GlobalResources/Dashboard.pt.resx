@@ -141,9 +141,6 @@
   <data name="BinaryData" xml:space="preserve">
     <value>Dados binários</value>
   </data>
-  <data name="Census" xml:space="preserve">
-    <value>Censo</value>
-  </data>
   <data name="CloneQuestionnaire" xml:space="preserve">
     <value>Questionário de clone</value>
   </data>

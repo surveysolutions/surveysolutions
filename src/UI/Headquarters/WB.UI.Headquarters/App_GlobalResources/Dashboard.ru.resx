@@ -138,9 +138,6 @@
   <data name="BinaryData" xml:space="preserve">
     <value>Бинарные данные</value>
   </data>
-  <data name="Census" xml:space="preserve">
-    <value>Census</value>
-  </data>
   <data name="CloneQuestionnaire" xml:space="preserve">
     <value>Клонировать опросник </value>
   </data>

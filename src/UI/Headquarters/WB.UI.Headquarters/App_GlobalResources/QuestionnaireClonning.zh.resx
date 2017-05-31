@@ -123,12 +123,6 @@
   <data name="CloneQuestionnaireTitle" xml:space="preserve">
     <value>复制问卷</value>
   </data>
-  <data name="inCensusMode" xml:space="preserve">
-    <value>以普查模式</value>
-  </data>
-  <data name="inRegularMode" xml:space="preserve">
-    <value>以常规模式</value>
-  </data>
   <data name="ToCloneQuestionnaire" xml:space="preserve">
     <value>复制问卷</value>
   </data>
