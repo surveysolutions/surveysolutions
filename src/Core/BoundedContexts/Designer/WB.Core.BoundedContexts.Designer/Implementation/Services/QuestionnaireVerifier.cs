@@ -932,7 +932,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return string.IsNullOrWhiteSpace(macro.Name);
         }
 
-        private static bool MacroHasInvalidName(Macro macro, MultiLanguageQuestionnaireDocument questionnaire)
+        private bool MacroHasInvalidName(Macro macro, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return !IsVariableNameValid(macro.Name);
         }
@@ -967,7 +967,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return string.IsNullOrWhiteSpace(table.TableName);
         }
 
-        private static bool LookupTableHasInvalidName(Guid tableId, LookupTable table, MultiLanguageQuestionnaireDocument questionnaire)
+        private bool LookupTableHasInvalidName(Guid tableId, LookupTable table, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return !IsVariableNameValid(table.TableName);
         }
@@ -985,9 +985,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return lookupTableContent == null;
         }
 
-        private static bool LookupTableHasInvalidHeaders(LookupTable table, LookupTableContent tableContent, MultiLanguageQuestionnaireDocument questionnaire)
+        private bool LookupTableHasInvalidHeaders(LookupTable table, LookupTableContent tableContent, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            return !tableContent.VariableNames.All(IsVariableNameValid);
+            foreach (var tableContentVariableName in tableContent.VariableNames)
+            {
+                if (!IsVariableNameValid(tableContentVariableName))
+                    return true;
+
+                if(!string.IsNullOrWhiteSpace(tableContentVariableName) && this.keywordsProvider.GetAllReservedKeywords().Contains(tableContentVariableName.ToLower()))
+                    return true;
+            }
+
+            return false;
         }
 
         private static bool LookupTableMoreThan10Columns(LookupTable table, LookupTableContent tableContent, MultiLanguageQuestionnaireDocument questionnaire)
@@ -1375,13 +1384,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return !VariableNameRegex.IsMatch(question.StataExportCaption);
         }
 
-        private static bool IsVariableNameValid(string variableName)
+        private bool IsVariableNameValid(string variableName)
         {
             if (string.IsNullOrEmpty(variableName))
                 return true;
 
             if (variableName.Length > DefaultVariableLengthLimit)
                 return false;
+
             return VariableNameRegex.IsMatch(variableName);
         }
         
@@ -1407,14 +1417,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return string.IsNullOrEmpty(question.StataExportCaption);
         }
 
-        private static bool VariableHasInvalidName(IVariable variable)
+        private bool VariableHasInvalidName(IVariable variable)
         {
             if (string.IsNullOrWhiteSpace(variable.Name))
                 return false;
             return !IsVariableNameValid(variable.Name);
         }
 
-        private static bool RosterHasInvalidVariableName(IGroup group)
+        private bool RosterHasInvalidVariableName(IGroup group)
         {
             if (!group.IsRoster)
                 return false;
