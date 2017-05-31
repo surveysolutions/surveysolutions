@@ -39,7 +39,7 @@ export default {
     },
     onTableInitComplete: function () {
       var self = this;
-      $(this.$el).parent('.dataTables_wrapper').find('.dataTables_filter label').on('click', function (e) {
+      $(this.$el).parents('.dataTables_wrapper').find('.dataTables_filter label').on('click', function (e) {
         if (e.target !== this)
           return;
         if ($(this).hasClass("active")) {
