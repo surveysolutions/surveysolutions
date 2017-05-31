@@ -24,7 +24,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 
         protected class AccountLocked : IEvent { }
 
-        protected Establish context = () =>
+        Establish context = () =>
         {
             TestConnectionString = ConfigurationManager.ConnectionStrings["TestConnection"].ConnectionString;
             databaseName = "testdb_" + Guid.NewGuid().FormatGuid();
@@ -50,7 +50,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                 new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));
         };
 
-        protected Cleanup things = () =>
+        Cleanup things = () =>
         {
 
             using (var connection = new NpgsqlConnection(TestConnectionString))
