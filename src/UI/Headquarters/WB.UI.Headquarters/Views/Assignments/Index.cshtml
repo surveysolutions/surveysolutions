@@ -7,15 +7,6 @@
 
 @section scripts
 {
-    <style>
-        .modal {
-            overflow: visible;
-        }
-
-        .modal-body {
-            overflow-y: visible !important;
-        }
-    </style>
     @Scripts.Render("~/js/common")
     @Scripts.Render("~/js/assignments")
 
@@ -55,6 +46,7 @@
                 {
                     data: "interviewsCount",
                     name: "InterviewsCount",
+                    "class": "type-numeric",
                     title: "@Assignments.InterviewsCount"
                 },
                 {
