@@ -1,6 +1,10 @@
 using System;
+using System.Linq;
+using Machine.Specifications;
 using Main.Core.Entities.Composite;
+using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Services;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
@@ -151,5 +155,32 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     Create.SingleQuestion(linkedToQuestionId: Id1, linkedFilter: "something")
                 })
                 .ExpectCritical("WB0117");
+
+        [Test]
+        public void lookup_table_has_reserved_word_in_header()
+        {
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.TextListQuestion(Id1, variable: "q1")
+            });
+
+            Guid tableId = Guid.Parse("11111111111111111111111111111111");
+            questionnaire.LookupTables.Add(tableId, Create.LookupTable("hello"));
+
+            var lookupTableContent = Create.LookupTableContent(new[] { "int", "long"},
+            Create.LookupTableRow(1, new decimal?[] { 1.15m, 10 }));
+            Mock<ILookupTableService> lookupTableServiceMock = new Mock<ILookupTableService>();
+
+            lookupTableServiceMock
+                .Setup(x => x.GetLookupTableContent(questionnaire.PublicKey, tableId))
+                .Returns(lookupTableContent);
+
+            var verifier = Create.QuestionnaireVerifier(lookupTableService: lookupTableServiceMock.Object);
+
+            var result = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+
+            result.Single().Code.ShouldEqual("WB0031");
+        }
+        
     }
 }
