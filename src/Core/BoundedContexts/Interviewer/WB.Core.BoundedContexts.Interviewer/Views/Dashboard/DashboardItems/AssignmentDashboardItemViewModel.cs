@@ -58,26 +58,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public void Init(AssignmentDocument assignment)
         {
-            this.Assignment = assignment;
+            this.assignment = assignment;
             this.questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
 
             this.PrefilledQuestions = GetPrefilledQuestions(assignment.IdentifyingData);
             this.GpsLocation = this.GetAssignmentLocation(assignment);
         }
 
-        private AssignmentDocument Assignment { get; set; }
-        public string AssignmentId => Assignment.Id;
+        private AssignmentDocument assignment;
 
-        public string QuestionnaireName => string.Format(InterviewerUIResources.DashboardItem_Title, Assignment.Title, this.questionnaireIdentity.Version);
+        public string QuestionnaireName => string.Format(InterviewerUIResources.DashboardItem_Title, this.assignment.Title, this.questionnaireIdentity.Version);
         public string Comment
         {
             get
             {
-                var interviewsByAssignmentCount = this.interviewViewRepository.Count(interview => interview.Assignment == Assignment.Id);
+                var interviewsByAssignmentCount = this.interviewViewRepository.Count(interview => interview.Assignment == this.assignment.Id);
 
-                if (Assignment.Capacity.HasValue)
+                if (this.assignment.Capacity.HasValue)
                 {
-                    var interviewsLeftByAssignmentCount = Assignment.Capacity.Value - Assignment.Quantity - interviewsByAssignmentCount;
+                    var interviewsLeftByAssignmentCount = this.assignment.Capacity.Value - this.assignment.Quantity - interviewsByAssignmentCount;
                     return InterviewerUIResources.DashboardItem_AssignmentLeftComment.FormatString(interviewsLeftByAssignmentCount);
                 }
                 else
@@ -95,20 +94,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             get
             {
-                if (Assignment.Capacity.HasValue)
+                if (this.assignment.Capacity.HasValue)
                 {
-                    var interviewsByAssignmentCount = this.interviewViewRepository.Count(interview => interview.Assignment == Assignment.Id);
-                    var interviewsLeftByAssignmentCount = Assignment.Capacity.Value - Assignment.Quantity - interviewsByAssignmentCount;
+                    var interviewsByAssignmentCount = this.interviewViewRepository.Count(interview => interview.Assignment == this.assignment.Id);
+                    var interviewsLeftByAssignmentCount = this.assignment.Capacity.Value - this.assignment.Quantity - interviewsByAssignmentCount;
                     return interviewsLeftByAssignmentCount > 0;
                 }
                 return true;
             }
-        } 
-
-        public IMvxCommand CreateNewInterviewCommand
-        {
-            get { return new MvxCommand(async () => await this.CreateNewInterviewAsync()); }
         }
+
+        public IMvxAsyncCommand CreateNewInterviewCommand => new MvxAsyncCommand(CreateNewInterviewAsync); 
 
         private async Task CreateNewInterviewAsync()
         {
@@ -116,9 +112,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             var interviewId = Guid.NewGuid();
             var interviewerIdentity = this.principal.CurrentUserIdentity;
 
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(QuestionnaireIdentity.Parse(this.Assignment.QuestionnaireId), null);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(QuestionnaireIdentity.Parse(this.assignment.QuestionnaireId), null);
             var prefilledQuestions = questionnaire.GetPrefilledQuestions();
-            var answersToIdentifyingQuestions = GetAnswersToIdentifyingQuestions(Assignment.IdentifyingData);
+            var answersToIdentifyingQuestions = GetAnswersToIdentifyingQuestions(this.assignment.IdentifyingData);
             bool hasEmptyAnswers = prefilledQuestions.Count > answersToIdentifyingQuestions.Count;
 
             ICommand createInterviewCommand;
@@ -130,7 +126,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                     DateTime.UtcNow,
                     interviewerIdentity.SupervisorId,
                     null,
-                    int.Parse(AssignmentId),
+                    int.Parse(this.assignment.Id),
                     answersToIdentifyingQuestions
                 );
             else
@@ -150,7 +146,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         private Dictionary<Guid, AbstractAnswer> GetAnswersToIdentifyingQuestions(List<AssignmentDocument.IdentifyingAnswer> identifyingAnswers)
         {
-            var questionnaireDocument = this.questionnaireRepository.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(this.Assignment.QuestionnaireId));
+            var questionnaireDocument = this.questionnaireRepository.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(this.assignment.QuestionnaireId));
             var elements = identifyingAnswers.ToDictionary(ia => ia.QuestionId, ia => ConvertToAbstractAnswer(ia, questionnaireDocument));
             return elements;
         }
