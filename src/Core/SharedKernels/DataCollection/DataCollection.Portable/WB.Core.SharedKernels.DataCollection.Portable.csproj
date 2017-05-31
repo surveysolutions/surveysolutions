@@ -46,6 +46,7 @@
     <Compile Include="AnswerChangeNotifier.cs" />
     <Compile Include="ConditionalState.cs" />
     <Compile Include="ConversionHelper.cs" />
+    <Compile Include="ExpressionStorage\CustomFunctions\Extensions.cs" />
     <Compile Include="FailedValidationCondition.cs" />
     <Compile Include="LinkedQuestionFilterResult.cs" />
     <Compile Include="IInterviewProperties.cs" />

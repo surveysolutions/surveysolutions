@@ -41,47 +41,48 @@ using WB.Core.SharedKernels.DataCollection.V3.CustomFunctions;
 using WB.Core.SharedKernels.DataCollection.V4.CustomFunctions;
 using WB.Core.SharedKernels.DataCollection.V5.CustomFunctions;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
+using WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions;
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
 	internal partial class ");
             
-            #line 22 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LinkedFilterMethodTemplate.tt"
+            #line 23 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LinkedFilterMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ClassName));
             
             #line default
             #line hidden
             this.Write("\r\n\t{   \r\n\t\tprivate ");
             
-            #line 24 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LinkedFilterMethodTemplate.tt"
+            #line 25 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LinkedFilterMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ReturnType));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 24 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LinkedFilterMethodTemplate.tt"
+            #line 25 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LinkedFilterMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.MethodName));
             
             #line default
             #line hidden
             this.Write("(");
             
-            #line 24 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LinkedFilterMethodTemplate.tt"
+            #line 25 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LinkedFilterMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IInterviewLevel).Name));
             
             #line default
             #line hidden
             this.Write(" scope)\r\n\t\t{\r\n\t\t\tvar current = scope as ");
             
-            #line 26 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LinkedFilterMethodTemplate.tt"
+            #line 27 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LinkedFilterMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.SourceLevelClassName));
             
             #line default
             #line hidden
             this.Write(";\r\n\t\t\treturn ");
             
-            #line 27 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LinkedFilterMethodTemplate.tt"
+            #line 28 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LinkedFilterMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.Expression));
             
             #line default
