@@ -196,6 +196,7 @@
     <Compile Include="Assignments\AssignmentViewFactory.cs" />
     <Compile Include="Assignments\IAssignmentsService.cs" />
     <Compile Include="Assignments\IAssignmentViewFactory.cs" />
+    <Compile Include="Assignments\IAssignmetnsDeletionService.cs" />
     <Compile Include="Assignments\IdentifyingAnswer.cs" />
     <Compile Include="ClientIdentifier.cs" />
     <Compile Include="Commands\CloneQuestionnaire.cs" />

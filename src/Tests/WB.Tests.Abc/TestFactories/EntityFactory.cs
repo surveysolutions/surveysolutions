@@ -1573,11 +1573,15 @@ namespace WB.Tests.Abc.TestFactories
             var asDynamic = result.AsDynamic();
             asDynamic.Id = id ?? 0;
             result.QuestionnaireId = questionnaireIdentity;
-            var readonlyUser = new ReadonlyUser();
-            var readonlyProfile = new ReadonlyProfile();
-            readonlyProfile.AsDynamic().SupervisorId = assigneeSupervisorId;
-            readonlyUser.AsDynamic().ReadonlyProfile = readonlyProfile;
-            asDynamic.Responsible = readonlyUser;
+
+            if (assigneeSupervisorId.HasValue)
+            {
+                var readonlyUser = new ReadonlyUser();
+                var readonlyProfile = new ReadonlyProfile();
+                readonlyProfile.AsDynamic().SupervisorId = assigneeSupervisorId;
+                readonlyUser.AsDynamic().ReadonlyProfile = readonlyProfile;
+                asDynamic.Responsible = readonlyUser;
+            }
 
             return result;
         }
