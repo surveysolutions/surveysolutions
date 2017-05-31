@@ -568,7 +568,7 @@ iнтервью</value>
     <value>Створити нове</value>
   </data>
   <data name="Dashboard_CreateNewTabText" xml:space="preserve">
-    <value>Створити нове інтерв'ю використовуючи шаблон (Census режим)</value>
+    <value>Створити нове інтерв'ю використовуючи шаблон</value>
   </data>
   <data name="Dashboard_StartedTabText" xml:space="preserve">
     <value>Інтерв'ю які були розпочаті, але не закінчені 
@@ -583,6 +583,6 @@ iнтервью</value>
 при наступній синхронізації</value>
   </data>
   <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
-    <value>Ви можете створити нове інтерв'ю використовуючи порожній census шаблон (Census режим)</value>
+    <value>Ви можете створити нове інтерв'ю використовуючи порожній шаблон</value>
   </data>
 </root>
