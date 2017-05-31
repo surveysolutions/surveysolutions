@@ -66,13 +66,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return result;
         }
 
-        private Dictionary<string, string> GetIdentifyingColumnText(Assignment assignment)
+        private List<AssignmentIdentifyingQuestionRow> GetIdentifyingColumnText(Assignment assignment)
         {
             QuestionnaireIdentity assignmentQuestionnaireId = assignment.QuestionnaireId;
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(assignmentQuestionnaireId, null);
 
-            Dictionary<string, string> identifyingColumnText = 
-                assignment.IdentifyingData.ToDictionary(_ => questionnaire.GetQuestionTitle(_.QuestionId).RemoveHtmlTags(), _ => _.Answer);
+            if (questionnaire == null) return new List<AssignmentIdentifyingQuestionRow>();
+
+            List<AssignmentIdentifyingQuestionRow> identifyingColumnText = 
+                assignment.IdentifyingData.Select(x => new AssignmentIdentifyingQuestionRow(questionnaire.GetQuestionTitle(x.QuestionId).RemoveHtmlTags(), x.Answer))
+                .ToList();
             return identifyingColumnText;
         }
 

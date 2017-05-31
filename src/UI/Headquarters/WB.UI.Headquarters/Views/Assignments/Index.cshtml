@@ -73,13 +73,8 @@
                     orderable: false,
                     searchable: false,
                     render: function(data) {
-                        var strings = [];
-                        for (var questionText in data) {
-                            if (data.hasOwnProperty(questionText)) {
-                                strings.push(questionText + ": " + data[questionText]);
-                            }
-                        }
-                        return _.join(strings, ", ");
+                        var questionsWithTitles = _.map(data, function(question){return question.title + ": " + question.answer});
+                        return  _.join(questionsWithTitles , ", ");
                     },
                     responsivePriority: 4
                 },
