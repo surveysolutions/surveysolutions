@@ -16,13 +16,13 @@ namespace WB.UI.Headquarters.API
 {
     [CamelCase]
     [RoutePrefix("api/Assignments")]
-    public class AssignmetsApiController : ApiController
+    public class AssignmentsApiController : ApiController
     {
         private readonly IAssignmentViewFactory assignmentViewFactory;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
 
-        public AssignmetsApiController(IAssignmentViewFactory assignmentViewFactory,
+        public AssignmentsApiController(IAssignmentViewFactory assignmentViewFactory,
             IAuthorizedUser authorizedUser,
             IPlainStorageAccessor<Assignment> assignmentsStorage)
         {
