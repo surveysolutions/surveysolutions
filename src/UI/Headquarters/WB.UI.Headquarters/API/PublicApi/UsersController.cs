@@ -11,7 +11,7 @@ using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.PublicApi
 {
-    [ApiBasicAuth(new[] { UserRoles.ApiUser, UserRoles.Administrator  }, TreatPasswordAsPlain = true)]
+    [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
     [RoutePrefix("api/v1")]
     public class UsersController : BaseApiServiceController
     {
@@ -19,9 +19,9 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly HqUserManager userManager;
 
         public UsersController(ILogger logger,
-            IUserViewFactory usersFactory, 
+            IUserViewFactory usersFactory,
             HqUserManager userManager)
-            :base(logger)
+            : base(logger)
         {
             this.usersFactory = usersFactory;
             this.userManager = userManager;
@@ -67,7 +67,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             return new UserApiDetails(user);
         }
 
-       
+
         /// <summary>
         /// Gets detailed info about single interviewer
         /// </summary>

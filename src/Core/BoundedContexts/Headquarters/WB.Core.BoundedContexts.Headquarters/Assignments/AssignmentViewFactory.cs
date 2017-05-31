@@ -50,12 +50,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 PageSize = input.PageSize,
                 Items = assignments.Select(x => new AssignmentRow
                 {
+                    QuestionnaireId = x.QuestionnaireId,
                     CreatedAtUtc = x.CreatedAtUtc,
                     ResponsibleId = x.ResponsibleId,
                     UpdatedAtUtc = x.UpdatedAtUtc,
                     Capacity = x.Capacity,
                     InterviewsCount = x.InterviewSummaries.Count,
                     Id = x.Id,
+                    Archived = x.Archived,
                     Responsible = x.Responsible.Name,
                     IdentifyingQuestions = this.GetIdentifyingColumnText(x)
                 }).ToList(),
