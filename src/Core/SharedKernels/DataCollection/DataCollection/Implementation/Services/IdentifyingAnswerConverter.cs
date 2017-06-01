@@ -8,12 +8,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
 {
     public class IdentifyingAnswerConverter : IIdentifyingAnswerConverter
     {
-        public AbstractAnswer GetAbstractAnswer(IQuestion question, string answer)
+        public AbstractAnswer GetAbstractAnswer(QuestionType questionType, string answer)
         {
-            if (question == null || answer == null)
-                return null;
-
-            switch (question.QuestionType)
+            switch (questionType)
             {
                 case QuestionType.Text:
                     return TextAnswer.FromString(answer);
@@ -27,7 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
                     return GpsAnswer.FromGeoPosition(GeoPosition.FromString(answer));
 
                 default:
-                    throw new ArgumentException(string.Format("Question of type {0} can't be identifier question", question.QuestionType));
+                    throw new ArgumentException($"Unknown question of type {questionType} can't be identifier question");
             }
         }
     }

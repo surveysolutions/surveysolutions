@@ -154,7 +154,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private AbstractAnswer ConvertToAbstractAnswer(AssignmentDocument.IdentifyingAnswer identifyingAnswer, QuestionnaireDocument questionnaireDocument)
         {
             var question = questionnaireDocument.Find<IQuestion>(identifyingAnswer.QuestionId);
-            return this.identifyingAnswerConverter.GetAbstractAnswer(question, identifyingAnswer.Answer);
+            return this.identifyingAnswerConverter.GetAbstractAnswer(question.QuestionType, identifyingAnswer.Answer);
         }
 
         private void RaiseStartingLongOperation()
