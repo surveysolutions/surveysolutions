@@ -68,7 +68,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         protected IInterviewExpressionStorage GetExpressionStorage()
         {
-            return this.expressionProcessorStatePrototypeProvider.GetExpressionProcessor(this.QuestionnaireIdentity);
+            return this.expressionProcessorStatePrototypeProvider.GetExpressionStorage(this.QuestionnaireIdentity);
         }
 
         /// <remarks>
@@ -2366,7 +2366,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected static IReadOnlyCollection<InterviewTreeNodeDiff> FindDifferenceBetweenTrees(InterviewTree sourceInterview, InterviewTree changedInterview)
             => sourceInterview.Clone().Compare(changedInterview);
 
-        protected void UpdateTreeWithDependentChanges(InterviewTree changedInterviewTree, IQuestionnaire questionnaire)
+        protected void UpdateTreeWithDependentChanges(InterviewTree changedInterviewTree, IQuestionnaire questionnaire, bool removeLinkedAnswers = true)
         {
             if (questionnaire.IsUsingExpressionStorage())
             {
@@ -2489,8 +2489,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                 foreach (var optionAndParent in optionsAndParents)
                                 {
                                     var optionLevel = expressionStorage.GetLevel(optionAndParent.ParenRoster);
-                                    Func<IInterviewLevel, bool> filter =
-                                        optionLevel.GetLinkedQuestionFilter(entity.Identity);
+                                    Func<IInterviewLevel, bool> filter = optionLevel.GetLinkedQuestionFilter(entity.Identity);
                                     if (filter == null)
                                     {
                                         options.Add(optionAndParent.Option);
@@ -2511,7 +2510,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                             options.Add(optionAndParent.Option);
                                     }
                                 }
-                                question.UpdateLinkedOptionsAndResetAnswerIfNeeded(options.ToArray());
+                                question.UpdateLinkedOptionsAndResetAnswerIfNeeded(options.ToArray(), removeLinkedAnswers);
                                 // if is roster title, need to update it here?
                             }
 

@@ -88,7 +88,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (this.UsesExpressionStorage)
             {
-                this.UpdateTreeWithDependentChanges(this.Tree, this.GetQuestionnaireOrThrow());
+                this.UpdateTreeWithDependentChanges(this.Tree, this.GetQuestionnaireOrThrow(), removeLinkedAnswers: false);
             }
             else
             {
