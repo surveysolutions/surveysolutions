@@ -11,15 +11,17 @@ using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.PublicApi
 {
-    [ApiBasicAuth(UserRoles.ApiUser, TreatPasswordAsPlain = true)]
+    [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
     [RoutePrefix("api/v1/assignments")]
     public class AssignmentsController : BaseApiServiceController
     {
@@ -28,6 +30,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly IMapper mapper;
         private readonly HqUserManager userManager;
         private readonly IPreloadedDataVerifier preloadedDataVerifier;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
         public AssignmentsController(
             IAssignmentViewFactory assignmentViewFactory,
@@ -35,27 +38,35 @@ namespace WB.UI.Headquarters.API.PublicApi
             IPreloadedDataVerifier preloadedDataVerifier,
             IMapper mapper,
             HqUserManager userManager,
-            ILogger logger) : base(logger)
+            ILogger logger, IQuestionnaireStorage questionnaireStorage) : base(logger)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.assignmentsStorage = assignmentsStorage;
             this.mapper = mapper;
             this.userManager = userManager;
+            this.questionnaireStorage = questionnaireStorage;
             this.preloadedDataVerifier = preloadedDataVerifier;
         }
 
         /// <summary>
         /// Single assignment details
         /// </summary>
-        /// <returns>Details of Assignment</returns>
+        /// <response code="200">Assignment details</response>
+        /// <response code="404">Assignment cannot be found</response>
         [HttpGet]
         [Route("{id:int}")]
         public AssignmentDetails Details(int id)
         {
             var assignment = assignmentsStorage.GetById(id);
+
+            if (assignment == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+
             return this.mapper.Map<AssignmentDetails>(assignment);
         }
-        
+
         /// <summary>
         /// List all assignments with filtering
         /// </summary>
@@ -79,11 +90,13 @@ namespace WB.UI.Headquarters.API.PublicApi
                 questionnaireId = null;
             }
 
+            var responsible = GetResponsibleIdPersonFromRequestValue(filter.Responsible);
+
             AssignmentsWithoutIdentifingData result = this.assignmentViewFactory.Load(new AssignmentsInputModel
             {
                 QuestionnaireId = questionnaireId?.QuestionnaireId,
                 QuestionnaireVersion = questionnaireId?.Version,
-                ResponsibleId = this.GetResponsibleIdPersonFromRequestValue(filter.Responsible),
+                ResponsibleId = responsible?.Id,
                 Order = filter.Order,
                 Page = Math.Max(filter.Page, 1),
                 PageSize = filter.PageSize,
@@ -102,70 +115,109 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// Create new assignment
         /// </summary>
         /// <param name="createItem">New assignments options</param>
-        /// <returns>Created assignments details</returns>
+        /// <response code="200">Created assignment with details</response>
+        /// <response code="400">Bad parameters provided or identifiying data incorrect. See response details for more info</response>
+        /// <response code="404">Questionnaire or responsible user not found</response>
+        /// <response code="406">Responsible user provided in request cannot be assigned to assignment</response>
         [HttpPost]
         [Route]
-        public HttpResponseMessage Create(CreateAssignmentApiRequest createItem)
+        public CreateAssignmentResult Create(CreateAssignmentApiRequest createItem)
         {
-            var responsible = this.GetResponsibleIdPersonFromRequestValue(createItem.Responsible);
+            var responsible = this.GetResponsibleIdPersonFromRequestValue(createItem?.Responsible);
 
-            if (responsible == null)
+            this.VerifyAssigneeInRoles(responsible, createItem?.Responsible, UserRoles.Interviewer, UserRoles.Supervisor);
+
+            QuestionnaireIdentity questionnaireId;
+            if (!QuestionnaireIdentity.TryParse(createItem.QuestionnaireId, out questionnaireId))
             {
-                throw new ArgumentException(nameof(CreateAssignmentApiRequest.Responsible), "Cannot identify user from argument: " + createItem.Responsible);
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound, $@"Questionnaire not found: {createItem?.QuestionnaireId}"));
             }
 
-            var assignment = new Assignment(QuestionnaireIdentity.Parse(createItem.QuestionnaireId), responsible.Value, createItem.Capacity);
+            if (this.questionnaireStorage.GetQuestionnaireDocument(questionnaireId) == null)
+            {
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound, $@"Questionnaire not found: {createItem?.QuestionnaireId}"));
+            }
 
-            assignment = this.mapper.Map(createItem.IdentifyingData, assignment);
+            var assignment = new Assignment(questionnaireId, responsible.Id, createItem.Capacity);
+
+            try
+            {
+                assignment = this.mapper.Map(createItem, assignment);
+            }
+            catch (AutoMapperMappingException ame)
+            {
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, ame.InnerException?.Message));
+            }
 
             var preloadData = this.mapper.Map<PreloadedDataByFile>(assignment);
-            var qid = assignment.QuestionnaireId;
-            var verifyResult = this.preloadedDataVerifier.VerifyAssignmentsSample(qid.QuestionnaireId, qid.Version, preloadData);
+
+            var verifyResult = this.preloadedDataVerifier.VerifyAssignmentsSample(questionnaireId.QuestionnaireId, questionnaireId.Version, preloadData);
             verifyResult.WasResponsibleProvided = true;
-
-            var statusCode = HttpStatusCode.BadRequest;
-
+            
             if (!verifyResult.Errors.Any())
             {
                 this.assignmentsStorage.Store(assignment, null);
                 assignment = this.assignmentsStorage.GetById(assignment.Id);
-                statusCode = HttpStatusCode.OK;
+               
+                return new CreateAssignmentResult
+                {
+                    Assignment = mapper.Map<AssignmentDetails>(assignment),
+                    VerificationStatus = verifyResult
+                };
             }
 
-            return Request.CreateResponse(statusCode, new CreateAssignmentResult
+            throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, new CreateAssignmentResult
             {
                 Assignment = mapper.Map<AssignmentDetails>(assignment),
                 VerificationStatus = verifyResult
-            });
+            }));
         }
 
         /// <summary>
         /// Assign new responsible person for assignment
         /// </summary>
         /// <param name="id">Assignment id</param>
-        /// <param name="responsible">Responsible user id or name</param>
-        /// <returns></returns>
+        /// <param name="assigneeRequest">Responsible user id or name</param>
+        /// <response code="200">Assingment details with updated assignee</response>
+        /// <response code="404">Assignment or assignee not found</response>
+        /// <response code="406">Assignee cannot be assigned to assignment</response>
         [HttpPatch]
         [Route("{id:int}/assign")]
-        public AssignmentDetails Assign(int id, [FromBody] AssignmentAssignRequest responsible)
+        public AssignmentDetails Assign(int id, [FromBody] AssignmentAssignRequest assigneeRequest)
         {
             var assignment = assignmentsStorage.GetById(id);
 
-            var responsibleUserId = this.GetResponsibleIdPersonFromRequestValue(responsible.Responsible);
-
-            if (responsibleUserId == null)
+            if (assignment == null)
             {
-                throw new ArgumentException(nameof(AssignmentAssignRequest.Responsible), "Cannot identify user from argument: " + responsible.Responsible);
+                throw new HttpResponseException(HttpStatusCode.NotFound);
             }
 
-            assignment.Reassign(responsibleUserId.Value);
+            var responsibleUser = this.GetResponsibleIdPersonFromRequestValue(assigneeRequest?.Responsible);
+
+            this.VerifyAssigneeInRoles(responsibleUser, assigneeRequest?.Responsible, UserRoles.Interviewer, UserRoles.Supervisor);
+
+            assignment.Reassign(responsibleUser.Id);
 
             assignmentsStorage.Store(assignment, id);
 
             return this.mapper.Map<AssignmentDetails>(assignmentsStorage.GetById(id));
         }
 
-        private Guid? GetResponsibleIdPersonFromRequestValue(string responsible)
+        private void VerifyAssigneeInRoles(HqUser responsibleUser, string providedValue, params UserRoles[] roles)
+        {
+            if (responsibleUser == null)
+            {
+                throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.NotFound,
+                    $@"User not found: {providedValue}"));
+            }
+            
+            if (!roles.Any(responsibleUser.IsInRole))
+            {
+                throw new HttpResponseException(HttpStatusCode.NotAcceptable);
+            }
+        }
+
+        private HqUser GetResponsibleIdPersonFromRequestValue(string responsible)
         {
             if (string.IsNullOrWhiteSpace(responsible))
             {
@@ -176,17 +228,10 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             if (!Guid.TryParse(responsible, out responsibleUserId))
             {
-                var user = this.userManager.FindByName(responsible);
-
-                if (user == null)
-                {
-                    return null;
-                }
-
-                responsibleUserId = user.Id;
+                return this.userManager.FindByName(responsible);
             }
 
-            return responsibleUserId;
+            return this.userManager.FindById(responsibleUserId);
         }
 
         /// <summary>
@@ -194,12 +239,18 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// </summary>
         /// <param name="id">Assignment id</param>
         /// <param name="capacity">New limit on created interviews</param>
-        /// <returns></returns>
+        /// <response code="200">Assingment details with updated capacity</response>
+        /// <response code="404">Assignment not found</response>
         [HttpPatch]
         [Route("{id:int}/changeCapacity")]
         public AssignmentDetails ChangeCapacity(int id, [FromBody] int? capacity)
         {
             var assignment = assignmentsStorage.GetById(id);
+
+            if (assignment == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
 
             assignment.UpdateCapacity(capacity);
 

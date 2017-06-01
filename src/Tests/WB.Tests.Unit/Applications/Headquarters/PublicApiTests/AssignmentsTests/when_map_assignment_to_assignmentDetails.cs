@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
