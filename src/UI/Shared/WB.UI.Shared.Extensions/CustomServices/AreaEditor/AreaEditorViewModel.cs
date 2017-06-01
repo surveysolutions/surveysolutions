@@ -22,10 +22,10 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         private IMapService mapService;
         private IUserInteractionService userInteractionService;
 
-        public AreaEditorViewModel(IPrincipal principal, 
+        public AreaEditorViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IMapService mapService,
-            IUserInteractionService userInteractionService) 
+            IUserInteractionService userInteractionService)
             : base(principal, viewModelNavigationService)
         {
             this.userInteractionService = userInteractionService;
@@ -49,9 +49,10 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             }
         }
 
-        private Dictionary<string,string> AvailableMaps = new Dictionary<string, string>();
+        private Dictionary<string, string> AvailableMaps = new Dictionary<string, string>();
 
         private List<string> mapsList;
+
         public List<string> MapsList
         {
             get { return this.mapsList; }
@@ -64,6 +65,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         }
 
         private string selectedMap;
+
         public string SelectedMap
         {
             get { return this.selectedMap; }
@@ -76,15 +78,27 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 {
                     this.UpdateBaseMap(this.AvailableMaps[value]);
                 }
-                
+
             }
         }
 
         public void UpdateBaseMap(string pathToMap)
         {
-
             if (pathToMap != null)
             {
+                try
+                {
+                    if(MapView?.LocationDisplay != null)
+                        this.MapView.LocationDisplay.IsEnabled = false;
+                }
+                catch (Exception exc)
+                {
+                    
+                    //throw;
+                }
+                
+
+
                 var map = new Map();
 
                 TileCache titleCache = new TileCache(pathToMap);
