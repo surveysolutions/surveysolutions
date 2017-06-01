@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -19,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Services;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Threading;
 using WB.UI.Headquarters.Resources;
@@ -69,7 +71,7 @@ namespace WB.UI.Headquarters.Implementation.Services
         public void ImportAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, Guid? supervisorId, Guid headquartersId)
         {
             var assignmentImportData = this.interviewImportDataParsingService.GetAssignmentsImportDataForSample(interviewImportProcessId, questionnaireIdentity);
-
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
             RunImportProcess(assignmentImportData,
                 questionnaireIdentity,
                 interviewImportProcessId,
@@ -93,13 +95,12 @@ namespace WB.UI.Headquarters.Implementation.Services
 
                     var responsibleId = assignmentRecord.InterviewerId ?? responsibleSupervisorId;
                     var topLevelAnswers = assignmentRecord.PreloadedData.Data.First();
-                    var assignment = new Assignment(questionnaireIdentity, responsibleId,
+                    var assignment = new Assignment(questionnaireIdentity, 
+                        responsibleId,
                         assignmentRecord.Quantity);
-                    var identifyingAnswers = topLevelAnswers.Answers.Select(a => new IdentifyingAnswer(assignment)
-                    {
-                        QuestionId = a.Key,
-                        Answer = a.Value.ToString()
-                    }).ToList();
+
+
+                    var identifyingAnswers = topLevelAnswers.Answers.Select(a => new IdentifyingAnswer(assignment, questionnaire, a.Value.ToString(), a.Key)).ToList();
                     assignment.SetAnswers(identifyingAnswers);
 
                     this.plainTransactionManager.ExecuteInPlainTransaction(
