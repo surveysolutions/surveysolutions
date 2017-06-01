@@ -246,7 +246,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Dictionary<Identity, AbstractAnswer> prefilledQuestionsWithAnswers = answersToIdentifyingQuestions.ToDictionary(x => new Identity(x.Key, RosterVector.Empty), x => x.Value);
             foreach (KeyValuePair<Identity, AbstractAnswer> answer in prefilledQuestionsWithAnswers)
             {
-                changedInterviewTree.GetQuestion(answer.Key).SetAnswer(answer.Value);
+                var treeQuestion = changedInterviewTree.GetQuestion(answer.Key);
+                treeQuestion.SetAnswer(answer.Value);
+                treeQuestion.MarkAsReadonly();
             }
 
             changedInterviewTree.ActualizeTree();
@@ -767,7 +769,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public bool IsReadOnlyQuestion(Identity identity)
         {
-            return false;
+            return Tree.GetQuestion(identity).IsReadonly;
         }
 
         private object GetAnswerAsObject(InterviewTreeQuestion question)
