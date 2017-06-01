@@ -133,7 +133,9 @@ namespace WB.UI.Headquarters.API.PublicApi
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound, $@"Questionnaire not found: {createItem?.QuestionnaireId}"));
             }
 
-            if (this.questionnaireStorage.GetQuestionnaireDocument(questionnaireId) == null)
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireId, null);
+            
+            if (questionnaire == null)
             {
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound, $@"Questionnaire not found: {createItem?.QuestionnaireId}"));
             }
@@ -142,11 +144,15 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             try
             {
-                assignment = this.mapper.Map(createItem, assignment);
+                var answers = createItem.IdentifyingData
+                    .Select(item => IdentifyingAnswer.Create(assignment, questionnaire, item.Answer, item.QuestionId, item.Variable))
+                    .ToList();
+
+                assignment.SetAnswers(answers);
             }
-            catch (AutoMapperMappingException ame)
+            catch (ArgumentException ae)
             {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, ame.InnerException?.Message));
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, ae.Message));
             }
 
             var preloadData = this.mapper.Map<PreloadedDataByFile>(assignment);
