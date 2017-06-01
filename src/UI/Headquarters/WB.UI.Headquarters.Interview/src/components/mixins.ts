@@ -6,10 +6,6 @@ export const entityPartial = {
         $me() {
             const id = this.id || this.$parent.id
 
-            if (id == null) {
-                console.error("Cannot identify entity id")
-            }
-
             return this.$store.state.entityDetails[id] || {
                 isAnswered: false,
                 validity: {
