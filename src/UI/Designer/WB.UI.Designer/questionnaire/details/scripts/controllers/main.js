@@ -352,28 +352,28 @@ angular.module('designerApp')
                     case "QRBarcode":
                         return "string";
                     case "TextList":
-                        return "TextList";
+                        return "TextList"; // real type is TextListAnswerRow[]
                     case "DateTime":
                         return "DateTime?";
                     case "GpsCoordinates":
                         return "GeoLocation";
                     case 'MultyOption':
                         if (question.yesNoView) {
-                            return "YesNoAnswers";
+                            return "YesNoAnswers"; // real type is YesNoAndAnswersMissings
                         }
                         if (isNotLinkedOrLinkedToTextList(question)) {
-                            return "decimal[]";
+                            return "int[]";
                         }
-                        return "decimal[][]";
+                        return "RosterVector[]";
                     case "SingleOption":
                         if (isNotLinkedOrLinkedToTextList(question)) {
-                            return "decimal?";
+                            return "int?";
                         }
 
-                        return "decimal[]";
+                        return "RosterVector";
                     case "Numeric":
                         if (question.isInteger) {
-                            return "long?";
+                            return "int?";
                         }
 
                         return "double?";
