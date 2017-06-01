@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace WB.Core.GenericSubdomains.Portable
+namespace WB.Infrastructure.Native.Utils
 {
     public static class WhereClouseHelper
     {
