@@ -4,6 +4,7 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using It = Moq.It;
@@ -82,9 +83,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         [Test]
         public void should_map_IdentifyingAnswer_Variable_name_from_questionnaire() =>
             Assert.That(this.AssignmentDetails.IdentifyingData[0].Variable, Is.EqualTo("test2"));
-
+        
         [Test]
         public void should_query_questionnaire_storage() =>
-            this.storageMock.Verify(x => x.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()), Times.Once);
+            this.storageMock.Verify(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()), Times.Once);
     }
 }
