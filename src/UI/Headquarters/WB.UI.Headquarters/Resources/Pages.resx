@@ -941,4 +941,13 @@
     <value>(ver. {1}) {0} </value>
     <comment>{0} - Questionnaire name, {1} - Questionnaire version</comment>
   </data>
+  <data name="HQ_LockWarning" xml:space="preserve">
+    <value>Locked headquarters (box checked) cannot login and perform any actions on the server.</value>
+  </data>
+  <data name="Interviewer_LockWarning" xml:space="preserve">
+    <value>Locked interviewers (box is checked) cannot connect their tablets with the server and send interviews to the server.</value>
+  </data>
+  <data name="Supervisor_LockWarning" xml:space="preserve">
+    <value>Locked supervisor (box checked) cannot login and perform any actions on the server.</value>
+  </data>
 </root>
