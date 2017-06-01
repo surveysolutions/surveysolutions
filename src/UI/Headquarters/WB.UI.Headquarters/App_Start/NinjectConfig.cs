@@ -53,6 +53,7 @@ using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation.Migrations;
 using WB.UI.Headquarters.API.Attributes;
+using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
@@ -73,6 +74,7 @@ using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
 using WB.UI.Shared.Web.Versions;
 using FilterScope = System.Web.Http.Filters.FilterScope;
+using WB.UI.Headquarters.API.PublicApi.Models;
 
 namespace WB.UI.Headquarters
 {
@@ -265,6 +267,8 @@ namespace WB.UI.Headquarters
             {
                 cfg.AddProfile(new WebInterviewAutoMapProfile());
                 cfg.AddProfile(new AssignmentProfile());
+                cfg.AddProfile(new AssignmentsPublicApiMapProfile());
+                cfg.ConstructServicesUsing(t => kernel.Get(t));
             });
             kernel.Bind<IMapper>().ToConstant(autoMapperConfig.CreateMapper());
             kernel.Bind<JsonSerializer>().ToConstant(JsonSerializer.Create(new JsonSerializerSettings

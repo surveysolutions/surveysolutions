@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Main.Core.Entities.SubEntities;
-using Swashbuckle.Swagger;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -18,7 +17,7 @@ using WB.UI.Headquarters.Code;
 namespace WB.UI.Headquarters.API.PublicApi
 {
     [RoutePrefix("api/v1/questionnaires")]
-    [ApiBasicAuth(new[] { UserRoles.ApiUser, UserRoles.Administrator }, TreatPasswordAsPlain = true)]
+    [ApiBasicAuth(new[] {UserRoles.ApiUser, UserRoles.Administrator}, TreatPasswordAsPlain = true)]
     public class QuestionnairesController : BaseApiServiceController
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
@@ -28,10 +27,10 @@ namespace WB.UI.Headquarters.API.PublicApi
 
         public QuestionnairesController(ILogger logger,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            IAllInterviewsFactory allInterviewsViewFactory, 
+            IAllInterviewsFactory allInterviewsViewFactory,
             ISerializer serializer,
             IQuestionnaireStorage questionnaireStorage)
-            :base(logger)
+            : base(logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.allInterviewsViewFactory = allInterviewsViewFactory;
@@ -75,7 +74,7 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             return new QuestionnaireApiView(questionnaires);
         }
-        
+
         /// <summary>
         /// Gets list of possible interview statuses 
         /// </summary>
@@ -99,7 +98,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
 
-            var questionnaireDocumentVersionedSrialized =  this.serializer.Serialize(questionnaireDocumentVersioned);
+            var questionnaireDocumentVersionedSrialized = this.serializer.Serialize(questionnaireDocumentVersioned);
             var response = this.Request.CreateResponse(questionnaireDocumentVersionedSrialized);
             return response;
         }

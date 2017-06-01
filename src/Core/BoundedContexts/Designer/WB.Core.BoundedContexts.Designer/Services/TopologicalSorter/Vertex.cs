@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace WB.Core.GenericSubdomains.Portable.Implementation.TopologicalSorter
+namespace WB.Core.BoundedContexts.Designer.Services.TopologicalSorter
 {
     internal class Vertex<T>
     {
@@ -39,7 +39,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.TopologicalSorter
 
         public override string ToString()
         {
-            var dependencies = string.Join(", ", Dependencies.Select(x => x.Value));
+            var dependencies = string.Join(", ", this.Dependencies.Select(x => x.Value));
             return $"{this.Value}: {dependencies}";
         }
     }

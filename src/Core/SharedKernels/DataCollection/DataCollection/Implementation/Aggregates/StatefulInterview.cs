@@ -246,10 +246,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Dictionary<Identity, AbstractAnswer> prefilledQuestionsWithAnswers = answersToIdentifyingQuestions.ToDictionary(x => new Identity(x.Key, RosterVector.Empty), x => x.Value);
             foreach (KeyValuePair<Identity, AbstractAnswer> answer in prefilledQuestionsWithAnswers)
             {
-                changedInterviewTree.GetQuestion(answer.Key).SetAnswer(answer.Value);
+                var treeQuestion = changedInterviewTree.GetQuestion(answer.Key);
+                treeQuestion.SetAnswer(answer.Value);
+                treeQuestion.MarkAsReadonly();
             }
-
-            List<Identity> answeredQuestions = prefilledQuestionsWithAnswers.Keys.ToList();
 
             changedInterviewTree.ActualizeTree();
 
@@ -765,6 +765,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 disabledVariables: disabledVariables,
                 wasCompleted: this.properties.WasCompleted,
                 createdOnClient: CreatedOnClient);
+        }
+
+        public bool IsReadOnlyQuestion(Identity identity)
+        {
+            return Tree.GetQuestion(identity).IsReadonly;
         }
 
         private object GetAnswerAsObject(InterviewTreeQuestion question)

@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
                 ByQuestions = variableNames.Where(questionnaire.HasQuestion).Select(variable => new SubstitutionVariable
                 {
                     Name = variable,
-                    Id = questionnaire.GetQuestionIdByVariable(variable)
+                    Id = questionnaire.GetQuestionIdByVariable(variable).Value
                 }).ToList(),
                 ByVariables = variableNames.Where(questionnaire.HasVariable).Select(x => new SubstitutionVariable
                 {

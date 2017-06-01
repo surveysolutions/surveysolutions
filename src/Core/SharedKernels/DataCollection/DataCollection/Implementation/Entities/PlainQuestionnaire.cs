@@ -273,7 +273,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (linkedQuestionId == null)
                 return false;
             return this.GetQuestionOrThrow(linkedQuestionId.Value).QuestionType == QuestionType.TextList;
-        } 
+        }
 
         public Guid[] GetQuestionsLinkedToRoster()
         {
@@ -285,9 +285,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.QuestionCache.Values.Where(x => x.LinkedToQuestionId.HasValue).Select(x => x.PublicKey).ToArray();
         }
 
-        public Guid GetQuestionIdByVariable(string variable)
+        public Guid? GetQuestionIdByVariable(string variable)
         {
-            return this.QuestionCache.Values.Single(x => x.StataExportCaption == variable).PublicKey;
+            return this.QuestionCache.Values.FirstOrDefault(x => x.StataExportCaption == variable)?.PublicKey;
         }
 
         public Guid GetVariableIdByVariableName(string variableName)

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WB.Core.GenericSubdomains.Portable.Implementation.TopologicalSorter
+namespace WB.Core.BoundedContexts.Designer.Services.TopologicalSorter
 {
     internal class StronglyConnectedComponent<T> : IEnumerable<Vertex<T>>
     {
