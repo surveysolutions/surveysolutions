@@ -138,9 +138,6 @@
   <data name="BinaryData" xml:space="preserve">
     <value>Binary data</value>
   </data>
-  <data name="Census" xml:space="preserve">
-    <value>Census</value>
-  </data>
   <data name="CloneQuestionnaire" xml:space="preserve">
     <value>Clone questionnaire</value>
   </data>
@@ -156,8 +153,8 @@
   <data name="LastEntryDate" xml:space="preserve">
     <value>Last Entry Date</value>
   </data>
-  <data name="NewInterview" xml:space="preserve">
-    <value>New interview</value>
+  <data name="NewAssignment" xml:space="preserve">
+    <value>New assignment</value>
   </data>
   <data name="Questionnaires" xml:space="preserve">
     <value>Questionnaires</value>

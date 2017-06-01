@@ -42,14 +42,11 @@ html {
 		position: relative;
 		color: $gray_text; 
 		min-width: 360px;
-		padding-bottom: 100px;
-		font-family: Arial, sans-serif;
-		font-size: 16px;
-		line-height: 18px;
+		padding: 70px 0 100px;
+		font: 16px/18px Arial, sans-serif;
 		@include gradient-horizontal($gray_form, $gray_form);
 		background-repeat: repeat-y;
 		background-size: 12px 100%;
-		padding-top: 70px;
 		.footer {
 			position: absolute;
 			bottom: 0;
@@ -114,7 +111,7 @@ h2{
 	margin-bottom: 25px;
 }
 h3{
-	@include font(19px, 21px, "RobotoBold");
+	font: 19px/21px "RobotoBold";
 	margin-top: 0;
 }
 h4{
@@ -198,9 +195,6 @@ h5{
 		padding-left: 15px;
 	}
 }
-// .row div[class^="col"] .page-header{
-// 	padding-left: 0;
-// }
 .alert{
 	margin-bottom: 20px;
 	background-color: transparent;
@@ -265,6 +259,13 @@ h5{
 }
 .primary-text{
 	color: $blue !important;
+}
+.gray-uppercase{
+	font: 12px/14px "TrebuchetMS" !important;
+	text-transform: uppercase;
+	letter-spacing: 0.13em;
+	color: $gray-highlight-font;
+	margin: 0 0 20px;
 }
 .info-block{
     font: 14px/16px "RobotoRegular";
@@ -610,7 +611,19 @@ table{
 	height: 600px;
 	padding: 10px;
 }
-
+table.jqplot-table-legend {
+	width: 90%;
+	border: none;
+}
+td.jqplot-table-legend.jqplot-table-legend-swatch.jqplot-seriesToggle {
+	width: 20px;
+}
+div.jqplot-table-legend-swatch-outline {
+	border: none;
+}
+.jqplot-table-legend-swatch {
+	border-width: 10px;
+}
 .block-filter{
 	.logo-wrapper{
 		max-width: 300px;

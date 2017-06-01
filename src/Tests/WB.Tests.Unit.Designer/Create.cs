@@ -11,6 +11,7 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
@@ -25,10 +26,12 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V10.Templates;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V5.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Services.TopologicalSorter;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
@@ -194,6 +197,13 @@ namespace WB.Tests.Unit.Designer
                 lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>(),
                 Mock.Of<IFileSystemAccessor>(),
                 Mock.Of<ICompilerSettings>());
+        }
+
+        public static CodeGeneratorV2 CodeGeneratorV2()
+        {
+            return new CodeGeneratorV2(new CodeGenerationModelsFactory(
+                DefaultMacrosSubstitutionService(),
+                ServiceLocator.Current.GetInstance<ILookupTableService>()));
         }
 
         public static QuestionProperties QuestionProperties()

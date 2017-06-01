@@ -157,6 +157,7 @@ namespace WB.UI.Interviewer
             kernel.Bind<IBattery>().To<AndroidBattery>();
             kernel.Bind<IDeviceOrientation>().To<AndroidDeviceOrientation>();
             kernel.Bind<IDeviceInformationService>().To<DeviceInformationService>();
+            kernel.Bind<IArchivePatcherService>().To<ArchivePatcherService>();
 
             kernel.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
             kernel.Bind<IQuestionnaireContentVersionProvider>().To<QuestionnaireContentVersionProvider>().InSingletonScope();

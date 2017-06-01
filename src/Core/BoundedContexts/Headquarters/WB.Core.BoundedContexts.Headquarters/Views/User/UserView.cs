@@ -28,5 +28,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         {
             return new UserLight(this.PublicKey, this.UserName);
         }
+
+        public bool IsInterviewer()
+        {
+            return Roles.Any(x => x == UserRoles.Interviewer);
+        }
     }
 }

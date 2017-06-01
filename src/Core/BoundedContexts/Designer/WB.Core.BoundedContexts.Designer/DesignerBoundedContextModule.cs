@@ -2,6 +2,7 @@
 using Ninject;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Commands.Account;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
@@ -33,6 +34,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
+using WB.Core.BoundedContexts.Designer.Services.TopologicalSorter;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.AllowedAddresses;
 using WB.Core.Infrastructure.Aggregates;
@@ -81,6 +83,8 @@ namespace WB.Core.BoundedContexts.Designer
 
             this.Bind<IDesignerEngineVersionService>().To<DesignerEngineVersionService>().InSingletonScope();
             this.Bind<ICodeGenerator>().To<CodeGenerator>();
+            this.Bind<ICodeGeneratorV2>().To<CodeGeneratorV2>();
+            this.Bind<ICodeGenerationModelsFactory>().To<CodeGenerationModelsFactory>();
             this.Bind<ILookupTableService>().To<LookupTableService>();
             this.Bind<IAttachmentService>().To<AttachmentService>();
             this.Bind(typeof(ITopologicalSorter<>)).To(typeof(TopologicalSorter<>));

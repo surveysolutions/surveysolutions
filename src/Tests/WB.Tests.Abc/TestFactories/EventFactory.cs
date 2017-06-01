@@ -82,13 +82,15 @@ namespace WB.Tests.Abc.TestFactories
                 userId: Guid.NewGuid(),
                 questionnaireId: questionnaireId ?? Guid.NewGuid(),
                 questionnaireVersion: questionnaireVersion ?? 7,
-                assignmentId: null);
+                assignmentId: null,
+                usesExpressionStorage: true);
 
         public InterviewFromPreloadedDataCreated InterviewFromPreloadedDataCreated(Guid? questionnaireId = null, long? questionnaireVersion = null)
             => new InterviewFromPreloadedDataCreated(
                 Guid.NewGuid(),
                 questionnaireId ?? Guid.NewGuid(),
-                questionnaireVersion ?? 1);
+                questionnaireVersion ?? 1, 
+                null);
 
         public InterviewHardDeleted InterviewHardDeleted(Guid? userId = null)
             => new InterviewHardDeleted(userId: userId ?? Guid.NewGuid());

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Main.Core.Documents;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -14,6 +15,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
         void RemoveQuestionnaire(QuestionnaireIdentity questionnaireIdentity);
 
         Task StoreQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaireIdentity, byte[] assembly);
+
+        QuestionnaireDocument GetQuestionnaire(QuestionnaireIdentity questionnaireIdentity);
 
         List<QuestionnaireIdentity> GetCensusQuestionnaireIdentities();
 

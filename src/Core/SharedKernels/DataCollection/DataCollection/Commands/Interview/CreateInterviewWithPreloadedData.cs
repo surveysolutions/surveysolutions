@@ -15,7 +15,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             DateTime answersTime, 
             Guid supervisorId, 
             Guid? interviewerId, 
-            InterviewKey interviewKey)
+            InterviewKey interviewKey,
+            int? assignmentId)
             : base(interviewId, userId)
         {
             this.Id = interviewId;
@@ -26,6 +27,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             this.SupervisorId = supervisorId;
             this.InterviewerId = interviewerId;
             this.InterviewKey = interviewKey;
+            this.AssignmentId = assignmentId;
         }
 
         public Guid Id { get; private set; }
@@ -36,6 +38,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
         public Guid? InterviewerId { get; private set; }
 
         public InterviewKey InterviewKey { get; private set; }
+        public int? AssignmentId { get; }
         public DateTime AnswersTime { get; private set; }
     }
 }

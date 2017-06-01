@@ -337,7 +337,7 @@
     <value>Вы хотите продолжить?</value>
   </data>
   <data name="Interviewers_ArchiveInterviewersConfirmMessage" xml:space="preserve">
-    <value>Интервью на планшете будут потеряны если они созданы в census режиме.</value>
+    <value>Интервью на планшете будут потеряны.</value>
   </data>
   <data name="Interviewers_ArchiveStatusTitle" xml:space="preserve">
     <value>Статус</value>

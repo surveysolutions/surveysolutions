@@ -625,7 +625,7 @@
     <value>Создать новое</value>
   </data>
   <data name="Dashboard_CreateNewTabText" xml:space="preserve">
-    <value>Создать новое интервью используя шаблон (Census режим)</value>
+    <value>Создать новое интервью используя шаблон</value>
   </data>
   <data name="Dashboard_StartedTabText" xml:space="preserve">
     <value>Интервью которые были начаты, но не закончены 
@@ -633,13 +633,21 @@
   </data>
   <data name="Dashboard_RejectedTabText" xml:space="preserve">
     <value>Интервью которые были возвращены супервизором
-Вам необходимо учеть замечания супервизора на обложке интервью</value>
+Вам необходимо учесть замечания супервизора на обложке интервью</value>
   </data>
   <data name="Dashboard_CompletedTabText" xml:space="preserve">
     <value>Завершенные интервью, будут загружены на сервер
 при следующей синхронизации</value>
   </data>
   <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
-    <value>Вы можете создать новое интервью используя пустой census опросник (Census режим)</value>
+    <value>Вы можете создать новое интервью используя пустой опросник</value>
+  </data>
+  <data name="DashboardItem_AssignmentLeftComment" xml:space="preserve">
+    <value>осталось создать {0} интервью</value>
+    <comment>осталось создать {0} интервью</comment>
+  </data>
+  <data name="DashboardItem_AssignmentCreatedComment" xml:space="preserve">
+    <value>Создано интервью: {0}</value>
+    <comment>Создано интервью: {0}</comment>
   </data>
 </root>

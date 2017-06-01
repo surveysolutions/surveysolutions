@@ -37,46 +37,65 @@
 
     var prepareQuestion = function () {
         var answers = $.map(questions.getAllLocal(), function (question) {
-            var answer = {};
+            var answer = null;
             switch (question.type()) {
                 case "Text":
                 case "AutoPropagate":
                 case "Numeric":
+                    if (!_.isUndefined(question.selectedOption())) {
                         answer = {
                             id: question.id(),
                             answer: question.selectedOption().split(',').join(''),
-                            settings:  question.settings(),
+                            settings: question.settings(),
                             type: question.type()
                         };
-                        break;
+                    }
+                    break;
                 case "DateTime":
                     var dateAnswer = question.selectedOption();
-                    var answerUTC = null;
+                    if (!_.isUndefined(dateAnswer)) {
+                        var answerUTC = null;
 
-                    if (question.settings().IsTimestamp) {
-                        answerUTC = moment(dateAnswer);
-                    } else {
-                        answerUTC = dateAnswer.getFullYear() + '-' + (dateAnswer.getMonth() + 1) + '-' + dateAnswer.getDate();
+                        if (question.settings().IsTimestamp) {
+                            answerUTC = moment(dateAnswer);
+                        } else {
+                            answerUTC = dateAnswer.getFullYear() +
+                                '-' +
+                                (dateAnswer.getMonth() + 1) +
+                                '-' +
+                                dateAnswer.getDate();
+                        }
+                        answer = {
+                            id: question.id(),
+                            answer: answerUTC,
+                            type: question.type()
+                        };
                     }
-                    answer = {
-                        id: question.id(),
-                        answer: answerUTC,
-                        type: question.type()
-                    };
                     break;
                 case "GpsCoordinates":
-                    answer = {
-                        id: question.id(),
-                        answer: question.latitude() + "$" + question.longitude(),
-                        type: question.type()
-                    };
+                    if (!_.isUndefined(question.latitude()) && !_.isUndefined(question.longitude())) {
+                        answer = {
+                            id: question.id(),
+                            answer: question.latitude() + "$" + question.longitude(),
+                            type: question.type()
+                        };
+                    }
                     break;
                 case "SingleOption":
-                    answer = {
-                        id: question.id(),
-                        answer: question.isFilteredCombobox() ? question.selectedOption().value() : question.selectedOption(),
-                        type: question.type()
-                    };
+                    var singleAnswer = question.selectedOption();
+
+                    if (!_.isUndefined(singleAnswer)) {
+                        if (question.isFilteredCombobox())
+                            singleAnswer = question.selectedOption().value();
+
+                        if (!_.isUndefined(singleAnswer)) {
+                            answer = {
+                                id: question.id(),
+                                answer: singleAnswer,
+                                type: question.type()
+                            };
+                        }
+                    }
                     break;
                 case "MultyOption":
                     answer = {
@@ -87,7 +106,7 @@
             }
             return answer;
         });
-        return answers;
+        return _.filter(answers, function(o) { return !_.isNull(o); });
     };
 
     var parseData = function (q) {

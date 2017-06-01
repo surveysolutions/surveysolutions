@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
+using ReflectionMagic;
+using WB.Core.BoundedContexts.Headquarters.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
@@ -30,6 +34,7 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -212,14 +217,20 @@ namespace WB.Tests.Abc.TestFactories
         public FailedValidationCondition FailedValidationCondition(int? failedConditionIndex = null)
             => new FailedValidationCondition(failedConditionIndex ?? 1117);
 
-        public Group FixedRoster(Guid? rosterId = null, IEnumerable<string> obsoleteFixedTitles = null, IEnumerable<IComposite> children = null, string variable = "roster_var", string title = "Roster X", FixedRosterTitle[] fixedTitles = null)
-            => Create.Entity.Roster(
-                rosterId: rosterId,
-                children: children,
-                title: title,
-                variable: variable,
-                fixedRosterTitles: fixedTitles,
-                fixedTitles: obsoleteFixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
+        public Group FixedRoster(Guid? rosterId = null,
+            string enablementCondition = null,
+            IEnumerable<string> obsoleteFixedTitles = null,
+            IEnumerable<IComposite> children = null,
+            string variable = "roster_var",
+            string title = "Roster X",
+            FixedRosterTitle[] fixedTitles = null) => Create.Entity.Roster(
+                        rosterId: rosterId,
+                        children: children,
+                        title: title,
+                        variable: variable,
+                        enablementCondition: enablementCondition,
+                        fixedRosterTitles: fixedTitles,
+                        fixedTitles: obsoleteFixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
 
         public FixedRosterTitle FixedTitle(decimal value, string title = null)
             => new FixedRosterTitle(value, title ?? $"Fixed title {value}");
@@ -412,6 +423,8 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewSummary InterviewSummary()
             => new InterviewSummary();
+
+
 
         public InterviewSummary InterviewSummary(
             Guid? interviewId = null,
@@ -1531,13 +1544,14 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
-        public AssignmentApiViewBuilder AssignmentApiView(string id, int? capacity, QuestionnaireIdentity questionnaireIdentity)
+        public AssignmentApiViewBuilder AssignmentApiView(string id, int? capacity, int quantity = 0, QuestionnaireIdentity questionnaireIdentity = null)
         {
             return new AssignmentApiViewBuilder(new AssignmentApiView
             {
                 Id = id ?? Guid.NewGuid().ToString(),
                 Capacity = capacity,
-                QuestionnaireId = questionnaireIdentity
+                QuestionnaireId = questionnaireIdentity,
+                Quantity = quantity
             });
         }
 
@@ -1559,12 +1573,52 @@ namespace WB.Tests.Abc.TestFactories
             public AssignmentApiView Build() => this._entity;
         }
 
-        public AssignmentDocumentBuilder AssignmentDocument(string id, int? capacity, string questionnaireIdentity)
+        public Assignment Assignment(int? id = null,
+            QuestionnaireIdentity questionnaireIdentity = null,
+            int? capacity = null,
+            Guid? assigneeSupervisorId = null,
+            string responsibleName = null,
+            ISet<InterviewSummary> interviewSummary = null)
+        {
+            var result = new Assignment();
+            var asDynamic = result.AsDynamic();
+            asDynamic.Capacity = capacity ?? 0;
+            asDynamic.Id = id ?? 0;
+            result.QuestionnaireId = questionnaireIdentity;
+
+            if (assigneeSupervisorId.HasValue)
+            {
+                var readonlyUser = new ReadonlyUser();
+                var readonlyProfile = new ReadonlyProfile();
+                readonlyProfile.AsDynamic().SupervisorId = assigneeSupervisorId;
+                readonlyUser.AsDynamic().ReadonlyProfile = readonlyProfile;
+                readonlyUser.AsDynamic().Name = responsibleName;
+                asDynamic.Responsible = readonlyUser;
+            }
+
+            asDynamic.InterviewSummaries = interviewSummary;
+
+            return result;
+        }
+
+        public IdentifyingAnswer IdentifyingAnswer(Assignment assignment = null, Guid? questionId = null, string answer = null, string answerAsString = null)
+        {
+            var result = (IdentifyingAnswer)Activator.CreateInstance(typeof(IdentifyingAnswer),
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            dynamic dynamic = result.AsDynamic();
+            dynamic.QuestionId = questionId ?? Guid.NewGuid();
+            dynamic.Answer = answer;
+            dynamic.AnswerAsString = answerAsString;
+            return result;
+        }
+
+        public AssignmentDocumentBuilder AssignmentDocument(string id, int? capacity, int quantity = 0, string questionnaireIdentity = null)
         {
             return new AssignmentDocumentBuilder(new AssignmentDocument
             {
                 Id = id ?? Guid.NewGuid().ToString(),
                 Capacity = capacity,
+                Quantity = quantity,
                 QuestionnaireId = questionnaireIdentity
             });
         }

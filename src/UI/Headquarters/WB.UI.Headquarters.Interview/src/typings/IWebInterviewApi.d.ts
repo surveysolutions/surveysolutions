@@ -4,14 +4,13 @@ declare interface ILanguageInfo {
 }
 
 declare interface IInterviewInfo {
-    questionnaireTitle: string;
-    humanId : string;
-    firstSectionId: string;
-    isSampleMode: boolean
+    questionnaireTitle: string
+    humanId : string
+    firstSectionId: string
 }
 
 declare interface IInterviewEntityWithType {
-    entityType: string,
+    entityType: string
     identity: string
 }
 

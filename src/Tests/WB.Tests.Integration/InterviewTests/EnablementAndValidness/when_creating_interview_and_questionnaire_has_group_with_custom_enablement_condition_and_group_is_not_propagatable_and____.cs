@@ -29,7 +29,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 using (var eventContext = new EventContext())
                 {
-                    SetupInterview(questionnaireDocument);
+                    SetupInterviewWithExpressionStorage(questionnaireDocument);
                     return new InvokeResults()
                     {
                         GroupDisabled =

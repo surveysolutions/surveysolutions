@@ -2,7 +2,6 @@
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -18,10 +17,10 @@ namespace WB.Tests.Integration.InterviewTests.Variables
             QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(id: QuestionnaireId,
                 children: new IComposite[]
                 {
-                    Create.Entity.NumericIntegerQuestion(id: n1Id, variable: "n1"),
-                    Create.Entity.NumericIntegerQuestion(id: n2Id, variable: "n2"),
+                    Create.Entity.NumericIntegerQuestion(n1Id, "n1"),
+                    Create.Entity.NumericIntegerQuestion(n2Id, "n2"),
                     Create.Entity.Variable(variableId, VariableType.LongInteger, "v1", "n1+n2"),
-                    Create.Entity.NumericIntegerQuestion(id: n3Id, variable: "n3", questionText: "title with %v1%"),
+                    Create.Entity.NumericIntegerQuestion(n3Id, "n3", questionText: "title with %v1%")
                 });
 
             interview = SetupStatefullInterview(questionnaire);
@@ -61,14 +60,14 @@ namespace WB.Tests.Integration.InterviewTests.Variables
             textQuetionId = Guid.Parse("21111111111111111111111111111111");
             variableId = Guid.Parse("22222222222222222222222222222222");
 
-            QuestionnaireDocument questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
+            QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
                 children: new IComposite[]
                 {
-                    Abc.Create.Entity.TextQuestion(questionId: textQuetionId, variable: "txt"),
+                    Create.Entity.TextQuestion(textQuetionId, variable: "txt"),
                     Create.Entity.Variable(variableId, VariableType.LongInteger, "v1", "txt.Length")
                 });
 
-            interview = SetupInterview(questionnaireDocument: questionnaire);
+            interview = SetupInterview(questionnaire);
             eventContext = new EventContext();
         };
 
