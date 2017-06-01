@@ -13,6 +13,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Tests.Abc;
 using WB.Tests.Abc.TestFactories;
 using WB.UI.Headquarters.API.PublicApi;
 
@@ -71,11 +72,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
 
         protected void SetupQuestionnaire(QuestionnaireDocument document)
         {
+            var doc = Create.Entity.PlainQuestionnaire(document);
             this.questionnaireStorage
-                .Setup(x => x.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>())).Returns(document);
-
-            this.questionnaireStorage
-                .Setup(x => x.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>())).Returns(document);
+                .Setup(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>())).Returns(doc);
         }
     }
 }

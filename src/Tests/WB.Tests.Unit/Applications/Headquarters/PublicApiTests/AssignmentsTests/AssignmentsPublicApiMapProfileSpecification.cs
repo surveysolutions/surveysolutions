@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoMapper;
-using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.PublicApi;
@@ -27,7 +28,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             Context();
 
             this.storageMock = new Mock<IQuestionnaireStorage>();
-            storageMock.Setup(s => s.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()))
+            storageMock.Setup(s => s.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()))
                 .Returns(Questionnaire);
             ServiceMock.Add(typeof(IQuestionnaireStorage), this.storageMock.Object);
             Because();
@@ -42,12 +43,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
 
         protected IMapper mapper;
 
-        protected QuestionnaireDocument Questionnaire { get; set; } = Create.Entity.QuestionnaireDocumentWithOneChapter(Id.g1,
+        protected IQuestionnaire Questionnaire { get; set; } = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(Id.g1,
             children: new[]
             {
                 Create.Entity.TextQuestion(questionId: Id.g2, variable: "test2", preFilled: true),
                 Create.Entity.TextQuestion(questionId: Id.g3, variable: "test3", preFilled: true),
                 Create.Entity.TextQuestion(questionId: Id.g4, variable: "test4", preFilled: true)
-            });
+            }));
     }
 }

@@ -1603,9 +1603,10 @@ namespace WB.Tests.Abc.TestFactories
 
         public IdentifyingAnswer IdentifyingAnswer(Assignment assignment = null, Guid? questionId = null, string answer = null, string answerAsString = null)
         {
-            var result = (IdentifyingAnswer)Activator.CreateInstance(typeof(IdentifyingAnswer),
-                BindingFlags.Instance | BindingFlags.NonPublic);
+            var result = new IdentifyingAnswer();
+            
             dynamic dynamic = result.AsDynamic();
+            dynamic.Assignment = assignment;
             dynamic.QuestionId = questionId ?? Guid.NewGuid();
             dynamic.Answer = answer;
             dynamic.AnswerAsString = answerAsString;
