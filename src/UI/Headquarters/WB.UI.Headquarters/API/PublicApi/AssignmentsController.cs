@@ -19,7 +19,7 @@ using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.PublicApi
 {
-    [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
+    [ApiBasicAuth(UserRoles.ApiUser, TreatPasswordAsPlain = true)]
     [RoutePrefix("api/v1/assignments")]
     public class AssignmentsController : BaseApiServiceController
     {
