@@ -123,9 +123,6 @@
   <data name="DesignerQuestionnaires" xml:space="preserve">
     <value>Questionnaires du site Designer</value>
   </data>
-  <data name="ImportInCensus" xml:space="preserve">
-    <value>Importer en lmode recensement</value>
-  </data>
   <data name="LoginToDesignerError" xml:space="preserve">
     <value>Imposible de se connecter à Designer. Veuillez vérifier que Designer est disponible et essayez &lt;a href='{0}'&gt;à nouveau&lt;/a&gt;</value>
   </data>

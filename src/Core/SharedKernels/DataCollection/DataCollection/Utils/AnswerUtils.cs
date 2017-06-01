@@ -132,7 +132,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                     if (answer.AnswerText.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0 &&
                         parentOption == parentQuestionValue)
                         yield return
-                            new CategoricalOption()
+                            new CategoricalOption
                             {
                                 Value = Convert.ToInt32(ParseAnswerOptionValueOrThrow(answer.AnswerValue, question.PublicKey)),
                                 Title = answer.AnswerText,

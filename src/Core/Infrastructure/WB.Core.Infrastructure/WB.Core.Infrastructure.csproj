@@ -66,6 +66,8 @@
     <Compile Include="EventBus\Lite\Implementation\RaiseFilters\AggregateRootRaiseFilter.cs" />
     <Compile Include="EventFreeInfrastructureModule.cs" />
     <Compile Include="EventSourcedInfrastructureModule.cs" />
+    <Compile Include="Fetching\IFetchingProvider.cs" />
+    <Compile Include="Fetching\IFetchRequest.cs" />
     <Compile Include="FileSystem\IProtectedArchiveUtils.cs" />
     <Compile Include="Implementation\Aggregates\AggregateLock.cs" />
     <Compile Include="Implementation\Aggregates\EventSourcedAggregateRootRepository.cs" />
@@ -194,6 +196,7 @@
     <Compile Include="InfrastructureModuleMobile.cs" />
     <Compile Include="Security\IExportSettings.cs" />
     <Compile Include="Security\ExportEncryptionSettings.cs" />
+    <Compile Include="Transactions\ActionExtensions.cs" />
     <Compile Include="Transactions\IPlainTransactionManagerProvider.cs" />
     <Compile Include="Transactions\ITransactionManager.cs" />
     <Compile Include="Transactions\ITransactionManagerProvider.cs" />
@@ -250,6 +253,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

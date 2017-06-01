@@ -27,7 +27,7 @@ namespace WB.Tests.Integration.HeadquartersTeamsAndStatusesReportTests
 
         protected static PostgreReadSideStorage<InterviewSummary> CreateInterviewSummaryRepository()
         {
-            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewSummaryMap), typeof(QuestionAnswerMap) });
+            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewSummaryMap), typeof(QuestionAnswerMap) }, true);
             postgresTransactionManager = new CqrsPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 
             pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
@@ -35,6 +35,7 @@ namespace WB.Tests.Integration.HeadquartersTeamsAndStatusesReportTests
 
            return new PostgreReadSideStorage<InterviewSummary>(postgresTransactionManager, Mock.Of<ILogger>(), "InterviewId");
         }
+
         protected static void ExecuteInCommandTransaction(Action action)
         {
             try

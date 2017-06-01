@@ -132,9 +132,6 @@
   <data name="DesignerQuestionnaires" xml:space="preserve">
     <value>Designer Questionnaires</value>
   </data>
-  <data name="ImportInCensus" xml:space="preserve">
-    <value>Import in census mode</value>
-  </data>
   <data name="ImportModeTitle" xml:space="preserve">
     <value>Questionnaire import mode</value>
   </data>
@@ -167,12 +164,6 @@
   </data>
   <data name="QuestionnaireExists" xml:space="preserve">
     <value>You have already imported this questionnaire</value>
-  </data>
-  <data name="CensusImportSubTitle" xml:space="preserve">
-    <value>This will allow interviewers to create assignments in the field. The questionnaire will be downloaded on all devices.</value>
-  </data>
-  <data name="CensusImportTitle" xml:space="preserve">
-    <value>Census mode import</value>
   </data>
   <data name="ImportAsNewVersion" xml:space="preserve">
     <value>Create a new version  (#{0})</value>

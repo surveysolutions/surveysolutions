@@ -19,7 +19,7 @@ namespace Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option or rebuild the Visual Studio project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Web.Application.StronglyTypedResourceProxyBuilder", "14.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Web.Application.StronglyTypedResourceProxyBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class QuestionnaireImport {
@@ -70,24 +70,6 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This will allow interviewers to create assignments in the field. The questionnaire will be downloaded on all devices..
-        /// </summary>
-        internal static string CensusImportSubTitle {
-            get {
-                return ResourceManager.GetString("CensusImportSubTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Census mode import.
-        /// </summary>
-        internal static string CensusImportTitle {
-            get {
-                return ResourceManager.GetString("CensusImportTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Sections.
         /// </summary>
         internal static string Chapters {
@@ -129,15 +111,6 @@ namespace Resources {
         internal static string ImportAsNewVersion {
             get {
                 return ResourceManager.GetString("ImportAsNewVersion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Import in census mode.
-        /// </summary>
-        internal static string ImportInCensus {
-            get {
-                return ResourceManager.GetString("ImportInCensus", resourceCulture);
             }
         }
         

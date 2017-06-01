@@ -16,48 +16,52 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
             var settings = ServiceLocator.Current.GetInstance<LegacyAssemblySettings>();
             var fileSystemAccessor = ServiceLocator.Current.GetInstance<IFileSystemAccessor>();
 
-            var pathToSearch = fileSystemAccessor.CombinePath(settings.FolderPath, settings.AssembliesDirectoryName);
-
-            var assemblyFiles = fileSystemAccessor.GetFilesInDirectory(pathToSearch, "*.dll");
-
-            if (assemblyFiles.Length > 0)
+            if (settings.AssembliesDirectoryName != null)
             {
-                Execute.WithConnection((con, trans) =>
+                var pathToSearch =
+                    fileSystemAccessor.CombinePath(settings.FolderPath, settings.AssembliesDirectoryName);
+
+                var assemblyFiles = fileSystemAccessor.GetFilesInDirectory(pathToSearch, "*.dll");
+
+                if (assemblyFiles.Length > 0)
                 {
-                    foreach (var assemblyFile in assemblyFiles)
+                    Execute.WithConnection((con, trans) =>
                     {
-                        var fileCreated = fileSystemAccessor.GetCreationTime(assemblyFile);
-                        var fileName = fileSystemAccessor.GetFileName(assemblyFile);
-                        var fileContent = fileSystemAccessor.ReadAllBytes(assemblyFile);
+                        foreach (var assemblyFile in assemblyFiles)
+                        {
+                            var fileCreated = fileSystemAccessor.GetCreationTime(assemblyFile);
+                            var fileName = fileSystemAccessor.GetFileName(assemblyFile);
+                            var fileContent = fileSystemAccessor.ReadAllBytes(assemblyFile);
 
 
-                        var insertCommand = con.CreateCommand();
+                            var insertCommand = con.CreateCommand();
 
-                        insertCommand.CommandText =
-                            $"INSERT INTO plainstore.\"{assemblyinfosTableName}\" (id, creationdate, content) VALUES (:id, :creationdate, :content) ON CONFLICT (id) DO NOTHING;";
+                            insertCommand.CommandText =
+                                $"INSERT INTO plainstore.\"{assemblyinfosTableName}\" (id, creationdate, content) VALUES (:id, :creationdate, :content) ON CONFLICT (id) DO NOTHING;";
 
 
-                        var idParam = insertCommand.CreateParameter();
-                        idParam.ParameterName = "id";
-                        idParam.Value = fileName;
+                            var idParam = insertCommand.CreateParameter();
+                            idParam.ParameterName = "id";
+                            idParam.Value = fileName;
 
-                        insertCommand.Parameters.Add(idParam);
+                            insertCommand.Parameters.Add(idParam);
 
-                        var creationdateParam = insertCommand.CreateParameter();
-                        creationdateParam.ParameterName = "creationdate";
-                        creationdateParam.Value = fileCreated;
+                            var creationdateParam = insertCommand.CreateParameter();
+                            creationdateParam.ParameterName = "creationdate";
+                            creationdateParam.Value = fileCreated;
 
-                        insertCommand.Parameters.Add(creationdateParam);
+                            insertCommand.Parameters.Add(creationdateParam);
 
-                        var contentParam = insertCommand.CreateParameter();
-                        contentParam.ParameterName = "content";
-                        contentParam.Value = fileContent;
+                            var contentParam = insertCommand.CreateParameter();
+                            contentParam.ParameterName = "content";
+                            contentParam.Value = fileContent;
 
-                        insertCommand.Parameters.Add(contentParam);
+                            insertCommand.Parameters.Add(contentParam);
 
-                        insertCommand.ExecuteNonQuery();
-                    }
-                });
+                            insertCommand.ExecuteNonQuery();
+                        }
+                    });
+                }
             }
         }
 

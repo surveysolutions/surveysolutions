@@ -148,7 +148,7 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .InitializesWith<CreateInterviewFromSynchronizationMetadata>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewFromSynchronizationMetadata(command.Id, command.UserId, command.QuestionnaireId, command.QuestionnaireVersion, command.InterviewStatus, command.FeaturedQuestionsMeta, command.Comments, command.RejectedDateTime, command.InterviewerAssignedDateTime, command.Valid, command.CreatedOnClient))
                 .InitializesWith<SynchronizeInterviewEventsCommand>(command => command.InterviewId, aggregate => aggregate.SynchronizeInterviewEvents)
                 .InitializesWith<CreateInterviewCommand>(command => command.InterviewId, aggregate => aggregate.CreateInterview)
-                .InitializesWith<CreateInterviewOnClientCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewOnClient(command.QuestionnaireIdentity, command.SupervisorId, command.AnswersTime, command.UserId, command.InterviewKey))
+                .InitializesWith<CreateInterviewOnClientCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewOnClient(command.QuestionnaireIdentity, command.SupervisorId, command.AnswersTime, command.UserId, command.InterviewKey, command.AssignmentId, command.AnswersToIdentifyingQuestions))
                 .InitializesWith<CreateInterviewWithPreloadedData>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewWithPreloadedData(command))
                 
                 .StatelessHandles<HardDeleteInterview>(command => command.InterviewId, (command, aggregate) => aggregate.HardDelete(command.UserId))
@@ -233,7 +233,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IQuantityReportFactory>().To<QuantityReportFactory>();
             this.Bind<ISpeedReportFactory>().To<SpeedReportFactory>();
             this.Bind<ISampleUploadViewFactory>().To<SampleUploadViewFactory>();
-            this.Bind<ITakeNewInterviewViewFactory>().To<TakeNewInterviewViewFactory>();
             this.Bind<IAllUsersAndQuestionnairesFactory>().To<AllUsersAndQuestionnairesFactory>();
             this.Bind<IQuestionnairePreloadingDataViewFactory>().To<QuestionnairePreloadingDataViewFactory>();
             this.Bind<IInterviewTroubleshootFactory>().To<InterviewTroubleshootFactory>();
@@ -361,6 +360,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IDeviceSyncInfoRepository>().To<DeviceSyncInfoRepository>();
             this.Bind<IAssignmentViewFactory>().To<AssignmentViewFactory>();
             this.Bind<IAssignmentsService>().To<AssignmentsService>();
+            this.Bind<IAssignmetnsDeletionService>().To<AssignmetnsDeletionService>();
+            this.Bind<IIdentifyingAnswerConverter>().To<IdentifyingAnswerConverter>();
         }
     }
 }

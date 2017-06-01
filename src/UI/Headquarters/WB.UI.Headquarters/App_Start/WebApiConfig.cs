@@ -45,7 +45,6 @@ namespace WB.UI.Headquarters
             config.Routes.MapHttpRoute("DefaultApiWithAction", "api/{controller}/{action}/{id}", new { id = RouteParameter.Optional });
             config.Routes.MapHttpRoute("DefaultApi", "api/{controller}/{id}", new { id = RouteParameter.Optional });
 
-
             //Real Api
             config.Routes.MapHttpRoute("InterviewsApiAction", "api/{apiVersion}/interviews/{action}", new { controller = "interviews" });
             config.Routes.MapHttpRoute("DefaultApiWithActionA", "api/{apiVersion}/interviews/{action}/{id}", new { controller = "interviews", id = RouteParameter.Optional });
@@ -120,7 +119,7 @@ namespace WB.UI.Headquarters
                 c => c.Action<InterviewsApiV2Controller>(x => x.PostImage(Param.Any<PostFileRequest>())));
             config.TypedRoute("api/interviewer/v2/attachments/{id}",
                 c => c.Action<AttachmentsApiV2Controller>(x => x.GetAttachmentContent(Param.Any<string>())));
-            config.TypedRoute("api/interviewer/v2/assignments", c => c.Action<AssignmentsController>(x => x.List()));
+            config.TypedRoute("api/interviewer/v2/assignments", c => c.Action<AssignmentsApiV2Controller>(x => x.List()));
         }
         #pragma warning restore 4014
     }

@@ -11,7 +11,7 @@ using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.PublicApi
 {
-    [ApiBasicAuth(new[] { UserRoles.ApiUser, UserRoles.Administrator  }, TreatPasswordAsPlain = true)]
+    [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
     [RoutePrefix("api/v1")]
     public class UsersController : BaseApiServiceController
     {
@@ -19,9 +19,9 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly HqUserManager userManager;
 
         public UsersController(ILogger logger,
-            IUserViewFactory usersFactory, 
+            IUserViewFactory usersFactory,
             HqUserManager userManager)
-            :base(logger)
+            : base(logger)
         {
             this.usersFactory = usersFactory;
             this.userManager = userManager;
@@ -67,7 +67,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             return new UserApiDetails(user);
         }
 
-       
+
         /// <summary>
         /// Gets detailed info about single interviewer
         /// </summary>
@@ -93,29 +93,37 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// </summary>
         /// <param name="id">User id</param>
         /// <response code="200">User archived</response>
+        /// <response code="400">User id cannot be parsed</response>
         /// <response code="404">User with provided id does not exist</response>
         /// <response code="406">User is not an interviewer or supervisor</response>
-        [HttpPost]
-        [Route("users/{id:guid}/Archive")]
-        public async Task<IHttpActionResult> Archive(Guid id)
+        [HttpPatch]
+        [Route("users/{id}/archive")]
+        public async Task<IHttpActionResult> Archive(string id)
         {
-            var user = this.usersFactory.GetUser(new UserViewInputModel(id));
-            if (user == null)
-            {
-                return this.NotFound();
-            }
-            if (!user.Roles.Contains(UserRoles.Interviewer) || user.Roles.Contains(UserRoles.Supervisor))
+            Guid userGuid;
+            if (!Guid.TryParse(id, out userGuid))
             {
                 return this.BadRequest();
             }
 
+            var user = this.usersFactory.GetUser(new UserViewInputModel(userGuid));
+            if (user == null)
+            {
+                return this.NotFound();
+            }
+            if (!(user.Roles.Contains(UserRoles.Interviewer) || user.Roles.Contains(UserRoles.Supervisor)))
+            {
+                return this.StatusCode(HttpStatusCode.NotAcceptable);
+
+            }
+
             if (user.IsSupervisor())
             {
-                await this.userManager.ArchiveSupervisorAndDependentInterviewersAsync(id);
+                await this.userManager.ArchiveSupervisorAndDependentInterviewersAsync(userGuid);
             }
             else
             {
-                await this.userManager.ArchiveUsersAsync(new[] { id });
+                await this.userManager.ArchiveUsersAsync(new[] { userGuid });
             }
             return this.Ok();
         }
@@ -125,23 +133,31 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// </summary>
         /// <param name="id">User id</param>
         /// <response code="200">User unarchived</response>
+        /// <response code="400">User id cannot be parsed</response>
         /// <response code="404">User with provided id does not exist</response>
         /// <response code="406">User is not an interviewer or supervisor</response>
-        [HttpPost]
-        [Route("users/{id:guid}/Unarchive")]
-        public async Task<IHttpActionResult> UnArchive(Guid id)
+        [HttpPatch]
+        [Route("users/{id}/unarchive")]
+        public async Task<IHttpActionResult> UnArchive(string id)
         {
+            Guid userGuid;
+            if (!Guid.TryParse(id, out userGuid))
+            {
+                return this.BadRequest();
+            }
+
             var user = this.usersFactory.GetUser(new UserViewInputModel(id));
             if (user == null)
             {
                 return this.NotFound();
             }
-            if (!user.Roles.Contains(UserRoles.Interviewer))
+
+            if (!(user.Roles.Contains(UserRoles.Interviewer) || user.Roles.Contains(UserRoles.Supervisor)))
             {
-                return this.BadRequest();
+                return this.StatusCode(HttpStatusCode.NotAcceptable);
             }
 
-            await this.userManager.UnarchiveUsersAsync(new[] { id });
+            await this.userManager.UnarchiveUsersAsync(new[] { userGuid });
             return this.Ok();
         }
     }

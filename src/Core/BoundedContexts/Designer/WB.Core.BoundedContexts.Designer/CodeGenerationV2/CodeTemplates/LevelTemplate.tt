@@ -1,0 +1,207 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="Main.Core.Entities.SubEntities" #>
+<#@ import namespace="WB.Core.SharedKernels.DataCollection.ExpressionStorage" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+
+	internal partial class <#=Model.ClassName#> : <#=typeof(IInterviewLevel).Name#> 
+	{
+		public bool IsAnswered(string answer) => !string.IsNullOrWhiteSpace(answer);
+
+		public bool IsAnswered<TY>(TY? answer) where TY : struct => answer.HasValue; // doublle?, int?, DateTime?
+
+		public bool IsAnswered(GeoLocation answer) => !(answer == null || (answer.Altitude == 0 && answer.Longitude == 0 && answer.Accuracy == 0 && answer.Latitude == 0));
+
+		public bool IsAnswered(int[] answer) => !(answer == null || answer.Length == 0);
+
+		public bool IsAnswered(RosterVector[] answer) => !(answer == null || answer.Length == 0);
+
+		public bool IsAnswered(TextListAnswerRow[] answer) => !(answer == null || answer.Length == 0);
+
+		public bool IsAnswered(RosterVector answer) => answer != null;
+
+		public bool IsAnswered(YesNoAndAnswersMissings answer) => !(answer.Yes.Length == 0 && answer.No.Length == 0);
+
+		public <#=Model.ClassName#>(RosterVector rosterVector, <#= Storage.ClassName #> storage) 
+		{
+			this.storage = storage;
+			Quest = new QuestionnaireRandom(storage.state.Properties);
+<#
+	if (Model.RosterScope.Length == 0)
+	{
+#>
+			this.RosterVector = RosterVector.Empty;
+			this.Identity = new Identity(IdOf.<#=Model.Variable#>, RosterVector.Empty);
+<#
+	}
+	else
+	{
+#>
+			this.RosterVector = rosterVector;
+			this.Identity = new Identity(IdOf.<#=Model.Variable#>, rosterVector);
+<#
+    }
+#>
+<#
+	foreach (var method in Storage.GetEnablementConditions(Model.ClassName)) 
+    {
+#>            
+			enablementConditions.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
+<# 
+	}
+#>
+<#
+	foreach (var methodGroup in Storage.GetValidationConditions(Model.ClassName)) 
+    {
+#>
+			validationConditions.Add(IdOf.<#=methodGroup.Key#>, new Func<bool>[] { <#=string.Join(",",  methodGroup.Value)#> });
+<# 
+	}
+#>
+<#
+	foreach (var method in Storage.GetVariableExpressions(Model.ClassName)) 
+    {
+#>            
+			variableExpressions.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
+<# 
+	}
+#>
+
+<#
+	foreach (var method in Storage.GetCategoricalOptionsFilters(Model.ClassName)) 
+    {
+#>            
+			categoricalFilters.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
+<# 
+	}
+#>
+
+<#
+	foreach (var method in Storage.GetLinkedFilters(Model.ClassName)) 
+    {
+#>            
+			linkedFilters.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
+<# 
+	}
+#>
+		}
+
+		public Func<IInterviewLevel, bool> GetLinkedQuestionFilter(Identity identity)
+		{
+			if (!linkedFilters.ContainsKey(identity.Id))
+				return null;
+			
+			return linkedFilters[identity.Id];
+		}
+
+		public Func<bool> GetConditionExpression(Identity identity)
+		{
+			if (!identity.RosterVector.Equals(this.RosterVector))
+				return null;
+			
+			if (!enablementConditions.ContainsKey(identity.Id))
+				return null;
+			
+			return enablementConditions[identity.Id];
+		}
+
+		public Func<bool>[] GetValidationExpressions(Identity identity)
+		{
+			if (!identity.RosterVector.Equals(this.RosterVector))
+				return null;
+			
+			if (!validationConditions.ContainsKey(identity.Id))
+				return null;
+			
+			return validationConditions[identity.Id];
+		}
+
+		public Func<object> GetVariableExpression(Identity identity)
+		{
+			if (!identity.RosterVector.Equals(this.RosterVector))
+				return null;
+			
+			if (!variableExpressions.ContainsKey(identity.Id))
+				return null;
+			
+			return variableExpressions[identity.Id];
+		}
+
+		public Func<int, bool> GetCategoricalFilter(Identity identity)
+		{
+			if (!identity.RosterVector.Equals(this.RosterVector))
+				return null;
+			
+			if (!categoricalFilters.ContainsKey(identity.Id))
+				return null;
+			
+			return categoricalFilters[identity.Id];
+		}
+
+		private Dictionary<Guid, Func<<#=typeof(IInterviewLevel).Name#>, bool>> linkedFilters = new Dictionary<Guid, Func<<#=typeof(IInterviewLevel).Name#>, bool>>();
+
+		private Dictionary<Guid, Func<int, bool>> categoricalFilters = new Dictionary<Guid, Func<int, bool>>();
+
+		private Dictionary<Guid, Func<bool>> enablementConditions = new Dictionary<Guid, Func<bool>>();
+
+		private Dictionary<Guid, Func<bool>[]> validationConditions = new Dictionary<Guid, Func<bool>[]>();
+
+		private Dictionary<Guid, Func<object>> variableExpressions = new Dictionary<Guid, Func<object>>();
+
+		private readonly <#= Storage.ClassName #> storage;
+
+		private <#=typeof(IInterviewStateForExpressions).Name#> state => storage.state;
+
+		private <#=typeof(IInterviewPropertiesForExpressions).Name#> properties => state.Properties;
+
+		public RosterVector RosterVector { get; private set; }
+
+		public Identity Identity  { get; private set; }
+
+		public int @rowcode => this.RosterVector[this.RosterVector.Length - 1];
+
+		public int @rowindex => state.GetRosterIndex(Identity);
+
+		public string @rowname => state.GetRosterTitle(Identity);
+
+		// backward compatibility
+		
+
+		private QuestionnaireRandom Quest;
+		
+<#
+	foreach (var question in Model.Questions) 
+    {
+#>            
+		public <#=question.TypeName#> <#=question.Variable#> => state.GetAnswer<<#=question.TypeName#>>(IdOf.<#=question.Variable#>, RosterVector.Take(<#=question.RosterScope.Length#>));
+<# 
+	}
+#>
+<#
+	foreach (var variable in Model.Variables) 
+    {
+#>            
+		public <#=variable.TypeName#> <#=variable.Variable#> => state.GetVariable<<#=variable.TypeName#>>(IdOf.<#=variable.Variable#>, RosterVector.Take(<#=variable.RosterScope.Length#>));
+<# 
+	}
+#>
+<#
+	foreach (var roster in Model.Rosters) 
+    {
+#>            
+		public <#=roster.Level.ClassName#>[] <#=roster.Variable#> => storage.GetLevels<<#=roster.Level.ClassName#>>(IdOf.<#=roster.Level.Variable#>,Identity);
+<# 
+	}
+#>
+<#
+	foreach (var table in Storage.LookupTables) 
+    {
+#>
+		public static Dictionary<int, <#= table.TypeName#>> <#= table.TableName #> => LookupTables.<#= table.TableName #>;
+<# 
+	}
+#>
+	}

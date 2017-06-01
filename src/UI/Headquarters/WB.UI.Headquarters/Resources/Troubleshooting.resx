@@ -130,7 +130,7 @@
     <value>Provide an interviewer login name, name of a questionnaire and a date range</value>
   </data>
   <data name="MissingCensusInterviewsTitle" xml:space="preserve">
-    <value>I need to locate an interview in a census mode</value>
+    <value>I need to locate an interview</value>
   </data>
   <data name="SupportSite" xml:space="preserve">
     <value>Click on the link of an issue you want to resolve. For the problems not listed below, visit the Survey Solutions &lt;a href="{0}" target="_blank"&gt;support site&lt;/a&gt;.</value>
@@ -173,7 +173,7 @@ Select an interviewer and timeframe to narrow down your search result</value>
     <value>One interview satisfies filter conditions</value>
   </data>
   <data name="MissingCensusInterviews_PageHeader" xml:space="preserve">
-    <value>Locating specific census interview</value>
+    <value>Locating specific interview</value>
   </data>
   <data name="TableTitle_Enumerator" xml:space="preserve">
     <value>Enumerator</value>

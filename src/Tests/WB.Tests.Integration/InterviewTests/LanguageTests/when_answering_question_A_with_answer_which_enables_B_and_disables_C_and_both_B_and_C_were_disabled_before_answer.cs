@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -27,7 +25,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var questionB = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
                 var questionC = Guid.Parse("cccccccccccccccccccccccccccccccc");
 
-                var interview = SetupInterview(
+                var interview = SetupInterviewWithExpressionStorage(
                     Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                     {
                         Abc.Create.Entity.Group(null, "Chapter X", null, null, false, new IComposite[]

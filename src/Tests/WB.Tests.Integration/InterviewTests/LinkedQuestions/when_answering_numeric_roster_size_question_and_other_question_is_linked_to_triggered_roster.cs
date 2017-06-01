@@ -32,9 +32,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     Abc.Create.Entity.SingleQuestion(q3Id, variable: "q3", linkedToRosterId: rosterId)
                 });
 
-                ILatestInterviewExpressionState interviewState = GetInterviewExpressionState(questionnaireDocument);
-
-                var interview = SetupStatefullInterview(questionnaireDocument, precompiledState: interviewState);
+                var interview = SetupStatefullInterview(questionnaireDocument);
 
                 var result = new InvokeResults();
 

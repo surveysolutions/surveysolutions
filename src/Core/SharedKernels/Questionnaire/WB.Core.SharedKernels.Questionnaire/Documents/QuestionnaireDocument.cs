@@ -121,6 +121,11 @@ namespace Main.Core.Documents
 
         public long LastEventSequence { get; set; }
 
+        public bool IsUsingExpressionStorage { get; set; }
+
+        // fill in before export to HQ or Tester
+        public List<Guid> ExpressionsPlayOrder { get; set; }
+
         public void Insert(int index, IComposite c, Guid? parentId)
         {
             if (!parentId.HasValue || this.PublicKey == parentId)

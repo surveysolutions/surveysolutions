@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -188,7 +189,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 questionnaireIdentity: questionnaireIdentity,
                 answersTime: DateTime.UtcNow,
                 supervisorId: Guid.NewGuid(),
-                interviewKey: null));
+                interviewKey: null,
+                assignmentId: null, 
+                answersToIdentifyingQuestions: new Dictionary<Guid, AbstractAnswer>()));
 
             return interviewId;
         }

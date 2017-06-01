@@ -59,9 +59,11 @@ export default safeStore({
             return getters.rootSections.length > 0
         },
         rootSections(state: ISidebarState) {
+            /* tslint:disable:no-string-literal */
             if (state.panels["null"]) {
                 return state.panels["null"]
             }
+            /* tslint:enable:no-string-literal */
 
             return []
         }

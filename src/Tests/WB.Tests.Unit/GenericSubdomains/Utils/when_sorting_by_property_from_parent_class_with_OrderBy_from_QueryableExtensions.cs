@@ -2,6 +2,7 @@
 using System.Linq;
 using Machine.Specifications;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils
 {

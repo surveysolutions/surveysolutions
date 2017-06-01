@@ -40,7 +40,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         Create.Entity.ValidationCondition(expression: "num >= 0", message: "static text validation 2")
                     }));
 
-                var interview = SetupInterview(questionnaireDocument);
+                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
                 interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestionCommand(questionId: questionId, answer: -5));
                 
                 using (var eventContext = new EventContext())

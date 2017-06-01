@@ -19,7 +19,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 {
     public class PostgresPlainStorageModule : Ninject.Modules.NinjectModule
     {
-        internal const string SessionFactoryName = "PlainSessionFactory";
+        public const string SessionFactoryName = "PlainSessionFactory";
         private readonly PostgresPlainStorageSettings settings;
 
         public PostgresPlainStorageModule(PostgresPlainStorageSettings settings)

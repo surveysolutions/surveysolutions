@@ -83,12 +83,7 @@
     <Compile Include="Implementation\ServiceVariables\ServiceColumns.cs" />
     <Compile Include="Implementation\ServiceVariables\ServiceVariable.cs" />
     <Compile Include="Implementation\ServiceVariables\ServiceVariableType.cs" />
-    <Compile Include="Implementation\TopologicalSorter.cs" />
-    <Compile Include="Implementation\TopologicalSorter\StronglyConnectedComponent.cs" />
-    <Compile Include="Implementation\TopologicalSorter\StronglyConnectedComponentList.cs" />
-    <Compile Include="Implementation\TopologicalSorter\Vertex.cs" />
     <Compile Include="IPasswordHasher.cs" />
-    <Compile Include="ITopologicalSorter.cs" />
     <Compile Include="JsonDeserializationException.cs" />
     <Compile Include="Monads.cs" />
     <Compile Include="NamedLocker.cs" />
@@ -101,7 +96,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="QueryableExtensions.cs" />
     <Compile Include="RosterVectorUtils.cs" />
     <Compile Include="Services\HttpStats.cs" />
     <Compile Include="Services\ICompressor.cs" />
@@ -124,8 +118,6 @@
     <Compile Include="TypeExtensions.cs" />
     <Compile Include="TypeSwitch.cs" />
     <Compile Include="Unit.cs" />
-    <Compile Include="ActionExtensions.cs" />
-    <Compile Include="WhereClouseHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

@@ -125,10 +125,11 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
             return rosterScope.Length > this.Length && this.SequenceEqual(rosterScope.Take(this.Length));
         }
 
-        public bool IsChildScopeFor(RosterScope rosterScope)
+        public bool IsChildScopeFor(RosterScope rosterScope, int? maxLevelsDifference = null)
         {
+            if (maxLevelsDifference.HasValue && (this.Length - rosterScope.Length) > maxLevelsDifference.Value)
+                return false;
             return rosterScope.Length < this.Length && rosterScope.SequenceEqual(this.Take(rosterScope.Length));
-            
         }
 
         public bool IsSameOrChildScopeFor(RosterScope rosterScope)

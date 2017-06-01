@@ -19,6 +19,8 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 
 using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Utils;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.UI.Headquarters.Code
 {
@@ -35,8 +37,8 @@ namespace WB.UI.Headquarters.Code
 
         private IAuthorizedUser authorizedUser => ServiceLocator.Current.GetInstance<IAuthorizedUser>();
 
-        private IQuestionnaireBrowseViewFactory questionnaireBrowseItemFactory
-            => ServiceLocator.Current.GetInstance<IQuestionnaireBrowseViewFactory>();
+        private IQuestionnaireBrowseViewFactory questionnaireBrowseItemFactory => ServiceLocator.Current.GetInstance<IQuestionnaireBrowseViewFactory>();
+        private IQuestionnaireStorage questionnaireStorage => ServiceLocator.Current.GetInstance<IQuestionnaireStorage>();
 
         private IUserViewFactory userViewFactory => ServiceLocator.Current.GetInstance<IUserViewFactory>();
 
@@ -156,6 +158,9 @@ namespace WB.UI.Headquarters.Code
                             ? SyncLogMessages.InterviewerLoggedIn
                             : SyncLogMessages.InterviewerFailedToLogin;
                         break;
+                    case SynchronizationLogType.GetAssignments:
+                        logItem.Log = GetAssignmentsLogMessage(context);
+                        break;
                     default:
                         throw new ArgumentException("logAction");
                 }
@@ -212,13 +217,44 @@ namespace WB.UI.Headquarters.Code
         private string GetQuestionnaireLogMessage(string messageFormat, HttpActionExecutedContext context)
         {
             var questionnaire = this.questionnaireBrowseItemFactory.GetById(
-                new QuestionnaireIdentity(context.GetActionArgumentOrDefault<Guid>("id", Guid.Empty),
+                new QuestionnaireIdentity(context.GetActionArgumentOrDefault("id", Guid.Empty),
                     context.GetActionArgumentOrDefault<int>("version", -1)));
 
             if (questionnaire == null)
                 return messageFormat.FormatString(UnknownStringArgumentValue, UnknownStringArgumentValue);
 
             return messageFormat.FormatString(questionnaire.Title, new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version));
+        }
+
+        private string GetAssignmentsLogMessage(HttpActionExecutedContext context)
+        {
+            var assignmentsApiView = this.GetResponseObject<List<AssignmentApiView>>(context);
+            
+            return SyncLogMessages.GetAssignmentsFormat.FormatString(assignmentsApiView.Count,
+                string.Join("", assignmentsApiView.Select(av => $"<li>{GetAssignmentLogMessage(av)}</li>")));
+        }
+
+        private string GetAssignmentLogMessage(AssignmentApiView apiView)
+        {
+            QuestionnaireIdentity assignmentQuestionnaireId = apiView.QuestionnaireId;
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(assignmentQuestionnaireId, null);
+            var answers = string.Join("", apiView.IdentifyingData
+                .Select(_ => GetAssignmentIdentifyingQuestionRow(_, questionnaire)));
+            return $"{apiView.Id}: <strong>{questionnaire.Title}</strong> [{apiView.QuestionnaireId}] <ul>{answers}</ul>";
+        }
+
+        private string GetAssignmentIdentifyingQuestionRow(AssignmentApiView.IdentifyingAnswer _, Core.SharedKernels.DataCollection.Aggregates.IQuestionnaire questionnaire)
+        {
+            string questionTitle = questionnaire.GetQuestionTitle(_.QuestionId).RemoveHtmlTags();
+            return $"<li title='{questionTitle}'>{LimitStringLength(questionTitle)}: {_.Answer}</li>";
+        }
+
+        private string LimitStringLength(string text, int limit = 50)
+        {
+            if (text.Length > limit) {
+                return text.Substring(0, limit) + "...";
+            }
+            return text;
         }
 
         private T GetResponseObject<T>(HttpActionExecutedContext context) where T : class

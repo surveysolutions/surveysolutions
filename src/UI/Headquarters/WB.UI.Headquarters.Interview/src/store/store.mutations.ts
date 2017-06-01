@@ -45,7 +45,6 @@ export default {
     SET_INTERVIEW_INFO(state, interviewInfo: IInterviewInfo) {
         state.questionnaireTitle = interviewInfo.questionnaireTitle
         state.firstSectionId = interviewInfo.firstSectionId
-        state.isSampleMode = interviewInfo.isSampleMode
     },
     SET_COVER_INFO(state, coverInfo: ISamplePrefilledData) {
         state.samplePrefilledInfo = coverInfo

@@ -1,101 +1,69 @@
 using System;
 using System.Linq;
-using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
-    internal class when_answer_on_integer_question_increases_roster_size_of_disabled_roster_with_disabled_nested_roster_with_disabled_questions_inside_triggered_by_the_same_question : InterviewTestsContext
+    internal class when_answer_on_integer_question_increases_roster_size_of_disabled_roster_with_disabled_nested_roster_with_disabled_questions_inside_triggered_by_the_same_question : in_standalone_app_domain
     {
-        Establish context = () =>
-        {
-            appDomainContext = AppDomainContext.Create();
-        };
-
         Because of = () =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
 
-                var userId = Guid.Parse("11111111111111111111111111111111");
-
-                var questionnaireId = Guid.Parse("77778888000000000000000000000000");
-                var rosterSizeQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-                var rosterQuestionId = Guid.Parse("22222222222222222222222222222222");
-                var nestedRosterQuestionId = Guid.Parse("33333333333333333333333333333333");
-                var rosterId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-                var nestedRosterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-                const string enablementCondition = "a > 2";
-
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: "a"),
-                    Abc.Create.Entity.Roster(rosterId, rosterSizeSourceType: RosterSizeSourceType.Question, enablementCondition: enablementCondition,
-                        rosterSizeQuestionId: rosterSizeQuestionId, children: new IComposite[]
+                    Abc.Create.Entity.NumericRoster(rosterId,enablementCondition: "a > 2", rosterSizeQuestionId: rosterSizeQuestionId, variable: "r1", children: new IComposite[]
+                    {
+                        Abc.Create.Entity.NumericIntegerQuestion(id: rosterQuestionId, enablementCondition: "a > 2", variable: null),
+                        Abc.Create.Entity.NumericRoster(nestedRosterId, enablementCondition: "a > 2", rosterSizeQuestionId: rosterSizeQuestionId, variable: "r2", children: new[]
                         {
-                            Abc.Create.Entity.NumericIntegerQuestion(id: rosterQuestionId, enablementCondition: enablementCondition, variable: null),
-                            Abc.Create.Entity.Roster(nestedRosterId, rosterSizeSourceType: RosterSizeSourceType.Question, enablementCondition: enablementCondition,
-                                rosterSizeQuestionId: rosterSizeQuestionId, children: new[]
-                                {
-                                    Abc.Create.Entity.NumericIntegerQuestion(id: nestedRosterQuestionId, enablementCondition: enablementCondition, variable: null)
-                                })
+                            Abc.Create.Entity.NumericIntegerQuestion(id: nestedRosterQuestionId, enablementCondition: "a > 2", variable: null)
                         })
-                    );
+                    })
+                );
 
-                var interview = SetupInterview(questionnaireDocument);
+                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
 
                 using (var eventContext = new EventContext())
                 {
                     interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, new decimal[0], DateTime.Now, 1);
 
-                    return new InvokeResults()
+                    return new InvokeResults
                     {
-                        NestedRosterInstanceRemoved =
-                            HasEvent<RosterInstancesRemoved>(eventContext.Events,
-                                where => where.Instances.Any(instance => instance.GroupId == nestedRosterId)),
+                        NestedRosterInstanceRemoved = HasEvent<RosterInstancesRemoved>(eventContext.Events, where => where.Instances.Any(x => x.GroupId == nestedRosterId)),
                         RosterAndNestedRosterInstancesAdded =
-                            HasEvent<RosterInstancesAdded>(eventContext.Events, where
-                                =>
-                                where.Instances.Count(
-                                    instance =>
-                                        instance.GroupId == rosterId && instance.RosterInstanceId == 0 &&
-                                        instance.OuterRosterVector.Length == 0) == 1
+                            HasEvent<RosterInstancesAdded>(eventContext.Events, _ => 
+                                _.Instances.Count( x =>
+                                        x.GroupId == rosterId && x.RosterInstanceId == 0 &&
+                                        x.OuterRosterVector.Length == 0) == 1
                                 &&
-                                where.Instances.Count(
-                                    instance =>
-                                        instance.GroupId == nestedRosterId && instance.RosterInstanceId == 0 &&
-                                        instance.OuterRosterVector.SequenceEqual(new decimal[] { 0 })) == 1),
+                                _.Instances.Count(x =>
+                                        x.GroupId == nestedRosterId && x.RosterInstanceId == 0 &&
+                                        x.OuterRosterVector.SequenceEqual(new decimal[] { 0 })) == 1),
                         FirstRowOfNestedRosterDisabled =
-                            HasEvent<GroupsDisabled>(eventContext.Events,
-                                where =>
-                                    where.Groups.Count(
-                                        instance =>
-                                            instance.Id == nestedRosterId &&
-                                            instance.RosterVector.Identical(new decimal[] { 0, 0 })) == 1),
+                            HasEvent<GroupsDisabled>(eventContext.Events, _ => _
+                                .Groups.Count(x =>
+                                            x.Id == nestedRosterId &&
+                                            x.RosterVector.Identical(new decimal[] { 0, 0 })) == 1),
                         FirstRowOfRosterDisabled =
-                            HasEvent<GroupsDisabled>(eventContext.Events,
-                                where =>
-                                    where.Groups.Count(
-                                        instance =>
-                                            instance.Id == rosterId &&
-                                            instance.RosterVector.Identical(new decimal[] { 0 })) == 1),
+                            HasEvent<GroupsDisabled>(eventContext.Events, _ => _
+                                .Groups.Count(x =>
+                                            x.Id == rosterId &&
+                                            x.RosterVector.Identical(new decimal[] { 0 })) == 1),
                         FirstQuestionFromFirstRowOfNestedRosterDisabled =
-                            HasEvent<QuestionsDisabled>(eventContext.Events,
-                                where =>
-                                    where.Questions.Count(
-                                        instance =>
-                                            instance.Id == nestedRosterQuestionId &&
-                                            instance.RosterVector.Identical(new decimal[] { 0, 0 })) == 1),
+                            HasEvent<QuestionsDisabled>(eventContext.Events, _ => _
+                                .Questions.Count(x =>
+                                            x.Id == nestedRosterQuestionId &&
+                                            x.RosterVector.Identical(new decimal[] { 0, 0 })) == 1),
                         FirstQuestionFromFirstRowOfRosterDisabled =
-                            HasEvent<QuestionsDisabled>(eventContext.Events,
-                                where =>
-                                    where.Questions.Count(
-                                        instance =>
-                                            instance.Id == rosterQuestionId &&
-                                            instance.RosterVector.Identical(new decimal[] { 0 })) == 1)
+                            HasEvent<QuestionsDisabled>(eventContext.Events, _ => _
+                                .Questions.Count(x =>
+                                            x.Id == rosterQuestionId &&
+                                            x.RosterVector.Identical(new decimal[] { 0 })) == 1)
                     };
                 }
             });
@@ -118,14 +86,14 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         It should_not_raise_RosterInstancesRemoved_event_for_nested_roster = () =>
             results.NestedRosterInstanceRemoved.ShouldBeFalse();
 
-        Cleanup stuff = () =>
-        {
-            appDomainContext.Dispose();
-            appDomainContext = null;
-        };
-
         private static InvokeResults results;
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        private static Guid userId = Guid.Parse("11111111111111111111111111111111");
+        private static Guid questionnaireId = Guid.Parse("77778888000000000000000000000000");
+        private static Guid rosterSizeQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        private static Guid rosterQuestionId = Guid.Parse("22222222222222222222222222222222");
+        private static Guid nestedRosterQuestionId = Guid.Parse("33333333333333333333333333333333");
+        private static Guid rosterId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+        private static Guid nestedRosterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
         [Serializable]
         internal class InvokeResults

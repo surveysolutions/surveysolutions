@@ -59,10 +59,8 @@
 	.form-group{
 		margin-bottom: 10px;
 		label{
-			font-size: 14px;
-			line-height: 16px;
+			@include font(14px, 16px);
 			font-family: inherit;
-			//font-weight: normal;
 			margin: 0;
 		}
 		&:last-of-type{
@@ -77,8 +75,7 @@
 			label{
 				display: table-cell;
 				vertical-align: middle;
-				font-size: 14px;
-				line-height: 16px;
+				@include font(14px, 16px);
 				width: 50px;
 				font-weight: normal;
 			}
@@ -88,12 +85,6 @@
 				border-bottom-left-radius: 4px;
 				border-top-left-radius: 4px;
 			}
-			// .input-group-addon{
-			// 	background-color: transparent;
-			// 	border-left: none;
-			// 	border-color: $gray_form;
-			// 	padding: 3px 10px; 
-			// }
 		}
 	}
 }
@@ -105,16 +96,9 @@
 		cursor: pointer;
 		border-right: none;
 		border-color: $gray_form;
-		//background-color: #fff;
 		border-bottom-left-radius: 4px;
 		border-top-left-radius: 4px;
 	}
-	// .input-group-addon{
-	// 	background-color: transparent;
-	// 	border-left: none;
-	// 	border-color: $gray_form;
-	// 	padding: 3px 10px; 
-	// }
 }
 .calendar{
 	@include size(21px, 20px); 
@@ -134,20 +118,6 @@
 .filters-container .flagged-questions{
 	margin: 0;
 }
-// .filters {
-// 	.bootstrap-select.btn-group{
-// 		width: 305px !important;
-// 	}
-// 	.input-group{
-// 		width: 305px;
-// 	}
-// 	 .combo-box{
-// 		width: 305px;
-// 		.btn-input .dropdown-toggle{
-//  			width: 305px;
-//  		}
-// 	}
-// }
 .filters{
 	.help-block{
 		margin-top: 10px;
@@ -170,19 +140,6 @@
 }
 @media (max-width: $screen-md-min){
 	@include tight-filters-aside();
-	.foldback-button{
-		display: block;
-	}
-	.fullscreen-hidden-filters{
-		.filters{
-			left: - $filter-width - 12px;
-			overflow: visible;
-			@include hidden-foldback-button();
-			 .foldback-button{
-                right: - $width-foldback-button;
-            }
-		}
-	}
 }
 @media (max-width: $screen-sm-min){
 	.filters{
@@ -214,15 +171,4 @@
 			display: none;
 		}
 	}
-	
 }
-
-// @media (max-width: $screen-xs-min){
-// 	.fullscreen-hidden-filters{
-// 		.filters{
-// 			.filters-container, .preset-filters-container{
-// 				width: 250px;
-// 			}
-// 		}
-// 	}
-// }

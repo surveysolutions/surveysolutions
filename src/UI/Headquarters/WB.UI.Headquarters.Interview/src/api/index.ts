@@ -130,8 +130,7 @@ export async function apiCallerAndFetch<T>(id: string, action: IServerHubCallbac
     try {
         return await wrap(action(hub))
     } catch (err) {
-        console.error(err)
-        if (id) {
+    if (id) {
             store.dispatch("setAnswerAsNotSaved", { id, message: err.statusText })
             store.dispatch("fetch", { id, done: true })
         } else {

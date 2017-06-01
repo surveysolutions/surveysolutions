@@ -187,14 +187,17 @@
     <Compile Include="Aggregates\ReadonlyUser.cs" />
     <Compile Include="Aggregates\Tablet.cs" />
     <Compile Include="Assignments\Assignment.cs" />
+    <Compile Include="Assignments\AssignmentIdentifyingQuestionRow.cs" />
     <Compile Include="Assignments\AssignmentMap.cs" />
     <Compile Include="Assignments\AssignmentRow.cs" />
     <Compile Include="Assignments\AssignmentsInputModel.cs" />
     <Compile Include="Assignments\AssignmentsService.cs" />
     <Compile Include="Assignments\AssignmentsWithoutIdentifingData.cs" />
     <Compile Include="Assignments\AssignmentViewFactory.cs" />
+    <Compile Include="Assignments\AssignmetnsDeletionService.cs" />
     <Compile Include="Assignments\IAssignmentsService.cs" />
     <Compile Include="Assignments\IAssignmentViewFactory.cs" />
+    <Compile Include="Assignments\IAssignmetnsDeletionService.cs" />
     <Compile Include="Assignments\IdentifyingAnswer.cs" />
     <Compile Include="ClientIdentifier.cs" />
     <Compile Include="Commands\CloneQuestionnaire.cs" />
@@ -705,8 +708,7 @@
     <Compile Include="Views\TakeNew\FeaturedAnswerView.cs" />
     <Compile Include="Views\TakeNew\FeaturedQuestionView.cs" />
     <Compile Include="Views\TakeNew\TakeNewInterviewInputModel.cs" />
-    <Compile Include="Views\TakeNew\TakeNewInterviewView.cs" />
-    <Compile Include="Views\TakeNew\TakeNewInterviewViewFactory.cs" />
+    <Compile Include="Views\TakeNew\TakeNewAssignmentView.cs" />
     <Compile Include="Views\TemplateLight.cs" />
     <Compile Include="Views\Template\DesignerQuestionnaireListViewItem.cs" />
     <Compile Include="Views\UsersAndQuestionnaires\AllUsersAndQuestionnairesFactory.cs" />

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
+using NHibernate;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
@@ -15,6 +17,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Threading;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate
@@ -22,7 +25,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
     internal class DeleteQuestionnaireService : IDeleteQuestionnaireService
     {
         private readonly Func<IInterviewsToDeleteFactory> interviewsToDeleteFactory;
-        private IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemReader => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
+        private IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemReader => 
+            ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
         private readonly ICommandService commandService;
         private readonly ILogger logger;
         private readonly ITranslationManagementService translations;
@@ -86,7 +90,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             try
             {
                 this.DeleteInterviews(questionnaireId, questionnaireVersion, userId);
-
+                this.DeleteAssignments(new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
                 this.DeleteTranslations(questionnaireId, questionnaireVersion);
 
                 IPlainTransactionManager plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
@@ -103,6 +107,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             {
                 DeleteInProcess.Remove(questionnaireKey);
             }
+        }
+
+        private void DeleteAssignments(QuestionnaireIdentity questionnaireIdentity)
+        {
+            var sessionProvider = ServiceLocator.Current.GetInstance<IAssignmetnsDeletionService>();
+            sessionProvider.Delete(questionnaireIdentity);
         }
 
         private void DeleteTranslations(Guid questionnaireId, long questionnaireVersion)

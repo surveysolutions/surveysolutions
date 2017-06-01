@@ -115,6 +115,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             await this.questionnaireAssemblyFileAccessor.StoreAssemblyAsync(questionnaireIdentity, assembly);
         }
 
+        public QuestionnaireDocument GetQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
+        {
+            return this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
+        }
+
         public void StoreTranslations(QuestionnaireIdentity questionnaireIdentity, List<TranslationInstance> translationInstances)
         {
             this.RemoveTranslations(questionnaireIdentity);

@@ -186,8 +186,8 @@
   <data name="Total" xml:space="preserve">
     <value>Total</value>
   </data>
-  <data name="CreateNewInterview" xml:space="preserve">
-    <value>Create new interview</value>
+  <data name="CreateNewAssignment" xml:space="preserve">
+    <value>Create new assignment</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Name</value>

@@ -332,7 +332,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lookup table has invalid column headers.
+        ///   Looks up a localized string similar to Lookup table has invalid column headers..
         /// </summary>
         internal static string WB0031_LookupTableHasInvalidHeaders {
             get {
