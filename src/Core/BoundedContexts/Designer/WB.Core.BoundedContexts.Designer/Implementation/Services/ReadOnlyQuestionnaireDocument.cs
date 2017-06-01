@@ -6,6 +6,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
@@ -197,6 +198,26 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public bool IsRoster(IComposite entity)
         {
             return (entity as Group)?.IsRoster ?? false;
+        }
+
+        public string GetVariable(IVariable variable)
+        {
+            return !string.IsNullOrEmpty(variable.Name) ? variable.Name : "__" + variable.PublicKey.FormatGuid();
+        }
+
+        public string GetVariable(StaticText staticText)
+        {
+            return "text_" + staticText.PublicKey.FormatGuid();
+        }
+
+        public string GetVariable(IQuestion question)
+        {
+            return !string.IsNullOrEmpty(question.StataExportCaption) ? question.StataExportCaption : "__" + question.PublicKey.FormatGuid();
+        }
+
+        public string GetVariable(IGroup group)
+        {
+            return !string.IsNullOrEmpty(group.VariableName) ? group.VariableName : "subsection_" + group.PublicKey.FormatGuid();
         }
     }
 }

@@ -118,7 +118,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             this.Write(", (v, s) => new ");
             
             #line 29 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(roster.Level.ClassName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(roster.ClassName));
             
             #line default
             #line hidden
@@ -176,7 +176,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             
             #line 61 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
 
-	foreach (var level in Model.AllLevels) 
+	foreach (var level in Model.Levels) 
 	{
 		var template = CreateLevelTemplate(level, Model);
 		this.Write(template.TransformText());
