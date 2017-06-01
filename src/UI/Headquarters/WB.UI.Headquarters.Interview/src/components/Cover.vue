@@ -1,5 +1,5 @@
 <template>
-    <div class="unit-section complete-section first-last-chapter">
+    <div class="unit-section complete-section">
         <div class="unit-title">
             <wb-humburger></wb-humburger>
             <h3>Cover</h3>
