@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using WB.Core.GenericSubdomains.Portable.Implementation.TopologicalSorter;
+using WB.Core.GenericSubdomains.Portable;
 
-namespace WB.Core.GenericSubdomains.Portable.Implementation
+namespace WB.Core.BoundedContexts.Designer.Services.TopologicalSorter
 {
     /// <summary>
     /// Implementation of the Tarjan stronly connected components algorithm. 
@@ -34,7 +34,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
                 }
             }
 
-            return listOfConnectedComponents.Where(AreVericesInCycle).Select(x => x.Select(v => v.Value).ToList()).ToList();
+            return listOfConnectedComponents.Where(this.AreVericesInCycle).Select(x => x.Select(v => v.Value).ToList()).ToList();
         }
 
         private bool AreVericesInCycle(List<Vertex<T>> vertices)

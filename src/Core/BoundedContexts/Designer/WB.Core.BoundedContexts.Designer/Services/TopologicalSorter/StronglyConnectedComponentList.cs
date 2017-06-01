@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace WB.Core.GenericSubdomains.Portable.Implementation.TopologicalSorter
+namespace WB.Core.BoundedContexts.Designer.Services.TopologicalSorter
 {
     internal class StronglyConnectedComponentList<T> : IEnumerable<StronglyConnectedComponent<T>>
     {
