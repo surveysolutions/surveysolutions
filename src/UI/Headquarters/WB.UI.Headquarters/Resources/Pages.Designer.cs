@@ -556,6 +556,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Locked headquarters (box checked) cannot login and perform any actions on the server..
+        /// </summary>
+        public static string HQ_LockWarning {
+            get {
+                return ResourceManager.GetString("HQ_LockWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you want to continue?.
         /// </summary>
         public static string Index_cshtml_Execute_Do_you_want_to_continue_ {
@@ -759,6 +768,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string InterviewDetails_UnansweredButtonLabel {
             get {
                 return ResourceManager.GetString("InterviewDetails_UnansweredButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Locked interviewers (box is checked) cannot connect their tablets with the server and send interviews to the server..
+        /// </summary>
+        public static string Interviewer_LockWarning {
+            get {
+                return ResourceManager.GetString("Interviewer_LockWarning", resourceCulture);
             }
         }
         
@@ -2128,6 +2146,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Supervisor_CreateText {
             get {
                 return ResourceManager.GetString("Supervisor_CreateText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Locked supervisor (box checked) cannot login and perform any actions on the server..
+        /// </summary>
+        public static string Supervisor_LockWarning {
+            get {
+                return ResourceManager.GetString("Supervisor_LockWarning", resourceCulture);
             }
         }
         
