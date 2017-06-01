@@ -249,6 +249,8 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="CodeGenerationV2\CodeTemplates\Extentions\LookupTablesTemplate.Extended.cs" />
+    <Compile Include="CodeGenerationV2\IQuestionTypeToCSharpTypeMapper.cs" />
+    <Compile Include="CodeGenerationV2\QuestionTypeToCSharpTypeMapper.cs" />
     <Compile Include="Commands\Account\UserCommand.cs" />
     <Compile Include="Commands\Account\AssignUserRole.cs" />
     <Compile Include="Commands\Account\ChangeUserPassword.cs" />
