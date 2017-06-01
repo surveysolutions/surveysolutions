@@ -39,7 +39,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         enablementCondition: "hwrkyn == 1", validationExpression: null),
                     Abc.Create.Entity.Roster(rosterId, variable: "about_jobs", enablementCondition: "hwrkyn == 2", rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestionId));
 
-                var interview = SetupInterview(questionnaireDocument);
+                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
 
                 interview.AnswerSingleOptionQuestion(userId, rosterSwitcherQuestionId, new decimal[0], DateTime.Now, 1);
 

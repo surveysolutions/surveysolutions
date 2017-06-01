@@ -54,6 +54,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             RosterModel = 201,
             StaticTextModel = 300,
             VariableModel = 400,
+            ReadOnlyQuestion = 500,
         }
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -86,7 +87,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 { InterviewEntityType.RosterModel, Load<RosterViewModel>},
                 { InterviewEntityType.TimestampQuestionModel, Load<TimestampQuestionViewModel>},
                 { InterviewEntityType.VariableModel, Load<VariableViewModel>},
-                { InterviewEntityType.AreaQuestionModel, Load<AreaQuestionViewModel> },
+                { InterviewEntityType.ReadOnlyQuestion, Load<ReadOnlyQuestionViewModel>},
+                { InterviewEntityType.AreaQuestionModel, Load<AreaQuestionViewModel> }
             };
 
         private static T Load<T>() where T : class => ServiceLocator.Current.GetInstance<T>();
@@ -118,7 +120,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 .GetPrefilledQuestions()
                 .Select(questionId => this.CreateInterviewEntityViewModel(
                     identity: new Identity(questionId, RosterVector.Empty),
-                    entityModelType: GetEntityModelType(questionId, questionnaire),
+                    entityModelType: GetEntityModelType(new Identity(questionId, RosterVector.Empty), questionnaire, interview),
                     interviewId: interviewId,
                     navigationState: null));
 
@@ -139,7 +141,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 .Where(entityId => !questionnaire.HasVariable(entityId) || this.settings.ShowVariables)
                 .Select(questionnaireEntity => this.CreateInterviewEntityViewModel(
                     identity: new Identity(questionnaireEntity, groupIdentity.RosterVector),
-                    entityModelType: GetEntityModelType(questionnaireEntity, questionnaire),
+                    entityModelType: GetEntityModelType(new Identity(questionnaireEntity, groupIdentity.RosterVector), questionnaire, interview),
                     interviewId: interviewId,
                     navigationState: navigationState))
                 .ToList();
@@ -148,14 +150,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         }
 
         [Obsolete("Do not use it. It is for transition purpose only")]
-        private static InterviewEntityType GetEntityModelType(Guid entityId, IQuestionnaire questionnaire)
+        private static InterviewEntityType GetEntityModelType(Identity identity, IQuestionnaire questionnaire, IStatefulInterview interview)
         {
+            Guid entityId = identity.Id;
+
             if (questionnaire.HasGroup(entityId))
             {
                 return questionnaire.IsRosterGroup(entityId) ? InterviewEntityType.RosterModel : InterviewEntityType.GroupModel;
             }
+
             if (questionnaire.HasQuestion(entityId))
             {
+                if (interview.IsReadOnlyQuestion(identity))
+                    return InterviewEntityType.ReadOnlyQuestion;
+
                 var questionType = questionnaire.GetQuestionType(entityId);
                 switch (questionType)
                 {

@@ -196,6 +196,7 @@
     <Compile Include="ViewModels\InterviewDetails\Questions\SingleOptionRosterLinkedQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\YesNoQuestionOptionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\YesNoQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\ReadOnlyQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\SideBarCompleteSectionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\SideBarCoverSectionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\SingleInterviewViewModel.cs" />

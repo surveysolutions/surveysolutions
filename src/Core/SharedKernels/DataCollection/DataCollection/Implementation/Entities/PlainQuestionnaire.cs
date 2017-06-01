@@ -1563,5 +1563,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                       || (x.LinkedToRosterId == linkedSourceEntityId))
                     .Select(x => x.PublicKey);
         }
+
+        public bool IsUsingExpressionStorage()
+        {
+            return this.QuestionnaireDocument.IsUsingExpressionStorage;
+        }
+
+        public List<Guid> GetExpressionsPlayOrder()
+        {
+            return this.QuestionnaireDocument.ExpressionsPlayOrder;
+        }
+
+        public bool HasAnyCascadingOptionsForSelectedParentOption(Guid cascadingQuestionId, Guid parenQuestionId,
+            int selectedParentValue)
+        {
+            var options = this.GetOptionsForQuestion(cascadingQuestionId, selectedParentValue, string.Empty);
+            return options.Any();
+        }
     }
 }

@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            interview.CreateInterviewOnClient(questionnaireIdentity, responsibleSupervisorId, DateTime.Now, userId, null);
+            interview.CreateInterviewOnClient(questionnaireIdentity, responsibleSupervisorId, DateTime.Now, userId, null, null, null);
 
         It should_raise_InterviewCreated_event = () =>
             eventContext.ShouldContainEvent<InterviewOnClientCreated>();

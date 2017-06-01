@@ -123,12 +123,6 @@
   <data name="CloneQuestionnaireTitle" xml:space="preserve">
     <value>Клонировать опросник </value>
   </data>
-  <data name="inCensusMode" xml:space="preserve">
-    <value>в режиме переписи</value>
-  </data>
-  <data name="inRegularMode" xml:space="preserve">
-    <value>в обычном режиме</value>
-  </data>
   <data name="ToCloneQuestionnaire" xml:space="preserve">
     <value>Клонировать опросник </value>
   </data>

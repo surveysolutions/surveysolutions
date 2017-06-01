@@ -25,8 +25,15 @@ namespace WB.Tests.Abc.TestFactories
             ISubstitionTextFactory textFactory = null,
             IQuestionOptionsRepository questionOptionsRepository = null)
         {
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter();
+            questionnaireDocument.IsUsingExpressionStorage = true;
+
+            var questionnaireDefaultRepository = Mock.Of<IQuestionnaireStorage>(repository =>
+                repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1, null) &&
+                repository.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument);
+
             var textFactoryMock = new Mock<ISubstitionTextFactory> {DefaultValue = DefaultValue.Mock};
-            var interview = new Interview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+            var interview = new Interview(questionnaireRepository ?? questionnaireDefaultRepository,
                 expressionProcessorStatePrototypeProvider ?? Stub.InterviewExpressionStateProvider(),
                 textFactory ?? textFactoryMock.Object);
 
@@ -82,7 +89,7 @@ namespace WB.Tests.Abc.TestFactories
 
             if (shouldBeInitialized)
             {
-                statefulInterview.CreateInterviewOnClient(Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), Guid.NewGuid(), DateTime.Now, userId ?? Guid.NewGuid(), null);
+                statefulInterview.CreateInterviewOnClient(Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), Guid.NewGuid(), DateTime.Now, userId ?? Guid.NewGuid(), null, null, null);
             }
 
             return statefulInterview;
@@ -104,7 +111,7 @@ namespace WB.Tests.Abc.TestFactories
 
             if (shouldBeInitialized)
             {
-                statefulInterview.CreateInterviewOnClient(Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), Guid.NewGuid(), DateTime.Now, userId ?? Guid.NewGuid(), null);
+                statefulInterview.CreateInterviewOnClient(Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), Guid.NewGuid(), DateTime.Now, userId ?? Guid.NewGuid(), null, null, null);
             }
 
             return statefulInterview;

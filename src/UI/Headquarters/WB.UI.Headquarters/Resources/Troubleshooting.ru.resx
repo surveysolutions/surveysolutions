@@ -130,7 +130,7 @@
     <value>Вам потребуется выбрать название опросника, имя интервьюера и диапазон дат</value>
   </data>
   <data name="MissingCensusInterviewsTitle" xml:space="preserve">
-    <value>Я не могу найти интервью, собранное в режиме census</value>
+    <value>Я не могу найти интервью</value>
   </data>
   <data name="SupportSite" xml:space="preserve">
     <value>Перейдите по ссылке, которая описывает ваш вопрос, чтобы увидеть предлагаемые решения. Если проблема, с которой вы столкнулись, не описана ниже, перейдите на &lt;a href="{0}" target="_blank"&gt;сайт технической поддержки&lt;/a&gt; Survey Solutions.</value>
@@ -173,7 +173,7 @@
     <value>Одно интервью удовлетворяет критериям поиска</value>
   </data>
   <data name="MissingCensusInterviews_PageHeader" xml:space="preserve">
-    <value>Поиск интервью, собранных в census режиме </value>
+    <value>Поиск интервью</value>
   </data>
   <data name="TableTitle_Enumerator" xml:space="preserve">
     <value>Интервьювер</value>

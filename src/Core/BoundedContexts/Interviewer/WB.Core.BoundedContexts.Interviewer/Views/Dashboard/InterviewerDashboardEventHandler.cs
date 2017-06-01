@@ -79,7 +79,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 false,
                 evnt.Payload.InterviewerAssignedDateTime,
                 null,
-                evnt.Payload.RejectedDateTime);
+                evnt.Payload.RejectedDateTime,
+                null);
         }
 
 
@@ -96,15 +97,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 true,
                 evnt.EventTimeStamp,
                 evnt.EventTimeStamp,
-                null);
+                null, 
+                evnt.Payload.AssignmentId);
         }
 
 
-        private void AddOrUpdateInterviewToDashboard(
-            Guid questionnaireId, long questionnaireVersion, Guid interviewId, Guid responsibleId, InterviewStatus status,
-            string comments, IEnumerable<AnsweredQuestionSynchronizationDto> answeredQuestions,
-            bool createdOnClient, bool canBeDeleted,
-            DateTime? assignedDateTime, DateTime? startedDateTime, DateTime? rejectedDateTime)
+        private void AddOrUpdateInterviewToDashboard(Guid questionnaireId, long questionnaireVersion, Guid interviewId, Guid responsibleId, InterviewStatus status, string comments, IEnumerable<AnsweredQuestionSynchronizationDto> answeredQuestions, bool createdOnClient, bool canBeDeleted, DateTime? assignedDateTime, DateTime? startedDateTime, DateTime? rejectedDateTime, int? assignmentId)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
             var questionnaireDocumentView = this.questionnaireRepository.GetQuestionnaireDocument(questionnaireIdentity);
@@ -171,6 +169,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             interviewView.InterviewerAssignedDateTime = assignedDateTime;
             interviewView.RejectedDateTime = rejectedDateTime;
             interviewView.CanBeDeleted = canBeDeleted;
+            interviewView.Assignment = assignmentId?.ToString();
             interviewView.LastInterviewerOrSupervisorComment = comments;
             interviewView.LocationQuestionId = prefilledGpsQuestionId;
 
@@ -273,7 +272,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 canBeDeleted: false,
                 assignedDateTime: evnt.Payload.InterviewData.InterviewerAssignedDateTime,
                 startedDateTime: null,
-                rejectedDateTime: evnt.Payload.InterviewData.RejectDateTime);
+                rejectedDateTime: evnt.Payload.InterviewData.RejectDateTime, 
+                assignmentId: null);
         }
 
         public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)

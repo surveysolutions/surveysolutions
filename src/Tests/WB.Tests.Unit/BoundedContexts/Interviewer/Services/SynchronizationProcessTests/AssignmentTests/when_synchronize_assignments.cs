@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Main.Core.Entities.Composite;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -22,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
     {
         private List<AssignmentDocument> LocalAssignments;
 
-        private List<AssignmentDocument> RemoteAssignments;
+        private List<AssignmentApiView> RemoteAssignments;
         private IPlainStorage<AssignmentDocument> localAssignmentsRepo;
         private Mock<IProgress<SyncProgressInfo>> progressInfo;
 
@@ -31,26 +32,26 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             this.LocalAssignments = new List<AssignmentDocument>
             {
                 Create.Entity
-                    .AssignmentDocument(Id.g1.ToString(), 10, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
+                    .AssignmentDocument(Id.g1.ToString(), 10, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                     .WithAnswer(Guid.NewGuid(), "1")
                     .WithAnswer(Guid.NewGuid(), "2")
                     .Build(),
                 Create.Entity
-                    .AssignmentDocument(Id.g2.ToString(), 10, Create.Entity.QuestionnaireIdentity(Id.gB).ToString())
+                    .AssignmentDocument(Id.g2.ToString(), 10, 0, Create.Entity.QuestionnaireIdentity(Id.gB).ToString())
                     .WithAnswer(Guid.NewGuid(), "1")
                     .WithAnswer(Guid.NewGuid(), "2")
                     .Build()
             };
 
-            this.RemoteAssignments = new List<AssignmentDocument>
+            this.RemoteAssignments = new List<AssignmentApiView>
             {
                 Create.Entity
-                    .AssignmentDocument(Id.g1.ToString(), 20, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
+                    .AssignmentApiView(Id.g1.ToString(), 20, 0, Create.Entity.QuestionnaireIdentity(Id.gA))
                     .WithAnswer(Guid.NewGuid(), "1")
                     .WithAnswer(Guid.NewGuid(), "2")
                     .Build(),
                 Create.Entity
-                    .AssignmentDocument(Id.g3.ToString(), 20, Create.Entity.QuestionnaireIdentity(Id.gC).ToString())
+                    .AssignmentApiView(Id.g3.ToString(), 20, 0, Create.Entity.QuestionnaireIdentity(Id.gC))
                     .WithAnswer(Guid.NewGuid(), "1")
                     .WithAnswer(Guid.NewGuid(), "2")
                     .Build()
@@ -61,7 +62,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         public async Task OneTimeSetup()
         {
             this.Context();
-            
+
             this.localAssignmentsRepo = new SqliteInmemoryStorage<AssignmentDocument>();
             this.localAssignmentsRepo.Store(this.LocalAssignments);
 
@@ -72,9 +73,17 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 Create.Entity.QuestionnaireIdentity(Id.gC)
             };
 
+            var questionnaire = Create.Entity.QuestionnaireDocument(Id.gC, children: new IComposite[]
+            {
+                Create.Entity.TextQuestion(RemoteAssignments[1].IdentifyingData[0].QuestionId, text: "text 1"),
+                Create.Entity.TextQuestion(RemoteAssignments[1].IdentifyingData[1].QuestionId, text: "title 2"),
+            });
+            questionnaire.Title = "title";
+
             var interviewerQuestionnaireAccessor = Mock.Of<IInterviewerQuestionnaireAccessor>(
                 x => x.GetCensusQuestionnaireIdentities() == new List<QuestionnaireIdentity>(questionaries) &&
-                     x.GetAllQuestionnaireIdentities() == new List<QuestionnaireIdentity>(questionaries)
+                     x.GetAllQuestionnaireIdentities() == new List<QuestionnaireIdentity>(questionaries) &&
+                     x.GetQuestionnaire(questionaries[2]) == questionnaire
             );
 
             var synchronizationService = Mock.Of<ISynchronizationService>(
@@ -91,7 +100,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             var interviewViewRepository = new SqliteInmemoryStorage<InterviewView>();
             interviewViewRepository.Store(new List<InterviewView>());
-            
+
             var viewModel = Create.Service.SynchronizationProcess(principal: principal,
                 interviewViewRepository: interviewViewRepository,
                 synchronizationService: synchronizationService,
@@ -100,7 +109,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             );
 
             this.progressInfo = new Mock<IProgress<SyncProgressInfo>>();
-            
+
             await viewModel.SyncronizeAsync(progressInfo.Object, CancellationToken.None);
         }
 
@@ -121,8 +130,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         [Test]
         public void should_update_existing_assignment_quantity()
         {
-            var exitingAssignment = this.localAssignmentsRepo.GetById(Id.g1.ToString());
-            Assert.That(exitingAssignment.Capacity, Is.EqualTo(this.RemoteAssignments[0].Capacity));
+            var existingAssignment = this.localAssignmentsRepo.GetById(Id.g1.ToString());
+            Assert.That(existingAssignment.Capacity, Is.EqualTo(this.RemoteAssignments[0].Capacity));
         }
 
         [Test]
@@ -138,7 +147,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 var remote = remoteLookup[local.Id];
 
                 Assert.That(remote.Capacity, Is.EqualTo(local.Capacity));
-                Assert.That(remote.QuestionnaireId, Is.EqualTo(local.QuestionnaireId));
+                Assert.That(remote.Quantity, Is.EqualTo(local.Quantity));
+                Assert.That(remote.QuestionnaireId.ToString(), Is.EqualTo(local.QuestionnaireId));
             }
         }
 

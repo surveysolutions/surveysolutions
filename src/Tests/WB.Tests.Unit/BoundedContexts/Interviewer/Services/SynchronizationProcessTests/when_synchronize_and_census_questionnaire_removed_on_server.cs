@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                     x.GetCensusQuestionnairesAsync(It.IsAny<CancellationToken>()) == Task.FromResult(new List<QuestionnaireIdentity>()) &&
                     x.GetServerQuestionnairesAsync(It.IsAny<CancellationToken>()) == Task.FromResult(new List<QuestionnaireIdentity>()) &&
                     x.GetInterviewsAsync(It.IsAny<CancellationToken>()) == Task.FromResult(new List<InterviewApiView>()) &&
-                    x.GetAssignmentsAsync(It.IsAny<CancellationToken>()) == Task.FromResult(new List<AssignmentDocument>())
+                    x.GetAssignmentsAsync(It.IsAny<CancellationToken>()) == Task.FromResult(new List<AssignmentApiView>())
             );
 
             var interviewerQuestionnaireAccessor = Mock.Of<IInterviewerQuestionnaireAccessor>(

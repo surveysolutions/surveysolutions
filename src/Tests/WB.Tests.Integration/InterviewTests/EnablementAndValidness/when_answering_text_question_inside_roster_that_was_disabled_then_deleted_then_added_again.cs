@@ -38,17 +38,17 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         rosterSizeSourceType: RosterSizeSourceType.Question,
                         enablementCondition: "@rowcode != (decimal)q0",
                         children: new[]
-                                  {
-                                      Abc.Create.Entity.Group(null, "Group X", null, "@rowcode != 2", false, new []
-                                      {
-                                          Abc.Create.Entity.Question(idOfQuestionInRoster, variable:"q2")
-                                      })
+                        {
+                            Abc.Create.Entity.Group(null, "Group X", null, "@rowcode != 2", false, new []
+                            {
+                                Abc.Create.Entity.Question(idOfQuestionInRoster, variable:"q2")
+                            })
                                       
-                                  })
+                        })
                     );
 
                 var emptyVector = new decimal[] { };
-                var interview = SetupInterview(questionnaireDocument, new object[] { });
+                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new object[] { });
 
                 interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, RosterVector.Empty, DateTime.Now, 3);
                 interview.AnswerNumericIntegerQuestion(userId, integerQuestionId, RosterVector.Empty, DateTime.Now, 2);
@@ -61,9 +61,9 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     interview.AnswerTextQuestion(userId, idOfQuestionInRoster, new decimal[] { 1 }, DateTime.Now, "Hello World!");
 
                     return new InvokeResults()
-                           {
-                               WasTextQuestionAnswered = HasEvent<TextQuestionAnswered>(eventContext.Events)
-                           };
+                    {
+                        WasTextQuestionAnswered = HasEvent<TextQuestionAnswered>(eventContext.Events)
+                    };
                 }
             });
 

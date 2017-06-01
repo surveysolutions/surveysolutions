@@ -27,15 +27,15 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 Setup.MockedServiceLocator();
                 var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 var variableId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+                var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]
                 {
-                    Abc.Create.Entity.YesNoQuestion(questionId: questionId, variable: "hhAssets", answers: new[] {11}),
-                    Abc.Create.Entity.Variable(variableId, VariableType.LongInteger, expression: "hhAssets.Missing.Length")
+                    Create.Entity.YesNoQuestion(questionId, variable: "hhAssets", answers: new[] {11}),
+                    Create.Entity.Variable(variableId, VariableType.LongInteger, expression: "hhAssets.Missing.Length")
                 });
 
                 var interview = SetupStatefullInterview(questionnaireDocument);
 
-                interview.AnswerYesNoQuestion(Abc.Create.Command.AnswerYesNoQuestion(
+                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(
                     questionId: questionId,
                     rosterVector: RosterVector.Empty,
                     answeredOptions: new[] { Create.Entity.AnsweredYesNoOption(11m, true)},

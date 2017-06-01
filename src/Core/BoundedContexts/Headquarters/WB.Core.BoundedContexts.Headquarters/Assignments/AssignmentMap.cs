@@ -11,12 +11,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public AssignmentMap()
         {
             Id(x => x.Id, mapper => mapper.Generator(Generators.Identity));
+            DynamicUpdate(true);
             Property(x => x.ResponsibleId);
             Property(x => x.Capacity);
             Property(x => x.Archived);
             Property(x => x.CreatedAtUtc);
             Property(x => x.UpdatedAtUtc);
-            Property(x => x.Completed);
 
             Component(x => x.QuestionnaireId, cmp =>
             {
@@ -27,13 +27,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
             Set(x => x.InterviewSummaries, set =>
             {
-                set.Key(key =>
-                {
-                    key.Column("assignmentid");
-                });
-                set.Lazy(CollectionLazy.NoLazy);
-                set.Cascade(Cascade.All | Cascade.DeleteOrphans);
+                set.Key(key => key.Column("assignmentid"));
+                set.Lazy(CollectionLazy.Lazy);
+                set.Cascade(Cascade.None);
             },
+
             relation => relation.OneToMany());
 
             List(x => x.IdentifyingData, mapper =>
@@ -41,11 +39,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 mapper.Table("AssignmentsIdentifyingAnswers");
                 mapper.Key(k => k.Column("AssignmentId"));
                 mapper.Index(i => i.Column("Position"));
-                mapper.Cascade(Cascade.All|Cascade.DeleteOrphans);
+                mapper.Cascade(Cascade.All);
             }, r => r.Component(c =>
             {
                 c.Property(x => x.Answer);
                 c.Property(x => x.QuestionId);
+                c.Property(x => x.AnswerAsString);
                 c.Property(x => x.Assignment);
             }));
 

@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private MvxSubscriptionToken startingLongOperationMessageSubscriptionToken;
 
         public NewInterviewsViewModel NewInterviews { get; }
-        public QuestionnairesViewModel Questionnaires { get; }
+        public CreateNewViewModel CreateNew { get; }
         public StartedInterviewsViewModel StartedInterviews { get; }
         public CompletedInterviewsViewModel CompletedInterviews { get; }
         public RejectedInterviewsViewModel RejectedInterviews { get; }
@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IPrincipal principal, 
             SynchronizationViewModel synchronization,
             IMvxMessenger messenger,
-            QuestionnairesViewModel questionnairesViewModel,
+            CreateNewViewModel createNewViewModel,
             StartedInterviewsViewModel startedInterviewsViewModel,
             CompletedInterviewsViewModel completedInterviewsViewModel,
             RejectedInterviewsViewModel rejectedInterviewsViewModel,
@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.Synchronization = synchronization;
             this.Synchronization.SyncCompleted += (sender, args) => this.RefreshDashboard();
 
-            this.Questionnaires = questionnairesViewModel;
+            this.CreateNew = createNewViewModel;
             this.StartedInterviews = startedInterviewsViewModel;
             this.CompletedInterviews = completedInterviewsViewModel;
             this.RejectedInterviews = rejectedInterviewsViewModel;
@@ -80,7 +80,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                                                   + this.RejectedInterviews.Items.Count;
 
         public bool IsExistsAnyCensusQuestionnairesOrInterviews
-            => numberOfAssignedInterviews + this.Questionnaires.Items.Count > 0;
+            => numberOfAssignedInterviews + this.CreateNew.Items.Count > 0;
 
         private SynchronizationViewModel synchronization;
         public SynchronizationViewModel Synchronization
@@ -122,7 +122,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             if(this.principal.CurrentUserIdentity == null)
                 return;
 
-            this.Questionnaires.Load();
+            this.CreateNew.Load();
             this.StartedInterviews.Load();
             this.CompletedInterviews.Load();
             this.RejectedInterviews.Load();

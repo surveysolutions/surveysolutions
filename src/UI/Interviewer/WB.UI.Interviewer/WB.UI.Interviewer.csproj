@@ -37,9 +37,9 @@
     <DefineConstants>TRACE;DEBUG;$(Constants)</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
+    <AndroidUseSharedRuntime>true</AndroidUseSharedRuntime>
     <AndroidLinkMode>None</AndroidLinkMode>
-    <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
+    <EmbedAssembliesIntoApk>false</EmbedAssembliesIntoApk>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <BundleAssemblies>false</BundleAssemblies>
     <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
@@ -415,6 +415,7 @@
     <Compile Include="CustomBindings\TextViewIsCurrentDashboardTabBinding.cs" />
     <Compile Include="CustomBindings\ViewDrawableTargetBinding.cs" />
     <Compile Include="CustomControls\InterviewerDashboardTemplateSelector.cs" />
+    <Compile Include="Implementations\Services\ArchiveParcherService.cs" />
     <Compile Include="Implementations\Services\DeviceInformationService.cs" />
     <Compile Include="Implementations\Services\InMemorySnapshotStoreWithCache.cs" />
     <Compile Include="Implementations\Services\StoredEvent.cs" />
@@ -506,6 +507,7 @@
     <AndroidResource Include="Resources\Layout\fragment_dashboard_tab_new.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\Layout\dashboard_assignment_questionnare_item.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\ErrorScreen.axml">
@@ -514,6 +516,7 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidEnvironment Include="AndroidEnvironment.txt" />
+    <AndroidJavaLibrary Include="patch-applier.jar" />
     <Content Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </Content>

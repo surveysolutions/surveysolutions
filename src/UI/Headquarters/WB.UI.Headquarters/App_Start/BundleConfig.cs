@@ -76,7 +76,7 @@ namespace WB.UI.Headquarters
             bundles.Add(new StyleBundle("~/css/list").Include(
                 "~/Content/listview.css"
                 ));
-            bundles.Add(new StyleBundle("~/css/interview-new").Include(
+            bundles.Add(new StyleBundle("~/css/assignment-new").Include(
                 "~/Content/bootstrap-editable.css",
                 "~/Content/datepicker.css"
                 ));
@@ -155,14 +155,14 @@ namespace WB.UI.Headquarters
                 "~/Scripts/knockout.validation.min.js",
                 "~/Scripts/viewmodels/pages/interview/custom.js"
                 ));
-            bundles.Add(new ScriptBundle("~/js/interview-new").Include(
+            bundles.Add(new ScriptBundle("~/js/assignment-new").Include(
                 "~/Scripts/bootstrap3-typeahead.js",
                 "~/Scripts/knockout/ko.typeahead.js",
                 "~/Scripts/components/typeahead-extended.js",
                 "~/Scripts/viewmodels/pages/interview/new/datacontext.js",
                 "~/Scripts/viewmodels/pages/interview/new/mapper.js",
                 "~/Scripts/viewmodels/pages/interview/new/model.js",
-                "~/Scripts/viewmodels/pages/interview/new/newinterview.js",
+                "~/Scripts/viewmodels/pages/interview/new/new-assignment.js",
                 "~/Scripts/spin.js",
                 "~/Scripts/knockout/ko.spin.js"
                 ));

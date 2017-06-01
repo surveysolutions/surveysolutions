@@ -23,7 +23,6 @@
 				position: relative;
 				@include transition(all, 0.3s);
 				&.group a{
-					/* padding-left: 0; */
 					&:before, &:after{
 						display: none;
 					}

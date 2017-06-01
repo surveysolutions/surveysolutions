@@ -1,5 +1,5 @@
 ﻿<template>
-  <table class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews">
+  <table class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews responsive">
     <thead>
     </thead>
     <tbody></tbody>
@@ -39,7 +39,7 @@ export default {
     },
     onTableInitComplete: function () {
       var self = this;
-      $(this.$el).parent('.dataTables_wrapper').find('.dataTables_filter label').on('click', function (e) {
+      $(this.$el).parents('.dataTables_wrapper').find('.dataTables_filter label').on('click', function (e) {
         if (e.target !== this)
           return;
         if ($(this).hasClass("active")) {
@@ -100,7 +100,17 @@ export default {
     this.table.on('deselect', function (e, dt, type, indexes) {
       self.$emit('deselect', e, dt, type, indexes)
     });
-    this.$emit('DataTableRef', this.table)
+    this.table.on('click', 'tbody td', function() {
+        var cell = self.table.cell(this)
+
+        if (cell.index().column > 0) {
+            var rowId = self.table.row(this).id()
+            var columns = self.table.settings().init().columns;
+
+            self.$emit('cell-clicked', columns[this.cellIndex].name, rowId, cell.data())
+        }
+    });
+    this.$emit('DataTableRef', this.table);
   },
   destroyed() {
   }

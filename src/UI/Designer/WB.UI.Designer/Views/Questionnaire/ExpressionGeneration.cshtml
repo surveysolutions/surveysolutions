@@ -68,7 +68,7 @@ pre.wrap {
             $('#getAssembly').click(function() {
                 $('#outputResult').text("sending request...");
                 editor.setValue("");
-                downloadURL('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ExpressionGeneration", action = "GetLatestVersionAssembly" })' + '?id=' + $('#questionnaireId').val())
+                downloadURL('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ExpressionGeneration", action = "GetLatestVersionAssembly" })' + '?id=' + $('#questionnaireId').val() + "&version=" + $('#version').val())
             });
 
             $('#getCompilationResult').click(function () {

@@ -76,7 +76,7 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
             return resultCommand;
         }
 
-        private static KeyValuePair<Guid, AbstractAnswer> ParseQuestionAnswer(UntypedQuestionAnswer answer)
+        public static KeyValuePair<Guid, AbstractAnswer> ParseQuestionAnswer(UntypedQuestionAnswer answer)
         {
             string answerAsString = answer.Answer.ToString();
             AbstractAnswer answerValue = null;

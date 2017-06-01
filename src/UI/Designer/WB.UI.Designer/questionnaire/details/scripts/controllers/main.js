@@ -333,8 +333,11 @@ angular.module('designerApp')
             };
 
             function isNotLinkedOrLinkedToTextList(question) {
-                return question.linkedToType === "textlist" ||
+                var notLinked = question.linkedToType == null && question.linkedToEntity == null;
+                var linkedToTl = question.linkedToType === "textlist" ||
                     (question.linkedToEntity || {}).type === "textlist";
+
+                return notLinked || linkedToTl;
             }
 
             $rootScope.updateVariableTypes = function(question) {
