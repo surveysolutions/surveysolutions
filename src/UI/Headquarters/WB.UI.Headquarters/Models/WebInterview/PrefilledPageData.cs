@@ -2,21 +2,23 @@
 
 namespace WB.UI.Headquarters.Models.WebInterview
 {
-    public class ReadonlyPrefilledQuestion
+    public class IdentifyingQuestion
     {
+        public string Identity { get; set; }
         public string Answer { get; set; }
         public string Title { get; set; }
         public string Type { get; set; }
+        public bool IsReadonly { get; set; }
     }
 
     public class SamplePrefilledData
     {
         public SamplePrefilledData()
         {
-            this.Questions = new List<ReadonlyPrefilledQuestion>();
+            this.Questions = new List<IdentifyingQuestion>();
         }
 
-        public List<ReadonlyPrefilledQuestion> Questions { get; set; }
+        public List<IdentifyingQuestion> Questions { get; set; }
     }
 
     public class PrefilledPageData

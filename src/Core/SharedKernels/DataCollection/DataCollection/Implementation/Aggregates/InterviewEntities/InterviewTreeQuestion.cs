@@ -196,6 +196,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsLinkedToListQuestion => (this.IsMultiLinkedToList || this.IsSingleLinkedToList);
         public bool IsLinked => (this.IsMultiLinkedOption || this.IsSingleLinkedOption);
         public bool IsCascading => this.AsCascading != null;
+        public bool IsReadonly
+        {
+            get { return true; }
+            private set { throw new NotImplementedException(); }
+        }
 
         public bool IsAnswered()
         {

@@ -17,7 +17,6 @@ const store = new Vuex.Store(safeStore({
         loadedEntitiesCount: 0,
         questionnaireTitle: "",
         firstSectionId: "",
-        isSampleMode: false,
         entities: [], /* IInterviewEntity[] */
         entityDetails: { /* string: object */ },
         breadcrumbs: {
