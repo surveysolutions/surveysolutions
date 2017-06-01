@@ -33,13 +33,14 @@ namespace WB.UI.Headquarters.API.PublicApi
                     (answer, dest, value, ctx) => GetVariableName(ctx, answer.QuestionId)))
                 .ForMember(x => x.QuestionId, opts => opts.MapFrom(x => x.QuestionId));
 
-            this.CreateMap<List<AssignmentIdentifyingDataItem>, Assignment>()
-                .BeforeMap((list, assignment, context) => this.PrepareQuestionnaire(context, assignment.QuestionnaireId))
-                .AfterMap((list, assignment, context) =>
+            this.CreateMap<CreateAssignmentApiRequest, Assignment>()
+                .BeforeMap((create, assignment, context) => this.PrepareQuestionnaire(context, assignment.QuestionnaireId))
+                .AfterMap((create, assignment, context) =>
                 {
-                    var data = context.Mapper.Map<List<IdentifyingAnswer>>(list);
+                    var data = context.Mapper.Map<List<IdentifyingAnswer>>(create.IdentifyingData);
                     assignment.SetAnswers(data);
-                });
+                })
+                .ForAllMembers(opt => opt.Ignore());
 
             this.CreateMap<AssignmentIdentifyingDataItem, IdentifyingAnswer>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.Answer))
@@ -47,7 +48,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                     opts.ResolveUsing((item, answer, value, ctx) =>
                         {
                             if (string.IsNullOrWhiteSpace(item.Variable))
-                                return this.GetVariableName(ctx, item.QuestionId.Value);
+                                return this.GetVariableName(ctx, item.QuestionId);
 
                             return item.Variable;
                         }))
@@ -55,14 +56,22 @@ namespace WB.UI.Headquarters.API.PublicApi
                     opts.ResolveUsing((item, answer, value, context) =>
                     {
                         if (item.QuestionId.HasValue) return item.QuestionId.Value;
+                        if (string.IsNullOrWhiteSpace(item.Variable)) return Guid.Empty;
 
                         var qd = this.GetFromScope<QuestionnaireDocument>(context);
                         var question = qd.Find<AbstractQuestion>(q => q.StataExportCaption == item.Variable);
                         Guid? id = question.FirstOrDefault()?.PublicKey;
-
-                        return id.Value;
+                        
+                        return id ?? Guid.Empty;
                     })
-                );
+                )
+                .AfterMap((item, answer) =>
+                {
+                    if (string.IsNullOrWhiteSpace(answer.VariableName) || answer.QuestionId == Guid.Empty)
+                    {
+                        throw new ArgumentException($"Cannot identify question from provided data: questionId: {item.QuestionId}, variable: {item.Variable}, answer: {item.Answer}");
+                    }
+                });
 
             this.CreateMap<Assignment, PreloadedDataByFile>()
                 .ConstructUsing((assignment, context) =>
@@ -74,7 +83,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                     var headers = assignment.IdentifyingData.Select(data =>
                     {
                         if (string.IsNullOrWhiteSpace(data.VariableName))
-                            return questionnaire.Find<AbstractQuestion>(data.QuestionId).StataExportCaption;
+                            return questionnaire.Find<AbstractQuestion>(data.QuestionId)?.StataExportCaption;
 
                         return data.VariableName;
                     }).ToArray();
@@ -113,10 +122,12 @@ namespace WB.UI.Headquarters.API.PublicApi
             return questionnaierStorage.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
         }
 
-        private string GetVariableName(ResolutionContext ctx, Guid questionId)
+        private string GetVariableName(ResolutionContext ctx, Guid? questionId)
         {
+            if (questionId == null) return null;
+
             var questionnaier = this.GetFromScope<QuestionnaireDocument>(ctx);
-            return questionnaier?.Find<AbstractQuestion>(questionId)?.StataExportCaption;
+            return questionnaier?.Find<AbstractQuestion>(questionId.Value)?.StataExportCaption;
         }
 
         private void SetInScope<T>(ResolutionContext ctx, T value)
