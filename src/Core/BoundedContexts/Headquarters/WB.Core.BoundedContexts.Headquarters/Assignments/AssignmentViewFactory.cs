@@ -109,13 +109,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
                 int id = 0;
+                var lowerSearchBy = input.SearchBy.ToLower();
                 if (int.TryParse(input.SearchBy, out id))
                 {
-                    items = items.Where(x => x.Id == id || x.Responsible.Name.Contains(input.SearchBy) || x.IdentifyingData.Any(a => a.Answer.StartsWith(input.SearchBy)));
+                    items = items.Where(x => x.Id == id || 
+                                        x.Responsible.Name.ToLower().Contains(lowerSearchBy) ||
+                                        x.IdentifyingData.Any(a => a.Answer.ToLower().Contains(lowerSearchBy)));
                 }
                 else
                 {
-                    items = items.Where(x => x.Responsible.Name.Contains(input.SearchBy) || x.IdentifyingData.Any(a => a.Answer.StartsWith(input.SearchBy)));
+                    items = items.Where(x => x.Responsible.Name.ToLower().Contains(lowerSearchBy) || x.IdentifyingData.Any(a => a.Answer.ToLower().Contains(lowerSearchBy)));
                 }
             }
 
