@@ -101,7 +101,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="QueryableExtensions.cs" />
     <Compile Include="RosterVectorUtils.cs" />
     <Compile Include="Services\HttpStats.cs" />
     <Compile Include="Services\ICompressor.cs" />
