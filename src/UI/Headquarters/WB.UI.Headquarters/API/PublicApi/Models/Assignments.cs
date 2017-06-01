@@ -98,7 +98,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         public VerificationStatus VerificationStatus { get; set; }
     }
 
-    public class CreateAssignmentRequest
+    public class CreateAssignmentApiRequest
     {
         [DataMember]
         [Required]

@@ -45,7 +45,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         }
 
         /// <summary>
-        /// Get Assignment details
+        /// Single assignment details
         /// </summary>
         /// <returns>Details of Assignment</returns>
         [HttpGet]
@@ -55,7 +55,12 @@ namespace WB.UI.Headquarters.API.PublicApi
             var assignment = assignmentsStorage.GetById(id);
             return this.mapper.Map<AssignmentDetails>(assignment);
         }
-
+        
+        /// <summary>
+        /// List all assignments with filtering
+        /// </summary>
+        /// <param name="filter">List filter options</param>
+        /// <returns>List of assignments</returns>
         [HttpGet]
         [Route("")]
         public AssignmentsListView List([FromUri(SuppressPrefixCheck = true, Name = "")] AssignmentsListFilter filter)
@@ -93,15 +98,20 @@ namespace WB.UI.Headquarters.API.PublicApi
             return listView;
         }
 
+        /// <summary>
+        /// Create new assignment
+        /// </summary>
+        /// <param name="createItem">New assignments options</param>
+        /// <returns>Created assignments details</returns>
         [HttpPost]
         [Route]
-        public HttpResponseMessage Create(CreateAssignmentRequest createItem)
+        public HttpResponseMessage Create(CreateAssignmentApiRequest createItem)
         {
             var responsible = this.GetResponsibleIdPersonFromRequestValue(createItem.Responsible);
 
             if (responsible == null)
             {
-                throw new ArgumentException(nameof(CreateAssignmentRequest.Responsible), "Cannot identify user from argument: " + createItem.Responsible);
+                throw new ArgumentException(nameof(CreateAssignmentApiRequest.Responsible), "Cannot identify user from argument: " + createItem.Responsible);
             }
 
             var assignment = new Assignment(QuestionnaireIdentity.Parse(createItem.QuestionnaireId), responsible.Value, createItem.Capacity);
@@ -179,6 +189,12 @@ namespace WB.UI.Headquarters.API.PublicApi
             return responsibleUserId;
         }
 
+        /// <summary>
+        /// Change assignments limit on created interviews
+        /// </summary>
+        /// <param name="id">Assignment id</param>
+        /// <param name="capacity">New limit on created interviews</param>
+        /// <returns></returns>
         [HttpPatch]
         [Route("{id:int}/changeCapacity")]
         public AssignmentDetails ChangeCapacity(int id, [FromBody] int? capacity)
