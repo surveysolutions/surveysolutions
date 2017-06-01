@@ -23,16 +23,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
 
             this.Assignment.SetAnswers(new List<IdentifyingAnswer>
             {
-                new IdentifyingAnswer(this.Assignment)
-                {
-                    Answer = "Test22",
-                    QuestionId = Id.g2
-                },
-                new IdentifyingAnswer(this.Assignment)
-                {
-                    Answer = "Test33",
-                    QuestionId = Id.g3
-                }
+                Create.Entity.IdentifyingAnswer(this.Assignment, answer: "Test22", questionId: Id.g2),
+                Create.Entity.IdentifyingAnswer(this.Assignment, answer: "Test33", questionId: Id.g3)
             });
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -33,6 +34,7 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -1596,6 +1598,17 @@ namespace WB.Tests.Abc.TestFactories
 
             asDynamic.InterviewSummaries = interviewSummary;
 
+            return result;
+        }
+
+        public IdentifyingAnswer IdentifyingAnswer(Assignment assignment = null, Guid? questionId = null, string answer = null, string answerAsString = null)
+        {
+            var result = (IdentifyingAnswer)Activator.CreateInstance(typeof(IdentifyingAnswer),
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            dynamic dynamic = result.AsDynamic();
+            dynamic.QuestionId = questionId ?? Guid.NewGuid();
+            dynamic.Answer = answer;
+            dynamic.AnswerAsString = answerAsString;
             return result;
         }
 

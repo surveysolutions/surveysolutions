@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.GenericSubdomains.Portable;
@@ -77,7 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             if (questionnaire == null) return new List<AssignmentIdentifyingQuestionRow>();
 
             List<AssignmentIdentifyingQuestionRow> identifyingColumnText = 
-                assignment.IdentifyingData.Select(x => new AssignmentIdentifyingQuestionRow(questionnaire.GetQuestionTitle(x.QuestionId).RemoveHtmlTags(), x.Answer))
+                assignment.IdentifyingData.Select(x => new AssignmentIdentifyingQuestionRow(questionnaire.GetQuestionTitle(x.QuestionId).RemoveHtmlTags(), x.AnswerAsString))
                 .ToList();
             return identifyingColumnText;
         }
@@ -110,17 +112,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
                 int id = 0;
+
                 var lowerSearchBy = input.SearchBy.ToLower();
+
+                Expression<Func<Assignment, bool>> textSearchExpression =
+                    x => x.Responsible.Name.ToLower().Contains(lowerSearchBy) || x.IdentifyingData.Any(a => a.AnswerAsString.ToLower().Contains(lowerSearchBy));
                 if (int.TryParse(input.SearchBy, out id))
                 {
-                    items = items.Where(x => x.Id == id || 
-                                        x.Responsible.Name.ToLower().Contains(lowerSearchBy) ||
-                                        x.IdentifyingData.Any(a => a.Answer.ToLower().Contains(lowerSearchBy)));
+                    textSearchExpression = textSearchExpression.OrCondition(x => x.Id == id);
                 }
-                else
-                {
-                    items = items.Where(x => x.Responsible.Name.ToLower().Contains(lowerSearchBy) || x.IdentifyingData.Any(a => a.Answer.ToLower().Contains(lowerSearchBy)));
-                }
+
+                items = items.Where(textSearchExpression);
             }
 
             if (input.QuestionnaireId.HasValue)

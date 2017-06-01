@@ -44,6 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             {
                 c.Property(x => x.Answer);
                 c.Property(x => x.QuestionId);
+                c.Property(x => x.AnswerAsString);
                 c.Property(x => x.Assignment);
             }));
 

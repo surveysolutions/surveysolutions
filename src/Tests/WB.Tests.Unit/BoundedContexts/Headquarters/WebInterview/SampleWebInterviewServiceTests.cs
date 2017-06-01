@@ -84,11 +84,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             Guid questionId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             
             var summary = Create.Entity.Assignment(id: 5, questionnaireIdentity: questionnaireId, assigneeSupervisorId: Guid.NewGuid());
-            summary.IdentifyingData.Add(new IdentifyingAnswer(summary)
-            {
-                Answer = "bla",
-                QuestionId = questionId
-            });
+            summary.IdentifyingData.Add(Create.Entity.IdentifyingAnswer(summary, answer: "bla", questionId: questionId));
 
             IPlainStorageAccessor<Assignment> assignments = new InMemoryPlainStorageAccessor<Assignment>();
             assignments.Store(summary, summary.Id);
