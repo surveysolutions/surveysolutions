@@ -5,6 +5,6 @@ namespace WB.Core.SharedKernels.DataCollection.Services
 {
     public interface IIdentifyingAnswerConverter
     {
-        AbstractAnswer GetAbstractAnswer(IQuestion question, string answer);
+        AbstractAnswer GetAbstractAnswer(QuestionType questionType, string answer);
     }
 }
