@@ -17,7 +17,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
             Guid fixed1 = Guid.Parse("11111111111111111111111111111111");
             Guid fixed2 = Guid.Parse("22222222222222222222222222222222");
 
-            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]
             {
                 Create.Entity.FixedRoster(fixed1, variable:"f1", fixedTitles: new []{Create.Entity.FixedTitle(1), Create.Entity.FixedTitle(2)}),
                 Create.Entity.FixedRoster(fixed2, variable:"f2", enablementCondition: "f1.Count() > 2",  fixedTitles: new []{Create.Entity.FixedTitle(3), Create.Entity.FixedTitle(4)}),

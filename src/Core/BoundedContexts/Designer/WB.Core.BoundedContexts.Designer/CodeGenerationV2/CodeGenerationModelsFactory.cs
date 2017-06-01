@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
@@ -19,13 +17,16 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
     {
         private readonly IMacrosSubstitutionService macrosSubstitutionService;
         private readonly ILookupTableService lookupTableService;
+        private readonly IQuestionTypeToCSharpTypeMapper questionTypeMapper;
 
         public CodeGenerationModelsFactory(
             IMacrosSubstitutionService macrosSubstitutionService, 
-            ILookupTableService lookupTableService)
+            ILookupTableService lookupTableService, 
+            IQuestionTypeToCSharpTypeMapper questionTypeMapper)
         {
             this.macrosSubstitutionService = macrosSubstitutionService;
             this.lookupTableService = lookupTableService;
+            this.questionTypeMapper = questionTypeMapper;
         }
 
         public ExpressionStorageModel CreateModel(ReadOnlyQuestionnaireDocument questionnaire)
@@ -37,11 +38,11 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                 IdMap = this.CreateIdMap(questionnaire)
             };
 
+            Dictionary<RosterScope, string> levelClassNames = new Dictionary<RosterScope, string>();
+
             Dictionary<RosterScope, Group[]> rosterScopes = questionnaire.Find<Group>()
                 .GroupBy(questionnaire.GetRosterScope)
                 .ToDictionary(x => x.Key, x => x.ToArray());
-
-            Dictionary<RosterScope, string> levelClassNames = new Dictionary<RosterScope, string>();
 
             foreach (var rosterScopePairs in rosterScopes)
             {
@@ -49,236 +50,57 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                 var rosters = rosterScopePairs.Value;
                 var firstRosterInScope = rosters.FirstOrDefault(x => x.IsRoster);
 
-                var levelModel = new LevelModel
-                {
-                    RosterScope = rosterScope
-                };
+                string variable;
+                string levelClassName;
 
-                string levelClassName = "";
                 if (firstRosterInScope == null)
                 {
+                    variable = CodeGeneratorV2.QuestionnaireIdName;
                     levelClassName = CodeGeneratorV2.QuestionnaireLevel;
-                    levelModel.Id = questionnaire.PublicKey;
-                    levelModel.Variable = CodeGeneratorV2.QuestionnaireIdName;
                 }
                 else
                 {
-                    levelModel.Id = firstRosterInScope.PublicKey;
-                    levelModel.Variable = this.GetVariable(firstRosterInScope);
-                    levelClassName = CodeGeneratorV2.LevelPrefix + levelModel.Variable;
+                    variable = questionnaire.GetVariable(firstRosterInScope);
+                    levelClassName = CodeGeneratorV2.LevelPrefix + variable;
                 }
 
-                levelModel.ClassName = levelClassName;
+                var levelModel = new LevelModel(variable, rosterScope, levelClassName);
+
                 levelClassNames.Add(rosterScope, levelClassName);
 
-                codeGenerationModel.AllLevels.Add(levelModel);
+                codeGenerationModel.Levels.Add(levelModel);
             }
 
-            foreach (var question in questionnaire.Find<IQuestion>())
+            
+            foreach (var level in codeGenerationModel.Levels)
             {
-                string varName = this.GetVariable(question);
-
-                var rosterScope = questionnaire.GetRosterScope(question);
-                var levelClassName = levelClassNames[rosterScope];
-                var questionModel = new QuestionModel
-                {
-                    Id = question.PublicKey,
-                    Variable = varName,
-                    ClassName = levelClassName,
-                    TypeName = GenerateQuestionTypeName(question, questionnaire),
-                    RosterScope = rosterScope
-                };
-
-                codeGenerationModel.AllQuestions.Add(questionModel);
+                level.Init(questionnaire, levelClassNames, questionTypeMapper);
             }
 
-            foreach (var variable in questionnaire.Find<IVariable>())
-            {
-                string varName = this.GetVariable(variable);
-
-                var rosterScope = questionnaire.GetRosterScope(variable);
-                var levelClassName = levelClassNames[rosterScope];
-                var variableModel = new VariableModel
-                {
-                    Id = variable.PublicKey,
-                    Variable = varName,
-                    ClassName = levelClassName,
-                    TypeName = this.GetVariablesCSharpType(variable.Type),
-                    RosterScope = rosterScope
-                };
-
-                codeGenerationModel.AllVariables.Add(variableModel);
-            }
-
-
-            foreach (var staticText in questionnaire.Find<StaticText>())
-            {
-                string varName = this.GetVariable(staticText);
-
-                var rosterScope = questionnaire.GetRosterScope(staticText);
-                var levelClassName = levelClassNames[rosterScope];
-                var questionModel = new StaticTextModel
-                {
-                    Id = staticText.PublicKey,
-                    Variable = varName,
-                    ClassName = levelClassName,
-                    RosterScope = rosterScope
-                };
-
-                codeGenerationModel.AllStaticTexts.Add(questionModel);
-            }
-
-            foreach (var level in codeGenerationModel.AllLevels)
-            {
-                foreach (var question in codeGenerationModel.AllQuestions)
-                {
-                    if (question.RosterScope.IsSameOrParentScopeFor(level.RosterScope))
-                    {
-                        level.Questions.Add(question);
-                    }
-                }
-
-                foreach (var variable in codeGenerationModel.AllVariables)
-                {
-                    if (variable.RosterScope.IsSameOrParentScopeFor(level.RosterScope))
-                    {
-                        level.Variables.Add(variable);
-                    }
-                }
-
-                foreach (var rosterScopePairs in rosterScopes)
-                {
-                    var rosterScope = rosterScopePairs.Key;
-                    if (rosterScope.Length > 1 && !rosterScope.IsSameOrParentScopeFor(level.RosterScope))
-                    {
-                        if (!rosterScope.IsChildScopeFor(level.RosterScope, 1))
-                            continue;
-                    }
-
-                    var rosters = rosterScopePairs.Value.Where(x => x.IsRoster);
-                    foreach (var roster in rosters)
-                    {
-                        level.Rosters.Add(new RosterModel
-                        {
-                            Variable = this.GetVariable(roster),
-                            Level = codeGenerationModel.AllLevels.First(x => x.RosterScope.Equals(rosterScope))
-                        });
-                    }
-                }
-            }
-
-            codeGenerationModel.ExpressionMethodModel.AddRange(this.CreateMethodModels(questionnaire, codeGenerationModel));
-            codeGenerationModel.LinkedFilterMethodModel.AddRange(this.CreateLinkedFilterModels(questionnaire, codeGenerationModel));
-            codeGenerationModel.CategoricalOptionsFilterModel.AddRange(this.CreateCategoricalOptionsFilterModels(questionnaire, codeGenerationModel));
-            codeGenerationModel.VariableMethodModel.AddRange(this.CreateVariableMethodModel(questionnaire, codeGenerationModel));
+            codeGenerationModel.ExpressionMethodModel.AddRange(this.CreateMethodModels(questionnaire, levelClassNames));
+            codeGenerationModel.LinkedFilterMethodModel.AddRange(this.CreateLinkedFilterModels(questionnaire, levelClassNames));
+            codeGenerationModel.CategoricalOptionsFilterModel.AddRange(this.CreateCategoricalOptionsFilterModels(questionnaire, levelClassNames));
+            codeGenerationModel.VariableMethodModel.AddRange(this.CreateVariableMethodModel(questionnaire, levelClassNames));
 
             return codeGenerationModel;
         }
 
-
-        private string GetVariablesCSharpType(VariableType variableType)
+        public string GenerateQuestionTypeName(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
         {
-            switch (variableType)
-            {
-                case VariableType.LongInteger:
-                    return "long?";
-                case VariableType.Double:
-                    return "double?";
-                case VariableType.Boolean:
-                    return "bool?";
-                case VariableType.DateTime:
-                    return "DateTime?";
-                case VariableType.String:
-                    return "string";
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(variableType), variableType, $"unknown variable type {variableType}");
-            }
+            return questionTypeMapper.GetType(question, questionnaire);
         }
 
         private Dictionary<Guid, string> CreateIdMap(ReadOnlyQuestionnaireDocument questionnaire)
         {
-            var map = questionnaire.Find<IQuestion>().ToDictionary(x => x.PublicKey, this.GetVariable);
-            questionnaire.Find<StaticText>().ForEach(x => map.Add(x.PublicKey, this.GetVariable(x)));
-            questionnaire.Find<IGroup>().ForEach(x => map.Add(x.PublicKey, this.GetVariable(x)));
-            questionnaire.Find<IVariable>().ForEach(x => map.Add(x.PublicKey, this.GetVariable(x)));
+            var map = questionnaire.Find<IQuestion>().ToDictionary(x => x.PublicKey, questionnaire.GetVariable);
+            questionnaire.Find<StaticText>().ForEach(x => map.Add(x.PublicKey, questionnaire.GetVariable(x)));
+            questionnaire.Find<IGroup>().ForEach(x => map.Add(x.PublicKey, questionnaire.GetVariable(x)));
+            questionnaire.Find<IVariable>().ForEach(x => map.Add(x.PublicKey, questionnaire.GetVariable(x)));
             map.Add(questionnaire.PublicKey, CodeGeneratorV2.QuestionnaireIdName);
             return map;
         }
 
-        private string GetVariable(IVariable variable)
-        {
-            return !String.IsNullOrEmpty(variable.Name) ? variable.Name : "__" + variable.PublicKey.FormatGuid();
-        }
-
-        private string GetVariable(StaticText staticText)
-        {
-            return CodeGeneratorV2.StaticText + staticText.PublicKey.FormatGuid();
-        }
-
-        private string GetVariable(IQuestion question)
-        {
-            return !String.IsNullOrEmpty(question.StataExportCaption) ? question.StataExportCaption : "__" + question.PublicKey.FormatGuid();
-        }
-
-        private string GetVariable(IGroup group)
-        {
-            return !String.IsNullOrEmpty(group.VariableName) ? group.VariableName : CodeGeneratorV2.SubSection_ + group.PublicKey.FormatGuid();
-        }
-
-        private static string GenerateQuestionTypeName(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
-        {
-            switch (question.QuestionType)
-            {
-                case QuestionType.Text:
-                    return "string";
-
-                case QuestionType.Numeric:
-                    return ((question as NumericQuestion)?.IsInteger ?? false) ? "int?" : "double?";
-
-                case QuestionType.QRBarcode:
-                    return "string";
-
-                case QuestionType.MultyOption:
-                    var multiOtion = question as MultyOptionsQuestion;
-                    if (multiOtion != null && multiOtion.YesNoView)
-                        return typeof(YesNoAndAnswersMissings).Name;
-
-                    if (question.LinkedToQuestionId == null && question.LinkedToRosterId == null)
-                        return "int[]";
-
-                    if (question.LinkedToQuestionId.HasValue && questionnaire.Find<ITextListQuestion>(question.LinkedToQuestionId.Value) != null)
-                    {
-                        return "int[]";
-                    }
-                    return $"{typeof(RosterVector).Name}[]";
-
-                case QuestionType.DateTime:
-                    return "DateTime?";
-
-                case QuestionType.SingleOption:
-                    if (question.LinkedToQuestionId == null && question.LinkedToRosterId == null) return "int?";
-
-                    if (question.LinkedToQuestionId.HasValue && questionnaire.Find<ITextListQuestion>(question.LinkedToQuestionId.Value) != null)
-                    {
-                        return "int?";
-                    }
-
-                    return typeof(RosterVector).Name;
-                case QuestionType.TextList:
-                    return $"{typeof(TextListAnswerRow).Name}[]";
-
-                case QuestionType.GpsCoordinates:
-                    return typeof(GeoLocation).Name;
-
-                case QuestionType.Multimedia:
-                    return "string";
-
-                default:
-                    throw new ArgumentException("Unknown question type.");
-            }
-        }
-
-        public IEnumerable<LinkedFilterMethodModel> CreateLinkedFilterModels(ReadOnlyQuestionnaireDocument questionnaire, ExpressionStorageModel model)
+        public IEnumerable<LinkedFilterMethodModel> CreateLinkedFilterModels(ReadOnlyQuestionnaireDocument questionnaire, Dictionary<RosterScope, string> levelClassNames)
         {
             var linkedWithFilter = questionnaire
                 .Find<IQuestion>()
@@ -288,34 +110,28 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
             {
                 if (!question.LinkedToRosterId.HasValue && !question.LinkedToQuestionId.HasValue) continue;
 
-                var questionModel = model.GetQuestionById(question.PublicKey);
+                var levelClassName = levelClassNames[questionnaire.GetRosterScope(question.PublicKey)];
 
-                string sourceLevelClassName;
-                if (question.LinkedToQuestionId.HasValue)
-                {
-                    var sourceQuestion = model.GetQuestionById(question.LinkedToQuestionId.Value);
-                    sourceLevelClassName = sourceQuestion.ClassName;
-                }
-                else
-                {
-                    var sourceLevel = model.GetLevelByVariable(this.GetVariable(questionnaire.Find<IGroup>(question.LinkedToRosterId.Value)));
-                    sourceLevelClassName = sourceLevel.ClassName;
-                }
+                var sourceLevelClassName = levelClassNames[question.LinkedToQuestionId.HasValue 
+                    ? questionnaire.GetRosterScope(question.LinkedToQuestionId.Value) 
+                    : questionnaire.GetRosterScope(questionnaire.Find<IGroup>(question.LinkedToRosterId.Value))];
 
                 var linkedFilterExpression = this.macrosSubstitutionService.InlineMacros(question.LinkedFilterExpression, questionnaire.Macros.Values);
+
+                var variableName = questionnaire.GetVariable(question);
                 yield return
                     new LinkedFilterMethodModel(
-                        ExpressionLocation.LinkedQuestionFilter(questionModel.Id),
+                        ExpressionLocation.LinkedQuestionFilter(question.PublicKey),
                         sourceLevelClassName,
-                        $"{CodeGeneratorV2.LinkedFilterPrefix}{questionModel.Variable}",
+                        $"{CodeGeneratorV2.LinkedFilterPrefix}{variableName}",
                         linkedFilterExpression,
-                        questionModel.Variable,
-                        questionModel.ClassName);
+                        variableName,
+                        levelClassName);
             }
         }
 
 
-        private IEnumerable<ConditionMethodModel> CreateVariableMethodModel(ReadOnlyQuestionnaireDocument questionnaire, ExpressionStorageModel model)
+        private IEnumerable<ConditionMethodModel> CreateVariableMethodModel(ReadOnlyQuestionnaireDocument questionnaire, Dictionary<RosterScope, string> levelClassNames)
         {
             var variables = questionnaire
                 .Find<IVariable>()
@@ -323,25 +139,24 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
 
             foreach (var variable in variables)
             {
-                var variableModel = model.GetVariableById(variable.PublicKey);
-                var expression = this.macrosSubstitutionService.InlineMacros(variable.Expression, questionnaire.Macros.Values);
+                var variableName = questionnaire.GetVariable(variable);
 
                 yield return
                     new ConditionMethodModel(
-                        ExpressionLocation.Variable(variableModel.Id),
-                        variableModel.ClassName,
-                        $"{CodeGeneratorV2.VariablePrefix}{variableModel.Variable}",
-                        expression,
+                        ExpressionLocation.Variable(variable.PublicKey),
+                        levelClassNames[questionnaire.GetRosterScope(variable)],
+                        $"{CodeGeneratorV2.VariablePrefix}{variableName}",
+                        macrosSubstitutionService.InlineMacros(variable.Expression, questionnaire.Macros.Values),
                         false,
-                        variableModel.Variable,
-                        variableModel.TypeName)
+                        variableName,
+                        questionTypeMapper.GetVariablesCSharpType(variable.Type))
                     {
                         UseObjectBoxing = true
                     };
             }
         }
 
-        public IEnumerable<OptionsFilterMethodModel> CreateCategoricalOptionsFilterModels(ReadOnlyQuestionnaireDocument questionnaire, ExpressionStorageModel model)
+        public IEnumerable<OptionsFilterMethodModel> CreateCategoricalOptionsFilterModels(ReadOnlyQuestionnaireDocument questionnaire, Dictionary<RosterScope, string> levelClassNames)
         {
             var questionsWithFilter = questionnaire
                 .Find<IQuestion>()
@@ -349,34 +164,34 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
 
             foreach (var question in questionsWithFilter)
             {
-                var questionModel = model.GetQuestionById(question.PublicKey);
-                var optionsFilterExpression = this.macrosSubstitutionService.InlineMacros(question.Properties.OptionsFilterExpression, questionnaire.Macros.Values);
-
+                var variable = questionnaire.GetVariable(question);
                 yield return 
                     new OptionsFilterMethodModel(
-                        ExpressionLocation.CategoricalQuestionFilter(questionModel.Id),
-                        questionModel.ClassName, 
-                        $"{CodeGeneratorV2.OptionsFilterPrefix}{questionModel.Variable}", 
-                        optionsFilterExpression,
-                        questionModel.Variable);
+                        ExpressionLocation.CategoricalQuestionFilter(question.PublicKey),
+                        levelClassNames[questionnaire.GetRosterScope(question)], 
+                        $"{CodeGeneratorV2.OptionsFilterPrefix}{variable}", 
+                        this.macrosSubstitutionService.InlineMacros(question.Properties.OptionsFilterExpression, questionnaire.Macros.Values),
+                        variable);
             }
         }
 
-        public IEnumerable<ConditionMethodModel> CreateMethodModels(ReadOnlyQuestionnaireDocument questionnaire, ExpressionStorageModel model)
+        public IEnumerable<ConditionMethodModel> CreateMethodModels(ReadOnlyQuestionnaireDocument questionnaire, Dictionary<RosterScope, string> levelClassNames)
         {
-            foreach (var questionModel in model.AllQuestions)
+            foreach (var question in questionnaire.Find<IQuestion>())
             {
-                var question = questionnaire.Find<IQuestion>(questionModel.Id);
                 var conditionExpression = this.macrosSubstitutionService.InlineMacros(question.ConditionExpression, questionnaire.Macros.Values);
+                var variable = questionnaire.GetVariable(question);
+                var className = levelClassNames[questionnaire.GetRosterScope(question)];
+
                 if (!string.IsNullOrWhiteSpace(conditionExpression))
                 {
                     yield return new ConditionMethodModel(
-                        ExpressionLocation.QuestionCondition(questionModel.Id),
-                        questionModel.ClassName,
-                        CodeGeneratorV2.EnablementPrefix + questionModel.Variable,
+                        ExpressionLocation.QuestionCondition(question.PublicKey),
+                        className,
+                        CodeGeneratorV2.EnablementPrefix + variable,
                         question.ConditionExpression,
                         false,
-                        questionModel.Variable);
+                        variable);
                 }
 
                 for (int index = 0; index < question.ValidationConditions.Count; index++)
@@ -387,19 +202,19 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                     if (!string.IsNullOrWhiteSpace(validationExpression))
                     {
                         yield return new ConditionMethodModel(
-                            ExpressionLocation.QuestionValidation(questionModel.Id, index),
-                            questionModel.ClassName,
-                            $"{CodeGeneratorV2.ValidationPrefix}{questionModel.Variable}__{index.ToString(CultureInfo.InvariantCulture)}",
+                            ExpressionLocation.QuestionValidation(question.PublicKey, index),
+                            className,
+                            $"{CodeGeneratorV2.ValidationPrefix}{variable}__{index.ToString(CultureInfo.InvariantCulture)}",
                             validationExpression,
                             true,
-                            questionModel.Variable);
+                            variable);
                     }
                 }
             }
 
             foreach (var staticText in questionnaire.Find<StaticText>())
             {
-                var className = model.GetClassNameByRosterScope(questionnaire.GetRosterScope(staticText));
+                var className = levelClassNames[questionnaire.GetRosterScope(staticText)];
                 var conditionExpression = this.macrosSubstitutionService.InlineMacros(staticText.ConditionExpression, questionnaire.Macros.Values);
                 var formattedId = CodeGeneratorV2.StaticText + staticText.PublicKey.FormatGuid();
                 if (!string.IsNullOrWhiteSpace(conditionExpression))
@@ -437,9 +252,9 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                     rosterScope = new RosterScope(rosterScope.Coordinates.Union(scopeCoordinate.ToEnumerable()));
                 }
 
-                string className = model.GetClassNameByRosterScope(rosterScope);
+                string className = levelClassNames[rosterScope];
                 string conditionExpression = this.macrosSubstitutionService.InlineMacros(group.ConditionExpression, questionnaire.Macros.Values);
-                string formattedId = this.GetVariable(group);
+                string formattedId = questionnaire.GetVariable(group);
                 if (!string.IsNullOrWhiteSpace(conditionExpression))
                 {
                     yield return new ConditionMethodModel(
