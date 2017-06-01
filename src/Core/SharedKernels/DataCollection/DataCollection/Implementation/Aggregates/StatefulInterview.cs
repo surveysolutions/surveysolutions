@@ -249,8 +249,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 changedInterviewTree.GetQuestion(answer.Key).SetAnswer(answer.Value);
             }
 
-            List<Identity> answeredQuestions = prefilledQuestionsWithAnswers.Keys.ToList();
-
             changedInterviewTree.ActualizeTree();
 
             this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
@@ -765,6 +763,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 disabledVariables: disabledVariables,
                 wasCompleted: this.properties.WasCompleted,
                 createdOnClient: CreatedOnClient);
+        }
+
+        public bool IsReadOnlyQuestion(Identity identity)
+        {
+            return false;
         }
 
         private object GetAnswerAsObject(InterviewTreeQuestion question)
