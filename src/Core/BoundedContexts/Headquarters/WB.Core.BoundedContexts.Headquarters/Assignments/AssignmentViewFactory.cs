@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.GenericSubdomains.Portable;
@@ -7,6 +9,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Sanitizer;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
@@ -50,12 +53,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 PageSize = input.PageSize,
                 Items = assignments.Select(x => new AssignmentRow
                 {
+                    QuestionnaireId = x.QuestionnaireId,
                     CreatedAtUtc = x.CreatedAtUtc,
                     ResponsibleId = x.ResponsibleId,
                     UpdatedAtUtc = x.UpdatedAtUtc,
                     Capacity = x.Capacity,
                     InterviewsCount = x.InterviewSummaries.Count,
                     Id = x.Id,
+                    Archived = x.Archived,
                     Responsible = x.Responsible.Name,
                     IdentifyingQuestions = this.GetIdentifyingColumnText(x)
                 }).ToList(),
@@ -74,7 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             if (questionnaire == null) return new List<AssignmentIdentifyingQuestionRow>();
 
             List<AssignmentIdentifyingQuestionRow> identifyingColumnText = 
-                assignment.IdentifyingData.Select(x => new AssignmentIdentifyingQuestionRow(questionnaire.GetQuestionTitle(x.QuestionId).RemoveHtmlTags(), x.Answer))
+                assignment.IdentifyingData.Select(x => new AssignmentIdentifyingQuestionRow(questionnaire.GetQuestionTitle(x.QuestionId).RemoveHtmlTags(), x.AnswerAsString))
                 .ToList();
             return identifyingColumnText;
         }
@@ -107,14 +112,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
                 int id = 0;
+
+                var lowerSearchBy = input.SearchBy.ToLower();
+
+                Expression<Func<Assignment, bool>> textSearchExpression =
+                    x => x.Responsible.Name.ToLower().Contains(lowerSearchBy) || x.IdentifyingData.Any(a => a.AnswerAsString.ToLower().Contains(lowerSearchBy));
                 if (int.TryParse(input.SearchBy, out id))
                 {
-                    items = items.Where(x => x.Id == id || x.Responsible.Name.Contains(input.SearchBy) || x.IdentifyingData.Any(a => a.Answer.StartsWith(input.SearchBy)));
+                    textSearchExpression = textSearchExpression.OrCondition(x => x.Id == id);
                 }
-                else
-                {
-                    items = items.Where(x => x.Responsible.Name.Contains(input.SearchBy) || x.IdentifyingData.Any(a => a.Answer.StartsWith(input.SearchBy)));
-                }
+
+                items = items.Where(textSearchExpression);
             }
 
             if (input.QuestionnaireId.HasValue)

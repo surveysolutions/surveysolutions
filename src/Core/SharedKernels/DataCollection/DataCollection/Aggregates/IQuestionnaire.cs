@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         Guid[] GetQuestionsLinkedToQuestion();
 
-        Guid GetQuestionIdByVariable(string variable);
+        Guid? GetQuestionIdByVariable(string variable);
 
         Guid GetVariableIdByVariableName(string variableName);
 

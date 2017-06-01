@@ -138,7 +138,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsPrefilled { get; private set; }
         public bool IsSupervisors { get; private set; }
         public bool IsHidden { get; private set; }
-
+        public bool IsReadonly { get; private set; }
         public bool IsValid => !this.FailedValidations?.Any() ?? this.isValidWithoutFailedValidations;
 
         public IReadOnlyList<FailedValidationCondition> FailedValidations { get; private set; }
@@ -553,6 +553,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             {
                 messagesWithSubstition.SetTree(tree);
             }
+        }
+
+        public void MarkAsReadonly()
+        {
+            this.IsReadonly = true;
         }
     }
 

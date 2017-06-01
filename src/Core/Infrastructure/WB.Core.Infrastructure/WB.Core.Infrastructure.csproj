@@ -196,6 +196,7 @@
     <Compile Include="InfrastructureModuleMobile.cs" />
     <Compile Include="Security\IExportSettings.cs" />
     <Compile Include="Security\ExportEncryptionSettings.cs" />
+    <Compile Include="Transactions\ActionExtensions.cs" />
     <Compile Include="Transactions\IPlainTransactionManagerProvider.cs" />
     <Compile Include="Transactions\ITransactionManager.cs" />
     <Compile Include="Transactions\ITransactionManagerProvider.cs" />

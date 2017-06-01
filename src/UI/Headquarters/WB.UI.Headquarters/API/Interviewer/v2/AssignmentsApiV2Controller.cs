@@ -10,13 +10,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.UI.Headquarters.API.Interviewer.v2
 {
-    public class AssignmentsController : ApiController
+    public class AssignmentsApiV2Controller : ApiController
     {
         private readonly IAuthorizedUser authorizedUser;
         private readonly IAssignmentsService assignmentsService;
         private readonly IMapper autoMapper;
 
-        public AssignmentsController(IAuthorizedUser authorizedUser,
+        public AssignmentsApiV2Controller(IAuthorizedUser authorizedUser,
             IAssignmentsService assignmentsService,
             IMapper autoMapper)
         {

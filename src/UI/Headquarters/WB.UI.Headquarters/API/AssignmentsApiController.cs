@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Filters;
@@ -25,14 +26,17 @@ namespace WB.UI.Headquarters.API
         private readonly IAssignmentViewFactory assignmentViewFactory;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
         public AssignmentsApiController(IAssignmentViewFactory assignmentViewFactory,
             IAuthorizedUser authorizedUser,
-            IPlainStorageAccessor<Assignment> assignmentsStorage)
+            IPlainStorageAccessor<Assignment> assignmentsStorage,
+            IQuestionnaireStorage questionnaireStorage)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.authorizedUser = authorizedUser;
             this.assignmentsStorage = assignmentsStorage;
+            this.questionnaireStorage = questionnaireStorage;
         }
         
         [Route("")]
@@ -153,14 +157,11 @@ namespace WB.UI.Headquarters.API
 
             var untypedQuestionAnswers =
                 JsonConvert.DeserializeObject<List<UntypedQuestionAnswer>>(request.AnswersToFeaturedQuestions);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
 
             var identifyingAnswers = untypedQuestionAnswers
                 .Select(CommandTransformator.ParseQuestionAnswer)
-                .Select(answer => new IdentifyingAnswer(assignment)
-                {
-                    QuestionId = answer.Key,
-                    Answer = answer.Value.ToString()
-                })
+                .Select(answer => IdentifyingAnswer.Create(assignment, questionnaire, answer.Value.ToString(), answer.Key))
                 .ToArray();
             assignment.SetAnswers(identifyingAnswers);
             

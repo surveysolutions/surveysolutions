@@ -22,6 +22,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
@@ -45,6 +46,8 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IInterviewUniqueKeyGenerator keyGenerator;
         private readonly ICaptchaProvider captchaProvider;
         private readonly IPlainStorageAccessor<Assignment> assignments;
+        private readonly IIdentifyingAnswerConverter identifyingAnswerConverter;
+        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IImageProcessingService imageProcessingService;
         private readonly IConnectionLimiter connectionLimiter;
@@ -79,7 +82,9 @@ namespace WB.UI.Headquarters.Controllers
             ILogger logger, IUserViewFactory usersRepository,
             IInterviewUniqueKeyGenerator keyGenerator,
             ICaptchaProvider captchaProvider,
-            IPlainStorageAccessor<Assignment> assignments)
+            IPlainStorageAccessor<Assignment> assignments,
+            IIdentifyingAnswerConverter identifyingAnswerConverter,
+            IQuestionnaireStorage questionnaireStorage)
             : base(commandService, logger)
         {
             this.commandService = commandService;
@@ -95,6 +100,8 @@ namespace WB.UI.Headquarters.Controllers
             this.keyGenerator = keyGenerator;
             this.captchaProvider = captchaProvider;
             this.assignments = assignments;
+            this.identifyingAnswerConverter = identifyingAnswerConverter;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         private string CreateInterview(Assignment assignment)
@@ -107,11 +114,18 @@ namespace WB.UI.Headquarters.Controllers
             if (!interviewer.IsInterviewer())
                 throw new InvalidOperationException($"Assignment {assignment.Id} has responsible that is not an interviewer. Interview cannot be created");
 
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(assignment.QuestionnaireId, null);
             var interviewId = Guid.NewGuid();
+            var answersFromAssignment =
+                assignment.IdentifyingData.ToDictionary(x => x.QuestionId, 
+                                                        x => this.identifyingAnswerConverter.GetAbstractAnswer(questionnaire.GetQuestionType(x.QuestionId), x.Answer));
+
             var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
                 interviewer.PublicKey, assignment.QuestionnaireId, DateTime.UtcNow,
                 interviewer.Supervisor.Id,
-                this.keyGenerator.Get(), assignment.Id, null);
+                this.keyGenerator.Get(), 
+                assignment.Id, 
+                answersFromAssignment);
 
             this.commandService.Execute(createInterviewOnClientCommand);
             return interviewId.FormatGuid();

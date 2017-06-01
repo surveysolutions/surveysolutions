@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -33,6 +34,7 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -218,18 +220,17 @@ namespace WB.Tests.Abc.TestFactories
         public Group FixedRoster(Guid? rosterId = null,
             string enablementCondition = null,
             IEnumerable<string> obsoleteFixedTitles = null,
-            IEnumerable<IComposite> children = null, 
-            string variable = "roster_var", 
-            string title = "Roster X", 
-            FixedRosterTitle[] fixedTitles = null)
-            => Create.Entity.Roster(
-                rosterId: rosterId,
-                children: children,
-                title: title,
-                variable: variable,
-                enablementCondition: enablementCondition,
-                fixedRosterTitles: fixedTitles,
-                fixedTitles: obsoleteFixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
+            IEnumerable<IComposite> children = null,
+            string variable = "roster_var",
+            string title = "Roster X",
+            FixedRosterTitle[] fixedTitles = null) => Create.Entity.Roster(
+                        rosterId: rosterId,
+                        children: children,
+                        title: title,
+                        variable: variable,
+                        enablementCondition: enablementCondition,
+                        fixedRosterTitles: fixedTitles,
+                        fixedTitles: obsoleteFixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
 
         public FixedRosterTitle FixedTitle(decimal value, string title = null)
             => new FixedRosterTitle(value, title ?? $"Fixed title {value}");
@@ -1574,10 +1575,14 @@ namespace WB.Tests.Abc.TestFactories
 
         public Assignment Assignment(int? id = null,
             QuestionnaireIdentity questionnaireIdentity = null,
-            Guid? assigneeSupervisorId = null)
+            int? capacity = null,
+            Guid? assigneeSupervisorId = null,
+            string responsibleName = null,
+            ISet<InterviewSummary> interviewSummary = null)
         {
             var result = new Assignment();
             var asDynamic = result.AsDynamic();
+            asDynamic.Capacity = capacity ?? 0;
             asDynamic.Id = id ?? 0;
             result.QuestionnaireId = questionnaireIdentity;
 
@@ -1587,9 +1592,24 @@ namespace WB.Tests.Abc.TestFactories
                 var readonlyProfile = new ReadonlyProfile();
                 readonlyProfile.AsDynamic().SupervisorId = assigneeSupervisorId;
                 readonlyUser.AsDynamic().ReadonlyProfile = readonlyProfile;
+                readonlyUser.AsDynamic().Name = responsibleName;
                 asDynamic.Responsible = readonlyUser;
             }
 
+            asDynamic.InterviewSummaries = interviewSummary;
+
+            return result;
+        }
+
+        public IdentifyingAnswer IdentifyingAnswer(Assignment assignment = null, Guid? questionId = null, string answer = null, string answerAsString = null)
+        {
+            var result = new IdentifyingAnswer();
+            
+            dynamic dynamic = result.AsDynamic();
+            dynamic.Assignment = assignment;
+            dynamic.QuestionId = questionId ?? Guid.NewGuid();
+            dynamic.Answer = answer;
+            dynamic.AnswerAsString = answerAsString;
             return result;
         }
 
