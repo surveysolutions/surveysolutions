@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         public override void Context()
         {
             this.Assignment = Create.Entity.Assignment(1, Create.Entity.QuestionnaireIdentity(Id.g1, 10),
-                responsibleName: "TestName",
+                responsibleName: "TestName", assigneeSupervisorId: Id.gE,
                 interviewSummary: new HashSet<InterviewSummary>{
                     new InterviewSummary(),
                     new InterviewSummary()
@@ -46,51 +46,51 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         }
 
         [Test]
-        public void should_map_id() => this.AssignmentDetails.Id.ShouldEqual(this.Assignment.Id);
+        public void should_map_id() => Assert.That(this.AssignmentDetails.Id, Is.EqualTo(this.Assignment.Id));
 
         [Test]
-        public void should_map_responsible() => 
-            this.AssignmentDetails.ResponsibleId.ShouldEqual(this.Assignment.ResponsibleId);
+        public void should_map_responsible() =>
+            Assert.That(this.AssignmentDetails.ResponsibleId, Is.EqualTo(this.Assignment.ResponsibleId));
 
         [Test]
         public void should_map_capacity() =>
-            this.AssignmentDetails.Capacity.ShouldEqual(this.Assignment.Capacity);
+            Assert.That(this.AssignmentDetails.Capacity, Is.EqualTo(this.Assignment.Capacity));
 
         [Test]
         public void should_map_CreatedAt() =>
-            this.AssignmentDetails.CreatedAtUtc.ShouldEqual(this.Assignment.CreatedAtUtc);
+            Assert.That(this.AssignmentDetails.CreatedAtUtc, Is.EqualTo(this.Assignment.CreatedAtUtc));
 
         [Test]
         public void should_map_UpdatedAt() =>
-            this.AssignmentDetails.UpdatedAtUtc.ShouldEqual(this.Assignment.UpdatedAtUtc);
+            Assert.That(this.AssignmentDetails.UpdatedAtUtc, Is.EqualTo(this.Assignment.UpdatedAtUtc));
 
         [Test]
         public void should_map_Archived() =>
-            this.AssignmentDetails.Archived.ShouldEqual(this.Assignment.Archived);
+            Assert.That(this.AssignmentDetails.Archived, Is.EqualTo(this.Assignment.Archived));
 
         [Test]
         public void should_map_QuestionnaireId() =>
-            this.AssignmentDetails.QuestionnaireId.ShouldEqual(this.Assignment.QuestionnaireId.ToString());
+            Assert.That(this.AssignmentDetails.QuestionnaireId, Is.EqualTo(this.Assignment.QuestionnaireId.ToString()));
 
         [Test]
         public void should_map_InterviewsCount() =>
-            this.AssignmentDetails.InterviewsCount.ShouldEqual(this.Assignment.InterviewSummaries.Count);
+            Assert.That(this.AssignmentDetails.InterviewsCount, Is.EqualTo(this.Assignment.InterviewSummaries.Count));
 
         [Test]
         public void should_map_ResponsibleName() =>
-            this.AssignmentDetails.ResponsibleName.ShouldEqual(this.Assignment.Responsible.Name);
+            Assert.That(this.AssignmentDetails.ResponsibleName, Is.EqualTo(this.Assignment.Responsible.Name));
 
         [Test]
         public void should_map_IdentifyingAnswer_Answer() =>
-            this.AssignmentDetails.IdentifyingData[0].Answer.ShouldEqual(this.Assignment.IdentifyingData[0].Answer);
+            Assert.That(this.AssignmentDetails.IdentifyingData[0].Answer, Is.EqualTo(this.Assignment.IdentifyingData[0].Answer));
 
         [Test]
         public void should_map_IdentifyingAnswer_QuestionId() =>
-            this.AssignmentDetails.IdentifyingData[0].QuestionId.ShouldEqual(this.Assignment.IdentifyingData[0].QuestionId);
+            Assert.That(this.AssignmentDetails.IdentifyingData[0].QuestionId, Is.EqualTo(this.Assignment.IdentifyingData[0].QuestionId));
 
         [Test]
         public void should_map_IdentifyingAnswer_Variable_name_from_questionnaire() =>
-            this.AssignmentDetails.IdentifyingData[0].Variable.ShouldEqual("test2");
+            Assert.That(this.AssignmentDetails.IdentifyingData[0].Variable, Is.EqualTo("test2"));
 
         [Test]
         public void should_query_questionnaire_storage() =>

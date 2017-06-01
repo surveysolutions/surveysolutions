@@ -215,15 +215,20 @@ namespace WB.Tests.Abc.TestFactories
         public FailedValidationCondition FailedValidationCondition(int? failedConditionIndex = null)
             => new FailedValidationCondition(failedConditionIndex ?? 1117);
 
-        public Group FixedRoster(Guid? rosterId = null, IEnumerable<string> obsoleteFixedTitles = null, IEnumerable<IComposite> children = null, string variable = "roster_var", string title = "Roster X", FixedRosterTitle[] fixedTitles = null)
-            => Create.Entity.Roster(
-                rosterId: rosterId,
-                children: children,
-                title: title,
-                variable: variable,
-                enablementCondition: enablementCondition,
-                fixedRosterTitles: fixedTitles,
-                fixedTitles: obsoleteFixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
+        public Group FixedRoster(Guid? rosterId = null,
+            string enablementCondition = null,
+            IEnumerable<string> obsoleteFixedTitles = null,
+            IEnumerable<IComposite> children = null,
+            string variable = "roster_var",
+            string title = "Roster X",
+            FixedRosterTitle[] fixedTitles = null) => Create.Entity.Roster(
+                        rosterId: rosterId,
+                        children: children,
+                        title: title,
+                        variable: variable,
+                        enablementCondition: enablementCondition,
+                        fixedRosterTitles: fixedTitles,
+                        fixedTitles: obsoleteFixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
 
         public FixedRosterTitle FixedTitle(decimal value, string title = null)
             => new FixedRosterTitle(value, title ?? $"Fixed title {value}");
@@ -1583,10 +1588,11 @@ namespace WB.Tests.Abc.TestFactories
                 var readonlyProfile = new ReadonlyProfile();
                 readonlyProfile.AsDynamic().SupervisorId = assigneeSupervisorId;
                 readonlyUser.AsDynamic().ReadonlyProfile = readonlyProfile;
-            readonlyUser.AsDynamic().Name = responsibleName;
-            result.AsDynamic().InterviewSummaries = interviewSummary;
+                readonlyUser.AsDynamic().Name = responsibleName;
                 asDynamic.Responsible = readonlyUser;
             }
+
+            asDynamic.InterviewSummaries = interviewSummary;
 
             return result;
         }
