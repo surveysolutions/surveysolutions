@@ -471,8 +471,13 @@
     <Compile Include="Applications\Headquarters\ExportApiTests\when_getting_export_file_and_questionnaire_identity_is_invalid.cs" />
     <Compile Include="Applications\Headquarters\FilterTests\MaintenanceFilterTests\when_action_executing_and_read_side_is_outdated.cs" />
     <Compile Include="Applications\Headquarters\InterviewerApiTests\CompanyLogoApiV2ControllerTests.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\BaseAssignmentsControllerTest.cs" />
     <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\AssignmentsPublicApiMapProfileSpecification.cs" />
-    <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_map_AssignmentIdentifyingDataItem_List_To_Assignment.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_assign_new_user_with_AssignmentsPublicApi.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_change_capacity_with_AssignmentsPublicApi.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_create_assignment_with_AssignmentsPublicApi.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_map_CreateAssignmentApiRequest_WithNonExistingQuestions.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_map_CreateAssignmentRequest_To_Assignment.cs" />
     <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_map_assignment_to_assignmentDetails.cs" />
     <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_map_assignment_to_preloadedDataByFile.cs" />
     <Compile Include="Applications\Headquarters\QuestionnaireImportServiceTests.cs" />

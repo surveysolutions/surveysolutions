@@ -1573,12 +1573,14 @@ namespace WB.Tests.Abc.TestFactories
 
         public Assignment Assignment(int? id = null,
             QuestionnaireIdentity questionnaireIdentity = null,
+            int? capacity = null,
             Guid? assigneeSupervisorId = null,
             string responsibleName = null,
             ISet<InterviewSummary> interviewSummary = null)
         {
             var result = new Assignment();
             var asDynamic = result.AsDynamic();
+            asDynamic.Capacity = capacity ?? 0;
             asDynamic.Id = id ?? 0;
             result.QuestionnaireId = questionnaireIdentity;
 

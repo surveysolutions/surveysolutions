@@ -16,8 +16,8 @@ namespace WB.Tests.Abc.TestFactories
     {
         public TestHqUserManager() : base(Mock.Of<IUserStore<HqUser, Guid>>(),
             Mock.Of<IHashCompatibilityProvider>(),
-            Mock.Of<IPasswordHasher>(), 
-            Mock.Of<IIdentityValidator<string>>(), 
+            Mock.Of<IPasswordHasher>(),
+            Mock.Of<IIdentityValidator<string>>(),
             Mock.Of<ILoggerProvider>()) { }
     }
 
