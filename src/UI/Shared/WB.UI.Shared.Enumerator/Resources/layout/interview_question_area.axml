@@ -9,9 +9,24 @@
       <TableLayout android:layout_width="wrap_content"
                    android:layout_height="wrap_content" 
                    android:stretchColumns="0">
-        <TableRow>
-          <TextView style="@style/Interview_Question_RecordedAnswer"
+        <TableRow local:MvxBind="Visible QuestionState.IsAnswered">
+            <TextView android:singleLine="true"
+                      android:textStyle="bold"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="Area: " />          
+            <TextView style="@style/Interview_Question_RecordedAnswer"
                     local:MvxBind="Text Answer.AreaSize; Visible QuestionState.IsAnswered" />
+        </TableRow>
+
+        <TableRow local:MvxBind="Visible QuestionState.IsAnswered">
+            <TextView android:singleLine="true"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:textStyle="bold"
+                      android:text="Length: " />            
+            <TextView style="@style/Interview_Question_RecordedAnswer"
+                    local:MvxBind="Text Answer.Length; Visible QuestionState.IsAnswered" />
           <include layout="@layout/interview_question__remove_button_recorded" />
         </TableRow>
       </TableLayout>
