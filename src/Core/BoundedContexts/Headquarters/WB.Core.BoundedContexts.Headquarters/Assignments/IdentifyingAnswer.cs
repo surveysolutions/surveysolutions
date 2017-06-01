@@ -6,20 +6,54 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
     public class IdentifyingAnswer
     {
-        protected IdentifyingAnswer()
+        public static IdentifyingAnswer Create(Assignment assignment, IQuestionnaire questionnaire, string answer, Guid? questionId = null, string variableName = null)
         {
-        }
+            var result = new IdentifyingAnswer();
 
-        public IdentifyingAnswer(Assignment assignment, IQuestionnaire questionnaire, string answer, Guid questionId)
-        {
-            this.Assignment = assignment;
-            this.Answer = this.AnswerAsString = answer;
+            result.Assignment = assignment;
+            result.Answer = result.AnswerAsString = answer;
 
-            this.QuestionId = questionId;
-            var questionType = questionnaire.GetQuestionType(questionId);
+            result.TryToFillQuestionId(questionnaire, questionId, variableName);
+
+            if (string.IsNullOrWhiteSpace(result.VariableName) || result.QuestionId == Guid.Empty)
+            {
+                throw new ArgumentException($"Cannot identify question from provided data: questionId: {questionId}, variable: {variableName}");
+            }
+
+            var questionType = questionnaire.GetQuestionType(result.QuestionId);
             if (questionType == QuestionType.SingleOption)
             {
-                this.AnswerAsString = questionnaire.GetAnswerOptionTitle(questionId, int.Parse(answer));
+                int singleOptionAnswer;
+
+                if (!int.TryParse(answer, out singleOptionAnswer))
+                {
+                    throw new ArgumentException($@"Incorrect answer type for SingleOption question: '{result.VariableName}' => '{answer}'", nameof(answer));
+                }
+
+                result.AnswerAsString = questionnaire.GetAnswerOptionTitle(result.QuestionId, singleOptionAnswer);
+            }
+
+            return result;
+        }
+
+        private void TryToFillQuestionId(IQuestionnaire questionnaire, Guid? questionId, string variableName)
+        {
+            this.QuestionId = questionId ?? Guid.Empty;
+            this.VariableName = variableName;
+
+            if (!string.IsNullOrWhiteSpace(variableName) && questionId == null)
+            {
+                questionId = questionnaire.GetQuestionIdByVariable(variableName);
+
+                if (questionId.HasValue)
+                {
+                    this.QuestionId = questionId.Value;
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(variableName) && questionId.HasValue)
+            {
+                this.VariableName = questionnaire.GetQuestionVariableName(questionId.Value);
             }
         }
 

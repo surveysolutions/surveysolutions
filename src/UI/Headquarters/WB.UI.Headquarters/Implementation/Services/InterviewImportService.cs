@@ -100,7 +100,7 @@ namespace WB.UI.Headquarters.Implementation.Services
                         assignmentRecord.Quantity);
 
 
-                    var identifyingAnswers = topLevelAnswers.Answers.Select(a => new IdentifyingAnswer(assignment, questionnaire, a.Value.ToString(), a.Key)).ToList();
+                    var identifyingAnswers = topLevelAnswers.Answers.Select(a => IdentifyingAnswer.Create(assignment, questionnaire, a.Value.ToString(), a.Key)).ToList();
                     assignment.SetAnswers(identifyingAnswers);
 
                     this.plainTransactionManager.ExecuteInPlainTransaction(

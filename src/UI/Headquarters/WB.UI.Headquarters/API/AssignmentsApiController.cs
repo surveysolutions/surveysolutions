@@ -161,7 +161,7 @@ namespace WB.UI.Headquarters.API
 
             var identifyingAnswers = untypedQuestionAnswers
                 .Select(CommandTransformator.ParseQuestionAnswer)
-                .Select(answer => new IdentifyingAnswer(assignment, questionnaire, answer.Value.ToString(), answer.Key))
+                .Select(answer => IdentifyingAnswer.Create(assignment, questionnaire, answer.Value.ToString(), answer.Key))
                 .ToArray();
             assignment.SetAnswers(identifyingAnswers);
             
