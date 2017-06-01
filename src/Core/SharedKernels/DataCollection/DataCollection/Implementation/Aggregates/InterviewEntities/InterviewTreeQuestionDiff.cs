@@ -88,7 +88,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
         }
 
-        public bool IsNodeMarkedAsReadonly
+        public bool NodeIsMarkedAsReadonly
         {
             get
             {

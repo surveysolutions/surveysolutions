@@ -2015,7 +2015,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var allNotNullableNodes = diff.Where(x => x.ChangedNode != null).ToList();
             var diffByQuestions = allNotNullableNodes.OfType<InterviewTreeQuestionDiff>().ToList();
-            var readonlyQuestions = diffByQuestions.Where(x => x.IsNodeMarkedAsReadonly).Select(x => x.ChangedNode.Identity).ToArray();
+            var readonlyQuestions = diffByQuestions.Where(x => x.NodeIsMarkedAsReadonly).Select(x => x.ChangedNode.Identity).ToArray();
             if (readonlyQuestions.Any()) this.ApplyEvent(new QuestionsMarkedAsReadonly(readonlyQuestions));
         }
 
