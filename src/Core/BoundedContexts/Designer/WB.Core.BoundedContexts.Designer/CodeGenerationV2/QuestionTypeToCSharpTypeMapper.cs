@@ -13,15 +13,12 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
         {
             switch (question.QuestionType)
             {
+                case QuestionType.Multimedia:
+                case QuestionType.QRBarcode:
                 case QuestionType.Text:
                     return "string";
-
                 case QuestionType.Numeric:
                     return ((question as NumericQuestion)?.IsInteger ?? false) ? "int?" : "double?";
-
-                case QuestionType.QRBarcode:
-                    return "string";
-
                 case QuestionType.MultyOption:
                     var multiOtion = question as MultyOptionsQuestion;
                     if (multiOtion != null && multiOtion.YesNoView)
@@ -54,8 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                 case QuestionType.GpsCoordinates:
                     return typeof(GeoLocation).Name;
 
-                case QuestionType.Multimedia:
-                    return "string";
+                
 
                 default:
                     throw new ArgumentException("Unknown question type.");

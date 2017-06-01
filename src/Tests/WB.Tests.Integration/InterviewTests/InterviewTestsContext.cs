@@ -60,7 +60,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             var state = GetLatestExpressionStorage(questionnaireDocument);
 
-            var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionProcessor(It.IsAny<QuestionnaireIdentity>()) == state);
+            var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionStorage(It.IsAny<QuestionnaireIdentity>()) == state);
 
             var interview = IntegrationCreate.PreloadedInterview(
                 preloadedData, questionnaireId, questionnaireRepository, statePrototypeProvider);
@@ -113,7 +113,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             var state = GetLatestExpressionStorage(questionnaireDocument);
 
-            var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionProcessor(It.IsAny<QuestionnaireIdentity>()) == state);
+            var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionStorage(It.IsAny<QuestionnaireIdentity>()) == state);
 
             var questionnaireRepository = questionnaireStorage ?? Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
                 questionnaireIdentity.QuestionnaireId,
@@ -150,7 +150,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             var state = GetLatestExpressionStorage(questionnaireDocument);
 
-            var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionProcessor(It.IsAny<QuestionnaireIdentity>()) == state);
+            var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionStorage(It.IsAny<QuestionnaireIdentity>()) == state);
 
             var interview = IntegrationCreate.Interview(questionnaireId, questionnaireRepository, statePrototypeProvider);
 
