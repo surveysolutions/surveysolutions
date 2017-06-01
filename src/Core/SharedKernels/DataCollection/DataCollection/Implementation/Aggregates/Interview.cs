@@ -414,6 +414,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ExpressionProcessorStatePrototype.EnableQuestions(@event.Questions);
         }
 
+        public virtual void Apply(QuestionsMarkedAsReadonly @event)
+        {
+            foreach (var questionIdentity in @event.Questions)
+                this.Tree.GetQuestion(questionIdentity)?.MarkAsReadonly();
+        }
+
         public virtual void Apply(StaticTextsEnabled @event)
         {
             foreach (var staticTextIdentity in @event.StaticTexts)
@@ -1872,14 +1878,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyLinkedOptionsChangesEvents(questionsWithChangedOptionsSet);
             this.ApplyLinkedToListOptionsChangesEvents(questionsWithChangedLinkedToListOptionsSet);
             this.ApplySubstitutionEvents(diff);
+            this.ApplyReadonlyStateEvents(diff);
         }
 
         protected void ApplyEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff, Guid? responsibleId = null)
         {
             var diffByQuestions = diff.OfType<InterviewTreeQuestionDiff>().ToList();
             var questionsWithRemovedAnswer = diffByQuestions.Where(x => x.IsAnswerRemoved).ToArray();
-
             var questionsWithChangedAnswer = diffByQuestions.Where(x => x.IsAnswerChanged).ToArray();
+
             var changedRosters = diff.OfType<InterviewTreeRosterDiff>().ToArray();
 
             var questionsRosterLevels = questionsWithChangedAnswer.Select(x => x.Identity.RosterVector).ToHashSet();
@@ -2002,6 +2009,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (enabledStaticTexts.Any()) this.ApplyEvent(new StaticTextsEnabled(enabledStaticTexts));
             if (disabledVariables.Any()) this.ApplyEvent(new VariablesDisabled(disabledVariables));
             if (enabledVariables.Any()) this.ApplyEvent(new VariablesEnabled(enabledVariables));
+        }
+
+        private void ApplyReadonlyStateEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
+        {
+            var allNotNullableNodes = diff.Where(x => x.ChangedNode != null).ToList();
+            var diffByQuestions = allNotNullableNodes.OfType<InterviewTreeQuestionDiff>().ToList();
+            var readonlyQuestions = diffByQuestions.Where(x => x.NodeIsMarkedAsReadonly).Select(x => x.ChangedNode.Identity).ToArray();
+            if (readonlyQuestions.Any()) this.ApplyEvent(new QuestionsMarkedAsReadonly(readonlyQuestions));
         }
 
         private void ApplyUpdateAnswerEvents(InterviewTreeQuestionDiff[] diffByQuestions, Guid responsibleId)

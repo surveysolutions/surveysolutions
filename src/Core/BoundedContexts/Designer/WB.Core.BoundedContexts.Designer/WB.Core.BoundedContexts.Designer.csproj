@@ -412,6 +412,11 @@
     <Compile Include="Services\Accounts\IPasswordStrategy.cs" />
     <Compile Include="Services\IAllowedAddressService.cs" />
     <Compile Include="Services\IIpAddressProvider.cs" />
+    <Compile Include="Services\ITopologicalSorter.cs" />
+    <Compile Include="Services\TopologicalSorter\StronglyConnectedComponent.cs" />
+    <Compile Include="Services\TopologicalSorter\StronglyConnectedComponentList.cs" />
+    <Compile Include="Services\TopologicalSorter\TopologicalSorter.cs" />
+    <Compile Include="Services\TopologicalSorter\Vertex.cs" />
     <Compile Include="ValueObjects\RosterScope.cs" />
     <Compile Include="Services\IFindReplaceService.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />

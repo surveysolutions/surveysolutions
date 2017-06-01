@@ -112,15 +112,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             var interviewId = Guid.NewGuid();
             var interviewerIdentity = this.principal.CurrentUserIdentity;
 
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(QuestionnaireIdentity.Parse(this.assignment.QuestionnaireId), null);
-            var prefilledQuestions = questionnaire.GetPrefilledQuestions();
             var answersToIdentifyingQuestions = GetAnswersToIdentifyingQuestions(this.assignment.IdentifyingData);
-            bool hasEmptyAnswers = prefilledQuestions.Count > answersToIdentifyingQuestions.Count;
 
-            ICommand createInterviewCommand;
-            
-            if (hasEmptyAnswers)
-                createInterviewCommand = new CreateInterviewOnClientCommand(interviewId,
+            ICommand createInterviewCommand = new CreateInterviewOnClientCommand(interviewId,
                     interviewerIdentity.UserId,
                     this.questionnaireIdentity,
                     DateTime.UtcNow,
@@ -129,16 +123,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                     int.Parse(this.assignment.Id),
                     answersToIdentifyingQuestions
                 );
-            else
-                createInterviewCommand = new CreateInterviewCommand(interviewId,
-                    interviewerIdentity.UserId,
-                    this.questionnaireIdentity.QuestionnaireId,
-                    answersToIdentifyingQuestions,
-                    DateTime.UtcNow,
-                    interviewerIdentity.SupervisorId,
-                    this.questionnaireIdentity.Version,
-                    null
-                );
+
 
             await this.commandService.ExecuteAsync(createInterviewCommand);
             this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
@@ -154,7 +139,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private AbstractAnswer ConvertToAbstractAnswer(AssignmentDocument.IdentifyingAnswer identifyingAnswer, QuestionnaireDocument questionnaireDocument)
         {
             var question = questionnaireDocument.Find<IQuestion>(identifyingAnswer.QuestionId);
-            return this.identifyingAnswerConverter.GetAbstractAnswer(question, identifyingAnswer.Answer);
+            return this.identifyingAnswerConverter.GetAbstractAnswer(question.QuestionType, identifyingAnswer.Answer);
         }
 
         private void RaiseStartingLongOperation()

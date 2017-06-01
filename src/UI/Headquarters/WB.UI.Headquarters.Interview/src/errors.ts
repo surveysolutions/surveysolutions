@@ -2,6 +2,8 @@ import * as toastr from "toastr"
 import Vue from "vue"
 import { verboseMode } from "./config"
 
+/* tslint:disable:no-console */
+
 Vue.config.errorHandler = (error, vm) => {
     console.error(error, vm)
     toastr.error(error)
@@ -24,7 +26,6 @@ function wrap(name, method, section) {
             if (verboseMode && !(window as any).NODEBUG) {
                 const argument = arguments[1] == null ? null : JSON.parse(JSON.stringify(arguments[1]))
 
-                // tslint:disable-next-line:no-console
                 console.debug("call", section, name, argument) // , new Error().stack)
             }
 

@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
         public VerificationStatus VerifyAssignmentsSample(Guid questionnaireId, long version, PreloadedDataByFile data)
         {
-            VerificationStatus status = new VerificationStatus(); 
+            var status = new VerificationStatus();
 
             if (data?.Content == null || data.Content.Length == 0)
             {
@@ -76,7 +76,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             var errors = new List<PreloadedDataVerificationError>();
 
             var datas = new[] { new PreloadedDataByFile(data.Id, preloadedDataService.GetValidFileNameForTopLevelQuestionnaire(), data.Header, data.Content) };
-            //var datas = new[] { new PreloadedDataByFile(data.Id, data.FileName, data.Header, data.Content) };
 
             errors.AddRange(
                 this.Verifier(this.ColumnWasntMappedOnQuestionInTemplate, "PL0003",

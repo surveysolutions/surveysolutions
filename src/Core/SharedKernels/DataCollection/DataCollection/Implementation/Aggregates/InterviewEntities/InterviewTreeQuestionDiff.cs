@@ -87,5 +87,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 return !sourceOptions.SequenceEqual(this.ChangedNode.AsLinkedToList.Options);
             }
         }
+
+        public bool NodeIsMarkedAsReadonly
+        {
+            get
+            {
+                if (this.ChangedNode == null) return false;
+                if (this.IsNodeAdded) return this.ChangedNode.IsReadonly;
+                return !SourceNode.IsReadonly && this.ChangedNode.IsReadonly;
+            }
+        }
     }
 }

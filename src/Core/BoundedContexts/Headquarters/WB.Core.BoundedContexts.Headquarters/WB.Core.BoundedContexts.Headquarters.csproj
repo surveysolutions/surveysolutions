@@ -194,6 +194,7 @@
     <Compile Include="Assignments\AssignmentsService.cs" />
     <Compile Include="Assignments\AssignmentsWithoutIdentifingData.cs" />
     <Compile Include="Assignments\AssignmentViewFactory.cs" />
+    <Compile Include="Assignments\AssignmetnsDeletionService.cs" />
     <Compile Include="Assignments\IAssignmentsService.cs" />
     <Compile Include="Assignments\IAssignmentViewFactory.cs" />
     <Compile Include="Assignments\IAssignmetnsDeletionService.cs" />
