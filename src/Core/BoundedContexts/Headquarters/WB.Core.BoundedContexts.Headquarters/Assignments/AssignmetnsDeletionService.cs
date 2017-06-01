@@ -20,10 +20,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             {
                 using (var transaction = session.BeginTransaction())
                 {
-                    var queryText = $"DELETE from plainstore.assignments a " +
-                        $"WHERE a.QuestionnaireId = :questionnaireId " +
-                        $"AND a.QuestionnaireVersion =  :questionnaireVersion";
-                    var query = session.CreateSQLQuery(queryText);
+                    var queryText = $"DELETE from {nameof(Assignment)} a " +
+                        $"WHERE a.QuestionnaireId.QuestionnaireId = :questionnaireId " +
+                        $"AND a.QuestionnaireId.Version =  :questionnaireVersion";
+                    var query = session.CreateQuery(queryText);
                     query.SetParameter("questionnaireId", questionnaireIdentity.QuestionnaireId);
                     query.SetParameter("questionnaireVersion", questionnaireIdentity.Version);
 

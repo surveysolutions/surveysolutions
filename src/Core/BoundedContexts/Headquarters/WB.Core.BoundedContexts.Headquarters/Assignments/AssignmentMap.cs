@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 mapper.Table("AssignmentsIdentifyingAnswers");
                 mapper.Key(k => k.Column("AssignmentId"));
                 mapper.Index(i => i.Column("Position"));
-                mapper.Cascade(Cascade.All|Cascade.DeleteOrphans);
+                mapper.Cascade(Cascade.All);
             }, r => r.Component(c =>
             {
                 c.Property(x => x.Answer);
