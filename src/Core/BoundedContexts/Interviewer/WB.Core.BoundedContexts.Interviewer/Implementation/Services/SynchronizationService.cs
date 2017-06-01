@@ -23,6 +23,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     public class SynchronizationService : ISynchronizationService
     {
         private const string apiVersion = "v2";
+
+#if !EXCLUDEEXTENSIONS
+        private readonly string checkVersionUrl = "api/interviewer/extended";
+#else
+        private readonly string checkVersionUrl = "api/interviewer";
+#endif
         private const string interviewerApiUrl = "api/interviewer/";
         private readonly string devicesController = string.Concat(interviewerApiUrl, apiVersion, "/devices");
         private readonly string usersController = string.Concat(interviewerApiUrl, apiVersion, "/users");
@@ -62,7 +68,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.logger = logger;
         }
 
-        #region [Interviewer Api]
+#region [Interviewer Api]
 
         public async Task<string> LoginAsync(LogonInfo logonInfo, RestCredentials credentials, CancellationToken? token = null)
         {
@@ -88,9 +94,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 this.restService.GetAsync<InterviewerApiView>(url: string.Concat(this.usersController, "/current"),
                 credentials: credentials ?? this.restCredentials, token: token));
         }
-        #endregion
+#endregion
 
-        #region [Device Api]
+#region [Device Api]
 
         public Task<bool> HasCurrentInterviewerDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
@@ -165,9 +171,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 credentials: credentials ?? this.restCredentials, token: token));
         }
 
-        #endregion
+#endregion
 
-        #region [Questionnaire Api]
+#region [Questionnaire Api]
 
 
         public Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged,
@@ -239,9 +245,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 credentials: this.restCredentials)).ConfigureAwait(false);
         }
 
-        #endregion
+#endregion
 
-        #region [Interview Api]
+#region [Interview Api]
 
         public Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token)
         {
@@ -302,9 +308,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 token: token));
         }
 
-        #endregion
+#endregion
         
-        #region Attachments
+#region Attachments
         public Task<List<string>> GetAttachmentContentsAsync(QuestionnaireIdentity questionnaire, 
             Action<decimal, long, long> onDownloadProgressChanged,
             CancellationToken token)
@@ -338,15 +344,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 return attachmentContent;
             });
         } 
-        #endregion
+#endregion
 
-        #region [Application Api]
+#region [Application Api]
 
         public Task<byte[]> GetApplicationAsync(CancellationToken token)
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>
             {
-                var restFile = await this.restService.DownloadFileAsync(url: interviewerApiUrl, token: token,
+                var restFile = await this.restService.DownloadFileAsync(url: checkVersionUrl, token: token,
                     credentials: this.restCredentials).ConfigureAwait(false);
 
                 return restFile.Content;
@@ -357,7 +363,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>
                 await this.restService.GetAsync<int?>(
-                    url: string.Concat(interviewerApiUrl, "/latestversion"),
+                    url: string.Concat(checkVersionUrl, "/latestversion"),
                     credentials: this.restCredentials, token: token).ConfigureAwait(false));
         }
 
@@ -382,7 +388,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             }).ConfigureAwait(false);
         }
 
-        #endregion
+#endregion
 
         private async Task TryGetRestResponseOrThrowAsync(Func<Task> restRequestTask)
         {

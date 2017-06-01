@@ -1470,7 +1470,6 @@
     <Compile Include="API\InterviewerSyncController.cs" />
     <Compile Include="API\Interviewer\DevicesControllerBase.cs" />
     <Compile Include="API\Interviewer\InterviewerApiController.cs" />
-    <Compile Include="API\Interviewer\InterviewerControllerBase.cs" />
     <Compile Include="API\Interviewer\InterviewsControllerBase.cs" />
     <Compile Include="API\Interviewer\QuestionnairesControllerBase.cs" />
     <Compile Include="API\Interviewer\UsersControllerBase.cs" />
