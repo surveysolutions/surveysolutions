@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration.Provider;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Web;
 using System.Web.Security;
@@ -343,7 +344,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts
 
         public override MembershipUser GetUser(string username, bool userIsOnline)
         {
-            IMembershipAccount user = this.AccountRepository.Get(username);
+            IMembershipAccount user = this.AccountRepository.GetByNameOrEmail(username);
             if (user == null)
             {
                 return null;
@@ -450,14 +451,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts
 
         public override bool ValidateUser(string username, string password)
         {
-            IMembershipAccount account = this.AccountRepository.Get(username);
+            IMembershipAccount account = this.AccountRepository.GetByNameOrEmail(username);
             if (account == null)
             {
                 return false;
             }
 
             AccountPasswordInfo passwordInfo = account.CreatePasswordInfo();
-
             return this.PasswordStrategy.Compare(passwordInfo, password);
         }
 
@@ -552,13 +552,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts
             status = this.AccountRepository.Register(account);
 
             return account;
-        }
-
-        private void LockUser(IMembershipAccount account)
-        {
-            account.IsLockedOut = true;
-            account.LastLockedOutAt = DateTime.Now;
-            this.AccountRepository.Update(account, MembershipEventType.LockUser);
         }
 
         private void Merge(DesignerMembershipUser user, IMembershipAccount account)
