@@ -36,7 +36,7 @@ namespace WB.UI.Designer
 
         public static IAccountRepository CreateRepository()
         {
-            return new CQRSAccountRepository(commandService, accountListViewFactory, accountViewFactory)
+            return new DesignerAccountRepository(commandService, accountListViewFactory, accountViewFactory)
             {
                 IsUniqueEmailRequired = MembershipProviderSettings.Instance.RequiresUniqueEmail
             };

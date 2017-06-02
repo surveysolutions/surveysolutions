@@ -8,16 +8,18 @@ using System.Web.Http.Routing;
 using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.UI.Designer.Api.Attributes;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.Applications.AttributesTests
 {
     internal class when_api_basic_auth_attribute_handles_on_authorization_with_correct_credentials : AttributesTestContext
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void context()
         {
             var membershipUserServiceMock = new Mock<IMembershipUserService>();
             var membershipWebUserMock = new Mock<IMembershipWebUser>();
@@ -28,6 +30,8 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
             membershipUserServiceMock.Setup(_ => _.WebUser).Returns(membershipWebUserMock.Object);
 
             Mock.Get(ServiceLocator.Current).Setup(_ => _.GetInstance<IMembershipUserService>()).Returns(membershipUserServiceMock.Object);
+            Setup.InstanceToMockedServiceLocator<IAccountRepository>(
+                Mock.Of<IAccountRepository>(x => x.GetByNameOrEmail(userName) == Mock.Of<IMembershipAccount>(a => a.UserName == userName)));
 
             var context = new Mock<HttpConfiguration>();
 
@@ -45,20 +49,23 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
             Func<string, string, bool> validateUserCredentials = (s, s1) => true;
 
             attribute = CreateApiBasicAuthAttribute(validateUserCredentials);
-        };
 
-        Because of = () =>
+            //Act
             attribute.OnAuthorization(filterContext);
+        }
 
-        It should_set_Thread_Identity_name_to_proveded_value = () =>
-            Thread.CurrentPrincipal.Identity.Name.ShouldEqual(userName);
 
-        It should_set_Thread_Identity_IsAuthenticated_to_true = () =>
-            Thread.CurrentPrincipal.Identity.IsAuthenticated.ShouldBeTrue();
+        [Test]
+        public void should_set_Thread_Identity_name_to_proveded_value() => 
+            Assert.That(Thread.CurrentPrincipal.Identity.Name, Is.EqualTo(this.userName));
 
-        private static ApiBasicAuthAttribute attribute;
-        private static HttpActionContext filterContext;
+        [Test]
+        public void should_set_Thread_Identity_IsAuthenticated_to_true() =>
+            Assert.That(Thread.CurrentPrincipal.Identity.IsAuthenticated, Is.True);
 
-        private static string userName = "name";
+        ApiBasicAuthAttribute attribute;
+        HttpActionContext filterContext;
+
+        string userName = "name";
     }
 }

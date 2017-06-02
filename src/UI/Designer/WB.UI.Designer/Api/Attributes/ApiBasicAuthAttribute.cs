@@ -11,6 +11,7 @@ using System.Web.Security;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.Infrastructure.Transactions;
 using WB.UI.Designer.Resources;
 
@@ -27,6 +28,8 @@ namespace WB.UI.Designer.Api.Attributes
         private IIpAddressProvider ipAddressProvider => ServiceLocator.Current.GetInstance<IIpAddressProvider>();
 
         private IPlainTransactionManagerProvider TransactionManagerProvider => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>();
+
+        private IAccountRepository AccountRepository => ServiceLocator.Current.GetInstance<IAccountRepository>();
 
         private readonly Func<string, string, bool> validateUserCredentials;
 
@@ -58,7 +61,8 @@ namespace WB.UI.Designer.Api.Attributes
                     return;
                 }
 
-                var identity = new GenericIdentity(credentials.Username, "Basic");
+                var account = this.AccountRepository.GetByNameOrEmail(credentials.Username);
+                var identity = new GenericIdentity(account.UserName, "Basic");
                 var principal = new GenericPrincipal(identity, null);
 
                 Thread.CurrentPrincipal = principal;

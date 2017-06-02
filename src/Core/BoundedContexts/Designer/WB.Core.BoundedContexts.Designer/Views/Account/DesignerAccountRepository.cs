@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Security;
 using WB.Core.BoundedContexts.Designer.Commands.Account;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
@@ -8,13 +9,13 @@ using WB.Core.Infrastructure.CommandBus;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Account
 {
-    public class CQRSAccountRepository : IAccountRepository
+    public class DesignerAccountRepository : IAccountRepository
     {
         private readonly ICommandService commandService;
         private readonly IAccountListViewFactory accountListViewFactory;
         private readonly IAccountViewFactory accountViewFactory;
 
-        public CQRSAccountRepository(ICommandService commandService, IAccountListViewFactory accountListViewFactory, IAccountViewFactory accountViewFactory)
+        public DesignerAccountRepository(ICommandService commandService, IAccountListViewFactory accountListViewFactory, IAccountViewFactory accountViewFactory)
         {
             this.commandService = commandService;
             this.accountListViewFactory = accountListViewFactory;
@@ -117,6 +118,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         public IMembershipAccount GetUserByResetPasswordToken(string token)
         {
             return this.GetUser(resetPasswordToken: token);
+        }
+
+        public IMembershipAccount GetByNameOrEmail(string userNameOrEmail)
+        {
+            IMembershipAccount account = this.Get(userNameOrEmail);
+            if (account == null)
+            {
+                account = this.FindByEmail(userNameOrEmail, 1, 1, out int _).FirstOrDefault();
+            }
+
+            return account;
         }
 
         public string GetUserNameByConfirmationToken(string confirmationToken)
