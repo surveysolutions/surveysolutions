@@ -11,6 +11,7 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.UI.Designer.Api.Attributes;
 using It = Machine.Specifications.It;
 
@@ -29,6 +30,8 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
             membershipUserServiceMock.Setup(_ => _.WebUser).Returns(membershipWebUserMock.Object);
 
             Mock.Get(ServiceLocator.Current).Setup(_ => _.GetInstance<IMembershipUserService>()).Returns(membershipUserServiceMock.Object);
+            Setup.InstanceToMockedServiceLocator<IAccountRepository>(
+                Mock.Of<IAccountRepository>(x => x.GetByNameOrEmail(userName) == Mock.Of<IMembershipAccount>(a => a.UserName == userName)));
 
             var context = new Mock<HttpConfiguration>();
 

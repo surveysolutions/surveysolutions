@@ -580,7 +580,7 @@
     <Compile Include="Views\Account\AccountListViewInputModel.cs" />
     <Compile Include="Views\Account\AccountViewFactory.cs" />
     <Compile Include="Views\Account\AccountViewInputModel.cs" />
-    <Compile Include="Views\Account\CQRSAccountRepository.cs" />
+    <Compile Include="Views\Account\DesignerAccountRepository.cs" />
     <Compile Include="Views\Account\CQRSRoleRepository.cs" />
     <Compile Include="Views\AllowedAddresses\AllowedAddress.cs" />
     <Compile Include="Implementation\Services\AllowedAddressService.cs" />

@@ -264,7 +264,7 @@ namespace WB.UI.Designer.Controllers
                 return this.View(model);
              }
 
-             var user = this.accountRepository.Get(model.UserName);
+             var user = this.accountRepository.GetByNameOrEmail(model.UserName);
              if (user == null)
              {
                 this.captchaService.RegisterFailedLogin(model.UserName);
