@@ -4,9 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
-using Resources;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -20,7 +17,6 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Services;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Threading;
 using WB.UI.Headquarters.Resources;
@@ -47,8 +43,8 @@ namespace WB.UI.Headquarters.Implementation.Services
         public InterviewImportService(
             ICommandService commandService,
             ILogger logger,
-            SampleImportSettings sampleImportSettings, 
-            IInterviewImportDataParsingService interviewImportDataParsingService, 
+            SampleImportSettings sampleImportSettings,
+            IInterviewImportDataParsingService interviewImportDataParsingService,
             IQuestionnaireStorage questionnaireStorage,
             IInterviewUniqueKeyGenerator interviewKeyGenerator,
             IPlainTransactionManagerProvider plainTransactionManagerProvider,
