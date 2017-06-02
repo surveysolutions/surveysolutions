@@ -8,6 +8,7 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
         Valid = 8,
         Enabled = 1,
         Flagged = 2,
-        Answered = 4
+        Answered = 4,
+        Readonly = 16,
     }
 }
