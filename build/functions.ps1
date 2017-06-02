@@ -3,6 +3,13 @@ function GetPathRelativeToCurrectLocation($FullPath) {
 }
 
 function GetPathToMSBuild() {
+    if (Test-Path "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\MSBuild.exe"){
+        return "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\MSBuild.exe"
+    }
+    if (Test-Path "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin\MSBuild.exe"){
+        return "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin\MSBuild.exe"
+    }
+
     return 'C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe'
 }
 
