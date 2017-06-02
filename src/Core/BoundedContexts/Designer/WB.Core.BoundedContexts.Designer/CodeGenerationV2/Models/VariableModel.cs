@@ -7,8 +7,6 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
     {
         public Guid Id { set; get; }
         public string Variable { set; get; }
-        public string ClassName { get; set; }
-        public string ExpressionMethod { get; set; }
         public string TypeName { get; set; }
         public RosterScope RosterScope { get; set; }
     }

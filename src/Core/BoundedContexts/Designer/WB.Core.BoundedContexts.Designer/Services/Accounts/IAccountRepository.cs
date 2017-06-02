@@ -133,5 +133,7 @@ namespace WB.Core.BoundedContexts.Designer.Services.Accounts
         /// The <see cref="string"/>.
         /// </returns>
         IMembershipAccount GetUserByResetPasswordToken(string token);
+
+        IMembershipAccount GetByNameOrEmail(string userNameOrEmail);
     }
 }

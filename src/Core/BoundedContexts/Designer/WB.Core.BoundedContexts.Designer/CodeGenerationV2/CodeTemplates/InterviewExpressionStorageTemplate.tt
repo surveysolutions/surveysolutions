@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 		foreach (var roster in Model.AllRosters) 
 		{
 #>
-			levelFactory.Add(IdOf.<#= roster.Variable #>, (v, s) => new <#= roster.Level.ClassName#>(v, s));
+			levelFactory.Add(IdOf.<#= roster.Variable #>, (v, s) => new <#= roster.ClassName#>(v, s));
 <#
 		}
 #>	

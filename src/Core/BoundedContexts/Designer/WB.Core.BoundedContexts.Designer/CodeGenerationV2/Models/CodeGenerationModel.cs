@@ -9,56 +9,30 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
 {
     public class ExpressionStorageModel
     {
-        public ExpressionStorageModel()
-        {
-            this.AllQuestions = new List<QuestionModel>();
-            this.AllLevels = new List<LevelModel>();
-            this.AllVariables = new List<VariableModel>();
-        }
         public Guid Id { set; get; }
-        public List<QuestionModel> AllQuestions { set; get; }
-        public List<LevelModel> AllLevels { set; get; }
+        public string ClassName { get; set; }
 
-        public List<VariableModel> AllVariables { get; set; }
+        public List<LevelModel> Levels { get; } = new List<LevelModel>();
 
-        public List<StaticTextModel> AllStaticTexts { get; private set; } = new List<StaticTextModel>();
+        public List<ConditionMethodModel> ExpressionMethodModel { get; } = new List<ConditionMethodModel>();
 
-        // change it later
-        public List<RosterModel> AllRosters => this.AllLevels
+        public List<OptionsFilterMethodModel> CategoricalOptionsFilterModel { get; } = new List<OptionsFilterMethodModel>();
+
+        public List<LinkedFilterMethodModel> LinkedFilterMethodModel { get; } = new List<LinkedFilterMethodModel>();
+
+        public List<ConditionMethodModel> VariableMethodModel { get; } = new List<ConditionMethodModel>();
+
+        public List<LookupTableTemplateModel> LookupTables { get; set; }
+       
+        public Dictionary<Guid, string> IdMap { get; set; }
+
+
+        public List<RosterModel> AllRosters => this.Levels
             .SelectMany(x => x.Rosters)
             .GroupBy(x => x.Variable)
             .Select(x => x.First())
             .ToList();
 
-        public List<ConditionMethodModel> ExpressionMethodModel { private set;  get; } = new List<ConditionMethodModel>();
-
-        public List<OptionsFilterMethodModel> CategoricalOptionsFilterModel { private set;  get; } = new List<OptionsFilterMethodModel>();
-
-        public List<LinkedFilterMethodModel> LinkedFilterMethodModel { private set;  get; } = new List<LinkedFilterMethodModel>();
-
-        public List<ConditionMethodModel> VariableMethodModel { private set; get; } = new List<ConditionMethodModel>();
-
-        public string[] AdditionalInterfaces { get; set; }
-        public string[] Namespaces { get; set; }
-
-        public List<LookupTableTemplateModel> LookupTables { get; set; }
-        public string ClassName { get; set; }
-        public Dictionary<Guid, string> IdMap { get; set; }
-
-        public QuestionModel GetQuestionById(Guid questionId)
-        {
-            return this.AllQuestions.FirstOrDefault(x => x.Id == questionId);
-        }
-
-        public LevelModel GetLevelByVariable(string variable)
-        {
-            return this.AllRosters.FirstOrDefault(x => x.Variable == variable)?.Level;
-        }
-
-        public string GetClassNameByRosterScope(RosterScope rosterScope)
-        {
-            return this.AllLevels.First(x => x.RosterScope.Equals(rosterScope)).ClassName;
-        }
 
         public IEnumerable<ConditionMethodModel> GetEnablementConditions(string className)
         {
@@ -91,11 +65,6 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
         public IEnumerable<LinkedFilterMethodModel> GetLinkedFilters(string className)
         {
             return this.LinkedFilterMethodModel.Where(x => x.ClassName == className);
-        }
-
-        public VariableModel GetVariableById(Guid variableId)
-        {
-            return this.AllVariables.FirstOrDefault(x => x.Id == variableId);
         }
     }
 }

@@ -21,6 +21,7 @@
             @Html.EditorFor(x => x.UserName, "TextBoxFormField")
             @Html.EditorFor(x => x.Password, "PasswordFormField")
             @Html.EditorFor(x => x.ConfirmPassword, "PasswordFormField")
+            @RenderSection(@"LockWarningSection", false)
             @Html.EditorFor(x => x.IsLocked, "CheckboxFormField", Model.IsLockedDisabled ? (object)new { } : (object)new { @disabled = @"disabled" })
             @RenderSection(@"PostDetailsSection", false)
             @Html.Partial("Profile/ValidationSummary")

@@ -11,7 +11,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.DataCollection.V7;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 {
@@ -98,7 +97,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
             }
         }
 
-        public IInterviewExpressionStorage GetExpressionProcessor(QuestionnaireIdentity questionnaireIdentity)
+        public IInterviewExpressionStorage GetExpressionStorage(QuestionnaireIdentity questionnaireIdentity)
         {
             var assemblyExists = this.questionnaireAssemblyFileAccessor.IsQuestionnaireAssemblyExists(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
 

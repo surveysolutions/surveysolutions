@@ -55,6 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             var disabledStaticTexts = new List<Identity>();
             var validQuestions = new HashSet<InterviewItemId>();
             var invalidQuestions = new HashSet<InterviewItemId>();
+            var readonlyQuestions = new HashSet<InterviewItemId>();
 
             var validStaticTexts = new List<Identity>();
             var invalidStaticTexts = new List<KeyValuePair<Identity, List<FailedValidationCondition>>>();
@@ -99,6 +100,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                         {
                             validQuestions.Add(new InterviewItemId(interviewQuestion.Key, interviewLevel.RosterVector));
                         }
+                    }
+
+                    if (interviewQuestion.Value.IsReadonly())
+                    {
+                        readonlyQuestions.Add(new InterviewItemId(interviewQuestion.Key, interviewLevel.RosterVector));
                     }
                 }
                 foreach (var disabledGroup in interviewLevel.DisabledGroups)
@@ -174,6 +180,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                 disabledStaticTexts,
                 validQuestions,
                 invalidQuestions,
+                readonlyQuestions,
                 validStaticTexts,
                 invalidStaticTexts,
                 propagatedGroupInstanceCounts,

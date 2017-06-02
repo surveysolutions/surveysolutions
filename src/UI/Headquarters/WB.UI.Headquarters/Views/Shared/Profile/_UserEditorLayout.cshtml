@@ -27,6 +27,7 @@
                 @Html.EditorFor(x => x.Email, "TextBoxFormField")
                 @Html.EditorFor(x => x.PhoneNumber, "TextBoxFormField")
             }
+            @RenderSection(@"LockWarningSection", false)
             @if (!isOwnAccoutEditing)
             {
                 @Html.EditorFor(x => x.IsLocked, "CheckboxFormField", Model.IsLockedDisabled ? new {} : (object) new {@disabled = @"disabled"})

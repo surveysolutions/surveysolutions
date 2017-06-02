@@ -691,7 +691,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can create individual interiews by entering all required data in {0}.
+        ///   Looks up a localized string similar to You can create individual assignments by entering all required data in {0}.
         /// </summary>
         internal static string ManualModeDescription {
             get {

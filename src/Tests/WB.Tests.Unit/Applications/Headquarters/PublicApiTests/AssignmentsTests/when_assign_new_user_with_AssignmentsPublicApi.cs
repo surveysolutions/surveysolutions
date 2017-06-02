@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Tests.Abc;
@@ -53,6 +54,22 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                     .And.Property(nameof(HttpResponseException.Response))
                     .Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(HttpStatusCode.NotAcceptable),
                 () => this.controller.Assign(101, new AssignmentAssignRequest(){Responsible = "any"}));
+        }
+
+        [Test]
+        public void should_store_assignment_with_new_assignee()
+        {
+            this.SetupAssignment(Create.Entity.Assignment(id: 42));
+
+            var user = Create.Entity.HqUser(userId: Id.g1, role: UserRoles.Interviewer);
+            this.SetupResponsibleUser(user);
+
+            this.controller.Assign(42, new AssignmentAssignRequest()
+            {
+                Responsible = "any"
+            });
+
+            this.assignmentsStorage.Verify(ass => ass.Store(It.Is<Assignment>(a => a.ResponsibleId == Id.g1), 42), Times.Once );
         }
     }
 }

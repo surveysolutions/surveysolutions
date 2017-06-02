@@ -414,9 +414,6 @@
   <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
     <value>正在导入访谈</value>
   </data>
-  <data name="ManualModeDescription" xml:space="preserve">
-    <value>您可以通过输入{0}中必须填写的数据创建单个访谈</value>
-  </data>
   <data name="ManualModeLinkTitle" xml:space="preserve">
     <value>手动模式</value>
   </data>
