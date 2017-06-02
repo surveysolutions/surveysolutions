@@ -120,6 +120,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 foreach (var disabledVariable in @event.InterviewData.DisabledVariables)
                     this.Tree.GetVariable(Identity.Create(disabledVariable.Id, disabledVariable.InterviewItemRosterVector))?.Disable();
 
+                foreach (var readonlyQuestion in @event.InterviewData.ReadonlyQuestions)
+                    this.Tree.GetQuestion(Identity.Create(readonlyQuestion.Id, readonlyQuestion.InterviewItemRosterVector))?.MarkAsReadonly();
+
                 this.Tree.ReplaceSubstitutions();
 
             
@@ -660,6 +663,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var disabledStaticTexts = new List<Identity>();
             var validAnsweredQuestions = new HashSet<InterviewItemId>();
             var invalidAnsweredQuestions = new HashSet<InterviewItemId>();
+            var readonlyQuestions = new HashSet<InterviewItemId>();
             var validStaticTexts = new List<Identity>();
             var invalidStaticTexts = new List<KeyValuePair<Identity, List<FailedValidationCondition>>>();
             var failedValidationConditions = new Dictionary<Identity, IList<FailedValidationCondition>>();
@@ -699,6 +703,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     {
                         validAnsweredQuestions.Add(new InterviewItemId(question.Identity.Id, question.Identity.RosterVector));
                     }
+                }
+
+                if (question.IsReadonly)
+                {
+                    readonlyQuestions.Add(new InterviewItemId(question.Identity.Id, question.Identity.RosterVector));
                 }
             }
 
@@ -756,6 +765,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 disabledStaticTexts: disabledStaticTexts,
                 validAnsweredQuestions: validAnsweredQuestions,
                 invalidAnsweredQuestions: invalidAnsweredQuestions,
+                readonlyQuestions: readonlyQuestions,
                 validStaticTexts: validStaticTexts,
                 invalidStaticTexts: invalidStaticTexts,
                 rosterGroupInstances: null /* Obsolete */,
