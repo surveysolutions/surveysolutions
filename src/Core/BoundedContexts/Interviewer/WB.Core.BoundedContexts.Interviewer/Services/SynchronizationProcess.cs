@@ -526,16 +526,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 var local = localAssignmentsLookup[remote.Id].FirstOrDefault();
                 if (local == null)
                 {
-                    var questionnaireId = remote.QuestionnaireId.ToString();
-                    var questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaireId);
-                    await this.DownloadQuestionnaireAsync(questionnaireIdentity, cancellationToken, statistics);
-                    var questionnaireDocument = this.questionnairesAccessor.GetQuestionnaire(questionnaireIdentity);
+                    await this.DownloadQuestionnaireAsync(remote.QuestionnaireId, cancellationToken, statistics);
+                    var questionnaireDocument = this.questionnairesAccessor.GetQuestionnaire(remote.QuestionnaireId);
+
                     local = new AssignmentDocument
                     {
                         Id = remote.Id,
-                        QuestionnaireId = questionnaireId,
+                        QuestionnaireId = remote.QuestionnaireId.ToString(),
                         Title = questionnaireDocument.Title,
                     };
+
                     var identifyingData = new List<AssignmentDocument.IdentifyingAnswer>();
 
                     foreach (var identifyingAnswer in remote.IdentifyingData)
@@ -642,19 +642,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 RAMInfo = this.ToRAMInfoApiView(info.RAMInfo)
             };
         }
-
-        private AssignmentDocument.IdentifyingAnswer ToIdentifyingAnswer(AssignmentApiView.IdentifyingAnswer answer,
-            QuestionnaireDocument questionnaireDocument)
-        {
-            var question = questionnaireDocument.Find<IQuestion>(answer.QuestionId);
-            return new AssignmentDocument.IdentifyingAnswer
-            {
-                QuestionId = answer.QuestionId,
-                Answer = answer.Answer,
-                Question = question.QuestionText
-            };
-        }
-
+        
         private LocationAddressApiView ToLocationAddressApiView(LocationAddress locationAddress)
         {
             return new LocationAddressApiView
