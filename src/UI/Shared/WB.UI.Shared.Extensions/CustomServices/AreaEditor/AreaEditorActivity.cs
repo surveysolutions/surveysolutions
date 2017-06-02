@@ -6,6 +6,7 @@ using Android.Views;
 using Android.Widget;
 using Esri.ArcGISRuntime.UI.Controls;
 using MvvmCross.Binding.BindingContext;
+using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 {
