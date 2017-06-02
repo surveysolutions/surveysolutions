@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Android.Views;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI;
@@ -52,33 +51,28 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         private Dictionary<string, string> AvailableMaps = new Dictionary<string, string>();
 
         private List<string> mapsList;
-
         public List<string> MapsList
         {
-            get { return this.mapsList; }
+            get => this.mapsList;
             set
             {
-                this.mapsList = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(() => SelectedMap); //fix
+                this.RaiseAndSetIfChanged(ref this.mapsList, value);
+                RaisePropertyChanged(() => SelectedMap); //fix binding
             }
         }
 
         private string selectedMap;
-
         public string SelectedMap
         {
-            get { return this.selectedMap; }
+            get => this.selectedMap;
             set
             {
-                this.selectedMap = value;
-                RaisePropertyChanged();
-
+                this.RaiseAndSetIfChanged(ref this.selectedMap, value);
+                
                 if (this.AvailableMaps.ContainsKey(value))
                 {
                     this.UpdateBaseMap(this.AvailableMaps[value]);
                 }
-
             }
         }
 
@@ -86,28 +80,26 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         {
             if (pathToMap != null)
             {
-                
+                //fix size of map
                 if(MapView?.LocationDisplay != null)
                     this.MapView.LocationDisplay.IsEnabled = false;
                 
-                var map = new Map();
-
                 TileCache titleCache = new TileCache(pathToMap);
-                var layer = new ArcGISTiledLayer(titleCache);
+                var layer = new ArcGISTiledLayer(titleCache)
+                {
+                    //zoom to any level
+                    //if area is out of the map
+                    // should be available to navigate
+                    MinScale = 100000000,
+                    MaxScale = 1
+                };
 
-                //zoom to any level
-                //if area is out of the map
-                // should be available to navigate
-                layer.MinScale = 100000000;
-                layer.MaxScale = 1;
-                //
-
-                map.Basemap = new Basemap(layer);
-                
-                map.MinScale = 100000000;
-                map.MaxScale = 1;
-
-                this.Map = map;
+                this.Map = new Map
+                {
+                    Basemap = new Basemap(layer),
+                    MinScale = 100000000,
+                    MaxScale = 1
+                };
             }
             else
             {
@@ -128,25 +120,20 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         private Map map;
         public Map Map
         {
-            get { return this.map; }
-            set
-            {
-                this.map = value;
-                RaisePropertyChanged();
-            }
+            get => this.map;
+            set => this.RaiseAndSetIfChanged(ref this.map, value);
         }
 
         private MapView mapView;
         public MapView MapView {
+            get => this.mapView;
             set
             {
                 this.mapView = value;
-
-
                 if (this.mapView != null)
                 {
                     this.mapView.ViewAttachedToWindow +=
-                        delegate(object sender, View.ViewAttachedToWindowEventArgs args)
+                        delegate
                         {
                             if (!string.IsNullOrEmpty(this.Area))
                                 if (this.StartEditAreaCommand.CanExecute())
@@ -154,7 +141,6 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                         };
                 }
             }
-            get { return this.mapView; }
         }
 
         public IMvxCommand SaveAreaCommand => new MvxCommand(() =>
@@ -162,23 +148,15 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             var command = this.MapView.SketchEditor.CompleteCommand;
             if (this.MapView.SketchEditor.CompleteCommand.CanExecute(command))
             {
-                
-                /*if(!GeometryEngine.IsSimple(this.MapView.SketchEditor.Geometry))
-                {
-                    userInteractionService.ShowToast("Area is invalid. Please fix.");
-                    return;
-                }
-                else*/
-                    this.MapView.SketchEditor.CompleteCommand.Execute(command);
+                this.MapView.SketchEditor.CompleteCommand.Execute(command);
             }
-            
             else
             {
                 this.userInteractionService.ShowToast("No changes we made to be saved");
             }
         });
 
-        public IMvxCommand SwitchLocatorCommand => new MvxCommand(() =>
+        public IMvxCommand SwitchLocatorCommand => new MvxCommand(() => 
         {
             if(!this.MapView.LocationDisplay.IsEnabled)
                 this.MapView.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.Off;
@@ -186,88 +164,98 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             this.MapView.LocationDisplay.IsEnabled = !this.MapView.LocationDisplay.IsEnabled;
         });
 
-        public IMvxCommand UpdateMapsCommand => new MvxCommand(async () =>
+        public IMvxAsyncCommand UpdateMapsCommand => new MvxAsyncCommand(async () =>
         {
-            if (!this.IsInProgress)
+            try
             {
-                this.IsInProgress = true;
-                this.cancellationTokenSource = new CancellationTokenSource();
-                await this.mapService.SyncMaps(this.cancellationTokenSource.Token);
+                if (!this.IsInProgress)
+                {
+                    this.IsInProgress = true;
+                    this.cancellationTokenSource = new CancellationTokenSource();
+                    await this.mapService.SyncMaps(this.cancellationTokenSource.Token);
 
-                this.AvailableMaps = this.mapService.GetAvailableMaps();
-                this.MapsList = this.AvailableMaps.Keys.ToList();
-
+                    this.AvailableMaps = this.mapService.GetAvailableMaps();
+                    this.MapsList = this.AvailableMaps.Keys.ToList();
+                }
+                else
+                {
+                    if (this.cancellationTokenSource != null && this.cancellationTokenSource.Token.CanBeCanceled)
+                        this.cancellationTokenSource.Cancel();
+                }
+            }
+            finally 
+            {
                 this.IsInProgress = false;
             }
-            else
-            {
-                if(this.cancellationTokenSource != null && this.cancellationTokenSource.Token.CanBeCanceled)
-                    this.cancellationTokenSource.Cancel();
-                this.IsInProgress = false;
-            }
-
         });
         
         private CancellationTokenSource cancellationTokenSource;
 
-
-        public IMvxCommand StartEditAreaCommand => new MvxCommand(async () =>
+        public IMvxAsyncCommand StartEditAreaCommand => new MvxAsyncCommand(async () =>
         {
             if (this.IsEditing)
                 return;
 
             this.IsEditing = true;
-            this.MapView.SketchEditor.GeometryChanged += delegate (object sender, GeometryChangedEventArgs args)
+            try
             {
-                this.GeometryArea = GeometryEngine.AreaGeodetic(args.NewGeometry);
-                this.CanUndo = this.MapView.SketchEditor.UndoCommand.CanExecute(this.MapView.SketchEditor.UndoCommand);
-                this.CanSave = this.MapView.SketchEditor.CompleteCommand.CanExecute(this.MapView.SketchEditor.CompleteCommand);
-            };
+                this.MapView.SketchEditor.GeometryChanged += delegate(object sender, GeometryChangedEventArgs args)
+                {
+                    this.GeometryArea = GeometryEngine.AreaGeodetic(args.NewGeometry);
+                    this.CanUndo =
+                        this.MapView.SketchEditor.UndoCommand.CanExecute(this.MapView.SketchEditor.UndoCommand);
+                    this.CanSave =
+                        this.MapView.SketchEditor.CompleteCommand.CanExecute(this.MapView.SketchEditor.CompleteCommand);
+                };
 
-            Geometry result = null;
-            if (string.IsNullOrWhiteSpace(this.Area))
-            {
-                result = await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polygon, true).ConfigureAwait(false);
+                Geometry result = null;
+                if (string.IsNullOrWhiteSpace(this.Area))
+                {
+                    result = await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polygon, true)
+                        .ConfigureAwait(false);
+                }
+                else
+                {
+                    var geometry = Geometry.FromJson(this.Area);
+                    await this.MapView.SetViewpointGeometryAsync(geometry, 120);
+                    result = await this.MapView.SketchEditor.StartAsync(geometry, SketchCreationMode.Polygon)
+                        .ConfigureAwait(false);
+                }
+
+                //save
+                var handler = this.OnAreaEditCompleted;
+                var position = this.MapView.LocationDisplay.Location.Position;
+
+                double? dist = null;
+                if (position != null)
+                {
+                    var point = new MapPoint(position.X, position.Y, position.Z, this.MapView.SpatialReference);
+                    dist = GeometryEngine.Distance(result, point);
+                }
+
+                var resultArea = new AreaEditorResult()
+                {
+                    Geometry = result?.ToJson(),
+                    MapName = this.SelectedMap,
+                    Area = GeometryEngine.AreaGeodetic(result),
+                    Length = GeometryEngine.LengthGeodetic(result),
+                    DistanceToEditor = dist
+                };
+                handler?.Invoke(resultArea);
             }
-            else
+            finally
             {
-                var geometry = Geometry.FromJson(this.Area);
-                await this.MapView.SetViewpointGeometryAsync(geometry, 120);
-                result = await this.MapView.SketchEditor.StartAsync(geometry, SketchCreationMode.Polygon).ConfigureAwait(false);
+                this.IsEditing = false;
+                Close(this);
             }
-
-            //save
-            var handler = this.OnAreaEditCompleted;
-            var position = this.MapView.LocationDisplay.Location.Position;
-
-            double? dist = null;
-            if (position != null)
-            {
-                var point = new MapPoint(position.X, position.Y, position.Z, this.MapView.SpatialReference);
-                dist = GeometryEngine.Distance(result, point);
-            }
-
-            var resultArea = new AreaEditorResult()
-            {
-                Geometry = result?.ToJson(),
-                MapName = this.SelectedMap,
-                Area = GeometryEngine.AreaGeodetic(result),
-                Length = GeometryEngine.LengthGeodetic(result),
-                DistanceToEditor = dist
-            };
-            handler?.Invoke(resultArea);
-
-            this.IsEditing = false;
-            Close(this);
         });
 
         private double? geometryArea;
         public double? GeometryArea
         {
-            get { return this.geometryArea; }
-            set { this.geometryArea = value; RaisePropertyChanged(); }
+            get => this.geometryArea;
+            set => this.RaiseAndSetIfChanged(ref this.geometryArea, value);
         }
-
 
         private void BtnUndo()
         {
@@ -289,30 +277,29 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         private bool isEditing;
         public bool IsEditing
         {
-            get { return this.isEditing; }
-            set { this.isEditing = value; RaisePropertyChanged(); }
+            get => this.isEditing;
+            set => this.RaiseAndSetIfChanged(ref this.isEditing, value);
         }
-
 
         private bool canUndo;
         public bool CanUndo
         {
-            get { return this.canUndo; }
-            set { this.canUndo = value; RaisePropertyChanged(); }
+            get => this.canUndo;
+            set => this.RaiseAndSetIfChanged(ref this.canUndo, value);
         }
 
         private bool canSave;
         public bool CanSave
         {
-            get { return this.canSave; }
-            set { this.canSave = value; RaisePropertyChanged(); }
+            get => this.canSave;
+            set => this.RaiseAndSetIfChanged(ref this.canSave, value);
         }
 
         private bool isInProgress;
         public bool IsInProgress
         {
-            get { return this.isInProgress; }
-            set { this.isInProgress = value; RaisePropertyChanged(); }
+            get => this.isInProgress;
+            set => this.RaiseAndSetIfChanged(ref this.isInProgress, value);
         }
     }
 }
