@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
@@ -8,11 +9,14 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Tests.Abc.TestFactories
 {
@@ -89,7 +93,9 @@ namespace WB.Tests.Abc.TestFactories
 
             if (shouldBeInitialized)
             {
-                statefulInterview.CreateInterviewOnClient(Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), Guid.NewGuid(), DateTime.Now, userId ?? Guid.NewGuid(), null, null, null);
+                var command = new CreateInterviewOnClientCommand(Guid.Empty, userId ?? Guid.NewGuid(), Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), DateTime.Now,
+                    Guid.NewGuid(), null, null, null);
+                statefulInterview.CreateInterviewOnClient(command);
             }
 
             return statefulInterview;
@@ -111,7 +117,9 @@ namespace WB.Tests.Abc.TestFactories
 
             if (shouldBeInitialized)
             {
-                statefulInterview.CreateInterviewOnClient(Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), Guid.NewGuid(), DateTime.Now, userId ?? Guid.NewGuid(), null, null, null);
+                var command = new CreateInterviewOnClientCommand(Guid.Empty, userId ?? Guid.NewGuid(), Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), DateTime.Now,
+                    Guid.NewGuid(), null, null, null);
+                statefulInterview.CreateInterviewOnClient(command);
             }
 
             return statefulInterview;

@@ -5,6 +5,7 @@ using Moq;
 using Ncqrs.Spec;
 using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -52,10 +53,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaireRepository,
                 interviewExpressionStatePrototypeProvider: interviewExpressionStatePrototypeProvider,
                 shouldBeInitialized: false);
+
+            command = new CreateInterviewOnClientCommand(Guid.Empty, userId, questionnaireIdentity, DateTime.Now,
+                responsibleSupervisorId, null, null, null);
+
         };
 
         Because of = () =>
-            interview.CreateInterviewOnClient(questionnaireIdentity, responsibleSupervisorId, DateTime.Now, userId, null, null, null);
+            interview.CreateInterviewOnClient(command);
 
         It should_raise_InterviewCreated_event = () =>
             eventContext.ShouldContainEvent<InterviewOnClientCreated>();
@@ -85,5 +90,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid variableId;
         private static StatefulInterview interview;
         private static QuestionnaireIdentity questionnaireIdentity;
+        private static CreateInterviewOnClientCommand command;
     }
 }
