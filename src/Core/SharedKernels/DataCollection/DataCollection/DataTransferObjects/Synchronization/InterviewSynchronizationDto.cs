@@ -10,6 +10,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         {
             Answers = new AnsweredQuestionSynchronizationDto[0];
             this.FailedValidationConditions = new List<KeyValuePair<Identity, IList<FailedValidationCondition>>>();
+            this.ReadonlyQuestions = new HashSet<InterviewItemId>();
         }
 
         public InterviewSynchronizationDto(Guid id, 
@@ -27,6 +28,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             IList<Identity> disabledStaticTexts, 
             HashSet<InterviewItemId> validAnsweredQuestions, 
             HashSet<InterviewItemId> invalidAnsweredQuestions, 
+            HashSet<InterviewItemId> readonlyQuestions, 
             IList<Identity> validStaticTexts, 
             IList<KeyValuePair<Identity, List<FailedValidationCondition>>> invalidStaticTexts, 
             Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances, 
@@ -52,6 +54,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             this.DisabledStaticTexts = disabledStaticTexts;
             ValidAnsweredQuestions = validAnsweredQuestions;
             InvalidAnsweredQuestions = invalidAnsweredQuestions;
+            ReadonlyQuestions = readonlyQuestions;
             
             RosterGroupInstances = rosterGroupInstances;
             this.FailedValidationConditions = failedValidationConditions;
@@ -83,6 +86,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public IList<Identity> DisabledStaticTexts { get; set; }
         public HashSet<InterviewItemId> ValidAnsweredQuestions { get;  set; }
         public HashSet<InterviewItemId> InvalidAnsweredQuestions { get;  set; }
+        public HashSet<InterviewItemId> ReadonlyQuestions { get;  set; }
 
         public IList<KeyValuePair<Identity, IList<FailedValidationCondition>>> FailedValidationConditions { get; set; }
         [Obsolete("Since all intervewers will be version 5.16+")]

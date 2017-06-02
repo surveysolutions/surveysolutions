@@ -70,6 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewData, InterviewDeclaredValid>,
         IUpdateHandler<InterviewData, InterviewHardDeleted>,
         IUpdateHandler<InterviewData, AnswerRemoved>,
+        IUpdateHandler<InterviewData, QuestionsMarkedAsReadonly>,
 
         IUpdateHandler<InterviewData, VariablesChanged>,
         IUpdateHandler<InterviewData, VariablesDisabled>,
@@ -280,6 +281,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     question.QuestionState = question.QuestionState | QuestionState.Flagged;
                 else
                     question.QuestionState &= ~QuestionState.Flagged;
+            });
+        }
+
+        private static InterviewData SetReadonlyStateForQuestion(InterviewData interview, decimal[] vector, Guid questionId)
+        {
+            return UpdateQuestion(interview, vector, questionId, (question) =>
+            {
+                question.QuestionState = question.QuestionState | QuestionState.Readonly;
             });
         }
 
@@ -821,6 +830,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             interview.CurrentLanguage = @event.Payload.Language;
             return interview;
+        }
+
+        public InterviewData Update(InterviewData state, IPublishedEvent<QuestionsMarkedAsReadonly> @event)
+        {
+            return @event.Payload.Questions.Aggregate(
+                    state,
+                    (document, question) => SetReadonlyStateForQuestion(document, question.RosterVector, question.Id));
         }
     }
 }
