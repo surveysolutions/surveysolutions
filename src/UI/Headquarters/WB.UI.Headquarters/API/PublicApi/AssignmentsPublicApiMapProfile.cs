@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.API.PublicApi.Models;
+using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.PublicApi
 {
@@ -34,7 +35,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.CreateMap<Assignment, PreloadedDataByFile>()
                 .ConstructUsing((assignment, context) =>
                 {
-                    var questionnaire = this.GetQuestionnaireDocument(context, assignment.QuestionnaireId);
+                    var questionnaire = this.GetQuestionnaire(context, assignment.QuestionnaireId);
 
                     var id = $"Assignment_{assignment.Id}_{questionnaire.Title}";
 
@@ -63,20 +64,15 @@ namespace WB.UI.Headquarters.API.PublicApi
                 .ForMember(x => x.Archived, opts => opts.MapFrom(x => x.Archived));
         }
 
-        private T GetService<T>(ResolutionContext context) where T : class
-        {
-            return context.Mapper.ServiceCtor(typeof(T)) as T;
-        }
-
         private void PrepareQuestionnaire(ResolutionContext context, QuestionnaireIdentity questionnaireIdentity)
         {
-            var document = this.GetQuestionnaireDocument(context, questionnaireIdentity);
-            this.SetInScope(context, document);
+            var document = this.GetQuestionnaire(context, questionnaireIdentity);
+            context.Set(document);
         }
 
-        private IQuestionnaire GetQuestionnaireDocument(ResolutionContext context, QuestionnaireIdentity questionnaireIdentity)
+        private IQuestionnaire GetQuestionnaire(ResolutionContext context, QuestionnaireIdentity questionnaireIdentity)
         {
-            var questionnaierStorage = this.GetService<IQuestionnaireStorage>(context);
+            var questionnaierStorage = context.Resolve<IQuestionnaireStorage>();
             return questionnaierStorage.GetQuestionnaire(questionnaireIdentity, null);
         }
 
@@ -84,18 +80,8 @@ namespace WB.UI.Headquarters.API.PublicApi
         {
             if (questionId == null) return null;
 
-            var questionnaier = this.GetFromScope<IQuestionnaire>(ctx);
+            var questionnaier = ctx.Get<IQuestionnaire>();
             return questionnaier.GetQuestionVariableName(questionId.Value);
-        }
-
-        private void SetInScope<T>(ResolutionContext ctx, T value)
-        {
-            ctx.Items[typeof(T).Name] = value;
-        }
-
-        private T GetFromScope<T>(ResolutionContext ctx) where T : class
-        {
-            return ctx.Items[typeof(T).Name] as T;
         }
     }
 }

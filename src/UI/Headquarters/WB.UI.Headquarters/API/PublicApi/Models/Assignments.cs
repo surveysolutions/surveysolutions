@@ -119,7 +119,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
         [DataMember]
         [Required]
-        public List<AssignmentIdentifyingDataItem> IdentifyingData { get; set; }
+        public List<AssignmentIdentifyingDataItem> IdentifyingData { get; set; } = new List<AssignmentIdentifyingDataItem>();
     }
 
 }
