@@ -89,6 +89,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 errors.AddRange(this.ErrorsByResposibleName(datas, preloadedDataService));
 
             if (this.ShouldVerificationBeContinued(errors))
+                errors.AddRange(this.ErrorsByQuantityColumn(datas, preloadedDataService));
+
+            if (this.ShouldVerificationBeContinued(errors))
                 errors.AddRange(this.Verifier(this.ErrorsByGpsQuestions, QuestionType.GpsCoordinates)(datas, preloadedDataService));
 
             if (this.ShouldVerificationBeContinued(errors))
@@ -830,6 +833,52 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 string.Format("{0}:{1}", levelData.Header[x],
                     levelData.Content[y][x]),
                 levelData.FileName);
+        }
+
+        private IEnumerable<PreloadedDataVerificationError> ErrorsByQuantityColumn(PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService)
+        {
+            foreach (var levelData in allLevels)
+            {
+                var quantityColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, ServiceColumns.AssignmentsCountColumnName);
+
+                if (quantityColumnIndex < 0)
+                    continue;
+
+                for (int y = 0; y < levelData.Content.Length; y++)
+                {
+                    var row = levelData.Content[y];
+                    var quantityString = row[quantityColumnIndex];
+
+                    if (String.IsNullOrWhiteSpace(quantityString))
+                        continue;
+
+                    int quantity;
+
+                    if (!int.TryParse(quantityString, out quantity))
+                    {
+                        yield return
+                            new PreloadedDataVerificationError("PL0035",
+                                PreloadingVerificationMessages.PL0035_QuantityNotParsed,
+                                new PreloadedDataVerificationReference(quantityColumnIndex, y,
+                                    PreloadedDataVerificationReferenceType.Cell,
+                                    "",
+                                    levelData.FileName));
+                        continue;
+                    }
+
+                    if (quantity < 1)
+                    {
+                        yield return
+                            new PreloadedDataVerificationError("PL0036",
+                                PreloadingVerificationMessages.PL0036_QuantityShouldBePositive,
+                                new PreloadedDataVerificationReference(quantityColumnIndex, y,
+                                    PreloadedDataVerificationReferenceType.Cell,
+                                    "",
+                                    levelData.FileName));
+                        continue;
+                    }
+                }
+            }
         }
 
         private IEnumerable<PreloadedDataVerificationError> ErrorsByResposibleName(PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService)
