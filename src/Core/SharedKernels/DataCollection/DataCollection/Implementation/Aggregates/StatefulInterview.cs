@@ -236,11 +236,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #region Command handlers
 
-        public void CreateInterviewOnClient(QuestionnaireIdentity questionnaireIdentity, Guid supervisorId, DateTime answersTime, Guid userId, InterviewKey key, int? assignmentId, Dictionary<Guid, AbstractAnswer> answersToIdentifyingQuestions)
+        public void CreateInterviewOnClient(CreateInterviewOnClientCommand command)
         {
-            this.QuestionnaireIdentity = questionnaireIdentity;
+            this.QuestionnaireIdentity = command.QuestionnaireIdentity;
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            answersToIdentifyingQuestions = answersToIdentifyingQuestions ?? new Dictionary<Guid, AbstractAnswer>();
+            var answersToIdentifyingQuestions = command.AnswersToIdentifyingQuestions ?? new Dictionary<Guid, AbstractAnswer>();
+            var userId = command.UserId;
 
             var changedInterviewTree = this.Tree.Clone();
 
@@ -260,18 +261,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             //apply events
-            this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireIdentity.QuestionnaireId, questionnaire.Version, assignmentId, questionnaire.IsUsingExpressionStorage()));
+            this.ApplyEvent(new InterviewOnClientCreated(userId, command.QuestionnaireIdentity.QuestionnaireId, questionnaire.Version, command.AssignmentId, questionnaire.IsUsingExpressionStorage()));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
             this.ApplyEvents(treeDifference, userId);
 
-            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
+            this.ApplyEvent(new SupervisorAssigned(userId, command.SupervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
 
-            this.ApplyEvent(new InterviewerAssigned(userId, userId, answersTime));
+            this.ApplyEvent(new InterviewerAssigned(userId, userId, command.AnswersTime));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
 
-            this.ApplyInterviewKey(key);
+            this.ApplyInterviewKey(command.InterviewKey);
         }
 
         public void Complete(Guid userId, string comment, DateTime completeTime)
