@@ -202,7 +202,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public UsersView GetAllResponsibles(int pageSize, string searchBy, bool showLocked = false)
         {
             Func<IQueryable<HqUser>, IQueryable<HqUser>> query = users =>
-                ApplyFilter(users, searchBy, false, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Headquarter)
+                ApplyFilter(users, searchBy, false, UserRoles.Supervisor, UserRoles.Interviewer)
                     .Where(user => showLocked || !user.IsLockedByHeadquaters);
 
             var filteredUsers = query
