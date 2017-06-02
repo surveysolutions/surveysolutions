@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using NUnit.Framework;
 
 namespace WB.Tests.Integration
 {
@@ -22,9 +23,30 @@ namespace WB.Tests.Integration
             return Path.Combine(GetSolutionFolderPath(), relativePath);
         }
 
+        private static string _solutionFolderPathCache = null;
+
         public static string GetSolutionFolderPath()
         {
-            return Directory.GetParent(typeof (TestEnvironment).Assembly.Location).Parent.Parent.Parent.Parent.FullName;
+            return _solutionFolderPathCache ?? (_solutionFolderPathCache = GetParentDirectoryContainingDirectories(TestContext.CurrentContext.TestDirectory, "UI", "Tests", "Core"));
+        }
+
+        private static string GetParentDirectoryContainingDirectories(string fodler, params string[] dirMarkers)
+        {
+            var dirInfo = new DirectoryInfo(fodler);
+
+            while (dirInfo.Root != dirInfo)
+            {
+                var folders = dirInfo.EnumerateDirectories().Select(ed => ed.Name).ToArray();
+
+                if (dirMarkers.All(dm => folders.Contains(dm)))
+                {
+                    return dirInfo.FullName;
+                }
+
+                dirInfo = dirInfo.Parent;
+            }
+
+            return null;
         }
     }
 }
