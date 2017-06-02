@@ -2226,7 +2226,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        protected void ValidatePrefilledAnswers(InterviewTree tree, IQuestionnaire questionnaire, Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions, RosterVector rosterVector = null)
+        protected void ValidatePrefilledAnswers(InterviewTree tree, IQuestionnaire questionnaire, IReadOnlyDictionary<Guid, AbstractAnswer> answersToFeaturedQuestions, RosterVector rosterVector = null)
         {
             var currentRosterVector = rosterVector ?? (decimal[])RosterVector.Empty;
             foreach (KeyValuePair<Guid, AbstractAnswer> answerToFeaturedQuestion in answersToFeaturedQuestions)

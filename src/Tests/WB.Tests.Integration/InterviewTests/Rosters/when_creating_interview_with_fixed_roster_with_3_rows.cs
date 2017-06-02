@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
@@ -40,7 +44,9 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                     var interview = SetupStatefullInterview(questionnaireDocument);
 
-                    interview.CreateInterviewOnClient(questionnaireIdentity, Guid.NewGuid(), DateTime.Now, Guid.NewGuid(), null, null, null);
+                    var command = new CreateInterviewOnClientCommand(Guid.Empty, Guid.NewGuid(), questionnaireIdentity, DateTime.Now,
+                        Guid.NewGuid(), null, null, null);
+                    interview.CreateInterviewOnClient(command);
 
                     return new InvokeResults
                     {

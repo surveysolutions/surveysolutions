@@ -13,14 +13,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     {
         public Identity Identity { get; private set; }
 
-        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
-        public ReadOnlyQuestionViewModel(IQuestionnaireStorage questionnaireRepository,
+        public ReadOnlyQuestionViewModel(
             IStatefulInterviewRepository interviewRepository,
             DynamicTextViewModel dynamicTextViewModel)
         {
-            this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.Title = dynamicTextViewModel;
         }
@@ -28,10 +26,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             this.Identity = entityIdentity;
             this.Title.Init(interviewId, entityIdentity);
