@@ -122,6 +122,7 @@
     <Compile Include="Exceptions\AnswerNotAcceptedException.cs" />
     <Compile Include="Exceptions\InterviewDomainExceptionType.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\Answers.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewNodesUpdater.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewProperties.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewPropertiesForExpressions.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewStateForExpressions.cs" />
