@@ -86,19 +86,10 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         {
             if (pathToMap != null)
             {
-                try
-                {
-                    if(MapView?.LocationDisplay != null)
-                        this.MapView.LocationDisplay.IsEnabled = false;
-                }
-                catch (Exception exc)
-                {
-                    
-                    //throw;
-                }
                 
-
-
+                if(MapView?.LocationDisplay != null)
+                    this.MapView.LocationDisplay.IsEnabled = false;
+                
                 var map = new Map();
 
                 TileCache titleCache = new TileCache(pathToMap);
