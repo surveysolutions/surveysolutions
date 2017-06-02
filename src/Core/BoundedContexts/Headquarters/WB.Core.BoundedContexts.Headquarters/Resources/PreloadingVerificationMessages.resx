@@ -217,4 +217,10 @@
   <data name="PL0034_CommaSymbolIsNotAllowedInNumericAnswer" xml:space="preserve">
     <value>Invalid decimal separator. The "," symbol is not allowed in numeric answers. Please use "." instead.</value>
   </data>
+  <data name="PL0035_QuantityNotParsed" xml:space="preserve">
+    <value>Only integer values are allowed.</value>
+  </data>
+  <data name="PL0036_QuantityShouldBePositive" xml:space="preserve">
+    <value>Quantity should be more then 0.</value>
+  </data>
 </root>

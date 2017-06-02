@@ -349,7 +349,7 @@
     <value>If usernames are not specified you will need to assign a supervisor to all interviews in a later step.</value>
   </data>
   <data name="ManualModeDescription" xml:space="preserve">
-    <value>You can create individual interiews by entering all required data in {0}</value>
+    <value>You can create individual assignments by entering all required data in {0}</value>
   </data>
   <data name="ManualModeLinkTitle" xml:space="preserve">
     <value>manual mode</value>
