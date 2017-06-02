@@ -1735,8 +1735,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (isInterviewNeedToBeCreated)
             {
-                var isUsingExpressionStorage = this.questionnaireRepository.GetQuestionnaireDocument(this.QuestionnaireIdentity).IsUsingExpressionStorage;
-                this.ApplyEvent(new InterviewOnClientCreated(command.UserId, command.QuestionnaireId, command.QuestionnaireVersion, null, isUsingExpressionStorage));
+                if (!(command.SynchronizedEvents.FirstOrDefault() is InterviewOnClientCreated))
+                {
+                    var isUsingExpressionStorage = this.questionnaireRepository.GetQuestionnaireDocument(this.QuestionnaireIdentity).IsUsingExpressionStorage;
+                    this.ApplyEvent(new InterviewOnClientCreated(command.UserId, command.QuestionnaireId, command.QuestionnaireVersion, null, isUsingExpressionStorage));
+                }
             }
             else
             {
