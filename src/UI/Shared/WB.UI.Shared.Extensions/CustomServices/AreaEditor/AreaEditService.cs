@@ -11,6 +11,23 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 {
     public class AreaEditService : WB.Core.SharedKernels.Enumerator.Services.Infrastructure.IAreaEditService
     {
+        public class EventAwaiter<TEventArgs>
+        {
+            #region Fields
+
+            private TaskCompletionSource<TEventArgs> _eventArrived = new TaskCompletionSource<TEventArgs>();
+
+            #endregion Fields
+
+            #region Properties
+
+            public Task<TEventArgs> Task { get; set; }
+
+            public EventHandler<TEventArgs> Subscription => (s, e) => _eventArrived.TrySetResult(e);
+
+            #endregion Properties
+        }
+
         private readonly IPermissions permissions;
         private IViewModelNavigationService viewModelNavigationService;
 
@@ -30,45 +47,34 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
             return await this.EditArea(area);
         }
-
+        
         private Task<AreaEditResult> EditArea(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area)
         {
-            return Task.Factory.StartNew<AreaEditResult>((Func<AreaEditResult>)(() =>
+            var tcs = new TaskCompletionSource<AreaEditResult>();
+
+            this.viewModelNavigationService.NavigateTo<AreaEditorViewModel>(new
             {
-                try
-                {
-                    AreaEditorResult result = null;
-                    ManualResetEvent waitEditAreaResetEvent = new ManualResetEvent(false);
+                geometry = area?.Geometry,
+                mapName = area?.MapName,
+                areaSize = area?.AreaSize
+            });
 
-                    this.viewModelNavigationService.NavigateTo<AreaEditorViewModel>(new
-                    {
-                        geometry = area?.Geometry,
-                        mapName = area?.MapName,
-                        areaSize = area?.AreaSize
-                    });
-                    
-                    AreaEditorActivity.OnAreaEditCompleted += (editResult =>
-                    {
-                        result = editResult;
-                        waitEditAreaResetEvent.Set();
-                    });
+            AreaEditorActivity.OnAreaEditCompleted += (editResult =>
+            {
+                tcs.TrySetResult(
+                    editResult == null
+                        ? null
+                        : new AreaEditResult()
+                        {
+                            Geometry = editResult.Geometry,
+                            MapName = editResult.MapName,
+                            Area = editResult.Area,
+                            Length = editResult.Length,
+                            DistanceToEditor = editResult.DistanceToEditor
+                        });
+            });
 
-                    waitEditAreaResetEvent.WaitOne();
-
-                    return result == null 
-                        ? null 
-                        : new AreaEditResult(){
-                            Geometry = result.Geometry,
-                            MapName = result.MapName,
-                            Area = result.Area,
-                            Length = result.Length,
-                            DistanceToEditor = result.DistanceToEditor};
-                }
-                catch (Exception)
-                {
-                    return (AreaEditResult)null;
-                }
-            }));
+            return tcs.Task;
         }
     }
 }

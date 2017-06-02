@@ -1145,10 +1145,6 @@
       <Project>{e41deb5c-2ad6-463f-9f76-10299fc2d9d1}</Project>
       <Name>WB.Infrastructure.Shared.Enumerator</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WB.UI.Shared.Extensions\WB.UI.Shared.Extensions.csproj">
-      <Project>{f69d3c48-f648-4b9f-9b4f-ba44e014224c}</Project>
-      <Name>WB.UI.Shared.Extensions</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\complete_screen_statistics_column_background.xml" />
