@@ -12,7 +12,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         void UpdateEnablement(IInterviewTreeNode entity);
         void UpdateEnablement(InterviewTreeGroup entity);
-        void UpdateQuestion(InterviewTreeQuestion question);
+
+        void UpdateSingleOptionQuestion(InterviewTreeQuestion question);
+        void UpdateMultiOptionQuestion(InterviewTreeQuestion question);
+        void UpdateYesNoQuestion(InterviewTreeQuestion question);
+        void UpdateCascadingQuestion(InterviewTreeQuestion question);
+        void UpdateLinkedQuestion(InterviewTreeQuestion question);
+        void UpdateLinkedToListQuestion(InterviewTreeQuestion question);
+
         void UpdateRoster(InterviewTreeRoster roster);
         void UpdateVariable(InterviewTreeVariable variable);
         void UpdateValidations(InterviewTreeStaticText staticText);
@@ -28,7 +35,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         readonly HashSet<Identity> disabledNodes = new HashSet<Identity>();
 
-        public InterviewNodesUpdater(IInterviewExpressionStorage expressionStorage, IQuestionnaire questionnaire, bool removeLinkedAnswers)
+        public InterviewNodesUpdater(IInterviewExpressionStorage expressionStorage, IQuestionnaire questionnaire,
+            bool removeLinkedAnswers)
         {
             this.expressionStorage = expressionStorage;
             this.questionnaire = questionnaire;
@@ -66,101 +74,126 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
         }
 
-        public void UpdateQuestion(InterviewTreeQuestion question)
+        public void UpdateSingleOptionQuestion(InterviewTreeQuestion question)
+        {
+            if (disabledNodes.Contains(question.Identity))
+                return;
+
+            if (!(question.IsAnswered() && questionnaire.IsSupportFilteringForOptions(question.Identity.Id)))
+                return;
+
+                var level = GetLevel(question);
+            var filter = level.GetCategoricalFilter(question.Identity);
+            var filterResult = RunOptionFilter(filter,
+                question.AsSingleFixedOption.GetAnswer().SelectedValue);
+            if (!filterResult)
+                question.RemoveAnswer();
+        }
+
+        public void UpdateMultiOptionQuestion(InterviewTreeQuestion question)
+        {
+            if (disabledNodes.Contains(question.Identity))
+                return;
+
+            if (!(question.IsAnswered() && questionnaire.IsSupportFilteringForOptions(question.Identity.Id)))
+                return;
+
+            var level = GetLevel(question);
+            var filter = level.GetCategoricalFilter(question.Identity);
+            var selectedOptions =
+                question.AsMultiFixedOption.GetAnswer().CheckedValues.ToArray();
+            var newSelectedOptions =
+                selectedOptions.Where(x => RunOptionFilter(filter, x)).ToArray();
+            if (newSelectedOptions.Length != selectedOptions.Length)
+            {
+                question.AsMultiFixedOption.SetAnswer(
+                    CategoricalFixedMultiOptionAnswer.FromInts(newSelectedOptions));
+                // remove rosters, implement cheaper solutions
+                question.Tree.ActualizeTree();
+            }
+        }
+
+        public void UpdateYesNoQuestion(InterviewTreeQuestion question)
+        {
+            if (disabledNodes.Contains(question.Identity))
+                return;
+
+            if (!(question.IsAnswered() && questionnaire.IsSupportFilteringForOptions(question.Identity.Id)))
+                return;
+
+            var level = GetLevel(question);
+            var filter = level.GetCategoricalFilter(question.Identity);
+            var checkedOptions = question.AsYesNo.GetAnswer().CheckedOptions;
+            var newCheckedOptions =
+                checkedOptions.Where(x => RunOptionFilter(filter, x.Value)).ToArray();
+
+            if (newCheckedOptions.Length != checkedOptions.Count)
+            {
+                question.AsYesNo.SetAnswer(YesNoAnswer.FromCheckedYesNoAnswerOptions(newCheckedOptions));
+                // remove rosters, implement cheaper solutions
+                question.Tree.ActualizeTree();
+            }
+        }
+
+        public void UpdateCascadingQuestion(InterviewTreeQuestion question)
+        {
+            if (disabledNodes.Contains(question.Identity))
+                return;
+
+            //move to cascading
+            var cascadingParent = question.AsCascading.GetCascadingParentTreeQuestion();
+            if (cascadingParent.IsDisabled() || !cascadingParent.IsAnswered())
+            {
+                if (question.IsAnswered())
+                    question.RemoveAnswer();
+                question.Disable();
+            }
+            else
+            {
+                var selectedParentValue = cascadingParent.AsSingleFixedOption.GetAnswer().SelectedValue;
+                if (!questionnaire.HasAnyCascadingOptionsForSelectedParentOption(question.Identity.Id,
+                    cascadingParent.Identity.Id, selectedParentValue))
+                {
+                    question.Disable();
+                }
+                else
+                {
+                    question.Enable();
+                }
+            }
+        }
+
+        public void UpdateLinkedQuestion(InterviewTreeQuestion question)
         {
             if (disabledNodes.Contains(question.Identity))
                 return;
 
             var level = GetLevel(question);
-
-            if (question.IsAnswered() && questionnaire.IsSupportFilteringForOptions(question.Identity.Id))
+            var optionsAndParents = question.GetCalculatedLinkedOptions();
+            var options = new List<RosterVector>();
+            foreach (var optionAndParent in optionsAndParents)
             {
-                var filter = level.GetCategoricalFilter(question.Identity);
-                if (question.IsSingleFixedOption)
+                var optionLevel = this.expressionStorage.GetLevel(optionAndParent.ParenRoster);
+                Func<IInterviewLevel, bool> filter = optionLevel.GetLinkedQuestionFilter(question.Identity);
+                if (filter == null)
                 {
-                    var filterResult = RunOptionFilter(filter,
-                        question.AsSingleFixedOption.GetAnswer().SelectedValue);
-                    if (!filterResult)
-                        question.RemoveAnswer();
-                }
-                else if (question.IsMultiFixedOption)
-                {
-                    var selectedOptions =
-                        question.AsMultiFixedOption.GetAnswer().CheckedValues.ToArray();
-                    var newSelectedOptions =
-                        selectedOptions.Where(x => RunOptionFilter(filter, x)).ToArray();
-                    if (newSelectedOptions.Length != selectedOptions.Length)
-                    {
-                        question.AsMultiFixedOption.SetAnswer(CategoricalFixedMultiOptionAnswer.FromInts(newSelectedOptions));
-                        // remove rosters, implement cheaper solutions
-                        question.Tree.ActualizeTree();
-                    }
-                }
-                else if (question.IsYesNo)
-                {
-                    var checkedOptions = question.AsYesNo.GetAnswer().CheckedOptions;
-                    var newCheckedOptions =
-                        checkedOptions.Where(x => RunOptionFilter(filter, x.Value)).ToArray();
-
-                    if (newCheckedOptions.Length != checkedOptions.Count)
-                    {
-                        question.AsYesNo.SetAnswer(YesNoAnswer.FromCheckedYesNoAnswerOptions(newCheckedOptions));
-                        // remove rosters, implement cheaper solutions
-                        question.Tree.ActualizeTree();
-                    }
-                }
-            }
-
-            if (question.IsCascading)
-            {
-                //move to cascading
-                var cascadingParent = question.AsCascading.GetCascadingParentTreeQuestion();
-                if (cascadingParent.IsDisabled() || !cascadingParent.IsAnswered())
-                {
-                    if (question.IsAnswered())
-                        question.RemoveAnswer();
-                    question.Disable();
+                    options.Add(optionAndParent.Option);
                 }
                 else
                 {
-                    var selectedParentValue = cascadingParent.AsSingleFixedOption.GetAnswer().SelectedValue;
-                    if (!questionnaire.HasAnyCascadingOptionsForSelectedParentOption(question.Identity.Id, cascadingParent.Identity.Id, selectedParentValue))
-                    {
-                        question.Disable();
-                    }
-                    else
-                    {
-                        question.Enable();
-                    }
-                }
-            }
-
-            if (question.IsLinked)
-            {
-                var optionsAndParents = question.GetCalculatedLinkedOptions();
-                var options = new List<RosterVector>();
-                foreach (var optionAndParent in optionsAndParents)
-                {
-                    var optionLevel = this.expressionStorage.GetLevel(optionAndParent.ParenRoster);
-                    Func<IInterviewLevel, bool> filter = optionLevel.GetLinkedQuestionFilter(question.Identity);
-                    if (filter == null)
-                    {
+                    if (RunLinkedFilter(filter, level))
                         options.Add(optionAndParent.Option);
-                    }
-                    else
-                    {
-                        if (RunLinkedFilter(filter, level))
-                            options.Add(optionAndParent.Option);
-                    }
                 }
-                question.UpdateLinkedOptionsAndResetAnswerIfNeeded(options.ToArray(), this.removeLinkedAnswers);
-                // if is roster title, need to update it here?
             }
+            question.UpdateLinkedOptionsAndResetAnswerIfNeeded(options.ToArray(), this.removeLinkedAnswers);
+        }
 
-            if (question.IsLinkedToListQuestion)
-            {
-                question.CalculateLinkedToListOptions(true);
-            }
+        public void UpdateLinkedToListQuestion(InterviewTreeQuestion question)
+        {
+            if (disabledNodes.Contains(question.Identity))
+                return;
+
+            question.CalculateLinkedToListOptions(true);
         }
 
         public void UpdateRoster(InterviewTreeRoster roster)
@@ -168,7 +201,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (disabledNodes.Contains(roster.Identity))
                 return;
 
-            roster.UpdateRosterTitle((questionId, answerOptionValue) => questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title);
+            roster.UpdateRosterTitle((questionId, answerOptionValue) => questionnaire
+                .GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title);
         }
 
         public void UpdateVariable(InterviewTreeVariable variable)
