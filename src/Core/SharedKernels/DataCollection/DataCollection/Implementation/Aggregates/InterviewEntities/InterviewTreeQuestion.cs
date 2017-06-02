@@ -542,27 +542,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             if (this.IsSingleFixedOption)
             {
-                updater.UpdateQuestion(this);
+                updater.UpdateSingleOptionQuestion(this);
             }
             else if (this.IsMultiFixedOption)
             {
-                updater.UpdateQuestion(this);
+                updater.UpdateMultiOptionQuestion(this);
             }
             else if (this.IsYesNo)
             {
-                updater.UpdateQuestion(this);
-            }
-            else if (this.IsCascading)
-            {
-                updater.UpdateQuestion(this);
+                updater.UpdateYesNoQuestion(this);
             }
             else if (this.IsLinked)
             {
-                updater.UpdateQuestion(this);
+                updater.UpdateLinkedQuestion(this);
             }
             else if (this.IsLinkedToListQuestion)
             {
-                updater.UpdateQuestion(this);
+                updater.UpdateLinkedToListQuestion(this);
+            }
+
+            if (this.IsCascading) // is IsSingleFixedOption too
+            {
+                updater.UpdateCascadingQuestion(this);
             }
 
             updater.UpdateValidations(this);
