@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
 
         public string GenerateQuestionTypeName(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
         {
-            return questionTypeMapper.GetType(question, questionnaire);
+            return questionTypeMapper.GetQuestionType(question, questionnaire);
         }
 
         private Dictionary<Guid, string> CreateIdMap(ReadOnlyQuestionnaireDocument questionnaire)
@@ -149,7 +149,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                         macrosSubstitutionService.InlineMacros(variable.Expression, questionnaire.Macros.Values),
                         false,
                         variableName,
-                        questionTypeMapper.GetVariablesCSharpType(variable.Type))
+                        questionTypeMapper.GetVariableType(variable.Type))
                     {
                         UseObjectBoxing = true
                     };

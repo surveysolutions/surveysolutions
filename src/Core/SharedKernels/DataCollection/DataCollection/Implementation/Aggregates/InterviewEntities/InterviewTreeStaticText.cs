@@ -65,6 +65,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return clone;
         }
 
+        public override void Accept(IInterviewNodesUpdater updater)
+        {
+            updater.UpdateEnablement(this);
+            updater.UpdateValidations(this);
+        }
+
         public void ReplaceSubstitutions()
         {
             this.Title.ReplaceSubstitutions();
