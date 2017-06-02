@@ -847,14 +847,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 for (int y = 0; y < levelData.Content.Length; y++)
                 {
                     var row = levelData.Content[y];
-                    var quantityString = row[quantityColumnIndex];
+                    var quantityString = row[quantityColumnIndex].Trim();
 
                     if (String.IsNullOrWhiteSpace(quantityString))
                         continue;
 
-                    int quantity;
+                    if (quantityString == "-1" || quantityString == "INF")
+                        continue;
 
-                    if (!int.TryParse(quantityString, out quantity))
+                    if (!int.TryParse(quantityString, out int quantity))
                     {
                         yield return
                             new PreloadedDataVerificationError("PL0035",
