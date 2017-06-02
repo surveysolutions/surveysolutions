@@ -30,7 +30,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         private static bool IsInterviewerOnly(IEvent eventPayload)
             => eventPayload is InterviewAnswersFromSyncPackageRestored
-            || eventPayload is InterviewOnClientCreated
             || eventPayload is InterviewSynchronized;
 
         private static bool IsCalculatedButNotAggregating(CommittedEvent committedEvent, Guid lastCompletionCommitId)
