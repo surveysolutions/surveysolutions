@@ -34,7 +34,8 @@
     "flatpickr": "2.4.4",
     "vee-validate": "2.0.0-rc.5",
     "jquery.validate.unobtrusive.bootstrap": "*",
-    "datatables.net-responsive": "^2.1.1"
+    "datatables.net-responsive": "^2.1.1",
+    "vue-router": "^2.5.3"
   },
   "devDependencies": {},
   "overrides": {

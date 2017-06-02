@@ -663,7 +663,6 @@
     <Content Include="Content\img\sort_desc_disabled.png" />
     <Content Include="Content\popover-extra-placements.min.css" />
     <EmbeddedResource Include="Content\swagger.css" />
-    <Content Include="Dependencies\build\vue\assignments\assignments.js" />
     <Content Include="Dependencies\build\vue\troubleshooting.js" />
     <Content Include="Dependencies\css\jqplot-override.css" />
     <Content Include="Dependencies\dist\*.*" />
@@ -734,7 +733,6 @@
     <Content Include="Dependencies\js\dataTables.conditionalPaging.js" />
     <Content Include="Dependencies\js\searchHighlight.js" />
     <Content Include="Dependencies\vendor\bootstrap-sass\assets\fonts\bootstrap\glyphicons-halflings-regular.svg" />
-    <None Include="Dependencies\vue\assignments\AssignmentsTable.vue" />
     <Content Include="ErrorPages\genericError.html" />
     <Content Include="Dependencies\vue\Typeahead.vue" />
     <Content Include="Dependencies\vue\troubleshooting.js" />
@@ -1119,7 +1117,6 @@
     <Content Include="Dependencies\vendor\bootstrap-sass\assets\fonts\bootstrap\glyphicons-halflings-regular.ttf" />
     <Content Include="Dependencies\vendor\bootstrap-sass\assets\fonts\bootstrap\glyphicons-halflings-regular.woff" />
     <Content Include="Dependencies\vendor\bootstrap-sass\assets\fonts\bootstrap\glyphicons-halflings-regular.woff2" />
-    <Content Include="Dependencies\vue\assignments\assignments.js" />
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -1436,6 +1433,9 @@
     <Content Include="Views\Shared\_ListDataTablePagingScript.cshtml" />
     <Content Include="Views\TabletReport\_ListViewStatusesScript.cshtml" />
     <Content Include="Views\Assignments\Index.cshtml" />
+    <Content Include="Views\Shared\typeahead.cshtml" />
+    <Content Include="Views\Shared\_MainLayoutVue.cshtml" />
+    <Content Include="Views\Assignments\assignmentslist.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1455,6 +1455,7 @@
     <Compile Include="API\AssignmentsApiController.cs" />
     <Compile Include="API\Interviewer\v2\AssignmentsApiV2Controller.cs" />
     <Compile Include="API\PublicApi\AssignmentsController.cs" />
+    <Compile Include="Code\AutoMapperResolutionContextExtensions.cs" />
     <Compile Include="API\PublicApi\BaseApiServiceController.cs" />
     <Compile Include="API\PublicApi\IncludeOnlyPublicApiDocumentFilter.cs" />
     <Compile Include="API\PublicApi\ExportController.cs" />

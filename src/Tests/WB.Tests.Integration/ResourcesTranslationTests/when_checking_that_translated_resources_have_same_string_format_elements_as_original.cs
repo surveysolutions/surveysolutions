@@ -4,35 +4,37 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using Machine.Specifications;
+using NUnit.Framework;
 
 namespace WB.Tests.Integration.ResourcesTranslationTests
 {
     internal class when_checking_that_translated_resources_have_same_string_format_elements_as_original : ResourcesTranslationTestsContext
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void Context()
         {
             var csproj = TestEnvironment.GetAllFilesFromSourceFolder(string.Empty, "*.csproj");
-            translatedResourceFiles = GetAllLinkedResourceFiles(csproj)
-                .Where(file => Path.GetFileNameWithoutExtension(file).Contains("."));
-        };
+            translatedResourceFiles = GetAllLinkedResourceFiles(csproj).Where(file => Path.GetFileNameWithoutExtension(file).Contains("."));
 
-        Because of = () =>
-            translatedResourceStringsNotCorrespondingToOriginal =
-                from translatedResourceFile in translatedResourceFiles
-                let resourceFileName = Path.GetFileName(translatedResourceFile)
-                from inconsistentResource in GetTranslatedResourcesNotCorrespondingToOriginalByStringFormat(translatedResourceFile)
-                select $"{resourceFileName}: {inconsistentResource}";
+            this.Because();
+        }
 
-        It should_find_translated_resource_files = () =>
-            translatedResourceFiles.ShouldNotBeEmpty();
+        private void Because() => translatedResourceStringsNotCorrespondingToOriginal =
+            from translatedResourceFile in translatedResourceFiles
+            let resourceFileName = Path.GetFileName(translatedResourceFile)
+            from inconsistentResource in GetTranslatedResourcesNotCorrespondingToOriginalByStringFormat(translatedResourceFile)
+            select $"{resourceFileName}: {inconsistentResource}";
 
-        It should_find_no_inconsistencies = () =>
-            translatedResourceStringsNotCorrespondingToOriginal.ShouldBeEmpty();
+        [Test]
+        public void should_find_translated_resource_files() => translatedResourceFiles.ShouldNotBeEmpty();
+        
+        [Test]
+        public void should_find_no_inconsistencies () => translatedResourceStringsNotCorrespondingToOriginal.ShouldBeEmpty();
 
-        private static IEnumerable<string> translatedResourceFiles;
-        private static IEnumerable<string> translatedResourceStringsNotCorrespondingToOriginal;
+        private IEnumerable<string> translatedResourceFiles;
+        private IEnumerable<string> translatedResourceStringsNotCorrespondingToOriginal;
 
-        private static IEnumerable<string> GetTranslatedResourcesNotCorrespondingToOriginalByStringFormat(string translatedResourceFile)
+        private IEnumerable<string> GetTranslatedResourcesNotCorrespondingToOriginalByStringFormat(string translatedResourceFile)
         {
             string originalResourceFile = ToOriginalResourceFileName(translatedResourceFile);
 
@@ -57,7 +59,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
             }
         }
 
-        public static IEnumerable<string> GetAllLinkedResourceFiles(IEnumerable<string> csprojFiles)
+        public  IEnumerable<string> GetAllLinkedResourceFiles(IEnumerable<string> csprojFiles)
         {
             foreach (var csproj in csprojFiles)
             {

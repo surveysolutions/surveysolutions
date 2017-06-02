@@ -141,7 +141,7 @@ namespace WB.UI.Designer.Controllers
 
             if (this.ModelState.IsValid)
             {
-                MembershipUser user = Membership.GetUser(model.UserName, false);
+                var user = this.accountRepository.GetByNameOrEmail(model.UserName);
                 if (user == null)
                 {
                     this.Error(string.Format(ErrorMessages.User_does_not_exist, model.UserName));
@@ -154,7 +154,7 @@ namespace WB.UI.Designer.Controllers
                         new EmailConfirmationModel()
                             {
                                 Email = user.Email.ToWBEmailAddress(),
-                                UserName = model.UserName,
+                                UserName = user.UserName,
                                 ConfirmationToken = confirmationToken
                             }).SendAsync();
 
@@ -264,7 +264,7 @@ namespace WB.UI.Designer.Controllers
                 return this.View(model);
              }
 
-             var user = this.accountRepository.Get(model.UserName);
+             var user = this.accountRepository.GetByNameOrEmail(model.UserName);
              if (user == null)
              {
                 this.captchaService.RegisterFailedLogin(model.UserName);

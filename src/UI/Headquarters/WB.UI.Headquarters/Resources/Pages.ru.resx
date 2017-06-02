@@ -936,4 +936,13 @@
   <data name="ConfirmationNeededTitle" xml:space="preserve">
     <value>Требуется подверждение</value>
   </data>
+  <data name="HQ_LockWarning" xml:space="preserve">
+    <value>Заблокированный хедквотер (галочка отмечена) не сможет войти на сайт и совершить какие-либо действия</value>
+  </data>
+  <data name="Interviewer_LockWarning" xml:space="preserve">
+    <value>Заблокированный интервьювер (галочка отмечена) не сможет соединиться с сервером со своего планшета и отправить собранные данные </value>
+  </data>
+  <data name="Supervisor_LockWarning" xml:space="preserve">
+    <value>Заблокированный супервизор (галочка отмечена) не сможет войти на сайт и совершить какие-либо действия</value>
+  </data>
 </root>

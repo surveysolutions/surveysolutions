@@ -21,7 +21,6 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
         public const string LinkedFilterPrefix = "FilterForLinkedQuestion__";
         public const string LevelPrefix = "Level_";
         public const string StaticText = "text_";
-        public const string SubSection_ = "subsection_";
         public const string LookupPrefix = "Lookup__";
         public const string PrivateFieldsPrefix = "__";
         

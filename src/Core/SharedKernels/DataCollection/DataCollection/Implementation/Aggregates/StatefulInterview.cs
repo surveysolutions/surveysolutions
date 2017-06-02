@@ -88,7 +88,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (this.UsesExpressionStorage)
             {
-                this.UpdateTreeWithDependentChanges(this.Tree, this.GetQuestionnaireOrThrow());
+                this.UpdateTreeWithDependentChanges(this.Tree, this.GetQuestionnaireOrThrow(), removeLinkedAnswers: false);
             }
             else
             {
@@ -119,6 +119,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 foreach (var disabledVariable in @event.InterviewData.DisabledVariables)
                     this.Tree.GetVariable(Identity.Create(disabledVariable.Id, disabledVariable.InterviewItemRosterVector))?.Disable();
+
+                foreach (var readonlyQuestion in @event.InterviewData.ReadonlyQuestions)
+                    this.Tree.GetQuestion(Identity.Create(readonlyQuestion.Id, readonlyQuestion.InterviewItemRosterVector))?.MarkAsReadonly();
 
                 this.Tree.ReplaceSubstitutions();
 
@@ -235,11 +238,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #region Command handlers
 
-        public void CreateInterviewOnClient(QuestionnaireIdentity questionnaireIdentity, Guid supervisorId, DateTime answersTime, Guid userId, InterviewKey key, int? assignmentId, Dictionary<Guid, AbstractAnswer> answersToIdentifyingQuestions)
+        public void CreateInterviewOnClient(CreateInterviewOnClientCommand command)
         {
-            this.QuestionnaireIdentity = questionnaireIdentity;
+            this.QuestionnaireIdentity = command.QuestionnaireIdentity;
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            answersToIdentifyingQuestions = answersToIdentifyingQuestions ?? new Dictionary<Guid, AbstractAnswer>();
+            var answersToIdentifyingQuestions = command.AnswersToIdentifyingQuestions ?? new Dictionary<Guid, AbstractAnswer>();
+            var userId = command.UserId;
 
             var changedInterviewTree = this.Tree.Clone();
 
@@ -259,18 +263,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             //apply events
-            this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireIdentity.QuestionnaireId, questionnaire.Version, assignmentId, questionnaire.IsUsingExpressionStorage()));
+            this.ApplyEvent(new InterviewOnClientCreated(userId, command.QuestionnaireIdentity.QuestionnaireId, questionnaire.Version, command.AssignmentId, questionnaire.IsUsingExpressionStorage()));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
             this.ApplyEvents(treeDifference, userId);
 
-            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
+            this.ApplyEvent(new SupervisorAssigned(userId, command.SupervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
 
-            this.ApplyEvent(new InterviewerAssigned(userId, userId, answersTime));
+            this.ApplyEvent(new InterviewerAssigned(userId, userId, command.AnswersTime));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
 
-            this.ApplyInterviewKey(key);
+            this.ApplyInterviewKey(command.InterviewKey);
         }
 
         public void Complete(Guid userId, string comment, DateTime completeTime)
@@ -662,6 +666,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var disabledStaticTexts = new List<Identity>();
             var validAnsweredQuestions = new HashSet<InterviewItemId>();
             var invalidAnsweredQuestions = new HashSet<InterviewItemId>();
+            var readonlyQuestions = new HashSet<InterviewItemId>();
             var validStaticTexts = new List<Identity>();
             var invalidStaticTexts = new List<KeyValuePair<Identity, List<FailedValidationCondition>>>();
             var failedValidationConditions = new Dictionary<Identity, IList<FailedValidationCondition>>();
@@ -701,6 +706,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     {
                         validAnsweredQuestions.Add(new InterviewItemId(question.Identity.Id, question.Identity.RosterVector));
                     }
+                }
+
+                if (question.IsReadonly)
+                {
+                    readonlyQuestions.Add(new InterviewItemId(question.Identity.Id, question.Identity.RosterVector));
                 }
             }
 
@@ -758,6 +768,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 disabledStaticTexts: disabledStaticTexts,
                 validAnsweredQuestions: validAnsweredQuestions,
                 invalidAnsweredQuestions: invalidAnsweredQuestions,
+                readonlyQuestions: readonlyQuestions,
                 validStaticTexts: validStaticTexts,
                 invalidStaticTexts: invalidStaticTexts,
                 rosterGroupInstances: null /* Obsolete */,

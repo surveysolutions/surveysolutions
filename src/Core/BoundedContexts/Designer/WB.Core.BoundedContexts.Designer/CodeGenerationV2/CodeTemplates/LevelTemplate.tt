@@ -28,23 +28,10 @@
 		public <#=Model.ClassName#>(RosterVector rosterVector, <#= Storage.ClassName #> storage) 
 		{
 			this.storage = storage;
-			Quest = new QuestionnaireRandom(storage.state.Properties);
-<#
-	if (Model.RosterScope.Length == 0)
-	{
-#>
-			this.RosterVector = RosterVector.Empty;
-			this.Identity = new Identity(IdOf.<#=Model.Variable#>, RosterVector.Empty);
-<#
-	}
-	else
-	{
-#>
+			this.Quest = new QuestionnaireRandom(storage.state.Properties);
 			this.RosterVector = rosterVector;
-			this.Identity = new Identity(IdOf.<#=Model.Variable#>, rosterVector);
-<#
-    }
-#>
+			this.Identity = new Identity(IdOf.<#=Model.Variable#>, this.RosterVector);
+
 <#
 	foreach (var method in Storage.GetEnablementConditions(Model.ClassName)) 
     {
@@ -69,7 +56,6 @@
 <# 
 	}
 #>
-
 <#
 	foreach (var method in Storage.GetCategoricalOptionsFilters(Model.ClassName)) 
     {
@@ -78,7 +64,6 @@
 <# 
 	}
 #>
-
 <#
 	foreach (var method in Storage.GetLinkedFilters(Model.ClassName)) 
     {
@@ -192,7 +177,7 @@
 	foreach (var roster in Model.Rosters) 
     {
 #>            
-		public <#=roster.Level.ClassName#>[] <#=roster.Variable#> => storage.GetLevels<<#=roster.Level.ClassName#>>(IdOf.<#=roster.Level.Variable#>,Identity);
+		public <#=roster.ClassName#>[] <#=roster.Variable#> => storage.GetLevels<<#=roster.ClassName#>>(IdOf.<#=roster.Variable#>,Identity);
 <# 
 	}
 #>

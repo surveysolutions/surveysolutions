@@ -16,7 +16,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public List<Assignment> GetAssignments(Guid responsibleId)
         {
-            return this.assignmentsAccessor.Query(x => x.Where(assigment => assigment.ResponsibleId == responsibleId && !assigment.Archived).ToList());
+            return this.assignmentsAccessor.Query(x =>
+            x.Where(assigment =>
+                assigment.ResponsibleId == responsibleId
+                && !assigment.Archived
+                && (assigment.Capacity == null || assigment.InterviewSummaries.Count < assigment.Capacity))
+            .ToList());
         }
     }
 }

@@ -141,6 +141,7 @@ namespace WB.UI.Headquarters.API
 
         [HttpPost]
         [Route("Create")]
+        [ObserverNotAllowedApi]
         public IHttpActionResult Create([FromBody] CreateAssignmentRequest request)
         {
             if (!this.authorizedUser.IsAdministrator && !this.authorizedUser.IsHeadquarter)

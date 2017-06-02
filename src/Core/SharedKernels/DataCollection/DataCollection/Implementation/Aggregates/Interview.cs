@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         protected IInterviewExpressionStorage GetExpressionStorage()
         {
-            return this.expressionProcessorStatePrototypeProvider.GetExpressionProcessor(this.QuestionnaireIdentity);
+            return this.expressionProcessorStatePrototypeProvider.GetExpressionStorage(this.QuestionnaireIdentity);
         }
 
         /// <remarks>
@@ -1767,8 +1767,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (isInterviewNeedToBeCreated)
             {
-                var isUsingExpressionStorage = this.questionnaireRepository.GetQuestionnaireDocument(this.QuestionnaireIdentity).IsUsingExpressionStorage;
-                this.ApplyEvent(new InterviewOnClientCreated(command.UserId, command.QuestionnaireId, command.QuestionnaireVersion, null, isUsingExpressionStorage));
+                if (!(command.SynchronizedEvents.FirstOrDefault() is InterviewOnClientCreated))
+                {
+                    var isUsingExpressionStorage = this.questionnaireRepository.GetQuestionnaireDocument(this.QuestionnaireIdentity).IsUsingExpressionStorage;
+                    this.ApplyEvent(new InterviewOnClientCreated(command.UserId, command.QuestionnaireId, command.QuestionnaireVersion, null, isUsingExpressionStorage));
+                }
             }
             else
             {
@@ -2261,7 +2264,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        protected void ValidatePrefilledAnswers(InterviewTree tree, IQuestionnaire questionnaire, Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions, RosterVector rosterVector = null)
+        protected void ValidatePrefilledAnswers(InterviewTree tree, IQuestionnaire questionnaire, IReadOnlyDictionary<Guid, AbstractAnswer> answersToFeaturedQuestions, RosterVector rosterVector = null)
         {
             var currentRosterVector = rosterVector ?? (decimal[])RosterVector.Empty;
             foreach (KeyValuePair<Guid, AbstractAnswer> answerToFeaturedQuestion in answersToFeaturedQuestions)
@@ -2404,7 +2407,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected static IReadOnlyCollection<InterviewTreeNodeDiff> FindDifferenceBetweenTrees(InterviewTree sourceInterview, InterviewTree changedInterview)
             => sourceInterview.Clone().Compare(changedInterview);
 
-        protected void UpdateTreeWithDependentChanges(InterviewTree changedInterviewTree, IQuestionnaire questionnaire)
+        protected void UpdateTreeWithDependentChanges(InterviewTree changedInterviewTree, IQuestionnaire questionnaire, bool removeLinkedAnswers = true)
         {
             if (questionnaire.IsUsingExpressionStorage())
             {
@@ -2527,8 +2530,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                 foreach (var optionAndParent in optionsAndParents)
                                 {
                                     var optionLevel = expressionStorage.GetLevel(optionAndParent.ParenRoster);
-                                    Func<IInterviewLevel, bool> filter =
-                                        optionLevel.GetLinkedQuestionFilter(entity.Identity);
+                                    Func<IInterviewLevel, bool> filter = optionLevel.GetLinkedQuestionFilter(entity.Identity);
                                     if (filter == null)
                                     {
                                         options.Add(optionAndParent.Option);
@@ -2549,7 +2551,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                             options.Add(optionAndParent.Option);
                                     }
                                 }
-                                question.UpdateLinkedOptionsAndResetAnswerIfNeeded(options.ToArray());
+                                question.UpdateLinkedOptionsAndResetAnswerIfNeeded(options.ToArray(), removeLinkedAnswers);
                                 // if is roster title, need to update it here?
                             }
 

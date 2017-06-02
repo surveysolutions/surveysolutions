@@ -344,11 +344,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             if (quantityIndex < 0)
                 return defaultQuantityValue;
 
-            var quantityString = row[quantityIndex];
+            var quantityString = row[quantityIndex].Trim();
+            if (quantityString == "-1" || quantityString == "INF")
+                return null;
 
-            int quantity;
-            if (int.TryParse(quantityString, out quantity))
+            if (int.TryParse(quantityString, out int quantity))
                 return quantity;
+
             return defaultQuantityValue;
         }
 

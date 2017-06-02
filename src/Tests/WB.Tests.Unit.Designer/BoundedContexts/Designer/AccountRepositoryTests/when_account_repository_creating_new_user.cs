@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountRepositoryTests
         It should_set_returned_account_provider_user_key_to_user_id = () =>
             validatedAccount.ProviderUserKey.ShouldEqual(validatedUserId);
 
-        private static CQRSAccountRepository accountRepository;
+        private static DesignerAccountRepository accountRepository;
         private static Mock<ICommandService> commandService;
         private static Guid validatedUserId;
         private static IMembershipAccount validatedAccount;
