@@ -52745,9 +52745,9 @@ license Apache-2.0
 }));
 
 /**
- * jQuery contextMenu v2.4.4 - Plugin for simple contextMenu handling
+ * jQuery contextMenu v2.5.0 - Plugin for simple contextMenu handling
  *
- * Version: v2.4.4
+ * Version: v2.5.0
  *
  * Authors: Björn Brala (SWIS.nl), Rodney Rehm, Addy Osmani (patches for FF)
  * Web: http://swisnl.github.io/jQuery-contextMenu/
@@ -52757,7 +52757,7 @@ license Apache-2.0
  * Licensed under
  *   MIT License http://www.opensource.org/licenses/mit-license
  *
- * Date: 2017-03-15T09:15:10.934Z
+ * Date: 2017-05-25T11:30:28.900Z
  */
 
 // jscs:disable
@@ -52917,7 +52917,8 @@ license Apache-2.0
                     offset = opt.$menu.position();
                 } else {
                     // x and y are given (by mouse event)
-                    offset = {top: y, left: x};
+                    var offsetParentOffset = opt.$menu.offsetParent().offset();
+                    offset = {top: y - offsetParentOffset.top, left: x -offsetParentOffset.left};
                 }
 
                 // correct offset if viewport demands it
@@ -53193,7 +53194,6 @@ license Apache-2.0
                     offset;
 
                 e.preventDefault();
-                e.stopImmediatePropagation();
 
                 setTimeout(function () {
                     var $window;
@@ -53214,13 +53214,13 @@ license Apache-2.0
                             sel.removeAllRanges();
                             sel.addRange(range);
                         }
-
+                        $(target).trigger(e);
                         root.$layer.show();
                     }
 
                     if (root.reposition && triggerAction) {
                         if (document.elementFromPoint) {
-                            if (root.$trigger.is(target) || root.$trigger.has(target).length) {
+                            if (root.$trigger.is(target)) {
                                 root.position.call(root.$trigger, root, x, y);
                                 return;
                             }
@@ -53295,7 +53295,7 @@ license Apache-2.0
                 // If targetZIndex is heigher then opt.zIndex dont progress any futher.
                 // This is used to make sure that if you are using a dialog with a input / textarea / contenteditable div
                 // and its above the contextmenu it wont steal keys events
-                if (targetZIndex > opt.zIndex) {
+                if (opt.$menu && parseInt(targetZIndex,10) > parseInt(opt.$menu.css("zIndex"),10)) {
                     return;
                 }
                 switch (e.keyCode) {
@@ -53582,6 +53582,7 @@ license Apache-2.0
                     return;
                 }
 
+
                 $this.trigger('contextmenu:focus');
             },
             // :hover done manually so key handling is possible
@@ -53598,6 +53599,10 @@ license Apache-2.0
                     e.preventDefault();
                     e.stopImmediatePropagation();
                     root.$selected = opt.$selected = opt.$node;
+                    return;
+                }
+
+                if(opt && opt.$menu && opt.$menu.hasClass('context-menu-visible')){
                     return;
                 }
 
@@ -53632,7 +53637,7 @@ license Apache-2.0
                 }
 
                 // hide menu if callback doesn't stop that
-                if (callback.call(root.$trigger, key, root) !== false) {
+                if (callback.call(root.$trigger, key, root, e) !== false) {
                     root.$menu.trigger('contextmenu:hide');
                 } else if (root.$menu.parent().length) {
                     op.update.call(root.$trigger, root);
@@ -53669,6 +53674,11 @@ license Apache-2.0
 
                 // remember selected
                 opt.$selected = root.$selected = $this;
+
+
+                if(opt && opt.$node && opt.$node.hasClass('context-menu-submenu')){
+                    opt.$node.addClass(root.classNames.hover);
+                }
 
                 // position sub-menu - do after show so dumb $.ui.position can keep up
                 if (opt.$node) {
@@ -53838,6 +53848,7 @@ license Apache-2.0
                 if (typeof root === 'undefined') {
                     root = opt;
                 }
+
                 // create contextMenu
                 opt.$menu = $('<ul class="context-menu-list"></ul>').addClass(opt.className || '').data({
                     'contextMenu': opt,
@@ -54174,7 +54185,7 @@ license Apache-2.0
                                 break;
 
                             case 'select':
-                                item.$input.val(item.selected || '');
+                                item.$input.val((item.selected === 0 ? "0" : item.selected) || '');
                                 break;
                         }
                     }
@@ -54637,14 +54648,13 @@ license Apache-2.0
                         disabled: !!$node.attr('disabled'),
                         callback: (function () {
                             return function () {
-                                $node.click();
+                                $node.get(0).click()
                             };
                         })()
                     };
                     break;
 
                 // http://www.whatwg.org/specs/web-apps/current-work/multipage/commands.html#using-the-command-element-to-define-a-command
-
                 case 'menuitem':
                 case 'command':
                     switch ($node.attr('type')) {
@@ -54657,7 +54667,7 @@ license Apache-2.0
                                 icon: $node.attr('icon'),
                                 callback: (function () {
                                     return function () {
-                                        $node.click();
+                                        $node.get(0).click()
                                     };
                                 })()
                             };

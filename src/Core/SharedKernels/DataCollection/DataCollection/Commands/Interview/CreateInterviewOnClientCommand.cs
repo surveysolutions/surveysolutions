@@ -15,7 +15,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
         public Guid SupervisorId { get; private set; }
         public InterviewKey InterviewKey { get; }
         public int? AssignmentId { get; private set; }
-        public Dictionary<Guid, AbstractAnswer> AnswersToIdentifyingQuestions { get; private set; }
+        public IReadOnlyDictionary<Guid, AbstractAnswer> AnswersToIdentifyingQuestions { get; private set; }
         public DateTime AnswersTime { get; private set; }
 
         public CreateInterviewOnClientCommand(Guid interviewId, 
@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             DateTime answersTime, Guid supervisorId, 
             InterviewKey interviewKey, 
             int? assignmentId,
-            Dictionary<Guid, AbstractAnswer> answersToIdentifyingQuestions)
+            IReadOnlyDictionary<Guid, AbstractAnswer> answersToIdentifyingQuestions)
             : base(interviewId, userId)
         {
             this.Id = interviewId;
