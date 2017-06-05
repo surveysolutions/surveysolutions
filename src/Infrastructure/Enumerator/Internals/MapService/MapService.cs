@@ -17,18 +17,22 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.MapService
         private readonly IPermissions permissions;
         private IFileSystemAccessor fileSystemAccessor;
         private TimeSpan timeout = new TimeSpan(0,0,30);
-        private string urlToCheckMaps = "https://download.mysurvey.solutions/maps.json";
+
+        private string urlToCheckMaps;
+
         private string mapsLocation;
         string filesToSearch = "*.tpk";
+        private string mapsListFile = "/maps/maps.json";
 
-        public MapService(IPermissions permissions, IFileSystemAccessor fileSystemAccessor)
+        public MapService(IPermissions permissions, 
+            IFileSystemAccessor fileSystemAccessor,
+            string urlToCheckMaps)
         {
             this.permissions = permissions;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.urlToCheckMaps = urlToCheckMaps;
             var pathToRootDirectory = Build.VERSION.SdkInt < BuildVersionCodes.N ? AndroidPathUtils.GetPathToExternalDirectory() : AndroidPathUtils.GetPathToInternalDirectory();
             
-            //Android.OS.Environment.ExternalStorageDirectory.AbsolutePath
-
             this.mapsLocation = fileSystemAccessor.CombinePath(pathToRootDirectory, "TheWorldBank/Shared/MapCache/");
         }
 
@@ -89,8 +93,8 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.MapService
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                var jsonData = await httpClient.GetStringAsync(uri);
+                var url = uri + mapsListFile;
+                var jsonData = await httpClient.GetStringAsync(url);
                 return JsonConvert.DeserializeObject<T>(jsonData);
             }
         }
