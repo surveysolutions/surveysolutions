@@ -7,6 +7,7 @@ using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 using MvvmCross.Core.ViewModels;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -152,7 +153,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             }
             else
             {
-                this.userInteractionService.ShowToast("No changes we made to be saved");
+                this.userInteractionService.ShowToast(UIResources.AreaMap_NoChangesInfo);
             }
         });
 
