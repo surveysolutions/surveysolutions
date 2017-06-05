@@ -62,6 +62,69 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        public static string AreaMap_Edit {
+            get {
+                return ResourceManager.GetString("AreaMap_Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Location.
+        /// </summary>
+        public static string AreaMap_Location {
+            get {
+                return ResourceManager.GetString("AreaMap_Location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No changes we made to be saved..
+        /// </summary>
+        public static string AreaMap_NoChangesInfo {
+            get {
+                return ResourceManager.GetString("AreaMap_NoChangesInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No maps were found. Please update maps.
+        /// </summary>
+        public static string AreaMap_NoMapsFound {
+            get {
+                return ResourceManager.GetString("AreaMap_NoMapsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string AreaMap_Save {
+            get {
+                return ResourceManager.GetString("AreaMap_Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Undo.
+        /// </summary>
+        public static string AreaMap_Undo {
+            get {
+                return ResourceManager.GetString("AreaMap_Undo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update maps.
+        /// </summary>
+        public static string AreaMap_UpdateMaps {
+            get {
+                return ResourceManager.GetString("AreaMap_UpdateMaps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {

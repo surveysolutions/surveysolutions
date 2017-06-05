@@ -473,4 +473,25 @@
   <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
     <value>Редактировать область</value>
   </data>
+  <data name="AreaMap_Edit" xml:space="preserve">
+    <value>Редактировать</value>
+  </data>
+  <data name="AreaMap_Location" xml:space="preserve">
+    <value>Положение</value>
+  </data>
+  <data name="AreaMap_NoChangesInfo" xml:space="preserve">
+    <value>Нет изменений, чтобы сохранять.</value>
+  </data>
+  <data name="AreaMap_NoMapsFound" xml:space="preserve">
+    <value>Карты не найдены. Попробуйте обновить карты.</value>
+  </data>
+  <data name="AreaMap_Save" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
+  <data name="AreaMap_Undo" xml:space="preserve">
+    <value>Отменить</value>
+  </data>
+  <data name="AreaMap_UpdateMaps" xml:space="preserve">
+    <value>Обновить карты</value>
+  </data>
 </root>
