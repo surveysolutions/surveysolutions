@@ -1727,6 +1727,24 @@ namespace WB.UI.Shared.Extensions
 		public partial class Dimension
 		{
 			
+			// aapt resource value: 0x7f070107
+			public static int Area_Editor_margin_1 = 2131165447;
+			
+			// aapt resource value: 0x7f070108
+			public static int Area_Editor_margin_10 = 2131165448;
+			
+			// aapt resource value: 0x7f07010c
+			public static int Area_Editor_margin_120 = 2131165452;
+			
+			// aapt resource value: 0x7f070109
+			public static int Area_Editor_margin_20 = 2131165449;
+			
+			// aapt resource value: 0x7f07010a
+			public static int Area_Editor_margin_45 = 2131165450;
+			
+			// aapt resource value: 0x7f07010b
+			public static int Area_Editor_margin_95 = 2131165451;
+			
 			// aapt resource value: 0x7f0700c7
 			public static int Interview_Attachment_Large_margin_bottom = 2131165383;
 			
