@@ -597,10 +597,10 @@
     <value>Surveys and statuses</value>
   </data>
   <data name="SurveysAndStatuses_SupervisorStatisticsFormat" xml:space="preserve">
-    <value>{0} interview(s) from {1} responsible(s)</value>
+    <value>{0} interviews</value>
   </data>
   <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
-    <value>{0} interview(s) from {1} responsible(s)</value>
+    <value>{0} interviews</value>
   </data>
   <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
     <value>Connected to the server</value>
