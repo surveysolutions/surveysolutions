@@ -1,6 +1,5 @@
 using Ninject.Modules;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Infrastructure.Shared.Enumerator.Internals.MapService;
 using WB.UI.Shared.Enumerator.CustomServices;
 
 namespace WB.UI.Shared.Enumerator
@@ -16,8 +15,6 @@ namespace WB.UI.Shared.Enumerator
 
             this.Bind<IExternalAppLauncher>().To<ExternalAppLauncher>();
             this.Bind<IVirbationService>().To<VibrationService>();
-
-            this.Bind<IMapService>().To<MapService>();
         }
     }
 }
