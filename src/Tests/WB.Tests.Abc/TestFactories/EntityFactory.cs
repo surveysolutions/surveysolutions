@@ -1546,14 +1546,14 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
-        public AssignmentApiViewBuilder AssignmentApiView(string id, int? capacity, int quantity = 0, QuestionnaireIdentity questionnaireIdentity = null)
+        public AssignmentApiViewBuilder AssignmentApiView(string id, int? quantity, int interviewsCount = 0, QuestionnaireIdentity questionnaireIdentity = null)
         {
             return new AssignmentApiViewBuilder(new AssignmentApiView
             {
                 Id = id ?? Guid.NewGuid().ToString(),
-                Quantity = capacity,
+                Quantity = quantity,
                 QuestionnaireId = questionnaireIdentity,
-                InterviewsCount = quantity
+                InterviewsCount = interviewsCount
             });
         }
 
@@ -1577,14 +1577,14 @@ namespace WB.Tests.Abc.TestFactories
 
         public Assignment Assignment(int? id = null,
             QuestionnaireIdentity questionnaireIdentity = null,
-            int? capacity = null,
+            int? quantity = null,
             Guid? assigneeSupervisorId = null,
             string responsibleName = null,
             ISet<InterviewSummary> interviewSummary = null)
         {
             var result = new Assignment();
             var asDynamic = result.AsDynamic();
-            asDynamic.Quantity = capacity ?? 0;
+            asDynamic.Quantity = quantity ?? 0;
             asDynamic.Id = id ?? 0;
             result.QuestionnaireId = questionnaireIdentity;
 
@@ -1615,13 +1615,13 @@ namespace WB.Tests.Abc.TestFactories
             return result;
         }
 
-        public AssignmentDocumentBuilder AssignmentDocument(string id, int? capacity, int quantity = 0, string questionnaireIdentity = null)
+        public AssignmentDocumentBuilder AssignmentDocument(string id, int? quantity, int interviewsCount = 0, string questionnaireIdentity = null)
         {
             return new AssignmentDocumentBuilder(new AssignmentDocument
             {
                 Id = id ?? Guid.NewGuid().ToString(),
-                Quantity = capacity,
-                InterviewsCount = quantity,
+                Quantity = quantity,
+                InterviewsCount = interviewsCount,
                 QuestionnaireId = questionnaireIdentity
             });
         }
