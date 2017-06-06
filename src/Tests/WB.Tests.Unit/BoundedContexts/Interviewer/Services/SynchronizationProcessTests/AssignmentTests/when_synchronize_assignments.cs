@@ -131,7 +131,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         public void should_update_existing_assignment_quantity()
         {
             var existingAssignment = this.localAssignmentsRepo.GetById(Id.g1.ToString());
-            Assert.That(existingAssignment.Capacity, Is.EqualTo(this.RemoteAssignments[0].Capacity));
+            Assert.That(existingAssignment.Quantity, Is.EqualTo(this.RemoteAssignments[0].Quantity));
         }
 
         [Test]
@@ -146,8 +146,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             {
                 var remote = remoteLookup[local.Id];
 
-                Assert.That(remote.Capacity, Is.EqualTo(local.Capacity));
                 Assert.That(remote.Quantity, Is.EqualTo(local.Quantity));
+                Assert.That(remote.InterviewsCount, Is.EqualTo(local.InterviewsCount));
                 Assert.That(remote.QuestionnaireId.ToString(), Is.EqualTo(local.QuestionnaireId));
             }
         }

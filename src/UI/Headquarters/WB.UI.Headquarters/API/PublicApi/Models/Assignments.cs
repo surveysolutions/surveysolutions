@@ -41,7 +41,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         public int InterviewsCount { get; set; }
 
         [DataMember]
-        public int? Capacity { get; set; }
+        public int? Quantity { get; set; }
 
         [DataMember]
         public bool Archived { get; set; }
@@ -88,8 +88,8 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
         public bool ShowArchive { get; set; }
         public string Order { get; set; }
-        public int Page { get; set; }
-        public int PageSize { get; set; }
+        public int Offset { get; set; }
+        public int Limit { get; set; }
     }
 
     public class CreateAssignmentResult
@@ -108,7 +108,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         /// Maximum number of allowed to create assignments
         /// </summary>
         [DataMember]
-        public int? Capacity { get; set; }
+        public int? Quantity { get; set; }
 
         /// <summary>
         /// QuestionnaireId for assignemnt

@@ -665,6 +665,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter)).Take(itemsCount).ToList();
         }
 
+        private static bool RunOptionFilter(Func<int, bool> filter, int selectedValue)
+        {
+            try
+            {
+                return filter(selectedValue);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public CategoricalOption GetOptionForQuestionWithoutFilter(Identity question, int value, int? parentQuestionValue = null)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
@@ -2415,10 +2427,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
                 expressionStorage.Initialize(new InterviewStateForExpressions(changedInterviewTree, questionnaire, interviewPropertiesForExpressions));
 
-                var playOrder = questionnaire.GetExpressionsPlayOrder();
-                var questionnaireLevelIdentity = new Identity(this.QuestionnaireIdentity.QuestionnaireId, RosterVector.Empty);
+                var updater = new InterviewNodesUpdater(expressionStorage, questionnaire, removeLinkedAnswers);
 
-                var disabledNodes = new HashSet<Identity>();
+                var playOrder = questionnaire.GetExpressionsPlayOrder();
 
                 foreach (var entityId in playOrder)
                 {
@@ -2427,220 +2438,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     {
                         IInterviewTreeNode entity = changedInterviewTree.GetNodeByIdentity(entityIdentity);
 
-                        if (entity == null)
-                            continue;
-
-                        if (disabledNodes.Contains(entity.Identity))
-                            continue;
-
-                        var nearestRoster = entity is InterviewTreeRoster
-                            ? entity.Identity
-                            : entity.Parents.OfType<InterviewTreeRoster>().LastOrDefault()?.Identity ??
-                              questionnaireLevelIdentity;
-                        var level = expressionStorage.GetLevel(nearestRoster);
-                        State result = this.RunConditionExpression(level.GetConditionExpression(entity.Identity));
-                        if (result != State.Disabled)
-                            entity.Enable();
-                        else
-                        {
-                            entity.Disable();
-                            if (entity is InterviewTreeGroup)
-                            {
-                                List<Identity> disabledChildNodes = (entity as InterviewTreeGroup).DisableChildNodes();
-                                disabledChildNodes.ForEach(x => disabledNodes.Add(x));
-                            }
-                        }
-
-                        if (entity is InterviewTreeRoster)
-                        {
-                            var roster = entity as InterviewTreeRoster;
-                            roster.UpdateRosterTitle((questionId, answerOptionValue) => questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title);
-                        }
-
-                        if (entity is InterviewTreeQuestion)
-                        {
-                            var question = entity as InterviewTreeQuestion;
-
-                            if (question.IsAnswered() && questionnaire.IsSupportFilteringForOptions(entityId))
-                            {
-                                var filter = level.GetCategoricalFilter(question.Identity);
-                                if (question.IsSingleFixedOption)
-                                {
-                                    var filterResult = RunOptionFilter(filter,
-                                        question.AsSingleFixedOption.GetAnswer().SelectedValue);
-                                    if (!filterResult)
-                                        question.RemoveAnswer();
-                                }
-                                else if (question.IsMultiFixedOption)
-                                {
-                                    var selectedOptions =
-                                        question.AsMultiFixedOption.GetAnswer().CheckedValues.ToArray();
-                                    var newSelectedOptions =
-                                        selectedOptions.Where(x => RunOptionFilter(filter, x)).ToArray();
-                                    if (newSelectedOptions.Length != selectedOptions.Length)
-                                    {
-                                        question.AsMultiFixedOption.SetAnswer(
-                                            CategoricalFixedMultiOptionAnswer.FromInts(newSelectedOptions));
-                                        // remove rosters, implement cheaper solutions
-                                        changedInterviewTree.ActualizeTree();
-                                    }
-                                }else if (question.IsYesNo)
-                                {
-                                    var checkedOptions = question.AsYesNo.GetAnswer().CheckedOptions;
-                                    var newCheckedOptions =
-                                        checkedOptions.Where(x => RunOptionFilter(filter, x.Value)).ToArray();
-
-                                    if (newCheckedOptions.Length != checkedOptions.Count)
-                                    {
-                                        question.AsYesNo.SetAnswer(YesNoAnswer.FromCheckedYesNoAnswerOptions(newCheckedOptions));
-                                        // remove rosters, implement cheaper solutions
-                                        changedInterviewTree.ActualizeTree();
-                                    }
-                                }
-                            }
-
-                            if (question.IsCascading)
-                            {
-                                //move to cascading
-                                var cascadingParent = question.AsCascading.GetCascadingParentTreeQuestion();
-                                if (cascadingParent.IsDisabled() || !cascadingParent.IsAnswered())
-                                {
-                                    if (question.IsAnswered())
-                                        question.RemoveAnswer();
-                                    question.Disable();
-                                }
-                                else
-                                {
-                                    var selectedParentValue = cascadingParent.AsSingleFixedOption.GetAnswer().SelectedValue;
-                                    if (!questionnaire.HasAnyCascadingOptionsForSelectedParentOption(entityId, cascadingParent.Identity.Id, selectedParentValue))
-                                    {
-                                        question.Disable();
-                                    }
-                                    else
-                                    {
-                                        question.Enable();
-                                    }
-                                }
-                            }
-
-                            if (question.IsLinked)
-                            {
-                                var optionsAndParents = question.GetCalculatedLinkedOptions();
-                                var options = new List<RosterVector>();
-                                foreach (var optionAndParent in optionsAndParents)
-                                {
-                                    var optionLevel = expressionStorage.GetLevel(optionAndParent.ParenRoster);
-                                    Func<IInterviewLevel, bool> filter = optionLevel.GetLinkedQuestionFilter(entity.Identity);
-                                    if (filter == null)
-                                    {
-                                        options.Add(optionAndParent.Option);
-                                    }
-                                    else
-                                    {
-                                        bool filterResult;
-                                        try
-                                        {
-                                            filterResult = filter(level);
-                                        }
-                                        catch
-                                        {
-                                            filterResult = false;
-                                        }
-
-                                        if (filterResult)
-                                            options.Add(optionAndParent.Option);
-                                    }
-                                }
-                                question.UpdateLinkedOptionsAndResetAnswerIfNeeded(options.ToArray(), removeLinkedAnswers);
-                                // if is roster title, need to update it here?
-                            }
-
-                            if (question.IsLinkedToListQuestion)
-                            {
-                                question.CalculateLinkedToListOptions(true);
-                            }
-                        }
-
-                        if (entity is InterviewTreeVariable)
-                        {
-                            var variable = entity as InterviewTreeVariable;
-                            Func<object> expression = level.GetVariableExpression(variable.Identity);
-                            try
-                            {
-                                variable.SetValue(expression());
-                            }
-                            catch
-                            {
-                                variable.SetValue(null);
-                            }
-                        }
-                    }
-                }
-                foreach (var entityId in playOrder)
-                {
-                    var entities = changedInterviewTree.FindEntity(entityId);
-                    foreach (var entity in entities)
-                    {
-                        var validateable = entity as IInterviewTreeValidateable;
-                        if (validateable == null) continue;
-
-                        var isUnansweredQuestion = entity is InterviewTreeQuestion && !(entity as InterviewTreeQuestion).IsAnswered();
-                        if (isUnansweredQuestion)
-                        {
-                            validateable.MarkValid();
-                            continue;
-                        }
-
-                        var nearestRoster = entity.Parents.OfType<InterviewTreeRoster>().LastOrDefault()?.Identity ?? questionnaireLevelIdentity;
-                        IInterviewLevel level = expressionStorage.GetLevel(nearestRoster);
-                        var validationExpressions = level.GetValidationExpressions(entity.Identity) ?? new Func<bool>[0];
-                        var validationResult = validationExpressions.Select(this.RunConditionExpression)
-                            .Select((x, i) => x == State.Disabled? new FailedValidationCondition(i) : null)
-                            .Where(x => x!=null)
-                            .ToArray();
-                                
-                        if (validationResult.Any())
-                            validateable.MarkInvalid(validationResult);
-                        else
-                            validateable.MarkValid();
+                        entity?.Accept(updater);
                     }
                 }
 
-                this.UpdateRosterTitles(changedInterviewTree, questionnaire);
+                //this.UpdateRosterTitles(changedInterviewTree, questionnaire);
             }
             else
             {
                 this.UpdateTreeWithDependentChangesWithExpressionState(changedInterviewTree, questionnaire);
             }
         }
-
-        private static bool RunOptionFilter(Func<int, bool> filter, int selectedValue)
-        {
-            try
-            {
-                return filter(selectedValue);
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-
-        private State RunConditionExpression(Func<bool> expression)
-        {
-            try
-            {
-                if (expression == null)
-                    return State.Enabled;
-                return expression() ? State.Enabled : State.Disabled;
-            }
-            catch
-            {
-                return State.Disabled;
-            }
-        }
-
 
         private void UpdateTreeWithDependentChangesWithExpressionState(InterviewTree changedInterviewTree,
             IQuestionnaire questionnaire)

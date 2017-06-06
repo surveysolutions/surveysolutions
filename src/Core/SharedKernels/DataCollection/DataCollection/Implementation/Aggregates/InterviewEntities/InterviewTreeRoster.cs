@@ -70,8 +70,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
         }
 
+        public override void Accept(IInterviewNodesUpdater updater)
+        {
+            updater.UpdateEnablement(this);
+            updater.UpdateRoster(this);
+        }
 
-    private string GetTypeAsText()
+
+        private string GetTypeAsText()
         {
             if (this.IsNumeric) return "Numeric";
             if (this.IsFixed) return "Fixed";

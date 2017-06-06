@@ -1,9 +1,7 @@
 using System;
 using System.ComponentModel;
-using System.Linq;
 using AutoMapper;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -20,7 +18,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.CreateMap<Assignment, AssignmentDetails>()
                 .BeforeMap((assignment, details, ctx) => this.PrepareQuestionnaire(ctx, assignment.QuestionnaireId))
                 .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Id))
-                .ForMember(x => x.Capacity, opts => opts.MapFrom(x => x.Capacity))
+                .ForMember(x => x.Quantity, opts => opts.MapFrom(x => x.Quantity))
                 .ForMember(x => x.QuestionnaireId, opts => opts.MapFrom(x => x.QuestionnaireId.ToString()))
                 .ForMember(x => x.IdentifyingData, opts => opts.MapFrom(x => x.IdentifyingData))
                 .ForMember(x => x.InterviewsCount, opts => opts.MapFrom(x => x.InterviewSummaries.Count))
@@ -32,30 +30,10 @@ namespace WB.UI.Headquarters.API.PublicApi
                     (answer, dest, value, ctx) => GetVariableName(ctx, answer.QuestionId)))
                 .ForMember(x => x.QuestionId, opts => opts.MapFrom(x => x.QuestionId));
 
-            this.CreateMap<Assignment, PreloadedDataByFile>()
-                .ConstructUsing((assignment, context) =>
-                {
-                    var questionnaire = this.GetQuestionnaire(context, assignment.QuestionnaireId);
-
-                    var id = $"Assignment_{assignment.Id}_{questionnaire.Title}";
-
-                    var headers = assignment.IdentifyingData.Select(data =>
-                    {
-                        if (string.IsNullOrWhiteSpace(data.VariableName))
-                            return questionnaire.GetQuestionVariableName(data.QuestionId);
-
-                        return data.VariableName;
-                    }).ToArray();
-
-                    var content = new[] { assignment.IdentifyingData.Select(data => data.Answer).ToArray() };
-
-                    return new PreloadedDataByFile(id, id, headers, content);
-                });
-
             this.CreateMap<AssignmentRow, AssignmentViewItem>()
                 .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Id))
                 .ForMember(x => x.QuestionnaireId, opts => opts.MapFrom(x => x.QuestionnaireId))
-                .ForMember(x => x.Capacity, opts => opts.MapFrom(x => x.Capacity))
+                .ForMember(x => x.Quantity, opts => opts.MapFrom(x => x.Quantity))
                 .ForMember(x => x.InterviewsCount, opts => opts.MapFrom(x => x.InterviewsCount))
                 .ForMember(x => x.ResponsibleId, opts => opts.MapFrom(x => x.ResponsibleId))
                 .ForMember(x => x.ResponsibleName, opts => opts.MapFrom(x => x.Responsible))

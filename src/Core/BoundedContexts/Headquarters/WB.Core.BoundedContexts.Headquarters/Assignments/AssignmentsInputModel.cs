@@ -11,5 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public Guid? ResponsibleId { get; set; }
         public Guid? SupervisorId { get; set; }
         public bool ShowArchive { get; set; }
+        public int? Limit { get; set; }
+        public int? Offset { get; set; }
     }
 }

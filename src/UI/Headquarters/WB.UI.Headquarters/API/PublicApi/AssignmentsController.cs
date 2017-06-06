@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.API.PublicApi.Models;
@@ -57,12 +58,8 @@ namespace WB.UI.Headquarters.API.PublicApi
         [Route("{id:int}")]
         public AssignmentDetails Details(int id)
         {
-            var assignment = assignmentsStorage.GetById(id);
-
-            if (assignment == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
+            var assignment = assignmentsStorage.GetById(id)
+                ?? throw new HttpResponseException(HttpStatusCode.NotFound);
 
             return this.mapper.Map<AssignmentDetails>(assignment);
         }
@@ -78,14 +75,13 @@ namespace WB.UI.Headquarters.API.PublicApi
         {
             filter = filter ?? new AssignmentsListFilter
             {
-                Page = 1,
-                PageSize = 20
+                Offset = 0,
+                Limit = 20
             };
 
-            filter.PageSize = filter.PageSize == 0 ? 20 : Math.Min(filter.PageSize, 100);
+            filter.Limit = filter.Limit == 0 ? 20 : Math.Min(filter.Limit, 100);
 
-            QuestionnaireIdentity questionnaireId;
-            if (!QuestionnaireIdentity.TryParse(filter.QuestionnaireId, out questionnaireId))
+            if (!QuestionnaireIdentity.TryParse(filter.QuestionnaireId, out QuestionnaireIdentity questionnaireId))
             {
                 questionnaireId = null;
             }
@@ -98,8 +94,8 @@ namespace WB.UI.Headquarters.API.PublicApi
                 QuestionnaireVersion = questionnaireId?.Version,
                 ResponsibleId = responsible?.Id,
                 Order = filter.Order,
-                Page = Math.Max(filter.Page, 1),
-                PageSize = filter.PageSize,
+                Limit = filter.Limit,
+                Offset = filter.Offset,
                 SearchBy = filter.SearchBy,
                 ShowArchive = filter.ShowArchive,
                 SupervisorId = filter.SupervisorId
@@ -127,20 +123,15 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             this.VerifyAssigneeInRoles(responsible, createItem?.Responsible, UserRoles.Interviewer, UserRoles.Supervisor);
 
-            QuestionnaireIdentity questionnaireId;
-            if (!QuestionnaireIdentity.TryParse(createItem.QuestionnaireId, out questionnaireId))
+            if (!QuestionnaireIdentity.TryParse(createItem.QuestionnaireId, out QuestionnaireIdentity questionnaireId))
             {
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound, $@"Questionnaire not found: {createItem?.QuestionnaireId}"));
             }
 
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireId, null);
-            
-            if (questionnaire == null)
-            {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound, $@"Questionnaire not found: {createItem?.QuestionnaireId}"));
-            }
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireId, null)
+               ?? throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound, $@"Questionnaire not found: {createItem?.QuestionnaireId}"));
 
-            var assignment = new Assignment(questionnaireId, responsible.Id, createItem.Capacity);
+            var assignment = new Assignment(questionnaireId, responsible.Id, createItem.Quantity);
 
             try
             {
@@ -155,16 +146,16 @@ namespace WB.UI.Headquarters.API.PublicApi
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, ae.Message));
             }
 
-            var preloadData = this.mapper.Map<PreloadedDataByFile>(assignment);
+            var preloadData = this.ConvertToPreloadedData(assignment, questionnaire);
 
             var verifyResult = this.preloadedDataVerifier.VerifyAssignmentsSample(questionnaireId.QuestionnaireId, questionnaireId.Version, preloadData);
             verifyResult.WasResponsibleProvided = true;
-            
+
             if (!verifyResult.Errors.Any())
             {
                 this.assignmentsStorage.Store(assignment, null);
                 assignment = this.assignmentsStorage.GetById(assignment.Id);
-               
+
                 return new CreateAssignmentResult
                 {
                     Assignment = mapper.Map<AssignmentDetails>(assignment),
@@ -191,12 +182,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         [Route("{id:int}/assign")]
         public AssignmentDetails Assign(int id, [FromBody] AssignmentAssignRequest assigneeRequest)
         {
-            var assignment = assignmentsStorage.GetById(id);
-
-            if (assignment == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
+            var assignment = assignmentsStorage.GetById(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
 
             var responsibleUser = this.GetResponsibleIdPersonFromRequestValue(assigneeRequest?.Responsible);
 
@@ -216,7 +202,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                 throw new HttpResponseException(this.Request.CreateResponse(HttpStatusCode.NotFound,
                     $@"User not found: {providedValue}"));
             }
-            
+
             if (!roles.Any(responsibleUser.IsInRole))
             {
                 throw new HttpResponseException(HttpStatusCode.NotAcceptable);
@@ -230,39 +216,84 @@ namespace WB.UI.Headquarters.API.PublicApi
                 return null;
             }
 
-            Guid responsibleUserId;
-
-            if (!Guid.TryParse(responsible, out responsibleUserId))
-            {
-                return this.userManager.FindByName(responsible);
-            }
-
-            return this.userManager.FindById(responsibleUserId);
+            return Guid.TryParse(responsible, out Guid responsibleUserId)
+                ? this.userManager.FindById(responsibleUserId)
+                : this.userManager.FindByName(responsible);
         }
 
         /// <summary>
         /// Change assignments limit on created interviews
         /// </summary>
         /// <param name="id">Assignment id</param>
-        /// <param name="capacity">New limit on created interviews</param>
-        /// <response code="200">Assingment details with updated capacity</response>
+        /// <param name="quantity">New limit on created interviews</param>
+        /// <response code="200">Assingment details with updated quantity</response>
         /// <response code="404">Assignment not found</response>
         [HttpPatch]
-        [Route("{id:int}/changeCapacity")]
-        public AssignmentDetails ChangeCapacity(int id, [FromBody] int? capacity)
+        [Route("{id:int}/changeQuantity")]
+        public AssignmentDetails ChangeQuantity(int id, [FromBody] int? quantity)
         {
-            var assignment = assignmentsStorage.GetById(id);
+            var assignment = assignmentsStorage.GetById(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            if (assignment == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
-
-            assignment.UpdateCapacity(capacity);
+            assignment.UpdateQuantity(quantity);
 
             assignmentsStorage.Store(assignment, id);
 
             return this.mapper.Map<AssignmentDetails>(assignmentsStorage.GetById(id));
+        }
+
+        /// <summary>
+        /// Archive assignment
+        /// </summary>
+        /// <param name="id">Assignment id</param>
+        /// <response code="200">Assingment details</response>
+        /// <response code="404">Assignment not found</response>
+        [HttpPatch]
+        [Route("{id:int}/archive")]
+        public AssignmentDetails Archive(int id)
+        {
+            var assignment = assignmentsStorage.GetById(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
+
+            assignment.Archive();
+
+            assignmentsStorage.Store(assignment, id);
+
+            return this.mapper.Map<AssignmentDetails>(assignmentsStorage.GetById(id));
+        }
+
+        /// <summary>
+        /// Archive assignment
+        /// </summary>
+        /// <param name="id">Assignment id</param>
+        /// <response code="200">Assingment details</response>
+        /// <response code="404">Assignment not found</response>
+        [HttpPatch]
+        [Route("{id:int}/unarchive")]
+        public AssignmentDetails Unarchive(int id)
+        {
+            var assignment = assignmentsStorage.GetById(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
+        
+            assignment.Unarchive();
+
+            assignmentsStorage.Store(assignment, id);
+
+            return this.mapper.Map<AssignmentDetails>(assignmentsStorage.GetById(id));
+        }
+
+        private PreloadedDataByFile ConvertToPreloadedData(Assignment assignment, IQuestionnaire questionnaire)
+        {
+            var id = $@"Assignment_{assignment.Id}_{questionnaire.Title}";
+
+            var headers = assignment.IdentifyingData.Select(data =>
+            {
+                if (string.IsNullOrWhiteSpace(data.VariableName))
+                    return questionnaire.GetQuestionVariableName(data.QuestionId);
+
+                return data.VariableName;
+            }).ToArray();
+
+            var content = new[] { assignment.IdentifyingData.Select(data => data.Answer).ToArray() };
+
+            return new PreloadedDataByFile(id, id, headers, content);
         }
     }
 }

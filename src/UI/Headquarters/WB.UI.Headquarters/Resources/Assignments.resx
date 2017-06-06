@@ -132,14 +132,11 @@
   <data name="AssignmentsSelected" xml:space="preserve">
     <value>{0} Assignment(s) selected</value>
   </data>
-  <data name="Capacity" xml:space="preserve">
-    <value>Capacity</value>
-  </data>
-  <data name="CapacityExplanation" xml:space="preserve">
+  <data name="QuantityExplanation" xml:space="preserve">
     <value>You can set number of interviews that should be created from this assignment</value>
   </data>
-  <data name="ChangeCapacityModalTitle" xml:space="preserve">
-    <value>Edit capacity for assignment {0}</value>
+  <data name="ChangeQuantityModalTitle" xml:space="preserve">
+    <value>Edit quantity for assignment {0}</value>
     <comment>{0} - id of the assignment</comment>
   </data>
   <data name="CreatedAt" xml:space="preserve">
@@ -153,6 +150,9 @@
   </data>
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
     <value>{0} Assignment(s) are going to be changed</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Quantity</value>
   </data>
   <data name="SelectResponsible" xml:space="preserve">
     <value>Select responsible</value>

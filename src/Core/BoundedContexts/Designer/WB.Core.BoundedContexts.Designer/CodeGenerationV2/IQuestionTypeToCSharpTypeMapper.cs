@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
 {
     public interface IQuestionTypeToCSharpTypeMapper
     {
-        string GetType(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire);
-        string GetVariablesCSharpType(VariableType variableType);
+        string GetQuestionType(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire);
+        string GetVariableType(VariableType variableType);
     }
 }

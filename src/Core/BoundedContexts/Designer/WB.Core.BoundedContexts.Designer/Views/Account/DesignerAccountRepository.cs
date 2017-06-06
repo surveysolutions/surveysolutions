@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             return account;
         }
 
-        public bool Delete(string username, bool deleteAllRelatedData)
+        public bool Delete(string username)
         {
             IAccountView account = this.GetUser(accountName: username);
 
@@ -125,7 +125,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             IMembershipAccount account = this.Get(userNameOrEmail);
             if (account == null)
             {
-                account = this.FindByEmail(userNameOrEmail, 1, 1, out int _).FirstOrDefault();
+                account = this.GetUser(accountEmail: userNameOrEmail);
             }
 
             return account;

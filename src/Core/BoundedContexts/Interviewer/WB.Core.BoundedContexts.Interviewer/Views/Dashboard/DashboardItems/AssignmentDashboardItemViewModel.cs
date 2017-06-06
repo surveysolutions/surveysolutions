@@ -75,9 +75,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             {
                 var interviewsByAssignmentCount = this.interviewViewRepository.Count(interview => interview.Assignment == this.assignment.Id);
 
-                if (this.assignment.Capacity.HasValue)
+                if (this.assignment.Quantity.HasValue)
                 {
-                    var interviewsLeftByAssignmentCount = this.assignment.Capacity.Value - this.assignment.Quantity - interviewsByAssignmentCount;
+                    var interviewsLeftByAssignmentCount = this.assignment.Quantity.Value - this.assignment.InterviewsCount - interviewsByAssignmentCount;
                     return InterviewerUIResources.DashboardItem_AssignmentLeftComment.FormatString(interviewsLeftByAssignmentCount);
                 }
                 else
@@ -95,10 +95,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             get
             {
-                if (this.assignment.Capacity.HasValue)
+                if (this.assignment.Quantity.HasValue)
                 {
                     var interviewsByAssignmentCount = this.interviewViewRepository.Count(interview => interview.Assignment == this.assignment.Id);
-                    var interviewsLeftByAssignmentCount = this.assignment.Capacity.Value - this.assignment.Quantity - interviewsByAssignmentCount;
+                    var interviewsLeftByAssignmentCount = this.assignment.Quantity.Value - this.assignment.InterviewsCount - interviewsByAssignmentCount;
                     return interviewsLeftByAssignmentCount > 0;
                 }
                 return true;
@@ -139,8 +139,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         private AbstractAnswer ConvertToAbstractAnswer(AssignmentDocument.IdentifyingAnswer identifyingAnswer, IQuestionnaire questionnaire)
         {
-            var questionType = questionnaire.GetQuestionType(identifyingAnswer.QuestionId);
-            return this.identifyingAnswerConverter.GetAbstractAnswer(questionType, identifyingAnswer.Answer);
+            return this.identifyingAnswerConverter.GetAbstractAnswer(questionnaire, identifyingAnswer.QuestionId, identifyingAnswer.Answer);
         }
 
         private void RaiseStartingLongOperation()

@@ -234,6 +234,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return clonedInterviewTreeGroup;
         }
 
+        public virtual void Accept(IInterviewNodesUpdater updater)
+        {
+            updater.UpdateEnablement(this);
+        }
+
         public void ReplaceSubstitutions()
         {
             this.Title.ReplaceSubstitutions();

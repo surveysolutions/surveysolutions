@@ -22,6 +22,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
@@ -459,6 +460,11 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaireFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(), 
                 syncLogFactory ?? Mock.Of<IInterviewLogSummaryReader>(), 
                 brokenPackagesFactory ?? Mock.Of<IBrokenInterviewPackagesViewFactory>());
+        }
+
+        public IIdentifyingAnswerConverter IdentifyingAnswerConverter()
+        {
+            return new IdentifyingAnswerConverter();
         }
     }
 }

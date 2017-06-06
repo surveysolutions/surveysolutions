@@ -54,6 +54,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Documents
         public static string GetQuestionType(this IComposite entity, QuestionnaireDocument questionnaire) 
             => (entity as IVariable)?.Type.ToString()
             ?? (entity is IGroup ? "Roster" : null)
+            // use IQuestionTypeToCSharpTypeMapper for questions here 
             ?? (entity as IQuestion)?.GenerateQuestionTypeName(questionnaire).Replace("Tuple<decimal, string>[]", "TextList");
 
         public static string GenerateQuestionTypeName(this IQuestion question, QuestionnaireDocument questionnaire)
