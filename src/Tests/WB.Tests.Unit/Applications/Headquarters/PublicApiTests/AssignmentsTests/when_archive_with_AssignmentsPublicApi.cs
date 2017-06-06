@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         [Test]
         public void should_store_updated_archive_status()
         {
-            this.SetupAssignment(Create.Entity.Assignment(id: 1, capacity: 10));
+            this.SetupAssignment(Create.Entity.Assignment(id: 1, quantity: 10));
 
             this.controller.Archive(1);
 
@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         [Test]
         public void should_store_updated_unarchive_status()
         {
-            this.SetupAssignment(Create.Entity.Assignment(id: 1, capacity: 10));
+            this.SetupAssignment(Create.Entity.Assignment(id: 1, quantity: 10));
 
             this.controller.Unarchive(1);
 
