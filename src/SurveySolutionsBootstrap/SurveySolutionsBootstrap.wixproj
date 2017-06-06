@@ -6,9 +6,7 @@
     <ProductVersion>3.10</ProductVersion>
     <ProjectGuid>ab07cf13-d4cb-471a-81fd-ab9fa0b2a05c</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputType>Bundle</OutputType>
-    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
-    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <OutputType>Bundle</OutputType>    
     <Name>SurveySolutionsBootstrap</Name>
     <SurveySolutionsVersion Condition=" '$(SurveySolutionsVersion)' == '' ">1.1.0.0</SurveySolutionsVersion>
     <OutputName>SurveySolutions.$(SurveySolutionsVersion)</OutputName>
@@ -69,9 +67,10 @@
     <Content Include="img\logo-50.png" />
     <Content Include="redist\NDP462-KB3151802-Web.exe" />
   </ItemGroup>
-  <Import Project="$(WixTargetsPath)" Condition=" Exists('$(WixTargetsPath)') " />
-  <Target Name="EnsureWixToolsetInstalled" Condition=" !Exists('$(WixTargetsPath)') ">
-    <Error Text="The WiX Toolset v3 build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />
+  <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
+  <Target Name="EnsureWixToolsetInstalled" Condition=" '$(WixTargetsImported)' != 'true' ">
+    <Error Text="The WiX Toolset v3.11 (or newer) build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />
   </Target>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.

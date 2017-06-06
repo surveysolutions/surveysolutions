@@ -7,9 +7,7 @@
     <ProjectGuid>c575970b-d09a-4c43-95b8-0867a617ddb8</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
     <OutputName>SurveySolutions</OutputName>
-    <OutputType>Package</OutputType>
-    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
-    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <OutputType>Package</OutputType>    
     <SurveySolutionsVersion Condition=" '$(SurveySolutionsVersion)' == '' ">1.1.0.0</SurveySolutionsVersion>
     <HarvestDir Condition=" '$(HarvestDir)' == '' ">harvest</HarvestDir>
     <HarvestDirectory Condition=" '$(HarvestDirectory)' == '' ">harvest</HarvestDirectory>
@@ -84,9 +82,10 @@
   <ItemGroup>
     <Folder Include="img\" />
   </ItemGroup>
-  <Import Project="$(WixTargetsPath)" Condition=" Exists('$(WixTargetsPath)') " />
-  <Target Name="EnsureWixToolsetInstalled" Condition=" !Exists('$(WixTargetsPath)') ">
-    <Error Text="The WiX Toolset build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />
+  <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
+  <Target Name="EnsureWixToolsetInstalled" Condition=" '$(WixTargetsImported)' != 'true' ">
+    <Error Text="The WiX Toolset v3.11 (or newer) build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />
   </Target>
   <Target Name="BeforeBuild">
     <HeatDirectory OutputFile="$(ProjectDir)\ProductFiles.wxs" Directory="$(HarvestDirectory)" ComponentGroupName="ProductFilesComponentGroup" DirectoryRefId="INSTALLSITEFOLDER" AutogenerateGuids="true" PreprocessorVariable="var.HarvestDir" SuppressRegistry="true" SuppressRootDirectory="true" ToolPath="$(WixToolPath)" NoLogo="true" />
