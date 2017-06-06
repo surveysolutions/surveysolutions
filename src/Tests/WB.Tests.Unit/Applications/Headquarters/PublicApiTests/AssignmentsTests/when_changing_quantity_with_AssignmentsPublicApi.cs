@@ -8,7 +8,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTests
 {
-    public class when_change_capacity_with_AssignmentsPublicApi : BaseAssignmentsControllerTest
+    public class when_changing_quantity_with_AssignmentsPublicApi : BaseAssignmentsControllerTest
     {
         [Test]
         public void should_return_404_for_non_existing_assignment()
@@ -20,9 +20,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         }
         
         [Test]
-        public void should_store_updated_capacity()
+        public void should_store_updated_quantity()
         {
-            this.SetupAssignment(Create.Entity.Assignment(id: 1, capacity: 10));
+            this.SetupAssignment(Create.Entity.Assignment(id: 1, quantity: 10));
 
             this.controller.ChangeQuantity(1, 30);
 
