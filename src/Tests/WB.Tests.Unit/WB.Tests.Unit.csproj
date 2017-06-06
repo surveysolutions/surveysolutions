@@ -474,7 +474,7 @@
     <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\BaseAssignmentsControllerTest.cs" />
     <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\AssignmentsPublicApiMapProfileSpecification.cs" />
     <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_assign_new_user_with_AssignmentsPublicApi.cs" />
-    <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_change_capacity_with_AssignmentsPublicApi.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_changing_quantity_with_AssignmentsPublicApi.cs" />
     <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_create_assignment_with_AssignmentsPublicApi.cs" />
     <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_map_assignment_to_assignmentDetails.cs" />
     <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_map_assignment_to_preloadedDataByFile.cs" />
