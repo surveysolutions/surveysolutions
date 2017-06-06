@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+    </style>
+    
     <style name="Area_Screen_Button">
         <item name="android:background">@drawable/screen_button</item>
         <item name="android:layout_height">wrap_content</item>
