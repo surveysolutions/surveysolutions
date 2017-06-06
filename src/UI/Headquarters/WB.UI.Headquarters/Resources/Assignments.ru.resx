@@ -132,13 +132,10 @@
   <data name="AssignmentsSelected" xml:space="preserve">
     <value>{0} Задач выбрано </value>
   </data>
-  <data name="Capacity" xml:space="preserve">
-    <value>Количество</value>
-  </data>
-  <data name="CapacityExplanation" xml:space="preserve">
+  <data name="QuantityExplanation" xml:space="preserve">
     <value>Изменение количества интервью, которые будут созданы согласно этой задаче</value>
   </data>
-  <data name="ChangeCapacityModalTitle" xml:space="preserve">
+  <data name="ChangeQuantityModalTitle" xml:space="preserve">
     <value>Редактировать количество интервью для задачи {0}</value>
     <comment>{0} - id of the assignment</comment>
   </data>
@@ -153,6 +150,9 @@
   </data>
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
     <value>{0} Задач будет изменено</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Количество</value>
   </data>
   <data name="SelectResponsible" xml:space="preserve">
     <value>Выбор ответственного</value>

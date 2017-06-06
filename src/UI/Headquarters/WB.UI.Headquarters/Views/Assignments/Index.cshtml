@@ -65,10 +65,10 @@
                     title: "@Assignments.InterviewsCount"
                 },
                 {
-                    data: "capacity",
-                    name: "Capacity",
+                    data: "quantity",
+                    name: "Quantity",
                     "class": "type-numeric",
-                    title: "@Assignments.Capacity",
+                    title: "@Assignments.Quantity",
                     orderable: true,
                     searchable: false,
                     "defaultContent": "<span>@Assignments.Unlimited</span>"
@@ -134,7 +134,7 @@
                     showArchive: false,
                     newResponsibleId: null,
                     editedRowId: null,
-                    editedCapacity: null,
+                    editedQuantity: null,
                     questionnaireApiUrl: "@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesCombobox"})",
                     responsibleApiUrl: "@(Model.IsSupervisor ? Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"}) :
                                                                Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"}))"
@@ -237,23 +237,23 @@
                 },
                 cellClicked: function(columnName, rowId, cellData) {
                     var isHq = @Model.IsHeadquarter.ToString().ToLower();
-                    if (columnName === 'Capacity' && isHq && !this.showArchive) {
+                    if (columnName === 'Quantity' && isHq && !this.showArchive) {
                         this.editedRowId = rowId;
-                        this.editedCapacity = cellData;
-                        $('#editCapacityModal').modal('show');
+                        this.editedQuantity = cellData;
+                        $('#editQuantityModal').modal('show');
                     }
                 },
-                updateCapacity: function() {
+                updateQuantity: function() {
                     var self = this;
                     this.$validator.validateAll().then(function() {
-                        var patchCapacityUrl = assignmentsEndpoint + "/" + self.editedRowId + "/SetCapacity";
-                        self.$http.patch(patchCapacityUrl,
+                        var patchQuantityUrl = assignmentsEndpoint + "/" + self.editedRowId + "/SetQuantity";
+                        self.$http.patch(patchQuantityUrl,
                                 {
-                                    capacity: self.editedCapacity
+                                    quantity: self.editedQuantity
                                 })
                             .then(function() {
-                                $('#editCapacityModal').modal('hide');
-                                self.editedCapacity = self.editedRowId = null;
+                                $('#editQuantityModal').modal('hide');
+                                self.editedQuantity = self.editedRowId = null;
                                 self.reloadTable();
                             });
                     });
@@ -286,7 +286,7 @@
                 $("footer").addClass("footer-adaptive");
 
                 if (this.$route.query.showArchive != undefined) {
-                    this.showArchive = this.$route.query.showArchive;
+                    this.showArchive = this.$route.query.showArchive === "true";
                 }
 
                 self.loadQuestionnaireIdByName(function(questionnaireId) {
@@ -431,33 +431,33 @@
             </div>
         </div>
 
-        <div class="modal fade" id="editCapacityModal" tabindex="-1" role="dialog">
+        <div class="modal fade" id="editQuantityModal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
-                        <h3>@string.Format(Assignments.ChangeCapacityModalTitle, "{{editedRowId}}")</h3>
+                        <h3>@string.Format(Assignments.ChangeQuantityModalTitle, "{{editedRowId}}")</h3>
                     </div>
                     <div class="modal-body">
                         <p>
-                            @Assignments.CapacityExplanation
+                            @Assignments.QuantityExplanation
                         </p>
                         <form onsubmit="return false;">
-                            <div class="form-group" v-bind:class="{'has-error': errors.has('editedCapacity')}">
-                                <label class="control-label" for="newCapacity">@Assignments.Capacity</label>
+                            <div class="form-group" v-bind:class="{'has-error': errors.has('editedQuantity')}">
+                                <label class="control-label" for="newQuantity">@Assignments.Quantity</label>
                                 <input type="text" class="form-control"
-                                       v-model.trim="editedCapacity"
-                                       name="editedCapacity"
+                                       v-model.trim="editedQuantity"
+                                       name="editedQuantity"
                                        v-validate="'numeric|min_value:1'"
                                        maxlength="9"
                                        autocomplete="off"
-                                       v-on:keyup.enter="updateCapacity"
-                                       id="newCapacity"
+                                       v-on:keyup.enter="updateQuantity"
+                                       id="newQuantity"
                                        placeholder="@Assignments.Unlimited">
                             </div>
                         </form>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" v-on:click="updateCapacity">@Common.Save</button>
+                            <button type="button" class="btn btn-primary" v-on:click="updateQuantity">@Common.Save</button>
                             <button type="button" class="btn btn-link" data-dismiss="modal">@Common.Cancel</button>
                         </div>
                     </div>
@@ -481,9 +481,9 @@
     var app = new Vue({ router }).$mount('#app');
 
     window.onload = function() {
-        $('#editCapacityModal').on('shown.bs.modal',
+        $('#editQuantityModal').on('shown.bs.modal',
             function() {
-                $('#newCapacity').focus();
+                $('#newQuantity').focus();
             });
     }
 </script>

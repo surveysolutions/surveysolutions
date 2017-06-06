@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                     CreatedAtUtc = x.CreatedAtUtc,
                     ResponsibleId = x.ResponsibleId,
                     UpdatedAtUtc = x.UpdatedAtUtc,
-                    Capacity = x.Capacity,
+                    Quantity = x.Quantity,
                     InterviewsCount = x.InterviewSummaries.Count,
                     Id = x.Id,
                     Archived = x.Archived,
