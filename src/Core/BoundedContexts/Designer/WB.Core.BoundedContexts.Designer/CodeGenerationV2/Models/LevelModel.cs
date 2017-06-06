@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
                 {
                     Id = variable.PublicKey,
                     Variable = questionnaire.GetVariable(variable),
-                    TypeName = questionTypeMapper.GetVariablesCSharpType(variable.Type),
+                    TypeName = questionTypeMapper.GetVariableType(variable.Type),
                     RosterScope = rosterScope
                 });
             }
@@ -83,7 +83,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
                 {
                     Id = question.PublicKey,
                     Variable = questionnaire.GetVariable(question),
-                    TypeName = questionTypeMapper.GetType(question, questionnaire),
+                    TypeName = questionTypeMapper.GetQuestionType(question, questionnaire),
                     RosterScope = rosterScope
                 });
             }

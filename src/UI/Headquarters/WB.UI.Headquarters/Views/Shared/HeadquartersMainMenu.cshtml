@@ -31,7 +31,15 @@
             @Html.MainMenuItem("UserBatchUploads", "BatchUserUpload", @MainMenu.UserBatchUpload, MenuItem.UserBatchUpload)
         </ul>
     </li>
-    @Html.MainMenuItem("Index", "SurveySetup", @MainMenu.SurveySetup, MenuItem.Questionnaires)
+    <li class="dropdown  @(page == MenuItem.Questionnaires || page == MenuItem.Assignments ? "active" : "")">
+        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.SurveySetup">
+            @MainMenu.SurveySetup <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            @Html.MainMenuItem("Index", "SurveySetup", @MainMenu.Questionnaires, MenuItem.Questionnaires)
+            @Html.MainMenuItem("Index", "Assignments", @MainMenu.Assignments, MenuItem.Assignments)
+        </ul>
+    </li>
     @if (!isCurrentUserObserver)
     {
         @Html.MainMenuItem("Index", "DataExport", @MainMenu.DataExport, MenuItem.DataExport)

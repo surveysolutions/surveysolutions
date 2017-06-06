@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
 {
     public class QuestionTypeToCSharpTypeMapper : IQuestionTypeToCSharpTypeMapper
     {
-        public string GetType(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
+        public string GetQuestionType(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
         {
             switch (question.QuestionType)
             {
@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
             }
         }
 
-        public string GetVariablesCSharpType(VariableType variableType)
+        public string GetVariableType(VariableType variableType)
         {
             switch (variableType)
             {

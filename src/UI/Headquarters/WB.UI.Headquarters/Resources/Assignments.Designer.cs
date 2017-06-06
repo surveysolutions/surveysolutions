@@ -106,29 +106,11 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Capacity.
+        ///   Looks up a localized string similar to Edit quantity for assignment {0}.
         /// </summary>
-        public static string Capacity {
+        public static string ChangeQuantityModalTitle {
             get {
-                return ResourceManager.GetString("Capacity", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You can set number of interviews that should be created from this assignment.
-        /// </summary>
-        public static string CapacityExplanation {
-            get {
-                return ResourceManager.GetString("CapacityExplanation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Edit capacity for assignment {0}.
-        /// </summary>
-        public static string ChangeCapacityModalTitle {
-            get {
-                return ResourceManager.GetString("ChangeCapacityModalTitle", resourceCulture);
+                return ResourceManager.GetString("ChangeQuantityModalTitle", resourceCulture);
             }
         }
         
@@ -165,6 +147,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string NumberOfAssignmentsAffected {
             get {
                 return ResourceManager.GetString("NumberOfAssignmentsAffected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quantity.
+        /// </summary>
+        public static string Quantity {
+            get {
+                return ResourceManager.GetString("Quantity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can set number of interviews that should be created from this assignment.
+        /// </summary>
+        public static string QuantityExplanation {
+            get {
+                return ResourceManager.GetString("QuantityExplanation", resourceCulture);
             }
         }
         

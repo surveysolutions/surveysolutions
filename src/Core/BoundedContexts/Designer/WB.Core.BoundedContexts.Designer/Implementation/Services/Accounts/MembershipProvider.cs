@@ -225,7 +225,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts
 
         public override bool DeleteUser(string username, bool deleteAllRelatedData)
         {
-            return this.AccountRepository.Delete(username, deleteAllRelatedData);
+            return this.AccountRepository.Delete(username);
         }
 
         public override MembershipUserCollection FindUsersByEmail(
@@ -342,9 +342,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts
             return this.CloneUser(user);
         }
 
-        public override MembershipUser GetUser(string username, bool userIsOnline)
+        public override MembershipUser GetUser(string userNameOrEmail, bool userIsOnline)
         {
-            IMembershipAccount user = this.AccountRepository.GetByNameOrEmail(username);
+            IMembershipAccount user = this.AccountRepository.GetByNameOrEmail(userNameOrEmail);
             if (user == null)
             {
                 return null;
@@ -449,9 +449,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts
             this.AccountRepository.Update(account);
         }
 
-        public override bool ValidateUser(string username, string password)
+        public override bool ValidateUser(string userNameOrEmail, string password)
         {
-            IMembershipAccount account = this.AccountRepository.GetByNameOrEmail(username);
+            IMembershipAccount account = this.AccountRepository.GetByNameOrEmail(userNameOrEmail);
             if (account == null)
             {
                 return false;

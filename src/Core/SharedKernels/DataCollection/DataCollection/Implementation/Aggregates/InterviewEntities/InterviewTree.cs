@@ -536,6 +536,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         void Enable();
 
         IInterviewTreeNode Clone();
+        void Accept(IInterviewNodesUpdater updater);
     }
 
     public interface ISubstitutable
@@ -597,6 +598,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void Enable() => this.isDisabled = false;
 
         public abstract IInterviewTreeNode Clone();
+        public abstract void Accept(IInterviewNodesUpdater updater);
     }
 
     public enum QuestionnaireReferenceType

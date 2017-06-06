@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.Code.CommandTransformation;
@@ -246,6 +247,25 @@ namespace WB.Tests.Abc.TestFactories
                 interviewId: synchronizationDto.Id,
                 userId: userId,
                 sycnhronizedInterview: synchronizationDto);
+        }
+
+        public CreateInterviewOnClientCommand CreateInterviewOnClientCommand(Guid? interviewId = null,
+            Guid? userId = null,
+            QuestionnaireIdentity questionnaireIdentity = null,
+            DateTime? answersTime = null, 
+            Guid? supervisorId = null,
+            InterviewKey interviewKey = null,
+            int? assignmentId = null,
+            IReadOnlyDictionary<Guid, AbstractAnswer> answersToIdentifyingQuestions = null)
+        {
+            return new CreateInterviewOnClientCommand(interviewId ?? Guid.NewGuid(),
+                userId ?? Guid.NewGuid(), 
+                questionnaireIdentity ?? new QuestionnaireIdentity(Guid.NewGuid(), 1), 
+                answersTime ?? DateTime.UtcNow,
+                supervisorId ?? Guid.NewGuid(),
+                interviewKey, 
+                assignmentId, 
+                answersToIdentifyingQuestions ?? new Dictionary<Guid, AbstractAnswer>());
         }
     }
 }

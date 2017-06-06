@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public string Value { get; }
 
-        public static TextAnswer FromString(string value) => value != null ? new TextAnswer(value) : null;
+        public static TextAnswer FromString(string value) => value != null ? new TextAnswer(value.Trim()) : null;
 
         public override string ToString() => Value;
     }
@@ -167,7 +167,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public static TextListAnswer FromTupleArray(Tuple<decimal, string>[] tupleArray)
             => tupleArray == null ? null : new TextListAnswer(
-                tupleArray.Select(tuple => new TextListAnswerRow(tuple.Item1, tuple.Item2)));
+                tupleArray.Select(tuple => new TextListAnswerRow(tuple.Item1, tuple.Item2.Trim())));
         
         public override string ToString() => string.Join(", ", Rows.Select(x => x.Text));
     }
