@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
 
             this.controller.ChangeCapacity(1, 30);
 
-            this.assignmentsStorage.Verify(x => x.Store(It.Is<Assignment>(a => a.Capacity == 30), 1), Times.Once);
+            this.assignmentsStorage.Verify(x => x.Store(It.Is<Assignment>(a => a.Quantity == 30), 1), Times.Once);
         }
     }
 }

@@ -129,13 +129,13 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPatch]
-        [Route("{id:int}/SetCapacity")]
+        [Route("{id:int}/SetQuantity")]
         [Authorize(Roles = "Administrator, Headquarter")]
         [ObserverNotAllowedApi]
-        public IHttpActionResult SetCapacity(int id, [FromBody] UpdateAssignmentRequest request)
+        public IHttpActionResult SetQuantity(int id, [FromBody] UpdateAssignmentRequest request)
         {
             var assignment = this.assignmentsStorage.GetById(id);
-            assignment.UpdateCapacity(request.Capacity);
+            assignment.UpdateQuantity(request.Quantity);
             return this.Ok();
         }
 
@@ -182,7 +182,7 @@ namespace WB.UI.Headquarters.API
 
         public class UpdateAssignmentRequest
         {
-            public int? Capacity { get; set; }
+            public int? Quantity { get; set; }
         }
 
         public class AssignRequest
