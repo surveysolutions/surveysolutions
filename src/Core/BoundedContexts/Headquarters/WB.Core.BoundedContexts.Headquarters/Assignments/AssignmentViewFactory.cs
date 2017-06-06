@@ -39,8 +39,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 var items = this.ApplyFilter(input, _);
                 items = this.DefineOrderBy(items, input);
 
-                var ids = items.Skip(input.Limit.Value)
-                    .Take(input.Offset.Value)
+                var ids = items.Skip(input.Offset.Value)
+                    .Take(input.Limit.Value)
                     .Select(x => x.Id)
                     .ToList();
 
