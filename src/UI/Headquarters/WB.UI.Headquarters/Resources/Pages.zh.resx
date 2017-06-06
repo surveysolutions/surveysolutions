@@ -882,9 +882,6 @@
   <data name="Supervisors_UnarchiveSupervisorsConfirm" xml:space="preserve">
     <value>您想要继续吗？</value>
   </data>
-  <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
-    <value>来自{1}个负责人的{0}个访谈</value>
-  </data>
   <data name="SurveysAndStatuses_InterviewerTitle" xml:space="preserve">
     <value>调查员（团队）</value>
   </data>
