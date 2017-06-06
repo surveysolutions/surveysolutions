@@ -460,5 +460,10 @@ namespace WB.Tests.Abc.TestFactories
                 syncLogFactory ?? Mock.Of<IInterviewLogSummaryReader>(), 
                 brokenPackagesFactory ?? Mock.Of<IBrokenInterviewPackagesViewFactory>());
         }
+
+        public IIdentifyingAnswerConverter IdentifyingAnswerConverter()
+        {
+            return new IdentifyingAnswerConverter();
+        }
     }
 }
