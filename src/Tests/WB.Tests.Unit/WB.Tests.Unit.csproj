@@ -473,11 +473,12 @@
     <Compile Include="Applications\Headquarters\InterviewerApiTests\CompanyLogoApiV2ControllerTests.cs" />
     <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\BaseAssignmentsControllerTest.cs" />
     <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\AssignmentsPublicApiMapProfileSpecification.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_archive_with_AssignmentsPublicApi.cs" />
     <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_assign_new_user_with_AssignmentsPublicApi.cs" />
     <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_changing_quantity_with_AssignmentsPublicApi.cs" />
     <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_create_assignment_with_AssignmentsPublicApi.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_list_assignments_with_AssignmentsPublicApi.cs" />
     <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_map_assignment_to_assignmentDetails.cs" />
-    <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_map_assignment_to_preloadedDataByFile.cs" />
     <Compile Include="Applications\Headquarters\QuestionnaireImportServiceTests.cs" />
     <Compile Include="Applications\Headquarters\ServicesTests\InterviewImportServiceTests\InterviewImportServiceTestsContext.cs" />
     <Compile Include="Applications\Headquarters\ServicesTests\InterviewImportServiceTests\when_import_interview_and_csv_file_parser_returns_null.cs" />

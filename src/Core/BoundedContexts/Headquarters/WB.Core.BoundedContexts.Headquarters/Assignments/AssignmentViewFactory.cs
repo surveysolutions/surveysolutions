@@ -30,11 +30,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         {
             var assignments = this.assignmentsStorage.Query(_ =>
             {
+                if (input.Limit == null && input.Offset == null)
+                {
+                    input.Limit = input.PageSize;
+                    input.Offset = (input.Page - 1) * input.PageSize;
+                }
+
                 var items = this.ApplyFilter(input, _);
                 items = this.DefineOrderBy(items, input);
 
-                var ids = items.Skip((input.Page - 1) * input.PageSize)
-                    .Take(input.PageSize)
+                var ids = items.Skip(input.Limit.Value)
+                    .Take(input.Offset.Value)
                     .Select(x => x.Id)
                     .ToList();
 
