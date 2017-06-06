@@ -565,8 +565,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     statistics.NewAssignmentsCount += 1;
                 }
 
-                local.Capacity = remote.Capacity;
                 local.Quantity = remote.Quantity;
+                local.InterviewsCount = remote.InterviewsCount;
 
                 this.assignmentsRepository.Store(local);
             }

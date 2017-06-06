@@ -473,11 +473,12 @@
     <Compile Include="Applications\Headquarters\InterviewerApiTests\CompanyLogoApiV2ControllerTests.cs" />
     <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\BaseAssignmentsControllerTest.cs" />
     <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\AssignmentsPublicApiMapProfileSpecification.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_archive_with_AssignmentsPublicApi.cs" />
     <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_assign_new_user_with_AssignmentsPublicApi.cs" />
-    <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_change_capacity_with_AssignmentsPublicApi.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_changing_quantity_with_AssignmentsPublicApi.cs" />
     <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_create_assignment_with_AssignmentsPublicApi.cs" />
+    <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_list_assignments_with_AssignmentsPublicApi.cs" />
     <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_map_assignment_to_assignmentDetails.cs" />
-    <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\when_map_assignment_to_preloadedDataByFile.cs" />
     <Compile Include="Applications\Headquarters\QuestionnaireImportServiceTests.cs" />
     <Compile Include="Applications\Headquarters\ServicesTests\InterviewImportServiceTests\InterviewImportServiceTestsContext.cs" />
     <Compile Include="Applications\Headquarters\ServicesTests\InterviewImportServiceTests\when_import_interview_and_csv_file_parser_returns_null.cs" />
@@ -562,6 +563,7 @@
     <Compile Include="Infrastructure\Native\EntitySerializerTests.cs" />
     <Compile Include="Infrastructure\PlainPostgresTransactionManagerTests.cs" />
     <Compile Include="Infrastructure\ZipArchiveUtilsTests.cs" />
+    <Compile Include="SharedKernels\DataCollection\IdentifyingAnswerConverterTests.cs" />
     <Compile Include="SharedKernels\DataCollection\IdentityTests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Answers\when_answering__NO__to_YesNo_roster_size_question_with_max_answers_set_to__1.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Answers\when_answering_numeric_question_that_triggers_long_roster.cs" />
@@ -695,6 +697,7 @@
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_creating_interview_export_view_by_interview_with_1_answered_timestamp_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\when_creating_InterviewQuestionView_for_Single_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\when_creating_InterviewQuestionView_for_Timestamp_question.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\InterviewSynchronizationDtoFactoryTests\InterviewSynchronizationDtoFactoryTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Merger\when_merging_questionnaire_and_interview_data_with_question_in_nested_roster_has_substitution_reference_on_parent_roster.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Merger\when_merging_questionnaire_and_interview_data_with_static_text_with_substitution_on_single_linked_referanced_to_list.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataServiceTests\when_CreatePreloadedDataDtoFromSampleData_and_some_anwers_is_null.cs" />

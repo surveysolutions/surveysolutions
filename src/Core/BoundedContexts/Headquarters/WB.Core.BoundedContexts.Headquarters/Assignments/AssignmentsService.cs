@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             x.Where(assigment =>
                 assigment.ResponsibleId == responsibleId
                 && !assigment.Archived
-                && (assigment.Capacity == null || assigment.InterviewSummaries.Count < assigment.Capacity))
+                && (assigment.Quantity == null || assigment.InterviewSummaries.Count < assigment.Quantity))
             .ToList());
         }
     }

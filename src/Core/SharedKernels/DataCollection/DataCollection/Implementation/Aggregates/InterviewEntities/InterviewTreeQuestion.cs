@@ -549,6 +549,39 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return clonedQuestion;
         }
 
+        public override void Accept(IInterviewNodesUpdater updater)
+        {
+            updater.UpdateEnablement(this);
+
+            if (this.IsSingleFixedOption)
+            {
+                updater.UpdateSingleOptionQuestion(this);
+            }
+            else if (this.IsMultiFixedOption)
+            {
+                updater.UpdateMultiOptionQuestion(this);
+            }
+            else if (this.IsYesNo)
+            {
+                updater.UpdateYesNoQuestion(this);
+            }
+            else if (this.IsLinked)
+            {
+                updater.UpdateLinkedQuestion(this);
+            }
+            else if (this.IsLinkedToListQuestion)
+            {
+                updater.UpdateLinkedToListQuestion(this);
+            }
+
+            if (this.IsCascading) // is IsSingleFixedOption too
+            {
+                updater.UpdateCascadingQuestion(this);
+            }
+
+            updater.UpdateValidations(this);
+        }
+
         public void ReplaceSubstitutions()
         {
             this.Title.ReplaceSubstitutions();

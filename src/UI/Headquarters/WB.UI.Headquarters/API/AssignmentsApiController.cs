@@ -3,19 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
-using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api;
-using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API
 {
@@ -129,13 +126,13 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPatch]
-        [Route("{id:int}/SetCapacity")]
+        [Route("{id:int}/SetQuantity")]
         [Authorize(Roles = "Administrator, Headquarter")]
         [ObserverNotAllowedApi]
-        public IHttpActionResult SetCapacity(int id, [FromBody] UpdateAssignmentRequest request)
+        public IHttpActionResult SetQuantity(int id, [FromBody] UpdateAssignmentRequest request)
         {
             var assignment = this.assignmentsStorage.GetById(id);
-            assignment.UpdateCapacity(request.Capacity);
+            assignment.UpdateQuantity(request.Quantity);
             return this.Ok();
         }
 
@@ -154,7 +151,7 @@ namespace WB.UI.Headquarters.API
                 new QuestionnaireIdentity(request.QuestionnaireId, request.QuestionnaireVersion);
 
             var assignment = new Assignment(questionnaireIdentity,
-                request.SupervisorId, request.Capacity);
+                request.SupervisorId, request.Quantity);
 
             var untypedQuestionAnswers =
                 JsonConvert.DeserializeObject<List<UntypedQuestionAnswer>>(request.AnswersToFeaturedQuestions);
@@ -177,12 +174,12 @@ namespace WB.UI.Headquarters.API
             public long QuestionnaireVersion { get; set; }
             public Guid SupervisorId { get; set; }
             public string AnswersToFeaturedQuestions { get; set; }
-            public int? Capacity { get; set; }
+            public int? Quantity { get; set; }
         }
 
         public class UpdateAssignmentRequest
         {
-            public int? Capacity { get; set; }
+            public int? Quantity { get; set; }
         }
 
         public class AssignRequest

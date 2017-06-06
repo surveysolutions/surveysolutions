@@ -15,10 +15,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.UpdatedAtUtc = DateTime.UtcNow;
         }
 
-        public Assignment(QuestionnaireIdentity questionnaireId, Guid responsibleId, int? capacity) : this()
+        public Assignment(QuestionnaireIdentity questionnaireId, Guid responsibleId, int? quantity) : this()
         {
             this.ResponsibleId = responsibleId;
-            this.Capacity = capacity;
+            this.Quantity = quantity;
             this.QuestionnaireId = questionnaireId;
         }
 
@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual ReadonlyUser Responsible { get; protected set; }
 
-        public virtual int? Capacity { get; protected set; }
+        public virtual int? Quantity { get; protected set; }
                 
         public virtual bool Archived { get; protected set; }
 
@@ -48,9 +48,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.UpdatedAtUtc = DateTime.UtcNow;
         }
 
-        public virtual void UpdateCapacity(int? capacity)
+        public virtual void UpdateQuantity(int? quantity)
         {
-            this.Capacity = capacity;
+            this.Quantity = quantity;
             this.UpdatedAtUtc = DateTime.UtcNow;
         }
         

@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
 namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 {
-    public class TesterPlainInterviewFileStorage : IPlainInterviewFileStorage
+    public class TesterPlainInterviewFileStorage : IPlainInterviewFileStorage, IPlainFileCleaner
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string basePath;
@@ -69,7 +69,24 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 
         private string GetPathToInterviewDirectory()
         {
-            return this.fileSystemAccessor.CombinePath(this.basePath, "TempInterviewData"); ;
+            return this.fileSystemAccessor.CombinePath(this.basePath, "TempInterviewData");
+        }
+
+        public void Clear()
+        {
+            var directoryPath = this.GetPathToInterviewDirectory();
+
+            if (!this.fileSystemAccessor.IsDirectoryExists(directoryPath))
+                return;
+
+            var files = this.fileSystemAccessor.GetFilesInDirectory(directoryPath);
+            var directories = this.fileSystemAccessor.GetDirectoriesInDirectory(directoryPath);
+
+            foreach (var file in files)
+                this.fileSystemAccessor.DeleteFile(file);
+
+            foreach (var directory in directories)
+                this.fileSystemAccessor.DeleteDirectory(directory);
         }
     }
 }

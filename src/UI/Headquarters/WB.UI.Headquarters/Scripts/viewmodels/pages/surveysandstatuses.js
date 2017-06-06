@@ -17,7 +17,7 @@
     self.TotalInterviewCount = ko.observable(0);
     self.TotalResponsibleCount = ko.observable(0);
     self.StatisticsMessage = ko.computed(function () {
-        return statisticsMessage.replace('{0}', self.TotalInterviewCount()).replace('{1}', self.TotalResponsibleCount());
+        return statisticsMessage.replace('{0}', self.TotalInterviewCount());
     }, this);
 
     self.GetFilterMethod = function () {

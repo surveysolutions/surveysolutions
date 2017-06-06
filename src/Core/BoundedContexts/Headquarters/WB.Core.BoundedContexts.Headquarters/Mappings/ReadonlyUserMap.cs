@@ -23,6 +23,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                 oto.Cascade(Cascade.None);
                 oto.Column("\"UserProfileId\"");
             });
+            this.Set(x => x.RoleIds, map =>
+            {
+                map.Table("userroles");
+                map.Schema("users");
+                map.Cascade(Cascade.None);
+                map.Key(k => k.Column("\"UserId\""));
+            }, m =>
+            {
+                m.Element(el => el.Column("\"RoleId\""));
+            });
         }
     }
 
