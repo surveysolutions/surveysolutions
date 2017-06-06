@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
 
@@ -43,6 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
 
             //assert
             Assert.That(result.ReadonlyQuestions.Count, Is.EqualTo(1));
-            Assert.That(result.ReadonlyQuestions.Single().Id, Is.EqualTo(questionId));        }
+            Assert.That(result.ReadonlyQuestions.Single().Id, Is.EqualTo(questionId));
+        }
     }
 }
