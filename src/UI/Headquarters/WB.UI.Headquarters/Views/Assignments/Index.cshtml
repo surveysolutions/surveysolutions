@@ -42,7 +42,13 @@
                     data: "responsible",
                     name: "Responsible.Name",
                     title: "@Common.Responsible",
-                    responsivePriority: 3
+                    responsivePriority: 3,
+                    render: function(data, type, row) {
+                        if (row.responsibleRole != null) {
+                            return '<span class="' + row.responsibleRole.toLowerCase() + '">' + data + ' </span>';
+                        }
+                        return data;
+                    }
                 },
                 {
                     data: "interviewsCount",
