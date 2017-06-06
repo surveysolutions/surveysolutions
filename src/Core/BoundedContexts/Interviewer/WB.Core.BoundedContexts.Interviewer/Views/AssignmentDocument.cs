@@ -25,9 +25,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         [PrimaryKey]
         public virtual string Id { get; set; }
 
-        public int? Capacity { get; set; }
+        public int? Quantity { get; set; }
 
-        public int Quantity { get; set; }
+        public int InterviewsCount { get; set; }
 
         public string QuestionnaireId { get; set; }
 
