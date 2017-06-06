@@ -145,6 +145,7 @@
     <Compile Include="Implementation\Entities\AssignmentApiView.cs" />
     <Compile Include="Implementation\Repositories\StatefulInterviewRepository.cs" />
     <Compile Include="Implementation\Services\IdentifyingAnswerConverter.cs" />
+    <Compile Include="Repositories\IPlainFileCleaner.cs" />
     <Compile Include="Repositories\IStatefulInterviewRepository.cs" />
     <Compile Include="Services\IIdentifyingAnswerConverter.cs" />
     <Compile Include="Services\ISubstitionTextFactory.cs" />
