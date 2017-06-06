@@ -1551,9 +1551,9 @@ namespace WB.Tests.Abc.TestFactories
             return new AssignmentApiViewBuilder(new AssignmentApiView
             {
                 Id = id ?? Guid.NewGuid().ToString(),
-                Capacity = capacity,
+                Quantity = capacity,
                 QuestionnaireId = questionnaireIdentity,
-                Quantity = quantity
+                InterviewsCount = quantity
             });
         }
 
@@ -1584,7 +1584,7 @@ namespace WB.Tests.Abc.TestFactories
         {
             var result = new Assignment();
             var asDynamic = result.AsDynamic();
-            asDynamic.Capacity = capacity ?? 0;
+            asDynamic.Quantity = capacity ?? 0;
             asDynamic.Id = id ?? 0;
             result.QuestionnaireId = questionnaireIdentity;
 
@@ -1620,8 +1620,8 @@ namespace WB.Tests.Abc.TestFactories
             return new AssignmentDocumentBuilder(new AssignmentDocument
             {
                 Id = id ?? Guid.NewGuid().ToString(),
-                Capacity = capacity,
-                Quantity = quantity,
+                Quantity = capacity,
+                InterviewsCount = quantity,
                 QuestionnaireId = questionnaireIdentity
             });
         }

@@ -41,7 +41,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         public int InterviewsCount { get; set; }
 
         [DataMember]
-        public int? Capacity { get; set; }
+        public int? Quantity { get; set; }
 
         [DataMember]
         public bool Archived { get; set; }
@@ -108,7 +108,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         /// Maximum number of allowed to create assignments
         /// </summary>
         [DataMember]
-        public int? Capacity { get; set; }
+        public int? Quantity { get; set; }
 
         /// <summary>
         /// QuestionnaireId for assignemnt

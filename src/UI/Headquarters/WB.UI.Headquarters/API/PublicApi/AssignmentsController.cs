@@ -140,7 +140,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound, $@"Questionnaire not found: {createItem?.QuestionnaireId}"));
             }
 
-            var assignment = new Assignment(questionnaireId, responsible.Id, createItem.Capacity);
+            var assignment = new Assignment(questionnaireId, responsible.Id, createItem.Quantity);
 
             try
             {
@@ -244,12 +244,12 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// Change assignments limit on created interviews
         /// </summary>
         /// <param name="id">Assignment id</param>
-        /// <param name="capacity">New limit on created interviews</param>
-        /// <response code="200">Assingment details with updated capacity</response>
+        /// <param name="quantity">New limit on created interviews</param>
+        /// <response code="200">Assingment details with updated quantity</response>
         /// <response code="404">Assignment not found</response>
         [HttpPatch]
-        [Route("{id:int}/changeCapacity")]
-        public AssignmentDetails ChangeCapacity(int id, [FromBody] int? capacity)
+        [Route("{id:int}/changeQuantity")]
+        public AssignmentDetails ChangeQuantity(int id, [FromBody] int? quantity)
         {
             var assignment = assignmentsStorage.GetById(id);
 
@@ -258,7 +258,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
 
-            assignment.UpdateQuantity(capacity);
+            assignment.UpdateQuantity(quantity);
 
             assignmentsStorage.Store(assignment, id);
 

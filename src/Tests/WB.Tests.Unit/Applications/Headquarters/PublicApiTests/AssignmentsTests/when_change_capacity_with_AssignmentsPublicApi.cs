@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             Assert.Throws(Is.TypeOf<HttpResponseException>()
                     .And.Property(nameof(HttpResponseException.Response))
                     .Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(HttpStatusCode.NotFound),
-                () => this.controller.ChangeCapacity(101, null));
+                () => this.controller.ChangeQuantity(101, null));
         }
         
         [Test]
@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         {
             this.SetupAssignment(Create.Entity.Assignment(id: 1, capacity: 10));
 
-            this.controller.ChangeCapacity(1, 30);
+            this.controller.ChangeQuantity(1, 30);
 
             this.assignmentsStorage.Verify(x => x.Store(It.Is<Assignment>(a => a.Quantity == 30), 1), Times.Once);
         }
