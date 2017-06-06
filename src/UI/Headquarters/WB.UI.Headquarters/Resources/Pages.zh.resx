@@ -891,9 +891,6 @@
   <data name="SurveysAndStatuses_Overview" xml:space="preserve">
     <value>调查和状态</value>
   </data>
-  <data name="SurveysAndStatuses_SupervisorStatisticsFormat" xml:space="preserve">
-    <value>来自{1}个负责人的{0}个访谈</value>
-  </data>
   <data name="SurveysAndStatuses_SupervisorTitle" xml:space="preserve">
     <value>督导员（团队）</value>
   </data>
