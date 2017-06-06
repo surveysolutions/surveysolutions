@@ -63,9 +63,8 @@ namespace WB.Core.BoundedContexts.Designer.Services.Accounts
         /// Delete a user from the database.
         /// </summary>
         /// <param name="username">Unique user name</param>
-        /// <param name="deleteAllRelatedData">Delete information from all other tables etc</param>
         /// <returns>true if was removed successfully; otherwise false.</returns>
-        bool Delete(string username, bool deleteAllRelatedData);
+        bool Delete(string username);
 
         /// <summary>
         /// Get number of users that are online
