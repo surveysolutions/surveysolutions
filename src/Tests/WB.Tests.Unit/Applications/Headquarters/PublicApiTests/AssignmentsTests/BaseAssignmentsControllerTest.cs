@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         protected Mock<ILogger> logger;
 
         [SetUp]
-        public void Setup()
+        public virtual void Setup()
         {
             this.PrepareMocks();
 
