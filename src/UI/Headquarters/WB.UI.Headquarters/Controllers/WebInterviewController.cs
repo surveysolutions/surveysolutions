@@ -263,7 +263,7 @@ namespace WB.UI.Headquarters.Controllers
                 return this.HttpNotFound();
             }
 
-            if (assignment.Archived || assignment.InterviewSummaries.Count >= assignment.Capacity)
+            if (assignment.Archived || assignment.InterviewSummaries.Count >= assignment.Quantity)
             {
                 throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
             }

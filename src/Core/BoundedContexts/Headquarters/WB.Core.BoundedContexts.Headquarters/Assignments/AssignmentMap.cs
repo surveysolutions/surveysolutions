@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             Id(x => x.Id, mapper => mapper.Generator(Generators.Identity));
             DynamicUpdate(true);
             Property(x => x.ResponsibleId);
-            Property(x => x.Capacity);
+            Property(x => x.Quantity);
             Property(x => x.Archived);
             Property(x => x.CreatedAtUtc);
             Property(x => x.UpdatedAtUtc);

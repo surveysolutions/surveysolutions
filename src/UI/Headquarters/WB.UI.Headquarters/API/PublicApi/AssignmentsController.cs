@@ -258,7 +258,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
 
-            assignment.UpdateCapacity(capacity);
+            assignment.UpdateQuantity(capacity);
 
             assignmentsStorage.Store(assignment, id);
 
