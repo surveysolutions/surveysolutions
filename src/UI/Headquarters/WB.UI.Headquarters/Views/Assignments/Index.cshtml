@@ -1,4 +1,5 @@
-﻿@model WB.UI.Headquarters.Controllers.AssignmentsFilters
+﻿@using Main.Core.Entities.SubEntities
+@model WB.UI.Headquarters.Controllers.AssignmentsFilters
 
 @{
     ViewBag.Title = Pages.Assignments_PageTitle;
@@ -13,6 +14,7 @@
 
     <script type="text/javascript">
         var assignmentsEndpoint = "@Url.Content("~/api/Assignments")";
+        var $profileUrl = '@Url.Action("Profile", "Interviewer")';
 
         var tableOptions = {
             rowId: "id",
@@ -43,11 +45,15 @@
                     name: "Responsible.Name",
                     title: "@Common.Responsible",
                     responsivePriority: 3,
-                    render: function(data, type, row) {
-                        if (row.responsibleRole != null) {
-                            return '<span class="' + row.responsibleRole.toLowerCase() + '">' + data + ' </span>';
+                    render: function (data, type, row) {
+                        var resultString = '<span class="' + row.responsibleRole.toLowerCase() + '">';
+                        if (row.responsibleRole === '@UserRoles.Interviewer.ToString()') {
+                            resultString += '<a href="' + $profileUrl + "/" + row.responsibleId + '">' + data + "</a>";
+                        } else {
+                            resultString += data;
                         }
-                        return data;
+                        resultString += '</span>';
+                        return resultString;
                     }
                 },
                 {
@@ -176,7 +182,7 @@
                                 this.questionnaireId.value.length);
                         queryString.version = this.questionnaireId.key.split("$")[1];
                     }
-                        
+
                     if (this.responsibleId)
                         queryString.responsible = this.responsibleId.value;
 
