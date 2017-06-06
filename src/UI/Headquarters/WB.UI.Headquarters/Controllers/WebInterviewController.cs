@@ -118,7 +118,7 @@ namespace WB.UI.Headquarters.Controllers
             var interviewId = Guid.NewGuid();
             var answersFromAssignment =
                 assignment.IdentifyingData.ToDictionary(x => x.QuestionId, 
-                                                        x => this.identifyingAnswerConverter.GetAbstractAnswer(questionnaire.GetQuestionType(x.QuestionId), x.Answer));
+                                                        x => this.identifyingAnswerConverter.GetAbstractAnswer(questionnaire, x.QuestionId, x.Answer));
 
             var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
                 interviewer.PublicKey, assignment.QuestionnaireId, DateTime.UtcNow,
