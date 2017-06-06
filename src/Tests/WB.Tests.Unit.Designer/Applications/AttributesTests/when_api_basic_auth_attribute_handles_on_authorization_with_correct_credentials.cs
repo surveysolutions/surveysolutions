@@ -21,6 +21,8 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
         [OneTimeSetUp]
         public void context()
         {
+            AssemblyContext.SetupServiceLocator();
+
             var membershipUserServiceMock = new Mock<IMembershipUserService>();
             var membershipWebUserMock = new Mock<IMembershipWebUser>();
             var membershipUserMock = new Mock<DesignerMembershipUser>();
@@ -28,7 +30,7 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
             membershipUserMock.Setup(x => x.IsLockedOut).Returns(false);
             membershipWebUserMock.Setup(x => x.MembershipUser).Returns(membershipUserMock.Object);
             membershipUserServiceMock.Setup(_ => _.WebUser).Returns(membershipWebUserMock.Object);
-
+            
             Mock.Get(ServiceLocator.Current).Setup(_ => _.GetInstance<IMembershipUserService>()).Returns(membershipUserServiceMock.Object);
             Setup.InstanceToMockedServiceLocator<IAccountRepository>(
                 Mock.Of<IAccountRepository>(x => x.GetByNameOrEmail(userName) == Mock.Of<IMembershipAccount>(a => a.UserName == userName)));
