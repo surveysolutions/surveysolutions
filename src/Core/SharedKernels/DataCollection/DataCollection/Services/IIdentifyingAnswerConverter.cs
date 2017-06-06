@@ -1,10 +1,12 @@
-﻿using Main.Core.Entities.SubEntities;
+﻿using System;
+using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
 namespace WB.Core.SharedKernels.DataCollection.Services
 {
     public interface IIdentifyingAnswerConverter
     {
-        AbstractAnswer GetAbstractAnswer(QuestionType questionType, string answer);
+        AbstractAnswer GetAbstractAnswer(IQuestionnaire questionnaire, Guid questionId, string answer);
     }
 }
