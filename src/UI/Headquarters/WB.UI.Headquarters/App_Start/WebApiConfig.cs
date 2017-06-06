@@ -1,8 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Net.Http.Headers;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
@@ -28,10 +26,6 @@ namespace WB.UI.Headquarters
             config.MapHttpAttributeRoutes(new TypedDirectRouteProvider());
 
             RegisterV2Api(config);
-
-            config.TypedRoute(@"api/interviewer/v2/devices/info", c => c.Action<DevicesApiV2Controller>(x => x.Info(Param.Any<DeviceInfoApiView>())));
-            config.TypedRoute(@"api/interviewer/v2/devices/statistics", c => c.Action<DevicesApiV2Controller>(x => x.Statistics(Param.Any<SyncStatisticsApiView>())));
-            config.TypedRoute(@"api/interviewer/v2/devices/exception", c => c.Action<DevicesApiV2Controller>(x => x.UnexpectedException(Param.Any<UnexpectedExceptionApiView>())));
 
             config.TypedRoute(@"api/interviewer", c => c.Action<InterviewerApiController>(x => x.Get()));
             config.TypedRoute(@"api/interviewer/latestversion", c => c.Action<InterviewerApiController>(x => x.GetLatestVersion()));
@@ -77,6 +71,10 @@ namespace WB.UI.Headquarters
 #pragma warning disable 4014
         private static void RegisterV2Api(HttpConfiguration config)
         {
+            config.TypedRoute(@"api/interviewer/v2/devices/info", c => c.Action<DevicesApiV2Controller>(x => x.Info(Param.Any<DeviceInfoApiView>())));
+            config.TypedRoute(@"api/interviewer/v2/devices/statistics", c => c.Action<DevicesApiV2Controller>(x => x.Statistics(Param.Any<SyncStatisticsApiView>())));
+            config.TypedRoute(@"api/interviewer/v2/devices/exception", c => c.Action<DevicesApiV2Controller>(x => x.UnexpectedException(Param.Any<UnexpectedExceptionApiView>())));
+
             config.TypedRoute("api/interviewer/v2/extended", c => c.Action<InterviewerApiV2Controller>(x => x.GetExtended()));
             config.TypedRoute("api/interviewer/v2/extended/latestversion", c => c.Action<InterviewerApiV2Controller>(x => x.GetLatestExtendedVersion()));
 
