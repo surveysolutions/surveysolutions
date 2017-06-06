@@ -48,9 +48,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.UpdatedAtUtc = DateTime.UtcNow;
         }
 
-        public virtual void UpdateQuantity(int? capacity)
+        public virtual void UpdateQuantity(int? quantity)
         {
-            this.Quantity = capacity;
+            this.Quantity = quantity;
             this.UpdatedAtUtc = DateTime.UtcNow;
         }
         
