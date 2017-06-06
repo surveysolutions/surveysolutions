@@ -8,19 +8,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class AssignmentDocument : IPlainStorageEntity
     {
-        [Ignore]
-        public List<IdentifyingAnswer> IdentifyingData
-        {
-            get
-            {
-                return string.IsNullOrWhiteSpace(this.IdentifyingDataValue)
-                    ? null
-                    : JsonConvert.DeserializeObject<List<IdentifyingAnswer>>(this.IdentifyingDataValue);
-            }
-            set { this.IdentifyingDataValue = JsonConvert.SerializeObject(value); }
-        }
+        [SQLite.Ignore]
+        public List<IdentifyingAnswer> IdentifyingData { get; set; }
 
-        public string IdentifyingDataValue { get; set; }
+        public string IdentifyingDataValue
+        {
+            get => JsonConvert.SerializeObject(IdentifyingData);
+
+            set => IdentifyingData = string.IsNullOrWhiteSpace(value)
+                ? new List<IdentifyingAnswer>()
+                : JsonConvert.DeserializeObject<List<IdentifyingAnswer>>(value);
+        }
 
         [PrimaryKey]
         public virtual string Id { get; set; }
