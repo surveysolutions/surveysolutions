@@ -10,10 +10,10 @@ namespace WB.UI.Headquarters.Models.Api
         {
             this.CreateMap<Assignment, AssignmentApiView>()
                 .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Id.ToString()))
-                .ForMember(x => x.Capacity, opts => opts.MapFrom(x => x.Quantity))
+                .ForMember(x => x.Quantity, opts => opts.MapFrom(x => x.Quantity))
                 .ForMember(x => x.QuestionnaireId, opts => opts.MapFrom(x => x.QuestionnaireId))
                 .ForMember(x => x.IdentifyingData, opts => opts.MapFrom(x => x.IdentifyingData))
-                .ForMember(x => x.Quantity, opts => opts.MapFrom(x => x.InterviewSummaries.Count));
+                .ForMember(x => x.InterviewsCount, opts => opts.MapFrom(x => x.InterviewSummaries.Count));
 
             this.CreateMap<IdentifyingAnswer, AssignmentApiView.IdentifyingAnswer>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.Answer))

@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
 
         [Test]
         public void should_map_capacity() =>
-            Assert.That(this.AssignmentDetails.Capacity, Is.EqualTo(this.Assignment.Quantity));
+            Assert.That(this.AssignmentDetails.Quantity, Is.EqualTo(this.Assignment.Quantity));
 
         [Test]
         public void should_map_CreatedAt() =>
