@@ -258,7 +258,7 @@
       <LastGenOutput>InterviewerUIResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\InterviewerUIResources.ru-RU.resx">
+    <EmbeddedResource Include="Properties\InterviewerUIResources.ru.resx">
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
