@@ -11,7 +11,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
         public void Because()
         {
            russianResourceFiles = TestEnvironment
-                .GetAllFilesFromSourceFolder(string.Empty, "*.ru-RU.resx")
+                .GetAllFilesFromSourceFolder(string.Empty, "*.ru.resx")
                 .Where(IsEnumeratorOrTesterOrInterviwerFile);
 
             englishResourceFiles = TestEnvironment
