@@ -10,7 +10,7 @@ using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 {
-    [Activity(WindowSoftInputMode = SoftInput.StateHidden, ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
+    [Activity(WindowSoftInputMode = SoftInput.StateHidden, Theme = "@style/AppTheme", ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public class AreaEditorActivity : BaseActivity<AreaEditorViewModel>
     {
         protected override int ViewResourceId => Resource.Layout.interview_area_editor;
