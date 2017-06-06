@@ -78,6 +78,12 @@
       <FixtureTestSelector>
         <FixtureName>WB.Tests.Integration.TeamInterviewsFactoryTests.when_getting_team_interviews</FixtureName>
       </FixtureTestSelector>
+      <FixtureTestSelector>
+        <FixtureName>WB.Tests.Integration.ResourcesTranslationTests.when_checking_that_translated_resources_have_same_string_format_elements_as_original</FixtureName>
+      </FixtureTestSelector>
+      <FixtureTestSelector>
+        <FixtureName>WB.Tests.Integration.ResourcesTranslationTests.when_checking_availability_of_resources_in_Russian_comparing_to_English</FixtureName>
+      </FixtureTestSelector>
     </IgnoredTests>
     <PreviouslyBuiltSuccessfully>True</PreviouslyBuiltSuccessfully>
     <RunPostBuildEvents>True</RunPostBuildEvents>
