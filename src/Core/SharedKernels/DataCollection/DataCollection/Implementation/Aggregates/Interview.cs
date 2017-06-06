@@ -2389,22 +2389,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
                 expressionStorage.Initialize(new InterviewStateForExpressions(changedInterviewTree, questionnaire, interviewPropertiesForExpressions));
 
-                var updater = new InterviewNodesUpdater(expressionStorage, questionnaire, removeLinkedAnswers);
-
-                var playOrder = questionnaire.GetExpressionsPlayOrder();
-
-                foreach (var entityId in playOrder)
+                using (var updater = new InterviewTreeUpdater(expressionStorage, questionnaire, removeLinkedAnswers))
                 {
-                    var entityIdentities = changedInterviewTree.FindEntity(entityId).Select(x => x.Identity).ToList();
-                    foreach (Identity entityIdentity in entityIdentities)
-                    {
-                        IInterviewTreeNode entity = changedInterviewTree.GetNodeByIdentity(entityIdentity);
+                    var playOrder = questionnaire.GetExpressionsPlayOrder();
 
-                        entity?.Accept(updater);
+                    foreach (var entityId in playOrder)
+                    {
+                        var entityIdentities = changedInterviewTree.FindEntity(entityId).Select(x => x.Identity)
+                            .ToList();
+                        foreach (Identity entityIdentity in entityIdentities)
+                        {
+                            IInterviewTreeNode entity = changedInterviewTree.GetNodeByIdentity(entityIdentity);
+
+                            entity?.Accept(updater);
+                        }
                     }
                 }
-
-                //this.UpdateRosterTitles(changedInterviewTree, questionnaire);
             }
             else
             {

@@ -1,14 +1,16 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
-    public interface IInterviewNodesUpdater
+    public interface IInterviewTreeUpdater
     {
         void UpdateEnablement(IInterviewTreeNode entity);
         void UpdateEnablement(InterviewTreeGroup entity);
@@ -26,7 +28,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         void UpdateValidations(InterviewTreeQuestion question);
     }
 
-    public class InterviewNodesUpdater : IInterviewNodesUpdater
+    public class InterviewTreeUpdater : IInterviewTreeUpdater, IDisposable
     {
         private readonly IInterviewExpressionStorage expressionStorage;
         private readonly IQuestionnaire questionnaire;
@@ -34,8 +36,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private readonly bool removeLinkedAnswers;
 
         readonly HashSet<Identity> disabledNodes = new HashSet<Identity>();
+        private readonly ConcurrentDictionary<Identity, IInterviewLevel> memoryCache = new ConcurrentDictionary<Identity, IInterviewLevel>();
 
-        public InterviewNodesUpdater(IInterviewExpressionStorage expressionStorage, IQuestionnaire questionnaire,
+        public InterviewTreeUpdater(IInterviewExpressionStorage expressionStorage, IQuestionnaire questionnaire,
             bool removeLinkedAnswers)
         {
             this.expressionStorage = expressionStorage;
@@ -258,8 +261,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 ? entity.Identity
                 : entity.Parents.OfType<InterviewTreeRoster>().LastOrDefault()?.Identity ?? this.questionnaireIdentity;
 
-            var level = this.expressionStorage.GetLevel(nearestRoster);
+            var level = this.GetFromCache(nearestRoster) ?? this.expressionStorage.GetLevel(nearestRoster);
+
+            if (level != null)
+            {
+                this.memoryCache[nearestRoster] = level;
+            }
+
             return level;
+        }
+
+        private IInterviewLevel GetFromCache(Identity nearestRoster)
+        {
+            IInterviewLevel cachedLevel;
+
+            bool foundInCache = this.memoryCache.TryGetValue(nearestRoster, out cachedLevel);
+            if (!foundInCache) return null;
+
+            return cachedLevel;
         }
 
         private static object GetVariableValue(Func<object> expression)
@@ -309,6 +328,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             {
                 return false;
             }
+        }
+
+        public void Dispose()
+        {
+            this.memoryCache.Clear();
+            this.disabledNodes.Clear();
         }
     }
 }

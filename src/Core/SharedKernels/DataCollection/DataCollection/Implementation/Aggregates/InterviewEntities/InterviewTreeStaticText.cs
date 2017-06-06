@@ -65,7 +65,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return clone;
         }
 
-        public override void Accept(IInterviewNodesUpdater updater)
+        public override void Accept(IInterviewTreeUpdater updater)
         {
             updater.UpdateEnablement(this);
             updater.UpdateValidations(this);
