@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.SharedKernels.Questionnaire.Documents
@@ -50,68 +46,6 @@ namespace WB.Core.SharedKernels.Questionnaire.Documents
             => (entity as IQuestion)?.StataExportCaption
             ?? (entity as IGroup)?.VariableName
             ?? (entity as IVariable)?.Name;
-
-        public static string GetQuestionType(this IComposite entity, QuestionnaireDocument questionnaire) 
-            => (entity as IVariable)?.Type.ToString()
-            ?? (entity is IGroup ? "Roster" : null)
-            // use IQuestionTypeToCSharpTypeMapper for questions here 
-            ?? (entity as IQuestion)?.GenerateQuestionTypeName(questionnaire).Replace("Tuple<decimal, string>[]", "TextList");
-
-        public static string GenerateQuestionTypeName(this IQuestion question, QuestionnaireDocument questionnaire)
-        {
-            switch (question.QuestionType)
-            {
-                case QuestionType.Text:
-                    return "string";
-
-                case QuestionType.AutoPropagate:
-                    return "long?";
-
-                case QuestionType.Numeric:
-                    return (question as NumericQuestion).IsInteger ? "long?" : "double?";
-
-                case QuestionType.QRBarcode:
-                    return "string";
-
-                case QuestionType.MultyOption:
-                    var multiOtion = question as MultyOptionsQuestion;
-                    if (multiOtion != null && multiOtion.YesNoView)
-                        return nameof(YesNoAnswers);
-
-                    if (question.LinkedToQuestionId == null && question.LinkedToRosterId == null)
-                        return "decimal[]";
-
-                    if (question.LinkedToQuestionId.HasValue && questionnaire.Find<ITextListQuestion>(question.LinkedToQuestionId.Value) != null)
-                    {
-                        return "decimal[]";
-                    }
-                    return "decimal[][]";
-
-                case QuestionType.DateTime:
-                    return "DateTime?";
-
-                case QuestionType.SingleOption:
-                    if (question.LinkedToQuestionId == null && question.LinkedToRosterId == null) return "decimal?";
-
-                    if (question.LinkedToQuestionId.HasValue && questionnaire.Find<ITextListQuestion>(question.LinkedToQuestionId.Value) != null)
-                    {
-                        return "decimal?";
-                    }
-
-                    return "decimal[]";
-                case QuestionType.TextList:
-                    return "Tuple<decimal, string>[]";
-
-                case QuestionType.GpsCoordinates:
-                    return "GeoLocation";
-
-                case QuestionType.Multimedia:
-                    return "string";
-
-                default:
-                    throw new ArgumentException("Unknown question type.");
-            }
-        }
 
         public static void SetVariable(this IQuestionnaireEntity entity, string variableName)
         {
