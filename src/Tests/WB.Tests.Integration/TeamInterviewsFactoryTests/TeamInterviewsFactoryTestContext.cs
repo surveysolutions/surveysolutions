@@ -29,8 +29,7 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
             featuredQuestionAnswersReader = new PostgreReadSideStorage<QuestionAnswer>(postgresTransactionManager, Mock.Of<ILogger>(), "Questionid");
 
             return new TeamInterviewsFactory(
-                reader ?? CreateInterviewSummaryRepository(),
-                featuredQuestionAnswersReader ?? CreateQuestionAnswerRepository());
+                reader ?? CreateInterviewSummaryRepository());
         }
         protected static PostgreReadSideStorage<InterviewSummary> CreateInterviewSummaryRepository()
         {

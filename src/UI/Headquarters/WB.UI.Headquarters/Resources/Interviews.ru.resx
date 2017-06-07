@@ -165,4 +165,7 @@
     <comment>Нет ответственного для некоторых интервью. Пожалуйста выберите ответственного.
 </comment>
   </data>
+  <data name="Assignment" xml:space="preserve">
+    <value>Задача</value>
+  </data>
 </root>
