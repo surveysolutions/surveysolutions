@@ -34,6 +34,7 @@ namespace WB.UI.Headquarters
             config.TypedRoute(@"api/interviewer/v2/devices/exception", c => c.Action<DevicesApiV2Controller>(x => x.UnexpectedException(Param.Any<UnexpectedExceptionApiView>())));
 
             config.TypedRoute(@"api/interviewer", c => c.Action<InterviewerApiController>(x => x.Get()));
+            config.TypedRoute(@"api/interviewer/patch/{deviceVersion}", c => c.Action<InterviewerApiController>(x => x.Patch(Param.Any<int>())));
             config.TypedRoute(@"api/interviewer/latestversion", c => c.Action<InterviewerApiController>(x => x.GetLatestVersion()));
             config.TypedRoute(@"api/interviewer/tabletInfo", c => c.Action<InterviewerApiController>(x => x.PostTabletInformation()));
             config.TypedRoute(@"api/interviewer/compatibility/{deviceid}/{deviceSyncProtocolVersion}",
