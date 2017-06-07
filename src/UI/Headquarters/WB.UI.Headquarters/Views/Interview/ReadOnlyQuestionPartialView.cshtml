@@ -54,9 +54,20 @@
         @Model.AnswerString
         break;
     case QuestionType.Area:
-    {
-        @Model.AnswerString
-    }
+        {
+            <div>
+                <iframe width="100%" height="250px" src='@Url.RouteUrl("Default", new {httproute = "", controller = "Interview", action = "InterviewAreaFrame", id = ViewData["InterviewId"], questionId = Model.Id})'></iframe>
+            
+                <p>
+                    <a  data-toggle="collapse" href="#collapseExample@(Model.Id)" aria-expanded="false" aria-controls="collapseExample">
+                        @Pages.InterviewDetails_MoreDetails
+                    </a>
+                </p>
+                <div class="collapse" id="collapseExample@(Model.Id)">
+                    @Model.AnswerString
+                </div>
+            </div>
+        }
         break;
     case QuestionType.GpsCoordinates:
         if (Model.Answer != null)

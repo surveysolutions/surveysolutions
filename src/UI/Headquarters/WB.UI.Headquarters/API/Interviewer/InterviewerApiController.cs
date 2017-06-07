@@ -197,9 +197,16 @@ namespace WB.UI.Headquarters.API.Interviewer
         {
             foreach (var product in request.Headers.UserAgent)
             {
-                if (product.Product.Name.Equals(@"org.worldbank.solutions.interviewer", StringComparison.OrdinalIgnoreCase))
+                if (product.Product?.Name?.Equals(@"org.worldbank.solutions.interviewer", StringComparison.OrdinalIgnoreCase) == true)
                 {
-                    return new Version(product.Product.Version);
+                    try
+                    {
+                        return new Version(product.Product.Version);
+                    }
+                    catch
+                    {
+                        return null;
+                    }
                 }
             }
 
