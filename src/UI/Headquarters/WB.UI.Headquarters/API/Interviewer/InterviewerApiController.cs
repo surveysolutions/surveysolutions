@@ -112,6 +112,19 @@ namespace WB.UI.Headquarters.API.Interviewer
         }
 
         [HttpGet]
+        public virtual HttpResponseMessage PatchExtended(int deviceVersion)
+        {
+            string pathToInterviewerPatch = this.fileSystemAccessor.CombinePath(
+                HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), $@"WBCapi.Ext.{deviceVersion}.delta");
+
+            if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerPatch))
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
+
+            Stream fileStream = new FileStream(pathToInterviewerPatch, FileMode.Open, FileAccess.Read);
+            return new ProgressiveDownload(this.Request).ResultMessage(fileStream, @"application/octet-stream");
+        }
+
+        [HttpGet]
         public virtual int? GetLatestVersion()
         {
             string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION),
