@@ -17,7 +17,7 @@
 
       <Button style="@style/Dashboard_InterviewItem_CreateButton"
               local:MvxBind="Text Localization('Dashboard_CreateInterview');
-                       Visible AllowToCreateNewInterview;
+                       Enabled AllowToCreateNewInterview;
                        Click CreateNewInterviewCommand;" />
 
       
