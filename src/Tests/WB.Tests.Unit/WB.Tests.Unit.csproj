@@ -495,6 +495,7 @@
     <Compile Include="BoundedContexts\Interviewer\Services\SynchronizationProcessTests\when_synchronize_and_upload_sync_statistics.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\SynchronizationProcessTests\when_synchronize_and_census_questionnaire_removed_on_server.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\When_Interviewer_SignIn.cs" />
+    <Compile Include="BoundedContexts\Tester\Services\TesterPlainInterviewFileStorageTests.cs" />
     <Compile Include="GenericSubdomains\TreeTest.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\NotificationService\LazyNotificationServiceTests.cs" />
     <Compile Include="GenericSubdomains\Utils\HttpStatisticianTests\HttpStatisticianTests.cs" />
