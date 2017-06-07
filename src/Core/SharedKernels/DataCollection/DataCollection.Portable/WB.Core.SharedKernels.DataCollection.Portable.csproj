@@ -47,13 +47,14 @@
     <Compile Include="ConditionalState.cs" />
     <Compile Include="ConversionHelper.cs" />
     <Compile Include="ExpressionStorage\CustomFunctions\Extensions.cs" />
+    <Compile Include="ExpressionStorage\LevelFunctions.cs" />
     <Compile Include="FailedValidationCondition.cs" />
     <Compile Include="LinkedQuestionFilterResult.cs" />
     <Compile Include="IInterviewProperties.cs" />
     <Compile Include="InterviewExpressionStateExtensions.cs" />
     <Compile Include="InterviewProperties.cs" />
     <Compile Include="LinkedQuestionOptionsChanges.cs" />
-    <Compile Include="ListAnswerRow.cs" />
+    <Compile Include="TextListAnswerRow.cs" />
     <Compile Include="RosterVector.cs" />
     <Compile Include="CategoricalOption.cs" />
     <Compile Include="StructuralChanges.cs" />

@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Substitution
             using (new EventContext())
             {
                 interview.AnswerTextListQuestion(userId, listQuestionId, RosterVector.Empty, DateTime.Now, new [] { Tuple.Create(1m, "one") });
-                interview.AnswerSingleOptionQuestion(userId, linkedSingleOptionQuestionId, RosterVector.Empty, DateTime.Now, 1m);
+                interview.AnswerSingleOptionQuestion(userId, linkedSingleOptionQuestionId, RosterVector.Empty, DateTime.Now, 1);
             }
 
             using (this.eventContext = new EventContext())

@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.AnswerTextListQuestion(interviewerId, textListQuestionId, RosterVector.Empty, DateTime.UtcNow, new[] {new Tuple<decimal, string>(1, "option 1") });
             interview.AnswerNumericIntegerQuestion(interviewerId, numericRosterSizeId, RosterVector.Empty, DateTime.UtcNow, 1);
             //act
-            interview.AnswerSingleOptionQuestion(interviewerId, categoricalSingleQuestionId, Create.Entity.RosterVector(0), DateTime.UtcNow, 1m);
+            interview.AnswerSingleOptionQuestion(interviewerId, categoricalSingleQuestionId, Create.Entity.RosterVector(0), DateTime.UtcNow, 1);
             //assert
             Assert.That(interview.GetSingleOptionLinkedToListQuestion(Identity.Create(categoricalSingleQuestionId,
                 Create.Entity.RosterVector(0))).GetAnswer().SelectedValue, Is.EqualTo(1));

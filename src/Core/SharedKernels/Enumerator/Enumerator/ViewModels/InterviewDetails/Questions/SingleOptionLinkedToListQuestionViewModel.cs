@@ -160,7 +160,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.Identity.Id,
                 this.Identity.RosterVector,
                 DateTime.UtcNow,
-                selectedOption.Value);
+                Convert.ToInt32(selectedOption.Value));
 
             try
             {

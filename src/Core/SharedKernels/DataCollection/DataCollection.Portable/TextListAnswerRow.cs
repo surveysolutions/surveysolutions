@@ -1,18 +1,25 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
     [DebuggerDisplay("{ToString()}")]
     public class TextListAnswerRow
     {
-        public TextListAnswerRow(decimal value, string text)
+        public TextListAnswerRow(int value, string text)
         {
             this.Value = value;
             this.Text = text;
         }
 
-        public decimal Value { get; }
+        public int Value { get; }
         public string Text { get; }
+
+        [Obsolete("Compatibility with v 5.20")]
+        public int Item1 => Value;
+
+        [Obsolete("Compatibility with v 5.20")]
+        public string Item2 => Text;
 
         public override string ToString() => $"{Value} -> {Text}";
     }

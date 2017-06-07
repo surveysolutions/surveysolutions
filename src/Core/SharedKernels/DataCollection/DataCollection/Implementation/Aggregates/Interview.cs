@@ -347,7 +347,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void Apply(LinkedToListOptionsChanged @event)
         {
             foreach (var linkedQuestion in @event.ChangedLinkedQuestions)
-                this.Tree.GetQuestion(linkedQuestion.QuestionId).AsLinkedToList.SetOptions(linkedQuestion.Options);
+                this.Tree.GetQuestion(linkedQuestion.QuestionId).AsLinkedToList.SetOptions(linkedQuestion.Options?.Select(Convert.ToInt32) ?? EmptyArray<int>.Value);
         }
 
         public virtual void Apply(GroupsDisabled @event)
@@ -1012,7 +1012,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvents(treeDifference, userId);
         }
 
-        public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal selectedValue)
+        public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, int selectedValue)
         {
             new InterviewPropertiesInvariants(this.properties)
                 .RequireAnswerCanBeChanged();
@@ -1955,7 +1955,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void ApplyLinkedToListOptionsChangesEvents(InterviewTreeQuestionDiff[] questionsWithChangedOptionsSet)
         {
             var changedLinkedOptions = questionsWithChangedOptionsSet
-                .Select(x => new ChangedLinkedToListOptions(x.ChangedNode.Identity, x.ChangedNode.AsLinkedToList.Options))
+                .Select(x => new ChangedLinkedToListOptions(x.ChangedNode.Identity, x.ChangedNode.AsLinkedToList.Options.Select(Convert.ToDecimal).ToArray()))
                 .ToArray();
 
             if (changedLinkedOptions.Any())
