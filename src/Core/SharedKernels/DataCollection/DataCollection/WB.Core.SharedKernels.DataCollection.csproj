@@ -122,7 +122,7 @@
     <Compile Include="Exceptions\AnswerNotAcceptedException.cs" />
     <Compile Include="Exceptions\InterviewDomainExceptionType.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\Answers.cs" />
-    <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewNodesUpdater.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\IInterviewTreeUpdater.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewProperties.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewPropertiesForExpressions.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewStateForExpressions.cs" />
@@ -136,6 +136,7 @@
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeRosterDiff.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeStaticText.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeStaticTextDiff.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeUpdater.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeValidateableDiff.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeVariable.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeVariableDiff.cs" />

@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             return this.GetDataFileByLevelName(allLevels, parentLevel.LevelName);
         }
 
-        public decimal[] GetAvailableIdListForParent(PreloadedDataByFile parentDataFile, ValueVector<Guid> levelScopeVector, string[] parentIdValues, PreloadedDataByFile[] allLevels)
+        public int[] GetAvailableIdListForParent(PreloadedDataByFile parentDataFile, ValueVector<Guid> levelScopeVector, string[] parentIdValues, PreloadedDataByFile[] allLevels)
         {
             if (parentIdValues == null || parentIdValues.Length == 0)
                 return null;
@@ -119,7 +119,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             if (rosterScopeDescription.Type == RosterScopeType.Fixed)
             {
                 return this.GroupsCache.ContainsKey(levelScopeVector.Last()) 
-                    ? this.GroupsCache[levelScopeVector.Last()].FixedRosterTitles.Select(x => x.Value).ToArray() 
+                    ? this.GroupsCache[levelScopeVector.Last()].FixedRosterTitles.Select(x => Convert.ToInt32(x.Value)).ToArray() 
                     : null;
             }
 
@@ -141,23 +141,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 parentDataFile.Header, row);
 
             if (rosterSizeAnswer == null)
-                return new decimal[0];
+                return new int[0];
 
             if (rosterScopeDescription.Type == RosterScopeType.Numeric)
             {
-                return Enumerable.Range(0, ((NumericIntegerAnswer) rosterSizeAnswer).Value)
-                    .Select(i => (decimal) i).ToArray();
+                return Enumerable.Range(0, ((NumericIntegerAnswer) rosterSizeAnswer).Value).ToArray();
             }
 
             if (rosterScopeDescription.Type == RosterScopeType.MultyOption)
             {
                 var multiOptionAnswer = rosterSizeAnswer as CategoricalFixedMultiOptionAnswer;
                 if (multiOptionAnswer != null)
-                    return multiOptionAnswer.CheckedValues.Select(v => (decimal) v).ToArray();
+                    return multiOptionAnswer.CheckedValues.ToArray();
 
                 var yesNoAnswer = rosterSizeAnswer as YesNoAnswer;
                 if(yesNoAnswer != null)
-                    return yesNoAnswer.CheckedOptions.Where(v=>v.Yes).Select(v => (decimal)v.Value).ToArray();
+                    return yesNoAnswer.CheckedOptions.Where(v=>v.Yes).Select(v => v.Value).ToArray();
             }
 
             if (rosterScopeDescription.Type == RosterScopeType.TextList)

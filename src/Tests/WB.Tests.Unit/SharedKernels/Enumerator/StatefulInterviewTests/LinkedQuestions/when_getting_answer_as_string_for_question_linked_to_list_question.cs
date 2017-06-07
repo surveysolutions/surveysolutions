@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
         [Test]
         public void Should_return_answer_string_value_when_linked_single_option_question_answered()
         {
-            interview.AnswerSingleOptionQuestion(userId, this.linkedSingleOptionQuestionid, RosterVector.Empty, DateTime.Now, 1m);
+            interview.AnswerSingleOptionQuestion(userId, this.linkedSingleOptionQuestionid, RosterVector.Empty, DateTime.Now, 1);
 
             var answerAsString = this.interview.GetAnswerAsString(Create.Entity.Identity(this.linkedSingleOptionQuestionid));
             Assert.That(answerAsString, Is.EqualTo("one"));

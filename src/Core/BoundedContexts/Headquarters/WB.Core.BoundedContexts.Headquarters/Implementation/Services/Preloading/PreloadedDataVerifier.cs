@@ -392,7 +392,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             {
                 var idValue = levelData.Content[y][idCoulmnIndexFile];
                 
-                decimal[] ids = preloadedDataService.GetAvailableIdListForParent(parentDataFile, levelExportStructure.LevelScopeVector,
+                var ids = preloadedDataService.GetAvailableIdListForParent(parentDataFile, levelExportStructure.LevelScopeVector,
                     this.CreateParentIdsVector(levelData.Content[y], parentIdColumnIndexes), allLevels);
 
                 if (ids == null)
@@ -403,7 +403,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                     yield return
                         new PreloadedDataVerificationReference(idCoulmnIndexFile, y, PreloadedDataVerificationReferenceType.Cell, idValue,
                             levelData.FileName);
-                if (!ids.Contains(decimalId))
+                if (!ids.Contains(Convert.ToInt32(decimalId)))
                     yield return
                         new PreloadedDataVerificationReference(idCoulmnIndexFile, y, PreloadedDataVerificationReferenceType.Cell, idValue,
                             levelData.FileName);
