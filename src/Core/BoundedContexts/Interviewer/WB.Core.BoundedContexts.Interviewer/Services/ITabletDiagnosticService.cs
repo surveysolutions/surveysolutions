@@ -7,7 +7,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
     public interface ITabletDiagnosticService
     {
         void LaunchShareAction(string title, string info);
-        Task UpdateTheApp(string url, CancellationToken cancellationToken, TimeSpan timeout);
+        Task UpdateTheApp(CancellationToken cancellationToken);
         void RestartTheApp();
     }
 }
