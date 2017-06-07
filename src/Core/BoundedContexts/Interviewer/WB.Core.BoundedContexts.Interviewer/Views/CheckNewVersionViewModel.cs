@@ -53,27 +53,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public string Version { get; set; }
 
-        public IMvxCommand CheckVersionCommand
-        {
-            get { return new MvxCommand(async () => await this.CheckVersion()); }
-        }
+        public IMvxAsyncCommand CheckVersionCommand => new MvxAsyncCommand(this.CheckVersion);
 
-        public IMvxCommand CancelUpgrade
-        {
-            get { return new MvxCommand(() => this.cancellationTokenSource.Cancel());}
-        }
+        public IMvxCommand CancelUpgrade => new MvxCommand(this.cancellationTokenSource.Cancel);
+        public IMvxAsyncCommand UpdateApplicationCommand => new MvxAsyncCommand(this.UpdateApplication);
+        public IMvxCommand RejectUpdateApplicationCommand => new MvxCommand(RejectUpdateApplication);
 
-        private MvxAsyncCommand updateApplicationCommand;
-        private TimeSpan downloadApkTimeout = TimeSpan.FromMinutes(30);
-
-        public IMvxCommand UpdateApplicationCommand
-        {
-            get
-            {
-                return this.updateApplicationCommand ?? (this.updateApplicationCommand = new MvxAsyncCommand(async () => await this.UpdateApplication()));
-            }
-        }
-
+        private readonly TimeSpan downloadApkTimeout = TimeSpan.FromMinutes(30);
+        
         private async Task UpdateApplication()
         {
             this.IsNewVersionAvaliable = false;
@@ -83,10 +70,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 this.CheckNewVersionResult = InterviewerUIResources.Diagnostics_DownloadingPleaseWait;
 
-                await
-                    this.tabletDiagnosticService.UpdateTheApp(this.interviewerSettings.Endpoint,
-                        this.cancellationTokenSource.Token,
-                        this.downloadApkTimeout);
+                await this.tabletDiagnosticService.UpdateTheApp(this.cancellationTokenSource.Token);
 
                 this.CheckNewVersionResult = null;
             }
@@ -103,14 +87,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.IsNewVersionAvaliable = false;
             this.CheckNewVersionResult = null;
             this.IsVersionCheckInProgress = true;
-            var cancellationTokenSource = new CancellationTokenSource();
+            this.cancellationTokenSource = new CancellationTokenSource();
 
             try
             {
                 var versionFromServer = await
-                    this.synchronizationService.GetLatestApplicationVersionAsync(cancellationTokenSource.Token);
+                    this.synchronizationService.GetLatestApplicationVersionAsync(this.cancellationTokenSource.Token);
 
-                if (!cancellationTokenSource.IsCancellationRequested)
+                if (!this.cancellationTokenSource.IsCancellationRequested)
                 {
                     if (versionFromServer.HasValue && versionFromServer > this.interviewerSettings.GetApplicationVersionCode())
                     {
@@ -135,11 +119,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private void RejectUpdateApplication()
         {
             this.IsNewVersionAvaliable = false;
-        }
-
-        public IMvxCommand RejectUpdateApplicationCommand
-        {
-            get { return new MvxCommand(RejectUpdateApplication); }
         }
     }
 }

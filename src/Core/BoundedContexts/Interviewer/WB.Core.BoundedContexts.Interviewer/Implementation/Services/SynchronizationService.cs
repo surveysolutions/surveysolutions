@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -342,11 +341,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         #region [Application Api]
 
-        public Task<byte[]> GetApplicationAsync(CancellationToken token)
+        public Task<byte[]> GetApplicationPatchAsync(CancellationToken token)
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>
             {
-                var restFile = await this.restService.DownloadFileAsync(url: interviewerApiUrl, token: token,
+                var interviewerPatchApiUrl = $"{interviewerApiUrl}patch/{this.interviewerSettings.GetApplicationVersionCode()}";
+
+                var restFile = await this.restService.DownloadFileAsync(url: interviewerPatchApiUrl, token: token,
                     credentials: this.restCredentials).ConfigureAwait(false);
 
                 return restFile.Content;
