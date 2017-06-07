@@ -43,6 +43,7 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
@@ -465,6 +466,11 @@ namespace WB.Tests.Abc.TestFactories
         public IIdentifyingAnswerConverter IdentifyingAnswerConverter()
         {
             return new IdentifyingAnswerConverter();
+        }
+
+        public TesterPlainInterviewFileStorage TesterPlainInterviewFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectory)
+        {
+            return new TesterPlainInterviewFileStorage(fileSystemAccessor, rootDirectory);
         }
     }
 }
