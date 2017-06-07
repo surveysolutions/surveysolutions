@@ -15,6 +15,7 @@
     <script type="text/javascript">
         var assignmentsEndpoint = "@Url.Content("~/api/Assignments")";
         var $profileUrl = '@Url.Action("Profile", "Interviewer")';
+        var $interviewsUrl = '@Url.Action("Interviews", "HQ")';
 
         var tableOptions = {
             rowId: "id",
@@ -62,7 +63,11 @@
                     "class": "type-numeric",
                     searchHighlight: false,
                     searchable: false,
-                    title: "@Assignments.InterviewsCount"
+                    title: "@Assignments.InterviewsCount",
+                    render: function (data, type, row) {
+                        var result = "<a href='" + $interviewsUrl + "?assignmentId=" + row.id + "'>" + (data == null ? "@Assignments.Unlimited" : data) + "</a>";
+                        return result;
+                    }
                 },
                 {
                     data: "quantity",
@@ -261,20 +266,19 @@
                 },
                 loadResponsibleIdByName: function(onDone) {
                     if (this.$route.query.responsible != undefined) {
-                        var requestParams = Object.assign({ query: this.$route.query.responsible, pageSize: 1, cache: false },
+                        var requestParams = $.extend({ query: this.$route.query.responsible, pageSize: 1, cache: false },
                             this.ajaxParams);
                         this.$http.get(this.responsibleApiUrl, { params: requestParams })
-                            .then(response => {
+                            .then(function(response) {
                                 onDone(response.body.options.length > 0 ? response.body.options[0].key : undefined);
                             });
                     } else onDone();
                 },
                 loadQuestionnaireIdByName: function(onDone) {
                     if (this.$route.query.questionnaire != undefined) {
-                        var requestParams = Object.assign({ query: this.$route.query.questionnaire, pageSize: 1, cache: false }, this.ajaxParams);
+                        var requestParams = $.extend({ query: this.$route.query.questionnaire, pageSize: 1, cache: false }, this.ajaxParams);
                         this.$http.get(this.questionnaireApiUrl, { params: requestParams })
-                            .then(response => {
-
+                            .then(function(response) {
                                 onDone(response.body.options.length > 0 ? response.body.options[0].key : undefined);
                             });
                     } else onDone();
@@ -285,9 +289,8 @@
                 $("main").removeClass("hold-transition");
                 $("footer").addClass("footer-adaptive");
 
-                if (this.$route.query.showArchive != undefined) {
-                    this.showArchive = this.$route.query.showArchive === "true";
-                }
+                this.showArchive = this.$route.query.showArchive != undefined &&
+                                   this.$route.query.showArchive === "true";
 
                 self.loadQuestionnaireIdByName(function(questionnaireId) {
                     if (questionnaireId != undefined)
@@ -303,8 +306,7 @@
                         self.reloadTable();
                         self.startWatchers(['responsibleId', 'questionnaireId', 'showArchive'], self.reloadTable.bind(self));
 
-                        $('.ddl').selectpicker('val', self.showArchive);
-                        $('.ddl').selectpicker('render');
+                        $('.ddl').selectpicker('val', self.showArchive.toString());
                     });
 
                 });
@@ -418,7 +420,7 @@
                                            :value="newResponsibleId"
                                            :ajax-params="{ }"
                                            v-on:selected="newResponsibleSelected"
-                                           fetch-url="">
+                                           :fetch-url="responsibleApiUrl">
                                 </typeahead>
                             </div>
                         </form>
@@ -478,7 +480,7 @@
         routes: [{ path: '/', component: assignmentsComponent }]
     });
 
-    var app = new Vue({ router }).$mount('#app');
+    var app = new Vue({ router: router }).$mount('#app');
 
     window.onload = function() {
         $('#editQuantityModal').on('shown.bs.modal',

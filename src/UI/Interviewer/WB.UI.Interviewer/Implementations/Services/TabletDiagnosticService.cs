@@ -12,6 +12,7 @@ using MvvmCross.Platform.Droid.Platform;
 using Flurl;
 using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Infrastructure.Shared.Enumerator;
 using WB.UI.Interviewer.Activities;
@@ -22,12 +23,21 @@ namespace WB.UI.Interviewer.Implementations.Services
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IPermissions permissions;
+        private readonly ISynchronizationService synchronizationService;
+        private readonly IInterviewerSettings interviewerSettings;
+        private readonly IArchivePatcherService archivePatcherService;
 
         public TabletDiagnosticService(IFileSystemAccessor fileSystemAccessor,
-            IPermissions permissions)
+            IPermissions permissions,
+            ISynchronizationService synchronizationService,
+            IInterviewerSettings interviewerSettings,
+            IArchivePatcherService archivePatcherService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.permissions = permissions;
+            this.synchronizationService = synchronizationService;
+            this.interviewerSettings = interviewerSettings;
+            this.archivePatcherService = archivePatcherService;
         }
 
         private Activity CurrentActivity => Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
@@ -40,17 +50,29 @@ namespace WB.UI.Interviewer.Implementations.Services
             this.CurrentActivity.StartActivity(Intent.CreateChooser(shareIntent, title));
         }
 
-        public async Task UpdateTheApp(string url, CancellationToken cancellationToken, TimeSpan timeout)
+        public async Task UpdateTheApp(CancellationToken cancellationToken)
         {
             await this.permissions.AssureHasPermission(Permission.Storage);
-            var applicationFileName = "interviewer.apk";
-            var pathToRootDirectory = Build.VERSION.SdkInt < BuildVersionCodes.N ? AndroidPathUtils.GetPathToExternalDirectory() : AndroidPathUtils.GetPathToInternalDirectory();
-            var downloadFolder = this.fileSystemAccessor.CombinePath(pathToRootDirectory, "download");
-            string pathTofile = this.fileSystemAccessor.CombinePath(downloadFolder, applicationFileName);
 
-            if (this.fileSystemAccessor.IsFileExists(pathTofile))
+            var pathToRootDirectory = Build.VERSION.SdkInt < BuildVersionCodes.N
+                ? AndroidPathUtils.GetPathToExternalDirectory()
+                : AndroidPathUtils.GetPathToInternalDirectory();
+
+            var downloadFolder = this.fileSystemAccessor.CombinePath(pathToRootDirectory, "download");
+
+            string pathToPatch = this.fileSystemAccessor.CombinePath(downloadFolder, "interviewer.patch");
+            string pathToNewApk = this.fileSystemAccessor.CombinePath(downloadFolder, "interviewer.apk");
+            string pathToOldApk = this.interviewerSettings.InstallationFilePath;
+            
+
+            if (this.fileSystemAccessor.IsFileExists(pathToPatch))
             {
-                this.fileSystemAccessor.DeleteFile(pathTofile);
+                this.fileSystemAccessor.DeleteFile(pathToPatch);
+            }
+
+            if (this.fileSystemAccessor.IsFileExists(pathToNewApk))
+            {
+                this.fileSystemAccessor.DeleteFile(pathToNewApk);
             }
 
             if (!this.fileSystemAccessor.IsDirectoryExists(downloadFolder))
@@ -58,33 +80,27 @@ namespace WB.UI.Interviewer.Implementations.Services
                 this.fileSystemAccessor.CreateDirectory(downloadFolder);
             }
 
-            HttpClient client = new HttpClient();
-            client.Timeout = timeout;
-            var uri = new Uri(Url.Combine(url, "/api/InterviewerSync/GetLatestVersion"));
+            var patchBytes = await this.synchronizationService.GetApplicationPatchAsync(cancellationToken);
 
-            var response = await client.GetAsync(uri, cancellationToken);
+            this.fileSystemAccessor.WriteAllBytes(pathToPatch, patchBytes);
             cancellationToken.ThrowIfCancellationRequested();
 
-            response.EnsureSuccessStatusCode();
-
-            byte[] responseBytes = await response.Content.ReadAsByteArrayAsync();
-            cancellationToken.ThrowIfCancellationRequested();
-            this.fileSystemAccessor.WriteAllBytes(pathTofile, responseBytes);
+            this.archivePatcherService.ApplyPath(pathToOldApk, pathToPatch, pathToNewApk);
             cancellationToken.ThrowIfCancellationRequested();
 
             Intent promptInstall;
-            if (Build.VERSION.SdkInt < Android.OS.BuildVersionCodes.N)
+            if (Build.VERSION.SdkInt < BuildVersionCodes.N)
             {
                 promptInstall =
                     new Intent(Intent.ActionView)
-                        .SetDataAndType(global::Android.Net.Uri.FromFile(new Java.IO.File(pathTofile)), "application/vnd.android.package-archive")
+                        .SetDataAndType(global::Android.Net.Uri.FromFile(new Java.IO.File(pathToNewApk)), "application/vnd.android.package-archive")
                         .AddFlags(ActivityFlags.NewTask)
                         .AddFlags(ActivityFlags.GrantReadUriPermission);
             }
             else
             {
                 var topActivity = this.CurrentActivity;
-                var uriForFile = FileProvider.GetUriForFile(topActivity.BaseContext, topActivity.ApplicationContext.PackageName + ".fileprovider", new Java.IO.File(pathTofile));
+                var uriForFile = FileProvider.GetUriForFile(topActivity.BaseContext, topActivity.ApplicationContext.PackageName + ".fileprovider", new Java.IO.File(pathToNewApk));
 
                 promptInstall = ShareCompat.IntentBuilder.From(topActivity)
                     .SetStream(uriForFile)

@@ -22,6 +22,7 @@
 
     self.SelectedStatus = ko.observable('');
     self.SearchBy = ko.observable('');
+    self.AssignmentId = ko.observable('').extend({ rateLimit: 500 });
     self.IsVisiblePrefilledColumns = ko.observable(false);
 
     self.TemplateName = ko.observable();
@@ -52,6 +53,7 @@
         self.Url.query['status'] = self.SelectedStatus() || "";
         self.Url.query['responsible'] = _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserName;
         self.Url.query['searchBy'] = self.SearchBy() || "";
+        self.Url.query['assignmentId'] = self.AssignmentId() || "";
         
         if (Modernizr.history) {
             window.history.pushState({}, "Interviews", self.Url.toString());
@@ -62,7 +64,8 @@
             TemplateVersion: selectedTemplate.version,
             ResponsibleName: _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserName,
             Status: self.SelectedStatus,
-            SearchBy: self.SearchBy
+            SearchBy: self.SearchBy,
+            AssignmentId: self.AssignmentId
         };
     };
 
@@ -74,7 +77,7 @@
         if (self.QueryString['responsible']) {
             self.SelectedResponsible({ UserName: self.QueryString['responsible'] });
         }
-
+        self.AssignmentId(self.QueryString['assignmentId']);
         self.SearchBy(decodeURIComponent(self.QueryString['searchBy'] || ""));
 
         updateTemplateName(self.SelectedTemplate());
@@ -84,6 +87,7 @@
         self.Url.query['status'] = self.QueryString['status'] || "";
         self.Url.query['responsible'] = self.QueryString['responsible'] || "";
         self.Url.query['searchBy'] = self.QueryString['searchBy'] || "";
+        self.Url.query['assignmentId'] = self.QueryString['assignmentId'] || "";
 
         self.SelectedTemplate.subscribe(
             function (value) {
@@ -93,6 +97,7 @@
 
         self.SelectedResponsible.subscribe(self.filter);
         self.SelectedStatus.subscribe(self.filter);
+        self.AssignmentId.subscribe(self.filter);
 
         self.search();
 

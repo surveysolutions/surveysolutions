@@ -68,6 +68,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.DynamicUpdate(true);
             Id(x => x.SummaryId);
             Property(x => x.AssignmentId);
+            Property(x => x.IsDeleted);
         }
     }
 }

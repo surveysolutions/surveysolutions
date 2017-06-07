@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return (IInterviewTreeNode)this.MemberwiseClone();
         }
 
-        public override void Accept(IInterviewNodesUpdater updater)
+        public override void Accept(IInterviewTreeUpdater updater)
         {
             updater.UpdateEnablement(this);
             updater.UpdateVariable(this);

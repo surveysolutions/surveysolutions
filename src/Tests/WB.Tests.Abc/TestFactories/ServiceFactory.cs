@@ -34,6 +34,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
+using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
@@ -43,6 +44,7 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
@@ -336,11 +338,14 @@ namespace WB.Tests.Abc.TestFactories
                 settings ?? Mock.Of<IEnumeratorSettings>());
         }
 
-        public AllInterviewsFactory AllInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummarys = null,
-            IQueryableReadSideRepositoryReader<QuestionAnswer> featuredQuestions = null)
+        public AllInterviewsFactory AllInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummarys = null)
         {
-            return new AllInterviewsFactory(interviewSummarys ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(), 
-                featuredQuestions ?? Mock.Of<IQueryableReadSideRepositoryReader<QuestionAnswer>>());
+            return new AllInterviewsFactory(interviewSummarys ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>());
+        }
+
+        public ITeamInterviewsFactory TeamInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummarys = null)
+        {
+            return new TeamInterviewsFactory(interviewSummarys ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>());
         }
 
         public PlainPostgresTransactionManager PlainPostgresTransactionManager(ISessionFactory sessionFactory = null)
@@ -465,6 +470,11 @@ namespace WB.Tests.Abc.TestFactories
         public IIdentifyingAnswerConverter IdentifyingAnswerConverter()
         {
             return new IdentifyingAnswerConverter();
+        }
+
+        public TesterPlainInterviewFileStorage TesterPlainInterviewFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectory)
+        {
+            return new TesterPlainInterviewFileStorage(fileSystemAccessor, rootDirectory);
         }
     }
 }
