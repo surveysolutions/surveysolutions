@@ -105,7 +105,7 @@ namespace WB.Tests.Abc.TestFactories
                 answerTime: DateTime.UtcNow,
                 selectedRosterVector: answer);
 
-        public AnswerSingleOptionQuestionCommand AnswerSingleOptionQuestionCommand(Guid interviewId, Guid userId, decimal answer = 0)
+        public AnswerSingleOptionQuestionCommand AnswerSingleOptionQuestionCommand(Guid interviewId, Guid userId, int answer = 0)
             => new AnswerSingleOptionQuestionCommand(
                 interviewId: interviewId,
                 userId: userId,

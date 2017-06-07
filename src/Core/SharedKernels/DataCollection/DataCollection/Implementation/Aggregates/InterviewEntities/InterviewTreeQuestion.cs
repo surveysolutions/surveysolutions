@@ -320,8 +320,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var refQuestion = this.Tree.FindEntityInQuestionBranch(linkedToListQuestion.LinkedSourceId, Identity) as InterviewTreeQuestion;
            
             var options = (refQuestion?.IsDisabled() ?? false)
-                ? EmptyArray<decimal>.Value
-                : refQuestion?.AsTextList?.GetAnswer()?.Rows.Select(x => x.Value).ToArray() ?? EmptyArray<decimal>.Value;
+                ? EmptyArray<int>.Value
+                : refQuestion?.AsTextList?.GetAnswer()?.Rows.Select(x => x.Value).ToArray() ?? EmptyArray<int>.Value;
 
             var previousOptions = this.AsLinkedToList.Options;
             this.AsLinkedToList.SetOptions(options);
@@ -986,11 +986,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         public Guid LinkedSourceId { get; protected set; }
 
-        public decimal[] Options { get; protected set; }
+        public int[] Options { get; protected set; }
 
-        public void SetOptions(IEnumerable<decimal> options)
+        public void SetOptions(IEnumerable<int> options)
         {
-            this.Options = options?.ToArray() ?? EmptyArray<decimal>.Value;
+            this.Options = options?.ToArray() ?? EmptyArray<int>.Value;
         }
     }
     
@@ -1000,7 +1000,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeMultiOptionLinkedToListQuestion(object answer, Guid linkedToQuestionId)
         {
             this.answer = CategoricalFixedMultiOptionAnswer.FromDecimalArray(answer as decimal[]);
-            this.Options = EmptyArray<decimal>.Value;
+            this.Options = EmptyArray<int>.Value;
             LinkedSourceId = linkedToQuestionId;
         }
 
@@ -1038,7 +1038,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeSingleOptionLinkedToListQuestion(object answer, Guid linkedToQuestionId)
         {
             this.answer = answer == null ? null : CategoricalFixedSingleOptionAnswer.FromInt(Convert.ToInt32(answer));
-            this.Options = EmptyArray<decimal>.Value;
+            this.Options = EmptyArray<int>.Value;
             LinkedSourceId = linkedToQuestionId;
         }
 

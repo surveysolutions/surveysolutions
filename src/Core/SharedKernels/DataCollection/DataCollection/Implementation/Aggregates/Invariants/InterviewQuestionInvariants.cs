@@ -112,7 +112,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireQuestionEnabled()
                 .RequireCascadingQuestionAnswerCorrespondsToParentAnswer(selectedValue, questionnaireIdentity, this.Questionnaire.Translation);
 
-        public void RequireLinkedToListSingleOptionAnswerAllowed(decimal selectedValue)
+        public void RequireLinkedToListSingleOptionAnswerAllowed(int selectedValue)
             => this
                 .RequireQuestionExists(QuestionType.SingleOption)
                 .RequireQuestionEnabled()
@@ -454,7 +454,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         }
 
 
-        private InterviewQuestionInvariants RequireLinkedToListOptionIsAvailable(decimal option)
+        private InterviewQuestionInvariants RequireLinkedToListOptionIsAvailable(int option)
         {
             var question = this.InterviewTree.GetQuestion(this.QuestionIdentity);
 
