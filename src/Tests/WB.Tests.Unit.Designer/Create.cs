@@ -1232,5 +1232,10 @@ namespace WB.Tests.Unit.Designer
                 Mock.Of<ITranslationsService>(),
                 questionnaireTranslator ?? Mock.Of<IQuestionnaireTranslator>());
         }
+
+        public static IQuestionTypeToCSharpTypeMapper QuestionTypeToCSharpTypeMapper()
+        {
+            return new QuestionTypeToCSharpTypeMapper();
+        }
     }
 }

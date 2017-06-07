@@ -28,6 +28,7 @@ namespace WB.UI.Headquarters
             RegisterV2Api(config);
 
             config.TypedRoute(@"api/interviewer", c => c.Action<InterviewerApiController>(x => x.Get()));
+            config.TypedRoute(@"api/interviewer/patch/{deviceVersion}", c => c.Action<InterviewerApiController>(x => x.Patch(Param.Any<int>())));
             config.TypedRoute(@"api/interviewer/latestversion", c => c.Action<InterviewerApiController>(x => x.GetLatestVersion()));
 
             config.TypedRoute(@"api/interviewer/extended", c => c.Action<InterviewerApiController>(x => x.GetExtended()));

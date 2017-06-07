@@ -4,20 +4,18 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Infrastructure.Native.Fetching;
 using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
-    public class AllInterviewsFactory : IAllInterviewsFactory
+    internal sealed class AllInterviewsFactory : IAllInterviewsFactory
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> reader;
-        private readonly IQueryableReadSideRepositoryReader<QuestionAnswer> featuredQuestions;
 
-        public AllInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> reader,
-            IQueryableReadSideRepositoryReader<QuestionAnswer> featuredQuestions)
+        public AllInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> reader)
         {
             this.reader = reader;
-            this.featuredQuestions = featuredQuestions;
         }
 
         public AllInterviewsView Load(AllInterviewsInputModel input)
@@ -27,16 +25,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 var items = ApplyFilter(input, _);
                 items = this.DefineOrderBy(items, input);
 
-                return items.Skip((input.Page - 1)*input.PageSize)
+                var ids = items.Skip((input.Page - 1)*input.PageSize)
                     .Take(input.PageSize)
+                    .Select(x => x.SummaryId)
                     .ToList();
+
+                var summaries = DefineOrderBy(_, input)
+                    .Where(x => ids.Contains(x.SummaryId))
+                    .Fetch(x => x.AnswersToFeaturedQuestions)
+                    .ToList();
+                return summaries;
             });
 
 
             var totalCount = this.reader.Query(_ => ApplyFilter(input, _).Count());
-            var requiredInterviews = interviews.Select(y => y.SummaryId).ToList();
-            var featuredQuestionAnswers = this.featuredQuestions.Query(_ => _.Where(x => requiredInterviews.Contains(x.InterviewSummary.SummaryId)).OrderBy(x => x.Position).ToList());
-
 
             var result = new AllInterviewsView
             {
@@ -45,14 +47,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 TotalCount = totalCount,
                 Items = interviews.Select(x => new AllInterviewsViewItem
                 {
-                    FeaturedQuestions = featuredQuestionAnswers.Where(f => f.InterviewSummary.SummaryId == x.SummaryId)
-                    .Select(a => new InterviewFeaturedQuestion
-                    {
-                        Id = a.Questionid,
-                        Answer = a.Answer,
-                        Question = a.Title,
-                        Type = a.Type
-                    }).ToList(),
+                    FeaturedQuestions = x.AnswersToFeaturedQuestions.Select(a => new InterviewFeaturedQuestion
+                        {
+                            Id = a.Questionid,
+                            Answer = a.Answer,
+                            Question = a.Title,
+                            Type = a.Type
+                        }).ToList(),
                     InterviewId = x.InterviewId,
                     LastEntryDate = x.UpdateDate.ToShortDateString(),
                     ResponsibleId = x.ResponsibleId,
@@ -210,12 +211,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             {
                 items = items.Where(x => x.QuestionnaireVersion == input.QuestionnaireVersion);
             }
+
+            if (input.AssignmentId.HasValue)
+            {
+                items = items.Where(x => x.AssignmentId == input.AssignmentId);
+            }
+
             return items;
         }
 
         private IQueryable<InterviewSummary> DefineOrderBy(IQueryable<InterviewSummary> query, ListViewModelBase model)
         {
-            var orderBy = model.Orders.FirstOrDefault();
+            var orderBy = model.Orders?.FirstOrDefault();
             if (orderBy == null)
             {
                 return query.OrderByDescending(x=>x.UpdateDate);

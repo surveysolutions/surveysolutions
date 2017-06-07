@@ -28,27 +28,50 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         [DataMember]
         public Guid ResponsibleId { get; set; }
 
+        /// <summary>
+        /// Name of the responsible person
+        /// Can be used for ordering
+        /// </summary>
         [DataMember]
         public string ResponsibleName { get; set; }
 
+        /// <summary>
+        /// Questionarire Id to filter by
+        /// </summary>
         [DataMember]
         public string QuestionnaireId { get; set; }
 
         /// <summary>
         /// Quantity of submitted interviews for this assignment
+        /// Can be used for ordering
         /// </summary>
         [DataMember]
         public int InterviewsCount { get; set; }
 
+        /// <summary>
+        /// Maximum allowed quantity of interviews that can be created from this assignment
+        /// Can be used for ordering
+        /// </summary>
         [DataMember]
         public int? Quantity { get; set; }
 
+        /// <summary>
+        /// Archived status to filter by. True or False
+        /// </summary>
         [DataMember]
-        public bool Archived { get; set; }
+        public bool Archived { get; set; } = false;
 
+        /// <summary>
+        /// Date when assignment were created
+        /// Can be used for ordering
+        /// </summary>
         [DataMember]
         public DateTime CreatedAtUtc { get; set; }
 
+        /// <summary>
+        /// Last Update Date of assignment
+        /// Can be used for ordering
+        /// </summary>
         [DataMember]
         public DateTime UpdatedAtUtc { get; set; }
     }
@@ -87,6 +110,11 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         public Guid? SupervisorId { get; set; }
 
         public bool ShowArchive { get; set; }
+        /// <summary>
+        /// Possible values are
+        /// Id, ResponsibleName, InterviewsCount, Quantity, UpdatedAtUtc, CreatedAtUtc
+        /// Followed by ordering direction "ASC" or "DESC"
+        /// </summary>
         public string Order { get; set; }
         public int Offset { get; set; }
         public int Limit { get; set; }

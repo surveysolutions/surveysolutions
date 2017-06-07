@@ -59,9 +59,7 @@ namespace WB.Core.GenericSubdomains.Portable
 
         public static int? ParseIntOrNull(this string value)
         {
-            int result;
-
-            return int.TryParse(value, out result) ? result : null as int?;
+            return int.TryParse(value, out int result) ? result : null as int?;
         }
 
         public static IEnumerable<OrderRequestItem> ParseOrderRequestString(this string value)
@@ -76,7 +74,7 @@ namespace WB.Core.GenericSubdomains.Portable
             foreach (string s in list)
             {
                 var ori = new OrderRequestItem { Field = s, Direction = OrderDirection.Asc };
-                if (s.EndsWith("Desc"))
+                if (s.EndsWith("Desc", StringComparison.OrdinalIgnoreCase))
                 {
                     ori.Direction = OrderDirection.Desc;
                     ori.Field = s.Substring(0, s.Length - 4);
@@ -102,7 +100,7 @@ namespace WB.Core.GenericSubdomains.Portable
 
         public static bool NotIn(this string source, string[] array)
         {
-            return array.All(x => x.ToLower() != source.ToLower());
+            return array.All(x => !string.Equals(x, source, StringComparison.OrdinalIgnoreCase));
         }
 
         public static string ToWBEmailAddress(this string source)

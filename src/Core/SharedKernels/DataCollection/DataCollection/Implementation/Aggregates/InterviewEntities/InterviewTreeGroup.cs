@@ -234,7 +234,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return clonedInterviewTreeGroup;
         }
 
-        public virtual void Accept(IInterviewNodesUpdater updater)
+        public virtual void Accept(IInterviewTreeUpdater updater)
         {
             updater.UpdateEnablement(this);
         }

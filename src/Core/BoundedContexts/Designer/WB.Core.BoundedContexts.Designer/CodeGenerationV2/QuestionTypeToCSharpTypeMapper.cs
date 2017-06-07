@@ -51,8 +51,6 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                 case QuestionType.GpsCoordinates:
                     return typeof(GeoLocation).Name;
 
-                
-
                 default:
                     throw new ArgumentException("Unknown question type.");
             }
