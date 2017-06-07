@@ -84,6 +84,9 @@
       <FixtureTestSelector>
         <FixtureName>WB.Tests.Integration.ResourcesTranslationTests.when_checking_availability_of_resources_in_Russian_comparing_to_English</FixtureName>
       </FixtureTestSelector>
+      <FixtureTestSelector>
+        <FixtureName>WB.Tests.Integration.AssignmentsDeletionServiceTests.AssignmetnsDeletionServiceTests</FixtureName>
+      </FixtureTestSelector>
     </IgnoredTests>
     <PreviouslyBuiltSuccessfully>True</PreviouslyBuiltSuccessfully>
     <RunPostBuildEvents>True</RunPostBuildEvents>
