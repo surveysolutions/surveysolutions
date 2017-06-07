@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                     ResponsibleId = x.ResponsibleId,
                     UpdatedAtUtc = x.UpdatedAtUtc,
                     Quantity = x.Quantity,
-                    InterviewsCount = x.InterviewSummaries.Count,
+                    InterviewsCount = x.InterviewSummaries.Count(s => s.IsDeleted == false),
                     Id = x.Id,
                     Archived = x.Archived,
                     Responsible = x.Responsible.Name,
@@ -105,11 +105,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             {
                 if (orderBy.Direction == OrderDirection.Asc)
                 {
-                    return query.OrderBy(x => x.InterviewSummaries.Count);
+                    return query.OrderBy(x => x.InterviewSummaries.Count(s => s.IsDeleted == false));
                 }
                 else
                 {
-                    return query.OrderByDescending(x => x.InterviewSummaries.Count);
+                    return query.OrderByDescending(x => x.InterviewSummaries.Count(s => s.IsDeleted == false));
                 }
             }
             return query.OrderUsingSortExpression(model.Order).AsQueryable();
