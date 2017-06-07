@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Linq;
-using Moq;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Tests.Abc;
+using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.Interview
 {
     [TestFixture]
+    [TestOf(typeof(AllInterviewsFactory))]
     internal class AllInterviewsFactoryTests
     {
         [TestCase(InterviewStatus.SupervisorAssigned,     true)]
@@ -29,8 +30,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.Interview
         {
             var interviewSummaryStorage = Create.Storage.InMemoryReadeSideStorage<InterviewSummary>();
             interviewSummaryStorage.Store(Create.Entity.InterviewSummary(status: interviewStatus), Guid.NewGuid());
-            var featuredQuestionsStorage = Create.Storage.InMemoryReadeSideStorage<QuestionAnswer>();
-            AllInterviewsFactory interviewsFactory = Create.Service.AllInterviewsFactory(interviewSummaryStorage, featuredQuestionsStorage);
+            AllInterviewsFactory interviewsFactory = Create.Service.AllInterviewsFactory(interviewSummaryStorage);
 
             var interviews = interviewsFactory.Load(new AllInterviewsInputModel());
 
@@ -72,8 +72,30 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.Interview
                 SearchBy = "1"
             });
 
+            Assert.That(interviews.TotalCount, Is.EqualTo(1));
+        }
 
-            Assert.AreEqual(1, interviews.TotalCount);
+        [Test]
+        public void Should_find_interviews_by_assignment()
+        {
+            Guid interviewIdWithAssignment = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            Guid interviewIdWithoutAssignment = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+
+            var summaryThatHasAssignmentId = Create.Entity.InterviewSummary(interviewIdWithAssignment, assignmentId: 5);
+            var summaryWithoutAssignment = Create.Entity.InterviewSummary(interviewIdWithoutAssignment, assignmentId: null);
+
+            var assignments = new TestInMemoryWriter<InterviewSummary>();
+            assignments.Store(summaryThatHasAssignmentId, interviewIdWithAssignment.FormatGuid());
+            assignments.Store(summaryWithoutAssignment, interviewIdWithoutAssignment.FormatGuid());
+
+            var factory = Create.Service.AllInterviewsFactory(assignments);
+
+            // Act
+            var foundEntries = factory.Load(new AllInterviewsInputModel { AssignmentId = 5 });
+
+            // Assert
+            Assert.That(foundEntries.TotalCount, Is.EqualTo(1));
+            Assert.That(foundEntries.Items.Single().InterviewId, Is.EqualTo(interviewIdWithAssignment));
         }
     }
 }

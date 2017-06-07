@@ -721,7 +721,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             {
                 Id = question.PublicKey,
                 VariableName = varName,
-                TypeName = question.GenerateQuestionTypeName(questionnaire),
+                TypeName = GenerateQuestionTypeName(question, questionnaire),
                 RosterScopeName = rosterScopeName,
                 ParentScopeTypeName = parentScopeTypeName
             };
@@ -763,6 +763,62 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             }
 
             return questionModel;
+        }
+
+        public static string GenerateQuestionTypeName(IQuestion question, QuestionnaireDocument questionnaire)
+        {
+            switch (question.QuestionType)
+            {
+                case QuestionType.Text:
+                    return "string";
+
+                case QuestionType.AutoPropagate:
+                    return "long?";
+
+                case QuestionType.Numeric:
+                    return (question as NumericQuestion).IsInteger ? "long?" : "double?";
+
+                case QuestionType.QRBarcode:
+                    return "string";
+
+                case QuestionType.MultyOption:
+                    var multiOtion = question as MultyOptionsQuestion;
+                    if (multiOtion != null && multiOtion.YesNoView)
+                        return nameof(YesNoAnswers);
+
+                    if (question.LinkedToQuestionId == null && question.LinkedToRosterId == null)
+                        return "decimal[]";
+
+                    if (question.LinkedToQuestionId.HasValue && questionnaire.Find<ITextListQuestion>(question.LinkedToQuestionId.Value) != null)
+                    {
+                        return "decimal[]";
+                    }
+                    return "decimal[][]";
+
+                case QuestionType.DateTime:
+                    return "DateTime?";
+
+                case QuestionType.SingleOption:
+                    if (question.LinkedToQuestionId == null && question.LinkedToRosterId == null) return "decimal?";
+
+                    if (question.LinkedToQuestionId.HasValue && questionnaire.Find<ITextListQuestion>(question.LinkedToQuestionId.Value) != null)
+                    {
+                        return "decimal?";
+                    }
+
+                    return "decimal[]";
+                case QuestionType.TextList:
+                    return "Tuple<decimal, string>[]";
+
+                case QuestionType.GpsCoordinates:
+                    return "GeoLocation";
+
+                case QuestionType.Multimedia:
+                    return "string";
+
+                default:
+                    throw new ArgumentException("Unknown question type.");
+            }
         }
 
         private bool IsLinkedToListQuestion(QuestionnaireDocument questionnaire, IQuestion question)

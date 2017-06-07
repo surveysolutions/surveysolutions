@@ -440,7 +440,8 @@ namespace WB.Tests.Abc.TestFactories
             DateTime? updateDate = null,
             bool? wasCreatedOnClient= null,
             bool isDeleted = false,
-            bool receivedByInterviewer = false)
+            bool receivedByInterviewer = false,
+            int? assignmentId = null)
             => new InterviewSummary
             {
                 InterviewId = interviewId ?? Guid.NewGuid(),
@@ -456,7 +457,8 @@ namespace WB.Tests.Abc.TestFactories
                 UpdateDate = updateDate ?? new DateTime(2017, 3, 23),
                 WasCreatedOnClient = wasCreatedOnClient ?? false,
                 IsDeleted = isDeleted,
-                ReceivedByInterviewer = receivedByInterviewer
+                ReceivedByInterviewer = receivedByInterviewer,
+                AssignmentId = assignmentId
             };
 
         public InterviewSynchronizationDto InterviewSynchronizationDto(

@@ -17,6 +17,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public long? QuestionnaireVersion { get; set; }
 
         public string SearchBy { get; set; }
+
+        public int? AssignmentId { get; set; }
     }
 
     public class InterviewsWithoutPrefilledInputModel : ListViewModelBase

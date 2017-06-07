@@ -12,31 +12,27 @@
         props: {
             addParamsToRequest: {
                 type: Function,
-                default: (d) => { return d }
+                default: function(d) { return d; }
             },
             responseProcessor: {
                 type: Function,
-                default: (r) => { return r }
+                default: function(r) { return r; }
             },
             tableOptions: {
                 type: Object,
-                default: () => { return {} }
+                default: function() { return {}; }
             }
         },
-        data() {
+        data: function() {
             return {
                 table: null
-            }
-        },
-        computed: {
-        },
-        watch: {
+            };
         },
         methods: {
             reload: function (data) {
-                this.table.ajax.data = data
+                this.table.ajax.data = data;
                 this.table.rows().deselect();
-                this.table.ajax.reload()
+                this.table.ajax.reload();
             },
             onTableInitComplete: function () {
                 var self = this;
@@ -55,22 +51,22 @@
                 $(firstHeader).html('<input class="double-checkbox" id="check-all" type="checkbox">' +
                     '<label for="check-all">' +
                     '<span class="tick"></span>' +
-                    '</label>')
+                    '</label>');
                 $('#check-all').change(function () {
                     if (!this.checked) {
-                        self.table.rows().deselect()
-                        $(self.table.rows).find(".checkbox-filter").prop('checked', false)
+                        self.table.rows().deselect();
+                        $(self.table.rows).find(".checkbox-filter").prop('checked', false);
                     }
                     else {
-                        self.table.rows().select()
-                        $(self.table.rows).find(".checkbox-filter").prop('checked', true)
+                        self.table.rows().select();
+                        $(self.table.rows).find(".checkbox-filter").prop('checked', true);
                     }
                 });
             }
         },
-        mounted() {
-            const self = this
-            var options = Object.assign({
+        mounted: function() {
+            var self = this;
+            var options = $.extend({
                 processing: true,
                 serverSide: true,
                 language:
@@ -83,7 +79,7 @@
                 pageLength: 20, // page size
                 dom: "frtp",
                 conditionalPaging: true
-            }, this.tableOptions)
+            }, this.tableOptions);
 
             options.ajax.data = function (d) {
                 self.addParamsToRequest(d);
@@ -93,27 +89,25 @@
                 self.responseProcessor(response.responseJSON);
             };
 
-            this.table = $(this.$el).DataTable(options)
+            this.table = $(this.$el).DataTable(options);
             this.table.on('init.dt', this.onTableInitComplete);
             this.table.on('select', function (e, dt, type, indexes) {
-                self.$emit('select', e, dt, type, indexes)
+                self.$emit('select', e, dt, type, indexes);
             });
             this.table.on('deselect', function (e, dt, type, indexes) {
-                self.$emit('deselect', e, dt, type, indexes)
+                self.$emit('deselect', e, dt, type, indexes);
             });
             this.table.on('click', 'tbody td', function () {
-                var cell = self.table.cell(this)
+                var cell = self.table.cell(this);
 
                 if (cell.index().column > 0) {
-                    var rowId = self.table.row(this).id()
+                    var rowId = self.table.row(this).id();
                     var columns = self.table.settings().init().columns;
 
-                    self.$emit('cell-clicked', columns[this.cellIndex].name, rowId, cell.data())
+                    self.$emit('cell-clicked', columns[this.cellIndex].name, rowId, cell.data());
                 }
             });
             this.$emit('DataTableRef', this.table);
-        },
-        destroyed() {
         }
     });
 </script>

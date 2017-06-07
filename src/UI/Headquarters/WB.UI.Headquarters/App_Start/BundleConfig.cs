@@ -23,7 +23,8 @@ namespace WB.UI.Headquarters
             bundles.Add(new ScriptBundle("~/js/assignments").Include(
                 "~/Dependencies/build/vue-libs.js",
                 "~/Dependencies/vendor/vee-validate/dist/vee-validate.min.js",
-                "~/Dependencies/js/dataTables.conditionalPaging.js"
+                "~/Dependencies/js/dataTables.conditionalPaging.js",
+                "~/Dependencies/js/searchHighlight.js"
             ));
 
 
