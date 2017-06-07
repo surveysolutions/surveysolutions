@@ -15,6 +15,7 @@
     <script type="text/javascript">
         var assignmentsEndpoint = "@Url.Content("~/api/Assignments")";
         var $profileUrl = '@Url.Action("Profile", "Interviewer")';
+        var $interviewsUrl = '@Url.Action("Interviews", "HQ")';
 
         var tableOptions = {
             rowId: "id",
@@ -62,7 +63,11 @@
                     "class": "type-numeric",
                     searchHighlight: false,
                     searchable: false,
-                    title: "@Assignments.InterviewsCount"
+                    title: "@Assignments.InterviewsCount",
+                    render: function (data, type, row) {
+                        var result = "<a href='" + $interviewsUrl + "?assignmentId=" + row.id + "'>" + (data == null ? "@Assignments.Unlimited" : data) + "</a>";
+                        return result;
+                    }
                 },
                 {
                     data: "quantity",
