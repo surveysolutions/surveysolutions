@@ -306,7 +306,9 @@
     <Compile Include="Migrations\PlainStore\M001-100\M012_MigrateSharedPersonsToListStorage.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M014_AddCanImportOnHQColumnToUsers.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M015_AddAllowedAddressesTable.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M016_AddQuestionnaireCompilationForOldVersionsTable.cs" />
     <Compile Include="Models\ControlPanel\AllowedAddressModel.cs" />
+    <Compile Include="Models\ControlPanel\CompilationVersionModel.cs" />
     <Compile Include="Models\IEmailNotification.cs" />
     <Compile Include="Models\JsonResponseResult.cs" />
     <Compile Include="Models\LogonModel.cs" />
@@ -758,6 +760,9 @@
     <Content Include="Views\ControlPanel\EditAllowesAddress.cshtml" />
     <Content Include="Views\ControlPanel\AddAllowesAddress.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\ControlPanel\CompilationVersionsViews\CompilationVersions.cshtml" />
+    <Content Include="Views\ControlPanel\CompilationVersionsViews\AddCompilationVersion.cshtml" />
+    <Content Include="Views\ControlPanel\CompilationVersionsViews\EditCompilationVersion.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

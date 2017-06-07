@@ -1,0 +1,46 @@
+﻿@using System.Web.Mvc.Html
+@using WB.Core.GenericSubdomains.Portable
+@using WB.Core.SharedKernels.SurveySolutions.Api.Designer
+@model IEnumerable<WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions.QuestionnaireCompilationVersion>
+
+@{
+    ViewBag.Title = "Compilation Versions";
+    this.Layout = "~/Views/ControlPanel/Layout.ControlPanel.cshtml";
+}
+
+<h2>Questionnaire Compilation Versions <a class="btn btn-default" href="@Url.Action("AddCompilationVersion","ControlPanel")">Add</a></h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Questionnaire</th>
+            <th>Version</th>
+            <th>Description</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var compilationVersion in Model)
+        {
+            RouteValueDictionary routeValues = new RouteValueDictionary {{"id", compilationVersion.QuestionnaireId}};
+            <tr>
+                <td>
+                    @Html.ActionLink(compilationVersion.QuestionnaireId.FormatGuid(), "Details", "Questionnaire", routeValues, null)
+                </td>
+                <td>@compilationVersion.Version / @ApiVersion.MaxQuestionnaireVersion</td>
+                <td>@compilationVersion.Description</td>
+                <td>
+                    <a href="@Url.Action("EditCompilationVersion", "ControlPanel", new {id = compilationVersion.QuestionnaireId})" class="btn btn-link">Edit</a>
+                </td>
+                <td>
+                    @using (Html.BeginForm("RemoveCompilationVersion", "ControlPanel", FormMethod.Post))
+                {
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("QuestionnaireId", compilationVersion.QuestionnaireId)
+                        <button type="submit" class="btn btn-link">Remove</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
