@@ -950,4 +950,7 @@
   <data name="Supervisor_LockWarning" xml:space="preserve">
     <value>Locked supervisor (box checked) cannot login and perform any actions on the server.</value>
   </data>
+  <data name="InterviewDetails_MoreDetails" xml:space="preserve">
+    <value>Details</value>
+  </data>
 </root>

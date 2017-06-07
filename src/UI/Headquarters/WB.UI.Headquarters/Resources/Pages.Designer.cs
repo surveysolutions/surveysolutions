@@ -700,6 +700,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Details.
+        /// </summary>
+        public static string InterviewDetails_MoreDetails {
+            get {
+                return ResourceManager.GetString("InterviewDetails_MoreDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No items satisfying selected filter.
         /// </summary>
         public static string InterviewDetails_NoItems {
