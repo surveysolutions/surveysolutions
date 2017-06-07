@@ -423,7 +423,7 @@
                                            :value="newResponsibleId"
                                            :ajax-params="{ }"
                                            v-on:selected="newResponsibleSelected"
-                                           fetch-url="">
+                                           :fetch-url="responsibleApiUrl">
                                 </typeahead>
                             </div>
                         </form>
