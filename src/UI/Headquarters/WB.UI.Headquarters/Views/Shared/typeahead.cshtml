@@ -39,30 +39,33 @@
         },
         computed: {
             inputId: function () {
-                return `sb_${this.controlId}`;
+                return 'sb_' + this.controlId;
             },
             placeholderText: function () {
                 return this.placeholder || "Select";
             }
         },
         mounted: function () {
-            const jqEl = $(this.$el)
-            const focusTo = jqEl.find(`#${this.inputId}`)
-            jqEl.on('shown.bs.dropdown', () => {
-                focusTo.focus()
-                this.fetchOptions(this.searchTerm)
-            })
+            var self = this;
+            var jqEl = $(this.$el);
+            var focusTo = jqEl.find('#' + this.inputId);
+            jqEl.on('shown.bs.dropdown',
+                function() {
+                    focusTo.focus();
+                    self.fetchOptions(self.searchTerm);
+                });
 
-            jqEl.on('hidden.bs.dropdown', () => {
-                this.searchTerm = ""
-            })
+            jqEl.on('hidden.bs.dropdown',
+                function() {
+                    self.searchTerm = "";
+                });
         },
         methods: {
-            onSearchBoxDownKey(event) {
+            onSearchBoxDownKey: function(event) {
                 var $firstOptionAnchor = $(this.$refs.dropdownMenu).find('a').first();
                 $firstOptionAnchor.focus();
             },
-            onOptionUpKey(event) {
+            onOptionUpKey: function(event) {
                 var isFirstOption = $(event.target).parent().index() === 1;
 
                 if (isFirstOption) {
@@ -70,18 +73,18 @@
                     event.stopPropagation();
                 }
             },
-            fetchOptions: function (filter = "") {
+            fetchOptions: function (filter) {
                 this.isLoading = true;
-                var requestParams = Object.assign({ query: filter, cache: false }, this.ajaxParams);
+                var requestParams = $.extend({ query: filter || "", cache: false }, this.ajaxParams);
                 this.$http.get(this.fetchUrl, { params: requestParams })
-                    .then(response => {
-                        this.options = response.body.options || [];
-                        this.isLoading = false;
-                    }, response => {
+                    .then(function(response) {
+                            this.options = response.body.options || [];
+                            this.isLoading = false;
+                        },
+                        function(response) {
 
-                        this.isLoading = false;
-                    });
-
+                            this.isLoading = false;
+                        });
             },
             clear: function () {
                 this.$emit('selected', null, this.controlId);
@@ -90,7 +93,7 @@
             selectOption: function (value) {
                 this.$emit('selected', value, this.controlId);
             },
-            updateOptionsList(e) {
+            updateOptionsList: function(e) {
                 this.fetchOptions(e.target.value);
             },
             highlight: function (title, searchTerm) {
@@ -99,8 +102,8 @@
                     var safeSearchTerm = _.escape(_.escapeRegExp(searchTerm));
 
                     var iQuery = new RegExp(safeSearchTerm, "ig");
-                    return encodedTitle.replace(iQuery, (matchedTxt, a, b) => {
-                        return `<strong>${matchedTxt}</strong>`;
+                    return encodedTitle.replace(iQuery, function(matchedTxt, a, b) {
+                        return '<strong>' + matchedTxt + '</strong>';
                     });
                 }
 
