@@ -3,6 +3,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -69,8 +70,10 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// </summary>
         /// <param name="filter">List filter options</param>
         /// <returns>List of assignments</returns>
+        /// <returns code="406">Incorrect filtering data provided</returns>
         [HttpGet]
         [Route("")]
+        [Localizable(false)]
         public AssignmentsListView List([FromUri(SuppressPrefixCheck = true, Name = "")] AssignmentsListFilter filter)
         {
             filter = filter ?? new AssignmentsListFilter
@@ -93,7 +96,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                 QuestionnaireId = questionnaireId?.QuestionnaireId,
                 QuestionnaireVersion = questionnaireId?.Version,
                 ResponsibleId = responsible?.Id,
-                Order = filter.Order,
+                Order = MapOrder(filter.Order),
                 Limit = filter.Limit,
                 Offset = filter.Offset,
                 SearchBy = filter.SearchBy,
@@ -105,6 +108,28 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             listView.Assignments = this.mapper.Map<List<AssignmentViewItem>>(result.Items);
             return listView;
+
+            string MapOrder(string input)
+            {
+                if (input == null) return null;
+
+                var order = input.Split(' ');
+                var column = order[0];
+
+                var direction = order.Length > 1 ? order[1] : @"ASC";
+
+                switch (column.ToLower())
+                {
+                    case "id": return $"Id {direction}";
+                    case "responsiblename": return $"Responsible.Name {direction}";
+                    case "interviewscount": return $"InterviewsCount {direction}";
+                    case "quantity": return $"Quantity {direction}";
+                    case "updatedatutc": return $"UpdatedAtUtc {direction}";
+                    case "createdatutc": return $"CreatedAtUtc {direction}";
+                }
+
+                throw new HttpResponseException(HttpStatusCode.NotAcceptable);
+            }
         }
 
         /// <summary>
