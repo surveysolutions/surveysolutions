@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         || x.Status == InterviewStatus.RejectedByHeadquarters,
                     QuestionnaireId = x.QuestionnaireId,
                     QuestionnaireVersion = x.QuestionnaireVersion,
-                    CreatedOnClient = x.WasCreatedOnClient,
+                    AssignmentId = x.AssignmentId,
                     ReceivedByInterviewer = x.ReceivedByInterviewer,
                     TeamLeadName = x.TeamLeadName,
                     Key = x.Key

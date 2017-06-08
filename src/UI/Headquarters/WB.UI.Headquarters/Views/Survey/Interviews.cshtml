@@ -150,7 +150,7 @@
                                             <th class="errors" data-bind='sortby: "HasErrors"'>@Pages.Survey_HasErrorsTitle</th>
                                             <th class="status" data-bind='sortby: "Status"'>@Pages.Survey_StatusTitle</th>
                                             <th class="download-on-device" data-bind='sortby: "ReceivedByInterviewer"'>@Pages.Survey_ReceivedByInterviewerTitle</th>
-                                            <th class="sorting_disabled">@Pages.Survey_CreatedOnClientTitle</th>
+                                            <th data-bind='sortby: "AssignmentId"'>@Common.Assignment</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -197,7 +197,7 @@
                                                 <span data-bind="text: ReceivedByInterviewer() ? '@Common.Yes' : '@Common.No'"></span>
                                             </td>
                                             <td>
-                                                <span data-bind="text: CreatedOnClient() ? '@Common.Yes' : '@Common.No'"></span>
+                                                <span data-bind="text: AssignmentId() ? AssignmentId() : ''"></span>
                                             </td> 
                                         </tr>
                                         <!-- /ko -->
