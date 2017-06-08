@@ -420,7 +420,7 @@
     <Compile Include="CustomBindings\TextViewIsCurrentDashboardTabBinding.cs" />
     <Compile Include="CustomBindings\ViewDrawableTargetBinding.cs" />
     <Compile Include="CustomControls\InterviewerDashboardTemplateSelector.cs" />
-    <Compile Include="Implementations\Services\ArchiveParcherService.cs" />
+    <Compile Include="Implementations\Services\ArchivePatcherService.cs" />
     <Compile Include="Implementations\Services\DeviceInformationService.cs" />
     <Compile Include="Implementations\Services\InMemorySnapshotStoreWithCache.cs" />
     <Compile Include="Implementations\Services\StoredEvent.cs" />
