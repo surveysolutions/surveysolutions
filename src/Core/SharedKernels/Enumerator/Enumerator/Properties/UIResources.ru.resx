@@ -494,4 +494,7 @@
   <data name="AreaMap_UpdateMaps" xml:space="preserve">
     <value>Обновить карты</value>
   </data>
+  <data name="Version_Not_Supports" xml:space="preserve">
+    <value>Версия вашего приложения не поддерживает данный функционал</value>
+  </data>
 </root>
