@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
 {
-    public class RostersCollection<T> : IEnumerable<T> where T : class, IInterviewLevel
+    public class RostersCollection<T> : IEnumerable<T> where T : class, IIndexedInterviewLevel
     {
         private readonly List<T> rosters;
 
-        public RostersCollection(IEnumerable<IInterviewLevel> rosters)
+        public RostersCollection(IEnumerable<IIndexedInterviewLevel> rosters)
         {
             this.rosters = rosters?.OrderBy(x => x.RowIndex).Select(x => x as T).ToList() ?? new List<T>();
         }

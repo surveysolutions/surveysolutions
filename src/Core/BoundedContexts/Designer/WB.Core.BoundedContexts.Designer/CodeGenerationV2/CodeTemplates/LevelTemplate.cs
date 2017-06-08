@@ -45,7 +45,14 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             
             #line default
             #line hidden
-            this.Write(" \r\n\t{\r\n\t\t\r\n\t\tpublic ");
+            this.Write(", ");
+            
+            #line 10 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IIndexedInterviewLevel).Name));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n\t{\r\n\t\t\r\n\t\tpublic ");
             
             #line 13 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ClassName));
