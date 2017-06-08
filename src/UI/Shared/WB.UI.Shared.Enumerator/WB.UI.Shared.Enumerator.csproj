@@ -310,6 +310,7 @@
     <Compile Include="Converters\IsCurrentUserCommentToColorConverter.cs" />
     <Compile Include="Converters\SectionStyleBackgroundConverter.cs" />
     <Compile Include="Converters\ToGoogleMapUrlConverter.cs" />
+    <Compile Include="Converters\VisibleOrInvisibleValueConverter.cs" />
     <Compile Include="CustomBindings\BaseBinding.cs" />
     <Compile Include="CustomBindings\EditTextChangedBinding.cs" />
     <Compile Include="CustomBindings\EditTextDateBinding.cs" />
