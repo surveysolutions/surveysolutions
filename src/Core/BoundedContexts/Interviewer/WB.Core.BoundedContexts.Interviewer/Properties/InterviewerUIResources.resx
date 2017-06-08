@@ -159,6 +159,9 @@
   <data name="Dashboard_Start" xml:space="preserve">
     <value>Start</value>
   </data>
+  <data name="Dashboard_AssignmentsTabTitle" xml:space="preserve">
+    <value>Create New</value>
+  </data>
   <data name="Dashboard_CreateInterview" xml:space="preserve">
     <value>Create
 interview</value>
