@@ -18,8 +18,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IMvxMessenger messenger;
 
         private MvxSubscriptionToken startingLongOperationMessageSubscriptionToken;
-
-        public NewInterviewsViewModel NewInterviews { get; }
+        
         public CreateNewViewModel CreateNew { get; }
         public StartedInterviewsViewModel StartedInterviews { get; }
         public CompletedInterviewsViewModel CompletedInterviews { get; }
@@ -32,8 +31,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             CreateNewViewModel createNewViewModel,
             StartedInterviewsViewModel startedInterviewsViewModel,
             CompletedInterviewsViewModel completedInterviewsViewModel,
-            RejectedInterviewsViewModel rejectedInterviewsViewModel,
-            NewInterviewsViewModel interviewsViewModel) : base(principal, viewModelNavigationService)
+            RejectedInterviewsViewModel rejectedInterviewsViewModel) : base(principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.messenger = messenger;
@@ -44,7 +42,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.StartedInterviews = startedInterviewsViewModel;
             this.CompletedInterviews = completedInterviewsViewModel;
             this.RejectedInterviews = rejectedInterviewsViewModel;
-            this.NewInterviews = interviewsViewModel;
         }
 
         private IMvxCommand synchronizationCommand;
@@ -74,8 +71,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             set { this.typeOfInterviews = value; this.RaisePropertyChanged(); }
         }
 
-        private int numberOfAssignedInterviews => this.NewInterviews.NewInterviewsCount
-                                                  + this.StartedInterviews.Items.Count
+        private int numberOfAssignedInterviews => this.StartedInterviews.Items.Count
                                                   + this.CompletedInterviews.Items.Count
                                                   + this.RejectedInterviews.Items.Count;
 
@@ -126,7 +122,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.StartedInterviews.Load();
             this.CompletedInterviews.Load();
             this.RejectedInterviews.Load();
-            this.NewInterviews.Load(this.synchronization);
             
             this.RaisePropertyChanged(() => this.DashboardTitle);
             this.RaisePropertyChanged(() => this.IsExistsAnyCensusQuestionnairesOrInterviews);
