@@ -44,10 +44,11 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 			return CreateLevel(rosterIdentity);
 		}
 		
-		public T[] GetLevels<T>(Guid levelId, Identity forRosterIdentity)
+		public RostersCollection<T> GetLevels<T>(Guid levelId, Identity forRosterIdentity) where T : class, IInterviewLevel, IIndexedInterviewLevel
         {
 			var rosterIdentities = this.state.FindEntitiesFromSameOrDeeperLevel(levelId, forRosterIdentity);
-            return rosterIdentities.Select(CreateLevel).Cast<T>().ToArray();
+			var rosters = rosterIdentities.Select(CreateLevel).Cast<T>().ToList();
+            return new RostersCollection<T>(rosters);
         }
 
 		private <#=typeof(IInterviewLevel).Name#> CreateLevel(Identity rosterIdentity)
@@ -59,7 +60,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 	}
 
 <#
-	foreach (var level in Model.AllLevels) 
+	foreach (var level in Model.Levels) 
 	{
 		var template = CreateLevelTemplate(level, Model);
 		this.Write(template.TransformText());
