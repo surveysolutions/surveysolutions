@@ -398,6 +398,7 @@
     <Compile Include="Activities\MvxFragmentStatePagerAdapter.cs" />
     <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
     <Compile Include="Activities\PrefsActivity.cs" />
+    <Compile Include="Activities\RecyclerViewFragment.cs" />
     <Compile Include="Activities\RelinkDeviceActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
     <Compile Include="AndroidDataCollectionSharedKernelModule.cs" />
