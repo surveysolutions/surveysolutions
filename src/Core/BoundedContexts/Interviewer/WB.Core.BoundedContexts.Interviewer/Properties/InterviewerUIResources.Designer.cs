@@ -98,6 +98,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create New.
+        /// </summary>
+        public static string Dashboard_AssignmentsTabTitle {
+            get {
+                return ResourceManager.GetString("Dashboard_AssignmentsTabTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Completed ({0}).
         /// </summary>
         public static string Dashboard_CompletedLinkText {
@@ -123,15 +132,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Dashboard_CreateInterview {
             get {
                 return ResourceManager.GetString("Dashboard_CreateInterview", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Create New.
-        /// </summary>
-        public static string Dashboard_CreateNewLinkText {
-            get {
-                return ResourceManager.GetString("Dashboard_CreateNewLinkText", resourceCulture);
             }
         }
         
@@ -234,6 +234,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Dashboard_RemoveInterviewQuestion {
             get {
                 return ResourceManager.GetString("Dashboard_RemoveInterviewQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start.
+        /// </summary>
+        public static string Dashboard_Start {
+            get {
+                return ResourceManager.GetString("Dashboard_Start", resourceCulture);
             }
         }
         

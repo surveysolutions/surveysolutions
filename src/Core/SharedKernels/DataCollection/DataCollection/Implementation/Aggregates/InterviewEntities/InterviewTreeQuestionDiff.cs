@@ -80,7 +80,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 if (this.ChangedNode == null) return false;
                 if (!this.ChangedNode.IsLinkedToListQuestion) return false;
 
-                var sourceOptions = this.SourceNode?.AsLinkedToList.Options ?? EmptyArray<decimal>.Value;
+                var sourceOptions = this.SourceNode?.AsLinkedToList.Options ?? EmptyArray<int>.Value;
 
                 if (sourceOptions.Length != this.ChangedNode.AsLinkedToList.Options.Length)
                     return true;

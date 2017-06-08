@@ -49,11 +49,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
             result.ShouldNotBeNull();
 
         private It should_result_have_2_ids_1_and_2 = () =>
-            result.SequenceEqual(new decimal[] { 1 });
+            result.SequenceEqual(new [] { 1 });
 
         private static PreloadedDataService preloadedDataService;
         private static QuestionnaireDocument questionnaireDocument;
-        private static decimal[] result;
+        private static int[] result;
         private static Guid rosterGroupId = Guid.NewGuid();
         private static Guid rosterSizeQuestionId = Guid.NewGuid();
         private static string rosterSizeQuestionVariableName = "var";

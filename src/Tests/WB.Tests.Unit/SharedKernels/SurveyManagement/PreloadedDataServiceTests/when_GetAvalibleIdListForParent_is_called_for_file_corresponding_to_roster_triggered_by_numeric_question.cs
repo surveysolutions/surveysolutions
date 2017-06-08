@@ -39,11 +39,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                             questionnaireDocument.Title), new ValueVector<Guid> { rosterSizeQuestionId }, new []{"1"}, new PreloadedDataByFile[0]);
 
         It should_return_array_with_0_1_2= () =>
-            result.ShouldEqual(new decimal[]{0, 1,2}); 
+            result.ShouldEqual(new []{0, 1,2}); 
 
         private static PreloadedDataService preloadedDataService;
         private static QuestionnaireDocument questionnaireDocument;
-        private static decimal[] result;
+        private static int[] result;
         private static Guid rosterGroupId = Guid.NewGuid();
         private static Guid rosterSizeQuestionId = Guid.NewGuid();
         private static string rosterSizeQuestionVariableName = "var";

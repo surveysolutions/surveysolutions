@@ -161,13 +161,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public IReadOnlyCollection<TextListAnswerRow> Rows { get; }
 
-        public Tuple<decimal, string>[] ToTupleArray() => this.Rows.Select(row => Tuple.Create(row.Value, row.Text)).ToArray();
+        public Tuple<decimal, string>[] ToTupleArray() => this.Rows.Select(row => Tuple.Create((decimal)row.Value, row.Text)).ToArray();
 
         public static TextListAnswer FromTextListAnswerRows(IEnumerable<TextListAnswerRow> rows) => rows == null ? null : new TextListAnswer(rows);
 
         public static TextListAnswer FromTupleArray(Tuple<decimal, string>[] tupleArray)
             => tupleArray == null ? null : new TextListAnswer(
-                tupleArray.Select(tuple => new TextListAnswerRow(tuple.Item1, tuple.Item2.Trim())));
+                tupleArray.Select(tuple => new TextListAnswerRow(Convert.ToInt32(tuple.Item1), tuple.Item2.Trim())));
         
         public override string ToString() => string.Join(", ", Rows.Select(x => x.Text));
     }

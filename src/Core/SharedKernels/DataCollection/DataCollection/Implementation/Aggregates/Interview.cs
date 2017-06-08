@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Domain;
@@ -356,7 +357,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void Apply(LinkedToListOptionsChanged @event)
         {
             foreach (var linkedQuestion in @event.ChangedLinkedQuestions)
-                this.Tree.GetQuestion(linkedQuestion.QuestionId).AsLinkedToList.SetOptions(linkedQuestion.Options);
+                this.Tree.GetQuestion(linkedQuestion.QuestionId).AsLinkedToList.SetOptions(linkedQuestion.Options?.Select(Convert.ToInt32) ?? EmptyArray<int>.Value);
         }
 
         public virtual void Apply(GroupsDisabled @event)
@@ -655,7 +656,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 var nearestRoster = question.Parents.OfType<InterviewTreeRoster>().LastOrDefault()?.Identity ?? new Identity(this.QuestionnaireIdentity.QuestionnaireId, RosterVector.Empty);
                 var level = expressionStorage.GetLevel(nearestRoster);
                 var categoricalFilter = level.GetCategoricalFilter(questionIdentity);
-                return questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter)
+                var unfilteredOptionsForQuestion = questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter).ToList();
+                return unfilteredOptionsForQuestion
                     .Where(x => RunOptionFilter(categoricalFilter, x.Value))
                     .Take(itemsCount)
                     .ToList();
@@ -692,9 +694,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 return null;
 
             if (questionnaire.IsSupportFilteringForOptions(question.Id))
+            {
+                if (this.UsesExpressionStorage)
+                    // BUG: shouldbe filtered
+                    return filteredOption;
                 return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(question, Enumerable.Repeat(filteredOption, 1)).SingleOrDefault();
-            else
-                return filteredOption;
+            }
+            return filteredOption;
         }
 
         #endregion
@@ -1021,7 +1027,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvents(treeDifference, userId);
         }
 
-        public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal selectedValue)
+        public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, int selectedValue)
         {
             new InterviewPropertiesInvariants(this.properties)
                 .RequireAnswerCanBeChanged();
@@ -1987,7 +1993,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void ApplyLinkedToListOptionsChangesEvents(InterviewTreeQuestionDiff[] questionsWithChangedOptionsSet)
         {
             var changedLinkedOptions = questionsWithChangedOptionsSet
-                .Select(x => new ChangedLinkedToListOptions(x.ChangedNode.Identity, x.ChangedNode.AsLinkedToList.Options))
+                .Select(x => new ChangedLinkedToListOptions(x.ChangedNode.Identity, x.ChangedNode.AsLinkedToList.Options.Select(Convert.ToDecimal).ToArray()))
                 .ToArray();
 
             if (changedLinkedOptions.Any())

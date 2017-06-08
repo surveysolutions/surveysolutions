@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using System.Web.Security;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.AllowedAddresses;
 using WB.UI.Designer.Models;
@@ -17,15 +19,18 @@ namespace WB.UI.Designer.Controllers
     {
         readonly ISettingsProvider settingsProvider;
         private readonly IAllowedAddressService allowedAddressService;
+        private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
 
         public ControlPanelController(
             IMembershipUserService userHelper, 
             ISettingsProvider settingsProvider, 
-            IAllowedAddressService allowedAddressService)
+            IAllowedAddressService allowedAddressService, 
+            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService)
             : base(userHelper)
         {
             this.settingsProvider = settingsProvider;
             this.allowedAddressService = allowedAddressService;
+            this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
         }
 
         public ActionResult Settings() => this.View(this.settingsProvider.GetSettings().OrderBy(setting => setting.Name));
@@ -37,6 +42,63 @@ namespace WB.UI.Designer.Controllers
         public ActionResult Versions() => this.View();
 
         public ActionResult MakeAdmin() => this.View();
+
+        public ActionResult CompilationVersions() => this.View("CompilationVersionsViews/CompilationVersions", this.questionnaireCompilationVersionService.GetCompilationVersions());
+
+        [HttpPost]
+        public ActionResult RemoveCompilationVersion(Guid questionnaireId)
+        {
+            this.questionnaireCompilationVersionService.Remove(questionnaireId);
+            return RedirectToAction("CompilationVersions");
+        }
+
+        public ActionResult AddCompilationVersion()
+        {
+            return this.View("CompilationVersionsViews/AddCompilationVersion", new CompilationVersionModel());
+        }
+
+        [HttpPost]
+        public ActionResult AddCompilationVersion(CompilationVersionModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                this.questionnaireCompilationVersionService.Add(new QuestionnaireCompilationVersion
+                {
+                    QuestionnaireId = model.QuestionnaireId,
+                    Description = model.Description,
+                    Version= model.Version
+                });
+                return RedirectToAction("CompilationVersions");
+            }
+            return this.View("CompilationVersionsViews/AddCompilationVersion", model);
+        }
+
+        public ActionResult EditCompilationVersion(int id)
+        {
+            var compilationVersion = this.questionnaireCompilationVersionService.GetById(id);
+            return this.View("CompilationVersionsViews/EditCompilationVersion", new CompilationVersionModel
+            {
+                QuestionnaireId = compilationVersion.QuestionnaireId,
+                Description = compilationVersion.Description,
+                Version = compilationVersion.Version
+            });
+        }
+
+        [HttpPost]
+        public ActionResult EditCompilationVersion(CompilationVersionModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                this.questionnaireCompilationVersionService.Update(new QuestionnaireCompilationVersion
+                {
+                    QuestionnaireId = model.QuestionnaireId,
+                    Description = model.Description,
+                    Version = model.Version
+                });
+                return RedirectToAction("CompilationVersions");
+            }
+            return this.View("CompilationVersionsViews/EditCompilationVersion", model);
+        }
 
         public ActionResult AllowesAddresses() => this.View(this.allowedAddressService.GetAddresses());
 
