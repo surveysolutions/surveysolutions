@@ -564,8 +564,8 @@ iнтервью</value>
   <data name="Troubleshooting_RestoreFolderIsEmpty" xml:space="preserve">
     <value>Папка '{0}' порожня. Будь ласка, покладіть резервну копію, з якої Вы бажаєте відновитись в цю папку.</value>
   </data>
-  <data name="Dashboard_CreateNewLinkText" xml:space="preserve">
-    <value>Створити нове</value>
+  <data name="Dashboard_Start" xml:space="preserve">
+    <value>Почати</value>
   </data>
   <data name="Dashboard_CreateNewTabText" xml:space="preserve">
     <value>Створити нове інтерв'ю використовуючи шаблон</value>
