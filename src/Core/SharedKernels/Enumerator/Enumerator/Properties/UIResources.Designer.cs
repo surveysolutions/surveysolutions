@@ -1180,6 +1180,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your version of application doesn&apos;t support this functionality.
+        /// </summary>
+        public static string Version_Not_Supports {
+            get {
+                return ResourceManager.GetString("Version_Not_Supports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>
         public static string Yes {
