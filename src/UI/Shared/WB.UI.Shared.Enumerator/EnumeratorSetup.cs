@@ -105,7 +105,6 @@ namespace WB.UI.Shared.Enumerator
             registry.AddOrOverwrite("IsStringNotEmpty", new IsStringNotEmptyConverter());
             registry.AddOrOverwrite("MediaButtonStyleBackground", new MediaQuestionButtonBackgroundConverter());
             registry.AddOrOverwrite("SectionStyleBackground", new SectionStyleBackgroundConverter());
-            registry.AddOrOverwrite("VisibleOrInvisible", new VisibleOrInvisibleValueConverter());
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)

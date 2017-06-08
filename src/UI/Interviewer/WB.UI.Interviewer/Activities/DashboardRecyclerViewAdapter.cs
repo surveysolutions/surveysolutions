@@ -34,7 +34,6 @@ namespace WB.UI.Interviewer.Activities
             base.OnBindViewHolder(holder, position);
 
             var viewHolder = (DashboardExpandableViewHolder)holder;
-            viewHolder.DetailsView.Visibility = ViewStates.Gone;
 
             viewHolder.DashboardItem.Click += (sender, args) =>
             {

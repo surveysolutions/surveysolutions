@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
     style="@style/Dashboard_InterviewListItem"
-              android:id="@+id/dashboardItem"
-              local:MvxBind="Click ToggleDetails">
+    android:id="@+id/dashboardItem">
   <LinearLayout style="@style/Dashboard_InterviewItem_Layout" >
     <LinearLayout style="@style/Dashboard_InterviewItem_StatusPanel" />
     <LinearLayout style="@style/Dashboard_InterviewItem_InformationBlock">
@@ -17,21 +16,20 @@
                        local:MvxItemTemplate="@layout/dashboard_item_prefilled_question" />
 
       <LinearLayout  android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                     android:layout_height="match_parent"
                      android:id="@+id/dashboardItemDetails"
                      android:orientation="vertical"
-                     android:visibility="gone"
-                     >
+                     android:visibility="gone">
         <MvxLinearLayout style="@style/Dashboard_InterviewItem_PrefilledQuestions"
                          android:orientation="vertical"
-                         local:MvxBind="ItemsSource DetailedQuestions;"
+                         local:MvxBind="ItemsSource DetailedPrefilledQuestions;"
                          local:MvxItemTemplate="@layout/dashboard_item_prefilled_question" />
         
         <LinearLayout android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:orientation="horizontal">
           <Button style="@style/Dashboard_InterviewItem_CreateButton"
-                  local:MvxBind="Text Localization('Dashboard_CreateInterview');
+                  local:MvxBind="Text Localization('Dashboard_Start');
                        Enabled AllowToCreateNewInterview;
                        Click CreateNewInterviewCommand;" />
           
