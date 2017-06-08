@@ -94,7 +94,7 @@
                         <h5>@Interviews.Assignment</h5>
                         <p class="list-group-item-text">
                             <div class="input-group">
-                                <input class="form-control with-clear-btn" placeholder="@Common.Any" data-bind="textInput: AssignmentId" type="text" />
+                                <input class="form-control with-clear-btn" placeholder="@Common.Any" data-bind="numeric, textInput: AssignmentId" type="text" />
                                 <div class="input-group-btn" data-bind="click: function(){AssignmentId(undefined); }">
                                     <div class="btn btn-default"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></div>
                                 </div>
@@ -148,7 +148,7 @@
                                             <th class="errors" data-bind='sortby: "HasErrors"'>@Common.НasErrors</th>
                                             <th class="status" data-bind='sortby: "Status"'>@Common.Status</th>
                                             <th class="download-on-device" data-bind='sortby: "ReceivedByInterviewer"'>@Common.ReceivedByInterviewer</th>
-                                            <th class="sorting_disabled">@Common.CreatedOnClient</th>
+                                            <th data-bind='sortby: "AssignmentId"'>@Common.Assignment</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -195,7 +195,7 @@
                                                 <span data-bind="text: ReceivedByInterviewer() ? '@Common.Yes' : '@Common.No'"></span>
                                             </td>
                                             <td>
-                                                <span data-bind="text: CreatedOnClient() ? '@Common.Yes' : '@Common.No'"></span>
+                                                <span data-bind="text: AssignmentId() ? AssignmentId() : ''"></span>
                                             </td>
                                         </tr>
                                         <!-- /ko -->

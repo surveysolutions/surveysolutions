@@ -1,33 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
-    public interface IInterviewTreeUpdater
-    {
-        void UpdateEnablement(IInterviewTreeNode entity);
-        void UpdateEnablement(InterviewTreeGroup entity);
-
-        void UpdateSingleOptionQuestion(InterviewTreeQuestion question);
-        void UpdateMultiOptionQuestion(InterviewTreeQuestion question);
-        void UpdateYesNoQuestion(InterviewTreeQuestion question);
-        void UpdateCascadingQuestion(InterviewTreeQuestion question);
-        void UpdateLinkedQuestion(InterviewTreeQuestion question);
-        void UpdateLinkedToListQuestion(InterviewTreeQuestion question);
-
-        void UpdateRoster(InterviewTreeRoster roster);
-        void UpdateVariable(InterviewTreeVariable variable);
-        void UpdateValidations(InterviewTreeStaticText staticText);
-        void UpdateValidations(InterviewTreeQuestion question);
-    }
-
     public class InterviewTreeUpdater : IInterviewTreeUpdater, IDisposable
     {
         private readonly IInterviewExpressionStorage expressionStorage;
@@ -49,10 +30,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void UpdateEnablement(IInterviewTreeNode entity)
         {
-            if (disabledNodes.Contains(entity.Identity))
+            if (this.disabledNodes.Contains(entity.Identity))
                 return;
 
-            var level = GetLevel(entity);
+            var level = this.GetLevel(entity);
             var result = RunConditionExpression(level.GetConditionExpression(entity.Identity));
             if (result)
                 entity.Enable();
@@ -62,10 +43,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void UpdateEnablement(InterviewTreeGroup group)
         {
-            if (disabledNodes.Contains(group.Identity))
+            if (this.disabledNodes.Contains(group.Identity))
                 return;
 
-            var level = GetLevel(group);
+            var level = this.GetLevel(group);
             var result = RunConditionExpression(level.GetConditionExpression(group.Identity));
             if (result)
                 group.Enable();
@@ -73,19 +54,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             {
                 group.Disable();
                 List<Identity> disabledChildNodes = group.DisableChildNodes();
-                disabledChildNodes.ForEach(x => disabledNodes.Add(x));
+                disabledChildNodes.ForEach(x => this.disabledNodes.Add(x));
             }
         }
 
         public void UpdateSingleOptionQuestion(InterviewTreeQuestion question)
         {
-            if (disabledNodes.Contains(question.Identity))
+            if (this.disabledNodes.Contains(question.Identity))
                 return;
 
-            if (!(question.IsAnswered() && questionnaire.IsSupportFilteringForOptions(question.Identity.Id)))
+            if (!(question.IsAnswered() && this.questionnaire.IsSupportFilteringForOptions(question.Identity.Id)))
                 return;
 
-                var level = GetLevel(question);
+            var level = this.GetLevel(question);
             var filter = level.GetCategoricalFilter(question.Identity);
             var filterResult = RunOptionFilter(filter,
                 question.AsSingleFixedOption.GetAnswer().SelectedValue);
@@ -95,13 +76,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void UpdateMultiOptionQuestion(InterviewTreeQuestion question)
         {
-            if (disabledNodes.Contains(question.Identity))
+            if (this.disabledNodes.Contains(question.Identity))
                 return;
 
-            if (!(question.IsAnswered() && questionnaire.IsSupportFilteringForOptions(question.Identity.Id)))
+            if (!(question.IsAnswered() && this.questionnaire.IsSupportFilteringForOptions(question.Identity.Id)))
                 return;
 
-            var level = GetLevel(question);
+            var level = this.GetLevel(question);
             var filter = level.GetCategoricalFilter(question.Identity);
             var selectedOptions =
                 question.AsMultiFixedOption.GetAnswer().CheckedValues.ToArray();
@@ -118,13 +99,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void UpdateYesNoQuestion(InterviewTreeQuestion question)
         {
-            if (disabledNodes.Contains(question.Identity))
+            if (this.disabledNodes.Contains(question.Identity))
                 return;
 
-            if (!(question.IsAnswered() && questionnaire.IsSupportFilteringForOptions(question.Identity.Id)))
+            if (!(question.IsAnswered() && this.questionnaire.IsSupportFilteringForOptions(question.Identity.Id)))
                 return;
 
-            var level = GetLevel(question);
+            var level = this.GetLevel(question);
             var filter = level.GetCategoricalFilter(question.Identity);
             var checkedOptions = question.AsYesNo.GetAnswer().CheckedOptions;
             var newCheckedOptions =
@@ -140,7 +121,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void UpdateCascadingQuestion(InterviewTreeQuestion question)
         {
-            if (disabledNodes.Contains(question.Identity))
+            if (this.disabledNodes.Contains(question.Identity))
                 return;
 
             //move to cascading
@@ -154,7 +135,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             else
             {
                 var selectedParentValue = cascadingParent.AsSingleFixedOption.GetAnswer().SelectedValue;
-                if (!questionnaire.HasAnyCascadingOptionsForSelectedParentOption(question.Identity.Id,
+                if (!this.questionnaire.HasAnyCascadingOptionsForSelectedParentOption(question.Identity.Id,
                     cascadingParent.Identity.Id, selectedParentValue))
                 {
                     question.Disable();
@@ -168,10 +149,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void UpdateLinkedQuestion(InterviewTreeQuestion question)
         {
-            if (disabledNodes.Contains(question.Identity))
+            if (this.disabledNodes.Contains(question.Identity))
                 return;
 
-            var level = GetLevel(question);
+            var level = this.GetLevel(question);
             var optionsAndParents = question.GetCalculatedLinkedOptions();
             var options = new List<RosterVector>();
             foreach (var optionAndParent in optionsAndParents)
@@ -193,7 +174,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void UpdateLinkedToListQuestion(InterviewTreeQuestion question)
         {
-            if (disabledNodes.Contains(question.Identity))
+            if (this.disabledNodes.Contains(question.Identity))
                 return;
 
             question.CalculateLinkedToListOptions(true);
@@ -201,19 +182,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void UpdateRoster(InterviewTreeRoster roster)
         {
-            if (disabledNodes.Contains(roster.Identity))
+            if (this.disabledNodes.Contains(roster.Identity))
                 return;
 
-            roster.UpdateRosterTitle((questionId, answerOptionValue) => questionnaire
+            roster.UpdateRosterTitle((questionId, answerOptionValue) => this.questionnaire
                 .GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title);
         }
 
         public void UpdateVariable(InterviewTreeVariable variable)
         {
-            if (disabledNodes.Contains(variable.Identity))
+            if (this.disabledNodes.Contains(variable.Identity))
                 return;
 
-            var level = GetLevel(variable);
+            var level = this.GetLevel(variable);
 
             Func<object> expression = level.GetVariableExpression(variable.Identity);
             variable.SetValue(GetVariableValue(expression));

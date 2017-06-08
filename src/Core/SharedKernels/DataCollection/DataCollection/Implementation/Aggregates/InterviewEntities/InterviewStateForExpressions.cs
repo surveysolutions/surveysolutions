@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             {
                 return new YesNoAndAnswersMissings(
                     this.questionnaire.GetOptionsForQuestion(questionId, null, "").Select(x => x.Value), 
-                    question.AsYesNo.GetAnswer().CheckedOptions).To<T>(); //YesNoAndAnswersMissings
+                    question.AsYesNo.GetAnswer()?.CheckedOptions).To<T>(); //YesNoAndAnswersMissings
             }
 
             if (question.IsSingleLinkedOption) return question.AsSingleLinkedOption.GetAnswer().SelectedValue.To<T>();//RosterVector

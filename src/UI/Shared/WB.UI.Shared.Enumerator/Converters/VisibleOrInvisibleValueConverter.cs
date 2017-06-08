@@ -10,7 +10,6 @@ namespace WB.UI.Shared.Enumerator.Converters
     {
         protected override ViewStates Convert(bool value, Type targetType, object parameter, CultureInfo culture)
         {
-            MvxTrace.Error("VisibleOrInvisibleValueConverter.Convert");
             return value ? ViewStates.Visible : ViewStates.Invisible;
         }
     }

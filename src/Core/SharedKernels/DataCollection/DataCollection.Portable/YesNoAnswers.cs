@@ -28,8 +28,8 @@ namespace WB.Core.SharedKernels.DataCollection
         public YesNoAndAnswersMissings(IEnumerable<int> allOptionCodes, IReadOnlyCollection<CheckedYesNoAnswerOption> checkedOptions = null)
         {
             this.allOptionCodes = allOptionCodes.ToArray();
-            this.selectedNoCodes = checkedOptions.Where(x => x.No).Select(x => x.Value).ToArray();
-            this.selectedYesCodes = checkedOptions.Where(x => x.Yes).Select(x => x.Value).ToArray();
+            this.selectedNoCodes = checkedOptions?.Where(x => x.No).Select(x => x.Value).ToArray() ?? new int[0];
+            this.selectedYesCodes = checkedOptions?.Where(x => x.Yes).Select(x => x.Value).ToArray() ?? new int[0];
         }
 
         private readonly int[] selectedYesCodes;

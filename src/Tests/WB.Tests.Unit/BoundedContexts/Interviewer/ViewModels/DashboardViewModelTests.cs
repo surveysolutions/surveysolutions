@@ -57,14 +57,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     createNewViewModel: DashboardQuestionnairesViewModel(),
                     startedInterviewsViewModel: DashboardStartedInterviewsViewModel(),
                     completedInterviewsViewModel: DashboardCompletedInterviewsViewModel(),
-                    rejectedInterviewsViewModel: DashboardRejectedInterviewsViewModel(),
-                    interviewsViewModel: DashboardNewInterviewsViewModel());
+                    rejectedInterviewsViewModel: DashboardRejectedInterviewsViewModel());
         }
-
-        private static NewInterviewsViewModel DashboardNewInterviewsViewModel()
-            => new NewInterviewsViewModel(
-                Substitute.For<IPlainStorage<QuestionnaireView>>(), Substitute.For<IPlainStorage<InterviewView>>(),
-                Substitute.For<IInterviewViewModelFactory>(), Substitute.For<IPrincipal>());
 
         private static CreateNewViewModel DashboardQuestionnairesViewModel()
             => new CreateNewViewModel(

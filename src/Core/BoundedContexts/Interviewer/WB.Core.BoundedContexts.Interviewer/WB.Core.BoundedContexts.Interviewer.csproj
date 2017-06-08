@@ -157,7 +157,6 @@
     <Compile Include="Views\Dashboard\CompletedInterviewsViewModel.cs" />
     <Compile Include="Views\Dashboard\DashboardItems\AssignmentDashboardItemViewModel.cs" />
     <Compile Include="Views\Dashboard\ListViewModel.cs" />
-    <Compile Include="Views\Dashboard\NewInterviewsViewModel.cs" />
     <Compile Include="Views\Dashboard\CreateNewViewModel.cs" />
     <Compile Include="Views\Dashboard\RejectedInterviewsViewModel.cs" />
     <Compile Include="Views\Dashboard\StartedInterviewsViewModel.cs" />

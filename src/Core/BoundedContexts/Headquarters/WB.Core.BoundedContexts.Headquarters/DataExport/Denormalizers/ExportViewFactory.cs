@@ -249,6 +249,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
             exportedHeaderItem.PublicKey = question.PublicKey;
             exportedHeaderItem.QuestionType = question.QuestionType;
+            exportedHeaderItem.IsIdentifyingQuestion = question.Featured;
+
             if (question is IMultyOptionsQuestion)
             {
                 var multioptionQuestion = (IMultyOptionsQuestion) question;
@@ -315,9 +317,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 {
                     var columnValue = decimal.Parse(question.Answers[i].AnswerValue);
 
-                    exportedHeaderItem.ColumnNames[i] = string.Format(GeneratedTitleExportFormat, 
-                        question.StataExportCaption, DecimalToHeaderConverter.ToHeader(columnValue)); 
-                        
+                    exportedHeaderItem.ColumnNames[i] = string.Format(GeneratedTitleExportFormat,
+                        question.StataExportCaption, DecimalToHeaderConverter.ToHeader(columnValue));
+
                     exportedHeaderItem.ColumnValues[i] = columnValue;
                 }
                 else

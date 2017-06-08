@@ -28,6 +28,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         public Guid InterviewId { get; private set; }
         public DashboardInterviewStatus Status { get; private set; }
         public List<PrefilledQuestion> PrefilledQuestions { get; private set; }
+        public List<PrefilledQuestion> DetailedPrefilledQuestions { get; private set; }
         public string DateComment { get; private set; }
         public string Comment { get; private set; }
         public bool HasComment { get; private set; }
@@ -61,7 +62,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, questionnaire.Title, questionnaireIdentity.Version);
             this.DateComment = this.GetInterviewDateCommentByStatus(interview);
             this.Comment = this.GetInterviewCommentByStatus(interview);
-            this.PrefilledQuestions = this.GetTop3PrefilledQuestions();
+            var questions = this.GetPrefilledQuestions();
+
+            this.PrefilledQuestions = questions.Take(3).ToList();
+            this.DetailedPrefilledQuestions = questions.Skip(3).ToList();
+
             this.GpsLocation = this.GetInterviewLocation(interview);
             this.IsSupportedRemove = interview.CanBeDeleted;
             this.HasComment = !string.IsNullOrEmpty(this.Comment);
@@ -157,14 +162,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             }
         }
 
-        private List<PrefilledQuestion> GetTop3PrefilledQuestions()
+        private List<PrefilledQuestion> GetPrefilledQuestions()
         {
             return this.prefilledQuestions.Where(_ => _.InterviewId == this.InterviewId)
                                           .OrderBy(x => x.SortIndex)
                                           .Select(fi => new PrefilledQuestion {
                                               Answer = fi.Answer,
                                               Question = fi.QuestionText
-                                          }).Take(3).ToList();
+                                          }).ToList();
         }
 
         public bool IsSupportedRemove { get; set; }

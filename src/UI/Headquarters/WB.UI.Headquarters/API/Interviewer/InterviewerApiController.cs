@@ -169,7 +169,7 @@ namespace WB.UI.Headquarters.API.Interviewer
             var deviceId = this.Request.Headers.GetValues(@"DeviceId").Single();
             var userId = User.Identity.GetUserId();
 
-            var user = userId != null 
+            var user = userId != null
                 ? this.userViewFactory.GetUser(new UserViewInputModel(Guid.Parse(userId)))
                 : null;
 
@@ -209,7 +209,8 @@ namespace WB.UI.Headquarters.API.Interviewer
                 {
                     return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
                 }
-            } else if (deviceSyncProtocolVersion != serverSyncProtocolVersion)
+            }
+            else if (deviceSyncProtocolVersion != serverSyncProtocolVersion)
             {
                 return this.Request.CreateResponse(HttpStatusCode.NotAcceptable);
             }
@@ -218,21 +219,15 @@ namespace WB.UI.Headquarters.API.Interviewer
                 ? this.Request.CreateResponse(HttpStatusCode.Forbidden)
                 : this.Request.CreateResponse(HttpStatusCode.OK, @"449634775");
         }
-        
+
         private Version GetInterviewerVersionFromUserAgent(HttpRequestMessage request)
         {
-            foreach (var product in request.Headers.UserAgent)
+            foreach (var product in request.Headers?.UserAgent)
             {
-                if (product.Product?.Name?.Equals(@"org.worldbank.solutions.interviewer", StringComparison.OrdinalIgnoreCase) == true)
+                if ((product.Product?.Name.Equals(@"org.worldbank.solutions.interviewer", StringComparison.OrdinalIgnoreCase)
+                    ?? false) && Version.TryParse(product.Product.Version, out Version version))
                 {
-                    try
-                    {
-                        return new Version(product.Product.Version);
-                    }
-                    catch
-                    {
-                        return null;
-                    }
+                    return version;
                 }
             }
 

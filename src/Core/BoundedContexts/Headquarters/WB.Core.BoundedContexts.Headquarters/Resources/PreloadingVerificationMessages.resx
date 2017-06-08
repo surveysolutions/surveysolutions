@@ -223,4 +223,7 @@
   <data name="PL0036_QuantityShouldBePositive" xml:space="preserve">
     <value>Quantity should be more then 0.</value>
   </data>
+  <data name="PL0037_ColumnIsNotIdentifying" xml:space="preserve">
+    <value>Column cannot be mapped to non identifying question</value>
+  </data>
 </root>
