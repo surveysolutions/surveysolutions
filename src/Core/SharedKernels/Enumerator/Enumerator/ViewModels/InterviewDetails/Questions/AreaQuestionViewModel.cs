@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MvvmCross.Core.ViewModels;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -19,6 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class AreaQuestionViewModel : MvxNotifyPropertyChanged, 
         IInterviewEntityViewModel, 
         ILiteEventHandler<AnswersRemoved>,
+        ILiteEventHandler<AreaQuestionAnswered>,
         ICompositeQuestion,
         IDisposable
     {
@@ -56,7 +58,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly ILiteEventRegistry eventRegistry;
 
         private Identity questionIdentity;
-        private Guid interviewId;
+        private string interviewId;
         private readonly QuestionStateViewModel<AreaQuestionAnswered> questionState;
         private IUserInteractionService userInteractionService;
 
@@ -81,28 +83,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.userInteractionService = userInteractionService;
         }
 
-        public Identity Identity { get { return this.questionIdentity; } }
+        public Identity Identity => this.questionIdentity;
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             if(interviewId == null) throw new ArgumentNullException("interviewId");
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
-            var interview = this.interviewRepository.Get(interviewId);
-            
             this.questionIdentity = entityIdentity;
-            this.interviewId = interview.Id;
+            this.interviewId = interviewId;
 
             this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.InstructionViewModel.Init(interviewId, entityIdentity);
 
-            var areaQuestion = interview.GetAreaQuestion(entityIdentity);
-            if (areaQuestion.IsAnswered)
-            {
-                var answer = areaQuestion.GetAnswer().Value;
-                this.Answer = new Area(answer.Geometry, answer.MapName, answer.AreaSize, answer.Length, answer.DistanceToEditor );
-            }
-
+            this.UpdateSelfFromModel();
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
@@ -116,7 +110,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (answerArea != null)
                 {
                     var command = new AnswerAreaQuestionCommand(
-                        interviewId: this.interviewId,
+                        interviewId: Guid.Parse(this.interviewId),
                         userId: this.userId,
                         questionId: this.questionIdentity.Id,
                         rosterVector: this.questionIdentity.RosterVector,
@@ -159,7 +153,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     try
                     {
                         await this.Answering.SendRemoveAnswerCommandAsync(
-                            new RemoveAnswerCommand(this.interviewId,
+                            new RemoveAnswerCommand(
+                                Guid.Parse(this.interviewId),
                                 this.userId, 
                                 this.questionIdentity,
                                 DateTime.UtcNow));
@@ -188,6 +183,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     this.Answer = null;
                 }
+            }
+        }
+
+        public void Handle(AreaQuestionAnswered @event)
+        {
+            if (@event.QuestionId == this.questionIdentity.Id &&
+                @event.RosterVector.SequenceEqual(this.questionIdentity.RosterVector))
+            {
+                this.UpdateSelfFromModel();
+            }
+        }
+
+        private void UpdateSelfFromModel()
+        {
+            var interview = this.interviewRepository.Get(interviewId);
+            var areaQuestion = interview.GetAreaQuestion(this.questionIdentity);
+            if (areaQuestion.IsAnswered)
+            {
+                var questionAnswer = areaQuestion.GetAnswer().Value;
+                this.Answer = new Area(questionAnswer.Geometry, questionAnswer.MapName, questionAnswer.AreaSize, questionAnswer.Length, questionAnswer.DistanceToEditor);
             }
         }
     }
