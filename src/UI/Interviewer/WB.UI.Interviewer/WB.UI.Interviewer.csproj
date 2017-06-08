@@ -386,8 +386,10 @@
   <ItemGroup>
     <Compile Include="Activities\DashboardActivity.cs" />
     <Compile Include="Activities\DashboardCompletednterviewsFragment.cs" />
+    <Compile Include="Activities\DashboardExpandableViewHolder.cs" />
     <Compile Include="Activities\DashboardNewInterviewsFragment.cs" />
     <Compile Include="Activities\DashboardQuestionnairesFragment.cs" />
+    <Compile Include="Activities\DashboardRecyclerViewAdapter.cs" />
     <Compile Include="Activities\DashboardRejectednterviewsFragment.cs" />
     <Compile Include="Activities\DashboardStartedInterviewsFragment.cs" />
     <Compile Include="Activities\DiagnosticsActivity.cs" />
@@ -512,7 +514,9 @@
     <AndroidResource Include="Resources\Layout\fragment_dashboard_tab_new.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\dashboard_assignment_questionnare_item.axml" />
+    <AndroidResource Include="Resources\Layout\dashboard_assignment_questionnare_item.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\ErrorScreen.axml">
