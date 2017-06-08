@@ -24,9 +24,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private const string apiVersion = "v2";
 
 #if !EXCLUDEEXTENSIONS
-        private readonly string checkVersionUrl = "api/interviewer/extended";
+        private readonly string checkVersionUrl = "api/interviewer/extended/";
 #else
-        private readonly string checkVersionUrl = "api/interviewer";
+        private readonly string checkVersionUrl = "api/interviewer/";
 #endif
         private const string interviewerApiUrl = "api/interviewer/";
         private readonly string devicesController = string.Concat(interviewerApiUrl, apiVersion, "/devices");
@@ -364,7 +364,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>
                 await this.restService.GetAsync<int?>(
-                    url: string.Concat(checkVersionUrl, "/latestversion"),
+                    url: string.Concat(checkVersionUrl, "latestversion"),
                     credentials: this.restCredentials, token: token).ConfigureAwait(false));
         }
 
