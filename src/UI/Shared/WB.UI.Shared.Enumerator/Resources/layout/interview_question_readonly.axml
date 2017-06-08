@@ -7,11 +7,16 @@
   <TextView
     style="@style/Interview_Question_Title"
     local:MvxBind="Html Title.HtmlText;" />
+  
 
-  <TextView
-    style="@style/Interview_Question_Title"
-    local:MvxBind="Text Answer;" />
+  <LinearLayout style="@style/Interview_Readonly_Question_Layout">
 
+    <ImageView style="@style/Interview_Readonly_Question_Icon" />   
+    
+    <TextView
+      style="@style/Interview_Readonly_Question_Answer"
+      local:MvxBind="Text Answer;" />
+  </LinearLayout>
 
   <View style="@style/Interview_Entity_Divider" />
 </LinearLayout>

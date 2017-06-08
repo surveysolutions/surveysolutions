@@ -91,5 +91,8 @@
   <dimen name="Interview_Cover_Marker_Line_width">14dp</dimen>
   <dimen name="Interview_Cover_Prefilled_vertical_padding">9dp</dimen>
   <dimen name="Interview_Cover_Prefilled_Block_vertical_padding">24dp</dimen>
+  
+  <dimen name="Interview_Question_Readonly_padding">1dp</dimen>
+  <dimen name="Interview_Question_Readonly_active_width">4dp</dimen>
 
 </resources>
