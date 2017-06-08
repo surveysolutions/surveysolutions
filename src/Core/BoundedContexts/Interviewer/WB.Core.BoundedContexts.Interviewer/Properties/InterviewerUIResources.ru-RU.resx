@@ -621,8 +621,8 @@
   <data name="Synchronization_Of_Assignments" xml:space="preserve">
     <value>Проверка на наличие новых заданий</value>
   </data>
-  <data name="Dashboard_CreateNewLinkText" xml:space="preserve">
-    <value>Создать новое</value>
+  <data name="Dashboard_Start" xml:space="preserve">
+    <value>Начать</value>
   </data>
   <data name="Dashboard_CreateNewTabText" xml:space="preserve">
     <value>Создать новое интервью используя шаблон</value>

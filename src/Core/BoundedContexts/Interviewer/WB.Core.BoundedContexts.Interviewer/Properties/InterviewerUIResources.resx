@@ -156,8 +156,8 @@
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
     <value>Completed ({0})</value>
   </data>
-  <data name="Dashboard_CreateNewLinkText" xml:space="preserve">
-    <value>Create New</value>
+  <data name="Dashboard_Start" xml:space="preserve">
+    <value>Start</value>
   </data>
   <data name="Dashboard_CreateInterview" xml:space="preserve">
     <value>Create

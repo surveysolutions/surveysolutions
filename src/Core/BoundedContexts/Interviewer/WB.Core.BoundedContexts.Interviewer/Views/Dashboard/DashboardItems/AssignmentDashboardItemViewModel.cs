@@ -63,12 +63,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
 
             this.PrefilledQuestions = GetPrefilledQuestions(assignment.IdentifyingData.Take(3));
-            this.DetailedQuestions = GetPrefilledQuestions(assignment.IdentifyingData.Skip(3));
+            this.DetailedPrefilledQuestions = GetPrefilledQuestions(assignment.IdentifyingData.Skip(3));
             this.GpsLocation = this.GetAssignmentLocation(assignment);
         }
 
         private AssignmentDocument assignment;
-        private bool isExpanded;
 
         public string QuestionnaireName => string.Format(InterviewerUIResources.DashboardItem_Title, this.assignment.Title, this.questionnaireIdentity.Version);
         public string Comment
@@ -89,14 +88,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             }
         }
 
-        public bool IsExpanded
-        {
-            get => this.isExpanded;
-            set => this.RaiseAndSetIfChanged(ref this.isExpanded, value);
-        }
-
         public List<PrefilledQuestion> PrefilledQuestions { get; private set; }
-        public List<PrefilledQuestion> DetailedQuestions { get; private set; }
+        public List<PrefilledQuestion> DetailedPrefilledQuestions { get; private set; }
         public InterviewGpsCoordinatesView GpsLocation { get; private set; }
         public bool HasGpsLocation => this.GpsLocation != null;
 
@@ -183,8 +176,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             get { return new MvxCommand(this.NavigateToGpsLocation, () => this.HasGpsLocation); }
         }
-
-        public IMvxCommand ToggleDetails => new MvxCommand(() => this.IsExpanded = !this.IsExpanded);
 
         private void NavigateToGpsLocation()
         {

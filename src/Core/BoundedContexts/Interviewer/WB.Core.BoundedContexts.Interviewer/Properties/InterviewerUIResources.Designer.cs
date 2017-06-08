@@ -127,15 +127,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create New.
-        /// </summary>
-        public static string Dashboard_CreateNewLinkText {
-            get {
-                return ResourceManager.GetString("Dashboard_CreateNewLinkText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Create new interview using templates.
         /// </summary>
         public static string Dashboard_CreateNewTabText {
@@ -234,6 +225,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Dashboard_RemoveInterviewQuestion {
             get {
                 return ResourceManager.GetString("Dashboard_RemoveInterviewQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start.
+        /// </summary>
+        public static string Dashboard_Start {
+            get {
+                return ResourceManager.GetString("Dashboard_Start", resourceCulture);
             }
         }
         

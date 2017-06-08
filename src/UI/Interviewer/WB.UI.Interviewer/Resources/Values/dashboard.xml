@@ -28,6 +28,7 @@
     <item name="android:layout_marginRight">@dimen/Dashboard_Layout_marginRight</item>
     <item name="android:layout_marginBottom">@dimen/Dashboard_Items_space</item>
     <item name="android:clickable">true</item>
+    <item name="android:background">?attr/selectableItemBackground</item>
   </style>
 
   <style name="Dashboard_InterviewItem_Layout" parent="AppTheme">

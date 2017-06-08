@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             listDashboardItems.AddRange(this.GetAssignments());
 
             this.Items = listDashboardItems;
-            this.Title = InterviewerUIResources.Dashboard_CreateNewLinkText;
+            this.Title = InterviewerUIResources.Dashboard_Start;
         }
 
         private List<CensusQuestionnaireDashboardItemViewModel> GetCensusQuestionnaires()
