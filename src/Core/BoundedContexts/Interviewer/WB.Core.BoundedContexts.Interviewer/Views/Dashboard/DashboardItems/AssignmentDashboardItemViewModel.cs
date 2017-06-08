@@ -24,7 +24,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 {
-    public class AssignmentDashboardItemViewModel : IDashboardItem
+    public class AssignmentDashboardItemViewModel : MvxNotifyPropertyChanged, IDashboardItem
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IIdentifyingAnswerConverter identifyingAnswerConverter;
@@ -62,11 +62,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.assignment = assignment;
             this.questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
 
-            this.PrefilledQuestions = GetPrefilledQuestions(assignment.IdentifyingData);
+            this.PrefilledQuestions = GetPrefilledQuestions(assignment.IdentifyingData.Take(3));
+            this.DetailedQuestions = GetPrefilledQuestions(assignment.IdentifyingData.Skip(3));
             this.GpsLocation = this.GetAssignmentLocation(assignment);
         }
 
         private AssignmentDocument assignment;
+        private bool isExpanded;
 
         public string QuestionnaireName => string.Format(InterviewerUIResources.DashboardItem_Title, this.assignment.Title, this.questionnaireIdentity.Version);
         public string Comment
@@ -87,7 +89,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             }
         }
 
+        public bool IsExpanded
+        {
+            get => this.isExpanded;
+            set => this.RaiseAndSetIfChanged(ref this.isExpanded, value);
+        }
+
         public List<PrefilledQuestion> PrefilledQuestions { get; private set; }
+        public List<PrefilledQuestion> DetailedQuestions { get; private set; }
         public InterviewGpsCoordinatesView GpsLocation { get; private set; }
         public bool HasGpsLocation => this.GpsLocation != null;
 
@@ -147,13 +156,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             messenger.Publish(new StartingLongOperationMessage(this));
         }
 
-        private List<PrefilledQuestion> GetPrefilledQuestions(List<AssignmentDocument.IdentifyingAnswer> identifyingAnswers)
+        private List<PrefilledQuestion> GetPrefilledQuestions(IEnumerable<AssignmentDocument.IdentifyingAnswer> identifyingAnswers)
         {
             return identifyingAnswers.Select(fi => new PrefilledQuestion
                 {
                     Answer = fi.Answer,
                     Question = fi.Question
-                }).Take(3).ToList();
+                }).ToList();
         }
 
         private InterviewGpsCoordinatesView GetAssignmentLocation(AssignmentDocument assignment)
@@ -174,6 +183,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             get { return new MvxCommand(this.NavigateToGpsLocation, () => this.HasGpsLocation); }
         }
+
+        public IMvxCommand ToggleDetails => new MvxCommand(() => this.IsExpanded = !this.IsExpanded);
 
         private void NavigateToGpsLocation()
         {
