@@ -157,7 +157,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
 			return CreateLevel(rosterIdentity);
 		}
 		
-		public RostersCollection<T> GetLevels<T>(Guid levelId, Identity forRosterIdentity) where T : class, IInterviewLevel
+		public RostersCollection<T> GetLevels<T>(Guid levelId, Identity forRosterIdentity) where T : class, IInterviewLevel, IIndexedInterviewLevel
         {
 			var rosterIdentities = this.state.FindEntitiesFromSameOrDeeperLevel(levelId, forRosterIdentity);
 			var rosters = rosterIdentities.Select(CreateLevel).Cast<T>().ToList();
