@@ -341,7 +341,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.questionIdentity.Id,
                 this.questionIdentity.RosterVector,
                 DateTime.UtcNow,
-                answerValue);
+                Convert.ToInt32(answerValue));
 
             try
             {

@@ -385,8 +385,9 @@
   <ItemGroup>
     <Compile Include="Activities\DashboardActivity.cs" />
     <Compile Include="Activities\DashboardCompletednterviewsFragment.cs" />
-    <Compile Include="Activities\DashboardNewInterviewsFragment.cs" />
+    <Compile Include="Activities\DashboardExpandableViewHolder.cs" />
     <Compile Include="Activities\DashboardQuestionnairesFragment.cs" />
+    <Compile Include="Activities\DashboardRecyclerViewAdapter.cs" />
     <Compile Include="Activities\DashboardRejectednterviewsFragment.cs" />
     <Compile Include="Activities\DashboardStartedInterviewsFragment.cs" />
     <Compile Include="Activities\DiagnosticsActivity.cs" />
@@ -419,7 +420,7 @@
     <Compile Include="CustomBindings\TextViewIsCurrentDashboardTabBinding.cs" />
     <Compile Include="CustomBindings\ViewDrawableTargetBinding.cs" />
     <Compile Include="CustomControls\InterviewerDashboardTemplateSelector.cs" />
-    <Compile Include="Implementations\Services\ArchiveParcherService.cs" />
+    <Compile Include="Implementations\Services\ArchivePatcherService.cs" />
     <Compile Include="Implementations\Services\DeviceInformationService.cs" />
     <Compile Include="Implementations\Services\InMemorySnapshotStoreWithCache.cs" />
     <Compile Include="Implementations\Services\StoredEvent.cs" />
@@ -508,10 +509,9 @@
     <AndroidResource Include="Resources\Layout\fragment_dashboard_tab.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\fragment_dashboard_tab_new.axml">
+    <AndroidResource Include="Resources\Layout\dashboard_assignment_questionnare_item.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\dashboard_assignment_questionnare_item.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\ErrorScreen.axml">

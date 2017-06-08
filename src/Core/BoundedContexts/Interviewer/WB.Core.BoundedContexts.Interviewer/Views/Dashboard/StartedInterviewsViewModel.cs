@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             var interviewViews = this.interviewViewRepository.Where(interview =>
                 interview.ResponsibleId == interviewerId &&
-                (interview.Status == SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus.InterviewerAssigned && interview.StartedDateTime != null || 
+                (interview.Status == SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus.InterviewerAssigned || 
                 interview.Status == SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus.Restarted));
 
             foreach (var interviewView in interviewViews)

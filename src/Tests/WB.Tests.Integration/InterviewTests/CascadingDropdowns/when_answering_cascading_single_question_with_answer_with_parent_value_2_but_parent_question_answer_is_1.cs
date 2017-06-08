@@ -36,11 +36,11 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                     Create.Entity.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
                         options: new List<Answer>
                         {
-                             Create.Entity.Option("1.1", "child 1 for parent option 1", "1"),
-                             Create.Entity.Option("1.2", "child 2 for parent option 1", "1"),
-                             Create.Entity.Option("2.1", "child 1 for parent option 2", "2"),
-                             Create.Entity.Option("2.2", "child 2 for parent option 2", "2"),
-                             Create.Entity.Option("2.3", "child 3 for parent option 2", "2")
+                             Create.Entity.Option("11", "child 1 for parent option 1", "1"),
+                             Create.Entity.Option("12", "child 2 for parent option 1", "1"),
+                             Create.Entity.Option("21", "child 1 for parent option 2", "2"),
+                             Create.Entity.Option("22", "child 2 for parent option 2", "2"),
+                             Create.Entity.Option("23", "child 3 for parent option 2", "2")
                         })
                     );
 
@@ -55,7 +55,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 using (var eventContext = new EventContext())
                 {
                     var exception = Catch.Exception(() =>
-                        interview.AnswerSingleOptionQuestion(actorId, childCascadedComboboxId, new decimal[] { }, DateTime.Now, 2.2m)
+                        interview.AnswerSingleOptionQuestion(actorId, childCascadedComboboxId, new decimal[] { }, DateTime.Now, 22)
                         );
 
                     return new InvokeResults

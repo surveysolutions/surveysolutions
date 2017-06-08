@@ -15,8 +15,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
         public int? LengthOfRosterVectorWhichNeedToBeExported { get; set; }
         public Dictionary<Guid, LabelItem> Labels { get; set; }
         public decimal[] ColumnValues { get; set; }
+        public bool IsIdentifyingQuestion { get; internal set; }
     }
-
 
     public class LabelItem
     {
@@ -33,5 +33,4 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
         public string Caption { get; set; }
         public string Title { get; set; }
     }
-
 }

@@ -48,12 +48,6 @@ namespace WB.UI.Interviewer.Activities
                 },
                 new MvxFragmentStatePagerAdapter.FragmentInfo
                 {
-                    FragmentType = typeof(DashboardNewInterviewsFragment),
-                    ViewModel = ViewModel.NewInterviews,
-                    Title = ViewModel.NewInterviews.Title
-                },
-                new MvxFragmentStatePagerAdapter.FragmentInfo
-                {
                     FragmentType = typeof(DashboardRejectednterviewsFragment),
                     ViewModel = ViewModel.RejectedInterviews,
                     Title = ViewModel.RejectedInterviews.Title

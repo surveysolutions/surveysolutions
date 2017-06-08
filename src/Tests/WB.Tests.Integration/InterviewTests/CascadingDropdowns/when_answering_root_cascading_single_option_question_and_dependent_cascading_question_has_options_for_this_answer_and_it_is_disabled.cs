@@ -46,7 +46,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerSingleOptionQuestion(actorId, parentSingleOptionQuestionId, RosterVector.Empty, DateTime.Now, 1m);
+                    interview.AnswerSingleOptionQuestion(actorId, parentSingleOptionQuestionId, RosterVector.Empty, DateTime.Now, 1);
 
                     return new InvokeResults
                     {

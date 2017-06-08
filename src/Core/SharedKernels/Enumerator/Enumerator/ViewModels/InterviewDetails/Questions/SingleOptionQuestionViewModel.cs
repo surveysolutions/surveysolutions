@@ -125,7 +125,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.questionIdentity.Id,
                 this.questionIdentity.RosterVector,
                 DateTime.UtcNow,
-                selectedOption.Value);
+                Convert.ToInt32(selectedOption.Value));
 
             try
             {

@@ -17,8 +17,8 @@
   </style>
 
   <style name="Dashboard_InterviewsList" parent="AppTheme">
-    <item name="android:layout_width">fill_parent</item>
-    <item name="android:layout_height">fill_parent</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
   </style>
 
   <style name="Dashboard_InterviewListItem" parent="AppTheme">
@@ -28,6 +28,7 @@
     <item name="android:layout_marginRight">@dimen/Dashboard_Layout_marginRight</item>
     <item name="android:layout_marginBottom">@dimen/Dashboard_Items_space</item>
     <item name="android:clickable">true</item>
+    <item name="android:background">?attr/selectableItemBackground</item>
   </style>
 
   <style name="Dashboard_InterviewItem_Layout" parent="AppTheme">
@@ -59,7 +60,7 @@
     <item name="android:layout_width">@dimen/Theme_Button_min_height</item>
     <item name="android:layout_height">@dimen/Theme_Button_min_height</item>
     <item name="android:background">@drawable/dashboard_location_bg</item>
-    <item name="android:layout_gravity">bottom</item>
+    <item name="android:layout_gravity">center_vertical</item>
   </style>
   
   <style name="Dashboard_InterviewItem_Title" parent="AppTheme">
@@ -68,6 +69,7 @@
     <item name="android:textSize">@dimen/textsize_20</item>
     <item name="android:fontFamily">Roboto</item>
     <item name="android:paddingTop">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
+    <item name="android:layout_marginBottom">@dimen/Dashboard_InterviewItem_PrefilledQuestions_marginTop</item>
   </style>
 
   <style name="Dashboard_InterviewItem_RemoveInterviewButton" parent="AppTheme">
@@ -85,7 +87,6 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:focusable">false</item>
     <item name="android:focusableInTouchMode">false</item>
-    <item name="android:layout_marginTop">@dimen/Dashboard_InterviewItem_PrefilledQuestions_marginTop</item>
   </style>
 
   <style name="Dashboard_InterviewItem_PrefilledQuestion" parent="AppTheme">
@@ -121,13 +122,14 @@
   </style>
 
   <style name="Dashboard_InterviewItem_Comment" parent="AppTheme">
-    <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:fontFamily">Roboto</item>
+    <item name="android:layout_width">@dimen/zero</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:layout_weight">1</item>
+    <item name="android:gravity">center_vertical</item>
     <item name="android:textSize">@dimen/textsize_14</item>
     <item name="android:textColor">@color/dashboard_new_interview_status</item>
     <item name="android:textStyle">bold</item>
-    <item name="android:layout_marginTop">@dimen/Dashboard_InterviewItem_Comment_lines_margin</item>
+    <item name="android:paddingLeft">@dimen/Dashboard_InterviewItem_Comment_lines_margin</item>
     <item name="android:singleLine">true</item>
   </style>
 

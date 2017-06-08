@@ -174,6 +174,9 @@
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
     <value>Начатые ({0})</value>
   </data>
+  <data name="Dashboard_AssignmentsTabTitle" xml:space="preserve">
+    <value>Создать</value>
+  </data>
   <data name="Dashboard_Title" xml:space="preserve">
     <value>{0} интервью для {1}</value>
   </data>
@@ -621,8 +624,8 @@
   <data name="Synchronization_Of_Assignments" xml:space="preserve">
     <value>Проверка на наличие новых заданий</value>
   </data>
-  <data name="Dashboard_CreateNewLinkText" xml:space="preserve">
-    <value>Создать новое</value>
+  <data name="Dashboard_Start" xml:space="preserve">
+    <value>Начать</value>
   </data>
   <data name="Dashboard_CreateNewTabText" xml:space="preserve">
     <value>Создать новое интервью используя шаблон</value>
