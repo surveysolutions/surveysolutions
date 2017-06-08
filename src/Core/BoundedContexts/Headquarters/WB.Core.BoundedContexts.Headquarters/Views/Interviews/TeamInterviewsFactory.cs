@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
                     CanApprove = x.Status == InterviewStatus.Completed || x.Status == InterviewStatus.RejectedByHeadquarters,
                     CanReject = x.Status == InterviewStatus.Completed || x.Status == InterviewStatus.RejectedByHeadquarters,
                     IsNeedInterviewerAssign = !x.IsAssignedToInterviewer,
-                    CreatedOnClient = x.WasCreatedOnClient,
+                    AssignmentId = x.AssignmentId,
                     ReceivedByInterviewer = x.ReceivedByInterviewer,
                 }).ToList();
             return new TeamInterviewsView
