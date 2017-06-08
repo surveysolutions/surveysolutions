@@ -30,28 +30,28 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var roster2Id = Guid.Parse("22222222222222222222222222222222");
                 var roster3Id = Guid.Parse("33333333333333333333333333333333");
 
-                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Abc.Create.Entity.MultyOptionsQuestion(rosterSizeQuestionId, variable: "multi", yesNoView: true, options: new List<Answer>
+                var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Create.Entity.MultyOptionsQuestion(rosterSizeQuestionId, variable: "multi", yesNoView: true, options: new List<Answer>
                     {
-                        Abc.Create.Entity.Option(value: "20", text: "A"),
-                        Abc.Create.Entity.Option(value: "30", text: "B")
+                        Create.Entity.Option(value: "20", text: "A"),
+                        Create.Entity.Option(value: "30", text: "B")
                     }),
 
-                    Abc.Create.Entity.Roster(
+                    Create.Entity.Roster(
                         rosterId: roster1Id,
                         rosterSizeSourceType: RosterSizeSourceType.Question,
                         rosterSizeQuestionId: rosterSizeQuestionId,
                         variable: "first",
                         children: new IComposite[]
                         {
-                            Abc.Create.Entity.Roster(
+                            Create.Entity.Roster(
                                 rosterId: roster2Id,
                                 rosterSizeSourceType: RosterSizeSourceType.Question,
                                 rosterSizeQuestionId: rosterSizeQuestionId,
                                 variable: "second",
                                 children: new IComposite[]
                                 {
-                                    Abc.Create.Entity.Roster(
+                                    Create.Entity.Roster(
                                         rosterId: roster3Id,
                                         rosterSizeSourceType: RosterSizeSourceType.Question,
                                         rosterSizeQuestionId: rosterSizeQuestionId,
@@ -66,7 +66,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var result = new InvokeResults();
 
-                var interview = SetupInterview(questionnaireDocument, new List<object>() { });
+                var interview = SetupInterview(questionnaireDocument, new List<object>());
 
                 interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(questionId: rosterSizeQuestionId, answeredOptions: new [] { Yes(30) }));
 
