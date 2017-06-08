@@ -359,6 +359,11 @@
     <Compile Include="Implementation\Services\SynchronizationLogViewFactory.cs" />
     <Compile Include="Implementation\Services\TabletInformation\FileBasedTabletInformationService.cs" />
     <Compile Include="Mappings\ReadonlyUserMap.cs" />
+    <Compile Include="Resources\TroubleshootingMessages.ru.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TroubleshootingMessages.ru.resx</DependentUpon>
+    </Compile>
     <Compile Include="Troubleshooting\IInterviewLogSummaryReader.cs" />
     <Compile Include="Troubleshooting\InterviewLogSummaryReader.cs" />
     <Compile Include="Troubleshooting\TroubleshootingService.cs" />
@@ -446,11 +451,6 @@
     </Compile>
     <Compile Include="Resources\TroubleshootingMessages.Designer.cs">
       <DependentUpon>TroubleshootingMessages.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Resources\TroubleshootingMessages.ru.Designer.cs">
-      <DependentUpon>TroubleshootingMessages.ru.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -781,72 +781,124 @@
     <Folder Include="Synchronization\Questionnaire\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\CommandValidatorsMessages.pt.resx" />
+    <EmbeddedResource Include="Resources\CommandValidatorsMessages.pt.resx">
+      <DependentUpon>CommandValidatorsMessages.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\CommandValidatorsMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CommandValidatorsMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\CommandValidatorsMessages.ru.resx" />
-    <EmbeddedResource Include="Resources\CommandValidatorsMessages.zh.resx" />
-    <EmbeddedResource Include="Resources\ErrorMessages.fr.resx" />
-    <EmbeddedResource Include="Resources\ErrorMessages.pt.resx" />
+    <EmbeddedResource Include="Resources\CommandValidatorsMessages.ru.resx">
+      <DependentUpon>CommandValidatorsMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\CommandValidatorsMessages.zh.resx">
+      <DependentUpon>CommandValidatorsMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ErrorMessages.fr.resx">
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ErrorMessages.pt.resx">
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\ErrorMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ErrorMessages.ru.resx" />
-    <EmbeddedResource Include="Resources\ErrorMessages.zh.resx" />
-    <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.fr.resx" />
-    <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.pt.resx" />
+    <EmbeddedResource Include="Resources\ErrorMessages.ru.resx">
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ErrorMessages.zh.resx">
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.fr.resx">
+      <DependentUpon>FileBasedDataExportRepositoryWriterMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.pt.resx">
+      <DependentUpon>FileBasedDataExportRepositoryWriterMessages.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>FileBasedDataExportRepositoryWriterMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.ru.resx" />
-    <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.zh.resx" />
-    <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.fr.resx" />
-    <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.pt.resx" />
+    <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.ru.resx">
+      <DependentUpon>FileBasedDataExportRepositoryWriterMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.zh.resx">
+      <DependentUpon>FileBasedDataExportRepositoryWriterMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.fr.resx">
+      <DependentUpon>HeadquarterUserCommandValidatorMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.pt.resx">
+      <DependentUpon>HeadquarterUserCommandValidatorMessages.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>HeadquarterUserCommandValidatorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.ru.resx" />
-    <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.zh.resx" />
-    <EmbeddedResource Include="Resources\PreloadingVerificationMessages.ru.resx" />
-    <EmbeddedResource Include="Resources\PreloadingVerificationMessages.pt.resx" />
+    <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.ru.resx">
+      <DependentUpon>HeadquarterUserCommandValidatorMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.zh.resx">
+      <DependentUpon>HeadquarterUserCommandValidatorMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PreloadingVerificationMessages.pt.resx">
+      <DependentUpon>PreloadingVerificationMessages.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\PreloadingVerificationMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PreloadingVerificationMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PreloadingVerificationMessages.zh.resx" />
-    <EmbeddedResource Include="Resources\SurveyManagementInterviewCommandValidatorMessages.pt.resx" />
+    <EmbeddedResource Include="Resources\PreloadingVerificationMessages.ru.resx">
+      <DependentUpon>PreloadingVerificationMessages.resx</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PreloadingVerificationMessages.zh.resx">
+      <DependentUpon>PreloadingVerificationMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\SurveyManagementInterviewCommandValidatorMessages.pt.resx">
+      <DependentUpon>SurveyManagementInterviewCommandValidatorMessages.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\SurveyManagementInterviewCommandValidatorMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SurveyManagementInterviewCommandValidatorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\SurveyManagementInterviewCommandValidatorMessages.zh.resx" />
+    <EmbeddedResource Include="Resources\SurveyManagementInterviewCommandValidatorMessages.zh.resx">
+      <DependentUpon>SurveyManagementInterviewCommandValidatorMessages.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\TroubleshootingMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>TroubleshootingMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\TroubleshootingMessages.ru.resx">
+      <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>TroubleshootingMessages.ru.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
+      <DependentUpon>TroubleshootingMessages.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\TroubleshootingMessages.zh.resx" />
-    <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.fr.resx" />
-    <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.pt.resx" />
+    <EmbeddedResource Include="Resources\TroubleshootingMessages.zh.resx">
+      <DependentUpon>TroubleshootingMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.fr.resx">
+      <DependentUpon>UserPreloadingServiceMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.pt.resx">
+      <DependentUpon>UserPreloadingServiceMessages.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>UserPreloadingServiceMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.ru.resx" />
-    <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.zh.resx" />
+    <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.ru.resx">
+      <DependentUpon>UserPreloadingServiceMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.zh.resx">
+      <DependentUpon>UserPreloadingServiceMessages.resx</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

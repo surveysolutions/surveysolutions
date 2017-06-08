@@ -134,4 +134,7 @@
     <value>Количество должно быть больше 0.</value>
     <comment>Количество должно быть больше 0.</comment>
   </data>
+  <data name="PL0037_ColumnIsNotIdentifying" xml:space="preserve">
+    <value>Колонка должна быть связана только с идентифицирующим вопросом</value>
+  </data>
 </root>
