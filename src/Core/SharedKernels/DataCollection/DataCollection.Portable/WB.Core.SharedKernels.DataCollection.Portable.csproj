@@ -48,6 +48,7 @@
     <Compile Include="ConversionHelper.cs" />
     <Compile Include="ExpressionStorage\CustomFunctions\Extensions.cs" />
     <Compile Include="ExpressionStorage\LevelFunctions.cs" />
+    <Compile Include="ExpressionStorage\RosterCollection.cs" />
     <Compile Include="FailedValidationCondition.cs" />
     <Compile Include="LinkedQuestionFilterResult.cs" />
     <Compile Include="IInterviewProperties.cs" />

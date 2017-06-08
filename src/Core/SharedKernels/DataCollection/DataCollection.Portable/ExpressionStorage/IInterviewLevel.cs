@@ -10,4 +10,10 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
         Func<object> GetVariableExpression(Identity identity);
         Func<int, bool> GetCategoricalFilter(Identity identity);
     }
+
+    public interface IIndexedInterviewLevel
+    {
+        int RowCode { get; }
+        int RowIndex { get; }
+    }
 }
