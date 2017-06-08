@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -57,12 +58,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Identity questionIdentity;
         private Guid interviewId;
         private readonly QuestionStateViewModel<AreaQuestionAnswered> questionState;
+        private IUserInteractionService userInteractionService;
 
         public AreaQuestionViewModel(
             IPrincipal principal,
             IStatefulInterviewRepository interviewRepository,
             IAreaEditService areaEditService,
             ILiteEventRegistry eventRegistry,
+            IUserInteractionService userInteractionService,
             QuestionStateViewModel<AreaQuestionAnswered> questionStateViewModel,
             QuestionInstructionViewModel instructionViewModel,
             AnsweringViewModel answering)
@@ -75,6 +78,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
+            this.userInteractionService = userInteractionService;
         }
 
         public Identity Identity { get { return this.questionIdentity; } }
@@ -135,6 +139,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             catch (InterviewException ex)
             {
                 this.QuestionState.Validity.ProcessException(ex);
+            }
+            catch (NotImplementedException)
+            {
+                userInteractionService.ShowToast(UIResources.Version_Not_Supports);
             }
             finally
             {
