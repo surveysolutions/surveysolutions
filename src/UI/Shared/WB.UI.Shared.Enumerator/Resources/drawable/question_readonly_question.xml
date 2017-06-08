@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:local="http://schemas.android.com/apk/res-auto">
+  <item>
+    <shape android:shape="rectangle">
+      <padding
+        android:top="@dimen/Interview_Question_Readonly_padding"
+        android:bottom="@dimen/Interview_Question_Readonly_padding"
+        android:left="@dimen/Interview_Question_Readonly_padding"
+        android:right="@dimen/Interview_Question_Readonly_padding" />
+      
+      <solid android:color="@color/readonly_question_inner_shape"/>
+      <stroke
+        android:width="@dimen/Interview_Question_Readonly_active_width"
+        android:color="@color/readonly_question_outer_shape"/>
+      <corners android:radius="@dimen/Interview_Question_Answer_Input_background_corners_radius"/>
+    </shape>
+  </item>  
+
+  <item>
+    <shape android:shape="rectangle">
+      <solid android:color="@color/readonly_question_background" />
+      <stroke
+        android:width="@dimen/Interview_Question_Readonly_active_width"
+        android:color="@color/readonly_question_inner_shape"/>
+      <corners android:radius="@dimen/Interview_Question_Answer_Input_background_corners_radius"/>
+    </shape>
+  </item>
+</layer-list>
