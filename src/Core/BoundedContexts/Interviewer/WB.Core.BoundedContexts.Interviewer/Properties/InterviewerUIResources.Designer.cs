@@ -98,6 +98,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create New.
+        /// </summary>
+        public static string Dashboard_AssignmentsTabTitle {
+            get {
+                return ResourceManager.GetString("Dashboard_AssignmentsTabTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Completed ({0}).
         /// </summary>
         public static string Dashboard_CompletedLinkText {
