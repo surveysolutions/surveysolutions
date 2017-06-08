@@ -163,6 +163,9 @@ iнтервью</value>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
     <value>Розпочаті ({0})</value>
   </data>
+  <data name="Dashboard_AssignmentsTabTitle" xml:space="preserve">
+    <value>Створити</value>
+  </data>
   <data name="Dashboard_Title" xml:space="preserve">
     <value>{0} призначення на {1}</value>
   </data>
