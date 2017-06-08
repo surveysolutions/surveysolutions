@@ -374,5 +374,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("PL0036_QuantityShouldBePositive", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Column cannot be mapped to non identifying question.
+        /// </summary>
+        public static string PL0037_ColumnIsNotIdentifying {
+            get {
+                return ResourceManager.GetString("PL0037_ColumnIsNotIdentifying", resourceCulture);
+            }
+        }
     }
 }
