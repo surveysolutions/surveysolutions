@@ -500,7 +500,14 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             
             #line default
             #line hidden
-            this.Write(",Identity);\r\n");
+            this.Write(", ");
+            
+            #line 169 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(roster.RosterScope.Length == 1? "null" : "Identity"));
+            
+            #line default
+            #line hidden
+            this.Write(");\r\n");
             
             #line 170 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
  
