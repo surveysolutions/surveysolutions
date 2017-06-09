@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WB.Core.Infrastructure.Implementation.ReadSide
+namespace WB.Core.BoundedContexts.Headquarters.Implementation.ReadSide
 {
     public class ReadSideStatus
     {

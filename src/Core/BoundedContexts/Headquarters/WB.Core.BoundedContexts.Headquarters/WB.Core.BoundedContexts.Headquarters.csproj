@@ -319,6 +319,14 @@
     <Compile Include="Implementation\Factories\QuestionnaireBrowseInputModel.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireBrowseViewFactory.cs" />
     <Compile Include="Implementation\IRecordsAccessor.cs" />
+    <Compile Include="Implementation\ReadSide\IReadSideAdministrationService.cs" />
+    <Compile Include="Implementation\ReadSide\ReadSideDenormalizerStatistic.cs" />
+    <Compile Include="Implementation\ReadSide\ReadSideEventHandlerDescription.cs" />
+    <Compile Include="Implementation\ReadSide\ReadSideEventPublishingDetails.cs" />
+    <Compile Include="Implementation\ReadSide\ReadSideRepositoryWriterError.cs" />
+    <Compile Include="Implementation\ReadSide\ReadSideRepositoryWriterStatus.cs" />
+    <Compile Include="Implementation\ReadSide\ReadSideService.cs" />
+    <Compile Include="Implementation\ReadSide\ReadSideStatus.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireQuestionOptionsRepository.cs" />
     <Compile Include="Implementation\Repositories\FilebasedPreloadedDataRepository.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireExportStructureStorage.cs" />

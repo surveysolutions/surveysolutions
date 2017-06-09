@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.IO;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,19 +11,18 @@ using Ncqrs.Domain;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
-
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 
-namespace WB.Core.Infrastructure.Implementation.ReadSide
+namespace WB.Core.BoundedContexts.Headquarters.Implementation.ReadSide
 {
-    public class ReadSideService : IReadSideAdministrationService
+    internal class ReadSideService : IReadSideAdministrationService
     {
         internal static int InstanceCount = 0;
 
@@ -171,17 +170,17 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 this.eventBus.GetAllRegistredEventHandlers()
                     .Select(
                         h =>
-                        new ReadSideEventHandlerDescription(h.Name, h.Readers.Select(CreateViewName).ToArray(),
-                                                    h.Writers.Select(CreateViewName).ToArray(), h is IAtomicEventHandler))
+                        new ReadSideEventHandlerDescription(h.Name, h.Readers.Select(this.CreateViewName).ToArray(),
+                                                    h.Writers.Select(this.CreateViewName).ToArray(), h is IAtomicEventHandler))
                     .ToList();
         }
 
         private List<ReadSideDenormalizerStatistic> GetRebuildDenormalizerStatistics()
         {
-            if(handlersWithStopwatches==null)
+            if(this.handlersWithStopwatches==null)
                 return new List<ReadSideDenormalizerStatistic>();
             var currentStateOfDenormalizers =
-                handlersWithStopwatches.OrderByDescending(h => h.Value.Elapsed.Ticks)
+                this.handlersWithStopwatches.OrderByDescending(h => h.Value.Elapsed.Ticks)
                     .Select(h => new {Name = h.Key.Name, Ticks = h.Value.Elapsed.Ticks});
 
             var timeSpentForAllDenormalizers = currentStateOfDenormalizers.Sum(x => x.Ticks);
@@ -255,7 +254,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                         ErrorMessage = error.Item2,
                         InnerException = GetFullUnwrappedExceptionText(error.Item3)
                     }),
-                ReadSideDenormalizerStatistics = GetRebuildDenormalizerStatistics()
+                ReadSideDenormalizerStatistics = this.GetRebuildDenormalizerStatistics()
             };
         }
 
@@ -397,7 +396,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 }
 
                 UpdateStatusMessage("Rebuild views by event sources succeeded.");
-                logger.Info("Rebuild views by event sources succeeded.");
+                this.logger.Info("Rebuild views by event sources succeeded.");
             }
             catch (OperationCanceledException exception)
             {
@@ -466,7 +465,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                         : $"Rebuild {(isPartialRebuild ? "specific" : "all")} views succeeded.";
 
                     UpdateStatusMessage(finishMessage);
-                    logger.Info(finishMessage);
+                    this.logger.Info(finishMessage);
                 }
             }
             catch (OperationCanceledException exception)
@@ -723,9 +722,9 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             UpdateStatusMessage(
                 "Acquiring first portion of events."
                 + Environment.NewLine
-                + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, this.FailedEventsCount, skipEventsCount));
+                + GetReadablePublishingDetails(republishStarted, this.processedEventsCount, allEventsCount, this.FailedEventsCount, skipEventsCount));
 
-            handlersWithStopwatches = handlers.ToDictionary(x => x, x => new Stopwatch());
+            this.handlersWithStopwatches = handlers.ToDictionary(x => x, x => new Stopwatch());
 
             foreach (CommittedEvent @event in eventStream)
             {
@@ -749,7 +748,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                     using (GlobalStopwatcher.Scope("Publish event", eventTypeName))
                     {
-                        this.eventBus.PublishEventToHandlers(@event, handlersWithStopwatches);
+                        this.eventBus.PublishEventToHandlers(@event, this.handlersWithStopwatches);
                     }
                 }
                 catch (Exception exception)
@@ -767,7 +766,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                 this.processedEventsCount++;
 
-                if (this.FailedEventsCount >= maxAllowedFailedEvents)
+                if (this.FailedEventsCount >= this.maxAllowedFailedEvents)
                 {
                     var message = $"Failed to rebuild read side. Too many events failed: {this.FailedEventsCount}. Last processed event count: {this.processedEventsCount}";
                     UpdateStatusMessage(message);
