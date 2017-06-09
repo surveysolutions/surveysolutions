@@ -2428,6 +2428,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 this.UpdateTreeWithDependentChangesWithExpressionState(changedInterviewTree, questionnaire);
             }
+
+            changedInterviewTree.ReplaceSubstitutions();
         }
 
         private void UpdateTreeWithDependentChangesWithExpressionState(InterviewTree changedInterviewTree,
@@ -2453,8 +2455,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
             this.UpdateTreeWithValidationChanges(changedInterviewTree, validationChanges);
-
-            changedInterviewTree.ReplaceSubstitutions();
         }
 
         private void UpdateTreeWithVariableChanges(InterviewTree tree, VariableValueChanges variableValueChanges)
