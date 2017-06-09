@@ -162,9 +162,6 @@
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
     <value>Comenzó ({0})</value>
   </data>
-  <data name="Dashboard_Title" xml:space="preserve">
-    <value>{0} tareas para {1}</value>
-  </data>
   <data name="DashboardItem_CensusModeComment" xml:space="preserve">
     <value>Modo de censo, entrevistas creadas: {0}</value>
   </data>

@@ -162,9 +162,6 @@
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
     <value>Bắt đầu ({0})</value>
   </data>
-  <data name="Dashboard_Title" xml:space="preserve">
-    <value>{0} các nhiệm vụ cho {1}</value>
-  </data>
   <data name="DashboardItem_AssignedOn" xml:space="preserve">
     <value>Giao nhiệm vụ vào {0}</value>
   </data>
