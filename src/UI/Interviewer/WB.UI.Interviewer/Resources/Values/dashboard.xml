@@ -85,7 +85,6 @@
     <item name="android:textColor">@color/dashboard_interview_title</item>
     <item name="android:background">@drawable/dashboard_remove_icon</item>
     <item name="android:textSize">@dimen/textsize_20</item>
-    <item name="android:layout_marginTop">@dimen/Dashboard_InterviewItem_RemoveInterviewButton_paddingTop</item>
     <item name="android:gravity">center|top</item>
     <item name="android:textColor">@color/dashboard_questionnairelist_empty_text</item>
   </style>
