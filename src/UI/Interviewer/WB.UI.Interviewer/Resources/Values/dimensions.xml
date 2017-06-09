@@ -44,7 +44,6 @@
   <dimen name="Dashboard_NoInterviewsTitle_marginTop">40dp</dimen>
   <dimen name="Dashboard_NoInterviewsText_marginTop">30dp</dimen>
   <dimen name="Dashboard_InterviewItem_RemoveInterviewButton_paddingTop">8dp</dimen>
-  <dimen name="Dashboard_Tab_Frame_paddingTop">30dp</dimen>
 
   <dimen name="Dashboard_Synchronization_Divider_Height">3dp</dimen>
 
