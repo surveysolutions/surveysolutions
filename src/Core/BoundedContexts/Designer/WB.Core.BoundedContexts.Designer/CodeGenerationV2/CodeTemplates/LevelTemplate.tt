@@ -166,7 +166,7 @@
 	foreach (var roster in Model.Rosters) 
     {
 #>            
-		public RostersCollection<<#=roster.ClassName#>> <#=roster.Variable#> => storage.GetLevels<<#=roster.ClassName#>>(IdOf.<#=roster.Variable#>,Identity);
+		public RostersCollection<<#=roster.ClassName#>> <#=roster.Variable#> => storage.GetLevels<<#=roster.ClassName#>>(IdOf.<#=roster.Variable#>, <#=roster.RosterScope.Length == 1? "null" : "Identity"#>);
 <# 
 	}
 #>
