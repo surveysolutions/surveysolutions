@@ -422,18 +422,18 @@ namespace WB.Tests.Abc.TestFactories
                 syncServiceMock,
                 interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
                 interviewViewRepository ?? new SqliteInmemoryStorage<InterviewView>(),
-                assignmentPlainStorage ?? new SqliteInmemoryStorage<AssignmentDocument>(),
                 principal ?? Mock.Of<IPrincipal>(),
                 logger ?? Mock.Of<ILogger>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 questionnaireFactory ?? Mock.Of<IInterviewerQuestionnaireAccessor>(),
-                attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>(),
                 interviewFactory ?? Mock.Of<IInterviewerInterviewAccessor>(),
                 interviewMultimediaViewStorage ?? Mock.Of<IPlainStorage<InterviewMultimediaView>>(),
                 interviewFileViewStorage ?? Mock.Of<IPlainStorage<InterviewFileView>>(),
                 new CompanyLogoSynchronizer(new InMemoryPlainStorage<CompanyLogo>(), syncServiceMock),
                 Mock.Of<AttachmentsCleanupService>(),
                 passwordHasher ?? Mock.Of<IPasswordHasher>(),
+                Mock.Of<IAssignmentsSynchronizer>(),
+                Mock.Of<IQuestionnaireDownloader>(),
                 httpStatistician ?? Mock.Of<IHttpStatistician>());
         }
 
@@ -475,6 +475,28 @@ namespace WB.Tests.Abc.TestFactories
         public TesterPlainInterviewFileStorage TesterPlainInterviewFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectory)
         {
             return new TesterPlainInterviewFileStorage(fileSystemAccessor, rootDirectory);
+        }
+
+        public IQuestionnaireDownloader QuestionnaireDownloader(
+            IAttachmentContentStorage attachmentContentStorage = null,
+            IInterviewerQuestionnaireAccessor questionnairesAccessor = null,
+            ISynchronizationService synchronizationService = null)
+        {
+            return new QuestionnaireDownloader(
+                attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>(),
+                questionnairesAccessor ?? Mock.Of<IInterviewerQuestionnaireAccessor>(),
+                synchronizationService ?? Mock.Of<ISynchronizationService>());
+        }
+
+        public IAssignmentsSynchronizer AssignmentsSynchronizer(ISynchronizationService synchronizationService = null,
+            IPlainStorage<AssignmentDocument> assignmentsRepository = null,
+            IQuestionnaireDownloader questionnaireDownloader = null,
+            IQuestionnaireStorage questionnaireStorage = null)
+        {
+            return new AssignmentsSynchronizer(synchronizationService ?? Mock.Of<ISynchronizationService>(),
+                assignmentsRepository ?? new SqliteInmemoryStorage<AssignmentDocument>(),
+                questionnaireDownloader ?? Mock.Of<IQuestionnaireDownloader>(),
+            questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
         }
     }
 }
