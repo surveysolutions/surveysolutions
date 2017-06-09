@@ -224,7 +224,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User {0} does not exist. Please enter a valid user name..
+        ///   Looks up a localized string similar to User {0} does not exist. Please enter a valid user name or email..
         /// </summary>
         internal static string User_does_not_exist {
             get {
@@ -233,7 +233,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User {0} does not exist. Please enter a valid user name..
+        ///   Looks up a localized string similar to User {0} does not exist. Please enter a valid user name or email..
         /// </summary>
         internal static string User_does_not_exist_Please_enter_a_valid_user_name {
             get {
