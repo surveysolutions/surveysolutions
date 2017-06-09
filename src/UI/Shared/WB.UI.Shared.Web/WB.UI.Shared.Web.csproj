@@ -162,6 +162,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Filters\ApiNoCacheAttribute.cs" />
     <Compile Include="Attributes\NoTransactionAttribute.cs" />
     <Compile Include="Captcha\ICaptchaService.cs" />
     <Compile Include="Captcha\NoCaptchaProvider.cs" />
