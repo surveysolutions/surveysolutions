@@ -458,10 +458,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public IEnumerable<Identity> FindEntitiesFromSameOrDeeperLevel(Guid entityIdToSearch, Identity startingSearchPointIdentity)
         {
+            var allEntities = this.FindEntity(entityIdToSearch).Select(x => x.Identity);
+
+            if (startingSearchPointIdentity == null)
+                return allEntities;
+
             var rosterVectorLength = startingSearchPointIdentity.RosterVector.Length;
-            return this.FindEntity(entityIdToSearch)
-                .Select(x => x.Identity)
-                .Where(x => x.RosterVector.Take(rosterVectorLength).SequenceEqual(startingSearchPointIdentity.RosterVector));
+            var entities = allEntities.Where(x => x.RosterVector.Take(rosterVectorLength).SequenceEqual(startingSearchPointIdentity.RosterVector));
+            return entities;
         }
 
         public void ReplaceSubstitutions()
