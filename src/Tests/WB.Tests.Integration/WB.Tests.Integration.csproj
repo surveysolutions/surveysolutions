@@ -504,6 +504,8 @@
     <Compile Include="InterviewTests\Variables\when_Answering_question_which_changes_value_of_a_variable.cs" />
     <Compile Include="InterviewTests\Variables\when_Answering_question_which_disables_a_variable.cs" />
     <Compile Include="InterviewTests\Variables\when_Answering_question_which_enables_a_variable.cs" />
+    <Compile Include="InterviewTests\Variables\when_removing_asnwer_which_changes_value_of_a_variable_that_uses_in_substitution.cs" />
+    <Compile Include="InterviewTests\Variables\when_removing_asnwer_which_changes_value_of_a_variable_that_uses_in_substitution1.cs" />
     <Compile Include="NCrunch.Framework.cs" />
     <Compile Include="OldschoolChartStatisticsDataProviderTests\when_count_of_interviews_is_zero.cs" />
     <Compile Include="OldschoolChartStatisticsDataProviderTests\when_3_interviews_are_completed_during_a_month_period.cs" />
