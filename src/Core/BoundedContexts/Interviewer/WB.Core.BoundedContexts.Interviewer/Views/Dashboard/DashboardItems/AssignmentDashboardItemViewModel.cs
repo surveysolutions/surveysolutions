@@ -183,6 +183,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             get { return new MvxCommand(this.NavigateToGpsLocation, () => this.HasGpsLocation); }
         }
 
+        public bool HasExpandedView { get => this.PrefilledQuestions.Count > 0; }
+
         private void NavigateToGpsLocation()
         {
             this.externalAppLauncher.LaunchMapsWithTargetLocation(this.GpsLocation.Latitude, this.GpsLocation.Longitude);

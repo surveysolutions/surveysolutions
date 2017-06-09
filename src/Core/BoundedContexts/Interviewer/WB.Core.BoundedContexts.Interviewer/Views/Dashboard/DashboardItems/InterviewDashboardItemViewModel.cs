@@ -70,6 +70,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.GpsLocation = this.GetInterviewLocation(interview);
             this.IsSupportedRemove = interview.CanBeDeleted;
             this.HasComment = !string.IsNullOrEmpty(this.Comment);
+            this.HasExpandedView = this.PrefilledQuestions.Count > 0;
 
             if (!string.IsNullOrEmpty(interview.Assignment))
             {
@@ -204,6 +205,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public IMvxAsyncCommand LoadDashboardItemCommand
             => new MvxAsyncCommand(this.LoadInterviewAsync, () => this.isInterviewReadyToLoad);
+
+        public bool HasExpandedView { get; private set; }
 
         private bool isInterviewReadyToLoad = true;
 
