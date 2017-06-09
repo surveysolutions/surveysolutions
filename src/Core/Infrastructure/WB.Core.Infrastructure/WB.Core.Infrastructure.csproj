@@ -79,13 +79,6 @@
     <Compile Include="Implementation\Aggregates\IAggregateRootCacheCleaner.cs" />
     <Compile Include="Implementation\Aggregates\PlainAggregateRootRepository.cs" />
     <Compile Include="Implementation\InMemoryKeyValueStorage.cs" />
-    <Compile Include="Implementation\ReadSide\ReadSideDenormalizerStatistic.cs" />
-    <Compile Include="Implementation\ReadSide\ReadSideEventHandlerDescription.cs" />
-    <Compile Include="Implementation\ReadSide\ReadSideRepositoryWriterError.cs" />
-    <Compile Include="Implementation\ReadSide\ReadSideRepositoryWriterStatus.cs" />
-    <Compile Include="Implementation\ReadSide\ReadSideService.cs" />
-    <Compile Include="Implementation\ReadSide\ReadSideEventPublishingDetails.cs" />
-    <Compile Include="Implementation\ReadSide\ReadSideStatus.cs" />
     <Compile Include="EventHandlers\AbstractFunctionalEventHandler.cs" />
     <Compile Include="EventHandlers\IFunctionalEventHandler.cs" />
     <Compile Include="EventHandlers\IUpdateHandler.cs" />
@@ -176,7 +169,6 @@
     <Compile Include="PlainStorage\IPlainTransactionManager.cs" />
     <Compile Include="PlainStorage\PlainStorageAttribute.cs" />
     <Compile Include="ReadSide\ICacheableRepositoryWriter.cs" />
-    <Compile Include="ReadSide\IReadSideAdministrationService.cs" />
     <Compile Include="ReadSide\IReadSideStatusService.cs" />
     <Compile Include="ReadSide\IViewFactory.cs" />
     <Compile Include="ReadSide\ReadSideSettings.cs" />

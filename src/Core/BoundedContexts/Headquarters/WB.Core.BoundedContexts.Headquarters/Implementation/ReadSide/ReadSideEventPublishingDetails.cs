@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.Infrastructure.Implementation.ReadSide
+namespace WB.Core.BoundedContexts.Headquarters.Implementation.ReadSide
 {
     public class ReadSideEventPublishingDetails
     {
@@ -8,7 +8,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         public int TotalEvents { get; set; }
         public int SkippedEvents { get; set; }
         public int FailedEvents { get; set; }
-        public decimal ProgressInPercents => TotalEvents > 0 ? Math.Round(100.00m * ProcessedEvents / TotalEvents, 2) : 0;
+        public decimal ProgressInPercents => this.TotalEvents > 0 ? Math.Round(100.00m * this.ProcessedEvents / this.TotalEvents, 2) : 0;
         public int Speed { get; set; }
         public TimeSpan TimeSpent { get; set; }
         public TimeSpan? EstimatedTime { get; set; }
