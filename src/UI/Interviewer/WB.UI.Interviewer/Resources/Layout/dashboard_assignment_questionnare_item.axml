@@ -22,7 +22,7 @@
                      android:layout_height="match_parent"
                      android:id="@+id/dashboardItemDetails"
                      android:orientation="vertical"
-                     android:visibility="gone">
+                     local:MvxBind="Visible Not(HasExpandedView)">
         <MvxLinearLayout style="@style/Dashboard_InterviewItem_PrefilledQuestions"
                          android:orientation="vertical"
                          local:MvxBind="ItemsSource DetailedPrefilledQuestions;"
