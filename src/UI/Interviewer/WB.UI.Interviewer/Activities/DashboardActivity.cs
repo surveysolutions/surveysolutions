@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.ComponentModel;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -7,9 +6,11 @@ using Android.Support.Design.Widget;
 using Android.Support.V4.View;
 using Android.Support.V7.Widget;
 using Android.Views;
+using MvvmCross.Droid.Support.V4;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.UI.Interviewer.Services;
 using WB.UI.Shared.Enumerator.Activities;
 
@@ -24,7 +25,9 @@ namespace WB.UI.Interviewer.Activities
         protected override int ViewResourceId => Resource.Layout.dashboard;
 
         public SyncServiceBinder Binder { get; set; }
-        
+
+        private MvxFragmentStatePagerAdapter fragmentStatePagerAdapter;
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -32,53 +35,53 @@ namespace WB.UI.Interviewer.Activities
             this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
 
             var viewPager = this.FindViewById<ViewPager>(Resource.Id.pager);
-            var fragments = new List<MvxFragmentStatePagerAdapter.FragmentInfo>
-            {
-                new MvxFragmentStatePagerAdapter.FragmentInfo
-                {
-                    FragmentType = typeof(DashboardQuestionnairesFragment),
-                    ViewModel = ViewModel.CreateNew,
-                    Title = ViewModel.CreateNew.Title
-                },
-                new MvxFragmentStatePagerAdapter.FragmentInfo
-                {
-                    FragmentType = typeof(DashboardStartedInterviewsFragment),
-                    ViewModel = ViewModel.StartedInterviews,
-                    Title = ViewModel.StartedInterviews.Title
-                },
-                new MvxFragmentStatePagerAdapter.FragmentInfo
-                {
-                    FragmentType = typeof(DashboardRejectednterviewsFragment),
-                    ViewModel = ViewModel.RejectedInterviews,
-                    Title = ViewModel.RejectedInterviews.Title
-                },
-                new MvxFragmentStatePagerAdapter.FragmentInfo
-                {
-                    FragmentType = typeof(DashboardCompletednterviewsFragment),
-                    ViewModel = ViewModel.CompletedInterviews,
-                    Title = ViewModel.CompletedInterviews.Title
-                },
-            };
 
-            var fragmentStatePagerAdapter = new MvxFragmentStatePagerAdapter(this, this.SupportFragmentManager, fragments);
+            fragmentStatePagerAdapter = new MvxFragmentStatePagerAdapter(this, viewPager, this.SupportFragmentManager);
             viewPager.Adapter = fragmentStatePagerAdapter;
             viewPager.PageSelected += (s, e) =>
             {
-                ViewModel.TypeOfInterviews = ((InterviewTabPanel) fragments[e.Position].ViewModel).InterviewStatus;
+                var currentFragment = (MvxFragment) fragmentStatePagerAdapter.GetItem(e.Position);
+
+                ViewModel.TypeOfInterviews = ((InterviewTabPanel) currentFragment.ViewModel).InterviewStatus;
             };
+
+            ViewModel.StartedInterviews.PropertyChanged += StartedInterviews_PropertyChanged;
+            ViewModel.RejectedInterviews.PropertyChanged += RejectedInterviews_PropertyChanged;
+            ViewModel.CompletedInterviews.PropertyChanged += CompletedInterviews_PropertyChanged;
+
+            fragmentStatePagerAdapter.AddFragment(typeof(DashboardQuestionnairesFragment), ViewModel.CreateNew, nameof(InterviewTabPanel.Title));
+
+            this.UpdateFragmentByViewModelPropertyChange<DashboardStartedInterviewsFragment>(ViewModel.StartedInterviews);
+            this.UpdateFragmentByViewModelPropertyChange<DashboardRejectednterviewsFragment>(ViewModel.RejectedInterviews);
+            this.UpdateFragmentByViewModelPropertyChange<DashboardCompletednterviewsFragment>(ViewModel.CompletedInterviews);
 
             var tabLayout = this.FindViewById<TabLayout>(Resource.Id.tabs);
             tabLayout.SetupWithViewPager(viewPager);
+        }
 
-            for (int fragmentIndex = 0; fragmentIndex < fragments.Count; fragmentIndex++)
+        private void CompletedInterviews_PropertyChanged(object sender, PropertyChangedEventArgs e)
+            => this.UpdateFragmentByViewModelPropertyChange<DashboardCompletednterviewsFragment>((CompletedInterviewsViewModel) sender, e.PropertyName);
+
+        private void RejectedInterviews_PropertyChanged(object sender, PropertyChangedEventArgs e)
+            => this.UpdateFragmentByViewModelPropertyChange<DashboardRejectednterviewsFragment>((RejectedInterviewsViewModel) sender, e.PropertyName);
+
+        private void StartedInterviews_PropertyChanged(object sender, PropertyChangedEventArgs e)
+            => this.UpdateFragmentByViewModelPropertyChange<DashboardStartedInterviewsFragment>((StartedInterviewsViewModel) sender, e.PropertyName);
+
+        private void UpdateFragmentByViewModelPropertyChange<TFragmentType>(ListViewModel<InterviewDashboardItemViewModel> listViewModel,
+            string propertyName = nameof(ListViewModel<InterviewDashboardItemViewModel>.Items))
+        {
+            if (propertyName != nameof(ListViewModel<InterviewDashboardItemViewModel>.Items)) return;
+
+            if (!this.fragmentStatePagerAdapter.HasFragmentForViewModel(listViewModel) && listViewModel.Items.Count > 0)
             {
-                fragments[fragmentIndex].ViewModel.PropertyChanged += (s, e) =>
-                {
-                    if (e.PropertyName != nameof(InterviewTabPanel.Title)) return;
+                this.fragmentStatePagerAdapter.AddFragment(typeof(TFragmentType), listViewModel,
+                    nameof(InterviewTabPanel.Title));
+            }
 
-                    var tabIndex = fragments.FindIndex(fragmentInfo => fragmentInfo.ViewModel == s);
-                    tabLayout.GetTabAt(tabIndex).SetText(((InterviewTabPanel)s).Title);
-                };
+            if (this.fragmentStatePagerAdapter.HasFragmentForViewModel(listViewModel) && listViewModel.Items.Count == 0)
+            {
+                this.fragmentStatePagerAdapter.RemoveFragmentByViewModel(listViewModel);
             }
         }
 
