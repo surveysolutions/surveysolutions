@@ -123,6 +123,9 @@
   <data name="InvalidCredentials" xml:space="preserve">
     <value>Пользователь не авторизирован. Пожалуйста, проверьте Ваши логин и пароль. </value>
   </data>
+  <data name="LoginWatermark" xml:space="preserve">
+    <value>Логин или email</value>
+  </data>
   <data name="PageHeader" xml:space="preserve">
     <value>Пожалуйста, чтобы получить доступ к опроснику, войдите, используя свою учетную запись на Дизайнере</value>
   </data>
