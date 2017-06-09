@@ -162,9 +162,6 @@
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
     <value>Entamé(s) ({0})</value>
   </data>
-  <data name="Dashboard_Title" xml:space="preserve">
-    <value>{0} affectations pour {1}</value>
-  </data>
   <data name="DashboardItem_CensusModeComment" xml:space="preserve">
     <value>Mode recensement, Entretiens créés : {0}</value>
   </data>

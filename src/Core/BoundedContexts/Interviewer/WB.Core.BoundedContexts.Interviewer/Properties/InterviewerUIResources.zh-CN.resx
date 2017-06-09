@@ -162,9 +162,6 @@
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
     <value>已开始({0})</value>
   </data>
-  <data name="Dashboard_Title" xml:space="preserve">
-    <value>{1}的任务共有{0}</value>
-  </data>
   <data name="DashboardItem_AssignedOn" xml:space="preserve">
     <value>已于{0}分配</value>
   </data>
