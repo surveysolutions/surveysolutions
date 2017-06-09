@@ -67,6 +67,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.PrefilledQuestions = GetPrefilledQuestions(identifyingData.Take(3));
             this.DetailedPrefilledQuestions = GetPrefilledQuestions(identifyingData.Skip(3));
             this.GpsLocation = this.GetAssignmentLocation(assignment);
+            this.AssignmentId = "№" + this.assignment.Id;
         }
 
         private AssignmentDocument assignment;
@@ -92,6 +93,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public List<PrefilledQuestion> PrefilledQuestions { get; private set; }
         public List<PrefilledQuestion> DetailedPrefilledQuestions { get; private set; }
+
+        public string AssignmentId { get; private set; }
+
         public InterviewGpsCoordinatesView GpsLocation { get; private set; }
         public bool HasGpsLocation => this.GpsLocation != null;
 

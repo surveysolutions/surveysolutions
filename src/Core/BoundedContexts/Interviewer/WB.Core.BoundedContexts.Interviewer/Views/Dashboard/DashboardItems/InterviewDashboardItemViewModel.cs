@@ -70,7 +70,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.GpsLocation = this.GetInterviewLocation(interview);
             this.IsSupportedRemove = interview.CanBeDeleted;
             this.HasComment = !string.IsNullOrEmpty(this.Comment);
+
+            if (!string.IsNullOrEmpty(interview.Assignment))
+            {
+                this.AssignmentId = "№" + interview.Assignment;
+            }
         }
+
+        public string AssignmentId { get; private set; }
 
         private InterviewGpsCoordinatesView GetInterviewLocation(InterviewView interview)
         {

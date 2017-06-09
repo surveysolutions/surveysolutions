@@ -10,16 +10,32 @@
       <LinearLayout android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-        <TextView style="@style/Dashboard_InterviewItem_Title"
-                  android:layout_gravity="center_vertical"
-                  android:layout_weight="1"
-                  android:layout_width="0dp"
-                  local:MvxBind="Text QuestionnaireName;" />
+        <LinearLayout android:layout_gravity="center_vertical"
+                      android:layout_weight="1"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical"
+                      android:layout_width="0dp">
+          <TextView style="@style/Dashboard_InterviewItem_Title"
+                    local:MvxBind="Text AssignmentId;  Visible AssignmentId" />
+
+          <TextView style="@style/Dashboard_InterviewItem_SubTitle"
+                    local:MvxBind="Text QuestionnaireName;" />
+
+          <TextView style="@style/Dashboard_InterviewItem_Comment"
+                   local:MvxBind="Text DateComment;
+                                  TextColor InterviewStatusToColor(Status);" />
+          <TextView style="@style/Dashboard_InterviewItem_Comment"
+                    local:MvxBind="Text Comment;
+                                 Visible HasComment;
+                                 TextColor InterviewStatusToColor(Status);" />
+        </LinearLayout>
         <TextView style="@style/Dashboard_InterviewItem_RemoveInterviewButton"
               android:text="\u2573"
               local:MvxBind="Click RemoveInterviewCommand;
                              Visible IsSupportedRemove;" />
       </LinearLayout>
+      <Space android:layout_width="match_parent" android:layout_height="@dimen/Dashboard_InterviewItem_PrefilledQuestions_marginTop"></Space>
+
       <MvxLinearLayout style="@style/Dashboard_InterviewItem_PrefilledQuestions"
           android:orientation="vertical"
           local:MvxBind="ItemsSource PrefilledQuestions;"
@@ -30,12 +46,12 @@
                     android:id="@+id/dashboardItemDetails"
                     android:orientation="vertical"
                     android:visibility="gone">
-        
+
         <MvxLinearLayout style="@style/Dashboard_InterviewItem_PrefilledQuestions"
                          android:orientation="vertical"
                          local:MvxBind="ItemsSource DetailedPrefilledQuestions;"
                          local:MvxItemTemplate="@layout/dashboard_item_prefilled_question" />
-        
+
         <LinearLayout android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:orientation="horizontal">
@@ -51,15 +67,8 @@
                                     Click NavigateToGpsLocationCommand;" />
         </LinearLayout>
 
-        <TextView style="@style/Dashboard_InterviewItem_Comment"
-                  local:MvxBind="Text DateComment;
-                         TextColor InterviewStatusToColor(Status);" />
-        <TextView style="@style/Dashboard_InterviewItem_Comment"
-                  local:MvxBind="Text Comment;
-                                 Visible HasComment;
-                                 TextColor InterviewStatusToColor(Status);" />
       </LinearLayout>
-      
+
     </LinearLayout>
   </LinearLayout>
 </LinearLayout>
