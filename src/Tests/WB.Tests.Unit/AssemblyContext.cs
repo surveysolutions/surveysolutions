@@ -128,6 +128,6 @@ public class AssemblyContext : IAssemblyContext
         Setup.InstanceToMockedServiceLocator(Mock.Of<IClock>());
         Setup.InstanceToMockedServiceLocator(Mock.Of<IInterviewUniqueKeyGenerator>());
 
-        EagerFetch.FetchingProvider = () => new FakeFetchingProvider();
+        EagerFetchExtensions.FetchingProvider = () => new FakeFetchingProvider();
     }
 }
