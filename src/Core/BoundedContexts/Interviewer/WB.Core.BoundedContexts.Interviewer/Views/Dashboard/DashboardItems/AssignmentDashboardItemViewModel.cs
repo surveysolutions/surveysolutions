@@ -61,9 +61,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             this.assignment = assignment;
             this.questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity, null);
 
-            var identifyingData = assignment.IdentifyingData.Where(x => questionnaire.GetQuestionType(x.QuestionId) != QuestionType.GpsCoordinates);
+            var identifyingData = assignment.IdentifyingData;
             this.PrefilledQuestions = GetPrefilledQuestions(identifyingData.Take(3));
             this.DetailedPrefilledQuestions = GetPrefilledQuestions(identifyingData.Skip(3));
             this.GpsLocation = this.GetAssignmentLocation(assignment);
@@ -157,12 +156,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         private List<PrefilledQuestion> GetPrefilledQuestions(IEnumerable<AssignmentDocument.IdentifyingAnswer> identifyingAnswers)
         {
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity, null);
             return identifyingAnswers.Select(fi => new PrefilledQuestion
                 {
-                    Answer = questionnaire.GetQuestionType(fi.QuestionId)  != QuestionType.SingleOption ? 
-                                            fi.Answer : 
-                                            questionnaire.GetAnswerOptionTitle(fi.QuestionId, int.Parse(fi.Answer)),
+                    Answer = fi.AnswerAsString,
                     Question = fi.Question
                 }).ToList();
         }

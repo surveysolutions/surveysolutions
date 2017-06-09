@@ -4,8 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
@@ -16,11 +14,9 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -29,8 +25,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 {
     public class SynchronizationProcess : ISynchronizationProcess
     {
-        private readonly IPlainStorage<AssignmentDocument> assignmentsRepository;
-        private readonly IAttachmentContentStorage attachmentContentStorage;
         private readonly AttachmentsCleanupService cleanupService;
         private readonly IHttpStatistician httpStatistician;
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
@@ -41,6 +35,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly ILogger logger;
         private readonly CompanyLogoSynchronizer logoSynchronizer;
         private readonly IPasswordHasher passwordHasher;
+        private readonly IAssignmentsSynchronizer assignmentsSynchronizer;
+        private readonly IQuestionnaireDownloader questionnaireDownloader;
         private readonly IPrincipal principal;
         private readonly IInterviewerQuestionnaireAccessor questionnairesAccessor;
         private readonly ISynchronizationService synchronizationService;
@@ -53,35 +49,35 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         public SynchronizationProcess(ISynchronizationService synchronizationService,
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IPlainStorage<InterviewView> interviewViewRepository,
-            IPlainStorage<AssignmentDocument> assignmentsRepository,
             IPrincipal principal,
             ILogger logger,
             IUserInteractionService userInteractionService,
             IInterviewerQuestionnaireAccessor questionnairesAccessor,
-            IAttachmentContentStorage attachmentContentStorage,
             IInterviewerInterviewAccessor interviewFactory,
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage,
             IPlainStorage<InterviewFileView> interviewFileViewStorage,
             CompanyLogoSynchronizer logoSynchronizer,
             AttachmentsCleanupService cleanupService,
             IPasswordHasher passwordHasher,
+            IAssignmentsSynchronizer assignmentsSynchronizer,
+            IQuestionnaireDownloader questionnaireDownloader,
             IHttpStatistician httpStatistician)
         {
             this.synchronizationService = synchronizationService;
             this.interviewersPlainStorage = interviewersPlainStorage;
             this.interviewViewRepository = interviewViewRepository;
-            this.assignmentsRepository = assignmentsRepository;
             this.principal = principal;
             this.logger = logger;
             this.userInteractionService = userInteractionService;
             this.questionnairesAccessor = questionnairesAccessor;
-            this.attachmentContentStorage = attachmentContentStorage;
             this.interviewFactory = interviewFactory;
             this.interviewMultimediaViewStorage = interviewMultimediaViewStorage;
             this.interviewFileViewStorage = interviewFileViewStorage;
             this.logoSynchronizer = logoSynchronizer;
             this.cleanupService = cleanupService;
             this.passwordHasher = passwordHasher;
+            this.assignmentsSynchronizer = assignmentsSynchronizer;
+            this.questionnaireDownloader = questionnaireDownloader;
             this.httpStatistician = httpStatistician;
         }
 
@@ -154,7 +150,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 await this.UploadCompletedInterviewsAsync(progress, statistics, cancellationToken);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                await this.SyncronizeAssignmentsAsync(progress, statistics, cancellationToken);
+                await this.assignmentsSynchronizer.SyncronizeAssignmentsAsync(progress, statistics, cancellationToken);
 
                 cancellationToken.ThrowIfCancellationRequested();
                 await this.SyncronizeCensusQuestionnaires(progress, statistics, cancellationToken);
@@ -358,7 +354,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                             InterviewerUIResources.Synchronization_Interviews)
                     });
 
-                    await this.DownloadQuestionnaireAsync(interview.QuestionnaireIdentity, cancellationToken, statistics);
+                    await this.questionnaireDownloader.DownloadQuestionnaireAsync(interview.QuestionnaireIdentity, cancellationToken, statistics);
 
                     var interviewDetails = await this.synchronizationService.GetInterviewDetailsAsync(
                         interview.Id,
@@ -414,55 +410,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             await this.CreateInterviewsAsync(remoteInterviewsToCreate, statistics, progress, cancellationToken);
         }
 
-        private async Task DownloadQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity,
-            CancellationToken cancellationToken, SychronizationStatistics statistics)
-        {
-            if (!this.questionnairesAccessor.IsQuestionnaireAssemblyExists(questionnaireIdentity))
-            {
-                var questionnaireAssembly = await this.synchronizationService.GetQuestionnaireAssemblyAsync(
-                    questionnaireIdentity,
-                    (progressPercentage, bytesReceived, totalBytesToReceive) => { },
-                    cancellationToken);
-
-                await this.questionnairesAccessor.StoreQuestionnaireAssemblyAsync(questionnaireIdentity, questionnaireAssembly);
-                await this.synchronizationService.LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(questionnaireIdentity);
-            }
-
-            if (!this.questionnairesAccessor.IsQuestionnaireExists(questionnaireIdentity))
-            {
-                var contentIds = await this.synchronizationService.GetAttachmentContentsAsync(questionnaireIdentity,
-                    (progressPercentage, bytesReceived, totalBytesToReceive) => { },
-                    cancellationToken);
-
-                foreach (var contentId in contentIds)
-                {
-                    var isExistContent = this.attachmentContentStorage.Exists(contentId);
-                    if (!isExistContent)
-                    {
-                        var attachmentContent = await this.synchronizationService.GetAttachmentContentAsync(contentId,
-                            (progressPercentage, bytesReceived, totalBytesToReceive) => { },
-                            cancellationToken);
-
-                        this.attachmentContentStorage.Store(attachmentContent);
-                    }
-                }
-
-                var translationDtos = await this.synchronizationService.GetQuestionnaireTranslationAsync(questionnaireIdentity, cancellationToken);
-
-                var questionnaireApiView = await this.synchronizationService.GetQuestionnaireAsync(
-                    questionnaireIdentity,
-                    (progressPercentage, bytesReceived, totalBytesToReceive) => { },
-                    cancellationToken);
-
-                this.questionnairesAccessor.StoreQuestionnaire(questionnaireIdentity,
-                    questionnaireApiView.QuestionnaireDocument,
-                    questionnaireApiView.AllowCensus, translationDtos);
-
-                await this.synchronizationService.LogQuestionnaireAsSuccessfullyHandledAsync(questionnaireIdentity);
-                statistics.SuccessfullyDownloadedQuestionnairesCount++;
-            }
-        }
-
         private Task<string> GetNewPasswordAsync()
         {
             var message =
@@ -495,83 +442,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             }
         }
 
-        private async Task SyncronizeAssignmentsAsync(IProgress<SyncProgressInfo> progress,
-            SychronizationStatistics statistics, CancellationToken cancellationToken)
-        {
-            progress.Report(new SyncProgressInfo
-            {
-                Title = InterviewerUIResources.Synchronization_Of_Assignments,
-                Statistics = statistics,
-                Status = SynchronizationStatus.Download
-            });
-
-            var remoteAssignments = await this.synchronizationService.GetAssignmentsAsync(cancellationToken);
-            var localAssignments = this.assignmentsRepository.LoadAll();
-
-            // removing local assignments if needed
-            var remoteIds = remoteAssignments.ToLookup(ra => ra.Id);
-
-            foreach (var assignment in localAssignments)
-            {
-                if (remoteIds.Contains(assignment.Id)) continue;
-                statistics.RemovedAssignmentsCount += 1;
-                this.assignmentsRepository.Remove(assignment.Id);
-            }
-
-            // adding new, updating capacity for existing
-            var localAssignmentsLookup = localAssignments.ToLookup(la => la.Id);
-
-            foreach (var remote in remoteAssignments)
-            {
-                var local = localAssignmentsLookup[remote.Id].FirstOrDefault();
-                if (local == null)
-                {
-                    await this.DownloadQuestionnaireAsync(remote.QuestionnaireId, cancellationToken, statistics);
-                    var questionnaireDocument = this.questionnairesAccessor.GetQuestionnaire(remote.QuestionnaireId);
-
-                    local = new AssignmentDocument
-                    {
-                        Id = remote.Id,
-                        QuestionnaireId = remote.QuestionnaireId.ToString(),
-                        Title = questionnaireDocument.Title,
-                    };
-
-                    var identifyingData = new List<AssignmentDocument.IdentifyingAnswer>();
-
-                    foreach (var identifyingAnswer in remote.IdentifyingData)
-                    {
-                        var question = questionnaireDocument.Find<IQuestion>(identifyingAnswer.QuestionId);
-
-                        identifyingData.Add(new AssignmentDocument.IdentifyingAnswer
-                        {
-                            QuestionId = identifyingAnswer.QuestionId,
-                            Answer = identifyingAnswer.Answer,
-                            Question = question.QuestionText
-                        });
-
-                        if (question.QuestionType == QuestionType.GpsCoordinates)
-                        {
-                            local.LocationQuestionId = question.PublicKey;
-                            var geoPositionAnswer = GeoPosition.FromString(identifyingAnswer.Answer);
-                            if (geoPositionAnswer != null)
-                            {
-                                local.LocationLatitude = geoPositionAnswer.Latitude;
-                                local.LocationLongitude = geoPositionAnswer.Longitude;
-                            }
-                        }
-                    }
-
-                    local.IdentifyingData = identifyingData;
-                    statistics.NewAssignmentsCount += 1;
-                }
-
-                local.Quantity = remote.Quantity;
-                local.InterviewsCount = remote.InterviewsCount;
-
-                this.assignmentsRepository.Store(local);
-            }
-        }
-
         private async Task SyncronizeCensusQuestionnaires(IProgress<SyncProgressInfo> progress,
             SychronizationStatistics statistics,
             CancellationToken cancellationToken)
@@ -595,7 +465,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                         InterviewerUIResources.Synchronization_Questionnaires)
                 });
 
-                await this.DownloadQuestionnaireAsync(censusQuestionnaireIdentity, cancellationToken, statistics);
+                await this.questionnaireDownloader.DownloadQuestionnaireAsync(censusQuestionnaireIdentity, cancellationToken, statistics);
 
                 processedQuestionnaires++;
             }

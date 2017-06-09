@@ -41,6 +41,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             public string Answer { get; set; }
             public Guid QuestionId { get; set; }
             public string Question { get; set; }
+            public string AnswerAsString { get; set; }
         }
     }
 }
