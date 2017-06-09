@@ -177,7 +177,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.disabledNodes.Contains(question.Identity))
                 return;
 
-            question.CalculateLinkedToListOptions(true);
+            question.CalculateLinkedToListOptions(this.removeLinkedAnswers);
         }
 
         public void UpdateRoster(InterviewTreeRoster roster)
