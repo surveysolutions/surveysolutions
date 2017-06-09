@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
 
         public RostersCollection(IEnumerable<IIndexedInterviewLevel> rosters)
         {
-            this.rosters = rosters?.OrderBy(x => x.RowIndex).Select(x => x as T).ToList() ?? new List<T>();
+            this.rosters = rosters?.OrderBy(x => x.RowIndex).Cast<T>().ToList() ?? new List<T>();
         }
         public IEnumerator<T> GetEnumerator()
         {
