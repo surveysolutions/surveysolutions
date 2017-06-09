@@ -1931,7 +1931,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="API\Attributes\" />
     <Folder Include="App_Data\" />
     <Folder Include="App_Start\OwinSecurity\" />
     <Folder Include="Migrations\ReadSide\M101-200\" />
