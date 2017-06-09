@@ -157,9 +157,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         private List<PrefilledQuestion> GetPrefilledQuestions(IEnumerable<AssignmentDocument.IdentifyingAnswer> identifyingAnswers)
         {
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity, null);
             return identifyingAnswers.Select(fi => new PrefilledQuestion
                 {
-                    Answer = fi.Answer,
+                    Answer = questionnaire.GetQuestionType(fi.QuestionId)  != QuestionType.SingleOption ? 
+                                            fi.Answer : 
+                                            questionnaire.GetAnswerOptionTitle(fi.QuestionId, int.Parse(fi.Answer)),
                     Question = fi.Question
                 }).ToList();
         }
