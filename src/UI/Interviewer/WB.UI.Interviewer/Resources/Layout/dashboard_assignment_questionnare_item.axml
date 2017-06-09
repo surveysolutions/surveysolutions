@@ -8,6 +8,9 @@
     <LinearLayout style="@style/Dashboard_InterviewItem_InformationBlock">
 
       <TextView style="@style/Dashboard_InterviewItem_Title"
+                local:MvxBind="Text AssignmentId;" />
+
+      <TextView style="@style/Dashboard_InterviewItem_SubTitle"
                 local:MvxBind="Text QuestionnaireName;" />
 
       <MvxLinearLayout style="@style/Dashboard_InterviewItem_PrefilledQuestions"
@@ -33,7 +36,7 @@
                        Enabled AllowToCreateNewInterview;
                        Click CreateNewInterviewCommand;" />
           
-          <TextView style="@style/Dashboard_InterviewItem_Comment"
+          <TextView style="@style/Dashboard_Assignment_CompletionState"
                     local:MvxBind="Text Comment;" />
 
           <ImageButton style="@style/Dashboard_Location"
