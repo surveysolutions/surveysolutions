@@ -59,6 +59,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             get { return new MvxCommand(async () => await this.CreateNewInterviewAsync()); }
         }
 
+        public bool HasExpandedView => false;
+
         private async Task CreateNewInterviewAsync()
         {
             RaiseStartingLongOperation();
