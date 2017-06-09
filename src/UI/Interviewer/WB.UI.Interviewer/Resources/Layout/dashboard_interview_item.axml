@@ -34,9 +34,11 @@
               local:MvxBind="Click RemoveInterviewCommand;
                              Visible IsSupportedRemove;" />
       </LinearLayout>
-      
-      <Space android:layout_width="match_parent" android:layout_height="@dimen/Dashboard_InterviewItem_PrefilledQuestions_marginTop"></Space>
 
+      <Space android:layout_width="match_parent"
+             android:layout_height="@dimen/Dashboard_InterviewItem_PrefilledQuestions_marginTop"
+             local:MvxBind="Visible HasExpandedView"></Space>
+      
       <MvxLinearLayout style="@style/Dashboard_InterviewItem_PrefilledQuestions"
           android:orientation="vertical"
           local:MvxBind="ItemsSource PrefilledQuestions;"
