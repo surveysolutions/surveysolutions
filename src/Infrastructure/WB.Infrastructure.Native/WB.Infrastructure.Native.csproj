@@ -181,6 +181,8 @@
   <ItemGroup>
     <Compile Include="Fetching\EagerFetch.cs" />
     <Compile Include="Fetching\FetchRequest.cs" />
+    <Compile Include="Fetching\IFetchingProvider.cs" />
+    <Compile Include="Fetching\IFetchRequest.cs" />
     <Compile Include="Fetching\NhFetchingProvider.cs" />
     <Compile Include="InitializationException.cs" />
     <Compile Include="Files\FileInfrastructureModule.cs" />
