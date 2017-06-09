@@ -364,6 +364,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TroubleshootingMessages.ru.resx</DependentUpon>
     </Compile>
+    <Compile Include="DataExport\Security\ExportEncryptionSettings.cs" />
+    <Compile Include="DataExport\Security\IExportSettings.cs" />
     <Compile Include="Troubleshooting\IInterviewLogSummaryReader.cs" />
     <Compile Include="Troubleshooting\InterviewLogSummaryReader.cs" />
     <Compile Include="Troubleshooting\TroubleshootingService.cs" />
