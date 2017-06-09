@@ -266,7 +266,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} assignments for {1}.
+        ///   Looks up a localized string similar to {0} interviews for {1}.
         /// </summary>
         public static string Dashboard_Title {
             get {
