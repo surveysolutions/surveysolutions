@@ -10,7 +10,9 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -80,12 +82,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             });
             questionnaire.Title = "title";
 
-            var interviewerQuestionnaireAccessor = Mock.Of<IInterviewerQuestionnaireAccessor>(
-                x => x.GetCensusQuestionnaireIdentities() == new List<QuestionnaireIdentity>(questionaries) &&
-                     x.GetAllQuestionnaireIdentities() == new List<QuestionnaireIdentity>(questionaries) &&
-                     x.GetQuestionnaire(questionaries[2]) == questionnaire
-            );
-
             var synchronizationService = Mock.Of<ISynchronizationService>(
                 x => x.GetCensusQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new List<QuestionnaireIdentity>())
                      && x.GetServerQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new List<QuestionnaireIdentity>(questionaries))
@@ -96,21 +92,21 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                      && x.GetAssignmentsAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(this.RemoteAssignments)
             );
 
-            var principal = Setup.InterviewerPrincipal("name", "pass");
-
             var interviewViewRepository = new SqliteInmemoryStorage<InterviewView>();
             interviewViewRepository.Store(new List<InterviewView>());
 
-            var viewModel = Create.Service.SynchronizationProcess(principal: principal,
-                interviewViewRepository: interviewViewRepository,
+            var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
+            var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(q => q.GetQuestionnaire(questionaries[2], null) == plainQuestionnaire);
+
+            var viewModel = Create.Service.AssignmentsSynchronizer(
                 synchronizationService: synchronizationService,
-                assignmentPlainStorage: this.localAssignmentsRepo,
-                questionnaireFactory: interviewerQuestionnaireAccessor
+                assignmentsRepository: this.localAssignmentsRepo,
+                questionnaireStorage: questionnaireStorage
             );
 
             this.progressInfo = new Mock<IProgress<SyncProgressInfo>>();
 
-            await viewModel.SyncronizeAsync(progressInfo.Object, CancellationToken.None);
+            await viewModel.SyncronizeAssignmentsAsync(progressInfo.Object, new SychronizationStatistics(), CancellationToken.None);
         }
 
         [Test]

@@ -17,6 +17,7 @@ using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
+using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -167,6 +168,8 @@ namespace WB.UI.Interviewer
             kernel.Bind<IQuestionnaireContentVersionProvider>().To<QuestionnaireContentVersionProvider>().InSingletonScope();
 
             kernel.Bind<ISynchronizationProcess>().To<SynchronizationProcess>();
+            kernel.Bind<IQuestionnaireDownloader>().To<QuestionnaireDownloader>();
+            kernel.Bind<IAssignmentsSynchronizer>().To<AssignmentsSynchronizer>();
             kernel.Bind<AttachmentsCleanupService>().ToSelf();
 
             kernel.Bind<InterviewerDashboardEventHandler>().ToSelf().InSingletonScope();
