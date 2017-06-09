@@ -189,7 +189,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Handle(AreaQuestionAnswered @event)
         {
             if (@event.QuestionId == this.questionIdentity.Id &&
-                @event.RosterVector.SequenceEqual(this.questionIdentity.RosterVector))
+                @event.RosterVector.Identical(this.questionIdentity.RosterVector))
             {
                 this.UpdateSelfFromModel();
             }
