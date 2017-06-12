@@ -1437,6 +1437,7 @@
     <Content Include="Views\Shared\_MainLayoutVue.cshtml" />
     <Content Include="Views\Assignments\assignmentslist.cshtml" />
     <Content Include="Views\Interview\InterviewAreaFrame.cshtml" />
+    <Content Include="Views\Download\Index.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1612,6 +1613,7 @@
     <Compile Include="Code\ValidateFileAttribute.cs" />
     <Compile Include="Code\WriteToSyncLogAttribute.cs" />
     <Compile Include="Controllers\AssignmentsController.cs" />
+    <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Controllers\Profile\AccountController.cs" />
     <Compile Include="Controllers\AttachmentsController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />

@@ -22,7 +22,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.MapService
 
         private string mapsLocation;
         string filesToSearch = "*.tpk";
-        private string mapsListFile = "/maps/maps.json";
+        private string mapsListFile = "/configuration/maps.config";
 
         public MapService(IPermissions permissions, 
             IFileSystemAccessor fileSystemAccessor,

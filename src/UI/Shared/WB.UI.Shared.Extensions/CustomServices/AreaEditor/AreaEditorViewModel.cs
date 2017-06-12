@@ -202,7 +202,18 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             {
                 this.MapView.SketchEditor.GeometryChanged += delegate(object sender, GeometryChangedEventArgs args)
                 {
-                    this.GeometryArea = GeometryEngine.AreaGeodetic(args.NewGeometry);
+                    var geometry = args.NewGeometry;
+                    try
+                    {
+                        this.GeometryArea = GeometryEngine.AreaGeodetic(args.NewGeometry);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        Console.WriteLine(geometry.ToJson());
+                        throw;
+                    }  
+                    
                     this.CanUndo =
                         this.MapView.SketchEditor.UndoCommand.CanExecute(this.MapView.SketchEditor.UndoCommand);
                     this.CanSave =
