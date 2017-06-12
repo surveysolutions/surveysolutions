@@ -1355,7 +1355,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 foreach (KeyValuePair<Identity, AbstractAnswer> answer in prefilledQuestionsWithAnswers)
                 {
-                    changedInterviewTree.GetQuestion(answer.Key).SetAnswer(answer.Value);
+                    var interviewTreeQuestion = changedInterviewTree.GetQuestion(answer.Key);
+                    interviewTreeQuestion.SetAnswer(answer.Value);
+
+                    if (command.AssignmentId.HasValue)
+                    {
+                        interviewTreeQuestion.MarkAsReadonly();
+                    }
                 }
 
                 bool isLastDataLevel = index == orderedData.Length - 1;
