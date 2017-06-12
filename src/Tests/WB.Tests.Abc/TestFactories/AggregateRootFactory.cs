@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Main.Core.Documents;
 using Moq;
+using NSubstitute;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
@@ -8,8 +11,10 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -71,7 +76,7 @@ namespace WB.Tests.Abc.TestFactories
         public StatefulInterview StatefulInterview(Guid interviewId, 
             Guid? questionnaireId = null,
             Guid? userId = null,
-            IQuestionnaire questionnaire = null,
+            QuestionnaireDocument questionnaire = null,
             bool shouldBeInitialized = true)
         {
             var interview = this.StatefulInterview(questionnaireId, userId, questionnaire, shouldBeInitialized);
@@ -81,14 +86,22 @@ namespace WB.Tests.Abc.TestFactories
 
         public StatefulInterview StatefulInterview(Guid? questionnaireId = null,
             Guid? userId = null,
-            IQuestionnaire questionnaire = null, 
+            QuestionnaireDocument questionnaire = null, 
             bool shouldBeInitialized = true)
         {
             questionnaireId = questionnaireId ?? Guid.NewGuid();
+            if (questionnaire != null)
+            {
+                questionnaire.IsUsingExpressionStorage = true;
+                questionnaire.ExpressionsPlayOrder = Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(questionnaire.AsReadOnly());
+            }
+
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
+            //Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire)
 
             var statefulInterview = new StatefulInterview(
-                Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire),
-                Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
+                questionnaireRepository,
+                CreateDefaultInterviewExpressionStateProvider(),
                 Create.Service.SubstitionTextFactory());
 
             if (shouldBeInitialized)
@@ -110,9 +123,12 @@ namespace WB.Tests.Abc.TestFactories
             bool shouldBeInitialized = true)
         {
             questionnaireId = questionnaireId ?? Guid.NewGuid();
+
+            var defaultExpressionStatePrototypeProvider = CreateDefaultInterviewExpressionStateProvider();
+
             var statefulInterview = new StatefulInterview(
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                interviewExpressionStatePrototypeProvider ?? Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
+                interviewExpressionStatePrototypeProvider ?? defaultExpressionStatePrototypeProvider,
                 Create.Service.SubstitionTextFactory());
 
             if (shouldBeInitialized)
@@ -123,6 +139,22 @@ namespace WB.Tests.Abc.TestFactories
             }
 
             return statefulInterview;
+        }
+
+        private static IInterviewExpressionStatePrototypeProvider CreateDefaultInterviewExpressionStateProvider()
+        {
+            //Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
+            var expressionStorage = new Mock<IInterviewExpressionStorage>();
+            var levelMock = new Mock<IInterviewLevel>();
+            expressionStorage.Setup(x => x.GetLevel(It.IsAny<Identity>())).Returns(levelMock.Object);
+
+            var expressionState = Stub<ILatestInterviewExpressionState>.WithNotEmptyValues;
+
+            var defaultExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(_
+                => _.GetExpressionStorage(It.IsAny<QuestionnaireIdentity>()) == expressionStorage.Object
+                && _.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == expressionState);
+
+            return defaultExpressionStatePrototypeProvider;
         }
     }
 }

@@ -105,12 +105,6 @@ namespace WB.Tests.Abc
         public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(IQuestionnaire questionnaire)
             => Stub<IQuestionnaireStorage>.Returning(questionnaire);
 
-        private static IQuestionnaireStorage QuestionnaireRepository(QuestionnaireDocument questionnaireDocument)
-            => Mock.Of<IQuestionnaireStorage>(repository
-                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument)
-                && repository.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument
-                && repository.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()) == questionnaireDocument);
-
         public static IEventHandler FailingFunctionalEventHandler()
             => FailingFunctionalEventHandlerHavingUniqueType<object>();
 
@@ -190,8 +184,8 @@ namespace WB.Tests.Abc
 
         public static StatefulInterview StatefulInterview(QuestionnaireDocument questionnaireDocument, bool census = true)
         {
-            //questionnaireDocument.IsUsingExpressionStorage = true;
-            //questionnaireDocument.ExpressionsPlayOrder = Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(questionnaireDocument.AsReadOnly());
+            questionnaireDocument.IsUsingExpressionStorage = true;
+            questionnaireDocument.ExpressionsPlayOrder = Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(questionnaireDocument.AsReadOnly());
 
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
 
