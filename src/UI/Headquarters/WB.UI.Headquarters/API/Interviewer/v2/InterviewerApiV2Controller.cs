@@ -19,7 +19,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
     {
         private const string RESPONSEAPPLICATIONFILENAME = "interviewer.apk";
         private const string PHYSICALAPPLICATIONFILENAME = "wbcapi.apk";
-        private const string PHYSICALAPPLICATIONEXTENDEDFILENAME = "wbcapi.ext.apk";
         private const string PHYSICALPATHTOAPPLICATION = "~/Client/";
 
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -34,15 +33,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
 
             return this.HttpResponseMessage(pathToInterviewerApp);
         }
-
-        [HttpGet]
-        public HttpResponseMessage GetExtended()
-        {
-            string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), PHYSICALAPPLICATIONEXTENDEDFILENAME);
-
-            return this.HttpResponseMessage(pathToInterviewerApp);
-        }
-
+        
         private HttpResponseMessage HttpResponseMessage(string pathToInterviewerApp)
         {
             if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerApp))
@@ -74,19 +65,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 : this.androidPackageReader.Read(pathToInterviewerApp).Version;
         }
 
-        [HttpGet]
-        public virtual int? GetLatestExtendedVersion()
-        {
-            string pathToInterviewerApp =
-                this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION),
-                    PHYSICALAPPLICATIONEXTENDEDFILENAME);
-
-            return !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
-                ? null
-                : this.androidPackageReader.Read(pathToInterviewerApp).Version;
-        }
-
-
+        
         //web config has content length override
         //if new version is created make correspondent changes
         public virtual HttpResponseMessage PostTabletInformation(TabletInformationPackage tabletInformationPackage)
