@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewFromPreloadedDataCreated> @event)
         {
             return this.CreateInterviewSummary(@event.Payload.UserId, @event.Payload.QuestionnaireId,
-                @event.Payload.QuestionnaireVersion, @event.EventSourceId, @event.EventTimeStamp, false, null);
+                @event.Payload.QuestionnaireVersion, @event.EventSourceId, @event.EventTimeStamp, false, @event.Payload.AssignmentId);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewOnClientCreated> @event)
