@@ -78,7 +78,9 @@
 
                 $scope.fileSelected(translation, file, function () {
                     commandService.updateTranslation($state.params.questionnaireId, translation).then(function () {
-                        dataBind(translation.checkpoint || {}, translation);
+                        translation.checkpoint = translation.checkpoint || {};
+
+                        dataBind(translation.checkpoint, translation);
                         $scope.translations.push(translation);
                         setTimeout(function () { utilityService.focus("focusTranslation" + translation.translationId); }, 500);
                     });
@@ -141,7 +143,7 @@
             });
 
             $scope.cancel = function (translation) {
-                dataBind(translation, translation.checkpoint);
+                dataBind(translation, translation.checkpoint || {});
                 translation.form.$setPristine();
             };
 
