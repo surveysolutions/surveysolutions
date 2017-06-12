@@ -118,10 +118,6 @@
       <HintPath>..\..\..\..\packages\MvvmCross.Platform.4.4.0\lib\MonoAndroid\MvvmCross.Platform.Droid.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Plugin.CurrentActivity, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Plugin.CurrentActivity.1.0.1\lib\MonoAndroid10\Plugin.CurrentActivity.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Plugin.Permissions, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Plugin.Permissions.1.2.1\lib\MonoAndroid10\Plugin.Permissions.dll</HintPath>
       <Private>True</Private>
@@ -211,11 +207,11 @@
       <Name>WB.Core.SharedKernels.Enumerator</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Infrastructure\Enumerator\WB.Infrastructure.Shared.Enumerator.csproj">
-      <Project>{e41deb5c-2ad6-463f-9f76-10299fc2d9d1}</Project>
+      <Project>{E41DEB5C-2AD6-463F-9F76-10299FC2D9D1}</Project>
       <Name>WB.Infrastructure.Shared.Enumerator</Name>
     </ProjectReference>
     <ProjectReference Include="..\WB.UI.Shared.Enumerator\WB.UI.Shared.Enumerator.csproj">
-      <Project>{5daa7eaf-9a68-4302-ae74-ef0daa0bd169}</Project>
+      <Project>{5DAA7EAF-9A68-4302-AE74-EF0DAA0BD169}</Project>
       <Name>WB.UI.Shared.Enumerator</Name>
     </ProjectReference>
   </ItemGroup>
