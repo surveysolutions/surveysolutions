@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.Code;
@@ -159,7 +160,7 @@ namespace WB.UI.Headquarters.API
 
             var identifyingAnswers = untypedQuestionAnswers
                 .Select(CommandTransformator.ParseQuestionAnswer)
-                .Select(answer => IdentifyingAnswer.Create(assignment, questionnaire, answer.Value.ToString(), answer.Key))
+                .Select(answer => IdentifyingAnswer.Create(assignment, questionnaire, answer.Value.ToString(), Identity.Create(answer.Key, null)))
                 .ToArray();
             assignment.SetAnswers(identifyingAnswers);
             

@@ -7,10 +7,8 @@ using Main.Core.Entities.Composite;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -35,13 +33,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             {
                 Create.Entity
                     .AssignmentDocument(Id.g1.ToString(), 10, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
-                    .WithAnswer(Guid.NewGuid(), "1")
-                    .WithAnswer(Guid.NewGuid(), "2")
+                    .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "1")
+                    .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "2")
                     .Build(),
                 Create.Entity
                     .AssignmentDocument(Id.g2.ToString(), 10, 0, Create.Entity.QuestionnaireIdentity(Id.gB).ToString())
-                    .WithAnswer(Guid.NewGuid(), "1")
-                    .WithAnswer(Guid.NewGuid(), "2")
+                    .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "1")
+                    .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "2")
                     .Build()
             };
 
@@ -49,15 +47,27 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             {
                 Create.Entity
                     .AssignmentApiView(Id.g1.ToString(), 20, 0, Create.Entity.QuestionnaireIdentity(Id.gA))
-                    .WithAnswer(Guid.NewGuid(), "1")
-                    .WithAnswer(Guid.NewGuid(), "2")
+                    .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "1")
+                    .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "2")
                     .Build(),
                 Create.Entity
                     .AssignmentApiView(Id.g3.ToString(), 20, 0, Create.Entity.QuestionnaireIdentity(Id.gC))
-                    .WithAnswer(Guid.NewGuid(), "1")
-                    .WithAnswer(Guid.NewGuid(), "2")
+                    .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "1")
+                    .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "2")
                     .Build()
             };
+        }
+
+        PlainQuestionnaire CreatePlain(Guid id, AssignmentApiView assignemtn)
+        {
+            var questionnaire = Create.Entity.QuestionnaireDocument(id, children: new IComposite[]
+            {
+                Create.Entity.TextQuestion(assignemtn.IdentifyingData[0].Identity.Id, text: "text 1"),
+                Create.Entity.TextQuestion(assignemtn.IdentifyingData[1].Identity.Id, text: "title 2"),
+            });
+
+            questionnaire.Title = "title";
+            return Create.Entity.PlainQuestionnaire(questionnaire);
         }
 
         [OneTimeSetUp]
@@ -75,13 +85,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 Create.Entity.QuestionnaireIdentity(Id.gC)
             };
 
-            var questionnaire = Create.Entity.QuestionnaireDocument(Id.gC, children: new IComposite[]
-            {
-                Create.Entity.TextQuestion(RemoteAssignments[1].IdentifyingData[0].QuestionId, text: "text 1"),
-                Create.Entity.TextQuestion(RemoteAssignments[1].IdentifyingData[1].QuestionId, text: "title 2"),
-            });
-            questionnaire.Title = "title";
-
             var synchronizationService = Mock.Of<ISynchronizationService>(
                 x => x.GetCensusQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new List<QuestionnaireIdentity>())
                      && x.GetServerQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new List<QuestionnaireIdentity>(questionaries))
@@ -94,9 +97,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             var interviewViewRepository = new SqliteInmemoryStorage<InterviewView>();
             interviewViewRepository.Store(new List<InterviewView>());
-
-            var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
-            var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(q => q.GetQuestionnaire(questionaries[2], null) == plainQuestionnaire);
+            var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(q => 
+                q.GetQuestionnaire(questionaries[2], null) == CreatePlain(Id.gC, this.RemoteAssignments[1])
+                && q.GetQuestionnaire(questionaries[0], null) == CreatePlain(Id.gA, this.RemoteAssignments[0]));
 
             var viewModel = Create.Service.AssignmentsSynchronizer(
                 synchronizationService: synchronizationService,

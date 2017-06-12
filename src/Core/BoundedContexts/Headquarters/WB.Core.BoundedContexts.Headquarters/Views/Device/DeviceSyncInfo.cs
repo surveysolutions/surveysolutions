@@ -59,6 +59,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Device
         public int RejectedInterviewsOnDeviceCount { get; set; }
         public int NewInterviewsOnDeviceCount { get; set; }
 
+        public int NewAssignmentsCount { get; set; }
+        public int RemovedAssignmentsCount { get; set; }
+
         [DefaultValue(0)]
         public long TotalUploadedBytes { get; set; }
 

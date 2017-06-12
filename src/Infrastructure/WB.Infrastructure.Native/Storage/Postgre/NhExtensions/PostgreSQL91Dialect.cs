@@ -95,6 +95,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
 
         public virtual object NullSafeGet(IDataReader resultSet, string[] names, object owner)
         {
+            var value = NHibernateUtil.Date.NullSafeGet(resultSet, names[0]);
+
             var index = resultSet.GetOrdinal(names[0]);
 
             if (resultSet.IsDBNull(index))
@@ -154,8 +156,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
                 {
                     new NpgsqlExtendedSqlType(
                         DbType.Object,
-                        this.NpgSqlType
-                        )
+                        this.NpgSqlType)
                 };
 
                 return sqlTypes;
@@ -167,7 +168,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
             { typeof(string[]), NpgsqlDbType.Array | NpgsqlDbType.Text },
             { typeof(decimal[]), NpgsqlDbType.Array | NpgsqlDbType.Numeric },
             { typeof(int[]), NpgsqlDbType.Array | NpgsqlDbType.Integer }
-        }; 
+        };
+
         protected virtual NpgsqlTypes.NpgsqlDbType NpgSqlType
         {
             get
@@ -185,5 +187,63 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
         public virtual Type ReturnedType => typeof(T[]);
 
         public bool IsMutable { get; private set; }
+    }
+
+    public interface ITypeConvertor
+    {
+        object Convert(object b);
+    }
+
+    public class PostgresSqlConvertorType<T, TResult, TConvertor> : PostgresSqlArrayType<T>, IUserType where TConvertor: ITypeConvertor
+    {
+        private readonly ITypeConvertor convertor;
+
+        public PostgresSqlConvertorType()
+        {
+            this.convertor = Activator.CreateInstance<TConvertor>();
+        }
+
+        bool IUserType.Equals(object x, object y)
+        {
+            return x?.Equals(y) ?? false;
+        }
+
+        public new int GetHashCode(object x)
+        {
+            return x?.GetHashCode() ?? 0;
+        }
+
+        public override object NullSafeGet(IDataReader resultSet, string[] names, object owner)
+        {
+            var index = resultSet.GetOrdinal(names[0]);
+
+            if (resultSet.IsDBNull(index))
+            {
+                return null;
+            }
+
+            var value = resultSet.GetValue(index);
+            var res = (TResult) convertor.Convert(value);
+
+            if (res != null)
+            {
+                return res;
+            }
+
+            throw new NotImplementedException();
+        }
+
+        public override void NullSafeSet(IDbCommand cmd, object value, int index)
+        {
+            var parameter = (IDbDataParameter) cmd.Parameters[index];
+            if (value == null)
+            {
+                parameter.Value = DBNull.Value;
+            }
+            else
+            {
+                parameter.Value = (T[]) this.convertor.Convert(value);
+            }
+        }
     }
 }

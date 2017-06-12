@@ -25,8 +25,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         {
             this.assignment = Create.Entity
                 .AssignmentApiView(Guid.NewGuid().ToString(), 5, 1, Create.Entity.QuestionnaireIdentity(Id.g1))
-                .WithAnswer(Guid.NewGuid(), "123")
-                .WithAnswer(Guid.NewGuid(), "456")
+                .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "123")
+                .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "456")
                 .Build();
 
             var restService = Mock.Of<IRestService>(
@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         {
             var assignmentDocument = assignments.Single();
             
-            assignmentDocument.IdentifyingData.SequenceEqual(assignment.IdentifyingData, source => source.QuestionId, target => target.QuestionId);
+            assignmentDocument.IdentifyingData.SequenceEqual(assignment.IdentifyingData, source => source.Identity, target => target.Identity);
             assignmentDocument.IdentifyingData.SequenceEqual(assignment.IdentifyingData, source => source.Answer, target => target.Answer);
         }
 

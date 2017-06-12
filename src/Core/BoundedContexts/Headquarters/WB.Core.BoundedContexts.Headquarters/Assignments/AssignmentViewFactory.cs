@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             if (questionnaire == null) return new List<AssignmentIdentifyingQuestionRow>();
 
             List<AssignmentIdentifyingQuestionRow> identifyingColumnText = 
-                assignment.IdentifyingData.Select(x => new AssignmentIdentifyingQuestionRow(questionnaire.GetQuestionTitle(x.QuestionId).RemoveHtmlTags(), x.AnswerAsString))
+                assignment.IdentifyingData.Select(x => new AssignmentIdentifyingQuestionRow(questionnaire.GetQuestionTitle(x.Identity.Id).RemoveHtmlTags(), x.AnswerAsString))
                 .ToList();
             return identifyingColumnText;
         }
