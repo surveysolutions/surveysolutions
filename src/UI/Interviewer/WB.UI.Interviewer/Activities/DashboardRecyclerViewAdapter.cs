@@ -34,11 +34,12 @@ namespace WB.UI.Interviewer.Activities
         {
             base.OnBindViewHolder(holder, position);
 
-            var viewHolder = (DashboardExpandableViewHolder)holder;
             var viewModel = (IDashboardItem)GetItem(position);
 
             if (viewModel.HasExpandedView)
             {
+                var viewHolder = (DashboardExpandableViewHolder)holder;
+
                 viewHolder.DashboardItem.Click += (sender, args) =>
                 {
                     bool shouldExpand = viewHolder.DetailsView.Visibility == ViewStates.Gone;
