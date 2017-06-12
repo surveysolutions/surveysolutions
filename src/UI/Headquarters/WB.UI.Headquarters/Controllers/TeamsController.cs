@@ -8,9 +8,11 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.ComponentModels;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
+    [ApiNoCache]
     public class TeamsController : BaseApiController
     {
         private const int DEFAULTPAGESIZE = 12;

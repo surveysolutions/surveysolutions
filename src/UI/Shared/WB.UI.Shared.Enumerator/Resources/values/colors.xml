@@ -50,7 +50,8 @@
 
   <color name="dashboard_button_color">#F6F6F6</color>
   <color name="dashboard_button_color_pressed">#E5E5E5</color>
-  
+  <color name="dashboard_questionnairelist_empty_text">#a3a3a3</color>
+
   <color name="previous_group_navigation_answered">#7AC16B</color>
   <color name="previous_group_navigation_unanswered">#2A81CB</color>
 

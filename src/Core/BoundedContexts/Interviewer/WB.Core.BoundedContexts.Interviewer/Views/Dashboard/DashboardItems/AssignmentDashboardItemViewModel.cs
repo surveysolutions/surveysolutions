@@ -61,12 +61,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             this.assignment = assignment;
             this.questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity, null);
 
-            var identifyingData = assignment.IdentifyingData.Where(x => questionnaire.GetQuestionType(x.QuestionId) != QuestionType.GpsCoordinates);
+            var identifyingData = assignment.IdentifyingData.Where(id => id.QuestionId != assignment.LocationQuestionId).ToList();
             this.PrefilledQuestions = GetPrefilledQuestions(identifyingData.Take(3));
             this.DetailedPrefilledQuestions = GetPrefilledQuestions(identifyingData.Skip(3));
             this.GpsLocation = this.GetAssignmentLocation(assignment);
+            this.Title = string.Format(InterviewerUIResources.Dashboard_CardTitle, this.assignment.Id);
         }
 
         private AssignmentDocument assignment;
@@ -92,6 +92,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public List<PrefilledQuestion> PrefilledQuestions { get; private set; }
         public List<PrefilledQuestion> DetailedPrefilledQuestions { get; private set; }
+
+        public string Title { get; private set; }
+
         public InterviewGpsCoordinatesView GpsLocation { get; private set; }
         public bool HasGpsLocation => this.GpsLocation != null;
 
@@ -155,7 +158,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             return identifyingAnswers.Select(fi => new PrefilledQuestion
                 {
-                    Answer = fi.Answer,
+                    Answer = fi.AnswerAsString,
                     Question = fi.Question
                 }).ToList();
         }
@@ -178,6 +181,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             get { return new MvxCommand(this.NavigateToGpsLocation, () => this.HasGpsLocation); }
         }
+
+        public bool HasExpandedView { get => this.PrefilledQuestions.Count > 0; }
 
         private void NavigateToGpsLocation()
         {

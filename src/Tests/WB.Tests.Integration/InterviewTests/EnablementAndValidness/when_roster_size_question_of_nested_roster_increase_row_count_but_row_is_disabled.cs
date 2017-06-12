@@ -6,7 +6,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
@@ -29,12 +29,12 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var rosterId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
                 var nestedRosterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
-                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Abc.Create.Entity.Roster(rosterId, variable: "parent", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedTitles: new[] { "1" },
+                var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Create.Entity.Roster(rosterId, variable: "parent", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedTitles: new[] { "1" },
                         children: new IComposite[]
                         {
-                            Abc.Create.Entity.NumericIntegerQuestion(nestedRosterSizeQuestionId, variable: "a"),
-                            Abc.Create.Entity.Roster(nestedRosterId, variable:"nested", rosterSizeSourceType: RosterSizeSourceType.Question, enablementCondition: "a > 1",
+                            Create.Entity.NumericIntegerQuestion(nestedRosterSizeQuestionId, variable: "a"),
+                            Create.Entity.Roster(nestedRosterId, variable:"nested", rosterSizeSourceType: RosterSizeSourceType.Question, enablementCondition: "a > 1",
                                 rosterSizeQuestionId: nestedRosterSizeQuestionId)
                         })
                     );
@@ -45,7 +45,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 {
                     interview.AnswerNumericIntegerQuestion(userId, nestedRosterSizeQuestionId, new decimal[] { 0 }, DateTime.Now, 1);
 
-                    return new InvokeResults()
+                    return new InvokeResults
                     {
                         NestedRosterEnabled = eventContext.AnyEvent<GroupsEnabled>(e => e.Groups.Any(q => q.Id == nestedRosterId)),
                         NestedRosterDisabled = eventContext.AnyEvent<GroupsDisabled>(e => e.Groups.Any(q => q.Id == nestedRosterId))

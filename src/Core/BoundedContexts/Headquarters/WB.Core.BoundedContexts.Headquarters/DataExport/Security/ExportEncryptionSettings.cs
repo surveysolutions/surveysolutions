@@ -1,4 +1,4 @@
-namespace WB.Core.Infrastructure.Security
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
 {
     public class ExportEncryptionSettings
     {

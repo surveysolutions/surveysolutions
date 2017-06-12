@@ -2573,6 +2573,96 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Press Add API button to create a new API user..
+        /// </summary>
+        public static string Users_API_Instruction1 {
+            get {
+                return ResourceManager.GetString("Users_API_Instruction1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click on a Login Name to modify profile of an existing API user. .
+        /// </summary>
+        public static string Users_API_Instruction2 {
+            get {
+                return ResourceManager.GetString("Users_API_Instruction2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Press Add Headquarters button to create a new HQ user..
+        /// </summary>
+        public static string Users_Headquarters_Instruction1 {
+            get {
+                return ResourceManager.GetString("Users_Headquarters_Instruction1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click on a Login Name to modify profile of an existing HQ user. .
+        /// </summary>
+        public static string Users_Headquarters_Instruction2 {
+            get {
+                return ResourceManager.GetString("Users_Headquarters_Instruction2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Press Add Interviewer button to create a new Interviewer..
+        /// </summary>
+        public static string Users_Interviewers_Instruction1 {
+            get {
+                return ResourceManager.GetString("Users_Interviewers_Instruction1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click on a Login Name to see information on an interviewer and to modify an Interviewer profile..
+        /// </summary>
+        public static string Users_Interviewers_Instruction2 {
+            get {
+                return ResourceManager.GetString("Users_Interviewers_Instruction2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Press Add Observer button to create a new Observer..
+        /// </summary>
+        public static string Users_Observers_Instruction1 {
+            get {
+                return ResourceManager.GetString("Users_Observers_Instruction1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click on a Login Name to modify profile of an existing Observer user. .
+        /// </summary>
+        public static string Users_Observers_Instruction2 {
+            get {
+                return ResourceManager.GetString("Users_Observers_Instruction2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Press Add Supervisor button to create a new supervisor..
+        /// </summary>
+        public static string Users_Supervisors_Instruction1 {
+            get {
+                return ResourceManager.GetString("Users_Supervisors_Instruction1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click on a Login Name to modify profile of an existing Supervisor. .
+        /// </summary>
+        public static string Users_Supervisors_Instruction2 {
+            get {
+                return ResourceManager.GetString("Users_Supervisors_Instruction2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Folder that contains the website has a path name that is too long. Please move the website to another folder with a shorter name..
         /// </summary>
         public static string WebsitePathIsTooLong_Title {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using WB.Core.Infrastructure.Implementation.ReadSide;
+using WB.Core.Infrastructure.ReadSide;
 
-namespace WB.Core.Infrastructure.ReadSide
+namespace WB.Core.BoundedContexts.Headquarters.Implementation.ReadSide
 {
     public interface IReadSideAdministrationService : IReadSideStatusService
     {

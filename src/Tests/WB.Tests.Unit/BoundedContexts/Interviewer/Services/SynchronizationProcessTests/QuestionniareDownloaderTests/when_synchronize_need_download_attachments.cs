@@ -2,39 +2,31 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Machine.Specifications;
 using Moq;
-using Nito.AsyncEx.Synchronous;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
+using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Tests.Abc;
-using WB.Tests.Abc.Storage;
-using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
+namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests.QuestionniareDownloaderTests
 {
-    [Subject(typeof(SynchronizationProcess))]
+    [TestOf(typeof(SynchronizationProcess))]
     internal class when_synchronize_and_need_download_missing_attachments
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public async Task context()
         {
-            var principal = Setup.InterviewerPrincipal("name", "pass");
-
-            var emptyInterviewViews = new List<InterviewView>().ToReadOnlyCollection();
-            var interviewViewRepository = new SqliteInmemoryStorage<InterviewView>();
-
-            var newCensusInterviewIdentities = new List<QuestionnaireIdentity>()
+            var newCensusInterviewIdentities = new List<QuestionnaireIdentity>
             {
                 new QuestionnaireIdentity(Guid.NewGuid(), 1),
-                new QuestionnaireIdentity(Guid.NewGuid(), 3),
+                new QuestionnaireIdentity(Guid.NewGuid(), 3)
             };
 
             var attachmentContentIds1 = new List<string>() { "1", "2", "3" };
@@ -42,14 +34,12 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             synchronizationService = Mock.Of<ISynchronizationService>(
                 x => x.GetCensusQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(newCensusInterviewIdentities)
-                && x.GetInterviewsAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new List<InterviewApiView>())
                 && x.GetQuestionnaireAsync(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<Action<decimal, long, long>>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new QuestionnaireApiView())
                 && x.GetAttachmentContentsAsync(newCensusInterviewIdentities[0], Moq.It.IsAny<Action<decimal, long, long>>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(attachmentContentIds1)
                 && x.GetAttachmentContentsAsync(newCensusInterviewIdentities[1], Moq.It.IsAny<Action<decimal, long, long>>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(attachmentContentIds2)
                 && x.GetAttachmentContentAsync("1", Moq.It.IsAny<Action<decimal, long, long>>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(Create.Entity.AttachmentContent_Enumerator("1"))
                 && x.GetAttachmentContentAsync("5", Moq.It.IsAny<Action<decimal, long, long>>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(Create.Entity.AttachmentContent_Enumerator("5"))
                 && x.GetQuestionnaireTranslationAsync(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new List<TranslationDto>())
-                && x.GetAssignmentsAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new List<AssignmentApiView>())
                 );
 
             interviewerQuestionnaireAccessor = Mock.Of<IInterviewerQuestionnaireAccessor>(
@@ -64,42 +54,50 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 && x.Exists("5") == false
                 );
 
-            viewModel = Create.Service.SynchronizationProcess(principal: principal,
-                interviewViewRepository: interviewViewRepository,
+            downloader = Create.Service.QuestionnaireDownloader(
                 attachmentContentStorage: attachmentContentStorage,
                 synchronizationService: synchronizationService,
-                questionnaireFactory: interviewerQuestionnaireAccessor
+                questionnairesAccessor: interviewerQuestionnaireAccessor
                 );
-        };
 
-        Because of = () => viewModel.SyncronizeAsync(new Progress<SyncProgressInfo>(), CancellationToken.None).WaitAndUnwrapException();
+            await downloader.DownloadQuestionnaireAsync(newCensusInterviewIdentities[0], CancellationToken.None, new SychronizationStatistics());
+            await downloader.DownloadQuestionnaireAsync(newCensusInterviewIdentities[1], CancellationToken.None, new SychronizationStatistics());
+        }
 
-        It should_download_attachment_content_for_id_1 = () =>
+        [Test]
+        public void should_download_attachment_content_for_id_1() =>
             Mock.Get(synchronizationService).Verify(s => s.GetAttachmentContentAsync("1", Moq.It.IsAny<Action<decimal, long, long>>(), Moq.It.IsAny<CancellationToken>()), Times.Once());
 
-        It should_download_attachment_content_for_id_2 = () =>
+        [Test]
+        public void should_download_attachment_content_for_id_2() =>
             Mock.Get(synchronizationService).Verify(s => s.GetAttachmentContentAsync("2", Moq.It.IsAny<Action<decimal, long, long>>(), Moq.It.IsAny<CancellationToken>()), Times.Never());
 
-        It should_download_attachment_content_for_id_3 = () =>
+        [Test]
+        public void should_download_attachment_content_for_id_3() =>
             Mock.Get(synchronizationService).Verify(s => s.GetAttachmentContentAsync("3", Moq.It.IsAny<Action<decimal, long, long>>(), Moq.It.IsAny<CancellationToken>()), Times.Never());
 
-        It should_download_attachment_content_for_id_5 = () =>
+        [Test]
+        public void should_download_attachment_content_for_id_5() =>
             Mock.Get(synchronizationService).Verify(s => s.GetAttachmentContentAsync("5", Moq.It.IsAny<Action<decimal, long, long>>(), Moq.It.IsAny<CancellationToken>()), Times.Once());
 
-        It should_store_attachment_content_for_id_1 = () =>
+        [Test]
+        public void should_store_attachment_content_for_id_1() =>
             Mock.Get(attachmentContentStorage).Verify(s => s.Store(Moq.It.Is<AttachmentContent>(ac => ac.Id == "1")), Times.Once());
 
-        It should_store_attachment_content_for_id_2 = () =>
+        [Test]
+        public void should_store_attachment_content_for_id_2() =>
             Mock.Get(attachmentContentStorage).Verify(s => s.Store(Moq.It.Is<AttachmentContent>(ac => ac.Id == "2")), Times.Never());
 
-        It should_store_attachment_content_for_id_3 = () =>
+        [Test]
+        public void should_store_attachment_content_for_id_3() =>
             Mock.Get(attachmentContentStorage).Verify(s => s.Store(Moq.It.Is<AttachmentContent>(ac => ac.Id == "3")), Times.Never());
 
-        It should_store_attachment_content_for_id_5 = () =>
+        [Test]
+        public void should_store_attachment_content_for_id_5() =>
             Mock.Get(attachmentContentStorage).Verify(s => s.Store(Moq.It.Is<AttachmentContent>(ac => ac.Id == "5")), Times.Once());
 
 
-        static SynchronizationProcess viewModel;
+        static IQuestionnaireDownloader downloader;
         static IAttachmentContentStorage attachmentContentStorage;
         static ISynchronizationService synchronizationService;
         static IInterviewerQuestionnaireAccessor interviewerQuestionnaireAccessor;

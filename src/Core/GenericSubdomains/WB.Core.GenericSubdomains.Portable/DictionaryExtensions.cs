@@ -64,6 +64,11 @@ namespace WB.Core.GenericSubdomains.Portable
             return dictionary.ContainsKey(key) ? dictionary[key] : null as TValue?;
         }
 
+        public static List<TValue> GetOrEmpty<TKey, TValue>(this IDictionary<TKey, List<TValue>> dictionary, TKey key)
+        {
+            return dictionary.ContainsKey(key) ? dictionary[key] : new List<TValue>();
+        }
+
         public static bool TryRemove<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> dictionary, TKey key)
         {
             TValue _;

@@ -381,6 +381,7 @@
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_question_that_enables_section_with_nested_rosters_inside_it_after_preloading.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_multipleoptionquestion_triggering_roster_having_condition_with_rowindex.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_index_of_failed_validation_condition_changes.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_referencing_questionnaire_level_roster_in_validation.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_using_IsAnswered_with_yes_no_question.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_datetime_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_w___.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_group_GB_with_question_B_and_disabled_B_disables_question_C.cs" />
@@ -503,6 +504,8 @@
     <Compile Include="InterviewTests\Variables\when_Answering_question_which_changes_value_of_a_variable.cs" />
     <Compile Include="InterviewTests\Variables\when_Answering_question_which_disables_a_variable.cs" />
     <Compile Include="InterviewTests\Variables\when_Answering_question_which_enables_a_variable.cs" />
+    <Compile Include="InterviewTests\Variables\when_removing_asnwer_which_changes_value_of_a_variable_that_uses_in_substitution.cs" />
+    <Compile Include="InterviewTests\Variables\when_removing_asnwer_which_changes_value_of_a_variable_that_uses_in_substitution1.cs" />
     <Compile Include="NCrunch.Framework.cs" />
     <Compile Include="OldschoolChartStatisticsDataProviderTests\when_count_of_interviews_is_zero.cs" />
     <Compile Include="OldschoolChartStatisticsDataProviderTests\when_3_interviews_are_completed_during_a_month_period.cs" />
