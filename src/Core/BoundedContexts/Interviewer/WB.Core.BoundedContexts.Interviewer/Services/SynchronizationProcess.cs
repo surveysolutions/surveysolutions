@@ -150,7 +150,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 await this.UploadCompletedInterviewsAsync(progress, statistics, cancellationToken);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                await this.assignmentsSynchronizer.SyncronizeAssignmentsAsync(progress, statistics, cancellationToken);
+                await this.assignmentsSynchronizer.SynchronizeAssignmentsAsync(progress, statistics, cancellationToken);
 
                 cancellationToken.ThrowIfCancellationRequested();
                 await this.SyncronizeCensusQuestionnaires(progress, statistics, cancellationToken);

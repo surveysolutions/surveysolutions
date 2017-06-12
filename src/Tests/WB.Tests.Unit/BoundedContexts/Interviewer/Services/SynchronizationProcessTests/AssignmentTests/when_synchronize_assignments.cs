@@ -106,7 +106,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             this.progressInfo = new Mock<IProgress<SyncProgressInfo>>();
 
-            await viewModel.SyncronizeAssignmentsAsync(progressInfo.Object, new SychronizationStatistics(), CancellationToken.None);
+            await viewModel.SynchronizeAssignmentsAsync(progressInfo.Object, new SychronizationStatistics(), CancellationToken.None);
         }
 
         [Test]
