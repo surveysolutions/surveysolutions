@@ -602,7 +602,7 @@ for further instructions</value>
   </data>
   <data name="Synchronization_Check_Obsolete_Questionnaires" xml:space="preserve">
     <value>Check for obsolete questionnaires</value>
-  </data>  
+  </data>
   <data name="Synchronization_Of_Assignments" xml:space="preserve">
     <value>Check for new assignments</value>
   </data>
@@ -647,5 +647,9 @@ your next synchronization</value>
   </data>
   <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
     <value>You can create new interviews using assignments</value>
+  </data>
+  <data name="Dashboard_CardTitle" xml:space="preserve">
+    <value>№ {0}</value>
+    <comment>{0} - Assignment id</comment>
   </data>
 </root>
