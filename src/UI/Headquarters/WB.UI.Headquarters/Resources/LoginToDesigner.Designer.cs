@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This is free tool for creating questionnaires for The World Bank’s CAPI platform. It could be found at.
+        ///   Looks up a localized string similar to This is free tool for creating questionnaires for The World Bank’s CAPI platform. It can be found at.
         /// </summary>
         public static string DesignerAppDescription {
             get {
@@ -75,6 +75,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string InvalidCredentials {
             get {
                 return ResourceManager.GetString("InvalidCredentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login or email.
+        /// </summary>
+        public static string LoginWatermark {
+            get {
+                return ResourceManager.GetString("LoginWatermark", resourceCulture);
             }
         }
         

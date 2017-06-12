@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace WB.Core.Infrastructure.Implementation.ReadSide
+namespace WB.Core.BoundedContexts.Headquarters.Implementation.ReadSide
 {
     public class ReadSideDenormalizerStatistic
     {
         public ReadSideDenormalizerStatistic(string denormalizerName, TimeSpan timeSpent, int percent)
         {
-            DenormalizerName = denormalizerName;
-            TimeSpent = timeSpent;
-            Percent = percent;
+            this.DenormalizerName = denormalizerName;
+            this.TimeSpent = timeSpent;
+            this.Percent = percent;
         }
 
         public string DenormalizerName { get; private set; }

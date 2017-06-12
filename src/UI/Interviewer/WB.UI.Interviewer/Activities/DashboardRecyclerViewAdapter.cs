@@ -3,6 +3,7 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using MvvmCross.Binding.Droid.BindingContext;
 using MvvmCross.Droid.Support.V7.RecyclerView;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 
 namespace WB.UI.Interviewer.Activities
 {
@@ -33,27 +34,32 @@ namespace WB.UI.Interviewer.Activities
         {
             base.OnBindViewHolder(holder, position);
 
-            var viewHolder = (DashboardExpandableViewHolder)holder;
+            var viewModel = (IDashboardItem)GetItem(position);
 
-            viewHolder.DashboardItem.Click += (sender, args) =>
+            if (viewModel.HasExpandedView)
             {
-                bool shouldExpand = viewHolder.DetailsView.Visibility == ViewStates.Gone;
+                var viewHolder = (DashboardExpandableViewHolder)holder;
 
-                ChangeBounds transition = new ChangeBounds();
-                transition.SetDuration(125);
-
-                if (shouldExpand)
+                viewHolder.DashboardItem.Click += (sender, args) =>
                 {
-                    viewHolder.DetailsView.Visibility = ViewStates.Visible;
-                }
-                else
-                {
-                    viewHolder.DetailsView.Visibility = ViewStates.Gone;
-                }
+                    bool shouldExpand = viewHolder.DetailsView.Visibility == ViewStates.Gone;
 
-                TransitionManager.BeginDelayedTransition(this.recyclerView, transition);
-                viewHolder.DashboardItem.Activated = shouldExpand;
-            };
+                    ChangeBounds transition = new ChangeBounds();
+                    transition.SetDuration(125);
+
+                    if (shouldExpand)
+                    {
+                        viewHolder.DetailsView.Visibility = ViewStates.Visible;
+                    }
+                    else
+                    {
+                        viewHolder.DetailsView.Visibility = ViewStates.Gone;
+                    }
+
+                    TransitionManager.BeginDelayedTransition(this.recyclerView, transition);
+                    viewHolder.DashboardItem.Activated = shouldExpand;
+                };
+            }
         }
     }
 }

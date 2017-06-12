@@ -151,7 +151,7 @@ namespace WB.UI.Headquarters.API
                 new QuestionnaireIdentity(request.QuestionnaireId, request.QuestionnaireVersion);
 
             var assignment = new Assignment(questionnaireIdentity,
-                request.SupervisorId, request.Quantity);
+                request.ResponsibleId, request.Quantity);
 
             var untypedQuestionAnswers =
                 JsonConvert.DeserializeObject<List<UntypedQuestionAnswer>>(request.AnswersToFeaturedQuestions);
@@ -172,7 +172,7 @@ namespace WB.UI.Headquarters.API
         {
             public Guid QuestionnaireId { get; set; }
             public long QuestionnaireVersion { get; set; }
-            public Guid SupervisorId { get; set; }
+            public Guid ResponsibleId { get; set; }
             public string AnswersToFeaturedQuestions { get; set; }
             public int? Quantity { get; set; }
         }

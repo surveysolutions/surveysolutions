@@ -133,15 +133,6 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Census.
-        /// </summary>
-        internal static string Census {
-            get {
-                return ResourceManager.GetString("Census", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Clone questionnaire.
         /// </summary>
         internal static string CloneQuestionnaire {
@@ -232,7 +223,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1. Click Import Template  button to load a questionnaire from Designer.
+        ///   Looks up a localized string similar to Click Import Template  button to load a questionnaire from Designer.
         /// </summary>
         internal static string SurveySetupIntroMessage1 {
             get {
@@ -241,7 +232,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 2. Click on a questionnaire from the list to create interview assignments.
+        ///   Looks up a localized string similar to Click on a questionnaire from the list to create interview assignments.
         /// </summary>
         internal static string SurveySetupIntroMessage2 {
             get {

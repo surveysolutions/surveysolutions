@@ -1,4 +1,4 @@
-﻿namespace WB.Infrastructure.Security
+﻿namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
 {
     public interface IExportSettings
     {

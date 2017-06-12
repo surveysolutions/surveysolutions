@@ -99,19 +99,19 @@
     <item name="android:layout_height">wrap_content</item>
     
     <item name="android:orientation">horizontal</item>
-    <item name="android:layout_marginLeft">36dp</item>
-    <item name="android:layout_marginRight">90dp</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Readonly_Question_Layout_margin_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Readonly_Question_Layout_margin_right</item>
     <item name="android:layout_marginTop">@dimen/Interview_Question_Answer_margin_top</item>
-    <item name="android:layout_marginBottom">40dp</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Readonly_Question_Layout_margin_bottom</item>
   </style>
   
   <style name="Interview_Readonly_Question_Answer">
     <item name="android:maxLines">1</item>
     <item name="android:singleLine">true</item>
-    <item name="android:layout_height">50dp</item>
+    <item name="android:layout_height">@dimen/Interview_Readonly_Question_Answer_layout_height</item>
     <item name="android:layout_weight">1</item>
-    <item name="android:layout_marginLeft">14dp</item>
-    <item name="android:padding">14dp</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Readonly_Question_Answer_margin_left</item>
+    <item name="android:padding">@dimen/Interview_Readonly_Question_Answer_padding</item>
     <item name="android:focusable">true</item>
     <item name="android:layout_width">@dimen/Zero</item>
     <item name="android:focusableInTouchMode">true</item>
@@ -125,7 +125,7 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_width">wrap_content</item>
     <item name="android:src">@drawable/lock_icon</item>
-    <item name="android:layout_marginTop">14dp</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Readonly_Question_Icon_margin_top</item>
   </style>
   
   <style name="Interview_Question_EmptyOptions">

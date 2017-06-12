@@ -48,6 +48,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
                 this.Rosters.Add(new RosterModel
                 {
                     Variable = questionnaire.GetVariable(roster),
+                    RosterScope = rosterScope,
                     ClassName = className
                 });
             }

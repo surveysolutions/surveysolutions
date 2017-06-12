@@ -175,10 +175,10 @@
     <value>Опросник</value>
   </data>
   <data name="SurveySetupIntroMessage2" xml:space="preserve">
-    <value>2. Кликните по опроснику из списка для создания интервью</value>
+    <value>Кликните по опроснику из списка для создания интервью</value>
   </data>
   <data name="SurveySetupIntroMessage1" xml:space="preserve">
-    <value>1. Кликните по кнопке Иморт Опросника для загрузки шаблона с Дизайнера</value>
+    <value>Кликните по кнопке Иморт Опросника для загрузки шаблона с Дизайнера</value>
   </data>
   <data name="WebInterviewSetup" xml:space="preserve">
     <value>Настройка web интервью</value>

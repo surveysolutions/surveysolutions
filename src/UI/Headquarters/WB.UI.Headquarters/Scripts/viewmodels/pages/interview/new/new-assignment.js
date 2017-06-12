@@ -17,7 +17,7 @@
     self.supervisors = function (query, sync, pageSize) {
         self.isSupervisorsLoading(true);
         self.SendRequest(supervisorsUrl, { query: query, pageSize: pageSize }, function (response) {
-            sync(response.Users, response.TotalCountByQuery);
+            sync(response.options, response.total);
         }, true, true, function() {
             self.isSupervisorsLoading(false);
         });
@@ -37,7 +37,7 @@
                 self.submitting = true;
 
                 var request = {
-                        supervisorId: self.responsible().UserId,
+                        responsibleId: self.responsible().key,
                         questionnaireId: self.questionnaire().templateId,
                         questionnaireVersion: self.questionnaire().templateVersion,
                         answersToFeaturedQuestions: ko.toJSON(datacontext.prepareQuestion()),

@@ -128,6 +128,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Implementation\Services\AnswerToStringConverter.cs" />
+    <Compile Include="Services\IAnswerToStringConverter.cs" />
+    <Compile Include="Services\Synchronization\AssignmentsSynchronizer.cs" />
     <Compile Include="Services\CompanyLogoInfo.cs" />
     <Compile Include="Services\IArchivePatcherService.cs" />
     <Compile Include="Services\IBattery.cs" />
@@ -149,6 +152,9 @@
     <Compile Include="Services\RestorePackageInfo.cs" />
     <Compile Include="Services\SynchronizationProcess.cs" />
     <Compile Include="Services\Synchronization\CompanyLogoSynchronizer.cs" />
+    <Compile Include="Services\Synchronization\IAssignmentsSynchronizer.cs" />
+    <Compile Include="Services\Synchronization\IQuestionnaireDownloader.cs" />
+    <Compile Include="Services\Synchronization\QuestionnaireDownloader.cs" />
     <Compile Include="Services\SyncProgressDto.cs" />
     <Compile Include="Views\AssignmentDocument.cs" />
     <Compile Include="Views\BackupRestoreViewModel.cs" />

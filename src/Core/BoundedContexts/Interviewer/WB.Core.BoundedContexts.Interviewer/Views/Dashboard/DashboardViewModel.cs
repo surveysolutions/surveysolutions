@@ -120,8 +120,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             this.CreateNew.Load();
             this.StartedInterviews.Load();
-            this.CompletedInterviews.Load();
             this.RejectedInterviews.Load();
+            this.CompletedInterviews.Load();
             
             this.RaisePropertyChanged(() => this.DashboardTitle);
             this.RaisePropertyChanged(() => this.IsExistsAnyCensusQuestionnairesOrInterviews);

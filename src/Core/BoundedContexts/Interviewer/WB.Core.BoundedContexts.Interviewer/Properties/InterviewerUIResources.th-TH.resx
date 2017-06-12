@@ -162,9 +162,6 @@
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
     <value>เริ่มสัมภาษณ์ : ({0})</value>
   </data>
-  <data name="Dashboard_Title" xml:space="preserve">
-    <value>งานที่ได้รับมอบหมายให้ {1} : {0}</value>
-  </data>
   <data name="DashboardItem_AssignedOn" xml:space="preserve">
     <value>{0} เสร็จสมบูรณ์เมื่อ</value>
   </data>

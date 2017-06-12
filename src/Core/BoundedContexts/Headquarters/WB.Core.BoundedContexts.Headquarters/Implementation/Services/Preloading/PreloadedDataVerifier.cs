@@ -874,7 +874,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 for (int y = 0; y < levelData.Content.Length; y++)
                 {
                     var row = levelData.Content[y];
-                    var quantityString = row[quantityColumnIndex].Trim();
+                    var quantityString = row[quantityColumnIndex]?.Trim();
 
                     if (String.IsNullOrWhiteSpace(quantityString))
                         continue;
