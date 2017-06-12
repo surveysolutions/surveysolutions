@@ -11,7 +11,7 @@
                     <b>Please provide answers to all questions to the extent possible.
                             Any answers you provide are sent to our system right away.
                             If you experience a communication disruption you can return to the questionnaire
-                            by following the same link you prowided so far retained for you.
+                            by following the same link you provided so far retained for you.
                             You can then continue by submitting new answers or revising earlier answers.
                     </b>
                 </p>
