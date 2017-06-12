@@ -21,9 +21,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
             {
-                Create.Entity.FixedRoster(fixedTitles: new[] {Create.Entity.FixedTitle(1)}, children: new[]
+                Create.Entity.FixedRoster(fixedTitles: new[] {Create.Entity.FixedTitle(1)}, variable: "r1",  children: new[]
                 {
-                    Create.Entity.FixedRoster(fixedTitles: new[] {Create.Entity.FixedTitle(0)}, children: new[]
+                    Create.Entity.FixedRoster(fixedTitles: new[] {Create.Entity.FixedTitle(0)}, variable: "r2", children: new[]
                     {
                         Create.Entity.Variable(variableIdentity.Id, VariableType.String)
                     })

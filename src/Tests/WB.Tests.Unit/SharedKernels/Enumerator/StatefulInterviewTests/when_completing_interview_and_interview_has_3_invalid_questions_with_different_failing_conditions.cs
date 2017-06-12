@@ -17,9 +17,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.Entity.TextQuestion(questionId: invalidQuestion1Identity.Id),
-                Create.Entity.TextQuestion(questionId: invalidQuestion2Identity.Id),
-                Create.Entity.TextQuestion(questionId: invalidQuestion3Identity.Id),
+                Create.Entity.TextQuestion(questionId: invalidQuestion1Identity.Id, variable: "q1"),
+                Create.Entity.TextQuestion(questionId: invalidQuestion2Identity.Id, variable: "q2"),
+                Create.Entity.TextQuestion(questionId: invalidQuestion3Identity.Id, variable: "q3"),
             });
 
             interview = Setup.StatefulInterview(questionnaireDocument: questionnaire);
