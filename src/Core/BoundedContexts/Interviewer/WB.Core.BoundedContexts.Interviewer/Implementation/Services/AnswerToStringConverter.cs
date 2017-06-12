@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                         {
                             answer = System.Convert.ToDecimal(answer, CultureInfo.InvariantCulture);
                         }
-                        getCategoricalOptionText = (option) => questionnaire.GetOptionForQuestionByOptionValue(questionId, option).Title;
+                        getCategoricalOptionText = (option) => questionnaire.GetAnswerOptionTitle(questionId, option);
                         break;
 
                     case QuestionType.Numeric:
