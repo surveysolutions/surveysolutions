@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -48,15 +49,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPlainStorage<PrefilledQuestionView> prefilledQuestions;
         private readonly IQuestionnaireStorage questionnaireRepository;
+        private readonly IAnswerToStringConverter answerToStringConverter;
 
         public InterviewerDashboardEventHandler(IPlainStorage<InterviewView> interviewViewRepository, 
             IPlainStorage<PrefilledQuestionView> prefilledQuestions,
             IQuestionnaireStorage questionnaireRepository,
-            ILiteEventRegistry liteEventRegistry)
+            ILiteEventRegistry liteEventRegistry,
+            IAnswerToStringConverter answerToStringConverter)
         {
             this.interviewViewRepository = interviewViewRepository;
             this.prefilledQuestions = prefilledQuestions;
             this.questionnaireRepository = questionnaireRepository;
+            this.answerToStringConverter = answerToStringConverter;
 
             liteEventRegistry.Subscribe(this);
         }
@@ -198,54 +202,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private PrefilledQuestionView GetAnswerOnPrefilledQuestion(Guid prefilledQuestion, IQuestionnaire questionnaire, object answer, Guid interviewId)
         {
-            Func<decimal, string> getCategoricalOptionText = null;
-
-            var questionType = questionnaire.GetQuestionType(prefilledQuestion);
-
-            if (answer != null)
-            {
-                switch (questionType)
-                {
-                    case QuestionType.DateTime:
-                        DateTime dateTimeAnswer;
-                        if (answer is string)
-                            dateTimeAnswer = DateTime.Parse((string) answer);
-                        else
-                            dateTimeAnswer = (DateTime) answer;
-
-                        var isTimestamp = questionnaire.IsTimestampQuestion(prefilledQuestion);
-                        var localTime = dateTimeAnswer.ToLocalTime();
-                        answer = isTimestamp 
-                            ? localTime.ToString(CultureInfo.CurrentCulture)
-                            : localTime.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
-                        break;
-                    case QuestionType.MultyOption:
-                    case QuestionType.SingleOption:
-                        if (answer.GetType().IsArray)
-                        {
-                            answer =
-                                (answer as object[]).Select(x => Convert.ToDecimal(x, CultureInfo.InvariantCulture))
-                                    .ToArray();
-                        }
-                        else
-                        {
-                            answer = Convert.ToDecimal(answer, CultureInfo.InvariantCulture);
-                        }
-                        getCategoricalOptionText = (option) => questionnaire.GetOptionForQuestionByOptionValue(prefilledQuestion, option).Title;
-                        break;
-                    case QuestionType.Numeric:
-                        decimal answerTyped = answer is string ? decimal.Parse((string)answer, CultureInfo.InvariantCulture) : Convert.ToDecimal(answer);
-                        if (questionnaire.ShouldUseFormatting(prefilledQuestion))
-                        {
-                            answer = answerTyped.FormatDecimal();
-                        }
-                        else
-                        {
-                            answer = answerTyped.ToString(CultureInfo.CurrentCulture);
-                        }
-                        break;
-                }
-            }
+            string stringAnswer = this.answerToStringConverter.Convert(answer, prefilledQuestion, questionnaire);
 
             return new PrefilledQuestionView
             {
@@ -253,7 +210,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 InterviewId = interviewId,
                 QuestionId = prefilledQuestion,
                 QuestionText = questionnaire.GetQuestionTitle(prefilledQuestion),
-                Answer = answer == null ? null : AnswerUtils.AnswerToString(answer, getCategoricalOptionText)
+                Answer = stringAnswer
             };
         }
 

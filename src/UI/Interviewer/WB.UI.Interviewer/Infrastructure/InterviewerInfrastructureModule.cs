@@ -44,6 +44,7 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<IQuestionnaireTranslator>().To<QuestionnaireTranslator>();
             this.Bind<IQuestionnaireStorage>().To<QuestionnaireStorage>().InSingletonScope();
             this.Bind<IPlainInterviewFileStorage>().To<InterviewerPlainInterviewFileStorage>();
+            this.Bind<IAnswerToStringConverter>().To<AnswerToStringConverter>();
 
             this.Bind<IInterviewerEventStorage, IEventStore>()
                 .To<SqliteMultiFilesEventStorage>()
