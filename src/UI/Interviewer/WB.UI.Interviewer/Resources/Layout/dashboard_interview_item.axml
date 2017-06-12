@@ -16,7 +16,7 @@
                       android:orientation="vertical"
                       android:layout_width="0dp">
           <TextView style="@style/Dashboard_InterviewItem_Title"
-                    local:MvxBind="Text AssignmentId;  Visible AssignmentId" />
+                    local:MvxBind="Text Title; Visible Title" />
 
           <TextView style="@style/Dashboard_InterviewItem_SubTitle"
                     local:MvxBind="Text QuestionnaireName;" />

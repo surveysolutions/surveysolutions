@@ -8,7 +8,7 @@
     <LinearLayout style="@style/Dashboard_InterviewItem_InformationBlock">
 
       <TextView style="@style/Dashboard_InterviewItem_Title"
-                local:MvxBind="Text AssignmentId;" />
+                local:MvxBind="Text Title;" />
 
       <TextView style="@style/Dashboard_InterviewItem_SubTitle"
                 local:MvxBind="Text QuestionnaireName;" />

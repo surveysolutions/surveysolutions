@@ -107,6 +107,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to № {0}.
+        /// </summary>
+        public static string Dashboard_CardTitle {
+            get {
+                return ResourceManager.GetString("Dashboard_CardTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Completed ({0}).
         /// </summary>
         public static string Dashboard_CompletedLinkText {

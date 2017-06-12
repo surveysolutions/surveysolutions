@@ -74,11 +74,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
             if (!string.IsNullOrEmpty(interview.Assignment))
             {
-                this.AssignmentId = "№" + interview.Assignment;
+                this.Title = string.Format(InterviewerUIResources.Dashboard_CardTitle, interview.Assignment);
             }
         }
 
-        public string AssignmentId { get; private set; }
+        public string Title { get; private set; }
 
         private InterviewGpsCoordinatesView GetInterviewLocation(InterviewView interview)
         {
