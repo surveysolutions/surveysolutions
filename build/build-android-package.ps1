@@ -68,7 +68,7 @@ function GetPackageName([string]$CapiProject) {
 	return ($res.Node.Value)
 }
 
-function UpdateAndroidAppManifest( $VersionName, $VersionCode, $CapiProject){
+function UpdateAndroidAppManifest($VersionName, $VersionCode, $CapiProject){
 	Write-Host "##teamcity[blockOpened name='Updating Android App Manifest']"
 	Write-Host "##teamcity[progressStart 'Updating Android App Manifest']"
 
@@ -189,8 +189,15 @@ if (Test-Path $OutFileName) {
 if([string]::IsNullOrWhiteSpace($VersionName)){
 	$VersionName = (GetVersionString $CapiProject)
 }
-$VersionName = $VersionName + " (build " + $VersionCode + ")"
 
+if($ExcludeExtra)
+{
+    $VersionName = $VersionName + " (build " + $VersionCode + ")"
+}
+else
+{
+	$VersionName = $VersionName + " (build " + $VersionCode + ")[Extended]"
+}
 UpdateAndroidAppManifest -VersionName $VersionName -VersionCode $VersionCode -CapiProject $CapiProject
 BuildAndroidApp $CapiProject $BuildConfiguration $ExcludeExtra | %{ if (-not $_) { Exit } }
 
