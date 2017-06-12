@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Android.Content;
-using Android.Views;
 using Android.Widget;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Core.ViewModels;
@@ -13,7 +12,6 @@ using MvvmCross.Platform.Converters;
 using MvvmCross.Platform.IoC;
 using Ninject;
 using Nito.AsyncEx.Synchronous;
-using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
@@ -22,7 +20,6 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator;
@@ -175,14 +172,10 @@ namespace WB.UI.Interviewer
             kernel.Bind<InterviewerDashboardEventHandler>().ToSelf().InSingletonScope();
             kernel.Get<InterviewerDashboardEventHandler>();
 
-            kernel.Bind<IMapService>().ToMethod(_ =>  new MapService(_.Kernel.Get<IPermissions>(), _.Kernel.Get<IFileSystemAccessor>(), _.Kernel.Get<IInterviewerSettings>()?.Endpoint));
+            kernel.Bind<IMapSynchronizer>().To<MapSynchronizer>();
+            kernel.Bind<IMapService>().To<MapService>();
 
             return kernel;
-        }
-
-        private static string GetMapsUrl()
-        {
-            return Mvx.Resolve<IInterviewerSettings>()?.Endpoint;
         }
 
         protected override IEnumerable<Assembly> AndroidViewAssemblies
