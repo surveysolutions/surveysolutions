@@ -953,4 +953,19 @@
   <data name="InterviewDetails_MoreDetails" xml:space="preserve">
     <value>Details</value>
   </data>
+  <data name="GetLatestAppDescription" xml:space="preserve">
+    <value>Download and install this version of the Interviewer app for surveys that use no ESRI GIS functionality. This apk does not include an ESRI SDK and thus is much smaller in size and faster to download compared to the version with SDK.</value>
+  </data>
+  <data name="GetLatestAppExtendedDescription" xml:space="preserve">
+    <value>Download and install this version of the interviewer app only if you use advanced ESRI GIS functionality. This apk contains large ESRI SDK, is large in size and might take long time to download.</value>
+  </data>
+  <data name="DownloadPage_Instructions" xml:space="preserve">
+    <value>Installation instructions</value>
+  </data>
+  <data name="DownloadPage_Title" xml:space="preserve">
+    <value>The Computer-assisted Personal Interview technology developed by the World Bank.</value>
+  </data>
+  <data name="DownloadPage_Welcome" xml:space="preserve">
+    <value>Welcome to Survey Solutions Interviewer download page</value>
+  </data>
 </root>

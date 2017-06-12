@@ -119,7 +119,7 @@
                 <span id="compile-config" style="color: red">Web Debug</span>
             }
             <span>|</span>
-            <a href="@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewerSync", action = "GetLatestVersion" })">@Common.GetInterviewerApp</a>
+            <a href="@Url.Action("Index","Download")">@Common.GetInterviewerApp</a>
             @if (ServiceLocator.Current.GetInstance<IVersionCheckService>().DoesNewVersionExist())
             {
                 <div>
