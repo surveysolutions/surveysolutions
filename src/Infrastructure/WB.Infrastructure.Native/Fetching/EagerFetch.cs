@@ -6,7 +6,7 @@ using WB.Core.Infrastructure.Fetching;
 
 namespace WB.Infrastructure.Native.Fetching
 {
-    public static class EagerFetch
+    public static class EagerFetchExtensions
     {
         public static Func<IFetchingProvider> FetchingProvider = () => new NhFetchingProvider();
 

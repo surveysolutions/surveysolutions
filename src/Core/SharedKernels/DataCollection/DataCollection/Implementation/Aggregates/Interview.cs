@@ -650,23 +650,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (this.UsesExpressionStorage)
             {
-                // too much
-                IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
-                var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
-                expressionStorage.Initialize(new InterviewStateForExpressions(this.tree, questionnaire, interviewPropertiesForExpressions));
-                var question = this.tree.GetQuestion(questionIdentity);
-                var nearestRoster = question.Parents.OfType<InterviewTreeRoster>().LastOrDefault()?.Identity ?? new Identity(this.QuestionnaireIdentity.QuestionnaireId, RosterVector.Empty);
-                var level = expressionStorage.GetLevel(nearestRoster);
-                var categoricalFilter = level.GetCategoricalFilter(questionIdentity);
-                var unfilteredOptionsForQuestion = questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter).ToList();
-                return unfilteredOptionsForQuestion
-                    .Where(x => RunOptionFilter(categoricalFilter, x.Value))
-                    .Take(itemsCount)
-                    .ToList();
+                var unfilteredOptionsForQuestion = questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter);
+
+                return this.FiltereCategoricalOptions(questionIdentity, itemsCount, questionnaire, unfilteredOptionsForQuestion);
             }
 
             return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(questionIdentity,
                 questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter)).Take(itemsCount).ToList();
+        }
+
+        private List<CategoricalOption> FiltereCategoricalOptions(Identity questionIdentity, int itemsCount, IQuestionnaire questionnaire, 
+            IEnumerable<CategoricalOption> unfilteredOptionsForQuestion)
+        {
+            // too much
+            IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
+            var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
+            expressionStorage.Initialize(new InterviewStateForExpressions(this.tree, questionnaire, interviewPropertiesForExpressions));
+            var question = this.tree.GetQuestion(questionIdentity);
+            var nearestRoster = question.Parents.OfType<InterviewTreeRoster>().LastOrDefault()?.Identity ??
+                                new Identity(this.QuestionnaireIdentity.QuestionnaireId, RosterVector.Empty);
+            var level = expressionStorage.GetLevel(nearestRoster);
+            var categoricalFilter = level.GetCategoricalFilter(questionIdentity);
+
+            return unfilteredOptionsForQuestion
+                .Where(x => RunOptionFilter(categoricalFilter, x.Value))
+                .Take(itemsCount)
+                .ToList();
         }
 
         private static bool RunOptionFilter(Func<int, bool> filter, int selectedValue)
@@ -690,7 +699,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public CategoricalOption GetOptionForQuestionWithFilter(Identity question, string optionText, int? parentQuestionValue = null)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            var filteredOption = questionnaire.GetOptionForQuestionByOptionText(question.Id, optionText, parentQuestionValue);
+            CategoricalOption filteredOption = questionnaire.GetOptionForQuestionByOptionText(question.Id, optionText, parentQuestionValue);
 
             if (filteredOption == null)
                 return null;
@@ -698,8 +707,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (questionnaire.IsSupportFilteringForOptions(question.Id))
             {
                 if (this.UsesExpressionStorage)
-                    // BUG: shouldbe filtered
-                    return filteredOption;
+                {
+                    return FiltereCategoricalOptions(question, 1, questionnaire, filteredOption.ToEnumerable()).SingleOrDefault();
+                }
                 return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(question, Enumerable.Repeat(filteredOption, 1)).SingleOrDefault();
             }
             return filteredOption;
@@ -1377,7 +1387,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 foreach (KeyValuePair<Identity, AbstractAnswer> answer in prefilledQuestionsWithAnswers)
                 {
-                    changedInterviewTree.GetQuestion(answer.Key).SetAnswer(answer.Value);
+                    var interviewTreeQuestion = changedInterviewTree.GetQuestion(answer.Key);
+                    interviewTreeQuestion.SetAnswer(answer.Value);
+
+                    if (command.AssignmentId.HasValue)
+                    {
+                        interviewTreeQuestion.MarkAsReadonly();
+                    }
                 }
 
                 bool isLastDataLevel = index == orderedData.Length - 1;
@@ -2441,13 +2457,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     foreach (var entityId in playOrder)
                     {
-                        var entityIdentities = changedInterviewTree.FindEntity(entityId).Select(x => x.Identity)
-                            .ToList();
-                        foreach (Identity entityIdentity in entityIdentities)
-                        {
-                            IInterviewTreeNode entity = changedInterviewTree.GetNodeByIdentity(entityIdentity);
+                        var entityIdentities = changedInterviewTree.FindEntity(entityId).ToList();
 
-                            entity?.Accept(updater);
+                        foreach (var entity in entityIdentities)
+                        {
+                            IInterviewTreeNode changedNode = changedInterviewTree.GetNodeByIdentity(entity.Identity);
+
+                            changedNode?.Accept(updater);
                         }
                     }
                 }
@@ -2456,6 +2472,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 this.UpdateTreeWithDependentChangesWithExpressionState(changedInterviewTree, questionnaire);
             }
+
+            changedInterviewTree.ReplaceSubstitutions();
         }
 
         private void UpdateTreeWithDependentChangesWithExpressionState(InterviewTree changedInterviewTree,
@@ -2481,8 +2499,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
             this.UpdateTreeWithValidationChanges(changedInterviewTree, validationChanges);
-
-            changedInterviewTree.ReplaceSubstitutions();
         }
 
         private void UpdateTreeWithVariableChanges(InterviewTree tree, VariableValueChanges variableValueChanges)

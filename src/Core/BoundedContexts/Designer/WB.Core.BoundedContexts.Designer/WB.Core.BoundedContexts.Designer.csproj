@@ -243,6 +243,11 @@
     <Compile Include="Aggregates\IAccountView.cs" />
     <Compile Include="Aggregates\Questionnaire.cs" />
     <Compile Include="Aggregates\Snapshots\QuestionnaireState.cs" />
+    <Compile Include="CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InterviewExpressionStorageTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="CodeGenerationV2\CodeTemplates\LookupTablesTemplate.cs">
       <DependentUpon>LookupTablesTemplate.tt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -369,11 +374,6 @@
       <DependentUpon>LevelTemplate.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.cs">
-      <DependentUpon>InterviewExpressionStorageTemplate.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="CodeGenerationV2\CodeTemplates\Extentions\InterviewExpressionStorageTemplate.Extended.cs" />
     <Compile Include="CodeGenerationV2\CodeTemplates\LinkedFilterMethodTemplate.cs">

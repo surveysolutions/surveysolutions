@@ -15,14 +15,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var prefilledQuestionId = Guid.Parse("11111111111111111111111111111111");
             var questionId = Guid.Parse("22222222222222222222222222222222");
             var responsibleId = Guid.Parse("33333333333333333333333333333333");
-            var suervisorId = Guid.Parse("44444444444444444444444444444444");
 
-            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                children: new IComposite[]
-                {
-                    Create.Entity.TextQuestion(questionId),
-                    Create.Entity.TextQuestion(prefilledQuestionId, preFilled: true)
-                });
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.TextQuestion(questionId, variable: "q1"),
+                Create.Entity.TextQuestion(prefilledQuestionId, variable: "q2", preFilled: true)
+            });
 
             var statefulInterview = Setup.StatefulInterview(questionnaire);
             statefulInterview.AnswerTextQuestion(responsibleId, prefilledQuestionId, RosterVector.Empty, DateTime.UtcNow, "prefilled text");

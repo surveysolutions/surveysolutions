@@ -6,7 +6,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
-using Moq;
+using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
@@ -40,25 +40,17 @@ namespace PerformanceTest
                 GetCompilerSettingsStub());
         }
 
-        private static ICompilerSettings GetCompilerSettingsStub()
-            => System.Environment.MachineName.ToLower() == "powerglide" // TLK's :)
-                ? Mock.Of<ICompilerSettings>(settings
-                    => settings.EnableDump == false
-                    && settings.DumpFolder == "C:/Projects/Data/Tests/CodeDump")
-                : Mock.Of<ICompilerSettings>();
-
-        public static IMacrosSubstitutionService DefaultMacrosSubstitutionService()
+        public static CodeGeneratorV2 CodeGeneratorV2()
         {
-            var macrosSubstitutionServiceMock = new Mock<IMacrosSubstitutionService>();
-            macrosSubstitutionServiceMock.Setup(
-                x => x.InlineMacros(It.IsAny<string>(), It.IsAny<IEnumerable<Macro>>()))
-                .Returns((string e, IEnumerable<Macro> macros) =>
-                {
-                    return e;
-                });
-
-            return macrosSubstitutionServiceMock.Object;
+            return new CodeGeneratorV2(new CodeGenerationModelsFactory(
+                DefaultMacrosSubstitutionService(),
+                ServiceLocator.Current.GetInstance<ILookupTableService>(),
+                new QuestionTypeToCSharpTypeMapper()));
         }
+
+        private static ICompilerSettings GetCompilerSettingsStub() => new Mocks.CompilerSettingsStub(null);
+            
+        public static IMacrosSubstitutionService DefaultMacrosSubstitutionService() => new Mocks.MacrosSubstitutionServiceStub();
 
         public static Group NumericRoster(Guid? rosterId, string variable, Guid? rosterSizeQuestionId, params IComposite[] children)
         {
@@ -370,8 +362,8 @@ namespace PerformanceTest
         public static Interview Interview(Guid? questionnaireId = null,
             IQuestionnaireStorage questionnaireRepository = null, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
-            var interview = new Interview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
+            var interview = new Interview(questionnaireRepository ?? new Mocks.QuestionnaireStorageStub(),
+                expressionProcessorStatePrototypeProvider ?? new Mocks.InterviewExpressionStatePrototypeProviderStub(),
                 Create.SubstitionTextFactory());
 
             interview.CreateInterview(
@@ -384,7 +376,6 @@ namespace PerformanceTest
 
             return interview;
         }
-
 
         public static FileSystemIOAccessor FileSystemIOAccessor()
         {

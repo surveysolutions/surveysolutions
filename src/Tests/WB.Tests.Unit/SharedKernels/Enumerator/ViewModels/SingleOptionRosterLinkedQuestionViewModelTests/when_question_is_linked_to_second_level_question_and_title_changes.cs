@@ -18,10 +18,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionRosterLi
             var questionIdentity = Create.Entity.Identity(questionId, RosterVector.Empty);
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[] {
-                Create.Entity.FixedRoster(rosterId: parentRosterId, fixedTitles: new [] { Create.Entity.FixedTitle(1, "Level1")}, children: new IComposite[] {
-                    Create.Entity.FixedRoster(rosterId: linkToRosterId, fixedTitles: new [] { Create.Entity.FixedTitle(1, "Level2")})
+                Create.Entity.FixedRoster(rosterId: parentRosterId, variable: "f1", fixedTitles: new [] { Create.Entity.FixedTitle(1, "Level1")}, children: new IComposite[] {
+                    Create.Entity.FixedRoster(rosterId: linkToRosterId, variable: "f2", fixedTitles: new [] { Create.Entity.FixedTitle(1, "Level2")})
                 }),
-                Create.Entity.SingleOptionQuestion(questionId: questionId, linkedToRosterId: linkToRosterId)
+                Create.Entity.SingleOptionQuestion(questionId: questionId, variable: "q1", linkedToRosterId: linkToRosterId)
             });
 
             var interview = Setup.StatefulInterview(questionnaire);

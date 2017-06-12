@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using Main.Core.Documents;
@@ -12,6 +13,7 @@ using NSubstitute;
 using System.Linq;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.TopologicalSorter;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
@@ -76,6 +78,7 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc.Storage;
@@ -125,13 +128,15 @@ namespace WB.Tests.Abc.TestFactories
             IPlainStorage<InterviewView> interviewViewRepository = null,
             IQuestionnaireStorage questionnaireStorage = null,
             ILiteEventRegistry liteEventRegistry = null,
-            IPlainStorage<PrefilledQuestionView> prefilledQuestions = null
+            IPlainStorage<PrefilledQuestionView> prefilledQuestions = null,
+            IAnswerToStringConverter answerToStringConverter = null
             )
             => new InterviewerDashboardEventHandler(
                 interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
                 prefilledQuestions ?? new InMemoryPlainStorage<PrefilledQuestionView>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                liteEventRegistry ?? Mock.Of<ILiteEventRegistry>());
+                liteEventRegistry ?? Mock.Of<ILiteEventRegistry>(),
+                answerToStringConverter ?? Mock.Of<IAnswerToStringConverter>());
 
         public DomainRepository DomainRepository(IAggregateSnapshotter aggregateSnapshotter = null, IServiceLocator serviceLocator = null)
             => new DomainRepository(
@@ -422,18 +427,18 @@ namespace WB.Tests.Abc.TestFactories
                 syncServiceMock,
                 interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
                 interviewViewRepository ?? new SqliteInmemoryStorage<InterviewView>(),
-                assignmentPlainStorage ?? new SqliteInmemoryStorage<AssignmentDocument>(),
                 principal ?? Mock.Of<IPrincipal>(),
                 logger ?? Mock.Of<ILogger>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 questionnaireFactory ?? Mock.Of<IInterviewerQuestionnaireAccessor>(),
-                attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>(),
                 interviewFactory ?? Mock.Of<IInterviewerInterviewAccessor>(),
                 interviewMultimediaViewStorage ?? Mock.Of<IPlainStorage<InterviewMultimediaView>>(),
                 interviewFileViewStorage ?? Mock.Of<IPlainStorage<InterviewFileView>>(),
                 new CompanyLogoSynchronizer(new InMemoryPlainStorage<CompanyLogo>(), syncServiceMock),
                 Mock.Of<AttachmentsCleanupService>(),
                 passwordHasher ?? Mock.Of<IPasswordHasher>(),
+                Mock.Of<IAssignmentsSynchronizer>(),
+                Mock.Of<IQuestionnaireDownloader>(),
                 httpStatistician ?? Mock.Of<IHttpStatistician>());
         }
 
@@ -475,6 +480,51 @@ namespace WB.Tests.Abc.TestFactories
         public TesterPlainInterviewFileStorage TesterPlainInterviewFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectory)
         {
             return new TesterPlainInterviewFileStorage(fileSystemAccessor, rootDirectory);
+        }
+
+        public IQuestionnaireDownloader QuestionnaireDownloader(
+            IAttachmentContentStorage attachmentContentStorage = null,
+            IInterviewerQuestionnaireAccessor questionnairesAccessor = null,
+            ISynchronizationService synchronizationService = null)
+        {
+            return new QuestionnaireDownloader(
+                attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>(),
+                questionnairesAccessor ?? Mock.Of<IInterviewerQuestionnaireAccessor>(),
+                synchronizationService ?? Mock.Of<ISynchronizationService>());
+        }
+
+        public IAssignmentsSynchronizer AssignmentsSynchronizer(ISynchronizationService synchronizationService = null,
+            IPlainStorage<AssignmentDocument> assignmentsRepository = null,
+            IQuestionnaireDownloader questionnaireDownloader = null,
+            IQuestionnaireStorage questionnaireStorage = null,
+            IAnswerToStringConverter answerToStringConverter = null)
+        {
+            return new AssignmentsSynchronizer(synchronizationService ?? Mock.Of<ISynchronizationService>(),
+                assignmentsRepository ?? new SqliteInmemoryStorage<AssignmentDocument>(),
+                questionnaireDownloader ?? Mock.Of<IQuestionnaireDownloader>(),
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
+                answerToStringConverter ?? Mock.Of<IAnswerToStringConverter>());
+        }
+
+        public IAnswerToStringConverter AnswerToStringConverter()
+        {
+            return new AnswerToStringConverter();
+        }
+
+        public ExpressionsPlayOrderProvider ExpressionsPlayOrderProvider(
+            IExpressionProcessor expressionProcessor = null,
+            IMacrosSubstitutionService macrosSubstitutionService = null)
+        {
+            return new ExpressionsPlayOrderProvider(
+                expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
+                macrosSubstitutionService ?? Create.Service.DefaultMacrosSubstitutionService());
+        }
+
+        public IMacrosSubstitutionService DefaultMacrosSubstitutionService()
+        {
+            var macrosSubstitutionServiceMock = new Mock<IMacrosSubstitutionService>();
+            macrosSubstitutionServiceMock.Setup(x => x.InlineMacros(It.IsAny<string>(), It.IsAny<IEnumerable<Macro>>())).Returns((string e, IEnumerable<Macro> macros) => e);
+            return macrosSubstitutionServiceMock.Object;
         }
     }
 }

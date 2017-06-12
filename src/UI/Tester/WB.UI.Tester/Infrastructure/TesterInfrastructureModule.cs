@@ -59,7 +59,6 @@ namespace WB.UI.Tester.Infrastructure
             this.Unbind<IPlainStorage<OptionView>>();
             this.Bind<IPlainStorage<OptionView>>().To<InMemoryPlainStorage<OptionView>>().InSingletonScope();
 
-            this.Bind<ILoggerProvider>().To<ServiceLocatorLoggerProvider>();
             this.Bind<ILogger>().To<XamarinInsightsLogger>().InSingletonScope();
 
             this.Bind<IRestServiceSettings>().To<TesterSettings>();

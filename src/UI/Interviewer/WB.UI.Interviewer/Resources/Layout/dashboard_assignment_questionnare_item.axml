@@ -8,7 +8,14 @@
     <LinearLayout style="@style/Dashboard_InterviewItem_InformationBlock">
 
       <TextView style="@style/Dashboard_InterviewItem_Title"
+                local:MvxBind="Text Title;" />
+
+      <TextView style="@style/Dashboard_InterviewItem_SubTitle"
                 local:MvxBind="Text QuestionnaireName;" />
+
+      <Space android:layout_width="match_parent" 
+             android:layout_height="@dimen/Dashboard_InterviewItem_PrefilledQuestions_marginTop"
+             local:MvxBind="Visible HasExpandedView"></Space>
 
       <MvxLinearLayout style="@style/Dashboard_InterviewItem_PrefilledQuestions"
                        android:orientation="vertical"
@@ -19,7 +26,7 @@
                      android:layout_height="match_parent"
                      android:id="@+id/dashboardItemDetails"
                      android:orientation="vertical"
-                     android:visibility="gone">
+                     local:MvxBind="Visible Not(HasExpandedView)">
         <MvxLinearLayout style="@style/Dashboard_InterviewItem_PrefilledQuestions"
                          android:orientation="vertical"
                          local:MvxBind="ItemsSource DetailedPrefilledQuestions;"
@@ -33,7 +40,7 @@
                        Enabled AllowToCreateNewInterview;
                        Click CreateNewInterviewCommand;" />
           
-          <TextView style="@style/Dashboard_InterviewItem_Comment"
+          <TextView style="@style/Dashboard_Assignment_CompletionState"
                     local:MvxBind="Text Comment;" />
 
           <ImageButton style="@style/Dashboard_Location"

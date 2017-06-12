@@ -107,6 +107,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to № {0}.
+        /// </summary>
+        public static string Dashboard_CardTitle {
+            get {
+                return ResourceManager.GetString("Dashboard_CardTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Completed ({0}).
         /// </summary>
         public static string Dashboard_CompletedLinkText {
@@ -266,7 +275,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} assignments for {1}.
+        ///   Looks up a localized string similar to {0} interviews for {1}.
         /// </summary>
         public static string Dashboard_Title {
             get {
@@ -293,7 +302,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} interviews left to create.
+        ///   Looks up a localized string similar to {0} interview(s) left to create.
         /// </summary>
         public static string DashboardItem_AssignmentLeftComment {
             get {
