@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion(questionid));
 
             var interview = Create.AggregateRoot.StatefulInterview(userId: interviewerId,
-                questionnaire: Create.Entity.PlainQuestionnaire(questionnaire));
+                questionnaire: questionnaire);
 
             interview.CommentAnswer(interviewerId, questionid, RosterVector.Empty, DateTime.Now, "in comment");
 

@@ -15,13 +15,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             rosterTitleAnswerValue = "answer";
             staticTextWithSubstitutionToRosterTitleId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-            var questionnaire= Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children:
+            var questionnaire= Create.Entity.QuestionnaireDocumentWithOneChapter(children:
                 Create.Entity.FixedRoster(fixedTitles: new[] {new FixedRosterTitle(1, rosterTitleAnswerValue)}, children: new[]
                 {
                     Create.Entity.StaticText(publicKey: staticTextWithSubstitutionToRosterTitleId, text: "uses %rostertitle%")
-                })));
+                }));
 
-            var questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), questionnaire);
+            var questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
             var statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
             var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(statefulInterview);
 

@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneQuestion(questionId);
 
-            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: Create.Entity.PlainQuestionnaire(questionnaire));
+            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
 
             var commentedAnswer = Create.Entity.AnsweredQuestionSynchronizationDto(questionId: questionId,
                 comments: Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor));
@@ -145,35 +145,31 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.Entity.FixedRoster(fixedRosterIdentity.Id, fixedTitles: new[] {new FixedRosterTitle(1, "fixed")},
+                Create.Entity.FixedRoster(fixedRosterIdentity.Id, variable: "r1", fixedTitles: new[] {new FixedRosterTitle(1, "fixed")},
                     children: new[]
                     {
-                        Create.Entity.FixedRoster(fixedNestedRosterIdentity.Id,
+                        Create.Entity.FixedRoster(fixedNestedRosterIdentity.Id, variable: "r2",
                             fixedTitles: new[] {new FixedRosterTitle(0, "fixed 2")},
                             children: new IComposite[]
                             {
-                                Create.Entity.MultyOptionsQuestion(multiOptionQuestionId),
-                                Create.Entity.MultyOptionsQuestion(linkedMultiOptionQuestionId,
-                                    linkedToQuestionId: sourceOfLinkedQuestionId),
-                                Create.Entity.SingleOptionQuestion(linkedSingleOptionQuestionId,
-                                    linkedToQuestionId: sourceOfLinkedQuestionId),
-                                Create.Entity.MultyOptionsQuestion(multiOptionQuestionIntId),
-                                Create.Entity.MultyOptionsQuestion(linkedMultiOptionQuestionIntId,
-                                    linkedToQuestionId: sourceOfLinkedQuestionId),
-                                Create.Entity.SingleOptionQuestion(linkedSingleOptionQuestionIntId,
-                                    linkedToQuestionId: sourceOfLinkedQuestionId),
-                                Create.Entity.FixedRoster(fixedNestedNestedRosterIdentity.Id,
+                                Create.Entity.MultyOptionsQuestion(multiOptionQuestionId, variable: "q1"),
+                                Create.Entity.MultyOptionsQuestion(linkedMultiOptionQuestionId, linkedToQuestionId: sourceOfLinkedQuestionId, variable: "q2"),
+                                Create.Entity.SingleOptionQuestion(linkedSingleOptionQuestionId, linkedToQuestionId: sourceOfLinkedQuestionId, variable: "q3"),
+                                Create.Entity.MultyOptionsQuestion(multiOptionQuestionIntId, variable: "q4"),
+                                Create.Entity.MultyOptionsQuestion(linkedMultiOptionQuestionIntId, linkedToQuestionId: sourceOfLinkedQuestionId, variable: "q5"),
+                                Create.Entity.SingleOptionQuestion(linkedSingleOptionQuestionIntId, linkedToQuestionId: sourceOfLinkedQuestionId, variable: "q6"),
+                                Create.Entity.FixedRoster(fixedNestedNestedRosterIdentity.Id, variable: "r3",
                                     fixedTitles: new[] {new FixedRosterTitle(3, "fixed 3")},
                                     children: new[]
                                     {
-                                        Create.Entity.TextQuestion(sourceOfLinkedQuestionId)
+                                        Create.Entity.TextQuestion(sourceOfLinkedQuestionId, variable: "q7")
                                     })
                             })
                     })
             });
 
 
-            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: Create.Entity.PlainQuestionnaire(questionnaire));
+            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
 
             var multiOptionQuestionAnswer = new[] {1m};
             var linkedMultiOptionQuestionAnswer = new decimal[][] {new[] {1m}, new[] {2m}};

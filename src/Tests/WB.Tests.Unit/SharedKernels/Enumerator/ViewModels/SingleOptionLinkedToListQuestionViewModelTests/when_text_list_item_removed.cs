@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedTo
                 Create.Entity.SingleQuestion(singleOptionQuestionId, linkedToQuestionId: textListQuestionId));
 
             Guid interviewId = Guid.Parse("33333333333333333333333333333333");
-            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: Create.Entity.PlainQuestionnaire(questionnaire), interviewId: interviewId);
+            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire, interviewId: interviewId);
             interview.AnswerTextListQuestion(Guid.NewGuid(), textListQuestionId, RosterVector.Empty, DateTime.UtcNow, new[]
             {
                 new Tuple<decimal, string>(1, "option 1")
