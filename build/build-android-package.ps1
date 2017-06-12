@@ -5,7 +5,8 @@ param([string]$VersionName,
 [string]$KeystoreName,
 [string]$KeystoreAlias,
 [string]$CapiProject,
-[string]$OutFileName)
+[string]$OutFileName,
+[bool]$ExcludeExtra)
 
 if(!$VersionCode){
 	Write-Host "##teamcity[buildProblem description='VersionCode param is not set']"
@@ -87,13 +88,26 @@ function UpdateAndroidAppManifest( $VersionName, $VersionCode, $CapiProject){
 	Write-Host "##teamcity[blockClosed name='Updating Android App Manifest']"
 }
 
-function BuildAndroidApp($AndroidProject, $BuildConfiguration){
+function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtensions){
 
 	Write-Host "##teamcity[blockOpened name='Building Android project']"
 	Write-Host "##teamcity[progressStart 'Building |'$AndroidProject|' project']"
 
-	& (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' /p:CodeContractsRunCodeAnalysis=false "/p:Configuration=$BuildConfiguration" | Write-Host
-
+	& (GetPathToMSBuild) $AndroidProject "/p:Configuration=$BuildConfiguration" /t:Clean  | Write-Host
+	
+	if($ExcludeExtensions)
+	{
+	    Write-Host "##teamcity[message text='Building apk excluding extra']"		
+				
+		& (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' "/p:Configuration=$BuildConfiguration" /p:CodeContractsRunCodeAnalysis=false --% /p:Constants="EXCLUDEEXTENSIONS" | Write-Host
+	}
+	else
+	{
+	    Write-Host "##teamcity[message text='Building apk with extra']"
+		
+		& (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' /p:CodeContractsRunCodeAnalysis=false "/p:Configuration=$BuildConfiguration" | Write-Host
+	}
+	
 	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
 	if (-not $wasBuildSuccessfull) {
@@ -178,7 +192,7 @@ if([string]::IsNullOrWhiteSpace($VersionName)){
 $VersionName = $VersionName + " (build " + $VersionCode + ")"
 
 UpdateAndroidAppManifest -VersionName $VersionName -VersionCode $VersionCode -CapiProject $CapiProject
-BuildAndroidApp $CapiProject $BuildConfiguration | %{ if (-not $_) { Exit } }
+BuildAndroidApp $CapiProject $BuildConfiguration $ExcludeExtra | %{ if (-not $_) { Exit } }
 
 SignAndPackCapi -KeyStorePass $KeystorePassword -KeyStoreName $KeystoreName `
 	-Alias $KeystoreAlias -CapiProject $CapiProject `

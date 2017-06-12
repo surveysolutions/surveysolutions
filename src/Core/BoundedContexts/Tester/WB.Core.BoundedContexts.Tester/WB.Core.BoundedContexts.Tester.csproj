@@ -52,6 +52,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TesterUIResources.km.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\TesterUIResources.ru1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TesterUIResources.ru.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\TesterUIResources.th-TH.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -212,8 +217,10 @@
       <LastGenOutput>TesterUIResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\TesterUIResources.ru-RU.resx">
+    <EmbeddedResource Include="Properties\TesterUIResources.ru.resx">
       <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TesterUIResources.ru1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\TesterUIResources.th-TH.resx">
       <Generator>ResXFileCodeGenerator</Generator>

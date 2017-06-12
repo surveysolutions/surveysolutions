@@ -204,7 +204,8 @@ angular.module('designerApp')
                 QRBarcode: 'icon-qrbarcode',
                 Text: 'icon-text',
                 SingleOption: 'icon-singleoption',
-                Multimedia: 'icon-photo'
+                Multimedia: 'icon-photo',
+                Area: 'icon-area'
             };
 
             $scope.items = [];

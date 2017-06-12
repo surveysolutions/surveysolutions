@@ -209,6 +209,8 @@
   <ItemGroup>
     <Compile Include="AndroidPathUtils.cs" />
     <Compile Include="DevicePasswordHasher.cs" />
+    <Compile Include="Internals\MapService\IMapService.cs" />
+    <Compile Include="Internals\MapService\MapService.cs" />
     <Compile Include="Internals\PictureChooser.cs" />
     <Compile Include="Internals\PortableOldToNewAssemblyRedirectSerializationBinder.cs" />
     <Compile Include="Internals\FileSystem\AndroidDirectoryInfo.cs" />

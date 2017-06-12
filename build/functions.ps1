@@ -313,14 +313,24 @@ function BuildWebPackage($Project, $BuildConfiguration) {
     return $wasBuildSuccessfull
 }
 
-function CopyCapi($Project, $source) {
+function CopyCapi($Project, $source, $cleanUp) {
 	$file = get-childitem $Project
 	$DestinationFolder = $file.directoryname + "\Externals"
+	
+	Write-Host "##teamcity[message text='Prepare to copy apk with option cleanUp = $cleanUp']"
 
-	If (Test-Path "$DestinationFolder"){
-		Remove-Item "$DestinationFolder" -Force -Recurse
+	if($cleanUp)
+	{
+	  if (Test-Path "$DestinationFolder"){
+		  Write-Host "##teamcity[message text='Clean up target folder $DestinationFolder']"
+		  
+		  Remove-Item "$DestinationFolder" -Force -Recurse
+	  }
+	  New-Item -ItemType directory -Path "$DestinationFolder"
 	}
-	New-Item -ItemType directory -Path "$DestinationFolder"
+	
+	Write-Host "##teamcity[message text='Copy apk with option clean from $source']"
+	
 	Copy-Item "$source" "$DestinationFolder" -Recurse
 }
 

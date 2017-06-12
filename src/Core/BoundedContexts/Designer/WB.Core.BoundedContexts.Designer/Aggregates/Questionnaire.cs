@@ -1425,6 +1425,59 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
+        public void UpdateAreaQuestion(UpdateAreaQuestion command)
+        {
+            var title = command.Title;
+            var variableName = command.VariableName;
+
+            PrepareGeneralProperties(ref title, ref variableName);
+
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
+            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
+
+            var isPrefilled = false;
+
+            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
+
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(command.QuestionId, parentGroup, title, variableName, isPrefilled,
+                QuestionType.Area, command.ResponsibleId, null);
+
+            var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
+            IQuestion newQuestion = CreateQuestion(
+                    command.QuestionId,
+                    QuestionType.Area,
+                    command.Scope,
+                    command.Title,
+                    command.VariableName,
+                    command.VariableLabel,
+                    command.EnablementCondition,
+                    command.HideIfDisabled,
+                    Order.AZ,
+                    false,
+                    command.Instructions,
+                    command.Properties,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    new List<ValidationCondition>(),
+                    null,
+                    false);
+
+            if (question != null)
+            {
+                this.innerDocument.ReplaceEntity(question, newQuestion);
+            }
+        }
+
         public void UpdateMultimediaQuestion(Guid questionId, string title, string variableName, string variableLabel, string enablementCondition, bool hideIfDisabled, 
             string instructions, Guid responsibleId, QuestionScope scope, QuestionProperties properties)
         {
@@ -3629,6 +3682,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 case QuestionType.Multimedia:
                     question = new MultimediaQuestion();
+                    break;
+
+                case QuestionType.Area:
+                    question = new AreaQuestion();
                     break;
 
                 default:
