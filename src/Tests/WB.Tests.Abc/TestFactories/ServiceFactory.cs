@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using Main.Core.Documents;
@@ -12,6 +13,7 @@ using NSubstitute;
 using System.Linq;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.TopologicalSorter;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
@@ -76,6 +78,7 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc.Storage;
@@ -506,6 +509,22 @@ namespace WB.Tests.Abc.TestFactories
         public IAnswerToStringConverter AnswerToStringConverter()
         {
             return new AnswerToStringConverter();
+        }
+
+        public ExpressionsPlayOrderProvider ExpressionsPlayOrderProvider(
+            IExpressionProcessor expressionProcessor = null,
+            IMacrosSubstitutionService macrosSubstitutionService = null)
+        {
+            return new ExpressionsPlayOrderProvider(
+                expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
+                macrosSubstitutionService ?? Create.Service.DefaultMacrosSubstitutionService());
+        }
+
+        public IMacrosSubstitutionService DefaultMacrosSubstitutionService()
+        {
+            var macrosSubstitutionServiceMock = new Mock<IMacrosSubstitutionService>();
+            macrosSubstitutionServiceMock.Setup(x => x.InlineMacros(It.IsAny<string>(), It.IsAny<IEnumerable<Macro>>())).Returns((string e, IEnumerable<Macro> macros) => e);
+            return macrosSubstitutionServiceMock.Object;
         }
     }
 }
