@@ -304,6 +304,33 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Installation instructions.
+        /// </summary>
+        public static string DownloadPage_Instructions {
+            get {
+                return ResourceManager.GetString("DownloadPage_Instructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Computer-assisted Personal Interview technology developed by the World Bank..
+        /// </summary>
+        public static string DownloadPage_Title {
+            get {
+                return ResourceManager.GetString("DownloadPage_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Welcome to Survey Solutions Interviewer download page.
+        /// </summary>
+        public static string DownloadPage_Welcome {
+            get {
+                return ResourceManager.GetString("DownloadPage_Welcome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         public static string EditQuestion_Save {
@@ -363,6 +390,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string GetLatestApp {
             get {
                 return ResourceManager.GetString("GetLatestApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download and install this version of the Interviewer app for surveys that use no ESRI GIS functionality. This apk does not include an ESRI SDK and thus is much smaller in size and faster to download compared to the version with SDK..
+        /// </summary>
+        public static string GetLatestAppDescription {
+            get {
+                return ResourceManager.GetString("GetLatestAppDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download and install this version of the interviewer app only if you use advanced ESRI GIS functionality. This apk contains large ESRI SDK, is large in size and might take long time to download..
+        /// </summary>
+        public static string GetLatestAppExtendedDescription {
+            get {
+                return ResourceManager.GetString("GetLatestAppExtendedDescription", resourceCulture);
             }
         }
         
