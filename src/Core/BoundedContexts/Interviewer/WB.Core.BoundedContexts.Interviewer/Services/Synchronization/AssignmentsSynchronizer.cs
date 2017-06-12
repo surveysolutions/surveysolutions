@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
@@ -18,16 +22,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
         private readonly IPlainStorage<AssignmentDocument> assignmentsRepository;
         private readonly IQuestionnaireDownloader questionnaireDownloader;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly IAnswerToStringConverter answerToStringConverter;
 
         public AssignmentsSynchronizer(ISynchronizationService synchronizationService, 
             IPlainStorage<AssignmentDocument> assignmentsRepository, 
             IQuestionnaireDownloader questionnaireDownloader, 
-            IQuestionnaireStorage questionnaireStorage)
+            IQuestionnaireStorage questionnaireStorage,
+            IAnswerToStringConverter answerToStringConverter)
         {
             this.synchronizationService = synchronizationService;
             this.assignmentsRepository = assignmentsRepository;
             this.questionnaireDownloader = questionnaireDownloader;
             this.questionnaireStorage = questionnaireStorage;
+            this.answerToStringConverter = answerToStringConverter;
         }
 
         public virtual async Task SynchronizeAssignmentsAsync(IProgress<SyncProgressInfo> progress,
@@ -62,53 +69,40 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
                 if (local == null)
                 {
                     await this.questionnaireDownloader.DownloadQuestionnaireAsync(remote.QuestionnaireId, cancellationToken, statistics);
-                    IQuestionnaire questionnaireDocument = this.questionnaireStorage.GetQuestionnaire(remote.QuestionnaireId, null);
+                    IQuestionnaire questionnaire = this.questionnaireStorage.GetQuestionnaire(remote.QuestionnaireId, null);
 
                     local = new AssignmentDocument
                     {
                         Id = remote.Id,
                         QuestionnaireId = remote.QuestionnaireId.ToString(),
-                        Title = questionnaireDocument.Title,
+                        Title = questionnaire.Title,
                     };
 
                     var identifyingData = new List<AssignmentDocument.IdentifyingAnswer>();
 
                     foreach (var identifyingAnswer in remote.IdentifyingData)
                     {
-                        var questionType = questionnaireDocument.GetQuestionType(identifyingAnswer.QuestionId);
+                        var questionType = questionnaire.GetQuestionType(identifyingAnswer.QuestionId);
 
-                        switch (questionType)
+                        if (questionType == QuestionType.GpsCoordinates)
                         {
-                            case QuestionType.SingleOption:
-                                var questionTextAnswer =
-                                    questionnaireDocument.GetAnswerOptionTitle(identifyingAnswer.QuestionId, int.Parse(identifyingAnswer.Answer));
-                                identifyingData.Add(new AssignmentDocument.IdentifyingAnswer
-                                {
-                                    QuestionId = identifyingAnswer.QuestionId,
-                                    Answer = identifyingAnswer.Answer,
-                                    AnswerAsString = questionTextAnswer,
-                                    Question = questionnaireDocument.GetQuestionTitle(identifyingAnswer.QuestionId)
-                                });
-                                break;
-                            case QuestionType.GpsCoordinates:
-                                local.LocationQuestionId = identifyingAnswer.QuestionId;
-                                var geoPositionAnswer = GeoPosition.FromString(identifyingAnswer.Answer);
-                                if (geoPositionAnswer != null)
-                                {
-                                    local.LocationLatitude = geoPositionAnswer.Latitude;
-                                    local.LocationLongitude = geoPositionAnswer.Longitude;
-                                }
-                                break;
-                            default:
-                                identifyingData.Add(new AssignmentDocument.IdentifyingAnswer
-                                {
-                                    QuestionId = identifyingAnswer.QuestionId,
-                                    Answer = identifyingAnswer.Answer,
-                                    AnswerAsString = identifyingAnswer.Answer,
-                                    Question = questionnaireDocument.GetQuestionTitle(identifyingAnswer.QuestionId)
-                                });
-                                break;
+                            local.LocationQuestionId = identifyingAnswer.QuestionId;
+                            var geoPositionAnswer = GeoPosition.FromString(identifyingAnswer.Answer);
+                            if (geoPositionAnswer != null)
+                            {
+                                local.LocationLatitude = geoPositionAnswer.Latitude;
+                                local.LocationLongitude = geoPositionAnswer.Longitude;
+                            }
                         }
+
+                        var stringAnswer = this.answerToStringConverter.Convert(identifyingAnswer.Answer, identifyingAnswer.QuestionId, questionnaire);
+                        identifyingData.Add(new AssignmentDocument.IdentifyingAnswer
+                        {
+                            QuestionId = identifyingAnswer.QuestionId,
+                            Answer = identifyingAnswer.Answer,
+                            AnswerAsString = stringAnswer,
+                            Question = questionnaire.GetQuestionTitle(identifyingAnswer.QuestionId)
+                        });
                     }
 
                     local.IdentifyingData = identifyingData;
@@ -120,6 +114,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
 
                 this.assignmentsRepository.Store(local);
             }
+        }
+
+        private static AssignmentDocument.IdentifyingAnswer CreateIdentifyingAnswer(
+            AssignmentApiView.IdentifyingAnswer identifyingAnswer, 
+            object questionAnswer, 
+            IQuestionnaire questionnaireDocument)
+        {
+            return new AssignmentDocument.IdentifyingAnswer
+            {
+                QuestionId = identifyingAnswer.QuestionId,
+                Answer = identifyingAnswer.Answer,
+                AnswerAsString = AnswerUtils.AnswerToString(questionAnswer),
+                Question = questionnaireDocument.GetQuestionTitle(identifyingAnswer.QuestionId)
+            };
         }
     }
 }

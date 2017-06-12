@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.assignment = assignment;
             this.questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
 
-            var identifyingData = assignment.IdentifyingData;
+            var identifyingData = assignment.IdentifyingData.Where(id => id.QuestionId != assignment.LocationQuestionId).ToList();
             this.PrefilledQuestions = GetPrefilledQuestions(identifyingData.Take(3));
             this.DetailedPrefilledQuestions = GetPrefilledQuestions(identifyingData.Skip(3));
             this.GpsLocation = this.GetAssignmentLocation(assignment);

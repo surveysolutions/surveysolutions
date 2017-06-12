@@ -125,13 +125,15 @@ namespace WB.Tests.Abc.TestFactories
             IPlainStorage<InterviewView> interviewViewRepository = null,
             IQuestionnaireStorage questionnaireStorage = null,
             ILiteEventRegistry liteEventRegistry = null,
-            IPlainStorage<PrefilledQuestionView> prefilledQuestions = null
+            IPlainStorage<PrefilledQuestionView> prefilledQuestions = null,
+            IAnswerToStringConverter answerToStringConverter = null
             )
             => new InterviewerDashboardEventHandler(
                 interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
                 prefilledQuestions ?? new InMemoryPlainStorage<PrefilledQuestionView>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                liteEventRegistry ?? Mock.Of<ILiteEventRegistry>());
+                liteEventRegistry ?? Mock.Of<ILiteEventRegistry>(),
+                answerToStringConverter ?? Mock.Of<IAnswerToStringConverter>());
 
         public DomainRepository DomainRepository(IAggregateSnapshotter aggregateSnapshotter = null, IServiceLocator serviceLocator = null)
             => new DomainRepository(
@@ -491,12 +493,19 @@ namespace WB.Tests.Abc.TestFactories
         public IAssignmentsSynchronizer AssignmentsSynchronizer(ISynchronizationService synchronizationService = null,
             IPlainStorage<AssignmentDocument> assignmentsRepository = null,
             IQuestionnaireDownloader questionnaireDownloader = null,
-            IQuestionnaireStorage questionnaireStorage = null)
+            IQuestionnaireStorage questionnaireStorage = null,
+            IAnswerToStringConverter answerToStringConverter = null)
         {
             return new AssignmentsSynchronizer(synchronizationService ?? Mock.Of<ISynchronizationService>(),
                 assignmentsRepository ?? new SqliteInmemoryStorage<AssignmentDocument>(),
                 questionnaireDownloader ?? Mock.Of<IQuestionnaireDownloader>(),
-            questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
+                answerToStringConverter ?? Mock.Of<IAnswerToStringConverter>());
+        }
+
+        public IAnswerToStringConverter AnswerToStringConverter()
+        {
+            return new AnswerToStringConverter();
         }
     }
 }

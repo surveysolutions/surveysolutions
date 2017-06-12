@@ -128,6 +128,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Implementation\Services\AnswerToStringConverter.cs" />
+    <Compile Include="Services\IAnswerToStringConverter.cs" />
     <Compile Include="Services\Synchronization\AssignmentsSynchronizer.cs" />
     <Compile Include="Services\CompanyLogoInfo.cs" />
     <Compile Include="Services\IArchivePatcherService.cs" />
