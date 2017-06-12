@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto"
+  style="@style/Interview_QuestionWithDivider"
+  local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
+  <LinearLayout style="@style/Interview_Question_Answer"
+                local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
+
+    <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
+      <TableLayout android:layout_width="wrap_content"
+                   android:layout_height="wrap_content" 
+                   android:stretchColumns="0">
+        <TableRow local:MvxBind="Visible QuestionState.IsAnswered">
+            <TextView android:singleLine="true"
+                      android:textStyle="bold"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="Area: " />          
+            <TextView style="@style/Interview_Question_RecordedAnswer"
+                    local:MvxBind="Text Answer.AreaSize; Visible QuestionState.IsAnswered" />
+        </TableRow>
+
+        <TableRow local:MvxBind="Visible QuestionState.IsAnswered">
+            <TextView android:singleLine="true"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:textStyle="bold"
+                      android:text="Length: " />            
+            <TextView style="@style/Interview_Question_RecordedAnswer"
+                    local:MvxBind="Text Answer.Length; Visible QuestionState.IsAnswered" />
+          <include layout="@layout/interview_question__remove_button_recorded" />
+        </TableRow>
+      </TableLayout>
+      <Button style="@style/Interview_Question_InputButton"
+              local:MvxBind="HideKeyboardOnClick .; 
+                           Click SaveAnswerCommand; 
+                           Text Localization('Interview_Questions_Area_SaveAnswer'); 
+                           BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
+    </LinearLayout>
+  </LinearLayout>
+</LinearLayout>

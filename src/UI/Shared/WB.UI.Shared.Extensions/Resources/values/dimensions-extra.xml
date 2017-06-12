@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<resources>
+    <dimen name="Area_Editor_margin_1">1dp</dimen>
+    <dimen name="Area_Editor_margin_10">10dp</dimen>
+    <dimen name="Area_Editor_margin_20">20dp</dimen>
+    <dimen name="Area_Editor_margin_45">45dp</dimen>
+    <dimen name="Area_Editor_margin_95">95dp</dimen>
+    <dimen name="Area_Editor_margin_120">120dp</dimen>
+
+    <dimen name="button_corners_radius">6dp</dimen>
+</resources>

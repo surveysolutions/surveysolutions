@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
@@ -44,7 +45,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
                                          ILitePublishedEventHandler<TranslationSwitched>,
                                          ILitePublishedEventHandler<MultipleOptionsLinkedQuestionAnswered>,
-                                         ILitePublishedEventHandler<SingleOptionLinkedQuestionAnswered>
+                                         ILitePublishedEventHandler<SingleOptionLinkedQuestionAnswered>,
+                                         ILitePublishedEventHandler<AreaQuestionAnswered>
     {
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPlainStorage<PrefilledQuestionView> prefilledQuestions;
@@ -428,6 +430,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             interviewView.Language = @event.Payload.Language;
 
             this.interviewViewRepository.Store(interviewView);
+        }
+
+        public void Handle(IPublishedEvent<AreaQuestionAnswered> evnt)
+        {
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, new Area(evnt.Payload.Geometry, evnt.Payload.MapName, evnt.Payload.AreaSize, evnt.Payload.Length, evnt.Payload.DistanceToEditor), evnt.Payload.AnswerTimeUtc);
         }
     }
 }

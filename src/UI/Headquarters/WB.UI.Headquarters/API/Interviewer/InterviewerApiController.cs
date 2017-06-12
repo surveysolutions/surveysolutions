@@ -27,6 +27,7 @@ namespace WB.UI.Headquarters.API.Interviewer
     {
         private const string RESPONSEAPPLICATIONFILENAME = "interviewer.apk";
         private const string PHYSICALAPPLICATIONFILENAME = "wbcapi.apk";
+        private const string PHYSICALAPPLICATIONEXTENDEDFILENAME = "wbcapi.ext.apk";
         private const string PHYSICALPATHTOAPPLICATION = "~/Client/";
 
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -69,11 +70,25 @@ namespace WB.UI.Headquarters.API.Interviewer
         {
             string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), PHYSICALAPPLICATIONFILENAME);
 
+            return this.HttpResponseMessage(pathToInterviewerApp);
+        }
+
+        [HttpGet]
+        public virtual HttpResponseMessage GetExtended()
+        {
+            string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), PHYSICALAPPLICATIONEXTENDEDFILENAME);
+
+            return this.HttpResponseMessage(pathToInterviewerApp);
+        }
+
+        private HttpResponseMessage HttpResponseMessage(string pathToInterviewerApp)
+        {
             if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerApp))
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
 
             Stream fileStream = new FileStream(pathToInterviewerApp, FileMode.Open, FileAccess.Read);
-            var response = new ProgressiveDownload(this.Request).ResultMessage(fileStream, @"application/vnd.android.package-archive");
+            var response = new ProgressiveDownload(this.Request).ResultMessage(fileStream,
+                @"application/vnd.android.package-archive");
 
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
             {
@@ -97,11 +112,34 @@ namespace WB.UI.Headquarters.API.Interviewer
         }
 
         [HttpGet]
+        public virtual HttpResponseMessage PatchExtended(int deviceVersion)
+        {
+            string pathToInterviewerPatch = this.fileSystemAccessor.CombinePath(
+                HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), $@"WBCapi.Ext.{deviceVersion}.delta");
+
+            if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerPatch))
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
+
+            Stream fileStream = new FileStream(pathToInterviewerPatch, FileMode.Open, FileAccess.Read);
+            return new ProgressiveDownload(this.Request).ResultMessage(fileStream, @"application/octet-stream");
+        }
+
+        [HttpGet]
         public virtual int? GetLatestVersion()
         {
-            string pathToInterviewerApp =
-                this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION),
+            string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION),
                     PHYSICALAPPLICATIONFILENAME);
+
+            return !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
+                ? null
+                : this.androidPackageReader.Read(pathToInterviewerApp).Version;
+        }
+
+        [HttpGet]
+        public virtual int? GetLatestExtendedVersion()
+        {
+            string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION),
+                    PHYSICALAPPLICATIONEXTENDEDFILENAME);
 
             return !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
                 ? null

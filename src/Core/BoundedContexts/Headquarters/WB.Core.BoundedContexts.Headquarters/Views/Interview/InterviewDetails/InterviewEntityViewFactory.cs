@@ -303,6 +303,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 case QuestionType.Text:
                 case QuestionType.QRBarcode:
                 case QuestionType.Multimedia:
+                case QuestionType.Area:
                     return AnswerUtils.AnswerToString(answer);
             }
             return "";

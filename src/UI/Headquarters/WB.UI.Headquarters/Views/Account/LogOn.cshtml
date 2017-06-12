@@ -101,11 +101,10 @@
             </div>
             <div class="row">
                 <div class="interviewer-app">
-                    <a href="@Url.HttpRouteUrl("DefaultApiWithAction", new {action="GetLatestVersion", controller = "InterviewerSync" })" class="get-interviewer-app">
+                    <a href="@Url.Action("Index", "Download")" class="get-interviewer-app">
                         <span>@Pages.GetLatestApp</span>
                         <span class="version">Version @(ServiceLocator.Current.GetInstance<IProductVersion>())</span>
-                    </a>
-                    <a href="http://docs.mysurvey.solutions/interviewer-installation" target="_blank">@Pages.InstallationInstruction</a>
+                        </a>
                 </div>
             </div>
         </div>
@@ -126,7 +125,7 @@
                     <span id="compile-config" style="color: red">Web Debug</span>
                 }
                 <span>|</span>
-                <a href="@Url.HttpRouteUrl("DefaultApiWithAction", new {action="GetLatestVersion", controller = "InterviewerSync" })">@Common.GetInterviewerApp</a>
+                <a href="@Url.Action("Index","Download")">@Common.GetInterviewerApp</a>
             </div>
         </div>
     </footer>

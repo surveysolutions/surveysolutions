@@ -1,8 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Net.Http.Headers;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
@@ -29,13 +27,14 @@ namespace WB.UI.Headquarters
 
             RegisterV2Api(config);
 
-            config.TypedRoute(@"api/interviewer/v2/devices/info", c => c.Action<DevicesApiV2Controller>(x => x.Info(Param.Any<DeviceInfoApiView>())));
-            config.TypedRoute(@"api/interviewer/v2/devices/statistics", c => c.Action<DevicesApiV2Controller>(x => x.Statistics(Param.Any<SyncStatisticsApiView>())));
-            config.TypedRoute(@"api/interviewer/v2/devices/exception", c => c.Action<DevicesApiV2Controller>(x => x.UnexpectedException(Param.Any<UnexpectedExceptionApiView>())));
-
             config.TypedRoute(@"api/interviewer", c => c.Action<InterviewerApiController>(x => x.Get()));
             config.TypedRoute(@"api/interviewer/patch/{deviceVersion}", c => c.Action<InterviewerApiController>(x => x.Patch(Param.Any<int>())));
             config.TypedRoute(@"api/interviewer/latestversion", c => c.Action<InterviewerApiController>(x => x.GetLatestVersion()));
+            
+            config.TypedRoute(@"api/interviewer/extended", c => c.Action<InterviewerApiController>(x => x.GetExtended()));
+            config.TypedRoute(@"api/interviewer/extended/patch/{deviceVersion}", c => c.Action<InterviewerApiController>(x => x.PatchExtended(Param.Any<int>())));
+            config.TypedRoute(@"api/interviewer/extended/latestversion", c => c.Action<InterviewerApiController>(x => x.GetLatestExtendedVersion()));
+
             config.TypedRoute(@"api/interviewer/tabletInfo", c => c.Action<InterviewerApiController>(x => x.PostTabletInformation()));
             config.TypedRoute(@"api/interviewer/compatibility/{deviceid}/{deviceSyncProtocolVersion}",
                 c => c.Action<InterviewerApiController>(x => x.CheckCompatibility(Param.Any<string>(), Param.Any<int>())));
@@ -74,9 +73,14 @@ namespace WB.UI.Headquarters
 #pragma warning disable 4014
         private static void RegisterV2Api(HttpConfiguration config)
         {
+            config.TypedRoute(@"api/interviewer/v2/devices/info", c => c.Action<DevicesApiV2Controller>(x => x.Info(Param.Any<DeviceInfoApiView>())));
+            config.TypedRoute(@"api/interviewer/v2/devices/statistics", c => c.Action<DevicesApiV2Controller>(x => x.Statistics(Param.Any<SyncStatisticsApiView>())));
+            config.TypedRoute(@"api/interviewer/v2/devices/exception", c => c.Action<DevicesApiV2Controller>(x => x.UnexpectedException(Param.Any<UnexpectedExceptionApiView>())));
+
             config.TypedRoute("api/interviewer/v2", c => c.Action<InterviewerApiV2Controller>(x => x.Get()));
-            config.TypedRoute("api/interviewer/v2/latestversion",
-                c => c.Action<InterviewerApiV2Controller>(x => x.GetLatestVersion()));
+            config.TypedRoute("api/interviewer/v2/latestversion", c => c.Action<InterviewerApiV2Controller>(x => x.GetLatestVersion()));
+
+
             config.TypedRoute("api/interviewer/v2/tabletInfo",
                 c => c.Action<InterviewerApiV2Controller>(x => x.PostTabletInformation(Param.Any<TabletInformationPackage>())));
             config.TypedRoute("api/interviewer/v2/tabletInfoAsFile",

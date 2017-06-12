@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:local="http://schemas.android.com/apk/res-auto"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/area_map_view_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" />
+        <ProgressBar
+            android:layout_alignParentTop="true"
+            style="@style/Progress_Indicator"
+            android:indeterminate="true"
+            local:MvxBind="Visibility Visibility(IsInProgress);" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/Area_Editor_margin_10"
+            android:orientation="vertical">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Area_Screen_Button"
+                android:id="@+id/areaEditor_Update_Maps"
+                local:MvxBind="Click UpdateMapsCommand; Text Localization('AreaMap_UpdateMaps');" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/areaEditor_No_Maps_Text"
+                local:MvxBind="Text Localization('AreaMap_NoMapsFound'); Visibility Visibility(Map == null);" />
+            <MvxSpinner
+                android:id="@+id/areaEditor_Maps_Selector"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dropdown"
+                local:MvxBind="ItemsSource MapsList; SelectedItem SelectedMap; Visibility Visibility(Map != null);" />
+        </LinearLayout>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Area_Screen_Button"
+            android:id="@+id/areaEditor_Location"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/Area_Editor_margin_20"
+            android:layout_marginRight="@dimen/Area_Editor_margin_10"
+            local:MvxBind="Click SwitchLocatorCommand;Text Localization('AreaMap_Location');" />
+        <TextView
+            android:layout_alignParentBottom="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/Area_Editor_margin_95"
+            android:layout_marginLeft="@dimen/Area_Editor_margin_10"
+            android:textStyle="bold"
+            android:background="@drawable/area_border"
+            android:id="@+id/areaEditor_GeometryArea"
+            local:MvxBind="Text GeometryArea; Visibility Visibility(IsEditing);" />
+        <LinearLayout
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/Area_Editor_margin_10"
+            android:layout_marginRight="@dimen/Area_Editor_margin_10"
+            android:layout_marginBottom="@dimen/Area_Editor_margin_45"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <Button
+                style="@style/Area_Screen_Button"
+                android:id="@+id/areaEditor_Start_Edit"
+                android:layout_marginTop="@dimen/Area_Editor_margin_1"
+                local:MvxBind="Click StartEditAreaCommand;Text Localization('AreaMap_Edit'); Enabled (Map != null);" />
+            <Button
+                style="@style/Area_Screen_Button"
+                android:id="@+id/areaEditor_Undo"
+                android:layout_marginTop="@dimen/Area_Editor_margin_1"
+                local:MvxBind="Click UndoCommand;Text Localization('AreaMap_Undo'); Enabled CanUndo;"
+                android:layout_marginLeft="@dimen/Area_Editor_margin_20" />
+            <Button
+                style="@style/Area_Screen_Button"
+                android:id="@+id/areaEditor_Save"
+                android:layout_marginTop="@dimen/Area_Editor_margin_1"
+                android:layout_marginLeft="@dimen/Area_Editor_margin_120"
+                local:MvxBind="Click SaveAreaCommand;Text Localization('AreaMap_Save'); Enabled CanSave;" />
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

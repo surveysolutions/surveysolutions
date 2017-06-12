@@ -250,6 +250,10 @@
                     $scope.activeQuestion.questionScope = 'Interviewer';
                 }
 
+                if (type === 'Area' && $scope.activeQuestion.questionScope === 'Supervisor') {
+                    $scope.activeQuestion.questionScope = 'Interviewer';
+                }
+
                 if (type === 'MultyOption' && $scope.activeQuestion.questionScope === 'Identifying') {
                     $scope.activeQuestion.questionScope = 'Interviewer';
                 }
@@ -394,16 +398,16 @@
                 if (!currentQuestion)
                     return [];
                 var allScopes = currentQuestion.allQuestionScopeOptions;
-                if (!currentQuestion.isCascade && !currentQuestion.isLinked && $.inArray(currentQuestion.type, ['TextList', 'QRBarcode', 'Multimedia', 'GpsCoordinates', 'MultyOption']) < 0)
+                if (!currentQuestion.isCascade && !currentQuestion.isLinked && $.inArray(currentQuestion.type, ['TextList', 'QRBarcode', 'Multimedia', 'GpsCoordinates', 'MultyOption', 'Area']) < 0)
                     return allScopes;
 
                 return allScopes.filter(function (o) {
-                    if (currentQuestion.type == 'MultyOption')
+                    if (currentQuestion.type === 'MultyOption')
                         return o.value !== 'Identifying';
 
-                    if (currentQuestion.type == 'GpsCoordinates')
+                    if (currentQuestion.type === 'GpsCoordinates')
                         return o.value !== 'Supervisor';
-
+                    
                     return o.value !== 'Identifying' && o.value !== 'Supervisor';
                 });
             };
