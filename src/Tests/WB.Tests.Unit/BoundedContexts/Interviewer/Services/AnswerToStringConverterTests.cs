@@ -24,7 +24,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
         [TestCase(256, QuestionType.Numeric, "256")]
         [TestCase(123256, QuestionType.Numeric, "123256")]
         [TestCase("123256", QuestionType.Numeric, "123256")]
-        [TestCase("11/11/2017", QuestionType.DateTime, "11/11/2017")]
         [TestCase("2", QuestionType.SingleOption, "title2")]
         public void when_get_answer_it_should_stored_to_correct_string(object answer, QuestionType questionType, string result)
         {
