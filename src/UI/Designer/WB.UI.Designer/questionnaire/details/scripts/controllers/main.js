@@ -513,13 +513,14 @@ angular.module('designerApp')
 
             $scope.getVariablesNames = function () {
                 return _($rootScope.variableNames);
-                // return _.pluck($rootScope.variableNames, "name");
             }
 
             $scope.aceEditorUpdateMode = function(editor) {
                 if (editor) {
                     var CSharpExtendableMode = window.ace.require("ace/mode/csharp-extended").Mode;
-                    editor.getSession().setMode(new CSharpExtendableMode($scope.getVariablesNames));
+                    editor.getSession().setMode(new CSharpExtendableMode(function () {
+                        return _.pluck($rootScope.variableNames, "name");
+                    }));
 
                     var variablesCompletor =
                     {
