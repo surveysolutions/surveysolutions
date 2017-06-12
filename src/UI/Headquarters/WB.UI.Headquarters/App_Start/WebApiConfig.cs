@@ -77,9 +77,6 @@ namespace WB.UI.Headquarters
             config.TypedRoute(@"api/interviewer/v2/devices/statistics", c => c.Action<DevicesApiV2Controller>(x => x.Statistics(Param.Any<SyncStatisticsApiView>())));
             config.TypedRoute(@"api/interviewer/v2/devices/exception", c => c.Action<DevicesApiV2Controller>(x => x.UnexpectedException(Param.Any<UnexpectedExceptionApiView>())));
 
-            config.TypedRoute("api/interviewer/v2/extended", c => c.Action<InterviewerApiV2Controller>(x => x.GetExtended()));
-            config.TypedRoute("api/interviewer/v2/extended/latestversion", c => c.Action<InterviewerApiV2Controller>(x => x.GetLatestExtendedVersion()));
-
             config.TypedRoute("api/interviewer/v2", c => c.Action<InterviewerApiV2Controller>(x => x.Get()));
             config.TypedRoute("api/interviewer/v2/latestversion", c => c.Action<InterviewerApiV2Controller>(x => x.GetLatestVersion()));
 
