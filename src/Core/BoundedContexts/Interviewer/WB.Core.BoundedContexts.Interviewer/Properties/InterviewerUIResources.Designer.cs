@@ -302,7 +302,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} interviews left to create.
+        ///   Looks up a localized string similar to {0} interview(s) left to create.
         /// </summary>
         public static string DashboardItem_AssignmentLeftComment {
             get {
