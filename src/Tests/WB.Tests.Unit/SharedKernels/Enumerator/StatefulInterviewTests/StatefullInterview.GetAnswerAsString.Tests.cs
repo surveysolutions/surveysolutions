@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Entity.SingleOptionQuestion(singleFilxedQuestionIdentity.Id, isPrefilled: true,
                     answers: new List<Answer> {Create.Entity.Answer("one", 1), Create.Entity.Answer("two", 2)}));
             var interviewerId = Guid.Parse("22222222222222222222222222222222");
-            var interview = Create.AggregateRoot.StatefulInterview(userId: interviewerId, questionnaire: Create.Entity.PlainQuestionnaire(questionnaire));
+            var interview = Create.AggregateRoot.StatefulInterview(userId: interviewerId, questionnaire: questionnaire);
             interview.AnswerSingleOptionQuestion(interviewerId, singleFilxedQuestionIdentity.Id, singleFilxedQuestionIdentity.RosterVector, DateTime.UtcNow, 2);
             //act
             var stringAnswerOnPrefilledSingleQuestion = interview.GetAnswerAsString(singleFilxedQuestionIdentity);

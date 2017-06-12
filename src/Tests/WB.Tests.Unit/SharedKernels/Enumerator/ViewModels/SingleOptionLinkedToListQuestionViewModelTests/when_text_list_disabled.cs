@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedTo
                 Create.Entity.TextListQuestion(textListQuestionId),
                 Create.Entity.SingleOptionQuestion(singleOptionQuestionId, linkedToQuestionId: textListQuestionId));
 
-            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: Create.Entity.PlainQuestionnaire(questionnaire));
+            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
             interview.AnswerTextListQuestion(Guid.NewGuid(), textListQuestionId, RosterVector.Empty, DateTime.UtcNow, new []
             {
                 new Tuple<decimal, string>(1, "option 1"),

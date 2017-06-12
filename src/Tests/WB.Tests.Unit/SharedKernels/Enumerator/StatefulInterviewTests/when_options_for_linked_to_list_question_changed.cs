@@ -16,12 +16,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             linkedQuestionIdentity = Create.Entity.Identity(linkedQuestionId, RosterVector.Empty);
 
-            var questionnaire =
-                Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]
-                {
-                    Create.Entity.TextListQuestion(questionId: linkSourceId),
-                    Create.Entity.MultyOptionsQuestion(linkedQuestionId, linkedToQuestionId: linkSourceId)
-                }));
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]
+            {
+                Create.Entity.TextListQuestion(questionId: linkSourceId),
+                Create.Entity.MultyOptionsQuestion(linkedQuestionId, linkedToQuestionId: linkSourceId)
+            });
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
             

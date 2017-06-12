@@ -26,12 +26,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                                          })
             };
 
-            var questionnaire =
-                Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]
                 {
-                    Create.Entity.FixedRoster(
-                        fixedTitles:
-                            new[]
+                    Create.Entity.FixedRoster(fixedTitles: new[]
                             {
                                 new FixedRosterTitle(1, "first fixed roster"),
                                 new FixedRosterTitle(2, "second fixed roster")
@@ -41,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                             Create.Entity.TextQuestion(linkSourceId)
                         }),
                     Create.Entity.MultyOptionsQuestion(linkedQuestionId, linkedToQuestionId: linkSourceId)
-                }));
+                });
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
             interview.Apply(Create.Event.TextQuestionAnswered(linkSourceId, Create.Entity.RosterVector(1), "one"));
