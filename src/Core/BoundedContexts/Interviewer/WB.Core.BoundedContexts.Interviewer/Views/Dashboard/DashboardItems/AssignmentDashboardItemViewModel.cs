@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
@@ -62,7 +63,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.assignment = assignment;
             this.questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
 
-            var identifyingData = assignment.IdentifyingData.Where(id => id.QuestionId != assignment.LocationQuestionId).ToList();
+            var identifyingData = assignment.IdentifyingData.Where(id => id.Identity.Id != assignment.LocationQuestionId).ToList();
             this.PrefilledQuestions = GetPrefilledQuestions(identifyingData.Take(3));
             this.DetailedPrefilledQuestions = GetPrefilledQuestions(identifyingData.Skip(3));
             this.GpsLocation = this.GetAssignmentLocation(assignment);
@@ -116,7 +117,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             }
         }
 
-        public IMvxAsyncCommand CreateNewInterviewCommand => new MvxAsyncCommand(CreateNewInterviewAsync, () => AllowToCreateNewInterview); 
+        public IMvxAsyncCommand CreateNewInterviewCommand => new MvxAsyncCommand(CreateNewInterviewAsync, () => AllowToCreateNewInterview);
 
         private async Task CreateNewInterviewAsync()
         {
@@ -136,7 +137,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                     answersToIdentifyingQuestions
                 );
 
-
             await this.commandService.ExecuteAsync(createInterviewCommand);
             this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
         }
@@ -144,13 +144,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private Dictionary<Guid, AbstractAnswer> GetAnswersToIdentifyingQuestions(List<AssignmentDocument.IdentifyingAnswer> identifyingAnswers)
         {
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(QuestionnaireIdentity.Parse(this.assignment.QuestionnaireId), null);
-            var elements = identifyingAnswers.ToDictionary(ia => ia.QuestionId, ia => ConvertToAbstractAnswer(ia, questionnaire));
+            var prefilled = questionnaire.GetPrefilledQuestions().ToHashSet();
+
+            var elements = identifyingAnswers.Where(ia => prefilled.Contains(ia.Identity.Id))
+                .ToDictionary(ia => ia.Identity.Id, ia => ConvertToAbstractAnswer(ia, questionnaire));
+
             return elements;
         }
 
         private AbstractAnswer ConvertToAbstractAnswer(AssignmentDocument.IdentifyingAnswer identifyingAnswer, IQuestionnaire questionnaire)
         {
-            return this.identifyingAnswerConverter.GetAbstractAnswer(questionnaire, identifyingAnswer.QuestionId, identifyingAnswer.Answer);
+            return this.identifyingAnswerConverter.GetAbstractAnswer(questionnaire, identifyingAnswer.Identity.Id, identifyingAnswer.Answer);
         }
 
         private void RaiseStartingLongOperation()

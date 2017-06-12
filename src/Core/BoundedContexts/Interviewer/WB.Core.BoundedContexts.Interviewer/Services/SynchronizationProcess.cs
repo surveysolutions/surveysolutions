@@ -555,6 +555,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 NewInterviewsOnDeviceCount =
                     this.interviewViewRepository.Count(
                         inteview => inteview.Status == InterviewStatus.InterviewerAssigned && !inteview.CanBeDeleted),
+
+                NewAssignmentsCount = statistics.NewAssignmentsCount,
+                RemovedAssignmentsCount = statistics.RemovedAssignmentsCount,
+
                 TotalDownloadedBytes = httpStats.DownloadedBytes,
                 TotalUploadedBytes = httpStats.UploadedBytes,
                 TotalConnectionSpeed = httpStats.Speed,

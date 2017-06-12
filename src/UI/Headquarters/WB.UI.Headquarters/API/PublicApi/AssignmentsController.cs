@@ -161,7 +161,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             try
             {
                 var answers = createItem.IdentifyingData
-                    .Select(item => IdentifyingAnswer.Create(assignment, questionnaire, item.Answer, item.QuestionId, item.Variable))
+                    .Select(item => IdentifyingAnswer.Create(assignment, questionnaire, item.Answer, item.Identity, item.Variable))
                     .ToList();
 
                 assignment.SetAnswers(answers);
@@ -311,7 +311,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             var headers = assignment.IdentifyingData.Select(data =>
             {
                 if (string.IsNullOrWhiteSpace(data.VariableName))
-                    return questionnaire.GetQuestionVariableName(data.QuestionId);
+                    return questionnaire.GetQuestionVariableName(data.Identity.Id);
 
                 return data.VariableName;
             }).ToArray();

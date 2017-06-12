@@ -27,8 +27,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
 
             this.Assignment.SetAnswers(new List<IdentifyingAnswer>
             {
-                Create.Entity.IdentifyingAnswer(this.Assignment, answer: "Test22", questionId: Id.g2),
-                Create.Entity.IdentifyingAnswer(this.Assignment, answer: "Test33", questionId: Id.g3)
+                Create.Entity.IdentifyingAnswer(this.Assignment, answer: "Test22", identity: Create.Identity(Id.g2)),
+                Create.Entity.IdentifyingAnswer(this.Assignment, answer: "Test33", identity: Create.Identity(Id.g3))
             });
         }
 
@@ -78,7 +78,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
 
         [Test]
         public void should_map_IdentifyingAnswer_QuestionId() =>
-            Assert.That(this.AssignmentDetails.IdentifyingData[0].QuestionId, Is.EqualTo(this.Assignment.IdentifyingData[0].QuestionId));
+            Assert.That(this.AssignmentDetails.IdentifyingData[0].Identity, Is.EqualTo(this.Assignment.IdentifyingData[0].Identity));
 
         [Test]
         public void should_map_IdentifyingAnswer_Variable_name_from_questionnaire() =>

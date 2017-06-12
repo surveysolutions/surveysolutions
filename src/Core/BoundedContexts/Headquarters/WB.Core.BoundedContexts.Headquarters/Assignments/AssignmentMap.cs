@@ -2,6 +2,8 @@
 using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
@@ -43,7 +45,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             }, r => r.Component(c =>
             {
                 c.Property(x => x.Answer);
-                c.Property(x => x.QuestionId);
+                c.Component(id => id.Identity, cmp =>
+                {
+                    cmp.Lazy(false);
+                    cmp.Property(x => x.Id, pm => pm.Column("QuestionId"));
+                    cmp.Property(x => x.RosterVector, pm =>
+                    {
+                        pm.Column(clmn =>
+                        {
+                            clmn.SqlType("integer[]");
+                            clmn.Name("RosterVector");
+                        });
+                        
+                        pm.Type<PostgresSqlConvertorType<int, RosterVector, RosterVectorTypeConvertor>>();
+                    });
+                });
                 c.Property(x => x.AnswerAsString);
                 c.Property(x => x.Assignment);
             }));

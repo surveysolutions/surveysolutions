@@ -245,7 +245,7 @@ namespace WB.UI.Headquarters.Code
 
         private string GetAssignmentIdentifyingQuestionRow(AssignmentApiView.IdentifyingAnswer _, Core.SharedKernels.DataCollection.Aggregates.IQuestionnaire questionnaire)
         {
-            string questionTitle = questionnaire.GetQuestionTitle(_.QuestionId).RemoveHtmlTags();
+            string questionTitle = questionnaire.GetQuestionTitle(_.Identity.Id).RemoveHtmlTags();
             return $"<li title='{questionTitle}'>{LimitStringLength(questionTitle)}: {_.Answer}</li>";
         }
 

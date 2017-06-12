@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
@@ -24,9 +21,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IAnswerToStringConverter answerToStringConverter;
 
-        public AssignmentsSynchronizer(ISynchronizationService synchronizationService, 
-            IPlainStorage<AssignmentDocument> assignmentsRepository, 
-            IQuestionnaireDownloader questionnaireDownloader, 
+        public AssignmentsSynchronizer(ISynchronizationService synchronizationService,
+            IPlainStorage<AssignmentDocument> assignmentsRepository,
+            IQuestionnaireDownloader questionnaireDownloader,
             IQuestionnaireStorage questionnaireStorage,
             IAnswerToStringConverter answerToStringConverter)
         {
@@ -65,12 +62,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
 
             foreach (var remote in remoteAssignments)
             {
+                await this.questionnaireDownloader.DownloadQuestionnaireAsync(remote.QuestionnaireId, cancellationToken, statistics);
+                IQuestionnaire questionnaire = this.questionnaireStorage.GetQuestionnaire(remote.QuestionnaireId, null);
+
                 var local = localAssignmentsLookup[remote.Id].FirstOrDefault();
                 if (local == null)
                 {
-                    await this.questionnaireDownloader.DownloadQuestionnaireAsync(remote.QuestionnaireId, cancellationToken, statistics);
-                    IQuestionnaire questionnaire = this.questionnaireStorage.GetQuestionnaire(remote.QuestionnaireId, null);
-
                     local = new AssignmentDocument
                     {
                         Id = remote.Id,
@@ -79,35 +76,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
                         ReceivedDateUtc = DateTime.UtcNow
                     };
 
-                    var identifyingData = new List<AssignmentDocument.IdentifyingAnswer>();
-
-                    foreach (var identifyingAnswer in remote.IdentifyingData)
-                    {
-                        var questionType = questionnaire.GetQuestionType(identifyingAnswer.QuestionId);
-
-                        if (questionType == QuestionType.GpsCoordinates)
-                        {
-                            local.LocationQuestionId = identifyingAnswer.QuestionId;
-                            var geoPositionAnswer = GeoPosition.FromString(identifyingAnswer.Answer);
-                            if (geoPositionAnswer != null)
-                            {
-                                local.LocationLatitude = geoPositionAnswer.Latitude;
-                                local.LocationLongitude = geoPositionAnswer.Longitude;
-                            }
-                        }
-
-                        var stringAnswer = this.answerToStringConverter.Convert(identifyingAnswer.Answer, identifyingAnswer.QuestionId, questionnaire);
-                        identifyingData.Add(new AssignmentDocument.IdentifyingAnswer
-                        {
-                            QuestionId = identifyingAnswer.QuestionId,
-                            Answer = identifyingAnswer.Answer,
-                            AnswerAsString = stringAnswer,
-                            Question = questionnaire.GetQuestionTitle(identifyingAnswer.QuestionId)
-                        });
-                    }
+                    var identifyingData = this.FillAnswers(remote, questionnaire, local);
 
                     local.IdentifyingData = identifyingData;
-                    statistics.NewAssignmentsCount += 1;
+                    statistics.NewAssignmentsCount++;
+                }
+                else
+                {
+                    local.IdentifyingData = FillAnswers(remote, questionnaire, local);
                 }
 
                 local.Quantity = remote.Quantity;
@@ -117,18 +93,37 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
             }
         }
 
-        private static AssignmentDocument.IdentifyingAnswer CreateIdentifyingAnswer(
-            AssignmentApiView.IdentifyingAnswer identifyingAnswer, 
-            object questionAnswer, 
-            IQuestionnaire questionnaireDocument)
+        private List<AssignmentDocument.IdentifyingAnswer> FillAnswers(AssignmentApiView remote, IQuestionnaire questionnaire, AssignmentDocument local)
         {
-            return new AssignmentDocument.IdentifyingAnswer
+            var identifyingData = new List<AssignmentDocument.IdentifyingAnswer>();
+
+            foreach (var identifyingAnswer in remote.IdentifyingData)
             {
-                QuestionId = identifyingAnswer.QuestionId,
-                Answer = identifyingAnswer.Answer,
-                AnswerAsString = AnswerUtils.AnswerToString(questionAnswer),
-                Question = questionnaireDocument.GetQuestionTitle(identifyingAnswer.QuestionId)
-            };
+                var questionType = questionnaire.GetQuestionType(identifyingAnswer.Identity.Id);
+
+                if (questionType == QuestionType.GpsCoordinates)
+                {
+                    local.LocationQuestionId = identifyingAnswer.Identity.Id;
+                    var geoPositionAnswer = GeoPosition.FromString(identifyingAnswer.Answer);
+                    if (geoPositionAnswer != null)
+                    {
+                        local.LocationLatitude = geoPositionAnswer.Latitude;
+                        local.LocationLongitude = geoPositionAnswer.Longitude;
+                    }
+                }
+
+                var stringAnswer = this.answerToStringConverter.Convert(identifyingAnswer.Answer,
+                    identifyingAnswer.Identity.Id, questionnaire);
+
+                identifyingData.Add(new AssignmentDocument.IdentifyingAnswer
+                {
+                    Identity = identifyingAnswer.Identity,
+                    Answer = identifyingAnswer.Answer,
+                    AnswerAsString = stringAnswer,
+                    Question = questionnaire.GetQuestionTitle(identifyingAnswer.Identity.Id)
+                });
+            }
+            return identifyingData;
         }
     }
 }

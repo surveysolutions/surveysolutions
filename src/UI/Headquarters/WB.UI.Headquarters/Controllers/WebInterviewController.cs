@@ -116,9 +116,12 @@ namespace WB.UI.Headquarters.Controllers
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(assignment.QuestionnaireId, null);
             var interviewId = Guid.NewGuid();
+
+            var prefilled = questionnaire.GetPrefilledQuestions().ToHashSet();
+            
             var answersFromAssignment =
-                assignment.IdentifyingData.ToDictionary(x => x.QuestionId, 
-                                                        x => this.identifyingAnswerConverter.GetAbstractAnswer(questionnaire, x.QuestionId, x.Answer));
+                assignment.IdentifyingData.Where(ia =>prefilled.Contains(ia.Identity.Id)).ToDictionary(x => x.Identity.Id, 
+                                                        x => this.identifyingAnswerConverter.GetAbstractAnswer(questionnaire, x.Identity.Id, x.Answer));
 
             var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
                 interviewer.PublicKey, assignment.QuestionnaireId, DateTime.UtcNow,
@@ -130,7 +133,7 @@ namespace WB.UI.Headquarters.Controllers
             this.commandService.Execute(createInterviewOnClientCommand);
             return interviewId.FormatGuid();
         }
-
+        
         private ResumeWebInterview GetResumeModel(string id)
         {
             var interview = this.statefulInterviewRepository.Get(id);

@@ -162,7 +162,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 Responsible = "any",
                 IdentifyingData = new List<AssignmentIdentifyingDataItem>
                 {
-                    new AssignmentIdentifyingDataItem{ Answer = "1", QuestionId = Id.g1 },
+                    new AssignmentIdentifyingDataItem{ Answer = "1", Identity = Create.Entity.Identity(Id.g1) },
                     new AssignmentIdentifyingDataItem{ Answer = "2", Variable = "text2" }
                 }
             });

@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public static RosterVector Convert(object obj)
         {
-            RosterVector answerAsRosterVector = obj as RosterVector;
+            var answerAsRosterVector = obj as RosterVector;
             if (answerAsRosterVector != null)
             {
                 return answerAsRosterVector;

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
@@ -14,7 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public class IdentifyingAnswer
         {
-            public Guid QuestionId { get; set; }
+            public Identity Identity { get; set; }
             public string Answer { get; set; }
         }
     }

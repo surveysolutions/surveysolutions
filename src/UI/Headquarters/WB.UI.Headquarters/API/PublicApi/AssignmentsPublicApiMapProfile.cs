@@ -27,8 +27,8 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.CreateMap<IdentifyingAnswer, AssignmentIdentifyingDataItem>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.Answer))
                 .ForMember(x => x.Variable, opts => opts.ResolveUsing(
-                    (answer, dest, value, ctx) => GetVariableName(ctx, answer.QuestionId)))
-                .ForMember(x => x.QuestionId, opts => opts.MapFrom(x => x.QuestionId));
+                    (answer, dest, value, ctx) => GetVariableName(ctx, answer.Identity.Id)))
+                .ForMember(x => x.Identity, opts => opts.MapFrom(x => x.Identity));
 
             this.CreateMap<AssignmentRow, AssignmentViewItem>()
                 .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Id))
