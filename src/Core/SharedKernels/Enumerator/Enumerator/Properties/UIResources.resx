@@ -204,6 +204,9 @@
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>Tap to take barcode</value>
   </data>
+  <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
+    <value>Tap to edit area</value>
+  </data>
   <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
     <value>Section completed: {0}</value>
   </data>
@@ -469,5 +472,29 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>Error</value>
+  </data>
+  <data name="AreaMap_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="AreaMap_Location" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="AreaMap_NoChangesInfo" xml:space="preserve">
+    <value>No changes we made to be saved.</value>
+  </data>
+  <data name="AreaMap_NoMapsFound" xml:space="preserve">
+    <value>No maps were found. Please update maps</value>
+  </data>
+  <data name="AreaMap_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="AreaMap_Undo" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="AreaMap_UpdateMaps" xml:space="preserve">
+    <value>Update maps</value>
+  </data>
+  <data name="Version_Not_Supports" xml:space="preserve">
+    <value>Your version of application doesn't support this functionality</value>
   </data>
 </root>

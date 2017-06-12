@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
@@ -39,8 +40,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, AnswerRemoved>,
         IUpdateHandler<InterviewSummary, InterviewKeyAssigned>,
         IUpdateHandler<InterviewSummary, InterviewReceivedByInterviewer>,
-        IUpdateHandler<InterviewSummary, InterviewReceivedBySupervisor>
-
+        IUpdateHandler<InterviewSummary, InterviewReceivedBySupervisor>,
+        IUpdateHandler<InterviewSummary, AreaQuestionAnswered>
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IUserViewFactory users;
@@ -365,6 +366,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             var responsible = this.users.GetUser(new UserViewInputModel(responsibleId));
             return responsible != null ? responsible.UserName : "<UNKNOWN RESPONSIBLE>";
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AreaQuestionAnswered> @event)
+        {
+            var area = new Area(@event.Payload.Geometry, @event.Payload.MapName, @event.Payload.AreaSize, @event.Payload.Length, @event.Payload.DistanceToEditor);
+            return this.AnswerQuestion(state, @event.Payload.QuestionId, area, @event.EventTimeStamp);
         }
     }
 }

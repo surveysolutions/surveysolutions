@@ -43,6 +43,7 @@ namespace WB.UI.Designer.CommandDeserialization
                     { "UpdateSingleOptionQuestion", typeof (UpdateSingleOptionQuestion) },
                     { "UpdateGpsCoordinatesQuestion", typeof (UpdateGpsCoordinatesQuestion) },
                     { "UpdateFilteredComboboxOptions", typeof (UpdateFilteredComboboxOptions) },
+                    { "UpdateAreaQuestion", typeof (UpdateAreaQuestion) },
                     
                     //Static text commands
                     { "AddStaticText", typeof (AddStaticText) },

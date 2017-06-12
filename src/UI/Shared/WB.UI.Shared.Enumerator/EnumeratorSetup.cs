@@ -158,6 +158,7 @@ namespace WB.UI.Shared.Enumerator
             return new[]
             {
                 typeof(EnumeratorSharedKernelModule).Assembly,
+                typeof(EnumeratorUIModule).Assembly,
             };
         }
     }

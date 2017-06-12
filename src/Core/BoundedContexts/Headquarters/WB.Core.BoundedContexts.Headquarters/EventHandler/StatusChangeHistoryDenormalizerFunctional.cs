@@ -43,7 +43,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewStatuses, TextListQuestionAnswered>,
         IUpdateHandler<InterviewStatuses, QRBarcodeQuestionAnswered>,
         IUpdateHandler<InterviewStatuses, PictureQuestionAnswered>,
-        IUpdateHandler<InterviewStatuses, UnapprovedByHeadquarters>
+        IUpdateHandler<InterviewStatuses, UnapprovedByHeadquarters>,
+        IUpdateHandler<InterviewStatuses, AreaQuestionAnswered>
     {
         private readonly IUserViewFactory users;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummares;
@@ -406,21 +407,26 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return this.RecordFirstAnswerIfNeeded(@event.EventIdentifier, state, @event.EventSourceId, @event.Payload.UserId, @event.Payload.AnswerTimeUtc);
         }
 
-        public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<UnapprovedByHeadquarters> @event)
+        public InterviewStatuses Update(InterviewStatuses state, IPublishedEvent<UnapprovedByHeadquarters> @event)
         {
             var interviewSummary = this.interviewSummares.GetById(@event.EventSourceId);
             if (interviewSummary == null)
-                return interviewStatuses;
+                return state;
 
             return this.AddCommentedStatus(
                 @event.EventIdentifier,
-                interviewStatuses,
+                state,
                 @event.Payload.UserId,
                 interviewSummary.TeamLeadId,
                 interviewSummary.ResponsibleId,
                 InterviewExportedAction.UnapprovedByHeadquarter,
                 @event.EventTimeStamp,
                 @event.Payload.Comment);
+        }
+
+        public InterviewStatuses Update(InterviewStatuses state, IPublishedEvent<AreaQuestionAnswered> @event)
+        {
+            return this.RecordFirstAnswerIfNeeded(@event.EventIdentifier, state, @event.EventSourceId, @event.Payload.UserId, @event.Payload.AnswerTimeUtc);
         }
     }
 }

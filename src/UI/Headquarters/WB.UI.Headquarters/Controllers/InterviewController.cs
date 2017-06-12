@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -90,6 +91,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public ActionResult InterviewHistory(Guid id)
         {
             return this.View(interviewHistoryViewFactory.Load(id));
+        }
+
+        public ActionResult InterviewAreaFrame(Guid id, string questionId)
+        {
+            InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
+
+            ChangeStatusView interviewInfo =
+                this.changeStatusFactory.Load(new ChangeStatusInputModel { InterviewId = id });
+
+            if (interviewInfo == null || interviewSummary == null || interviewSummary.IsDeleted)
+                return HttpNotFound();
+
+            bool isAccessAllowed =
+                this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator ||
+                (this.authorizedUser.IsSupervisor && this.authorizedUser.Id == interviewSummary.TeamLeadId);
+
+            if (!isAccessAllowed)
+                return HttpNotFound();
+
+            var detailsViewModel = interviewDetailsViewFactory.GetInterviewDetails(id, InterviewDetailsFilter.All, null);
+            var identity = Identity.Parse(questionId);
+            var question = detailsViewModel.FilteredEntities.FirstOrDefault(x => x.Id == identity) as InterviewQuestionView;
+
+            if(question == null || question.QuestionType != QuestionType.Area)
+                return HttpNotFound();
+
+            return this.View(question);
         }
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]

@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="Aggregates\IQuestionnaire.cs" />
     <Compile Include="Aggregates\IStatefulInterview.cs" />
+    <Compile Include="Commands\Interview\AnswerAreaQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerYesNoQuestion.cs" />
     <Compile Include="Commands\Interview\CreateInterviewFromSnapshotCommand.cs" />
     <Compile Include="Commands\Interview\MarkInterviewAsReceivedByInterviewer.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Events\Interview\InterviewAnswersFromSyncPackageRestored.cs" />
     <Compile Include="Events\Interview\InterviewKeyAssigned.cs" />
     <Compile Include="Events\Interview\LinkedToListOptionsChanged.cs" />
+    <Compile Include="Events\Interview\AreaQuestionAnswered.cs" />
     <Compile Include="Events\Interview\QuestionsMarkedAsReadonly.cs" />
     <Compile Include="Events\Interview\TranslationSwitched.cs" />
     <Compile Include="Events\Interview\VariablesDisabled.cs" />

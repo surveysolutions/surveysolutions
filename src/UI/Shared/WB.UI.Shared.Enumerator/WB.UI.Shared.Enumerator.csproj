@@ -351,6 +351,7 @@
     <Compile Include="CustomControls\MaskedEditTextControl\MaskedEditText.cs" />
     <Compile Include="CustomControls\NumericEditText.cs" />
     <Compile Include="CustomServices\AndroidNetworkService.cs" />
+    <Compile Include="CustomServices\AreaEditor\DummyAreaEditService.cs" />
     <Compile Include="CustomServices\ExternalAppLauncher.cs" />
     <Compile Include="CustomServices\UserInteractionService.cs" />
     <Compile Include="CustomServices\UserInterfaceStateService.cs" />
@@ -625,7 +626,9 @@
     <AndroidResource Include="Resources\drawable-v21\group_with_invalid_answers.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-v21\question_input_button.xml" />
+    <AndroidResource Include="Resources\drawable-v21\question_input_button.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-v21\question_input_button_answered.xml" />
@@ -1060,7 +1063,7 @@
       <SubType>Designer</SubType>
     </None>
     <AndroidResource Include="Resources\layout\interview_complete_status_change.axml">
-      <SubType>AndroidResource</SubType>
+      <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_active_group.axml">
       <SubType>Designer</SubType>
@@ -1114,6 +1117,9 @@
     <AndroidResource Include="Resources\layout\interview_group_to_parent_navigation.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_question_area.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question_readonly.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -1130,6 +1136,14 @@
     <ProjectReference Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\WB.Core.SharedKernels.Enumerator.csproj">
       <Project>{0F1DDEFE-DF5C-4856-A89C-241F3BD41B5F}</Project>
       <Name>WB.Core.SharedKernels.Enumerator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
+      <Project>{D6616C1D-7C3A-4576-B82B-098721CD4417}</Project>
+      <Name>WB.Core.SharedKernels.Questionnaire</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Infrastructure\Enumerator\WB.Infrastructure.Shared.Enumerator.csproj">
+      <Project>{e41deb5c-2ad6-463f-9f76-10299fc2d9d1}</Project>
+      <Name>WB.Infrastructure.Shared.Enumerator</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -297,6 +297,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             if (interviewQuestion.IsDouble)
                 return interviewQuestion.AsDouble.GetAnswer().Value;
 
+            if (interviewQuestion.IsArea)
+                return interviewQuestion.AsArea.GetAnswer().Value;
+
             return null;
         }
 

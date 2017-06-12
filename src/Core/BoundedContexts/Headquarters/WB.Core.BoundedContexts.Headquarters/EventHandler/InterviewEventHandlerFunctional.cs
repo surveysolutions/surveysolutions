@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
@@ -75,7 +76,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewData, VariablesChanged>,
         IUpdateHandler<InterviewData, VariablesDisabled>,
         IUpdateHandler<InterviewData, VariablesEnabled>,
-        IUpdateHandler<InterviewData, TranslationSwitched>
+        IUpdateHandler<InterviewData, TranslationSwitched>,
+        IUpdateHandler<InterviewData, AreaQuestionAnswered>
     {
         private readonly IUserViewFactory users;
         private readonly IQuestionnaireStorage questionnaireStorage;
@@ -837,6 +839,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return @event.Payload.Questions.Aggregate(
                     state,
                     (document, question) => SetReadonlyStateForQuestion(document, question.RosterVector, question.Id));
+        }
+
+        public InterviewData Update(InterviewData state, IPublishedEvent<AreaQuestionAnswered> @event)
+        {
+            return this.SaveAnswer(state, @event.Payload.RosterVector, @event.Payload.QuestionId,
+                new Area(@event.Payload.Geometry, @event.Payload.MapName, @event.Payload.AreaSize, @event.Payload.Length, @event.Payload.DistanceToEditor), 
+                true);
         }
     }
 }
