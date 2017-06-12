@@ -47,5 +47,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         Task SendSyncStatisticsAsync(SyncStatisticsApiView statistics, CancellationToken token, RestCredentials credentials);
         Task SendUnexpectedExceptionAsync(UnexpectedExceptionApiView exception, CancellationToken token);
         Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken);
+
+        Task SyncMaps(string workingDirectory, CancellationToken cancellationToken);
     }
 }

@@ -40,6 +40,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Implementation\Services\IDesignerApiService.cs" />
+    <Compile Include="Implementation\Services\TesterMapSynchronizer.cs" />
     <Compile Include="Implementation\Services\TesterPlainInterviewFileStorage.cs" />
     <Compile Include="Implementation\Services\QuestionnaireImportService.cs" />
     <Compile Include="Properties\TesterUIResources.id-ID.Designer.cs">
@@ -127,6 +128,9 @@
     <Reference Include="MvvmCross.Plugins.PictureChooser, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.PictureChooser.4.4.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.PictureChooser.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\Portable.Ninject.3.3.1\lib\portable-net4+sl5+wp8+win8+wpa81+monotouch+monoandroid+Xamarin.iOS\Ninject.dll</HintPath>

@@ -114,6 +114,7 @@
     <Compile Include="Implementation\Services\InterviewerInterviewAccessor.cs" />
     <Compile Include="Implementation\Services\InterviewerQuestionnaireAccessor.cs" />
     <Compile Include="Implementation\Services\InterviewEventStreamOptimizer.cs" />
+    <Compile Include="Implementation\Services\MapSynchronizer.cs" />
     <Compile Include="Implementation\Services\QuestionnaireContentVersionProvider.cs" />
     <Compile Include="Implementation\Services\QuestionnaireKeyValueStorage.cs" />
     <Compile Include="Implementation\Storage\IInterviewerEventStorage.cs" />

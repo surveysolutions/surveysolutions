@@ -38,6 +38,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly string translationsController = string.Concat(interviewerApiUrl, apiVersion, "/translations");
         private readonly string attachmentContentController = string.Concat(interviewerApiUrl, apiVersion, "/attachments");
 
+        private readonly string mapsListUrl = "/configuration/maps.config";
+
         private readonly IPrincipal principal;
         private readonly IRestService restService;
         private readonly IInterviewerSettings interviewerSettings;
@@ -220,6 +222,37 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
             return response.ToList();
         }
+        
+        
+        public async Task SyncMaps(string workingDirectory, CancellationToken cancellationToken)
+        {
+            var response = await this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<MapDescription>>(
+                url: this.mapsListUrl, token: cancellationToken)).ConfigureAwait(false);
+
+            var items = response.ToList();
+
+            foreach (var mapDescription in items)
+            {
+                var filename = this.fileSystemAccessor.CombinePath(workingDirectory, mapDescription.MapName);
+
+                if (this.fileSystemAccessor.IsFileExists(filename))
+                    continue;
+
+                var restFile = await this.restService.DownloadFileAsync(
+                    url: mapDescription.URL,
+                    token: cancellationToken,
+                    credentials: this.restCredentials).ConfigureAwait(false);
+
+                this.fileSystemAccessor.WriteAllBytes(filename, restFile.Content);
+            }
+        }
+
+        public class MapDescription
+        {
+            public string MapName { set; get; }
+            public string URL { set; get; }
+        }
+
 
         public Task<List<TranslationDto>> GetQuestionnaireTranslationAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken)
         {
