@@ -4,10 +4,10 @@ using System.Linq;
 using System.Linq.Expressions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.DenormalizerStorage;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
@@ -15,7 +15,6 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
@@ -191,6 +190,9 @@ namespace WB.Tests.Abc
 
         public static StatefulInterview StatefulInterview(QuestionnaireDocument questionnaireDocument, bool census = true)
         {
+            //questionnaireDocument.IsUsingExpressionStorage = true;
+            //questionnaireDocument.ExpressionsPlayOrder = Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(questionnaireDocument.AsReadOnly());
+
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
 
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument);
@@ -248,31 +250,6 @@ namespace WB.Tests.Abc
             filteredOptionsViewModel.Setup(x => x.Init(It.IsAny<string>(), It.IsAny<Identity>(), It.IsAny<int>()));
 
             return filteredOptionsViewModel.Object;
-        }
-
-        public static InterviewDetailsViewFactory InterviewDetailsViewFactory(
-            Guid interviewId, QuestionnaireDocument questionnaireDocument, 
-            ILatestInterviewExpressionState interviewExpressionState)
-        {
-            var questionnaireRepository = Setup.QuestionnaireRepository(questionnaireDocument);
-
-            var interview = Create.AggregateRoot.StatefulInterview(
-                interviewExpressionStatePrototypeProvider: Stub<IInterviewExpressionStatePrototypeProvider>.Returning(interviewExpressionState),
-                questionnaireRepository: questionnaireRepository);
-
-            var interviewData = Create.Entity.InterviewData(questionnaireId: questionnaireDocument.PublicKey);
-            var interviewSummary = Create.Entity.InterviewSummary(interviewId,
-                interview.QuestionnaireIdentity.QuestionnaireId, interview.QuestionnaireIdentity.Version,
-                interview.Status);
-            var interviewSummaryRepository = new InMemoryReadSideRepositoryAccessor<InterviewSummary>();
-            interviewSummaryRepository.Store(interviewSummary, interviewId);
-
-            return Create.Service.InterviewDetailsViewFactory(
-                questionnaireStorage: questionnaireRepository,
-                interviewStore: new TestInMemoryWriter<InterviewData>(interviewId.FormatGuid(), interviewData),
-                statefulInterviewRepository: Stub<IStatefulInterviewRepository>.Returning<IStatefulInterview>(interview),
-                interviewSummaryRepository: interviewSummaryRepository
-                );
         }
 
         internal static void ApplyInterviewEventsToViewModels(IEventSourcedAggregateRoot interview, ILiteEventRegistry eventRegistry, Guid interviewId)

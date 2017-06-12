@@ -16,18 +16,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             Guid rosterId = Guid.NewGuid();
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.Entity.Roster(
-                    rosterId: rosterId,
-                    fixedRosterTitles: new[]
-                    {
+                Create.Entity.FixedRoster(rosterId: rosterId, fixedTitles: new[] {
                         Create.Entity.FixedTitle(1, "First"),
                         Create.Entity.FixedTitle(2, "Second"),
                         Create.Entity.FixedTitle(3, "Third"),
                     },
                     children: new IComposite[]
                     {
-                        Create.Entity.TextQuestion(questionId: disabledQuestionId),
-                        Create.Entity.TextQuestion(questionId: enabledQuestionId),
+                        Create.Entity.TextQuestion(questionId: disabledQuestionId, variable: "q1"),
+                        Create.Entity.TextQuestion(questionId: enabledQuestionId, variable: "q2"),
                     }),
             });
 
