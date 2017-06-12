@@ -25,6 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
         [TestCase(123256, QuestionType.Numeric, "123256")]
         [TestCase("123256", QuestionType.Numeric, "123256")]
         [TestCase("2", QuestionType.SingleOption, "title2")]
+        [TestCase("1,2[3]4", QuestionType.GpsCoordinates, "1, 2")]
         public void when_get_answer_it_should_stored_to_correct_string(object answer, QuestionType questionType, string result)
         {
             Guid questionId = Guid.NewGuid();
