@@ -81,17 +81,17 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         public void when_question_title_contains_not_allowed_characters_should_trim_it(string prefilledQuestionTitle, string expectedHeader)
         {
             var questionnaireId = Create.Entity.QuestionnaireIdentity();
-            Guid questionId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            var questionId = Create.Entity.Identity(Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
             
             var summary = Create.Entity.Assignment(id: 5, questionnaireIdentity: questionnaireId, assigneeSupervisorId: Guid.NewGuid());
-            summary.IdentifyingData.Add(Create.Entity.IdentifyingAnswer(summary, answer: "bla", questionId: questionId));
+            summary.IdentifyingData.Add(Create.Entity.IdentifyingAnswer(summary, answer: "bla", identity: questionId));
 
             IPlainStorageAccessor<Assignment> assignments = new InMemoryPlainStorageAccessor<Assignment>();
             assignments.Store(summary, summary.Id);
 
             var questionnaires = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId,
                 Create.Entity.QuestionnaireDocumentWithOneChapter(
-                    Create.Entity.TextQuestion(questionId, text: prefilledQuestionTitle)));
+                    Create.Entity.TextQuestion(questionId.Id, text: prefilledQuestionTitle)));
 
             var service = this.GetService(assignments, questionnaires);
 

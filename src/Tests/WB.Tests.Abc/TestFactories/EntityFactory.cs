@@ -1568,9 +1568,9 @@ namespace WB.Tests.Abc.TestFactories
                 _entity = entity;
             }
 
-            public AssignmentApiViewBuilder WithAnswer(Guid questionId, string answer)
+            public AssignmentApiViewBuilder WithAnswer(Identity questionId, string answer)
             {
-                this._entity.IdentifyingData.Add(new AssignmentApiView.IdentifyingAnswer { Answer = answer, QuestionId = questionId});
+                this._entity.IdentifyingData.Add(new AssignmentApiView.IdentifyingAnswer { Answer = answer, Identity = questionId});
                 return this;
             }
 
@@ -1605,13 +1605,13 @@ namespace WB.Tests.Abc.TestFactories
             return result;
         }
 
-        public IdentifyingAnswer IdentifyingAnswer(Assignment assignment = null, Guid? questionId = null, string answer = null, string answerAsString = null)
+        public IdentifyingAnswer IdentifyingAnswer(Assignment assignment = null, Identity identity = null, string answer = null, string answerAsString = null)
         {
             var result = new IdentifyingAnswer();
             
             dynamic dynamic = result.AsDynamic();
             dynamic.Assignment = assignment;
-            dynamic.QuestionId = questionId ?? Guid.NewGuid();
+            dynamic.Identity = identity;
             dynamic.Answer = answer;
             dynamic.AnswerAsString = answerAsString;
             return result;
@@ -1637,10 +1637,10 @@ namespace WB.Tests.Abc.TestFactories
                 _entity = entity;
             }
 
-            public AssignmentDocumentBuilder WithAnswer(Guid questionId, string answer)
+            public AssignmentDocumentBuilder WithAnswer(Identity identity, string answer)
             {
                 this._entity.IdentifyingData = this._entity.IdentifyingData ?? new List<AssignmentDocument.IdentifyingAnswer>();
-                this._entity.IdentifyingData.Add(new AssignmentDocument.IdentifyingAnswer { Answer = answer, QuestionId = questionId});
+                this._entity.IdentifyingData.Add(new AssignmentDocument.IdentifyingAnswer { Answer = answer, Identity = identity });
                 return this;
             }
 

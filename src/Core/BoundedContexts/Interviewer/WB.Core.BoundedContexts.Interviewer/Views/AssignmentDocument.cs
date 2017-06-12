@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using SQLite;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using Newtonsoft.Json;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
@@ -40,8 +41,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public class IdentifyingAnswer
         {
+            public Identity Identity { get; set; }
             public string Answer { get; set; }
-            public Guid QuestionId { get; set; }
             public string Question { get; set; }
             public string AnswerAsString { get; set; }
         }

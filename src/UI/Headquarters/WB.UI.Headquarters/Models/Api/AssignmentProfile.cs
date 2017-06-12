@@ -17,7 +17,7 @@ namespace WB.UI.Headquarters.Models.Api
 
             this.CreateMap<IdentifyingAnswer, AssignmentApiView.IdentifyingAnswer>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.Answer))
-                .ForMember(x => x.QuestionId, opts => opts.MapFrom(x => x.QuestionId));
+                .ForMember(x => x.Identity, opts => opts.MapFrom(x => x.Identity));
         }
     }
 }

@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
 
             if (sampleAssignment != null)
             {
-                foreach (var questionItem in sampleAssignment.IdentifyingData.Select(x => questionnaire.GetQuestionTitle(x.QuestionId)))
+                foreach (var questionItem in sampleAssignment.IdentifyingData.Select(x => questionnaire.GetQuestionTitle(x.Identity.Id)))
                 {
                     csvWriter.WriteField(TitlesCleanupRegex.Replace(questionItem.RemoveHtmlTags(), ""));
                 }

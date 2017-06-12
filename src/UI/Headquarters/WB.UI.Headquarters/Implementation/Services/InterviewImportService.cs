@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Services;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Threading;
 using WB.UI.Headquarters.Resources;
@@ -96,7 +97,7 @@ namespace WB.UI.Headquarters.Implementation.Services
                         assignmentRecord.Quantity);
 
 
-                    var identifyingAnswers = topLevelAnswers.Answers.Select(a => IdentifyingAnswer.Create(assignment, questionnaire, a.Value.ToString(), a.Key)).ToList();
+                    var identifyingAnswers = topLevelAnswers.Answers.Select(a => IdentifyingAnswer.Create(assignment, questionnaire, a.Value.ToString(), Identity.Create(a.Key, null))).ToList();
                     assignment.SetAnswers(identifyingAnswers);
 
                     this.plainTransactionManager.ExecuteInPlainTransaction(
