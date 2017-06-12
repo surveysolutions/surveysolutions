@@ -2413,13 +2413,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     foreach (var entityId in playOrder)
                     {
-                        var entityIdentities = changedInterviewTree.FindEntity(entityId).Select(x => x.Identity)
-                            .ToList();
-                        foreach (Identity entityIdentity in entityIdentities)
-                        {
-                            IInterviewTreeNode entity = changedInterviewTree.GetNodeByIdentity(entityIdentity);
+                        var entityIdentities = changedInterviewTree.FindEntity(entityId).ToList();
 
-                            entity?.Accept(updater);
+                        foreach (var entity in entityIdentities)
+                        {
+                            IInterviewTreeNode changedNode = changedInterviewTree.GetNodeByIdentity(entity.Identity);
+
+                            changedNode?.Accept(updater);
                         }
                     }
                 }

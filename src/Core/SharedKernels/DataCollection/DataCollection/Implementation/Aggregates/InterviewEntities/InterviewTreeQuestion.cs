@@ -415,12 +415,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 return string.Join(", ", formattedAnswers);
             }
 
-            Func<decimal, string> getCategoricalAnswerOptionText = answerOptionValue
-                => Tree.GetOptionForQuestionByOptionValue(this.Identity.Id, answerOptionValue);
+            string GetCategoricalAnswerOptionText(decimal answerOptionValue) =>
+                this.Tree.GetOptionForQuestionByOptionValue(this.Identity.Id, answerOptionValue);
 
-            if (this.IsSingleFixedOption) return AnswerUtils.AnswerToString(Convert.ToDecimal(this.AsSingleFixedOption.GetAnswer()?.SelectedValue), getCategoricalAnswerOptionText);
-            if (this.IsMultiFixedOption) return AnswerUtils.AnswerToString(this.AsMultiFixedOption.GetAnswer()?.ToDecimals()?.ToArray(), getCategoricalAnswerOptionText);
-            if (this.IsYesNo) return AnswerUtils.AnswerToString(this.AsYesNo.GetAnswer()?.ToAnsweredYesNoOptions()?.ToArray(), getCategoricalAnswerOptionText);
+            if (this.IsSingleFixedOption) return AnswerUtils.AnswerToString(Convert.ToDecimal(this.AsSingleFixedOption.GetAnswer()?.SelectedValue), GetCategoricalAnswerOptionText);
+            if (this.IsMultiFixedOption) return AnswerUtils.AnswerToString(this.AsMultiFixedOption.GetAnswer()?.ToDecimals()?.ToArray(), GetCategoricalAnswerOptionText);
+            if (this.IsYesNo) return AnswerUtils.AnswerToString(this.AsYesNo.GetAnswer()?.ToAnsweredYesNoOptions()?.ToArray(), GetCategoricalAnswerOptionText);
 
             if (this.IsSingleLinkedToList)
             {
