@@ -26,34 +26,38 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
         {
             string[] variableNames = this.substitutionService.GetAllSubstitutionVariableNames(text);
 
-            var byRosters = variableNames.Where(questionnaire.HasRoster).Select(variable => new SubstitutionVariable
+            var substitutionVariables = new SubstitutionVariables();
+
+            foreach (var variable in variableNames)
             {
-                Name = variable,
-                Id = questionnaire.GetGroupIdByVariableName(variable)
-            }).ToList();
+                if (questionnaire.HasQuestion(variable)) substitutionVariables.ByQuestions.Add(new SubstitutionVariable
+                {
+                    Name = variable,
+                    Id = questionnaire.GetQuestionIdByVariable(variable).Value
+                });
+
+                if (questionnaire.HasVariable(variable)) substitutionVariables.ByVariables.Add(new SubstitutionVariable
+                {
+                    Name = variable,
+                    Id = questionnaire.GetVariableIdByVariableName(variable)
+                });
+
+                if (questionnaire.HasRoster(variable)) substitutionVariables.ByRosters.Add(new SubstitutionVariable
+                {
+                    Name = variable,
+                    Id = questionnaire.GetGroupIdByVariableName(variable)
+                });
+            }
+
             if (this.substitutionService.ContainsRosterTitle(text))
             {
-                byRosters.Add(new SubstitutionVariable
+                substitutionVariables.ByRosters.Add(new SubstitutionVariable
                 {
                     Name = this.substitutionService.RosterTitleSubstitutionReference,
                     Id = questionnaire.GetRostersFromTopToSpecifiedEntity(identity.Id).Last()
                 });
             }
-            
-            var substitutionVariables = new SubstitutionVariables
-            {
-                ByQuestions = variableNames.Where(questionnaire.HasQuestion).Select(variable => new SubstitutionVariable
-                {
-                    Name = variable,
-                    Id = questionnaire.GetQuestionIdByVariable(variable).Value
-                }).ToList(),
-                ByVariables = variableNames.Where(questionnaire.HasVariable).Select(x => new SubstitutionVariable
-                {
-                    Name = x,
-                    Id = questionnaire.GetVariableIdByVariableName(x)
-                }).ToList(),
-                ByRosters = byRosters
-            };
+
             return new SubstitionText(identity, text, substitutionVariables, this.substitutionService, this.variableToUiStringService);
         }
     }
