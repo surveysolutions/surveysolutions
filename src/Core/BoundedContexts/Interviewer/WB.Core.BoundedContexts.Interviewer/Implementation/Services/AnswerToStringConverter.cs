@@ -53,6 +53,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                             ? answerTyped.FormatDecimal() 
                             : answerTyped.ToString(CultureInfo.CurrentCulture);
                         break;
+
+                    case QuestionType.GpsCoordinates:
+                        var gps = answer is string
+                            ? GeoPosition.FromString((string)answer)
+                            : (GeoPosition)answer;
+                        answer = $"{gps.Latitude}, {gps.Longitude}";
+                        break;
                 }
             }
 
