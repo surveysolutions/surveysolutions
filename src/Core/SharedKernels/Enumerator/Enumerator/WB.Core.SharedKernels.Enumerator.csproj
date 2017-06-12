@@ -131,6 +131,7 @@
     <Compile Include="Services\IEntityWithErrorsViewModelFactory.cs" />
     <Compile Include="Services\IExternalAppLauncher.cs" />
     <Compile Include="Services\IFriendlyErrorMessageService.cs" />
+    <Compile Include="Services\Infrastructure\IMapSynchronizer.cs" />
     <Compile Include="Services\Infrastructure\IPrincipal.cs" />
     <Compile Include="Services\Infrastructure\IAreaEditService.cs" />
     <Compile Include="Services\Infrastructure\IQRBarcodeScanService.cs" />
