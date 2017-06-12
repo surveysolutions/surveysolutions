@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
             this.questionnaireStorage = questionnaireStorage;
         }
 
-        public virtual async Task SyncronizeAssignmentsAsync(IProgress<SyncProgressInfo> progress,
+        public virtual async Task SynchronizeAssignmentsAsync(IProgress<SyncProgressInfo> progress,
             SychronizationStatistics statistics, CancellationToken cancellationToken)
         {
             progress.Report(new SyncProgressInfo

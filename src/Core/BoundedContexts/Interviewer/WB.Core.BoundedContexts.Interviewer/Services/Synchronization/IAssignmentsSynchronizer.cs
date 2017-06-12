@@ -7,7 +7,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
 {
     public interface IAssignmentsSynchronizer
     {
-        Task SyncronizeAssignmentsAsync(IProgress<SyncProgressInfo> progress,
+        Task SynchronizeAssignmentsAsync(IProgress<SyncProgressInfo> progress,
             SychronizationStatistics statistics, CancellationToken cancellationToken);
     }
 }
