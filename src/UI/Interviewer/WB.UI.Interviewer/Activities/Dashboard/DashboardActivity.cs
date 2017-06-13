@@ -20,6 +20,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
     [Activity(Label = "", 
         Theme = "@style/GrayAppTheme", 
         WindowSoftInputMode = SoftInput.StateHidden,
+        HardwareAccelerated = true,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     public class DashboardActivity : BaseActivity<DashboardViewModel>, ISyncBgService
     {
