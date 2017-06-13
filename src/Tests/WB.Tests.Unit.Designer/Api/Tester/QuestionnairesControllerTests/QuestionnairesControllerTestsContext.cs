@@ -1,11 +1,11 @@
-﻿using NSubstitute;
+﻿using Moq;
+using NSubstitute;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.UI.Designer.Api.Tester;
 
 namespace WB.Tests.Unit.Designer.Api.Tester.QuestionnairesControllerTests
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.Designer.Api.Tester.QuestionnairesControllerTests
                 viewFactory: viewFactory ?? Substitute.For<IQuestionnaireListViewFactory>(),
                 engineVersionService: engineVersionService ?? Substitute.For<IDesignerEngineVersionService>(),
                 expressionsPlayOrderProvider: expressionsPlayOrderProvider ?? Substitute.For<IExpressionsPlayOrderProvider>(),
-                questionnaireCompilationVersionService: questionnaireCompilationVersionService ?? Substitute.For<IQuestionnaireCompilationVersionService>());
+                questionnaireCompilationVersionService: questionnaireCompilationVersionService ?? Mock.Of<IQuestionnaireCompilationVersionService>());
         }
     }
 }

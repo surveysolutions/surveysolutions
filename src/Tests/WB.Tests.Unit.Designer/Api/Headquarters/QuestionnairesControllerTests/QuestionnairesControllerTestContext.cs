@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
                 zipUtils: zipUtils ?? Mock.Of<IStringCompressor>(),
                 listItemStorage: new TestPlainStorage<QuestionnaireListViewItem>(),
                 expressionsPlayOrderProvider: expressionsPlayOrderProvider ?? Substitute.For<IExpressionsPlayOrderProvider>(),
-                questionnaireCompilationVersionService: questionnaireCompilationVersionService ?? Substitute.For<IQuestionnaireCompilationVersionService>());
+                questionnaireCompilationVersionService: questionnaireCompilationVersionService ?? Mock.Of<IQuestionnaireCompilationVersionService>());
         }
     }
 }
