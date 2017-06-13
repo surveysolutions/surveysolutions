@@ -1,6 +1,7 @@
 ﻿using NSubstitute;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
@@ -17,7 +18,8 @@ namespace WB.Tests.Unit.Designer.Api.Tester.QuestionnairesControllerTests
             IExpressionProcessorGenerator expressionProcessorGenerator = null,
             IQuestionnaireListViewFactory viewFactory = null,
             IDesignerEngineVersionService engineVersionService = null,
-            IExpressionsPlayOrderProvider expressionsPlayOrderProvider = null)
+            IExpressionsPlayOrderProvider expressionsPlayOrderProvider = null,
+            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService = null)
         {
             return new QuestionnairesController(
                 userHelper: userHelper ?? Substitute.For<IMembershipUserService>(),
@@ -26,7 +28,8 @@ namespace WB.Tests.Unit.Designer.Api.Tester.QuestionnairesControllerTests
                 expressionProcessorGenerator: expressionProcessorGenerator ?? Substitute.For<IExpressionProcessorGenerator>(),
                 viewFactory: viewFactory ?? Substitute.For<IQuestionnaireListViewFactory>(),
                 engineVersionService: engineVersionService ?? Substitute.For<IDesignerEngineVersionService>(),
-                expressionsPlayOrderProvider: expressionsPlayOrderProvider ?? Substitute.For<IExpressionsPlayOrderProvider>());
+                expressionsPlayOrderProvider: expressionsPlayOrderProvider ?? Substitute.For<IExpressionsPlayOrderProvider>(),
+                questionnaireCompilationVersionService: questionnaireCompilationVersionService ?? Substitute.For<IQuestionnaireCompilationVersionService>());
         }
     }
 }
