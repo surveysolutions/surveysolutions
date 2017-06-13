@@ -6,7 +6,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.MapService
 {
     public interface IMapService
     {
-        Dictionary<string, string> GetAvailableMaps();
+        List<MapDescription> GetAvailableMaps();
         Task SyncMaps(CancellationToken cancellationToken);
     }
 }
