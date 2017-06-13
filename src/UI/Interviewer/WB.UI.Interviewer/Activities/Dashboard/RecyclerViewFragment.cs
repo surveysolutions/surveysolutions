@@ -5,7 +5,7 @@ using MvvmCross.Droid.Support.V7.RecyclerView;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.UI.Shared.Enumerator.Activities;
 
-namespace WB.UI.Interviewer.Activities
+namespace WB.UI.Interviewer.Activities.Dashboard
 {
     public abstract class RecyclerViewFragment<TViewModel> : BaseFragment<ListViewModel<TViewModel>> where TViewModel : class
     {
@@ -19,7 +19,7 @@ namespace WB.UI.Interviewer.Activities
 
             var recyclerView = view.FindViewById<MvxRecyclerView>(Resource.Id.dashboard_tab_recycler);
             if (recyclerView != null)
-                recyclerView.Adapter = new DashboardRecyclerViewAdapter(recyclerView, (IMvxAndroidBindingContext)base.BindingContext);
+                recyclerView.Adapter = new RecyclerViewAdapter(recyclerView, (IMvxAndroidBindingContext)base.BindingContext);
 
             return view;
         }
