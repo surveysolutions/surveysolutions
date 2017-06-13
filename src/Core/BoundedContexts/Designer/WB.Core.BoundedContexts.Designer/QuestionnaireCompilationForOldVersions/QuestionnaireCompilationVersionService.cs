@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersion
             this.questionnaireCompilationVersionStorage.Store(version, version.QuestionnaireId);
         }
 
-        public QuestionnaireCompilationVersion GetById(int id)
+        public QuestionnaireCompilationVersion GetById(Guid id)
         {
             return this.questionnaireCompilationVersionStorage.GetById(id);
         }

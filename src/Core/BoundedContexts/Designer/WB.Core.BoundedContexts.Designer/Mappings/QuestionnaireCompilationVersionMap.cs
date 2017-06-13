@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
             });
 
             this.Property(x => x.Version);
+            this.Property(x => x.Description);
         }
     }
 }

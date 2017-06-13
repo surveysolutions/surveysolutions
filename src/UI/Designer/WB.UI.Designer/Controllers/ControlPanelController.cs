@@ -73,7 +73,7 @@ namespace WB.UI.Designer.Controllers
             return this.View("CompilationVersionsViews/AddCompilationVersion", model);
         }
 
-        public ActionResult EditCompilationVersion(int id)
+        public ActionResult EditCompilationVersion(Guid id)
         {
             var compilationVersion = this.questionnaireCompilationVersionService.GetById(id);
             return this.View("CompilationVersionsViews/EditCompilationVersion", new CompilationVersionModel

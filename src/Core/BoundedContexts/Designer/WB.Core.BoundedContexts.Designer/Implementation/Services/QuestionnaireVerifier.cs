@@ -10,6 +10,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
+using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
@@ -255,6 +256,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly ITranslationsService translationService;
         private readonly IQuestionnaireTranslator questionnaireTranslator;
         private readonly ITopologicalSorter<string> topologicalSorter;
+        private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
 
         private static readonly Regex VariableNameRegex = new Regex("^(?!.*[_]{2})[A-Za-z][_A-Za-z0-9]*(?<!_)$");
         private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w \-\(\)\\/]*$");
@@ -271,7 +273,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             IAttachmentService attachmentService,
             ITopologicalSorter<string> topologicalSorter, 
             ITranslationsService translationService, 
-            IQuestionnaireTranslator questionnaireTranslator)
+            IQuestionnaireTranslator questionnaireTranslator, 
+            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService)
         {
             this.expressionProcessor = expressionProcessor;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -285,6 +288,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.topologicalSorter = topologicalSorter;
             this.translationService = translationService;
             this.questionnaireTranslator = questionnaireTranslator;
+            this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
         }
 
         private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> AtomicVerifiers
@@ -547,7 +551,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             string resultAssembly;
 
-            var questionnaireVersionToCompileAssembly = Math.Max(20, this.engineVersionService.GetQuestionnaireContentVersion(questionnaire));
+
+            var questionnaireVersionToCompileAssembly =
+                this.questionnaireCompilationVersionService.GetById(questionnaire.PublicKey)?.Version 
+                ?? Math.Max(20, this.engineVersionService.GetQuestionnaireContentVersion(questionnaire));
 
             return this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
                 questionnaire, questionnaireVersionToCompileAssembly,
