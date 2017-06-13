@@ -172,6 +172,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Discard.
+        /// </summary>
+        public static string Dashboard_Discard {
+            get {
+                return ResourceManager.GetString("Dashboard_Discard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to № {0}.
         /// </summary>
         public static string Dashboard_InterviewCard_Title {
@@ -224,6 +233,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Dashboard_NoNewItemsLinkText {
             get {
                 return ResourceManager.GetString("Dashboard_NoNewItemsLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open.
+        /// </summary>
+        public static string Dashboard_Open {
+            get {
+                return ResourceManager.GetString("Dashboard_Open", resourceCulture);
             }
         }
         
