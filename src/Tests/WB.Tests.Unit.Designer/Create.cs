@@ -1233,7 +1233,7 @@ namespace WB.Tests.Unit.Designer
                 topologicalSorter ?? Create.TopologicalSorter<string>(),
                 Mock.Of<ITranslationsService>(),
                 questionnaireTranslator ?? Mock.Of<IQuestionnaireTranslator>(),
-                Substitute.For<IQuestionnaireCompilationVersionService>());
+                Mock.Of<IQuestionnaireCompilationVersionService>());
         }
 
         public static IQuestionTypeToCSharpTypeMapper QuestionTypeToCSharpTypeMapper()
