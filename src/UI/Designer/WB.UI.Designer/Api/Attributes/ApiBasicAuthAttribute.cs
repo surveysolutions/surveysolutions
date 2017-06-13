@@ -90,7 +90,7 @@ namespace WB.UI.Designer.Api.Attributes
                         var clientIpAddress = ipAddressProvider.GetClientIpAddress();
                         if (!this.allowedAddressService.IsAllowedAddress(clientIpAddress))
                         {
-                            this.ThrowUnathorizedException(actionContext, ErrorMessages.UserNeedToContactSupport);
+                            this.ThrowForbiddenException(actionContext, ErrorMessages.UserNeedToContactSupport);
                             return;
                         }
                     }
@@ -137,6 +137,13 @@ namespace WB.UI.Designer.Api.Attributes
         {
             var host = actionContext.Request.RequestUri.DnsSafeHost;
             actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = errorMessage };
+            actionContext.Response.Headers.Add("WWW-Authenticate", $"Basic realm=\"{host}\"");
+        }
+
+        private void ThrowForbiddenException(HttpActionContext actionContext, string errorMessage)
+        {
+            var host = actionContext.Request.RequestUri.DnsSafeHost;
+            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Forbidden) { ReasonPhrase = errorMessage };
             actionContext.Response.Headers.Add("WWW-Authenticate", $"Basic realm=\"{host}\"");
         }
 

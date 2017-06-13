@@ -152,6 +152,10 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     this.ModelState.AddModelError("InvalidCredentials", string.Empty);
                 }
+                if (ex.StatusCode == HttpStatusCode.Forbidden)
+                {
+                    this.ModelState.AddModelError("AccessForbidden", Resources.LoginToDesigner.AccessForbidden);
+                }
                 else
                 {
                     this.Logger.Warn("Error communicating to designer", ex);
