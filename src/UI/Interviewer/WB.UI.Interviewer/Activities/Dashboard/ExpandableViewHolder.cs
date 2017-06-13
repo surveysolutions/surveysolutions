@@ -10,10 +10,13 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
         public View DetailsView { get; }
 
+        public View ExpandHandle { get; }
         public ExpandableViewHolder(View itemView, IMvxAndroidBindingContext context) : base(itemView, context)
+
         {
             this.DetailsView = itemView.FindViewById<View>(Resource.Id.dashboardItemDetails);
             this.DashboardItem = itemView.FindViewById<View>(Resource.Id.dashboardItem);
+            this.ExpandHandle = itemView.FindViewById<View>(Resource.Id.expandHandle);
         }
     }
 }
