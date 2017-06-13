@@ -4,23 +4,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Platform.Core;
 using MvvmCross.Core.ViewModels;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class SingleOptionLinkedToListQuestionViewModel : MvxNotifyPropertyChanged, 
+    public class SingleOptionLinkedToListQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
         ILiteEventHandler<AnswersRemoved>,
         ILiteEventHandler<TextListQuestionAnswered>,
@@ -73,7 +70,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public CovariantObservableCollection<SingleOptionQuestionOptionViewModel> Options
         {
             get { return this.options; }
-            private set { this.options = value; this.RaisePropertyChanged(() => this.HasOptions);}
+            private set
+            {
+                this.options = value;
+                this.RaisePropertyChanged(() => this.HasOptions);
+            }
         }
 
         public bool HasOptions => this.Options.Any();
@@ -94,7 +95,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.InstructionViewModel.Init(interviewId, questionIdentity);
 
             this.interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, interview.Language);
+            var questionnaire =
+                this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, interview.Language);
 
             this.Identity = questionIdentity;
             this.interviewId = interview.Id;
@@ -160,7 +162,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.Identity.Id,
                 this.Identity.RosterVector,
                 DateTime.UtcNow,
-                Convert.ToInt32(selectedOption.Value));
+                selectedOption.Value);
 
             try
             {
@@ -242,16 +244,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             get
             {
                 var result = new CompositeCollection<ICompositeEntity>();
-                this.optionsTopBorderViewModel = new OptionBorderViewModel<SingleOptionQuestionAnswered>(this.questionState, true)
-                {
-                    HasOptions = HasOptions
-                };
+                this.optionsTopBorderViewModel =
+                    new OptionBorderViewModel<SingleOptionQuestionAnswered>(this.questionState, true)
+                    {
+                        HasOptions = HasOptions
+                    };
                 result.Add(this.optionsTopBorderViewModel);
                 result.AddCollection(this.Options);
-                this.optionsBottomBorderViewModel = new OptionBorderViewModel<SingleOptionQuestionAnswered>(this.questionState, false)
-                {
-                    HasOptions = HasOptions
-                };
+                this.optionsBottomBorderViewModel =
+                    new OptionBorderViewModel<SingleOptionQuestionAnswered>(this.questionState, false)
+                    {
+                        HasOptions = HasOptions
+                    };
                 result.Add(this.optionsBottomBorderViewModel);
                 return result;
             }
@@ -272,7 +276,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void InsertOrUpdateOptions(List<TextListAnswerRow> textListAnswerRows)
         {
-            var linkedQuestionAnswer = interview.GetSingleOptionLinkedToListQuestion(this.Identity).GetAnswer()?.SelectedValue;
+            var linkedQuestionAnswer = interview.GetSingleOptionLinkedToListQuestion(this.Identity).GetAnswer()
+                ?.SelectedValue;
 
             foreach (var textListAnswerRow in textListAnswerRows)
             {
@@ -313,7 +318,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var listQuestion = interview.FindQuestionInQuestionBranch(this.linkedToQuestionId, this.Identity);
 
-            if ((listQuestion == null) || listQuestion.IsDisabled() || listQuestion.AsTextList?.GetAnswer()?.Rows == null)
+            if ((listQuestion == null) || listQuestion.IsDisabled() ||
+                listQuestion.AsTextList?.GetAnswer()?.Rows == null)
                 return new List<TextListAnswerRow>();
 
             return new List<TextListAnswerRow>(listQuestion.AsTextList.GetAnswer().Rows);
@@ -321,11 +327,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private SingleOptionQuestionOptionViewModel CreateOptionViewModel(TextListAnswerRow optionValue)
         {
-            var option = new SingleOptionQuestionOptionViewModel()
+            var option = new SingleOptionQuestionOptionViewModel
             {
                 Enablement = this.questionState.Enablement,
                 Title = optionValue.Text,
-                Value = Convert.ToInt32(optionValue.Value),
+                Value = optionValue.Value,
                 QuestionState = this.questionState
             };
 
