@@ -227,7 +227,10 @@
                 </div>
                 <div class="col-sm-9 col-xs-10 prefilled-data-info info-block">
                     <ol class="list-unstyled">
-                        <li>@Pages.Users_Interviewers_Instruction1</li>
+                        @if (!authorizedUser.IsSupervisor && !authorizedUser.IsObserving)
+                        {
+                            <li>@Pages.Users_Interviewers_Instruction1</li>
+                        }
                         <li>@Pages.Users_Interviewers_Instruction2</li>
                     </ol>
                 </div>
