@@ -89,16 +89,6 @@
     <item name="android:textColor">@color/recordedAnswerText</item>
   </style>
   
-  <style name="Dashboard_InterviewItem_RemoveInterviewButton" parent="AppTheme">
-    <item name="android:layout_width">@dimen/Theme_Button_min_height</item>
-    <item name="android:layout_height">@dimen/Theme_Button_min_height</item>
-    <item name="android:textColor">@color/dashboard_interview_title</item>
-    <item name="android:background">@drawable/dashboard_remove_icon</item>
-    <item name="android:textSize">@dimen/textsize_20</item>
-    <item name="android:gravity">center|top</item>
-    <item name="android:textColor">@color/dashboard_questionnairelist_empty_text</item>
-  </style>
-
   <style name="Dashboard_InterviewItem_PrefilledQuestions">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
@@ -151,21 +141,32 @@
     <item name="android:layout_weight">1</item>
     <item name="android:layout_gravity">center_vertical</item>
     <item name="android:paddingLeft">@dimen/Dashboard_InterviewItem_Comment_lines_margin</item>
-    <item name="android:paddingTop">@dimen/button_shadow_margin</item>
     <item name="android:singleLine">true</item>
   </style>
 
-  <style name="Dashboard_InterviewItem_CreateButton" parent="AppTheme">
+  <style name="Dashboard_InterviewItem_CreateButton">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:background">@drawable/default_input_button</item>
     <item name="android:paddingLeft">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
     <item name="android:paddingRight">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
-    <item name="android:textStyle">bold</item>
     <item name="android:textAllCaps">true</item>
     <item name="android:letterSpacing">0.1</item>
     <item name="android:layout_marginTop">@dimen/Dashboard_InterviewItem_CreateButton_marginTop</item>
-    <item name="android:layout_marginBottom">@dimen/Dashboard_InterviewItem_CreateButton_marginBottom</item>
+    <item name="android:layout_marginBottom">@dimen/Dashboard_InterviewItem_CreateButton_marginTop</item>
+  </style>
+  
+  <style name="Dashboard_InterviewItem_RemoveInterviewButton">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textColor">@color/dashboard_interview_title</item>
+    <item name="android:layout_gravity">center_vertical</item>
+    <item name="android:padding">@dimen/Interview_Group_button_padding</item>
+    <item name="android:paddingLeft">@dimen/zero</item>
+    <item name="android:layout_marginLeft">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:letterSpacing">0.1</item>
+    <item name="android:background">?attr/selectableItemBackground</item>
   </style>
 
   <style name="Dashboard_Tab_Description" parent="AppTheme">
