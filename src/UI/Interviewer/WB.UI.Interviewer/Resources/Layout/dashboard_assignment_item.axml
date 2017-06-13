@@ -43,6 +43,7 @@
 
       <ImageView style="@style/Dashboard_ExpandHandle"
                 android:id="@+id/expandHandle"
+                local:srcCompat="@drawable/dashboard_expand_handle"
                 local:MvxBind="Visible HasExpandedView;" />
       
       <LinearLayout  android:layout_width="match_parent"

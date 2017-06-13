@@ -71,7 +71,6 @@
   <style name="Dashboard_ExpandHandle">
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_width">wrap_content</item>
-    <item name="android:src">@drawable/dashboard_expand_handle</item>
   </style>
   
   <style name="Dashboard_InterviewItem_Title">
