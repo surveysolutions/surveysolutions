@@ -5,14 +5,14 @@ using MvvmCross.Binding.Droid.BindingContext;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 
-namespace WB.UI.Interviewer.Activities
+namespace WB.UI.Interviewer.Activities.Dashboard
 {
-    public class DashboardRecyclerViewAdapter : MvxRecyclerAdapter
+    public class RecyclerViewAdapter : MvxRecyclerAdapter
     {
         private readonly RecyclerView recyclerView;
         private readonly IMvxAndroidBindingContext bindingContext;
 
-        public DashboardRecyclerViewAdapter(RecyclerView recyclerView, IMvxAndroidBindingContext bindingContext)
+        public RecyclerViewAdapter(RecyclerView recyclerView, IMvxAndroidBindingContext bindingContext)
         {
             this.recyclerView = recyclerView;
             this.bindingContext = bindingContext;
@@ -21,7 +21,7 @@ namespace WB.UI.Interviewer.Activities
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
             var itemBindingContext = new MvxAndroidBindingContext(parent.Context, this.bindingContext.LayoutInflaterHolder);
-            var vh = new DashboardExpandableViewHolder(this.InflateViewForHolder(parent, viewType, itemBindingContext), itemBindingContext)
+            var vh = new ExpandableViewHolder(this.InflateViewForHolder(parent, viewType, itemBindingContext), itemBindingContext)
             {
                 Click = this.ItemClick,
                 LongClick = this.ItemLongClick
@@ -34,11 +34,11 @@ namespace WB.UI.Interviewer.Activities
         {
             base.OnBindViewHolder(holder, position);
 
-            var viewModel = (IDashboardItem)GetItem(position);
+            var viewModel = (IDashboardItem)this.GetItem(position);
 
             if (viewModel.HasExpandedView)
             {
-                var viewHolder = (DashboardExpandableViewHolder)holder;
+                var viewHolder = (ExpandableViewHolder)holder;
 
                 viewHolder.DashboardItem.Click += (sender, args) =>
                 {

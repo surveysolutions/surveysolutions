@@ -13,8 +13,9 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.UI.Interviewer.Services;
 using WB.UI.Shared.Enumerator.Activities;
+using MvxFragmentStatePagerAdapter = WB.UI.Interviewer.CustomControls.MvxFragmentStatePagerAdapter;
 
-namespace WB.UI.Interviewer.Activities
+namespace WB.UI.Interviewer.Activities.Dashboard
 {
     [Activity(Label = "", 
         Theme = "@style/GrayAppTheme", 
@@ -27,6 +28,13 @@ namespace WB.UI.Interviewer.Activities
         public SyncServiceBinder Binder { get; set; }
 
         private MvxFragmentStatePagerAdapter fragmentStatePagerAdapter;
+        private ViewPager viewPager;
+
+        protected override void OnSaveInstanceState(Bundle outState)
+        {
+            this.fragmentStatePagerAdapter.RemoveAllFragments();
+            base.OnSaveInstanceState(outState);
+        }
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -34,39 +42,34 @@ namespace WB.UI.Interviewer.Activities
 
             this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
 
-            var viewPager = this.FindViewById<ViewPager>(Resource.Id.pager);
+            viewPager = this.FindViewById<ViewPager>(Resource.Id.pager);
 
-            fragmentStatePagerAdapter = new MvxFragmentStatePagerAdapter(this, viewPager, this.SupportFragmentManager);
-            viewPager.Adapter = fragmentStatePagerAdapter;
-            viewPager.PageSelected += (s, e) =>
-            {
-                var currentFragment = (MvxFragment) fragmentStatePagerAdapter.GetItem(e.Position);
+            this.fragmentStatePagerAdapter = new MvxFragmentStatePagerAdapter(this, viewPager, this.SupportFragmentManager);
+            viewPager.Adapter = this.fragmentStatePagerAdapter;
+            viewPager.PageSelected += ViewPager_PageSelected;
 
-                ViewModel.TypeOfInterviews = ((InterviewTabPanel) currentFragment.ViewModel).InterviewStatus;
-            };
+            this.ViewModel.StartedInterviews.PropertyChanged += this.StartedInterviews_PropertyChanged;
+            this.ViewModel.RejectedInterviews.PropertyChanged += this.RejectedInterviews_PropertyChanged;
+            this.ViewModel.CompletedInterviews.PropertyChanged += this.CompletedInterviews_PropertyChanged;
 
-            ViewModel.StartedInterviews.PropertyChanged += StartedInterviews_PropertyChanged;
-            ViewModel.RejectedInterviews.PropertyChanged += RejectedInterviews_PropertyChanged;
-            ViewModel.CompletedInterviews.PropertyChanged += CompletedInterviews_PropertyChanged;
+            this.fragmentStatePagerAdapter.AddFragment(typeof(QuestionnairesFragment), this.ViewModel.CreateNew, nameof(InterviewTabPanel.Title));
 
-            fragmentStatePagerAdapter.AddFragment(typeof(DashboardQuestionnairesFragment), ViewModel.CreateNew, nameof(InterviewTabPanel.Title));
-
-            this.UpdateFragmentByViewModelPropertyChange<DashboardStartedInterviewsFragment>(ViewModel.StartedInterviews);
-            this.UpdateFragmentByViewModelPropertyChange<DashboardRejectednterviewsFragment>(ViewModel.RejectedInterviews);
-            this.UpdateFragmentByViewModelPropertyChange<DashboardCompletednterviewsFragment>(ViewModel.CompletedInterviews);
+            this.UpdateFragmentByViewModelPropertyChange<StartedInterviewsFragment>(this.ViewModel.StartedInterviews);
+            this.UpdateFragmentByViewModelPropertyChange<RejectedInterviewsFragment>(this.ViewModel.RejectedInterviews);
+            this.UpdateFragmentByViewModelPropertyChange<CompletedInterviewsFragment>(this.ViewModel.CompletedInterviews);
 
             var tabLayout = this.FindViewById<TabLayout>(Resource.Id.tabs);
             tabLayout.SetupWithViewPager(viewPager);
         }
 
         private void CompletedInterviews_PropertyChanged(object sender, PropertyChangedEventArgs e)
-            => this.UpdateFragmentByViewModelPropertyChange<DashboardCompletednterviewsFragment>((CompletedInterviewsViewModel) sender, e.PropertyName);
+            => this.UpdateFragmentByViewModelPropertyChange<CompletedInterviewsFragment>((CompletedInterviewsViewModel) sender, e.PropertyName);
 
         private void RejectedInterviews_PropertyChanged(object sender, PropertyChangedEventArgs e)
-            => this.UpdateFragmentByViewModelPropertyChange<DashboardRejectednterviewsFragment>((RejectedInterviewsViewModel) sender, e.PropertyName);
+            => this.UpdateFragmentByViewModelPropertyChange<RejectedInterviewsFragment>((RejectedInterviewsViewModel) sender, e.PropertyName);
 
         private void StartedInterviews_PropertyChanged(object sender, PropertyChangedEventArgs e)
-            => this.UpdateFragmentByViewModelPropertyChange<DashboardStartedInterviewsFragment>((StartedInterviewsViewModel) sender, e.PropertyName);
+            => this.UpdateFragmentByViewModelPropertyChange<StartedInterviewsFragment>((StartedInterviewsViewModel) sender, e.PropertyName);
 
         private void UpdateFragmentByViewModelPropertyChange<TFragmentType>(ListViewModel<InterviewDashboardItemViewModel> listViewModel,
             string propertyName = nameof(ListViewModel<InterviewDashboardItemViewModel>.Items))
@@ -88,13 +91,32 @@ namespace WB.UI.Interviewer.Activities
         protected override void OnStart()
         {
             base.OnStart();
-            BindService(new Intent(this, typeof(SyncBgService)), new SyncServiceConnection(this), Bind.AutoCreate);
+            this.BindService(new Intent(this, typeof(SyncBgService)), new SyncServiceConnection(this), Bind.AutoCreate);
         }
+
+        private void ViewPager_PageSelected(object sender, ViewPager.PageSelectedEventArgs e)
+        {
+            var currentFragment = (MvxFragment)this.fragmentStatePagerAdapter.GetItem(e.Position);
+
+            this.ViewModel.TypeOfInterviews = ((InterviewTabPanel)currentFragment.ViewModel).InterviewStatus;
+        }
+
 
         protected override void OnViewModelSet()
         {
             base.OnViewModelSet();
             this.ViewModel.Synchronization.SyncBgService = this;
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            this.viewPager.PageSelected -= this.ViewPager_PageSelected;
+
+            this.ViewModel.StartedInterviews.PropertyChanged -= this.StartedInterviews_PropertyChanged;
+            this.ViewModel.RejectedInterviews.PropertyChanged -= this.RejectedInterviews_PropertyChanged;
+            this.ViewModel.CompletedInterviews.PropertyChanged -= this.CompletedInterviews_PropertyChanged;
         }
 
         public override void OnBackPressed() {}
