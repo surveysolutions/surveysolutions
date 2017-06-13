@@ -10,9 +10,9 @@
   
 
   <LinearLayout style="@style/Interview_Readonly_Question_Layout">
+    <ImageView style="@style/Interview_Readonly_Question_Icon"
+               local:srcCompat="@drawable/lock_icon"/>
 
-    <ImageView style="@style/Interview_Readonly_Question_Icon" />   
-    
     <TextView
       style="@style/Interview_Readonly_Question_Answer"
       local:MvxBind="Text Answer;" />
