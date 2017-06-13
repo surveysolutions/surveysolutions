@@ -607,12 +607,6 @@
     <AndroidResource Include="Resources\Drawable\dashboard_item_pressed.xml" />
     <AndroidResource Include="Resources\Drawable\dashboard_item_default.xml" />
     <AndroidResource Include="Resources\Drawable\location_icon.png" />
-    <AndroidResource Include="Resources\Drawable\dashboard_location_default.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Drawable\dashboard_location_bg.xml" />
-    <AndroidResource Include="Resources\Drawable\dashboard_location_pressed.xml" />
-    <AndroidResource Include="Resources\drawable-v21\dashboard_location_bg.xml" />
     <AndroidResource Include="Resources\Drawable\dashboard_remove_icon_pressed.xml">
       <SubType>Designer</SubType>
     </AndroidResource>

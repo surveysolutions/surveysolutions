@@ -124,7 +124,6 @@
   <style name="Interview_Readonly_Question_Icon">
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_width">wrap_content</item>
-    <item name="android:src">@drawable/lock_icon</item>
     <item name="android:layout_marginTop">@dimen/Interview_Readonly_Question_Icon_margin_top</item>
   </style>
   
