@@ -36,6 +36,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public double? LocationLatitude { get; set; }
         public double? LocationLongitude { get; set; }
 
+        public DateTime ReceivedDateUtc { get; set; }
+
         public class IdentifyingAnswer
         {
             public string Answer { get; set; }
