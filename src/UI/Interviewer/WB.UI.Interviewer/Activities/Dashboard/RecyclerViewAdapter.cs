@@ -50,10 +50,12 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                     if (shouldExpand)
                     {
                         viewHolder.DetailsView.Visibility = ViewStates.Visible;
+                        viewHolder.ExpandHandle.Visibility = ViewStates.Gone;
                     }
                     else
                     {
                         viewHolder.DetailsView.Visibility = ViewStates.Gone;
+                        viewHolder.ExpandHandle.Visibility = ViewStates.Visible;
                     }
 
                     TransitionManager.BeginDelayedTransition(this.recyclerView, transition);

@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
             if (!string.IsNullOrEmpty(interview.Assignment))
             {
-                this.Title = string.Format(InterviewerUIResources.Dashboard_CardTitle, interview.Assignment);
+                this.Title = string.Format(InterviewerUIResources.Dashboard_InterviewCard_Title, interview.Assignment);
             }
         }
 

@@ -509,7 +509,7 @@
     <AndroidResource Include="Resources\Layout\fragment_dashboard_tab.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\dashboard_assignment_questionnare_item.axml">
+    <AndroidResource Include="Resources\Layout\dashboard_assignment_item.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
@@ -642,6 +642,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\values-large\dimensions.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Drawable\dashboard_expand_handle.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
