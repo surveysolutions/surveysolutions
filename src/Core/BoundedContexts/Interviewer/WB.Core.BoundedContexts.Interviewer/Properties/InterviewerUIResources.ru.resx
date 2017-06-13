@@ -671,4 +671,10 @@
   <data name="Dashboard_ShowLocation">
     <value>Показать на карте</value>
   </data>
+  <data name="Dashboard_Open">
+    <value>Открыть</value>
+  </data>
+  <data name="Dashboard_Discard">
+    <value>Удалить</value>
+  </data>
 </root>

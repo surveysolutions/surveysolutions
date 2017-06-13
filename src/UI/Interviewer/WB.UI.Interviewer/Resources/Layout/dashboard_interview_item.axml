@@ -29,10 +29,6 @@
                                  Visible HasComment;
                                  TextColor InterviewStatusToColor(Status);" />
         </LinearLayout>
-        <TextView style="@style/Dashboard_InterviewItem_RemoveInterviewButton"
-              android:text="\u2573"
-              local:MvxBind="Click RemoveInterviewCommand;
-                             Visible IsSupportedRemove;" />
       </LinearLayout>
 
       <Space android:layout_width="match_parent"
@@ -44,6 +40,10 @@
           local:MvxBind="ItemsSource PrefilledQuestions;"
           local:MvxItemTemplate="@layout/dashboard_item_prefilled_question" />
 
+      <ImageView style="@style/Dashboard_ExpandHandle"
+                 android:id="@+id/expandHandle"
+                 local:MvxBind="Visible HasExpandedView;" />
+      
       <LinearLayout android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/dashboardItemDetails"
@@ -57,14 +57,19 @@
                       android:layout_height="wrap_content"
                       android:orientation="horizontal">
           <Button style="@style/Dashboard_InterviewItem_CreateButton"
-                  local:MvxBind="Text Localization('Dashboard_Start');
+                  local:MvxBind="Text Localization('Dashboard_Open');
                        Click LoadDashboardItemCommand;" />
+          <TextView style="@style/Dashboard_InterviewItem_RemoveInterviewButton"
+                    android:text="Discard"
+                    local:MvxBind="Click RemoveInterviewCommand;
+                             Visible IsSupportedRemove;" />
           <View android:layout_width="0dp"
                 android:layout_height="match_parent"
                     android:layout_weight="1"/>
-          <ImageButton style="@style/Dashboard_Location"
-                       local:MvxBind="Visible HasGpsLocation;
-                                    Click NavigateToGpsLocationCommand;" />
+          <TextView style="@style/Dashboard_Location"
+                    local:MvxBind="Visible HasGpsLocation;
+                                      Text Localization('Dashboard_ShowLocation');
+                                      Click NavigateToGpsLocationCommand;" />
         </LinearLayout>
       </LinearLayout>
     </LinearLayout>

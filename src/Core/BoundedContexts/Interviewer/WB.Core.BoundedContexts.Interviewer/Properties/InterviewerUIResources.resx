@@ -666,4 +666,10 @@ your next synchronization</value>
   <data name="Dashboard_ShowLocation">
     <value>Show location</value>
   </data>
+  <data name="Dashboard_Open">
+    <value>Open</value>
+  </data>
+  <data name="Dashboard_Discard">
+    <value>Discard</value>
+  </data>
 </root>
