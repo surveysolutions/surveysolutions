@@ -9,6 +9,6 @@ namespace WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersion
         void Update(QuestionnaireCompilationVersion version);
         void Remove(Guid questionnaireId);
         void Add(QuestionnaireCompilationVersion version);
-        QuestionnaireCompilationVersion GetById(int id);
+        QuestionnaireCompilationVersion GetById(Guid questionnaireId);
     }
 }

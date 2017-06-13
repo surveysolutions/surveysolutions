@@ -7,6 +7,7 @@ using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
@@ -27,6 +28,7 @@ namespace WB.UI.Designer.Api.Tester
         private readonly IQuestionnaireListViewFactory viewFactory;
         private readonly IDesignerEngineVersionService engineVersionService;
         private readonly IExpressionsPlayOrderProvider expressionsPlayOrderProvider;
+        private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
 
         public QuestionnairesController(IMembershipUserService userHelper,
             IQuestionnaireViewFactory questionnaireViewFactory,
@@ -34,7 +36,8 @@ namespace WB.UI.Designer.Api.Tester
             IExpressionProcessorGenerator expressionProcessorGenerator,
             IQuestionnaireListViewFactory viewFactory, 
             IDesignerEngineVersionService engineVersionService, 
-            IExpressionsPlayOrderProvider expressionsPlayOrderProvider)
+            IExpressionsPlayOrderProvider expressionsPlayOrderProvider, 
+            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService)
         {
             this.userHelper = userHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
@@ -43,6 +46,7 @@ namespace WB.UI.Designer.Api.Tester
             this.viewFactory = viewFactory;
             this.engineVersionService = engineVersionService;
             this.expressionsPlayOrderProvider = expressionsPlayOrderProvider;
+            this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
         }
 
         [HttpGet]
@@ -68,15 +72,16 @@ namespace WB.UI.Designer.Api.Tester
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
             }
 
-            // 20 - to use expression storage
-            var questionnaireContentVersion = Math.Max(20, this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source));
+            var specifiedCompilationVersion = this.questionnaireCompilationVersionService.GetById(id)?.Version;
+
+            var versionToCompileAssembly = specifiedCompilationVersion ?? Math.Max(20, this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source));
 
             string resultAssembly;
             try
             {
                 GenerationResult generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
                     questionnaireView.Source,
-                    questionnaireContentVersion, 
+                    versionToCompileAssembly, 
                     out resultAssembly);
                 if(!generationResult.Success)
                     throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
