@@ -81,7 +81,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             }
 
             this.Comment = string.Format(InterviewerUIResources.DashboardItem_AssignmentCreatedComment, interviewsByAssignmentCount);
+            this.ReceivedDate = assignment.ReceivedDateUtc.ToLocalTime().ToString("MMM d");
+            this.ReceivedTime = assignment.ReceivedDateUtc.ToLocalTime().ToString("HH:mm");
         }
+
+        public string ReceivedTime { get; set; }
+
+        public string ReceivedDate { get; private set; }
 
         private AssignmentDocument assignment;
 

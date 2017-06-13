@@ -295,6 +295,13 @@
     <item name="android:layout_marginTop">6dp</item>
     <item name="android:layout_marginBottom">6dp</item>
   </style>
+
+  <style name="Dashboard_ReceiveDate">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textColor">@color/group_not_started</item>
+    <item name="android:paddingRight">@dimen/Interview_Group_button_padding</item>
+  </style>
 </resources>
 
 
