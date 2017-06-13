@@ -9,6 +9,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -36,6 +37,8 @@ namespace WB.UI.Designer.Api.Headquarters
         private readonly ISerializer serializer;
         private readonly IStringCompressor zipUtils;
         private readonly IExpressionsPlayOrderProvider expressionsPlayOrderProvider;
+        private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
+
 
         public HQQuestionnairesController(IMembershipUserService userHelper,
             IQuestionnaireViewFactory questionnaireViewFactory,
@@ -46,7 +49,8 @@ namespace WB.UI.Designer.Api.Headquarters
             ISerializer serializer,
             IStringCompressor zipUtils, 
             IPlainStorageAccessor<QuestionnaireListViewItem> listItemStorage, 
-            IExpressionsPlayOrderProvider expressionsPlayOrderProvider)
+            IExpressionsPlayOrderProvider expressionsPlayOrderProvider, 
+            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService)
         {
             this.userHelper = userHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
@@ -58,6 +62,7 @@ namespace WB.UI.Designer.Api.Headquarters
             this.zipUtils = zipUtils;
             this.listItemStorage = listItemStorage;
             this.expressionsPlayOrderProvider = expressionsPlayOrderProvider;
+            this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
         }
 
         [HttpGet]
@@ -105,11 +110,19 @@ namespace WB.UI.Designer.Api.Headquarters
 
             this.CheckInvariantsAndThrowIfInvalid(clientQuestionnaireContentVersion, questionnaireView);
 
-            var questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source);
+            var specifiedCompilationVersion = this.questionnaireCompilationVersionService.GetById(id)?.Version;
+            int versionToCompileAssembly;
 
-            var versionToCompileAssembly = clientQuestionnaireContentVersion > 19 
-                ? Math.Max(20, questionnaireContentVersion)
-                : Math.Max(questionnaireContentVersion, minSupportedQuestionnaireVersion.GetValueOrDefault());
+            if (specifiedCompilationVersion.HasValue)
+                versionToCompileAssembly = specifiedCompilationVersion.Value;
+            else
+            {
+                var questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source);
+
+                versionToCompileAssembly = clientQuestionnaireContentVersion > 19
+                    ? Math.Max(20, questionnaireContentVersion)
+                    : Math.Max(questionnaireContentVersion, minSupportedQuestionnaireVersion.GetValueOrDefault());
+            }
 
             var resultAssembly = this.GetQuestionnaireAssemblyOrThrow(questionnaireView, versionToCompileAssembly);
 

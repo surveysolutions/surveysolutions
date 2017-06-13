@@ -22,7 +22,7 @@
     <tbody>
         @foreach (var compilationVersion in Model)
         {
-            RouteValueDictionary routeValues = new RouteValueDictionary {{"id", compilationVersion.QuestionnaireId}};
+            RouteValueDictionary routeValues = new RouteValueDictionary {{"id", compilationVersion.QuestionnaireId.FormatGuid()}};
             <tr>
                 <td>
                     @Html.ActionLink(compilationVersion.QuestionnaireId.FormatGuid(), "Details", "Questionnaire", routeValues, null)
