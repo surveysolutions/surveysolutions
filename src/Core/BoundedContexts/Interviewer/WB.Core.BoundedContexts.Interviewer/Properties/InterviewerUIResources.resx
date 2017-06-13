@@ -148,7 +148,7 @@
     <value>{0} (v{1})</value>
   </data>
   <data name="DashboardItem_AssignmentLeftComment" xml:space="preserve">
-    <value>{0} interview(s) left to create</value>
+    <value>{0} interview(s)</value>
   </data>
   <data name="DashboardItem_AssignmentCreatedComment" xml:space="preserve">
     <value>Interviews created: {0}</value>
@@ -648,8 +648,22 @@ your next synchronization</value>
   <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
     <value>You can create new interviews using assignments</value>
   </data>
-  <data name="Dashboard_CardTitle" xml:space="preserve">
+  <data name="Dashboard_Assignment_CardTitle" xml:space="preserve">
     <value>№ {0}</value>
     <comment>{0} - Assignment id</comment>
+  </data>
+  <data name="Dashboard_AssignmentCard_TitleCountdown">
+    <value>({0} interview's)</value>
+    <comment>{0} - number of interviews to be created</comment>
+  </data>
+  <data name="Dashboard_AssignmentCard_TitleCountdown_Unlimited">
+    <value>(Unlimited)</value>
+  </data>
+  <data name="Dashboard_InterviewCard_Title">
+    <value>№ {0}</value>
+    <comment>{0} - Assignment id</comment>
+  </data>
+  <data name="Dashboard_ShowLocation">
+    <value>Show location</value>
   </data>
 </root>

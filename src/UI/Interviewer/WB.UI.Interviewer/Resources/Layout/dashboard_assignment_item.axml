@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    style="@style/Dashboard_InterviewListItem"
+    android:id="@+id/dashboardItem">
+  <LinearLayout style="@style/Dashboard_InterviewItem_Layout" >
+    <LinearLayout style="@style/Dashboard_InterviewItem_StatusPanel" />
+    <LinearLayout style="@style/Dashboard_InterviewItem_InformationBlock">
+
+      <TextView style="@style/Dashboard_InterviewItem_Title"
+                local:MvxBind="Text Title;" />
+
+      <TextView style="@style/Dashboard_InterviewItem_SubTitle"
+                local:MvxBind="Text QuestionnaireName;" />
+
+      <Space android:layout_width="match_parent" 
+             android:layout_height="@dimen/Dashboard_InterviewItem_PrefilledQuestions_marginTop"
+             local:MvxBind="Visible HasExpandedView"></Space>
+
+      <MvxLinearLayout style="@style/Dashboard_InterviewItem_PrefilledQuestions"
+                       android:orientation="vertical"
+                       local:MvxBind="ItemsSource PrefilledQuestions;"
+                       local:MvxItemTemplate="@layout/dashboard_item_prefilled_question" />
+
+      <ImageView style="@style/Dashboard_ExpandHandle"
+                android:id="@+id/expandHandle"
+                local:MvxBind="Visible HasExpandedView;" />
+      
+      <LinearLayout  android:layout_width="match_parent"
+                     android:layout_height="match_parent"
+                     android:id="@+id/dashboardItemDetails"
+                     android:orientation="vertical"
+                     local:MvxBind="Visible Not(HasExpandedView)">
+        <MvxLinearLayout style="@style/Dashboard_InterviewItem_PrefilledQuestions"
+                         android:orientation="vertical"
+                         local:MvxBind="ItemsSource DetailedPrefilledQuestions;"
+                         local:MvxItemTemplate="@layout/dashboard_item_prefilled_question" />
+        
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+          <Button style="@style/Dashboard_InterviewItem_CreateButton"
+                  local:MvxBind="Text Localization('Dashboard_Start');
+                       Enabled AllowToCreateNewInterview;
+                       Click CreateNewInterviewCommand;" />
+          
+          <TextView style="@style/Dashboard_Assignment_CompletionState"
+                    local:MvxBind="Text Comment;" />
+
+          <TextView style="@style/Dashboard_Location"
+                       local:MvxBind="Visible HasGpsLocation;
+                                      Text Localization('Dashboard_ShowLocation');
+                                      Click NavigateToGpsLocationCommand;" />
+        </LinearLayout>
+      </LinearLayout>
+
+    </LinearLayout>
+  </LinearLayout>
+</LinearLayout>

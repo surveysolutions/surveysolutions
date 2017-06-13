@@ -646,15 +646,29 @@
     <value>Вы можете создать новое интервью используя пустой опросник</value>
   </data>
   <data name="DashboardItem_AssignmentLeftComment" xml:space="preserve">
-    <value>осталось создать {0} интервью</value>
+    <value>{0} интервью</value>
     <comment>осталось создать {0} интервью</comment>
   </data>
   <data name="DashboardItem_AssignmentCreatedComment" xml:space="preserve">
     <value>Создано интервью: {0}</value>
     <comment>Создано интервью: {0}</comment>
   </data>
-  <data name="Dashboard_CardTitle" xml:space="preserve">
+  <data name="Dashboard_Assignment_CardTitle" xml:space="preserve">
     <value>№ {0}</value>
     <comment>{0} - Assignment id</comment>
+  </data>
+  <data name="Dashboard_AssignmentCard_TitleCountdown">
+    <value>({0} интервью)</value>
+    <comment>{0} - number of interviews to be created</comment>
+  </data>
+  <data name="Dashboard_AssignmentCard_TitleCountdown_Unlimited">
+    <value>(Не ограничено)</value>
+  </data>
+  <data name="Dashboard_InterviewCard_Title">
+    <value>№ {0}</value>
+    <comment>{0} - Assignment id</comment>
+  </data>
+  <data name="Dashboard_ShowLocation">
+    <value>Показать на карте</value>
   </data>
 </root>

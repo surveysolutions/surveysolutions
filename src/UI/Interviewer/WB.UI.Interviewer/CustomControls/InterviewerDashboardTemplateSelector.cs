@@ -11,7 +11,7 @@ namespace WB.UI.Interviewer.CustomControls
         {
             {typeof (CensusQuestionnaireDashboardItemViewModel), Resource.Layout.dashboard_census_questionnare_item },
             {typeof (InterviewDashboardItemViewModel), Resource.Layout.dashboard_interview_item },
-            {typeof (AssignmentDashboardItemViewModel), Resource.Layout.dashboard_assignment_questionnare_item },
+            {typeof (AssignmentDashboardItemViewModel), Resource.Layout.dashboard_assignment_item },
         };
 
         public int GetItemViewType(object forItemObject)

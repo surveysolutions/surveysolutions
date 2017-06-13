@@ -58,10 +58,20 @@
   </style>
 
   <style name="Dashboard_Location">
-    <item name="android:layout_width">@dimen/Theme_Button_min_height</item>
-    <item name="android:layout_height">@dimen/Theme_Button_min_height</item>
-    <item name="android:background">@drawable/dashboard_location_bg</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_gravity">center_vertical</item>
+    <item name="android:textColor">@color/btn_default</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:letterSpacing">0.1</item>
+    <item name="android:background">?attr/selectableItemBackground</item>
+    <item name="android:padding">@dimen/Interview_Group_button_padding</item>
+  </style>
+
+  <style name="Dashboard_ExpandHandle">
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:src">@drawable/dashboard_expand_handle</item>
   </style>
   
   <style name="Dashboard_InterviewItem_Title">
@@ -136,11 +146,13 @@
   
   <style name="Dashboard_Assignment_CompletionState" parent="Dashboard_InterviewItem_Comment">
     <item name="android:layout_width">@dimen/zero</item>
-    <item name="android:layout_height">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
     <item name="android:textColor">@color/dashboard_questionnairelist_empty_text</item>
     <item name="android:layout_weight">1</item>
-    <item name="android:gravity">center_vertical</item>
+    <item name="android:layout_gravity">center_vertical</item>
     <item name="android:paddingLeft">@dimen/Dashboard_InterviewItem_Comment_lines_margin</item>
+    <item name="android:paddingTop">@dimen/button_shadow_margin</item>
+    <item name="android:singleLine">true</item>
   </style>
 
   <style name="Dashboard_InterviewItem_CreateButton" parent="AppTheme">
@@ -151,6 +163,7 @@
     <item name="android:paddingRight">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
     <item name="android:textStyle">bold</item>
     <item name="android:textAllCaps">true</item>
+    <item name="android:letterSpacing">0.1</item>
     <item name="android:layout_marginTop">@dimen/Dashboard_InterviewItem_CreateButton_marginTop</item>
     <item name="android:layout_marginBottom">@dimen/Dashboard_InterviewItem_CreateButton_marginBottom</item>
   </style>

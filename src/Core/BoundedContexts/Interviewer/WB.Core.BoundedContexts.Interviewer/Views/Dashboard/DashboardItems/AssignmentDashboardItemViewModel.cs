@@ -66,29 +66,27 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.PrefilledQuestions = GetPrefilledQuestions(identifyingData.Take(3));
             this.DetailedPrefilledQuestions = GetPrefilledQuestions(identifyingData.Skip(3));
             this.GpsLocation = this.GetAssignmentLocation(assignment);
-            this.Title = string.Format(InterviewerUIResources.Dashboard_CardTitle, this.assignment.Id);
+
+            this.Title = string.Format(InterviewerUIResources.Dashboard_Assignment_CardTitle, this.assignment.Id) + " ";
+
+            var interviewsByAssignmentCount = this.interviewViewRepository.Count(interview => interview.Assignment == this.assignment.Id);
+            if (this.assignment.Quantity.HasValue)
+            {
+                var interviewsLeftByAssignmentCount = Math.Max(0, this.assignment.Quantity.Value - this.assignment.InterviewsCount - interviewsByAssignmentCount);
+                this.Title += InterviewerUIResources.Dashboard_AssignmentCard_TitleCountdown.FormatString(interviewsLeftByAssignmentCount);
+            }
+            else
+            {
+                this.Title += InterviewerUIResources.Dashboard_AssignmentCard_TitleCountdown_Unlimited;
+            }
+
+            this.Comment = string.Format(InterviewerUIResources.DashboardItem_AssignmentCreatedComment, interviewsByAssignmentCount);
         }
 
         private AssignmentDocument assignment;
 
         public string QuestionnaireName => string.Format(InterviewerUIResources.DashboardItem_Title, this.assignment.Title, this.questionnaireIdentity.Version);
-        public string Comment
-        {
-            get
-            {
-                var interviewsByAssignmentCount = this.interviewViewRepository.Count(interview => interview.Assignment == this.assignment.Id);
-
-                if (this.assignment.Quantity.HasValue)
-                {
-                    var interviewsLeftByAssignmentCount = this.assignment.Quantity.Value - this.assignment.InterviewsCount - interviewsByAssignmentCount;
-                    return InterviewerUIResources.DashboardItem_AssignmentLeftComment.FormatString(interviewsLeftByAssignmentCount);
-                }
-                else
-                {
-                    return InterviewerUIResources.DashboardItem_AssignmentCreatedComment.FormatString(interviewsByAssignmentCount);
-                }
-            }
-        }
+        public string Comment { get; private set; }
 
         public List<PrefilledQuestion> PrefilledQuestions { get; private set; }
         public List<PrefilledQuestion> DetailedPrefilledQuestions { get; private set; }
