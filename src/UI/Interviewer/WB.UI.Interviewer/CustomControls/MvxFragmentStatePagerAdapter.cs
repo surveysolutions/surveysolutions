@@ -44,7 +44,9 @@ namespace WB.UI.Interviewer.CustomControls
 
             var bundle = new Bundle();
             bundle.PutInt("number", position);
-            
+
+            if (this._fragments[position].CachedFragment != null) return this._fragments[position].CachedFragment;
+
             this._fragments[position].CachedFragment = (MvxFragment)Fragment.Instantiate(this._context,
                 this.FragmentJavaName(this._fragments[position].Type), bundle);
 
