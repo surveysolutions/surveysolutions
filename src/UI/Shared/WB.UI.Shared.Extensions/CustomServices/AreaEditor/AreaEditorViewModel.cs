@@ -19,8 +19,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
     {
         public event Action<AreaEditorResult> OnAreaEditCompleted;
 
-        private IMapService mapService;
-        private IUserInteractionService userInteractionService;
+        private readonly IMapService mapService;
+        private readonly IUserInteractionService userInteractionService;
 
         public AreaEditorViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
@@ -35,23 +35,28 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         public override void Load()
         {
             this.AvailableMaps = this.mapService.GetAvailableMaps();
-            this.MapsList = this.AvailableMaps.Keys.ToList();
+            this.MapsList = this.AvailableMaps.Select(x => x.MapName).ToList();
 
             if (this.AvailableMaps.Count == 0) return;
+            this.ReloadMap();
+        }
 
-            if (!string.IsNullOrEmpty(this.MapName) && this.AvailableMaps.ContainsKey(this.MapName))
+        private void ReloadMap()
+        {
+            if (!string.IsNullOrEmpty(this.MapName) && this.MapsList.Contains(this.MapName))
             {
                 this.SelectedMap = this.MapName;
             }
             else
             {
-                this.SelectedMap = this.AvailableMaps.FirstOrDefault().Key;
+                this.SelectedMap = this.MapsList.FirstOrDefault();
             }
         }
 
-        private Dictionary<string, string> AvailableMaps = new Dictionary<string, string>();
 
-        private List<string> mapsList;
+        private List<MapDescription> AvailableMaps = new List<MapDescription>();
+
+        private List<string> mapsList = new List<string>();
         public List<string> MapsList
         {
             get => this.mapsList;
@@ -69,10 +74,12 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             set
             {
                 this.RaiseAndSetIfChanged(ref this.selectedMap, value);
-                
-                if (this.AvailableMaps.ContainsKey(value))
+
+                var existingMap = this.AvailableMaps.FirstOrDefault(x => x.MapName == value);
+
+                if (existingMap != null)
                 {
-                    this.UpdateBaseMap(this.AvailableMaps[value]);
+                    this.UpdateBaseMap(existingMap.MapFullPath);
                 }
             }
         }
@@ -176,7 +183,9 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     await this.mapService.SyncMaps(this.cancellationTokenSource.Token);
 
                     this.AvailableMaps = this.mapService.GetAvailableMaps();
-                    this.MapsList = this.AvailableMaps.Keys.ToList();
+                    this.MapsList = this.AvailableMaps.Select(x => x.MapName).ToList();
+
+                    this.ReloadMap();
                 }
                 else
                 {
@@ -184,7 +193,11 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                         this.cancellationTokenSource.Cancel();
                 }
             }
-            finally 
+            catch 
+            {
+                this.userInteractionService.ShowToast(UIResources.AreaMap_UpdateFailed);
+            }
+            finally
             {
                 this.IsInProgress = false;
             }

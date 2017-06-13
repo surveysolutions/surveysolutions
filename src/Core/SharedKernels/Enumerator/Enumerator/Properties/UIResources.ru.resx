@@ -497,4 +497,7 @@
   <data name="Version_Not_Supports" xml:space="preserve">
     <value>Версия вашего приложения не поддерживает данный функционал</value>
   </data>
+  <data name="AreaMap_UpdateFailed" xml:space="preserve">
+    <value>Обновление не удалось</value>
+  </data>
 </root>

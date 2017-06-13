@@ -1,28 +1,28 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     public class MapSynchronizer : IMapSynchronizer
     {
-        private ISynchronizationService synchronizationService;
-        private IFileSystemAccessor fileSystemAccessor;
+        private readonly ISynchronizationService synchronizationService;
 
-        public MapSynchronizer(IFileSystemAccessor fileSystemAccessor, ISynchronizationService synchronizationService)
+        public MapSynchronizer( ISynchronizationService synchronizationService)
         {
-            this.fileSystemAccessor = fileSystemAccessor;
             this.synchronizationService = synchronizationService;
         }
 
-        public Task SyncMaps(string workingDirectory, CancellationToken cancellationToken)
+        public Task<List<MapView>> GetMapList(CancellationToken cancellationToken)
         {
-            if (!this.fileSystemAccessor.IsDirectoryExists(workingDirectory))
-                this.fileSystemAccessor.CreateDirectory(workingDirectory);
-
-            return synchronizationService.SyncMaps(workingDirectory, cancellationToken);
+            return synchronizationService.GetMapList(cancellationToken);
         }
-        
+
+        public Task<byte[]> GetMapContent(string url, CancellationToken token)
+        {
+            return synchronizationService.GetMapContent(url, token);
+        }
     }
 }

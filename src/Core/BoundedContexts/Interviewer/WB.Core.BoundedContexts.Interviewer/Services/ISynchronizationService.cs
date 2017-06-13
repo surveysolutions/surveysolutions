@@ -48,6 +48,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         Task SendUnexpectedExceptionAsync(UnexpectedExceptionApiView exception, CancellationToken token);
         Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken);
 
-        Task SyncMaps(string workingDirectory, CancellationToken cancellationToken);
+        Task<List<MapView>> GetMapList(CancellationToken cancellationToken);
+        Task<byte[]> GetMapContent(string url, CancellationToken cancellationToken);
     }
 }
