@@ -61,6 +61,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The server is not registered with Questionnaire Designer. Please contact support for registration..
+        /// </summary>
+        public static string AccessForbidden {
+            get {
+                return ResourceManager.GetString("AccessForbidden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This is free tool for creating questionnaires for The World Bank’s CAPI platform. It can be found at.
         /// </summary>
         public static string DesignerAppDescription {
