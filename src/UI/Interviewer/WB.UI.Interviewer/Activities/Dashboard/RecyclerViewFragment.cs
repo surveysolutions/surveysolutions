@@ -20,7 +20,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             var recyclerView = view.FindViewById<MvxRecyclerView>(Resource.Id.dashboard_tab_recycler);
             if (recyclerView != null)
                 recyclerView.Adapter = new RecyclerViewAdapter(recyclerView, (IMvxAndroidBindingContext)base.BindingContext);
-
+            recyclerView.NestedScrollingEnabled = false;
             return view;
         }
     }
