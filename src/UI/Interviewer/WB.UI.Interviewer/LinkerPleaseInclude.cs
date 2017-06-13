@@ -1,6 +1,7 @@
 using System.Collections.Specialized;
 using Android.Views;
 using Android.Widget;
+using Flurl;
 using Flurl.Http;
 
 namespace WB.UI.Interviewer
@@ -67,6 +68,11 @@ namespace WB.UI.Interviewer
         public void Include(IFlurlClient flurlClient)
         {
             flurlClient.WithHeader("name", "value");
+        }
+
+        public void Include(Flurl.NullValueHandling nullValueHandling)
+        {
+            "url".SetQueryParams(new object(), nullValueHandling);
         }
     }
 }
