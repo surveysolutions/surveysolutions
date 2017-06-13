@@ -72,7 +72,7 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
 
             attribute.OnAuthorization(actionContext);
 
-            Assert.AreEqual(HttpStatusCode.Unauthorized, actionContext.Response.StatusCode);
+            Assert.AreEqual(HttpStatusCode.Forbidden, actionContext.Response.StatusCode);
         }
 
         [Test]
@@ -104,7 +104,7 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
 
             attribute.OnAuthorization(actionContext);
 
-            Assert.AreEqual(HttpStatusCode.Unauthorized, actionContext.Response.StatusCode);
+            Assert.AreEqual(HttpStatusCode.Forbidden, actionContext.Response.StatusCode);
         }
 
         private static string userName = "name";
