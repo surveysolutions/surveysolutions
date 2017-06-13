@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly string translationsController = string.Concat(interviewerApiUrl, apiVersion, "/translations");
         private readonly string attachmentContentController = string.Concat(interviewerApiUrl, apiVersion, "/attachments");
 
-        private readonly string mapsListUrl = "/configuration/maps.config";
+        private readonly string mapsListUrl = "/configuration/maps.json";
 
         private readonly IPrincipal principal;
         private readonly IRestService restService;
@@ -224,35 +224,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         }
         
         
-        public async Task SyncMaps(string workingDirectory, CancellationToken cancellationToken)
+        public Task<List<MapView>> GetMapList(CancellationToken cancellationToken)
         {
-            var response = await this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<MapDescription>>(
-                url: this.mapsListUrl, token: cancellationToken)).ConfigureAwait(false);
+            return  this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<MapView>>(
+                url: this.mapsListUrl, token: cancellationToken));
+        }
 
-            var items = response.ToList();
 
-            foreach (var mapDescription in items)
+        public Task<byte[]> GetMapContent(string url,CancellationToken cancellationToken)
+        {
+            return this.TryGetRestResponseOrThrowAsync(async () =>
             {
-                var filename = this.fileSystemAccessor.CombinePath(workingDirectory, mapDescription.MapName);
-
-                if (this.fileSystemAccessor.IsFileExists(filename))
-                    continue;
-
                 var restFile = await this.restService.DownloadFileAsync(
-                    url: mapDescription.URL,
+                    url: url,
                     token: cancellationToken,
                     credentials: this.restCredentials).ConfigureAwait(false);
 
-                this.fileSystemAccessor.WriteAllBytes(filename, restFile.Content);
-            }
+                return restFile.Content;
+            });
         }
-
-        public class MapDescription
-        {
-            public string MapName { set; get; }
-            public string URL { set; get; }
-        }
-
 
         public Task<List<TranslationDto>> GetQuestionnaireTranslationAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken)
         {

@@ -116,6 +116,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update failed.
+        /// </summary>
+        public static string AreaMap_UpdateFailed {
+            get {
+                return ResourceManager.GetString("AreaMap_UpdateFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update maps.
         /// </summary>
         public static string AreaMap_UpdateMaps {

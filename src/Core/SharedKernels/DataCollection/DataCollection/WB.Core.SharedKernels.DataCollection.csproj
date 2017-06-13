@@ -146,6 +146,7 @@
     <Compile Include="Implementation\Aggregates\Invariants\InterviewQuestionInvariants.cs" />
     <Compile Include="Implementation\Aggregates\StatefulInterview.cs" />
     <Compile Include="Implementation\Entities\AssignmentApiView.cs" />
+    <Compile Include="Implementation\Entities\MapView.cs" />
     <Compile Include="Implementation\Repositories\StatefulInterviewRepository.cs" />
     <Compile Include="Implementation\Services\IdentifyingAnswerConverter.cs" />
     <Compile Include="Repositories\IPlainFileCleaner.cs" />

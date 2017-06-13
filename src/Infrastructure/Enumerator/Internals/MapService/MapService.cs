@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Android.OS;
 using Plugin.Permissions.Abstractions;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -26,22 +24,21 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.MapService
             this.permissions = permissions;
             this.fileSystemAccessor = fileSystemAccessor;
             this.mapSynchronizer = mapSynchronizer;
-            var pathToRootDirectory = Build.VERSION.SdkInt < BuildVersionCodes.N ? AndroidPathUtils.GetPathToExternalDirectory() : AndroidPathUtils.GetPathToInternalDirectory();
             
-            this.mapsLocation = fileSystemAccessor.CombinePath(pathToRootDirectory, "TheWorldBank/Shared/MapCache/");
+            this.mapsLocation = fileSystemAccessor.CombinePath(AndroidPathUtils.GetPathToExternalDirectory(), "TheWorldBank/Shared/MapCache/");
         }
 
-        public Dictionary<string, string> GetAvailableMaps()
+        public List<MapDescription> GetAvailableMaps()
         {
-
             if (!this.fileSystemAccessor.IsDirectoryExists(this.mapsLocation))
-                return new Dictionary<string, string>();
+                return new List<MapDescription>();
 
-            var tpkFileSearchResult = this.fileSystemAccessor.GetFilesInDirectory(this.mapsLocation, this.filesToSearch).OrderBy(x => x).ToList();
-            if (tpkFileSearchResult.Count == 0)
-                return new Dictionary<string, string>();
-
-            return tpkFileSearchResult.ToDictionary(this.fileSystemAccessor.GetFileNameWithoutExtension);
+            return this.fileSystemAccessor.GetFilesInDirectory(this.mapsLocation, this.filesToSearch).OrderBy(x => x)
+                .Select(x => new MapDescription()
+                {
+                    MapFullPath = x,
+                    MapName = this.fileSystemAccessor.GetFileNameWithoutExtension(x)
+                }).ToList();
         }
 
         public async Task SyncMaps(CancellationToken cancellationToken)
@@ -50,14 +47,21 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.MapService
 
             if (!this.fileSystemAccessor.IsDirectoryExists(this.mapsLocation))
                 this.fileSystemAccessor.CreateDirectory(this.mapsLocation);
-            try
-            {
-                await this.mapSynchronizer.SyncMaps(this.mapsLocation, cancellationToken);
-            }
-            catch
-            {
-            }
             
+            var items = await this.mapSynchronizer.GetMapList(cancellationToken).ConfigureAwait(false);
+
+            foreach (var mapDescription in items)
+            {
+                var filename = this.fileSystemAccessor.CombinePath(this.mapsLocation, mapDescription.MapName);
+
+                if (this.fileSystemAccessor.IsFileExists(filename))
+                    continue;
+
+                var mapContent = await this.mapSynchronizer.GetMapContent(mapDescription.URL, cancellationToken).ConfigureAwait(false);
+
+                this.fileSystemAccessor.WriteAllBytes(filename, mapContent);
+            }
+
         }
     }
 }
