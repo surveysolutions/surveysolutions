@@ -53,6 +53,12 @@
                                     <p>@LoginToDesigner.UserDesignerCredentials</p>
                                 </div>
                             }
+                            @if (ViewData.ModelState.ContainsKey("AccessForbidden") && ViewData.ModelState["AccessForbidden"].Errors.Any())
+                            {
+                                <div class="alert alert-danger">
+                                    <p>@ViewData.ModelState["AccessForbidden"].Errors.First().ErrorMessage</p>
+                                </div>
+                            }
                             @if (TempData[Alerts.ERROR] != null)
                             {
                                 <div class="alert alert-danger">
