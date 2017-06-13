@@ -10,6 +10,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs;
+using NSubstitute;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
@@ -29,6 +30,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V1
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V5.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
+using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services.TopologicalSorter;
@@ -1230,7 +1232,8 @@ namespace WB.Tests.Unit.Designer
                 attachmentService ?? attachmentServiceMock,
                 topologicalSorter ?? Create.TopologicalSorter<string>(),
                 Mock.Of<ITranslationsService>(),
-                questionnaireTranslator ?? Mock.Of<IQuestionnaireTranslator>());
+                questionnaireTranslator ?? Mock.Of<IQuestionnaireTranslator>(),
+                Substitute.For<IQuestionnaireCompilationVersionService>());
         }
 
         public static IQuestionTypeToCSharpTypeMapper QuestionTypeToCSharpTypeMapper()

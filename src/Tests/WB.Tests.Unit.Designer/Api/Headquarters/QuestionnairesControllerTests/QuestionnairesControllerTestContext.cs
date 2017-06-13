@@ -3,6 +3,7 @@ using Moq;
 using NSubstitute;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
@@ -23,7 +24,8 @@ namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
             ISerializer serializer=null,
             IStringCompressor zipUtils = null,
             IAttachmentService attachmentService = null,
-            IExpressionsPlayOrderProvider expressionsPlayOrderProvider = null)
+            IExpressionsPlayOrderProvider expressionsPlayOrderProvider = null,
+            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService = null)
         {
             return new HQQuestionnairesController(
                 userHelper: membershipUserService ?? Mock.Of<IMembershipUserService>(),
@@ -35,7 +37,8 @@ namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
                 serializer: serializer??Mock.Of<ISerializer>(),
                 zipUtils: zipUtils ?? Mock.Of<IStringCompressor>(),
                 listItemStorage: new TestPlainStorage<QuestionnaireListViewItem>(),
-                expressionsPlayOrderProvider: expressionsPlayOrderProvider ?? Substitute.For<IExpressionsPlayOrderProvider>());
+                expressionsPlayOrderProvider: expressionsPlayOrderProvider ?? Substitute.For<IExpressionsPlayOrderProvider>(),
+                questionnaireCompilationVersionService: questionnaireCompilationVersionService ?? Substitute.For<IQuestionnaireCompilationVersionService>());
         }
     }
 }
