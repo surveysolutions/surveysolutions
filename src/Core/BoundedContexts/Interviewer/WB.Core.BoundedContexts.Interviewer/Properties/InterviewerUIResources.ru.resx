@@ -658,11 +658,11 @@
     <comment>{0} - Assignment id</comment>
   </data>
   <data name="Dashboard_AssignmentCard_TitleCountdown">
-    <value>({0} интервью)</value>
+    <value>{0} интервью</value>
     <comment>{0} - number of interviews to be created</comment>
   </data>
   <data name="Dashboard_AssignmentCard_TitleCountdown_Unlimited">
-    <value>(Не ограничено)</value>
+    <value>Не ограничено</value>
   </data>
   <data name="Dashboard_InterviewCard_Title">
     <value>№ {0}</value>
