@@ -13,7 +13,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HQ Login</title>
+    <title>@Pages.DownloadPage_PageTitle</title>
     @this.GenerateFavicon(Url.Content("~/Dependencies/img/identity/favicon-hq"))
     <!-- cssLibs:css -->
     <!-- endinject -->
@@ -44,14 +44,14 @@
                                 <p>@Pages.GetLatestAppDescription </p>
                                 <a href="@Url.HttpRouteUrl("DefaultApiWithAction", new {action = "GetLatestVersion", controller = "InterviewerSync"})" class="get-interviewer-app">
                                     <span>@Pages.GetLatestApp</span>
-                                    <span class="version">Version @(ServiceLocator.Current.GetInstance<IProductVersion>())</span>
+                                    <span class="version">@Pages.DownloadPage_Version @(ServiceLocator.Current.GetInstance<IProductVersion>())</span>
                                 </a>
                             </div>
                             <div class="form-actions">
                                 <p>@Pages.GetLatestAppExtendedDescription</p>
                                 <a href="@Url.HttpRouteUrl("DefaultApiWithAction", new {action = "GetLatestExtendedVersion", controller = "InterviewerSync"})" class="get-interviewer-app">
                                     <span>@Pages.GetLatestApp</span>
-                                    <span class="version">Version @(ServiceLocator.Current.GetInstance<IProductVersion>())</span>
+                                    <span class="version">@Pages.DownloadPage_Version @(ServiceLocator.Current.GetInstance<IProductVersion>())</span>
                                 </a>
                             </div>
                             <div class="additional-info-block">

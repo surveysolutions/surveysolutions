@@ -107,10 +107,10 @@ namespace WB.UI.Headquarters.API
         {
             string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(InterviewerApkInfo.Directory), InterviewerApkInfo.FileName);
 
-            return this.CheckFilleAndResponse(pathToFile);
+            return this.CheckFileAndResponse(pathToFile);
         }
 
-        private HttpResponseMessage CheckFilleAndResponse(string pathToFile)
+        private HttpResponseMessage CheckFileAndResponse(string pathToFile)
         {
             if (this.fileSystemAccessor.IsFileExists(pathToFile))
             {
@@ -136,7 +136,7 @@ namespace WB.UI.Headquarters.API
         {
             string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(InterviewerApkInfo.Directory), InterviewerApkInfo.ExtendedFileName);
 
-            return this.CheckFilleAndResponse(pathToFile);
+            return this.CheckFileAndResponse(pathToFile);
         }
 
         [HttpGet]

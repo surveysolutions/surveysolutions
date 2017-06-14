@@ -993,4 +993,10 @@
   <data name="DownloadPage_Welcome" xml:space="preserve">
     <value>Добро пожаловать на страницу загрузки</value>
   </data>
+  <data name="DownloadPage_PageTitle" xml:space="preserve">
+    <value>Скачивание приложения Интервьюер</value>
+  </data>
+  <data name="DownloadPage_Version" xml:space="preserve">
+    <value>Версия</value>
+  </data>
 </root>
