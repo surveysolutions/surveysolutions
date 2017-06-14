@@ -119,6 +119,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
 
                     identifyingData.Add(new AssignmentDocument.IdentifyingAnswer
                     {
+                    AssignmentId = remote.Id,
                         Identity = identifyingAnswer.Identity,
                         Answer = identifyingAnswer.Answer,
                         AnswerAsString = stringAnswer,

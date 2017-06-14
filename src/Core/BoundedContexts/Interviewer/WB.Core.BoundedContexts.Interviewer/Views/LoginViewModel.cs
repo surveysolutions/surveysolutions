@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal,
             IPasswordHasher passwordHasher,
-            IPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
+            IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IPlainStorage<CompanyLogo> logoStorage,
             ISynchronizationService synchronizationService,
             ILogger logger)
