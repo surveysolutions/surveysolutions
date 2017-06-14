@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.DetailedPrefilledQuestions = GetPrefilledQuestions(identifyingData.Skip(3));
             this.GpsLocation = this.GetAssignmentLocation(assignment);
 
-            this.Title = string.Format(InterviewerUIResources.Dashboard_Assignment_CardTitle, this.assignment.Id) + " ";
+            this.Title = string.Format(InterviewerUIResources.Dashboard_Assignment_CardTitle, this.assignment.Id) + ": ";
 
             var interviewsByAssignmentCount = this.interviewViewRepository.Count(interview => interview.Assignment == this.assignment.Id);
             if (this.assignment.Quantity.HasValue)
