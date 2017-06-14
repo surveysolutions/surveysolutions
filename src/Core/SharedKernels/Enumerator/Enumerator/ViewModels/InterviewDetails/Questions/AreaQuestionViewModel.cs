@@ -117,13 +117,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         answerTime: DateTime.UtcNow,
                         geometry: answerArea.Geometry,
                         mapName: answerArea.MapName,
-                        area : answerArea.Area,
+                        area: answerArea.Area,
                         length: answerArea.Length,
-                        distanceToEditor:answerArea.DistanceToEditor);
+                        distanceToEditor: answerArea.DistanceToEditor);
 
                     await this.Answering.SendAnswerQuestionCommandAsync(command);
                     this.QuestionState.Validity.ExecutedWithoutExceptions();
-                    this.Answer = new Area(answerArea.Geometry, answerArea.MapName, answerArea.Area, answerArea.Length, answerArea.DistanceToEditor);
+                    this.Answer = new Area(answerArea.Geometry, answerArea.MapName, answerArea.Area, answerArea.Length,
+                        answerArea.DistanceToEditor);
                 }
             }
             catch (MissingPermissionsException)
@@ -137,6 +138,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             catch (NotImplementedException)
             {
                 userInteractionService.ShowToast(UIResources.Version_Not_Supports);
+            }
+            catch (NotSupportedException)
+            {
+                userInteractionService.ShowToast(UIResources.Device_Does_Not_Support);
             }
             finally
             {

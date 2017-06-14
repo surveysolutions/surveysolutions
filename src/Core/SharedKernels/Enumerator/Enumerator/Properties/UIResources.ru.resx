@@ -500,4 +500,7 @@
   <data name="AreaMap_UpdateFailed" xml:space="preserve">
     <value>Обновление не удалось</value>
   </data>
+  <data name="Device_Does_Not_Support" xml:space="preserve">
+    <value>Ваше устройство не поддерживает данный функционал</value>
+  </data>
 </root>
