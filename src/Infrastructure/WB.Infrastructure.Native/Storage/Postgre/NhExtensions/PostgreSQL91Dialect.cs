@@ -95,8 +95,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
 
         public virtual object NullSafeGet(IDataReader resultSet, string[] names, object owner)
         {
-            var value = NHibernateUtil.Date.NullSafeGet(resultSet, names[0]);
-
             var index = resultSet.GetOrdinal(names[0]);
 
             if (resultSet.IsDBNull(index))
