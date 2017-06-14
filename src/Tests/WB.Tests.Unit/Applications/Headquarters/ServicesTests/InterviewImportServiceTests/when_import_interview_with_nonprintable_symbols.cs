@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using Machine.Specifications;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -33,10 +34,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                     Create.Entity.GpsCoordinateQuestion(questionId: Guid.Parse("10101010101010101010101010101010"), variable: "LongLat", isPrefilled: true));
             
             var mockOfSamplePreloadingDataParsingService = new Mock<IInterviewImportDataParsingService>();
-            mockOfSamplePreloadingDataParsingService.Setup(x => x.GetInterviewsImportDataForPanel("sampleId", questionnaireIdentity))
+            mockOfSamplePreloadingDataParsingService.Setup(x => x.GetAssignmentsData("sampleId", questionnaireIdentity, PreloadedContentType.Assignments))
                 .Returns(new[]
                 {
-                    new AssignmentImportData()
+                    new AssignmentImportData
                     {
                         InterviewerId = interviewerId,
                         SupervisorId = supervisorId,
@@ -50,16 +51,20 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                         executedCommand = command as CreateInterviewWithPreloadedData;
                     });
 
+            var questionnaireBrowseItem = Create.Entity.QuestionnaireBrowseItem(questionnaireDocument, false);
+            var questionnaireFactory = Mock.Of<IQuestionnaireBrowseViewFactory>(x => x.GetById(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireBrowseItem);
+
             interviewImportService =
                 CreateInterviewImportService(
                     sampleImportSettings: new SampleImportSettings(1),
                     commandService: mockOfCommandService.Object,
                     interviewImportDataParsingService: mockOfSamplePreloadingDataParsingService.Object, 
-                    questionnaireDocument: questionnaireDocument);
+                    questionnaireDocument: questionnaireDocument,
+                    questionnaireBrowseViewFactory: questionnaireFactory);
         };
 
         Because of = () => exception = Catch.Exception(() =>
-                interviewImportService.ImportInterviews(questionnaireIdentity, "sampleId", null, Guid.Parse("22222222222222222222222222222222")));
+                interviewImportService.ImportAssignments(questionnaireIdentity, "sampleId", null, Guid.Parse("22222222222222222222222222222222"), PreloadedContentType.Assignments));
 
         It should_not_be_exception = () =>
             exception.ShouldBeNull();

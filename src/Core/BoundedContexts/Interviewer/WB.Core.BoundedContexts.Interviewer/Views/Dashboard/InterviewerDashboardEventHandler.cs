@@ -41,6 +41,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                                          ILitePublishedEventHandler<AnswersRemoved>,
 
                                          ILitePublishedEventHandler<InterviewOnClientCreated>,
+                                         ILitePublishedEventHandler<InterviewFromPreloadedDataCreated>,
                                          ILitePublishedEventHandler<AnswerRemoved>,
 
                                          ILitePublishedEventHandler<TranslationSwitched>,
@@ -102,6 +103,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 evnt.EventTimeStamp,
                 evnt.EventTimeStamp,
                 null, 
+                evnt.Payload.AssignmentId);
+        }
+
+        public void Handle(IPublishedEvent<InterviewFromPreloadedDataCreated> evnt)
+        {
+            this.AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId,
+                evnt.Payload.QuestionnaireVersion,
+                evnt.EventSourceId,
+                evnt.Payload.UserId,
+                InterviewStatus.InterviewerAssigned,
+                null,
+                new AnsweredQuestionSynchronizationDto[0],
+                true,
+                true,
+                evnt.EventTimeStamp,
+                evnt.EventTimeStamp,
+                null,
                 evnt.Payload.AssignmentId);
         }
 

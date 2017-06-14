@@ -143,7 +143,7 @@ namespace WB.Tests.Integration
                 userId: Guid.NewGuid(),
                 questionnaireId: questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
                 version: 1,
-                preloadedDataDto: preloadedData,
+                answers: preloadedData.Answers,
                 answersTime: new DateTime(2012, 12, 20),
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),

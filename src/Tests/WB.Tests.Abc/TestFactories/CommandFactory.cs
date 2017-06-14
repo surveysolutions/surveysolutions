@@ -227,7 +227,7 @@ namespace WB.Tests.Abc.TestFactories
         public CreateInterviewWithPreloadedData CreateInterviewWithPreloadedData(PreloadedLevelDto[] data = null)
         {
             return new CreateInterviewWithPreloadedData(Guid.NewGuid(), 
-                Guid.NewGuid(), Guid.NewGuid(), 1, new PreloadedDataDto(data ?? new PreloadedLevelDto[0]), DateTime.Now, Guid.NewGuid(), null, null, null);
+                Guid.NewGuid(), Guid.NewGuid(), 1, new PreloadedDataDto(data ?? new PreloadedLevelDto[0]).Answers, DateTime.Now, Guid.NewGuid(), null, null, null);
         }
 
         public SynchronizeInterviewCommand Synchronize(Guid userId, InterviewSynchronizationDto synchronizationDto)

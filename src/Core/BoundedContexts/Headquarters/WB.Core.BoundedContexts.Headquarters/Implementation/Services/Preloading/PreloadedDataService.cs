@@ -16,7 +16,6 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -234,7 +233,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             return this.GetDataFileByLevelName(allLevels, topLevelExportData.LevelName);
         }
 
-        public PreloadedDataRecord[] CreatePreloadedDataDtosFromPanelData(PreloadedDataByFile[] allLevels)
+        public AssignmentPreloadedDataRecord[] CreatePreloadedDataDtosFromPanelData(PreloadedDataByFile[] allLevels)
         {
             var topLevelData = this.GetTopLevelData(allLevels);
             
@@ -245,17 +244,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             var interviewersCache = new Dictionary<string, UserView>();
             var idColumnIndex = this.GetIdColumnIndex(topLevelData);
             var responsibleNameIndex = this.GetResponsibleNameIndex(topLevelData);
-            var result = new List<PreloadedDataRecord>();
+            var quantityIndex = this.GetQuantityIndex(topLevelData);
+            var result = new List<AssignmentPreloadedDataRecord>();
             
             foreach (var topLevelRow in topLevelData.Content)
             {
                 var rowId = topLevelRow[idColumnIndex];
                 var answersByTopLevel = this.BuildAnswerForLevel(topLevelRow, topLevelData.Header, topLevelData.FileName);
-                var levels = new List<PreloadedLevelDto>() { new PreloadedLevelDto(new decimal[0], answersByTopLevel) };
+                var levels = new List<PreloadedLevelDto> { new PreloadedLevelDto(new decimal[0], answersByTopLevel) };
                 var answersinsideRosters = this.GetHierarchicalAnswersByLevelName(topLevelData.FileName, new[] { rowId }, allLevels);
                 levels.AddRange(answersinsideRosters);
 
                 var responsibleName = this.CheckAndGetSupervisorNameForLevel(topLevelRow, responsibleNameIndex);
+                int? quantity = this.CheckAndGetQuantityForLevel(topLevelRow, quantityIndex);
 
                 Guid? interviewerId = null;
                 Guid? supervisorId = null;
@@ -270,11 +271,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                     supervisorId = this.GetSupervisorIdAndUpdateCache(supervisorsCache, responsibleName);
                 }
 
-                result.Add(new PreloadedDataRecord
+                result.Add(new AssignmentPreloadedDataRecord
                 {
                     PreloadedDataDto = new PreloadedDataDto(levels.ToArray()),
                     SupervisorId = supervisorId,
-                    InterviewerId = interviewerId
+                    InterviewerId = interviewerId,
+                    Quantity = quantity
                 });
             }
             return result.ToArray();
