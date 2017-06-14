@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TextView
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:local="http://schemas.android.com/apk/res-auto"
+  
+  android:paddingTop="@dimen/Dashboard_Tab_Frame_paddingTop"
+  style="@style/Dashboard_Tab_Description"
+  local:MvxBind="Text Title">
+</TextView>

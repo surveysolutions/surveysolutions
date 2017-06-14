@@ -74,10 +74,10 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         private void StartedInterviews_PropertyChanged(object sender, PropertyChangedEventArgs e)
             => this.UpdateFragmentByViewModelPropertyChange<StartedInterviewsFragment>((StartedInterviewsViewModel) sender, e.PropertyName);
 
-        private void UpdateFragmentByViewModelPropertyChange<TFragmentType>(ListViewModel<InterviewDashboardItemViewModel> listViewModel,
-            string propertyName = nameof(ListViewModel<InterviewDashboardItemViewModel>.Items))
+        private void UpdateFragmentByViewModelPropertyChange<TFragmentType>(ListViewModel<IDashboardItem> listViewModel,
+            string propertyName = nameof(ListViewModel<IDashboardItem>.Items))
         {
-            if (propertyName != nameof(ListViewModel<InterviewDashboardItemViewModel>.Items)) return;
+            if (propertyName != nameof(ListViewModel<IDashboardItem>.Items)) return;
 
             if (!this.fragmentStatePagerAdapter.HasFragmentForViewModel(listViewModel) && listViewModel.Items.Count > 0)
             {

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -9,9 +10,8 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
-    public class RejectedInterviewsViewModel : ListViewModel<InterviewDashboardItemViewModel>
+    public class RejectedInterviewsViewModel : ListViewModel<IDashboardItem>
     {
-        public string Description => InterviewerUIResources.Dashboard_RejectedTabText;
         public override GroupStatus InterviewStatus => GroupStatus.StartedInvalid;
 
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
@@ -31,13 +31,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public void Load()
         {
             this.Items = this.GetRejectedInterviews().ToList();
+
+            var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
+            subTitle.Title = InterviewerUIResources.Dashboard_RejectedTabText;
+            this.UiItems = subTitle.ToEnumerable().Concat(this.Items).ToList();
+
             this.Title = string.Format(InterviewerUIResources.Dashboard_RejectedLinkText, this.Items.Count);
         }
 
-        private IEnumerable<InterviewDashboardItemViewModel> GetRejectedInterviews()
+        private IEnumerable<IDashboardItem> GetRejectedInterviews()
         {
             var interviewerId = this.principal.CurrentUserIdentity.UserId;
-
+            
             var interviewViews = this.interviewViewRepository.Where(interview =>
                 interview.ResponsibleId == interviewerId &&
                 interview.Status == SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus.RejectedBySupervisor);

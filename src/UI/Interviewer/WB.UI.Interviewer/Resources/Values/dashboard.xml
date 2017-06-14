@@ -27,8 +27,6 @@
     <item name="android:layout_marginLeft">@dimen/Dashboard_Layout_marginLeft</item>
     <item name="android:layout_marginRight">@dimen/Dashboard_Layout_marginRight</item>
     <item name="android:layout_marginBottom">@dimen/Dashboard_Items_space</item>
-    <item name="android:clickable">true</item>
-    <item name="android:background">?attr/selectableItemBackground</item>
   </style>
 
   <style name="Dashboard_InterviewItem_Layout" parent="AppTheme">
@@ -44,6 +42,11 @@
     <item name="android:layout_marginTop">@dimen/Dashboard_InterviewItem_StatusPanel_margin</item>
     <item name="android:layout_marginBottom">@dimen/Dashboard_InterviewItem_StatusPanel_margin</item>
     <item name="android:layout_marginLeft">@dimen/Dashboard_InterviewItem_StatusPanel_margin</item>
+  </style>
+
+  <style name="Dashboard_Card_Status">
+    <item name="android:layout_width">@dimen/Dashboard_InterviewItem_StatusPanel_width</item>
+    <item name="android:layout_height">match_parent</item>
   </style>
 
   <style name="Dashboard_InterviewItem_InformationBlock" parent="AppTheme">
@@ -288,7 +291,7 @@
     <item name="android:layout_width">@dimen/Dashboard_Synchronization_Statistics_Width</item>
     <item name="android:layout_alignParentBottom">true</item>
   </style>
-
+  
   <style name="Dashboard_Progress_Indicator" parent="Progress_Indicator">
     <item name="android:layout_marginTop">6dp</item>
     <item name="android:layout_marginBottom">6dp</item>
