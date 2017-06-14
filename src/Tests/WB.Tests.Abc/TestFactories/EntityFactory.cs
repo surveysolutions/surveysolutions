@@ -1617,7 +1617,7 @@ namespace WB.Tests.Abc.TestFactories
             return result;
         }
 
-        public AssignmentDocumentBuilder AssignmentDocument(int id, int? quantity, int interviewsCount = 0, string questionnaireIdentity = null)
+        public AssignmentDocumentBuilder AssignmentDocument(int id, int? quantity = null, int interviewsCount = 0, string questionnaireIdentity = null)
         {
             return new AssignmentDocumentBuilder(new AssignmentDocument
             {
@@ -1640,7 +1640,14 @@ namespace WB.Tests.Abc.TestFactories
             public AssignmentDocumentBuilder WithAnswer(Identity identity, string answer)
             {
                 this._entity.IdentifyingData = this._entity.IdentifyingData ?? new List<AssignmentDocument.IdentifyingAnswer>();
-                this._entity.IdentifyingData.Add(new AssignmentDocument.IdentifyingAnswer { Answer = answer, Identity = identity });
+
+                this._entity.IdentifyingData.Add(new AssignmentDocument.IdentifyingAnswer
+                {
+                    AssignmentId = this._entity.Id,
+                    Answer = answer,
+                    Identity = identity
+                });
+
                 return this;
             }
 

@@ -53,9 +53,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         private QuestionnaireIdentity questionnaireIdentity;
 
-        public void Init(AssignmentDocument assignment)
+        public void Init(AssignmentDocument assignmentDocument)
         {
-            this.assignment = assignment;
+            this.assignment = assignmentDocument;
             this.questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
 
             var identifyingData = assignment.IdentifyingData.Where(id => id.Identity.Id != assignment.LocationQuestionId).ToList();
@@ -63,13 +63,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.DetailedPrefilledQuestions = GetPrefilledQuestions(identifyingData.Skip(3));
             this.GpsLocation = this.GetAssignmentLocation(assignment);
 
-            this.Title = string.Format(InterviewerUIResources.Dashboard_Assignment_CardTitle, this.assignment.Id) + ": ";
+            this.Title = string.Format(InterviewerUIResources.Dashboard_Assignment_CardTitle, this.assignment.Id.ToString()) + ": ";
 
             var interviewsByAssignmentCount = this.interviewViewRepository.Count(interview => interview.Assignment == this.assignment.Id);
             if (this.assignment.Quantity.HasValue)
             {
                 var interviewsLeftByAssignmentCount = Math.Max(0, this.assignment.Quantity.Value - this.assignment.InterviewsCount - interviewsByAssignmentCount);
-                this.Title += InterviewerUIResources.Dashboard_AssignmentCard_TitleCountdown.FormatString(interviewsLeftByAssignmentCount);
+                this.Title += InterviewerUIResources.Dashboard_AssignmentCard_TitleCountdown.FormatString(interviewsLeftByAssignmentCount.ToString());
             }
             else
             {
@@ -131,7 +131,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                     interviewerIdentity.SupervisorId,
                     interviewerIdentity.UserId,
                     null,
-                    this.assignment.Id,
+                    this.assignment.Id
                 );
 
             await this.commandService.ExecuteAsync(createInterviewCommand);
@@ -173,14 +173,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 }).ToList();
         }
 
-        private InterviewGpsCoordinatesView GetAssignmentLocation(AssignmentDocument assignment)
+        private InterviewGpsCoordinatesView GetAssignmentLocation(AssignmentDocument assignmentDocument)
         {
-            if (assignment.LocationQuestionId.HasValue && assignment.LocationLatitude.HasValue && assignment.LocationLongitude.HasValue)
+            if (assignmentDocument.LocationQuestionId.HasValue && assignmentDocument.LocationLatitude.HasValue && assignmentDocument.LocationLongitude.HasValue)
             {
                 return new InterviewGpsCoordinatesView
                 {
-                    Latitude = assignment.LocationLatitude ?? 0,
-                    Longitude = assignment.LocationLongitude ?? 0
+                    Latitude = assignmentDocument.LocationLatitude ?? 0,
+                    Longitude = assignmentDocument.LocationLongitude ?? 0
                 };
             }
 
