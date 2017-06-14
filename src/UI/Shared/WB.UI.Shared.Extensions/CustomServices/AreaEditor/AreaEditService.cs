@@ -50,6 +50,12 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         
         private Task<AreaEditResult> EditArea(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area)
         {
+            bool is64Bit = IntPtr.Size == 8;
+
+            if(is64Bit)
+                throw new NotSupportedException("This functionality is not available for this device");
+
+
             var tcs = new TaskCompletionSource<AreaEditResult>();
 
             this.viewModelNavigationService.NavigateTo<AreaEditorViewModel>(new
