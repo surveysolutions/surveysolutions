@@ -9,6 +9,12 @@ using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers
 {
+    public class InterviewAnswer 
+    {
+        public Identity Identity { get; set;  }
+        public AbstractAnswer Answer { get; set; }
+    }
+
     public abstract class AbstractAnswer { }
 
     [DebuggerDisplay("{ToString()}")]

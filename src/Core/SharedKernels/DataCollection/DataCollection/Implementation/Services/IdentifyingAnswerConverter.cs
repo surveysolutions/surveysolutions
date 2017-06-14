@@ -30,7 +30,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
                     return GpsAnswer.FromGeoPosition(GeoPosition.FromString(answer));
 
                 default:
-                    throw new ArgumentException($"Unknown question of type {questionType} can't be identifier question");
+                    return null;
+                    //throw new ArgumentException($"Unknown question of type {questionType} can't be identifier question");
             }
         }
     }

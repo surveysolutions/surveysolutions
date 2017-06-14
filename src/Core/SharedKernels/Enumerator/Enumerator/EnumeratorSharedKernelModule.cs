@@ -43,6 +43,7 @@ namespace WB.Core.SharedKernels.Enumerator
             CommandRegistry
                 .Setup<StatefulInterview>()
                 .InitializesWith<CreateInterviewFromSynchronizationMetadata>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewFromSynchronizationMetadata(command.Id, command.UserId, command.QuestionnaireId, command.QuestionnaireVersion, command.InterviewStatus, command.FeaturedQuestionsMeta, command.Comments, command.RejectedDateTime, command.InterviewerAssignedDateTime, command.Valid, command.CreatedOnClient))
+                .InitializesWith<CreateInterviewWithPreloadedData>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewWithPreloadedData(command))
                 .InitializesWith<CreateInterviewOnClientCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewOnClient(command))
                 .InitializesWith<SynchronizeInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Synchronize(command))
                 .InitializesWith<CreateInterviewFromSnapshotCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewFromSnapshot(command))
