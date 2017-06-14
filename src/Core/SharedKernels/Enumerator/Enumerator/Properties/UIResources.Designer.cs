@@ -208,6 +208,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your device doesn&apos;t support this functionality.
+        /// </summary>
+        public static string Device_Does_Not_Support {
+            get {
+                return ResourceManager.GetString("Device_Does_Not_Support", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Synchronization endpoint.
         /// </summary>
         public static string EndpointHint {
