@@ -53,6 +53,8 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             this.ViewModel.RejectedInterviews.PropertyChanged += this.RejectedInterviews_PropertyChanged;
             this.ViewModel.CompletedInterviews.PropertyChanged += this.CompletedInterviews_PropertyChanged;
 
+            this.ViewModel.TypeOfInterviews = this.ViewModel.CreateNew.InterviewStatus;
+
             this.fragmentStatePagerAdapter.AddFragment(typeof(QuestionnairesFragment), this.ViewModel.CreateNew, nameof(InterviewTabPanel.Title));
 
             this.UpdateFragmentByViewModelPropertyChange<StartedInterviewsFragment>(this.ViewModel.StartedInterviews);
