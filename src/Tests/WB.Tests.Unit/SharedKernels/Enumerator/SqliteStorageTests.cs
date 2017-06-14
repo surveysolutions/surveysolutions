@@ -9,7 +9,7 @@ using WB.Tests.Unit.SharedKernels.SurveyManagement;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator
 {
-    [TestOf(typeof(SqlitePlainStorage<>))]
+    [TestOf(typeof(SqlitePlainStorage<,>))]
     public class SqliteStorageTests
     {
         [Test]

@@ -4,11 +4,16 @@ using System.Linq.Expressions;
 
 namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage
 {
-    public interface IPlainStorage<TEntity> : IDisposable where TEntity : class, IPlainStorageEntity
+    public interface IPlainStorage<TEntity> : IPlainStorage<TEntity, string>
+        where TEntity : class, IPlainStorageEntity, IPlainStorageEntity<string>
     {
-        TEntity GetById(string id);
+    }
+
+    public interface IPlainStorage<TEntity, in TKey> : IDisposable where TEntity : class, IPlainStorageEntity<TKey>
+    {
+        TEntity GetById(TKey id);
         void Remove(IEnumerable<TEntity> entities);
-        void Remove(string id);
+        void Remove(TKey id);
 
         void Store(TEntity entity);
         void Store(IEnumerable<TEntity> entities);

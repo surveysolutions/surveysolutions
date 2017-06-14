@@ -191,7 +191,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             interviewView.InterviewerAssignedDateTime = assignedDateTime;
             interviewView.RejectedDateTime = rejectedDateTime;
             interviewView.CanBeDeleted = canBeDeleted;
-            interviewView.Assignment = assignmentId?.ToString();
+            interviewView.Assignment = assignmentId;
             interviewView.LastInterviewerOrSupervisorComment = comments;
             interviewView.LocationQuestionId = prefilledGpsQuestionId;
 

@@ -4,7 +4,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
     public class AssignmentApiView
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public QuestionnaireIdentity QuestionnaireId { get; set; }
         public int? Quantity { get; set; }
         public int InterviewsCount { get; set; }

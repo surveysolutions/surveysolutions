@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         public async Task Context()
         {
             this.assignment = Create.Entity
-                .AssignmentApiView(Guid.NewGuid().ToString(), 5, 1, Create.Entity.QuestionnaireIdentity(Id.g1))
+                .AssignmentApiView(1, 5, 1, Create.Entity.QuestionnaireIdentity(Id.g1))
                 .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "123")
                 .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "456")
                 .Build();

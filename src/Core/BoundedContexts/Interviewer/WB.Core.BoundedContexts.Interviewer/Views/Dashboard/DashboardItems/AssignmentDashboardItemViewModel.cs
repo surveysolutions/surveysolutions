@@ -131,7 +131,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                     interviewerIdentity.SupervisorId,
                     interviewerIdentity.UserId,
                     null,
-                    int.Parse(this.assignment.Id)
+                    this.assignment.Id,
                 );
 
             await this.commandService.ExecuteAsync(createInterviewCommand);
