@@ -196,7 +196,7 @@ if($ExcludeExtra)
 }
 else
 {
-	$VersionName = $VersionName + " (build " + $VersionCode + ") Extended"
+	$VersionName = $VersionName + " (build " + $VersionCode + ") with Maps"
 }
 UpdateAndroidAppManifest -VersionName $VersionName -VersionCode $VersionCode -CapiProject $CapiProject
 BuildAndroidApp $CapiProject $BuildConfiguration $ExcludeExtra | %{ if (-not $_) { Exit } }
