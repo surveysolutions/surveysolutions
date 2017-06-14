@@ -998,4 +998,10 @@
   <data name="DownloadPage_Welcome" xml:space="preserve">
     <value>Welcome to Survey Solutions Interviewer download page</value>
   </data>
+  <data name="DownloadPage_PageTitle" xml:space="preserve">
+    <value>Download Interviewer app</value>
+  </data>
+  <data name="DownloadPage_Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
 </root>

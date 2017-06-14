@@ -313,11 +313,29 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download Interviewer app.
+        /// </summary>
+        public static string DownloadPage_PageTitle {
+            get {
+                return ResourceManager.GetString("DownloadPage_PageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Computer-assisted Personal Interview technology developed by the World Bank..
         /// </summary>
         public static string DownloadPage_Title {
             get {
                 return ResourceManager.GetString("DownloadPage_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version.
+        /// </summary>
+        public static string DownloadPage_Version {
+            get {
+                return ResourceManager.GetString("DownloadPage_Version", resourceCulture);
             }
         }
         

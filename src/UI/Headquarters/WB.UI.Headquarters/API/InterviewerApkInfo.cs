@@ -2,8 +2,8 @@
 {
     public static class InterviewerApkInfo
     {
-        public const string FileName = "wbcapi.apk";
-        public const string ExtendedFileName = "wbcapi.ext.apk";
+        public const string FileName = "WBCapi.apk";
+        public const string ExtendedFileName = "WBCapi.Ext.apk";
         public const string Directory = (@"~/Client/");
     }
 }
