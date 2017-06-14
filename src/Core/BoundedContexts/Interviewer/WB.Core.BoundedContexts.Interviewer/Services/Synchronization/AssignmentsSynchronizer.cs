@@ -16,13 +16,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
     public class AssignmentsSynchronizer : IAssignmentsSynchronizer
     {
         private readonly ISynchronizationService synchronizationService;
-        private readonly IPlainStorage<AssignmentDocument> assignmentsRepository;
+        private readonly IPlainStorage<AssignmentDocument, int> assignmentsRepository;
         private readonly IQuestionnaireDownloader questionnaireDownloader;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IAnswerToStringConverter answerToStringConverter;
 
         public AssignmentsSynchronizer(ISynchronizationService synchronizationService,
-            IPlainStorage<AssignmentDocument> assignmentsRepository,
+            IPlainStorage<AssignmentDocument, int> assignmentsRepository,
             IQuestionnaireDownloader questionnaireDownloader,
             IQuestionnaireStorage questionnaireStorage,
             IAnswerToStringConverter answerToStringConverter)

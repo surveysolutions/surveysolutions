@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using SQLite;
@@ -11,8 +10,20 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    public class SqlitePlainStorage<TEntity> : IPlainStorage<TEntity>
+    public class SqlitePlainStorage<TEntity> : SqlitePlainStorage<TEntity, string>, IPlainStorage<TEntity>
         where TEntity : class, IPlainStorageEntity, new()
+    {
+        public SqlitePlainStorage(ILogger logger, IFileSystemAccessor fileSystemAccessor, SqliteSettings settings) : base(logger, fileSystemAccessor, settings)
+        {
+        }
+
+        public SqlitePlainStorage(SQLiteConnectionWithLock storage, ILogger logger) : base(storage, logger)
+        {
+        }
+    }
+
+    public class SqlitePlainStorage<TEntity, TKey> : IPlainStorage<TEntity, TKey>
+        where TEntity : class, IPlainStorageEntity<TKey>, new()
     {
         protected readonly SQLiteConnectionWithLock connection;
         private readonly ILogger logger;
@@ -40,17 +51,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.connection.CreateTable<TEntity>();
         }
 
-        public virtual TEntity GetById(string id)
+        public virtual TEntity GetById(TKey id)
         {
             TEntity entity = null;
 
             using (this.connection.Lock())
-                this.connection.RunInTransaction(() => entity = this.connection.Find<TEntity>(x => x.Id == id));
+                this.connection.RunInTransaction(() => entity = this.connection.Find<TEntity>(id));
 
             return entity;
         }
 
-        public void Remove(string id)
+        public void Remove(TKey id)
         {
             using (this.connection.Lock())
                 this.connection.RunInTransaction(() => this.connection.Delete<TEntity>(id));
