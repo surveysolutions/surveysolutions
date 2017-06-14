@@ -14,7 +14,7 @@ namespace WB.Tests.Abc.Storage
         {
         }
     }
-    
+
     internal class SqliteInmemoryStorage<TEntity> : SqliteInmemoryStorage<TEntity, string>, IPlainStorage<TEntity>
         where TEntity : class, IPlainStorageEntity, IPlainStorageEntity<string>, new()
     {

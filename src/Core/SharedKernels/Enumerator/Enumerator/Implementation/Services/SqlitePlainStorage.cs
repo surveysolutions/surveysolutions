@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         where TEntity : class, IPlainStorageEntity<TKey>, new()
     {
         protected readonly SQLiteConnectionWithLock connection;
-        private readonly ILogger logger;
+        protected readonly ILogger logger;
 
         public SqlitePlainStorage(ILogger logger,
             IFileSystemAccessor fileSystemAccessor,
@@ -37,9 +37,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, entityName + "-data.sqlite3");
 
             var sqliteConnectionString = new SQLiteConnectionString(pathToDatabase, true);
-            this.connection = new SQLiteConnectionWithLock(sqliteConnectionString, 
+            this.connection = new SQLiteConnectionWithLock(sqliteConnectionString,
                 openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex);
-            
+
             this.logger = logger;
             this.connection.CreateTable<TEntity>();
         }
@@ -123,9 +123,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public TEntity FirstOrDefault() => this.RunInTransaction(table => table.FirstOrDefault());
 
-        public IReadOnlyCollection<TEntity> LoadAll() => this.RunInTransaction(table => table.ToReadOnlyCollection());
+        public virtual IReadOnlyCollection<TEntity> LoadAll()
+        {
+            return this.RunInTransaction(table => table.Connection.Table<TEntity>().ToReadOnlyCollection());
+        }
 
-        private TResult RunInTransaction<TResult>(Func<TableQuery<TEntity>, TResult> function)
+        protected TResult RunInTransaction<TResult>(Func<TableQuery<TEntity>, TResult> function)
         {
             TResult result = default(TResult);
             using (this.connection.Lock())
@@ -133,11 +136,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             return result;
         }
-
+        
         public IReadOnlyCollection<TEntity> FixedQuery(Expression<Func<TEntity, bool>> wherePredicate, Expression<Func<TEntity, int>> orderPredicate, int takeCount, int skip = 0)
             => this.RunInTransaction(table => table.Where(wherePredicate).OrderBy(orderPredicate).Skip(skip).Take(takeCount).ToReadOnlyCollection());
         
-        public void RemoveAll()
+        public virtual void RemoveAll()
         {
             this.connection.DeleteAll<TEntity>();
         }
