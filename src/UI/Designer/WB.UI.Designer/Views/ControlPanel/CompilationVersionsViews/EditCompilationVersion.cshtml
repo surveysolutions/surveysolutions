@@ -1,6 +1,6 @@
 ﻿@model WB.UI.Designer.Models.ControlPanel.CompilationVersionModel
 @{
-    ViewBag.Title = "Allowes Addresses";
+    ViewBag.Title = "Compilation Versions";
     this.Layout = "~/Views/ControlPanel/Layout.ControlPanel.cshtml";
 }
 
@@ -14,7 +14,7 @@
             @Html.HiddenFor(x => x.QuestionnaireId)
             <div class="form-group">
                 @Html.LabelFor(x => x.Version, new { @class = "control-label" })
-                @Html.TextBoxFor(x => x.Version, new { @class = "form-control", autocomplete = "off" })
+                @Html.TextBoxFor(x => x.Version, new { @class = "form-control", autocomplete = "off", @type = "number" })
                 @Html.ValidationMessageFor(x => x.Version, null, new { @class = "help-block" })
             </div>
             <div class="form-group">
