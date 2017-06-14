@@ -1,8 +1,6 @@
 using System.Collections.Specialized;
 using Android.Views;
 using Android.Widget;
-using Flurl;
-using Flurl.Http;
 
 namespace WB.UI.Interviewer
 {
@@ -63,11 +61,6 @@ namespace WB.UI.Interviewer
         {
             //fix for Thai calendar (KP-6403)
             var thai = new System.Globalization.ThaiBuddhistCalendar();
-        }
-
-        public void Include(IFlurlClient flurlClient)
-        {
-            flurlClient.WithHeader("name", "value");
         }
     }
 }
