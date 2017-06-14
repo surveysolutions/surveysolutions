@@ -3,7 +3,7 @@
     xmlns:local="http://schemas.android.com/apk/res-auto"
     style="@style/Dashboard_InterviewListItem"
     android:id="@+id/dashboardItem">
-  <LinearLayout style="@style/Dashboard_InterviewItem_Layout" >
+  <LinearLayout style="@style/Dashboard_InterviewItem_Layout">
     <LinearLayout style="@style/Dashboard_InterviewItem_StatusPanel"
                   local:MvxBind="BackgroundStyle InterviewStatusToColor(Status);"/>
     <LinearLayout style="@style/Dashboard_InterviewItem_InformationBlock">

@@ -163,6 +163,7 @@
     <Compile Include="Views\CompanyLogo.cs" />
     <Compile Include="Views\Dashboard\CompletedInterviewsViewModel.cs" />
     <Compile Include="Views\Dashboard\DashboardItems\AssignmentDashboardItemViewModel.cs" />
+    <Compile Include="Views\Dashboard\DashboardItems\DashboardSubTitleViewModel.cs" />
     <Compile Include="Views\Dashboard\ListViewModel.cs" />
     <Compile Include="Views\Dashboard\CreateNewViewModel.cs" />
     <Compile Include="Views\Dashboard\RejectedInterviewsViewModel.cs" />
