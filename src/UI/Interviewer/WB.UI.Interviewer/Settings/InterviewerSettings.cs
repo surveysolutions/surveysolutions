@@ -99,7 +99,8 @@ namespace WB.UI.Interviewer.Settings
                 flags.Add("DEBUG");
 #endif
                 flags.Add($"QuestionnarieVersion/{this.GetSupportedQuestionnaireContentVersion()}");
-                _userAgent = $"{Application.Context.PackageName}/{this.GetApplicationVersionName()} ({string.Join(" ", flags)})";
+                var packageName = Application.Context.PackageName.Replace("[", "").Replace("]", "");
+                _userAgent = $"{packageName}/{this.GetApplicationVersionName()} ({string.Join(" ", flags)})";
                 return _userAgent;
             }
         }
