@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -10,9 +11,8 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
-    public class CompletedInterviewsViewModel : ListViewModel<InterviewDashboardItemViewModel>
+    public class CompletedInterviewsViewModel : ListViewModel<IDashboardItem>
     {
-        public string Description => InterviewerUIResources.Dashboard_CompletedTabText;
         public override GroupStatus InterviewStatus => GroupStatus.Completed;
 
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
@@ -34,13 +34,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public void Load()
         {
             this.Items = this.GetCompletedInterviews().ToList();
+
+            var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
+            subTitle.Title = InterviewerUIResources.Dashboard_CompletedTabText;
+            this.UiItems = subTitle.ToEnumerable().Concat(this.Items).ToList();
+
             this.Title = string.Format(InterviewerUIResources.Dashboard_CompletedLinkText, this.Items.Count);
         }
 
-        private IEnumerable<InterviewDashboardItemViewModel> GetCompletedInterviews()
+        private IEnumerable<IDashboardItem> GetCompletedInterviews()
         {
             var interviewerId = this.principal.CurrentUserIdentity.UserId;
-
+           
             var interviewViews = this.interviewViewRepository.Where(interview =>
                 interview.ResponsibleId == interviewerId &&
                 interview.Status == SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus.Completed);

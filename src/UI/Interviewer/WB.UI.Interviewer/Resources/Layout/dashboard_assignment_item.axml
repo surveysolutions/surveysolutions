@@ -3,77 +3,87 @@
     xmlns:local="http://schemas.android.com/apk/res-auto"
     style="@style/Dashboard_InterviewListItem"
     android:id="@+id/dashboardItem">
-  <LinearLayout style="@style/Dashboard_InterviewItem_Layout" >
-    <LinearLayout style="@style/Dashboard_InterviewItem_StatusPanel" />
-    <LinearLayout style="@style/Dashboard_InterviewItem_InformationBlock">
+  <android.support.v7.widget.CardView android:layout_width="match_parent"
+                                      android:layout_height="wrap_content"
+                                      local:cardCornerRadius="@dimen/Dashboard_Card_CornerRadius"
+                                      local:cardElevation="@dimen/Dashboard_Card_Elevation"
+                                      local:cardUseCompatPadding="true"
+                                      local:cardPreventCornerOverlap="false"> <!-- for some reason styles are not applied so I cannot move it :(-->
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal">
+      <LinearLayout style="@style/Dashboard_Card_Status"
+                    android:background="@drawable/dashboard_interview_status_new" />
+      <LinearLayout style="@style/Dashboard_InterviewItem_InformationBlock">
 
-      <LinearLayout android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-        <LinearLayout android:layout_gravity="center_vertical"
-                      android:layout_weight="1"
-                      android:layout_height="wrap_content"
-                      android:orientation="vertical"
-                      android:layout_width="0dp">
-          <TextView style="@style/Dashboard_InterviewItem_Title"
-                    local:MvxBind="Text Title;" />
-
-          <TextView style="@style/Dashboard_InterviewItem_SubTitle"
-                    local:MvxBind="Text QuestionnaireName;" />
-        </LinearLayout>
-        <LinearLayout android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:orientation="vertical" >
-          <TextView style="@style/Dashboard_ReceiveDate"
-                    local:MvxBind="Text ReceivedDate" />
-          <TextView style="@style/Dashboard_ReceiveDate"
-                    local:MvxBind="Text ReceivedTime" />
-        </LinearLayout>
-      </LinearLayout>
-
-      <Space android:layout_width="match_parent" 
-             android:layout_height="@dimen/Dashboard_InterviewItem_PrefilledQuestions_marginTop"
-             local:MvxBind="Visible HasExpandedView"></Space>
-
-      <MvxLinearLayout style="@style/Dashboard_InterviewItem_PrefilledQuestions"
-                       android:orientation="vertical"
-                       local:MvxBind="ItemsSource PrefilledQuestions;"
-                       local:MvxItemTemplate="@layout/dashboard_item_prefilled_question" />
-
-      <ImageView style="@style/Dashboard_ExpandHandle"
-                android:id="@+id/expandHandle"
-                local:srcCompat="@drawable/dashboard_expand_handle"
-                local:MvxBind="Visible HasExpandedView;" />
-      
-      <LinearLayout  android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:id="@+id/dashboardItemDetails"
-                     android:orientation="vertical"
-                     local:MvxBind="Visible Not(HasExpandedView)">
-        <MvxLinearLayout style="@style/Dashboard_InterviewItem_PrefilledQuestions"
-                         android:orientation="vertical"
-                         local:MvxBind="ItemsSource DetailedPrefilledQuestions;"
-                         local:MvxItemTemplate="@layout/dashboard_item_prefilled_question" />
-        
         <LinearLayout android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:orientation="horizontal">
-          <Button style="@style/Dashboard_InterviewItem_CreateButton"
-                  local:MvxBind="Text Localization('Dashboard_Start');
+
+          <LinearLayout android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_width="0dp">
+            <TextView style="@style/Dashboard_InterviewItem_Title"
+                      local:MvxBind="Text Title;" />
+
+            <TextView style="@style/Dashboard_InterviewItem_SubTitle"
+                      local:MvxBind="Text QuestionnaireName;" />
+          </LinearLayout>
+          <LinearLayout android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+            <TextView style="@style/Dashboard_ReceiveDate"
+                      local:MvxBind="Text ReceivedDate" />
+            <TextView style="@style/Dashboard_ReceiveDate"
+                      local:MvxBind="Text ReceivedTime" />
+          </LinearLayout>
+        </LinearLayout>
+
+        <Space android:layout_width="match_parent"
+               android:layout_height="@dimen/Dashboard_InterviewItem_PrefilledQuestions_marginTop"
+               local:MvxBind="Visible HasExpandedView">
+        </Space>
+
+        <MvxLinearLayout style="@style/Dashboard_InterviewItem_PrefilledQuestions"
+                         android:orientation="vertical"
+                         local:MvxBind="ItemsSource PrefilledQuestions;"
+                         local:MvxItemTemplate="@layout/dashboard_item_prefilled_question" />
+
+        <ImageView style="@style/Dashboard_ExpandHandle"
+                   android:id="@+id/expandHandle"
+                   local:srcCompat="@drawable/dashboard_expand_handle"
+                   local:MvxBind="Visible HasExpandedView;" />
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:id="@+id/dashboardItemDetails"
+                      android:orientation="vertical"
+                      local:MvxBind="Visible Not(HasExpandedView)">
+          <MvxLinearLayout style="@style/Dashboard_InterviewItem_PrefilledQuestions"
+                           android:orientation="vertical"
+                           local:MvxBind="ItemsSource DetailedPrefilledQuestions;"
+                           local:MvxItemTemplate="@layout/dashboard_item_prefilled_question" />
+
+          <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+            <Button style="@style/Dashboard_InterviewItem_CreateButton"
+                    local:MvxBind="Text Localization('Dashboard_Start');
                        Enabled AllowToCreateNewInterview;
                        Click CreateNewInterviewCommand;" />
-          
-          <TextView style="@style/Dashboard_Assignment_CompletionState"
-                    local:MvxBind="Text Comment;" />
 
-          <TextView style="@style/Dashboard_Location"
-                       local:MvxBind="Visible HasGpsLocation;
+            <TextView style="@style/Dashboard_Assignment_CompletionState"
+                      local:MvxBind="Text Comment;" />
+
+            <TextView style="@style/Dashboard_Location"
+                      local:MvxBind="Visible HasGpsLocation;
                                       Text Localization('Dashboard_ShowLocation');
                                       Click NavigateToGpsLocationCommand;" />
+          </LinearLayout>
         </LinearLayout>
       </LinearLayout>
-
     </LinearLayout>
-  </LinearLayout>
+  </android.support.v7.widget.CardView>
 </LinearLayout>

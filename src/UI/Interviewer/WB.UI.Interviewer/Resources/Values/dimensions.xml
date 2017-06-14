@@ -49,6 +49,9 @@
 
   <dimen name="Dashboard_Synchronization_Statistics_Height">180dp</dimen>
   <dimen name="Dashboard_Synchronization_Statistics_Width">350dp</dimen>
+  
+  <dimen name="Dashboard_Card_CornerRadius">4dp</dimen>
+  <dimen name="Dashboard_Card_Elevation">2dp</dimen>
 
   <dimen name="Relink_Message_marginBottom">28dp</dimen>
   <dimen name="Relink_FormContainer_marginTop">16dp</dimen>

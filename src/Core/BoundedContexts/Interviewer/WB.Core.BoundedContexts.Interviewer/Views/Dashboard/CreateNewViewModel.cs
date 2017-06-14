@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -10,7 +11,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public class CreateNewViewModel : ListViewModel<IDashboardItem>
     {
-        public string Description => InterviewerUIResources.Dashboard_CreateNewTabText;
         public override GroupStatus InterviewStatus => GroupStatus.Disabled;
 
         private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
@@ -30,10 +30,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public void Load()
         {
             var listDashboardItems = new List<IDashboardItem>();
+
+            
             listDashboardItems.AddRange(this.GetCensusQuestionnaires());
             listDashboardItems.AddRange(this.GetAssignments());
 
             this.Items = listDashboardItems;
+
+            var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
+            subTitle.Title = InterviewerUIResources.Dashboard_CreateNewTabText;
+            this.UiItems = subTitle.ToEnumerable().Concat(this.Items).ToList();
+
             this.Title = InterviewerUIResources.Dashboard_AssignmentsTabTitle;
         }
 
