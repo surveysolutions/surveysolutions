@@ -69,10 +69,5 @@ namespace WB.UI.Interviewer
         {
             flurlClient.WithHeader("name", "value");
         }
-
-        public void Include(Flurl.NullValueHandling nullValueHandling)
-        {
-            "url".SetQueryParams(new object(), nullValueHandling);
-        }
     }
 }
