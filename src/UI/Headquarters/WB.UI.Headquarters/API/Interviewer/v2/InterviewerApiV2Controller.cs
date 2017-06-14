@@ -31,11 +31,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         {
             string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), PHYSICALAPPLICATIONFILENAME);
 
-            return this.HttpResponseMessage(pathToInterviewerApp);
-        }
-        
-        private HttpResponseMessage HttpResponseMessage(string pathToInterviewerApp)
-        {
             if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerApp))
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
 
