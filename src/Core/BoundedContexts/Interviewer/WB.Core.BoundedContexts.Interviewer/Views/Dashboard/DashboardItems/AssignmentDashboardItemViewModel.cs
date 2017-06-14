@@ -125,29 +125,32 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             var interviewId = Guid.NewGuid();
             var interviewerIdentity = this.principal.CurrentUserIdentity;
 
-            var answersToIdentifyingQuestions = GetAnswersToIdentifyingQuestions(this.assignment.IdentifyingData);
+            List<InterviewAnswer> answers = GetAnswersToIdentifyingQuestions(this.assignment.IdentifyingData);
 
-            ICommand createInterviewCommand = new CreateInterviewOnClientCommand(interviewId,
+            ICommand createInterviewCommand = new CreateInterviewWithPreloadedData(interviewId,
                     interviewerIdentity.UserId,
-                    this.questionnaireIdentity,
+                    this.questionnaireIdentity.QuestionnaireId,
+                    this.questionnaireIdentity.Version,
+                    answers,
                     DateTime.UtcNow,
                     interviewerIdentity.SupervisorId,
+                    interviewerIdentity.UserId,
                     null,
-                    int.Parse(this.assignment.Id),
-                    answersToIdentifyingQuestions
+                    int.Parse(this.assignment.Id)
                 );
 
             await this.commandService.ExecuteAsync(createInterviewCommand);
             this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
         }
 
-        private Dictionary<Guid, AbstractAnswer> GetAnswersToIdentifyingQuestions(List<AssignmentDocument.IdentifyingAnswer> identifyingAnswers)
+        private List<InterviewAnswer> GetAnswersToIdentifyingQuestions(List<AssignmentDocument.IdentifyingAnswer> identifyingAnswers)
         {
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(QuestionnaireIdentity.Parse(this.assignment.QuestionnaireId), null);
-            var prefilled = questionnaire.GetPrefilledQuestions().ToHashSet();
 
-            var elements = identifyingAnswers.Where(ia => prefilled.Contains(ia.Identity.Id))
-                .ToDictionary(ia => ia.Identity.Id, ia => ConvertToAbstractAnswer(ia, questionnaire));
+            var elements = identifyingAnswers
+                .Select(ia => new InterviewAnswer { Identity = ia.Identity, Answer= ConvertToAbstractAnswer(ia, questionnaire)})
+                .Where(x => x.Answer!=null)
+                .ToList();
 
             return elements;
         }

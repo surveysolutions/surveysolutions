@@ -17,7 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Services;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Threading;
 using WB.UI.Headquarters.Resources;
@@ -65,110 +65,51 @@ namespace WB.UI.Headquarters.Implementation.Services
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
         }
 
-        public void ImportAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, Guid? supervisorId, Guid headquartersId)
+        public void ImportAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, Guid? supervisorId, Guid headquartersId, PreloadedContentType mode)
         {
-            var assignmentImportData = this.interviewImportDataParsingService.GetAssignmentsImportDataForSample(interviewImportProcessId, questionnaireIdentity);
+            AssignmentImportData[] assignmentImportData = this.interviewImportDataParsingService.GetAssignmentsData(interviewImportProcessId, questionnaireIdentity, mode);
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
-            RunImportProcess(assignmentImportData,
-                questionnaireIdentity,
-                interviewImportProcessId,
-                PreloadedContentType.Assignments, 
-                (assignmentRecord) =>
+
+            void ImportAction(AssignmentImportData assignmentRecord)
+            {
+                if (!supervisorId.HasValue && !assignmentRecord.SupervisorId.HasValue)
                 {
-                    if (!supervisorId.HasValue && !assignmentRecord.SupervisorId.HasValue)
+                    this.Status.State.Errors.Add(new InterviewImportError
                     {
-                        this.Status.State.Errors.Add(new InterviewImportError
-                        {
-                            ErrorMessage = string.Format(Interviews.ImportInterviews_FailedToImportInterview_NoSupervisor,
-                                    this.FormatInterviewImportData(assignmentRecord))
-                        });
-                        return;
-                    }
+                        ErrorMessage = string.Format(Interviews.ImportInterviews_FailedToImportInterview_NoSupervisor, this.FormatInterviewImportData(assignmentRecord))
+                    });
+                    return;
+                }
 
-                    var responsibleSupervisorId = assignmentRecord.SupervisorId ?? supervisorId.Value;
+                var responsibleSupervisorId = assignmentRecord.SupervisorId ?? supervisorId.Value;
 
-                    var questionnaireBrowseItem = this.plainTransactionManager.ExecuteInQueryTransaction(
-                        () => this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity));
+                var questionnaireBrowseItem = this.plainTransactionManager.ExecuteInQueryTransaction(() => this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity));
 
-                    var responsibleId = assignmentRecord.InterviewerId ?? responsibleSupervisorId;
-                    var topLevelAnswers = assignmentRecord.PreloadedData.Data.First();
-                    var assignment = new Assignment(questionnaireIdentity, 
-                        responsibleId,
-                        assignmentRecord.Quantity);
+                var responsibleId = assignmentRecord.InterviewerId ?? responsibleSupervisorId;
+                List<InterviewAnswer> answers = assignmentRecord.PreloadedData.Answers;
+                var assignment = new Assignment(questionnaireIdentity, responsibleId, assignmentRecord.Quantity);
 
 
-                    var identifyingAnswers = topLevelAnswers.Answers.Select(a => IdentifyingAnswer.Create(assignment, questionnaire, a.Value.ToString(), Identity.Create(a.Key, null))).ToList();
-                    assignment.SetAnswers(identifyingAnswers);
+                List<IdentifyingAnswer> identifyingAnswers = answers.Select(a => IdentifyingAnswer.Create(assignment, questionnaire, a.Answer.ToString(), a.Identity)).ToList();
+                assignment.SetAnswers(identifyingAnswers);
 
-                    this.plainTransactionManager.ExecuteInPlainTransaction(
-                        () => assignmentPlainStorageAccessor.Store(assignment, null));
+                bool isSupportAssignments = questionnaireBrowseItem.AllowAssignments;
+                if (!isSupportAssignments)
+                {
+                    this.transactionManagerProvider.GetTransactionManager().ExecuteInQueryTransaction(() => this.plainTransactionManager.ExecuteInPlainTransaction(() => this.commandService.Execute(new CreateInterviewWithPreloadedData(Guid.NewGuid(), headquartersId, questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, supervisorId: responsibleSupervisorId, interviewerId: assignmentRecord.InterviewerId, answersTime: DateTime.UtcNow, answers: answers, interviewKey: this.interviewKeyGenerator.Get(), assignmentId: assignment.Id))));
+                }
 
-                    bool isSupportAssignments = questionnaireBrowseItem.AllowAssignments;
-                    if (!isSupportAssignments)
-                    {
-                        this.transactionManagerProvider.GetTransactionManager().ExecuteInQueryTransaction(() =>
-                            this.plainTransactionManager.ExecuteInPlainTransaction(
-                                () => this.commandService.Execute(
-                                    new CreateInterviewWithPreloadedData(
-                                        Guid.NewGuid(),
-                                        headquartersId,
-                                        questionnaireIdentity.QuestionnaireId,
-                                        questionnaireIdentity.Version,
-                                        supervisorId: responsibleSupervisorId,
-                                        interviewerId: assignmentRecord.InterviewerId,
-                                        answersTime: DateTime.UtcNow,
-                                        preloadedDataDto: assignmentRecord.PreloadedData,
-                                        interviewKey: this.interviewKeyGenerator.Get(),
-                                        assignmentId: assignment.Id))));
-                    }
-                });
+                this.plainTransactionManager.ExecuteInPlainTransaction(() => this.assignmentPlainStorageAccessor.Store(assignment, null));
+            }
+
+            RunImportProcess(assignmentImportData, questionnaireIdentity, interviewImportProcessId, PreloadedContentType.Assignments, ImportAction);
         }
 
-        public void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId,
-            Guid? supervisorId, Guid headquartersId)
-        {
-            var interviewsToImport = this.interviewImportDataParsingService.GetInterviewsImportDataForPanel(interviewImportProcessId, questionnaireIdentity);
-
-            RunImportProcess(interviewsToImport,
-                questionnaireIdentity,
-                interviewImportProcessId,
-                PreloadedContentType.Panel, 
-                (importedInterview) =>
-                {
-                if (!supervisorId.HasValue && !importedInterview.SupervisorId.HasValue)
-                    {
-                        this.Status.State.Errors.Add(new InterviewImportError
-                        {
-                            ErrorMessage =
-                                string.Format(Interviews.ImportInterviews_FailedToImportInterview_NoSupervisor, this.FormatInterviewImportData(importedInterview))
-                        });
-                        return;
-                    }
-                    var responsibleSupervisorId = importedInterview.SupervisorId ?? supervisorId.Value;
-
-                    this.transactionManagerProvider.GetTransactionManager().ExecuteInQueryTransaction(() =>
-                            this.plainTransactionManager.ExecuteInPlainTransaction(
-                                () => this.commandService.Execute(
-                                    new CreateInterviewWithPreloadedData(
-                                        Guid.NewGuid(),
-                                        headquartersId,
-                                        questionnaireIdentity.QuestionnaireId,
-                                        questionnaireIdentity.Version,
-                                        supervisorId: responsibleSupervisorId,
-                                        interviewerId: importedInterview.InterviewerId,
-                                        answersTime: DateTime.UtcNow,
-                                        preloadedDataDto: importedInterview.PreloadedData,
-                                        interviewKey: this.interviewKeyGenerator.Get(),
-                                        assignmentId: null))));
-                });
-        }
-
-        private void RunImportProcess<T>(T[] records, 
+        private void RunImportProcess(AssignmentImportData[] records, 
             QuestionnaireIdentity questionnaireIdentity, 
             string interviewImportProcessId, 
             PreloadedContentType preloadedContentType, 
-            Action<T> importAction)
-            where T : InterviewImportData
+            Action<AssignmentImportData> importAction)
         {
             lock (lockStart)
             {

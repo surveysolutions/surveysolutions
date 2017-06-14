@@ -363,20 +363,11 @@ namespace WB.UI.Headquarters.Controllers
 
                 try
                 {
-                    if (model.PreloadedContentType == PreloadedContentType.Assignments)
-                    {
-                        this.interviewImportService.ImportAssignments(supervisorId: model.SupervisorId,
-                            questionnaireIdentity: questionnaireIdentity, 
-                            interviewImportProcessId: model.Id,
-                            headquartersId: headquartersId);
-                    }
-                    else
-                    {
-                        this.interviewImportService.ImportInterviews(supervisorId: model.SupervisorId,
-                            questionnaireIdentity: questionnaireIdentity, 
-                            interviewImportProcessId: model.Id,
-                            headquartersId: headquartersId);
-                    }
+                    this.interviewImportService.ImportAssignments(supervisorId: model.SupervisorId,
+                        questionnaireIdentity: questionnaireIdentity, 
+                        interviewImportProcessId: model.Id,
+                        headquartersId: headquartersId,
+                        mode: model.PreloadedContentType);
                 }
                 finally
                 {

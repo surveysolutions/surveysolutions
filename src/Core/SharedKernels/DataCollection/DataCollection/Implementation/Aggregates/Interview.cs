@@ -1370,38 +1370,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             InterviewTree changedInterviewTree = this.Tree.Clone();
 
-            PreloadedLevelDto[] orderedData = command.PreloadedData.Data.OrderBy(x => x.RosterVector.Length).ToArray();
-            List<Identity> answeredQuestions = orderedData.SelectMany(x => x.Answers.Select(y => new Identity(y.Key, x.RosterVector))).ToList();
+            List<InterviewAnswer>[] answersGroupedByLevels = command.Answers
+                .GroupBy(x => x.Identity.RosterVector.Length)
+                .Select(x => new { Depth = x.Key, Answers = x.ToList()})
+                .OrderBy(x => x.Depth)
+                .Select(x => x.Answers)
+                .ToArray();
 
-            for (int index = 0; index < orderedData.Length; index++)
+            foreach (var answersInLevel in answersGroupedByLevels)
             {
-                PreloadedLevelDto preloadedLevel = orderedData[index];
-                Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions = preloadedLevel.Answers;
+                this.ValidatePreloadValues(changedInterviewTree, questionnaire, answersInLevel);
 
-                this.ValidatePreloadValues(changedInterviewTree, questionnaire, answersToFeaturedQuestions, preloadedLevel.RosterVector);
-
-                Dictionary<Identity, AbstractAnswer> prefilledQuestionsWithAnswers = answersToFeaturedQuestions.ToDictionary(
-                    answersToFeaturedQuestion =>
-                        new Identity(answersToFeaturedQuestion.Key, preloadedLevel.RosterVector),
-                    answersToFeaturedQuestion => answersToFeaturedQuestion.Value);
-
-                foreach (KeyValuePair<Identity, AbstractAnswer> answer in prefilledQuestionsWithAnswers)
+                foreach (InterviewAnswer answer in answersInLevel)
                 {
-                    var interviewTreeQuestion = changedInterviewTree.GetQuestion(answer.Key);
-                    interviewTreeQuestion.SetAnswer(answer.Value);
+                    var interviewTreeQuestion = changedInterviewTree.GetQuestion(answer.Identity);
+                    // answers were not parsed correctly
+                    if (interviewTreeQuestion==null)
+                        continue;
+                    interviewTreeQuestion.SetAnswer(answer.Answer);
 
-                    if (command.AssignmentId.HasValue)
+                    if (command.AssignmentId.HasValue && questionnaire.IsPrefilled(answer.Identity.Id))
                     {
                         interviewTreeQuestion.MarkAsReadonly();
                     }
                 }
-
-                bool isLastDataLevel = index == orderedData.Length - 1;
-                bool nextDataLevelIsDeeperThanPrevious = preloadedLevel.RosterVector.Length != orderedData[Math.Min(index + 1, orderedData.Length - 1)].RosterVector.Length;
-                if (isLastDataLevel || nextDataLevelIsDeeperThanPrevious)
-                {
-                    changedInterviewTree.ActualizeTree();
-                }
+                
+                changedInterviewTree.ActualizeTree();
             }
 
             this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
@@ -1457,8 +1451,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 changedInterviewTree.GetQuestion(answer.Key).SetAnswer(answer.Value);
             }
-
-            List<Identity> answeredQuestions = prefilledQuestionsWithAnswers.Keys.ToList();
 
             changedInterviewTree.ActualizeTree();
 
@@ -2239,15 +2231,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #endregion
 
-        private void ValidatePreloadValues(InterviewTree tree, IQuestionnaire questionnaire, Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions, RosterVector rosterVector = null)
+        private void ValidatePreloadValues(InterviewTree tree, IQuestionnaire questionnaire, List<InterviewAnswer> answersToFeaturedQuestions)
         {
-            var currentRosterVector = rosterVector ?? (decimal[])RosterVector.Empty;
-            foreach (KeyValuePair<Guid, AbstractAnswer> answerToFeaturedQuestion in answersToFeaturedQuestions)
+            foreach (var answerToFeaturedQuestion in answersToFeaturedQuestions)
             {
-                Guid questionId = answerToFeaturedQuestion.Key;
-                AbstractAnswer answer = answerToFeaturedQuestion.Value;
+                Guid questionId = answerToFeaturedQuestion.Identity.Id;
+                AbstractAnswer answer = answerToFeaturedQuestion.Answer;
 
-                var questionIdentity = new Identity(questionId, currentRosterVector);
+                var questionIdentity = answerToFeaturedQuestion.Identity;
 
                 QuestionType questionType = questionnaire.GetQuestionType(questionId);
 

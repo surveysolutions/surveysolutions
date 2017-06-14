@@ -112,16 +112,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
                     }
                 }
 
-                var stringAnswer = this.answerToStringConverter.Convert(identifyingAnswer.Answer,
-                    identifyingAnswer.Identity.Id, questionnaire);
-
-                identifyingData.Add(new AssignmentDocument.IdentifyingAnswer
+                try
                 {
-                    Identity = identifyingAnswer.Identity,
-                    Answer = identifyingAnswer.Answer,
-                    AnswerAsString = stringAnswer,
-                    Question = questionnaire.GetQuestionTitle(identifyingAnswer.Identity.Id)
-                });
+                    string stringAnswer = this.answerToStringConverter.Convert(identifyingAnswer.Answer,
+                        identifyingAnswer.Identity.Id, questionnaire);
+
+                    identifyingData.Add(new AssignmentDocument.IdentifyingAnswer
+                    {
+                        Identity = identifyingAnswer.Identity,
+                        Answer = identifyingAnswer.Answer,
+                        AnswerAsString = stringAnswer,
+                        Question = questionnaire.GetQuestionTitle(identifyingAnswer.Identity.Id)
+                    });
+                }
+                catch (Exception)
+                {
+                    //BUG: most of question types cannot be restored from current string representation
+                    // list questions should be serialized with values, as well as multi option answer should be parsable "2, 3"
+                }
             }
             return identifyingData;
         }

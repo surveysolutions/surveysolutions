@@ -752,8 +752,8 @@ namespace WB.Tests.Abc.TestFactories
                 IsDeleted = deleted
             };
 
-        public QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire)
-            => new QuestionnaireBrowseItem(questionnaire, 1, false, 1, true);
+        public QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire, bool supportsAssignments = true)
+            => new QuestionnaireBrowseItem(questionnaire, 1, false, 1, supportsAssignments);
 
         public QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
             => new QuestionnaireDocument

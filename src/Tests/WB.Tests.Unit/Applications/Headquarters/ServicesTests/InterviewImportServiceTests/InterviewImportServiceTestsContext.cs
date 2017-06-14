@@ -10,6 +10,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.Implementation.Services;
@@ -24,12 +25,14 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             ILogger logger = null,
             SampleImportSettings sampleImportSettings = null,
             IInterviewImportDataParsingService interviewImportDataParsingService=null,
-            QuestionnaireDocument questionnaireDocument = null)
+            QuestionnaireDocument questionnaireDocument = null,
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null)
         {
             var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(
                 _ =>
                     _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) ==
                     questionnaireDocument);
+
             return new InterviewImportService(
                 commandService: commandService ?? Mock.Of<ICommandService>(),
                 logger: logger ?? Mock.Of<ILogger>(),
@@ -43,8 +46,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                         _ => _.GetPlainTransactionManager() == Mock.Of<IPlainTransactionManager>()),
                 transactionManagerProvider: Create.Service.TransactionManagerProvider(),
                 assignmentPlainStorageAccessor: Mock.Of<IPlainStorageAccessor<Assignment>>(),
-                questionnaireBrowseViewFactory: Mock.Of<IQuestionnaireBrowseViewFactory>()
-                );
+                questionnaireBrowseViewFactory: questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>());
         }
     }
 }
