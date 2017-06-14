@@ -410,16 +410,13 @@ namespace WB.Tests.Abc.TestFactories
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage = null,
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage = null,
             IPlainStorage<InterviewFileView> interviewFileViewStorage = null,
-            IPlainStorage<AssignmentDocument> assignmentPlainStorage = null,
             ISynchronizationService synchronizationService = null,
             ILogger logger = null,
             IUserInteractionService userInteractionService = null,
             IPasswordHasher passwordHasher = null,
             IPrincipal principal = null,
-            IMvxMessenger messenger = null,
             IInterviewerQuestionnaireAccessor questionnaireFactory = null,
             IInterviewerInterviewAccessor interviewFactory = null,
-            IAttachmentContentStorage attachmentContentStorage = null,
             IHttpStatistician httpStatistician = null)
         {
             var syncServiceMock = synchronizationService ?? Mock.Of<ISynchronizationService>();
@@ -494,13 +491,13 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public IAssignmentsSynchronizer AssignmentsSynchronizer(ISynchronizationService synchronizationService = null,
-            IPlainStorage<AssignmentDocument> assignmentsRepository = null,
+            IPlainStorage<AssignmentDocument, int> assignmentsRepository = null,
             IQuestionnaireDownloader questionnaireDownloader = null,
             IQuestionnaireStorage questionnaireStorage = null,
             IAnswerToStringConverter answerToStringConverter = null)
         {
             return new AssignmentsSynchronizer(synchronizationService ?? Mock.Of<ISynchronizationService>(),
-                assignmentsRepository ?? new SqliteInmemoryStorage<AssignmentDocument>(),
+                assignmentsRepository ?? new SqliteInmemoryStorage<AssignmentDocument, int>(),
                 questionnaireDownloader ?? Mock.Of<IQuestionnaireDownloader>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 answerToStringConverter ?? Mock.Of<IAnswerToStringConverter>());

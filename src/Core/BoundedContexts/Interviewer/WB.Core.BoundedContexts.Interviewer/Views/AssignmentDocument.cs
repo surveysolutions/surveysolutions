@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
-    public class AssignmentDocument : IPlainStorageEntity
+    public class AssignmentDocument : IPlainStorageEntity<int>
     {
         [SQLite.Ignore]
         public List<IdentifyingAnswer> IdentifyingData { get; set; }
@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         }
 
         [PrimaryKey]
-        public virtual string Id { get; set; }
+        public virtual int Id { get; set; }
 
         public int? Quantity { get; set; }
 

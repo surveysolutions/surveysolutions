@@ -64,7 +64,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             => new CreateNewViewModel(
                 Substitute.For<IPlainStorage<QuestionnaireView>>(), 
                 Substitute.For<IInterviewViewModelFactory>(),
-                Substitute.For<IPlainStorage<AssignmentDocument>>());
+                Substitute.For<IPlainStorage<AssignmentDocument, int>>());
 
         private static StartedInterviewsViewModel DashboardStartedInterviewsViewModel()
             => new StartedInterviewsViewModel(Substitute.For<IPlainStorage<InterviewView>>(),

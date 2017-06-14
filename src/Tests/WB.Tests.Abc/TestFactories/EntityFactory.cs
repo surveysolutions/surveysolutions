@@ -1548,11 +1548,11 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
-        public AssignmentApiViewBuilder AssignmentApiView(string id, int? quantity, int interviewsCount = 0, QuestionnaireIdentity questionnaireIdentity = null)
+        public AssignmentApiViewBuilder AssignmentApiView(int id, int? quantity, int interviewsCount = 0, QuestionnaireIdentity questionnaireIdentity = null)
         {
             return new AssignmentApiViewBuilder(new AssignmentApiView
             {
-                Id = id ?? Guid.NewGuid().ToString(),
+                Id = id,
                 Quantity = quantity,
                 QuestionnaireId = questionnaireIdentity,
                 InterviewsCount = interviewsCount
@@ -1617,11 +1617,11 @@ namespace WB.Tests.Abc.TestFactories
             return result;
         }
 
-        public AssignmentDocumentBuilder AssignmentDocument(string id, int? quantity, int interviewsCount = 0, string questionnaireIdentity = null)
+        public AssignmentDocumentBuilder AssignmentDocument(int id, int? quantity, int interviewsCount = 0, string questionnaireIdentity = null)
         {
             return new AssignmentDocumentBuilder(new AssignmentDocument
             {
-                Id = id ?? Guid.NewGuid().ToString(),
+                Id = id,
                 Quantity = quantity,
                 InterviewsCount = interviewsCount,
                 QuestionnaireId = questionnaireIdentity

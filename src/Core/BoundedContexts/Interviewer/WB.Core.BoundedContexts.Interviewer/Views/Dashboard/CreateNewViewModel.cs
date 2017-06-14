@@ -15,12 +15,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly IInterviewViewModelFactory viewModelFactory;
-        private readonly IPlainStorage<AssignmentDocument> assignmentsRepository;
+        private readonly IPlainStorage<AssignmentDocument, int> assignmentsRepository;
 
         public CreateNewViewModel(
             IPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IInterviewViewModelFactory viewModelFactory,
-            IPlainStorage<AssignmentDocument> assignmentsRepository)
+            IPlainStorage<AssignmentDocument, int> assignmentsRepository)
         {
             this.questionnaireViewRepository = questionnaireViewRepository;
             this.viewModelFactory = viewModelFactory;

@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.HasComment = !string.IsNullOrEmpty(this.Comment);
             this.HasExpandedView = this.PrefilledQuestions.Count > 0;
 
-            if (!string.IsNullOrEmpty(interview.Assignment))
+            if (interview.Assignment != null)
             {
                 this.Title = string.Format(InterviewerUIResources.Dashboard_InterviewCard_Title, interview.Assignment);
             }
