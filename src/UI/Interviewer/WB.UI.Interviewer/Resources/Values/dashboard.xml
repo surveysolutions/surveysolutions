@@ -299,6 +299,7 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textColor">@color/group_not_started</item>
     <item name="android:paddingRight">@dimen/Interview_Group_button_padding</item>
+    <item name="android:layout_gravity">right</item>
   </style>
 </resources>
 
