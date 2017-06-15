@@ -75,9 +75,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                                                   + this.CompletedInterviews.Items.Count
                                                   + this.RejectedInterviews.Items.Count;
 
-        public bool IsExistsAnyCensusQuestionnairesOrInterviews
-            => numberOfAssignedInterviews + this.CreateNew.Items.Count > 0;
-
         private SynchronizationViewModel synchronization;
         public SynchronizationViewModel Synchronization
         {
@@ -118,13 +115,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             if(this.principal.CurrentUserIdentity == null)
                 return;
 
-            this.CreateNew.Load();
+            this.CreateNew.Load(this.Synchronization);
             this.StartedInterviews.Load();
             this.RejectedInterviews.Load();
             this.CompletedInterviews.Load();
             
             this.RaisePropertyChanged(() => this.DashboardTitle);
-            this.RaisePropertyChanged(() => this.IsExistsAnyCensusQuestionnairesOrInterviews);
 
             IsLoaded = true;
         }
