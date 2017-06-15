@@ -163,7 +163,7 @@ namespace WB.UI.Headquarters.API
                 .Select(answer => IdentifyingAnswer.Create(assignment, questionnaire, answer.Value.ToString(), Identity.Create(answer.Key, null)))
                 .ToArray();
             assignment.SetAnswers(identifyingAnswers);
-            
+
             this.assignmentsStorage.Store(assignment, Guid.NewGuid());
 
             return this.Ok(new {});
