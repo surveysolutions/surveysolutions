@@ -15,8 +15,7 @@
     <script type="text/javascript">
         var assignmentsEndpoint = "@Url.Content("~/api/Assignments")";
         var $profileUrl = '@Url.Action("Profile", "Interviewer")';
-        var $interviewsUrl = '@Url.Action("Interviews", "HQ")';
-
+        var $interviewsUrl = "@(Model.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ"))";
         var tableOptions = {
             rowId: "id",
             deferLoading: 0,
