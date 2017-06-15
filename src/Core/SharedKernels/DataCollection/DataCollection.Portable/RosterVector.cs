@@ -47,7 +47,11 @@ namespace WB.Core.SharedKernels.DataCollection
             var answerAsDecimalArrayArray = obj as decimal[][];
             if (answerAsDecimalArrayArray != null)
                 return answerAsDecimalArrayArray.Select(desimalArray => (RosterVector)desimalArray).ToArray();
-            
+
+            var readOnlyCollection = obj as IReadOnlyCollection<RosterVector>;
+            if (readOnlyCollection != null)
+                return readOnlyCollection.ToArray();
+
             throw new ArgumentException(nameof(obj));
         }
 

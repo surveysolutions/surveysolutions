@@ -585,6 +585,7 @@
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_child_interviewer_entities.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTreeTests.cs" />
     <Compile Include="SharedKernels\DataCollection\RosterManagersTest.cs" />
+    <Compile Include="SharedKernels\DataCollection\RosterVectorTests.cs" />
     <Compile Include="SharedKernels\DataCollection\SubstitionTextTests.cs" />
     <Compile Include="SharedKernels\DataCollection\SubstitionTextFactoryTests.cs" />
     <Compile Include="SharedKernels\Enumerator\CompositeCollectionTests.cs" />
