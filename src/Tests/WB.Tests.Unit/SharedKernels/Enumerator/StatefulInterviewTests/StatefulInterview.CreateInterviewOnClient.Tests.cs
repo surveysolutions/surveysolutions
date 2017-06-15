@@ -115,9 +115,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(question);
             var interview = Setup.StatefulInterview(questionnaire);
 
-            var answersToIdentifyingQuestions = new Dictionary<Guid, AbstractAnswer>()
+            var answersToIdentifyingQuestions = new Dictionary<Identity, AbstractAnswer>()
             {
-                {questionId, abstractAnswer}
+                {Create.Identity(questionId), abstractAnswer}
             };
 
             var command = Create.Command.CreateInterviewOnClientCommand(interview.Id, answersToIdentifyingQuestions: answersToIdentifyingQuestions);
@@ -141,9 +141,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.TextQuestion(questionId: questionTextId, variable: "text"));
             var interview = Setup.StatefulInterview(questionnaire);
-            var answersToIdentifyingQuestions = new Dictionary<Guid, AbstractAnswer>()
+            var answersToIdentifyingQuestions = new Dictionary<Identity, AbstractAnswer>()
             {
-                {questionTextId, TextAnswer.FromString("value")}
+                {Create.Identity(questionTextId), TextAnswer.FromString("value")}
             };
             var command = Create.Command.CreateInterviewOnClientCommand(interview.Id, assignmentId: 1, answersToIdentifyingQuestions: answersToIdentifyingQuestions);
 
@@ -163,9 +163,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion(questionId));
             var interview = Setup.StatefulInterview(questionnaire);
             SetupEventContext();
-            var answersToIdentifyingQuestions = new Dictionary<Guid, AbstractAnswer>()
+            var answersToIdentifyingQuestions = new Dictionary<Identity, AbstractAnswer>()
             {
-                {questionId, TextAnswer.FromString("value")}
+                {Create.Identity(questionId), TextAnswer.FromString("value")}
             };
             var command = Create.Command.CreateInterviewOnClientCommand(interview.Id, assignmentId: 1, answersToIdentifyingQuestions: answersToIdentifyingQuestions);
 

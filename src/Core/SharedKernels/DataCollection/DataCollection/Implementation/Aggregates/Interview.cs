@@ -1433,9 +1433,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             InterviewTree changedInterviewTree = this.Tree.Clone();
 
-            this.ValidatePrefilledAnswers(this.Tree, questionnaire, command.AnswersToFeaturedQuestions, RosterVector.Empty);
-
             Dictionary<Identity, AbstractAnswer> prefilledQuestionsWithAnswers = command.AnswersToFeaturedQuestions.ToDictionary(x => new Identity(x.Key, RosterVector.Empty), x => x.Value);
+
+            this.ValidatePrefilledAnswers(this.Tree, questionnaire, prefilledQuestionsWithAnswers, RosterVector.Empty);
             foreach (KeyValuePair<Identity, AbstractAnswer> answer in prefilledQuestionsWithAnswers)
             {
                 changedInterviewTree.GetQuestion(answer.Key).SetAnswer(answer.Value);
@@ -2280,12 +2280,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        protected void ValidatePrefilledAnswers(InterviewTree tree, IQuestionnaire questionnaire, IReadOnlyDictionary<Guid, AbstractAnswer> answersToFeaturedQuestions, RosterVector rosterVector = null)
+        protected void ValidatePrefilledAnswers(InterviewTree tree, IQuestionnaire questionnaire, IReadOnlyDictionary<Identity, AbstractAnswer> answersToFeaturedQuestions, RosterVector rosterVector = null)
         {
             var currentRosterVector = rosterVector ?? (decimal[])RosterVector.Empty;
-            foreach (KeyValuePair<Guid, AbstractAnswer> answerToFeaturedQuestion in answersToFeaturedQuestions)
+            foreach (var answerToFeaturedQuestion in answersToFeaturedQuestions)
             {
-                Guid questionId = answerToFeaturedQuestion.Key;
+                Guid questionId = answerToFeaturedQuestion.Key.Id;
                 AbstractAnswer answer = answerToFeaturedQuestion.Value;
 
                 var questionIdentity = new Identity(questionId, currentRosterVector);

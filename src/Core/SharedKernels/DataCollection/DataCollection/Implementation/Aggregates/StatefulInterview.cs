@@ -244,15 +244,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.QuestionnaireIdentity = command.QuestionnaireIdentity;
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            var answersToIdentifyingQuestions = command.AnswersToIdentifyingQuestions ?? new Dictionary<Guid, AbstractAnswer>();
+            var answersToIdentifyingQuestions = command.AnswersToIdentifyingQuestions ?? new Dictionary<Identity, AbstractAnswer>();
             var userId = command.UserId;
 
             var changedInterviewTree = this.Tree.Clone();
 
             this.ValidatePrefilledAnswers(this.Tree, questionnaire, answersToIdentifyingQuestions, RosterVector.Empty);
 
-            Dictionary<Identity, AbstractAnswer> prefilledQuestionsWithAnswers = answersToIdentifyingQuestions.ToDictionary(x => new Identity(x.Key, RosterVector.Empty), x => x.Value);
-            foreach (KeyValuePair<Identity, AbstractAnswer> answer in prefilledQuestionsWithAnswers)
+            foreach (KeyValuePair<Identity, AbstractAnswer> answer in answersToIdentifyingQuestions)
             {
                 var treeQuestion = changedInterviewTree.GetQuestion(answer.Key);
                 treeQuestion.SetAnswer(answer.Value);

@@ -2841,8 +2841,26 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f020054
 			public static int avd_hide_password = 2130837588;
 			
+			// aapt resource value: 0x7f0201ba
+			public static int avd_hide_password_1 = 2130837946;
+			
+			// aapt resource value: 0x7f0201bb
+			public static int avd_hide_password_2 = 2130837947;
+			
+			// aapt resource value: 0x7f0201bc
+			public static int avd_hide_password_3 = 2130837948;
+			
 			// aapt resource value: 0x7f020055
 			public static int avd_show_password = 2130837589;
+			
+			// aapt resource value: 0x7f0201bd
+			public static int avd_show_password_1 = 2130837949;
+			
+			// aapt resource value: 0x7f0201be
+			public static int avd_show_password_2 = 2130837950;
+			
+			// aapt resource value: 0x7f0201bf
+			public static int avd_show_password_3 = 2130837951;
 			
 			// aapt resource value: 0x7f020056
 			public static int back_to_parent = 2130837590;
