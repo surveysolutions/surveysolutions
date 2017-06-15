@@ -210,5 +210,35 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             Assert.That(linkedMultiOptionQuestionInt.GetAnswer().CheckedValues, Is.EqualTo(linkedMultiOptionQuestionAnswer));
             Assert.That(linkedSingleOptionQuestionInt.GetAnswer().SelectedValue, Is.EqualTo(linkedSingleOptionQuestionAnswer));
         }
+
+
+        [Test]
+        public void When_rejected_interview_has_readonly_question_Should_restore_readonly_state_after_sync()
+        {
+            //arrange
+            var textQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            var textQuestionIdentity = Create.Identity(textQuestionId);
+
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.TextQuestion(textQuestionId)
+                );
+
+            var interview = Setup.StatefulInterview(questionnaire);
+
+            var answerTextQuestion = Create.Entity.AnsweredQuestionSynchronizationDto(
+                questionId: textQuestionId,
+                answer: "answer");
+
+            var syncDto = Create.Entity.InterviewSynchronizationDto(
+                answers: new[] { answerTextQuestion },
+                readonlyQuestions: new HashSet<InterviewItemId> { Create.Entity.InterviewItemId(textQuestionId) }
+            );
+
+            //act
+            interview.ApplyEvent(new InterviewSynchronized(syncDto));
+
+            //assert
+            Assert.That(interview.IsReadOnlyQuestion(textQuestionIdentity), Is.True);
+        }
     }
 }
