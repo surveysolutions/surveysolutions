@@ -213,6 +213,7 @@
     <Compile Include="Internals\MapService\MapDescription.cs" />
     <Compile Include="Internals\MapService\MapService.cs" />
     <Compile Include="Internals\PictureChooser.cs" />
+    <Compile Include="Internals\PortableInterviewAnswerJsonSerializer.cs" />
     <Compile Include="Internals\PortableOldToNewAssemblyRedirectSerializationBinder.cs" />
     <Compile Include="Internals\FileSystem\AndroidDirectoryInfo.cs" />
     <Compile Include="Internals\FileSystem\AndroidFileInfo.cs" />
@@ -240,6 +241,10 @@
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
+      <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>

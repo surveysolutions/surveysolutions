@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -19,19 +19,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
         private readonly IPlainStorage<AssignmentDocument, int> assignmentsRepository;
         private readonly IQuestionnaireDownloader questionnaireDownloader;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly IAnswerToStringConverter answerToStringConverter;
 
         public AssignmentsSynchronizer(ISynchronizationService synchronizationService,
             IPlainStorage<AssignmentDocument, int> assignmentsRepository,
             IQuestionnaireDownloader questionnaireDownloader,
-            IQuestionnaireStorage questionnaireStorage,
-            IAnswerToStringConverter answerToStringConverter)
+            IQuestionnaireStorage questionnaireStorage)
         {
             this.synchronizationService = synchronizationService;
             this.assignmentsRepository = assignmentsRepository;
             this.questionnaireDownloader = questionnaireDownloader;
             this.questionnaireStorage = questionnaireStorage;
-            this.answerToStringConverter = answerToStringConverter;
         }
 
         public virtual async Task SynchronizeAssignmentsAsync(IProgress<SyncProgressInfo> progress,
@@ -60,7 +57,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
             // adding new, updating capacity for existing
             var localAssignmentsLookup = localAssignments.ToLookup(la => la.Id);
 
-            foreach (var remote in remoteAssignments)
+            foreach (AssignmentApiView remote in remoteAssignments)
             {
                 await this.questionnaireDownloader.DownloadQuestionnaireAsync(remote.QuestionnaireId, cancellationToken, statistics);
                 IQuestionnaire questionnaire = this.questionnaireStorage.GetQuestionnaire(remote.QuestionnaireId, null);
@@ -78,12 +75,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
 
                     var identifyingData = this.FillAnswers(remote, questionnaire, local);
 
-                    local.IdentifyingData = identifyingData;
+                    local.Answers = identifyingData;
                     statistics.NewAssignmentsCount++;
                 }
                 else
                 {
-                    local.IdentifyingData = FillAnswers(remote, questionnaire, local);
+                    local.Answers = FillAnswers(remote, questionnaire, local);
                 }
 
                 local.Quantity = remote.Quantity;
@@ -93,44 +90,26 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
             }
         }
 
-        private List<AssignmentDocument.IdentifyingAnswer> FillAnswers(AssignmentApiView remote, IQuestionnaire questionnaire, AssignmentDocument local)
+        private List<AssignmentDocument.AssignmentAnswer> FillAnswers(AssignmentApiView remote, IQuestionnaire questionnaire, AssignmentDocument local)
         {
-            var identifyingData = new List<AssignmentDocument.IdentifyingAnswer>();
+            var identifyingData = new List<AssignmentDocument.AssignmentAnswer>();
+            var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
 
-            foreach (var identifyingAnswer in remote.IdentifyingData)
+            local.LocationLatitude = remote.LocationLatitude;
+            local.LocationLongitude = remote.LocationLongitude;
+
+            foreach (var answer in remote.Answers)
             {
-                var questionType = questionnaire.GetQuestionType(identifyingAnswer.Identity.Id);
-
-                if (questionType == QuestionType.GpsCoordinates)
+                var isIdentifying = identifyingQuestionIds.Contains(answer.Identity.Id);
+                identifyingData.Add(new AssignmentDocument.AssignmentAnswer
                 {
-                    local.LocationQuestionId = identifyingAnswer.Identity.Id;
-                    var geoPositionAnswer = GeoPosition.FromString(identifyingAnswer.Answer);
-                    if (geoPositionAnswer != null)
-                    {
-                        local.LocationLatitude = geoPositionAnswer.Latitude;
-                        local.LocationLongitude = geoPositionAnswer.Longitude;
-                    }
-                }
-
-                try
-                {
-                    string stringAnswer = this.answerToStringConverter.Convert(identifyingAnswer.Answer,
-                        identifyingAnswer.Identity.Id, questionnaire);
-
-                    identifyingData.Add(new AssignmentDocument.IdentifyingAnswer
-                    {
                     AssignmentId = remote.Id,
-                        Identity = identifyingAnswer.Identity,
-                        Answer = identifyingAnswer.Answer,
-                        AnswerAsString = stringAnswer,
-                        Question = questionnaire.GetQuestionTitle(identifyingAnswer.Identity.Id)
-                    });
-                }
-                catch (Exception)
-                {
-                    //BUG: most of question types cannot be restored from current string representation
-                    // list questions should be serialized with values, as well as multi option answer should be parsable "2, 3"
-                }
+                    Identity = answer.Identity,
+                    SerializedAnswer = answer.SerializedAnswer,
+                    AnswerAsString = answer.AnswerAsString,
+                    Question = isIdentifying ? questionnaire.GetQuestionTitle(answer.Identity.Id) : null,
+                    IsIdentifying = isIdentifying
+                });
             }
             return identifyingData;
         }

@@ -15,8 +15,8 @@ namespace WB.Core.SharedKernels.DataCollection
             this.Yes = yes;
         }
 
-        public int Value { get; }
-        public bool Yes { get; }
+        public int Value { get; set; }
+        public bool Yes { get; set; }
         public bool No => !Yes;
 
         public override string ToString() => $"{this.Value} -> {(this.Yes ? "Yes" : "No")}";

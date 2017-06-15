@@ -20,13 +20,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class TextAnswer : AbstractAnswer
     {
+        protected  TextAnswer() { }
+
         private TextAnswer(string value)
         {
             if (value == null) throw new ArgumentNullException(nameof(value));
             this.Value = value;
         }
 
-        public string Value { get; }
+        public string Value { get; set; }
 
         public static TextAnswer FromString(string value) => value != null ? new TextAnswer(value.Trim()) : null;
 
@@ -36,12 +38,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class NumericIntegerAnswer : AbstractAnswer
     {
+        protected NumericIntegerAnswer() { }
         private NumericIntegerAnswer(int value)
         {
             this.Value = value;
         }
 
-        public int Value { get; }
+        public int Value { get; set; }
 
         public static NumericIntegerAnswer FromInt(int value) => new NumericIntegerAnswer(value);
 
@@ -51,12 +54,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class NumericRealAnswer : AbstractAnswer
     {
+        protected NumericRealAnswer() { }
         private NumericRealAnswer(double value)
         {
             this.Value = value;
         }
 
-        public double Value { get; }
+        public double Value { get; set; }
 
         public static NumericRealAnswer FromDouble(double value) => new NumericRealAnswer(value);
 
@@ -68,12 +72,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class DateTimeAnswer : AbstractAnswer
     {
+        protected DateTimeAnswer() { }
+
         private DateTimeAnswer(DateTime value)
         {
             this.Value = value;
         }
 
-        public DateTime Value { get; }
+        public DateTime Value { get; set; }
 
         public static DateTimeAnswer FromDateTime(DateTime value) => new DateTimeAnswer(value);
 
@@ -83,12 +89,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class CategoricalFixedSingleOptionAnswer : AbstractAnswer
     {
+        protected CategoricalFixedSingleOptionAnswer() { }
         private CategoricalFixedSingleOptionAnswer(int selectedValue)
         {
             this.SelectedValue = selectedValue;
         }
 
-        public int SelectedValue { get; }
+        public int SelectedValue { get; set; }
 
         public static CategoricalFixedSingleOptionAnswer FromInt(int selectedValue) => new CategoricalFixedSingleOptionAnswer(selectedValue);
         public static CategoricalFixedSingleOptionAnswer FromDecimal(decimal selectedValue) => new CategoricalFixedSingleOptionAnswer((int) selectedValue);
@@ -99,13 +106,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class CategoricalFixedMultiOptionAnswer : AbstractAnswer
     {
+        protected CategoricalFixedMultiOptionAnswer() { }
         private CategoricalFixedMultiOptionAnswer(IEnumerable<int> checkedValues)
         {
             if (checkedValues == null) throw new ArgumentNullException(nameof(checkedValues));
             this.CheckedValues = checkedValues.ToReadOnlyCollection();
         }
 
-        public IReadOnlyCollection<int> CheckedValues { get; }
+        public IReadOnlyCollection<int> CheckedValues { get; set; }
 
         public IEnumerable<decimal> ToDecimals() => this.CheckedValues.Select(value => (decimal) value);
 
@@ -123,13 +131,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class CategoricalLinkedSingleOptionAnswer : AbstractAnswer
     {
+        protected CategoricalLinkedSingleOptionAnswer() { }
         private CategoricalLinkedSingleOptionAnswer(RosterVector selectedValue)
         {
             if (selectedValue == null) throw new ArgumentNullException(nameof(selectedValue));
             this.SelectedValue = selectedValue;
         }
 
-        public RosterVector SelectedValue { get; }
+        public RosterVector SelectedValue { get; set; }
 
         public static CategoricalLinkedSingleOptionAnswer FromRosterVector(RosterVector selectedValue)
             => selectedValue == null ? null : new CategoricalLinkedSingleOptionAnswer(selectedValue);
@@ -140,13 +149,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class CategoricalLinkedMultiOptionAnswer : AbstractAnswer
     {
+        protected CategoricalLinkedMultiOptionAnswer() { }
         private CategoricalLinkedMultiOptionAnswer(IEnumerable<RosterVector> checkedValues)
         {
             if (checkedValues == null) throw new ArgumentNullException(nameof(checkedValues));
             this.CheckedValues = checkedValues.ToReadOnlyCollection();
         }
 
-        public IReadOnlyCollection<RosterVector> CheckedValues { get; }
+        public IReadOnlyCollection<RosterVector> CheckedValues { get; set; }
 
         public static CategoricalLinkedMultiOptionAnswer FromRosterVectors(IEnumerable<RosterVector> checkedValues)
             => checkedValues == null ? null : new CategoricalLinkedMultiOptionAnswer(checkedValues);
@@ -159,13 +169,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class TextListAnswer : AbstractAnswer
     {
+        protected TextListAnswer() { }
         private TextListAnswer(IEnumerable<TextListAnswerRow> rows)
         {
             if (rows == null) throw new ArgumentNullException(nameof(rows));
             this.Rows = rows.ToReadOnlyCollection();
         }
 
-        public IReadOnlyCollection<TextListAnswerRow> Rows { get; }
+        public IReadOnlyCollection<TextListAnswerRow> Rows { get; set; }
 
         public Tuple<decimal, string>[] ToTupleArray() => this.Rows.Select(row => Tuple.Create((decimal)row.Value, row.Text)).ToArray();
 
@@ -182,13 +193,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class GpsAnswer : AbstractAnswer
     {
+        protected GpsAnswer() { }
         private GpsAnswer(GeoPosition value)
         {
             if (value == null) throw new ArgumentNullException(nameof(value));
             this.Value = value;
         }
 
-        public GeoPosition Value { get; }
+        public GeoPosition Value { get; set; }
 
         public static GpsAnswer FromGeoPosition(GeoPosition value) => value != null ? new GpsAnswer(value) : null;
 
@@ -202,13 +214,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class QRBarcodeAnswer : AbstractAnswer
     {
+        protected QRBarcodeAnswer() { }
         private QRBarcodeAnswer(string decodedText)
         {
             if (decodedText == null) throw new ArgumentNullException(nameof(decodedText));
             this.DecodedText = decodedText;
         }
 
-        public string DecodedText { get; }
+        public string DecodedText { get; set; }
 
         public static QRBarcodeAnswer FromString(string decodedText) => decodedText != null ? new QRBarcodeAnswer(decodedText) : null;
 
@@ -218,13 +231,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class MultimediaAnswer : AbstractAnswer
     {
+        protected MultimediaAnswer() { }
         private MultimediaAnswer(string fileName)
         {
             if (fileName == null) throw new ArgumentNullException(nameof(fileName));
             this.FileName = fileName;
         }
 
-        public string FileName { get; }
+        public string FileName { get; set; }
 
         public static MultimediaAnswer FromString(string fileName) => fileName != null ? new MultimediaAnswer(fileName) : null;
 
@@ -234,13 +248,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class AreaAnswer : AbstractAnswer
     {
+        protected AreaAnswer() { }
         private AreaAnswer(Area area)
         {
             if (area == null) throw new ArgumentNullException(nameof(area));
             this.Value = area;
         }
 
-        public Area Value { get; }
+        public Area Value { get; set; }
 
         public static AreaAnswer FromArea(Area area) => area!= null ? new AreaAnswer(area) : null;
 
@@ -250,13 +265,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class YesNoAnswer : AbstractAnswer
     {
+        protected YesNoAnswer() { }
         private YesNoAnswer(IEnumerable<CheckedYesNoAnswerOption> checkedOptions)
         {
             if (checkedOptions == null) throw new ArgumentNullException(nameof(checkedOptions));
             this.CheckedOptions = checkedOptions.ToReadOnlyCollection();
         }
 
-        public IReadOnlyCollection<CheckedYesNoAnswerOption> CheckedOptions { get; }
+        public IReadOnlyCollection<CheckedYesNoAnswerOption> CheckedOptions { get; set; }
 
         public IEnumerable<AnsweredYesNoOption> ToAnsweredYesNoOptions() => this.CheckedOptions.Select(option => new AnsweredYesNoOption(option.Value, option.Yes));
 

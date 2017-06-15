@@ -1,8 +1,10 @@
-﻿using NHibernate.Mapping.ByCode;
+﻿using System.Collections.Generic;
+using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
@@ -64,6 +66,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 c.Property(x => x.AnswerAsString);
                 c.Property(x => x.Assignment);
             }));
+
+            Property(x => x.Answers, mapper =>
+            {
+                mapper.Lazy(true);
+                mapper.Type<PostgresJson<IList<InterviewAnswer>>>();
+            });
 
             ManyToOne(x => x.Responsible, mto =>
             {

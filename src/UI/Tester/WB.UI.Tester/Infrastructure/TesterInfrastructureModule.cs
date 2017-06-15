@@ -68,6 +68,7 @@ namespace WB.UI.Tester.Infrastructure
             this.Bind<IRestService>().To<RestService>();
 
             this.Bind<ISerializer>().ToMethod((ctx) => new PortableJsonSerializer());
+            this.Bind<IInterviewAnswerSerializer>().ToMethod((ctx) => new PortableInterviewAnswerJsonSerializer());
             this.Bind<IJsonAllTypesSerializer>().ToMethod((ctx) => new PortableJsonAllTypesSerializer());
 
             this.Bind<IStringCompressor>().To<JsonCompressor>();

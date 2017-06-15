@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Transactions;
@@ -69,6 +70,7 @@ namespace WB.UI.Headquarters.Implementation.Services
         {
             AssignmentImportData[] assignmentImportData = this.interviewImportDataParsingService.GetAssignmentsData(interviewImportProcessId, questionnaireIdentity, mode);
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+            var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
 
             void ImportAction(AssignmentImportData assignmentRecord)
             {
@@ -89,9 +91,9 @@ namespace WB.UI.Headquarters.Implementation.Services
                 List<InterviewAnswer> answers = assignmentRecord.PreloadedData.Answers;
                 var assignment = new Assignment(questionnaireIdentity, responsibleId, assignmentRecord.Quantity);
 
-
-                List<IdentifyingAnswer> identifyingAnswers = answers.Select(a => IdentifyingAnswer.Create(assignment, questionnaire, a.Answer.ToString(), a.Identity)).ToList();
-                assignment.SetAnswers(identifyingAnswers);
+                List<IdentifyingAnswer> identifyingAnswers = answers.Where(x => identifyingQuestionIds.Contains(x.Identity.Id)).Select(a => IdentifyingAnswer.Create(assignment, questionnaire, a.Answer.ToString(), a.Identity)).ToList();
+                assignment.SetIdentifyingData(identifyingAnswers);
+                assignment.SetAnswers(answers);
 
                 bool isSupportAssignments = questionnaireBrowseItem.AllowAssignments;
                 if (!isSupportAssignments)
