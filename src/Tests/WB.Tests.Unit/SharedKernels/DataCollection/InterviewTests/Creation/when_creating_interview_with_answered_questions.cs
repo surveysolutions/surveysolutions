@@ -22,14 +22,21 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Creation
                 Create.Entity.TextQuestion(q1, variable: "txt", scope: QuestionScope.Interviewer));
 
             var interview = Setup.StatefulInterview(questionnaire, false);
-            var answers = new Dictionary<Identity, AbstractAnswer>();
-            answers.Add(identity, Create.Entity.TextQuestionAnswer(textQuestionAnswer));
+            var answers = new List<InterviewAnswer>();
+            answers.Add(
+                new InterviewAnswer
+                {
+                    Identity = identity,
+                    Answer = Create.Entity.TextQuestionAnswer(textQuestionAnswer)
+                });
+                
 
             // Act
             interview.CreateInterviewOnClient(Create.Command.CreateInterviewOnClientCommand(answersToIdentifyingQuestions: answers));
 
             // Assert
             Assert.That(interview.GetTextQuestion(identity).GetAnswer().Value, Is.EqualTo(textQuestionAnswer));
+            Assert.That(interview.IsReadOnlyQuestion(identity), Is.False, "Interviewer scoped questions should not be marked as readonly");
         }
 
         [Test]
@@ -53,8 +60,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Creation
                 );
 
             var interview = Setup.StatefulInterview(questionnaire, false);
-            var answers = new Dictionary<Identity, AbstractAnswer>();
-            answers.Add(identity, Create.Entity.TextQuestionAnswer(textQuestionAnswer));
+            var answers = new List<InterviewAnswer>();
+            answers.Add(
+                new InterviewAnswer
+                {
+                    Identity = identity,
+                    Answer = Create.Entity.TextQuestionAnswer(textQuestionAnswer)
+                });
+
 
             // Act
             interview.CreateInterviewOnClient(Create.Command.CreateInterviewOnClientCommand(answersToIdentifyingQuestions: answers));

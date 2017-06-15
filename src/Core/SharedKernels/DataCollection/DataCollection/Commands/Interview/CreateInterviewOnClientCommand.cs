@@ -9,14 +9,13 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
     public class CreateInterviewOnClientCommand : InterviewCommand
     {
-        public Guid Id { get; private set; }
-        public QuestionnaireIdentity QuestionnaireIdentity { get; private set; }
-        public Guid SupervisorId { get; private set; }
+        public Guid Id { get; }
+        public QuestionnaireIdentity QuestionnaireIdentity { get; }
+        public Guid SupervisorId { get; }
         public InterviewKey InterviewKey { get; }
-        public int? AssignmentId { get; private set; }
-        // TODO: Change to List<InterviewAnswer>
-        public IReadOnlyDictionary<Identity, AbstractAnswer> Answers { get; private set; }
-        public DateTime AnswersTime { get; private set; }
+        public int? AssignmentId { get; }
+        public IReadOnlyList<InterviewAnswer> Answers { get; }
+        public DateTime AnswersTime { get; }
 
         public CreateInterviewOnClientCommand(Guid interviewId, 
             Guid userId, 
@@ -24,7 +23,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             DateTime answersTime, Guid supervisorId, 
             InterviewKey interviewKey, 
             int? assignmentId,
-            IReadOnlyDictionary<Identity, AbstractAnswer> answersToIdentifyingQuestions)
+            IReadOnlyList<InterviewAnswer> answersToIdentifyingQuestions)
             : base(interviewId, userId)
         {
             this.Id = interviewId;
@@ -33,7 +32,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             this.SupervisorId = supervisorId;
             this.InterviewKey = interviewKey;
             this.AssignmentId = assignmentId;
-            this.Answers = answersToIdentifyingQuestions ?? new Dictionary<Identity, AbstractAnswer>();
+            this.Answers = answersToIdentifyingQuestions ?? new List<InterviewAnswer>();
         }
     }
 }

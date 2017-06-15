@@ -191,7 +191,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 supervisorId: Guid.NewGuid(),
                 interviewKey: null,
                 assignmentId: null, 
-                answersToIdentifyingQuestions: new Dictionary<Identity, AbstractAnswer>()));
+                answersToIdentifyingQuestions: new List<InterviewAnswer>()));
 
             return interviewId;
         }
