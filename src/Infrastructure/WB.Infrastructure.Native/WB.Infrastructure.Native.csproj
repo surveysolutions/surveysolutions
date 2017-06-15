@@ -201,6 +201,7 @@
     <Compile Include="Storage\Esent\Implementation\EsentCachedReadSideStorage.cs" />
     <Compile Include="Storage\EventSerializerSettings.cs" />
     <Compile Include="Storage\MainCoreAssemblyRedirectSerializationBaseBinder.cs" />
+    <Compile Include="Storage\NewtonInterviewAnswerJsonSerializer.cs" />
     <Compile Include="Storage\NewtonJsonSerializer.cs" />
     <Compile Include="Storage\NewToOldAssemblyRedirectSerializationBinder.cs" />
     <Compile Include="Storage\OldToNewAssemblyRedirectSerializationBinder.cs" />
@@ -263,6 +264,10 @@
     <ProjectReference Include="..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
       <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
       <Name>WB.Core.GenericSubdomains.Portable</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
+      <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
       <Project>{89b14b50-5305-45e2-9835-7a05bd0b97a9}</Project>

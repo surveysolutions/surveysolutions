@@ -152,7 +152,9 @@ namespace WB.UI.Headquarters.Injections
             base.Load();
 
             this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer());
-            this.Bind<IJsonAllTypesSerializer>().ToMethod((ctx) => new JsonAllTypesSerializer());
+            this.Bind<IInterviewAnswerSerializer>().ToMethod(ctx => new NewtonInterviewAnswerJsonSerializer());
+            
+            this.Bind<IJsonAllTypesSerializer>().ToMethod(ctx => new JsonAllTypesSerializer());
 
             this.Bind<IStringCompressor>().To<JsonCompressor>();
             this.Bind<IRestServiceSettings>().To<DesignerQuestionnaireApiRestServiceSettings>().InSingletonScope();

@@ -164,7 +164,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                     .Select(item => IdentifyingAnswer.Create(assignment, questionnaire, item.Answer, item.Identity, item.Variable))
                     .ToList();
 
-                assignment.SetAnswers(answers);
+                assignment.SetIdentifyingData(answers);
             }
             catch (ArgumentException ae)
             {

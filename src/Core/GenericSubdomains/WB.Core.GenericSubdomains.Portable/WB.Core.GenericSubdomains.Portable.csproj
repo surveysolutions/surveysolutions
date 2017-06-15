@@ -100,6 +100,7 @@
     <Compile Include="Services\HttpStats.cs" />
     <Compile Include="Services\ICompressor.cs" />
     <Compile Include="Services\IHttpStatistician.cs" />
+    <Compile Include="Services\IInterviewAnswerSerializer.cs" />
     <Compile Include="Services\ILoggerProvider.cs" />
     <Compile Include="Services\IJsonAllTypesSerializer.cs" />
     <Compile Include="Services\ISerializer.cs" />

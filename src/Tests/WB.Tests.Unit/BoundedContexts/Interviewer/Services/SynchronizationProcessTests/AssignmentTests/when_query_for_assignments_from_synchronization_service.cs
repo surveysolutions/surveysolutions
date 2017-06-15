@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
-using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -45,8 +44,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         {
             var assignmentDocument = assignments.Single();
             
-            assignmentDocument.IdentifyingData.SequenceEqual(assignment.IdentifyingData, source => source.Identity, target => target.Identity);
-            assignmentDocument.IdentifyingData.SequenceEqual(assignment.IdentifyingData, source => source.Answer, target => target.Answer);
+            assignmentDocument.Answers.SequenceEqual(assignment.Answers, source => source.Identity, target => target.Identity);
+            assignmentDocument.Answers.SequenceEqual(assignment.Answers, source => source.AnswerAsString, target => target.AnswerAsString);
         }
 
         [Test]

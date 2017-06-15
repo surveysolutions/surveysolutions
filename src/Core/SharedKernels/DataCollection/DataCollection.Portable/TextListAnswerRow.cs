@@ -12,8 +12,8 @@ namespace WB.Core.SharedKernels.DataCollection
             this.Text = text;
         }
 
-        public int Value { get; }
-        public string Text { get; }
+        public int Value { get; set; }
+        public string Text { get; set; }
 
         [Obsolete("Compatibility with v 5.20")]
         public int Item1 => Value;

@@ -1570,7 +1570,7 @@ namespace WB.Tests.Abc.TestFactories
 
             public AssignmentApiViewBuilder WithAnswer(Identity questionId, string answer)
             {
-                this._entity.IdentifyingData.Add(new AssignmentApiView.IdentifyingAnswer { Answer = answer, Identity = questionId});
+                this._entity.Answers.Add(new AssignmentApiView.InterviewSerializedAnswer { AnswerAsString = answer, Identity = questionId});
                 return this;
             }
 
@@ -1639,12 +1639,12 @@ namespace WB.Tests.Abc.TestFactories
 
             public AssignmentDocumentBuilder WithAnswer(Identity identity, string answer)
             {
-                this._entity.IdentifyingData = this._entity.IdentifyingData ?? new List<AssignmentDocument.IdentifyingAnswer>();
+                this._entity.Answers = this._entity.Answers ?? new List<AssignmentDocument.AssignmentAnswer>();
 
-                this._entity.IdentifyingData.Add(new AssignmentDocument.IdentifyingAnswer
+                this._entity.Answers.Add(new AssignmentDocument.AssignmentAnswer
                 {
                     AssignmentId = this._entity.Id,
-                    Answer = answer,
+                    AnswerAsString = answer,
                     Identity = identity
                 });
 

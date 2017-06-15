@@ -162,7 +162,7 @@ namespace WB.UI.Headquarters.API
                 .Select(CommandTransformator.ParseQuestionAnswer)
                 .Select(answer => IdentifyingAnswer.Create(assignment, questionnaire, answer.Value.ToString(), Identity.Create(answer.Key, null)))
                 .ToArray();
-            assignment.SetAnswers(identifyingAnswers);
+            assignment.SetIdentifyingData(identifyingAnswers);
 
             this.assignmentsStorage.Store(assignment, Guid.NewGuid());
 

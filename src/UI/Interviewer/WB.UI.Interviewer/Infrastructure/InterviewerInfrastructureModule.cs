@@ -67,6 +67,7 @@ namespace WB.UI.Interviewer.Infrastructure
                     AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies")));
 
             this.Bind<ISerializer>().ToMethod((ctx) => new PortableJsonSerializer());
+            this.Bind<IInterviewAnswerSerializer>().ToMethod((ctx) => new PortableInterviewAnswerJsonSerializer());
             this.Bind<IJsonAllTypesSerializer>().ToMethod((ctx) => new PortableJsonAllTypesSerializer());
         }
     }
