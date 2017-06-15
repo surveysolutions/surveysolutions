@@ -164,8 +164,22 @@ namespace WB.Tests.Abc.TestFactories
                 newQuestionnaireVersion??42,
                 Guid.NewGuid());
 
-        public CreateInterviewCommand CreateInterviewCommand()
-            => new CreateInterviewCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), null, DateTime.Now, Guid.NewGuid(), 1, Create.Entity.InterviewKey());
+        public CreateInterviewCommand CreateInterviewCommand(Guid? questionnaireId = null, 
+            long? questionnaireVersion = null,
+            Guid? responsibleSupervisorId = null, 
+            Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions = null, 
+            Guid? userId = null,
+            DateTime? answersTime = null)
+        {
+            return new CreateInterviewCommand(Guid.NewGuid(),
+                userId ?? Guid.NewGuid(),
+                questionnaireId ?? Guid.NewGuid(),
+                answersToFeaturedQuestions, 
+                answersTime ?? DateTime.Now,
+                responsibleSupervisorId ?? Guid.NewGuid(),
+                questionnaireVersion ?? 1, 
+                Create.Entity.InterviewKey());
+        }
 
         public CreateInterviewControllerCommand CreateInterviewControllerCommand()
             => new CreateInterviewControllerCommand

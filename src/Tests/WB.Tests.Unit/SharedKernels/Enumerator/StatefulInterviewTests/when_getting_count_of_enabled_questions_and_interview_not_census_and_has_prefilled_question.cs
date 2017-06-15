@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Tests.Abc;
 
@@ -26,7 +27,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 });
 
             var statefulInterview = Setup.StatefulInterview(questionnaire, false);
-            statefulInterview.CreateInterview(questionnaire.PublicKey, 1, suervisorId, new Dictionary<Guid, AbstractAnswer>(), DateTime.UtcNow, responsibleId);
+            statefulInterview.CreateInterview(new CreateInterviewCommand(statefulInterview.EventSourceId, responsibleId, questionnaire.PublicKey, 
+                new Dictionary<Guid, AbstractAnswer>(), DateTime.UtcNow, suervisorId, 1, null));
             //act
             var countActiveQuestionsInInterview = statefulInterview.CountActiveQuestionsInInterview();
             //assert
