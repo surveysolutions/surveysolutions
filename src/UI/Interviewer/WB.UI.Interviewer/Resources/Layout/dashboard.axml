@@ -33,42 +33,36 @@
         local:MvxBind="Visible IsExistsAnyCensusQuestionnairesOrInterviews;"/>
   </android.support.design.widget.AppBarLayout>
 
-  <LinearLayout android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/applicationBackground">
+  <ProgressBar style="@style/Dashboard_Progress_Indicator"
+               local:MvxBind="ShowProgress Or(IsInProgress, Synchronization.IsSynchronizationInProgress); Visibility VisibleOrInvisible(Or(IsInProgress, Synchronization.IsSynchronizationInProgress))" />
 
-    <ProgressBar style="@style/Dashboard_Progress_Indicator"
-                 local:MvxBind="ShowProgress Or(IsInProgress, Synchronization.IsSynchronizationInProgress); Visibility VisibleOrInvisible(Or(IsInProgress, Synchronization.IsSynchronizationInProgress))" />
+  <include layout="@layout/synchronization_panel" />
 
-    <include layout="@layout/synchronization_panel" />
+  <FrameLayout android:layout_width="match_parent"
+               android:layout_height="match_parent">
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        local:MvxBind="Visible IsExistsAnyCensusQuestionnairesOrInterviews;">
+    </android.support.v4.view.ViewPager>
+    <LinearLayout style="@style/Dashboard_NoInterviewsPanel"
+                    local:MvxBind="Visible And(Not(IsExistsAnyCensusQuestionnairesOrInterviews), IsLoaded);">
+      <TextView style="@style/Dashboard_NoInterviewsTitle"
+                local:MvxBind="Text Localization('Dashboard_NoInterviewsTitle')" />
 
-    <FrameLayout android:layout_width="match_parent"
-                 android:layout_height="match_parent">
-      <android.support.v4.view.ViewPager
-          android:id="@+id/pager"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          local:MvxBind="Visible IsExistsAnyCensusQuestionnairesOrInterviews;">
-      </android.support.v4.view.ViewPager>
-      <LinearLayout style="@style/Dashboard_NoInterviewsPanel"
-                      local:MvxBind="Visible And(Not(IsExistsAnyCensusQuestionnairesOrInterviews), IsLoaded);">
-        <TextView style="@style/Dashboard_NoInterviewsTitle"
-                  local:MvxBind="Text Localization('Dashboard_NoInterviewsTitle')" />
+      <TextView style="@style/Dashboard_NoInterviewsText"
+                local:MvxBind="Text Localization('Dashboard_NoInterviewsText')" />
 
-        <TextView style="@style/Dashboard_NoInterviewsText"
-                  local:MvxBind="Text Localization('Dashboard_NoInterviewsText')" />
-
-        <Button style="@style/Dashboard_NoInterviewsSyncButton"
-                  local:MvxBind="Text Localization('Dashboard_NoInterviewsSyncButton');
+      <Button style="@style/Dashboard_NoInterviewsSyncButton"
+                local:MvxBind="Text Localization('Dashboard_NoInterviewsSyncButton');
                                Enabled Not(Synchronization.IsSynchronizationInProgress);
                                Click SynchronizationCommand;" />
-      </LinearLayout>
-      <LinearLayout style="@style/Interview_GroupWithDivider"
-                    local:MvxBind="Enabled Not(Or(Synchronization.IsSynchronizationInProgress, IsInProgress, Synchronization.HasUserAnotherDevice));
+    </LinearLayout>
+    <LinearLayout style="@style/Interview_GroupWithDivider"
+                  local:MvxBind="Enabled Not(Or(Synchronization.IsSynchronizationInProgress, IsInProgress, Synchronization.HasUserAnotherDevice));
                                  Clickable Or(Synchronization.IsSynchronizationInProgress, IsInProgress, Synchronization.HasUserAnotherDevice);"
-                    android:layout_height="match_parent">
-      </LinearLayout>
-    </FrameLayout>
-  </LinearLayout>
+                  android:layout_height="match_parent">
+    </LinearLayout>
+  </FrameLayout>
 </LinearLayout>

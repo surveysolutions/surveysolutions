@@ -33,7 +33,8 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
         protected override void OnSaveInstanceState(Bundle outState)
         {
-            this.fragmentStatePagerAdapter.RemoveAllFragments();
+            this.RemoveFragments();
+
             base.OnSaveInstanceState(outState);
         }
 
@@ -42,12 +43,25 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             base.OnCreate(bundle);
 
             this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
+        }
 
-            viewPager = this.FindViewById<ViewPager>(Resource.Id.pager);
+        private void RemoveFragments()
+        {
+            this.fragmentStatePagerAdapter.RemoveAllFragments();
+            this.viewPager.PageSelected -= this.ViewPager_PageSelected;
 
-            this.fragmentStatePagerAdapter = new MvxFragmentStatePagerAdapter(this, viewPager, this.SupportFragmentManager);
-            viewPager.Adapter = this.fragmentStatePagerAdapter;
-            viewPager.PageSelected += ViewPager_PageSelected;
+            this.ViewModel.StartedInterviews.PropertyChanged -= this.StartedInterviews_PropertyChanged;
+            this.ViewModel.RejectedInterviews.PropertyChanged -= this.RejectedInterviews_PropertyChanged;
+            this.ViewModel.CompletedInterviews.PropertyChanged -= this.CompletedInterviews_PropertyChanged;
+        }
+
+        private void CreateFragments()
+        {
+            this.viewPager = this.FindViewById<ViewPager>(Resource.Id.pager);
+
+            this.fragmentStatePagerAdapter = new MvxFragmentStatePagerAdapter(this, this.viewPager, this.SupportFragmentManager);
+            this.viewPager.Adapter = this.fragmentStatePagerAdapter;
+            this.viewPager.PageSelected += this.ViewPager_PageSelected;
 
             this.ViewModel.StartedInterviews.PropertyChanged += this.StartedInterviews_PropertyChanged;
             this.ViewModel.RejectedInterviews.PropertyChanged += this.RejectedInterviews_PropertyChanged;
@@ -55,14 +69,15 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
             this.ViewModel.TypeOfInterviews = this.ViewModel.CreateNew.InterviewStatus;
 
-            this.fragmentStatePagerAdapter.AddFragment(typeof(QuestionnairesFragment), this.ViewModel.CreateNew, nameof(InterviewTabPanel.Title));
+            this.fragmentStatePagerAdapter.AddFragment(typeof(QuestionnairesFragment), this.ViewModel.CreateNew,
+                nameof(InterviewTabPanel.Title));
 
             this.UpdateFragmentByViewModelPropertyChange<StartedInterviewsFragment>(this.ViewModel.StartedInterviews);
             this.UpdateFragmentByViewModelPropertyChange<RejectedInterviewsFragment>(this.ViewModel.RejectedInterviews);
             this.UpdateFragmentByViewModelPropertyChange<CompletedInterviewsFragment>(this.ViewModel.CompletedInterviews);
 
             var tabLayout = this.FindViewById<TabLayout>(Resource.Id.tabs);
-            tabLayout.SetupWithViewPager(viewPager);
+            tabLayout.SetupWithViewPager(this.viewPager);
         }
 
         private void CompletedInterviews_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -93,6 +108,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
         protected override void OnStart()
         {
+            this.CreateFragments();
             base.OnStart();
             this.BindService(new Intent(this, typeof(SyncBgService)), new SyncServiceConnection(this), Bind.AutoCreate);
         }
@@ -113,13 +129,9 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
         protected override void OnDestroy()
         {
+            this.RemoveFragments();
+
             base.OnDestroy();
-
-            this.viewPager.PageSelected -= this.ViewPager_PageSelected;
-
-            this.ViewModel.StartedInterviews.PropertyChanged -= this.StartedInterviews_PropertyChanged;
-            this.ViewModel.RejectedInterviews.PropertyChanged -= this.RejectedInterviews_PropertyChanged;
-            this.ViewModel.CompletedInterviews.PropertyChanged -= this.CompletedInterviews_PropertyChanged;
         }
 
         public override void OnBackPressed() {}
