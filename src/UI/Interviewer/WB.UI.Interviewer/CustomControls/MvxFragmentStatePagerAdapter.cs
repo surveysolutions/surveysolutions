@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Android.Content;
-using Android.Graphics;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V4.App;
@@ -10,7 +9,6 @@ using Android.Support.V4.View;
 using Java.Lang;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Droid.Support.V4;
-using Object = Java.Lang.Object;
 
 namespace WB.UI.Interviewer.CustomControls
 {
@@ -58,7 +56,12 @@ namespace WB.UI.Interviewer.CustomControls
 
         private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            this.NotifyDataSetChanged();
+            var vm = sender as MvxViewModel;
+            var viewPagerItem = this._fragments.FirstOrDefault(x => x.ViewModel == vm);
+            var titlePropertyName = viewPagerItem?.TitlePropertyName;
+
+            if (e.PropertyName == titlePropertyName)
+                this.NotifyDataSetChanged();
         }
 
         public override int Count => this._fragments.Count;
@@ -110,8 +113,6 @@ namespace WB.UI.Interviewer.CustomControls
 
         public bool HasFragmentForViewModel(MvxViewModel viewModel) 
             => this._fragments.Any(x => x.ViewModel == viewModel);
-
-        public override int GetItemPosition(Object @object) => PositionNone;
 
         public void RemoveAllFragments()
         {
