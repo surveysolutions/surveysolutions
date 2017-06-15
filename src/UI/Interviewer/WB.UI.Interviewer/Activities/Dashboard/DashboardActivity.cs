@@ -90,9 +90,9 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             => this.UpdateFragmentByViewModelPropertyChange<StartedInterviewsFragment>((StartedInterviewsViewModel) sender, e.PropertyName);
 
         private void UpdateFragmentByViewModelPropertyChange<TFragmentType>(ListViewModel<IDashboardItem> listViewModel,
-            string propertyName = nameof(ListViewModel<IDashboardItem>.Items))
+            string propertyName = nameof(ListViewModel<IDashboardItem>.UiItems))
         {
-            if (propertyName != nameof(ListViewModel<IDashboardItem>.Items)) return;
+            if (propertyName != nameof(ListViewModel<IDashboardItem>.UiItems)) return;
 
             if (!this.fragmentStatePagerAdapter.HasFragmentForViewModel(listViewModel) && listViewModel.Items.Count > 0)
             {

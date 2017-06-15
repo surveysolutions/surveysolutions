@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.GenericSubdomains.Portable;
@@ -16,63 +17,76 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly IInterviewViewModelFactory viewModelFactory;
         private readonly IPlainStorage<AssignmentDocument, int> assignmentsRepository;
+        private readonly IViewModelNavigationService viewModelNavigationService;
+
+        private SynchronizationViewModel Synchronization;
+
+        private IMvxCommand synchronizationCommand;
+        public IMvxCommand SynchronizationCommand => synchronizationCommand ??
+                                                     (synchronizationCommand = new MvxCommand(this.RunSynchronization, () => !this.Synchronization.IsSynchronizationInProgress));
 
         public CreateNewViewModel(
             IPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IInterviewViewModelFactory viewModelFactory,
-            IPlainStorage<AssignmentDocument, int> assignmentsRepository)
+            IPlainStorage<AssignmentDocument, int> assignmentsRepository,
+            IViewModelNavigationService viewModelNavigationService)
         {
             this.questionnaireViewRepository = questionnaireViewRepository;
             this.viewModelFactory = viewModelFactory;
             this.assignmentsRepository = assignmentsRepository;
+            this.viewModelNavigationService = viewModelNavigationService;
         }
 
-        public void Load()
+        public void Load(SynchronizationViewModel sync)
         {
-            var listDashboardItems = new List<IDashboardItem>();
-
+            this.Synchronization = sync;
             
-            listDashboardItems.AddRange(this.GetCensusQuestionnaires());
-            listDashboardItems.AddRange(this.GetAssignments());
+            this.Items = this.GetCensusQuestionnaires().Union(this.GetAssignments()).ToList();
 
-            this.Items = listDashboardItems;
-
-            var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
-            subTitle.Title = InterviewerUIResources.Dashboard_CreateNewTabText;
-            this.UiItems = subTitle.ToEnumerable().Concat(this.Items).ToList();
+            this.UiItems = this.Items.Any() ? this.GetSubTitle().ToEnumerable().Concat(this.Items).ToList() : this.Items;
 
             this.Title = InterviewerUIResources.Dashboard_AssignmentsTabTitle;
         }
 
-        private List<CensusQuestionnaireDashboardItemViewModel> GetCensusQuestionnaires()
+        private void RunSynchronization()
         {
-            var censusQuestionnaireViews = this.questionnaireViewRepository.Where(questionnaire => questionnaire.Census);
+            if (this.viewModelNavigationService.HasPendingOperations)
+            {
+                this.viewModelNavigationService.ShowWaitMessage();
+                return;
+            }
 
-            // show census mode for new tab
-            var censusQuestionnaireViewModels = new List<CensusQuestionnaireDashboardItemViewModel>();
-            foreach (var censusQuestionnaireView in censusQuestionnaireViews)
+            this.Synchronization.IsSynchronizationInProgress = true;
+            this.Synchronization.Synchronize();
+        }
+
+        private IDashboardItem GetSubTitle()
+        {
+            var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
+            subTitle.Title = InterviewerUIResources.Dashboard_CreateNewTabText;
+            return subTitle;
+        }
+
+        private IEnumerable<IDashboardItem> GetCensusQuestionnaires()
+        {
+            foreach (var censusQuestionnaireView in this.questionnaireViewRepository.Where(questionnaire => questionnaire.Census))
             {
                 var censusQuestionnaireDashboardItem = this.viewModelFactory.GetNew<CensusQuestionnaireDashboardItemViewModel>();
                 censusQuestionnaireDashboardItem.Init(censusQuestionnaireView);
-                censusQuestionnaireViewModels.Add(censusQuestionnaireDashboardItem);
-            }
 
-            return censusQuestionnaireViewModels;
+                yield return censusQuestionnaireDashboardItem;
+            }
         }
 
-        private List<AssignmentDashboardItemViewModel> GetAssignments()
+        private IEnumerable<IDashboardItem> GetAssignments()
         {
-            var assignments = this.assignmentsRepository.LoadAll();
-
-            var dashboardItems = new List<AssignmentDashboardItemViewModel>();
-            foreach (var assignment in assignments)
+            foreach (var assignment in this.assignmentsRepository.LoadAll())
             {
                 var dashboardItem = this.viewModelFactory.GetNew<AssignmentDashboardItemViewModel>();
                 dashboardItem.Init(assignment);
-                dashboardItems.Add(dashboardItem);
-            }
 
-            return dashboardItems;
+                yield return dashboardItem;
+            }
         }
     }
 }
