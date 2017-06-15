@@ -6,7 +6,6 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using TextListAnswerRow = WB.UI.Headquarters.Models.WebInterview.TextListAnswerRow;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
@@ -44,7 +43,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 this.commandResponsibleId, identity.Id, identity.RosterVector, DateTime.UtcNow, text));
         }
 
-        public void AnswerTextListQuestion(string questionIdenty, TextListAnswerRow[] rows)
+        public void AnswerTextListQuestion(string questionIdenty, TextListAnswerRowDto[] rows)
         {
             var identity = Identity.Parse(questionIdenty);
             this.ExecuteQuestionCommand(new AnswerTextListQuestionCommand(this.GetCallerInterview().Id,

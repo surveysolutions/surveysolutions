@@ -3,7 +3,6 @@ using AutoMapper;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
 namespace WB.UI.Headquarters.Models.WebInterview
 {
@@ -79,9 +78,10 @@ namespace WB.UI.Headquarters.Models.WebInterview
                .ForMember(x => x.IsTimestamp, opts => opts.MapFrom(x => x.AsDateTime.IsTimestamp))
                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsDateTime.GetAnswer().Value));
 
-            this.CreateMap<TextListAnswerRow, TextListAnswerRow>()
+            this.CreateMap<TextListAnswerRow, TextListAnswerRowDto>()
                 .ForMember(x => x.Text, opts => opts.MapFrom(x => x.Text))
                 .ForMember(x => x.Value, opts => opts.MapFrom(x => x.Value));
+
             this.CreateMap<InterviewTreeQuestion, InterviewTextListQuestion>()
                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                .ForMember(x => x.Rows, opts => opts.MapFrom(x => x.AsTextList.GetAnswer().Rows));
