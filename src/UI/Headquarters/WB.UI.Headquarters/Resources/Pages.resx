@@ -1004,4 +1004,10 @@
   <data name="DownloadPage_Version" xml:space="preserve">
     <value>Version</value>
   </data>
+  <data name="AreaQestion_Area" xml:space="preserve">
+    <value>Area</value>
+  </data>
+  <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
+    <value>square meters</value>
+  </data>
 </root>
