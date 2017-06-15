@@ -246,14 +246,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var changedInterviewTree = this.Tree.Clone();
 
-            var answers = command.Answers.Select(x => new InterviewAnswer
-            {
-                Identity = x.Key,
-                Answer = x.Value
-            }).ToList();
-
             changedInterviewTree.ActualizeTree();
-            base.PutAnswers(changedInterviewTree, answers, command.AssignmentId);
+            base.PutAnswers(changedInterviewTree, command.Answers, command.AssignmentId);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);

@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -120,15 +121,18 @@ namespace WB.UI.Headquarters.Controllers
             var prefilled = questionnaire.GetPrefilledQuestions().ToHashSet();
             
             var answersFromAssignment =
-                assignment.IdentifyingData.Where(ia =>prefilled.Contains(ia.Identity.Id)).ToDictionary(x => x.Identity, 
-                                                        x => this.identifyingAnswerConverter.GetAbstractAnswer(questionnaire, x.Identity.Id, x.Answer));
+                assignment.IdentifyingData.Where(ia =>prefilled.Contains(ia.Identity.Id)).Select(x => 
+                                                    new InterviewAnswer{
+                                                        Identity = x.Identity,
+                                                        Answer = this.identifyingAnswerConverter.GetAbstractAnswer(questionnaire, x.Identity.Id, x.Answer)
+                                                    });
 
             var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
                 interviewer.PublicKey, assignment.QuestionnaireId, DateTime.UtcNow,
                 interviewer.Supervisor.Id,
                 this.keyGenerator.Get(), 
                 assignment.Id, 
-                answersFromAssignment);
+                answersFromAssignment.ToList());
 
             this.commandService.Execute(createInterviewOnClientCommand);
             return interviewId.FormatGuid();

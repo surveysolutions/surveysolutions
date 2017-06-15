@@ -1396,7 +1396,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         protected void PutAnswers(InterviewTree changedInterviewTree, 
-            List<InterviewAnswer> answers, 
+            IEnumerable<InterviewAnswer> answers, 
             int? commandAssignmentId)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();

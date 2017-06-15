@@ -270,7 +270,7 @@ namespace WB.Tests.Abc.TestFactories
             Guid? supervisorId = null,
             InterviewKey interviewKey = null,
             int? assignmentId = null,
-            IReadOnlyDictionary<Identity, AbstractAnswer> answersToIdentifyingQuestions = null)
+            List<InterviewAnswer> answersToIdentifyingQuestions = null)
         {
             return new CreateInterviewOnClientCommand(interviewId ?? Guid.NewGuid(),
                 userId ?? Guid.NewGuid(), 
@@ -279,7 +279,7 @@ namespace WB.Tests.Abc.TestFactories
                 supervisorId ?? Guid.NewGuid(),
                 interviewKey, 
                 assignmentId, 
-                answersToIdentifyingQuestions ?? new Dictionary<Identity, AbstractAnswer>());
+                answersToIdentifyingQuestions ?? new List<InterviewAnswer>());
         }
     }
 }
