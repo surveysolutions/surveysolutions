@@ -223,6 +223,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Area.
+        /// </summary>
+        public static string AreaQestion_Area {
+            get {
+                return ResourceManager.GetString("AreaQestion_Area", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to square meters.
+        /// </summary>
+        public static string AreaQestion_AreaUnitMeter {
+            get {
+                return ResourceManager.GetString("AreaQestion_AreaUnitMeter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assignments.
         /// </summary>
         public static string Assignments_PageTitle {
