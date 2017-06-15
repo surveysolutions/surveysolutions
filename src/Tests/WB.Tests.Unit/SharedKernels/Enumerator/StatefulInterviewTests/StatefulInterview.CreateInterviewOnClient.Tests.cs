@@ -115,9 +115,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(question);
             var interview = Setup.StatefulInterview(questionnaire);
 
-            var answersToIdentifyingQuestions = new Dictionary<Identity, AbstractAnswer>()
+            var answersToIdentifyingQuestions = new List<InterviewAnswer>
             {
-                {Create.Identity(questionId), abstractAnswer}
+                new InterviewAnswer
+                {
+                    Identity = Create.Identity(questionId),
+                    Answer = abstractAnswer
+                }
             };
 
             var command = Create.Command.CreateInterviewOnClientCommand(interview.Id, answersToIdentifyingQuestions: answersToIdentifyingQuestions, assignmentId: 1);
@@ -141,9 +145,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.TextQuestion(questionId: questionTextId, variable: "text", preFilled: true));
             var interview = Setup.StatefulInterview(questionnaire);
-            var answersToIdentifyingQuestions = new Dictionary<Identity, AbstractAnswer>()
+
+            var answersToIdentifyingQuestions = new List<InterviewAnswer>()
             {
-                {Create.Identity(questionTextId), TextAnswer.FromString("value")}
+                new InterviewAnswer
+                {
+                    Identity = Create.Identity(questionTextId),
+                    Answer = TextAnswer.FromString("value")
+                }
             };
             var command = Create.Command.CreateInterviewOnClientCommand(interview.Id, assignmentId: 1, answersToIdentifyingQuestions: answersToIdentifyingQuestions);
 
@@ -163,9 +172,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion(questionId, preFilled: true));
             var interview = Setup.StatefulInterview(questionnaire);
             SetupEventContext();
-            var answersToIdentifyingQuestions = new Dictionary<Identity, AbstractAnswer>()
+            var answersToIdentifyingQuestions = new List<InterviewAnswer>()
             {
-                {Create.Identity(questionId), TextAnswer.FromString("value")}
+                new InterviewAnswer
+                {
+                    Identity = Create.Identity(questionId),
+                    Answer = TextAnswer.FromString("value")
+                }
             };
             var command = Create.Command.CreateInterviewOnClientCommand(interview.Id, assignmentId: 1, answersToIdentifyingQuestions: answersToIdentifyingQuestions);
 
