@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using SQLite;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
@@ -26,15 +27,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public DateTime ReceivedDateUtc { get; set; }
 
         [Ignore]
-        public List<IdentifyingAnswer> IdentifyingData { get; set; } = new List<IdentifyingAnswer>();
+        public List<AssignmentAnswer> Answers { get; set; } = new List<AssignmentAnswer>();
 
-        public class IdentifyingAnswer
+        public class AssignmentAnswer
         {
             [PrimaryKey, AutoIncrement]
             public long? Id { get; set; }
 
             [Indexed(Unique = false)]
             public int AssignmentId { get; set; }
+
+            public bool IsIdentifying { get; set; }
 
             [Ignore]
             public Identity Identity { get; set; }
@@ -45,8 +48,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 set => Identity = Identity.Parse(value);
             }
 
-            public string Answer { get; set; }
+            public string SerializedAnswer { get; set; }
+
             public string Question { get; set; }
+
             public string AnswerAsString { get; set; }
         }
     }

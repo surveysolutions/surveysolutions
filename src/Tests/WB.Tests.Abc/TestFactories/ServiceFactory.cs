@@ -493,14 +493,12 @@ namespace WB.Tests.Abc.TestFactories
         public IAssignmentsSynchronizer AssignmentsSynchronizer(ISynchronizationService synchronizationService = null,
             IPlainStorage<AssignmentDocument, int> assignmentsRepository = null,
             IQuestionnaireDownloader questionnaireDownloader = null,
-            IQuestionnaireStorage questionnaireStorage = null,
-            IAnswerToStringConverter answerToStringConverter = null)
+            IQuestionnaireStorage questionnaireStorage = null)
         {
             return new AssignmentsSynchronizer(synchronizationService ?? Mock.Of<ISynchronizationService>(),
                 assignmentsRepository ?? new SqliteInmemoryStorage<AssignmentDocument, int>(),
                 questionnaireDownloader ?? Mock.Of<IQuestionnaireDownloader>(),
-                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                answerToStringConverter ?? Mock.Of<IAnswerToStringConverter>());
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
         }
 
         public IAnswerToStringConverter AnswerToStringConverter()

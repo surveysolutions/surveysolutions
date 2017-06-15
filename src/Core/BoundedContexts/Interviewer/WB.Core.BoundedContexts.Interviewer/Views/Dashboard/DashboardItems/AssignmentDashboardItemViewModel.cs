@@ -8,8 +8,8 @@ using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -24,6 +24,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IIdentifyingAnswerConverter identifyingAnswerConverter;
+        private readonly IInterviewAnswerSerializer answerSerializer;
         private readonly ICommandService commandService;
         private readonly IInterviewerPrincipal principal;
         private readonly IViewModelNavigationService viewModelNavigationService;
@@ -39,10 +40,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             IPlainStorage<InterviewView> interviewViewRepository,
             IExternalAppLauncher externalAppLauncher,
             IQuestionnaireStorage questionnaireRepository,
-            IIdentifyingAnswerConverter identifyingAnswerConverter)
+            IIdentifyingAnswerConverter identifyingAnswerConverter, 
+            IInterviewAnswerSerializer answerSerializer)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.identifyingAnswerConverter = identifyingAnswerConverter;
+            this.answerSerializer = answerSerializer;
             this.commandService = commandService;
             this.principal = principal;
             this.viewModelNavigationService = viewModelNavigationService;
@@ -58,7 +61,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.assignment = assignmentDocument;
             this.questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
 
-            var identifyingData = assignment.IdentifyingData.Where(id => id.Identity.Id != assignment.LocationQuestionId).ToList();
+            var identifyingData = assignment.Answers.Where(id => id.Identity.Id != assignment.LocationQuestionId && id.IsIdentifying).ToList();
             this.PrefilledQuestions = GetPrefilledQuestions(identifyingData.Take(3));
             this.DetailedPrefilledQuestions = GetPrefilledQuestions(identifyingData.Skip(3));
             this.GpsLocation = this.GetAssignmentLocation(assignment);
@@ -120,7 +123,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             var interviewId = Guid.NewGuid();
             var interviewerIdentity = this.principal.CurrentUserIdentity;
 
-            List<InterviewAnswer> answers = GetAnswersToIdentifyingQuestions(this.assignment.IdentifyingData);
+            List<InterviewAnswer> answers = GetAnswersToIdentifyingQuestions(this.assignment.Answers);
 
             ICommand createInterviewCommand = new CreateInterviewWithPreloadedData(interviewId,
                     interviewerIdentity.UserId,
@@ -138,15 +141,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
         }
 
-        private List<InterviewAnswer> GetAnswersToIdentifyingQuestions(List<AssignmentDocument.IdentifyingAnswer> identifyingAnswers)
+        private List<InterviewAnswer> GetAnswersToIdentifyingQuestions(List<AssignmentDocument.AssignmentAnswer> identifyingAnswers)
         {
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(QuestionnaireIdentity.Parse(this.assignment.QuestionnaireId), null);
-
             var elements = identifyingAnswers
                 .Select(ia => new InterviewAnswer
                 {
                     Identity = ia.Identity,
-                    Answer = ConvertToAbstractAnswer(ia, questionnaire)
+                    Answer = this.ConvertToAbstractAnswer(ia)
                 })
                 .Where(x => x.Answer != null)
                 .ToList();
@@ -154,9 +155,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             return elements;
         }
 
-        private AbstractAnswer ConvertToAbstractAnswer(AssignmentDocument.IdentifyingAnswer identifyingAnswer, IQuestionnaire questionnaire)
+        private AbstractAnswer ConvertToAbstractAnswer(AssignmentDocument.AssignmentAnswer assignmentAnswer)
         {
-            return this.identifyingAnswerConverter.GetAbstractAnswer(questionnaire, identifyingAnswer.Identity.Id, identifyingAnswer.Answer);
+            return this.answerSerializer.Deserialize<AbstractAnswer>(assignmentAnswer.SerializedAnswer);
         }
 
         private void RaiseStartingLongOperation()
@@ -164,7 +165,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             messenger.Publish(new StartingLongOperationMessage(this));
         }
 
-        private List<PrefilledQuestion> GetPrefilledQuestions(IEnumerable<AssignmentDocument.IdentifyingAnswer> identifyingAnswers)
+        private List<PrefilledQuestion> GetPrefilledQuestions(IEnumerable<AssignmentDocument.AssignmentAnswer> identifyingAnswers)
         {
             return identifyingAnswers.Select(fi => new PrefilledQuestion
                 {

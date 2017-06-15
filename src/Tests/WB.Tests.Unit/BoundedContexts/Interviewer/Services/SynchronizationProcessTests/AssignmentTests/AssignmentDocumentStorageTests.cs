@@ -50,14 +50,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             this.storage.Store(document);
 
-            document.IdentifyingData.Add(new AssignmentDocument.IdentifyingAnswer
+            document.Answers.Add(new AssignmentDocument.AssignmentAnswer
             {
                 Identity = Create.Identity(Id.g3),
                 AssignmentId = 1,
-                Answer = "answer3"
+                AnswerAsString = "answer3"
             });
 
-            document.IdentifyingData.RemoveAt(0);
+            document.Answers.RemoveAt(0);
 
             this.storage.Store(document);
 
@@ -65,9 +65,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             AssertThatStoredAssignmentIsEqualToDocument(stored, document);
 
-            var storedAnswers = this.connection.Table<AssignmentDocument.IdentifyingAnswer>().ToList();
+            var storedAnswers = this.connection.Table<AssignmentDocument.AssignmentAnswer>().ToList();
 
-            Assert.That(storedAnswers, Has.Count.EqualTo(document.IdentifyingData.Count), "Ensure that there is no leftover answers in db");
+            Assert.That(storedAnswers, Has.Count.EqualTo(document.Answers.Count), "Ensure that there is no leftover answers in db");
         }
 
         [Test]
@@ -85,7 +85,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             this.storage.RemoveAll();
 
-            var storedAnswers = this.connection.Table<AssignmentDocument.IdentifyingAnswer>().ToList();
+            var storedAnswers = this.connection.Table<AssignmentDocument.AssignmentAnswer>().ToList();
             var storedQuestions = this.connection.Table<AssignmentDocument>().ToList();
 
             Assert.That(storedAnswers, Has.Count.EqualTo(0));
@@ -94,15 +94,15 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
         private static void AssertThatStoredAssignmentIsEqualToDocument(AssignmentDocument stored, AssignmentDocument document)
         {
-            var storedAnswers = stored.IdentifyingData.OrderBy(id => id.Id).ToArray();
-            var documentAnswers = document.IdentifyingData.OrderBy(id => id.Id).ToArray();
+            var storedAnswers = stored.Answers.OrderBy(id => id.Id).ToArray();
+            var documentAnswers = document.Answers.OrderBy(id => id.Id).ToArray();
 
-            Assert.That(stored.IdentifyingData, Has.Count.EqualTo(document.IdentifyingData.Count));
+            Assert.That(stored.Answers, Has.Count.EqualTo(document.Answers.Count));
 
             for (int i = 0; i < storedAnswers.Length; i++)
             {
                 Assert.That(storedAnswers[i].Identity, Is.EqualTo(documentAnswers[i].Identity));
-                Assert.That(storedAnswers[i].Answer, Is.EqualTo(documentAnswers[i].Answer));
+                Assert.That(storedAnswers[i].AnswerAsString, Is.EqualTo(documentAnswers[i].AnswerAsString));
                 Assert.That(storedAnswers[i].AssignmentId, Is.EqualTo(document.Id));
             }
         }

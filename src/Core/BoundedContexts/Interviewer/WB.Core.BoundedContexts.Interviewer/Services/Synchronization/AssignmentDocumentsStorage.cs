@@ -13,19 +13,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
     {
         public AssignmentDocumentsStorage(ILogger logger, IFileSystemAccessor fileSystemAccessor, SqliteSettings settings) : base(logger, fileSystemAccessor, settings)
         {
-            this.connection.CreateTable<AssignmentDocument.IdentifyingAnswer>();
+            this.connection.CreateTable<AssignmentDocument.AssignmentAnswer>();
         }
 
         public AssignmentDocumentsStorage(SQLiteConnectionWithLock storage, ILogger logger) : base(storage, logger)
         {
-            storage.CreateTable<AssignmentDocument.IdentifyingAnswer>();
+            storage.CreateTable<AssignmentDocument.AssignmentAnswer>();
         }
 
         public override AssignmentDocument GetById(int id)
         {
             var entity = base.GetById(id);
 
-            entity.IdentifyingData = this.connection.Table<AssignmentDocument.IdentifyingAnswer>()
+            entity.Answers = this.connection.Table<AssignmentDocument.AssignmentAnswer>()
                 .Where(ia => ia.AssignmentId == id).ToList();
 
             return entity;
@@ -43,10 +43,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
                         {
                             this.connection.InsertOrReplace(entity);
 
-                            this.connection.Table<AssignmentDocument.IdentifyingAnswer>()
+                            this.connection.Table<AssignmentDocument.AssignmentAnswer>()
                                 .Delete(answer => answer.AssignmentId == entity.Id);
 
-                            this.connection.InsertAll(entity.IdentifyingData);
+                            this.connection.InsertAll(entity.Answers);
                         }
                     });
                 }
@@ -62,12 +62,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
         public override IReadOnlyCollection<AssignmentDocument> LoadAll()
         {
             var entities = this.connection.Table<AssignmentDocument>().ToList();
-            var answers  = this.connection.Table<AssignmentDocument.IdentifyingAnswer>().ToList();
+            var answers  = this.connection.Table<AssignmentDocument.AssignmentAnswer>().ToList();
 
             var result = entities.GroupJoin(answers, entity => entity.Id, answer => answer.AssignmentId,
                 (entity, entityAnswers) =>
                 {
-                    entity.IdentifyingData = entityAnswers.ToList();
+                    entity.Answers = entityAnswers.ToList();
                     return entity;
                 });
 
@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
         public override void RemoveAll()
         {
             base.RemoveAll();
-            this.connection.DeleteAll<AssignmentDocument.IdentifyingAnswer>();
+            this.connection.DeleteAll<AssignmentDocument.AssignmentAnswer>();
         }
     }
 }

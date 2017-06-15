@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Net;
+using Microsoft.Practices.ServiceLocation;
 using NHibernate;
 using NHibernate.Dialect;
 using NHibernate.SqlTypes;
 using NHibernate.UserTypes;
+using Npgsql;
 using NpgsqlTypes;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
 {
@@ -243,5 +246,73 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
                 parameter.Value = (T[]) this.convertor.Convert(value);
             }
         }
+    }
+
+    public class PostgresJson<T> : IUserType where T : class
+    {
+        private IInterviewAnswerSerializer JsonConvert { get; } = ServiceLocator.Current.GetInstance<IInterviewAnswerSerializer>();
+
+        public new bool Equals(object x, object y)
+        {
+            if (x == null && y == null)
+                return true;
+
+            if (x == null || y == null)
+                return false;
+
+            var xdocX = JsonConvert.Serialize(x);
+            var xdocY = JsonConvert.Serialize(y);
+
+            return xdocY == xdocX;
+        }
+
+        public int GetHashCode(object x) => x == null ? 0 : x.GetHashCode();
+
+        public object NullSafeGet(IDataReader rs, string[] names, object owner)
+        {
+            if (names.Length != 1)
+                throw new InvalidOperationException("Only expecting one column...");
+
+            var val = rs[names[0]] as string;
+
+            var result = !string.IsNullOrWhiteSpace(val) ? this.JsonConvert.Deserialize<T>(val) : null;
+            return result;
+        }
+
+        public void NullSafeSet(IDbCommand cmd, object value, int index)
+        {
+            var parameter = (NpgsqlParameter)cmd.Parameters[index];
+            parameter.NpgsqlDbType = NpgsqlDbType.Json;
+
+            if (value == null)
+                parameter.Value = DBNull.Value;
+            else
+                parameter.Value = JsonConvert.Serialize(value);
+        }
+
+        public object DeepCopy(object value)
+        {
+            if (value == null)
+                return null;
+
+            var serialized = JsonConvert.Serialize(value);
+            return JsonConvert.Deserialize<T>(serialized);
+        }
+
+        public object Replace(object original, object target, object owner) => original;
+
+        public object Assemble(object cached, object owner)
+        {
+            var str = cached as string;
+            return string.IsNullOrWhiteSpace(str) ? null : JsonConvert.Deserialize<T>(str);
+        }
+
+        public object Disassemble(object value) => value == null ? null : JsonConvert.Serialize(value);
+
+        public SqlType[] SqlTypes => new SqlType[] { new NpgsqlExtendedSqlType(DbType.Object, NpgsqlTypes.NpgsqlDbType.Json) };
+
+        public Type ReturnedType => typeof(T);
+
+        public bool IsMutable => true;
     }
 }

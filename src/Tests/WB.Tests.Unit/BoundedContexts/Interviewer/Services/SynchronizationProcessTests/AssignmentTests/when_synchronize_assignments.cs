@@ -62,8 +62,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         {
             var questionnaire = Create.Entity.QuestionnaireDocument(id, children: new IComposite[]
             {
-                Create.Entity.TextQuestion(assignemtn.IdentifyingData[0].Identity.Id, text: "text 1"),
-                Create.Entity.TextQuestion(assignemtn.IdentifyingData[1].Identity.Id, text: "title 2"),
+                Create.Entity.TextQuestion(assignemtn.Answers[0].Identity.Id, text: "text 1"),
+                Create.Entity.TextQuestion(assignemtn.Answers[1].Identity.Id, text: "title 2"),
             });
 
             questionnaire.Title = "title";
