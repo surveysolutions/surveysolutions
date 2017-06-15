@@ -207,7 +207,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
         public IMvxAsyncCommand StartEditAreaCommand => new MvxAsyncCommand(async () =>
         {
-            if (this.IsEditing)
+            if (this.IsEditing || this.Map == null)
                 return;
 
             this.IsEditing = true;
