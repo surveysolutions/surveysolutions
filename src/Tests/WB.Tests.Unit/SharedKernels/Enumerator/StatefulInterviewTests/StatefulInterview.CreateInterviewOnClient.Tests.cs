@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         {
             //arrange
             var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var question = Create.Entity.TextQuestion(questionId: questionId, variable: "text");
+            var question = Create.Entity.TextQuestion(questionId: questionId, variable: "text", preFilled: true);
             var answer = TextAnswer.FromString("value");
             When_create_interview_with_identifier_data_Should_apply_answer(question, answer, "value");
         }
@@ -67,7 +67,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         {
             //arrange
             var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var question = Create.Entity.NumericIntegerQuestion(id: questionId, variable: "int");
+            var question = Create.Entity.NumericIntegerQuestion(id: questionId, variable: "int", isPrefilled: true);
             var answer = NumericIntegerAnswer.FromInt(399);
             When_create_interview_with_identifier_data_Should_apply_answer(question, answer, "399");
         }
@@ -81,7 +81,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             {
                 Create.Entity.Answer("1", 1),
                 Create.Entity.Answer("2", 2),
-            });
+            }, isPrefilled: true);
             var answer = CategoricalFixedSingleOptionAnswer.FromInt(2);
             When_create_interview_with_identifier_data_Should_apply_answer(question, answer, "2");
         }
@@ -91,7 +91,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         {
             //arrange
             var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var question = Create.Entity.DateTimeQuestion(questionId: questionId, variable: "date");
+            var question = Create.Entity.DateTimeQuestion(questionId: questionId, variable: "date", preFilled: true);
             var answer = DateTimeAnswer.FromDateTime(new DateTime(2017, 11, 11));
             When_create_interview_with_identifier_data_Should_apply_answer(question, answer, "11/11/2017");
         }
@@ -101,7 +101,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         {
             //arrange
             var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var question = Create.Entity.GpsCoordinateQuestion(questionId: questionId, variable: "gps");
+            var question = Create.Entity.GpsCoordinateQuestion(questionId: questionId, variable: "gps", isPrefilled: true);
             var answer = GpsAnswer.FromGeoPosition(new GeoPosition(2,2,2,2, DateTimeOffset.UtcNow));
             When_create_interview_with_identifier_data_Should_apply_answer(question, answer, "2,2[2]2");
         }
@@ -120,7 +120,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 {Create.Identity(questionId), abstractAnswer}
             };
 
-            var command = Create.Command.CreateInterviewOnClientCommand(interview.Id, answersToIdentifyingQuestions: answersToIdentifyingQuestions);
+            var command = Create.Command.CreateInterviewOnClientCommand(interview.Id, answersToIdentifyingQuestions: answersToIdentifyingQuestions, assignmentId: 1);
 
             //act
             interview.CreateInterviewOnClient(command);
@@ -139,7 +139,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var questionTextIdentity = Identity.Create(questionTextId, RosterVector.Empty);
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                Create.Entity.TextQuestion(questionId: questionTextId, variable: "text"));
+                Create.Entity.TextQuestion(questionId: questionTextId, variable: "text", preFilled: true));
             var interview = Setup.StatefulInterview(questionnaire);
             var answersToIdentifyingQuestions = new Dictionary<Identity, AbstractAnswer>()
             {
@@ -160,7 +160,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         {
             // arrange
             var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion(questionId));
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion(questionId, preFilled: true));
             var interview = Setup.StatefulInterview(questionnaire);
             SetupEventContext();
             var answersToIdentifyingQuestions = new Dictionary<Identity, AbstractAnswer>()
@@ -173,9 +173,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview.CreateInterviewOnClient(command);
 
             // assert
-            eventContext.AssertThatContainsEvent<InterviewOnClientCreated>();
-            eventContext.AssertThatContainsEvent<TextQuestionAnswered>(e => e.QuestionId == questionId);
-            eventContext.AssertThatContainsEvent<QuestionsMarkedAsReadonly>(e => e.Questions.Single(i => i.Id == questionId) != null);
+            eventContext.ShouldContainEvent<InterviewOnClientCreated>();
+            eventContext.ShouldContainEvent<TextQuestionAnswered>(e => e.QuestionId == questionId);
+            eventContext.ShouldContainEvent<QuestionsMarkedAsReadonly>(e => e.Questions.Single(i => i.Id == questionId) != null);
         }
     }
 }

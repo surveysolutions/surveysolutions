@@ -14,7 +14,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
         public Guid SupervisorId { get; private set; }
         public InterviewKey InterviewKey { get; }
         public int? AssignmentId { get; private set; }
-        public IReadOnlyDictionary<Identity, AbstractAnswer> AnswersToIdentifyingQuestions { get; private set; }
+        // TODO: Change to List<InterviewAnswer>
+        public IReadOnlyDictionary<Identity, AbstractAnswer> Answers { get; private set; }
         public DateTime AnswersTime { get; private set; }
 
         public CreateInterviewOnClientCommand(Guid interviewId, 
@@ -32,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             this.SupervisorId = supervisorId;
             this.InterviewKey = interviewKey;
             this.AssignmentId = assignmentId;
-            this.AnswersToIdentifyingQuestions = answersToIdentifyingQuestions ?? new Dictionary<Identity, AbstractAnswer>();
+            this.Answers = answersToIdentifyingQuestions ?? new Dictionary<Identity, AbstractAnswer>();
         }
     }
 }
