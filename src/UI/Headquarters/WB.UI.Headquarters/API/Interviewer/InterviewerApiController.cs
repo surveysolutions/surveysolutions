@@ -101,21 +101,19 @@ namespace WB.UI.Headquarters.API.Interviewer
         [HttpGet]
         public virtual HttpResponseMessage Patch(int deviceVersion)
         {
-            string pathToInterviewerPatch = this.fileSystemAccessor.CombinePath(
-                HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), $@"WBCapi.{deviceVersion}.delta");
-
-            if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerPatch))
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
-
-            Stream fileStream = new FileStream(pathToInterviewerPatch, FileMode.Open, FileAccess.Read);
-            return new ProgressiveDownload(this.Request).ResultMessage(fileStream, @"application/octet-stream");
+            return GetPatchFile($@"WBCapi.{deviceVersion}.delta");
         }
 
         [HttpGet]
         public virtual HttpResponseMessage PatchExtended(int deviceVersion)
         {
+            return GetPatchFile($@"WBCapi.{deviceVersion}.Ext.delta");
+        }
+
+        private HttpResponseMessage GetPatchFile(string fileName)
+        {
             string pathToInterviewerPatch = this.fileSystemAccessor.CombinePath(
-                HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), $@"WBCapi.Ext.{deviceVersion}.delta");
+                HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), fileName);
 
             if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerPatch))
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
