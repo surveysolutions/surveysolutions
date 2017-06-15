@@ -999,4 +999,10 @@
   <data name="DownloadPage_Version" xml:space="preserve">
     <value>Версия</value>
   </data>
+  <data name="AreaQestion_Area" xml:space="preserve">
+    <value>Площадь</value>
+  </data>
+  <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
+    <value>квадратных метров</value>
+  </data>
 </root>
