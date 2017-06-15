@@ -1365,39 +1365,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void CreateInterviewWithPreloadedData(CreateInterviewWithPreloadedData command)
         {
             this.QuestionnaireIdentity = new QuestionnaireIdentity(command.QuestionnaireId, command.Version);
-
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-
             InterviewTree changedInterviewTree = this.Tree.Clone();
 
-            List<InterviewAnswer>[] answersGroupedByLevels = command.Answers
-                .GroupBy(x => x.Identity.RosterVector.Length)
-                .Select(x => new { Depth = x.Key, Answers = x.ToList()})
-                .OrderBy(x => x.Depth)
-                .Select(x => x.Answers)
-                .ToArray();
+            this.PutAnswers(changedInterviewTree, command.Answers, command.AssignmentId);
 
-            foreach (var answersInLevel in answersGroupedByLevels)
-            {
-                this.ValidatePreloadValues(changedInterviewTree, questionnaire, answersInLevel);
-
-                foreach (InterviewAnswer answer in answersInLevel)
-                {
-                    var interviewTreeQuestion = changedInterviewTree.GetQuestion(answer.Identity);
-                    // answers were not parsed correctly
-                    if (interviewTreeQuestion==null)
-                        continue;
-                    interviewTreeQuestion.SetAnswer(answer.Answer);
-
-                    if (command.AssignmentId.HasValue && questionnaire.IsPrefilled(answer.Identity.Id))
-                    {
-                        interviewTreeQuestion.MarkAsReadonly();
-                    }
-                }
-                
-                changedInterviewTree.ActualizeTree();
-            }
-
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
             IReadOnlyCollection<InterviewTreeNodeDiff> treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
@@ -1421,6 +1393,40 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             this.ApplyInterviewKey(command.InterviewKey);
+        }
+
+        protected void PutAnswers(InterviewTree changedInterviewTree, 
+            List<InterviewAnswer> answers, 
+            int? commandAssignmentId)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            List<InterviewAnswer>[] answersGroupedByLevels = answers
+                .GroupBy(x => x.Identity.RosterVector.Length)
+                .Select(x => new { Depth = x.Key, Answers = x.ToList() })
+                .OrderBy(x => x.Depth)
+                .Select(x => x.Answers)
+                .ToArray();
+
+            foreach (var answersInLevel in answersGroupedByLevels)
+            {
+                this.ValidatePreloadValues(changedInterviewTree, questionnaire, answersInLevel);
+
+                foreach (InterviewAnswer answer in answersInLevel)
+                {
+                    var interviewTreeQuestion = changedInterviewTree.GetQuestion(answer.Identity);
+                    // answers were not parsed correctly
+                    if (interviewTreeQuestion == null)
+                        continue;
+                    interviewTreeQuestion.SetAnswer(answer.Answer);
+
+                    if (commandAssignmentId.HasValue && questionnaire.IsPrefilled(answer.Identity.Id))
+                    {
+                        interviewTreeQuestion.MarkAsReadonly();
+                    }
+                }
+
+                changedInterviewTree.ActualizeTree();
+            }
         }
 
         public void CreateInterview(CreateInterviewCommand command)
