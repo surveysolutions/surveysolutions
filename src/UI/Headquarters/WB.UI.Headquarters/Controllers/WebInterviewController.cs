@@ -120,7 +120,7 @@ namespace WB.UI.Headquarters.Controllers
             var prefilled = questionnaire.GetPrefilledQuestions().ToHashSet();
             
             var answersFromAssignment =
-                assignment.IdentifyingData.Where(ia =>prefilled.Contains(ia.Identity.Id)).ToDictionary(x => x.Identity.Id, 
+                assignment.IdentifyingData.Where(ia =>prefilled.Contains(ia.Identity.Id)).ToDictionary(x => x.Identity, 
                                                         x => this.identifyingAnswerConverter.GetAbstractAnswer(questionnaire, x.Identity.Id, x.Answer));
 
             var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
