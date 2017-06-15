@@ -43,15 +43,18 @@ namespace WB.UI.Interviewer.CustomControls
             var bundle = new Bundle();
             bundle.PutInt("number", position);
 
-            if (this._fragments[position].CachedFragment != null) return this._fragments[position].CachedFragment;
+            var cachedFragment = this._fragments[position].CachedFragment;
 
-            this._fragments[position].CachedFragment = (MvxFragment)Fragment.Instantiate(this._context,
+            if (cachedFragment != null) return cachedFragment;
+
+            cachedFragment = (MvxFragment)Fragment.Instantiate(this._context,
                 this.FragmentJavaName(this._fragments[position].Type), bundle);
 
-            this._fragments[position].CachedFragment.ViewModel = this._fragments[position].ViewModel;
-            this._fragments[position].ViewModel.PropertyChanged += this.ViewModel_PropertyChanged;
+            cachedFragment.ViewModel = this._fragments[position].ViewModel;
 
-            return this._fragments[position].CachedFragment;
+            this._fragments[position].CachedFragment = cachedFragment;
+
+            return cachedFragment;
         }
 
         private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -73,12 +76,13 @@ namespace WB.UI.Interviewer.CustomControls
             else if (position < 0 && this._fragments.Count > 0)
                 position = this._fragments.Count;
 
-            this._fragments.Add(new ViewPagerItem
+            this._fragments.Insert(position, new ViewPagerItem
             {
                 Type = fragType,
                 ViewModel = model,
                 TitlePropertyName = titlePropertyName
             });
+            model.PropertyChanged += this.ViewModel_PropertyChanged;
 
             this.NotifyDataSetChanged();
         }
