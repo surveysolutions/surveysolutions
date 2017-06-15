@@ -484,6 +484,7 @@
     <Compile Include="BoundedContexts\Headquarters\Security\HqUserManagerTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\TroubleshootingTests\TroubleshootingServiceTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\Views\Interview\TeamInterviewsFactoryTests.cs" />
+    <Compile Include="BoundedContexts\Headquarters\WebInterview\MappingTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\WebInterview\SampleWebInterviewServiceTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\AnswerToStringConverterTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\CompanyLogoSynchronizerTests.cs" />
