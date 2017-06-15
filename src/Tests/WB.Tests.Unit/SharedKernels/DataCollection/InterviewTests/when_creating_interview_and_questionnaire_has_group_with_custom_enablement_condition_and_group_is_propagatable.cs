@@ -5,6 +5,7 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -30,11 +31,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             eventContext = new EventContext();
 
+            command = Create.Command.CreateInterviewCommand(questionnaireId, 1, supervisorId,
+                answersToFeaturedQuestions, answersTime: answersTime, userId: userId);
+
             interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>
-            interview.CreateInterview(questionnaireId, 1, supervisorId, answersToFeaturedQuestions, answersTime, userId);
+            interview.CreateInterview(command);
 
         It should_not_raise_GroupDisabled_event = () =>
             eventContext.ShouldNotContainEvent<GroupsDisabled>();
@@ -52,5 +56,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         static DateTime answersTime;
         static Guid supervisorId;
         private static Interview interview;
+        private static CreateInterviewCommand command;
     }
 }

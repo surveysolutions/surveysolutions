@@ -1423,17 +1423,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyInterviewKey(command.InterviewKey);
         }
 
-        public void CreateInterview(Guid questionnaireId, 
-            long questionnaireVersion, 
-            Guid supervisorId,
-            Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions, 
-            DateTime answersTime, 
-            Guid userId)
-        {
-            this.CreateInterview(new CreateInterviewCommand(this.EventSourceId, userId, questionnaireId, 
-                answersToFeaturedQuestions, answersTime, supervisorId, questionnaireVersion, null));
-        }
-
         public void CreateInterview(CreateInterviewCommand command)
         {
             var userId = command.UserId;

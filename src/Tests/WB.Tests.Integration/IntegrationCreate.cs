@@ -117,13 +117,8 @@ namespace WB.Tests.Integration
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
                 Create.Service.SubstitionTextFactory());
 
-            interview.CreateInterview(
-                questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
-                1,
-                new Guid("D222D222D222D222D222D222D222D222"),
-                new Dictionary<Guid, AbstractAnswer>(),
-                new DateTime(2012, 12, 20),
-                new Guid("F111F111F111F111F111F111F111F111"));
+            interview.CreateInterview(new CreateInterviewCommand(interview.EventSourceId, new Guid("F111F111F111F111F111F111F111F111"), questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"), 
+                new Dictionary<Guid, AbstractAnswer>(), new DateTime(2012, 12, 20), new Guid("D222D222D222D222D222D222D222D222"), 1, null));
 
             return interview;
         }
@@ -178,13 +173,8 @@ namespace WB.Tests.Integration
                 expressionProcessorStatePrototypeProvider ?? Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
                 Create.Service.SubstitionTextFactory());
 
-            interview.CreateInterview(
-                questionnaireIdentity?.QuestionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
-                questionnaireIdentity?.Version ?? 1,
-                new Guid("D222D222D222D222D222D222D222D222"),
-                answersOnPrefilledQuestions ?? new Dictionary<Guid, AbstractAnswer>(),
-                new DateTime(2012, 12, 20),
-                new Guid("F111F111F111F111F111F111F111F111"));
+            interview.CreateInterview(new CreateInterviewCommand(interview.EventSourceId, new Guid("F111F111F111F111F111F111F111F111"), questionnaireIdentity?.QuestionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"), 
+                answersOnPrefilledQuestions ?? new Dictionary<Guid, AbstractAnswer>(), new DateTime(2012, 12, 20), new Guid("D222D222D222D222D222D222D222D222"), questionnaireIdentity?.Version ?? 1, null));
 
             return interview;
         }
