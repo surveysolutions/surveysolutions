@@ -55,8 +55,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         {
                             clmn.SqlType("integer[]");
                             clmn.Name("RosterVector");
+                            clmn.NotNullable(true);
                         });
-                        
+
                         pm.Type<PostgresSqlConvertorType<int, RosterVector, RosterVectorTypeConvertor>>();
                     });
                 });
