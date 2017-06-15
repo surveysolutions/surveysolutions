@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         {
             var result = new IdentifyingAnswer();
 
-            result.Assignment = assignment; 
+            result.Assignment = assignment;
             result.Answer = result.AnswerAsString = answer;
 
             result.TryToFillQuestionId(questionnaire, questionId, variableName);
@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             if (!string.IsNullOrWhiteSpace(variableName) && questionId == null)
             {
                 var qId = questionnaire.GetQuestionIdByVariable(variableName);
-                
+
                 if (qId != null)
                 {
                     this.Identity = Identity.Create(qId.Value, null);
@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         }
 
         public virtual Identity Identity { get; protected set; }
-        
+
         public virtual string Answer { get; protected set; }
 
         public virtual string AnswerAsString { get; protected set; }

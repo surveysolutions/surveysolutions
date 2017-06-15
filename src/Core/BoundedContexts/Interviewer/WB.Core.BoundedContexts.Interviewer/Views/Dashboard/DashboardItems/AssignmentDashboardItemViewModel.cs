@@ -133,7 +133,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                     null,
                     this.assignment.Id
                 );
-
+            
             await this.commandService.ExecuteAsync(createInterviewCommand);
             this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
         }
