@@ -120,11 +120,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 foreach (var disabledVariable in @event.InterviewData.DisabledVariables)
                     this.Tree.GetVariable(Identity.Create(disabledVariable.Id, disabledVariable.InterviewItemRosterVector))?.Disable();
 
-                foreach (var readonlyQuestion in @event.InterviewData.ReadonlyQuestions)
-                    this.Tree.GetQuestion(Identity.Create(readonlyQuestion.Id, readonlyQuestion.InterviewItemRosterVector))?.MarkAsReadonly();
-
                 this.Tree.ReplaceSubstitutions();
-
             
                 CalculateLinkedToListOptionsOnTree(this.Tree, this.ExpressionProcessorStatePrototype, false);
 
@@ -132,6 +128,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 this.UpdateLinkedQuestions(this.Tree, this.ExpressionProcessorStatePrototype, false);
             }
+
+            foreach (var readonlyQuestion in @event.InterviewData.ReadonlyQuestions)
+            {
+                this.Tree.GetQuestion(Identity.Create(readonlyQuestion.Id, readonlyQuestion.InterviewItemRosterVector))?.MarkAsReadonly();
+            }
+
             this.CreatedOnClient = @event.InterviewData.CreatedOnClient;
             this.properties.SupervisorId = @event.InterviewData.SupervisorId;
             this.properties.InterviewerId = @event.InterviewData.UserId;
