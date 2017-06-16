@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.Items = this.GetStartedInterviews().ToList();
 
             var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
-            subTitle.Title = InterviewerUIResources.Dashboard_RejectedTabText;
+            subTitle.Title = InterviewerUIResources.Dashboard_StartedTabText;
             this.UiItems = subTitle.ToEnumerable().Concat(this.Items).ToList();
 
             this.Title = string.Format(InterviewerUIResources.Dashboard_StartedLinkText, this.Items.Count);
