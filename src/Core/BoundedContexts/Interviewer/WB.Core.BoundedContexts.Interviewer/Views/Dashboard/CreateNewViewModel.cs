@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -16,7 +17,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly IInterviewViewModelFactory viewModelFactory;
-        private readonly IPlainStorage<AssignmentDocument, int> assignmentsRepository;
+        private readonly IAssignmentDocumentsStorage assignmentsRepository;
         private readonly IViewModelNavigationService viewModelNavigationService;
 
         private SynchronizationViewModel Synchronization;
@@ -28,7 +29,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public CreateNewViewModel(
             IPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IInterviewViewModelFactory viewModelFactory,
-            IPlainStorage<AssignmentDocument, int> assignmentsRepository,
+            IAssignmentDocumentsStorage assignmentsRepository,
             IViewModelNavigationService viewModelNavigationService)
         {
             this.questionnaireViewRepository = questionnaireViewRepository;

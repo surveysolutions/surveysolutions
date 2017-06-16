@@ -9,47 +9,65 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
 {
-    public class AssignmentDocumentsStorage : SqlitePlainStorage<AssignmentDocument, int>
+    public class AssignmentDocumentsStorage :
+        SqlitePlainStorage<AssignmentDocument, int>,
+        IAssignmentDocumentsStorage
     {
-        public AssignmentDocumentsStorage(ILogger logger, IFileSystemAccessor fileSystemAccessor, SqliteSettings settings) : base(logger, fileSystemAccessor, settings)
+        public AssignmentDocumentsStorage(ILogger logger, IFileSystemAccessor fileSystemAccessor, SqliteSettings settings)
+            : base(logger, fileSystemAccessor, settings)
         {
             this.connection.CreateTable<AssignmentDocument.AssignmentAnswer>();
         }
 
-        public AssignmentDocumentsStorage(SQLiteConnectionWithLock storage, ILogger logger) : base(storage, logger)
+        public AssignmentDocumentsStorage(SQLiteConnectionWithLock storage, ILogger logger)
+            : base(storage, logger)
         {
             storage.CreateTable<AssignmentDocument.AssignmentAnswer>();
         }
 
+        public new void Remove(int assignmentId)
+        {
+            RunInTransaction(table =>
+            {
+                table.Connection.Delete<AssignmentDocument>(assignmentId);
+
+                table.Connection.Table<AssignmentDocument.AssignmentAnswer>()
+                    .Delete(aa => aa.AssignmentId == assignmentId);
+            });
+        }
+
         public override AssignmentDocument GetById(int id)
         {
-            var entity = base.GetById(id);
+            return RunInTransaction(table =>
+            {
+                var entity = table.Connection.Find<AssignmentDocument>(id);
 
-            entity.Answers = this.connection.Table<AssignmentDocument.AssignmentAnswer>()
-                .Where(ia => ia.AssignmentId == id).ToList();
+                if (entity == null) return null;
 
-            return entity;
+                entity.Answers = table.Connection.Table<AssignmentDocument.AssignmentAnswer>()
+                    .Where(ia => ia.AssignmentId == id)
+                    .ToList();
+
+                return entity;
+            });
         }
 
         public override void Store(IEnumerable<AssignmentDocument> entities)
         {
             try
             {
-                using (this.connection.Lock())
+                RunInTransaction(table =>
                 {
-                    this.connection.RunInTransaction(() =>
+                    foreach (var entity in entities.Where(entity => entity != null))
                     {
-                        foreach (var entity in entities.Where(entity => entity != null))
-                        {
-                            this.connection.InsertOrReplace(entity);
+                        table.Connection.InsertOrReplace(entity);
 
-                            this.connection.Table<AssignmentDocument.AssignmentAnswer>()
-                                .Delete(answer => answer.AssignmentId == entity.Id);
+                        table.Connection.Table<AssignmentDocument.AssignmentAnswer>()
+                            .Delete(answer => answer.AssignmentId == entity.Id);
 
-                            this.connection.InsertAll(entity.Answers);
-                        }
-                    });
-                }
+                        table.Connection.InsertAll(entity.Answers);
+                    }
+                });
 
             }
             catch (SQLiteException ex)
@@ -61,23 +79,30 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
 
         public override IReadOnlyCollection<AssignmentDocument> LoadAll()
         {
-            var entities = this.connection.Table<AssignmentDocument>().ToList();
-            var answers  = this.connection.Table<AssignmentDocument.AssignmentAnswer>().ToList();
+            return RunInTransaction(documents =>
+            {
+                var answersLookup = documents.Connection.Table<AssignmentDocument.AssignmentAnswer>().ToLookup(a => a.AssignmentId);
 
-            var result = entities.GroupJoin(answers, entity => entity.Id, answer => answer.AssignmentId,
-                (entity, entityAnswers) =>
+                IEnumerable<AssignmentDocument> FillAnswers()
                 {
-                    entity.Answers = entityAnswers.ToList();
-                    return entity;
-                });
+                    foreach (var assignment in documents)
+                    {
+                        assignment.Answers = answersLookup[assignment.Id].ToList();
+                        yield return assignment;
+                    }
+                }
 
-            return result.ToReadOnlyCollection();
+                return FillAnswers().ToReadOnlyCollection();
+            });
         }
 
         public override void RemoveAll()
         {
-            base.RemoveAll();
-            this.connection.DeleteAll<AssignmentDocument.AssignmentAnswer>();
+            RunInTransaction(table =>
+            {
+                base.RemoveAll();
+                table.Connection.DeleteAll<AssignmentDocument.AssignmentAnswer>();
+            });
         }
     }
 }

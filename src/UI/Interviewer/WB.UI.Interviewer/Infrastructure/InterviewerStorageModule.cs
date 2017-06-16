@@ -7,7 +7,6 @@ using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
-using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -31,6 +30,7 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<IQuestionnaireStorage>().To<QuestionnaireStorage>().InSingletonScope();
             this.Bind<IPlainInterviewFileStorage>().To<InterviewerPlainInterviewFileStorage>();
             this.Bind<IAnswerToStringConverter>().To<AnswerToStringConverter>();
+            this.Bind<IAssignmentDocumentsStorage>().To<AssignmentDocumentsStorage>().InSingletonScope();
 
             this.Bind<IInterviewerEventStorage, IEventStore>()
                 .To<SqliteMultiFilesEventStorage>()
@@ -45,7 +45,6 @@ namespace WB.UI.Interviewer.Infrastructure
 
             this.Bind(typeof(IPlainStorage<,>)).To(typeof(SqlitePlainStorage<,>)).InSingletonScope();
             this.Bind(typeof(IPlainStorage<>)).To(typeof(SqlitePlainStorage<>)).InSingletonScope();
-            this.Bind(typeof(IPlainStorage<AssignmentDocument, int>)).To(typeof(AssignmentDocumentsStorage)).InSingletonScope();
         }
     }
 }
