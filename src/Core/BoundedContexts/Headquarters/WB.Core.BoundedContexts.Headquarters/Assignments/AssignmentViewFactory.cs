@@ -174,7 +174,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
             var assignmentIdentifyingData = assignment.IdentifyingData.ToLookup(id => id.Identity);
 
-            foreach (var answer in assignment.Answers)
+            foreach (var answer in assignment.Answers ?? Enumerable.Empty<InterviewAnswer>())
             {
                 var serializedAnswer = new AssignmentApiView.InterviewSerializedAnswer
                 {
