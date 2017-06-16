@@ -69,7 +69,7 @@ export function detailsMixin(fetchMethod: string, defaults) {
                 })
             },
             handleEmptyAnswer(answer) {
-                const answ = answer === undefined || answer === null ? "" : answer
+                const answ = answer === undefined || answer === null ? null : answer
 
                 if (answ === this.$me.answer) {
                     return true
