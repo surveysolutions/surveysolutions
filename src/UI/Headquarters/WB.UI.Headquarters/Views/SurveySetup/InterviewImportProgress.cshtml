@@ -86,13 +86,13 @@
                     <li>@Html.ActionLink(MainMenu.SurveySetup, "Index", "SurveySetup")</li>
                     <li>@Html.ActionLink(BatchUpload.BreadCrumbs_CreatingMultipleInterviews, "BatchUpload", "SurveySetup", new { id = Model.QuestionnaireId, version = Model.Version }, new { })</li>
                 </ol>
-                <h1>@(Model.Status.PreloadedContentType == PreloadedContentType.Assignments ? BatchUpload.CreatingMultipleAssignments : BatchUpload.CreatingMultipleInterviews)</h1>
+                <h1>@BatchUpload.CreatingMultipleAssignments</h1>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-7">
                 <h3>
-                    @string.Format(Model.Status.PreloadedContentType == PreloadedContentType.Assignments ? BatchUpload.ImportAssignmentsFor : BatchUpload.ImportInterviewsFor, Html.QuestionnaireName(Model.QuestionnaireTitle, Model.Version))
+                    @string.Format(BatchUpload.ImportAssignmentsFor, Html.QuestionnaireName(Model.QuestionnaireTitle, Model.Version))
                 </h3>
             </div>
         </div>
@@ -106,24 +106,24 @@
                     <p data-bind="ifnot: status.isInProgress">@BatchUpload.ImportInterviews_Done</p>
                     <p class="success-text" data-bind="if: status.createdInterviewsCount() > 0">
                         <!-- ko if: (status.createdInterviewsCount() - status.interviewsWithError()) == 1 -->
-                        @(Model.Status.PreloadedContentType == PreloadedContentType.Assignments ? BatchUpload.SingleAssignmentCreated : BatchUpload.SingleInterviewCreated)
+                        @BatchUpload.SingleAssignmentCreated
                         <!-- /ko -->
                         <!-- ko if: (status.createdInterviewsCount() - status.interviewsWithError()) > 1 -->
-                        @Html.Raw(string.Format(Model.Status.PreloadedContentType == PreloadedContentType.Assignments ? BatchUpload.MultipleAssignmentsCreated : BatchUpload.MultipleInterviewsCreated, "<span data-bind='text: (status.createdInterviewsCount() - status.interviewsWithError())'></span>"))
+                        @Html.Raw(string.Format(BatchUpload.MultipleAssignmentsCreated, "<span data-bind='text: (status.createdInterviewsCount() - status.interviewsWithError())'></span>"))
                         <!-- /ko -->
                     </p>
                     <p class="default-text" data-bind="ifnot: status.hasErrors">@BatchUpload.ImportInterviews_NoneFailed</p>
                     <p class="error-text" data-bind="if: status.hasErrors">
                         <!-- ko if: status.interviewsWithError() == 1 -->
-                        @(Model.Status.PreloadedContentType == PreloadedContentType.Assignments ? BatchUpload.SingleAssignmentFailedToBeCreated : BatchUpload.SingleInterviewFailedToBeCreated)
+                        @BatchUpload.SingleAssignmentFailedToBeCreated
                         <!-- /ko -->
                         <!-- ko if: status.interviewsWithError() > 1 -->
-                        @Html.Raw(string.Format(Model.Status.PreloadedContentType == PreloadedContentType.Assignments ? BatchUpload.MultipleAssignmentFailedToBeCreated : BatchUpload.MultipleInterviewFailedToBeCreated, "<span data-bind='text: status.interviewsWithError'></span>"))
+                        @Html.Raw(string.Format(BatchUpload.MultipleAssignmentFailedToBeCreated, "<span data-bind='text: status.interviewsWithError'></span>"))
                         <!-- /ko -->
                     </p>
                 </div>
                 <a data-bind="if: status.hasErrors() && status.isInProgress()===false" href="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewsApi", action = "GetInvalidInterviewsByLastImport"})">
-                    @(Model.Status.PreloadedContentType == PreloadedContentType.Assignments ? BatchUpload.DownloadInvalidAssignments : BatchUpload.DownloadInvalidInterviews)
+                    @BatchUpload.DownloadInvalidAssignments
                 </a>
                 <div class="cancelable-progress" data-bind="if: status.isInProgress()">
                     <div class="progress">
@@ -133,14 +133,7 @@
                     </div>
                 </div>
                 <div class="action-buttons" data-bind="ifnot: status.isInProgress">
-                    @if (Model.Status.PreloadedContentType == PreloadedContentType.Assignments)
-                    {
-                        <a class="btn btn-primary" href="@Url.Action("Index", "Assignments", new {templateId = Model.QuestionnaireId, templateVersion = Model.Version})">@MainMenu.Assignments</a>
-                    }
-                    else
-                    {
-                        <a class="btn btn-primary" href="@Url.Action("Interviews", "HQ", new {templateId = Model.QuestionnaireId, templateVersion = Model.Version})">@MainMenu.Interviews</a>
-                    }
+                    <a class="btn btn-primary" href="@Url.Action("Index", "Assignments", new {templateId = Model.QuestionnaireId, templateVersion = Model.Version})">@MainMenu.Assignments</a>
                     <a class="btn btn-primary" href="@Url.Action("Index", "SurveySetup")">@MainMenu.SurveySetup</a>
                     @Html.ActionLink(BatchUpload.BackToImport, "BatchUpload", "SurveySetup", new {id = Model.QuestionnaireId, version = Model.Version}, new {@class = "back-link"})
                 </div>
