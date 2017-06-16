@@ -13,6 +13,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         {
             this.CreatedAtUtc = DateTime.UtcNow;
             this.UpdatedAtUtc = DateTime.UtcNow;
+
+            Answers = new List<InterviewAnswer>();
+            IdentifyingData = new List<IdentifyingAnswer>();
         }
 
         public Assignment(QuestionnaireIdentity questionnaireId, Guid responsibleId, int? quantity) : this()
@@ -20,6 +23,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.ResponsibleId = responsibleId;
             this.Quantity = quantity;
             this.QuestionnaireId = questionnaireId;
+
+            Answers = new List<InterviewAnswer>();
+            IdentifyingData = new List<IdentifyingAnswer>();
         }
 
         public virtual int Id { get; protected set; }
@@ -38,9 +44,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual QuestionnaireIdentity QuestionnaireId { get; set; }
 
-        public virtual IList<IdentifyingAnswer> IdentifyingData { get; protected set; } = new List<IdentifyingAnswer>();
+        public virtual IList<IdentifyingAnswer> IdentifyingData { get; protected set; }
 
-        public virtual IList<InterviewAnswer> Answers { get; protected set; } = new List<InterviewAnswer>();
+        public virtual IList<InterviewAnswer> Answers { get; protected set; }
 
         public virtual ISet<InterviewSummary> InterviewSummaries { get; protected set; }
 
