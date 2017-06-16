@@ -115,6 +115,33 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fill all or some of the identifying fields.
+        /// </summary>
+        public static string CreateAssignment_AnswersInstruction {
+            get {
+                return ResourceManager.GetString("CreateAssignment_AnswersInstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specify maximum number of interviews to be generated for that assignment (Quantity).
+        /// </summary>
+        public static string CreateAssignment_QuantityInstruction {
+            get {
+                return ResourceManager.GetString("CreateAssignment_QuantityInstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select responsible (Supervisor or Interviewer) for this assignment.
+        /// </summary>
+        public static string CreateAssignment_ResponsibleInstruction {
+            get {
+                return ResourceManager.GetString("CreateAssignment_ResponsibleInstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created at.
         /// </summary>
         public static string CreatedAt {
