@@ -2,16 +2,18 @@ using System.Linq;
 using Moq;
 using NUnit.Framework;
 using SQLite;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Tests.Abc;
+using System.Collections.Generic;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests.AssignmentTests
 {
     public class AssignmentDocumentStorageTests
     {
-        private AssignmentDocumentsStorage storage;
+        private IAssignmentDocumentsStorage storage;
         private SQLiteConnectionWithLock connection;
 
         [OneTimeSetUp]
@@ -19,8 +21,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         {
             this.connection = Create.Storage.InMemorySqLiteConnection;
 
-            this.storage = new AssignmentDocumentsStorage(connection,
-                Mock.Of<ILogger>());
+            this.storage = new AssignmentDocumentsStorage(connection, Mock.Of<ILogger>());
         }
 
         [Test]
@@ -29,12 +30,40 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var document = Create.Entity.AssignmentDocument(1)
                 .WithAnswer(Create.Entity.Identity(Id.g1), "answer1")
                 .WithAnswer(Create.Entity.Identity(Id.g2), "answer2")
+                .WithAnswer(Create.Entity.Identity(Id.g3), "IDEN1", true)
+                .WithAnswer(Create.Entity.Identity(Id.g4), "IDEN2", true)
                 .Build();
 
             this.storage.Store(document);
 
             var stored = this.storage.LoadAll().First();
 
+            this.storage.FetchPreloadedData(stored);
+
+            AssertThatStoredAssignmentIsEqualToDocument(stored, document);
+        }
+        
+        [Test]
+        public void should_not_load_all_answers_on_loadAll()
+        {
+            var document = Create.Entity.AssignmentDocument(1)
+                .WithAnswer(Create.Entity.Identity(Id.g1), "answer1")
+                .WithAnswer(Create.Entity.Identity(Id.g2), "answer2")
+                .WithAnswer(Create.Entity.Identity(Id.g3), "IDEN1", true)
+                .WithAnswer(Create.Entity.Identity(Id.g4), "IDEN1", true)
+                .WithAnswer(Create.Entity.Identity(Id.g5), "IDEN3", true)
+                .Build();
+
+            this.storage.Store(document);
+
+            var stored = this.storage.LoadAll().First();
+
+            Assert.That(stored.Answers, Has.Count.EqualTo(0));
+
+            this.storage.FetchPreloadedData(stored);
+
+            Assert.That(stored.Answers, Has.Count.EqualTo(5));
+            
             AssertThatStoredAssignmentIsEqualToDocument(stored, document);
         }
 
@@ -59,7 +88,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             this.storage.Store(document);
 
-            var stored = this.storage.GetById(1);
+            var stored = this.storage.LoadAll().First();
+
+            this.storage.FetchPreloadedData(stored);
 
             AssertThatStoredAssignmentIsEqualToDocument(stored, document);
 
@@ -69,14 +100,36 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         }
 
         [Test]
+        public void should_be_able_to_removeOne()
+        {
+            var document = Create.Entity.AssignmentDocument(1)
+                    .WithAnswer(Create.Entity.Identity(Id.g1), "answer1")
+                    .WithAnswer(Create.Entity.Identity(Id.g2), "answer2")
+                    .WithAnswer(Create.Entity.Identity(Id.g3), "answer3", identifying: true)
+                    .WithAnswer(Create.Entity.Identity(Id.g4), "answer4", identifying: true)
+                    .WithAnswer(Create.Entity.Identity(Id.g5), "answer5")
+                    .Build();
+
+            this.storage.Store(document);
+
+            this.storage.Remove(1);
+
+            var storedAnswers = this.connection.Table<AssignmentDocument.AssignmentAnswer>().ToList();
+            var storedQuestions = this.connection.Table<AssignmentDocument>().ToList();
+
+            Assert.That(storedAnswers, Has.Count.EqualTo(0));
+            Assert.That(storedQuestions, Has.Count.EqualTo(0));
+        }
+
+        [Test]
         public void should_be_able_to_removeAll()
         {
             var document = Create.Entity.AssignmentDocument(1)
                 .WithAnswer(Create.Entity.Identity(Id.g1), "answer1")
                 .WithAnswer(Create.Entity.Identity(Id.g2), "answer2")
-                .WithAnswer(Create.Entity.Identity(Id.g3), "answer3")
+                .WithAnswer(Create.Entity.Identity(Id.g3), "answer3", identifying: true)
                 .WithAnswer(Create.Entity.Identity(Id.g4), "answer4")
-                .WithAnswer(Create.Entity.Identity(Id.g5), "answer5")
+                .WithAnswer(Create.Entity.Identity(Id.g5), "answer5", identifying: true)
                 .Build();
 
             this.storage.Store(document);
@@ -92,17 +145,29 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
         private static void AssertThatStoredAssignmentIsEqualToDocument(AssignmentDocument stored, AssignmentDocument document)
         {
-            var storedAnswers = stored.Answers.OrderBy(id => id.Id).ToArray();
-            var documentAnswers = document.Answers.OrderBy(id => id.Id).ToArray();
-
-            Assert.That(stored.Answers, Has.Count.EqualTo(document.Answers.Count));
-
-            for (int i = 0; i < storedAnswers.Length; i++)
+            void AssertEqualAnswers(List<AssignmentDocument.AssignmentAnswer> source, List<AssignmentDocument.AssignmentAnswer> target)
             {
-                Assert.That(storedAnswers[i].Identity, Is.EqualTo(documentAnswers[i].Identity));
-                Assert.That(storedAnswers[i].AnswerAsString, Is.EqualTo(documentAnswers[i].AnswerAsString));
-                Assert.That(storedAnswers[i].AssignmentId, Is.EqualTo(document.Id));
+                source = source.OrderBy(s => s.Id).ToList();
+                target = target.OrderBy(s => s.Id).ToList();
+
+                source.SequenceEqual(target, answer => answer.AssignmentId, answer => answer.AssignmentId);
+                source.SequenceEqual(target, answer => answer.AnswerAsString, answer => answer.AnswerAsString);
+                source.SequenceEqual(target, answer => answer.IsIdentifying, answer => answer.IsIdentifying);
+                source.SequenceEqual(target, answer => answer.Identity, answer => answer.Identity);
+                source.SequenceEqual(target, answer => answer.Question, answer => answer.Question);
+                source.SequenceEqual(target, answer => answer.SerializedAnswer, answer => answer.SerializedAnswer);
             }
+
+            AssertEqualAnswers(stored.Answers, document.Answers);
+            AssertEqualAnswers(stored.IdentifyingAnswers, stored.IdentifyingAnswers);
+
+            Assert.That(stored.InterviewsCount, Is.EqualTo(document.InterviewsCount));
+            Assert.That(stored.LocationLatitude, Is.EqualTo(document.LocationLatitude));
+            Assert.That(stored.LocationLongitude, Is.EqualTo(document.LocationLongitude));
+            Assert.That(stored.QuestionnaireId, Is.EqualTo(document.QuestionnaireId));
+            Assert.That(stored.Quantity, Is.EqualTo(document.Quantity));
+            Assert.That(stored.Title, Is.EqualTo(document.Title));
+            Assert.That(stored.ReceivedDateUtc, Is.EqualTo(document.ReceivedDateUtc));
         }
     }
 }
