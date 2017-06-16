@@ -75,7 +75,7 @@ export function detailsMixin(fetchMethod: string, defaults) {
                     return true
                 }
 
-                if (answ === "" && this.$me.isAnswered) {
+                if ((answ === "" || answ === null) && this.$me.isAnswered) {
                     this.removeAnswer()
                     return true
                 }
