@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.Properties;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
@@ -13,8 +14,6 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
@@ -29,6 +28,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private readonly IMvxMessenger messenger;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IExternalAppLauncher externalAppLauncher;
+        private readonly IAssignmentDocumentsStorage assignmentDocumentsStorage;
 
         public AssignmentDashboardItemViewModel(
             ICommandService commandService,
@@ -37,6 +37,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             IMvxMessenger messenger,
             IPlainStorage<InterviewView> interviewViewRepository,
             IExternalAppLauncher externalAppLauncher,
+            IAssignmentDocumentsStorage assignmentDocumentsStorage,
             IInterviewAnswerSerializer answerSerializer)
         {
             this.answerSerializer = answerSerializer;
@@ -46,6 +47,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.messenger = messenger;
             this.interviewViewRepository = interviewViewRepository;
             this.externalAppLauncher = externalAppLauncher;
+            this.assignmentDocumentsStorage = assignmentDocumentsStorage;
         }
 
         private QuestionnaireIdentity questionnaireIdentity;
@@ -138,6 +140,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             RaiseStartingLongOperation();
             var interviewId = Guid.NewGuid();
             var interviewerIdentity = this.principal.CurrentUserIdentity;
+            this.assignmentDocumentsStorage.FetchPreloadedData(this.assignment);
 
             List<InterviewAnswer> answers = GetAnswersToIdentifyingQuestions(this.assignment.Answers);
 

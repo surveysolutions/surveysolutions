@@ -14,7 +14,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 
@@ -159,8 +158,11 @@ namespace WB.UI.Headquarters.Code
                             ? SyncLogMessages.InterviewerLoggedIn
                             : SyncLogMessages.InterviewerFailedToLogin;
                         break;
-                    case SynchronizationLogType.GetAssignments:
+                    case SynchronizationLogType.GetAssignmentsList:
                         logItem.Log = GetAssignmentsLogMessage(context);
+                        break;
+                    case SynchronizationLogType.GetAssignment:
+                        logItem.Log = GetAssignmentLogMessage(context);
                         break;
                     default:
                         throw new ArgumentException("logAction");
@@ -235,15 +237,30 @@ namespace WB.UI.Headquarters.Code
                 string.Join("", assignmentsApiView.Select(av => $"<li>{GetAssignmentLogMessage(av)}</li>")));
         }
 
-        private string GetAssignmentLogMessage(AssignmentApiView apiView)
+        private string GetAssignmentLogMessage(AssignmentApiView view)
         {
-            QuestionnaireIdentity assignmentQuestionnaireId = apiView.QuestionnaireId;
+            QuestionnaireIdentity assignmentQuestionnaireId = view.QuestionnaireId;
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(assignmentQuestionnaireId, null);
-            var answers = string.Join("", apiView.Answers.Where(x => !string.IsNullOrEmpty(x.AnswerAsString)).Select(_ => GetAssignmentIdentifyingQuestionRow(_, questionnaire)));
-            return $"{apiView.Id}: <strong>{questionnaire.Title}</strong> [{apiView.QuestionnaireId}] <ul>{answers}</ul>";
+            return $"{view.Id}: <strong>{questionnaire.Title}</strong> [{view.QuestionnaireId}]";
         }
 
-        private string GetAssignmentIdentifyingQuestionRow(AssignmentApiView.InterviewSerializedAnswer _, Core.SharedKernels.DataCollection.Aggregates.IQuestionnaire questionnaire)
+        private string GetAssignmentLogMessage(HttpActionExecutedContext context)
+        {
+            var apiView = this.GetResponseObject<AssignmentApiDocument>(context);
+            QuestionnaireIdentity assignmentQuestionnaireId = apiView.QuestionnaireId;
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(assignmentQuestionnaireId, null);
+            var identityQuestions = questionnaire.GetPrefilledQuestions().ToHashSet();
+
+            var answers = apiView.Answers
+                .Where(x => !string.IsNullOrEmpty(x.AnswerAsString))
+                .Where(x => identityQuestions.Contains(x.Identity.Id))
+                .Select(_ => GetAssignmentIdentifyingQuestionRow(_, questionnaire));
+
+            var answersString = string.Join("", answers);
+            return $"{apiView.Id}: <strong>{questionnaire.Title}</strong> [{apiView.QuestionnaireId}] <ul>{answersString}</ul>";
+        }
+
+        private string GetAssignmentIdentifyingQuestionRow(AssignmentApiDocument.InterviewSerializedAnswer _, Core.SharedKernels.DataCollection.Aggregates.IQuestionnaire questionnaire)
         {
             string questionTitle = questionnaire.GetQuestionTitle(_.Identity.Id).RemoveHtmlTags();
             return $"<li title='{questionTitle}'>{LimitStringLength(questionTitle)}: {_.AnswerAsString}</li>";

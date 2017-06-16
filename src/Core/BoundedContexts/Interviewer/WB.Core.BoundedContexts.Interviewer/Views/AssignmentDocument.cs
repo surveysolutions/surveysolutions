@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public DateTime ReceivedDateUtc { get; set; }
 
         [Ignore]
-        public List<AssignmentAnswer> Answers { get; set; } = new List<AssignmentAnswer>();
+        public List<AssignmentAnswer> Answers { get; set; }
 
         [Ignore]
         public List<AssignmentAnswer> IdentifyingAnswers { get; set; } = new List<AssignmentAnswer>();

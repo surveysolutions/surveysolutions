@@ -23,5 +23,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 && (assigment.Quantity == null || assigment.InterviewSummaries.Count < assigment.Quantity))
             .ToList());
         }
+
+        public Assignment GetAssignment(int id)
+        {
+            return this.assignmentsAccessor.GetById(id);
+        }
     }
 }

@@ -146,7 +146,8 @@
     <Compile Include="Implementation\Aggregates\InterviewEntities\SubstitutionVariables.cs" />
     <Compile Include="Implementation\Aggregates\Invariants\InterviewQuestionInvariants.cs" />
     <Compile Include="Implementation\Aggregates\StatefulInterview.cs" />
-    <Compile Include="Implementation\Entities\AssignmentApiView.cs" />
+    <Compile Include="Services\IAssignmentSynchronizationApi.cs" />
+    <Compile Include="WebApi\AssignmentApiDocument.cs" />
     <Compile Include="Implementation\Entities\MapView.cs" />
     <Compile Include="Implementation\Repositories\StatefulInterviewRepository.cs" />
     <Compile Include="Implementation\Services\IdentifyingAnswerConverter.cs" />

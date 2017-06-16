@@ -1,15 +1,19 @@
 ﻿using System.Collections.Generic;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.UI.Headquarters.Code;
 using Main.Core.Entities.SubEntities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 
 namespace WB.UI.Headquarters.API.Interviewer.v2
 {
-    public class AssignmentsApiV2Controller : ApiController
+    public class AssignmentsApiV2Controller : ApiController, IAssignmentSynchronizationApi
     {
         private readonly IAuthorizedUser authorizedUser;
         private readonly IAssignmentsService assignmentsService;
@@ -23,23 +27,47 @@ namespace WB.UI.Headquarters.API.Interviewer.v2
             this.assignmentViewFactory = assignmentViewFactory;
         }
 
-        [WriteToSyncLog(SynchronizationLogType.GetAssignments)]
+        [WriteToSyncLog(SynchronizationLogType.GetAssignment)]
         [ApiBasicAuth(UserRoles.Interviewer)]
         [HttpGet]
-        public List<AssignmentApiView> List()
+        public Task<AssignmentApiDocument> GetAssignmentAsync(int id, CancellationToken cancellationToken)
         {
             var authorizedUserId = this.authorizedUser.Id;
+
+            var assignment = this.assignmentsService.GetAssignment(id);
+
+            if (assignment.ResponsibleId != authorizedUserId)
+            {
+                throw new HttpResponseException(HttpStatusCode.Forbidden);
+            }
+
+            return Task.FromResult(this.assignmentViewFactory.MapAssignment(assignment));
+        }
+
+        [WriteToSyncLog(SynchronizationLogType.GetAssignmentsList)]
+        [ApiBasicAuth(UserRoles.Interviewer)]
+        [HttpGet]
+        public Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken)
+        {
+            var authorizedUserId = this.authorizedUser.Id;
+
             var assignments = this.assignmentsService.GetAssignments(authorizedUserId);
 
             var assignmentApiViews = new List<AssignmentApiView>();
 
             foreach (var assignment in assignments)
             {
-                var assignmentApiView = this.assignmentViewFactory.MapAssignment(assignment);
-                assignmentApiViews.Add(assignmentApiView);
+                assignmentApiViews.Add(new AssignmentApiView
+                {
+                    Id = assignment.Id,
+                    Quantity = assignment.Quantity.HasValue
+                        ? assignment.Quantity - assignment.InterviewSummaries.Count
+                        : null,
+                    QuestionnaireId = assignment.QuestionnaireId
+                });
             }
 
-            return assignmentApiViews;
+            return Task.FromResult(assignmentApiViews);
         }
     }
 }

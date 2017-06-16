@@ -66,9 +66,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
             if (entity == null) return;
 
             table.Connection.InsertOrReplace(entity);
-            table.Connection.Table<AssignmentDocument.AssignmentAnswer>().Delete(answer => answer.AssignmentId == entity.Id);
-            table.Connection.InsertAll(entity.Answers);
-            //table.Connection.InsertAll(entity.IdentifyingAnswers);
+
+            if (entity.Answers != null)
+            {
+                table.Connection.Table<AssignmentDocument.AssignmentAnswer>().Delete(answer => answer.AssignmentId == entity.Id);
+                table.Connection.InsertAll(entity.Answers);
+            }
         }
 
         /// <summary>
