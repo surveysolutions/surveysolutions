@@ -36,20 +36,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
             });
         }
 
-        public override AssignmentDocument GetById(int id)
+        public override void Store(AssignmentDocument entity)
         {
-            return RunInTransaction(table =>
-            {
-                var entity = table.Connection.Find<AssignmentDocument>(id);
-
-                if (entity == null) return null;
-
-                entity.Answers = table.Connection.Table<AssignmentDocument.AssignmentAnswer>()
-                    .Where(ia => ia.AssignmentId == id)
-                    .ToList();
-
-                return entity;
-            });
+            RunInTransaction(table => StoreImplementation(table, entity));
         }
 
         public override void Store(IEnumerable<AssignmentDocument> entities)
@@ -58,14 +47,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
             {
                 RunInTransaction(table =>
                 {
-                    foreach (var entity in entities.Where(entity => entity != null))
+                    foreach (var entity in entities)
                     {
-                        table.Connection.InsertOrReplace(entity);
-
-                        table.Connection.Table<AssignmentDocument.AssignmentAnswer>()
-                            .Delete(answer => answer.AssignmentId == entity.Id);
-
-                        table.Connection.InsertAll(entity.Answers);
+                        StoreImplementation(table, entity);
                     }
                 });
 
@@ -77,22 +61,51 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
             }
         }
 
+        private void StoreImplementation(TableQuery<AssignmentDocument> table, AssignmentDocument entity)
+        {
+            if (entity == null) return;
+
+            table.Connection.InsertOrReplace(entity);
+            table.Connection.Table<AssignmentDocument.AssignmentAnswer>().Delete(answer => answer.AssignmentId == entity.Id);
+            table.Connection.InsertAll(entity.Answers);
+            //table.Connection.InsertAll(entity.IdentifyingAnswers);
+        }
+
+        /// <summary>
+        /// Load all assignment documents, without all preloaded data
+        /// </summary>
+        /// <returns></returns>
         public override IReadOnlyCollection<AssignmentDocument> LoadAll()
         {
-            return RunInTransaction(documents =>
+            return RunInTransaction(assignmentTable =>
             {
-                var answersLookup = documents.Connection.Table<AssignmentDocument.AssignmentAnswer>().ToLookup(a => a.AssignmentId);
+                var answersLookup = assignmentTable.Connection.Table<AssignmentDocument.AssignmentAnswer>()
+                    .Where(a => a.IsIdentifying)
+                    .ToLookup(a => a.AssignmentId);
 
                 IEnumerable<AssignmentDocument> FillAnswers()
                 {
-                    foreach (var assignment in documents)
+                    foreach (var assignment in assignmentTable)
                     {
-                        assignment.Answers = answersLookup[assignment.Id].ToList();
+                        assignment.IdentifyingAnswers = answersLookup[assignment.Id].ToList();
                         yield return assignment;
                     }
                 }
 
                 return FillAnswers().ToReadOnlyCollection();
+            });
+        }
+
+        public AssignmentDocument FetchPreloadedData(AssignmentDocument document)
+        {
+            return RunInTransaction(documents =>
+            {
+                var answers = documents.Connection.Table<AssignmentDocument.AssignmentAnswer>()
+                    .Where(a => a.AssignmentId == document.Id).ToList();
+
+                document.Answers = answers;
+
+                return document;
             });
         }
 

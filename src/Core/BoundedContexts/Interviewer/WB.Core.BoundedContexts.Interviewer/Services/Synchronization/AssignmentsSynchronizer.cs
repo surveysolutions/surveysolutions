@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
                     statistics.NewAssignmentsCount++;
                 }
 
-                local.Answers = this.FillAnswers(remote, questionnaire, local);
+                this.FillAnswers(remote, questionnaire, local);
                 local.Quantity = remote.Quantity;
                 local.InterviewsCount = remote.InterviewsCount;
 
@@ -83,19 +83,32 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
             }
         }
 
-        private List<AssignmentDocument.AssignmentAnswer> FillAnswers(AssignmentApiView remote, IQuestionnaire questionnaire, AssignmentDocument local)
+        private void FillAnswers(AssignmentApiView remote, IQuestionnaire questionnaire, AssignmentDocument local)
         {
-            var identifyingData = new List<AssignmentDocument.AssignmentAnswer>();
             var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
 
             local.LocationLatitude = remote.LocationLatitude;
             local.LocationLongitude = remote.LocationLongitude;
+            var answers = new List<AssignmentDocument.AssignmentAnswer>();
+            var identiAnswers = new List<AssignmentDocument.AssignmentAnswer>();
 
             foreach (var answer in remote.Answers)
             {
                 var isIdentifying = identifyingQuestionIds.Contains(answer.Identity.Id);
-                
-                identifyingData.Add(new AssignmentDocument.AssignmentAnswer
+
+                if (isIdentifying)
+                {
+                    identiAnswers.Add(new AssignmentDocument.AssignmentAnswer
+                    {
+                        AssignmentId = remote.Id,
+                        Identity = answer.Identity,
+                        AnswerAsString = answer.AnswerAsString,
+                        Question = isIdentifying ? questionnaire.GetQuestionTitle(answer.Identity.Id) : null,
+                        IsIdentifying = isIdentifying
+                    });
+                }
+
+                answers.Add(new AssignmentDocument.AssignmentAnswer
                 {
                     AssignmentId = remote.Id,
                     Identity = answer.Identity,
@@ -106,7 +119,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
                 });
             }
 
-            return identifyingData;
+            local.Answers = answers;
+            local.IdentifyingAnswers = identiAnswers;
         }
     }
 }

@@ -7,7 +7,6 @@ using Main.Core.Entities.Composite;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -49,21 +48,24 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                     .AssignmentApiView(1, 20, 0, Create.Entity.QuestionnaireIdentity(Id.gA))
                     .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "1")
                     .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "2")
+                    .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "3")
                     .Build(),
                 Create.Entity
                     .AssignmentApiView(3, 20, 0, Create.Entity.QuestionnaireIdentity(Id.gC))
                     .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "1")
                     .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "2")
+                    .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "3")
                     .Build()
             };
         }
 
-        PlainQuestionnaire CreatePlain(Guid id, AssignmentApiView assignemtn)
+        PlainQuestionnaire CreatePlain(Guid id, AssignmentApiView assignment)
         {
             var questionnaire = Create.Entity.QuestionnaireDocument(id, children: new IComposite[]
             {
-                Create.Entity.TextQuestion(assignemtn.Answers[0].Identity.Id, text: "text 1"),
-                Create.Entity.TextQuestion(assignemtn.Answers[1].Identity.Id, text: "title 2"),
+                Create.Entity.TextQuestion(assignment.Answers[0].Identity.Id, text: "text 1"),
+                Create.Entity.TextQuestion(assignment.Answers[1].Identity.Id, text: "title 2"),
+                Create.Entity.TextQuestion(assignment.Answers[2].Identity.Id, text: "title 3", preFilled: true)
             });
 
             questionnaire.Title = "title";
@@ -89,15 +91,16 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 x => x.GetCensusQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new List<QuestionnaireIdentity>())
                      && x.GetServerQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new List<QuestionnaireIdentity>(questionaries))
                      && x.GetInterviewsAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new List<InterviewApiView>())
-                     && x.GetAttachmentContentsAsync(It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<Action<decimal, long, long>>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new List<string>())
-                     && x.GetQuestionnaireAsync(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<Action<decimal, long, long>>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new QuestionnaireApiView())
+                     && x.GetAttachmentContentsAsync(It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<Action<decimal, long, long>>(),
+                        It.IsAny<CancellationToken>()) == Task.FromResult(new List<string>())
+                     && x.GetQuestionnaireAsync(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<Action<decimal, long, long>>(), It.IsAny<CancellationToken>()) == Task.FromResult(new QuestionnaireApiView())
                      && x.GetQuestionnaireTranslationAsync(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new List<TranslationDto>())
                      && x.GetAssignmentsAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(this.RemoteAssignments)
             );
 
             var interviewViewRepository = new SqliteInmemoryStorage<InterviewView>();
             interviewViewRepository.Store(new List<InterviewView>());
-            var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(q => 
+            var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(q =>
                 q.GetQuestionnaire(questionaries[2], null) == CreatePlain(Id.gC, this.RemoteAssignments[1])
                 && q.GetQuestionnaire(questionaries[0], null) == CreatePlain(Id.gA, this.RemoteAssignments[0]));
 
@@ -115,21 +118,28 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         [Test]
         public void should_add_new_assignment()
         {
-            var newRemoteAssign = this.localAssignmentsRepo.GetById(3);
+            var newRemoteAssign = this.localAssignmentsRepo.LoadAll().FirstOrDefault(ad => ad.Id == 3);
             Assert.NotNull(newRemoteAssign);
+        }
+
+        [Test]
+        public void should_fill_identifying_answers()
+        {
+            var assignment = this.localAssignmentsRepo.LoadAll().First();
+            Assert.That(assignment.IdentifyingAnswers, Has.Count.EqualTo(1));
         }
 
         [Test]
         public void should_remove_removed_assignment()
         {
-            var newRemoteAssign = this.localAssignmentsRepo.GetById(2);
+            var newRemoteAssign = this.localAssignmentsRepo.LoadAll().FirstOrDefault(ad => ad.Id == 2);
             Assert.Null(newRemoteAssign);
         }
 
         [Test]
         public void should_update_existing_assignment_quantity()
         {
-            var existingAssignment = this.localAssignmentsRepo.GetById(1);
+            var existingAssignment = this.localAssignmentsRepo.LoadAll().FirstOrDefault(ad => ad.Id == 1);
             Assert.That(existingAssignment.Quantity, Is.EqualTo(this.RemoteAssignments[0].Quantity));
         }
 

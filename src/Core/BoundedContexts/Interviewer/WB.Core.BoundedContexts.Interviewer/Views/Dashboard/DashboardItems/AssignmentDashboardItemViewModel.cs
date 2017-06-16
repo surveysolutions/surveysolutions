@@ -22,8 +22,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 {
     public class AssignmentDashboardItemViewModel : MvxNotifyPropertyChanged, IDashboardItem
     {
-        private readonly IQuestionnaireStorage questionnaireRepository;
-        private readonly IIdentifyingAnswerConverter identifyingAnswerConverter;
         private readonly IInterviewAnswerSerializer answerSerializer;
         private readonly ICommandService commandService;
         private readonly IInterviewerPrincipal principal;
@@ -39,12 +37,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             IMvxMessenger messenger,
             IPlainStorage<InterviewView> interviewViewRepository,
             IExternalAppLauncher externalAppLauncher,
-            IQuestionnaireStorage questionnaireRepository,
-            IIdentifyingAnswerConverter identifyingAnswerConverter, 
             IInterviewAnswerSerializer answerSerializer)
         {
-            this.questionnaireRepository = questionnaireRepository;
-            this.identifyingAnswerConverter = identifyingAnswerConverter;
             this.answerSerializer = answerSerializer;
             this.commandService = commandService;
             this.principal = principal;
@@ -67,9 +61,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.DetailedPrefilledQuestions = GetPrefilledQuestions(identifyingData.Skip(3));
             this.GpsLocation = this.GetAssignmentLocation(assignment);
 
-            
-
             dashboardViewModel.InterviewsCountChanged += (sender, args) => this.Refresh();
+
             this.Refresh();
             this.ReceivedDate = assignment.ReceivedDateUtc.ToLocalTime().ToString("MMM d");
             this.ReceivedTime = assignment.ReceivedDateUtc.ToLocalTime().ToString("HH:mm");
