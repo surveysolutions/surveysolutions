@@ -7,12 +7,12 @@ using Main.Core.Entities.Composite;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         private List<AssignmentDocument> LocalAssignments;
 
         private List<AssignmentApiView> RemoteAssignments;
-        private IPlainStorage<AssignmentDocument, int> localAssignmentsRepo;
+        private IAssignmentDocumentsStorage localAssignmentsRepo;
         private Mock<IProgress<SyncProgressInfo>> progressInfo;
 
         private void Context()
@@ -75,7 +75,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         {
             this.Context();
 
-            this.localAssignmentsRepo = new SqliteInmemoryStorage<AssignmentDocument, int>();
+            this.localAssignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
             this.localAssignmentsRepo.Store(this.LocalAssignments);
 
             var questionaries = new[]

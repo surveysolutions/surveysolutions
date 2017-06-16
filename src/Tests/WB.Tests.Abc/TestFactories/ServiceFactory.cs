@@ -11,7 +11,6 @@ using Ncqrs.Eventing.Storage;
 using NHibernate;
 using NSubstitute;
 using System.Linq;
-using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -24,7 +23,6 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Factories;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
@@ -491,12 +489,12 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public IAssignmentsSynchronizer AssignmentsSynchronizer(ISynchronizationService synchronizationService = null,
-            IPlainStorage<AssignmentDocument, int> assignmentsRepository = null,
+            IAssignmentDocumentsStorage assignmentsRepository = null,
             IQuestionnaireDownloader questionnaireDownloader = null,
             IQuestionnaireStorage questionnaireStorage = null)
         {
             return new AssignmentsSynchronizer(synchronizationService ?? Mock.Of<ISynchronizationService>(),
-                assignmentsRepository ?? new SqliteInmemoryStorage<AssignmentDocument, int>(),
+                assignmentsRepository ?? Create.Storage.AssignmentDocumentsInmemoryStorage(),
                 questionnaireDownloader ?? Mock.Of<IQuestionnaireDownloader>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
         }

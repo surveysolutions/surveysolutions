@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
@@ -18,8 +17,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             public Identity Identity { get; set; }
             public string SerializedAnswer { get; set; }
             public string AnswerAsString { get; set; }
-
-            
         }
     }
 }

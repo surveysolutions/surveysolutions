@@ -5,7 +5,10 @@ using System.Linq.Expressions;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Fetching;
@@ -18,12 +21,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
     {
         private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly IInterviewAnswerSerializer answerSerializer;
 
         public AssignmentViewFactory(IPlainStorageAccessor<Assignment> assignmentsStorage,
-            IQuestionnaireStorage questionnaireStorage)
+            IQuestionnaireStorage questionnaireStorage, IInterviewAnswerSerializer answerSerializer)
         {
             this.assignmentsStorage = assignmentsStorage;
             this.questionnaireStorage = questionnaireStorage;
+            this.answerSerializer = answerSerializer;
         }
 
         public AssignmentsWithoutIdentifingData Load(AssignmentsInputModel input)
@@ -154,8 +159,46 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 items = items.Where(x => x.Responsible.ReadonlyProfile.SupervisorId == input.SupervisorId || x.ResponsibleId == input.SupervisorId);
             }
 
-
             return items;
+        }
+
+        public AssignmentApiView MapAssignment(Assignment assignment)
+        {
+            var assignmentApiView = new AssignmentApiView
+            {
+                Id = assignment.Id,
+                QuestionnaireId = assignment.QuestionnaireId,
+                Quantity = assignment.Quantity,
+                InterviewsCount = assignment.InterviewSummaries.Count
+            };
+
+            var assignmentIdentifyingData = assignment.IdentifyingData.ToLookup(id => id.Identity);
+
+            foreach (var answer in assignment.Answers)
+            {
+                var serializedAnswer = new AssignmentApiView.InterviewSerializedAnswer
+                {
+                    Identity = answer.Identity,
+                    SerializedAnswer = this.answerSerializer.Serialize(answer.Answer)
+                };
+
+                var identifyingAnswer = assignmentIdentifyingData[answer.Identity].FirstOrDefault();
+
+                if (identifyingAnswer != null)
+                {
+                    if (answer.Answer is GpsAnswer)
+                    {
+                        var gpsAnswer = answer.Answer as GpsAnswer;
+                        assignmentApiView.LocationLatitude = gpsAnswer.Value.Latitude;
+                        assignmentApiView.LocationLongitude = gpsAnswer.Value.Latitude;
+                    }
+                    serializedAnswer.AnswerAsString = identifyingAnswer.AnswerAsString;
+                }
+
+                assignmentApiView.Answers.Add(serializedAnswer);
+            }
+
+            return assignmentApiView;
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using SQLite;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
@@ -28,6 +28,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         [Ignore]
         public List<AssignmentAnswer> Answers { get; set; } = new List<AssignmentAnswer>();
+
+        [Ignore]
+        public IEnumerable<AssignmentAnswer> IdentifyingAnswers => Answers.Where(ans => ans.IsIdentifying);
 
         public class AssignmentAnswer
         {

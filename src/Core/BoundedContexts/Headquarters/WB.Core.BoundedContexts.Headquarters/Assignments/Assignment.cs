@@ -11,8 +11,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
     {
         public Assignment()
         {
-            this.IdentifyingData = new List<IdentifyingAnswer>();
-            this.Answers = new List<InterviewAnswer>();
             this.CreatedAtUtc = DateTime.UtcNow;
             this.UpdatedAtUtc = DateTime.UtcNow;
         }
@@ -40,9 +38,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual QuestionnaireIdentity QuestionnaireId { get; set; }
 
-        public virtual IList<IdentifyingAnswer> IdentifyingData { get; protected set; }
+        public virtual IList<IdentifyingAnswer> IdentifyingData { get; protected set; } = new List<IdentifyingAnswer>();
 
-        public virtual IList<InterviewAnswer> Answers { get; protected set; }
+        public virtual IList<InterviewAnswer> Answers { get; protected set; } = new List<InterviewAnswer>();
 
         public virtual ISet<InterviewSummary> InterviewSummaries { get; protected set; }
 

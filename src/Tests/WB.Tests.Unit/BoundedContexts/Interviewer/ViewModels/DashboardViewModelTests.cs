@@ -3,6 +3,7 @@ using MvvmCross.Plugins.Messenger;
 using MvvmCross.Test.Core;
 using NSubstitute;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
@@ -64,7 +65,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             => new CreateNewViewModel(
                 Substitute.For<IPlainStorage<QuestionnaireView>>(), 
                 Substitute.For<IInterviewViewModelFactory>(),
-                Substitute.For<IPlainStorage<AssignmentDocument, int>>(),
+                Substitute.For<IAssignmentDocumentsStorage>(),
                 Mock.Of<IViewModelNavigationService>());
 
         private static StartedInterviewsViewModel DashboardStartedInterviewsViewModel()

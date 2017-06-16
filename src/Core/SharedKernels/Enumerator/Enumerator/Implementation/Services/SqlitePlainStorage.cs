@@ -53,32 +53,26 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public virtual TEntity GetById(TKey id)
         {
-            TEntity entity = null;
-
-            using (this.connection.Lock())
-                this.connection.RunInTransaction(() => entity = this.connection.Find<TEntity>(id));
-
-            return entity;
+            return RunInTransaction(table => table.Connection.Find<TEntity>(id));
         }
 
         public void Remove(TKey id)
         {
-            using (this.connection.Lock())
-                this.connection.RunInTransaction(() => this.connection.Delete<TEntity>(id));
+            RunInTransaction(table => table.Connection.Delete<TEntity>(id));
         }
 
         public void Remove(IEnumerable<TEntity> entities)
         {
             try
             {
-                using (this.connection.Lock())
+                RunInTransaction(table =>
                 {
-                    this.connection.RunInTransaction(() =>
+                    foreach (var entity in entities.Where(entity => entity != null))
                     {
-                        foreach (var entity in entities.Where(entity => entity != null))
-                            this.connection.Delete(entity);
-                    });
-                }
+                        table.Connection.Delete(entity);
+                    }
+                });
+
             }
             catch (SQLiteException ex)
             {
@@ -89,24 +83,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public void Store(TEntity entity)
         {
-            this.Store(new[] {entity});
+            this.Store(new[] { entity });
         }
 
         public virtual void Store(IEnumerable<TEntity> entities)
         {
             try
             {
-                using (this.connection.Lock())
+                RunInTransaction(table =>
                 {
-                    this.connection.RunInTransaction(() =>
+                    foreach (var entity in entities.Where(entity => entity != null))
                     {
-                        foreach (var entity in entities.Where(entity => entity != null))
-                        {
-                            connection.InsertOrReplace(entity);
-                        }
-                    });
-                }
-
+                        table.Connection.InsertOrReplace(entity);
+                    }
+                });
             }
             catch (SQLiteException ex)
             {
@@ -128,6 +118,19 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return this.RunInTransaction(table => table.Connection.Table<TEntity>().ToReadOnlyCollection());
         }
 
+        public IReadOnlyCollection<TEntity> FixedQuery(Expression<Func<TEntity, bool>> wherePredicate, Expression<Func<TEntity, int>> orderPredicate, int takeCount, int skip = 0)
+            => this.RunInTransaction(table => table.Where(wherePredicate).OrderBy(orderPredicate).Skip(skip).Take(takeCount).ToReadOnlyCollection());
+
+        public virtual void RemoveAll()
+        {
+            RunInTransaction(table => table.Connection.DeleteAll<TEntity>());
+        }
+
+        public void Dispose()
+        {
+            this.connection.Dispose();
+        }
+
         protected TResult RunInTransaction<TResult>(Func<TableQuery<TEntity>, TResult> function)
         {
             TResult result = default(TResult);
@@ -136,18 +139,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             return result;
         }
-        
-        public IReadOnlyCollection<TEntity> FixedQuery(Expression<Func<TEntity, bool>> wherePredicate, Expression<Func<TEntity, int>> orderPredicate, int takeCount, int skip = 0)
-            => this.RunInTransaction(table => table.Where(wherePredicate).OrderBy(orderPredicate).Skip(skip).Take(takeCount).ToReadOnlyCollection());
-        
-        public virtual void RemoveAll()
-        {
-            this.connection.DeleteAll<TEntity>();
-        }
 
-        public void Dispose()
+        protected void RunInTransaction(Action<TableQuery<TEntity>> function)
         {
-            this.connection.Dispose();
+            using (this.connection.Lock())
+            {
+                this.connection.RunInTransaction(
+                    () => function.Invoke(this.connection.Table<TEntity>()));
+            }
         }
     }
 }
