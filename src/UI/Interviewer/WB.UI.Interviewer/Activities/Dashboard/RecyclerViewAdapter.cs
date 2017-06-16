@@ -1,9 +1,11 @@
+using System;
 using Android.Support.Transitions;
 using Android.Support.V7.Widget;
 using Android.Views;
 using MvvmCross.Binding.Droid.BindingContext;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
+using Object = Java.Lang.Object;
 
 namespace WB.UI.Interviewer.Activities.Dashboard
 {
@@ -39,29 +41,38 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             if (viewModel.HasExpandedView)
             {
                 var viewHolder = (ExpandableViewHolder)holder;
-
-                viewHolder.DashboardItem.Click += (sender, args) =>
-                {
-                    bool shouldExpand = viewHolder.DetailsView.Visibility == ViewStates.Gone;
-
-                    ChangeBounds transition = new ChangeBounds();
-                    transition.SetDuration(125);
-
-                    if (shouldExpand)
-                    {
-                        viewHolder.DetailsView.Visibility = ViewStates.Visible;
-                        viewHolder.ExpandHandle.Visibility = ViewStates.Gone;
-                    }
-                    else
-                    {
-                        viewHolder.DetailsView.Visibility = ViewStates.Gone;
-                        viewHolder.ExpandHandle.Visibility = ViewStates.Visible;
-                    }
-
-                    TransitionManager.BeginDelayedTransition(this.recyclerView, transition);
-                    viewHolder.DashboardItem.Activated = shouldExpand;
-                };
+                viewHolder.CardClick += DashboardItemOnClick;
             }
+        }
+
+        public override void OnViewDetachedFromWindow(Object holder)
+        {
+            base.OnViewDetachedFromWindow(holder);
+            var viewHolder = (ExpandableViewHolder)holder;
+            viewHolder.CardClick -= DashboardItemOnClick;
+        }
+
+        private void DashboardItemOnClick(object sender, EventArgs eventArgs)
+        {
+            var viewHolder = (ExpandableViewHolder)sender;
+            bool shouldExpand = viewHolder.DetailsView.Visibility == ViewStates.Gone;
+
+            ChangeBounds transition = new ChangeBounds();
+            transition.SetDuration(125);
+
+            if (shouldExpand)
+            {
+                viewHolder.DetailsView.Visibility = ViewStates.Visible;
+                viewHolder.ExpandHandle.Visibility = ViewStates.Gone;
+            }
+            else
+            {
+                viewHolder.DetailsView.Visibility = ViewStates.Gone;
+                viewHolder.ExpandHandle.Visibility = ViewStates.Visible;
+            }
+
+            TransitionManager.BeginDelayedTransition(this.recyclerView, transition);
+            viewHolder.DashboardItem.Activated = shouldExpand;
         }
     }
 }
