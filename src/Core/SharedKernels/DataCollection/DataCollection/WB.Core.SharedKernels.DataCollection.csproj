@@ -73,6 +73,7 @@
     <Compile Include="Aggregates\IStatefulInterview.cs" />
     <Compile Include="Commands\Interview\AnswerAreaQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerYesNoQuestion.cs" />
+    <Compile Include="Commands\Interview\AssignResponsibleCommand.cs" />
     <Compile Include="Commands\Interview\CreateInterviewFromSnapshotCommand.cs" />
     <Compile Include="Commands\Interview\MarkInterviewAsReceivedByInterviewer.cs" />
     <Compile Include="Commands\Interview\RejectInterviewToInterviewerCommand.cs" />

@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
+using WB.Core.BoundedContexts.Headquarters.Views.Responsible;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Infrastructure.Native.Utils;
@@ -199,23 +200,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
         }
 
-        public UsersView GetAllResponsibles(int pageSize, string searchBy, bool showLocked = false)
+        public ResponsibleView GetAllResponsibles(int pageSize, string searchBy, bool showLocked = false)
         {
-            Func<IQueryable<HqUser>, IQueryable<HqUser>> query = users =>
-                ApplyFilter(users, searchBy, false, UserRoles.Supervisor, UserRoles.Interviewer)
+            Func<IQueryable<HqUser>, IQueryable<ResponsiblesViewItem>> query = users =>
+            {
+                var responsible = ApplyFilter(users, searchBy, false, UserRoles.Supervisor, UserRoles.Interviewer)
                     .Where(user => showLocked || !user.IsLockedByHeadquaters);
+
+                return responsible.Select(x => new ResponsiblesViewItem
+                {
+                    InterviewerId = x.Profile.SupervisorId.HasValue ? x.Id : (Guid?)null,
+                    SupervisorId = x.Profile.SupervisorId ?? x.Id,
+                    UserName = x.UserName
+                });
+            };
 
             var filteredUsers = query
                 .PagedAndOrderedQuery(nameof(HqUser.UserName), 1, pageSize)
                 .Invoke(this.UserRepository.Users)
-                .ToList()
-                .Select(x => new UsersViewItem
-                {
-                    UserId = x.Id,
-                    UserName = x.UserName
-                });
+                .ToList();
 
-            return new UsersView
+            return new ResponsibleView
             {
                 TotalCountByQuery = query.Invoke(this.UserRepository.Users).Count(),
                 Users = filteredUsers.ToList()
