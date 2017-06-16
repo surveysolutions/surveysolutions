@@ -716,6 +716,11 @@ label.inactive{
 		.content{
 			box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
 		}
+		.details-interview{
+			&.questionnaire{
+				@include width-questionnaire(($filter-width + $content-width-small));
+			}
+		}
 	}
 }
 @media only screen and (max-width: 1300px){
