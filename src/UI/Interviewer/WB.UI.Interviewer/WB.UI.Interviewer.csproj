@@ -524,9 +524,9 @@
   <ItemGroup>
     <AndroidEnvironment Include="AndroidEnvironment.txt" />
     <AndroidJavaLibrary Include="patch-applier.jar" />
-    <Content Include="Properties\AndroidManifest.xml">
+    <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
-    </Content>
+    </None>
     <AndroidResource Include="Resources\Drawable\dashboardquestionnaire.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
