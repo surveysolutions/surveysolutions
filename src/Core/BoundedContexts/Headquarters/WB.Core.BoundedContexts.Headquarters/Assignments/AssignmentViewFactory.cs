@@ -10,6 +10,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Infrastructure.Native.Fetching;
 using WB.Infrastructure.Native.Sanitizer;
 using WB.Infrastructure.Native.Utils;
@@ -161,21 +162,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return items;
         }
 
-        public AssignmentApiView MapAssignment(Assignment assignment)
+        public AssignmentApiDocument MapAssignment(Assignment assignment)
         {
-            var assignmentApiView = new AssignmentApiView
+            var assignmentApiView = new AssignmentApiDocument
             {
                 Id = assignment.Id,
                 QuestionnaireId = assignment.QuestionnaireId,
-                Quantity = assignment.Quantity,
-                InterviewsCount = assignment.InterviewSummaries.Count
+                Quantity = assignment.Quantity - assignment.InterviewSummaries.Count
             };
 
             var assignmentIdentifyingData = assignment.IdentifyingData.ToLookup(id => id.Identity);
 
             foreach (var answer in assignment.Answers ?? Enumerable.Empty<InterviewAnswer>())
             {
-                var serializedAnswer = new AssignmentApiView.InterviewSerializedAnswer
+                var serializedAnswer = new AssignmentApiDocument.InterviewSerializedAnswer
                 {
                     Identity = answer.Identity,
                     SerializedAnswer = this.answerSerializer.Serialize(answer.Answer)

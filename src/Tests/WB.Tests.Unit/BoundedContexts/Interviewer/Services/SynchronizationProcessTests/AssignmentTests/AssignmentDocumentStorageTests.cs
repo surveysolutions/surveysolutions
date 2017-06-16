@@ -58,7 +58,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             var stored = this.storage.LoadAll().First();
 
-            Assert.That(stored.Answers, Has.Count.EqualTo(0));
+            Assert.IsNull(stored.Answers);
+            Assert.That(stored.IdentifyingAnswers, Has.Count.EqualTo(3));
 
             this.storage.FetchPreloadedData(stored);
 

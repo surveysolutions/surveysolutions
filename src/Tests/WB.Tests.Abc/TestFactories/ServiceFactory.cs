@@ -488,12 +488,12 @@ namespace WB.Tests.Abc.TestFactories
                 synchronizationService ?? Mock.Of<ISynchronizationService>());
         }
 
-        public IAssignmentsSynchronizer AssignmentsSynchronizer(ISynchronizationService synchronizationService = null,
+        public IAssignmentsSynchronizer AssignmentsSynchronizer(IAssignmentSynchronizationApi synchronizationService = null,
             IAssignmentDocumentsStorage assignmentsRepository = null,
             IQuestionnaireDownloader questionnaireDownloader = null,
             IQuestionnaireStorage questionnaireStorage = null)
         {
-            return new AssignmentsSynchronizer(synchronizationService ?? Mock.Of<ISynchronizationService>(),
+            return new AssignmentsSynchronizer(synchronizationService ?? Mock.Of<IAssignmentSynchronizationApi>(),
                 assignmentsRepository ?? Create.Storage.AssignmentDocumentsInmemoryStorage(),
                 questionnaireDownloader ?? Mock.Of<IQuestionnaireDownloader>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());

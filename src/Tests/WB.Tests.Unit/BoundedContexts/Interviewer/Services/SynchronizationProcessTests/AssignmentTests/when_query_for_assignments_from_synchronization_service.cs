@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,7 +7,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests.AssignmentTests
@@ -22,11 +21,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         [OneTimeSetUp]
         public async Task Context()
         {
-            this.assignment = Create.Entity
-                .AssignmentApiView(1, 5, 1, Create.Entity.QuestionnaireIdentity(Id.g1))
-                .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "123")
-                .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "456")
-                .Build();
+            this.assignment = Create.Entity.AssignmentApiView(1, 5, Create.Entity.QuestionnaireIdentity(Id.g1));
 
             var restService = Mock.Of<IRestService>(
                 x => x.GetAsync<List<AssignmentApiView>>(It.IsAny<string>(), null, null, It.IsAny<RestCredentials>(),
@@ -38,15 +33,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         }
 
         public async Task Act() => this.assignments = await synchronizationService.GetAssignmentsAsync(default(CancellationToken));
-
-        [Test]
-        public void should_be_able_deserialize_identifying_data()
-        {
-            var assignmentDocument = assignments.Single();
-            
-            assignmentDocument.Answers.SequenceEqual(assignment.Answers, source => source.Identity, target => target.Identity);
-            assignmentDocument.Answers.SequenceEqual(assignment.Answers, source => source.AnswerAsString, target => target.AnswerAsString);
-        }
 
         [Test]
         public void should_be_able_to_deserialize_quantity() => Assert.That(assignments.Single().Quantity, Is.EqualTo(assignment.Quantity));

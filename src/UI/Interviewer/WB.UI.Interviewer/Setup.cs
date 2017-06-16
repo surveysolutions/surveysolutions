@@ -22,6 +22,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.SurveyManagement;
@@ -158,6 +159,7 @@ namespace WB.UI.Interviewer
                 .WithConstructorArgument("backupFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Backup"))
                 .WithConstructorArgument("restoreFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Restore"));
             kernel.Bind<ISynchronizationService>().To<SynchronizationService>();
+            kernel.Bind<IAssignmentSynchronizationApi>().To<SynchronizationService>();
             kernel.Bind<IBattery>().To<AndroidBattery>();
             kernel.Bind<IDeviceOrientation>().To<AndroidDeviceOrientation>();
             kernel.Bind<IDeviceInformationService>().To<DeviceInformationService>();

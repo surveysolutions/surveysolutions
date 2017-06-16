@@ -621,9 +621,6 @@
   <data name="Synchronization_Done" xml:space="preserve">
     <value>Завершить</value>
   </data>
-  <data name="Synchronization_Of_Assignments" xml:space="preserve">
-    <value>Проверка на наличие новых заданий</value>
-  </data>
   <data name="Dashboard_Start" xml:space="preserve">
     <value>Начать</value>
   </data>
@@ -676,5 +673,9 @@
   </data>
   <data name="Dashboard_Discard">
     <value>Удалить</value>
+  </data>
+  <data name="Synchronization_Of_AssignmentsFormat" xml:space="preserve">
+    <value>Синхронизация {0} из {1} заданий</value>
+    <comment>Синхронизация {0} из {1} заданий</comment>
   </data>
 </root>

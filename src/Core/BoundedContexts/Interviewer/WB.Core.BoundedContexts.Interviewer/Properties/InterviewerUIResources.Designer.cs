@@ -1283,11 +1283,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Check for new assignments.
+        ///   Looks up a localized string similar to Synchronizing {0} of {1} assignment(s).
         /// </summary>
-        public static string Synchronization_Of_Assignments {
+        public static string Synchronization_Of_AssignmentsFormat {
             get {
-                return ResourceManager.GetString("Synchronization_Of_Assignments", resourceCulture);
+                return ResourceManager.GetString("Synchronization_Of_AssignmentsFormat", resourceCulture);
             }
         }
         

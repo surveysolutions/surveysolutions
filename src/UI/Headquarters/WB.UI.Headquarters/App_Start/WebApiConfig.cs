@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
@@ -124,7 +125,10 @@ namespace WB.UI.Headquarters
                 c => c.Action<InterviewsApiV2Controller>(x => x.PostImage(Param.Any<PostFileRequest>())));
             config.TypedRoute("api/interviewer/v2/attachments/{id}",
                 c => c.Action<AttachmentsApiV2Controller>(x => x.GetAttachmentContent(Param.Any<string>())));
-            config.TypedRoute("api/interviewer/v2/assignments", c => c.Action<AssignmentsApiV2Controller>(x => x.List()));
+            config.TypedRoute("api/interviewer/v2/assignments", 
+                c => c.Action<AssignmentsApiV2Controller>(x => x.GetAssignmentsAsync(Param.Any<CancellationToken>())));
+            config.TypedRoute("api/interviewer/v2/assignments/{id}",
+                c => c.Action<AssignmentsApiV2Controller>(x => x.GetAssignmentAsync(Param.Any<int>(), Param.Any<CancellationToken>())));
         }
         #pragma warning restore 4014
     }
