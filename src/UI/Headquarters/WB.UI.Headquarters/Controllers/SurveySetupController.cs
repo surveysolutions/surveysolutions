@@ -189,7 +189,7 @@ namespace WB.UI.Headquarters.Controllers
                 QuestionnaireId = model.QuestionnaireId,
                 Version = model.QuestionnaireVersion,
                 QuestionnaireTitle = questionnaireInfo?.Title,
-                WasSupervisorProvided = verificationStatus.WasResponsibleProvided,
+                WasResponsibleProvided = verificationStatus.WasResponsibleProvided,
                 Id = preloadedMetadata.Id,
                 PreloadedContentType = PreloadedContentType.Panel,
                 FileName = model.File.FileName,
@@ -274,7 +274,7 @@ namespace WB.UI.Headquarters.Controllers
                 QuestionnaireId = model.QuestionnaireId,
                 Version = model.QuestionnaireVersion,
                 QuestionnaireTitle = questionnaireInfo?.Title,
-                WasSupervisorProvided = verificationStatus.WasResponsibleProvided,
+                WasResponsibleProvided = verificationStatus.WasResponsibleProvided,
                 Id = preloadedMetadata.Id,
                 PreloadedContentType = PreloadedContentType.Assignments,
                 FileName = preloadedSample.FileName,
@@ -363,7 +363,7 @@ namespace WB.UI.Headquarters.Controllers
 
                 try
                 {
-                    this.interviewImportService.ImportAssignments(supervisorId: model.SupervisorId,
+                    this.interviewImportService.ImportAssignments(supervisorId: model.ResponsibleId,
                         questionnaireIdentity: questionnaireIdentity, 
                         interviewImportProcessId: model.Id,
                         headquartersId: headquartersId,
