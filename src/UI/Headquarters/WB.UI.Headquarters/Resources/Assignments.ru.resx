@@ -127,16 +127,16 @@
     <value>Архивные</value>
   </data>
   <data name="AssignmentsHeader" xml:space="preserve">
-    <value>Задачи</value>
+    <value>Задания</value>
   </data>
   <data name="AssignmentsSelected" xml:space="preserve">
-    <value>{0} Задач выбрано </value>
+    <value>{0} Заданий выбрано </value>
   </data>
   <data name="QuantityExplanation" xml:space="preserve">
-    <value>Изменение количества интервью, которые будут созданы согласно этой задаче</value>
+    <value>Изменение количества интервью, которые будут созданы согласно этому заданию</value>
   </data>
   <data name="ChangeQuantityModalTitle" xml:space="preserve">
-    <value>Редактировать количество интервью для задачи {0}</value>
+    <value>Редактировать количество интервью для задания {0}</value>
     <comment>{0} - id of the assignment</comment>
   </data>
   <data name="CreatedAt" xml:space="preserve">
@@ -149,7 +149,7 @@
     <value>Количество интервью</value>
   </data>
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
-    <value>{0} Задач будет изменено</value>
+    <value>{0} Заданий будет изменено</value>
   </data>
   <data name="Quantity" xml:space="preserve">
     <value>Количество</value>
@@ -168,5 +168,14 @@
   </data>
   <data name="UpdatedAt" xml:space="preserve">
     <value>Обновлено</value>
+  </data>
+  <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
+    <value>Заполните все или несколько идентификационных полей</value>
+  </data>
+  <data name="CreateAssignment_QuantityInstruction" xml:space="preserve">
+    <value>Выберите ответственного (Супервизора или Интервьюера) для задания</value>
+  </data>
+  <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
+    <value>Введите максимальное число интервью которое возможно создать на основе этого задания</value>
   </data>
 </root>
