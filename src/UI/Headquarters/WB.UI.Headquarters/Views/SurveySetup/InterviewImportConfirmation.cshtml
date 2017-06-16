@@ -55,7 +55,7 @@
                     <li>@Html.ActionLink(MainMenu.SurveySetup, "Index", "SurveySetup")</li>
                     <li>@Html.ActionLink(BatchUpload.BreadCrumbs_CreatingMultipleInterviews, "BatchUpload", "SurveySetup", new { id = Model.QuestionnaireId, version = Model.Version }, new { })</li>
                 </ol>
-                <h1>@(Model.PreloadedContentType == PreloadedContentType.Panel ? BatchUpload.CreatingMultipleInterviews : BatchUpload.CreatingMultipleAssignments)</h1>
+                <h1>@BatchUpload.CreatingMultipleAssignments</h1>
             </div>
         </div>
         <div class="row">
@@ -70,14 +70,7 @@
                 <div class="import-progress">
                     <p class="success-text">@BatchUpload.VerificationCompleted</p>
                     <p>
-                        @if (Model.PreloadedContentType == PreloadedContentType.Panel)
-                        {
-                            @(Model.EntitiesCount == 1 ? BatchUpload.DataForSingleInterviewFound : string.Format(BatchUpload.DataForMultipleInterviewsFound, Model.EntitiesCount))
-                        }
-                        else
-                        {
-                            @(Model.EntitiesCount == 1 ? BatchUpload.DataForSingleAssignmentFound : string.Format(BatchUpload.DataForMultipleAssignmentsFound, Model.EntitiesCount))
-                        }
+                        @(Model.EntitiesCount == 1 ? BatchUpload.DataForSingleAssignmentFound : string.Format(BatchUpload.DataForMultipleAssignmentsFound, Model.EntitiesCount))
                     </p>
                     @if (Model.WasResponsibleProvided)
                     {
@@ -122,7 +115,7 @@
                     }
                     <div class="action-buttons">
                         <button type="submit" class="btn btn-success" data-bind="@if (!Model.WasResponsibleProvided) { <text>enable: isResponsibleSelected</text> }">
-                             @(Model.PreloadedContentType == PreloadedContentType.Panel ? BatchUpload.CreateInterviews : BatchUpload.CreateAssignments)
+                             @BatchUpload.CreateAssignments
                         </button>
                         <a href="@Url.Action("BatchUpload", "SurveySetup", new {id = Model.QuestionnaireId, version = Model.Version})" class="back-link">
                             @BatchUpload.BackToImport

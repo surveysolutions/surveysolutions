@@ -133,6 +133,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No assignments were created.
+        /// </summary>
+        internal static string AssignmentsAreNotCreated {
+            get {
+                return ResourceManager.GetString("AssignmentsAreNotCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back to import.
         /// </summary>
         internal static string BackToImport {
@@ -178,7 +187,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to creating multiple interviews.
+        ///   Looks up a localized string similar to creating multiple assignments.
         /// </summary>
         internal static string BreadCrumbs_CreatingMultipleInterviews {
             get {
@@ -547,7 +556,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Other interview import process is running. Only one interview import process at a time is allowed. Wait until the process is finished and then upload a new sample file. Follow the link if you want to get more detailed progress information about the other import process..
+        ///   Looks up a localized string similar to Other assignment import process is running. Only one assignment import process at a time is allowed. Wait until the process is finished and then upload a new sample file. Follow the link if you want to get more detailed progress information about the other import process..
         /// </summary>
         internal static string ImportInProgress {
             get {
@@ -907,7 +916,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Go to running interview import process.
+        ///   Looks up a localized string similar to Go to running assignment import process.
         /// </summary>
         internal static string RunningInterviewImportProcess {
             get {
@@ -1033,7 +1042,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor must be selected.
+        ///   Looks up a localized string similar to Supervisor or interviewer must be selected.
         /// </summary>
         internal static string SupervisorMustBeSelected {
             get {
