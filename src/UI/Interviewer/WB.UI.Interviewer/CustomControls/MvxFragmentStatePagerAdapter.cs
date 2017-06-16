@@ -9,6 +9,7 @@ using Android.Support.V4.View;
 using Java.Lang;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Droid.Support.V4;
+using Object = Java.Lang.Object;
 
 namespace WB.UI.Interviewer.CustomControls
 {
@@ -117,6 +118,8 @@ namespace WB.UI.Interviewer.CustomControls
 
         public bool HasFragmentForViewModel(MvxViewModel viewModel) 
             => this._fragments.Any(x => x.ViewModel == viewModel);
+
+        public override int GetItemPosition(Object @object) => PositionNone;
 
         public void RemoveAllFragments()
         {
