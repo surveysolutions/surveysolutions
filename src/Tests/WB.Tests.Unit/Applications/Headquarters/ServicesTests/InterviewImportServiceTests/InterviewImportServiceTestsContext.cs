@@ -28,10 +28,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             QuestionnaireDocument questionnaireDocument = null,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null)
         {
-            var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(
-                _ =>
-                    _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) ==
-                    questionnaireDocument);
+            var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, 1);
+            var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(_ 
+                => _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), It.IsAny<long>()) == questionnaireDocument
+                && _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), null) == plainQuestionnaire);
 
             return new InterviewImportService(
                 commandService: commandService ?? Mock.Of<ICommandService>(),
