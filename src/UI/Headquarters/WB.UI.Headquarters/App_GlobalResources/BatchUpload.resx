@@ -258,8 +258,8 @@
   <data name="ImportInterviews_ChooseFile" xml:space="preserve">
     <value>Choose a file to upload</value>
   </data>
-  <data name="ImportInterviews_SelectSupervisor" xml:space="preserve">
-    <value>Select supervisor</value>
+  <data name="ImportInterviews_SelectResponsible" xml:space="preserve">
+    <value>Select responsible</value>
   </data>
   <data name="ImportInterviews_SelectButtonText" xml:space="preserve">
     <value>Select</value>
@@ -491,8 +491,8 @@ Specify usernames for supervisors or enumerators to make batch interview assignm
     <value>{0} assignments created</value>
     <comment>{0} - count of created assignments (always &gt; 1)</comment>
   </data>
-  <data name="SelectSupervisorToAssign" xml:space="preserve">
-    <value>Select the supervisor for this batch</value>
+  <data name="SelectResponsibleToAssign" xml:space="preserve">
+    <value>Select the responsible for this batch</value>
   </data>
   <data name="SingleInterviewCreated" xml:space="preserve">
     <value>1 interview created</value>

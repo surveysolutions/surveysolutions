@@ -198,9 +198,6 @@
   <data name="ImportInterviews_SelectButtonText" xml:space="preserve">
     <value>选择</value>
   </data>
-  <data name="ImportInterviews_SelectSupervisor" xml:space="preserve">
-    <value>选择督导员</value>
-  </data>
   <data name="ImportSample" xml:space="preserve">
     <value>导入样本</value>
   </data>
@@ -443,9 +440,6 @@
   </data>
   <data name="RunningInterviewImportProcess" xml:space="preserve">
     <value>正在进行的导入过程</value>
-  </data>
-  <data name="SelectSupervisorToAssign" xml:space="preserve">
-    <value>选择督导员</value>
   </data>
   <data name="SimpleTitle" xml:space="preserve">
     <value>仅识别数据</value>

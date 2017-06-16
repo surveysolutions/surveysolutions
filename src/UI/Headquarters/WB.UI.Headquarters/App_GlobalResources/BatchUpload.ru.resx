@@ -177,8 +177,8 @@
   <data name="ImportInterviews_SelectButtonText" xml:space="preserve">
     <value>Выберите</value>
   </data>
-  <data name="ImportInterviews_SelectSupervisor" xml:space="preserve">
-    <value>Выберите супервизора</value>
+  <data name="ImportInterviews_SelectResponsible" xml:space="preserve">
+    <value>Выберите ответственного</value>
   </data>
   <data name="InVerificationProcess" xml:space="preserve">
     <value>в процессе проверки, проверено</value>
@@ -476,5 +476,9 @@
   <data name="DownloadInvalidAssignments" xml:space="preserve">
     <value>Загрузить задачи с ошибками</value>
     <comment>Загрузить задачи с ошибками</comment>
+  </data>
+  <data name="SelectResponsibleToAssign" xml:space="preserve">
+    <value>Выберите ответственного за эти задачи</value>
+    <comment>Выберите ответственного за эти задачи</comment>
   </data>
 </root>
