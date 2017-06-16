@@ -209,19 +209,25 @@
         <!-- ko template:  { name: type(), data: $data } -->
         <!-- /ko -->
         <!-- /ko -->
+        <div class="form-group">
+            <div class="col-sm-2 col-sm-offset-1" style="border-bottom: 3px solid #c3c3c3;"></div>
+            <div class="col-md-2" style="border-bottom: 3px solid #c3c3c3;"></div>
+        </div>
         <div class="form-group" data-bind="validationElement: quantity">
-            <label class="col-sm-2 control-label">@Assignments.Quantity</label>
+            <label class="col-sm-2 control-label"><strong>@Assignments.Quantity</strong></label>
             <div class="col-sm-2">
                 <div class="input-group">
-                    <span class="input-group-addon">#</span>
                     <input class="form-control" type="text" data-bind="numericformatter: quantity, value: quantity" maxlength="9" autocomplete="off"
                            placeholder="@Assignments.Unlimited"/>
+                    <div class="input-group-btn" data-bind="click: function(){ quantity(undefined); }">
+                        <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                    </div>
                 </div>
                 <span class="help-block" data-bind="validationMessage: quantity"></span>
             </div>
         </div>
         <div class="form-group" data-bind="validationElement: responsible">
-            <label class="col-sm-2 control-label">@Common.Responsible</label>
+            <label class="col-sm-2 control-label"><strong>@Common.Responsible</strong></label>
             <div class="col-md-2">
                 <div class="input-group">
                     <input class="form-control" data-bind="typeahead: responsible, typeaheadOptions: {source: supervisors, displayText: function(item){return item.value}, autoSelect: true}, valueupdate:'afterkeydown'" type="text" />
