@@ -151,6 +151,7 @@
     <Compile Include="Services\RestorePackageInfo.cs" />
     <Compile Include="Services\SynchronizationProcess.cs" />
     <Compile Include="Services\Synchronization\CompanyLogoSynchronizer.cs" />
+    <Compile Include="Services\IAssignmentDocumentsStorage.cs" />
     <Compile Include="Services\Synchronization\IAssignmentsSynchronizer.cs" />
     <Compile Include="Services\Synchronization\IQuestionnaireDownloader.cs" />
     <Compile Include="Services\Synchronization\QuestionnaireDownloader.cs" />

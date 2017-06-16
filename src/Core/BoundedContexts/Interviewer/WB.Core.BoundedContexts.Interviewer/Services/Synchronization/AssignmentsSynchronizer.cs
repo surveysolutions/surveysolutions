@@ -9,19 +9,18 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
 {
     public class AssignmentsSynchronizer : IAssignmentsSynchronizer
     {
         private readonly ISynchronizationService synchronizationService;
-        private readonly IPlainStorage<AssignmentDocument, int> assignmentsRepository;
+        private readonly IAssignmentDocumentsStorage assignmentsRepository;
         private readonly IQuestionnaireDownloader questionnaireDownloader;
         private readonly IQuestionnaireStorage questionnaireStorage;
 
         public AssignmentsSynchronizer(ISynchronizationService synchronizationService,
-            IPlainStorage<AssignmentDocument, int> assignmentsRepository,
+            IAssignmentDocumentsStorage assignmentsRepository,
             IQuestionnaireDownloader questionnaireDownloader,
             IQuestionnaireStorage questionnaireStorage)
         {
@@ -73,16 +72,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
                         ReceivedDateUtc = DateTime.UtcNow
                     };
 
-                    var identifyingData = this.FillAnswers(remote, questionnaire, local);
-
-                    local.Answers = identifyingData;
                     statistics.NewAssignmentsCount++;
                 }
-                else
-                {
-                    local.Answers = FillAnswers(remote, questionnaire, local);
-                }
 
+                local.Answers = this.FillAnswers(remote, questionnaire, local);
                 local.Quantity = remote.Quantity;
                 local.InterviewsCount = remote.InterviewsCount;
 
@@ -101,6 +94,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
             foreach (var answer in remote.Answers)
             {
                 var isIdentifying = identifyingQuestionIds.Contains(answer.Identity.Id);
+                
                 identifyingData.Add(new AssignmentDocument.AssignmentAnswer
                 {
                     AssignmentId = remote.Id,
@@ -111,6 +105,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
                     IsIdentifying = isIdentifying
                 });
             }
+
             return identifyingData;
         }
     }

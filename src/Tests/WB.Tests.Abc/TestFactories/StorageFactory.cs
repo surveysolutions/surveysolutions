@@ -2,8 +2,11 @@ using System;
 using System.Linq;
 using Microsoft.AspNet.Identity;
 using Moq;
+using SQLite;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
@@ -31,7 +34,7 @@ namespace WB.Tests.Abc.TestFactories
         public IUserRepository UserRepository(params HqUser[] users)
             => Mock.Of<IUserRepository>(x => x.Users == users.AsQueryable());
 
-        public HqUserManager HqUserManager(IUserStore<HqUser, Guid> userStore = null, 
+        public HqUserManager HqUserManager(IUserStore<HqUser, Guid> userStore = null,
             IHashCompatibilityProvider hashCompatibilityProvider = null,
             IPasswordHasher passwordHasher = null,
             IIdentityValidator<string> identityValidator = null,
@@ -41,5 +44,14 @@ namespace WB.Tests.Abc.TestFactories
                 passwordHasher ?? Mock.Of<IPasswordHasher>(),
                 identityValidator ?? Mock.Of<IIdentityValidator<string>>(),
                 logger ?? Mock.Of<ILoggerProvider>());
+
+        public IAssignmentDocumentsStorage AssignmentDocumentsInmemoryStorage()
+        {
+            return new AssignmentDocumentsStorage(InMemorySqLiteConnection, Mock.Of<ILogger>());
+        }
+
+        public SQLiteConnectionWithLock InMemorySqLiteConnection =>
+            new SQLiteConnectionWithLock(new SQLiteConnectionString(":memory:", true),
+                openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex);
     }
 }

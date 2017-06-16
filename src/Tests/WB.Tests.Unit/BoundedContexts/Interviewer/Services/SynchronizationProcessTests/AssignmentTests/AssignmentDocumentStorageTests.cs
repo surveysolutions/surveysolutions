@@ -17,9 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         [OneTimeSetUp]
         public void Setup()
         {
-            this.connection = new SQLiteConnectionWithLock(
-                new SQLiteConnectionString(":memory:", true),
-                openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex);
+            this.connection = Create.Storage.InMemorySqLiteConnection;
 
             this.storage = new AssignmentDocumentsStorage(connection,
                 Mock.Of<ILogger>());
