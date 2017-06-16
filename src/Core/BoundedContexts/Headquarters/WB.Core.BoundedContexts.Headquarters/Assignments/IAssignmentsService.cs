@@ -6,5 +6,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
     public interface IAssignmentsService
     {
         List<Assignment> GetAssignments(Guid responsibleId);
+        Assignment GetAssignment(int id);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 

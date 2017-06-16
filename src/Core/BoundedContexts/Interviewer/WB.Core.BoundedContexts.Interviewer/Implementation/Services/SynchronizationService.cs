@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -19,7 +20,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
-    public class SynchronizationService : ISynchronizationService
+    public class SynchronizationService : ISynchronizationService, IAssignmentSynchronizationApi
     {
         private const string apiVersion = "v2";
 
@@ -95,9 +96,29 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 this.restService.GetAsync<InterviewerApiView>(url: string.Concat(this.usersController, "/current"),
                 credentials: credentials ?? this.restCredentials, token: token));
         }
-#endregion
+        #endregion
 
-#region [Device Api]
+        #region AssignmentsApi
+
+        public async Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken)
+        {
+            var response = await this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<AssignmentApiView>>(
+                url: this.assignmentsController, credentials: this.restCredentials, token: cancellationToken));
+
+            return response.ToList();
+        }
+
+        public async Task<AssignmentApiDocument> GetAssignmentAsync(int id, CancellationToken cancellationToken)
+        {
+            var response = await this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<AssignmentApiDocument>(
+                url: $"{this.assignmentsController}/{id}", credentials: this.restCredentials, token: cancellationToken));
+
+            return response;
+        }
+
+        #endregion
+
+        #region [Device Api]
 
         public Task<bool> HasCurrentInterviewerDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
@@ -214,23 +235,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<QuestionnaireIdentity>>(
                url: string.Concat(this.questionnairesController, "/list"), credentials: this.restCredentials, token: cancellationToken));
         }
-        
-        public async Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken)
-        {
-            var response = await this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<AssignmentApiView>>(
-               url: this.assignmentsController, credentials: this.restCredentials, token: cancellationToken));
-
-            return response.ToList();
-        }
-        
-        
+      
         public Task<List<MapView>> GetMapList(CancellationToken cancellationToken)
         {
             return  this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<MapView>>(
                 url: this.mapsListUrl, token: cancellationToken));
         }
-
-
+        
         public Task<byte[]> GetMapContent(string url,CancellationToken cancellationToken)
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>

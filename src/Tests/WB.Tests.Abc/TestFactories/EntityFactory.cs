@@ -48,6 +48,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -1548,33 +1549,46 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
-        public AssignmentApiViewBuilder AssignmentApiView(int id, int? quantity, int interviewsCount = 0, QuestionnaireIdentity questionnaireIdentity = null)
+        public AssignmentApiView AssignmentApiView(int id, int? quantity, QuestionnaireIdentity questionnaireIdentity = null)
         {
-            return new AssignmentApiViewBuilder(new AssignmentApiView
+            return new AssignmentApiView
             {
                 Id = id,
                 Quantity = quantity,
-                QuestionnaireId = questionnaireIdentity,
-                InterviewsCount = interviewsCount
+                QuestionnaireId = questionnaireIdentity
+            };
+        }
+
+        public AssignmentApiDocumentBuilder AssignmentApiDocument(int id, int? quantity, QuestionnaireIdentity questionnaireIdentity = null)
+        {
+            return new AssignmentApiDocumentBuilder(new AssignmentApiDocument
+            {
+                Id = id,
+                Quantity = quantity,
+                QuestionnaireId = questionnaireIdentity
             });
         }
 
-        public class AssignmentApiViewBuilder
+        public class AssignmentApiDocumentBuilder
         {
-            private readonly AssignmentApiView _entity;
+            private readonly AssignmentApiDocument _entity;
+            private static readonly NewtonInterviewAnswerJsonSerializer serializer = new NewtonInterviewAnswerJsonSerializer();
 
-            public AssignmentApiViewBuilder(AssignmentApiView entity)
+            public AssignmentApiDocumentBuilder(AssignmentApiDocument entity)
             {
                 _entity = entity;
             }
 
-            public AssignmentApiViewBuilder WithAnswer(Identity questionId, string answer)
+            public AssignmentApiDocumentBuilder WithAnswer(Identity questionId, string answer, string serializedAnswer = null, AbstractAnswer answerAsObj = null)
             {
-                this._entity.Answers.Add(new AssignmentApiView.InterviewSerializedAnswer { AnswerAsString = answer, Identity = questionId});
+                this._entity.Answers.Add(new AssignmentApiDocument.InterviewSerializedAnswer { AnswerAsString = answer,
+                    Identity = questionId,
+                    SerializedAnswer = serializedAnswer ?? (answerAsObj == null ? null :serializer.Serialize(answerAsObj))
+                });
                 return this;
             }
 
-            public AssignmentApiView Build() => this._entity;
+            public AssignmentApiDocument Build() => this._entity;
         }
 
         public Assignment Assignment(int? id = null,
@@ -1586,7 +1600,7 @@ namespace WB.Tests.Abc.TestFactories
         {
             var result = new Assignment();
             var asDynamic = result.AsDynamic();
-            asDynamic.Quantity = quantity ?? 0;
+            asDynamic.Quantity = quantity;
             asDynamic.Id = id ?? 0;
             result.QuestionnaireId = questionnaireIdentity;
 

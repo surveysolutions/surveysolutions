@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 
 namespace WB.UI.Headquarters.Models.Api
 {
@@ -8,11 +8,10 @@ namespace WB.UI.Headquarters.Models.Api
     {
         public AssignmentProfile()
         {
-            this.CreateMap<Assignment, AssignmentApiView>()
+            this.CreateMap<Assignment, AssignmentApiDocument>()
                 .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Id.ToString()))
                 .ForMember(x => x.Quantity, opts => opts.MapFrom(x => x.Quantity))
-                .ForMember(x => x.QuestionnaireId, opts => opts.MapFrom(x => x.QuestionnaireId))
-                .ForMember(x => x.InterviewsCount, opts => opts.MapFrom(x => x.InterviewSummaries.Count));
+                .ForMember(x => x.QuestionnaireId, opts => opts.MapFrom(x => x.QuestionnaireId));
         }
     }
 }

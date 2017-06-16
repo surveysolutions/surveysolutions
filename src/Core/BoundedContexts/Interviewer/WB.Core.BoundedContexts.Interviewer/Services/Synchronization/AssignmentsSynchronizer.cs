@@ -7,19 +7,20 @@ using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
 {
     public class AssignmentsSynchronizer : IAssignmentsSynchronizer
     {
-        private readonly ISynchronizationService synchronizationService;
+        private readonly IAssignmentSynchronizationApi synchronizationService;
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
         private readonly IQuestionnaireDownloader questionnaireDownloader;
         private readonly IQuestionnaireStorage questionnaireStorage;
 
-        public AssignmentsSynchronizer(ISynchronizationService synchronizationService,
+        public AssignmentsSynchronizer(IAssignmentSynchronizationApi synchronizationService,
             IAssignmentDocumentsStorage assignmentsRepository,
             IQuestionnaireDownloader questionnaireDownloader,
             IQuestionnaireStorage questionnaireStorage)
@@ -30,18 +31,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
             this.questionnaireStorage = questionnaireStorage;
         }
 
-        public virtual async Task SynchronizeAssignmentsAsync(IProgress<SyncProgressInfo> progress,
-            SychronizationStatistics statistics, CancellationToken cancellationToken)
+        public virtual async Task SynchronizeAssignmentsAsync(IProgress<SyncProgressInfo> progress, SychronizationStatistics statistics, CancellationToken cancellationToken)
         {
+            var remoteAssignments = await this.synchronizationService.GetAssignmentsAsync(cancellationToken);
+
+            var localAssignments = this.assignmentsRepository.LoadAll();
+
             progress.Report(new SyncProgressInfo
             {
-                Title = InterviewerUIResources.Synchronization_Of_Assignments,
+                Title = InterviewerUIResources.Synchronization_Of_AssignmentsFormat.FormatString(0, remoteAssignments.Count),
                 Statistics = statistics,
                 Status = SynchronizationStatus.Download
             });
-
-            var remoteAssignments = await this.synchronizationService.GetAssignmentsAsync(cancellationToken);
-            var localAssignments = this.assignmentsRepository.LoadAll();
 
             // removing local assignments if needed
             var remoteIds = remoteAssignments.ToLookup(ra => ra.Id);
@@ -49,21 +50,27 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
             foreach (var assignment in localAssignments)
             {
                 if (remoteIds.Contains(assignment.Id)) continue;
+
                 statistics.RemovedAssignmentsCount += 1;
                 this.assignmentsRepository.Remove(assignment.Id);
             }
 
             // adding new, updating capacity for existing
-            var localAssignmentsLookup = localAssignments.ToLookup(la => la.Id);
-
-            foreach (AssignmentApiView remote in remoteAssignments)
+            var localAssignmentsLookup = this.assignmentsRepository.LoadAll().ToLookup(la => la.Id);
+            var processedAssignmentsCount = 0;
+            foreach (var remoteItem in remoteAssignments)
             {
-                await this.questionnaireDownloader.DownloadQuestionnaireAsync(remote.QuestionnaireId, cancellationToken, statistics);
-                IQuestionnaire questionnaire = this.questionnaireStorage.GetQuestionnaire(remote.QuestionnaireId, null);
+                processedAssignmentsCount++;
 
-                var local = localAssignmentsLookup[remote.Id].FirstOrDefault();
+                await this.questionnaireDownloader.DownloadQuestionnaireAsync(remoteItem.QuestionnaireId, cancellationToken, statistics);
+
+                IQuestionnaire questionnaire = this.questionnaireStorage.GetQuestionnaire(remoteItem.QuestionnaireId, null);
+
+                var local = localAssignmentsLookup[remoteItem.Id].FirstOrDefault();
                 if (local == null)
                 {
+                    var remote = await this.synchronizationService.GetAssignmentAsync(remoteItem.Id, cancellationToken);
+
                     local = new AssignmentDocument
                     {
                         Id = remote.Id,
@@ -72,18 +79,40 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
                         ReceivedDateUtc = DateTime.UtcNow
                     };
 
+                    this.FillAnswers(remote, questionnaire, local);
+
                     statistics.NewAssignmentsCount++;
+
+                    progress.Report(new SyncProgressInfo
+                    {
+                        Title = InterviewerUIResources.Synchronization_Of_AssignmentsFormat.FormatString(processedAssignmentsCount, remoteAssignments.Count),
+                        Statistics = statistics,
+                        Status = SynchronizationStatus.Download
+                    });
                 }
 
-                this.FillAnswers(remote, questionnaire, local);
-                local.Quantity = remote.Quantity;
-                local.InterviewsCount = remote.InterviewsCount;
+                if (LocalAssignmentRequireUpdate(local, remoteItem))
+                {
+                    local.Quantity = remoteItem.Quantity;
 
-                this.assignmentsRepository.Store(local);
+                    this.assignmentsRepository.Store(local);
+                }
             }
+
+            progress.Report(new SyncProgressInfo
+            {
+                Title = InterviewerUIResources.Synchronization_Of_AssignmentsFormat.FormatString(processedAssignmentsCount, remoteAssignments.Count),
+                Statistics = statistics,
+                Status = SynchronizationStatus.Download
+            });
         }
 
-        private void FillAnswers(AssignmentApiView remote, IQuestionnaire questionnaire, AssignmentDocument local)
+        private static bool LocalAssignmentRequireUpdate(AssignmentDocument local, AssignmentApiView remoteItem)
+        {
+            return local.Quantity != remoteItem.Quantity;
+        }
+
+        private void FillAnswers(AssignmentApiDocument remote, IQuestionnaire questionnaire, AssignmentDocument local)
         {
             var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
 
