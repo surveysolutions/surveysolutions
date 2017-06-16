@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.Code;
@@ -148,21 +149,29 @@ namespace WB.UI.Headquarters.API
             if (request == null)
                 return this.BadRequest();
 
-            var questionnaireIdentity =
-                new QuestionnaireIdentity(request.QuestionnaireId, request.QuestionnaireVersion);
+            var questionnaireIdentity = new QuestionnaireIdentity(request.QuestionnaireId, request.QuestionnaireVersion);
 
-            var assignment = new Assignment(questionnaireIdentity,
-                request.ResponsibleId, request.Quantity);
+            var assignment = new Assignment(questionnaireIdentity, request.ResponsibleId, request.Quantity);
 
-            var untypedQuestionAnswers =
-                JsonConvert.DeserializeObject<List<UntypedQuestionAnswer>>(request.AnswersToFeaturedQuestions);
+            var untypedQuestionAnswers = JsonConvert.DeserializeObject<List<UntypedQuestionAnswer>>(request.AnswersToFeaturedQuestions);
+
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
 
-            var identifyingAnswers = untypedQuestionAnswers
-                .Select(CommandTransformator.ParseQuestionAnswer)
-                .Select(answer => IdentifyingAnswer.Create(assignment, questionnaire, answer.Value.ToString(), Identity.Create(answer.Key, null)))
-                .ToArray();
+            var answers = new List<InterviewAnswer>();
+            var identifyingAnswers = new List<IdentifyingAnswer>();
+
+            foreach (var answer in untypedQuestionAnswers.Select(CommandTransformator.ParseQuestionAnswer))
+            {
+                identifyingAnswers.Add(IdentifyingAnswer.Create(assignment, questionnaire, answer.Value.ToString(), Identity.Create(answer.Key, null)));
+                answers.Add(new InterviewAnswer
+                {
+                    Identity = new Identity(answer.Key, RosterVector.Empty),
+                    Answer = answer.Value
+                });
+            }
+
             assignment.SetIdentifyingData(identifyingAnswers);
+            assignment.SetAnswers(answers);
 
             this.assignmentsStorage.Store(assignment, Guid.NewGuid());
 
