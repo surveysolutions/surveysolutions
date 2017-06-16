@@ -26,8 +26,6 @@
 
   <dimen name="Dashboard_Layout_border_width">1dp</dimen>
   <dimen name="Dashboard_Layout_border_radius">3dp</dimen>
-  <dimen name="Dashboard_Layout_marginLeft">32dp</dimen>
-  <dimen name="Dashboard_Layout_marginRight">32dp</dimen>
   <dimen name="Dashboard_TabMenu_marginTop">30dp</dimen>
   <dimen name="Dashboard_TabMenu_marginBottom">20dp</dimen>
   <dimen name="Dashboard_TabMenu_tab_marginLeft">32dp</dimen>
