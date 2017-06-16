@@ -693,6 +693,7 @@
     <Compile Include="Views\Reposts\Views\TeamsAndStatusesReportLine.cs" />
     <Compile Include="Views\Reposts\Views\TeamsAndStatusesReportView.cs" />
     <Compile Include="Views\Reposts\Views\TemplateViewItem.cs" />
+    <Compile Include="Views\Responsible\ResponsiblesViewItem.cs" />
     <Compile Include="Views\Revalidate\InterviewTroubleshootFactory.cs" />
     <Compile Include="Views\Revalidate\InterviewTroubleshootInputModel.cs" />
     <Compile Include="Views\Revalidate\InterviewTroubleshootView.cs" />
@@ -733,6 +734,7 @@
     <Compile Include="Views\User\InterviewerOptionFilter.cs" />
     <Compile Include="Views\User\ITeamViewFactory.cs" />
     <Compile Include="Views\User\IUserViewFactory.cs" />
+    <Compile Include="Views\Responsible\ResponsibleView.cs" />
     <Compile Include="Views\User\RoleExtensions.cs" />
     <Compile Include="Views\User\TeamViewFactory.cs" />
     <Compile Include="Views\User\UserListView.cs" />

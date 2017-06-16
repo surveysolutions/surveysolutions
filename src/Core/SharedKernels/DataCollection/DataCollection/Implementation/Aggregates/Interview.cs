@@ -1576,6 +1576,37 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new FlagRemovedFromAnswer(userId, questionId, rosterVector));
         }
 
+        public void AssignResponsible(AssignResponsibleCommand command)
+        {
+            InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
+
+            propertiesInvariants.ThrowIfInterviewHardDeleted();
+            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Created, InterviewStatus.InterviewerAssigned, InterviewStatus.SupervisorAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters);
+            if (command.InterviewerId.HasValue)
+                propertiesInvariants.ThrowIfTryAssignToSameInterviewer(command.InterviewerId.Value);
+
+            if (this.properties.SupervisorId != command.SupervisorId)
+            {
+                this.ApplyEvent(new SupervisorAssigned(command.UserId, command.SupervisorId));
+
+                if (this.properties.Status == InterviewStatus.Created || this.properties.Status == InterviewStatus.InterviewerAssigned)
+                {
+                    this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
+                }
+            }
+
+            if (command.InterviewerId.HasValue)
+            {
+                this.ApplyEvent(new InterviewerAssigned(command.UserId, command.InterviewerId.Value, command.AssignTime));
+
+                if (!this.properties.WasCompleted && this.properties.Status == InterviewStatus.SupervisorAssigned)
+                {
+                    this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
+                }
+            }
+        }
+
+
         public void AssignSupervisor(Guid userId, Guid supervisorId)
         {
             InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
