@@ -69,7 +69,7 @@
 
                 if (item.text == text) return
 
-                if (!text || !text.trim()) {
+                if (!text || !text.trim() || text.trim() === item.text) {
                     return
                 }
                 item.text = text;
