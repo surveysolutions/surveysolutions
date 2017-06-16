@@ -16,7 +16,7 @@
                     <li>@Html.ActionLink(MainMenu.SurveySetup, "Index", "SurveySetup")</li>
                     <li>@Html.ActionLink(BatchUpload.BreadCrumbs_CreatingMultipleInterviews, "BatchUpload", "SurveySetup", new { id = Model.QuestionnaireId, version = Model.Version }, new { })</li>
                 </ol>
-                <h1>@BatchUpload.ImportInterviews_PageTitle</h1>
+                <h1>@BatchUpload.ImportAssignments_PageTitle</h1>
             </div>
         </div>
         <div class="row">
@@ -30,7 +30,7 @@
             <div class="col-sm-7 col-xs-12 action-block">
                 <div class="import-progress">
                     <p class="error-text">@BatchUpload.BatchFileVerificationFailed</p>
-                    <p>@BatchUpload.InterviewsAreNotCreated</p>
+                    <p>@BatchUpload.AssignmentsAreNotCreated</p>
                 </div>
                 <h3 class="error-text">
                     @if (Model.Errors.Length == 1)

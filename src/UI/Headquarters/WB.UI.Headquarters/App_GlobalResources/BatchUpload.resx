@@ -298,7 +298,7 @@
     <value>Verify data</value>
   </data>
   <data name="ImportInProgress" xml:space="preserve">
-    <value>Other interview import process is running. Only one interview import process at a time is allowed. Wait until the process is finished and then upload a new sample file. Follow the link if you want to get more detailed progress information about the other import process.</value>
+    <value>Other assignment import process is running. Only one assignment import process at a time is allowed. Wait until the process is finished and then upload a new sample file. Follow the link if you want to get more detailed progress information about the other import process.</value>
   </data>
   <data name="CreateSample" xml:space="preserve">
     <value>Create interviews from this data</value>
@@ -331,7 +331,7 @@
     <value>Verify panel data</value>
   </data>
   <data name="RunningInterviewImportProcess" xml:space="preserve">
-    <value>Go to running interview import process</value>
+    <value>Go to running assignment import process</value>
   </data>
   <data name="BatchDescription" xml:space="preserve">
     <value>Upload archive with identifying tab file and collected data.</value>
@@ -392,7 +392,7 @@ Specify usernames for supervisors or enumerators to make batch interview assignm
     <value>Verification of the uploaded file failed</value>
   </data>
   <data name="BreadCrumbs_CreatingMultipleInterviews" xml:space="preserve">
-    <value>creating multiple interviews</value>
+    <value>creating multiple assignments</value>
   </data>
   <data name="ImportFrom" xml:space="preserve">
     <value>Importing information from {0} for {1}</value>
@@ -400,7 +400,7 @@ Specify usernames for supervisors or enumerators to make batch interview assignm
   </data>
   <data name="ImportInterviews_PageTitle" xml:space="preserve">
     <value>Creating multiple interviews with batch upload</value>
-  </data>  
+  </data>
   <data name="ImportAssignments_PageTitle" xml:space="preserve">
     <value>Creating multiple assignments with batch upload</value>
   </data>
@@ -510,7 +510,7 @@ Specify usernames for supervisors or enumerators to make batch interview assignm
     <value>Verification complete</value>
   </data>
   <data name="SupervisorMustBeSelected" xml:space="preserve">
-    <value>Supervisor must be selected</value>
+    <value>Supervisor or interviewer must be selected</value>
   </data>
   <data name="Cell" xml:space="preserve">
     <value>Cell</value>
@@ -532,5 +532,8 @@ Specify usernames for supervisors or enumerators to make batch interview assignm
   </data>
   <data name="Prerequisite_ZipFile" xml:space="preserve">
     <value>Only .zip files are allowed for upload.</value>
+  </data>
+  <data name="AssignmentsAreNotCreated" xml:space="preserve">
+    <value>No assignments were created</value>
   </data>
 </root>
