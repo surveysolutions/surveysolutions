@@ -169,4 +169,13 @@
   <data name="UpdatedAt" xml:space="preserve">
     <value>Updated at</value>
   </data>
+  <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
+    <value>Fill all or some of the identifying fields</value>
+  </data>
+  <data name="CreateAssignment_QuantityInstruction" xml:space="preserve">
+    <value>Specify maximum number of interviews to be generated for that assignment (Quantity)</value>
+  </data>
+  <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
+    <value>Select responsible (Supervisor or Interviewer) for this assignment</value>
+  </data>
 </root>

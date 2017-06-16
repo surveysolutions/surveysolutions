@@ -204,12 +204,15 @@
 }
 
 <div class="row-fluid" id="featured-questions-region" data-bind="visible: IsPageLoaded">
+    <p class="col-sm-offset-2">@Assignments.CreateAssignment_AnswersInstruction</p>
     <div id="featured-questions" class="form-horizontal">
         <!-- ko foreach: questions -->
-        <!-- ko template:  { name: type(), data: $data } -->
+        <!-- ko template: { name: type(), data: $data } -->
         <!-- /ko -->
         <!-- /ko -->
         <div class="form-group" style="padding-top: 20px"></div>
+        <p class="col-sm-offset-2">@Assignments.CreateAssignment_QuantityInstruction</p>
+        <p class="col-sm-offset-2">@Assignments.CreateAssignment_ResponsibleInstruction</p>
         <div class="form-group" data-bind="validationElement: quantity">
             <label class="col-sm-2 control-label"><strong>@Assignments.Quantity</strong></label>
             <div class="col-sm-2">
@@ -217,7 +220,8 @@
                     <input class="form-control" type="text" data-bind="numericformatter: quantity, value: quantity" maxlength="9" autocomplete="off"
                            placeholder="@Assignments.Unlimited"/>
                     <div class="input-group-btn" data-bind="click: function(){ quantity(undefined); }">
-                        <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                        <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </div>
                     </div>
                 </div>
                 <span class="help-block" data-bind="validationMessage: quantity"></span>
@@ -227,10 +231,11 @@
             <label class="col-sm-2 control-label"><strong>@Common.Responsible</strong></label>
             <div class="col-md-2">
                 <div class="input-group">
-                    <input class="form-control" data-bind="typeahead: responsible, typeaheadOptions: {source: supervisors, displayText: function(item){return item.value}, autoSelect: true}, valueupdate:'afterkeydown'" type="text" />
+                    <input class="form-control" data-bind="typeahead: responsible, typeaheadOptions: {source: supervisors, displayText: function(item){return item.value}, autoSelect: true}, valueupdate:'afterkeydown'" type="text"/>
                     <span data-bind="spinner: isSupervisorsLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
                     <div class="input-group-btn" data-bind="click: function(){ responsible(undefined); }">
-                        <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                        <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </div>
                     </div>
                 </div>
                 <span class="help-block" data-bind="validationMessage: responsible"></span>
@@ -240,7 +245,7 @@
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-2">
             <button type="submit" class="btn btn-primary" data-bind="click: saveCommand, enable: isSaveEnable">@Common.Create</button>
-            @Html.ActionLink(Common.Cancel, "Index", "SurveySetup", new { }, new { @class = "btn btn-default" })
+            @Html.ActionLink(Common.Cancel, "Index", "SurveySetup", new {}, new {@class = "btn btn-default"})
         </div>
     </div>
 </div>
