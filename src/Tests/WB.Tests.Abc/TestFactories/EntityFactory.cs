@@ -1637,16 +1637,25 @@ namespace WB.Tests.Abc.TestFactories
                 _entity = entity;
             }
 
-            public AssignmentDocumentBuilder WithAnswer(Identity identity, string answer)
+            public AssignmentDocumentBuilder WithAnswer(Identity identity, string answer, bool identifying = false)
             {
                 this._entity.Answers = this._entity.Answers ?? new List<AssignmentDocument.AssignmentAnswer>();
-
-                this._entity.Answers.Add(new AssignmentDocument.AssignmentAnswer
+                this._entity.IdentifyingAnswers = this._entity.IdentifyingAnswers ?? new List<AssignmentDocument.AssignmentAnswer>();
+                
+                var assignmentAnswer = new AssignmentDocument.AssignmentAnswer
                 {
                     AssignmentId = this._entity.Id,
                     AnswerAsString = answer,
+                    IsIdentifying = identifying,
                     Identity = identity
-                });
+                };
+
+                this._entity.Answers.Add(assignmentAnswer);
+
+                if (identifying)
+                {
+                    this._entity.IdentifyingAnswers.Add(assignmentAnswer);
+                }
 
                 return this;
             }

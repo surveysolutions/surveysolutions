@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public List<AssignmentAnswer> Answers { get; set; } = new List<AssignmentAnswer>();
 
         [Ignore]
-        public IEnumerable<AssignmentAnswer> IdentifyingAnswers => Answers.Where(ans => ans.IsIdentifying);
+        public List<AssignmentAnswer> IdentifyingAnswers { get; set; } = new List<AssignmentAnswer>();
 
         public class AssignmentAnswer
         {

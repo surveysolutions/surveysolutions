@@ -81,7 +81,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
         }
 
-        public void Store(TEntity entity)
+        public virtual void Store(TEntity entity)
         {
             this.Store(new[] { entity });
         }
