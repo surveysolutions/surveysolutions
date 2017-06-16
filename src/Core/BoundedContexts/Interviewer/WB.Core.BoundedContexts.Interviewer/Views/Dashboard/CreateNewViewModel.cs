@@ -37,11 +37,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.viewModelNavigationService = viewModelNavigationService;
         }
 
-        public void Load(SynchronizationViewModel sync)
+        public void Load(SynchronizationViewModel sync, DashboardViewModel dashboardViewModel)
         {
             this.Synchronization = sync;
             
-            this.Items = this.GetCensusQuestionnaires().Union(this.GetAssignments()).ToList();
+            this.Items = this.GetCensusQuestionnaires().Union(this.GetAssignments(dashboardViewModel)).ToList();
 
             this.UiItems = this.Items.Any() ? this.GetSubTitle().ToEnumerable().Concat(this.Items).ToList() : this.Items;
 
@@ -78,12 +78,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        private IEnumerable<IDashboardItem> GetAssignments()
+        private IEnumerable<IDashboardItem> GetAssignments(DashboardViewModel dashboardViewModel)
         {
             foreach (var assignment in this.assignmentsRepository.LoadAll())
             {
                 var dashboardItem = this.viewModelFactory.GetNew<AssignmentDashboardItemViewModel>();
-                dashboardItem.Init(assignment);
+                dashboardItem.Init(assignment, dashboardViewModel);
 
                 yield return dashboardItem;
             }
