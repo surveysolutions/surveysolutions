@@ -10,8 +10,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private string title;
         public string Title
         {
-            get { return this.title; }
-            set { this.title = value; this.RaisePropertyChanged(); }
+            get => this.title;
+            set => this.RaiseAndSetIfChanged(ref this.title, value);
         }
     }
 }

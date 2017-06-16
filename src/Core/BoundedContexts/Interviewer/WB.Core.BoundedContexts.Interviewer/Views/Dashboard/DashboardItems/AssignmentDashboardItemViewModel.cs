@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         private QuestionnaireIdentity questionnaireIdentity;
 
-        public void Init(AssignmentDocument assignmentDocument)
+        public void Init(AssignmentDocument assignmentDocument, DashboardViewModel dashboardViewModel)
         {
             this.assignment = assignmentDocument;
             this.questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
@@ -66,22 +66,33 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.DetailedPrefilledQuestions = GetPrefilledQuestions(identifyingData.Skip(3));
             this.GpsLocation = this.GetAssignmentLocation(assignment);
 
-            this.Title = string.Format(InterviewerUIResources.Dashboard_Assignment_CardTitle, this.assignment.Id.ToString()) + ": ";
+            
 
-            var interviewsByAssignmentCount = this.interviewViewRepository.Count(interview => interview.Assignment == this.assignment.Id);
+            dashboardViewModel.InterviewsCountChanged += (sender, args) => this.Refresh();
+            this.Refresh();
+            this.ReceivedDate = assignment.ReceivedDateUtc.ToLocalTime().ToString("MMM d");
+            this.ReceivedTime = assignment.ReceivedDateUtc.ToLocalTime().ToString("HH:mm");
+        }
+
+        private void Refresh()
+        {
+            var newTitle = string.Format(InterviewerUIResources.Dashboard_Assignment_CardTitle, this.assignment.Id) + ": ";
+
+            var interviewsByAssignmentCount =
+                this.interviewViewRepository.Count(interview => interview.Assignment == this.assignment.Id);
             if (this.assignment.Quantity.HasValue)
             {
                 var interviewsLeftByAssignmentCount = Math.Max(0, this.assignment.Quantity.Value - this.assignment.InterviewsCount - interviewsByAssignmentCount);
-                this.Title += InterviewerUIResources.Dashboard_AssignmentCard_TitleCountdown.FormatString(interviewsLeftByAssignmentCount.ToString());
+                newTitle += InterviewerUIResources.Dashboard_AssignmentCard_TitleCountdown.FormatString(interviewsLeftByAssignmentCount);
             }
             else
             {
-                this.Title += InterviewerUIResources.Dashboard_AssignmentCard_TitleCountdown_Unlimited;
+                newTitle += InterviewerUIResources.Dashboard_AssignmentCard_TitleCountdown_Unlimited;
             }
 
+            this.RaisePropertyChanged(() => AllowToCreateNewInterview);
+            this.Title = newTitle;
             this.Comment = string.Format(InterviewerUIResources.DashboardItem_AssignmentCreatedComment, interviewsByAssignmentCount);
-            this.ReceivedDate = assignment.ReceivedDateUtc.ToLocalTime().ToString("MMM d");
-            this.ReceivedTime = assignment.ReceivedDateUtc.ToLocalTime().ToString("HH:mm");
         }
 
         public string ReceivedTime { get; set; }
@@ -89,14 +100,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         public string ReceivedDate { get; private set; }
 
         private AssignmentDocument assignment;
+        private string title;
+        private string comment;
 
         public string QuestionnaireName => string.Format(InterviewerUIResources.DashboardItem_Title, this.assignment.Title, this.questionnaireIdentity.Version);
-        public string Comment { get; private set; }
+
+        public string Comment
+        {
+            get => this.comment;
+            private set => this.RaiseAndSetIfChanged(ref this.comment, value);
+        }
 
         public List<PrefilledQuestion> PrefilledQuestions { get; private set; }
         public List<PrefilledQuestion> DetailedPrefilledQuestions { get; private set; }
 
-        public string Title { get; private set; }
+        public string Title
+        {
+            get => this.title;
+            private set => this.RaiseAndSetIfChanged(ref this.title, value);
+        }
 
         public InterviewGpsCoordinatesView GpsLocation { get; private set; }
         public bool HasGpsLocation => this.GpsLocation != null;
@@ -193,7 +215,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             get { return new MvxCommand(this.NavigateToGpsLocation, () => this.HasGpsLocation); }
         }
 
-        public bool HasExpandedView { get => this.PrefilledQuestions.Count > 0; }
+        public bool HasExpandedView => this.PrefilledQuestions.Count > 0;
 
         private void NavigateToGpsLocation()
         {

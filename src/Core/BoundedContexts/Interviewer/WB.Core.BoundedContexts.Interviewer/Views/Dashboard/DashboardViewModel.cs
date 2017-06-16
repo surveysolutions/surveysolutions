@@ -1,6 +1,7 @@
 using System;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Plugins.Messenger;
+using Ncqrs.Domain;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
@@ -23,6 +24,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public StartedInterviewsViewModel StartedInterviews { get; }
         public CompletedInterviewsViewModel CompletedInterviews { get; }
         public RejectedInterviewsViewModel RejectedInterviews { get; }
+
+        public event EventHandler InterviewsCountChanged;
 
         public DashboardViewModel(IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal, 
@@ -108,14 +111,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
 
         private void OnInterviewRemoved(object sender, EventArgs e)
-            => this.RaisePropertyChanged(() => this.DashboardTitle);
+        {
+            this.RaisePropertyChanged(() => this.DashboardTitle);
+            this.OnInterviewsCountChanged();
+        }
 
         private void RefreshDashboard()
         {
             if(this.principal.CurrentUserIdentity == null)
                 return;
 
-            this.CreateNew.Load(this.Synchronization);
+            this.CreateNew.Load(this.Synchronization, this);
             this.StartedInterviews.Load();
             this.RejectedInterviews.Load();
             this.CompletedInterviews.Load();
@@ -160,6 +166,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             messenger.Unsubscribe<StartingLongOperationMessage>(startingLongOperationMessageSubscriptionToken);
             this.StartedInterviews.OnInterviewRemoved -= this.OnInterviewRemoved;
             this.CompletedInterviews.OnInterviewRemoved -= this.OnInterviewRemoved;
+        }
+
+        protected virtual void OnInterviewsCountChanged()
+        {
+            this.InterviewsCountChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }
