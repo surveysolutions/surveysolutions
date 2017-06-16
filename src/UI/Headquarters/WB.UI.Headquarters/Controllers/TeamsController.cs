@@ -47,6 +47,11 @@ namespace WB.UI.Headquarters.Controllers
             => this.userViewFactory.GetAllSupervisors(pageSize: pageSize, searchBy: query, showLocked: showLocked);
 
         [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        public UsersView Responsibles(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showLocked = DEFAULT_SHOW_LOCKED)
+            => this.userViewFactory.GetAllResponsibles(pageSize: pageSize, searchBy: query, showLocked: showLocked);
+
+        [HttpGet]
         [Authorize(Roles = "Supervisor")]
         public UsersView AsigneeInterviewersBySupervisor(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
             => this.teamViewFactory.GetAsigneeInterviewersBySupervisor(pageSize: pageSize, searchBy: query,

@@ -610,11 +610,11 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select supervisor.
+        ///   Looks up a localized string similar to Select responsible.
         /// </summary>
-        internal static string ImportInterviews_SelectSupervisor {
+        internal static string ImportInterviews_SelectResponsible {
             get {
-                return ResourceManager.GetString("ImportInterviews_SelectSupervisor", resourceCulture);
+                return ResourceManager.GetString("ImportInterviews_SelectResponsible", resourceCulture);
             }
         }
         
@@ -952,11 +952,11 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select the supervisor for this batch.
+        ///   Looks up a localized string similar to Select the responsible for this batch.
         /// </summary>
-        internal static string SelectSupervisorToAssign {
+        internal static string SelectResponsibleToAssign {
             get {
-                return ResourceManager.GetString("SelectSupervisorToAssign", resourceCulture);
+                return ResourceManager.GetString("SelectResponsibleToAssign", resourceCulture);
             }
         }
         
