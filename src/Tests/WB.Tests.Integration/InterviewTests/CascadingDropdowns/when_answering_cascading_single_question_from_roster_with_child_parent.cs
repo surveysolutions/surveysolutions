@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -12,13 +11,8 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 {
-    internal class when_answering_cascading_single_question_from_roster_with_child_parent : InterviewTestsContext
+    internal class when_answering_cascading_single_question_from_roster_with_child_parent : in_standalone_app_domain
     {
-        Establish context = () =>
-        {
-            appDomainContext = AppDomainContext.Create();
-        };
-
         Because of = () =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
@@ -72,14 +66,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
         It should_answer_on_single_option_question_with_selectedValue_equals_1 = () =>
            results.WasChildAnswerSaved.ShouldBeTrue();
 
-        Cleanup stuff = () =>
-        {
-            appDomainContext.Dispose();
-            appDomainContext = null;
-        };
-
         private static InvokeResults results;
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
 
         [Serializable]
         internal class InvokeResults

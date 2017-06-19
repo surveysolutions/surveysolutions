@@ -91,17 +91,17 @@ namespace WB.Tests.Integration.InterviewTests
             IEnumerable<object> events = null, 
             ILatestInterviewExpressionState precompiledState = null, 
             bool useLatestEngine = true,
-            Dictionary<Guid, AbstractAnswer> answersOnPrefilledQuestions = null,
+            List<InterviewAnswer> answers = null,
             QuestionnaireIdentity questionnaireIdentity = null,
             IQuestionnaireStorage questionnaireStorage = null)
         {
-            return SetupStatefullInterviewWithExpressionStorage(questionnaireDocument, events, answersOnPrefilledQuestions, questionnaireIdentity, questionnaireStorage);
+            return SetupStatefullInterviewWithExpressionStorage(questionnaireDocument, events, answers, questionnaireIdentity, questionnaireStorage);
         }
 
         protected static StatefulInterview SetupStatefullInterviewWithExpressionStorage(
             QuestionnaireDocument questionnaireDocument,
             IEnumerable<object> events = null,
-            Dictionary<Guid, AbstractAnswer> answersOnPrefilledQuestions = null,
+            List<InterviewAnswer> answers = null,
             QuestionnaireIdentity questionnaireIdentity = null,
             IQuestionnaireStorage questionnaireStorage = null)
         {
@@ -125,7 +125,7 @@ namespace WB.Tests.Integration.InterviewTests
             var interview = IntegrationCreate.StatefulInterview(
                 questionnaireIdentity,
                 expressionProcessorStatePrototypeProvider: statePrototypeProvider,
-                answersOnPrefilledQuestions: answersOnPrefilledQuestions,
+                answersOnPrefilledQuestions: answers,
                 questionnaireRepository: questionnaireRepository);
 
             ApplyAllEvents(interview, events);

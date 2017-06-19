@@ -1689,5 +1689,14 @@ namespace WB.Tests.Abc.TestFactories
 
             public AssignmentDocument Build() => this._entity;
         }
+
+        public InterviewAnswer InterviewAnswer(Identity identity, AbstractAnswer answer)
+        {
+            return new InterviewAnswer
+            {
+                Identity = identity,
+                Answer = answer
+            };
+        }
     }
 }
