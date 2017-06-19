@@ -281,5 +281,18 @@ namespace WB.Tests.Abc.TestFactories
                 assignmentId, 
                 answersToIdentifyingQuestions ?? new List<InterviewAnswer>());
         }
+
+        public AssignResponsibleCommand AssignResponsibleCommand(Guid? interviewId = null, 
+            Guid? userId = null, 
+            Guid? interviewerId = null, 
+            Guid? supervisorId = null, 
+            DateTime? assignTime = null)
+        {
+            return new AssignResponsibleCommand(interviewId ?? Guid.NewGuid(),
+                userId ?? Guid.NewGuid(),
+                interviewerId ?? Guid.NewGuid(),
+                supervisorId ?? Guid.NewGuid(),
+                assignTime ?? DateTime.UtcNow);
+        }
     }
 }

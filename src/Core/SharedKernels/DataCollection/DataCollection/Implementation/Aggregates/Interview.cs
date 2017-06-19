@@ -1576,18 +1576,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new FlagRemovedFromAnswer(userId, questionId, rosterVector));
         }
 
-        public void AssignResponsible(AssignResponsibleCommand command)
+        private void AssignResponsible(Guid userId, Guid? interviewerId, Guid? supervisorId, DateTime? assignTime)
         {
             InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
-            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Created, InterviewStatus.InterviewerAssigned, InterviewStatus.SupervisorAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters);
-            if (command.InterviewerId.HasValue)
-                propertiesInvariants.ThrowIfTryAssignToSameInterviewer(command.InterviewerId.Value);
 
-            if (this.properties.SupervisorId != command.SupervisorId)
+            var isNeedPerformAssignToSupervisor = supervisorId.HasValue && this.properties.SupervisorId != supervisorId;
+            var isNeedPerformAssignToInterviewer = interviewerId.HasValue;
+
+            if (isNeedPerformAssignToSupervisor)
+                propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Created, InterviewStatus.InterviewerAssigned, InterviewStatus.SupervisorAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters);
+            else if (isNeedPerformAssignToInterviewer)
+                propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor);
+
+            if (isNeedPerformAssignToInterviewer)
+                propertiesInvariants.ThrowIfTryAssignToSameInterviewer(interviewerId.Value);
+
+            if (isNeedPerformAssignToSupervisor)
             {
-                this.ApplyEvent(new SupervisorAssigned(command.UserId, command.SupervisorId));
+                this.ApplyEvent(new SupervisorAssigned(userId, supervisorId.Value));
 
                 if (this.properties.Status == InterviewStatus.Created || this.properties.Status == InterviewStatus.InterviewerAssigned)
                 {
@@ -1595,51 +1603,37 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
 
-            if (command.InterviewerId.HasValue)
+            if (isNeedPerformAssignToInterviewer)
             {
-                this.ApplyEvent(new InterviewerAssigned(command.UserId, command.InterviewerId.Value, command.AssignTime));
+                this.ApplyEvent(new InterviewerAssigned(userId, interviewerId.Value, assignTime));
 
                 if (!this.properties.WasCompleted && this.properties.Status == InterviewStatus.SupervisorAssigned)
                 {
                     this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
                 }
             }
+            else
+            {
+                if (this.properties.InterviewerId.HasValue)
+                {
+                    this.ApplyEvent(new InterviewerAssigned(userId, null, null));
+                }
+            }
         }
 
+        public void AssignResponsible(AssignResponsibleCommand command)
+        {
+            AssignResponsible(command.UserId, command.InterviewerId, command.SupervisorId, command.AssignTime);
+        }
 
         public void AssignSupervisor(Guid userId, Guid supervisorId)
         {
-            InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
-
-            propertiesInvariants.ThrowIfInterviewHardDeleted();
-            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Created, InterviewStatus.InterviewerAssigned, InterviewStatus.SupervisorAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters);
-
-            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
-
-            if (this.properties.InterviewerId.HasValue)
-            {
-                this.ApplyEvent(new InterviewerAssigned(userId, null, null));
-            }
-
-            if (this.properties.Status == InterviewStatus.Created || this.properties.Status == InterviewStatus.InterviewerAssigned)
-            {
-                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
-            }
+            AssignResponsible(userId, null, supervisorId, null);
         }
 
         public void AssignInterviewer(Guid userId, Guid interviewerId, DateTime assignTime)
         {
-            InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
-
-            propertiesInvariants.ThrowIfInterviewHardDeleted();
-            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor);
-            propertiesInvariants.ThrowIfTryAssignToSameInterviewer(interviewerId);
-
-            this.ApplyEvent(new InterviewerAssigned(userId, interviewerId, assignTime));
-            if (!this.properties.WasCompleted && this.properties.Status == InterviewStatus.SupervisorAssigned)
-            {
-                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
-            }
+            AssignResponsible(userId, interviewerId, null, assignTime);
         }
 
         public void Delete(Guid userId)
