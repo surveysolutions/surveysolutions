@@ -66,9 +66,6 @@
                     break;
                 case "DateTime":
                     item.settings(dto.Settings);
-                    if (!item.settings().IsTimestamp) {
-                        item.selectedOption(new Date());
-                    }
                     item.selectedOption.extend({ date: true });
                     break;
                 case "Text":
