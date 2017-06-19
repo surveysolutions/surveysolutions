@@ -149,7 +149,7 @@
     <comment>{0} - count of interviews in file</comment>
   </data>
   <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>Вы можете скачать задачи назначенные интервьюерам для доставки ссылок респондентам</value>
+    <value>Вы можете скачать задания назначенные интервьюерам для доставки ссылок респондентам</value>
   </data>
   <data name="StopWebInterview" xml:space="preserve">
     <value>Остановить web интервью</value>
