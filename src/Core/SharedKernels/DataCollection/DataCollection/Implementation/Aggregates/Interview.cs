@@ -1593,17 +1593,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (isNeedPerformAssignToInterviewer)
                 propertiesInvariants.ThrowIfTryAssignToSameInterviewer(interviewerId.Value);
 
+            // events
             if (isNeedPerformAssignToSupervisor)
             {
-                this.ApplyEvent(new SupervisorAssigned(userId, supervisorId.Value));
-
-                if (this.properties.Status == InterviewStatus.Created || this.properties.Status == InterviewStatus.InterviewerAssigned)
-                {
-                    this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
-                }
+                this.FireSupervisorAssignedEvents(userId, supervisorId.Value);
             }
 
-            if (isNeedPerformAssignToInterviewer)
+            this.FireInterviewerAssignedEvents(userId, interviewerId, assignTime);
+        }
+
+        private void FireSupervisorAssignedEvents(Guid userId, Guid supervisorId)
+        {
+            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
+
+            if (this.properties.Status == InterviewStatus.Created || this.properties.Status == InterviewStatus.InterviewerAssigned)
+            {
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
+            }
+        }
+
+        private void FireInterviewerAssignedEvents(Guid userId, Guid? interviewerId, DateTime? assignTime)
+        {
+            if (interviewerId.HasValue)
             {
                 this.ApplyEvent(new InterviewerAssigned(userId, interviewerId.Value, assignTime));
 
