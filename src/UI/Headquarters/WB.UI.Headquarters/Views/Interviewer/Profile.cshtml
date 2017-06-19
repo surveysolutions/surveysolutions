@@ -136,16 +136,7 @@ else
                 <div class="col-sm-12 clearfix">
                     <h3>@Pages.InterviewerProfile_Sync_Activity_Title</h3>
                     <div class="graphic-wrapper clearfix">
-                        <div class="graphic census">
-                            <div class="day-unit">
-                                <div class="quarter-of-day">
-                                    <div class="recent-activity"></div>
-                                    <div class="unfinished-assignments">
-                                        <div class="half-of-quarter"></div>
-                                        <div class="half-of-quarter"></div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="graphic">
                             @foreach (var syncDay in Model.SynchronizationActivity.Days)
                             {
                                 <div class="day-unit">
@@ -169,12 +160,7 @@ else
                                                 }
                                                 else
                                                 {
-                                                    for (int i = 0; i < syncDayQuarter.DownloadedQuestionnairesInProportionCount; i++)
-                                                    {
-                                                        <div class="census-template"></div>
-                                                    }
-
-                                                    for (int i = 0; i < syncDayQuarter.DownloadedInterviewsInProportionCount; i++)
+                                                    for (int i = 0; i < syncDayQuarter.DownloadedAssignmentsInProportionCount; i++)
                                                     {
                                                         <div class="downloaded"></div>
                                                     }
@@ -191,15 +177,15 @@ else
                                                     }
                                                 }
                                             </div>
-                                            <div class="unfinished-assignments @(syncDayQuarter.DownloadedQuestionnairesCount > 0 ? @"census-update" : "")">
+                                            <div class="unfinished-assignments">
                                                 <div class="half-of-quarter">
-                                                    @for (int i = 0; i < syncDayQuarter.NewInterviewsOnDeviceCount; i++)
+                                                    @for (int i = 0; i < syncDayQuarter.AllAssignmentsOnDeviceCount; i++)
                                                     {
                                                         <div class="unfinished-unit"></div>
                                                     }
                                                 </div>
                                                 <div class="half-of-quarter">
-                                                    @for (int i = 0; i < syncDayQuarter.NewInterviewsOnDeviceCount; i++)
+                                                    @for (int i = 0; i < syncDayQuarter.AllAssignmentsOnDeviceCount; i++)
                                                     {
                                                         <div class="unfinished-unit"></div>
                                                     }
@@ -225,16 +211,14 @@ else
                         <div class="graphic-explanation">
                             <div class="recent-activity">
                                 <ul class="list-unstyled">
-                                    <li><span class="census-template"></span>@Pages.InterviewerProfile_Sync_Activity_Census_Desc</li>
-                                    <li><span class="downloaded"></span>@Pages.InterviewerProfile_Sync_Activity_Downloaded_Interview_Desc</li>
+                                    <li><span class="downloaded"></span>@Pages.InterviewerProfile_Sync_Activity_Downloaded_Assignments_Desc</li>
                                     <li><span class="uploaded"></span>@Pages.InterviewerProfile_Sync_Activity_Uploaded_Interview_Desc</li>
                                     <li><span class="successful-connection"></span>@Pages.InterviewerProfile_Sync_Activity_Nothing_To_Sync</li>
                                     <li><span class="failed-connection"></span>@Pages.InterviewerProfile_Sync_Activity_Failed_Sync</li>
                                 </ul>
                             </div>
                             <div class="unfinished-assignments">
-                                <p class="primary-text">@Pages.InterviewerProfile_Sync_Activity_Census_Timeline_Desc</p>
-                                <p class="primary-text">@Pages.InterviewerProfile_Sync_Activity_Started_Interview_Desc</p>
+                                <p class="primary-text">@Pages.InterviewerProfile_Sync_Activity_All_Assignments_Desc</p>
                             </div>
                         </div>
                     </div>

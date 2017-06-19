@@ -19,5 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public double TotalConnectionSpeed { get; set; }
 
         public TimeSpan TotalSyncDuration { get; set; }
+
+        public int AssignmentsOnDeviceCount { get; set; }
     }
 }

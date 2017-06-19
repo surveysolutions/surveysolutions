@@ -37,6 +37,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return this.inMemroyStorage.Values.AsQueryable().Count(predicate);
         }
 
+        public int Count() => this.inMemroyStorage.Values.Count;
+
         public void RemoveAll()
         {
             this.inMemroyStorage.Clear();
