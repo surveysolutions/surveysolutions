@@ -154,7 +154,7 @@
     <value>Обновлен</value>
   </data>
   <data name="NewAssignment" xml:space="preserve">
-    <value>Новая задача</value>
+    <value>Новое задание</value>
   </data>
   <data name="Questionnaires" xml:space="preserve">
     <value>Опросники</value>
@@ -187,7 +187,6 @@
     <value>Удалить опросник</value>
   </data>
   <data name="UploadAssignments" xml:space="preserve">
-    <value>Загрузить задачи</value>
-    <comment>Загрузить задачи</comment>
+    <value>Загрузить задания</value>
   </data>
 </root>
