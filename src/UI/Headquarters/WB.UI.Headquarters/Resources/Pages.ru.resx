@@ -898,7 +898,7 @@
   <data name="InterviewerProfile_Sync_Activity_Title" xml:space="preserve">
     <value>Последние данные по синхронизации</value>
   </data>
-  <data name="InterviewerProfile_Sync_Activity_Started_Interview_Desc" xml:space="preserve">
+  <data name="InterviewerProfile_Sync_Activity_All_Assignments_Desc" xml:space="preserve">
     <value>Количество незаконченных или не синхронизированных интервью на устройстве в каждый момент синхронизации</value>
   </data>
   <data name="InterviewerProfile_Sync_Activity_Failed_Sync" xml:space="preserve">
@@ -910,14 +910,8 @@
   <data name="InterviewerProfile_Sync_Activity_Uploaded_Interview_Desc" xml:space="preserve">
     <value>Загруженные на сервер для подтверждения</value>
   </data>
-  <data name="InterviewerProfile_Sync_Activity_Census_Timeline_Desc" xml:space="preserve">
-    <value>Обновление опросников</value>
-  </data>
-  <data name="InterviewerProfile_Sync_Activity_Downloaded_Interview_Desc" xml:space="preserve">
-    <value>Скачанные интервью</value>
-  </data>
-  <data name="InterviewerProfile_Sync_Activity_Census_Desc" xml:space="preserve">
-    <value>Скачанные опросники</value>
+  <data name="InterviewerProfile_Sync_Activity_Downloaded_Assignments_Desc" xml:space="preserve">
+    <value>Скачанные задания</value>
   </data>
   <data name="InterviewerProfile_DeviceAssignmentDate" xml:space="preserve">
     <value>Дата подключения устройства</value>

@@ -111,6 +111,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public int Count(Expression<Func<TEntity, bool>> predicate)
           => this.RunInTransaction(table => table.Count(predicate));
 
+        public int Count()
+            => this.RunInTransaction(table => table.Count());
+
         public TEntity FirstOrDefault() => this.RunInTransaction(table => table.FirstOrDefault());
 
         public virtual IReadOnlyCollection<TEntity> LoadAll()

@@ -27,6 +27,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
     {
         private readonly AttachmentsCleanupService cleanupService;
         private readonly IHttpStatistician httpStatistician;
+        private readonly IPlainStorage<AssignmentDocument, int> assignmentsStorage;
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly IInterviewerInterviewAccessor interviewFactory;
         private readonly IPlainStorage<InterviewFileView> interviewFileViewStorage;
@@ -61,7 +62,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             IPasswordHasher passwordHasher,
             IAssignmentsSynchronizer assignmentsSynchronizer,
             IQuestionnaireDownloader questionnaireDownloader,
-            IHttpStatistician httpStatistician)
+            IHttpStatistician httpStatistician,
+            IPlainStorage<AssignmentDocument, int> assignmentsStorage)
         {
             this.synchronizationService = synchronizationService;
             this.interviewersPlainStorage = interviewersPlainStorage;
@@ -79,6 +81,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.assignmentsSynchronizer = assignmentsSynchronizer;
             this.questionnaireDownloader = questionnaireDownloader;
             this.httpStatistician = httpStatistician;
+            this.assignmentsStorage = assignmentsStorage;
         }
 
         public async Task SyncronizeAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
@@ -558,6 +561,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
                 NewAssignmentsCount = statistics.NewAssignmentsCount,
                 RemovedAssignmentsCount = statistics.RemovedAssignmentsCount,
+                AssignmentsOnDeviceCount = this.assignmentsStorage.Count(),
 
                 TotalDownloadedBytes = httpStats.DownloadedBytes,
                 TotalUploadedBytes = httpStats.UploadedBytes,

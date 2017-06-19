@@ -26,6 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage
         TEntity FirstOrDefault();
         IReadOnlyCollection<TEntity> LoadAll();
         int Count(Expression<Func<TEntity, bool>> predicate);
+        int Count();
         void RemoveAll();
     }
 }
