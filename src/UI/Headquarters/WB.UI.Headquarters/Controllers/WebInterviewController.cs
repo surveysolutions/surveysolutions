@@ -127,12 +127,17 @@ namespace WB.UI.Headquarters.Controllers
                                                         Answer = this.identifyingAnswerConverter.GetAbstractAnswer(questionnaire, x.Identity.Id, x.Answer)
                                                     });
 
-            var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
-                interviewer.PublicKey, assignment.QuestionnaireId, DateTime.UtcNow,
+            var createInterviewOnClientCommand = new CreateInterviewWithPreloadedData(
+                interviewId,
+                interviewer.PublicKey, 
+                assignment.QuestionnaireId.QuestionnaireId, 
+                assignment.QuestionnaireId.Version,
+                answersFromAssignment.ToList(),
+                DateTime.UtcNow,
                 interviewer.Supervisor.Id,
+                interviewer.PublicKey,
                 this.keyGenerator.Get(), 
-                assignment.Id, 
-                answersFromAssignment.ToList());
+                assignment.Id);
 
             this.commandService.Execute(createInterviewOnClientCommand);
             return interviewId.FormatGuid();

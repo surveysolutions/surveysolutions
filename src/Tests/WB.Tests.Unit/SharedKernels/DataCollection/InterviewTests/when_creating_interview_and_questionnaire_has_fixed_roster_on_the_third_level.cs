@@ -22,7 +22,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             questionnaireId = Guid.Parse("22220000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            answersToFeaturedQuestions = new Dictionary<Guid, AbstractAnswer>();
             fixedRosterId = Guid.Parse("22220000FFFFFFFFFFFFFFFFFFFFFFFF");
 
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(
@@ -42,12 +41,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext = new EventContext();
 
             command = Create.Command.CreateInterviewCommand(questionnaireId, 1, supervisorId,
-                answersToFeaturedQuestions, userId);
+                new List<InterviewAnswer>(), userId);
             interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>
-            interview.CreateInterview(command);
+            interview.CreateInterviewWithPreloadedData(command);
 
         It should_raise_RosterInstancesAdded_event_with_3_instances = () =>
             eventContext.GetEvent<RosterInstancesAdded>().Instances.Count().ShouldEqual(3);
@@ -64,10 +63,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static EventContext eventContext;
         private static Guid userId;
         private static Guid questionnaireId;
-        private static Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions;
         private static Guid supervisorId;
         private static Guid fixedRosterId;
         private static Interview interview;
-        private static CreateInterviewCommand command;
+        private static CreateInterviewWithPreloadedData command;
     }
 }

@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.CommandTransformatorT
             command = commandTransformator.TransformCommnadIfNeeded(command);
 
         It should_return_command_of_CreateInterviewCommand_type = () =>
-            command.ShouldBeOfExactType<CreateInterviewCommand>();
+            command.ShouldBeOfExactType<CreateInterviewWithPreloadedData>();
 
         private static CommandTransformator commandTransformator;
         private static ICommand command = Create.Command.CreateInterviewControllerCommand();

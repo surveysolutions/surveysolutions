@@ -1374,7 +1374,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IReadOnlyCollection<InterviewTreeNodeDiff> treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             //apply events
-            this.ApplyEvent(new InterviewFromPreloadedDataCreated(
+            this.ApplyEvent(new InterviewCreated(
                 command.UserId,
                 this.QuestionnaireIdentity.QuestionnaireId, 
                 this.QuestionnaireIdentity.Version, 
@@ -1427,40 +1427,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 changedInterviewTree.ActualizeTree();
             }
-        }
 
-        public void CreateInterview(CreateInterviewCommand command)
-        {
-            var userId = command.UserId;
-
-            this.QuestionnaireIdentity = new QuestionnaireIdentity(command.QuestionnaireId, command.QuestionnaireVersion);
-
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-
-            InterviewTree changedInterviewTree = this.Tree.Clone();
-
-            Dictionary<Identity, AbstractAnswer> prefilledQuestionsWithAnswers = command.AnswersToFeaturedQuestions.ToDictionary(x => new Identity(x.Key, RosterVector.Empty), x => x.Value);
-
-            this.ValidatePrefilledAnswers(this.Tree, questionnaire, prefilledQuestionsWithAnswers, RosterVector.Empty);
-            foreach (KeyValuePair<Identity, AbstractAnswer> answer in prefilledQuestionsWithAnswers)
-            {
-                changedInterviewTree.GetQuestion(answer.Key).SetAnswer(answer.Value);
-            }
-
-            changedInterviewTree.ActualizeTree();
-
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
-            IReadOnlyCollection<InterviewTreeNodeDiff> treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
-
-            //apply events
-            this.ApplyEvent(new InterviewCreated(userId, command.QuestionnaireId, questionnaire.Version, null, questionnaire.IsUsingExpressionStorage()));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
-
-            this.ApplyEvents(treeDifference, userId);
-
-            this.ApplyEvent(new SupervisorAssigned(userId, command.SupervisorId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
-            this.ApplyInterviewKey(command.InterviewKey);
+            if (!answersGroupedByLevels.Any())
+                changedInterviewTree.ActualizeTree();
         }
 
         protected void ApplyInterviewKey(InterviewKey key)

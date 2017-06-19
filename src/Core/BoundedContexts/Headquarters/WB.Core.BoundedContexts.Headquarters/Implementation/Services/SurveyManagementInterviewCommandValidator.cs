@@ -12,16 +12,12 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
     internal class SurveyManagementInterviewCommandValidator : ICommandValidator<StatefulInterview, SynchronizeInterviewEventsCommand>,
-        ICommandValidator<StatefulInterview, CreateInterviewWithPreloadedData>,
-        ICommandValidator<StatefulInterview, CreateInterviewCommand>
+        ICommandValidator<StatefulInterview, CreateInterviewWithPreloadedData>
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
         private readonly InterviewPreconditionsServiceSettings interviewPreconditionsServiceSettings;
 
-        private ITransactionManagerProvider TransactionManagerProvider
-        {
-            get { return ServiceLocator.Current.GetInstance<ITransactionManagerProvider>(); }
-        }
+        private ITransactionManagerProvider TransactionManagerProvider => ServiceLocator.Current.GetInstance<ITransactionManagerProvider>();
 
         public SurveyManagementInterviewCommandValidator(
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage, 
@@ -87,11 +83,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         }
 
         public void Validate(StatefulInterview aggregate, CreateInterviewWithPreloadedData command)
-        {
-            this.ThrowIfInterviewCountLimitReached();
-        }
-
-        public void Validate(StatefulInterview aggregate, CreateInterviewCommand command)
         {
             this.ThrowIfInterviewCountLimitReached();
         }
