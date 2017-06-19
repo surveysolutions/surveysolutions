@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.CensusQuestionnai
 
         It should_execute_create_intervew_on_client_command = () =>
             mockOfCommandService.Verify(x =>
-                x.ExecuteAsync(Moq.It.IsAny<CreateInterviewOnClientCommand>(), Moq.It.IsAny<string>(),
+                x.ExecuteAsync(Moq.It.IsAny<CreateInterviewWithPreloadedData>(), Moq.It.IsAny<string>(),
                     Moq.It.IsAny<CancellationToken>()), Times.Once);
 
         It should_navigate_to_prefilled_questions_view_model = () =>

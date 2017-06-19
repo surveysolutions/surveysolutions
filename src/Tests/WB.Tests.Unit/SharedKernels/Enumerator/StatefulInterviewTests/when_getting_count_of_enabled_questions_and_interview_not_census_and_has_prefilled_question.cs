@@ -20,15 +20,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var suervisorId = Guid.Parse("44444444444444444444444444444444");
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                children: new IComposite[]
-                {
-                    Create.Entity.TextQuestion(questionId, variable: "q1"),
-                    Create.Entity.TextQuestion(prefilledQuestionId, variable: "q2", preFilled: true)
-                });
+                Create.Entity.TextQuestion(questionId, variable: "q1"), 
+                Create.Entity.TextQuestion(prefilledQuestionId, variable: "q2", preFilled: true)
+            );
 
             var statefulInterview = Setup.StatefulInterview(questionnaire, false);
-            statefulInterview.CreateInterview(new CreateInterviewCommand(statefulInterview.EventSourceId, responsibleId, questionnaire.PublicKey, 
-                new Dictionary<Guid, AbstractAnswer>(), DateTime.UtcNow, suervisorId, 1, null));
+            statefulInterview.CreateInterviewWithPreloadedData(Create.Command.CreateInterviewCommand(questionnaire.PublicKey, 1, suervisorId, new List<InterviewAnswer>(), responsibleId, DateTime.UtcNow));
+
             //act
             var countActiveQuestionsInInterview = statefulInterview.CountActiveQuestionsInInterview();
             //assert

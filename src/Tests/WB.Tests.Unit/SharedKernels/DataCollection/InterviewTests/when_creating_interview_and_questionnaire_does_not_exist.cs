@@ -21,16 +21,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             responsibleSupervisorId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA00");
-            answersToFeaturedQuestions = new Dictionary<Guid, AbstractAnswer>();
 
             var repositoryWithoutQuestionnaire = Mock.Of<IQuestionnaireStorage>();
 
-            command = Create.Command.CreateInterviewCommand(questionnaireId, 1, responsibleSupervisorId,
-                answersToFeaturedQuestions, userId: userId);
+            this.command = Create.Command.CreateInterviewCommand(this.questionnaireId, 1, this.responsibleSupervisorId,
+                new List<InterviewAnswer>(), userId: this.userId);
            interview = Create.AggregateRoot.Interview(questionnaireRepository: repositoryWithoutQuestionnaire);
 
            // Act
-           act =() => interview.CreateInterview(command);
+           act =() => interview.CreateInterviewWithPreloadedData(command);
         }
          
 
@@ -41,9 +40,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private Guid questionnaireId;
         private Guid userId;
         private Guid responsibleSupervisorId;
-        private Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions;
         private Interview interview;
-        private CreateInterviewCommand command;
+        private CreateInterviewWithPreloadedData command;
         private Action act;
     }
 }

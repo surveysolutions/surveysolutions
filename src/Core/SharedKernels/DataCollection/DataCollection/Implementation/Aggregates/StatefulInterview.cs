@@ -240,33 +240,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #region Command handlers
 
-        public void CreateInterviewOnClient(CreateInterviewOnClientCommand command)
-        {
-            this.QuestionnaireIdentity = command.QuestionnaireIdentity;
-
-            var changedInterviewTree = this.Tree.Clone();
-
-            changedInterviewTree.ActualizeTree();
-            base.PutAnswers(changedInterviewTree, command.Answers, command.AssignmentId);
-
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
-            var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
-
-            //apply events
-            this.ApplyEvent(new InterviewOnClientCreated(command.UserId, command.QuestionnaireIdentity.QuestionnaireId, questionnaire.Version, command.AssignmentId, questionnaire.IsUsingExpressionStorage()));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
-
-            this.ApplyEvents(treeDifference, command.UserId);
-
-            this.ApplyEvent(new SupervisorAssigned(command.UserId, command.SupervisorId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
-
-            this.ApplyEvent(new InterviewerAssigned(command.UserId, command.UserId, command.AnswersTime));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
-
-            this.ApplyInterviewKey(command.InterviewKey);
-        }
 
         public void Complete(Guid userId, string comment, DateTime completeTime)
         {
