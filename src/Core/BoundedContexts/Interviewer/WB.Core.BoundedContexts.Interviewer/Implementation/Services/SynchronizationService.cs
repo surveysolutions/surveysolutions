@@ -100,17 +100,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         #region AssignmentsApi
 
-        public async Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken)
+        public Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken)
         {
-            var response = await this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<AssignmentApiView>>(
+            var response = this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<AssignmentApiView>>(
                 url: this.assignmentsController, credentials: this.restCredentials, token: cancellationToken));
 
-            return response.ToList();
+            return response;
         }
 
-        public async Task<AssignmentApiDocument> GetAssignmentAsync(int id, CancellationToken cancellationToken)
+        public Task<AssignmentApiDocument> GetAssignmentAsync(int id, CancellationToken cancellationToken)
         {
-            var response = await this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<AssignmentApiDocument>(
+            var response = this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<AssignmentApiDocument>(
                 url: $"{this.assignmentsController}/{id}", credentials: this.restCredentials, token: cancellationToken));
 
             return response;

@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             var interviewerIdentity = this.principal.CurrentUserIdentity;
             this.assignmentDocumentsStorage.FetchPreloadedData(this.assignment);
 
-            List<InterviewAnswer> answers = GetAnswersToIdentifyingQuestions(this.assignment.Answers);
+            List<InterviewAnswer> answers = this.GetAnswers(this.assignment.Answers);
 
             ICommand createInterviewCommand = new CreateInterviewWithPreloadedData(interviewId,
                     interviewerIdentity.UserId,
@@ -160,7 +160,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
         }
 
-        private List<InterviewAnswer> GetAnswersToIdentifyingQuestions(List<AssignmentDocument.AssignmentAnswer> identifyingAnswers)
+        private List<InterviewAnswer> GetAnswers(List<AssignmentDocument.AssignmentAnswer> identifyingAnswers)
         {
             var elements = identifyingAnswers
                 .Select(ia => new InterviewAnswer

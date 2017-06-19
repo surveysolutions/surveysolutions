@@ -76,6 +76,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
                         Id = remote.Id,
                         QuestionnaireId = remote.QuestionnaireId.ToString(),
                         Title = questionnaire.Title,
+                        Quantity = remote.Quantity,
                         ReceivedDateUtc = DateTime.UtcNow
                     };
 
@@ -89,9 +90,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
                         Statistics = statistics,
                         Status = SynchronizationStatus.Download
                     });
-                }
 
-                if (LocalAssignmentRequireUpdate(local, remoteItem))
+                    this.assignmentsRepository.Store(local);
+                }
+                else if (LocalAssignmentRequireUpdate(local, remoteItem))
                 {
                     local.Quantity = remoteItem.Quantity;
 
