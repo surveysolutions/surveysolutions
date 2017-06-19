@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
@@ -6,7 +7,6 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Tests.Abc;
 
@@ -24,8 +24,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         {
             this.assignment = Create.Entity
                 .AssignmentApiDocument(1, 5, Create.Entity.QuestionnaireIdentity(Id.g1))
-                .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "123")
-                .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "456")
+                .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "123", "serializeddata")
+                .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "456", "serializeddata2")
                 .Build();
 
             var restService = Mock.Of<IRestService>(
@@ -42,8 +42,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         [Test]
         public void should_be_able_deserialize_identifying_data()
         {
-            this.assignmentResponse.Answers.SequenceEqual(this.assignment.Answers, source => source.Identity, target => target.Identity);
-            this.assignmentResponse.Answers.SequenceEqual(this.assignment.Answers, source => source.AnswerAsString, target => target.AnswerAsString);
+            Assert.That(this.assignmentResponse.Answers, Has.All.Matches<AssignmentApiDocument.InterviewSerializedAnswer>(f =>
+                this.assignment.Answers.Any(e =>
+                    f.Identity == e.Identity &&
+                        f.AnswerAsString == e.AnswerAsString &&
+                        f.SerializedAnswer == e.SerializedAnswer)));
         }
 
         [Test]
