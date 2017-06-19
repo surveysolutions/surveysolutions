@@ -26,6 +26,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
 
         bool IsQuestionnaireAssemblyExists(QuestionnaireIdentity questionnaireIdentity);
 
+        List<QuestionnaireIdentity> GetAllQuestionnaireIdentities();
+
         IReadOnlyCollection<QuestionnaireDocumentView> LoadAll();
 
         void StoreTranslations(QuestionnaireIdentity questionnaireIdentity, List<TranslationInstance> translationInstances);
