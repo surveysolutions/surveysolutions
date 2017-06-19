@@ -53,7 +53,7 @@
                     break;
                 case "DateTime":
                     var dateAnswer = question.selectedOption();
-                    if (!_.isUndefined(dateAnswer)) {
+                    if (!_.isUndefined(dateAnswer) && !_.isNull(dateAnswer)) {
                         var answerUTC = null;
 
                         if (question.settings().IsTimestamp) {
