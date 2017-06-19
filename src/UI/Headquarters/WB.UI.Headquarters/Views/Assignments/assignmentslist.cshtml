@@ -1,4 +1,9 @@
-﻿<script type="text/x-template" id="assignments-table-template">
+﻿@using Microsoft.Practices.ServiceLocation
+@using WB.Core.BoundedContexts.Headquarters.Services
+@{
+    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
+}
+<script type="text/x-template" id="assignments-table-template">
     <table class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews responsive">
         <thead>
         </thead>
@@ -47,22 +52,26 @@
                         $(this).children("input[type='search']").delay(200).queue(function () { $(this).focus(); $(this).dequeue(); });
                     }
                 });
-                var firstHeader = this.table.column(0).header();
-                $(firstHeader).html('<input class="double-checkbox" id="check-all" type="checkbox">' +
-                    '<label for="check-all">' +
-                    '<span class="tick"></span>' +
-                    '</label>');
-                $('#check-all').change(function () {
-                    if (!this.checked) {
-                        self.table.rows().deselect();
-                        $(self.table.rows).find(".checkbox-filter").prop('checked', false);
+                @if (!authorizedUser.IsObserver && !authorizedUser.IsObserving)
+                {
+                    <text>
+                        var firstHeader = this.table.column(0).header();
+                        $(firstHeader).html('<input class="double-checkbox" id="check-all" type="checkbox">' +
+                            '<label for="check-all">' +
+                            '<span class="tick"></span>' +
+                            '</label>');
+                        $('#check-all').change(function() {
+                            if (!this.checked) {
+                                self.table.rows().deselect();
+                                $(self.table.rows).find(".checkbox-filter").prop('checked', false);
+                            } else {
+                                self.table.rows().select();
+                                $(self.table.rows).find(".checkbox-filter").prop('checked', true);
+                            }
+                        });
+                    </text>
+                }
                     }
-                    else {
-                        self.table.rows().select();
-                        $(self.table.rows).find(".checkbox-filter").prop('checked', true);
-                    }
-                });
-            }
         },
         mounted: function() {
             var self = this;
