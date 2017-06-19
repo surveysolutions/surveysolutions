@@ -8,15 +8,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class QuestionnaireDocumentView : IPlainStorageEntity
     {
-
         [PrimaryKey]
         public string Id { get; set; }
 
         [Ignore]
         public QuestionnaireDocument QuestionnaireDocument
         {
-            get { return Mvx.Resolve<IJsonAllTypesSerializer>().Deserialize<QuestionnaireDocument>(Document); }
-            set { Document = Mvx.Resolve<IJsonAllTypesSerializer>().SerializeToByteArray(value); }
+            get => Mvx.Resolve<IJsonAllTypesSerializer>().Deserialize<QuestionnaireDocument>(Document);
+            set => Document = Mvx.Resolve<IJsonAllTypesSerializer>().SerializeToByteArray(value);
         }
 
         public byte[] Document { get; set; }

@@ -150,10 +150,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                  .ToList();
         }
 
-        public bool IsAttachmentUsedAsync(string contentId)
+        public IReadOnlyCollection<QuestionnaireDocumentView> LoadAll()
         {
-            var questionnaireDocumentViews = this.questionnaireDocuments.LoadAll().Where(x => !x.QuestionnaireDocument.IsDeleted).ToList();
-            return questionnaireDocumentViews.Count > 0 && questionnaireDocumentViews.Any(x => x.QuestionnaireDocument.Attachments.Any(a => a.ContentId == contentId));
+            return this.questionnaireDocuments.LoadAll();
         }
 
         public bool IsQuestionnaireExists(QuestionnaireIdentity questionnaireIdentity)
