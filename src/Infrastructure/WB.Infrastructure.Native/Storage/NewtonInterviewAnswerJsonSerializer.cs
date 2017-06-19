@@ -50,6 +50,7 @@ namespace WB.Infrastructure.Native.Storage
                 answerTypes.Add(typeof(InterviewAnswer));
                 answerTypes.Add(typeof(TextListAnswerRow));
                 answerTypes.Add(typeof(GeoPosition));
+                answerTypes.Add(typeof(CheckedYesNoAnswerOption));
 
                 foreach (var typeInfo in answerTypes)
                 {
