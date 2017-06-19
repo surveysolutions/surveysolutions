@@ -441,7 +441,7 @@
     <value>Создать задания</value>
   </data>
   <data name="DataForSingleAssignmentFound" xml:space="preserve">
-    <value>Надены данные для 1 задания</value>
+    <value>Найдены данные для 1 задания</value>
   </data>
   <data name="DataForMultipleAssignmentsFound" xml:space="preserve">
     <value>Найдены данные для {0} задания(ий)</value>
