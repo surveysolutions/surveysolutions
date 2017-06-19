@@ -117,7 +117,7 @@
                     true);
             }
 
-            @if (authorizedUser.IsObserver)
+            @if (authorizedUser.IsObserver && !authorizedUser.IsObserving)
             {
             <text>
             model.onTableInitCompleteExtra = function () {
