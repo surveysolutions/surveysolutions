@@ -23,15 +23,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             questionnaireId = Guid.Parse("22220000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            answersToFeaturedQuestions = new Dictionary<Guid, AbstractAnswer>();
+            var answersToFeaturedQuestions = new List<InterviewAnswer>();
             answersTime = new DateTime(2013, 09, 01);
 
             Guid questionId = Guid.Parse("22220000111111111111111111111111");
             Guid parentPropagatableGroupId = Guid.Parse("22220000AAAAAAAAAAAAAAAAAAAAAAAA");
 
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), _
-                => /*_.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new [] { questionId }
-                && */_.GetRostersFromTopToSpecifiedQuestion(questionId) == new [] { parentPropagatableGroupId });
+                => _.GetRostersFromTopToSpecifiedQuestion(questionId) == new [] { parentPropagatableGroupId });
 
             eventContext = new EventContext();
 
@@ -41,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            interview.CreateInterview(command);
+            interview.CreateInterviewWithPreloadedData(command);
 
         It should_not_raise_QuestionDisabled_event = () =>
             eventContext.ShouldNotContainEvent<QuestionsDisabled>();
@@ -55,10 +54,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static EventContext eventContext;
         private static Guid userId;
         private static Guid questionnaireId;
-        private static Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions;
         private static DateTime answersTime;
         private static Guid supervisorId;
         private static Interview interview;
-        private static CreateInterviewCommand command;
+        private static CreateInterviewWithPreloadedData command;
     }
 }
