@@ -503,4 +503,16 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Device_Does_Not_Support" xml:space="preserve">
     <value>Your device doesn't support this functionality</value>
   </data>
+  <data name="AreaMap_MapTitle" xml:space="preserve">
+    <value>Map</value>
+  </data>
+  <data name="AreaMap_AreaFormat" xml:space="preserve">
+    <value>Area:</value>
+  </data>
+  <data name="AreaMap_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="AreaMap_LengthFormat" xml:space="preserve">
+    <value>Perimeter:</value>
+  </data>
 </root>

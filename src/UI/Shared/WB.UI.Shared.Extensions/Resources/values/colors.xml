@@ -4,5 +4,10 @@
   <color name="screen_button_disabled">#C6C6C6</color>
   <color name="screen_button_pressed">#0D6DBF</color>
   <color name="screen_button">#2A81CB</color>
-  
+
+  <color name="screen_button_bordered_disabled">#20575757</color>
+  <color name="screen_button_bordered_pressed">#80575757</color>
+  <color name="screen_button_bordered">#60575757</color>
+    
+    
 </resources>
