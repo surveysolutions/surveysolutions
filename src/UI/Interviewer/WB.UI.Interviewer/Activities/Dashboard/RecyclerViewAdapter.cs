@@ -45,13 +45,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             }
         }
 
-        public override void OnViewDetachedFromWindow(Object holder)
-        {
-            base.OnViewDetachedFromWindow(holder);
-            var viewHolder = (ExpandableViewHolder)holder;
-            viewHolder.CardClick -= DashboardItemOnClick;
-        }
-
         private void DashboardItemOnClick(object sender, EventArgs eventArgs)
         {
             var viewHolder = (ExpandableViewHolder)sender;
