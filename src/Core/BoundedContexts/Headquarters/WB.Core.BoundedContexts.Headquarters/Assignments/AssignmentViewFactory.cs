@@ -168,7 +168,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             {
                 Id = assignment.Id,
                 QuestionnaireId = assignment.QuestionnaireId,
-                Quantity = assignment.Quantity - assignment.InterviewSummaries.Count
+                Quantity = assignment.Quantity == null ? null : assignment.Quantity - assignment.InterviewSummaries.Count
             };
 
             var assignmentIdentifyingData = assignment.IdentifyingData.ToLookup(id => id.Identity);
@@ -189,7 +189,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                     {
                         var gpsAnswer = answer.Answer as GpsAnswer;
                         assignmentApiView.LocationLatitude = gpsAnswer.Value.Latitude;
-                        assignmentApiView.LocationLongitude = gpsAnswer.Value.Latitude;
+                        assignmentApiView.LocationLongitude = gpsAnswer.Value.Longitude;
                     }
                     serializedAnswer.AnswerAsString = identifyingAnswer.AnswerAsString;
                 }
