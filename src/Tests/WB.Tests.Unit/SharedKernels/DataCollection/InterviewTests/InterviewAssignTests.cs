@@ -162,6 +162,42 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext.AssertThatContainsEvent<InterviewerAssigned>(e => e.InterviewerId == null);
         }
 
+        [Test]
+        public void Interview_in_status_InterviewerAssigned_And_interview_being_reassigned_to_different_responsible_in_one_team_As_result_interviewer_should_be_changed()
+        {
+            // arrange
+            var interview = SetupInterview();
+            interview.Apply(Create.Event.SupervisorAssigned(supervisorId, supervisorId));
+            interview.Apply(Create.Event.InterviewerAssigned(supervisorId, interviewerId, DateTime.UtcNow.AddHours(-1)));
+            interview.Apply(Create.Event.InterviewStatusChanged(InterviewStatus.InterviewerAssigned));
+            SetupEventContext();
+
+            // act
+            interview.AssignResponsible(Create.Command.AssignResponsibleCommand(supervisorId: supervisorId, interviewerId: interviewerId2, assignTime: DateTime.UtcNow));
+
+            // assert
+            eventContext.AssertThatContainsEvent<InterviewerAssigned>();
+            eventContext.AssertThatDoesNotContainEvent<SupervisorAssigned>();
+            eventContext.AssertThatDoesNotContainEvent<InterviewStatusChanged>();
+        }
+
+        [Test]
+        public void When_Interview_in_status_InterviewerAssigned_And_interview_being_moved_to_interviewer_in_other_team_As_result_supervisor_and_interviewer_should_be_changed()
+        {
+            // arrange
+            var interview = SetupInterview();
+            interview.Apply(Create.Event.SupervisorAssigned(supervisorId, supervisorId));
+            interview.Apply(Create.Event.InterviewStatusChanged(InterviewStatus.SupervisorAssigned));
+            SetupEventContext();
+
+            // act
+            interview.AssignResponsible(Create.Command.AssignResponsibleCommand(supervisorId: supervisorId2, interviewerId: interviewerId2, assignTime: DateTime.UtcNow));
+
+            // assert
+            eventContext.AssertThatContainsEvent<SupervisorAssigned>();
+            eventContext.AssertThatContainsEvent<InterviewerAssigned>();
+            eventContext.AssertThatContainsEvent<InterviewStatusChanged>(e => e.Status == InterviewStatus.InterviewerAssigned);
+        }
 
         readonly Guid interviewerId   = Guid.Parse("99999999999999999999999999999999");
         readonly Guid interviewerId2  = Guid.Parse("22222222222222222222222222222222");
