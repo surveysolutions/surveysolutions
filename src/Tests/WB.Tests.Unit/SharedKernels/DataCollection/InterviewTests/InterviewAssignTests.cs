@@ -176,9 +176,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.AssignResponsible(Create.Command.AssignResponsibleCommand(supervisorId: supervisorId, interviewerId: interviewerId2, assignTime: DateTime.UtcNow));
 
             // assert
-            eventContext.AssertThatContainsEvent<InterviewerAssigned>();
-            eventContext.AssertThatDoesNotContainEvent<SupervisorAssigned>();
-            eventContext.AssertThatDoesNotContainEvent<InterviewStatusChanged>();
+            eventContext.ShouldContainEvent<InterviewerAssigned>();
+            eventContext.ShouldNotContainEvent<SupervisorAssigned>();
+            eventContext.ShouldNotContainEvent<InterviewStatusChanged>();
         }
 
         [Test]
@@ -194,9 +194,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.AssignResponsible(Create.Command.AssignResponsibleCommand(supervisorId: supervisorId2, interviewerId: interviewerId2, assignTime: DateTime.UtcNow));
 
             // assert
-            eventContext.AssertThatContainsEvent<SupervisorAssigned>();
-            eventContext.AssertThatContainsEvent<InterviewerAssigned>();
-            eventContext.AssertThatContainsEvent<InterviewStatusChanged>(e => e.Status == InterviewStatus.InterviewerAssigned);
+            eventContext.ShouldContainEvent<SupervisorAssigned>();
+            eventContext.ShouldContainEvent<InterviewerAssigned>();
+            eventContext.ShouldContainEvent<InterviewStatusChanged>(e => e.Status == InterviewStatus.InterviewerAssigned);
         }
 
         readonly Guid interviewerId   = Guid.Parse("99999999999999999999999999999999");
