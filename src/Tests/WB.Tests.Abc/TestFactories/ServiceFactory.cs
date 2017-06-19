@@ -434,7 +434,8 @@ namespace WB.Tests.Abc.TestFactories
                 passwordHasher ?? Mock.Of<IPasswordHasher>(),
                 Mock.Of<IAssignmentsSynchronizer>(),
                 Mock.Of<IQuestionnaireDownloader>(),
-                httpStatistician ?? Mock.Of<IHttpStatistician>());
+                httpStatistician ?? Mock.Of<IHttpStatistician>(),
+                Mock.Of<IPlainStorage<AssignmentDocument, int>>());
         }
 
         public SynchronizationService SynchronizationService(IPrincipal principal = null,

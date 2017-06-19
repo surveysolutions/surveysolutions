@@ -54,32 +54,53 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         public int GetFailedSynchronizationsCount(Guid interviewerId)
             => this.dbContext.DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
                 .Count(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.StatisticsId == null);
-
+        
         public SynchronizationActivity GetSynchronizationActivity(Guid interviewerId, string deviceId)
         {
-            var limitByNumberOfDays = DateTime.UtcNow.AddDays(-7);
+            var toDay = DateTime.UtcNow;
+            var fromDay = toDay.AddDays(-6);
 
-            var dbDaysGroupedBySyncDate = this.dbContext.DeviceSyncInfo
-                .Where(syncInfo => syncInfo.InterviewerId == interviewerId && syncInfo.DeviceId == deviceId && syncInfo.SyncDate > limitByNumberOfDays)
+            var deviceInfoByPeriod = this.dbContext.DeviceSyncInfo
+                .Where(syncInfo => syncInfo.InterviewerId == interviewerId && syncInfo.DeviceId == deviceId &&
+                                   syncInfo.SyncDate > fromDay)
                 .Select(syncInfo => new DbDay
                 {
-                    Statistics = syncInfo.Statistics == null ? null : new DbDayStatistics
-                    {
-                        DownloadedQuestionnairesCount = syncInfo.Statistics.DownloadedQuestionnairesCount,
-                        DownloadedInterviewsCount = syncInfo.Statistics.DownloadedInterviewsCount,
-                        UploadedInterviewsCount = syncInfo.Statistics.UploadedInterviewsCount,
-                        NewInterviewsOnDeviceCount = syncInfo.Statistics.NewInterviewsOnDeviceCount
-                    },
+                    Statistics = syncInfo.Statistics == null
+                        ? null
+                        : new DbDayStatistics
+                        {
+                            AllAssignmentsOnDeviceCount = syncInfo.Statistics.AssignmentsOnDeviceCount,
+                            DownloadedAssignmentsCount = syncInfo.Statistics.NewAssignmentsCount,
+                            UploadedInterviewsCount = syncInfo.Statistics.UploadedInterviewsCount
+                        },
                     SyncDate = syncInfo.SyncDate
                 })
-                .OrderBy(syncInfo=> syncInfo.SyncDate)
-                .ToList()
-                .GroupBy(syncInfo => syncInfo.SyncDate.ToString("MMM dd"));
+                .OrderBy(syncInfo => syncInfo.SyncDate)
+                .ToList();
+                
 
             return new SynchronizationActivity
             {
-                Days = dbDaysGroupedBySyncDate.Select(x => ToSyncDay(x.Key, x.ToArray())).ToArray()
+                Days = this.GetDays(deviceInfoByPeriod, fromDay, toDay).ToArray()
             };
+        }
+
+        private IEnumerable<SyncDay> GetDays(List<DbDay> deviceInfoByPeriod, DateTime fromDay, DateTime toDay)
+        {
+            var syncDateFormat = "MMM dd";
+            var deviceInfoGroupedBySyncDate = deviceInfoByPeriod
+                .GroupBy(syncInfo => syncInfo.SyncDate.ToString(syncDateFormat))
+                .ToDictionary(x => x.Key, x => x);
+
+            for (int i = 0; i <= (toDay - fromDay).Days; i++)
+            {
+                var currentDay = fromDay.AddDays(i).ToString(syncDateFormat);
+                
+                yield return ToSyncDay(currentDay,
+                    deviceInfoGroupedBySyncDate.ContainsKey(currentDay)
+                        ? deviceInfoGroupedBySyncDate[currentDay].ToArray()
+                        : Array.Empty<DbDay>());
+            }
         }
 
         private static SyncDay ToSyncDay(string dayAndMonth, DbDay[] dbDays) => new SyncDay
@@ -96,16 +117,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
         private static SyncDayQuarter ToSyncDayQuarter(IEnumerable<DbDay> quarter) => new SyncDayQuarter
         {
-            NewInterviewsOnDeviceCount = quarter.Where(x => x.Statistics != null).Select(x => x.Statistics.NewInterviewsOnDeviceCount).DefaultIfEmpty().Max(),
-            DownloadedInterviewsCount = quarter.Where(x => x.Statistics != null).Sum(x => x.Statistics.DownloadedInterviewsCount),
-            DownloadedQuestionnairesCount = quarter.Where(x => x.Statistics != null).Sum(x => x.Statistics.DownloadedQuestionnairesCount),
+            DownloadedAssigmentsCount = quarter.Where(x => x.Statistics != null).Sum(x => x.Statistics.DownloadedAssignmentsCount),
+            AllAssignmentsOnDeviceCount = quarter.Where(x => x.Statistics != null).Select(x => x.Statistics.AllAssignmentsOnDeviceCount).DefaultIfEmpty().Max(),
             UploadedInterviewsCount = quarter.Where(x => x.Statistics != null).Sum(x => x.Statistics.UploadedInterviewsCount),
             FailedSynchronizationsCount = quarter.Count(x => x.Statistics == null),
             SynchronizationsWithoutChangesCount = quarter.Where(x => x.Statistics != null)
-                .Count(x =>
-                    x.Statistics.DownloadedQuestionnairesCount == 0 &&
-                    x.Statistics.DownloadedInterviewsCount == 0 &&
-                    x.Statistics.UploadedInterviewsCount == 0)
+                .Count(x =>x.Statistics.DownloadedAssignmentsCount == 0 &&
+                           x.Statistics.UploadedInterviewsCount == 0)
         };
 
         public class DbDay
@@ -116,10 +134,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
         public class DbDayStatistics
         {
-            public int DownloadedInterviewsCount { get; set; }
-            public int DownloadedQuestionnairesCount { get; set; }
             public int UploadedInterviewsCount { get; set; }
-            public int NewInterviewsOnDeviceCount { get; set; }
+            public int DownloadedAssignmentsCount { get; set; }
+            public int AllAssignmentsOnDeviceCount { get; set; }
         }
     }
 }

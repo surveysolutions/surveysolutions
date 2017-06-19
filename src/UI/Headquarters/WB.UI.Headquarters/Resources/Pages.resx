@@ -524,11 +524,8 @@
   <data name="InterviewerProfile_DeviceAndConnectionStatistics" xml:space="preserve">
     <value>Device and connection statistics</value>
   </data>
-  <data name="InterviewerProfile_Sync_Activity_Census_Desc" xml:space="preserve">
-    <value>Questionnaires update</value>
-  </data>
-  <data name="InterviewerProfile_Sync_Activity_Downloaded_Interview_Desc" xml:space="preserve">
-    <value>Downloaded assignment</value>
+  <data name="InterviewerProfile_Sync_Activity_Downloaded_Assignments_Desc" xml:space="preserve">
+    <value>Downloaded assignments</value>
   </data>
   <data name="InterviewerProfile_Sync_Activity_Uploaded_Interview_Desc" xml:space="preserve">
     <value>Uploaded to server for approval</value>
@@ -539,10 +536,7 @@
   <data name="InterviewerProfile_Sync_Activity_Failed_Sync" xml:space="preserve">
     <value>Failed synchronizations attempt</value>
   </data>
-  <data name="InterviewerProfile_Sync_Activity_Census_Timeline_Desc" xml:space="preserve">
-    <value>Questionnaires updates</value>
-  </data>
-  <data name="InterviewerProfile_Sync_Activity_Started_Interview_Desc" xml:space="preserve">
+  <data name="InterviewerProfile_Sync_Activity_All_Assignments_Desc" xml:space="preserve">
     <value>Number of unfinished or unsynchronized assignments on device every given moment</value>
   </data>
   <data name="InterviewerProfile_Sync_Activity_Title" xml:space="preserve">
