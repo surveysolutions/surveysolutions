@@ -183,15 +183,17 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             var interviewId = Guid.NewGuid();
 
-            await this.commandService.ExecuteAsync(new CreateInterviewOnClientCommand(
+            await this.commandService.ExecuteAsync(new CreateInterviewWithPreloadedData(
                 interviewId: interviewId,
                 userId: this.principal.CurrentUserIdentity.UserId,
-                questionnaireIdentity: questionnaireIdentity,
+                questionnaireId: questionnaireIdentity.QuestionnaireId,
+                version: questionnaireIdentity.Version,
+                answers: new List<InterviewAnswer>(), 
                 answersTime: DateTime.UtcNow,
                 supervisorId: Guid.NewGuid(),
+                interviewerId: null,
                 interviewKey: null,
-                assignmentId: null, 
-                answersToIdentifyingQuestions: new List<InterviewAnswer>()));
+                assignmentId: null));
 
             return interviewId;
         }

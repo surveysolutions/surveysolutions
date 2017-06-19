@@ -62,8 +62,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext = null;
         };
 
-        It should_raise_InterviewFromPreloadedDataCreated_event = () =>
-                eventContext.ShouldContainEvent<InterviewFromPreloadedDataCreated>();
+        It should_raise_InterviewCreated_event = () =>
+                eventContext.ShouldContainEvent<InterviewCreated>();
 
         It should_raise_valid_SingleOptionQuestionAnswered_event = () =>
             eventContext.ShouldContainEvent<SingleOptionQuestionAnswered>(@event

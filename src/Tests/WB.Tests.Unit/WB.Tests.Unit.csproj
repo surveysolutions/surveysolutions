@@ -1182,7 +1182,6 @@
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_building_answer_from_string_array_for_gps_qustion.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\when_HeaderStructureForLevel_has_illegal_level_labels.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SurveyManagementInterviewCommandValidatorTests\SurveyManagementInterviewCommandValidatorTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\SurveyManagementInterviewCommandValidatorTests\when_interview_is_creating_but_max_number_of_allowed_interviews_is_reached.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_synchronizing_created_on_client_interview_events.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SurveyManagementInterviewCommandValidatorTests\when_synchronizing_created_on_client_interview_events_but_limit_have_been_reached.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_synchronizing_deleted_interview_events.cs" />

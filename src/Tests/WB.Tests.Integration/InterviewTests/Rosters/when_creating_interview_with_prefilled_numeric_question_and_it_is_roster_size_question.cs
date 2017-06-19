@@ -9,6 +9,7 @@ using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
 {
@@ -35,11 +36,10 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 using (var eventContext = new EventContext())
                 {
-                    var interview = SetupStatefullInterview(questionnaireDocument, 
-                        answersOnPrefilledQuestions: new Dictionary<Guid, AbstractAnswer>
-                        {
-                            { numericQuestionId, NumericIntegerAnswer.FromInt(3) }
-                        });
+                    SetupStatefullInterview(questionnaireDocument, answers: new List<InterviewAnswer>
+                    {
+                        Create.Entity.InterviewAnswer(Create.Identity(numericQuestionId), NumericIntegerAnswer.FromInt(3))
+                    });
 
                     result.AnyNumericRosterWasCreated = eventContext.AnyEvent<RosterInstancesAdded>(x => x.Instances.Any(r => r.GroupId == roster1Id));
 
