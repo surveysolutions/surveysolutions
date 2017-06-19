@@ -7,7 +7,8 @@
         <item name="android:background">@drawable/screen_button</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
         <item name="android:paddingRight">16dp</item>
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingTop">18dp</item>
@@ -18,6 +19,22 @@
         <item name="android:letterSpacing">0.1</item>
     </style>
 
+    <style name="Area_Screen_Button_Bordered">
+        <item name="android:background">@drawable/screen_button</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingTop">18dp</item>
+        <item name="android:paddingBottom">18dp</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.1</item>
+    </style>
+        
     <style name="Progress_Indicator" parent="android:Widget.ProgressBar.Horizontal">
         <item name="android:focusable">false</item>
         <item name="android:layout_height">2dp</item>
@@ -25,4 +42,45 @@
         <item name="android:keepScreenOn">false</item>
         <item name="android:indeterminateDrawable">@drawable/progress_bar</item>
     </style>
+
+    <style name="Area_LocationButton">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:background">@drawable/locator_icon</item>
+    </style>
+
+    <style name="Area_CompassButton">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:background">@drawable/compass_icon</item>
+    </style>
+
+    <style name="Area_ZoomMapInButton">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:background">@drawable/plus_icon</item>
+    </style>
+    <style name="Area_ZoomMapOutButton">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:background">@drawable/minus_icon</item>
+    </style>
+
+    <style name="Area_UpdateMapsButton">
+        <item name="android:layout_width">36dp</item>
+        <item name="android:layout_height">36dp</item>
+        <item name="android:layout_gravity">left</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:background">@drawable/sync_maps</item>
+    </style>
+
+    
 </resources>

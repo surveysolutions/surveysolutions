@@ -62,6 +62,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Area:.
+        /// </summary>
+        public static string AreaMap_AreaFormat {
+            get {
+                return ResourceManager.GetString("AreaMap_AreaFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string AreaMap_Cancel {
+            get {
+                return ResourceManager.GetString("AreaMap_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit.
         /// </summary>
         public static string AreaMap_Edit {
@@ -71,11 +89,29 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Perimeter:.
+        /// </summary>
+        public static string AreaMap_LengthFormat {
+            get {
+                return ResourceManager.GetString("AreaMap_LengthFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Location.
         /// </summary>
         public static string AreaMap_Location {
             get {
                 return ResourceManager.GetString("AreaMap_Location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Map.
+        /// </summary>
+        public static string AreaMap_MapTitle {
+            get {
+                return ResourceManager.GetString("AreaMap_MapTitle", resourceCulture);
             }
         }
         
