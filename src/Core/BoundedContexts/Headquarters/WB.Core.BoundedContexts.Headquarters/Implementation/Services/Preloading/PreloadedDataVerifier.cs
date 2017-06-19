@@ -102,11 +102,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             if (this.ShouldVerificationBeContinued(errors))
                 errors.AddRange(this.Verifier(this.ColumnDuplications)(datas, preloadedDataService));
 
-            if (this.ShouldVerificationBeContinued(errors))
-                errors.AddRange(this.Verifier(this.ColumnMappedToNonIdentifyingScope, "PL0037",
-                    PreloadingVerificationMessages.PL0037_ColumnIsNotIdentifying, PreloadedDataVerificationReferenceType.Column)
-                    (datas, preloadedDataService));
-
             status.Errors = errors.Count > 100 ? errors.Take(100).ToList() : errors;
             status.EntitiesCount = datas.FirstOrDefault()?.Content.Length ?? 0;
             if (!status.Errors.Any())
@@ -241,24 +236,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                     
                     this.ErrorsByResposibleName
                 };
-            }
-        }
-
-        private IEnumerable<string> ColumnMappedToNonIdentifyingScope(PreloadedDataByFile levelData,
-            IPreloadedDataService preloadedDataService)
-        {
-            var levelExportStructure = preloadedDataService.FindLevelInPreloadedData(levelData.FileName);
-            if (levelExportStructure == null)
-                yield break;
-            var referenceNames = levelExportStructure.ReferencedNames ?? new string[0];
-            var listOfParentIdColumns = this.GetListOfParentIdColumns(levelData, levelExportStructure).ToArray();
-            var listOfPermittedExtraColumns = this.GetListOfPermittedExtraColumnsForLevel(levelExportStructure).ToArray();
-            var listOfServiceVariableNames = ServiceColumns.SystemVariables.Select(x => x.VariableExportColumnName).ToList();
-
-            foreach (var columnName in levelData.Header)
-            {
-                if (levelExportStructure.HeaderItems.Values.Any(headerItem => !headerItem.IsIdentifyingQuestion && headerItem.ColumnNames.Contains(columnName)))
-                    yield return columnName;
             }
         }
 
