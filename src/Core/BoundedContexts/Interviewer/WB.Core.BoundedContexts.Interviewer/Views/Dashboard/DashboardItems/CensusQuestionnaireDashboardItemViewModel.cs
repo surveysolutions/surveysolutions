@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
@@ -9,6 +10,7 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -67,8 +69,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             var interviewId = Guid.NewGuid();
             var interviewerIdentity = this.principal.CurrentUserIdentity;
 
-            var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
-                interviewerIdentity.UserId, this.questionnaireIdentity, DateTime.UtcNow,
+            var createInterviewOnClientCommand = new CreateInterviewWithPreloadedData(interviewId,
+                interviewerIdentity.UserId, this.questionnaireIdentity.QuestionnaireId, this.questionnaireIdentity.Version, new List<InterviewAnswer>(), DateTime.UtcNow,
                 interviewerIdentity.SupervisorId,
                 null, null, null);
             await this.commandService.ExecuteAsync(createInterviewOnClientCommand);

@@ -54,13 +54,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 interviewExpressionStatePrototypeProvider: interviewExpressionStatePrototypeProvider,
                 shouldBeInitialized: false);
 
-            command = new CreateInterviewOnClientCommand(Guid.Empty, userId, questionnaireIdentity, DateTime.Now,
+            command = Create.Command.CreateInterviewOnClientCommand(Guid.Empty, userId, questionnaireIdentity, DateTime.Now,
                 responsibleSupervisorId, null, null, null);
 
         };
 
         Because of = () =>
-            interview.CreateInterviewOnClient(command);
+            interview.CreateInterviewWithPreloadedData(command);
 
         It should_raise_InterviewCreated_event = () =>
             eventContext.ShouldContainEvent<InterviewOnClientCreated>();
@@ -90,6 +90,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid variableId;
         private static StatefulInterview interview;
         private static QuestionnaireIdentity questionnaireIdentity;
-        private static CreateInterviewOnClientCommand command;
+        private static CreateInterviewWithPreloadedData command;
     }
 }

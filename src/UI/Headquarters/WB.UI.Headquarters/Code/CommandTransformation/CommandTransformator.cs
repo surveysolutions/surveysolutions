@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -56,23 +57,31 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
             return command;
         }
 
-        private CreateInterviewCommand GetCreateInterviewCommand(CreateInterviewControllerCommand command)
+        private CreateInterviewWithPreloadedData GetCreateInterviewCommand(CreateInterviewControllerCommand command)
         {
-            var answers = command.AnswersToFeaturedQuestions
+            List<InterviewAnswer> answers = command.AnswersToFeaturedQuestions
                 .Select(ParseQuestionAnswer)
-                .ToDictionary(a => a.Key, a => a.Value);
+                .Select(x => new InterviewAnswer
+                {
+                    Identity = new Identity(x.Key, null),
+                    Answer = x.Value
+                })
+                .ToList();
 
             Guid interviewId = Guid.NewGuid();
             var interviewKey = ServiceLocator.Current.GetInstance<IInterviewUniqueKeyGenerator>().Get();
 
-            var resultCommand = new CreateInterviewCommand(interviewId,
-                                                           authorizedUser.Id,
-                                                           command.QuestionnaireId,
-                                                           answers,
-                                                           DateTime.UtcNow,
-                                                           command.SupervisorId, 
-                                                           command.QuestionnaireVersion,
-                                                           interviewKey);
+            var resultCommand = new CreateInterviewWithPreloadedData(interviewId,
+                authorizedUser.Id,
+                command.QuestionnaireId,
+                command.QuestionnaireVersion,
+                answers,
+                DateTime.UtcNow,
+                command.SupervisorId,
+                null,
+                interviewKey,
+                null);
+
             return resultCommand;
         }
 

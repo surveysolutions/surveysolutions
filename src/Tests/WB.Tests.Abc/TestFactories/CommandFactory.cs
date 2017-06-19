@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
@@ -164,21 +163,24 @@ namespace WB.Tests.Abc.TestFactories
                 newQuestionnaireVersion??42,
                 Guid.NewGuid());
 
-        public CreateInterviewCommand CreateInterviewCommand(Guid? questionnaireId = null, 
+        public CreateInterviewWithPreloadedData CreateInterviewCommand(Guid? questionnaireId = null, 
             long? questionnaireVersion = null,
             Guid? responsibleSupervisorId = null, 
-            Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions = null, 
+            List<InterviewAnswer> answersToFeaturedQuestions = null, 
             Guid? userId = null,
             DateTime? answersTime = null)
         {
-            return new CreateInterviewCommand(Guid.NewGuid(),
+            return new CreateInterviewWithPreloadedData(
+                Guid.NewGuid(),
                 userId ?? Guid.NewGuid(),
                 questionnaireId ?? Guid.NewGuid(),
+                questionnaireVersion ?? 1,
                 answersToFeaturedQuestions, 
                 answersTime ?? DateTime.Now,
                 responsibleSupervisorId ?? Guid.NewGuid(),
-                questionnaireVersion ?? 1, 
-                Create.Entity.InterviewKey());
+                null,
+                Create.Entity.InterviewKey(),
+                null);
         }
 
         public CreateInterviewControllerCommand CreateInterviewControllerCommand()
@@ -238,6 +240,20 @@ namespace WB.Tests.Abc.TestFactories
             return new SwitchTranslation(Guid.Empty, language, Guid.NewGuid());
         }
 
+        public CreateInterviewWithPreloadedData CreateInterviewWithPreloadedData(Guid interviewId,
+            Guid userId,
+            Guid questionnaireId,
+            long version,
+            List<InterviewAnswer> answers,
+            DateTime answersTime,
+            Guid supervisorId,
+            Guid? interviewerId,
+            InterviewKey interviewKey,
+            int? assignmentId)
+        {
+            return new CreateInterviewWithPreloadedData(interviewId, userId, questionnaireId, version, answers, answersTime, supervisorId, interviewerId, interviewKey, assignmentId);
+        }
+
         public CreateInterviewWithPreloadedData CreateInterviewWithPreloadedData(PreloadedLevelDto[] data = null)
         {
             return new CreateInterviewWithPreloadedData(Guid.NewGuid(), 
@@ -263,7 +279,7 @@ namespace WB.Tests.Abc.TestFactories
                 sycnhronizedInterview: synchronizationDto);
         }
 
-        public CreateInterviewOnClientCommand CreateInterviewOnClientCommand(Guid? interviewId = null,
+        public CreateInterviewWithPreloadedData CreateInterviewOnClientCommand(Guid? interviewId = null,
             Guid? userId = null,
             QuestionnaireIdentity questionnaireIdentity = null,
             DateTime? answersTime = null, 
@@ -272,14 +288,16 @@ namespace WB.Tests.Abc.TestFactories
             int? assignmentId = null,
             List<InterviewAnswer> answersToIdentifyingQuestions = null)
         {
-            return new CreateInterviewOnClientCommand(interviewId ?? Guid.NewGuid(),
+            return new CreateInterviewWithPreloadedData(interviewId ?? Guid.NewGuid(),
                 userId ?? Guid.NewGuid(), 
-                questionnaireIdentity ?? new QuestionnaireIdentity(Guid.NewGuid(), 1), 
+                questionnaireIdentity?.QuestionnaireId ?? Guid.NewGuid(),
+                questionnaireIdentity?.Version ?? 1,
+                answersToIdentifyingQuestions ?? new List<InterviewAnswer>(),
                 answersTime ?? DateTime.UtcNow,
                 supervisorId ?? Guid.NewGuid(),
+                userId,
                 interviewKey, 
-                assignmentId, 
-                answersToIdentifyingQuestions ?? new List<InterviewAnswer>());
+                assignmentId);
         }
 
         public AssignResponsibleCommand AssignResponsibleCommand(Guid? interviewId = null, 
