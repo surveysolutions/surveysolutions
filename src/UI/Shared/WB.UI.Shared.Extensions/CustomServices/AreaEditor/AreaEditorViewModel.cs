@@ -123,8 +123,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             {
                 this.Geometry =  Geometry.FromJson(geometry);
 
-                this.GeometryArea = GeometryEngine.AreaGeodetic(this.Geometry);
-                this.GeometryLength = GeometryEngine.LengthGeodetic(this.Geometry);
+                this.GeometryArea = GeometryEngine.AreaGeodetic(this.Geometry).ToString("#.##");
+                this.GeometryLength = GeometryEngine.LengthGeodetic(this.Geometry).ToString("#.##");
             }
         }
 
@@ -244,8 +244,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     var geometry = args.NewGeometry;
                     try
                     {
-                        this.GeometryArea = GeometryEngine.AreaGeodetic(geometry);
-                        this.GeometryLength = GeometryEngine.LengthGeodetic(geometry);
+                        this.GeometryArea = GeometryEngine.AreaGeodetic(geometry).ToString("#.##");
+                        this.GeometryLength = GeometryEngine.LengthGeodetic(geometry).ToString("#.##");
                     }
                     catch (Exception e)
                     {
@@ -292,10 +292,23 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 buffer.Read(data, 0, data.Length);
                 */
 
+                //project to geocoordinates
+                SpatialReference reference = new SpatialReference(4326);
+                var projectedGeometry = GeometryEngine.Project(result, reference);
+                var projectedPolygon = projectedGeometry as Polygon;
+
+                string coordinates = string.Empty; 
+                if (projectedPolygon != null)
+                {
+                    var tco = projectedPolygon.Parts.Select(x => $"{x.StartPoint.X},{x.StartPoint.Y}");
+                    coordinates = string.Join(";", tco);
+                }
+
                 var resultArea = new AreaEditorResult()
                 {
                     Geometry = result?.ToJson(),
                     MapName = this.SelectedMap,
+                    Coordinates = coordinates, 
                     Area = GeometryEngine.AreaGeodetic(result),
                     Length = GeometryEngine.LengthGeodetic(result),
                     DistanceToEditor = dist,
@@ -310,15 +323,15 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             }
         });
 
-        private double? geometryArea = 0;
-        public double? GeometryArea
+        private string geometryArea = "0";
+        public string GeometryArea
         {
             get => this.geometryArea;
             set => this.RaiseAndSetIfChanged(ref this.geometryArea, value);
         }
 
-        private double? geometryLength = 0;
-        public double? GeometryLength
+        private string geometryLength ="0";
+        public string GeometryLength
         {
             get => this.geometryLength;
             set => this.RaiseAndSetIfChanged(ref this.geometryLength, value);
