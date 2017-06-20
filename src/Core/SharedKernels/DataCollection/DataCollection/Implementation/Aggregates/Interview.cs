@@ -1364,7 +1364,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void CreateInterview(CreateInterview command)
         {
-            this.QuestionnaireIdentity = new QuestionnaireIdentity(command.QuestionnaireId, command.Version);
+            this.QuestionnaireIdentity = command.QuestionnaireId;
             InterviewTree changedInterviewTree = this.Tree.Clone();
 
             this.PutAnswers(changedInterviewTree, command.Answers, command.AssignmentId);

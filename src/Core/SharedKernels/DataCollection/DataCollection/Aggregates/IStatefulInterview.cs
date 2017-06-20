@@ -28,7 +28,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool HasErrors { get; }
         bool IsCompleted { get; }
+
+        [Obsolete("Replaced with HasEditableIdentifyingQuestions")]
         bool CreatedOnClient { get; }
+
+        bool HasEditableIdentifyingQuestions { get; }
 
         InterviewTreeGroup GetGroup(Identity identity);
         InterviewTreeRoster GetRoster(Identity identity);
