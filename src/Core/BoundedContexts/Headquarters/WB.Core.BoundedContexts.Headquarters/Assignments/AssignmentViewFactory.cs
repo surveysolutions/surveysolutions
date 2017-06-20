@@ -185,15 +185,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
                 if (identifyingAnswer != null)
                 {
-                    if (answer.Answer is GpsAnswer)
+                    if (answer.Answer is GpsAnswer gpsAnswer)
                     {
-                        var gpsAnswer = answer.Answer as GpsAnswer;
                         assignmentApiView.LocationLatitude = gpsAnswer.Value.Latitude;
                         assignmentApiView.LocationLongitude = gpsAnswer.Value.Longitude;
+                        assignmentApiView.LocationQuestionId = identifyingAnswer.Identity.Id;
                     }
+
                     serializedAnswer.AnswerAsString = identifyingAnswer.AnswerAsString;
                 }
-
+                
                 assignmentApiView.Answers.Add(serializedAnswer);
             }
 

@@ -1579,12 +1579,21 @@ namespace WB.Tests.Abc.TestFactories
                 _entity = entity;
             }
 
-            public AssignmentApiDocumentBuilder WithAnswer(Identity questionId, string answer, string serializedAnswer = null, AbstractAnswer answerAsObj = null)
+            public AssignmentApiDocumentBuilder WithAnswer(Identity questionId, string answer, string serializedAnswer = null, 
+                AbstractAnswer answerAsObj = null, double? latitude = null, double? longtitude = null)
             {
                 this._entity.Answers.Add(new AssignmentApiDocument.InterviewSerializedAnswer { AnswerAsString = answer,
                     Identity = questionId,
                     SerializedAnswer = serializedAnswer ?? (answerAsObj == null ? null :serializer.Serialize(answerAsObj))
                 });
+
+                if (latitude != null && longtitude != null)
+                {
+                    this._entity.LocationQuestionId = questionId.Id;
+                    this._entity.LocationLatitude = latitude;
+                    this._entity.LocationLongitude = longtitude;
+                }
+
                 return this;
             }
 
