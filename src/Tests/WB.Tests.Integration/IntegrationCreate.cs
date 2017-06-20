@@ -117,17 +117,14 @@ namespace WB.Tests.Integration
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
                 Create.Service.SubstitionTextFactory());
 
-            interview.CreateInterviewWithPreloadedData(Create.Command.CreateInterviewWithPreloadedData(
+            interview.CreateInterviewWithPreloadedData(Create.Command.CreateInterview(
                 interviewId: interview.EventSourceId, 
                 userId: new Guid("F111F111F111F111F111F111F111F111"),
                 questionnaireId: questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
                 version: 1,
                 answers:new List<InterviewAnswer>(),
                 answersTime: new DateTime(2012, 12, 20),
-                supervisorId: new Guid("D222D222D222D222D222D222D222D222"), 
-                interviewerId: null,
-                interviewKey: null, 
-                assignmentId: null));
+                supervisorId: new Guid("D222D222D222D222D222D222D222D222")));
 
             return interview;
         }
@@ -142,7 +139,7 @@ namespace WB.Tests.Integration
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
                 Create.Service.SubstitionTextFactory());
           
-            interview.CreateInterviewWithPreloadedData(new CreateInterviewWithPreloadedData(
+            interview.CreateInterviewWithPreloadedData(Create.Command.CreateInterview(
                 interviewId: Guid.NewGuid(),
                 userId: Guid.NewGuid(),
                 questionnaireId: questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
@@ -151,8 +148,7 @@ namespace WB.Tests.Integration
                 answersTime: new DateTime(2012, 12, 20),
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),
-                interviewKey: Create.Entity.InterviewKey(),
-                assignmentId: null));
+                interviewKey: Create.Entity.InterviewKey()));
 
             return interview;
         }
@@ -182,7 +178,7 @@ namespace WB.Tests.Integration
                 expressionProcessorStatePrototypeProvider ?? Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
                 Create.Service.SubstitionTextFactory());
 
-            interview.CreateInterviewWithPreloadedData(new CreateInterviewWithPreloadedData(
+            interview.CreateInterviewWithPreloadedData(Create.Command.CreateInterview(
                 interviewId: interview.EventSourceId,
                 userId: new Guid("F111F111F111F111F111F111F111F111"),
                 questionnaireId: questionnaireIdentity?.QuestionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
@@ -191,8 +187,7 @@ namespace WB.Tests.Integration
                 answersTime: new DateTime(2012, 12, 20),
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),
-                interviewKey: Create.Entity.InterviewKey(),
-                assignmentId: null));
+                interviewKey: Create.Entity.InterviewKey()));
 
           return interview;
         }

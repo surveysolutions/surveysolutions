@@ -177,7 +177,6 @@
     <Compile Include="Commands\Interview\AnswerTextListQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerQRBarcodeQuestionCommand.cs" />
     <Compile Include="Commands\Interview\CancelInterviewByHqSynchronizationCommand.cs" />
-    <Compile Include="Commands\Interview\CreateInterviewOnClientCommand.cs" />
     <Compile Include="Commands\Interview\CreateInterviewWithPreloadedData.cs" />
     <Compile Include="Commands\Interview\HardDeleteInterview.cs" />
     <Compile Include="Commands\Interview\HqApproveInterviewCommand.cs" />
@@ -250,7 +249,6 @@
     <Compile Include="Commands\Interview\Base\AnswerQuestionCommand.cs" />
     <Compile Include="Commands\Interview\Base\QuestionCommand.cs" />
     <Compile Include="Commands\Interview\CommentAnswerCommand.cs" />
-    <Compile Include="Commands\Interview\CreateInterviewCommand.cs" />
     <Compile Include="Commands\Interview\Base\InterviewCommand.cs" />
     <Compile Include="Commands\Interview\DeleteInterviewCommand.cs" />
     <Compile Include="Commands\Interview\CompleteInterviewCommand.cs" />
