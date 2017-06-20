@@ -127,7 +127,7 @@ namespace WB.UI.Headquarters.Controllers
                                                         Answer = this.identifyingAnswerConverter.GetAbstractAnswer(questionnaire, x.Identity.Id, x.Answer)
                                                     });
 
-            var createInterviewCommand = new CreateInterviewWithPreloadedData(
+            var createInterviewCommand = new CreateInterview(
                 interviewId,
                 interviewer.PublicKey, 
                 assignment.QuestionnaireId.QuestionnaireId, 

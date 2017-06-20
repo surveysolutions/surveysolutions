@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            interview.CreateInterviewWithPreloadedData(command);
+            interview.CreateInterview(command);
 
         It should_call_ProcessValidationExpressions_once = () =>
             expressionState.Received(1).ProcessValidationExpressions();
@@ -66,6 +66,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid responsibleSupervisorId;
         private static Interview interview;
         private static ILatestInterviewExpressionState expressionState;
-        private static CreateInterviewWithPreloadedData command;
+        private static CreateInterview command;
     }
 }

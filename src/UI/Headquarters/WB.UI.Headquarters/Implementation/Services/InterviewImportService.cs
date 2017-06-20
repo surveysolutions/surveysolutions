@@ -108,7 +108,7 @@ namespace WB.UI.Headquarters.Implementation.Services
                 bool isSupportAssignments = questionnaireBrowseItem.AllowAssignments;
                 if (!isSupportAssignments)
                 {
-                    this.transactionManagerProvider.GetTransactionManager().ExecuteInQueryTransaction(() => this.plainTransactionManager.ExecuteInPlainTransaction(() => this.commandService.Execute(new CreateInterviewWithPreloadedData(Guid.NewGuid(), headquartersId, questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, supervisorId: responsibleSupervisorId, interviewerId: responsibleInterviewerId, answersTime: DateTime.UtcNow, answers: answers, interviewKey: this.interviewKeyGenerator.Get(), assignmentId: assignment.Id))));
+                    this.transactionManagerProvider.GetTransactionManager().ExecuteInQueryTransaction(() => this.plainTransactionManager.ExecuteInPlainTransaction(() => this.commandService.Execute(new CreateInterview(Guid.NewGuid(), headquartersId, questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, supervisorId: responsibleSupervisorId, interviewerId: responsibleInterviewerId, answersTime: DateTime.UtcNow, answers: answers, interviewKey: this.interviewKeyGenerator.Get(), assignmentId: assignment.Id))));
                 }
             }
 

@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            interview.CreateInterviewWithPreloadedData(command);
+            interview.CreateInterview(command);
 
         It should_raise_RosterInstancesAdded_event_with_3_instances = () =>
             eventContext.GetEvent<RosterInstancesAdded>().Instances.Count().ShouldEqual(3);
@@ -66,6 +66,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid supervisorId;
         private static Guid fixedRosterId;
         private static Interview interview;
-        private static CreateInterviewWithPreloadedData command;
+        private static CreateInterview command;
     }
 }

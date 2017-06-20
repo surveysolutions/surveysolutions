@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
-    public class CreateInterviewWithPreloadedData : InterviewCommand
+    public class CreateInterview : InterviewCommand
     {
-        public CreateInterviewWithPreloadedData(Guid interviewId, 
+        public CreateInterview(Guid interviewId, 
             Guid userId, 
             Guid questionnaireId, 
             long version,
@@ -18,11 +19,21 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             Guid? interviewerId, 
             InterviewKey interviewKey,
             int? assignmentId)
+            : this(interviewId, userId, new QuestionnaireIdentity(questionnaireId, version),answers, answersTime, supervisorId, interviewerId, interviewKey, assignmentId){}
+
+        public CreateInterview(Guid interviewId,
+            Guid userId,
+            QuestionnaireIdentity questionnaireId,
+            List<InterviewAnswer> answers,
+            DateTime answersTime,
+            Guid supervisorId,
+            Guid? interviewerId,
+            InterviewKey interviewKey,
+            int? assignmentId)
             : base(interviewId, userId)
         {
             this.Id = interviewId;
             this.QuestionnaireId = questionnaireId;
-            this.Version = version;
             this.Answers = answers;
             this.AnswersTime = answersTime;
             this.SupervisorId = supervisorId;
@@ -32,8 +43,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
         }
 
         public Guid Id { get; private set; }
-        public Guid QuestionnaireId { get; private set; }
-        public long Version { get; private set; }
+        public QuestionnaireIdentity QuestionnaireId { get; private set; }
         public List<InterviewAnswer> Answers { get; private set; }
         public Guid SupervisorId { get; private set; }
         public Guid? InterviewerId { get; private set; }

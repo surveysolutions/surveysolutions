@@ -57,7 +57,7 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
             return command;
         }
 
-        private CreateInterviewWithPreloadedData GetCreateInterviewCommand(CreateInterviewControllerCommand command)
+        private CreateInterview GetCreateInterviewCommand(CreateInterviewControllerCommand command)
         {
             List<InterviewAnswer> answers = command.AnswersToFeaturedQuestions
                 .Select(ParseQuestionAnswer)
@@ -71,7 +71,7 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
             Guid interviewId = Guid.NewGuid();
             var interviewKey = ServiceLocator.Current.GetInstance<IInterviewUniqueKeyGenerator>().Get();
 
-            var resultCommand = new CreateInterviewWithPreloadedData(interviewId,
+            var resultCommand = new CreateInterview(interviewId,
                 authorizedUser.Id,
                 command.QuestionnaireId,
                 command.QuestionnaireVersion,

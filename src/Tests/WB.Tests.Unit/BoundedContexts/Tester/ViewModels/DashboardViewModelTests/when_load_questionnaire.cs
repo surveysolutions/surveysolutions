@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 Times.Once);
 
         It should_be_executed_CreateInterviewCommand = () => 
-            mockOfCommandService.Verify(_ => _.ExecuteAsync(Moq.It.IsAny<CreateInterviewWithPreloadedData>(), null, Moq.It.IsAny<CancellationToken>()), Times.Once);
+            mockOfCommandService.Verify(_ => _.ExecuteAsync(Moq.It.IsAny<CreateInterview>(), null, Moq.It.IsAny<CancellationToken>()), Times.Once);
 
         It should_be_navigated_to_prefilled_questions_view_model = () => 
             mockOfViewModelNavigationService.Verify(_ => _.NavigateToPrefilledQuestions(Moq.It.IsAny<string>()), Times.Once);
