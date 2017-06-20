@@ -1198,44 +1198,44 @@ namespace WB.UI.Shared.Extensions
 		public partial class Color
 		{
 			
-			// aapt resource value: 0x7f0d0097
-			public static int abc_background_cache_hint_selector_material_dark = 2131558551;
-			
 			// aapt resource value: 0x7f0d0098
-			public static int abc_background_cache_hint_selector_material_light = 2131558552;
+			public static int abc_background_cache_hint_selector_material_dark = 2131558552;
 			
 			// aapt resource value: 0x7f0d0099
-			public static int abc_btn_colored_borderless_text_material = 2131558553;
+			public static int abc_background_cache_hint_selector_material_light = 2131558553;
 			
 			// aapt resource value: 0x7f0d009a
-			public static int abc_btn_colored_text_material = 2131558554;
+			public static int abc_btn_colored_borderless_text_material = 2131558554;
 			
 			// aapt resource value: 0x7f0d009b
-			public static int abc_color_highlight_material = 2131558555;
+			public static int abc_btn_colored_text_material = 2131558555;
 			
 			// aapt resource value: 0x7f0d009c
-			public static int abc_hint_foreground_material_dark = 2131558556;
+			public static int abc_color_highlight_material = 2131558556;
 			
 			// aapt resource value: 0x7f0d009d
-			public static int abc_hint_foreground_material_light = 2131558557;
+			public static int abc_hint_foreground_material_dark = 2131558557;
+			
+			// aapt resource value: 0x7f0d009e
+			public static int abc_hint_foreground_material_light = 2131558558;
 			
 			// aapt resource value: 0x7f0d0001
 			public static int abc_input_method_navigation_guard = 2131558401;
 			
-			// aapt resource value: 0x7f0d009e
-			public static int abc_primary_text_disable_only_material_dark = 2131558558;
-			
 			// aapt resource value: 0x7f0d009f
-			public static int abc_primary_text_disable_only_material_light = 2131558559;
+			public static int abc_primary_text_disable_only_material_dark = 2131558559;
 			
 			// aapt resource value: 0x7f0d00a0
-			public static int abc_primary_text_material_dark = 2131558560;
+			public static int abc_primary_text_disable_only_material_light = 2131558560;
 			
 			// aapt resource value: 0x7f0d00a1
-			public static int abc_primary_text_material_light = 2131558561;
+			public static int abc_primary_text_material_dark = 2131558561;
 			
 			// aapt resource value: 0x7f0d00a2
-			public static int abc_search_url_text = 2131558562;
+			public static int abc_primary_text_material_light = 2131558562;
+			
+			// aapt resource value: 0x7f0d00a3
+			public static int abc_search_url_text = 2131558563;
 			
 			// aapt resource value: 0x7f0d0002
 			public static int abc_search_url_text_normal = 2131558402;
@@ -1246,32 +1246,32 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0d0004
 			public static int abc_search_url_text_selected = 2131558404;
 			
-			// aapt resource value: 0x7f0d00a3
-			public static int abc_secondary_text_material_dark = 2131558563;
-			
 			// aapt resource value: 0x7f0d00a4
-			public static int abc_secondary_text_material_light = 2131558564;
+			public static int abc_secondary_text_material_dark = 2131558564;
 			
 			// aapt resource value: 0x7f0d00a5
-			public static int abc_tint_btn_checkable = 2131558565;
+			public static int abc_secondary_text_material_light = 2131558565;
 			
 			// aapt resource value: 0x7f0d00a6
-			public static int abc_tint_default = 2131558566;
+			public static int abc_tint_btn_checkable = 2131558566;
 			
 			// aapt resource value: 0x7f0d00a7
-			public static int abc_tint_edittext = 2131558567;
+			public static int abc_tint_default = 2131558567;
 			
 			// aapt resource value: 0x7f0d00a8
-			public static int abc_tint_seek_thumb = 2131558568;
+			public static int abc_tint_edittext = 2131558568;
 			
 			// aapt resource value: 0x7f0d00a9
-			public static int abc_tint_spinner = 2131558569;
+			public static int abc_tint_seek_thumb = 2131558569;
 			
 			// aapt resource value: 0x7f0d00aa
-			public static int abc_tint_switch_thumb = 2131558570;
+			public static int abc_tint_spinner = 2131558570;
 			
 			// aapt resource value: 0x7f0d00ab
-			public static int abc_tint_switch_track = 2131558571;
+			public static int abc_tint_switch_thumb = 2131558571;
+			
+			// aapt resource value: 0x7f0d00ac
+			public static int abc_tint_switch_track = 2131558572;
 			
 			// aapt resource value: 0x7f0d0005
 			public static int accent_material_dark = 2131558405;
@@ -1294,8 +1294,8 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0d000a
 			public static int background_material_light = 2131558410;
 			
-			// aapt resource value: 0x7f0d00ac
-			public static int bread_crumb_transparency = 2131558572;
+			// aapt resource value: 0x7f0d00ad
+			public static int bread_crumb_transparency = 2131558573;
 			
 			// aapt resource value: 0x7f0d000b
 			public static int bright_foreground_disabled_material_dark = 2131558411;
@@ -1411,8 +1411,8 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0d003b
 			public static int design_bottom_navigation_shadow_color = 2131558459;
 			
-			// aapt resource value: 0x7f0d00ad
-			public static int design_error = 2131558573;
+			// aapt resource value: 0x7f0d00ae
+			public static int design_error = 2131558574;
 			
 			// aapt resource value: 0x7f0d003c
 			public static int design_fab_shadow_end_color = 2131558460;
@@ -1444,8 +1444,8 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0d0045
 			public static int design_textinput_error_color_light = 2131558469;
 			
-			// aapt resource value: 0x7f0d00ae
-			public static int design_tint_password_toggle = 2131558574;
+			// aapt resource value: 0x7f0d00af
+			public static int design_tint_password_toggle = 2131558575;
 			
 			// aapt resource value: 0x7f0d0013
 			public static int dim_foreground_disabled_material_dark = 2131558419;
@@ -1645,8 +1645,8 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0d0067
 			public static int question_input_button_unpressed = 2131558503;
 			
-			// aapt resource value: 0x7f0d00af
-			public static int question_title_text = 2131558575;
+			// aapt resource value: 0x7f0d00b0
+			public static int question_title_text = 2131558576;
 			
 			// aapt resource value: 0x7f0d008e
 			public static int readonly_question_background = 2131558542;
@@ -1668,6 +1668,9 @@ namespace WB.UI.Shared.Extensions
 			
 			// aapt resource value: 0x7f0d0093
 			public static int screen_button = 2131558547;
+			
+			// aapt resource value: 0x7f0d0097
+			public static int screen_button_border = 2131558551;
 			
 			// aapt resource value: 0x7f0d0096
 			public static int screen_button_bordered = 2131558550;
@@ -1711,8 +1714,8 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0d0070
 			public static int sections_list_text_color = 2131558512;
 			
-			// aapt resource value: 0x7f0d00b0
-			public static int show_instructions = 2131558576;
+			// aapt resource value: 0x7f0d00b1
+			public static int show_instructions = 2131558577;
 			
 			// aapt resource value: 0x7f0d004c
 			public static int sideBarPrefilledQuestionText = 2131558476;
@@ -1723,11 +1726,11 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0d0038
 			public static int switch_thumb_disabled_material_light = 2131558456;
 			
-			// aapt resource value: 0x7f0d00b1
-			public static int switch_thumb_material_dark = 2131558577;
-			
 			// aapt resource value: 0x7f0d00b2
-			public static int switch_thumb_material_light = 2131558578;
+			public static int switch_thumb_material_dark = 2131558578;
+			
+			// aapt resource value: 0x7f0d00b3
+			public static int switch_thumb_material_light = 2131558579;
 			
 			// aapt resource value: 0x7f0d0039
 			public static int switch_thumb_normal_material_dark = 2131558457;
@@ -1760,23 +1763,29 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f080112
 			public static int Area_Editor_margin_15 = 2131230994;
 			
+			// aapt resource value: 0x7f080119
+			public static int Area_Editor_margin_160 = 2131231001;
+			
 			// aapt resource value: 0x7f080113
 			public static int Area_Editor_margin_20 = 2131230995;
 			
-			// aapt resource value: 0x7f080119
-			public static int Area_Editor_margin_200 = 2131231001;
-			
 			// aapt resource value: 0x7f08011a
-			public static int Area_Editor_margin_220 = 2131231002;
+			public static int Area_Editor_margin_200 = 2131231002;
 			
 			// aapt resource value: 0x7f08011b
-			public static int Area_Editor_margin_280 = 2131231003;
+			public static int Area_Editor_margin_230 = 2131231003;
+			
+			// aapt resource value: 0x7f08011c
+			public static int Area_Editor_margin_280 = 2131231004;
 			
 			// aapt resource value: 0x7f080114
 			public static int Area_Editor_margin_30 = 2131230996;
 			
-			// aapt resource value: 0x7f08011c
-			public static int Area_Editor_margin_320 = 2131231004;
+			// aapt resource value: 0x7f08011d
+			public static int Area_Editor_margin_300 = 2131231005;
+			
+			// aapt resource value: 0x7f08011e
+			public static int Area_Editor_margin_320 = 2131231006;
 			
 			// aapt resource value: 0x7f080115
 			public static int Area_Editor_margin_33 = 2131230997;
@@ -2871,26 +2880,26 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f020054
 			public static int avd_hide_password = 2130837588;
 			
-			// aapt resource value: 0x7f0201bf
-			public static int avd_hide_password_1 = 2130837951;
+			// aapt resource value: 0x7f0201c3
+			public static int avd_hide_password_1 = 2130837955;
 			
-			// aapt resource value: 0x7f0201c0
-			public static int avd_hide_password_2 = 2130837952;
+			// aapt resource value: 0x7f0201c4
+			public static int avd_hide_password_2 = 2130837956;
 			
-			// aapt resource value: 0x7f0201c1
-			public static int avd_hide_password_3 = 2130837953;
+			// aapt resource value: 0x7f0201c5
+			public static int avd_hide_password_3 = 2130837957;
 			
 			// aapt resource value: 0x7f020055
 			public static int avd_show_password = 2130837589;
 			
-			// aapt resource value: 0x7f0201c2
-			public static int avd_show_password_1 = 2130837954;
+			// aapt resource value: 0x7f0201c6
+			public static int avd_show_password_1 = 2130837958;
 			
-			// aapt resource value: 0x7f0201c3
-			public static int avd_show_password_2 = 2130837955;
+			// aapt resource value: 0x7f0201c7
+			public static int avd_show_password_2 = 2130837959;
 			
-			// aapt resource value: 0x7f0201c4
-			public static int avd_show_password_3 = 2130837956;
+			// aapt resource value: 0x7f0201c8
+			public static int avd_show_password_3 = 2130837960;
 			
 			// aapt resource value: 0x7f020056
 			public static int back_to_parent = 2130837590;
@@ -3445,7 +3454,7 @@ namespace WB.UI.Shared.Extensions
 			public static int media_question_white_border = 2130837773;
 			
 			// aapt resource value: 0x7f02010e
-			public static int Minus_icon = 2130837774;
+			public static int minus_icon = 2130837774;
 			
 			// aapt resource value: 0x7f02010f
 			public static int mr_button_connected_dark = 2130837775;
@@ -3537,11 +3546,11 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f02012c
 			public static int notification_icon_background = 2130837804;
 			
-			// aapt resource value: 0x7f0201bd
-			public static int notification_template_icon_bg = 2130837949;
+			// aapt resource value: 0x7f0201c1
+			public static int notification_template_icon_bg = 2130837953;
 			
-			// aapt resource value: 0x7f0201be
-			public static int notification_template_icon_low_bg = 2130837950;
+			// aapt resource value: 0x7f0201c2
+			public static int notification_template_icon_low_bg = 2130837954;
 			
 			// aapt resource value: 0x7f02012d
 			public static int notification_tile_bg = 2130837805;
@@ -3553,7 +3562,7 @@ namespace WB.UI.Shared.Extensions
 			public static int overlay = 2130837807;
 			
 			// aapt resource value: 0x7f020130
-			public static int Plus_icon = 2130837808;
+			public static int plus_icon = 2130837808;
 			
 			// aapt resource value: 0x7f020131
 			public static int progress_bar = 2130837809;
@@ -3709,271 +3718,283 @@ namespace WB.UI.Shared.Extensions
 			public static int screen_button = 2130837859;
 			
 			// aapt resource value: 0x7f020164
-			public static int screen_button_disabled = 2130837860;
+			public static int screen_button_bordered = 2130837860;
 			
 			// aapt resource value: 0x7f020165
-			public static int screen_button_pressed = 2130837861;
+			public static int screen_button_disabled = 2130837861;
 			
 			// aapt resource value: 0x7f020166
-			public static int screen_button_unpressed = 2130837862;
+			public static int screen_button_disabled_bordered = 2130837862;
 			
 			// aapt resource value: 0x7f020167
-			public static int sidebar_button = 2130837863;
+			public static int screen_button_pressed = 2130837863;
 			
 			// aapt resource value: 0x7f020168
-			public static int sidebar_button_bg = 2130837864;
+			public static int screen_button_pressed_bordered = 2130837864;
 			
 			// aapt resource value: 0x7f020169
-			public static int sidebar_button_bg_pressed = 2130837865;
+			public static int screen_button_unpressed = 2130837865;
 			
 			// aapt resource value: 0x7f02016a
-			public static int sidebar_row = 2130837866;
+			public static int screen_button_unpressed_bordered = 2130837866;
 			
 			// aapt resource value: 0x7f02016b
-			public static int sidebar_row_pressed = 2130837867;
+			public static int sidebar_button = 2130837867;
 			
 			// aapt resource value: 0x7f02016c
-			public static int sidebar_row_selected = 2130837868;
+			public static int sidebar_button_bg = 2130837868;
 			
 			// aapt resource value: 0x7f02016d
-			public static int sidebar_row_unpressed = 2130837869;
+			public static int sidebar_button_bg_pressed = 2130837869;
 			
 			// aapt resource value: 0x7f02016e
-			public static int sync_maps = 2130837870;
+			public static int sidebar_row = 2130837870;
 			
 			// aapt resource value: 0x7f02016f
-			public static int text_editor_border = 2130837871;
+			public static int sidebar_row_pressed = 2130837871;
 			
 			// aapt resource value: 0x7f020170
-			public static int theme_blue_light_btn_check_holo_light = 2130837872;
+			public static int sidebar_row_selected = 2130837872;
 			
 			// aapt resource value: 0x7f020171
-			public static int theme_blue_light_btn_check_off_disabled_focused_holo_light = 2130837873;
+			public static int sidebar_row_unpressed = 2130837873;
 			
 			// aapt resource value: 0x7f020172
-			public static int theme_blue_light_btn_check_off_disabled_holo_light = 2130837874;
+			public static int sync_maps = 2130837874;
 			
 			// aapt resource value: 0x7f020173
-			public static int theme_blue_light_btn_check_off_focused_holo_light = 2130837875;
+			public static int text_editor_border = 2130837875;
 			
 			// aapt resource value: 0x7f020174
-			public static int theme_blue_light_btn_check_off_holo_light = 2130837876;
+			public static int theme_blue_light_btn_check_holo_light = 2130837876;
 			
 			// aapt resource value: 0x7f020175
-			public static int theme_blue_light_btn_check_off_pressed_holo_light = 2130837877;
+			public static int theme_blue_light_btn_check_off_disabled_focused_holo_light = 2130837877;
 			
 			// aapt resource value: 0x7f020176
-			public static int theme_blue_light_btn_check_on_disabled_focused_holo_light = 2130837878;
+			public static int theme_blue_light_btn_check_off_disabled_holo_light = 2130837878;
 			
 			// aapt resource value: 0x7f020177
-			public static int theme_blue_light_btn_check_on_disabled_holo_light = 2130837879;
+			public static int theme_blue_light_btn_check_off_focused_holo_light = 2130837879;
 			
 			// aapt resource value: 0x7f020178
-			public static int theme_blue_light_btn_check_on_focused_holo_light = 2130837880;
+			public static int theme_blue_light_btn_check_off_holo_light = 2130837880;
 			
 			// aapt resource value: 0x7f020179
-			public static int theme_blue_light_btn_check_on_holo_light = 2130837881;
+			public static int theme_blue_light_btn_check_off_pressed_holo_light = 2130837881;
 			
 			// aapt resource value: 0x7f02017a
-			public static int theme_blue_light_btn_check_on_pressed_holo_light = 2130837882;
+			public static int theme_blue_light_btn_check_on_disabled_focused_holo_light = 2130837882;
 			
 			// aapt resource value: 0x7f02017b
-			public static int theme_blue_light_btn_default_disabled_focused_holo_light = 2130837883;
+			public static int theme_blue_light_btn_check_on_disabled_holo_light = 2130837883;
 			
 			// aapt resource value: 0x7f02017c
-			public static int theme_blue_light_btn_default_disabled_holo_light = 2130837884;
+			public static int theme_blue_light_btn_check_on_focused_holo_light = 2130837884;
 			
 			// aapt resource value: 0x7f02017d
-			public static int theme_blue_light_btn_default_focused_holo_light = 2130837885;
+			public static int theme_blue_light_btn_check_on_holo_light = 2130837885;
 			
 			// aapt resource value: 0x7f02017e
-			public static int theme_blue_light_btn_default_holo_light = 2130837886;
+			public static int theme_blue_light_btn_check_on_pressed_holo_light = 2130837886;
 			
 			// aapt resource value: 0x7f02017f
-			public static int theme_blue_light_btn_default_normal_holo_light = 2130837887;
+			public static int theme_blue_light_btn_default_disabled_focused_holo_light = 2130837887;
 			
 			// aapt resource value: 0x7f020180
-			public static int theme_blue_light_btn_default_pressed_holo_light = 2130837888;
+			public static int theme_blue_light_btn_default_disabled_holo_light = 2130837888;
 			
 			// aapt resource value: 0x7f020181
-			public static int theme_blue_light_btn_radio_holo_light = 2130837889;
+			public static int theme_blue_light_btn_default_focused_holo_light = 2130837889;
 			
 			// aapt resource value: 0x7f020182
-			public static int theme_blue_light_btn_radio_off_disabled_focused_holo_light = 2130837890;
+			public static int theme_blue_light_btn_default_holo_light = 2130837890;
 			
 			// aapt resource value: 0x7f020183
-			public static int theme_blue_light_btn_radio_off_disabled_holo_light = 2130837891;
+			public static int theme_blue_light_btn_default_normal_holo_light = 2130837891;
 			
 			// aapt resource value: 0x7f020184
-			public static int theme_blue_light_btn_radio_off_focused_holo_light = 2130837892;
+			public static int theme_blue_light_btn_default_pressed_holo_light = 2130837892;
 			
 			// aapt resource value: 0x7f020185
-			public static int theme_blue_light_btn_radio_off_holo_light = 2130837893;
+			public static int theme_blue_light_btn_radio_holo_light = 2130837893;
 			
 			// aapt resource value: 0x7f020186
-			public static int theme_blue_light_btn_radio_off_pressed_holo_light = 2130837894;
+			public static int theme_blue_light_btn_radio_off_disabled_focused_holo_light = 2130837894;
 			
 			// aapt resource value: 0x7f020187
-			public static int theme_blue_light_btn_radio_on_disabled_focused_holo_light = 2130837895;
+			public static int theme_blue_light_btn_radio_off_disabled_holo_light = 2130837895;
 			
 			// aapt resource value: 0x7f020188
-			public static int theme_blue_light_btn_radio_on_disabled_holo_light = 2130837896;
+			public static int theme_blue_light_btn_radio_off_focused_holo_light = 2130837896;
 			
 			// aapt resource value: 0x7f020189
-			public static int theme_blue_light_btn_radio_on_focused_holo_light = 2130837897;
+			public static int theme_blue_light_btn_radio_off_holo_light = 2130837897;
 			
 			// aapt resource value: 0x7f02018a
-			public static int theme_blue_light_btn_radio_on_holo_light = 2130837898;
+			public static int theme_blue_light_btn_radio_off_pressed_holo_light = 2130837898;
 			
 			// aapt resource value: 0x7f02018b
-			public static int theme_blue_light_btn_radio_on_pressed_holo_light = 2130837899;
+			public static int theme_blue_light_btn_radio_on_disabled_focused_holo_light = 2130837899;
 			
 			// aapt resource value: 0x7f02018c
-			public static int theme_blue_light_edit_text_holo_light = 2130837900;
+			public static int theme_blue_light_btn_radio_on_disabled_holo_light = 2130837900;
 			
 			// aapt resource value: 0x7f02018d
-			public static int theme_blue_light_item_background_holo_light = 2130837901;
+			public static int theme_blue_light_btn_radio_on_focused_holo_light = 2130837901;
 			
 			// aapt resource value: 0x7f02018e
-			public static int theme_blue_light_list_activated_holo = 2130837902;
+			public static int theme_blue_light_btn_radio_on_holo_light = 2130837902;
 			
 			// aapt resource value: 0x7f02018f
-			public static int theme_blue_light_list_focused_holo = 2130837903;
+			public static int theme_blue_light_btn_radio_on_pressed_holo_light = 2130837903;
 			
 			// aapt resource value: 0x7f020190
-			public static int theme_blue_light_list_longpressed_holo = 2130837904;
+			public static int theme_blue_light_edit_text_holo_light = 2130837904;
 			
 			// aapt resource value: 0x7f020191
-			public static int theme_blue_light_list_pressed_holo_light = 2130837905;
+			public static int theme_blue_light_item_background_holo_light = 2130837905;
 			
 			// aapt resource value: 0x7f020192
-			public static int theme_blue_light_list_selector_background_transition_holo_light = 2130837906;
+			public static int theme_blue_light_list_activated_holo = 2130837906;
 			
 			// aapt resource value: 0x7f020193
-			public static int theme_blue_light_list_selector_disabled_holo_light = 2130837907;
+			public static int theme_blue_light_list_focused_holo = 2130837907;
 			
 			// aapt resource value: 0x7f020194
-			public static int theme_blue_light_list_selector_holo_light = 2130837908;
+			public static int theme_blue_light_list_longpressed_holo = 2130837908;
 			
 			// aapt resource value: 0x7f020195
-			public static int theme_blue_light_progress_bg_holo_light = 2130837909;
+			public static int theme_blue_light_list_pressed_holo_light = 2130837909;
 			
 			// aapt resource value: 0x7f020196
-			public static int theme_blue_light_progress_horizontal_holo_light = 2130837910;
+			public static int theme_blue_light_list_selector_background_transition_holo_light = 2130837910;
 			
 			// aapt resource value: 0x7f020197
-			public static int theme_blue_light_progress_indeterminate_horizontal_holo_light = 2130837911;
+			public static int theme_blue_light_list_selector_disabled_holo_light = 2130837911;
 			
 			// aapt resource value: 0x7f020198
-			public static int theme_blue_light_progress_primary_holo_light = 2130837912;
+			public static int theme_blue_light_list_selector_holo_light = 2130837912;
 			
 			// aapt resource value: 0x7f020199
-			public static int theme_blue_light_progress_secondary_holo_light = 2130837913;
+			public static int theme_blue_light_progress_bg_holo_light = 2130837913;
 			
 			// aapt resource value: 0x7f02019a
-			public static int theme_blue_light_progressbar_indeterminate_holo1 = 2130837914;
+			public static int theme_blue_light_progress_horizontal_holo_light = 2130837914;
 			
 			// aapt resource value: 0x7f02019b
-			public static int theme_blue_light_progressbar_indeterminate_holo2 = 2130837915;
+			public static int theme_blue_light_progress_indeterminate_horizontal_holo_light = 2130837915;
 			
 			// aapt resource value: 0x7f02019c
-			public static int theme_blue_light_progressbar_indeterminate_holo3 = 2130837916;
+			public static int theme_blue_light_progress_primary_holo_light = 2130837916;
 			
 			// aapt resource value: 0x7f02019d
-			public static int theme_blue_light_progressbar_indeterminate_holo4 = 2130837917;
+			public static int theme_blue_light_progress_secondary_holo_light = 2130837917;
 			
 			// aapt resource value: 0x7f02019e
-			public static int theme_blue_light_progressbar_indeterminate_holo5 = 2130837918;
+			public static int theme_blue_light_progressbar_indeterminate_holo1 = 2130837918;
 			
 			// aapt resource value: 0x7f02019f
-			public static int theme_blue_light_progressbar_indeterminate_holo6 = 2130837919;
+			public static int theme_blue_light_progressbar_indeterminate_holo2 = 2130837919;
 			
 			// aapt resource value: 0x7f0201a0
-			public static int theme_blue_light_progressbar_indeterminate_holo7 = 2130837920;
+			public static int theme_blue_light_progressbar_indeterminate_holo3 = 2130837920;
 			
 			// aapt resource value: 0x7f0201a1
-			public static int theme_blue_light_progressbar_indeterminate_holo8 = 2130837921;
+			public static int theme_blue_light_progressbar_indeterminate_holo4 = 2130837921;
 			
 			// aapt resource value: 0x7f0201a2
-			public static int theme_blue_light_scrubber_control_disabled_holo = 2130837922;
+			public static int theme_blue_light_progressbar_indeterminate_holo5 = 2130837922;
 			
 			// aapt resource value: 0x7f0201a3
-			public static int theme_blue_light_scrubber_control_focused_holo = 2130837923;
+			public static int theme_blue_light_progressbar_indeterminate_holo6 = 2130837923;
 			
 			// aapt resource value: 0x7f0201a4
-			public static int theme_blue_light_scrubber_control_normal_holo = 2130837924;
+			public static int theme_blue_light_progressbar_indeterminate_holo7 = 2130837924;
 			
 			// aapt resource value: 0x7f0201a5
-			public static int theme_blue_light_scrubber_control_pressed_holo = 2130837925;
+			public static int theme_blue_light_progressbar_indeterminate_holo8 = 2130837925;
 			
 			// aapt resource value: 0x7f0201a6
-			public static int theme_blue_light_scrubber_control_selector_holo_light = 2130837926;
+			public static int theme_blue_light_scrubber_control_disabled_holo = 2130837926;
 			
 			// aapt resource value: 0x7f0201a7
-			public static int theme_blue_light_scrubber_primary_holo = 2130837927;
+			public static int theme_blue_light_scrubber_control_focused_holo = 2130837927;
 			
 			// aapt resource value: 0x7f0201a8
-			public static int theme_blue_light_scrubber_progress_horizontal_holo_light = 2130837928;
+			public static int theme_blue_light_scrubber_control_normal_holo = 2130837928;
 			
 			// aapt resource value: 0x7f0201a9
-			public static int theme_blue_light_scrubber_secondary_holo = 2130837929;
+			public static int theme_blue_light_scrubber_control_pressed_holo = 2130837929;
 			
 			// aapt resource value: 0x7f0201aa
-			public static int theme_blue_light_scrubber_track_holo_light = 2130837930;
+			public static int theme_blue_light_scrubber_control_selector_holo_light = 2130837930;
 			
 			// aapt resource value: 0x7f0201ab
-			public static int theme_blue_light_spinner_background_holo_light = 2130837931;
+			public static int theme_blue_light_scrubber_primary_holo = 2130837931;
 			
 			// aapt resource value: 0x7f0201ac
-			public static int theme_blue_light_spinner_default_holo_light = 2130837932;
+			public static int theme_blue_light_scrubber_progress_horizontal_holo_light = 2130837932;
 			
 			// aapt resource value: 0x7f0201ad
-			public static int theme_blue_light_spinner_disabled_holo_light = 2130837933;
+			public static int theme_blue_light_scrubber_secondary_holo = 2130837933;
 			
 			// aapt resource value: 0x7f0201ae
-			public static int theme_blue_light_spinner_focused_holo_light = 2130837934;
+			public static int theme_blue_light_scrubber_track_holo_light = 2130837934;
 			
 			// aapt resource value: 0x7f0201af
-			public static int theme_blue_light_spinner_pressed_holo_light = 2130837935;
+			public static int theme_blue_light_spinner_background_holo_light = 2130837935;
 			
 			// aapt resource value: 0x7f0201b0
-			public static int theme_blue_light_text_select_handle_left = 2130837936;
+			public static int theme_blue_light_spinner_default_holo_light = 2130837936;
 			
 			// aapt resource value: 0x7f0201b1
-			public static int theme_blue_light_text_select_handle_middle = 2130837937;
+			public static int theme_blue_light_spinner_disabled_holo_light = 2130837937;
 			
 			// aapt resource value: 0x7f0201b2
-			public static int theme_blue_light_text_select_handle_right = 2130837938;
+			public static int theme_blue_light_spinner_focused_holo_light = 2130837938;
 			
 			// aapt resource value: 0x7f0201b3
-			public static int theme_blue_light_textfield_activated_holo_light = 2130837939;
+			public static int theme_blue_light_spinner_pressed_holo_light = 2130837939;
 			
 			// aapt resource value: 0x7f0201b4
-			public static int theme_blue_light_textfield_default_holo_light = 2130837940;
+			public static int theme_blue_light_text_select_handle_left = 2130837940;
 			
 			// aapt resource value: 0x7f0201b5
-			public static int theme_blue_light_textfield_disabled_focused_holo_light = 2130837941;
+			public static int theme_blue_light_text_select_handle_middle = 2130837941;
 			
 			// aapt resource value: 0x7f0201b6
-			public static int theme_blue_light_textfield_disabled_holo_light = 2130837942;
+			public static int theme_blue_light_text_select_handle_right = 2130837942;
 			
 			// aapt resource value: 0x7f0201b7
-			public static int theme_blue_light_textfield_focused_holo_light = 2130837943;
+			public static int theme_blue_light_textfield_activated_holo_light = 2130837943;
 			
 			// aapt resource value: 0x7f0201b8
-			public static int to_parent_group_completed = 2130837944;
+			public static int theme_blue_light_textfield_default_holo_light = 2130837944;
 			
 			// aapt resource value: 0x7f0201b9
-			public static int to_parent_group_invalid = 2130837945;
+			public static int theme_blue_light_textfield_disabled_focused_holo_light = 2130837945;
 			
 			// aapt resource value: 0x7f0201ba
-			public static int to_parent_group_started = 2130837946;
+			public static int theme_blue_light_textfield_disabled_holo_light = 2130837946;
 			
 			// aapt resource value: 0x7f0201bb
-			public static int user_interaction_input_editor = 2130837947;
+			public static int theme_blue_light_textfield_focused_holo_light = 2130837947;
 			
 			// aapt resource value: 0x7f0201bc
-			public static int zoom = 2130837948;
+			public static int to_parent_group_completed = 2130837948;
+			
+			// aapt resource value: 0x7f0201bd
+			public static int to_parent_group_invalid = 2130837949;
+			
+			// aapt resource value: 0x7f0201be
+			public static int to_parent_group_started = 2130837950;
+			
+			// aapt resource value: 0x7f0201bf
+			public static int user_interaction_input_editor = 2130837951;
+			
+			// aapt resource value: 0x7f0201c0
+			public static int zoom = 2130837952;
 			
 			static Drawable()
 			{

@@ -10,9 +10,12 @@
     <dimen name="Area_Editor_margin_45">45dp</dimen>
     <dimen name="Area_Editor_margin_95">95dp</dimen>
     <dimen name="Area_Editor_margin_120">120dp</dimen>
+    <dimen name="Area_Editor_margin_160">160dp</dimen>
     <dimen name="Area_Editor_margin_200">200dp</dimen>
-    <dimen name="Area_Editor_margin_220">220dp</dimen>
+    <dimen name="Area_Editor_margin_230">230dp</dimen>
     <dimen name="Area_Editor_margin_280">280dp</dimen>
+    <dimen name="Area_Editor_margin_300">300dp</dimen>
     <dimen name="Area_Editor_margin_320">320dp</dimen>
+    
     <dimen name="button_corners_radius">6dp</dimen>
 </resources>
