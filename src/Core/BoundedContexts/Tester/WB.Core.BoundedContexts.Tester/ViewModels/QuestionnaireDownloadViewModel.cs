@@ -186,8 +186,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             await this.commandService.ExecuteAsync(new CreateInterview(
                 interviewId: interviewId,
                 userId: this.principal.CurrentUserIdentity.UserId,
-                questionnaireId: questionnaireIdentity.QuestionnaireId,
-                version: questionnaireIdentity.Version,
+                questionnaireId: questionnaireIdentity,
                 answers: new List<InterviewAnswer>(), 
                 answersTime: DateTime.UtcNow,
                 supervisorId: Guid.NewGuid(),
