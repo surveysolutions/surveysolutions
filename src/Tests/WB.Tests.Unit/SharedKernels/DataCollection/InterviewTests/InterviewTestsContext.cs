@@ -42,10 +42,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 expressionProcessorStatePrototypeProvider: expressionProcessorStatePrototypeProvider,
                 textFactory: textFactory);
 
-            interview.CreateInterviewWithPreloadedData(Create.Command.CreateInterviewWithPreloadedData(interview.EventSourceId, userId ?? new Guid("F000F000F000F000F000F000F000F000"), 
+            interview.CreateInterviewWithPreloadedData(Create.Command.CreateInterview(interview.EventSourceId, userId ?? new Guid("F000F000F000F000F000F000F000F000"), 
                 questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"), 1,
                 answersToFeaturedQuestions ?? new List<InterviewAnswer>(), answersTime ?? new DateTime(2012, 12, 20), 
-                supervisorId ?? new Guid("D222D222D222D222D222D222D222D222"), null, Create.Entity.InterviewKey(), null));
+                supervisorId ?? new Guid("D222D222D222D222D222D222D222D222"), null, Create.Entity.InterviewKey()));
 
             return interview;
         }
