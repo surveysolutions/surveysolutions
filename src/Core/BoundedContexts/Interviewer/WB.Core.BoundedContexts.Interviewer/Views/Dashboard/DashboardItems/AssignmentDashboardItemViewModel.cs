@@ -146,8 +146,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
             ICommand createInterviewCommand = new CreateInterview(interviewId,
                     interviewerIdentity.UserId,
-                    this.questionnaireIdentity.QuestionnaireId, 
-                    this.questionnaireIdentity.Version,
+                    this.questionnaireIdentity, 
                     answers,
                     DateTime.UtcNow, 
                     interviewerIdentity.SupervisorId,

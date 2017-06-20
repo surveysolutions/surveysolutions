@@ -130,8 +130,7 @@ namespace WB.UI.Headquarters.Controllers
             var createInterviewCommand = new CreateInterview(
                 interviewId,
                 interviewer.PublicKey, 
-                assignment.QuestionnaireId.QuestionnaireId, 
-                assignment.QuestionnaireId.Version,
+                assignment.QuestionnaireId,
                 answersFromAssignment.ToList(),
                 DateTime.UtcNow,
                 interviewer.Supervisor.Id,

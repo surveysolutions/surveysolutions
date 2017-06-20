@@ -253,8 +253,7 @@ namespace WB.Tests.Abc.TestFactories
             return new CreateInterview(
                 interviewId, 
                 userId, 
-                questionnaireId, 
-                version, 
+                Create.Entity.QuestionnaireIdentity(questionnaireId, version), 
                 answers, 
                 answersTime, 
                 supervisorId, 
