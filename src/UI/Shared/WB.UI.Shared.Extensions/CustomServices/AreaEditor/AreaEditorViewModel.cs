@@ -292,10 +292,23 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 buffer.Read(data, 0, data.Length);
                 */
 
+                //project to geocoordinates
+                SpatialReference reference = new SpatialReference(4326);
+                var projectedGeometry = GeometryEngine.Project(result, reference);
+                var projectedPolygon = projectedGeometry as Polygon;
+
+                string coordinates = string.Empty; 
+                if (projectedPolygon != null)
+                {
+                    var tco = projectedPolygon.Parts.Select(x => $"{x.StartPoint.X},{x.StartPoint.Y}");
+                    coordinates = string.Join(";", tco);
+                }
+
                 var resultArea = new AreaEditorResult()
                 {
                     Geometry = result?.ToJson(),
                     MapName = this.SelectedMap,
+                    Coordinates = coordinates, 
                     Area = GeometryEngine.AreaGeodetic(result),
                     Length = GeometryEngine.LengthGeodetic(result),
                     DistanceToEditor = dist,
