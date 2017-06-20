@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             );
 
             var statefulInterview = Setup.StatefulInterview(questionnaire, false);
-            statefulInterview.CreateInterviewWithPreloadedData(
+            statefulInterview.CreateInterview(
                 Create.Command.CreateInterview(questionnaire.PublicKey, 1, suervisorId, new List<InterviewAnswer>(), responsibleId, DateTime.UtcNow));
 
             //act

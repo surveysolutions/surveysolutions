@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            interview.CreateInterviewWithPreloadedData(command);
+            interview.CreateInterview(command);
 
         Cleanup stuff = () =>
         {
@@ -65,6 +65,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid prefilledQuestionId;
         private static string prefilledQuestionAnswer;
         private static Interview interview;
-        private static CreateInterviewWithPreloadedData command;
+        private static CreateInterview command;
     }
 }

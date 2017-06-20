@@ -46,7 +46,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                     var command = Create.Command.CreateInterview(Guid.Empty, Guid.NewGuid(), questionnaireIdentity, DateTime.Now,
                         Guid.NewGuid(), null, null, null);
-                    interview.CreateInterviewWithPreloadedData(command);
+                    interview.CreateInterview(command);
 
                     return new InvokeResults
                     {

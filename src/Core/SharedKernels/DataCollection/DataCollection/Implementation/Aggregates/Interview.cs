@@ -1363,7 +1363,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #region Other handlers
 
-        public void CreateInterviewWithPreloadedData(CreateInterviewWithPreloadedData command)
+        public void CreateInterview(CreateInterview command)
         {
             this.QuestionnaireIdentity = new QuestionnaireIdentity(command.QuestionnaireId, command.Version);
             InterviewTree changedInterviewTree = this.Tree.Clone();

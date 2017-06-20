@@ -108,7 +108,7 @@ namespace WB.Tests.Abc.TestFactories
             {
                 var command = Create.Command.CreateInterview(Guid.Empty, userId ?? Guid.NewGuid(), Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), DateTime.Now,
                     Guid.NewGuid(), null, null, null);
-                statefulInterview.CreateInterviewWithPreloadedData(command);
+                statefulInterview.CreateInterview(command);
             }
 
             return statefulInterview;
@@ -135,7 +135,7 @@ namespace WB.Tests.Abc.TestFactories
             {
                 var command = Create.Command.CreateInterview(Guid.Empty, userId ?? Guid.NewGuid(), Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), DateTime.Now,
                     Guid.NewGuid(), null, null, null);
-                statefulInterview.CreateInterviewWithPreloadedData(command);
+                statefulInterview.CreateInterview(command);
             }
 
             return statefulInterview;

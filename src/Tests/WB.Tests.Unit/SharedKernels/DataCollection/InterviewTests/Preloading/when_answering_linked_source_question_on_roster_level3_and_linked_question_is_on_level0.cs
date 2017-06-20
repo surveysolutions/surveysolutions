@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Preloading
         };
 
         Because of = () =>
-            interview.CreateInterviewWithPreloadedData(command);
+            interview.CreateInterview(command);
 
         It should_set_answers_for_text_question_on_the_3rd_level = () =>
         {
@@ -88,6 +88,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Preloading
         static readonly Guid listRosterSizeQuestionId = Guid.Parse("66666666666666666666666666666666");
         static readonly Guid textQuestionId = Guid.Parse("77777777777777777777777777777777");
 
-        static CreateInterviewWithPreloadedData command;
+        static CreateInterview command;
     }
 }
