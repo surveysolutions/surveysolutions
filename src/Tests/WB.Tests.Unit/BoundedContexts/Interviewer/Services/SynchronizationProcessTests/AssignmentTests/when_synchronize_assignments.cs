@@ -135,8 +135,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         [Test]
         public void should_add_new_assignment()
         {
-            var newRemoteAssign = this.localAssignmentsRepo.LoadAll().FirstOrDefault(ad => ad.Id == 3);
-            Assert.NotNull(newRemoteAssign);
+            var newRemoteAssign = this.localAssignmentsRepo.LoadAll();
+            newRemoteAssign.Should().Contain(ad => ad.Id == 3);
         }
 
         [Test]
