@@ -24,11 +24,11 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             }
         }
 
-        public event EventHandler CardClick;
+        public Action<ExpandableViewHolder> CardClick;
 
         protected virtual void OnCardClick()
         {
-            this.CardClick?.Invoke(this, EventArgs.Empty);
+            this.CardClick?.Invoke(this);
         }
     }
 }
