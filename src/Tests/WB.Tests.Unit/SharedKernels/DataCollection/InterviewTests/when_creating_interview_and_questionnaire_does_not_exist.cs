@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
            interview = Create.AggregateRoot.Interview(questionnaireRepository: repositoryWithoutQuestionnaire);
 
            // Act
-           act =() => interview.CreateInterviewWithPreloadedData(command);
+           act =() => interview.CreateInterview(command);
         }
          
 
@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private Guid userId;
         private Guid responsibleSupervisorId;
         private Interview interview;
-        private CreateInterviewWithPreloadedData command;
+        private CreateInterview command;
         private Action act;
     }
 }

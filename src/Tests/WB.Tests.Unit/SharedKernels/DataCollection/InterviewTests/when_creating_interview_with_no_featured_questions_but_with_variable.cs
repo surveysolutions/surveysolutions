@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            interview.CreateInterviewWithPreloadedData(command);
+            interview.CreateInterview(command);
 
         It should_raise_InterviewCreated_event = () =>
             eventContext.ShouldContainEvent<InterviewCreated>();
@@ -90,6 +90,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid variableId;
         private static StatefulInterview interview;
         private static QuestionnaireIdentity questionnaireIdentity;
-        private static CreateInterviewWithPreloadedData command;
+        private static CreateInterview command;
     }
 }
