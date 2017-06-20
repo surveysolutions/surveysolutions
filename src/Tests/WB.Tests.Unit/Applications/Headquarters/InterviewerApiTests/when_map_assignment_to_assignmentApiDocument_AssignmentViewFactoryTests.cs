@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -90,6 +91,13 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
                         e.Identity == f.Identity
                     )
                 ));
+        }
+
+
+        [Test]
+        public void should_map_creation_date()
+        {
+            this.assignmentApiDocument.CreatedAtUtc.Should().Be(this.assignment.CreatedAtUtc);
         }
     }
 
