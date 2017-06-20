@@ -18,7 +18,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
         Establish context = () =>
         {
             var interview = Substitute.For<IStatefulInterview>();
-            interview.CreatedOnClient.Returns(true);
          
             viewModel = CreateLoginViewModel(
                 viewModelNavigationService: ViewModelNavigationServiceMock.Object,
