@@ -50,13 +50,16 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                     .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "2")
                     .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "3")
                     .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "4")
+                    .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "gpsQuestion",latitude: 10.0, longtitude: 20.0)
+                    .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "gpsnonIdent")
                     .Build(),
                 Create.Entity
                     .AssignmentApiDocument(3, 20, Create.Entity.QuestionnaireIdentity(Id.gC))
                     .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "1")
                     .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "2")
                     .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "3")
-                    .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "gpsQuestion",latitude: 10.0, longtitude: 20.0)
+                    .WithAnswer(Create.Entity.Identity(Id.gA), "gpsQuestion_1", latitude: 10.0, longtitude: 20.0)
+                    .WithAnswer(Create.Entity.Identity(Id.gB), "gpsQuestion2_3")
                     .Build()
             };
         }
@@ -68,7 +71,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 Create.Entity.TextQuestion(assignment.Answers[0].Identity.Id, text: "text 1"),
                 Create.Entity.TextQuestion(assignment.Answers[1].Identity.Id, text: "title 2"),
                 Create.Entity.TextQuestion(assignment.Answers[2].Identity.Id, text: "title 3", preFilled: true),
-                Create.Entity.GpsCoordinateQuestion(assignment.Answers[3].Identity.Id, isPrefilled: true)
+                Create.Entity.GpsCoordinateQuestion(assignment.Answers[3].Identity.Id, isPrefilled: true),
+                Create.Entity.GpsCoordinateQuestion(assignment.Answers[4].Identity.Id)
             });
 
             questionnaire.Title = "title";
@@ -135,10 +139,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         }
 
         [Test]
-        public void should_fill_identifying_answers()
+        public void should_fill_identifying_answers_without_gps()
         {
             var assignment = this.localAssignmentsRepo.LoadAll().First(ass => ass.Id == 3);
+
             Assert.That(assignment.IdentifyingAnswers, Has.Count.EqualTo(1));
+
+            Assert.That(assignment.IdentifyingAnswers.FirstOrDefault(ia => ia.Identity.Id == Id.gA), Is.Null);
         }
 
         [Test]

@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
                 }
             });
 
-            var service = new AssignmentViewFactory(null, null, answerSerializer);
+            var service = new AssignmentsService(null, answerSerializer);
 
             // act
             this.assignmentApiDocument = service.MapAssignment(this.assignment);
@@ -140,7 +140,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
                 }
             });
 
-            var service = new AssignmentViewFactory(null, null, answerSerializer);
+            var service = new AssignmentsService(null, answerSerializer);
 
             // act
             this.assignmentApiDocument = service.MapAssignment(this.assignment);
