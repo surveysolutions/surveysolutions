@@ -118,6 +118,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         geometry: answerArea.Geometry,
                         mapName: answerArea.MapName,
                         area: answerArea.Area,
+                        coordinates:answerArea.Coordinates,
                         length: answerArea.Length,
                         distanceToEditor: answerArea.DistanceToEditor);
 
