@@ -1916,7 +1916,6 @@
     <Compile Include="Utils\ExceptionExtensoins.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\Threading\AsyncQuestionnaireUpdater.cs" />
-    <Compile Include="Utils\ViewHelpers.cs" />
     <Compile Include="Views\DesignerQuestionnaireApiRestServiceSettings.cs" />
     <Compile Include="Views\Interview\HtmlExtensions.cs" />
     <Compile Include="Views\Shared\HtmlExtensions.cs" />
