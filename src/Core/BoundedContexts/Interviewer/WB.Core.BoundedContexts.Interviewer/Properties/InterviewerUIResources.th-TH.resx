@@ -174,9 +174,6 @@
   <data name="DashboardItem_CreatedOn" xml:space="preserve">
     <value>มอบหมายงานเมื่อ  {0}</value>
   </data>
-  <data name="DashboardItem_InProgress" xml:space="preserve">
-    <value>กำลังดำเนินการ</value>
-  </data>
   <data name="DashboardItem_NotStarted" xml:space="preserve">
     <value>ยังไม่เริ่มต้น</value>
   </data>
