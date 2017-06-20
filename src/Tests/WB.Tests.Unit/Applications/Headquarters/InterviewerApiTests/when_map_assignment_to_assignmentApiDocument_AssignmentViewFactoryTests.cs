@@ -78,6 +78,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
         {
             Assert.That(this.assignmentApiDocument.LocationLatitude, Is.EqualTo(10.0));
             Assert.That(this.assignmentApiDocument.LocationLongitude, Is.EqualTo(20.0));
+            Assert.That(this.assignmentApiDocument.LocationQuestionId, Is.EqualTo(Id.g3));
         }
 
         [Test]

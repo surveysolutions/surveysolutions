@@ -14,7 +14,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 
@@ -23,7 +22,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
     public class when_synchronize_assignments
     {
         private List<AssignmentDocument> LocalAssignments;
-
         private List<AssignmentApiDocument> RemoteAssignments;
         private IAssignmentDocumentsStorage localAssignmentsRepo;
         private Mock<IProgress<SyncProgressInfo>> progressInfo;
@@ -51,16 +49,17 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                     .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "1")
                     .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "2")
                     .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "3")
+                    .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "4")
                     .Build(),
                 Create.Entity
                     .AssignmentApiDocument(3, 20, Create.Entity.QuestionnaireIdentity(Id.gC))
                     .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "1")
                     .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "2")
                     .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "3")
+                    .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "gpsQuestion",latitude: 10.0, longtitude: 20.0)
                     .Build()
             };
-
-            }
+        }
 
         PlainQuestionnaire CreatePlain(AssignmentApiDocument assignment)
         {
@@ -68,7 +67,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             {
                 Create.Entity.TextQuestion(assignment.Answers[0].Identity.Id, text: "text 1"),
                 Create.Entity.TextQuestion(assignment.Answers[1].Identity.Id, text: "title 2"),
-                Create.Entity.TextQuestion(assignment.Answers[2].Identity.Id, text: "title 3", preFilled: true)
+                Create.Entity.TextQuestion(assignment.Answers[2].Identity.Id, text: "title 3", preFilled: true),
+                Create.Entity.GpsCoordinateQuestion(assignment.Answers[3].Identity.Id, isPrefilled: true)
             });
 
             questionnaire.Title = "title";

@@ -90,7 +90,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
                 {
                     foreach (var assignment in assignmentTable)
                     {
-                        assignment.IdentifyingAnswers = answersLookup[assignment.Id].ToList();
+                        assignment.IdentifyingAnswers = answersLookup[assignment.Id]
+                            .Where(answer => answer.Identity.Id != assignment.LocationQuestionId)
+                            .ToList();
                         yield return assignment;
                     }
                 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -16,6 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
 
         public double? LocationLatitude { get; set; }
         public double? LocationLongitude { get; set; }
+        public Guid? LocationQuestionId { get; set; }
 
         public class InterviewSerializedAnswer
         {
