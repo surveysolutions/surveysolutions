@@ -127,7 +127,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var command = Create.Command.CreateInterview(interview.Id, answersToIdentifyingQuestions: answersToIdentifyingQuestions, assignmentId: 1);
 
             //act
-            interview.CreateInterviewWithPreloadedData(command);
+            interview.CreateInterview(command);
 
             //assert
             Assert.That(interview.GetAnswerAsString(questionIdentity), Is.EqualTo(stringAnswer));
@@ -157,7 +157,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var command = Create.Command.CreateInterview(interview.Id, assignmentId: 1, answersToIdentifyingQuestions: answersToIdentifyingQuestions);
 
             //act
-            interview.CreateInterviewWithPreloadedData(command);
+            interview.CreateInterview(command);
 
             //assert
             Assert.That(interview.GetAnswerAsString(questionTextIdentity), Is.EqualTo("value"));
@@ -183,7 +183,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var command = Create.Command.CreateInterview(interview.Id, assignmentId: 1, answersToIdentifyingQuestions: answersToIdentifyingQuestions);
 
             // act
-            interview.CreateInterviewWithPreloadedData(command);
+            interview.CreateInterview(command);
 
             // assert
             eventContext.ShouldContainEvent<InterviewCreated>();

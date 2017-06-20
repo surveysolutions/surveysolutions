@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            interview.CreateInterviewWithPreloadedData(command);
+            interview.CreateInterview(command);
 
         It should_not_raise_QuestionDisabled_event = () =>
             eventContext.ShouldNotContainEvent<QuestionsDisabled>();
@@ -57,6 +57,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static DateTime answersTime;
         private static Guid supervisorId;
         private static Interview interview;
-        private static CreateInterviewWithPreloadedData command;
+        private static CreateInterview command;
     }
 }
