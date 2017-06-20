@@ -7,6 +7,7 @@ using Android.Widget;
 using Esri.ArcGISRuntime.UI.Controls;
 using MvvmCross.Binding.BindingContext;
 using WB.UI.Shared.Enumerator.Activities;
+using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 {
@@ -32,6 +33,10 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+            var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
+            toolbar.Title = "";
+            this.SetSupportActionBar(toolbar);
+
             this.ViewModel.OnAreaEditCompleted += OnAreaEditCompleted;
 
             //esri bug
