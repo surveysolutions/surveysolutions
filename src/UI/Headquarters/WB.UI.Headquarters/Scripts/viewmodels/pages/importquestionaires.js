@@ -3,6 +3,7 @@
 
     var self = this;
     self.Url = new Url(window.location.href);
+    self.defaultOrder = [[1, 'desc']];
 
     self.onDataTableDataReceived = function (data) {};
 
