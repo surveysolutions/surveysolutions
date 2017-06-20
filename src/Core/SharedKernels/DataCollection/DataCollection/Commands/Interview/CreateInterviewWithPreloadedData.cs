@@ -9,18 +9,6 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
     public class CreateInterview : InterviewCommand
     {
-        public CreateInterview(Guid interviewId, 
-            Guid userId, 
-            Guid questionnaireId, 
-            long version,
-            List<InterviewAnswer> answers, 
-            DateTime answersTime, 
-            Guid supervisorId, 
-            Guid? interviewerId, 
-            InterviewKey interviewKey,
-            int? assignmentId)
-            : this(interviewId, userId, new QuestionnaireIdentity(questionnaireId, version),answers, answersTime, supervisorId, interviewerId, interviewKey, assignmentId){}
-
         public CreateInterview(Guid interviewId,
             Guid userId,
             QuestionnaireIdentity questionnaireId,

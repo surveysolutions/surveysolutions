@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.UI.Headquarters.Code.CommandTransformation
 {
@@ -73,8 +74,7 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
 
             var resultCommand = new CreateInterview(interviewId,
                 authorizedUser.Id,
-                command.QuestionnaireId,
-                command.QuestionnaireVersion,
+                new QuestionnaireIdentity(command.QuestionnaireId, command.QuestionnaireVersion),
                 answers,
                 DateTime.UtcNow,
                 command.SupervisorId,
