@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Moq;
 using NUnit.Framework;
@@ -143,16 +144,15 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         {
             var assignment = this.localAssignmentsRepo.LoadAll().First(ass => ass.Id == 3);
 
-            Assert.That(assignment.IdentifyingAnswers, Has.Count.EqualTo(1));
-
-            Assert.That(assignment.IdentifyingAnswers.FirstOrDefault(ia => ia.Identity.Id == Id.gA), Is.Null);
+            assignment.IdentifyingAnswers.Should().HaveCount(1);
+            assignment.IdentifyingAnswers.Should().NotContain(ia => ia.Identity.Id == Id.gA);
         }
 
         [Test]
         public void should_remove_removed_assignment()
         {
             var newRemoteAssign = this.localAssignmentsRepo.LoadAll().FirstOrDefault(ad => ad.Id == 2);
-            Assert.Null(newRemoteAssign);
+            newRemoteAssign.Should().BeNull();
         }
 
         [Test]
