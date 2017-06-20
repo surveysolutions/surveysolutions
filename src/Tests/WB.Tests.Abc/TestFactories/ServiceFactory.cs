@@ -501,8 +501,6 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
         }
 
-
-
         public IAnswerToStringConverter AnswerToStringConverter()
         {
             return new AnswerToStringConverter();
@@ -532,7 +530,7 @@ namespace WB.Tests.Abc.TestFactories
                 accessor.Store(assignment, assignment.Id);
             }
 
-            var service = new AssignmentsService(accessor);
+            var service = new AssignmentsService(accessor, Mock.Of<IInterviewAnswerSerializer>());
 
             return service;
         }
