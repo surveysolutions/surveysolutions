@@ -41,31 +41,30 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             if (viewModel.HasExpandedView)
             {
                 var viewHolder = (ExpandableViewHolder)holder;
-                viewHolder.CardClick += DashboardItemOnClick;
+                viewHolder.CardClick = DashboardItemOnClick;
             }
         }
 
-        private void DashboardItemOnClick(object sender, EventArgs eventArgs)
+        private void DashboardItemOnClick(ExpandableViewHolder sender)
         {
-            var viewHolder = (ExpandableViewHolder)sender;
-            bool shouldExpand = viewHolder.DetailsView.Visibility == ViewStates.Gone;
+            bool shouldExpand = sender.DetailsView.Visibility == ViewStates.Gone;
 
             ChangeBounds transition = new ChangeBounds();
             transition.SetDuration(125);
 
             if (shouldExpand)
             {
-                viewHolder.DetailsView.Visibility = ViewStates.Visible;
-                viewHolder.ExpandHandle.Visibility = ViewStates.Gone;
+                sender.DetailsView.Visibility = ViewStates.Visible;
+                sender.ExpandHandle.Visibility = ViewStates.Gone;
             }
             else
             {
-                viewHolder.DetailsView.Visibility = ViewStates.Gone;
-                viewHolder.ExpandHandle.Visibility = ViewStates.Visible;
+                sender.DetailsView.Visibility = ViewStates.Gone;
+                sender.ExpandHandle.Visibility = ViewStates.Visible;
             }
 
             TransitionManager.BeginDelayedTransition(this.recyclerView, transition);
-            viewHolder.DashboardItem.Activated = shouldExpand;
+            sender.DashboardItem.Activated = shouldExpand;
         }
     }
 }

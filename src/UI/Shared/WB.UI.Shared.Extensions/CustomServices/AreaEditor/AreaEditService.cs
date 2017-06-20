@@ -75,7 +75,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                             MapName = editResult.MapName,
                             Area = editResult.Area,
                             Length = editResult.Length,
-                            DistanceToEditor = editResult.DistanceToEditor
+                            DistanceToEditor = editResult.DistanceToEditor,
+                            Preview = editResult.Preview
                         });
             });
 

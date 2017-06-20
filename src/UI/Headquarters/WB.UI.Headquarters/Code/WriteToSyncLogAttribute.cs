@@ -257,7 +257,8 @@ namespace WB.UI.Headquarters.Code
                 .Select(_ => GetAssignmentIdentifyingQuestionRow(_, questionnaire));
 
             var answersString = string.Join("", answers);
-            return $"{apiView.Id}: <strong>{questionnaire.Title}</strong> [{apiView.QuestionnaireId}] <ul>{answersString}</ul>";
+            return SyncLogMessages.GetAssignmentFormat.FormatString(
+                $"{apiView.Id}: <strong>{questionnaire.Title}</strong> [{apiView.QuestionnaireId}] <ul>{answersString}</ul>");
         }
 
         private string GetAssignmentIdentifyingQuestionRow(AssignmentApiDocument.InterviewSerializedAnswer _, Core.SharedKernels.DataCollection.Aggregates.IQuestionnaire questionnaire)

@@ -117,12 +117,18 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         
         public void Init(string geometry, string mapName, double? areaSize)
         {
-            this.Area = geometry;
             this.MapName = mapName;
-            this.GeometryArea = areaSize;
+
+            if(!string.IsNullOrEmpty(geometry))
+            {
+                this.Geometry =  Geometry.FromJson(geometry);
+
+                this.GeometryArea = GeometryEngine.AreaGeodetic(this.Geometry);
+                this.GeometryLength = GeometryEngine.LengthGeodetic(this.Geometry);
+            }
         }
 
-        public string Area { set; get; }
+        private Geometry Geometry { set; get; } = null;
         public string MapName { set; get; }
 
         private Map map;
@@ -143,13 +149,24 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     this.mapView.ViewAttachedToWindow +=
                         delegate
                         {
-                            if (!string.IsNullOrEmpty(this.Area))
+                            //if (this.Geometry != null)
                                 if (this.StartEditAreaCommand.CanExecute())
                                     this.StartEditAreaCommand.Execute();
                         };
                 }
             }
         }
+
+
+        public IMvxAsyncCommand RotateMapToNorth => new MvxAsyncCommand(async () =>
+            await this.MapView?.SetViewpointRotationAsync(0));
+
+
+        public IMvxAsyncCommand ZoomMapIn => new MvxAsyncCommand(async () =>
+            await this.MapView?.SetViewpointScaleAsync(this.MapView.MapScale / 1.3));
+
+        public IMvxAsyncCommand ZoomMapOut => new MvxAsyncCommand(async () =>
+            await this.MapView?.SetViewpointScaleAsync(this.MapView.MapScale * 1.3));
 
         public IMvxCommand SaveAreaCommand => new MvxCommand(() =>
         {
@@ -162,6 +179,14 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             {
                 this.userInteractionService.ShowToast(UIResources.AreaMap_NoChangesInfo);
             }
+        });
+
+        public IMvxCommand CancelCommand => new MvxCommand(() =>
+        {
+            var handler = this.OnAreaEditCompleted;
+            handler?.Invoke(null);
+            Close(this);
+
         });
 
         public IMvxCommand SwitchLocatorCommand => new MvxCommand(() => 
@@ -185,7 +210,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     this.AvailableMaps = this.mapService.GetAvailableMaps();
                     this.MapsList = this.AvailableMaps.Select(x => x.MapName).ToList();
 
-                    this.ReloadMap();
+                    if (this.Map == null)
+                        this.ReloadMap();
                 }
                 else
                 {
@@ -218,7 +244,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     var geometry = args.NewGeometry;
                     try
                     {
-                        this.GeometryArea = GeometryEngine.AreaGeodetic(args.NewGeometry);
+                        this.GeometryArea = GeometryEngine.AreaGeodetic(geometry);
+                        this.GeometryLength = GeometryEngine.LengthGeodetic(geometry);
                     }
                     catch (Exception e)
                     {
@@ -234,16 +261,16 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 };
 
                 Geometry result = null;
-                if (string.IsNullOrWhiteSpace(this.Area))
+                if (this.Geometry == null)
                 {
+                    await this.MapView.SetViewpointRotationAsync(0);//hack to fix Map is not prepared.
                     result = await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polygon, true)
                         .ConfigureAwait(false);
                 }
                 else
                 {
-                    var geometry = Geometry.FromJson(this.Area);
-                    await this.MapView.SetViewpointGeometryAsync(geometry, 120);
-                    result = await this.MapView.SketchEditor.StartAsync(geometry, SketchCreationMode.Polygon)
+                    await this.MapView.SetViewpointGeometryAsync(this.Geometry, 120);
+                    result = await this.MapView.SketchEditor.StartAsync(this.Geometry, SketchCreationMode.Polygon)
                         .ConfigureAwait(false);
                 }
 
@@ -258,13 +285,21 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     dist = GeometryEngine.Distance(result, point);
                 }
 
+                //preview
+                /*var preview = await this.MapView.ExportImageAsync().ConfigureAwait(false);
+                var buffer = await preview.GetEncodedBufferAsync();
+                byte[] data = new byte[buffer.Length];
+                buffer.Read(data, 0, data.Length);
+                */
+
                 var resultArea = new AreaEditorResult()
                 {
                     Geometry = result?.ToJson(),
                     MapName = this.SelectedMap,
                     Area = GeometryEngine.AreaGeodetic(result),
                     Length = GeometryEngine.LengthGeodetic(result),
-                    DistanceToEditor = dist
+                    DistanceToEditor = dist,
+                    //Preview = data
                 };
                 handler?.Invoke(resultArea);
             }
@@ -275,11 +310,18 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             }
         });
 
-        private double? geometryArea;
+        private double? geometryArea = 0;
         public double? GeometryArea
         {
             get => this.geometryArea;
             set => this.RaiseAndSetIfChanged(ref this.geometryArea, value);
+        }
+
+        private double? geometryLength = 0;
+        public double? GeometryLength
+        {
+            get => this.geometryLength;
+            set => this.RaiseAndSetIfChanged(ref this.geometryLength, value);
         }
 
         private void BtnUndo()
