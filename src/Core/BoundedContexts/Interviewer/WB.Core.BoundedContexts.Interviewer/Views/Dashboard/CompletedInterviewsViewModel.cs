@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.GenericSubdomains.Portable;
@@ -33,13 +34,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public void Load()
         {
-            this.Items = this.GetCompletedInterviews().ToList();
+            
+            Task.Run(() =>
+            {
+                var items = this.GetCompletedInterviews().ToList();
+                var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
+                subTitle.Title = InterviewerUIResources.Dashboard_CompletedTabText;
+                var uiItems = subTitle.ToEnumerable().Concat(items).ToList();
+                return Tuple.Create(items, uiItems);
+            }).ContinueWith(task =>
+            {
+                this.Items = task.Result.Item1;
+                this.UiItems = task.Result.Item2;
 
-            var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
-            subTitle.Title = InterviewerUIResources.Dashboard_CompletedTabText;
-            this.UiItems = subTitle.ToEnumerable().Concat(this.Items).ToList();
-
-            this.Title = string.Format(InterviewerUIResources.Dashboard_CompletedLinkText, this.Items.Count);
+                this.Title = string.Format(InterviewerUIResources.Dashboard_CompletedLinkText, this.Items.Count);
+            }, TaskScheduler.FromCurrentSynchronizationContext());
+            
+            this.Title = string.Format(InterviewerUIResources.Dashboard_CompletedLinkText, 0);
         }
 
         private IEnumerable<IDashboardItem> GetCompletedInterviews()
