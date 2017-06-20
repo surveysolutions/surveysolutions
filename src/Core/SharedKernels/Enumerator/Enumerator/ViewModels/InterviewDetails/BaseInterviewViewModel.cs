@@ -129,6 +129,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 .GetPrefilledQuestions()
                 .Any(questionId => questionnaire.GetQuestionType(questionId) != QuestionType.GpsCoordinates);
 
+            this.HasEdiablePrefilledQuestions = questionnaire
+                .GetPrefilledQuestions()
+                .All(questionId => interview.GetQuestion(new Identity(questionId, null))?.IsReadonly ?? true);
+
             this.QuestionnaireTitle = questionnaire.Title;
         
             this.availableLanguages = questionnaire.GetTranslationLanguages();
@@ -259,6 +263,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public string QuestionnaireTitle { get; set; }
 
         public bool HasPrefilledQuestions { get; set; }
+        public bool HasEdiablePrefilledQuestions { get; set; }
+        
         public bool HasCommentsFromSupervior { get; set; }
         public bool HasNotEmptyNoteFromSupervior { get; set; }
 

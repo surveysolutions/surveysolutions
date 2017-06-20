@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             var interviewerIdentity = this.principal.CurrentUserIdentity;
 
             var createInterviewCommand = new CreateInterview(interviewId,
-                interviewerIdentity.UserId, this.questionnaireIdentity.QuestionnaireId, this.questionnaireIdentity.Version, new List<InterviewAnswer>(), DateTime.UtcNow,
+                interviewerIdentity.UserId, this.questionnaireIdentity, new List<InterviewAnswer>(), DateTime.UtcNow,
                 interviewerIdentity.SupervisorId,
                 null, null, null);
             await this.commandService.ExecuteAsync(createInterviewCommand);
