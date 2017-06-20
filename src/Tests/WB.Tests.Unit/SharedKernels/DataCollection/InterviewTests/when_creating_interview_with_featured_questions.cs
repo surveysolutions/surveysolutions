@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var interviewExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(_ =>
                 _.GetExpressionState(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == expressionState);
 
-            command = Create.Command.CreateInterviewCommand(questionnaireId, questionnaireVersion, responsibleSupervisorId,
+            command = Create.Command.CreateInterview(questionnaireId, questionnaireVersion, responsibleSupervisorId,
                 answersToFeaturedQuestions, userId);
             interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository,
                 expressionProcessorStatePrototypeProvider: interviewExpressionStatePrototypeProvider);

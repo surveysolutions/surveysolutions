@@ -127,7 +127,7 @@ namespace WB.UI.Headquarters.Controllers
                                                         Answer = this.identifyingAnswerConverter.GetAbstractAnswer(questionnaire, x.Identity.Id, x.Answer)
                                                     });
 
-            var createInterviewOnClientCommand = new CreateInterviewWithPreloadedData(
+            var createInterviewCommand = new CreateInterviewWithPreloadedData(
                 interviewId,
                 interviewer.PublicKey, 
                 assignment.QuestionnaireId.QuestionnaireId, 
@@ -139,7 +139,7 @@ namespace WB.UI.Headquarters.Controllers
                 this.keyGenerator.Get(), 
                 assignment.Id);
 
-            this.commandService.Execute(createInterviewOnClientCommand);
+            this.commandService.Execute(createInterviewCommand);
             return interviewId.FormatGuid();
         }
         

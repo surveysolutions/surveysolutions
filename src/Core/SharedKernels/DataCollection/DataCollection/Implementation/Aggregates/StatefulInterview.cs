@@ -34,12 +34,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public override void Apply(InterviewCreated @event)
         {
             base.Apply(@event);
+            this.CreatedOnClient = true;
             this.sourceInterview = this.Tree.Clone();
         }
 
         public override void Apply(InterviewFromPreloadedDataCreated @event)
         {
             base.Apply(@event);
+            this.CreatedOnClient = true;
             this.sourceInterview = this.Tree.Clone();
         }
 
