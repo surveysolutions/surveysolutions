@@ -465,6 +465,7 @@
     <Compile Include="Applications\Headquarters\ExportApiTests\when_getting_export_file_which_does_not_exist_on_server.cs" />
     <Compile Include="Applications\Headquarters\ExportApiTests\when_getting_export_file_and_questionnaire_identity_is_invalid.cs" />
     <Compile Include="Applications\Headquarters\FilterTests\MaintenanceFilterTests\when_action_executing_and_read_side_is_outdated.cs" />
+    <Compile Include="Applications\Headquarters\InterviewerApiTests\when_map_assignment_to_assignmentApiDocument_AssignmentViewFactoryTests.cs" />
     <Compile Include="Applications\Headquarters\InterviewerApiTests\CompanyLogoApiV2ControllerTests.cs" />
     <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\BaseAssignmentsControllerTest.cs" />
     <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\AssignmentsPublicApiMapProfileSpecification.cs" />
