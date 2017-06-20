@@ -34,6 +34,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public void Load()
         {
+            this.Items = this.UiItems = new List<IDashboardItem>();
+
             Task.Run(() =>
             {
                 var items = this.GetStartedInterviews().ToList();
