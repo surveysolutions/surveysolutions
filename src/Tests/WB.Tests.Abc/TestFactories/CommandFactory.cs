@@ -239,7 +239,7 @@ namespace WB.Tests.Abc.TestFactories
                 sycnhronizedInterview: synchronizationDto);
         }
 
-        public CreateInterviewWithPreloadedData CreateInterview(Guid interviewId,
+        public CreateInterview CreateInterview(Guid interviewId,
             Guid userId,
             Guid questionnaireId,
             long version,
@@ -250,7 +250,7 @@ namespace WB.Tests.Abc.TestFactories
             InterviewKey interviewKey = null,
             int? assignmentId = null)
         {
-            return new CreateInterviewWithPreloadedData(
+            return new CreateInterview(
                 interviewId, 
                 userId, 
                 questionnaireId, 
@@ -263,7 +263,7 @@ namespace WB.Tests.Abc.TestFactories
                 assignmentId);
         }
 
-        public CreateInterviewWithPreloadedData CreateInterview(Guid? questionnaireId = null,
+        public CreateInterview CreateInterview(Guid? questionnaireId = null,
             long? questionnaireVersion = null,
             Guid? responsibleSupervisorId = null,
             List<InterviewAnswer> answersToFeaturedQuestions = null,
@@ -282,7 +282,7 @@ namespace WB.Tests.Abc.TestFactories
                 Create.Entity.InterviewKey());
         }
 
-        public CreateInterviewWithPreloadedData CreateInterview(
+        public CreateInterview CreateInterview(
             Guid? interviewId = null,
             Guid? userId = null,
             QuestionnaireIdentity questionnaireIdentity = null,
