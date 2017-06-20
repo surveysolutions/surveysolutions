@@ -5,11 +5,9 @@ using System.Text.RegularExpressions;
 using CsvHelper;
 using CsvHelper.Configuration;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Infrastructure.Native.Fetching;
 using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
@@ -17,12 +15,12 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
     internal class SampleWebInterviewService : ISampleWebInterviewService
     {
         private static readonly Regex TitlesCleanupRegex = new Regex(@"(\r\n?|\n|\t)", RegexOptions.Compiled | RegexOptions.CultureInvariant);
-        private readonly IPlainStorageAccessor<Assignment> assignments;
-        private IQuestionnaireStorage questionnaireStorage;
+        private readonly IAssignmentsService assignmentsService;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
-        public SampleWebInterviewService(IPlainStorageAccessor<Assignment> assignments, IQuestionnaireStorage questionnaireStorage)
+        public SampleWebInterviewService(IAssignmentsService assignmentsService, IQuestionnaireStorage questionnaireStorage)
         {
-            this.assignments = assignments;
+            this.assignmentsService = assignmentsService;
             this.questionnaireStorage = questionnaireStorage;
         }
 
@@ -91,13 +89,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
 
         private List<Assignment> GetAssignments(QuestionnaireIdentity questionnaire)
         {
-            return this.assignments.Query(_ => _
-                .Where(x => x.QuestionnaireId.QuestionnaireId == questionnaire.QuestionnaireId &&
-                    x.QuestionnaireId.Version == questionnaire.Version &&
-                    x.Responsible.ReadonlyProfile.SupervisorId != null)
-                .OrderBy(x => x.Id)
-                .Fetch(x => x.IdentifyingData)
-                .ToList());
+            return this.assignmentsService.GetAssignmentsReadyForWebInterview(questionnaire);
         }
     }
 }

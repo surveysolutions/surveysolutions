@@ -25,6 +25,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IWebInterviewConfigurator configurator;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IPlainStorageAccessor<Assignment> assignments;
+        private readonly IAssignmentsService assignmentsService;
 
         // GET: WebInterviewSetup
         public WebInterviewSetupController(ICommandService commandService,
@@ -32,7 +33,8 @@ namespace WB.UI.Headquarters.Controllers
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IWebInterviewConfigurator configurator,
             IWebInterviewConfigProvider webInterviewConfigProvider,
-            IPlainStorageAccessor<Assignment> assignments)
+            IPlainStorageAccessor<Assignment> assignments,
+            IAssignmentsService assignmentsService)
             : base(commandService, 
                   logger)
         {
@@ -40,6 +42,7 @@ namespace WB.UI.Headquarters.Controllers
             this.configurator = configurator;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.assignments = assignments;
+            this.assignmentsService = assignmentsService;
         }
 
         public ActionResult Start(string id)
@@ -99,10 +102,8 @@ namespace WB.UI.Headquarters.Controllers
                 QuestionnaireIdentity = questionnaireIdentity
             };
 
-            model.AssignmentsCount = this.assignments.Query(_ => _.Count(
-                x => x.QuestionnaireId.QuestionnaireId == questionnaire.QuestionnaireId &&
-                    x.QuestionnaireId.Version == questionnaire.Version &&
-                    x.Responsible.ReadonlyProfile.SupervisorId != null));
+            model.AssignmentsCount =
+                this.assignmentsService.GetCountOfAssignmentsReadyForWebInterview(questionnaireIdentity);
 
             return this.View(model);
         }

@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.TopologicalSorter;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
@@ -500,6 +501,8 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
         }
 
+
+
         public IAnswerToStringConverter AnswerToStringConverter()
         {
             return new AnswerToStringConverter();
@@ -519,6 +522,19 @@ namespace WB.Tests.Abc.TestFactories
             var macrosSubstitutionServiceMock = new Mock<IMacrosSubstitutionService>();
             macrosSubstitutionServiceMock.Setup(x => x.InlineMacros(It.IsAny<string>(), It.IsAny<IEnumerable<Macro>>())).Returns((string e, IEnumerable<Macro> macros) => e);
             return macrosSubstitutionServiceMock.Object;
+        }
+
+        public IAssignmentsService AssignmentService(params Assignment[] assignments)
+        {
+            IPlainStorageAccessor<Assignment> accessor = new TestPlainStorage<Assignment>();
+            foreach (var assignment in assignments)
+            {
+                accessor.Store(assignment, assignment.Id);
+            }
+
+            var service = new AssignmentsService(accessor);
+
+            return service;
         }
     }
 }
