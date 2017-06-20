@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
 
             //Act
-            interview.CreateInterviewWithPreloadedData(command);
+            interview.CreateInterview(command);
         }
 
         [Test]
@@ -66,6 +66,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private Guid userId;
         private Guid responsibleSupervisorId;
         private Interview interview;
-        private CreateInterviewWithPreloadedData command;
+        private CreateInterview command;
     }
 }

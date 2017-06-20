@@ -117,7 +117,7 @@ namespace WB.Tests.Integration
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
                 Create.Service.SubstitionTextFactory());
 
-            interview.CreateInterviewWithPreloadedData(Create.Command.CreateInterview(
+            interview.CreateInterview(Create.Command.CreateInterview(
                 interviewId: interview.EventSourceId, 
                 userId: new Guid("F111F111F111F111F111F111F111F111"),
                 questionnaireId: questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
@@ -139,7 +139,7 @@ namespace WB.Tests.Integration
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
                 Create.Service.SubstitionTextFactory());
           
-            interview.CreateInterviewWithPreloadedData(Create.Command.CreateInterview(
+            interview.CreateInterview(Create.Command.CreateInterview(
                 interviewId: Guid.NewGuid(),
                 userId: Guid.NewGuid(),
                 questionnaireId: questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
@@ -178,7 +178,7 @@ namespace WB.Tests.Integration
                 expressionProcessorStatePrototypeProvider ?? Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
                 Create.Service.SubstitionTextFactory());
 
-            interview.CreateInterviewWithPreloadedData(Create.Command.CreateInterview(
+            interview.CreateInterview(Create.Command.CreateInterview(
                 interviewId: interview.EventSourceId,
                 userId: new Guid("F111F111F111F111F111F111F111F111"),
                 questionnaireId: questionnaireIdentity?.QuestionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),

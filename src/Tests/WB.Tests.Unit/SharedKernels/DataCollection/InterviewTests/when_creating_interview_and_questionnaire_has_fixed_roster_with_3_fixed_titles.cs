@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 answersToFeaturedQuestions: answersToFeaturedQuestions,
                 answersTime: answersTime,
                 userId: userId);
-            interview.CreateInterviewWithPreloadedData(command);
+            interview.CreateInterview(command);
         }
 
         [Test]

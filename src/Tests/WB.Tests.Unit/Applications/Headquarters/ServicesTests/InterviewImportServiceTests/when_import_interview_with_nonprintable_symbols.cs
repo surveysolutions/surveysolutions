@@ -45,10 +45,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                     }
                 });
 
-            mockOfCommandService.Setup(x => x.Execute(Moq.It.IsAny<CreateInterviewWithPreloadedData>(), null)).Callback<ICommand, string>(
+            mockOfCommandService.Setup(x => x.Execute(Moq.It.IsAny<CreateInterview>(), null)).Callback<ICommand, string>(
                     (command, ordinal) =>
                     {
-                        executedCommand = command as CreateInterviewWithPreloadedData;
+                        executedCommand = command as CreateInterview;
                     });
 
             var questionnaireBrowseItem = Create.Entity.QuestionnaireBrowseItem(questionnaireDocument, false);
@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             exception.ShouldBeNull();
 
         It should_call_execute_command_service_once = () =>
-            mockOfCommandService.Verify(x=> x.Execute(Moq.It.IsAny<CreateInterviewWithPreloadedData>(), null), Times.Once);
+            mockOfCommandService.Verify(x=> x.Execute(Moq.It.IsAny<CreateInterview>(), null), Times.Once);
 
         It should_be_specified_interviewer = () =>
             executedCommand.InterviewerId.ShouldEqual(interviewerId);
@@ -82,7 +82,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             "Responsible	EANo	MapRefNo	DUNo	Prov	LocalMunic	MainPlace	SubPlace	LongLat__Latitude	LongLat__Longitude\r\n" +
             @"GONZALES	138215891	318	2513	<?=/)L62O]#)7P#I_JOG[;>)1'	;A)=1C9'82LQ+K-S;YJ`AR	OR	`^!!4_!\\QF@RG_HL73ZD\	-6	1");
 
-        private static CreateInterviewWithPreloadedData executedCommand = null;
+        private static CreateInterview executedCommand = null;
         private static Exception exception;
         private static InterviewImportService interviewImportService;
         private static readonly Mock<ICommandService> mockOfCommandService = new Mock<ICommandService>();
