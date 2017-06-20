@@ -844,7 +844,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewData Update(InterviewData state, IPublishedEvent<AreaQuestionAnswered> @event)
         {
             return this.SaveAnswer(state, @event.Payload.RosterVector, @event.Payload.QuestionId,
-                new Area(@event.Payload.Geometry, @event.Payload.MapName, @event.Payload.AreaSize, @event.Payload.Length, @event.Payload.DistanceToEditor), 
+                new Area(@event.Payload.Geometry, @event.Payload.MapName, @event.Payload.AreaSize, @event.Payload.Length, 
+                @event.Payload.Coordinates, @event.Payload.DistanceToEditor), 
                 true);
         }
     }
