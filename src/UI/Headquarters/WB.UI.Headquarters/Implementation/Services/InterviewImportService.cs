@@ -54,8 +54,8 @@ namespace WB.UI.Headquarters.Implementation.Services
             IPlainTransactionManagerProvider plainTransactionManagerProvider,
             ITransactionManagerProvider transactionManagerProvider,
             IPlainStorageAccessor<Assignment> assignmentPlainStorageAccessor,
-            IUserViewFactory userViewFactory,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+            IUserViewFactory userViewFactory)
         {
             this.commandService = commandService;
             this.logger = logger;
@@ -76,6 +76,8 @@ namespace WB.UI.Headquarters.Implementation.Services
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
             var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
 
+            GetInterviewerAndSupervisorIdsByResponsibleId(responsibleId, out Guid? supervisorIdByResponsible, out Guid? interviewerIdByResponsible);
+
             void ImportAction(AssignmentImportData assignmentRecord)
             {
                 if (!responsibleId.HasValue && !assignmentRecord.SupervisorId.HasValue)
@@ -87,11 +89,12 @@ namespace WB.UI.Headquarters.Implementation.Services
                     return;
                 }
 
-                this.GetResponsibleIds(responsibleId, assignmentRecord, out Guid responsibleSupervisorId, out Guid? responsibleInterviewerId);
+                var responsibleSupervisorId = assignmentRecord.SupervisorId ?? supervisorIdByResponsible.Value;
+                var responsibleInterviewerId = assignmentRecord.SupervisorId.HasValue ? assignmentRecord.InterviewerId : interviewerIdByResponsible;
+                var assignmentResponsibleId = responsibleInterviewerId ?? responsibleSupervisorId;
 
                 var questionnaireBrowseItem = this.plainTransactionManager.ExecuteInQueryTransaction(() => this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity));
 
-                var assignmentResponsibleId = responsibleInterviewerId ?? responsibleSupervisorId;
                 List<InterviewAnswer> answers = assignmentRecord.PreloadedData.Answers;
                 var assignment = new Assignment(questionnaireIdentity, assignmentResponsibleId, assignmentRecord.Quantity);
 
@@ -202,30 +205,26 @@ namespace WB.UI.Headquarters.Implementation.Services
         
         public InterviewImportStatus Status { get; private set; } = new InterviewImportStatus();
 
-        private void GetResponsibleIds(Guid? responsibleId, AssignmentImportData assignmentRecord,
-            out Guid responsibleSupervisorId, out Guid? responsibleInterviewerId)
+        private void GetInterviewerAndSupervisorIdsByResponsibleId(Guid? responsibleId, 
+            out Guid? responsibleSupervisorId, out Guid? responsibleInterviewerId)
         {
-            if (assignmentRecord.SupervisorId.HasValue)
+            if (!responsibleId.HasValue)
             {
-                responsibleSupervisorId = assignmentRecord.SupervisorId.Value;
-                responsibleInterviewerId = assignmentRecord.InterviewerId;
+                responsibleSupervisorId = null;
+                responsibleInterviewerId = null;
+                return;
+            }
+
+            var responsible = this.GetUserById(responsibleId.Value);
+            if (responsible.IsInterviewer())
+            {
+                responsibleSupervisorId = responsible.Supervisor.Id;
+                responsibleInterviewerId = responsible.PublicKey;
             }
             else
             {
-                if (!responsibleId.HasValue)
-                    throw new ArgumentException();
-
-                var responsible = this.GetUserById(responsibleId.Value);
-                if (responsible.IsInterviewer())
-                {
-                    responsibleSupervisorId = responsible.Supervisor.Id;
-                    responsibleInterviewerId = responsible.PublicKey;
-                }
-                else
-                {
-                    responsibleSupervisorId = responsible.PublicKey;
-                    responsibleInterviewerId = null;
-                }
+                responsibleSupervisorId = responsible.PublicKey;
+                responsibleInterviewerId = null;
             }
         }
 
