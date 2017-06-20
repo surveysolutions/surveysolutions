@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -42,11 +44,31 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             this.Synchronization = sync;
             
-            this.Items = this.GetCensusQuestionnaires().Union(this.GetAssignments(dashboardViewModel)).ToList();
-
-            this.UiItems = this.Items.Any() ? this.GetSubTitle().ToEnumerable().Concat(this.Items).ToList() : this.Items;
+            LoadAsync(dashboardViewModel);
 
             this.Title = InterviewerUIResources.Dashboard_AssignmentsTabTitle;
+        }
+
+        private void LoadAsync(DashboardViewModel dashboardViewModel)
+        {
+            dashboardViewModel.IsInProgress = true;
+            this.Items = this.UiItems = new List<IDashboardItem>();
+
+            Task.Run(() =>
+            {
+                var assignments = this.GetCensusQuestionnaires().Union(this.GetAssignments(dashboardViewModel)).ToList();
+
+                var uiItems = assignments.Any()
+                    ? this.GetSubTitle().ToEnumerable().Concat(assignments).ToList()
+                    : assignments;
+
+                return Tuple.Create(assignments, uiItems);
+            }).ContinueWith(task =>
+            {
+                Items = task.Result.Item1;
+                UiItems = task.Result.Item2;
+                dashboardViewModel.IsInProgress = false;
+            }, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         private void RunSynchronization()

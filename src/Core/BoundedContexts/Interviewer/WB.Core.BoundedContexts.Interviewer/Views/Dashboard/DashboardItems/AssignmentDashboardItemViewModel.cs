@@ -144,16 +144,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
             List<InterviewAnswer> answers = this.GetAnswers(this.assignment.Answers);
 
-            ICommand createInterviewCommand = new CreateInterviewWithPreloadedData(interviewId,
+            ICommand createInterviewCommand = new CreateInterviewOnClientCommand(interviewId,
                     interviewerIdentity.UserId,
-                    this.questionnaireIdentity.QuestionnaireId,
-                    this.questionnaireIdentity.Version,
-                    answers,
-                    DateTime.UtcNow,
+                    new QuestionnaireIdentity(this.questionnaireIdentity.QuestionnaireId, this.questionnaireIdentity.Version),
+                    DateTime.UtcNow, 
                     interviewerIdentity.SupervisorId,
-                    interviewerIdentity.UserId,
                     null,
-                    this.assignment.Id
+                    this.assignment.Id,
+                    answers
                 );
 
             await this.commandService.ExecuteAsync(createInterviewCommand);

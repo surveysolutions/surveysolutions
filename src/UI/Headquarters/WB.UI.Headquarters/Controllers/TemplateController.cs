@@ -140,29 +140,27 @@ namespace WB.UI.Headquarters.Controllers
 
             try
             {
-                await this.designerQuestionnaireApiRestService.GetAsync(url: @"/api/hq/user/login", credentials: designerUserCredentials);
+                await this.designerQuestionnaireApiRestService.GetAsync(url: @"/api/hq/user/login",
+                    credentials: designerUserCredentials);
 
                 this.designerUserCredentials.Set(designerUserCredentials);
 
                 return this.RedirectToAction("Import");
             }
+            catch (RestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                this.ModelState.AddModelError("InvalidCredentials", string.Empty);
+            }
+            catch (RestException ex) when (ex.StatusCode == HttpStatusCode.Forbidden)
+            {
+                this.ModelState.AddModelError("AccessForbidden", Resources.LoginToDesigner.AccessForbidden);
+            }
             catch (RestException ex)
             {
-                if (ex.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    this.ModelState.AddModelError("InvalidCredentials", string.Empty);
-                }
-                if (ex.StatusCode == HttpStatusCode.Forbidden)
-                {
-                    this.ModelState.AddModelError("AccessForbidden", Resources.LoginToDesigner.AccessForbidden);
-                }
-                else
-                {
-                    this.Logger.Warn("Error communicating to designer", ex);
-                    this.Error(string.Format(
-                        QuestionnaireImport.LoginToDesignerError,
-                        GlobalHelper.GenerateUrl("Import", "Template", new { area = string.Empty })));
-                }
+                this.Logger.Warn("Error communicating to designer", ex);
+                this.Error(string.Format(
+                    QuestionnaireImport.LoginToDesignerError,
+                    GlobalHelper.GenerateUrl("Import", "Template", new { area = string.Empty })));
             }
             catch (Exception ex)
             {

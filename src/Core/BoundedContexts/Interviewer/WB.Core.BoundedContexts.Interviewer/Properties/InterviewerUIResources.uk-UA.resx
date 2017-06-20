@@ -178,9 +178,6 @@ iнтервью</value>
   <data name="DashboardItem_CreatedOn" xml:space="preserve">
     <value>Створено {0}</value>
   </data>
-  <data name="DashboardItem_InProgress" xml:space="preserve">
-    <value>Триває</value>
-  </data>
   <data name="DashboardItem_NotStarted" xml:space="preserve">
     <value>Не розпочато</value>
   </data>

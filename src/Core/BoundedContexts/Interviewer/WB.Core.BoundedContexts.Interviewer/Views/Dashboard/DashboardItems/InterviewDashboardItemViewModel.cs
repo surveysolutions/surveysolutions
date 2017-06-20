@@ -31,7 +31,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         public List<PrefilledQuestion> DetailedPrefilledQuestions { get; private set; }
         public string DateComment { get; private set; }
         public string Comment { get; private set; }
-        public bool HasComment { get; private set; }
 
         public event EventHandler OnItemRemoved;
 
@@ -69,7 +68,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
             this.GpsLocation = this.GetInterviewLocation(interview);
             this.IsSupportedRemove = interview.CanBeDeleted;
-            this.HasComment = !string.IsNullOrEmpty(this.Comment);
             this.HasExpandedView = this.PrefilledQuestions.Count > 0;
 
             if (interview.Assignment != null)
@@ -159,8 +157,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             {
                 case DashboardInterviewStatus.New:
                     return InterviewerUIResources.DashboardItem_NotStarted;
-                case DashboardInterviewStatus.InProgress:
-                    return InterviewerUIResources.DashboardItem_InProgress;
                 case DashboardInterviewStatus.Completed:
                     return interview.LastInterviewerOrSupervisorComment;
                 case DashboardInterviewStatus.Rejected:

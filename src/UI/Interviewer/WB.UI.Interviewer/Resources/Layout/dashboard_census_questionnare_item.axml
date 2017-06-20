@@ -16,7 +16,8 @@
                        Click CreateNewInterviewCommand;" />
 
       <TextView  style="@style/Dashboard_InterviewItem_Comment"
-          local:MvxBind="Text Comment;" />
+                 android:layout_marginBottom="@dimen/Dashboard_InterviewItem_InformationBlock_margin"
+                 local:MvxBind="Text Comment;" />
 
     </LinearLayout>
   </LinearLayout>

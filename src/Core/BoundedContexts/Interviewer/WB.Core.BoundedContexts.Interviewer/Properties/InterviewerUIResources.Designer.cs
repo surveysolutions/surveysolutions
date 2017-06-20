@@ -392,15 +392,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In progress.
-        /// </summary>
-        public static string DashboardItem_InProgress {
-            get {
-                return ResourceManager.GetString("DashboardItem_InProgress", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Not started.
         /// </summary>
         public static string DashboardItem_NotStarted {
