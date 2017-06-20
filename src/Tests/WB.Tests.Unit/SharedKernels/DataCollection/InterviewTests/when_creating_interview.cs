@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.Version == questionnaireVersion);
 
-            this.command = Create.Command.CreateInterviewCommand(questionnaireId: this.questionnaireId,
+            this.command = Create.Command.CreateInterview(questionnaireId: this.questionnaireId,
                 questionnaireVersion: this.questionnaireVersion,
                 responsibleSupervisorId: this.responsibleSupervisorId,
                 answersToFeaturedQuestions: new List<InterviewAnswer>(), 

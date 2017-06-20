@@ -69,11 +69,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             var interviewId = Guid.NewGuid();
             var interviewerIdentity = this.principal.CurrentUserIdentity;
 
-            var createInterviewOnClientCommand = new CreateInterviewWithPreloadedData(interviewId,
+            var createInterviewCommand = new CreateInterviewWithPreloadedData(interviewId,
                 interviewerIdentity.UserId, this.questionnaireIdentity.QuestionnaireId, this.questionnaireIdentity.Version, new List<InterviewAnswer>(), DateTime.UtcNow,
                 interviewerIdentity.SupervisorId,
                 null, null, null);
-            await this.commandService.ExecuteAsync(createInterviewOnClientCommand);
+            await this.commandService.ExecuteAsync(createInterviewCommand);
             this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
         }
 
