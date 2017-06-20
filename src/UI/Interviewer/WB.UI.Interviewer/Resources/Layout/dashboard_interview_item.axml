@@ -26,7 +26,7 @@
                                   TextColor InterviewStatusToColor(Status);" />
         <TextView style="@style/Dashboard_InterviewItem_Comment"
                   local:MvxBind="Text Comment;
-                                 Visible HasComment;
+                                 Visible Comment;
                                  TextColor InterviewStatusToColor(Status);" />
 
         <Space android:layout_width="match_parent"
