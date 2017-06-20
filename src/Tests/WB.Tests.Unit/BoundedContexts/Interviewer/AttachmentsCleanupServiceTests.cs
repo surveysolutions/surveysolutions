@@ -17,18 +17,20 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
     [TestFixture]
     public class AttachmentsCleanupServiceTests : MvvmCross.Test.Core.MvxIoCSupportingTest
     {
+        private IPlainStorage<AttachmentContentMetadata> metadataStorage;
+        private IPlainStorage<AttachmentContentData> contentStorage;
+        protected List<QuestionnaireDocumentView> questionnaires = new List<QuestionnaireDocumentView>();
+        private IInterviewerQuestionnaireAccessor interviewerQuestionnaireAccessor;
+
         [Test]
         public void when_no_questionnaires_use_attchament_it_should_be_removed()
         {
-            IPlainStorage<AttachmentContentMetadata> metadataStorage = new SqliteInmemoryStorage<AttachmentContentMetadata>();
-            IPlainStorage<AttachmentContentData> contentStorage = new SqliteInmemoryStorage<AttachmentContentData>();
-
             var contentId = "meta";
             metadataStorage.Store(new AttachmentContentMetadata { Id = contentId, ContentType = "application/json", Size = 4 });
             contentStorage.Store(new AttachmentContentData {Content = new byte[] {1, 2, 3}, Id = contentId});
 
             var service = this.CreateAttachmentsCleanupService(metadataStorage: metadataStorage,
-                contentStorage: contentStorage);
+                contentStorage: contentStorage, questionnairesAccessor: interviewerQuestionnaireAccessor);
 
             service.RemovedOrphanedAttachments();
 
@@ -44,30 +46,34 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
             base.Setup();
         }
 
+        [SetUp]
+        public void TestSetup()
+        {
+            this.metadataStorage = new SqliteInmemoryStorage<AttachmentContentMetadata>();
+            this.contentStorage = new SqliteInmemoryStorage<AttachmentContentData>();
+
+            this.interviewerQuestionnaireAccessor = Mock.Of<IInterviewerQuestionnaireAccessor>(x => x.LoadAll() == this.questionnaires);
+        }
+
         [Test]
         public void when_questionnaire_uses_attachment_it_should_not_be_removed()
         {
-            IPlainStorage<AttachmentContentMetadata> metadataStorage = new SqliteInmemoryStorage<AttachmentContentMetadata>();
-            IPlainStorage<AttachmentContentData> contentStorage = new SqliteInmemoryStorage<AttachmentContentData>();
-
             var questionnaire = Create.Entity.QuestionnaireDocumentWithAttachments(null, Create.Entity.Attachment("meta"));
 
             Ioc.RegisterSingleton(Mock.Of<IJsonAllTypesSerializer>(s =>
                 s.Deserialize<QuestionnaireDocument>(It.IsAny<byte[]>()) == questionnaire
                 && s.Serialize(It.IsAny<QuestionnaireDocument>()) == "any"));
 
-            var documentView = new QuestionnaireDocumentView { QuestionnaireDocument = questionnaire };
+            this.questionnaires.Add(new QuestionnaireDocumentView { QuestionnaireDocument = questionnaire });
 
             var contentId = "meta";
             metadataStorage.Store(new AttachmentContentMetadata { Id = contentId, ContentType = "application/json", Size = 4 });
             contentStorage.Store(new AttachmentContentData { Content = new byte[] { 1, 2, 3 }, Id = contentId });
 
-            IInterviewerQuestionnaireAccessor questionnaireAccessor = Mock.Of<IInterviewerQuestionnaireAccessor>(
-                x => x.LoadAll() == new List<QuestionnaireDocumentView> { documentView });
 
             var service = this.CreateAttachmentsCleanupService(metadataStorage: metadataStorage,
                 contentStorage: contentStorage,
-                questionnairesAccessor: questionnaireAccessor);
+                questionnairesAccessor: interviewerQuestionnaireAccessor);
 
             service.RemovedOrphanedAttachments();
 
