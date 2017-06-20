@@ -186,6 +186,7 @@
                     $(row).addClass('disabled');
                 }
             },
+            order: self.defaultOrder,
             initComplete: function (settings, json) {
                 if (!_.isUndefined(onTableInitComplete))
                     onTableInitComplete();
