@@ -512,4 +512,8 @@
   <data name="AreaMap_LengthFormat" xml:space="preserve">
     <value>Периметр:</value>
   </data>
+  <data name="AreaMap_MapTitle" xml:space="preserve">
+    <value>Карта</value>
+    <comment>Карта</comment>
+  </data>
 </root>
