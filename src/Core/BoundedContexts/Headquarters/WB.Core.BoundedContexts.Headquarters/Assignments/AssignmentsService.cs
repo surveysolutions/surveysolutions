@@ -64,7 +64,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             {
                 Id = assignment.Id,
                 QuestionnaireId = assignment.QuestionnaireId,
-                Quantity = assignment.Quantity == null ? null : assignment.Quantity - assignment.InterviewSummaries.Count
+                Quantity = assignment.Quantity == null ? null : assignment.Quantity - assignment.InterviewSummaries.Count,
+                CreatedAtUtc = assignment.CreatedAtUtc
             };
 
             var assignmentIdentifyingData = assignment.IdentifyingData.ToLookup(id => id.Identity);
