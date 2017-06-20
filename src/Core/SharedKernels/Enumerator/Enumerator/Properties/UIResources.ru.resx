@@ -503,4 +503,17 @@
   <data name="Device_Does_Not_Support" xml:space="preserve">
     <value>Ваше устройство не поддерживает данный функционал</value>
   </data>
+  <data name="AreaMap_AreaFormat" xml:space="preserve">
+    <value>Площадь:</value>
+  </data>
+  <data name="AreaMap_Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="AreaMap_LengthFormat" xml:space="preserve">
+    <value>Периметр:</value>
+  </data>
+  <data name="AreaMap_MapTitle" xml:space="preserve">
+    <value>Карта</value>
+    <comment>Карта</comment>
+  </data>
 </root>

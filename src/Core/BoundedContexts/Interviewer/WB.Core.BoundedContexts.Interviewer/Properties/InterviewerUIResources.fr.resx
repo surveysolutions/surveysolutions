@@ -171,9 +171,6 @@
   <data name="DashboardItem_CreatedOn" xml:space="preserve">
     <value>Créé le {0}</value>
   </data>
-  <data name="DashboardItem_InProgress" xml:space="preserve">
-    <value>En cours</value>
-  </data>
   <data name="DashboardItem_NotStarted" xml:space="preserve">
     <value>Pas encore commencé</value>
   </data>

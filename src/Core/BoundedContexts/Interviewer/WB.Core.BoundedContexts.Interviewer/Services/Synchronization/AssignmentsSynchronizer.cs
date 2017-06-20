@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
@@ -58,6 +59,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
             // adding new, updating capacity for existing
             var localAssignmentsLookup = this.assignmentsRepository.LoadAll().ToLookup(la => la.Id);
             var processedAssignmentsCount = 0;
+
             foreach (var remoteItem in remoteAssignments)
             {
                 processedAssignmentsCount++;
@@ -77,7 +79,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
                         QuestionnaireId = remote.QuestionnaireId.ToString(),
                         Title = questionnaire.Title,
                         Quantity = remote.Quantity,
-                        ReceivedDateUtc = DateTime.UtcNow
+                        LocationQuestionId = remote.LocationQuestionId,
+                        LocationLatitude = remote.LocationLatitude,
+                        LocationLongitude = remote.LocationLongitude,
+                        ReceivedDateUtc = remote.CreatedAtUtc
                     };
 
                     this.FillAnswers(remote, questionnaire, local);
@@ -120,6 +125,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
 
             local.LocationLatitude = remote.LocationLatitude;
             local.LocationLongitude = remote.LocationLongitude;
+            local.LocationQuestionId = remote.LocationQuestionId;
+
             var answers = new List<AssignmentDocument.AssignmentAnswer>();
             var identiAnswers = new List<AssignmentDocument.AssignmentAnswer>();
 
@@ -127,7 +134,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
             {
                 var isIdentifying = identifyingQuestionIds.Contains(answer.Identity.Id);
 
-                if (isIdentifying)
+                if (isIdentifying && questionnaire.GetQuestionType(answer.Identity.Id) != QuestionType.GpsCoordinates)
                 {
                     identiAnswers.Add(new AssignmentDocument.AssignmentAnswer
                     {

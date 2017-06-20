@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
@@ -46,7 +47,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                         _ => _.GetPlainTransactionManager() == Mock.Of<IPlainTransactionManager>()),
                 transactionManagerProvider: Create.Service.TransactionManagerProvider(),
                 assignmentPlainStorageAccessor: Mock.Of<IPlainStorageAccessor<Assignment>>(),
-                questionnaireBrowseViewFactory: questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>());
+                questionnaireBrowseViewFactory: questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
+                userViewFactory : Mock.Of<IUserViewFactory>());
         }
     }
 }

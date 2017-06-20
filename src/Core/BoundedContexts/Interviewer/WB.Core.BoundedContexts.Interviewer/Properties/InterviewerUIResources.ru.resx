@@ -126,9 +126,6 @@
   <data name="DashboardItem_CreatedOn" xml:space="preserve">
     <value>Cоздано {0}</value>
   </data>
-  <data name="DashboardItem_InProgress" xml:space="preserve">
-    <value>В процессе</value>
-  </data>
   <data name="DashboardItem_NotStarted" xml:space="preserve">
     <value>Не начатое</value>
   </data>

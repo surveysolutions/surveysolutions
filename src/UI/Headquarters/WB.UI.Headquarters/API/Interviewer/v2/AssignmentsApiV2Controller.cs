@@ -17,14 +17,12 @@ namespace WB.UI.Headquarters.API.Interviewer.v2
     {
         private readonly IAuthorizedUser authorizedUser;
         private readonly IAssignmentsService assignmentsService;
-        private readonly IAssignmentViewFactory assignmentViewFactory;
 
         public AssignmentsApiV2Controller(IAuthorizedUser authorizedUser,
             IAssignmentsService assignmentsService, IAssignmentViewFactory assignmentViewFactory)
         {
             this.authorizedUser = authorizedUser;
             this.assignmentsService = assignmentsService;
-            this.assignmentViewFactory = assignmentViewFactory;
         }
 
         [WriteToSyncLog(SynchronizationLogType.GetAssignment)]
@@ -41,7 +39,7 @@ namespace WB.UI.Headquarters.API.Interviewer.v2
                 throw new HttpResponseException(HttpStatusCode.Forbidden);
             }
 
-            return Task.FromResult(this.assignmentViewFactory.MapAssignment(assignment));
+            return Task.FromResult(this.assignmentsService.MapAssignment(assignment));
         }
 
         [WriteToSyncLog(SynchronizationLogType.GetAssignmentsList)]

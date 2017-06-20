@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
@@ -7,5 +9,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
     {
         List<Assignment> GetAssignments(Guid responsibleId);
         Assignment GetAssignment(int id);
+
+        List<Assignment> GetAssignmentsReadyForWebInterview(QuestionnaireIdentity questionnaireId);
+        int GetCountOfAssignmentsReadyForWebInterview(QuestionnaireIdentity questionnaireId);
+
+        AssignmentApiDocument MapAssignment(Assignment assignment);
     }
 }
