@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 synchronizedEvents: eventsToPublish));
 
         It should_raise_InterviewOnClientCreated_event = () =>
-          eventContext.ShouldContainEvent<InterviewOnClientCreated>(@event => @event.UserId == userId);
+          eventContext.ShouldContainEvent<InterviewCreated>(@event => @event.UserId == userId);
 
         It should_raise_interview_received_by_supervisor_event = () =>
             eventContext.ShouldContainEvent<InterviewReceivedBySupervisor>();
