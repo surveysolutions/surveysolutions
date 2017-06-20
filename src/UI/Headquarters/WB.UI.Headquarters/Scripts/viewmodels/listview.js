@@ -186,9 +186,17 @@
                     $(row).addClass('disabled');
                 }
             },
-            "initComplete": function (settings, json) {
+            initComplete: function (settings, json) {
                 if (!_.isUndefined(onTableInitComplete))
                     onTableInitComplete();
+
+                // Replace throttling with debounce https://github.com/DataTables/DataTables/issues/809#issuecomment-293918587
+                var $input = $(this).find("input[type='search']");
+                var searchDelay = this.api().settings()[0].searchDelay;
+
+                $input.off().on('keyup cut paste',
+                    _.debounce(function() { api.search($input.val()).draw(); },
+                    searchDelay));
             }
         });
     };
