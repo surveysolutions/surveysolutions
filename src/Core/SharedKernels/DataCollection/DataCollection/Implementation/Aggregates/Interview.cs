@@ -1400,12 +1400,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             int? commandAssignmentId)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
             List<InterviewAnswer>[] answersGroupedByLevels = answers
                 .GroupBy(x => x.Identity.RosterVector.Length)
                 .Select(x => new { Depth = x.Key, Answers = x.ToList() })
                 .OrderBy(x => x.Depth)
                 .Select(x => x.Answers)
                 .ToArray();
+
+            var noAnswersOnQuestionnaireLevel = !answersGroupedByLevels.Any(x => x.FirstOrDefault()?.Identity.RosterVector.Length == 0);
+            if (noAnswersOnQuestionnaireLevel)
+                changedInterviewTree.ActualizeTree();
 
             foreach (var answersInLevel in answersGroupedByLevels)
             {
@@ -1427,9 +1432,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 changedInterviewTree.ActualizeTree();
             }
-
-            if (!answersGroupedByLevels.Any())
-                changedInterviewTree.ActualizeTree();
         }
 
         protected void ApplyInterviewKey(InterviewKey key)

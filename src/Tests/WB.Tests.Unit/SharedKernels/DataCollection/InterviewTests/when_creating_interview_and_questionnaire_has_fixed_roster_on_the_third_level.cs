@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             eventContext = new EventContext();
 
-            command = Create.Command.CreateInterviewCommand(questionnaireId, 1, supervisorId,
+            command = Create.Command.CreateInterview(questionnaireId, 1, supervisorId,
                 new List<InterviewAnswer>(), userId);
             interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
         };

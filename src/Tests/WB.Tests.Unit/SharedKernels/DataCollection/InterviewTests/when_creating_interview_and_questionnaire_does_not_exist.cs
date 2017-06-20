@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var repositoryWithoutQuestionnaire = Mock.Of<IQuestionnaireStorage>();
 
-            this.command = Create.Command.CreateInterviewCommand(this.questionnaireId, 1, this.responsibleSupervisorId,
+            this.command = Create.Command.CreateInterview(this.questionnaireId, 1, this.responsibleSupervisorId,
                 new List<InterviewAnswer>(), userId: this.userId);
            interview = Create.AggregateRoot.Interview(questionnaireRepository: repositoryWithoutQuestionnaire);
 

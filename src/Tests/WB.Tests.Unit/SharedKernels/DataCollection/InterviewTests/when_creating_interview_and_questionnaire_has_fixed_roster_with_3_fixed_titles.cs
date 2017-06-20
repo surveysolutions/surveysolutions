@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext = new EventContext();
 
             interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
-            var command = Create.Command.CreateInterviewCommand(
+            var command = Create.Command.CreateInterview(
                 questionnaireId: questionnaireId,
                 questionnaireVersion: 1,
                 responsibleSupervisorId: supervisorId,

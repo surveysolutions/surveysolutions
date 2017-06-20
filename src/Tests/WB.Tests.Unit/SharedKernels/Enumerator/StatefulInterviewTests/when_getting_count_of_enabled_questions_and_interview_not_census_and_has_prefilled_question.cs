@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Main.Core.Entities.Composite;
 using NUnit.Framework;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Tests.Abc;
 
@@ -25,12 +23,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             );
 
             var statefulInterview = Setup.StatefulInterview(questionnaire, false);
-            statefulInterview.CreateInterviewWithPreloadedData(Create.Command.CreateInterviewCommand(questionnaire.PublicKey, 1, suervisorId, new List<InterviewAnswer>(), responsibleId, DateTime.UtcNow));
+            statefulInterview.CreateInterviewWithPreloadedData(
+                Create.Command.CreateInterview(questionnaire.PublicKey, 1, suervisorId, new List<InterviewAnswer>(), responsibleId, DateTime.UtcNow));
 
             //act
             var countActiveQuestionsInInterview = statefulInterview.CountActiveQuestionsInInterview();
             //assert
-            Assert.That(countActiveQuestionsInInterview, Is.EqualTo(1));
+            Assert.That(countActiveQuestionsInInterview, Is.EqualTo(2));
         }
     }
 }
