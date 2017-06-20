@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
                         LocationQuestionId = remote.LocationQuestionId,
                         LocationLatitude = remote.LocationLatitude,
                         LocationLongitude = remote.LocationLongitude,
-                        ReceivedDateUtc = DateTime.UtcNow
+                        ReceivedDateUtc = remote.CreatedAtUtc
                     };
 
                     this.FillAnswers(remote, questionnaire, local);

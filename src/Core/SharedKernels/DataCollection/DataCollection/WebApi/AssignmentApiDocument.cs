@@ -19,6 +19,8 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public double? LocationLongitude { get; set; }
         public Guid? LocationQuestionId { get; set; }
 
+        public DateTime CreatedAtUtc { get; set; }
+
         public class InterviewSerializedAnswer
         {
             [JsonProperty("id")]
