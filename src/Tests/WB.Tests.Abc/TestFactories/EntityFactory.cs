@@ -1604,14 +1604,19 @@ namespace WB.Tests.Abc.TestFactories
             asDynamic.Id = id ?? 0;
             result.QuestionnaireId = questionnaireIdentity;
 
+            var readonlyUser = new ReadonlyUser();
+            var readonlyProfile = new ReadonlyProfile();
+            
+            readonlyUser.AsDynamic().ReadonlyProfile = readonlyProfile;
+            asDynamic.Responsible = readonlyUser;
+
             if (assigneeSupervisorId.HasValue)
             {
-                var readonlyUser = new ReadonlyUser();
-                var readonlyProfile = new ReadonlyProfile();
                 readonlyProfile.AsDynamic().SupervisorId = assigneeSupervisorId;
-                readonlyUser.AsDynamic().ReadonlyProfile = readonlyProfile;
+            }
+            if (!string.IsNullOrEmpty(responsibleName))
+            {
                 readonlyUser.AsDynamic().Name = responsibleName;
-                asDynamic.Responsible = readonlyUser;
             }
 
             asDynamic.InterviewSummaries = interviewSummary;

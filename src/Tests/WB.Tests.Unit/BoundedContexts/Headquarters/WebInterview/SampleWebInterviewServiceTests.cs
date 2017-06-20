@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using CsvHelper;
@@ -6,15 +7,10 @@ using CsvHelper.Configuration;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview.Impl;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.Implementation;
-using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
-using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
 {
@@ -50,11 +46,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             var questionnaireId = Create.Entity.QuestionnaireIdentity();
 
             var assignmentId = 5;
-            var summary = Create.Entity.Assignment(id: assignmentId, questionnaireIdentity: questionnaireId, assigneeSupervisorId: Guid.NewGuid());
-
-            IPlainStorageAccessor<Assignment> assignments = new InMemoryPlainStorageAccessor<Assignment>();
-            assignments.Store(summary, summary.Id);
-
+            var assignment = Create.Entity.Assignment(id: assignmentId, questionnaireIdentity: questionnaireId, assigneeSupervisorId: Guid.NewGuid());
+            var assignments = Create.Service.AssignmentService(assignment);
             var service = this.GetService(assignments: assignments);
 
             // Act
@@ -83,11 +76,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             var questionnaireId = Create.Entity.QuestionnaireIdentity();
             var questionId = Create.Entity.Identity(Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
             
-            var summary = Create.Entity.Assignment(id: 5, questionnaireIdentity: questionnaireId, assigneeSupervisorId: Guid.NewGuid());
-            summary.IdentifyingData.Add(Create.Entity.IdentifyingAnswer(summary, answer: "bla", identity: questionId));
+            var assignment = Create.Entity.Assignment(id: 5, questionnaireIdentity: questionnaireId, assigneeSupervisorId: Guid.NewGuid());
+            assignment.IdentifyingData.Add(Create.Entity.IdentifyingAnswer(assignment, answer: "bla", identity: questionId));
 
-            IPlainStorageAccessor<Assignment> assignments = new InMemoryPlainStorageAccessor<Assignment>();
-            assignments.Store(summary, summary.Id);
+            IAssignmentsService assignments = Create.Service.AssignmentService(assignment);
 
             var questionnaires = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId,
                 Create.Entity.QuestionnaireDocumentWithOneChapter(
@@ -120,9 +112,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             return reader;
         }
 
-        private SampleWebInterviewService GetService(IPlainStorageAccessor<Assignment> assignments = null, IQuestionnaireStorage questionnaireStorage = null)
+        private SampleWebInterviewService GetService(IAssignmentsService assignments = null, IQuestionnaireStorage questionnaireStorage = null)
         {
-            return new SampleWebInterviewService(assignments ?? new InMemoryPlainStorageAccessor<Assignment>(),
+            var assignmentsService = new Mock<IAssignmentsService>();
+            assignmentsService.Setup(x => x.GetAssignmentsReadyForWebInterview(It.IsAny<QuestionnaireIdentity>()))
+                .Returns(new List<Assignment>());
+            return new SampleWebInterviewService(
+                assignments ?? assignmentsService.Object,
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
         }
     }
