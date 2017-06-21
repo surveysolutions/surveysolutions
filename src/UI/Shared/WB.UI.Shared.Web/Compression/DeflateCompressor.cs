@@ -1,7 +1,7 @@
 using System.IO;
 using System.IO.Compression;
 
-namespace WB.Core.GenericSubdomains.Portable.Implementation.Services.Compression
+namespace WB.UI.Shared.Web.Compression
 {
     public class DeflateCompressor : Compressor
     {

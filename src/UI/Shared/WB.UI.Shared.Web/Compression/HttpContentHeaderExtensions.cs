@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.Http.Headers;
 
-namespace WB.Core.GenericSubdomains.Portable.Implementation.Services.Compression
+namespace WB.UI.Shared.Web.Compression
 {
     /// <summary>
     /// Backported from https://github.com/azzlack/Microsoft.AspNet.WebApi.MessageHandlers.Compression
