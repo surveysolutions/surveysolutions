@@ -27,6 +27,10 @@
     <item name="android:layout_marginLeft">@dimen/Dashboard_Layout_marginLeft</item>
     <item name="android:layout_marginRight">@dimen/Dashboard_Layout_marginRight</item>
     <item name="android:layout_marginBottom">@dimen/Dashboard_Items_space</item>
+
+    <item name="android:clipChildren">false</item>
+    <item name="android:clipToPadding">false</item>
+    <item name="android:padding">@dimen/Dashboard_Card_Elevation</item>
   </style>
 
   <style name="Dashboard_InterviewItem_Layout" parent="AppTheme">
