@@ -189,7 +189,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                         ExpressionLocation.QuestionCondition(question.PublicKey),
                         className,
                         CodeGeneratorV2.EnablementPrefix + variable,
-                        question.ConditionExpression,
+                        conditionExpression,
                         false,
                         variable);
                 }
