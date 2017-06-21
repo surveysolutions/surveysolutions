@@ -34,9 +34,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public async void Load()
         {
-            this.Title = string.Format(InterviewerUIResources.Dashboard_CompletedLinkText, 0);
             this.Items = this.Items ?? new List<IDashboardItem>();
             this.UiItems = this.UiItems ?? new List<IDashboardItem>();
+            this.Title = string.Format(InterviewerUIResources.Dashboard_CompletedLinkText, this.Items.Count);
 
             var items = await Task.Run(() => this.GetCompletedInterviews().ToList());
 

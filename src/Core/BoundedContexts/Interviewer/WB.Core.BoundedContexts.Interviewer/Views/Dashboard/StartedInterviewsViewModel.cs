@@ -34,16 +34,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public async void Load()
         {
-            this.Items = this.UiItems = new List<IDashboardItem>();
-            this.Title = string.Format(InterviewerUIResources.Dashboard_StartedLinkText, 0);
+            this.Items = this.Items ?? new List<IDashboardItem>();
+            this.UiItems = this.UiItems ?? new List<IDashboardItem>();
 
-            List<IDashboardItem> items = await Task.Run(() => this.GetStartedInterviews().ToList());
+            this.Title = string.Format(InterviewerUIResources.Dashboard_StartedLinkText, this.Items.Count);
+
+            var dashboardItems = await Task.Run(() => this.GetStartedInterviews().ToList());
 
             var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
             subTitle.Title = InterviewerUIResources.Dashboard_StartedTabText;
-            var uiItems = subTitle.ToEnumerable().Concat(items).ToList();
+            var uiItems = subTitle.ToEnumerable().Concat(dashboardItems).ToList();
             
-            this.Items = items;
+            this.Items = dashboardItems;
             this.UiItems = uiItems;
 
             this.Title = string.Format(InterviewerUIResources.Dashboard_StartedLinkText, this.Items.Count);
