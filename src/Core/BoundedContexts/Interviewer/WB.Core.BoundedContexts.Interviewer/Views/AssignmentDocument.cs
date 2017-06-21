@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using SQLite;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.DataCollection;
@@ -13,9 +12,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public virtual int Id { get; set; }
 
         public int? Quantity { get; set; }
-
-        public int InterviewsCount { get; set; }
-
         public string QuestionnaireId { get; set; }
         public string Title { get; set; }
 
