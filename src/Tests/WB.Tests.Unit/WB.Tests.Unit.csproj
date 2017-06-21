@@ -482,6 +482,7 @@
     <Compile Include="Applications\Shared\Web\Captcha\WebCachedCaptchaServiceTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\Assignments\when_getting_assignments_for_web_interview.cs" />
     <Compile Include="BoundedContexts\Headquarters\InterviewUniqueKeyGeneratorTests.cs" />
+    <Compile Include="BoundedContexts\Headquarters\Repositories\DeviceSyncInfoRepositoryTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\Security\HashCompatibilityProviderTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\Security\HqUserManagerTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\TroubleshootingTests\TroubleshootingServiceTests.cs" />
