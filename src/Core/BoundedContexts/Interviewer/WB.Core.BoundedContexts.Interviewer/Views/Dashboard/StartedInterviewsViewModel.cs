@@ -32,25 +32,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.principal = principal;
         }
 
-        public void Load()
+        public async void Load()
         {
             this.Items = this.UiItems = new List<IDashboardItem>();
-
-            Task.Run(() =>
-            {
-                var items = this.GetStartedInterviews().ToList();
-                var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
-                subTitle.Title = InterviewerUIResources.Dashboard_StartedTabText;
-                var uiItems = subTitle.ToEnumerable().Concat(items).ToList();
-                return Tuple.Create(items, uiItems);
-            }).ContinueWith(task =>
-            {
-                this.Items = task.Result.Item1;
-                this.UiItems = task.Result.Item2;
-
-                this.Title = string.Format(InterviewerUIResources.Dashboard_StartedLinkText, this.Items.Count);
-            }, TaskScheduler.FromCurrentSynchronizationContext());
             this.Title = string.Format(InterviewerUIResources.Dashboard_StartedLinkText, 0);
+
+            List<IDashboardItem> items = await Task.Run(() => this.GetStartedInterviews().ToList());
+
+            var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
+            subTitle.Title = InterviewerUIResources.Dashboard_StartedTabText;
+            var uiItems = subTitle.ToEnumerable().Concat(items).ToList();
+            
+            this.Items = items;
+            this.UiItems = uiItems;
+
+            this.Title = string.Format(InterviewerUIResources.Dashboard_StartedLinkText, this.Items.Count);
         }
 
         private IEnumerable<IDashboardItem> GetStartedInterviews()
@@ -71,7 +67,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        private void InterviewDashboardItem_OnItemRemoved(object sender, System.EventArgs e)
+        private void InterviewDashboardItem_OnItemRemoved(object sender, EventArgs e)
         {
             this.Load();
             this.OnInterviewRemoved(sender, e);
