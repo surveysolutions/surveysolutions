@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard15</TargetFramework>
+    <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win+wpa81+wp80</PackageTargetFallback>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
