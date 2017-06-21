@@ -149,14 +149,12 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     this.mapView.ViewAttachedToWindow +=
                         delegate
                         {
-                            //if (this.Geometry != null)
-                                if (this.StartEditAreaCommand.CanExecute())
-                                    this.StartEditAreaCommand.Execute();
+                            if (this.StartEditAreaCommand.CanExecute())
+                                this.StartEditAreaCommand.Execute();
                         };
                 }
             }
         }
-
 
         public IMvxAsyncCommand RotateMapToNorth => new MvxAsyncCommand(async () =>
             await this.MapView?.SetViewpointRotationAsync(0));
@@ -263,7 +261,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 Geometry result = null;
                 if (this.Geometry == null)
                 {
-                    await this.MapView.SetViewpointRotationAsync(0);//hack to fix Map is not prepared.
+                    await this.MapView.SetViewpointRotationAsync(0);//workaround to fix Map is not prepared.
                     result = await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polygon, true)
                         .ConfigureAwait(false);
                 }
@@ -276,14 +274,16 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
                 //save
                 var handler = this.OnAreaEditCompleted;
-                var position = this.MapView.LocationDisplay.Location.Position;
+
+                //distance
+                /*var position = this.MapView.LocationDisplay.Location.Position;
 
                 double? dist = null;
                 if (position != null)
                 {
                     var point = new MapPoint(position.X, position.Y, position.Z, this.MapView.SpatialReference);
                     dist = GeometryEngine.Distance(result, point);
-                }
+                }*/
 
                 //preview
                 /*var preview = await this.MapView.ExportImageAsync().ConfigureAwait(false);
@@ -311,7 +311,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     Coordinates = coordinates, 
                     Area = GeometryEngine.AreaGeodetic(result),
                     Length = GeometryEngine.LengthGeodetic(result),
-                    DistanceToEditor = dist,
+                    //DistanceToEditor = dist,
                     //Preview = data
                 };
                 handler?.Invoke(resultArea);
