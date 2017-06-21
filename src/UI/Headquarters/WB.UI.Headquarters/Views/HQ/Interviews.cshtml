@@ -1,14 +1,15 @@
 ﻿@using System.Web.Optimization
-@using Newtonsoft.Json
+@using Microsoft.Practices.ServiceLocation
+@using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.GenericSubdomains.Portable
-@using WB.Core.GenericSubdomains.Utils
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
-@using WB.UI.Headquarters.Resources
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.DocumentFilter
 @{
     ViewBag.Title = Common.Interviews;
     Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
 }
 
 @section scripts
@@ -123,12 +124,16 @@
                                 <table id="interviews" class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews">
                                     <thead>
                                         <tr>
-                                            <th class="sorting_disabled checkbox-cell">
-                                                <input class="double-checkbox" id="check-all" type="checkbox" data-bind="click: $root.selectAll($element)">
-                                                <label for="check-all">
-                                                    <span class="tick"></span>
-                                                </label>
-                                            </th>
+                                            @if (!authorizedUser.IsObserver && !authorizedUser.IsObserving)
+                                            {
+
+                                                <th class="sorting_disabled checkbox-cell">
+                                                    <input class="double-checkbox" id="check-all" type="checkbox" data-bind="click: $root.selectAll($element)">
+                                                    <label for="check-all">
+                                                        <span class="tick"></span>
+                                                    </label>
+                                                </th>
+                                            }
                                             <th class="sorting_disabled  interview-id  title-row">
                                                 @Common.InterviewKey
                                                 <a href="#" class="show-prefield-btn" data-bind="text : $root.IsVisiblePrefilledColumns() ? '@Common.HideIdentifying' : '@Common.ShowIdentifying', click: $root.ToggleVisiblePrefilledColumns()"></a>
@@ -158,10 +163,13 @@
                                     
                                         <!-- ko foreach:Items -->
                                         <tr data-bind="css: { 'selected' : IsSelected }">
-                                            <td class="checkbox-cell">
-                                                <input type="checkbox" data-bind="value: InterviewId(), attr: { id: 'cbx_' + InterviewId() }, checked: IsSelected" class="checkbox-filter" />
-                                                <label data-bind="attr: { for: 'cbx_' + InterviewId() }"><span class="tick"></span></label>
-                                            </td>
+                                            @if (!authorizedUser.IsObserver && !authorizedUser.IsObserving)
+                                            {
+                                                <td class="checkbox-cell">
+                                                    <input type="checkbox" data-bind="value: InterviewId(), attr: { id: 'cbx_' + InterviewId() }, checked: IsSelected" class="checkbox-filter" />
+                                                    <label data-bind="attr: { for: 'cbx_' + InterviewId() }"><span class="tick"></span></label>
+                                                </td>
+                                            }
                                             <td class="interview-id title-row">
                                                 <a data-bind="attr: { href: $detailsUrl + '/' + InterviewId() }, text: Key"></a>
                                             </td>
@@ -207,7 +215,7 @@
                             <!-- /ko -->
                         </div>
                     </div>
-                    
+
                     <div class="screen-small-resolution">
                         <!-- ko foreach:Items -->
                         <div class="row-unit" data-bind="css: { 'selected' : IsSelected }">
@@ -274,7 +282,7 @@
                 InterviewStatus.ApprovedByHeadquarters.ToLocalizeString()))
         </div>
         <br />
-    </script>    
+    </script>
     <script type="text/html" id="confirm-delete-template">
         @Html.Raw(Interviews.DeleteConfirmMessageHQ.FormatString(
             "<span data-bind='text: length'></span>",
@@ -302,4 +310,3 @@
     </script>
 
 </main>
-
