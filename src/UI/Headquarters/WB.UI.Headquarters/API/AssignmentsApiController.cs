@@ -15,6 +15,7 @@ using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api;
+using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.API
 {
@@ -26,16 +27,19 @@ namespace WB.UI.Headquarters.API
         private readonly IAuthorizedUser authorizedUser;
         private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly IInterviewCreatorFromAssignment interviewCreatorFromAssignment;
 
         public AssignmentsApiController(IAssignmentViewFactory assignmentViewFactory,
             IAuthorizedUser authorizedUser,
             IPlainStorageAccessor<Assignment> assignmentsStorage,
-            IQuestionnaireStorage questionnaireStorage)
+            IQuestionnaireStorage questionnaireStorage,
+            IInterviewCreatorFromAssignment interviewCreatorFromAssignment)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.authorizedUser = authorizedUser;
             this.assignmentsStorage = assignmentsStorage;
             this.questionnaireStorage = questionnaireStorage;
+            this.interviewCreatorFromAssignment = interviewCreatorFromAssignment;
         }
         
         [Route("")]
@@ -174,6 +178,8 @@ namespace WB.UI.Headquarters.API
             assignment.SetAnswers(answers);
 
             this.assignmentsStorage.Store(assignment, Guid.NewGuid());
+            
+            this.interviewCreatorFromAssignment.CreateInterviewIfQuestionnaireIsOld(request.ResponsibleId, questionnaireIdentity, assignment.Id, answers);
 
             return this.Ok(new {});
         }
