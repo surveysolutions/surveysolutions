@@ -9,17 +9,24 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.API.PublicApi
 {
@@ -33,6 +40,8 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly HqUserManager userManager;
         private readonly IPreloadedDataVerifier preloadedDataVerifier;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly IInterviewCreatorFromAssignment interviewCreatorFromAssignment;
+
 
         public AssignmentsController(
             IAssignmentViewFactory assignmentViewFactory,
@@ -40,13 +49,16 @@ namespace WB.UI.Headquarters.API.PublicApi
             IPreloadedDataVerifier preloadedDataVerifier,
             IMapper mapper,
             HqUserManager userManager,
-            ILogger logger, IQuestionnaireStorage questionnaireStorage) : base(logger)
+            ILogger logger,
+            IQuestionnaireStorage questionnaireStorage,
+            IInterviewCreatorFromAssignment interviewCreatorFromAssignment) : base(logger)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.assignmentsStorage = assignmentsStorage;
             this.mapper = mapper;
             this.userManager = userManager;
             this.questionnaireStorage = questionnaireStorage;
+            this.interviewCreatorFromAssignment = interviewCreatorFromAssignment;
             this.preloadedDataVerifier = preloadedDataVerifier;
         }
 
@@ -179,6 +191,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             if (!verifyResult.Errors.Any())
             {
                 this.assignmentsStorage.Store(assignment, null);
+                interviewCreatorFromAssignment.CreateInterviewIfQuestionnaireIsOld(responsible, questionnaireId, assignment.Id, createItem.IdentifyingData);
                 assignment = this.assignmentsStorage.GetById(assignment.Id);
 
                 return new CreateAssignmentResult
@@ -200,7 +213,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// </summary>
         /// <param name="id">Assignment id</param>
         /// <param name="assigneeRequest">Responsible user id or name</param>
-        /// <response code="200">Assingment details with updated assignee</response>
+        /// <response code="200">Assignment details with updated assignee</response>
         /// <response code="404">Assignment or assignee not found</response>
         /// <response code="406">Assignee cannot be assigned to assignment</response>
         [HttpPatch]

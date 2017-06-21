@@ -294,6 +294,8 @@ namespace WB.UI.Headquarters
                 .ToMethod(_ => new GoogleApiSettings(_.Kernel.Get<IConfigurationManager>().AppSettings[@"Google.Map.ApiKey"]))
                 .InSingletonScope();
 
+            kernel.Bind<IInterviewCreatorFromAssignment>().To<InterviewCreatorFromAssignment>();
+
             return kernel;
         }
 

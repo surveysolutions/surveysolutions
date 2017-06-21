@@ -7,15 +7,21 @@ using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
 using WB.Tests.Abc.TestFactories;
 using WB.UI.Headquarters.API.PublicApi;
+using WB.UI.Headquarters.Services;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTests
 {
@@ -43,7 +49,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 this.mapper.Object,
                 this.userManager.Object,
                 this.logger.Object,
-                this.questionnaireStorage.Object);
+                this.questionnaireStorage.Object,
+                Mock.Of<IInterviewCreatorFromAssignment>());
 
             this.controller.Request = new HttpRequestMessage();
             this.controller.Configuration = new HttpConfiguration();
