@@ -9,7 +9,8 @@ using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 {
-    internal class PlainInterviewFileStorage : IPlainInterviewFileStorage
+    // TODO: Make it private
+    public class PlainInterviewFileStorage : IPlainInterviewFileStorage
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string basePath;
