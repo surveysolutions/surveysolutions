@@ -32,32 +32,29 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.principal = principal;
         }
 
-        public void Load()
+        public async void Load()
         {
-            this.Items = this.UiItems = new List<IDashboardItem>();
+            this.Items = this.Items ?? new List<IDashboardItem>();
+            this.UiItems = this.UiItems ?? new List<IDashboardItem>();
+            this.Title = string.Format(InterviewerUIResources.Dashboard_CompletedLinkText, this.Items.Count);
 
-            Task.Run(() =>
-            {
-                var items = this.GetCompletedInterviews().ToList();
-                var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
-                subTitle.Title = InterviewerUIResources.Dashboard_CompletedTabText;
-                var uiItems = subTitle.ToEnumerable().Concat(items).ToList();
-                return Tuple.Create(items, uiItems);
-            }).ContinueWith(task =>
-            {
-                this.Items = task.Result.Item1;
-                this.UiItems = task.Result.Item2;
+            var items = await Task.Run(() => this.GetCompletedInterviews().ToList());
 
-                this.Title = string.Format(InterviewerUIResources.Dashboard_CompletedLinkText, this.Items.Count);
-            }, TaskScheduler.FromCurrentSynchronizationContext());
-            
-            this.Title = string.Format(InterviewerUIResources.Dashboard_CompletedLinkText, 0);
+            var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
+            subTitle.Title = InterviewerUIResources.Dashboard_CompletedTabText;
+            var uiItems = new List<IDashboardItem>(items.Count + 1) { subTitle };
+            uiItems.AddRange(items);
+
+            this.Items = items;
+            this.UiItems = uiItems;
+
+            this.Title = string.Format(InterviewerUIResources.Dashboard_CompletedLinkText, this.Items.Count);
         }
 
         private IEnumerable<IDashboardItem> GetCompletedInterviews()
         {
             var interviewerId = this.principal.CurrentUserIdentity.UserId;
-           
+
             var interviewViews = this.interviewViewRepository.Where(interview =>
                 interview.ResponsibleId == interviewerId &&
                 interview.Status == SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus.Completed);

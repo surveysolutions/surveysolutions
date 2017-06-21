@@ -1651,7 +1651,6 @@ namespace WB.Tests.Abc.TestFactories
             {
                 Id = id,
                 Quantity = quantity,
-                InterviewsCount = interviewsCount,
                 QuestionnaireId = questionnaireIdentity
             });
         }

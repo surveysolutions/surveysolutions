@@ -30,7 +30,7 @@
   <dimen name="Dashboard_TabMenu_marginBottom">20dp</dimen>
   <dimen name="Dashboard_TabMenu_tab_marginLeft">32dp</dimen>
   <dimen name="Dashboard_TabMenu_tab_padding">12dp</dimen>
-  <dimen name="Dashboard_Items_space">12dp</dimen>
+  <dimen name="Dashboard_Items_space">2dp</dimen>
   <dimen name="Dashboard_InterviewItem_StatusPanel_width">14dp</dimen>
   <dimen name="Dashboard_InterviewItem_StatusPanel_margin">1dp</dimen>
   <dimen name="Dashboard_InterviewItem_InformationBlock_margin">14dp</dimen>

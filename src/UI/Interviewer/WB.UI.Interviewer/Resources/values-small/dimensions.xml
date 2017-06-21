@@ -2,6 +2,6 @@
 <resources>
   <dimen name="Dashboard_Tab_Frame_paddingTop">20dp</dimen>
   <dimen name="Dashboard_PrefilledQuestion_Width">150dp</dimen>
-  <dimen name="Dashboard_Layout_marginLeft">16dp</dimen>
-  <dimen name="Dashboard_Layout_marginRight">16dp</dimen>
+  <dimen name="Dashboard_Layout_marginLeft">12dp</dimen>
+  <dimen name="Dashboard_Layout_marginRight">12dp</dimen>
 </resources>

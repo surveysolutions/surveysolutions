@@ -105,6 +105,7 @@
             android:orientation="horizontal"
             android:background="#ffff"
             android:weightSum="1.0" 
+            android:clickable="true"
             android:gravity="center_vertical|right">
             <LinearLayout
                 android:layout_alignParentLeft="true"
@@ -114,6 +115,7 @@
                 android:layout_marginLeft="@dimen/Area_Editor_margin_20"
                 android:layout_gravity="left"
                 android:layout_weight="0.6"
+                android:duplicateParentState="true"
                 android:gravity="center_vertical|left"
                 android:orientation="vertical">
                 <TextView
@@ -123,6 +125,7 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:gravity="left"
+                    android:duplicateParentState="true"
                     android:id="@+id/areaEditor_GeometryArea"
                     local:MvxBind="Text Format('{0} {1} m2', Localization('AreaMap_AreaFormat'), GeometryArea) ; Visibility Visibility(IsEditing);" />
                 <TextView
@@ -132,6 +135,7 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:gravity="left"
+                    android:duplicateParentState="true"
                     android:id="@+id/areaEditor_GeometryLength"
                     local:MvxBind="Text Format('{0} {1} m', Localization('AreaMap_LengthFormat'), GeometryLength) ; Visibility Visibility(IsEditing);" />
             </LinearLayout>
@@ -140,6 +144,7 @@
                 android:layout_weight="0.4"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:duplicateParentState="true"
                 android:gravity="center_vertical|right">
                 <Button
                     style="@style/Area_Screen_Button"
@@ -147,12 +152,14 @@
                     android:background="#ffff"
                     android:textColor="#000000"
                     android:layout_marginRight="@dimen/Area_Editor_margin_15"
-                    local:MvxBind="Click CancelCommand;Text Localization('AreaMap_Cancel');" />
+                    local:MvxBind="Click CancelCommand;Text Localization('AreaMap_Cancel');" 
+                    android:duplicateParentState="true"/>
                 <Button
                     style="@style/Area_Screen_Button"
                     android:id="@+id/areaEditor_Save"
                     android:layout_marginRight="@dimen/Area_Editor_margin_20"
-                    local:MvxBind="Click SaveAreaCommand;Text Localization('AreaMap_Save'); Enabled CanSave;" />
+                    local:MvxBind="Click SaveAreaCommand;Text Localization('AreaMap_Save'); Enabled CanSave;" 
+                    />
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
