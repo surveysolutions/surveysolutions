@@ -63,7 +63,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             set
             {
                 this.RaiseAndSetIfChanged(ref this.mapsList, value);
-                RaisePropertyChanged(() => SelectedMap); //fix binding
+                RaisePropertyChanged(() => SelectedMap); //workaround to fix binding
             }
         }
 
@@ -88,7 +88,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         {
             if (pathToMap != null)
             {
-                //fix size of map
+                //woraround to fix size of map
+                //on map reload
                 if (MapView?.LocationDisplay != null)
                     this.MapView.LocationDisplay.IsEnabled = false;
 
@@ -150,14 +151,12 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     this.mapView.ViewAttachedToWindow +=
                         delegate
                         {
-                            //if (this.Geometry != null)
                             if (this.StartEditAreaCommand.CanExecute())
                                 this.StartEditAreaCommand.Execute();
                         };
                 }
             }
         }
-
 
         public IMvxAsyncCommand RotateMapToNorth => new MvxAsyncCommand(async () =>
             await this.MapView?.SetViewpointRotationAsync(0));
@@ -205,7 +204,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 {
                     this.IsInProgress = true;
                     this.cancellationTokenSource = new CancellationTokenSource();
-                    await this.mapService.SyncMaps(this.cancellationTokenSource.Token);
+                    await this.mapService.SyncMaps(this.cancellationTokenSource.Token).ConfigureAwait(false);
 
                     this.AvailableMaps = this.mapService.GetAvailableMaps();
                     this.MapsList = this.AvailableMaps.Select(x => x.MapName).ToList();
@@ -260,24 +259,21 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                         this.MapView.SketchEditor.CompleteCommand.CanExecute(this.MapView.SketchEditor.CompleteCommand);
                 };
 
-                Geometry result = null;
+                Geometry result;
                 if (this.Geometry == null)
                 {
-                    await this.MapView.SetViewpointRotationAsync(0);//hack to fix Map is not prepared.
+                    await this.MapView.SetViewpointRotationAsync(0).ConfigureAwait(false);//workaround to fix Map is not prepared.
                     result = await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polygon, true)
                         .ConfigureAwait(false);
                 }
                 else
                 {
-                    await this.MapView.SetViewpointGeometryAsync(this.Geometry, 120);
+                    await this.MapView.SetViewpointGeometryAsync(this.Geometry, 120).ConfigureAwait(false);
                     result = await this.MapView.SketchEditor.StartAsync(this.Geometry, SketchCreationMode.Polygon)
                         .ConfigureAwait(false);
                 }
 
-                //save
-                var handler = this.OnAreaEditCompleted;
                 var position = this.MapView.LocationDisplay.Location.Position;
-
                 double? dist = null;
                 if (position != null)
                 {
@@ -285,22 +281,14 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     dist = GeometryEngine.Distance(result, point);
                 }
 
-                //preview
-                /*var preview = await this.MapView.ExportImageAsync().ConfigureAwait(false);
-                var buffer = await preview.GetEncodedBufferAsync();
-                byte[] data = new byte[buffer.Length];
-                buffer.Read(data, 0, data.Length);
-                */
-
                 //project to geocoordinates
                 SpatialReference reference = new SpatialReference(4326);
-                var projectedGeometry = GeometryEngine.Project(result, reference);
-                var projectedPolygon = projectedGeometry as Polygon;
-
+                var projectedPolygon = GeometryEngine.Project(result, reference) as Polygon;
+                
                 string coordinates = string.Empty;
                 if (projectedPolygon != null)
                 {
-                    var tco = projectedPolygon.Parts.Select(x => $"{x.StartPoint.X},{x.StartPoint.Y}");
+                    var tco = projectedPolygon.Parts[0].Points.Select(x => $"{x.StartPoint.X},{x.StartPoint.Y}").ToList();
                     coordinates = string.Join(";", tco);
                 }
 
@@ -311,9 +299,11 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     Coordinates = coordinates,
                     Area = GeometryEngine.AreaGeodetic(result),
                     Length = GeometryEngine.LengthGeodetic(result),
-                    DistanceToEditor = dist,
-                    //Preview = data
+                    DistanceToEditor = dist
                 };
+
+                //save
+                var handler = this.OnAreaEditCompleted;
                 handler?.Invoke(resultArea);
             }
             finally
