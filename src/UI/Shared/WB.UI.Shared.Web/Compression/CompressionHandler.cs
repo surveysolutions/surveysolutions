@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Services;
 
-namespace WB.Core.GenericSubdomains.Portable.Implementation.Services.Compression
+namespace WB.UI.Shared.Web.Compression
 {
     /// <summary>
     /// Backported from https://github.com/azzlack/Microsoft.AspNet.WebApi.MessageHandlers.Compression
@@ -72,7 +72,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services.Compression
 
                     this.CompressResponse(request, response);
                 }
-                catch (ObjectDisposedException x)
+                catch (ObjectDisposedException)
                 {
                    // Trace.TraceError($"Could not compress request, as response.Content had already been disposed: {x.Message}");
                 }
