@@ -115,24 +115,14 @@ namespace WB.UI.Headquarters.Controllers
             if (!interviewer.IsInterviewer())
                 throw new InvalidOperationException($"Assignment {assignment.Id} has responsible that is not an interviewer. Interview cannot be created");
 
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(assignment.QuestionnaireId, null);
             var interviewId = Guid.NewGuid();
-
-            var prefilled = questionnaire.GetPrefilledQuestions().ToHashSet();
-            
-            var answersFromAssignment =
-                assignment.IdentifyingData.Where(ia =>prefilled.Contains(ia.Identity.Id)).Select(x => 
-                                                    new InterviewAnswer{
-                                                        Identity = x.Identity,
-                                                        Answer = this.identifyingAnswerConverter.GetAbstractAnswer(questionnaire, x.Identity.Id, x.Answer)
-                                                    });
 
             var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
                 interviewer.PublicKey, assignment.QuestionnaireId, DateTime.UtcNow,
                 interviewer.Supervisor.Id,
                 this.keyGenerator.Get(), 
                 assignment.Id, 
-                answersFromAssignment.ToList());
+                assignment.Answers.ToList());
 
             this.commandService.Execute(createInterviewOnClientCommand);
             return interviewId.FormatGuid();
