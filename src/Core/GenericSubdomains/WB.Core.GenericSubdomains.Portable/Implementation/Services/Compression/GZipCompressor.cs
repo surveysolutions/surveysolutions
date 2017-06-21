@@ -1,7 +1,7 @@
 using System.IO;
 using System.IO.Compression;
 
-namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
+namespace WB.Core.GenericSubdomains.Portable.Implementation.Services.Compression
 {
     public class GZipCompressor : Compressor
     {
@@ -10,7 +10,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
         public override Stream CreateCompressionStream(Stream output)
         {
-            return new GZipStream(output, CompressionMode.Compress, leaveOpen: true);
+            return new GZipStream(output, CompressionLevel.Optimal, leaveOpen: true);
         }
 
         public override Stream CreateDecompressionStream(Stream input)
