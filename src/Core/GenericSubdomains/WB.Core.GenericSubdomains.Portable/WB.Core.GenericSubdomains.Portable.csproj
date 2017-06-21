@@ -46,6 +46,7 @@
     <Compile Include="ArrayExtensions.cs" />
     <Compile Include="CustomCollections\ConcurrentHashSet.cs" />
     <Compile Include="EmptyArray.cs" />
+    <Compile Include="Implementation\Services\Compression\HttpContentHeaderExtensions.cs" />
     <Compile Include="Implementation\Services\HttpStatistician.cs" />
     <Compile Include="IPasswordPolicy.cs" />
     <Compile Include="NumericExtensions.cs" />
@@ -73,11 +74,11 @@
     <Compile Include="Implementation\RestException.cs" />
     <Compile Include="Implementation\RestExceptionType.cs" />
     <Compile Include="Implementation\RestFile.cs" />
-    <Compile Include="Implementation\Services\CompressedContent.cs" />
-    <Compile Include="Implementation\Services\Compressor.cs" />
-    <Compile Include="Implementation\Services\DecompressionHandler.cs" />
-    <Compile Include="Implementation\Services\DeflateCompressor.cs" />
-    <Compile Include="Implementation\Services\GZipCompressor.cs" />
+    <Compile Include="Implementation\Services\Compression\CompressedContent.cs" />
+    <Compile Include="Implementation\Services\Compression\Compressor.cs" />
+    <Compile Include="Implementation\Services\Compression\CompressionHandler.cs" />
+    <Compile Include="Implementation\Services\Compression\DeflateCompressor.cs" />
+    <Compile Include="Implementation\Services\Compression\GZipCompressor.cs" />
     <Compile Include="Implementation\Services\RestService.cs" />
     <Compile Include="Implementation\Services\SubstitutionService.cs" />
     <Compile Include="Implementation\ServiceVariables\ServiceColumns.cs" />
