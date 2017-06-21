@@ -161,8 +161,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             AssertEqualAnswers(stored.Answers, document.Answers);
             AssertEqualAnswers(stored.IdentifyingAnswers, stored.IdentifyingAnswers);
-
-            Assert.That(stored.InterviewsCount, Is.EqualTo(document.InterviewsCount));
+            
             Assert.That(stored.LocationLatitude, Is.EqualTo(document.LocationLatitude));
             Assert.That(stored.LocationLongitude, Is.EqualTo(document.LocationLongitude));
             Assert.That(stored.QuestionnaireId, Is.EqualTo(document.QuestionnaireId));

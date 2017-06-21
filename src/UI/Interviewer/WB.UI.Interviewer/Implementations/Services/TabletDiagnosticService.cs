@@ -90,9 +90,9 @@ namespace WB.UI.Interviewer.Implementations.Services
             {
                 patchOrFullApkBytes = await this.synchronizationService.GetApplicationPatchAsync(cancellationToken);
             }
-            catch (SynchronizationException ex)
+            catch (SynchronizationException ex) when (ex.InnerException is RestException rest)
             {
-                if (((RestException) ex.InnerException).StatusCode != HttpStatusCode.NotFound) throw;
+                if (rest.StatusCode != HttpStatusCode.NotFound) throw;
             }
 
             cancellationToken.ThrowIfCancellationRequested();

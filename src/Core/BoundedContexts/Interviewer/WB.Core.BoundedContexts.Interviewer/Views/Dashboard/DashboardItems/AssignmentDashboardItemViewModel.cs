@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.assignment = assignmentDocument;
             this.questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
 
-            var identifyingData = assignment.IdentifyingAnswers.Where(id => id.Identity.Id != assignment.LocationQuestionId).ToList();
+            var identifyingData = assignment.IdentifyingAnswers;
 
             this.PrefilledQuestions = GetPrefilledQuestions(identifyingData.Take(3));
             this.DetailedPrefilledQuestions = GetPrefilledQuestions(identifyingData.Skip(3));
@@ -78,7 +78,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 this.interviewViewRepository.Count(interview => interview.Assignment == this.assignment.Id);
             if (this.assignment.Quantity.HasValue)
             {
-                var interviewsLeftByAssignmentCount = Math.Max(0, this.assignment.Quantity.Value - this.assignment.InterviewsCount - interviewsByAssignmentCount);
+                var interviewsLeftByAssignmentCount = Math.Max(0, this.assignment.Quantity.Value - interviewsByAssignmentCount);
                 newTitle += InterviewerUIResources.Dashboard_AssignmentCard_TitleCountdown.FormatString(interviewsLeftByAssignmentCount);
             }
             else
@@ -126,7 +126,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 if (this.assignment.Quantity.HasValue)
                 {
                     var interviewsByAssignmentCount = this.interviewViewRepository.Count(interview => interview.Assignment == this.assignment.Id);
-                    var interviewsLeftByAssignmentCount = this.assignment.Quantity.Value - this.assignment.InterviewsCount - interviewsByAssignmentCount;
+                    var interviewsLeftByAssignmentCount = this.assignment.Quantity.Value - interviewsByAssignmentCount;
                     return interviewsLeftByAssignmentCount > 0;
                 }
                 return true;
