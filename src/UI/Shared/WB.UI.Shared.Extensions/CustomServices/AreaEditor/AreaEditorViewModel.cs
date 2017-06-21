@@ -288,7 +288,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 string coordinates = string.Empty;
                 if (projectedPolygon != null)
                 {
-                    var tco = projectedPolygon.Parts[0].Points.Select(x => $"{x.StartPoint.X},{x.StartPoint.Y}").ToList();
+                    var tco = projectedPolygon.Parts[0].Points.Select(x => $"{x.X},{x.Y}").ToList();
                     coordinates = string.Join(";", tco);
                 }
 
