@@ -26,7 +26,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         private void Cancel()
         {
             var handler = OnAreaEditCompleted;
-            handler?.Invoke((AreaEditorResult)null);
+            handler?.Invoke(null);
             this.Finish();
         }
         
@@ -39,8 +39,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
             this.ViewModel.OnAreaEditCompleted += OnAreaEditCompleted;
 
-            //esri bug
-            //inflated map doesn't work  
+            //workaround
+            //inflated map doesn't work (should be fixed in next Esri release) 
             var map = new MapView();
             var bindingSet = this.CreateBindingSet<AreaEditorActivity, AreaEditorViewModel>();
 
@@ -55,6 +55,5 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             var container = this.FindViewById<LinearLayout>(Resource.Id.area_map_view_container);
             container.AddView(map);
         }
-        
     }
 }
