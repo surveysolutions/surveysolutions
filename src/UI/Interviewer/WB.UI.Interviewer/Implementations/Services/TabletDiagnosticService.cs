@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,7 +12,9 @@ using MvvmCross.Platform;
 using MvvmCross.Platform.Droid.Platform;
 using Flurl;
 using Plugin.Permissions.Abstractions;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Infrastructure.Shared.Enumerator;
@@ -80,12 +83,35 @@ namespace WB.UI.Interviewer.Implementations.Services
                 this.fileSystemAccessor.CreateDirectory(downloadFolder);
             }
 
-            var patchBytes = await this.synchronizationService.GetApplicationPatchAsync(cancellationToken);
 
-            this.fileSystemAccessor.WriteAllBytes(pathToPatch, patchBytes);
+            byte[] patchOrFullApkBytes = null;
+
+            try
+            {
+                patchOrFullApkBytes = await this.synchronizationService.GetApplicationPatchAsync(cancellationToken);
+            }
+            catch (SynchronizationException ex) when (ex.InnerException is RestException rest)
+            {
+                if (rest.StatusCode != HttpStatusCode.NotFound) throw;
+            }
+
             cancellationToken.ThrowIfCancellationRequested();
 
-            this.archivePatcherService.ApplyPath(pathToOldApk, pathToPatch, pathToNewApk);
+            if (patchOrFullApkBytes != null)
+            {
+                this.fileSystemAccessor.WriteAllBytes(pathToPatch, patchOrFullApkBytes);
+                cancellationToken.ThrowIfCancellationRequested();
+
+                this.archivePatcherService.ApplyPath(pathToOldApk, pathToPatch, pathToNewApk);
+            }
+            else
+            {
+                patchOrFullApkBytes = await this.synchronizationService.GetApplicationAsync(cancellationToken);
+                cancellationToken.ThrowIfCancellationRequested();
+
+                this.fileSystemAccessor.WriteAllBytes(pathToNewApk, patchOrFullApkBytes);
+            }
+
             cancellationToken.ThrowIfCancellationRequested();
 
             Intent promptInstall;

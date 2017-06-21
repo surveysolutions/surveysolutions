@@ -6,7 +6,6 @@ using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -43,32 +42,31 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public void Load(SynchronizationViewModel sync, DashboardViewModel dashboardViewModel)
         {
             this.Synchronization = sync;
-            
+
             LoadAsync(dashboardViewModel);
 
             this.Title = InterviewerUIResources.Dashboard_AssignmentsTabTitle;
         }
 
-        private void LoadAsync(DashboardViewModel dashboardViewModel)
+        private async void LoadAsync(DashboardViewModel dashboardViewModel)
         {
             dashboardViewModel.IsInProgress = true;
-            this.Items = this.UiItems = new List<IDashboardItem>();
 
-            Task.Run(() =>
-            {
-                var assignments = this.GetCensusQuestionnaires().Union(this.GetAssignments(dashboardViewModel)).ToList();
+            this.Items = this.Items ?? new List<IDashboardItem>();
+            this.UiItems = this.UiItems ?? new List<IDashboardItem>();
 
-                var uiItems = assignments.Any()
-                    ? this.GetSubTitle().ToEnumerable().Concat(assignments).ToList()
-                    : assignments;
+            var assignments = await Task.Run(() => this.GetCensusQuestionnaires().Union(this.GetAssignments(dashboardViewModel)).ToList());
 
-                return Tuple.Create(assignments, uiItems);
-            }).ContinueWith(task =>
-            {
-                Items = task.Result.Item1;
-                UiItems = task.Result.Item2;
-                dashboardViewModel.IsInProgress = false;
-            }, TaskScheduler.FromCurrentSynchronizationContext());
+            var uiItems = assignments.Any()
+                ? new List<IDashboardItem>(assignments.Count + 1) {this.GetSubTitle()}
+                : new List<IDashboardItem>(assignments.Count);
+
+            uiItems.AddRange(assignments);
+
+            Items = assignments;
+            UiItems = uiItems;
+
+            dashboardViewModel.IsInProgress = false;
         }
 
         private void RunSynchronization()

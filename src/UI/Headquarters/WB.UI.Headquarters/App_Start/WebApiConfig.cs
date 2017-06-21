@@ -4,7 +4,7 @@ using System.Net.Http.Headers;
 using System.Threading;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.GenericSubdomains.Portable.Implementation.Compression;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -41,7 +41,7 @@ namespace WB.UI.Headquarters
                 c => c.Action<InterviewerApiController>(x => x.CheckCompatibility(Param.Any<string>(), Param.Any<int>())));
 
             config.Filters.Add(new UnhandledExceptionFilter());
-            config.MessageHandlers.Add(new DecompressionHandler());
+            config.MessageHandlers.Add(new CompressionHandler());
 
             config.Routes.MapHttpRoute("DefaultApiWithAction", "api/{controller}/{action}/{id}", new { id = RouteParameter.Optional });
             config.Routes.MapHttpRoute("DefaultApi", "api/{controller}/{id}", new { id = RouteParameter.Optional });
@@ -69,6 +69,7 @@ namespace WB.UI.Headquarters
 
             config.Services.Add(typeof(IExceptionLogger), new NLogExceptionLogger());
 
+            config.EnsureInitialized();
             #pragma warning restore 4014
         }
 #pragma warning disable 4014

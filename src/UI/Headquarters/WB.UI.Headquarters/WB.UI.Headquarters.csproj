@@ -1645,6 +1645,7 @@
     <Compile Include="Filters\BrowsersRestriction.cs" />
     <Compile Include="Code\WebInterviewAccessException.cs" />
     <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
+    <Compile Include="Implementation\Services\InterviewCreatorFromAssignment.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M009_AddInterviewIdColumnAndEnumeratorIndex.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M010_AddAssignmentsTables.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M011_RenamePrefilledQuestionsToIdentifyingOnAssignments.cs" />
@@ -1897,6 +1898,7 @@
     </Compile>
     <Compile Include="ServiceLocationModule.cs" />
     <Compile Include="Services\IImageProcessingService.cs" />
+    <Compile Include="Services\IInterviewCreatorFromAssignment.cs" />
     <Compile Include="Services\IInterviewImportService.cs" />
     <Compile Include="Services\ImageProcessingService.cs" />
     <Compile Include="Services\InterviewImportColumn.cs" />
