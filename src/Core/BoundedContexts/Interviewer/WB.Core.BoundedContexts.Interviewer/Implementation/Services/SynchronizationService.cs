@@ -376,10 +376,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 };
                 return attachmentContent;
             });
-        } 
-#endregion
+        }
+        #endregion
 
-#region [Application Api]
+        #region [Application Api]
+        public Task<byte[]> GetApplicationAsync(CancellationToken token) => 
+            this.TryGetRestResponseOrThrowAsync(async () =>
+        {
+            var restFile = await this.restService.DownloadFileAsync(url: interviewerApiUrl, token: token,
+                credentials: this.restCredentials).ConfigureAwait(false);
+
+            return restFile.Content;
+        });
 
         public Task<byte[]> GetApplicationPatchAsync(CancellationToken token)
         {
