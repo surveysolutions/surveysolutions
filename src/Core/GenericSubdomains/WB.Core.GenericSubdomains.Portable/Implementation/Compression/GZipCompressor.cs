@@ -1,7 +1,7 @@
 using System.IO;
 using System.IO.Compression;
 
-namespace WB.UI.Shared.Web.Compression
+namespace WB.Core.GenericSubdomains.Portable.Implementation.Compression
 {
     public class GZipCompressor : Compressor
     {
