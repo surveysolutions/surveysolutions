@@ -5,7 +5,7 @@ using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
 {
-    internal class VariableToUIStringService : IVariableToUIStringService
+    public class VariableToUIStringService : IVariableToUIStringService
     {
         public string VariableToUIString(object variable)
         {

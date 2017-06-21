@@ -8,7 +8,8 @@ using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 {
-    internal class InterviewSynchronizationFileStorage : IInterviewSynchronizationFileStorage
+    // todo make it private
+    public class InterviewSynchronizationFileStorage : IInterviewSynchronizationFileStorage
     {
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
         private readonly IFileSystemAccessor fileSystemAccessor;
