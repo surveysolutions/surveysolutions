@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Threading;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
+using WB.Core.GenericSubdomains.Portable.Implementation.Compression;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -12,7 +13,6 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.API.Interviewer;
 using WB.UI.Headquarters.API.Interviewer.v2;
-using WB.UI.Shared.Web.Compression;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters

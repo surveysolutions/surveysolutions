@@ -4,9 +4,9 @@ using System.Web.Http.Controllers;
 using System.Web.Http.ExceptionHandling;
 using System.Web.Http.Routing;
 using Elmah.Contrib.WebApi;
+using WB.Core.GenericSubdomains.Portable.Implementation.Compression;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.MessageHandlers;
-using WB.UI.Shared.Web.Compression;
 
 namespace WB.UI.Designer
 {

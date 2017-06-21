@@ -46,6 +46,12 @@
     <Compile Include="ArrayExtensions.cs" />
     <Compile Include="CustomCollections\ConcurrentHashSet.cs" />
     <Compile Include="EmptyArray.cs" />
+    <Compile Include="Implementation\Compression\CompressedContent.cs" />
+    <Compile Include="Implementation\Compression\CompressionHandler.cs" />
+    <Compile Include="Implementation\Compression\Compressor.cs" />
+    <Compile Include="Implementation\Compression\DeflateCompressor.cs" />
+    <Compile Include="Implementation\Compression\GZipCompressor.cs" />
+    <Compile Include="Implementation\Compression\HttpContentHeaderExtensions.cs" />
     <Compile Include="Implementation\Services\HttpStatistician.cs" />
     <Compile Include="IPasswordPolicy.cs" />
     <Compile Include="NumericExtensions.cs" />
