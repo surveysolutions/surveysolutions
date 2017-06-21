@@ -1,5 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("WB.Tests.Unit")]
+[assembly: InternalsVisibleTo("WB.Tests.Integration")]
+[assembly: InternalsVisibleTo("PerformanceTest")]
+[assembly: InternalsVisibleTo("WB.Tests.Abc")]
 
 namespace WB.Core.BoundedContexts.Interviewer
 {
