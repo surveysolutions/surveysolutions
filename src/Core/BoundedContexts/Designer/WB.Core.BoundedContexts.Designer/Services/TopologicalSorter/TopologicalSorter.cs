@@ -7,9 +7,9 @@ namespace WB.Core.BoundedContexts.Designer.Services.TopologicalSorter
 {
     /// <summary>
     /// Implementation of the Tarjan stronly connected components algorithm. 
+    /// https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm
+    /// http://en.wikipedia.org/wiki/Topological_sorting
     /// </summary>
-    /// <see cref="https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm"/>
-    /// <seealso cref="http://en.wikipedia.org/wiki/Topological_sorting"/>
     public class TopologicalSorter<T> : ITopologicalSorter<T>
     {
         public List<List<T>> DetectCycles(Dictionary<T, T[]> dependencies)
