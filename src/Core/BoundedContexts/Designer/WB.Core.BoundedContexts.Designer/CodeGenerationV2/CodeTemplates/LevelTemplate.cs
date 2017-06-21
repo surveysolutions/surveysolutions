@@ -66,9 +66,9 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             
             #line default
             #line hidden
-            this.Write(" storage) \r\n\t\t{\r\n\t\t\tthis.storage = storage;\r\n\t\t\tthis.Quest = new QuestionnaireRan" +
-                    "dom(storage.state.Properties);\r\n\t\t\tthis.RosterVector = rosterVector;\r\n\t\t\tthis.Id" +
-                    "entity = new Identity(IdOf.");
+            this.Write(" storage) \r\n\t\t{\r\n\t\t\tthis._storage = storage;\r\n\t\t\tthis.Quest = new QuestionnaireRa" +
+                    "ndom(storage.state.Properties);\r\n\t\t\tthis.RosterVector = rosterVector;\r\n\t\t\tthis.I" +
+                    "dentity = new Identity(IdOf.");
             
             #line 18 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.Variable));
@@ -321,21 +321,21 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             
             #line default
             #line hidden
-            this.Write(" storage;\r\n\r\n\t\tprivate ");
+            this.Write(" _storage;\r\n\r\n\t\tprivate ");
             
             #line 126 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IInterviewStateForExpressions).Name));
             
             #line default
             #line hidden
-            this.Write(" state => storage.state;\r\n\r\n\t\tprivate ");
+            this.Write(" _state => _storage.state;\r\n\r\n\t\tprivate ");
             
             #line 128 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IInterviewPropertiesForExpressions).Name));
             
             #line default
             #line hidden
-            this.Write(@" properties => state.Properties;
+            this.Write(@" properties => _state.Properties;
 
 		public RosterVector RosterVector { get; private set; }
 
@@ -343,9 +343,9 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
 
 		public int @rowcode => this.RosterVector[this.RosterVector.Length - 1];
 
-		public int @rowindex => state.GetRosterIndex(Identity);
+		public int @rowindex => _state.GetRosterIndex(Identity);
 
-		public string @rowname => state.GetRosterTitle(Identity);
+		public string @rowname => _state.GetRosterTitle(Identity);
 		
 		public int RowCode => @rowcode;
 
@@ -380,7 +380,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             
             #line default
             #line hidden
-            this.Write(" => state.GetAnswer<");
+            this.Write(" => _state.GetAnswer<");
             
             #line 153 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.TypeName));
@@ -433,7 +433,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             
             #line default
             #line hidden
-            this.Write(" => state.GetVariable<");
+            this.Write(" => _state.GetVariable<");
             
             #line 161 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(variable.TypeName));
@@ -486,7 +486,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             
             #line default
             #line hidden
-            this.Write(" => storage.GetLevels<");
+            this.Write(" => _storage.GetLevels<");
             
             #line 169 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(roster.ClassName));
