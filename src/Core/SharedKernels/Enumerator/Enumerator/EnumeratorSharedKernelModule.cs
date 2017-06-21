@@ -1,4 +1,5 @@
-﻿using Ninject.Modules;
+﻿using System.Runtime.CompilerServices;
+using Ninject.Modules;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -13,6 +14,11 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+
+[assembly: InternalsVisibleTo("WB.Tests.Unit")]
+[assembly: InternalsVisibleTo("WB.Tests.Integration")]
+[assembly: InternalsVisibleTo("PerformanceTest")]
+[assembly: InternalsVisibleTo("WB.Tests.Abc")]
 
 namespace WB.Core.SharedKernels.Enumerator
 {
