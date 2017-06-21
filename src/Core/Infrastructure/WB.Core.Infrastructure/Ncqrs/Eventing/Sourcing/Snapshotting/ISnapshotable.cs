@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.Contracts;
-using Ncqrs.Domain;
+﻿using Ncqrs.Domain;
 
 namespace Ncqrs.Eventing.Sourcing.Snapshotting
 {    
@@ -15,14 +14,12 @@ namespace Ncqrs.Eventing.Sourcing.Snapshotting
     /// you implement more than one, it will cause an exception when saving this
     /// instance.
     /// </remarks>
-    [ContractClass(typeof(SnapshotableContracts<>))]
     public interface ISnapshotable<TSnapshot>
     {
         TSnapshot CreateSnapshot();
         void RestoreFromSnapshot(TSnapshot snapshot);
     }
 
-    [ContractClassFor(typeof(ISnapshotable<>))]
     internal abstract class SnapshotableContracts<TSnapshot> : ISnapshotable<TSnapshot>
     {
         public void RestoreFromSnapshot(TSnapshot snapshot)
