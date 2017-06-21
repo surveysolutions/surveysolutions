@@ -2,7 +2,7 @@ using System.IO;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Services;
 
-namespace WB.UI.Shared.Web.Compression
+namespace WB.Core.GenericSubdomains.Portable.Implementation.Compression
 {
     /// <summary>
     /// Backported from https://github.com/azzlack/Microsoft.AspNet.WebApi.MessageHandlers.Compression

@@ -162,12 +162,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Compression\CompressedContent.cs" />
-    <Compile Include="Compression\CompressionHandler.cs" />
-    <Compile Include="Compression\Compressor.cs" />
-    <Compile Include="Compression\DeflateCompressor.cs" />
-    <Compile Include="Compression\GZipCompressor.cs" />
-    <Compile Include="Compression\HttpContentHeaderExtensions.cs" />
     <Compile Include="Filters\ApiNoCacheAttribute.cs" />
     <Compile Include="Attributes\NoTransactionAttribute.cs" />
     <Compile Include="Captcha\ICaptchaService.cs" />
