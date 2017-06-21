@@ -105,7 +105,8 @@
             android:orientation="horizontal"
             android:background="#ffff"
             android:weightSum="1.0" 
-            android:gravity="center_vertical|right">
+            android:gravity="center_vertical|right"
+            android:clickable="true">
             <LinearLayout
                 android:layout_alignParentLeft="true"
                 android:id="@+id/area_stats"
