@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             controller.TempData[Alerts.ERROR].ShouldEqual("Only tab-separated values files are accepted");
 
         [NUnit.Framework.OneTimeTearDown]
-        void stuff()
+        public void stuff()
         {
             stream.Dispose();
         }
