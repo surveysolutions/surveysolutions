@@ -118,7 +118,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 if (creatorId.HasValue)
                 {
                     questionnaireListViewItem.SharedPersons.Where(p => p.IsOwner && p.UserId != creatorId).ForEach(p => p.IsOwner = false);
-                    var owner = questionnaireListViewItem.SharedPersons.SingleOrDefault(p => p.UserId == creatorId);
+                    var owner = questionnaireListViewItem.SharedPersons.FirstOrDefault(p => p.UserId == creatorId);
                     if (owner != null)
                     {
                         owner.IsOwner = true;
