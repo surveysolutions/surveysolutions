@@ -82,58 +82,29 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         }
 
         private void CompletedInterviews_PropertyChanged(object sender, PropertyChangedEventArgs e)
-            => this.UpdateFragmentByViewModelPropertyChange<CompletedInterviewsFragment>((CompletedInterviewsViewModel) sender, e.PropertyName);
+            => this.UpdateFragmentByViewModelPropertyChange<CompletedInterviewsFragment>((CompletedInterviewsViewModel)sender, e.PropertyName);
+
+        private void RejectedInterviews_PropertyChanged(object sender, PropertyChangedEventArgs e)
+            => this.UpdateFragmentByViewModelPropertyChange<RejectedInterviewsFragment>((RejectedInterviewsViewModel)sender, e.PropertyName);
 
         private void StartedInterviews_PropertyChanged(object sender, PropertyChangedEventArgs e)
             => this.UpdateFragmentByViewModelPropertyChange<StartedInterviewsFragment>((StartedInterviewsViewModel)sender, e.PropertyName);
-
-        private void RejectedInterviews_PropertyChanged(object sender, PropertyChangedEventArgs e)
-            => this.UpdateFragmentByViewModelPropertyChange<RejectedInterviewsFragment>((RejectedInterviewsViewModel) sender, e.PropertyName);
 
         private void UpdateFragmentByViewModelPropertyChange<TFragmentType>(ListViewModel<IDashboardItem> listViewModel,
             string propertyName = nameof(ListViewModel<IDashboardItem>.UiItems))
         {
             if (propertyName != nameof(ListViewModel<IDashboardItem>.UiItems)) return;
 
-            if (!this.fragmentStatePagerAdapter.HasFragmentForViewModel(listViewModel) && listViewModel.Items.Count > 0)
+            if (!this.fragmentStatePagerAdapter.HasFragmentForViewModel(listViewModel) && listViewModel.Items != null &&
+                listViewModel.Items.Count > 0)
             {
-                var position = this.GetProperPositionToAddFragment<TFragmentType>();
-                this.fragmentStatePagerAdapter.AddFragment(typeof(TFragmentType), listViewModel, nameof(InterviewTabPanel.Title), position);
+                this.fragmentStatePagerAdapter.AddFragment(typeof(TFragmentType), listViewModel,
+                    nameof(InterviewTabPanel.Title));
             }
 
             if (this.fragmentStatePagerAdapter.HasFragmentForViewModel(listViewModel) && listViewModel.Items.Count == 0)
             {
                 this.fragmentStatePagerAdapter.RemoveFragmentByViewModel(listViewModel);
-            }
-        }
-
-        private int GetProperPositionToAddFragment<TFragmentType>()
-        {
-            var fragmentsCount = this.fragmentStatePagerAdapter.Count;
-            
-            for (int i = 0; i < fragmentsCount; i++)
-            {
-                var fragment = this.fragmentStatePagerAdapter.GetItem(i);
-
-                var fragmentPosition = GetDesiredPosition(fragment.GetType());
-                var desiredPosition = GetDesiredPosition(typeof(TFragmentType));
-
-                if (desiredPosition < fragmentPosition)
-                {
-                    return i;
-                }
-            }
-
-            return -1;
-
-            int GetDesiredPosition(Type fragmentType)
-            {
-                if (fragmentType == typeof(QuestionnairesFragment)) return 0;
-                else if (fragmentType == typeof(StartedInterviewsFragment)) return 1;
-                else if (fragmentType == typeof(RejectedInterviewsFragment)) return 2;
-                else if (fragmentType == typeof(CompleteInterviewFragment)) return 3;
-
-                return int.MaxValue;
             }
         }
 
