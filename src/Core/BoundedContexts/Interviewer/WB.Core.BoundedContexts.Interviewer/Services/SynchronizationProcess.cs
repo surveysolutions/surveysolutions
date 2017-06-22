@@ -378,6 +378,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     else
                         statistics.NewInterviewsCount++;
                 }
+                catch (OperationCanceledException)
+                {
+
+                }
                 catch (Exception exception)
                 {
                     statistics.FailedToCreateInterviewsCount++;
@@ -647,6 +651,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
                     this.interviewFactory.RemoveInterview(completedInterview.InterviewId);
                     statistics.SuccessfullyUploadedInterviewsCount++;
+                }
+                catch (OperationCanceledException)
+                {
+
                 }
                 catch (Exception syncException)
                 {
