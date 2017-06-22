@@ -204,13 +204,16 @@
 }
 
 <div class="row-fluid" id="featured-questions-region" data-bind="visible: IsPageLoaded">
-    <p class="col-sm-offset-2">@Assignments.CreateAssignment_AnswersInstruction</p>
+    
     <div id="featured-questions" class="form-horizontal">
-        <!-- ko foreach: questions -->
-        <!-- ko template: { name: type(), data: $data } -->
+        <!-- ko if: questions().length > 0 -->
+            <p class="col-sm-offset-2">@Assignments.CreateAssignment_AnswersInstruction</p>
+            <!-- ko foreach: questions -->
+            <!-- ko template: { name: type(), data: $data } -->
+            <!-- /ko -->
+            <!-- /ko -->
+            <div class="form-group" style="padding-top: 20px"></div>
         <!-- /ko -->
-        <!-- /ko -->
-        <div class="form-group" style="padding-top: 20px"></div>
         <p class="col-sm-offset-2">@Assignments.CreateAssignment_QuantityInstruction</p>
         <p class="col-sm-offset-2">@Assignments.CreateAssignment_ResponsibleInstruction</p>
         <div class="form-group" data-bind="validationElement: quantity">
