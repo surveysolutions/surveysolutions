@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             expressionState.GetStructuralChanges().Returns(structuralChanges);
             expressionState.ProcessVariables()
                 .Returns(
-                    new VariableValueChanges(new Dictionary<Identity, object>()
+                    new VariableValueChanges(new Dictionary<Identity, object>
                     {
                         {Create.Entity.Identity(variableId, RosterVector.Empty), true}
                     }));
@@ -54,23 +54,23 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 interviewExpressionStatePrototypeProvider: interviewExpressionStatePrototypeProvider,
                 shouldBeInitialized: false);
 
-            command = new CreateInterviewOnClientCommand(Guid.Empty, userId, questionnaireIdentity, DateTime.Now,
+            command = Create.Command.CreateInterview(Guid.Empty, userId, questionnaireIdentity, DateTime.Now,
                 responsibleSupervisorId, null, null, null);
 
         };
 
         Because of = () =>
-            interview.CreateInterviewOnClient(command);
+            interview.CreateInterview(command);
 
         It should_raise_InterviewCreated_event = () =>
-            eventContext.ShouldContainEvent<InterviewOnClientCreated>();
+            eventContext.ShouldContainEvent<InterviewCreated>();
 
         It should_provide_questionnaire_id_in_InterviewCreated_event = () =>
-            eventContext.GetEvent<InterviewOnClientCreated>()
+            eventContext.GetEvent<InterviewCreated>()
                 .QuestionnaireId.ShouldEqual(questionnaireId);
 
         It should_provide_questionnaire_verstion_in_InterviewCreated_event = () =>
-            eventContext.GetEvent<InterviewOnClientCreated>()
+            eventContext.GetEvent<InterviewCreated>()
                 .QuestionnaireVersion.ShouldEqual(questionnaireVersion);
 
         It should_set_variable_value = () =>
@@ -90,6 +90,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid variableId;
         private static StatefulInterview interview;
         private static QuestionnaireIdentity questionnaireIdentity;
-        private static CreateInterviewOnClientCommand command;
+        private static CreateInterview command;
     }
 }

@@ -18,7 +18,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             questionnaireId = Guid.Parse("22220000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            answersToFeaturedQuestions = new Dictionary<Guid, AbstractAnswer>();
             answersTime = new DateTime(2013, 09, 01);
 
             Guid groupId = Guid.Parse("22220000FFFFFFFFFFFFFFFFFFFFFFFF");
@@ -29,8 +28,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             eventContext = new EventContext();
 
-            command = Create.Command.CreateInterviewCommand(questionnaireId, 1, supervisorId,
-                answersToFeaturedQuestions, answersTime: answersTime, userId: userId);
+            command = Create.Command.CreateInterview(questionnaireId, 1, supervisorId,
+                new List<InterviewAnswer>(), answersTime: answersTime, userId: userId);
             interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
         };
 
@@ -49,10 +48,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static EventContext eventContext;
         private static Guid userId;
         private static Guid questionnaireId;
-        private static Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions;
         private static DateTime answersTime;
         private static Guid supervisorId;
         private static Interview interview;
-        private static CreateInterviewCommand command;
+        private static CreateInterview command;
     }
 }

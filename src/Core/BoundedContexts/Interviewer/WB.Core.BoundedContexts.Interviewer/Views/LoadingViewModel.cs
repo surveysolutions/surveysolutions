@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                if (interview.CreatedOnClient)
+                if (interview.HasEditableIdentifyingQuestions)
                 {
                     this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewIdString);
                 }
