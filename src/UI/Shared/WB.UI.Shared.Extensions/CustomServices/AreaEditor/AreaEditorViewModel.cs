@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using Esri.ArcGISRuntime.Geometry;
@@ -288,7 +289,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 string coordinates = string.Empty;
                 if (projectedPolygon != null)
                 {
-                    var tco = projectedPolygon.Parts[0].Points.Select(x => $"{x.X},{x.Y}").ToList();
+                    var tco = projectedPolygon.Parts[0].Points.Select(x => $"{x.X.ToString(CultureInfo.InvariantCulture)},{x.Y.ToString(CultureInfo.InvariantCulture)}").ToList();
                     coordinates = string.Join(";", tco);
                 }
 
