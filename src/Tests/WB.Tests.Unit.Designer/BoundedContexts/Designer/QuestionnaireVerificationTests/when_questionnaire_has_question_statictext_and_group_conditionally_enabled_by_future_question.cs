@@ -53,7 +53,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         [NUnit.Framework.Test] public void should_return_warning_for_group_with_reference_on_future_question_id () =>
             FindWarningForEntityWithId(errors, "WB0251", groupId).References.Last().Id.ShouldEqual(futureQuestionId);
 
-        It should_return_warning_for_question= () =>
+        [NUnit.Framework.Test]
+        public void should_return_warning_for_question() =>
             FindWarningForEntityWithId(errors, "WB0251", questionId).References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_warning_for_question_with_reference_on_future_question () =>
