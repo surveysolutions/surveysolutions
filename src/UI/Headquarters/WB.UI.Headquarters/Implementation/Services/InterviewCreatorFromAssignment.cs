@@ -91,10 +91,9 @@ namespace WB.UI.Headquarters.Implementation.Services
         {
             var userId = this.authorizedUser.Id;
 
-            var command = new CreateInterviewWithPreloadedData(Guid.NewGuid(),
+            var command = new CreateInterview(Guid.NewGuid(),
                 userId,
-                questionnaireIdentity.QuestionnaireId,
-                questionnaireIdentity.Version,
+                questionnaireIdentity,
                 supervisorId: responsibleSupervisorId,
                 interviewerId: responsibleInterviewerId,
                 answersTime: DateTime.UtcNow,

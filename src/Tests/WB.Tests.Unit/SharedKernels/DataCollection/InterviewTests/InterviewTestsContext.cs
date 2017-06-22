@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         }
         
         protected static Interview CreateInterview(Guid? interviewId = null, Guid? userId = null, Guid? questionnaireId = null,
-            Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions = null, DateTime? answersTime = null, Guid? supervisorId = null,
+            List<InterviewAnswer> answersToFeaturedQuestions = null, DateTime? answersTime = null, Guid? supervisorId = null,
             IQuestionnaireStorage questionnaireRepository = null, 
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
@@ -42,8 +42,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 expressionProcessorStatePrototypeProvider: expressionProcessorStatePrototypeProvider,
                 textFactory: textFactory);
 
-            interview.CreateInterview(new CreateInterviewCommand(interview.EventSourceId, userId ?? new Guid("F000F000F000F000F000F000F000F000"), questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"), 
-                answersToFeaturedQuestions ?? new Dictionary<Guid, AbstractAnswer>(), answersTime ?? new DateTime(2012, 12, 20), supervisorId ?? new Guid("D222D222D222D222D222D222D222D222"), 1, null));
+            interview.CreateInterview(Create.Command.CreateInterview(interview.EventSourceId, userId ?? new Guid("F000F000F000F000F000F000F000F000"), 
+                questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"), 1,
+                answersToFeaturedQuestions ?? new List<InterviewAnswer>(), answersTime ?? new DateTime(2012, 12, 20), 
+                supervisorId ?? new Guid("D222D222D222D222D222D222D222D222"), null, Create.Entity.InterviewKey()));
 
             return interview;
         }

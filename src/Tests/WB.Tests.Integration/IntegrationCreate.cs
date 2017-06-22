@@ -117,8 +117,14 @@ namespace WB.Tests.Integration
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
                 Create.Service.SubstitionTextFactory());
 
-            interview.CreateInterview(new CreateInterviewCommand(interview.EventSourceId, new Guid("F111F111F111F111F111F111F111F111"), questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"), 
-                new Dictionary<Guid, AbstractAnswer>(), new DateTime(2012, 12, 20), new Guid("D222D222D222D222D222D222D222D222"), 1, null));
+            interview.CreateInterview(Create.Command.CreateInterview(
+                interviewId: interview.EventSourceId, 
+                userId: new Guid("F111F111F111F111F111F111F111F111"),
+                questionnaireId: questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
+                version: 1,
+                answers:new List<InterviewAnswer>(),
+                answersTime: new DateTime(2012, 12, 20),
+                supervisorId: new Guid("D222D222D222D222D222D222D222D222")));
 
             return interview;
         }
@@ -133,7 +139,7 @@ namespace WB.Tests.Integration
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
                 Create.Service.SubstitionTextFactory());
           
-            interview.CreateInterviewWithPreloadedData(new CreateInterviewWithPreloadedData(
+            interview.CreateInterview(Create.Command.CreateInterview(
                 interviewId: Guid.NewGuid(),
                 userId: Guid.NewGuid(),
                 questionnaireId: questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
@@ -142,8 +148,7 @@ namespace WB.Tests.Integration
                 answersTime: new DateTime(2012, 12, 20),
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),
-                interviewKey: Create.Entity.InterviewKey(),
-                assignmentId: null));
+                interviewKey: Create.Entity.InterviewKey()));
 
             return interview;
         }
@@ -166,17 +171,25 @@ namespace WB.Tests.Integration
         public static StatefulInterview StatefulInterview(QuestionnaireIdentity questionnaireIdentity,
             IQuestionnaireStorage questionnaireRepository = null, 
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null,
-            Dictionary<Guid, AbstractAnswer> answersOnPrefilledQuestions = null)
+            List<InterviewAnswer> answersOnPrefilledQuestions = null)
         {
             var interview = new StatefulInterview(
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ?? Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
                 Create.Service.SubstitionTextFactory());
 
-            interview.CreateInterview(new CreateInterviewCommand(interview.EventSourceId, new Guid("F111F111F111F111F111F111F111F111"), questionnaireIdentity?.QuestionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"), 
-                answersOnPrefilledQuestions ?? new Dictionary<Guid, AbstractAnswer>(), new DateTime(2012, 12, 20), new Guid("D222D222D222D222D222D222D222D222"), questionnaireIdentity?.Version ?? 1, null));
+            interview.CreateInterview(Create.Command.CreateInterview(
+                interviewId: interview.EventSourceId,
+                userId: new Guid("F111F111F111F111F111F111F111F111"),
+                questionnaireId: questionnaireIdentity?.QuestionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
+                version: questionnaireIdentity?.Version ?? 1,
+                answers: answersOnPrefilledQuestions ?? new List<InterviewAnswer>(),
+                answersTime: new DateTime(2012, 12, 20),
+                supervisorId: Guid.NewGuid(),
+                interviewerId: Guid.NewGuid(),
+                interviewKey: Create.Entity.InterviewKey()));
 
-            return interview;
+          return interview;
         }
 
         public static CommittedEvent CommittedEvent(string origin = null, 

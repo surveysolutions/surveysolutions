@@ -1,23 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 {
-    internal class when_creating_interview_with_cascading_questions_in_fixed_roster_and_parent_has_condition : InterviewTestsContext
+    internal class when_creating_interview_with_cascading_questions_in_fixed_roster_and_parent_has_condition : in_standalone_app_domain
     {
-        Establish context = () =>
-        {
-            appDomainContext = AppDomainContext.Create();
-        };
 
         Because of = () =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
@@ -36,7 +30,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                     Create.Entity.Roster(topRosterId,
                         variable: "varRoster",
                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                        fixedTitles: new []{ "a", "b"},
+                        fixedTitles: new[] {"a", "b"},
                         children: new List<IComposite>
                         {
                             Create.Entity.SingleQuestion(parentSingleOptionQuestionId, "q1", "numeric > 10",
@@ -45,29 +39,30 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                                     Create.Entity.Option("1", "parent option 1"),
                                     Create.Entity.Option("2", "parent option 2")
                                 }),
-                            Create.Entity.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
+                            Create.Entity.SingleQuestion(childCascadedComboboxId, "q2",
+                                cascadeFromQuestionId: parentSingleOptionQuestionId,
                                 options:
-                                    new List<Answer>
-                                    {
-                                        Create.Entity.Option("1", "child 1 for parent option 1", "1"),
-                                        Create.Entity.Option("3", "child 1 for parent option 2", "2")
-                                    }
-                                ),
-                            Create.Entity.SingleQuestion(grandChildCascadedComboboxId, "q3", cascadeFromQuestionId: childCascadedComboboxId,
+                                new List<Answer>
+                                {
+                                    Create.Entity.Option("1", "child 1 for parent option 1", "1"),
+                                    Create.Entity.Option("3", "child 1 for parent option 2", "2")
+                                }
+                            ),
+                            Create.Entity.SingleQuestion(grandChildCascadedComboboxId, "q3",
+                                cascadeFromQuestionId: childCascadedComboboxId,
                                 options:
-                                    new List<Answer>
-                                    {
-                                        Create.Entity.Option("1", "child 1 for parent option 1", "1"),
-                                        Create.Entity.Option("3", "child 1 for parent option 2", "2")
-                                    }
-                                )
-
+                                new List<Answer>
+                                {
+                                    Create.Entity.Option("1", "child 1 for parent option 1", "1"),
+                                    Create.Entity.Option("3", "child 1 for parent option 2", "2")
+                                }
+                            )
                         })
-                    );
-                
+                );
+
                 using (var eventContext = new EventContext())
                 {
-                    Interview interview = SetupInterview(questionnaire);
+                    SetupInterview(questionnaire);
 
                     return new InvokeResults
                     {
@@ -91,14 +86,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
         It should_disable_all_grand_child_questions = () =>
             results.WasAnyGrandChildQuestionDisabled.ShouldBeTrue();
 
-        Cleanup stuff = () =>
-        {
-            appDomainContext.Dispose();
-            appDomainContext = null;
-        };
-
         private static InvokeResults results;
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
 
         [Serializable]
         internal class InvokeResults

@@ -106,9 +106,9 @@ namespace WB.Tests.Abc.TestFactories
 
             if (shouldBeInitialized)
             {
-                var command = new CreateInterviewOnClientCommand(Guid.Empty, userId ?? Guid.NewGuid(), Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), DateTime.Now,
+                var command = Create.Command.CreateInterview(Guid.Empty, userId ?? Guid.NewGuid(), Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), DateTime.Now,
                     Guid.NewGuid(), null, null, null);
-                statefulInterview.CreateInterviewOnClient(command);
+                statefulInterview.CreateInterview(command);
             }
 
             return statefulInterview;
@@ -133,9 +133,9 @@ namespace WB.Tests.Abc.TestFactories
 
             if (shouldBeInitialized)
             {
-                var command = new CreateInterviewOnClientCommand(Guid.Empty, userId ?? Guid.NewGuid(), Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), DateTime.Now,
+                var command = Create.Command.CreateInterview(Guid.Empty, userId ?? Guid.NewGuid(), Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), DateTime.Now,
                     Guid.NewGuid(), null, null, null);
-                statefulInterview.CreateInterviewOnClient(command);
+                statefulInterview.CreateInterview(command);
             }
 
             return statefulInterview;
