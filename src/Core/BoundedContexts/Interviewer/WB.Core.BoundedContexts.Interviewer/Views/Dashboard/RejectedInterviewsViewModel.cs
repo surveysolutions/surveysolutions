@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.GenericSubdomains.Portable;
@@ -28,15 +30,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.principal = principal;
         }
 
-        public void Load()
+        public async Task LoadAsync()
         {
-            this.Items = this.GetRejectedInterviews().ToList();
+            var rejectedInterviews = await Task.Run(() => this.GetRejectedInterviews().ToList());
+
+            this.Title = string.Format(InterviewerUIResources.Dashboard_RejectedLinkText, rejectedInterviews.Count);
 
             var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
             subTitle.Title = InterviewerUIResources.Dashboard_RejectedTabText;
-            this.UiItems = subTitle.ToEnumerable().Concat(this.Items).ToList();
+            var uiItems = subTitle.ToEnumerable().Concat(rejectedInterviews).ToList();
 
-            this.Title = string.Format(InterviewerUIResources.Dashboard_RejectedLinkText, this.Items.Count);
+            this.Items = rejectedInterviews;
+            this.UiItems = new MvxObservableCollection<IDashboardItem>(uiItems);
         }
 
         private IEnumerable<IDashboardItem> GetRejectedInterviews()
