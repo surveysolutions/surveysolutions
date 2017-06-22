@@ -115,7 +115,6 @@ namespace WB.UI.Headquarters.Controllers
             if (!interviewer.IsInterviewer())
                 throw new InvalidOperationException($"Assignment {assignment.Id} has responsible that is not an interviewer. Interview cannot be created");
 
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(assignment.QuestionnaireId, null);
             var interviewId = Guid.NewGuid();
 
             var prefilled = questionnaire.GetPrefilledQuestions().ToHashSet();
