@@ -57,10 +57,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateCascadingCombobo
         private static Guid parentQuestionId = Guid.Parse("22222222222222222222222222222222");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+
         private static Option[] options =
         {
-            new Option(Guid.NewGuid(), "1", "Option 1", "1"), 
-            new Option(Guid.NewGuid(), "2", "Option 2", (string)null)
-        }
+            new Option(Guid.NewGuid(), "1", "Option 1", "1"),
+            new Option(Guid.NewGuid(), "2", "Option 2", (string) null)
+        };
     }
 }

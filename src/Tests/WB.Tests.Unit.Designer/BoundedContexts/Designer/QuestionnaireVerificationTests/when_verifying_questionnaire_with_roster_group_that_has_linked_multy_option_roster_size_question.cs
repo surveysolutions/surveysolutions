@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_roster_group_that_has_linked_multy_option_roster_size_question : QuestionnaireVerifierTestsContext
     {
-        private [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             rosterGroupId = Guid.Parse("10000000000000000000000000000000");
             rosterSizeQuestionId = Guid.Parse("13333333333333333333333333333333");
             referencedQuestionId = Guid.Parse("12222222222222222222222222222222");

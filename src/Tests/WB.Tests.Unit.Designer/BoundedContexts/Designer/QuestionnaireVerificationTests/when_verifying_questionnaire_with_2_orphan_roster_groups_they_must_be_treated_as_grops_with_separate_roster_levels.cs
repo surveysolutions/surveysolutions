@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_2_orphan_roster_groups_they_must_be_treated_as_grops_with_separate_roster_levels : QuestionnaireVerifierTestsContext
     {
-        private [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             rosterGroupId1 = Guid.Parse("13333333333333333333333333333333");
             rosterGroupId2 = Guid.Parse("10000000000000000000000000000000");
             questionWithSubstitutionsIdFromLevel1 = Guid.Parse("12222222222222222222222222222222");

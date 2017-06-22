@@ -48,10 +48,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
         private static Guid parentQuestionId = Guid.Parse("22222222222222222222222222222222");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-
-        private static Answer[] oldAnswers = new Answer[]
-        {
-            new Answer { AnswerText = "option1", AnswerValue = "1", ParentValue = "1"}, new Answer { AnswerText = "option2", AnswerValue = "2", ParentValue = "2" }
-        }
     }
 }

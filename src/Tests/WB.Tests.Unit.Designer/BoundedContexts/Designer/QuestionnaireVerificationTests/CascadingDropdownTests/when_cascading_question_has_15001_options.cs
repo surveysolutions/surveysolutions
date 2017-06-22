@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 StataExportCaption = "var1",
                 CascadeFromQuestionId = parentSingleOptionQuestionId,
                 Answers = new List<Answer>()
-            }
+            };
 
             for (int i = 0; i <= 15000; i++)
             {

@@ -19,7 +19,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup(parentGroupId,  chapterId, responsibleId: responsibleId);
             questionnaire.AddGroup(groupId, parentGroupId, responsibleId: responsibleId);
 
-
             BecauseOf();
         }
 
@@ -34,7 +33,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
           keyword => exception.Message.ToLower().Contains(keyword));
 
 
-        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid chapterId;
         private static Guid parentGroupId;

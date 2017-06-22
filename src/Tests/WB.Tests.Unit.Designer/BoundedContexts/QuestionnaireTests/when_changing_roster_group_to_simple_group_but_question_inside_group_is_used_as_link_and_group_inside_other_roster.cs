@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         private void BecauseOf() =>
             questionnaire.UpdateGroup(groupToUpdateId, responsibleId, "title", null, null, "", "", false, false, RosterSizeSourceType.Question, null, null);
 
-        private [NUnit.Framework.Test] public void should_contains_group_with_groupToUpdateId_specified () =>
+        [NUnit.Framework.Test] public void should_contains_group_with_groupToUpdateId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupToUpdateId).ShouldNotBeNull();
 
         [NUnit.Framework.Test] public void should_contains_group_with_IsRoster_specified () =>

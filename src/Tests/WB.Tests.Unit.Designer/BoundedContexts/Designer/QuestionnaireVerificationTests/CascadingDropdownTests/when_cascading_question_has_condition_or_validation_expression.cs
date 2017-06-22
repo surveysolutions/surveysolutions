@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_cascading_question_has_condition_or_validation_expression : QuestionnaireVerifierTestsContext
     {
-        private [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             parentSingleOptionQuestionId = Guid.Parse("11111111111111111111111111111111");
             childCascadedComboboxId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             secondChildId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");

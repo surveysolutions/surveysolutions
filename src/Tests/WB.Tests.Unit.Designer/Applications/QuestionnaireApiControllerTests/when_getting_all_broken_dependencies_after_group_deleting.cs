@@ -11,13 +11,14 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
 {
     internal class when_getting_all_broken_dependencies_after_group_deleting : QuestionnaireApiControllerTestContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context ()
+        {
             brokenLinks = new List<QuestionnaireItemLink>
-                          {
-                              CreateQuestionnaireItemLink(),
-                              CreateQuestionnaireItemLink(),
-                              CreateQuestionnaireItemLink()
-                          }
+            {
+                CreateQuestionnaireItemLink(),
+                CreateQuestionnaireItemLink(),
+                CreateQuestionnaireItemLink()
+            };
             questionnaireInfoFactory = Mock.Of<IQuestionnaireInfoFactory>(
                 x => x.GetAllBrokenGroupDependencies(questionnaireId, groupId) == brokenLinks);
 

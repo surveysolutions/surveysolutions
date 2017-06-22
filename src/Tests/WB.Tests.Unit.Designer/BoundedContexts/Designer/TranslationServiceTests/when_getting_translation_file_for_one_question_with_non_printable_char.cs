@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                     translationId: translationId,
                     questionnaireId: questionnaireId,
                     questionnaireEntityId: questionId),
-            }
+            };
 
             QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {

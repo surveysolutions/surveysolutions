@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
 
         private void BecauseOf() => view = factory.Load(questionnaireId, userId);
 
-        [NUnit.Framework.Test] public void should_be_only_owner_in_shared_persons_list () =>
+        [NUnit.Framework.Test] public void should_be_only_owner_in_shared_persons_list () 
         {
             view.SharedPersons.Count.ShouldEqual(1);
             view.SharedPersons[0].Email.ShouldEqual(userEmail);

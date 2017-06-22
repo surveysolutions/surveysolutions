@@ -25,13 +25,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTranslati
                     translation: "option1",
                     translationId: translationId,
                     questionnaireEntityId: questionId,
-                    translationIndex:"1"),
+                    translationIndex: "1"),
                 Create.TranslationDto(type: TranslationType.ValidationMessage,
                     translation: "validation message",
                     translationId: translationId,
                     questionnaireEntityId: questionId,
-                    translationIndex:"1")
-            }
+                    translationIndex: "1")
+            };
             BecauseOf();
         }
 
