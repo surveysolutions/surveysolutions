@@ -9,21 +9,20 @@ namespace WB.UI.Designer.Tests.QuestionnaireApiControllerTests
 {
     internal class when_getting_existing_static_text : QuestionnaireApiControllerTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireInfoFactory = Mock.Of<IQuestionnaireInfoFactory>(
                 x => x.GetStaticTextEditView(questionnaireId, entityId) == CreateStaticTextView());
 
             controller = CreateQuestionnaireController(questionnaireInfoFactory: questionnaireInfoFactory);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             result = controller.EditStaticText(id: questionnaireId, staticTextId: entityId);
 
-        It should_static_text_not_be_null = () =>
+        [NUnit.Framework.Test] public void should_static_text_not_be_null () =>
             result.ShouldNotBeNull();
 
-        It should_static_text_has_type_of_NewEditStaticTextView = () =>
+        [NUnit.Framework.Test] public void should_static_text_has_type_of_NewEditStaticTextView () =>
             result.ShouldBeOfExactType<NewEditStaticTextView>();
 
         private static QuestionnaireController controller;

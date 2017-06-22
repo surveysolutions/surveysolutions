@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
 {
     internal class when_PasteAfterCommand_is_inflating : CommandInflaterTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var membershipUserService = Mock.Of<IMembershipUserService>(
                 _ => _.WebUser == Mock.Of<IMembershipWebUser>(
                     u => u.UserId == actionUserId && u.MembershipUser.Email == actionUserEmail));
@@ -28,15 +27,15 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
             command = new PasteAfter(questoinnaireId, entityId, pasteAfterId, questoinnaireId, entityId, ownerId);
 
             commandInflater = CreateCommandInflater(membershipUserService, documentStorage);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             commandInflater.PrepareDeserializedCommandForExecution(command);
 
-        It should_not_be_null = () =>
+        [NUnit.Framework.Test] public void should_not_be_null () =>
            command.SourceDocument.ShouldNotBeNull();
 
-        It should_questionnarie_id_as_provided = () =>
+        [NUnit.Framework.Test] public void should_questionnarie_id_as_provided () =>
             command.SourceDocument.PublicKey.ShouldEqual(questoinnaireId);
 
         private static CommandInflater commandInflater;

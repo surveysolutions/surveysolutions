@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using Machine.Specifications;
@@ -17,8 +17,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 {
     internal class when_storing_translations_from_excel_file_with_missing_same_translations : TranslationsServiceTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var testType = typeof(when_storing_translations_from_excel_file_with_missing_same_translations);
             var readResourceFile = testType.Namespace + ".testTranslationsWithMissingTranslations.xlsx";
             var manifestResourceStream = testType.Assembly.GetManifestResourceStream(readResourceFile);
@@ -39,41 +38,41 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
             service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
             
-        };
+        }
 
-        Because of = () => service.Store(questionnaireId, translationId, fileStream);
+        private void BecauseOf() => service.Store(questionnaireId, translationId, fileStream);
 
-        It should_store_all_entities_for_questionnaire_and_culture = () => 
+        [NUnit.Framework.Test] public void should_store_all_entities_for_questionnaire_and_culture () => 
             plainStorageAccessor.Query(_ => _.All(x => x.QuestionnaireId == questionnaireId && x.TranslationId == translationId)).ShouldBeTrue();
 
-        It should_dont_store_title_translation = () =>
+        [NUnit.Framework.Test] public void should_dont_store_title_translation () =>
         {
             var translationInstance = plainStorageAccessor.Query(_ => _.SingleOrDefault(x => x.Type == TranslationType.Title));
             translationInstance.ShouldBeNull();
-        };
+        }
 
-        It should_dont_store_instruction_translation = () =>
+        [NUnit.Framework.Test] public void should_dont_store_instruction_translation () =>
         {
             var translationInstance = plainStorageAccessor.Query(_ => _.SingleOrDefault(x => x.Type == TranslationType.Instruction));
             translationInstance.ShouldBeNull();
-        };
+        }
         
-        It should_store_validation_translation = () =>
+        [NUnit.Framework.Test] public void should_store_validation_translation () =>
         {
             var translationInstance = plainStorageAccessor.Query(_ => _.Single(x => x.Type == TranslationType.ValidationMessage));
             translationInstance.QuestionnaireEntityId.ShouldEqual(entityId);
             translationInstance.Value.ShouldEqual("validation message");
             translationInstance.TranslationIndex.ShouldEqual("1");
-        };
+        }
 
 
-        It should_store_option_translation = () =>
+        [NUnit.Framework.Test] public void should_store_option_translation () =>
         {
             var translationInstance = plainStorageAccessor.Query(_ => _.Single(x => x.Type == TranslationType.OptionTitle));
             translationInstance.QuestionnaireEntityId.ShouldEqual(entityId);
             translationInstance.Value.ShouldEqual("option");
             translationInstance.TranslationIndex.ShouldEqual("2");
-        };
+        }
 
         static TranslationsService service;
         static TestPlainStorage<TranslationInstance> plainStorageAccessor;

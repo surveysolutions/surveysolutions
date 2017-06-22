@@ -14,17 +14,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
     [Ignore("reference validation is turned off")]
     internal class when_adding_text_question_and_enablementCondition_contains_2_id_references_and_1_of_them_invalid : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
                 => processor.GetIdentifiersUsedInExpression(enablementCondition) == new[] { existingQuestionId.ToString(), notExistingQuestionId.ToString() });
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId, expressionProcessor: expressionProcessor);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(Create.Command.AddDefaultTypeQuestion(questionnaire.Id, existingQuestionId,"title", responsibleId, chapterId));
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.AddTextQuestion(
                     questionId: questionId,
@@ -41,10 +40,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
                      mask: null,
                     responsibleId: responsibleId));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__not__valid__expression__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__not__valid__expression__ () =>
             new[] { "not", "valid", "expression" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 

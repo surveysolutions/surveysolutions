@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
 {
     internal class when_getting_group_edit_view_and_group_is_absent : QuestionnaireInfoFactoryTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
             var questionnaireView = CreateQuestionnaireDocument();
             questionDetailsReaderMock
@@ -21,12 +20,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                 .Returns(questionnaireView);
 
             factory = CreateQuestionnaireInfoFactory(questionDetailsReaderMock.Object);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             result = factory.GetGroupEditView(questionnaireId, groupId);
 
-        It should_return_null = () =>
+        [NUnit.Framework.Test] public void should_return_null () =>
             result.ShouldBeNull();
        
         private static QuestionnaireInfoFactory factory;

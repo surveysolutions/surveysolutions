@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -8,8 +8,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_moving_roster_nested_group_with_numeric_question_with_title_which_contains_roster_title_as_substitution_to_group : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             questionId = Guid.Parse("11111111111111111111111111111111");
@@ -28,20 +27,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 title : questionTitle,
                 variableName : "var");
             eventContext = new EventContext();
-        };
+        }
 
-        Because of = () => exception = Catch.Exception(() => questionnaire.MoveGroup(nestedRosterId, chapterId, 1, responsibleId));
+        private void BecauseOf() => exception = Catch.Exception(() => questionnaire.MoveGroup(nestedRosterId, chapterId, 1, responsibleId));
 
         Cleanup stuff = () =>
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__questions____substitution__and_variable_name_of_question_with_rostertitle_in_substitution = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__questions____substitution__and_variable_name_of_question_with_rostertitle_in_substitution () =>
           new[] { "questions", "substitution", "var" }.ShouldEachConformTo(
           keyword => exception.Message.ToLower().Contains(keyword));
 

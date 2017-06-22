@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
 {
     internal class when_getting_nameric_roster_edit_view_having_gps_and_text_questions : QuestionnaireInfoFactoryTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
             questionnaireView = Create.QuestionnaireDocumentWithOneChapter(children: new List<IComposite>
             {
@@ -31,12 +30,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                 .Returns(questionnaireView);
 
             factory = CreateQuestionnaireInfoFactory(questionDetailsReaderMock.Object);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             result = factory.GetRosterEditView(questionnaireId, g2Id);
         
-        It should_return_grouped_list_of_title_questions_size_2 = () =>
+        [NUnit.Framework.Test] public void should_return_grouped_list_of_title_questions_size_2 () =>
             result.NumericIntegerTitles.Count.ShouldEqual(2);
        
         private static QuestionnaireInfoFactory factory;

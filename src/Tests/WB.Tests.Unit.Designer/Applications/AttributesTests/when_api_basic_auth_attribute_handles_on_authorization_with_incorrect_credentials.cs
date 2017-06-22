@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
 {
     internal class when_api_basic_auth_attribute_handles_on_authorization_with_incorrect_credentials : AttributesTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var userName = "name";
 
             var context = new Mock<HttpConfiguration>();
@@ -35,12 +34,12 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
             Func<string, string, bool> validateUserCredentials = (s, s1) => false;
 
             attribute = CreateApiBasicAuthAttribute(validateUserCredentials);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             attribute.OnAuthorization(filterContext);
 
-        It should_return_unauthorized_status_code = () =>
+        [NUnit.Framework.Test] public void should_return_unauthorized_status_code () =>
             filterContext.Response.StatusCode.ShouldEqual(HttpStatusCode.Unauthorized);
 
         private static ApiBasicAuthAttribute attribute;

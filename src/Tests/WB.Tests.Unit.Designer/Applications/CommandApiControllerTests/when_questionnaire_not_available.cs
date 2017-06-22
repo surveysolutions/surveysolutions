@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Http;
 using Machine.Specifications;
 using Moq;
@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
 {
     internal class when_questionnaire_not_available : CommandApiControllerTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             
             model = new CommandController.CommandExecutionModel();
             commandInflaterMock = new Mock<ICommandInflater>();
@@ -21,15 +20,15 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
                 .Throws(new CommandInflaitingException(CommandInflatingExceptionType.EntityNotFound, "test"));
 
             controller = CreateCommandController(commandInflater:commandInflaterMock.Object);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             message = controller.Post(model);
 
-        It should_not_be_null = () =>
+        [NUnit.Framework.Test] public void should_not_be_null () =>
             message.ShouldNotBeNull();
 
-        It should_not_be_correct_status = () =>
+        [NUnit.Framework.Test] public void should_not_be_correct_status () =>
             message.StatusCode.ShouldEqual(HttpStatusCode.NotFound);
 
         private static CommandController controller;

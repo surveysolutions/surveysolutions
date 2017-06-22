@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewFactory
 {
     internal class when_loading_view_and_chapter_exists : ChapterInfoViewFactoryContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var repositoryMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
 
             repositoryMock
@@ -26,21 +25,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewFactory
                 ));
 
             factory = CreateChapterInfoViewFactory(repository: repositoryMock.Object);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             view = factory.Load(questionnaireId, chapterId.FormatGuid());
 
-        It should_find_chapter = () =>
+        [NUnit.Framework.Test] public void should_find_chapter () =>
             view.ShouldNotBeNull();
 
-        It should_chapter_id_be_equal_chapterId = () =>
+        [NUnit.Framework.Test] public void should_chapter_id_be_equal_chapterId () =>
             view.Chapter.ItemId.ShouldEqual(chapterId.FormatGuid());
 
-        It should_view_have_all_variabe_names_ = () =>
+        [NUnit.Framework.Test] public void should_view_have_all_variabe_names_ () =>
             view.VariableNames.Length.ShouldEqual(keywordsAndVariables.Length);
 
-        It should_contain_all_variabe_names_ = () =>
+        [NUnit.Framework.Test] public void should_contain_all_variabe_names_ () =>
             view.VariableNames.Select(x => x.Name).ShouldContain(keywordsAndVariables);
 
         private static NewChapterView view;
@@ -57,6 +56,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewFactory
             "@rowindex",
             "@rowname",
             "@rowcode"
-        };
+        }
 }
 }

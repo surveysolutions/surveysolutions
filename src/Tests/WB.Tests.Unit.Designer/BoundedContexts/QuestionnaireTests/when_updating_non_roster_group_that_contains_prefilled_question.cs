@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_updating_non_roster_group_that_contains_prefilled_question : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             var prefilledQuestionId = Guid.Parse("22222222222222222222222222222222");
 
@@ -23,9 +22,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddNumericQuestion(prefilledQuestionId, isInteger: true, parentId: rosterId, isPreFilled:true, responsibleId:responsibleId);
             
             eventContext = new EventContext();
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception =
                 Catch.Exception(
                     () =>
@@ -36,21 +35,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__missing__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__missing__ () =>
             exception.Message.ToLower().ShouldContain("become");
 
-        It should_throw_exception_with_message_containting__roster__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__roster__ () =>
             exception.Message.ToLower().ShouldContain("roster");
 
-        It should_throw_exception_with_message_containting__prefilled__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__prefilled__ () =>
             exception.Message.ToLower().ShouldContain("identifying");
 
-        It should_throw_exception_with_message_containting__question__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__question__ () =>
             exception.Message.ToLower().ShouldContain("question");
 
 

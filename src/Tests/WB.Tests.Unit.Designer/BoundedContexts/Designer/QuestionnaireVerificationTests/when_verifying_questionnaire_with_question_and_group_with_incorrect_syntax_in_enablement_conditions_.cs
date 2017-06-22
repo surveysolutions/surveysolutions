@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_question_and_group_with_incorrect_syntax_in_enablement_conditions_ : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
-        {
+        private [NUnit.Framework.OneTimeSetUp] public void context () {
             const string incorrectConditionExpression = "[hehe] &=+< 5";
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 new TextQuestion
@@ -27,25 +26,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             );
             
             verifier = CreateQuestionnaireVerifier(expressionProcessorGenerator: CreateExpressionProcessorGenerator());
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(questionnaire);
 
-        It should_return_2_messages = () =>
+        [NUnit.Framework.Test] public void should_return_2_messages () =>
             verificationMessages.Count().ShouldEqual(2);
 
-        It should_return_each_error_with_code__WB0003__ = () =>
+        [NUnit.Framework.Test] public void should_return_each_error_with_code__WB0003__ () =>
             verificationMessages.ShouldEachConformTo(error=> error.Code == "WB0003");
 
-        It should_return_each_error_with_single_reference = () =>
+        [NUnit.Framework.Test] public void should_return_each_error_with_single_reference () =>
             verificationMessages.ShouldEachConformTo(error=> error.References.Count() == 1);
 
-        It should_return_one_error_referencing_with_type_of_question = () =>
+        [NUnit.Framework.Test] public void should_return_one_error_referencing_with_type_of_question () =>
             verificationMessages.Single(x => x.References.Single().Id == questionId)
                 .References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_second_one_referencing_with_type_of_group = () =>
+        [NUnit.Framework.Test] public void should_return_second_one_referencing_with_type_of_group () =>
             verificationMessages.Single(x => x.References.Single().Id == groupId).
                 References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
         

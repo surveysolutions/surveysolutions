@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
@@ -17,8 +17,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
 {
     internal class when_loading_view_and_shared_persons_contains_viewer : QuestionnaireInfoViewFactoryContext
     {
-        private Establish context = () =>
-        {
+        private [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireInfoViewRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(
                 x => x.GetById(questionnaireId) == CreateQuestionnaireDocument(questionnaireId, questionnaireTitle));
 
@@ -38,15 +37,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
 
             factory = CreateQuestionnaireInfoViewFactory(repository: questionnaireInfoViewRepository,
                 questionnaireListViewItemStorage: questionnaireListViewItemStorage, accountsDocumentReader: accountDocumentRepository);
-        };
+        }
 
-        Because of = () => view = factory.Load(questionnaireId, userId);
+        private void BecauseOf() => view = factory.Load(questionnaireId, userId);
 
-        It should_be_only_1_specified_shared_person = () =>
+        [NUnit.Framework.Test] public void should_be_only_1_specified_shared_person () =>
         {
             view.SharedPersons.Count.ShouldEqual(1);
             view.SharedPersons[0].Email.ShouldEqual(userEmail);
-        };
+        }
 
         private static QuestionnaireInfoView view;
         private static QuestionnaireInfoViewFactory factory;

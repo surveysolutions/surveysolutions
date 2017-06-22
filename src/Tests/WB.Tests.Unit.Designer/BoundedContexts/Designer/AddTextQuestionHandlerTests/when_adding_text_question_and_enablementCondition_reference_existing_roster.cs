@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
 {
     internal class when_adding_text_question_and_enablementCondition_reference_existing_roster : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
                 => processor.GetIdentifiersUsedInExpression("roster1.Max(x => x.age) > maxAge") == new[] { "roster", "age", "maxAge" });
 
@@ -26,9 +25,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
 
             questionnaire.AddNumericQuestion(rosterQuestionId, rosterId, responsibleId, variableName: "age");
             questionnaire.AddNumericQuestion(existingQuestionId, chapterId, responsibleId, variableName: "maxAge");
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             questionnaire.AddTextQuestion(
                 questionId: questionId,
                 parentId: chapterId,
@@ -45,7 +44,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
                 responsibleId: responsibleId,
                 index: nullIndex);
 
-        It should_contains_TextQuestion_with_questionId = () =>
+        [NUnit.Framework.Test] public void should_contains_TextQuestion_with_questionId () =>
             questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId).ShouldNotBeNull();
 
         private static Questionnaire questionnaire;

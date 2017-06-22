@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -11,15 +11,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
 {
     internal class when_generating_classes_with_filtered_linked_question : CodeGeneratorTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             AssemblyContext.SetupServiceLocator();
             var assetsTitles = new[]
             {
                 Create.FixedRosterTitle(1, "TV"),
                 Create.FixedRosterTitle(2, "Microwave"),
                 Create.FixedRosterTitle(3, "Cleaner")
-            };
+            }
 
             questionnaire = Create.QuestionnaireDocument(questionnaireId, children: new IComposite[]
             {
@@ -31,12 +30,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             });
 
             generator = Create.CodeGenerator();
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             generatedClassContent = generator.Generate(questionnaire, version).Values.First();
 
-        It should_generate_class_with_V7_namespace_included = () =>
+        [NUnit.Framework.Test] public void should_generate_class_with_V7_namespace_included () =>
              generatedClassContent.ShouldContain("WB.Core.SharedKernels.DataCollection.V7");
 
         private static int version = 16;

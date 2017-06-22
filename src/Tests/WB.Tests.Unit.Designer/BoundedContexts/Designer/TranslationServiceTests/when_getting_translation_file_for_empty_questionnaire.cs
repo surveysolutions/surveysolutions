@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
@@ -11,19 +11,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 {
     internal class when_getting_translation_file_for_empty_questionnaire : TranslationsServiceTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
             
             var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
             questionnaires.SetReturnsDefault(Create.QuestionnaireDocument(questionnaireId));
 
             service = Create.TranslationsService(questionnaireStorage: questionnaires.Object);
-        };
+        }
 
-        Because of = () => exception = Catch.Exception(()=> service.GetAsExcelFile(questionnaireId, Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")));
+        private void BecauseOf() => exception = Catch.Exception(()=> service.GetAsExcelFile(questionnaireId, Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")));
 
-        It should_not_throw_any_exceptions = () => exception.ShouldBeNull();
+        [NUnit.Framework.Test] public void should_not_throw_any_exceptions () => exception.ShouldBeNull();
         
         static TranslationsService service;
         static Guid questionnaireId;

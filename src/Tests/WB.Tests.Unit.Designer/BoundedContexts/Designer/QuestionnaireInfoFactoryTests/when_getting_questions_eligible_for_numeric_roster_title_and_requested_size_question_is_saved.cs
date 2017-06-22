@@ -15,8 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
 {
     internal class when_getting_questions_eligible_for_numeric_roster_title_and_requested_size_question_is_saved : QuestionnaireInfoFactoryTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireView = Create.QuestionnaireDocument(Guid.NewGuid(),
                 Create.Roster(roster1Id, rosterSizeQuestionId: rosterSizeQuestionId, rosterType: RosterSizeSourceType.Question, children: new List<IComposite>()
                 {
@@ -31,15 +30,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                 .Returns(questionnaireView);
 
             factory = CreateQuestionnaireInfoFactory(questionDetailsReaderMock.Object);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             result = factory.GetQuestionsEligibleForNumericRosterTitle(questionnaireId, roster2Id, rosterSizeQuestionId);
 
-        It should_return_2_elements_to_show_in_dropdown = () =>
+        [NUnit.Framework.Test] public void should_return_2_elements_to_show_in_dropdown () =>
             result.Count.ShouldEqual(2);
 
-        It should_return_roster_title_questions_as_the_second_element = () => 
+        [NUnit.Framework.Test] public void should_return_roster_title_questions_as_the_second_element () => 
             result.ElementAt(1).Id.ShouldEqual(rosterTitleQuestionId.FormatGuid());
 
         private static QuestionnaireInfoFactory factory;

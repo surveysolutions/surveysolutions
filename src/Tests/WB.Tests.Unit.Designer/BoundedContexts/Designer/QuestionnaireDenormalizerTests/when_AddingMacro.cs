@@ -9,28 +9,27 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
 {
     internal class when_AddingMacro : QuestionnaireDenormalizerTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = Create.QuestionnaireDocument(questionnaireId, userId: creatorId);
             denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaire);
             command = new AddMacro(questionnaire.PublicKey, entityId, creatorId);
-        };
+        }
 
-        Because of = () => denormalizer.AddMacro(command);
+        private void BecauseOf() => denormalizer.AddMacro(command);
 
-        It should_add_one_macro = () =>
+        [NUnit.Framework.Test] public void should_add_one_macro () =>
             questionnaire.Macros.Count.ShouldEqual(1);
 
-        It should_add_macro_with_key_equals_entity_id = () =>
+        [NUnit.Framework.Test] public void should_add_macro_with_key_equals_entity_id () =>
            questionnaire.Macros.ContainsKey(entityId).ShouldBeTrue();
 
-        It should_add_macro_with_empty_name = () =>
+        [NUnit.Framework.Test] public void should_add_macro_with_empty_name () =>
            questionnaire.Macros[entityId].Name.ShouldBeNull();
 
-        It should_add_macro_with_empty_content = () =>
+        [NUnit.Framework.Test] public void should_add_macro_with_empty_content () =>
            questionnaire.Macros[entityId].Content.ShouldBeNull();
 
-        It should_add_macro_with_empty_description = () =>
+        [NUnit.Framework.Test] public void should_add_macro_with_empty_description () =>
            questionnaire.Macros[entityId].Description.ShouldBeNull();
 
         private static Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
