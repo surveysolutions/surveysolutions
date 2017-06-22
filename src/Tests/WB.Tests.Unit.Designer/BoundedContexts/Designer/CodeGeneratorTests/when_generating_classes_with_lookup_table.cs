@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
                 Create.FixedRosterTitle(1, "TV"),
                 Create.FixedRosterTitle(2, "Microwave"),
                 Create.FixedRosterTitle(3, "Cleaner")
-            }
+            };
 
             questionnaire = Create.QuestionnaireDocument(questionnaireId, children: new[]
             {

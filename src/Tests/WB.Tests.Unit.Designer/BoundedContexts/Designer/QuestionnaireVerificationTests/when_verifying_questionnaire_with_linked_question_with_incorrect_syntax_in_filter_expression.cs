@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_linked_question_with_incorrect_syntax_in_filter_expression : QuestionnaireVerifierTestsContext
     {
-        private [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
                 Create.FixedRoster(rosterId: rosterId, fixedTitles: new[] { "1", "2", "3" },children: new[]

@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
     internal class when_updating_multi_option_question_and_title_contains_substitution_to_question_with_not_supported_type :
         QuestionnaireTestsContext
     {
-        private [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddGpsQuestion(

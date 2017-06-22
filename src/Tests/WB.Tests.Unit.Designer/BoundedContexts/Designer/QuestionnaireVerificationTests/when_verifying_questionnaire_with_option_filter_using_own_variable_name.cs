@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_option_filter_using_own_variable_name : QuestionnaireVerifierTestsContext
     {
-        private [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = Create.QuestionnaireDocument(children: new IComposite[]
             {
                 Create.Chapter(children: new IComposite[]

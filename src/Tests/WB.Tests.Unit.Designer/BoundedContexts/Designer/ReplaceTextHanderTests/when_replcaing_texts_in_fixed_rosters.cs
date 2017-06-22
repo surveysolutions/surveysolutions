@@ -9,7 +9,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
 {
     internal class when_replcaing_texts_in_fixed_rosters : QuestionnaireTestsContext
     {
-        private [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             responsibleId = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
             questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
                 groupId: chapterId);

@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_linked_question_reference_on_question_of_not_supported_type : QuestionnaireVerifierTestsContext
     {
-        private [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             linkedQuestionId = Guid.Parse("10000000000000000000000000000000");
             notSupportedForLinkingQuestionId = Guid.Parse("13333333333333333333333333333333");
             questionnaire = CreateQuestionnaireDocument(

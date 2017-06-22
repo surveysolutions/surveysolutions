@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_3_questions_with_invalid_validation_expression_and_with_2_with_correct : QuestionnaireVerifierTestsContext
     {
-        private [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             const string InvalidExpression = "[hehe] &=+< 5";
             const string ValidExpression = "var1 > 0";
 

@@ -20,33 +20,49 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             questionnaireDocument = CreateQuestionnaireDocument();
             questionnaireView = CreateQuestionnaireView(questionnaireDocument);
 
-            verificationMessages =  new QuestionnaireVerificationMessage[]
+            verificationMessages = new QuestionnaireVerificationMessage[]
             {
                 Create.VerificationError("error1", "message1", Create.VerificationReference(Guid.NewGuid())),
-                Create.VerificationError("error2", "message2", Create.VerificationReference(Guid.NewGuid(), QuestionnaireVerificationReferenceType.Group)),
-            }
+                Create.VerificationError("error2", "message2",
+                    Create.VerificationReference(Guid.NewGuid(), QuestionnaireVerificationReferenceType.Group)),
+            };
 
             verificationWarnings = new QuestionnaireVerificationMessage[]
             {
-                Create.VerificationWarning("code1", "message3", Create.VerificationReference(Guid.NewGuid(), QuestionnaireVerificationReferenceType.Roster)),
-                Create.VerificationWarning("code2", "message4", Create.VerificationReference(Guid.NewGuid(), QuestionnaireVerificationReferenceType.Group)),
-                Create.VerificationWarning("code3", "message5", Create.VerificationReference(Guid.NewGuid(), QuestionnaireVerificationReferenceType.Question))
-            }
+                Create.VerificationWarning("code1", "message3",
+                    Create.VerificationReference(Guid.NewGuid(), QuestionnaireVerificationReferenceType.Roster)),
+                Create.VerificationWarning("code2", "message4",
+                    Create.VerificationReference(Guid.NewGuid(), QuestionnaireVerificationReferenceType.Group)),
+                Create.VerificationWarning("code3", "message5",
+                    Create.VerificationReference(Guid.NewGuid(), QuestionnaireVerificationReferenceType.Question))
+            };
 
             var allVerificationErrors = verificationMessages.Union(verificationWarnings);
 
             mappedAndEnrichedVerificationErrors = new VerificationMessage[]
             {
-                Create.VerificationMessage("aaa","aaaa", Create.VerificationReferenceEnriched(QuestionnaireVerificationReferenceType.Question, Guid.NewGuid(), "aaaaaaaaaaaaaaaaaaaaaa")),
-                Create.VerificationMessage("aaa","aaaa", Create.VerificationReferenceEnriched(QuestionnaireVerificationReferenceType.Question, Guid.NewGuid(), "aaaaaaaaaaaaaaaaaaaaaa")),
-                Create.VerificationMessage("ccc","ccccc", Create.VerificationReferenceEnriched(QuestionnaireVerificationReferenceType.Question, Guid.NewGuid(), "ccccccccccccccccc")),
-            }
+                Create.VerificationMessage("aaa", "aaaa",
+                    Create.VerificationReferenceEnriched(QuestionnaireVerificationReferenceType.Question,
+                        Guid.NewGuid(), "aaaaaaaaaaaaaaaaaaaaaa")),
+                Create.VerificationMessage("aaa", "aaaa",
+                    Create.VerificationReferenceEnriched(QuestionnaireVerificationReferenceType.Question,
+                        Guid.NewGuid(), "aaaaaaaaaaaaaaaaaaaaaa")),
+                Create.VerificationMessage("ccc", "ccccc",
+                    Create.VerificationReferenceEnriched(QuestionnaireVerificationReferenceType.Question,
+                        Guid.NewGuid(), "ccccccccccccccccc")),
+            };
             mappedAndEnrichedVerificationWarnings = new VerificationMessage[]
             {
-                Create.VerificationMessage("ccc","ccccc", Create.VerificationReferenceEnriched(QuestionnaireVerificationReferenceType.Question, Guid.NewGuid(), "ccccccccccccccccc")),
-                Create.VerificationMessage("ddd","ddddd", Create.VerificationReferenceEnriched(QuestionnaireVerificationReferenceType.Group, Guid.NewGuid(), "ccccccccccccccccc")),
-                Create.VerificationMessage("eee","eeeee", Create.VerificationReferenceEnriched(QuestionnaireVerificationReferenceType.Question, Guid.NewGuid(), "ccccccccccccccccc"))
-            }
+                Create.VerificationMessage("ccc", "ccccc",
+                    Create.VerificationReferenceEnriched(QuestionnaireVerificationReferenceType.Question,
+                        Guid.NewGuid(), "ccccccccccccccccc")),
+                Create.VerificationMessage("ddd", "ddddd",
+                    Create.VerificationReferenceEnriched(QuestionnaireVerificationReferenceType.Group, Guid.NewGuid(),
+                        "ccccccccccccccccc")),
+                Create.VerificationMessage("eee", "eeeee",
+                    Create.VerificationReferenceEnriched(QuestionnaireVerificationReferenceType.Question,
+                        Guid.NewGuid(), "ccccccccccccccccc"))
+            };
 
             var questionnaireViewFactory = Mock.Of<IQuestionnaireViewFactory>(x => x.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == questionnaireView);
             verifierMock = new Mock<IQuestionnaireVerifier>();

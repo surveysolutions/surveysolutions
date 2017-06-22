@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_question_with_incorrect_syntax_in_validation_and_condition : QuestionnaireVerifierTestsContext
     {
-        private [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             const string invalidExpression = "[hehe] &=+< 5";
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 Create.TextQuestion(

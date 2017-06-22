@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             BecauseOf();
         }
 
-        private private void BecauseOf() =>
+        private void BecauseOf() 
         {
             questionnaire.UpdateNumericQuestion(
                 new UpdateNumericQuestion(

@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_linked_question_reference_on_question_not_under_propagated_group : QuestionnaireVerifierTestsContext
     {
-        private [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             linkedQuestionId = Guid.Parse("10000000000000000000000000000000");
             notUnderPropagatedGroupLinkingQuestionId = Guid.Parse("12222222222222222222222222222222");
             questionnaire = CreateQuestionnaireDocument(

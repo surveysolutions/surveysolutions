@@ -85,17 +85,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
 
         private static Dictionary<Guid, Macro> macros = new Dictionary<Guid, Macro>
         {
-            { macro1Id, Create.Macro("2. second", "content2", "description2") },
-            { macro2Id, Create.Macro("3. third", "content3", "description3") },
-            { macro3Id, Create.Macro("4. fourth", "content4", "description4") },
-            { macro4Id, Create.Macro("1. first", "content1", "description1") }
-        }
+            {macro1Id, Create.Macro("2. second", "content2", "description2")},
+            {macro2Id, Create.Macro("3. third", "content3", "description3")},
+            {macro3Id, Create.Macro("4. fourth", "content4", "description4")},
+            {macro4Id, Create.Macro("1. first", "content1", "description1")}
+        };
 
         private static Dictionary<Guid, LookupTable> lookupTables = new Dictionary<Guid, LookupTable>
         {
-            { lookupTable1Id, Create.LookupTable("table1")},
-            { lookupTable2Id, Create.LookupTable("table2")}
-        }
+            {lookupTable1Id, Create.LookupTable("table1")},
+            {lookupTable2Id, Create.LookupTable("table2")}
+        };
         private static string questionnaireId = "11111111111111111111111111111111";
         private static string questionnaireTitle = "questionnaire title";
         private static Guid userId = Guid.Parse("22222222222222222222222222222222");

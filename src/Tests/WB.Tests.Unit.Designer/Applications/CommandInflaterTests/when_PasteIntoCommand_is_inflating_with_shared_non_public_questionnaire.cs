@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
 {
     internal class when_PasteIntoCommand_is_inflating_with_shared_non_public_questionnaire_but_shared : CommandInflaterTestsContext
     {
-        private [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var membershipUserService = Mock.Of<IMembershipUserService>(
                 _ => _.WebUser == Mock.Of<IMembershipWebUser>(
                     u => u.UserId == actionUserId && u.MembershipUser.Email == actionUserEmail));

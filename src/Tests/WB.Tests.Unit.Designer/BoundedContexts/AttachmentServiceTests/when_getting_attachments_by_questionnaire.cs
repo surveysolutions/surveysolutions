@@ -29,12 +29,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
         private static AttachmentService attachmentService;
         private static List<AttachmentMeta> expectedAttachments;
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
+
         private static readonly AttachmentMeta[] allAttachments =
         {
             Create.AttachmentMeta(Guid.NewGuid(), "", questionnaireId),
             Create.AttachmentMeta(Guid.NewGuid(), "", Guid.NewGuid()),
             Create.AttachmentMeta(Guid.NewGuid(), "", questionnaireId)
-        }
+        };
         
         private static readonly TestPlainStorage<AttachmentMeta> attachmentMetaStorage = new TestPlainStorage<AttachmentMeta>();
     }

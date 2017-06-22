@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     class when_verifying_questionnaire_that_have_linked_multiquestion_with_max_allowed_answers : QuestionnaireVerifierTestsContext
     {
 
-        private [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             multyOptionsQuestionId = Guid.Parse("10000000000000000000000000000000");
             var linkedQuestionId = Guid.Parse("20000000000000000000000000000000");
             var rosterSizeQuestion = Guid.Parse("30000000000000000000000000000000");

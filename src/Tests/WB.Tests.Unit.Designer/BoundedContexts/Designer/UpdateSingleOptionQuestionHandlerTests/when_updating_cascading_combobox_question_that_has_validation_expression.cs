@@ -57,7 +57,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
 
         private static Answer[] oldAnswers = new Answer[]
         {
-            new Answer { AnswerText = "option1", AnswerValue = "1", ParentValue = "1"}, new Answer { AnswerText = "option2", AnswerValue = "2", ParentValue = "2" }
-        }
+            new Answer {AnswerText = "option1", AnswerValue = "1", ParentValue = "1"},
+            new Answer {AnswerText = "option2", AnswerValue = "2", ParentValue = "2"}
+        };
     }
 }

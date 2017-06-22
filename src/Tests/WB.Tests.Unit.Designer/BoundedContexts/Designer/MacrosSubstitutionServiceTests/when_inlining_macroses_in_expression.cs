@@ -7,14 +7,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MacrosSubstitutionServ
 {
     internal class when_inlining_macroses_in_expression
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context ()
+        {
             macros = new List<Macro>
-                     {
-                         Create.Macro("a", "invalid"),
-                         Create.Macro("aa", "aaexpression"),
-                         Create.Macro("b", "invalid"),
-                         Create.Macro("bb", "bbexpression"),
-                     }
+            {
+                Create.Macro("a", "invalid"),
+                Create.Macro("aa", "aaexpression"),
+                Create.Macro("b", "invalid"),
+                Create.Macro("bb", "bbexpression"),
+            };
             expression = "$aa + $bb";
             macrosSubstitutionService = Create.MacrosSubstitutionService();
             BecauseOf();

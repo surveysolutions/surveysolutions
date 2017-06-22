@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_roster_group_by_fixed_titles_that_have_empty_title : QuestionnaireVerifierTestsContext
     {
-        private [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             rosterGroupId = Guid.Parse("10000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument(
                 Create.TextQuestion(variable: "var"),

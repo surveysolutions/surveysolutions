@@ -9,7 +9,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_moving_prefilled_question_to_group_under_roster : QuestionnaireTestsContext
     {
-        private [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
              questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
              questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
              questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId, isRoster: true);
