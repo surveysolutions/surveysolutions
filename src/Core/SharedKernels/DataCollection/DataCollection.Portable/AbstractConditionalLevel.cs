@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using WB.Core.SharedKernels.DataCollection.V2.CustomFunctions;
+
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 
 namespace WB.Core.SharedKernels.DataCollection
 {
