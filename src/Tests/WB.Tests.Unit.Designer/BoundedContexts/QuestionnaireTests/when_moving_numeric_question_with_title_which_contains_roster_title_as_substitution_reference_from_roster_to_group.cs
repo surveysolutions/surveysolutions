@@ -30,7 +30,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             new[] { "unknown", "substitution" }.ShouldEachConformTo(
            keyword => exception.Message.ToLower().Contains(keyword));
 
-        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid questionId;
         private static Guid chapterId;

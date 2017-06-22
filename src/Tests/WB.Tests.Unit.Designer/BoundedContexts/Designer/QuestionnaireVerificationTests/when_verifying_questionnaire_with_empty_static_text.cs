@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     class when_verifying_questionnaire_with_empty_static_text : QuestionnaireVerifierTestsContext
     {
 
-        private [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                     Create.StaticText(staticTextId: staticTextId, text: string.Empty),
                     Create.TextQuestion(variable: "var")

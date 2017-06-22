@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         [NUnit.Framework.Test] public void should_return_warning () => errors.Where(x => x.MessageLevel == VerificationMessageLevel.Warning).ShouldNotBeEmpty();
 
-        [NUnit.Framework.Test] public void should_return_WB0202_warning_with_reference_to_empty_group () =>
+        [NUnit.Framework.Test] public void should_return_WB0202_warning_with_reference_to_empty_group () 
         {
             var warning = errors
                 .Where(x => x.MessageLevel == VerificationMessageLevel.Warning)

@@ -20,8 +20,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                         title: "old title",
                         variableName: "old_variable_name",
                         instructions: "old instructions",
-            BecauseOf();
                         enablementCondition: "old condition");
+            BecauseOf();
         }
 
         private void BecauseOf() =>

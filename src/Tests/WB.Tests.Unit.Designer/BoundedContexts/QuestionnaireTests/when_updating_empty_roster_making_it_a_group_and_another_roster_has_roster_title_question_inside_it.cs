@@ -8,7 +8,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_updating_empty_roster_making_it_a_group_and_another_roster_has_roster_title_question_inside_it : QuestionnaireTestsContext
     {
-        private [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddNumericQuestion(rosterSizeQuestionId,isInteger : true,parentId: chapterId,responsibleId:responsibleId);

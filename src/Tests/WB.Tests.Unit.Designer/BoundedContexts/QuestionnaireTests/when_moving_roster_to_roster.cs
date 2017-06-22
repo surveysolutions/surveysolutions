@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         private void BecauseOf() =>
                 questionnaire.MoveGroup(roster1Id, roster2Id, 0, responsibleId);
 
-        private [NUnit.Framework.Test] public void should_raise_QuestionnaireItemMoved_event () =>
+        [NUnit.Framework.Test] public void should_raise_QuestionnaireItemMoved_event () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(roster1Id).ShouldNotBeNull();
 
         [NUnit.Framework.Test] public void should_raise_QuestionnaireItemMoved_event_with_GroupId_specified () =>

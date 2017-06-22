@@ -12,13 +12,19 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             mapper = CreateVerificationErrorsMapper();
-            verificationMessages = new []
+            verificationMessages = new[]
             {
-                Create.VerificationError("aaa", "aaaa", new []{ "compile error 1", "compile error 2" }, new QuestionnaireNodeReference(QuestionnaireVerificationReferenceType.Question, Guid.Parse(questionId1))),
-                Create.VerificationError("aaa", "aaaa", new []{ "compile error 3" }, new QuestionnaireNodeReference(QuestionnaireVerificationReferenceType.Question, Guid.Parse(questionId2))),
-                Create.VerificationError("aaa", "bbbb", new []{ "compile error 3" }, new QuestionnaireNodeReference(QuestionnaireVerificationReferenceType.Question, Guid.Parse(questionId2))),
+                Create.VerificationError("aaa", "aaaa", new[] {"compile error 1", "compile error 2"},
+                    new QuestionnaireNodeReference(QuestionnaireVerificationReferenceType.Question,
+                        Guid.Parse(questionId1))),
+                Create.VerificationError("aaa", "aaaa", new[] {"compile error 3"},
+                    new QuestionnaireNodeReference(QuestionnaireVerificationReferenceType.Question,
+                        Guid.Parse(questionId2))),
+                Create.VerificationError("aaa", "bbbb", new[] {"compile error 3"},
+                    new QuestionnaireNodeReference(QuestionnaireVerificationReferenceType.Question,
+                        Guid.Parse(questionId2))),
 
-            }
+            };
             document = CreateQuestionnaireDocumentWith2TextQuestions(Guid.Parse(questionId1), Guid.Parse(questionId2), Guid.Parse(groupId));
             BecauseOf();
         }

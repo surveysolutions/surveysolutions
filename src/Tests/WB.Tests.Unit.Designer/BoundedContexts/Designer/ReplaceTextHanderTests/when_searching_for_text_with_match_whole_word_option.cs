@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
 {
     internal class when_searching_for_text_with_match_whole_word_option : QuestionnaireTestsContext
     {
-        private [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var responsibleId = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
             questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
                 groupId: chapterId);

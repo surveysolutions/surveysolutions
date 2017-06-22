@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
         [NUnit.Framework.Test] public void should_raise_QuestionCloned_event_with_correct_hideIfDisabled_flag_for_textList_question () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<ITextListQuestion>().Single().HideIfDisabled.ShouldEqual(true);
         
-        [NUnit.Framework.Test] public void should_raise_QuestionCloned_event_with_correct_hideIfDisabled_flag_for_multimedia_question () =>
+        [NUnit.Framework.Test] public void should_raise_QuestionCloned_event_with_correct_hideIfDisabled_flag_for_multimedia_question () 
         {
             var multimediaCloneEvent = questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<IMultimediaQuestion>().Single();
             multimediaCloneEvent.HideIfDisabled.ShouldEqual(true);

@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Designer.Api.Tester.TranslationsControllerTests
         private static readonly TranslationInstance[] storedTranslations =
         {
             Create.TranslationInstance(questionnaireId: questionnaireId),
-            Create.TranslationInstance(questionnaireId: Guid.NewGuid()) 
-        }
+            Create.TranslationInstance(questionnaireId: Guid.NewGuid())
+        };
     }
 }

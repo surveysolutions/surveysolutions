@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
 {
     internal class when_updating_cascading_combobox_question_that_was_filtered_combobox_and_options_are_more_then_200 : QuestionnaireTestsContext
     {
-        private [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             int incrementer = 0;
             oldOptions = new Option[210].Select(
                 answer =>

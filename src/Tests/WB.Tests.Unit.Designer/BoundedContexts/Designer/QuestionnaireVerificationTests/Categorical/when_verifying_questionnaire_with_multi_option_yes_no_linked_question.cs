@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_multi_option_yes_no_linked_question : QuestionnaireVerifierTestsContext
     {
-        private [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument(
                 Create.Roster(rosterId: Guid.NewGuid(), variable:"ros",
                     children: new[] {Create.TextQuestion(questionId: linkedQuestionId, variable: "var2")}),

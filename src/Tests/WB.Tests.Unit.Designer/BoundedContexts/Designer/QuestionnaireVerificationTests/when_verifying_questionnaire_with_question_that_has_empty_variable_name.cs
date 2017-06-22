@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     class when_verifying_questionnaire_with_question_that_has_empty_variable_name : QuestionnaireVerifierTestsContext
     {
 
-        private [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                     new NumericQuestion("Question with empty var")
                     {

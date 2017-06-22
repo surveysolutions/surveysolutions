@@ -36,20 +36,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             BecauseOf();
         }
 
-        private private void BecauseOf() =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.MoveQuestion(rosterSizeQuestionId, targetRosterGroupId, targetIndex: 0, responsibleId: responsibleId));
 
-        private [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        private [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__title__ () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__title__ () =>
             exception.Message.ToLower().ShouldContain("source");
 
-        private [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__question__ () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__question__ () =>
             exception.Message.ToLower().ShouldContain("question");
 
-        private [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__roster__ () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__roster__ () =>
             exception.Message.ToLower().ShouldContain("roster");
 
         private static Exception exception;

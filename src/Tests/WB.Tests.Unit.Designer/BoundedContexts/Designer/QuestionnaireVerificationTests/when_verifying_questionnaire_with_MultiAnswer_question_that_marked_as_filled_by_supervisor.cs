@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_TextList_question_that_marked_as_filled_by_supervisor : QuestionnaireVerifierTestsContext
     {
-        private [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             supervisorTextListquestionId = Guid.Parse("10000000000000000000000000000000");
             textQuestionId = Guid.Parse("20000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument(

@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
 
     internal class when_ImportQuestionnaire : QuestionnaireDenormalizerTestsContext
     {
-        private [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireDocument = CreateQuestionnaireDocument();
             questionnaireDocument.Macros.Add(macrosWithBefore, new Macro() { Description = "before" });
 

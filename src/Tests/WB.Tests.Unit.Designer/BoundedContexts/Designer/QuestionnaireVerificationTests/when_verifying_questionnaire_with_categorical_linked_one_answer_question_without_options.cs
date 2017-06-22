@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     class when_verifying_questionnaire_with_categorical_linked_one_answer_question_without_options : QuestionnaireVerifierTestsContext
     {
 
-        private [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionId = Guid.Parse("10000000000000000000000000000000");
             var linkedQuestionId = Guid.Parse("20000000000000000000000000000000");
             var rosterSizeQuestion = Guid.Parse("30000000000000000000000000000000");

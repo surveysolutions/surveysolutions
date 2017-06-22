@@ -47,6 +47,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewFactory
         private static ChapterInfoViewFactory factory;
         private static string questionnaireId = "11111111111111111111111111111111";
         private static Guid chapterId = Guid.Parse("22222222222222222222222222222222");
+
         private static readonly string[] keywordsAndVariables =
         {
             "list",
@@ -57,6 +58,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewFactory
             "@rowindex",
             "@rowname",
             "@rowcode"
-        }
-}
+        };
+    }
 }
