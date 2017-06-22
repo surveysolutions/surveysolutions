@@ -16,14 +16,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.LookupTables
             addLookupTable = Create.Command.AddLookupTable(questionnaireId, lookupTableId, responsibleId);
 
             eventContext = new EventContext();
+            BecauseOf();
         }
-
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        }
-
+        
         private void BecauseOf() =>
             exception = Catch.Exception(() => questionnaire.AddLookupTable(addLookupTable));
 

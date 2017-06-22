@@ -39,6 +39,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                    new[] {categoricalQuestionId.ToString()});
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

@@ -22,6 +22,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             });
 
             generator = Create.CodeGenerator();
+            BecauseOf();
         }
 
 

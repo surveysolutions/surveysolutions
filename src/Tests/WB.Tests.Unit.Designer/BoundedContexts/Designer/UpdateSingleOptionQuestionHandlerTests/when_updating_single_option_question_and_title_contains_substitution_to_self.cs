@@ -23,6 +23,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                         variableName: "old_variable_name",
                         instructions: "old instructions",
                         enablementCondition: "old condition");
+            BecauseOf();
         }
 
         private void BecauseOf() =>
@@ -40,7 +41,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                     options: options,
                     linkedToEntityId: linkedToQuestionId,
                     isFilteredCombobox: isFilteredCombobox,
-                    cascadeFromQuestionId: �ascadeFromQuestionId, validationConditions: new List<ValidationCondition>(),
+                    cascadeFromQuestionId: cascadeFromQuestionId, validationConditions: new List<ValidationCondition>(),
                 linkedFilterExpression: null, properties: Create.QuestionProperties());
 
         [NUnit.Framework.Test] public void should_update_question_text () =>
@@ -60,6 +61,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
         private static Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "Option 1"), new Option(Guid.NewGuid(), "2", "Option 2"), };
         private static Guid? linkedToQuestionId = (Guid?)null;
         private static bool isFilteredCombobox = false;
-        private static Guid? �ascadeFromQuestionId = (Guid?)null;
+        private static Guid? cascadeFromQuestionId = (Guid?)null;
     }
 }

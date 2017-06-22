@@ -20,6 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTest
                 $"3{_}4.00{_}9.087e-10{_end}";
 
             lookupTableService = Create.LookupTableService(lookupTableContentStorage: LookupTableContentStorageMock.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

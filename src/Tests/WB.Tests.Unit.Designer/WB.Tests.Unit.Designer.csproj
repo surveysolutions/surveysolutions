@@ -758,7 +758,6 @@
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewFactoryTests\ChapterInfoViewFactoryContext.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewFactoryTests\when_loading_view_and_chapter_exists.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewFactoryTests\when_loading_view_and_chapter_is_absent.cs" />
-    <Compile Include="BoundedContexts\Designer\CodeGenerationModelTests\CodeGenerationModelTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\CodeGeneratorTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\CreateQuestionnaireCommandTests\when_creating_new_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\DeleteStaticTextHandlerTests\when_deleting_static_text_and_all_parameters_specified.cs" />
@@ -1088,7 +1087,6 @@
     <Compile Include="BoundedContexts\Designer\UpdateFilteredComboboxOptionsHandlerTests\when_updating_filtered_combobox_options_and_some_options_not_unique.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateFilteredComboboxOptionsHandlerTests\when_updating_filtered_combobox_options_and_user_dont_have_permission_to_execute_command.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_all_parameters_is_specified.cs" />
-    <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_condition_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_it_does_not_exists_in_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_title_contains_substitution_to_invalid_question.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_title_contains_substitution_to_question_from_roster.cs" />

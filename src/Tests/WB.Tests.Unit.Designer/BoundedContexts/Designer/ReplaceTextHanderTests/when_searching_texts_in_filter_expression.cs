@@ -16,6 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
 
             questionnaire.AddMultiOptionQuestion(filteredQuestionId, chapterId, responsibleId,
                 optionsFilterExpression: $"filter with {searchFor}");
+            BecauseOf();
         }
 
         private void BecauseOf() => matches = questionnaire.FindAllTexts(searchFor, false, false, false);

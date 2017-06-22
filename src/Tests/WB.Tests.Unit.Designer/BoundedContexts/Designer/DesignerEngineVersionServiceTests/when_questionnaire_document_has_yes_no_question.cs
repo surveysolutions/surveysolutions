@@ -23,6 +23,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
                 );
 
             designerEngineVersionService = Create.DesignerEngineVersionService();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

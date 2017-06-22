@@ -37,11 +37,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
                     new Option() {Title = "one one", Value= "1.1", ParentValue = "1", Id = Guid.NewGuid() },
                 }
             );
+            BecauseOf();
         }
 
-        private private void BecauseOf() => exception = Catch.Exception(() => questionnaire.DeleteQuestion(parentQuestionId, responsibleId));
+        private void BecauseOf() => exception = Catch.Exception(() => questionnaire.DeleteQuestion(parentQuestionId, responsibleId));
 
-        private [NUnit.Framework.Test] public void should_not_allow_removal () =>
+         [NUnit.Framework.Test] public void should_not_allow_removal () 
         {
             var ex = exception as QuestionnaireException;
             ex.ShouldNotBeNull();

@@ -45,6 +45,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
                 engineVersionService: expressionsEngineVersionService,
                 questionnaireVerifier: questionnaireVerifier,
                 expressionProcessorGenerator: expressionProcessorGenerator);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

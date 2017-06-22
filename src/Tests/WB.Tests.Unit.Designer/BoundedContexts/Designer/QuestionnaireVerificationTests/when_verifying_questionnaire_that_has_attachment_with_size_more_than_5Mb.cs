@@ -19,6 +19,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 Create.AttachmentView(id: attachmentId, size: 6*1024*1024));
 
             verifier = CreateQuestionnaireVerifier(attachmentService: attachmentServiceMock);
+            BecauseOf();
         }
 
         private void BecauseOf() => verificationMessages = verifier.Verify(Create.QuestionnaireView(questionnaire));

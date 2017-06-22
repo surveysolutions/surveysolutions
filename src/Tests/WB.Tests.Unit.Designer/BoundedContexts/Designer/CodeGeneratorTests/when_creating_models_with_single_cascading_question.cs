@@ -35,6 +35,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             });
 
             templateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory();
+            BecauseOf();
         }
 
         private void BecauseOf() =>
@@ -49,7 +50,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
         [NUnit.Framework.Test] public void should_reference_same_question_model_in_AllQuestions_and_questionnaire_level () =>
             model.QuestionnaireLevelModel.Questions.Last().ShouldEqual(model.AllQuestions.Last());
 
-        [NUnit.Framework.Test] public void should_create_single_cascading_question_model () =>
+        [NUnit.Framework.Test] public void should_create_single_cascading_question_model () 
         {
             QuestionTemplateModel question = model.AllQuestions.Single(x => x.Id == Id.gB);
             question.VariableName.ShouldEqual("singleCascading");

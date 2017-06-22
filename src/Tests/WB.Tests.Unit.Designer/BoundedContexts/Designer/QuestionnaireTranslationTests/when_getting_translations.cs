@@ -32,6 +32,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTranslati
                     questionnaireEntityId: questionId,
                     translationIndex:"1")
             }
+            BecauseOf();
         }
 
         private void BecauseOf() => translation = CreateQuestionnaireTranslation(storedTranslations);

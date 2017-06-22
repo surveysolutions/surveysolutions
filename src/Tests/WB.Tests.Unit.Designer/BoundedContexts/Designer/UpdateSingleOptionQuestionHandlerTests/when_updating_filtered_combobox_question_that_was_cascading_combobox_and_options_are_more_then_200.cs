@@ -54,6 +54,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
             );
 
             questionnaire.UpdateCascadingComboboxOptions(cascadeQuestionId, responsibleId, oldOptions);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

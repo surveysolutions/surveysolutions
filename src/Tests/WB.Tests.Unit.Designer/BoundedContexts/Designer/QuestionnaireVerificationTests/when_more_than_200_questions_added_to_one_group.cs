@@ -14,6 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             IComposite[] questions = Enumerable.Range(0, 201).Select(index => Create.Question(variable: "numeric" + index)).ToArray();
             questionnaire = Create.QuestionnaireDocumentWithOneChapter(children: questions);
             verifier = CreateQuestionnaireVerifier();
+            BecauseOf();
         }
 
         private void BecauseOf() => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));

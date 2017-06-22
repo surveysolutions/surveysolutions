@@ -14,6 +14,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
             questionnaire.AddOrUpdateAttachment(Create.Command.AddOrUpdateAttachment(questionnaireId, oldAttachmentId, "", responsibleId, ""));
 
             updateAttachment = Create.Command.AddOrUpdateAttachment(questionnaireId, attachmentId, attachmentContentId, responsibleId, name, oldAttachmentId);
+
+            BecauseOf();
         }
 
 

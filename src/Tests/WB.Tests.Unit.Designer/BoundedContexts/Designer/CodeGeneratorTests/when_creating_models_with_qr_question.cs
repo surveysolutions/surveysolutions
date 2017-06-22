@@ -22,6 +22,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             });
 
             templateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory();
+            BecauseOf();
         }
 
         private void BecauseOf() =>
@@ -36,7 +37,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
         [NUnit.Framework.Test] public void should_reference_same_question_model_in_AllQuestions_and_questionnaire_level () =>
             model.QuestionnaireLevelModel.Questions.First().ShouldEqual(model.AllQuestions.First());
 
-        [NUnit.Framework.Test] public void should_create_qr_question_model () =>
+        [NUnit.Framework.Test] public void should_create_qr_question_model () 
         {
             QuestionTemplateModel question = model.AllQuestions.Single(x => x.Id == Id.gA);
             question.VariableName.ShouldEqual("qr");

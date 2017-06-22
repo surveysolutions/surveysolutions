@@ -30,6 +30,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .Returns(lookupTableContent);
 
             verifier = CreateQuestionnaireVerifier(lookupTableService: lookupTableServiceMock.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

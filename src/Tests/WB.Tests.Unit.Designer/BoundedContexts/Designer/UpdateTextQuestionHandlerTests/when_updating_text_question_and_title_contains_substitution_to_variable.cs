@@ -30,6 +30,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
                 variableType: VariableType.String,
                 variableName: variableName,
                 variableExpression: "text + text");
+            BecauseOf();
         }
 
         private void BecauseOf() =>

@@ -21,6 +21,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateFilteredCombobox
                 isFilteredCombobox: true,
                 responsibleId: responsibleId
             );
+            BecauseOf();
         }
 
         private void BecauseOf() =>

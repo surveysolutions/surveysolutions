@@ -44,6 +44,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfFactoryTests
                 questionnaireStorage: questionnaireRepository, 
                 questionnaireChangeHistoryStorage: questionnaireChangeHistoryStorage,
                 questionnaireListViewItemStorage: questionnaireListItemStorage);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

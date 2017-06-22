@@ -22,6 +22,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
 
             questionnaire.UpdateGroup(anotherRosterId, responsibleId, "rosterTitle", "", rosterSizeQuestionId, "", null, false, true,
                 RosterSizeSourceType.Question, null, rosterTitleQuestionId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>
@@ -40,7 +41,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                     options: options,
                     linkedToEntityId: linkedToQuestionId,
                     isFilteredCombobox: isFilteredCombobox,
-                    cascadeFromQuestionId: �ascadeFromQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
+                    cascadeFromQuestionId: cascadeFromQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
                 linkedFilterExpression: null, properties: Create.QuestionProperties()));
 
         [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
@@ -67,6 +68,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
         private static string enablementCondition = "some condition";
         private static Option[] options = null;
         private static bool isFilteredCombobox = false;
-        private static Guid? �ascadeFromQuestionId = (Guid?)null;
+        private static Guid? cascadeFromQuestionId = (Guid?)null;
     }
 }

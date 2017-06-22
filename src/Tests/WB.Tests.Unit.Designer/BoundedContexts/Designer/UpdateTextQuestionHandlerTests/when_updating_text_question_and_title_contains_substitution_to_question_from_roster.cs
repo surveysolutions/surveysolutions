@@ -35,6 +35,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
                 responsibleId,isInteger : true,
                 variableName : substitutionVariableName
             );
+            BecauseOf();
         }
 
         private void BecauseOf() =>

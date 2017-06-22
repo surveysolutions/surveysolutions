@@ -36,6 +36,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateCascadingCombobo
                 isFilteredCombobox: false,
                 cascadeFromQuestionId: parentQuestionId
             );
+            BecauseOf();
         }
 
         private void BecauseOf() =>

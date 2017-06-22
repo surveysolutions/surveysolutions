@@ -19,6 +19,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             var attachmentService = Setup.AttachmentsServiceForOneQuestionnaire(questionnaire.PublicKey);
 
             verifier = CreateQuestionnaireVerifier(attachmentService: attachmentService);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

@@ -38,9 +38,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 null,null, QuestionScope.Interviewer, new List<ValidationCondition>());
 
             denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireView);
+            BecauseOf();
         }
 
-        private private void BecauseOf() => {
+        private void BecauseOf() {
             denormalizer.UpdateQRBarcodeQuestion(command);
             qRBarcodeQuestion = GetQRBarcodeQuestionById();
         }

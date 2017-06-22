@@ -16,6 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
                 .Returns(false);
 
             attachmentService = Create.AttachmentService(attachmentContentStorage: attachmentContentStorage.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() =>
@@ -39,7 +40,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
             10, 255, 196, 0, 20, 16, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 196, 0, 20, 1, 1, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 196, 0, 20, 17, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 255, 218, 0, 12, 3, 1, 0, 2, 17, 3, 17, 0, 63, 0, 191, 128, 1, 255, 217
-        }
+        };
         private static readonly string attachmentContentId = "ABECA98D65F866DFCD292BC973BDACF5954B916D";
         private static readonly string contentType = "image/png";
         private static readonly Mock<IPlainStorageAccessor<AttachmentContent>> attachmentContentStorage = new Mock<IPlainStorageAccessor<AttachmentContent>>();

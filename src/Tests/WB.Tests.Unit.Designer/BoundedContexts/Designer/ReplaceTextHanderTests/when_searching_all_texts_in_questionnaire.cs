@@ -105,6 +105,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 $"attachment {searchFor}",
                 responsibleId,
                 null));
+            BecauseOf();
         }
 
         private void BecauseOf() => foundReferences = questionnaire.FindAllTexts(searchFor, true, false, false);

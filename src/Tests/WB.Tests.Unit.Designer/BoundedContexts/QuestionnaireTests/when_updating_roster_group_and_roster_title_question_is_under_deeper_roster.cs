@@ -25,6 +25,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup(nestedRosterId, rosterId, responsibleId: responsibleId, isRoster:true);
 
             questionnaire.AddNumericQuestion( titleQuestionId, isInteger : true, parentId: nestedRosterId, responsibleId:responsibleId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

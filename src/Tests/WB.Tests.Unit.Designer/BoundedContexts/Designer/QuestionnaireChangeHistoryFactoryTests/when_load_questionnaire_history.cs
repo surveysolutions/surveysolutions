@@ -45,6 +45,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
                     questionnaireDocumentStorage:
                         Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(
                             _ => _.GetById(Moq.It.IsAny<string>()) == questionnaireDocument));
+            BecauseOf();
         }
 
         private void BecauseOf() =>

@@ -16,6 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 rosterId: rosterId,
                 children: new[] {Create.Question()}));
             verifier = CreateQuestionnaireVerifier();
+            BecauseOf();
         }
 
         private void BecauseOf() => { errors = verifier.Verify(Create.QuestionnaireView(questionnaire)); };

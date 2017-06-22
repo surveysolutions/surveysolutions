@@ -16,6 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
 
             questionnaire.AddNumericQuestion(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), chapterId ,responsibleId, variableName : "valid_varname");
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(questionnaire.Id, Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"), chapterId, "title" , responsibleId ));
+            BecauseOf();
         }
 
         private void BecauseOf() =>

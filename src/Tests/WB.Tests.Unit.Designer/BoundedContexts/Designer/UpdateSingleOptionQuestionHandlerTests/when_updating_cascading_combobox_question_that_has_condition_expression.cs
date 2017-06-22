@@ -14,6 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddSingleOptionQuestion(parentQuestionId, chapterId, responsibleId, variableName: "cascade_parent");
             questionnaire.AddSingleOptionQuestion(cascadingId, chapterId, responsibleId, variableName: "cascade_child");
+            BecauseOf();
         }
 
         private void BecauseOf() =>

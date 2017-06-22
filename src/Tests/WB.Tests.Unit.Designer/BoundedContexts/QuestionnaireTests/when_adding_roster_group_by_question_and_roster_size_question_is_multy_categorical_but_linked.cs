@@ -27,6 +27,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 chapterId,responsibleId,
                 options: new Option[0],
                 linkedToQuestionId : questionid);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

@@ -11,6 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
         [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = Create.QuestionnaireDocument();
             generator = Create.CodeGenerator();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

@@ -31,6 +31,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                         instructions: "old instructions",
                         enablementCondition: "old condition");
             questionnaire.AddGroup(groupFromRosterId, rosterId, responsibleId: responsibleId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

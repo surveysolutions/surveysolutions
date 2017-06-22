@@ -35,6 +35,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MembershipProviderTest
             Setup.InstanceToMockedServiceLocator<IPasswordStrategy>(passwordStrategy);
 
             membershipProvider = CreateMembershipProvider();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

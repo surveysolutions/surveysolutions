@@ -34,6 +34,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             questionnaire.UpdateGroup(sourceRosterId, responsibleId, "rosterTitle", "", rosterSizeQuestion1Id, "", null, false, true,
                 RosterSizeSourceType.Question, null, rosterTitleQuestionId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

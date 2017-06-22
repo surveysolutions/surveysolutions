@@ -13,6 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddGroup(groupId,chapterId, responsibleId: responsibleId);
             questionnaire.AddGroup(groupInGroupId, groupId, responsibleId: responsibleId);
+            BecauseOf();
         }
 
         private void BecauseOf() => questionnaire.MoveGroup(groupInGroupId, null, 0, responsibleId);

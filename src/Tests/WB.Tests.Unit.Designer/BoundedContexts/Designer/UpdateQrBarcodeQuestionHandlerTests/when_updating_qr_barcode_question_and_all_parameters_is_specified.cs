@@ -24,6 +24,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
                 instructions: "old instructions",
                 enablementCondition: "old condition",
                 responsibleId: responsibleId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>            

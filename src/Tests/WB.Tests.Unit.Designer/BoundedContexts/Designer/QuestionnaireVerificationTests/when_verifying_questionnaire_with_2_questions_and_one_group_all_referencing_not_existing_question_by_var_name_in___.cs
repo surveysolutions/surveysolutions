@@ -49,6 +49,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                         new[] { "notExistingVariableName" });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor: expressionProcessor);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

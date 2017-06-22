@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Translations;
@@ -16,6 +16,7 @@ namespace WB.Tests.Unit.Designer.Api.Tester.TranslationsControllerTests
             translationsStorage.Store(storedTranslations.Select(x=>new Tuple<TranslationInstance, object>(x, Guid.NewGuid())));
 
             controller = CreateTranslationsController(translations: translationsStorage);
+            BecauseOf();
         }
 
         private void BecauseOf() => expectedTranslations = controller.Get(questionnaireId,  version: ApiVersion.CurrentTesterProtocolVersion);

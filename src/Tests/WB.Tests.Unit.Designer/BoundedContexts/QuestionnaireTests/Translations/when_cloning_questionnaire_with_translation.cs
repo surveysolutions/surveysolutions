@@ -13,6 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Translations
 
             sourceQuestionnaire = Create.QuestionnaireDocument();
             sourceQuestionnaire.Translations.Add(Create.Translation(translationId: translationId, name: name));
+            BecauseOf();
         }
 
 

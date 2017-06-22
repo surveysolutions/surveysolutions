@@ -26,16 +26,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 responsibleId,
                 title : questionTitle,
                 variableName : "var");
-            eventContext = new EventContext();
+
+            BecauseOf();
         }
 
         private void BecauseOf() => exception = Catch.Exception(() => questionnaire.MoveGroup(nestedRosterId, chapterId, 1, responsibleId));
-
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        }
 
         [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
@@ -45,7 +40,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
           keyword => exception.Message.ToLower().Contains(keyword));
 
 
-        private static EventContext eventContext;
+
         private static Questionnaire questionnaire;
         private static Guid questionId;
         private static Guid chapterId;

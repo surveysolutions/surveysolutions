@@ -45,6 +45,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
                 parentId: groupToPasteInId);
 
             command.SourceDocument = doc;
+            BecauseOf();
         }
 
         private void BecauseOf() => 

@@ -26,6 +26,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
                 .Returns(questionnaireDocument);
 
             factory = CreateQuestionnaireInfoViewFactory(repository: repositoryMock.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() =>
@@ -40,7 +41,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
         [NUnit.Framework.Test] public void should_contains_all_lookups_from_questionnaire () =>
             view.LookupTables.Select(x => x.ItemId).ShouldContainOnly(lookupTable1Id.FormatGuid(), lookupTable2Id.FormatGuid());
 
-        [NUnit.Framework.Test] public void should_first_element_match_macro_with_id_macro4Id () =>
+        [NUnit.Framework.Test] public void should_first_element_match_macro_with_id_macro4Id () 
         {
             view.Macros.ElementAt(0).ItemId.ShouldEqual(macro4Id.FormatGuid());
             view.Macros.ElementAt(0).Name.ShouldEqual(macros[macro4Id].Name);
@@ -48,7 +49,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
             view.Macros.ElementAt(0).Description.ShouldEqual(macros[macro4Id].Description);
         }
 
-        [NUnit.Framework.Test] public void should_second_element_match_macro_with_id_macro1Id () =>
+        [NUnit.Framework.Test] public void should_second_element_match_macro_with_id_macro1Id () 
         {
             view.Macros.ElementAt(1).ItemId.ShouldEqual(macro1Id.FormatGuid());
             view.Macros.ElementAt(1).Name.ShouldEqual(macros[macro1Id].Name);
@@ -56,7 +57,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
             view.Macros.ElementAt(1).Description.ShouldEqual(macros[macro1Id].Description);
         }
 
-        [NUnit.Framework.Test] public void should_third_element_match_macro_with_id_macro2Id () =>
+        [NUnit.Framework.Test] public void should_third_element_match_macro_with_id_macro2Id () 
         {
             view.Macros.ElementAt(2).ItemId.ShouldEqual(macro2Id.FormatGuid());
             view.Macros.ElementAt(2).Name.ShouldEqual(macros[macro2Id].Name);
@@ -64,7 +65,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
             view.Macros.ElementAt(2).Description.ShouldEqual(macros[macro2Id].Description);
         }
 
-        [NUnit.Framework.Test] public void should_fourth_element_match_macro_with_id_macro3Id () =>
+        [NUnit.Framework.Test] public void should_fourth_element_match_macro_with_id_macro3Id () 
         {
             view.Macros.ElementAt(3).ItemId.ShouldEqual(macro3Id.FormatGuid());
             view.Macros.ElementAt(3).Name.ShouldEqual(macros[macro3Id].Name);

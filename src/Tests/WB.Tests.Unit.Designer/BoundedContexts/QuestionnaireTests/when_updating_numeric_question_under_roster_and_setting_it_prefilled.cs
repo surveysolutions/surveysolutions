@@ -25,7 +25,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId, isRoster:true);
             
             questionnaire.AddTextQuestion(questionId, rosterId, responsibleId);
-            
+            BecauseOf();
+
         }
 
         private void BecauseOf() =>

@@ -15,12 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
             deleteAttachment = Create.Command.DeleteAttachment(questionnaireId, attachmentId, sharedPersonId);
 
             eventContext = new EventContext();
-        }
-
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
+            BecauseOf();
         }
 
         private void BecauseOf() =>

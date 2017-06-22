@@ -13,11 +13,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire = Create.Questionnaire(
                 responsible,
                 Create.QuestionnaireDocument(Guid.NewGuid(), Create.Group(groupId: rootSectionId, title: "last section")));
+            BecauseOf();
         }
 
         private void BecauseOf() => exception = Catch.Only<QuestionnaireException>(() => questionnaire.DeleteGroup(rootSectionId, responsible));
 
-        [NUnit.Framework.Test] public void should_not_allow_delete_last_remaining_root_section () =>
+        [NUnit.Framework.Test] public void should_not_allow_delete_last_remaining_root_section () 
         {
             exception.ShouldNotBeNull();
             exception.Message.ShouldEqual("Last existing section can not be removed from questionnaire");

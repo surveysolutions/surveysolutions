@@ -20,6 +20,7 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
 
             }
             document = CreateQuestionnaireDocumentWith2TextQuestions(Guid.Parse(questionId1), Guid.Parse(questionId2), Guid.Parse(groupId));
+            BecauseOf();
         }
 
         private void BecauseOf() =>
@@ -28,13 +29,13 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
         [NUnit.Framework.Test] public void should_return_2_errors () => 
             result.Length.ShouldEqual(2);
 
-        [NUnit.Framework.Test] public void should_return_first_error_with_same_Code_as_input_error_has () =>
+        [NUnit.Framework.Test] public void should_return_first_error_with_same_Code_as_input_error_has ()
         {
             result.ElementAt(0).Code.ShouldEqual(verificationMessages.ElementAt(0).Code);
             result.ElementAt(0).Code.ShouldEqual(verificationMessages.ElementAt(1).Code);
         }
 
-        [NUnit.Framework.Test] public void should_return_first_error_with_same_Message_as_input_error_has () =>
+        [NUnit.Framework.Test] public void should_return_first_error_with_same_Message_as_input_error_has ()
         {
             result.ElementAt(0).Message.ShouldEqual(verificationMessages.ElementAt(0).Message);
             result.ElementAt(0).Message.ShouldEqual(verificationMessages.ElementAt(1).Message);
@@ -43,7 +44,7 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
         [NUnit.Framework.Test] public void should_return_first_error_with_same_References_count_as_input_error_has () =>
             result.ElementAt(0).Errors.SelectMany(e => e.References).Count().ShouldEqual(2);
 
-        [NUnit.Framework.Test] public void should_return_first_error_that_references_question_with_questionId () =>
+        [NUnit.Framework.Test] public void should_return_first_error_that_references_question_with_questionId ()
         {
             result.ElementAt(0).Errors.First().References.ElementAt(0).ItemId.ShouldEqual(questionId1);
             result.ElementAt(0).Errors.Second().References.ElementAt(0).ItemId.ShouldEqual(questionId2);

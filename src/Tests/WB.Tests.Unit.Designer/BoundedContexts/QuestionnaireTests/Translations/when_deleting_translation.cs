@@ -13,6 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Translations
             questionnaire.AddOrUpdateTranslation(Create.Command.AddOrUpdateTranslation(questionnaireId, translationId, "", responsibleId));
 
             deleteTranslation = Create.Command.DeleteTranslation(questionnaireId, translationId, responsibleId);
+            BecauseOf();
         }
 
         private void BecauseOf() => questionnaire.DeleteTranslation(deleteTranslation);

@@ -12,6 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UserTests
             passwordQuestion = "secret question";
 
             user = CreateUser();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

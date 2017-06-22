@@ -26,6 +26,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.GetChapterOf
                 },
                 new Group("group") { PublicKey = Guid.NewGuid() }
             );
+            BecauseOf();
         }
 
         private void BecauseOf() => foundGroup = questionnaire.GetChapterOfItemById(targetGroupId);

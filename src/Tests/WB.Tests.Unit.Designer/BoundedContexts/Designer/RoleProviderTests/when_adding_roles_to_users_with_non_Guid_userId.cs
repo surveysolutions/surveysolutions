@@ -16,6 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.RoleProviderTests
             var dependencyResolver = Mock.Of<IDependencyResolver>(x => x.GetService(typeof(IRoleRepository)) == roleRepository);
             DependencyResolver.SetResolver(dependencyResolver);
             roleProvider = CreateRoleProvider();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

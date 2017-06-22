@@ -18,6 +18,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 responsibleId,
                 title : "%rostertitle% hello",
                 variableName : "var");
+            BecauseOf();
         }
 
         private void BecauseOf() =>

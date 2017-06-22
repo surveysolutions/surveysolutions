@@ -13,6 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             questionnaire = Create.QuestionnaireDocument(questionnaireId, userId: creatorId);
 
             denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaire);
+            BecauseOf();
         }
 
         private void BecauseOf() => denormalizer.AddLookupTable(new AddLookupTable(questionnaire.PublicKey, null, "", entityId, creatorId));

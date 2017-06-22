@@ -24,6 +24,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
                 variableName: "old_variable_name",
                 instructions: "old instructions",
                 enablementCondition: "old condition");
+            BecauseOf();
         }
 
         private void BecauseOf() =>

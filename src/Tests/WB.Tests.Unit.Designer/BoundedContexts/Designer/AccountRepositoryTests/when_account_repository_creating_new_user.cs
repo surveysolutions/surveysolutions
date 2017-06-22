@@ -15,6 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountRepositoryTests
             validatedUserId = Guid.Parse("11111111111111111111111111111111");
             commandService = new Mock<ICommandService>();
             accountRepository = CreateAccountRepository(commandService: commandService.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

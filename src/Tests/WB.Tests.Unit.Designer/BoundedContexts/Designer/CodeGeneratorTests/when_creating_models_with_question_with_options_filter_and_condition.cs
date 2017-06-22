@@ -27,6 +27,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             });
 
             templateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory(expressionProcessor: new RoslynExpressionProcessor());
+            BecauseOf();
         }
 
         private void BecauseOf() => exception = Catch.Exception(

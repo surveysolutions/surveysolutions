@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Net;
 using System.Web.Http;
 using Machine.Specifications;
@@ -11,6 +11,7 @@ namespace WB.Tests.Unit.Designer.Api.Tester.QuestionnairesControllerTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             controller = CreateQuestionnairesController();
+            BecauseOf();
         }
 
         private void BecauseOf() => expectedException =

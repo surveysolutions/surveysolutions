@@ -14,6 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MoveVariableHandlerTes
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddVariable(entityId : entityId, parentId : chapterId, responsibleId:responsibleId);
             questionnaire.AddGroup(targetEntityId, responsibleId: responsibleId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>            

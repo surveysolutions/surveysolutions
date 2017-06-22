@@ -15,6 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
 
             questionnaire.AddMultiOptionQuestion(filteredQuestionId, chapterId, responsibleId,
                 linkedFilterExpression: $"filter with {searchFor}");
+            BecauseOf();
         }
 
         private void BecauseOf() => questionnaire.ReplaceTexts(Create.Command.ReplaceTextsCommand(searchFor, replaceWith, userId: responsibleId));

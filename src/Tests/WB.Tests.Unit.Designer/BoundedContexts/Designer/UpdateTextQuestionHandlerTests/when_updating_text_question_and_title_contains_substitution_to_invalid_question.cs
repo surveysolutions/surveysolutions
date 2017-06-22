@@ -22,6 +22,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
                 responsibleId,
                 title: "old title",
                 variableName: "old_variable_name");
+            BecauseOf();
         }
 
         private void BecauseOf() =>

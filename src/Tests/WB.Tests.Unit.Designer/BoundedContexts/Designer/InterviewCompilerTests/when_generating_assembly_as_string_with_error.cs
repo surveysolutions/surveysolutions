@@ -20,6 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.InterviewCompilerTests
             classes.Add(fileName, testClassToCompilePartTwo);
 
             generatedClasses = classes;
+            BecauseOf();
         }
 
         private void BecauseOf() =>

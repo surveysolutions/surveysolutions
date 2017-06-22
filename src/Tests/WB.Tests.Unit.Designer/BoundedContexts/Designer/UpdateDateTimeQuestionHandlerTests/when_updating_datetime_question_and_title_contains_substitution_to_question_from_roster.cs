@@ -37,6 +37,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
 
             questionnaire.AddNumericQuestion(questionFromRosterId, rosterId, responsibleId,
                 isInteger: true,variableName: substitutionVariableName);
+            BecauseOf();
         }
 
         private void BecauseOf() => exception = Catch.Exception(() => questionnaire.UpdateDateTimeQuestion(command));

@@ -15,6 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Translations
             questionnaire.AddOrUpdateTranslation(Create.Command.AddOrUpdateTranslation(questionnaireId, translationId, "", ownerId));
 
             deleteTranslation = Create.Command.DeleteTranslation(questionnaireId, translationId, sharedPersonId);
+            BecauseOf();
         }
 
 

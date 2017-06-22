@@ -30,6 +30,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 FixedRosterTitles = null,
                 RosterTitleQuestionId = rosterTitleQuestionId
             });*/
+            BecauseOf();
         }
 
         private void BecauseOf() => questionnaire.MoveGroup(groupFromSourceRosterId, groupFromTargetRosterId, 0, responsibleId);

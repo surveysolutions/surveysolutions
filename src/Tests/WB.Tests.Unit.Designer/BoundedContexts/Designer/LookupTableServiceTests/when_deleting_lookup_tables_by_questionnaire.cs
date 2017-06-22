@@ -36,6 +36,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTest
 
             lookupTableService = Create.LookupTableService(lookupTableContentStorage: LookupTableContentStorageMock.Object, documentStorage: qStore.Object);
             lookupTableService.SaveLookupTableContent(questionnaireId, lookupTableId, fileContent);
+            BecauseOf();
 
         }
 

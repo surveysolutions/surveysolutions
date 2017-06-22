@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using Machine.Specifications;
 using Moq;
@@ -20,6 +20,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
                 .Throws(new CommandInflaitingException(CommandInflatingExceptionType.EntityNotFound, "test"));
 
             controller = CreateCommandController(commandInflater:commandInflaterMock.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

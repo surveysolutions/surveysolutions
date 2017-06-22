@@ -14,12 +14,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
             allAttachments.ForEach(attachment => attachmentMetaStorage.Store(attachment, attachment.AttachmentId));
 
             attachmentService = Create.AttachmentService(attachmentMetaStorage: attachmentMetaStorage);
+            BecauseOf();
         }
 
         private void BecauseOf() =>
             expectedAttachments = attachmentService.GetAttachmentsByQuestionnaire(questionnaireId);
 
-        [NUnit.Framework.Test] public void should_return_2_specified_attachments () =>
+        [NUnit.Framework.Test] public void should_return_2_specified_attachments () 
         {
             expectedAttachments.Count.ShouldEqual(2);
             expectedAttachments.All(x => x.QuestionnaireId == questionnaireId).ShouldEqual(true);

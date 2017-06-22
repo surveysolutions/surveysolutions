@@ -13,6 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DeleteVariableHandlerT
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddVariable(entityId : entityId, parentId : chapterId ,responsibleId:responsibleId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>            

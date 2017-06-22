@@ -61,6 +61,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTranslato
                 && _.GetFixedRosterTitle(fixedRoster, rosterTitleValue1) == "титул ростера 1");
 
             translator = Create.QuestionnaireTranslator();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

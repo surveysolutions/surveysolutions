@@ -40,15 +40,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             questionnaires.SetReturnsDefault(questionnaire);
 
             service = Create.TranslationsService(translationsStorage, questionnaires.Object);
+            BecauseOf();
         }
 
-        private void BecauseOf() =>
+        private void BecauseOf() 
         {
             var excelFile = service.GetAsExcelFile(questionnaireId, translationId);
             cells = new ExcelPackage(new MemoryStream(excelFile.ContentAsExcelFile)).Workbook.Worksheets[1].Cells;
         }
 
-        [NUnit.Framework.Test] public void should_remove_non_printable_chars_in_translation_file () =>
+        [NUnit.Framework.Test] public void should_remove_non_printable_chars_in_translation_file () 
         {
             cells[3, 4].GetValue<string>().ShouldEqual("В скобках символ без графического отобажения ()");
             cells[3, 5].GetValue<string>().ShouldEqual("Here is non-printable char ()");

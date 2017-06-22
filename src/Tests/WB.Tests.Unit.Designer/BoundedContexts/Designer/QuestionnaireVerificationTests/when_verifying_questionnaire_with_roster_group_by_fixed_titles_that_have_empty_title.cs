@@ -19,6 +19,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 Create.FixedRoster(rosterId: rosterGroupId, variable: "a",
                     fixedTitles: new[] {"fixed title 1", " ", "fixed title 3"}));
             verifier = CreateQuestionnaireVerifier();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

@@ -12,6 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.LookupTables
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: responsibleId);
 
             addLookupTable = Create.Command.AddLookupTable(questionnaireId, lookupTableId, responsibleId);
+            BecauseOf();
         }
 
 

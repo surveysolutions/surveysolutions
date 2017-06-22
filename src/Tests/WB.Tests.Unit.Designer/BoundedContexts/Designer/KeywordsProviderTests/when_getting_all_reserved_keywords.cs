@@ -20,6 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.KeywordsProviderTests
                 .Union(ServiceColumns.SystemVariables.Select(x => x.VariableExportColumnName))
                 .Select(x => x.ToLower())
                 .ToArray();
+            BecauseOf();
 
         }
 
@@ -45,23 +46,23 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.KeywordsProviderTests
             "sizeof", "stackalloc", "static", "string", "struct", "switch", "this",
             "throw", "true", "try", "typeof", "uint", "ulong", "unchecked",
             "unsafe", "ushort", "using", "virtual", "void", "volatile", "while"
-        }
+        };
 
         private static readonly string[] StataVariableRestrictions = new[]
         {
             "_all", "_b", "byte", "_coef", "_cons", "double", "float", "if", "in", "int", "long", "_n", "_pi",
             "_pred", "_rc", "_skip", "strl", "using", "with"
-        }
+        };
 
         private static readonly string[] SpssReservedKeywords = new[]
         {
             "all", "and", "by", "eq", "ge", "gt", "le", "lt", "ne", "not", "or", "to", "with"
-        }
+        };
 
         private static readonly List<string> SurveySolutionsServiceVariablesKeywords = new List<string>()
         {
             "rowcode", "rowname", "rowindex", "roster", "id", "parentid1", "parentid2","parentid3", "parentid4", "self", "state", "quest", "optioncode"
-        }
+        };
         private static string[] reservedKeywords;
 
         private static IEnumerable<string> result;

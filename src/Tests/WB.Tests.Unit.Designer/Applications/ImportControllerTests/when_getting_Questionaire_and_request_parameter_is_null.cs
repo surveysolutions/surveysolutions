@@ -8,6 +8,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             importController = CreateImportController();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

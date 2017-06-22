@@ -27,6 +27,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 responsibleId,
                 options: new Option[0],
                 linkedToQuestionId : questionUsedAsLinkId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

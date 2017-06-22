@@ -29,6 +29,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
 
             importController = CreateImportController(membershipUserService: membershipUserService,
                 questionnaireViewFactory: questionnaireViewFactory);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

@@ -30,6 +30,7 @@ namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
             questionnairesController = CreateQuestionnairesController(membershipUserService: membershipUserService,
                 questionnaireViewFactory: questionnaireViewFactory,
                 engineVersionService: expressionsEngineVersionService);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

@@ -10,6 +10,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
         [NUnit.Framework.OneTimeSetUp] public void context () {
             original = Create.FixedRoster(fixedTitles: new List<string> {"title1"});
             clone = (Group)original.Clone();
+            BecauseOf();
         }
 
         private void BecauseOf() => clone.FixedRosterTitles[0].Title = "changed";

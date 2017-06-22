@@ -16,6 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CreateQuestionnaireCom
             createdBy = Guid.NewGuid();
             isPublic = true;
             questionnaire = Create.Questionnaire();
+            BecauseOf();
         }
 
         private void BecauseOf() => questionnaire.CreateQuestionnaire(questionnaireId, questionnaireTitle, createdBy, isPublic);
@@ -32,7 +33,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CreateQuestionnaireCom
         [NUnit.Framework.Test] public void should_contains_questionnaire_with_given_CreatedBy () =>
             questionnaire.QuestionnaireDocument.CreatedBy.ShouldEqual(createdBy);
 
-        [NUnit.Framework.Test] public void should_raise_new_group_added_event () =>
+        [NUnit.Framework.Test] public void should_raise_new_group_added_event () 
         {
             var group = (IGroup)questionnaire.QuestionnaireDocument.Children.Single();
             group.GetParent().ShouldEqual(questionnaire.QuestionnaireDocument);
