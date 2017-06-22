@@ -77,6 +77,9 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
         {
             foreach (var question in questionnaire.Find<IQuestion>())
             {
+                if (question.QuestionType == QuestionType.Area)
+                    continue;
+
                 var rosterScope = questionnaire.GetRosterScope(question);
                 if (!rosterScope.IsSameOrParentScopeFor(this.RosterScope)) continue;
 
