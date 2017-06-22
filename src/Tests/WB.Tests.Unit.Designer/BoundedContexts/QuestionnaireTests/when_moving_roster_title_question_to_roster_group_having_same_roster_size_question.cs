@@ -36,6 +36,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             AddGroup(questionnaire: questionnaire, groupId: targetGroupId, parentGroupId: chapterId, condition: null,
                 responsibleId: responsibleId, isRoster: true, rosterSizeQuestionId: rosterSizeQuestionId);
+            BecauseOf();
         }
 
         private void BecauseOf() => questionnaire.MoveQuestion(questionId: rosterTitleQuestionId, responsibleId: responsibleId, targetIndex: 0,

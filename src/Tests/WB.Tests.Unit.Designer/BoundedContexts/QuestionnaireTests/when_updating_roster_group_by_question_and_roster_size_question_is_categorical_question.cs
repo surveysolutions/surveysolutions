@@ -20,6 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             questionnaire.AddMultiOptionQuestion(rosterSizeQuestionId,chapterId,responsibleId);
             questionnaire.AddGroup(groupId, responsibleId: responsibleId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

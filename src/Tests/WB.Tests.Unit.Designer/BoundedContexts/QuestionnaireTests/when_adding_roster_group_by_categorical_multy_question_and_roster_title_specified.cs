@@ -28,6 +28,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             
             questionnaire.AddGroup(parentGroupId, responsibleId: responsibleId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

@@ -14,6 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             questionnaire = Create.QuestionnaireDocument(questionId, Create.TextQuestion(variable: "var"));
             questionnaire.Macros.Add(macroId, Create.Macro("Very invalid! name"));
             verifier = CreateQuestionnaireVerifier();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

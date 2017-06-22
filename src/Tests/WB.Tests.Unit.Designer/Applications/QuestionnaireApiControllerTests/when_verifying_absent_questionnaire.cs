@@ -9,6 +9,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             controller = CreateQuestionnaireController();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

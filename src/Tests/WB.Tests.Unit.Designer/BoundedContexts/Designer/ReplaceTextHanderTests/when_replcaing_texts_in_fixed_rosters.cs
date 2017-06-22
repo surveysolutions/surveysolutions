@@ -23,6 +23,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                     new FixedRosterTitleItem("1", "one"),
                     new FixedRosterTitleItem("2", $"two with {searchFor}")
                 });
+            BecauseOf();
         }
 
         private void BecauseOf() => questionnaire.ReplaceTexts(Create.Command.ReplaceTextsCommand(searchFor, replaceWith, userId: responsibleId));

@@ -22,6 +22,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             questionnaire.AddGroup( groupId, parallelRosterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
                 rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

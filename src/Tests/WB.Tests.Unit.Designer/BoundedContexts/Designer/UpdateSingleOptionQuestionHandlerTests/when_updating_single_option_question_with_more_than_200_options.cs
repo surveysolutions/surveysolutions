@@ -20,6 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                         option => new Option(new Guid(), incrementer.ToString(), (incrementer++).ToString()))).ToArray();
 
             questionnaire = CreateQuestionnaireWithOneQuestion(responsibleId: responsibleId, questionId: questionId);
+            BecauseOf();
 
         }
 

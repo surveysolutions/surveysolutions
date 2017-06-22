@@ -11,6 +11,7 @@ namespace WB.Tests.Unit.Designer.Api.Tester.AttachmentsControllerTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             controller = CreateAttachmentController();
+            BecauseOf();
         }
 
         private void BecauseOf() => expectedException =

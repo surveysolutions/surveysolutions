@@ -38,6 +38,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 => processor.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>()) == new[] { "s546i" });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

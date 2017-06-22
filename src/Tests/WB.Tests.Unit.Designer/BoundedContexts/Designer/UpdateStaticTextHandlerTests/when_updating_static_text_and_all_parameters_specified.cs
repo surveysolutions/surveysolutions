@@ -28,6 +28,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateStaticTextHandle
                 hideIfDisabled: true,
                 validationConditions: new List<ValidationCondition>() { new ValidationCondition(validationCondition, validationMessage) }
                 );
+            BecauseOf();
         }
 
         private void BecauseOf() =>            
@@ -47,16 +48,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateStaticTextHandle
         [NUnit.Framework.Test] public void should_contains_statictext_with_enablement_condition_specified () =>
             questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ConditionExpression.ShouldEqual(enablementCondition);
 
-        private [NUnit.Framework.Test] public void should_contains_statictext_with_hide_if_disabled_specified () =>
+        [NUnit.Framework.Test] public void should_contains_statictext_with_hide_if_disabled_specified () =>
             questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).HideIfDisabled.ShouldBeTrue();
 
-        private [NUnit.Framework.Test] public void should_contains_statictext_with_validation_condition_count_equals_1 () =>
+        [NUnit.Framework.Test] public void should_contains_statictext_with_validation_condition_count_equals_1 () =>
             questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ValidationConditions.Count.ShouldEqual(1);
 
-        private [NUnit.Framework.Test] public void should_contains_statictext_with_validation_condition_expression_specified () =>
+        [NUnit.Framework.Test] public void should_contains_statictext_with_validation_condition_expression_specified () =>
             questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ValidationConditions.Single().Expression.ShouldEqual(validationCondition);
 
-        private [NUnit.Framework.Test] public void should_contains_statictext_with_validation_condition_message_specified () =>
+        [NUnit.Framework.Test] public void should_contains_statictext_with_validation_condition_message_specified () =>
             questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ValidationConditions.Single().Message.ShouldEqual(validationMessage);
 
         private static UpdateStaticText command;

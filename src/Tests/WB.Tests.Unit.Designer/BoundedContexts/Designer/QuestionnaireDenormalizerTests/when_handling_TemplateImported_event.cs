@@ -23,6 +23,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             documentStorage = new InMemoryReadSideRepositoryAccessor<QuestionnaireDocument>();
             documentStorage.Store(questionnaireDocument, questionnaireDocument.PublicKey);
             denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireDocument, sharedPersons: macrosWithBefore.ToEnumerable());
+            BecauseOf();
         }
 
         private void BecauseOf() =>

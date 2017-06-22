@@ -16,7 +16,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
              questionnaire.AddNumericQuestion(rosterSizeQuestionId,groupId, responsibleId,isInteger: true);
              questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
                 rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
-         }
+            BecauseOf();
+        }
 
         private void BecauseOf() =>
              exception = Catch.Exception(() =>

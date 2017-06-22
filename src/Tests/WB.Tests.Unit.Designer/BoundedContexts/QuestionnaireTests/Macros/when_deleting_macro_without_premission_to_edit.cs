@@ -15,6 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Macros
             questionnaire.AddSharedPerson(sharedPersonId, "email@email.com", ShareType.View, ownerId);
 
             deleteMacro = Create.Command.DeleteMacro(questionnaireId, macroId, sharedPersonId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

@@ -39,6 +39,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             questionnaires.SetReturnsDefault(questionnaire);
             service = Create.TranslationsService(plainStorageAccessor,
                 questionnaireStorage: questionnaires.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() => service.Store(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), translationId, fileStream);

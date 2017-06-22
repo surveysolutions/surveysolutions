@@ -24,6 +24,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
                 updatedQuestionId,
                 rootGroupId,
                 actorId);
+            BecauseOf();
         }
 
         private void BecauseOf() => exception = Catch.Exception(() => questionnaire.UpdateSingleOptionQuestion(updatedQuestionId, 
@@ -42,7 +43,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
             cascadeFromQuestionId: Guid.NewGuid(), validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
                 linkedFilterExpression: null, properties: Create.QuestionProperties()));
 
-        [NUnit.Framework.Test] public void should_not_allow_cascades_from_non_existing_question () =>
+        [NUnit.Framework.Test] public void should_not_allow_cascades_from_non_existing_question () 
         {
             var ex = exception as QuestionnaireException;
             ex.ShouldNotBeNull();

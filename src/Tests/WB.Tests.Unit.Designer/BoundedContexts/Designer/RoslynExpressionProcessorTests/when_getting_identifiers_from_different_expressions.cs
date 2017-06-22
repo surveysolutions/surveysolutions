@@ -40,9 +40,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.RoslynExpressionProces
                 { "self > System.DateTime.Now.AddMonth(1)", new [] { "self", "DateTime.Now", "AddMonth" } },
                 { "self > DateTime.Now", new [] { "self", "DateTime.Now" } },
                 { "self > DateTime.Now.AddMonth(1)", new [] { "self", "DateTime.Now", "AddMonth" } }
-            }
+            };
 
             analyzer = Create.RoslynExpressionProcessor();
+            BecauseOf();
         }
 
         private void BecauseOf() =>
@@ -50,7 +51,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.RoslynExpressionProces
                 expression => expression,
                 expression => analyzer.GetIdentifiersUsedInExpression(expression));
 
-        [NUnit.Framework.Test] public void should_return_only_expected_identifiers () =>
+        [NUnit.Framework.Test] public void should_return_only_expected_identifiers () 
         {
             foreach (var result in results)
             {

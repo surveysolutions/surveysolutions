@@ -9,12 +9,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
             attachmentContentStorage.Store(Create.AttachmentContent(content: fileContent, contentType: contentType, contentId: attachmentContentId), attachmentContentId);
 
             attachmentService = Create.AttachmentService(attachmentContentStorage: attachmentContentStorage);
+            BecauseOf();
         }
 
         private void BecauseOf() =>
             attachmentContent = attachmentService.GetContent(attachmentContentId);
 
-        [NUnit.Framework.Test] public void should_return_attachment_content_with_specified_properties () =>
+        [NUnit.Framework.Test] public void should_return_attachment_content_with_specified_properties () 
         {
             attachmentContent.ContentId.ShouldEqual(attachmentContentId);
             attachmentContent.ContentType.ShouldEqual(contentType);

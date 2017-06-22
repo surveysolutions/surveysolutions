@@ -27,7 +27,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
 
             questionnaire = Create.Questionnaire();
             questionnaire.Initialize(Guid.NewGuid(),questionnaireDoc,null);
-           
+            BecauseOf();
+
         }
 
         private void BecauseOf() =>

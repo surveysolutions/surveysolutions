@@ -23,6 +23,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             questionnaire.LookupTables.Add(table1Id, Create.LookupTable("var"));
 
             verifier = CreateQuestionnaireVerifier(lookupTableService: lookupTableServiceMock.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

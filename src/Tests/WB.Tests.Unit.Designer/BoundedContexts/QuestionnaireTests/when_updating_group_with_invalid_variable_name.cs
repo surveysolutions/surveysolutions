@@ -14,6 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddGroup(rosterId, chapterId, variableName: "valid", responsibleId: responsibleId, isRoster:true);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

@@ -16,6 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.RoleRepositoryTests
             validatedRole = SimpleRoleEnum.User;
             commandService = new Mock<ICommandService>();
             roleRepository = CreateRoleRepository(commandService: commandService.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

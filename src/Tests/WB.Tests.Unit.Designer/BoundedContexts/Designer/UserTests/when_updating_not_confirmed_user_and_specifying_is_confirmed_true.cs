@@ -7,6 +7,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UserTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             user = CreateUser();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

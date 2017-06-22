@@ -19,6 +19,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewFactory
                 .Returns(CreateQuestionnaireDocumentWithoutChapters(questionnaireId));
 
             factory = CreateChapterInfoViewFactory(repository: repositoryMock.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

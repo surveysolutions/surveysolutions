@@ -19,14 +19,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             
             questionnaire.AddTextQuestion(questionWithSubstitutionId, chapterId, responsibleId);
 
-            eventContext = new EventContext();
+            BecauseOf();
         }
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        }
 
         private void BecauseOf() => exception =
             Catch.Exception(() => questionnaire.UpdateNumericQuestion(
@@ -50,7 +45,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             new[] { "substitution", "to", "illegal", "type", textQuestionVariable }.ShouldEachConformTo(x =>
                 ((QuestionnaireException) exception).Message.Contains(x));
 
-        private static EventContext eventContext;
+
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

@@ -25,6 +25,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
             questionnaire.AddNumericQuestion(existingQuestionId, chapterId, responsibleId);
             questionnaire.AddQRBarcodeQuestion(questionId, chapterId,responsibleId,
                 title: "old title", variableName: "old_variable_name",instructions: "old instructions",enablementCondition: "old condition");
+            BecauseOf();
         }
 
         private void BecauseOf() =>

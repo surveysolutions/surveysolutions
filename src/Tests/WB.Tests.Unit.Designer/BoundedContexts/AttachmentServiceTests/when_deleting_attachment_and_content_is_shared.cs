@@ -14,6 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
             attachmentMetaStorage.Store(Create.AttachmentMeta(otherAttachmentId, contentHash, otherQuestionnaireId), otherAttachmentId);
 
             attachmentService = Create.AttachmentService(attachmentContentStorage: attachmentContentStorage, attachmentMetaStorage: attachmentMetaStorage);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

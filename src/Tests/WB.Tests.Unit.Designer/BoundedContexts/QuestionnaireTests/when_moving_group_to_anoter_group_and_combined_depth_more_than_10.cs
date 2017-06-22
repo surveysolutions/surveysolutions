@@ -17,6 +17,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             AddGroup(questionnaire, groupId1, null, "", responsibleId, null);
             AddGroup(questionnaire, groupId2, groupId1, "", responsibleId, null);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

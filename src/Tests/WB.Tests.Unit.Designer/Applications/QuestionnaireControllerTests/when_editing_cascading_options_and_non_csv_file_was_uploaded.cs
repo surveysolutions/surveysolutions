@@ -17,6 +17,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 
             var stream = new MemoryStream(Encoding.UTF8.GetBytes("Simple text file")) {Position = 0};
             postedFile = Mock.Of<HttpPostedFileBase>(pf => pf.InputStream == stream);
+            BecauseOf();
         }
 
         private void BecauseOf() => controller.EditCascadingOptions(postedFile);

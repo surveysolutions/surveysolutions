@@ -14,6 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId, isRoster: true);
            
             questionnaire.AddGroup(groupInsideRosterId,  rosterId, responsibleId: responsibleId);
+            BecauseOf();
         }
 
         private void BecauseOf() => questionnaire.DeleteGroup(groupInsideRosterId, responsibleId);

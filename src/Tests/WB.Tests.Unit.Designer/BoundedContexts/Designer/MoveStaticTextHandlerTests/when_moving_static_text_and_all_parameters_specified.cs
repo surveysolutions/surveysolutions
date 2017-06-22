@@ -15,6 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MoveStaticTextHandlerT
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddStaticTextAndMoveIfNeeded(new AddStaticText(questionnaire.Id, entityId, "title", responsibleId, chapterId));
             questionnaire.AddGroup(targetEntityId, responsibleId: responsibleId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>            

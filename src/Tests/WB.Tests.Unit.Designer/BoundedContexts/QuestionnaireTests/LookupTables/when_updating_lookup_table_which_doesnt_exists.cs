@@ -14,13 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.LookupTables
 
             updateLookupTable = Create.Command.UpdateLookupTable(questionnaireId, lookupTableId, responsibleId, lookupTableName);
 
-            eventContext = new EventContext();
-        }
-
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
+            BecauseOf();
         }
 
         private void BecauseOf() =>
@@ -35,6 +29,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.LookupTables
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid lookupTableId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static readonly string lookupTableName = "lookuptbl";
-        private static EventContext eventContext;
     }
 }

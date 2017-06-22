@@ -18,6 +18,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             questionnaires.SetReturnsDefault(Create.QuestionnaireDocument(questionnaireId));
 
             service = Create.TranslationsService(questionnaireStorage: questionnaires.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() => exception = Catch.Exception(()=> service.GetAsExcelFile(questionnaireId, Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")));

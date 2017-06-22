@@ -17,16 +17,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId, isRoster: true);
             questionnaire.AddNumericQuestion(questionId, rosterId,responsibleId,title: questionTitle,variableName: "var");
-            eventContext = new EventContext();
+
+            BecauseOf();
         }
 
         private void BecauseOf() => exception = Catch.Exception(() => questionnaire.MoveQuestion(questionId, chapterId, 1, responsibleId));
-
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        }
 
         [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

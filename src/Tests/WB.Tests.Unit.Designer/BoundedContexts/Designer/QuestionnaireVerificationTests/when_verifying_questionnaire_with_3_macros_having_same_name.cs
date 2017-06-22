@@ -17,6 +17,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             questionnaire.Macros.Add(Guid.Parse("33333333333333333333333333333333"), Create.Macro("macroname"));
 
             verifier = CreateQuestionnaireVerifier();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

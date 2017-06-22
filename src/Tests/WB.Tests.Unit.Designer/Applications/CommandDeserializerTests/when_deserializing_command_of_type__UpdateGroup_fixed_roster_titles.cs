@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
@@ -29,6 +29,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
             }}", questionnaireId, groupId, title, propagationKind, rosterFixedTitles);
 
             deserializer = CreateCommandDeserializer();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

@@ -13,6 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Macros
             questionnaire.AddMacro(Create.Command.AddMacro(questionnaireId, macroId, responsibleId));
 
             updateMacro = Create.Command.UpdateMacro(questionnaireId, macroId, name, content, description, responsibleId);
+            BecauseOf();
         }
 
 

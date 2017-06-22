@@ -10,6 +10,7 @@ namespace WB.Tests.Unit.Designer.Services.DeskAuthenticationServiceTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             service = Create.DeskAuthenticationService(multipassKey: "multipass", returnUrlFormat: "{0}{1}{2}", siteKey: "solutions");
+            BecauseOf();
         }
 
         private void BecauseOf() =>

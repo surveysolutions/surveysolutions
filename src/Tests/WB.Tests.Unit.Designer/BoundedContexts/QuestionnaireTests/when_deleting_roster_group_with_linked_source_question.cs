@@ -28,6 +28,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 options: new Option[0],
                 linkedToQuestionId: linkedSourceQuestionId
             );
+            BecauseOf();
         }
 
         private void BecauseOf() => exception = Catch.Exception(() => questionnaire.DeleteGroup(rosterId, responsibleId));

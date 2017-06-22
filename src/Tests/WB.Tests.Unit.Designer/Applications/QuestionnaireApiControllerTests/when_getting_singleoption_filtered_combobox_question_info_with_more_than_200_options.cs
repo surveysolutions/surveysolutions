@@ -17,6 +17,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
                 .Setup(x => x.GetQuestionEditView(questionnaireId, questionId))
                 .Returns(singleoptionFilteredCombobox);
             controller = CreateQuestionnaireController(questionnaireInfoFactory: questionnaireInfoViewFactoryMock.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

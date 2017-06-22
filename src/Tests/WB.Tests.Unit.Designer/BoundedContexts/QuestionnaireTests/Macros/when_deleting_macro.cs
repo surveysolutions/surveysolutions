@@ -12,6 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Macros
             questionnaire.AddMacro(Create.Command.AddMacro(questionnaireId, macroId, responsibleId));
 
             deleteMacro = Create.Command.DeleteMacro(questionnaireId, macroId, responsibleId);
+            BecauseOf();
         }
 
 

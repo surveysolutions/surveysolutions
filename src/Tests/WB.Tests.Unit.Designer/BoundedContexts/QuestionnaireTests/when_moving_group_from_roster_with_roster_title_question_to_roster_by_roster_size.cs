@@ -21,6 +21,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             
             questionnaire.AddGroup(groupFromRosterId,  sourceRosterId, responsibleId: responsibleId);
             questionnaire.AddNumericQuestion(rosterTitleQuestionId, groupFromRosterId, responsibleId);
+            BecauseOf();
         }
 
         private void BecauseOf() => questionnaire.MoveGroup(groupFromRosterId, targetGroupId, 0, responsibleId);

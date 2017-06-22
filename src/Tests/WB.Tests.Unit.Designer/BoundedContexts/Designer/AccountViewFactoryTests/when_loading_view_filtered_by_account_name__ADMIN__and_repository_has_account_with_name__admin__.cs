@@ -19,6 +19,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountViewFactoryTest
             var accountsRepository = Stub<IPlainStorageAccessor<User>>.Returning(CreateAccount(userName: "admin"));
 
             accountFactory = CreateAccountViewFactory(accountsRepository: accountsRepository);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

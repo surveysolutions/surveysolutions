@@ -38,14 +38,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                 .Returns(questionnaireView);
 
             factory = CreateQuestionnaireInfoFactory(questionDetailsReaderMock.Object);
+            BecauseOf();
         }
 
-        private void BecauseOf() =>
+        private void BecauseOf() 
         {
             q5View = factory.GetQuestionEditView(questionnaireId, q5Id);
         }
 
-        [NUnit.Framework.Test] public void should_return_4_elemets_for_dropdown () =>
+        [NUnit.Framework.Test] public void should_return_4_elemets_for_dropdown () 
         {
             var listItems = q5View.SourceOfLinkedEntities.Where(x => x.Type == "textlist" || x.Type == "text");
             listItems.Select(x => x.Id).ShouldEqual(new [] { q1Id.FormatGuid(), q2Id.FormatGuid(), q3Id.FormatGuid(), q4Id.FormatGuid() });

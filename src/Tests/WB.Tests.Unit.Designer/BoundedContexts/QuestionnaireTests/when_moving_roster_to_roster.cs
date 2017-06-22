@@ -17,6 +17,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 rosterSizeQuestionId: null, rosterFixedTitles: new[] { new FixedRosterTitleItem("1", "test"), new FixedRosterTitleItem("2", "test 2") });
             
             questionnaire.AddGroup(roster2Id, chapterId, responsibleId: responsibleId, isRoster:true);
+            BecauseOf();
         }
 
 

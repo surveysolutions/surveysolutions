@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -48,6 +48,7 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
             Func<string, string, bool> validateUserCredentials = (s, s1) => true;
 
             attribute = CreateApiBasicAuthAttribute(validateUserCredentials);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

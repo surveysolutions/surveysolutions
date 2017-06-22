@@ -14,6 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddTextListQuestion(rosterSizeQuestionId, chapterId, responsibleId);
             questionnaire.AddGroup(groupId, chapterId, responsibleId: responsibleId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

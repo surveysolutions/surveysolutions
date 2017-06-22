@@ -34,6 +34,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
                     new Option{Title = "one",Value = "1",Id = Guid.NewGuid()},
                     new Option{Title = "two",Value = "2",Id = Guid.NewGuid()}
                 });
+            BecauseOf();
         }
 
         private void BecauseOf() => exception = Catch.Exception(() => questionnaire.UpdateSingleOptionQuestion(
@@ -53,7 +54,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
             cascadeFromQuestionId: parentQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
             linkedFilterExpression: null, properties: Create.QuestionProperties()));
 
-        [NUnit.Framework.Test] public void should_not_allow_to_set_both_linked_and_cascading_qestion_at_the_same_time () =>
+        [NUnit.Framework.Test] public void should_not_allow_to_set_both_linked_and_cascading_qestion_at_the_same_time ()
         {
             var ex = exception as QuestionnaireException;
             ex.ShouldNotBeNull();

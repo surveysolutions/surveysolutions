@@ -17,6 +17,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTest
                 $"4{_}56{_}3{_end}";
 
             lookupTableService = Create.LookupTableService();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

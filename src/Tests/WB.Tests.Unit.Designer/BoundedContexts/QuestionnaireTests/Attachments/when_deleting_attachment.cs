@@ -14,6 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
             questionnaire.AddOrUpdateAttachment(Create.Command.AddOrUpdateAttachment(questionnaireId, attachmentId, "", responsibleId, ""));
 
             deleteAttachment = Create.Command.DeleteAttachment(questionnaireId, attachmentId, responsibleId);
+            BecauseOf();
         }
 
 

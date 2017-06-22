@@ -35,6 +35,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .Returns(new GenerationResult() { Success = true, Diagnostics = new List<GenerationDiagnostic>() });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessorGenerator: questionnireExpressionProcessorGeneratorMock.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

@@ -21,6 +21,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             }, creatorId);
 
             questionnaire = CreateQuestionnaireDenormalizer(questionnaire: questionnaireView);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

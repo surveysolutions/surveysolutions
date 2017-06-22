@@ -19,6 +19,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.InterviewCompilerTests
             classes.Add(fileName, testClassToCompilePartTwo);
 
             generatedClasses = classes;
+            BecauseOf();
         }
 
         private void BecauseOf() => emitResult = IncreaseCallStackEndExec_TODO_Check_does_method_name_affect_stack(1);

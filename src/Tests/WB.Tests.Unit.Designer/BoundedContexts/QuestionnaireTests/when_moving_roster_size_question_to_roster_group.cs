@@ -33,6 +33,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             
             AddGroup(questionnaire: questionnaire, groupId: rosterGroupId, parentGroupId: targetRosterGroupId, condition: null,
                 responsibleId: responsibleId, rosterSizeQuestionId: rosterSizeQuestionId, isRoster: true);
+            BecauseOf();
         }
 
 

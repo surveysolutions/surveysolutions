@@ -28,6 +28,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
             
             questionnaire.AddNumericQuestion(questionFromRosterId, rosterId, responsibleId, isInteger : true, variableName : substitutionVariableName
             );
+            BecauseOf();
         }
 
         private void BecauseOf() =>

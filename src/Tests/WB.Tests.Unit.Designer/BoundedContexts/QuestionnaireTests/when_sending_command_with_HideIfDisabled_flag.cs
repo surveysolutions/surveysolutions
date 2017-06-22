@@ -27,6 +27,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             AddQuestion(questionnaire, questionSingleOptionId, groupId, responsibleId, QuestionType.SingleOption, "SingleOption_question");
             AddQuestion(questionnaire, questionTextId, groupId, responsibleId, QuestionType.Text, "Text_question");
             AddQuestion(questionnaire, questionTextListId, groupId, responsibleId, QuestionType.TextList, "TextList_question");
+            BecauseOf();
         }
 
         private private void BecauseOf() =>

@@ -40,6 +40,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
             }}");
 
             deserializer = CreateCommandDeserializer();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

@@ -20,6 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 variableName: "var",
                 title: "%rostertitle% hello"
             );
+            BecauseOf();
         }
 
         private void BecauseOf() =>

@@ -14,6 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Translations
             questionnaire.AddOrUpdateTranslation(Create.Command.AddOrUpdateTranslation(questionnaireId, oldTranslationId, "", responsibleId));
 
             updateTranslation = Create.Command.AddOrUpdateTranslation(questionnaireId, translationId, name, responsibleId, oldTranslationId);
+            BecauseOf();
         }
 
 

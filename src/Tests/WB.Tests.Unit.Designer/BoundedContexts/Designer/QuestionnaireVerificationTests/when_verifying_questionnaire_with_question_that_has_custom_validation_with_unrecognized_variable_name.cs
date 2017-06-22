@@ -33,6 +33,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .Returns(new string[] { UnrecognizableVariableName });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

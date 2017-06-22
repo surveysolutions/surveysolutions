@@ -15,6 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 children: Enumerable.Range(1, 101).Select(_ => Create.TextQuestion()).ToArray<IComposite>());
 
             verifier = CreateQuestionnaireVerifier();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

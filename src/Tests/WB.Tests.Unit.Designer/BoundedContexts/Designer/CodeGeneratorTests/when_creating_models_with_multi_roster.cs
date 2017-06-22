@@ -31,6 +31,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             });
 
             templateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory();
+            BecauseOf();
         }
 
         private void BecauseOf() =>
@@ -42,7 +43,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
         [NUnit.Framework.Test] public void should_create_questionnaire_level_with_1_question () =>
             model.QuestionnaireLevelModel.Rosters.Count.ShouldEqual(1);
 
-        [NUnit.Framework.Test] public void should_create_fixed_roster_model () =>
+        [NUnit.Framework.Test] public void should_create_fixed_roster_model () 
         {
             RosterTemplateModel roster = model.AllRosters.Single(x => x.Id == Id.gA);
             roster.Conditions.ShouldEqual("roster condition");

@@ -38,6 +38,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 Create.NumericIntegerQuestion(Guid.NewGuid(), variable: "numeric")
             });
             verifier = CreateQuestionnaireVerifier();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

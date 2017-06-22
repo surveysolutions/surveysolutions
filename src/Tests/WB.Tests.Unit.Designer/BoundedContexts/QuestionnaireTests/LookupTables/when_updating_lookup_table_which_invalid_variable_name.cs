@@ -13,13 +13,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.LookupTables
 
             updateLookupTable = Create.Command.UpdateLookupTable(questionnaireId, lookupTableId, responsibleId, lookupTableName: "$some,invalid%name");
 
-            eventContext = new EventContext();
-        }
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
+            BecauseOf();
         }
 
         private void BecauseOf() =>

@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                     translationId: translationId,
                     questionnaireId: questionnaireId,
                     questionnaireEntityId: comboboxId),
-            }
+            };
 
             QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
@@ -47,9 +47,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             questionnaires.SetReturnsDefault(questionnaire);
 
             service = Create.TranslationsService(translationsStorage, questionnaires.Object);
+            BecauseOf();
         }
 
-        private void BecauseOf() =>
+        private void BecauseOf() 
         {
             var excelFile = service.GetAsExcelFile(questionnaireId, translationId);
             var excelWorkbook = new ExcelPackage(new MemoryStream(excelFile.ContentAsExcelFile)).Workbook;
@@ -57,13 +58,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             cascadingCells = excelWorkbook.Worksheets["@@_cascading"].Cells;
         }
 
-        [NUnit.Framework.Test] public void should_export_translation_on__Translations_combobox__sheet_in_2_row () =>
+        [NUnit.Framework.Test] public void should_export_translation_on__Translations_combobox__sheet_in_2_row () 
         {
             comboboxCells[2, 4].GetValue<string>().ShouldEqual("Option");
             comboboxCells[2, 5].GetValue<string>().ShouldEqual("Опция");
         }
 
-        [NUnit.Framework.Test] public void should_export_translation_on__Translations_cascading__sheet_in_2_row () =>
+        [NUnit.Framework.Test] public void should_export_translation_on__Translations_cascading__sheet_in_2_row () 
         {
             cascadingCells[2, 4].GetValue<string>().ShouldEqual("Cascading Option");
             cascadingCells[2, 5].GetValue<string>().ShouldEqual("Каскадная Опция");

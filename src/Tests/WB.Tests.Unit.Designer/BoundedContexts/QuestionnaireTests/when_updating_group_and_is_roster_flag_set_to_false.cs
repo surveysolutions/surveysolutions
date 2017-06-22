@@ -12,6 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
             questionnaire = CreateQuestionnaireWithOneGroup(responsibleId, groupId: groupId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

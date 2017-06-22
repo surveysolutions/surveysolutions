@@ -33,6 +33,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
             command = new PasteInto(questionnaireId, entityId, questionnaireId, pasteAfterId, entityId, actionUserId);
 
             commandInflater = CreateCommandInflater(membershipUserService, documentStorage, listStorage);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

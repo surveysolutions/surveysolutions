@@ -14,6 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.InterviewCompilerTests
             compiler = CreateRoslynCompiler();
             referencedPortableAssemblies = CreateReferencesForCompiler();
             generatedClasses.Add("main", testClassToCompile);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

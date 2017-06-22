@@ -15,6 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
                 Create.ValidationCondition(message: "original")
             });
             clone = (TextQuestion)original.Clone();
+            BecauseOf();
         }
 
         private void BecauseOf() => clone.ValidationConditions[0].Message = "changed";

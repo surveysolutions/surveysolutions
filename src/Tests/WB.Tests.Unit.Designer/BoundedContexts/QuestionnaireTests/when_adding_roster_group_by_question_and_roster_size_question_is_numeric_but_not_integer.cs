@@ -18,6 +18,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddNumericQuestion(rosterSizeQuestionId, chapterId, isInteger: false, responsibleId:responsibleId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

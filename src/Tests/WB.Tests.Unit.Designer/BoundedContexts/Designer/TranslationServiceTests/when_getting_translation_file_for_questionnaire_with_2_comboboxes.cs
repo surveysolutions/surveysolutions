@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                     translationId: translationId,
                     questionnaireId: questionnaireId,
                     questionnaireEntityId: comboboxId),
-            }
+            };
 
             QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
@@ -48,12 +48,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             questionnaires.SetReturnsDefault(questionnaire);
 
             service = Create.TranslationsService(translationsStorage, questionnaires.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() => translationFile = service.GetAsExcelFile(questionnaireId, translationId);
 
         
-        [NUnit.Framework.Test] public void should_exported_excel_file_has_3_specified_worksheets () =>
+        [NUnit.Framework.Test] public void should_exported_excel_file_has_3_specified_worksheets () 
         {
             var excelWorkbook = new ExcelPackage(new MemoryStream(translationFile.ContentAsExcelFile)).Workbook;
             var worksheetNames = excelWorkbook.Worksheets.Select(x=>x.Name).ToList();

@@ -14,6 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             responsibleId = Guid.Parse("11111111111111111111111111111111");
 
             questionnaire = CreateQuestionnaireWithNesingAndLastGroup(10, parentGroupId, responsibleId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

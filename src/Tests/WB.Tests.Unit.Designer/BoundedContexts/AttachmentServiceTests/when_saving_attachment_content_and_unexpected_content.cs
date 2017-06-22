@@ -16,6 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
                 .Returns(false);
 
             attachmentService = Create.AttachmentService(attachmentContentStorage: attachmentContentStorage.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

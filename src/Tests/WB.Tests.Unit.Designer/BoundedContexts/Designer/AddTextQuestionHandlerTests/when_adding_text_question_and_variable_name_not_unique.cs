@@ -13,7 +13,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddTextQuestion(Guid.NewGuid(), chapterId, responsibleId, variableName:notUniqueVariableName);
-            
+            BecauseOf();
+
         }
 
         private void BecauseOf() =>

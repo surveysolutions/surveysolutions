@@ -35,6 +35,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
                 rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
             
             questionnaire.AddVariableAndMoveIfNeeded(Create.Command.AddVariable(questionnaire.Id, variableFromRosterId, rosterId, responsibleId, substitutionVariableName));
+            BecauseOf();
         }
 
         private void BecauseOf() =>

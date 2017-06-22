@@ -21,6 +21,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateStaticTextHandle
                 attachmentName : "",
                 responsibleId : responsibleId,
                 enablementCondition : String.Empty);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

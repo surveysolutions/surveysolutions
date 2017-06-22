@@ -13,6 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             questionnaire = Create.QuestionnaireDocument(questionnaireId, userId: creatorId);
             denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaire);
             command = new AddMacro(questionnaire.PublicKey, entityId, creatorId);
+            BecauseOf();
         }
 
         private void BecauseOf() => denormalizer.AddMacro(command);

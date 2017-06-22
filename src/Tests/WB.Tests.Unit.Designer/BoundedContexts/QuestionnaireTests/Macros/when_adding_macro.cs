@@ -11,6 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Macros
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: responsibleId);
 
             addMacro = Create.Command.AddMacro(questionnaireId, macroId, responsibleId);
+            BecauseOf();
         }
 
 

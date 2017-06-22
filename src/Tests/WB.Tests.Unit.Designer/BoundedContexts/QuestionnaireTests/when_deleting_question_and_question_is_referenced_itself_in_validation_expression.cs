@@ -11,6 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup( chapterId, responsibleId: responsibleId);
             questionnaire.AddTextQuestion(questionId: questionToBeDeleted, parentId: chapterId,responsibleId:responsibleId, variableName:"q", validationExpression:"q!= null");
+            BecauseOf();
         }
 
         private void BecauseOf() =>

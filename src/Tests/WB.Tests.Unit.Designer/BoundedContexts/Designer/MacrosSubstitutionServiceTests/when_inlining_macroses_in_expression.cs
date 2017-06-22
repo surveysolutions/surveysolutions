@@ -17,6 +17,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MacrosSubstitutionServ
                      }
             expression = "$aa + $bb";
             macrosSubstitutionService = Create.MacrosSubstitutionService();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

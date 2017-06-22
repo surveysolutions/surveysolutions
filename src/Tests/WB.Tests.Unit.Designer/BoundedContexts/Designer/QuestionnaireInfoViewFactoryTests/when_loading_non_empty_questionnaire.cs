@@ -39,6 +39,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
                     x => x.GetById(userId.FormatGuid()) == new User() { Email = ownerEmail });
             factory = CreateQuestionnaireInfoViewFactory(repository: repositoryMock.Object,
                 accountsDocumentReader: userRepositoryMock);
+            BecauseOf();
         }
 
         private void BecauseOf() => view = factory.Load(questionnaireId, userId);

@@ -21,6 +21,7 @@ namespace WB.Tests.Unit.Designer.Services.QuestionnaireDowngradeServiceTests
                 }));
 
             service = new QuestionnaireDowngradeService();
+            BecauseOf();
         }
 
         private void BecauseOf() => service.Downgrade(questionnaire, 11);

@@ -49,6 +49,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                         new[] { "99999999999999999999999999999999" });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor: expressionProcessor);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

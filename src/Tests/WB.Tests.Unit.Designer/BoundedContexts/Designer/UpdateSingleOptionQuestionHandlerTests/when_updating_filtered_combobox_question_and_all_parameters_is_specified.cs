@@ -31,6 +31,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                 linkedToQuestionId: null,
                 isFilteredCombobox: false,
                 cascadeFromQuestionId: null);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

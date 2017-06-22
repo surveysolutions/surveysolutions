@@ -15,12 +15,13 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
             mockOfAttachmentService.Setup(x => x.GetContent(attachmentContentId)).Returns(expectedAttachmentContent);
 
             importController = CreateImportController(attachmentService: mockOfAttachmentService.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() =>
             response = importController.AttachmentContent(attachmentContentId);
 
-        [NUnit.Framework.Test] public void should_return_specified_http_response () =>
+        [NUnit.Framework.Test] public void should_return_specified_http_response ()
         {
             response.Content.ReadAsByteArrayAsync().Result.SequenceEqual(expectedAttachmentContent.Content);
             response.Content.Headers.ContentType.MediaType.ShouldEqual(expectedAttachmentContent.ContentType);
@@ -36,7 +37,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
         {
             ContentId = attachmentContentId,
             ContentType = "image/png",
-            Content = new byte[] {1, 2, 3}
-        }
+            Content = new byte[] { 1, 2, 3 }
+        };
     }
 }

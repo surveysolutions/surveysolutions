@@ -14,15 +14,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGpsQuestion(textQuestionId, chapterId, responsibleId, variableName: textQuestionVariable);
             questionnaire.AddGroup(groupId, chapterId, responsibleId: responsibleId);
 
-            eventContext = new EventContext();
+
+            BecauseOf();
         }
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        }
-
+        
         private void BecauseOf() => exception =
             Catch.Exception(() => questionnaire.UpdateGroup(
                 groupId: groupId,
@@ -42,7 +38,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             new[] { "substitution", "to", "illegal", "type", textQuestionVariable }.ShouldEachConformTo(x =>
                 ((QuestionnaireException) exception).Message.Contains(x));
 
-        private static EventContext eventContext;
+
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

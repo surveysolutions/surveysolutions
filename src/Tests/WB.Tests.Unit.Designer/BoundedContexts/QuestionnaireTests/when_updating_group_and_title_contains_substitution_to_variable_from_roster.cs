@@ -16,14 +16,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddVariable(variableId, rosterId, responsibleId, variableName: variableName);
             questionnaire.AddGroup(groupId, chapterId, responsibleId: responsibleId);
 
-            eventContext = new EventContext();
+
+            BecauseOf();
         }
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        }
 
         private void BecauseOf() => exception =
             Catch.Exception(() => questionnaire.UpdateGroup(
@@ -44,7 +40,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             new[] { "illegal", "substitution", "to", variableName }.ShouldEachConformTo(x =>
                 ((QuestionnaireException) exception).Message.Contains(x));
 
-        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

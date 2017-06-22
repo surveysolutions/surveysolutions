@@ -25,6 +25,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateNumericQuestionH
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(Create.Command.AddDefaultTypeQuestion(questionnaire.Id, questionId, "title", responsibleId, chapterId));
             
             eventContext = new EventContext();
+            BecauseOf();
         }
 
         private void BecauseOf() => exception = 
@@ -41,7 +42,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateNumericQuestionH
                     false, QuestionScope.Interviewer, false, false, null,
                     validationConditions: new List<ValidationCondition>())));
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown]
+        public void stuff ()
         {
             eventContext.Dispose();
             eventContext = null;

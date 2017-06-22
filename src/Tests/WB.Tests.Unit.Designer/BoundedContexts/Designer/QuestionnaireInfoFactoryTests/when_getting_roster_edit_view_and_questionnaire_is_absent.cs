@@ -15,6 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         [NUnit.Framework.OneTimeSetUp] public void context () {
             questionDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
             factory = CreateQuestionnaireInfoFactory(questionDetailsReaderMock.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

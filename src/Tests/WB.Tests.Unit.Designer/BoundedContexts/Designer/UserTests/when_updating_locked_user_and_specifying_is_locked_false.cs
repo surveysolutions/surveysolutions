@@ -8,6 +8,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UserTests
         [NUnit.Framework.OneTimeSetUp] public void context () {
             user = CreateUser();
             user.IsLockedOut = true;
+            BecauseOf();
         }
 
         private void BecauseOf() =>

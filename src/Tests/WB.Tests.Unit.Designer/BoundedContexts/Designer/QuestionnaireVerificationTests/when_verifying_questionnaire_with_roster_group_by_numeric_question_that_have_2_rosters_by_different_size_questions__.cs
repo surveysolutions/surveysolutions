@@ -45,6 +45,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 RosterTitleQuestionId = rosterTitleQuestionId
             });
             verifier = CreateQuestionnaireVerifier();
+
+            BecauseOf();
         }
 
         private void BecauseOf() =>
