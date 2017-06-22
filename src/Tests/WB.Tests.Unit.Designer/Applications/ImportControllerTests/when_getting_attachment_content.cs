@@ -11,22 +11,21 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
 {
     internal class when_getting_attachment_content : ImportControllerTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             mockOfAttachmentService.Setup(x => x.GetContent(attachmentContentId)).Returns(expectedAttachmentContent);
 
             importController = CreateImportController(attachmentService: mockOfAttachmentService.Object);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             response = importController.AttachmentContent(attachmentContentId);
 
-        It should_return_specified_http_response = () =>
+        [NUnit.Framework.Test] public void should_return_specified_http_response () =>
         {
             response.Content.ReadAsByteArrayAsync().Result.SequenceEqual(expectedAttachmentContent.Content);
             response.Content.Headers.ContentType.MediaType.ShouldEqual(expectedAttachmentContent.ContentType);
             response.Headers.ETag.Tag.ShouldEqual($"\"{expectedAttachmentContent.ContentId}\"");
-        };
+        }
 
         private static ImportV2Controller importController;
         private static string attachmentContentId = "Attahcment Content Id";
@@ -38,6 +37,6 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
             ContentId = attachmentContentId,
             ContentType = "image/png",
             Content = new byte[] {1, 2, 3}
-        };
+        }
     }
 }

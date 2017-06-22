@@ -9,18 +9,17 @@ namespace WB.UI.Designer.Tests.QuestionnaireApiControllerTests
 {
     internal class when_getting_not_existing_static_text : QuestionnaireApiControllerTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             controller = CreateQuestionnaireController();
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() => controller.EditStaticText(questionnaireId, entityId));
 
-        It should_throw_exception = () =>
+        [NUnit.Framework.Test] public void should_throw_exception () =>
             exception.ShouldNotBeNull();
 
-        It should_throw_HttpResponseException_exception = () =>
+        [NUnit.Framework.Test] public void should_throw_HttpResponseException_exception () =>
             exception.ShouldBeOfExactType(typeof(HttpResponseException));
 
         private static QuestionnaireController controller;

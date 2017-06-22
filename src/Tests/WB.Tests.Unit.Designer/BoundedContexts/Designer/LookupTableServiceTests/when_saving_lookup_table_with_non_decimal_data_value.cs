@@ -8,8 +8,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTest
 {
     internal class when_saving_lookup_table_with_non_decimal_data_value
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             fileContent =
                 $"no{_}rowcode{_}column{_end}" +
                 $"1{_}2{_}3{_end}" +
@@ -18,19 +17,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTest
                 $"4{_}56{_}3{_end}";
 
             lookupTableService = Create.LookupTableService();
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 lookupTableService.SaveLookupTableContent(questionnaireId, lookupTableId, fileContent));
 
-        It should_throw_exception = () =>
+        [NUnit.Framework.Test] public void should_throw_exception () =>
             exception.ShouldNotBeNull();
 
-        It should_throw_ArgumentException = () =>
+        [NUnit.Framework.Test] public void should_throw_ArgumentException () =>
             exception.ShouldBeOfExactType<ArgumentException>();
 
-        It should_throw_ArgumentException1 = () =>
+        [NUnit.Framework.Test] public void should_throw_ArgumentException1 () =>
             ((ArgumentException)exception).Message.ShouldEqual(string.Format(ExceptionMessages.LookupTables_data_value_cannot_be_parsed, "not_decimal", "column", 3));
 
         private static Exception exception;

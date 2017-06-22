@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
 {
     internal class when_updating_single_option_question_that_is_linked_and_referencing_question_is_missing : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(parentGroupId, responsibleId: responsibleId);
             questionnaire.AddGroup(rosterId, parentGroupId, responsibleId: responsibleId, isRoster: true);
@@ -25,9 +24,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                         instructions: "old instructions",
                         enablementCondition: "old condition");
             questionnaire.AddGroup(groupFromRosterId, rosterId, responsibleId: responsibleId);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateSingleOptionQuestion(
                     questionId: questionId,
@@ -43,14 +42,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                     options: options,
                     linkedToEntityId: linkedToQuestionId,
                     isFilteredCombobox: isFilteredCombobox,
-                    cascadeFromQuestionId: ñascadeFromQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
+                    cascadeFromQuestionId: ï¿½ascadeFromQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
                 linkedFilterExpression: null, properties: Create.QuestionProperties()));
 
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__linked_question_doesnot_exist__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__linked_question_doesnot_exist__ () =>
             new[] { "entity that you are linked to does not exist" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
@@ -70,6 +69,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
         private static Guid linkedToQuestionId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static bool isFilteredCombobox = false;
-        private static Guid? ñascadeFromQuestionId = (Guid?)null;
+        private static Guid? ï¿½ascadeFromQuestionId = (Guid?)null;
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -19,8 +19,7 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
 {
     internal class when_api_basic_auth_attribute_handles_on_authorization_and_user_not_approved : AttributesTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var membershipUserServiceMock = new Mock<IMembershipUserService>();
             var membershipWebUserMock = new Mock<IMembershipWebUser>();
             var membershipUserMock = new Mock<DesignerMembershipUser>();
@@ -49,15 +48,15 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
             Func<string, string, bool> validateUserCredentials = (s, s1) => true;
 
             attribute = CreateApiBasicAuthAttribute(validateUserCredentials);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             attribute.OnAuthorization(filterContext);
         
-        It should_response_context_contains_unauthorized_exception = () =>
+        [NUnit.Framework.Test] public void should_response_context_contains_unauthorized_exception () =>
             filterContext.Response.StatusCode.ShouldEqual(HttpStatusCode.Unauthorized);
 
-        It should_response_context_unauthorized_exception_has_specified_reasonphrase = () =>
+        [NUnit.Framework.Test] public void should_response_context_unauthorized_exception_has_specified_reasonphrase () =>
             filterContext.Response.ReasonPhrase.ShouldEqual(expectedReasonPhrase);
 
         private static ApiBasicAuthAttribute attribute;

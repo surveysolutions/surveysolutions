@@ -10,19 +10,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
 {
     internal class when_saving_already_existing_attachment_content : AttachmentServiceTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             attachmentContentStorage
                 .Setup(x => x.Query(Moq.It.IsAny<Func<IQueryable<AttachmentContent>, bool>>()))
                 .Returns(true);
 
             attachmentService = Create.AttachmentService(attachmentContentStorage: attachmentContentStorage.Object);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             attachmentService.SaveContent(attachmentContentId, contentType, fileContent);
 
-        It should_not_save_content_to__storage = () =>
+        [NUnit.Framework.Test] public void should_not_save_content_to__storage () =>
             attachmentContentStorage.Verify(x => x.Store(Moq.It.IsAny<AttachmentContent>(), Moq.It.IsAny<string>()), Times.Never);
         
 

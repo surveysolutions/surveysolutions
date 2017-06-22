@@ -10,17 +10,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
 {
     internal class when_saving_attachment_meta : AttachmentServiceTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             attachmentMetaStorage.Setup(x => x.GetById(attachmentId)).Returns((AttachmentMeta)null);
 
             attachmentService = Create.AttachmentService(attachmentMetaStorage: attachmentMetaStorage.Object);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             attachmentService.SaveMeta(attachmentId, questionnaireId, attachmentContentId, fileName);
 
-        It should_save_meta_storage = () =>
+        [NUnit.Framework.Test] public void should_save_meta_storage () =>
             attachmentMetaStorage.Verify(x => x.Store(Moq.It.IsAny<AttachmentMeta>(), attachmentId), Times.Once);
         
 

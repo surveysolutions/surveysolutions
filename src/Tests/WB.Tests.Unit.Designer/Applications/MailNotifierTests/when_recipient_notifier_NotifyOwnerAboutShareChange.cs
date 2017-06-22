@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
@@ -16,22 +16,21 @@ namespace WB.Tests.Unit.Designer.Applications.MailNotifierTests
 {
     internal class when_recipient_notifier_NotifyOwnerAboutShareChange
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             systemMailer.Setup(x => x.GetOwnerShareChangeNotificationEmail(it.IsAny<SharingNotificationModel>())).Returns(message.Object);
 
             Setup.InstanceToMockedServiceLocator<ISystemMailer>(systemMailer.Object);
 
             recipientNotifier = new MailNotifier(new Mock<ILogger>().Object);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             recipientNotifier.NotifyOwnerAboutShareChange(ShareChangeType.Share, receiverEmail, receiverName, questoinnaireId, questionnaiteTitle, ShareType.View, actionUserEmail, sharedWithPersonEmail);
 
-        It should_call_SendAsync = () =>
+        [NUnit.Framework.Test] public void should_call_SendAsync () =>
            message.Verify(x => x.SendAsync(null, null), Times.Once);
 
-        It should_call_GetOwnerShareChangeNotificationEmail = () =>
+        [NUnit.Framework.Test] public void should_call_GetOwnerShareChangeNotificationEmail () =>
            systemMailer.Verify(x => x.GetOwnerShareChangeNotificationEmail(Moq.It.Is<SharingNotificationModel>(
                y => y.Email == receiverEmail.ToWBEmailAddress()
                && y.ShareTypeName == "view" 

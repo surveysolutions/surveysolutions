@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -18,8 +18,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
 {
     internal class when_PasteIntoCommand_is_inflating_with_not_shared_non_public_questionnaire : CommandInflaterTestsContext
     {
-        private Establish context = () =>
-        {
+        private [NUnit.Framework.OneTimeSetUp] public void context () {
             var membershipUserService = Mock.Of<IMembershipUserService>(
                 _ => _.WebUser == Mock.Of<IMembershipWebUser>(
                     u => u.UserId == actionUserId && u.MembershipUser.Email == actionUserEmail));
@@ -36,12 +35,12 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
             command = new PasteInto(questoinnaireId, entityId, pasteAfterId, questoinnaireId, entityId, actionUserId);
 
             commandInflater = CreateCommandInflater(membershipUserService, documentStorage, sharedPersons);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() => commandInflater.PrepareDeserializedCommandForExecution(command));
 
-        It should_throw_interview_exception = () =>
+        [NUnit.Framework.Test] public void should_throw_interview_exception () =>
             exception.ShouldBeOfExactType<CommandInflaitingException>();
 
         private static Exception exception;

@@ -7,8 +7,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.RoslynExpressionProces
 {
     internal class when_getting_identifiers_from_different_expressions
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             expectedResults = new Dictionary<string, IEnumerable<string>>
             {
                 { "a+b", new[] { "a", "b" } },
@@ -41,23 +40,23 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.RoslynExpressionProces
                 { "self > System.DateTime.Now.AddMonth(1)", new [] { "self", "DateTime.Now", "AddMonth" } },
                 { "self > DateTime.Now", new [] { "self", "DateTime.Now" } },
                 { "self > DateTime.Now.AddMonth(1)", new [] { "self", "DateTime.Now", "AddMonth" } }
-            };
+            }
 
             analyzer = Create.RoslynExpressionProcessor();
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             results = expectedResults.Keys.ToDictionary(
                 expression => expression,
                 expression => analyzer.GetIdentifiersUsedInExpression(expression));
 
-        It should_return_only_expected_identifiers = () =>
+        [NUnit.Framework.Test] public void should_return_only_expected_identifiers () =>
         {
             foreach (var result in results)
             {
                 result.Value.ShouldContainOnly(expectedResults[result.Key]);
             }
-        };
+        }
 
         private static Dictionary<string, IReadOnlyCollection<string>> results;
         private static Dictionary<string, IEnumerable<string>> expectedResults;

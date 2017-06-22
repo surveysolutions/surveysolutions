@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
 {
     internal class when_getting_question_view_for_linked_question_inside_two_rosters : QuestionnaireInfoFactoryTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
             questionnaireView = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
@@ -39,18 +38,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                 .Returns(questionnaireView);
 
             factory = CreateQuestionnaireInfoFactory(questionDetailsReaderMock.Object);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
         {
             q5View = factory.GetQuestionEditView(questionnaireId, q5Id);
-        };
+        }
 
-        It should_return_4_elemets_for_dropdown = () =>
+        [NUnit.Framework.Test] public void should_return_4_elemets_for_dropdown () =>
         {
             var listItems = q5View.SourceOfLinkedEntities.Where(x => x.Type == "textlist" || x.Type == "text");
             listItems.Select(x => x.Id).ShouldEqual(new [] { q1Id.FormatGuid(), q2Id.FormatGuid(), q3Id.FormatGuid(), q4Id.FormatGuid() });
-        };
+        }
 
         private static QuestionnaireInfoFactory factory;
         private static QuestionnaireDocument questionnaireView;

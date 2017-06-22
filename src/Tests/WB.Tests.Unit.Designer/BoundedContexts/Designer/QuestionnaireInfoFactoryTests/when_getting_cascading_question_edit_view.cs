@@ -17,8 +17,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
 {
     internal class when_getting_cascading_question_edit_view : QuestionnaireInfoFactoryTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
             questionnaireView = Create.QuestionnaireDocumentWithOneChapter(questionnaireId: docId, chapterId: g1Id, children: new IComposite[]
             {
@@ -36,24 +35,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                 .Returns(questionnaireView);
 
             factory = CreateQuestionnaireInfoFactory(questionDetailsReaderMock.Object);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             result = factory.GetQuestionEditView(questionnaireId, questionId);
 
-        It should_return_not_null_view = () =>
+        [NUnit.Framework.Test] public void should_return_not_null_view () =>
             result.ShouldNotBeNull();
 
-        It should_return_grouped_list_of_single_questions_with_3_items = () =>
+        [NUnit.Framework.Test] public void should_return_grouped_list_of_single_questions_with_3_items () =>
             result.SourceOfSingleQuestions.Count.ShouldEqual(3);
 
-        It should_return_list_withfirst_placeholder_item = () =>
+        [NUnit.Framework.Test] public void should_return_list_withfirst_placeholder_item () =>
             result.SourceOfSingleQuestions.ElementAt(0).IsSectionPlaceHolder.ShouldBeTrue();
 
-        It should_return_single_question_with_id__g1 = () =>
+        [NUnit.Framework.Test] public void should_return_single_question_with_id__g1 () =>
             result.SourceOfSingleQuestions.ElementAt(1).Id.ShouldEqual(q1Id.FormatGuid());
 
-        It should_return_single_question_with_id__g2 = () =>
+        [NUnit.Framework.Test] public void should_return_single_question_with_id__g2 () =>
             result.SourceOfSingleQuestions.ElementAt(2).Id.ShouldEqual(q2Id.FormatGuid());
 
         private static QuestionnaireInfoFactory factory;

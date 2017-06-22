@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
@@ -17,8 +17,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
     [Ignore("reference validation is turned off")]
     internal class when_updating_qr_barcode_question_and_condition_contains_2_id_references_and_1_of_them_invalid : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
                 => processor.GetIdentifiersUsedInExpression(conditionExpression) == new[] { existingQuestionId.ToString(), notExistingQuestionId.ToString() });
 
@@ -34,9 +33,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
                 instructions: "old instructions",
                 enablementCondition: "old condition",
                 responsibleId: responsibleId);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
 
             questionnaire.UpdateQRBarcodeQuestion(
@@ -56,10 +55,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
                         scope: QuestionScope.Interviewer,
                         validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>())));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__not__valid__expression__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__not__valid__expression__ () =>
              new[] { "not", "valid", "expression" }.ShouldEachConformTo(
                     keyword => exception.Message.ToLower().Contains(keyword));
 

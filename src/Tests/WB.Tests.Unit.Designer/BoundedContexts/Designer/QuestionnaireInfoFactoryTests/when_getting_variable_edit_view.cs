@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
 {
     internal class when_getting_variable_edit_view : QuestionnaireInfoFactoryTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireEntityDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
             questionnaireView = CreateQuestionnaireDocument();
             questionnaireEntityDetailsReaderMock
@@ -22,27 +21,27 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                 .Returns(questionnaireView);
 
             factory = CreateQuestionnaireInfoFactory(questionnaireEntityDetailsReaderMock.Object);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             result = factory.GetVariableEditView(questionnaireId, entityId);
 
-        It should_return_not_null_view = () =>
+        [NUnit.Framework.Test] public void should_return_not_null_view () =>
             result.ShouldNotBeNull();
 
-        It should_return_variable_with_Id_equals_variableId = () =>
+        [NUnit.Framework.Test] public void should_return_variable_with_Id_equals_variableId () =>
             result.Id.ShouldEqual(entityId);
 
-        It should_return_variable_with_itemId_equals_formated_variableId = () =>
+        [NUnit.Framework.Test] public void should_return_variable_with_itemId_equals_formated_variableId () =>
             result.ItemId.ShouldEqual(entityId.FormatGuid());
 
-        It should_return_variable_name_equals = () =>
+        [NUnit.Framework.Test] public void should_return_variable_name_equals () =>
             result.VariableData.Name.ShouldEqual(GetVariable(entityId).Name);
 
-        It should_return_variable_type_equals = () =>
+        [NUnit.Framework.Test] public void should_return_variable_type_equals () =>
             result.VariableData.Type.ShouldEqual(GetVariable(entityId).Type);
 
-        It should_return_variable_expression_equals = () =>
+        [NUnit.Framework.Test] public void should_return_variable_expression_equals () =>
             result.VariableData.Expression.ShouldEqual(GetVariable(entityId).Expression);
 
         private static IVariable GetVariable(Guid entityId)

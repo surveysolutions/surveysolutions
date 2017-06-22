@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -16,8 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
 {
     internal class when_handling_StaticTextDeleted_event : QuestionnaireDenormalizerTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             entityId = Guid.Parse("11111111111111111111111111111111");
             
             QuestionnaireDocument questionnaire = CreateQuestionnaireDocument(children: new []
@@ -29,12 +28,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             },createdBy:responsibleId);
 
             denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaire);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             denormalizer.DeleteStaticText(entityId, responsibleId.Value);
 
-        It should_chapter_be_empty = () =>
+        [NUnit.Framework.Test] public void should_chapter_be_empty () =>
             chapter.Children.ShouldBeEmpty();
         
         private static Group chapter;

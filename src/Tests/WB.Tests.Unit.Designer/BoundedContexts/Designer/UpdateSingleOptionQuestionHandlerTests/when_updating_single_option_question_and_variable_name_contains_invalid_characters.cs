@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
 {
     internal class when_updating_single_option_question_and_variable_name_contains_invalid_characters : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddQRBarcodeQuestion(questionId,
@@ -22,9 +21,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                         variableName: "old_variable_name",
                         instructions: "old instructions",
                         enablementCondition: "old condition");
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateSingleOptionQuestion(
                     questionId: questionId,
@@ -40,13 +39,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                     options: options,
                     linkedToEntityId: linkedToQuestionId,
                     isFilteredCombobox: isFilteredCombobox,
-                    cascadeFromQuestionId: ñascadeFromQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
+                    cascadeFromQuestionId: ï¿½ascadeFromQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
                 linkedFilterExpression: null, properties: Create.QuestionProperties()));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__variable__contains__characters__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__variable__contains__characters__ () =>
             new[] { "variable", "contain", "character" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
@@ -65,6 +64,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
         private static Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "Option 1"), new Option(Guid.NewGuid(), "2", "Option 2"), };
         private static Guid? linkedToQuestionId = (Guid?)null;
         private static bool isFilteredCombobox = false;
-        private static Guid? ñascadeFromQuestionId = (Guid?)null;
+        private static Guid? ï¿½ascadeFromQuestionId = (Guid?)null;
     }
 }

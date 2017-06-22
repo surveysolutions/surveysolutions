@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_question_with_condition_expression_and_without_name : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
-        {
+        private [NUnit.Framework.OneTimeSetUp] public void context () {
             var groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var question1Id = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             var question2Id = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
@@ -36,18 +35,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .Returns(new[] { "b" });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor.Object);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_message_with_code__WB0057 = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_code__WB0057 () =>
             verificationMessages.ShouldContainError("WB0057");
 
-        It should_return_message_with_level_general = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_level_general () =>
             verificationMessages.GetError("WB0057").MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
-        It should_return_message_with_one_references = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_one_references () =>
             verificationMessages.GetError("WB0057").References.Count().ShouldEqual(1);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

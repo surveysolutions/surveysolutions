@@ -16,8 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
     [Ignore("reference validation is turned off")]
     internal class when_updating_text_question_and_validation_contains_2_id_references_and_1_of_them_invalid : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
                 => processor.GetIdentifiersUsedInExpression(validationExpression) == new[] { existingQuestionId.ToString(), notExistingQuestionId.ToString() });
 
@@ -26,9 +25,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
             questionnaire.AddNumericQuestion(existingQuestionId, chapterId, responsibleId);
             questionnaire.AddQRBarcodeQuestion(questionId, chapterId,responsibleId,
                 title: "old title", variableName: "old_variable_name",instructions: "old instructions",enablementCondition: "old condition");
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateTextQuestion(
                     new UpdateTextQuestion(
@@ -41,10 +40,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
                         isPreFilled,
                         new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>())));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__not__valid__expression__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__not__valid__expression__ () =>
             new[] { "not", "valid", "expression" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
