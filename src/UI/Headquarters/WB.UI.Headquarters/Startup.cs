@@ -133,7 +133,7 @@ namespace WB.UI.Headquarters
                         }
                     }
                 },
-                ExpireTimeSpan = TimeSpan.FromHours(applicationSecuritySection.CookieSettings.ExpirationTime),
+                ExpireTimeSpan = TimeSpan.FromSeconds(20),
                 SlidingExpiration = applicationSecuritySection.CookieSettings.SlidingExpiration,
                 CookieName = applicationSecuritySection.CookieSettings.Name,
                 CookieHttpOnly = applicationSecuritySection.CookieSettings.HttpOnly
