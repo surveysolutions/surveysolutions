@@ -383,7 +383,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public Task<byte[]> GetApplicationAsync(CancellationToken token) => 
             this.TryGetRestResponseOrThrowAsync(async () =>
         {
-            var restFile = await this.restService.DownloadFileAsync(url: interviewerApiUrl, token: token,
+            var restFile = await this.restService.DownloadFileAsync(url: checkVersionUrl, token: token,
                 credentials: this.restCredentials).ConfigureAwait(false);
 
             return restFile.Content;
