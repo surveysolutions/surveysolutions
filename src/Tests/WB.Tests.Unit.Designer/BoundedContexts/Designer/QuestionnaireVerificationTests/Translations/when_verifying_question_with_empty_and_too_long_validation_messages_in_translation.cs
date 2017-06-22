@@ -39,6 +39,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             var questionnaireTranslator = Setup.QuestionnaireTranslator(questionnaire, null, translatedQuestionnaire);
 
             verifier = CreateQuestionnaireVerifier(questionnaireTranslator: questionnaireTranslator);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

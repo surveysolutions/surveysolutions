@@ -27,6 +27,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
             command = new PasteInto(questoinnaireId, entityId, pasteAfterId, questoinnaireId, entityId, ownerId);
 
             commandInflater = CreateCommandInflater(membershipUserService, documentStorage);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

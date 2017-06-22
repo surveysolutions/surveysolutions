@@ -21,6 +21,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId, expressionProcessor: expressionProcessor);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(Create.Command.AddDefaultTypeQuestion(questionnaire.Id, existingQuestionId,"title", responsibleId, chapterId));
+            BecauseOf();
         }
 
         private void BecauseOf() =>

@@ -35,6 +35,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .Returns(new[] { "b" });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

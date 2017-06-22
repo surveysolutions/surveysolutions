@@ -36,6 +36,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MembershipProviderTest
             membershipProvider = CreateMembershipProvider();
 
             membershipUser = Mock.Of<DesignerMembershipUser>(x => x.Email == validatedUserEmail && (Guid)x.ProviderUserKey == userIdWithExistingEmail);
+            BecauseOf();
         }
 
         private void BecauseOf() => exception =

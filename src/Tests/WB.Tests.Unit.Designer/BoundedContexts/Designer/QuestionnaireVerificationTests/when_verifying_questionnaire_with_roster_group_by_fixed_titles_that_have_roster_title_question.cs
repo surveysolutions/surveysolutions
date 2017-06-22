@@ -37,6 +37,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 }.ToReadOnlyCollection()
             });
             verifier = CreateQuestionnaireVerifier();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

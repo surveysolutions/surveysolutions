@@ -44,6 +44,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
                     new Option{Title = "one",Value = "1",Id = Guid.NewGuid()},
                     new Option{Title = "two",Value = "2",Id = Guid.NewGuid()}
                 });
+            BecauseOf();
         }
 
         private void BecauseOf() => questionnaire.UpdateSingleOptionQuestion(

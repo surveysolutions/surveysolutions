@@ -17,6 +17,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     StataExportCaption = "var0"
                 }); 
             verifier = CreateQuestionnaireVerifier();
+            BecauseOf();
         }
 
         private void BecauseOf() => 

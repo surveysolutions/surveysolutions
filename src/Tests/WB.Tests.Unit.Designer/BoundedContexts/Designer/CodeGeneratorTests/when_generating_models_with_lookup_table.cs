@@ -52,6 +52,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             questionnaire.LookupTables.Add(lookupId, Create.LookupTable("price"));
 
             templateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

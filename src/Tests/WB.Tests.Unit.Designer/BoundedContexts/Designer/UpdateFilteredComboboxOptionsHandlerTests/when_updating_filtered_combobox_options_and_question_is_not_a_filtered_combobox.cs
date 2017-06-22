@@ -20,6 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateFilteredCombobox
                 variableName: "var",
                 responsibleId: responsibleId
             );
+            BecauseOf();
         }
 
         private void BecauseOf() =>

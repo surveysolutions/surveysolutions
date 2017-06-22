@@ -34,6 +34,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                 responsibleId: responsibleId);
 
             questionnaire.AddGroup(groupFromRosterId, rosterId, responsibleId: responsibleId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

@@ -22,6 +22,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
                 x => x.GetAllBrokenGroupDependencies(questionnaireId, groupId) == brokenLinks);
 
             controller = CreateQuestionnaireController(questionnaireInfoFactory: questionnaireInfoFactory);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

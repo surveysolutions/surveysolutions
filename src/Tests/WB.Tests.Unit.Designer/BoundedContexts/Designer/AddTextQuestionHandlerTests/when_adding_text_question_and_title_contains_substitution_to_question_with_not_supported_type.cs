@@ -14,6 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddGpsQuestion(Guid.NewGuid(), chapterId, responsibleId, variableName : substitutionVariableName);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

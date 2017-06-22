@@ -12,6 +12,7 @@ namespace WB.Tests.Unit.Designer.Applications.MessageHandlerTests
             innerhandler.Message = new HttpResponseMessage(HttpStatusCode.OK);
             client = new HttpMessageInvoker(CreateHttpsVerifier(innerhandler));
             requestMessage = new HttpRequestMessage(HttpMethod.Get, "http://localhost");
+            BecauseOf();
         }
 
         private void BecauseOf() =>

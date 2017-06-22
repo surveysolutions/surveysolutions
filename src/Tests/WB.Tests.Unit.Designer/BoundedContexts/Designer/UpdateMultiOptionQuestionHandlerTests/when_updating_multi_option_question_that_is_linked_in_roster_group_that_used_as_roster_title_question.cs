@@ -25,7 +25,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
 
             questionnaire.UpdateGroup(anotherRosterId, responsibleId, "rosterTitle", "", rosterSizeQuestionId, "", null, false, true,
                 RosterSizeSourceType.Question, null, rosterTitleQuestionId);
-            
+            BecauseOf();
+
         }
 
         private void BecauseOf() =>

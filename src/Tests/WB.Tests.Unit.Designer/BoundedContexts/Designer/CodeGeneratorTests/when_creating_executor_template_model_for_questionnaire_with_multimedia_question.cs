@@ -42,6 +42,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
                 });
 
             expressionStateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

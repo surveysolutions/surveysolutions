@@ -29,6 +29,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 });
 
             command = Create.Command.ReplaceTextsCommand(searchFor.ToLower(), replaceWith, userId: responsibleId);
+            BecauseOf();
         }
 
         private void BecauseOf() => questionnaire.ReplaceTexts(command);

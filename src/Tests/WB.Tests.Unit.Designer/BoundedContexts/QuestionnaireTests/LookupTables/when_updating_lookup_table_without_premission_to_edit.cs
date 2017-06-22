@@ -15,6 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.LookupTables
             questionnaire.AddSharedPerson(sharedPersonId, "email@email.com", ShareType.View, ownerId);
 
             updateLookupTable = Create.Command.UpdateLookupTable(questionnaireId, lookupTableId, sharedPersonId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

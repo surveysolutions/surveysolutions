@@ -14,12 +14,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
             allContents.ForEach(content=>attachmentContentStorage.Store(content, content.ContentId));
 
             attachmentService = Create.AttachmentService(attachmentMetaStorage: attachmentMetaStorage, attachmentContentStorage: attachmentContentStorage);
+            BecauseOf();
         }
 
         private void BecauseOf() =>
             expectedAttachmentSizes = attachmentService.GetAttachmentSizesByQuestionnaire(questionnaireId);
 
-        [NUnit.Framework.Test] public void should_return_3_specified_attachment_sizes () =>
+        [NUnit.Framework.Test] public void should_return_3_specified_attachment_sizes () 
         {
             expectedAttachmentSizes.Count.ShouldEqual(3);
             expectedAttachmentSizes[0].Size.ShouldEqual(100);
@@ -35,13 +36,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
             Create.AttachmentContent(contentId: "content 1", size: 100),
             Create.AttachmentContent(contentId: "content 2", size: 50),
             Create.AttachmentContent(contentId: "content 3", size: 20)
-        }
+        };
         private static readonly AttachmentMeta[] allAttachments =
         {
             Create.AttachmentMeta(Guid.NewGuid(), allContents[0].ContentId, questionnaireId),
             Create.AttachmentMeta(Guid.NewGuid(), allContents[0].ContentId, questionnaireId),
             Create.AttachmentMeta(Guid.NewGuid(), allContents[1].ContentId, questionnaireId)
-        }
+        };
 
         private static readonly TestPlainStorage<AttachmentMeta> attachmentMetaStorage = new TestPlainStorage<AttachmentMeta>();
         private static readonly TestPlainStorage<AttachmentContent> attachmentContentStorage = new TestPlainStorage<AttachmentContent>();

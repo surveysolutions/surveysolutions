@@ -21,7 +21,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup(rosterId, responsibleId: responsibleId);
             questionnaire.AddNumericQuestion(prefilledQuestionId, isInteger: true, parentId: rosterId, isPreFilled:true, responsibleId:responsibleId);
             
-            eventContext = new EventContext();
+
+            BecauseOf();
         }
 
         private void BecauseOf() =>
@@ -31,11 +32,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                         questionnaire.UpdateGroup(rosterId, responsibleId, "title",null, rosterSizeQuestionId, null, null, hideIfDisabled: false, isRoster: true,
                             rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null));
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        }
 
         [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
@@ -53,7 +49,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             exception.Message.ToLower().ShouldContain("question");
 
 
-        private static EventContext eventContext;
+
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid rosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

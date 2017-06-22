@@ -11,11 +11,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
             attachmentMetaStorage.Store(Create.AttachmentMeta(attachmentId, attachmentContentId, questionnaireId: questionnaireId, fileName: fileName), attachmentId);
 
             attachmentService = Create.AttachmentService(attachmentContentStorage: attachmentContentStorage, attachmentMetaStorage: attachmentMetaStorage);
+            BecauseOf();
         }
 
         private void BecauseOf() => attachmentService.CloneMeta(attachmentId, newAttachmentId, newQuestionnaireId);
 
-        [NUnit.Framework.Test] public void should_save_cloned_attachment_meta_with_specified_properties () =>
+        [NUnit.Framework.Test] public void should_save_cloned_attachment_meta_with_specified_properties () 
         {
             var attachmentMeta = attachmentMetaStorage.GetById(newAttachmentId);
             attachmentMeta.FileName.ShouldEqual(fileName);

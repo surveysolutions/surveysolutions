@@ -12,6 +12,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
             command = "{}";
 
             deserializer = CreateCommandDeserializer();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

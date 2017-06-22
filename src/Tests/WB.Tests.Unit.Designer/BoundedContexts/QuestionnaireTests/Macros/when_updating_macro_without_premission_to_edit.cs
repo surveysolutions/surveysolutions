@@ -15,6 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Macros
             questionnaire.AddSharedPerson(sharedPersonId, "email@email.com", ShareType.View, ownerId);
 
             updateMacro = Create.Command.UpdateMacro(questionnaireId, macroId, name, content, description, sharedPersonId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

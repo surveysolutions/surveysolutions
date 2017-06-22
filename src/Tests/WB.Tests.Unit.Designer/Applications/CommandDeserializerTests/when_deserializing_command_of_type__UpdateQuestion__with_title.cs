@@ -24,6 +24,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
             }}", questionnaireId, questionId, title);
 
             deserializer = CreateCommandDeserializer();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

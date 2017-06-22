@@ -19,6 +19,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                         option => new Option(new Guid(), incrementer.ToString(), (incrementer++).ToString()))).ToArray();
 
             questionnaire = CreateQuestionnaireWithOneQuestion(responsibleId: responsibleId, questionId: questionId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

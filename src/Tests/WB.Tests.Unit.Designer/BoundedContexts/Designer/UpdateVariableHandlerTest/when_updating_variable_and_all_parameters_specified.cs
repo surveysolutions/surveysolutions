@@ -23,6 +23,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateVariableHandlerT
                 expression: variableExpression,
                 userId: responsibleId
                 );
+            BecauseOf();
         }
 
         private void BecauseOf() =>            

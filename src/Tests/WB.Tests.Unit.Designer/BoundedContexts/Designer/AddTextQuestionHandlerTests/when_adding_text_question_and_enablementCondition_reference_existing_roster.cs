@@ -25,6 +25,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
 
             questionnaire.AddNumericQuestion(rosterQuestionId, rosterId, responsibleId, variableName: "age");
             questionnaire.AddNumericQuestion(existingQuestionId, chapterId, responsibleId, variableName: "maxAge");
+            BecauseOf();
         }
 
         private void BecauseOf() =>

@@ -19,18 +19,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             });
 
             expressionStateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory();
+            BecauseOf();
         }
 
         private void BecauseOf() =>
             templateModel = expressionStateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, Create.CodeGenerationSettings());
 
-        [NUnit.Framework.Test] public void should_generate_model_for_single_linked_to_list_question_with_type__nullable_decimal () =>
+        [NUnit.Framework.Test] public void should_generate_model_for_single_linked_to_list_question_with_type__nullable_decimal () 
         {
             var singleLinkedToList = GetQuestion(singleLinkedToListId);
             singleLinkedToList.TypeName.ShouldEqual("decimal?");
         }
 
-        [NUnit.Framework.Test] public void should_generate_model_for_multi_linked_to_list_question_with_type__decimal () =>
+        [NUnit.Framework.Test] public void should_generate_model_for_multi_linked_to_list_question_with_type__decimal () 
         {
             var multiLiskedToList = GetQuestion(multiLiskedToListId);
             multiLiskedToList.TypeName.ShouldEqual("decimal[]");

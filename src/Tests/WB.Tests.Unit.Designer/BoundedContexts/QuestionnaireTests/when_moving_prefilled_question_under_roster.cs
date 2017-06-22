@@ -20,6 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId, isRoster: true);
             
             questionnaire.AddTextQuestion(questionId, chapterId, responsibleId, isPreFilled : true );
+            BecauseOf();
         }
 
         private void BecauseOf() =>

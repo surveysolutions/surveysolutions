@@ -7,6 +7,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             attachmentService = Create.AttachmentService();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

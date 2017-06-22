@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.UI.Designer.Controllers;
 using It = Machine.Specifications.It;
+using NUnit.Framework;
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 {
@@ -21,6 +22,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 
             stream.Position = 0;
             postedFile = Mock.Of<HttpPostedFileBase>(pf => pf.InputStream == stream && pf.FileName == "data.csv");
+            BecauseOf();
         }
 
         private void BecauseOf() => view = controller.EditCascadingOptions(postedFile);
@@ -37,7 +39,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
         It should_return_first_option_with_parent_value_equals_2= () =>
             ((IEnumerable<Option>)view.Model).First().ParentValue.ShouldEqual("2");
 
-        Cleanup cleanup = () =>
+        [OneTimeTearDown]
+        public void cleanup()
         {
             stream.Dispose();
         }

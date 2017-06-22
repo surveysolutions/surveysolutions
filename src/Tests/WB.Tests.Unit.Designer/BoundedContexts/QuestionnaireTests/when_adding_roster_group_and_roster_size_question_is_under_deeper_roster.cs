@@ -22,6 +22,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             
             questionnaire.AddNumericQuestion(rosterSizeQuestionId, isInteger : true, parentId: anotherRosterId,
                 responsibleId:responsibleId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

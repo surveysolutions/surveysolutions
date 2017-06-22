@@ -15,7 +15,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
              questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId, isRoster: true);
              questionnaire.AddGroup( groupFromRosterId,  rosterId, responsibleId: responsibleId);
              questionnaire.AddTextQuestion(questionId, isPreFilled: true, parentId: chapterId, responsibleId:responsibleId);
-    }
+            BecauseOf();
+        }
 
     private void BecauseOf() =>
         exception = Catch.Exception(() =>

@@ -40,7 +40,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             questionnaires.SetReturnsDefault(questionnaire);
 
             service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
-            
+            BecauseOf();
+
         }
 
         private void BecauseOf() => service.Store(questionnaireId, translationId, fileStream);
@@ -48,7 +49,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         [NUnit.Framework.Test] public void should_store_all_entities_for_questionnaire_and_culture () => 
             plainStorageAccessor.Query(_ => _.All(x => x.QuestionnaireId == questionnaireId && x.TranslationId == translationId)).ShouldBeTrue();
 
-        [NUnit.Framework.Test] public void should_store_title_translation () =>
+        [NUnit.Framework.Test] public void should_store_title_translation () 
         {
             var translationInstance = plainStorageAccessor.Query(_ => _.Single(x => x.Type == TranslationType.Title));
             translationInstance.QuestionnaireEntityId.ShouldEqual(entityId);
@@ -56,7 +57,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             translationInstance.TranslationIndex.ShouldBeNull();
         }
 
-        [NUnit.Framework.Test] public void should_store_instruction_translation () =>
+        [NUnit.Framework.Test] public void should_store_instruction_translation () 
         {
             var translationInstance = plainStorageAccessor.Query(_ => _.Single(x => x.Type == TranslationType.Instruction));
             translationInstance.QuestionnaireEntityId.ShouldEqual(entityId);
@@ -64,7 +65,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             translationInstance.TranslationIndex.ShouldBeNull();
         }
         
-        [NUnit.Framework.Test] public void should_store_validation_translation () =>
+        [NUnit.Framework.Test] public void should_store_validation_translation () 
         {
             var translationInstance = plainStorageAccessor.Query(_ => _.Single(x => x.Type == TranslationType.ValidationMessage));
             translationInstance.QuestionnaireEntityId.ShouldEqual(entityId);
@@ -73,7 +74,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         }
 
 
-        [NUnit.Framework.Test] public void should_store_option_translation () =>
+        [NUnit.Framework.Test] public void should_store_option_translation () 
         {
             var translationInstance = plainStorageAccessor.Query(_ => _.First(x => x.Type == TranslationType.OptionTitle));
             translationInstance.QuestionnaireEntityId.ShouldEqual(entityId);
@@ -81,7 +82,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             translationInstance.TranslationIndex.ShouldEqual("2");
         }
 
-        [NUnit.Framework.Test] public void should_store_option_translation_for_combobox_from_second_sheet () =>
+        [NUnit.Framework.Test] public void should_store_option_translation_for_combobox_from_second_sheet () 
         {
             var translationInstance = plainStorageAccessor.Query(_ => _.Last(x => x.Type == TranslationType.OptionTitle));
             translationInstance.QuestionnaireEntityId.ShouldEqual(questionId);

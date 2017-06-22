@@ -13,6 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
 
             sourceQuestionnaire = Create.QuestionnaireDocument();
             sourceQuestionnaire.Attachments.Add(Create.Attachment(attachmentId: attachmentId, name: name, contentId: contentId));
+            BecauseOf();
         }
 
 

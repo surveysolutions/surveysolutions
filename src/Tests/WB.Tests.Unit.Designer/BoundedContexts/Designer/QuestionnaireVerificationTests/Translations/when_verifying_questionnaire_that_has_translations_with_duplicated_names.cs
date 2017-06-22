@@ -31,6 +31,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             questionnaireTranslator = Setup.QuestionnaireTranslator(questionnaire, null, translatedQuestionnaire);
 
             verifier = CreateQuestionnaireVerifier(questionnaireTranslator: questionnaireTranslator);
+            BecauseOf();
         }
 
         private void BecauseOf() => verificationMessages = verifier.Verify(Create.QuestionnaireView(questionnaire));

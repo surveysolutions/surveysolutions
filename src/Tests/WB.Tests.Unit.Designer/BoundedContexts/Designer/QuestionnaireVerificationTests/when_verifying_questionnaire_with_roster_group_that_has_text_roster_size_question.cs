@@ -20,6 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             new TextQuestion("question 1") { PublicKey = rosterSizeQuestionId, StataExportCaption = "var" },
             new Group() { PublicKey = rosterGroupId, IsRoster = true, VariableName = "a", RosterSizeQuestionId = rosterSizeQuestionId }});
             verifier = CreateQuestionnaireVerifier();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

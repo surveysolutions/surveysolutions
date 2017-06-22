@@ -16,6 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddTextQuestion(linkedSourceQuestionId,rosterId,responsibleId);
 
             questionnaire.AddMultiOptionQuestion(categoricalLinkedQuestionId,chapterId,responsibleId, options:new Option[0], linkedToQuestionId: linkedSourceQuestionId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

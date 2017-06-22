@@ -13,6 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Macros
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: ownerId);
             questionnaire.AddSharedPerson(sharedPersonId, "email@email.com", ShareType.View, ownerId);
             addMacro = Create.Command.AddMacro(questionnaireId, macroId, sharedPersonId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

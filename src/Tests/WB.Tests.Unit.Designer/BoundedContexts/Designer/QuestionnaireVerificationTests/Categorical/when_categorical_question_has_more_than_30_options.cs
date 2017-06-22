@@ -24,6 +24,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 answers: answers.ToArray()));
 
             verifier = CreateQuestionnaireVerifier();
+            BecauseOf();
         }
 
         private void BecauseOf() => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));

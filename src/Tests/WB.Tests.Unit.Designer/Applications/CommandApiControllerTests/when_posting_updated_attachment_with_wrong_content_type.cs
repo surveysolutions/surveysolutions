@@ -30,6 +30,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
             controller = CreateCommandController(
                 commandDeserializer: commandDeserializerMock.Object,
                 attachmentService: attachmentServiceMock.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

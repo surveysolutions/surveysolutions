@@ -22,6 +22,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                 .Returns(questionnaireView);
 
             factory = CreateQuestionnaireInfoFactory(questionnaireEntityDetailsReaderMock.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

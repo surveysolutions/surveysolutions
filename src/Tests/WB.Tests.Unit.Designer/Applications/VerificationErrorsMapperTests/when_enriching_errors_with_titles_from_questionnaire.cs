@@ -27,6 +27,7 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
                     Create.FixedRosterTitle(1, "Hello"), Create.FixedRosterTitle(2, "World")
                 })
             });
+            BecauseOf();
         }
 
         private void BecauseOf() =>
@@ -83,7 +84,7 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
         [NUnit.Framework.Test] public void should_return_third_error_with_same_References_count_as_input_error_has () =>
             result.ElementAt(2).Errors.First().References.Count.ShouldEqual(3);
 
-        [NUnit.Framework.Test] public void should_return_third_error_that_references_question_group_and_roster () =>
+        [NUnit.Framework.Test] public void should_return_third_error_that_references_question_group_and_roster () 
         {
             var references = result.ElementAt(2).Errors.First().References;
             references.ElementAt(0).ItemId.ShouldEqual(questionId);

@@ -19,16 +19,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup(parentGroupId,  chapterId, responsibleId: responsibleId);
             questionnaire.AddGroup(groupId, parentGroupId, responsibleId: responsibleId);
 
-            eventContext = new EventContext();
+
+            BecauseOf();
         }
 
         private void BecauseOf() => exception = Catch.Exception(() => questionnaire.MoveGroup(groupId, chapterId, 2, responsibleId));
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        }
 
         [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

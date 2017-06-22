@@ -14,6 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.LookupTables
             questionnaire.AddSharedPerson(sharedPersonId, "email@email.com", ShareType.View, ownerId);
 
             addLookupTable = Create.Command.AddLookupTable(questionnaireId, macroId, sharedPersonId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

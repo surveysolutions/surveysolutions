@@ -32,6 +32,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 FixedRosterTitles = new[] { Create.FixedRosterTitle(1, "fixed title 1")}
             });
             verifier = CreateQuestionnaireVerifier();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

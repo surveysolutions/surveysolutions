@@ -21,6 +21,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 
             stream.Position = 0;
             postedFile = Mock.Of<HttpPostedFileBase>(pf => pf.InputStream == stream && pf.FileName == "data.csv");
+            BecauseOf();
         }
 
         private void BecauseOf() => view = controller.EditOptions(postedFile);
@@ -34,7 +35,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
         [NUnit.Framework.Test] public void should_return_first_option_with_title_equals_Street_1 () =>
             ((IEnumerable<Option>)view.Model).First().Title.ShouldEqual("Street 1");
 
-        Cleanup cleanup = () =>
+        [NUnit.Framework.OneTimeTearDown]
+        public void cleanup()
         {
             stream.Dispose();
         }

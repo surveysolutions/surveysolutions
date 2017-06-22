@@ -11,6 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTest
             fileContent = $"no{_}row{_}code{_}column{_end}";
 
             lookupTableService = Create.LookupTableService();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

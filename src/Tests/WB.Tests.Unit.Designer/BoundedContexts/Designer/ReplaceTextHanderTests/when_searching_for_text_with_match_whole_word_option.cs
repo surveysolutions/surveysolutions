@@ -24,7 +24,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
             questionnaire.AddStaticTextAndMoveIfNeeded(new AddStaticText(questionnaire.Id, entityId: staticTextId1,
                 text: $"static text  {searchFor}title", responsibleId:responsibleId,
                 parentId: chapterId));
-            
+            BecauseOf();
+
         }
 
         private void BecauseOf() => matches = questionnaire.FindAllTexts(searchFor.ToLower(), false, true, false);

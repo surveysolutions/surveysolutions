@@ -21,6 +21,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultimediaQuesti
                 enablementCondition : "old condition",
                 responsibleId : responsibleId
             );
+            BecauseOf();
         }
 
         private void BecauseOf() =>

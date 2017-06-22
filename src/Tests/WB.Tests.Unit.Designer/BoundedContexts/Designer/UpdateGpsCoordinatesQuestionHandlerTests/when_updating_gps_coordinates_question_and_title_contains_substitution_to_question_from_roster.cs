@@ -29,6 +29,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
             questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
                 rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
             questionnaire.AddNumericQuestion(questionFromRosterId, rosterId, responsibleId, isInteger: true, variableName: substitutionVariableName);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

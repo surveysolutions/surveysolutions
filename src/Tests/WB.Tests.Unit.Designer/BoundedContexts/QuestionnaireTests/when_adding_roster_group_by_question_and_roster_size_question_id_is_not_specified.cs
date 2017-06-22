@@ -13,6 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             rosterSizeQuestionId = null;
 
             questionnaire = CreateQuestionnaire(responsibleId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

@@ -25,6 +25,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewFactory
                 ));
 
             factory = CreateChapterInfoViewFactory(repository: repositoryMock.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

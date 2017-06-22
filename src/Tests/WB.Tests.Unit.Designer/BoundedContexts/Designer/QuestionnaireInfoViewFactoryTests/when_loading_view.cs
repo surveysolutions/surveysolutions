@@ -18,6 +18,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
                 .Returns(CreateQuestionnaireDocument(questionnaireId, questionnaireTitle));
 
             factory = CreateQuestionnaireInfoViewFactory(repository: repositoryMock.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

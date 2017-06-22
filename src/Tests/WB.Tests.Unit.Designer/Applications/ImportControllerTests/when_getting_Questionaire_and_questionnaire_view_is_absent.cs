@@ -12,6 +12,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
         [NUnit.Framework.OneTimeSetUp] public void context () {
             request = Create.DownloadQuestionnaireRequest(Guid.NewGuid());
             importController = CreateImportController();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

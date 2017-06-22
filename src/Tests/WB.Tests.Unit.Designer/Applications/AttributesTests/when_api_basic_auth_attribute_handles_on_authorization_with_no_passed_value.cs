@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -25,6 +25,7 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
             filterContext = new HttpActionContext(controllerContext, actionDescriptor.Object);
 
             attribute = CreateApiBasicAuthAttribute();
+            BecauseOf();
         }
 
         private void BecauseOf() =>

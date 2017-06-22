@@ -21,6 +21,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireHelper
                 x.Load(Moq.It.IsAny<QuestionnaireListInputModel>()) == CreateQuestionnaireListView(user));
 
             questionnaireHelper = new UI.Designer.Code.QuestionnaireHelper(userViewFactoryMock);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

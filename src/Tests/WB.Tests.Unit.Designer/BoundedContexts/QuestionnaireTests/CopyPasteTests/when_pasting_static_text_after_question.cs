@@ -36,6 +36,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
                itemToPasteAfterId: questionToPastAfterId);
 
             command.SourceDocument = doc;
+            BecauseOf();
         }
 
         private void BecauseOf() => 

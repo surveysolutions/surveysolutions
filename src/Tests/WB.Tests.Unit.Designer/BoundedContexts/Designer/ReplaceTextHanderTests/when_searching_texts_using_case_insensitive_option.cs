@@ -21,6 +21,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 responsibleId:responsibleId, 
                 text: $"static text title with {searchFor}",
                 parentId: chapterId));
+            BecauseOf();
         }
 
         private void BecauseOf() => matches = questionnaire.FindAllTexts(searchFor.ToLower(), false, false, false);

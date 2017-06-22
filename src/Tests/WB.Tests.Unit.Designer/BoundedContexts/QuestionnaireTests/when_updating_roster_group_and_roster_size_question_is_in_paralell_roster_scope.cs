@@ -27,6 +27,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup( parallelRosterId,  chapterId, responsibleId: responsibleId,isRoster:true);
 
             questionnaire.AddGroup(groupId, parallelRosterId, responsibleId: responsibleId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

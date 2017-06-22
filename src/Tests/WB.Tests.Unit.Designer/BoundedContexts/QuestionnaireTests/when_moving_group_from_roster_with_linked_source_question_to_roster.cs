@@ -25,6 +25,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 options: new Option[0],
                 linkedToQuestionId: linkedSourceQuestionId
             );
+            BecauseOf();
         }
 
         private void BecauseOf() => questionnaire.MoveGroup(groupId: groupInsideRosterId, targetGroupId: roster2Id, responsibleId: responsibleId, targetIndex:0);

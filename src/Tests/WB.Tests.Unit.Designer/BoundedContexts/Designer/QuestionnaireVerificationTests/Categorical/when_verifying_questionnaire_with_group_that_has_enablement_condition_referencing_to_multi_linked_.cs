@@ -46,6 +46,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 => processor.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>()) == new[] { categoricalQuestionId.ToString() });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

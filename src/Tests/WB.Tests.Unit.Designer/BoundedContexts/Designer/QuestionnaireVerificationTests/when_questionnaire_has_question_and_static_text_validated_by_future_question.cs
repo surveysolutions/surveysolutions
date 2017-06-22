@@ -28,6 +28,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 Create.Question(questionId: futureQuestionId, questionType: QuestionType.Text, variable: "q2"));
 
             verifier = CreateQuestionnaireVerifier();
+            BecauseOf();
         }
 
         private void BecauseOf() => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));

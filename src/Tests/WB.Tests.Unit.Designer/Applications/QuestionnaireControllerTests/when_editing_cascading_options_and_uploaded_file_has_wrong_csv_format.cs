@@ -19,6 +19,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 
             stream.Position = 0;
             postedFile = Mock.Of<HttpPostedFileBase>(pf => pf.InputStream == stream && pf.FileName == "image.csv");
+            BecauseOf();
         }
 
         private void BecauseOf() => controller.EditCascadingOptions(postedFile);
@@ -26,7 +27,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
         [NUnit.Framework.Test] public void should_add_error_message_to_temp_data () =>
             controller.TempData[Alerts.ERROR].ShouldEqual("Only tab-separated values files are accepted");
 
-        Cleanup stuff = () => stream.Dispose();
+        [NUnit.Framework.OneTimeTearDown]
+        public void stuff() => stream.Dispose();
 
         private static QuestionnaireController controller;
         private static HttpPostedFileBase postedFile;

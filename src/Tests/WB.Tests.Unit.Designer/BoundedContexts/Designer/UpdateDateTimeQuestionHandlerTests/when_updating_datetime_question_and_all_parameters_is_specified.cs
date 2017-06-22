@@ -24,12 +24,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
                     variableName: "old_variable_name",
                     instructions: "old instructions",
                     enablementCondition: "old condition");
+            BecauseOf();
         }
 
         private void BecauseOf() => questionnaire.UpdateDateTimeQuestion(command);
 
 
-        [NUnit.Framework.Test] public void should_raise_QuestionChanged_event_with_specified_properties () =>
+        [NUnit.Framework.Test] public void should_raise_QuestionChanged_event_with_specified_properties () 
         {
             var question = questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId);
 

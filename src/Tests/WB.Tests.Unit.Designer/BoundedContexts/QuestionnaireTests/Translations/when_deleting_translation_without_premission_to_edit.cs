@@ -13,14 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Translations
             questionnaire.AddOrUpdateTranslation(Create.Command.AddOrUpdateTranslation(questionnaireId, translationId, "", ownerId));
 
             deleteTranslation = Create.Command.DeleteTranslation(questionnaireId, translationId, sharedPersonId);
-
-            eventContext = new EventContext();
-        }
-
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
+            BecauseOf();
         }
 
         private void BecauseOf() =>
@@ -39,6 +32,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Translations
         private static readonly Guid sharedPersonId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid translationId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        private static EventContext eventContext;
     }
 }

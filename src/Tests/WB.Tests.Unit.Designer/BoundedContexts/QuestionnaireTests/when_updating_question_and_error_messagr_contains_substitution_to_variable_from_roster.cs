@@ -21,16 +21,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddVariableAndMoveIfNeeded(new AddVariable(questionnaire.Id,  variableId, new VariableData(VariableType.String, variableName, "", null), responsibleId, parentId: rosterId ));
 
             questionnaire.AddTextQuestion(questionWithSubstitutionId, chapterId, responsibleId);
-            
 
-            eventContext = new EventContext();
+
+            BecauseOf();
         }
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        }
+    
 
         private void BecauseOf() => exception =
             Catch.Exception(() => questionnaire.UpdateTextQuestion(
@@ -53,7 +49,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             new[] { "illegal", "substitution", "to", variableName }.ShouldEachConformTo(x =>
                 ((QuestionnaireException) exception).Message.Contains(x));
 
-        private static EventContext eventContext;
+
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

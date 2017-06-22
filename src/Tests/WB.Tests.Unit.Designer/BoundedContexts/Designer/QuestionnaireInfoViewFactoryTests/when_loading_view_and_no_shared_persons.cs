@@ -25,6 +25,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
 
             factory = CreateQuestionnaireInfoViewFactory(repository: questionnaireInfoViewRepository,
                 accountsDocumentReader: accountDocumentRepository);
+            BecauseOf();
         }
 
         private void BecauseOf() => view = factory.Load(questionnaireId, userId);

@@ -21,6 +21,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 entityId: staticTextId,
                 text: "static text 5 title with",
                 parentId: chapterId));
+            BecauseOf();
         }
 
         private void BecauseOf() => matches = questionnaire.FindAllTexts("\\d", false, false, true);

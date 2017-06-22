@@ -27,6 +27,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
                 commandDeserializer: commandDeserializerMock.Object,
                 translationsService: translationServiceMock.Object,
                 commandService: mockOfCommandService.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

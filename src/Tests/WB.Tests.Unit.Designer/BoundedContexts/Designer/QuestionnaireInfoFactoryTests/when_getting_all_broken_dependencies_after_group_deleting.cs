@@ -42,6 +42,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             factory = CreateQuestionnaireInfoFactory(
                 questionDetailsReaderMock.Object,
                 expressionProcessor: Create.RoslynExpressionProcessor());
+            BecauseOf();
         }
 
         private void BecauseOf() =>

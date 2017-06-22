@@ -30,6 +30,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 options: new Option[0],
                 linkedToQuestionId : linkedQuestionId);
             questionnaire.AddGroup(groupId, responsibleId: responsibleId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

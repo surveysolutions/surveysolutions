@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                     questionnaireId: questionnaireId,
                     questionnaireEntityId: rosterId,
                     translationIndex: "42")
-            }
+            };
 
             QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(
                 children: new IComposite[]
@@ -51,16 +51,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             questionnaires.SetReturnsDefault(questionnaire);
 
             service = Create.TranslationsService(translationsStorage, questionnaires.Object);
+            BecauseOf();
         }
 
-        private void BecauseOf() =>
+        private void BecauseOf() 
         {
             excelFile = service.GetAsExcelFile(questionnaireId, translationId);
             workbook = SpreadsheetGear.Factory.GetWorkbookSet().Workbooks.OpenFromMemory(excelFile.ContentAsExcelFile);
             cells = workbook.Worksheets[0].Cells;
         }
 
-        [NUnit.Framework.Test] public void should_output_roster_title_translation () =>
+        [NUnit.Framework.Test] public void should_output_roster_title_translation () 
         {
             var questionTitleRow = 2;
             ((TranslationType)Enum.Parse(typeof(TranslationType), cells[questionTitleRow, translationTypeColumn].Text)).ShouldEqual(TranslationType.Title);
@@ -70,7 +71,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             cells[questionTitleRow, translactionColumn].Value?.ToString().ShouldBeNull();
         }
 
-        [NUnit.Framework.Test] public void should_output_roster_fixed_option_title_translation () =>
+        [NUnit.Framework.Test] public void should_output_roster_fixed_option_title_translation () 
         {
             var questionTitleRow = 3;
             ((TranslationType)Enum.Parse(typeof(TranslationType), cells[questionTitleRow, translationTypeColumn].Text)).ShouldEqual(TranslationType.FixedRosterTitle);

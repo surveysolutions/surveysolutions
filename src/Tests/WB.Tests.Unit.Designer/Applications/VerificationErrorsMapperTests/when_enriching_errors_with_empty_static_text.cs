@@ -14,6 +14,7 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
             mapper = CreateVerificationErrorsMapper();
             verificationMessages = CreateStaticTextVerificationError(Guid.Parse(staticTextId));
             document = CreateQuestionnaireDocumentWithStaticText(Guid.Parse(staticTextId), Guid.Parse(chapterId));
+            BecauseOf();
         }
 
         private void BecauseOf() =>

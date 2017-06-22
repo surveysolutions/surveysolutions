@@ -21,6 +21,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             
             questionnaire.AddTextQuestion(questionId, chapterId, responsibleId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

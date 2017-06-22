@@ -69,6 +69,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
                 questionnaireViewFactory: questionnaireViewFactory, 
                 questionnaireVerifier: verifierMock.Object,
                 verificationErrorsMapper: errorsMapperMock.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

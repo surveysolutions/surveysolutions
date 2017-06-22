@@ -53,6 +53,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .Returns(new string[] { underDeeperRosterLevelQuestionId.ToString() });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor.Object);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

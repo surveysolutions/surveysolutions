@@ -34,6 +34,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateCascadingCombobo
                 responsibleId : responsibleId,
                 cascadeFromQuestionId : parentQuestionId
            );
+            BecauseOf();
         }
 
         private void BecauseOf() =>

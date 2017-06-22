@@ -23,6 +23,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             questionnaire.UpdateGroup(rosterId, responsibleId, "test_title", "", rosterSizeQuestionId, "", null, false, true,
                 RosterSizeSourceType.Question, null, rosterTitleQuestionId);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

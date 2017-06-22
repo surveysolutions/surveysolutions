@@ -16,6 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
 
             questionnaire.AddMultiOptionQuestion(questionId, chapterId, responsibleId,
                 title: $"filter with {searchFor}");
+            BecauseOf();
         }
 
         private void BecauseOf() => exception = Catch.Only<QuestionnaireException>(() => 

@@ -37,6 +37,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 rosterTitleQuestionId,
                 rosterId,
                 responsibleId);
+            BecauseOf();
         }
 
 

@@ -49,6 +49,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
             );
 
             questionnaire.UpdateFilteredComboboxOptions(filteredQuestionId, responsibleId, oldOptions);
+            BecauseOf();
         }
 
         private void BecauseOf() =>

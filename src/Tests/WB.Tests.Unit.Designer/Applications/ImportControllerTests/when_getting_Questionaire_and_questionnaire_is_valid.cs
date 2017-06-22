@@ -49,6 +49,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
                 expressionProcessorGenerator: expressionProcessorGenerator,
                 serializer: serializer,
                 zipUtils: stringCompressorMock);
+            BecauseOf();
         }
 
         private void BecauseOf() =>
