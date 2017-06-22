@@ -736,9 +736,7 @@
     <Compile Include="BoundedContexts\Designer\AddStaticTextHandlerTests\when_adding_static_text_and_user_dont_have_permissions.cs" />
     <Compile Include="BoundedContexts\Designer\AddStaticTextHandlerTests\when_adding_static_text_to_chapter.cs" />
     <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_all_parameters_is_specified.cs" />
-    <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_enablementCondition_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_enablementCondition_reference_existing_roster.cs" />
-    <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_enablementCondition_reference_not_existing_roster.cs" />
     <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_it_is_prefilled_to_group_under_roster.cs" />
     <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_question_already_exists.cs" />
     <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_title_contains_substitution_to_invalid_question.cs" />
@@ -954,9 +952,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_with_incorrect_syntax_in_validation_condition.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_with_incorrect_syntax_in_enablement_condition.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_2_questions_and_1_group_having_enablement_conditions_with_incorrect_syntax_and____.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_2_questions_and_one_group_all_referencing_not_existing_question_by_var_name_in___.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_2_questions_and_one_group_all_referencing_not_existing_question_in_enablement_c___.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_2_questions_referencing_not_existing_question_by_id_in_validation_expression.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_2_rosters_inside_roster_and_second_roster_has_roster_size_question_from_first_roster.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_2_rosters_inside_roster_and_second_roster_has_roster_size_question_that_used_with__.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_3_questions_with_invalid_validation_expression_and_2_with_correct.cs" />
@@ -998,8 +993,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_inside_roster_that_has_substitutions_references_with_deeper_roster_level_and__.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_of_type_not_included_in_white_list_of_question_types.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_title_that_references_self_in_substitution.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_has_custom_validation_referencing_question_with_deeper_roster_level.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_has_custom_validation_with_unrecognized_variable_name.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_has_empty_variable_name.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_has_missing_options_value.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_featured_categorical_multi_answers_question.cs" />
@@ -1057,14 +1050,12 @@
     <Compile Include="BoundedContexts\Designer\UpdateCascadingComboboxOptionsHandlerTests\when_updating_cascading_combobox_options_and_user_dont_have_permission_to_execute_command.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateCascadingComboboxOptionsHandlerTests\when_updating_cascading_combobox_options_with_1_duplicated_option.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_all_parameters_is_specified.cs" />
-    <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_condition_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_it_does_not_exists_in_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_title_contains_substitution_to_invalid_question.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_title_contains_substitution_to_question_from_roster.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_title_contains_substitution_to_question_with_not_supported_type.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_title_contains_substitution_to_self.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_user_dont_have_permissions.cs" />
-    <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_validation_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_variable_name_contains_invalid_characters.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_variable_name_contains_keyword.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_variable_name_is_empty.cs" />
@@ -1102,7 +1093,6 @@
     <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_variable_name_start_with_digit.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateMultimediaQuestionHandlerTests\when_updating_multimedia_question_and_all_parameters_is_specified.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_and_all_parameters_is_specified.cs" />
-    <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_and_condition_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_and_it_does_not_exists_in_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_and_more_than_one_question_with_same_id_already_exists.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_and_title_contains_substitution_to_invalid_question.cs" />
@@ -1110,7 +1100,6 @@
     <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_and_title_contains_substitution_to_question_with_not_supported_type.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_and_title_contains_substitution_to_self.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_and_user_dont_have_permissions.cs" />
-    <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_and_validation_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_and_variable_name_contains_invalid_characters.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_and_variable_name_contains_keyword.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_and_variable_name_is_empty.cs" />
@@ -1135,7 +1124,6 @@
     <Compile Include="BoundedContexts\Designer\UpdateNumericQuestionHandlerTests\when_updating_numeric_question_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateNumericQuestionHandlerTests\when_updating_numeric_question_with_variable_name_roster_title.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateQrBarcodeQuestionHandlerTests\when_updating_qr_barcode_question_and_all_parameters_is_specified.cs" />
-    <Compile Include="BoundedContexts\Designer\UpdateQrBarcodeQuestionHandlerTests\when_updating_qr_barcode_question_and_condition_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateQrBarcodeQuestionHandlerTests\when_updating_qr_barcode_question_and_it_does_not_exists_in_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateQrBarcodeQuestionHandlerTests\when_updating_qr_barcode_question_and_more_than_one_question_with_same_id_already_exists.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateQrBarcodeQuestionHandlerTests\when_updating_qr_barcode_question_and_title_contains_substitution_to_invalid_question.cs" />
@@ -1156,7 +1144,6 @@
     <Compile Include="BoundedContexts\Designer\UpdateSingleOptionQuestionHandlerTests\when_updating_filtered_combobox_question_and_all_parameters_is_specified.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateSingleOptionQuestionHandlerTests\when_updating_filtered_combobox_question_that_was_cascading_combobox_and_options_are_more_then_200.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_and_all_parameters_is_specified.cs" />
-    <Compile Include="BoundedContexts\Designer\UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_and_condition_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_and_it_does_not_exists_in_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_and_more_than_one_question_with_same_id_already_exists.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_and_title_contains_substitution_to_invalid_question.cs" />
@@ -1164,7 +1151,6 @@
     <Compile Include="BoundedContexts\Designer\UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_and_title_contains_substitution_to_question_with_not_supported_type.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_and_title_contains_substitution_to_self.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_and_user_dont_have_permissions.cs" />
-    <Compile Include="BoundedContexts\Designer\UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_and_validation_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_and_variable_name_contains_invalid_characters.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_and_variable_name_contains_keyword.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_and_variable_name_is_empty.cs" />
@@ -1193,14 +1179,12 @@
     <Compile Include="BoundedContexts\Designer\UpdateStaticTextHandlerTests\when_updating_static_text_and_text_is_empty.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateStaticTextHandlerTests\when_updating_static_text_and_user_dont_have_permissions.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_all_parameters_is_specified.cs" />
-    <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_condition_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_it_does_not_exists_in_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_contains_substitution_to_invalid_question.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_contains_substitution_to_question_from_roster.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_contains_substitution_to_question_with_not_supported_type.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_contains_substitution_to_self.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_user_dont_have_permissions.cs" />
-    <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_validation_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_variable_name_contains_invalid_characters.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_variable_name_contains_keyword.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_variable_name_is_empty.cs" />
@@ -1215,7 +1199,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionnaireDocumentExtensions.cs" />
     <Compile Include="QuestionnaireExtensions.cs" />
-    <Compile Include="Services\DeskAuthenticationServiceTests\when_getting_return_url.cs" />
     <Compile Include="Services\QuestionnaireDowngradeServiceTests\when_multiple_validations_are_not_supported.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="BoundedContexts\Designer\KeywordsProviderTests\KeywordsProviderTestContext.cs" />
@@ -1227,7 +1210,9 @@
     <Compile Include="TestPlainStorage.cs" />
     <Compile Include="VerifierExtensions.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Services\DeskAuthenticationServiceTests\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslations.xlsx" />

@@ -36,7 +36,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
         [NUnit.Framework.Test] public void should_return_first_option_with_title_equals_Street_1 () =>
             ((IEnumerable<Option>)view.Model).First().Title.ShouldEqual("Street 1");
 
-        It should_return_first_option_with_parent_value_equals_2= () =>
+        [NUnit.Framework.Test]
+        public void should_return_first_option_with_parent_value_equals_2() =>
             ((IEnumerable<Option>)view.Model).First().ParentValue.ShouldEqual("2");
 
         [OneTimeTearDown]
