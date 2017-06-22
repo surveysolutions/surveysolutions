@@ -9,8 +9,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.InterviewCompilerTests
 {
     internal class when_generating_assembly_as_string_with_deep_stack : InterviewCompilerTestsContext
     {
-
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp]
+        public void context () {
             compiler = CreateRoslynCompiler();
             referencedPortableAssemblies = CreateReferencesForCompiler();
 
@@ -289,7 +289,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
                 InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),
                         
                 @__a = this.@__a,        
-                            }
+                            };
                  
             ConditionalDependencies = new Dictionary<Guid, Guid[]>(this.ConditionalDependencies);
             StructuralDependencies = new Dictionary<Guid, Guid[]>(this.StructuralDependencies);
@@ -358,14 +358,14 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
                         
             public static Dictionary<Guid, Guid[]> conditionalDependencies = new Dictionary<Guid, Guid[]>()
             {            
-                            }
+                            };
 
             public static Dictionary<Guid, Guid[]> structuralDependencies = new Dictionary<Guid, Guid[]>()
             {
                                 { Guid.Parse(""2a0c684d-e415-46d9-9f80-44062f9c5679""), new Guid[]{
                                     Guid.Parse(""bae70e5b-e198-a698-867e-16312511c8a1""),
                                 }},
-                            }
+                            };
 
             public static Dictionary<Guid, Guid[]> parentScopeMap = new Dictionary<Guid, Guid[]>
             {
@@ -375,7 +375,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
                                 {@__2a0c684de41546d99f8044062f9c5679_id, @__questionnaire_scope},
                                 //rosters
                                                         
-            }
+            };
         }    
 }";
 
