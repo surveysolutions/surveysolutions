@@ -191,10 +191,18 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
         public IMvxCommand SwitchLocatorCommand => new MvxCommand(() =>
         {
-            if (!this.MapView.LocationDisplay.IsEnabled)
-                this.MapView.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.Off;
+            //temporary catch for KP-9486
+            //esri was notified
+            try
+            {
+                if (!this.MapView.LocationDisplay.IsEnabled)
+                    this.MapView.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.Off;
 
-            this.MapView.LocationDisplay.IsEnabled = !this.MapView.LocationDisplay.IsEnabled;
+                this.MapView.LocationDisplay.IsEnabled = !this.MapView.LocationDisplay.IsEnabled;
+            }
+            catch 
+            {}
+            
         });
 
         public IMvxAsyncCommand UpdateMapsCommand => new MvxAsyncCommand(async () =>
