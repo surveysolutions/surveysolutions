@@ -12,7 +12,7 @@
 		
 		public <#=Model.ClassName#>(RosterVector rosterVector, <#= Storage.ClassName #> storage) 
 		{
-			this.storage = storage;
+			this._storage = storage;
 			this.Quest = new QuestionnaireRandom(storage.state.Properties);
 			this.RosterVector = rosterVector;
 			this.Identity = new Identity(IdOf.<#=Model.Variable#>, this.RosterVector);
@@ -121,11 +121,11 @@
 
 		private Dictionary<Guid, Func<object>> variableExpressions = new Dictionary<Guid, Func<object>>();
 
-		private readonly <#= Storage.ClassName #> storage;
+		private readonly <#= Storage.ClassName #> _storage;
 
-		private <#=typeof(IInterviewStateForExpressions).Name#> state => storage.state;
+		private <#=typeof(IInterviewStateForExpressions).Name#> _state => _storage.state;
 
-		private <#=typeof(IInterviewPropertiesForExpressions).Name#> properties => state.Properties;
+		private <#=typeof(IInterviewPropertiesForExpressions).Name#> properties => _state.Properties;
 
 		public RosterVector RosterVector { get; private set; }
 
@@ -133,9 +133,9 @@
 
 		public int @rowcode => this.RosterVector[this.RosterVector.Length - 1];
 
-		public int @rowindex => state.GetRosterIndex(Identity);
+		public int @rowindex => _state.GetRosterIndex(Identity);
 
-		public string @rowname => state.GetRosterTitle(Identity);
+		public string @rowname => _state.GetRosterTitle(Identity);
 		
 		public int RowCode => @rowcode;
 
@@ -150,7 +150,7 @@
 	foreach (var question in Model.Questions) 
     {
 #>            
-		public <#=question.TypeName#> <#=question.Variable#> => state.GetAnswer<<#=question.TypeName#>>(IdOf.<#=question.Variable#>, RosterVector.Take(<#=question.RosterScope.Length#>));
+		public <#=question.TypeName#> <#=question.Variable#> => _state.GetAnswer<<#=question.TypeName#>>(IdOf.<#=question.Variable#>, RosterVector.Take(<#=question.RosterScope.Length#>));
 <# 
 	}
 #>
@@ -158,7 +158,7 @@
 	foreach (var variable in Model.Variables) 
     {
 #>            
-		public <#=variable.TypeName#> <#=variable.Variable#> => state.GetVariable<<#=variable.TypeName#>>(IdOf.<#=variable.Variable#>, RosterVector.Take(<#=variable.RosterScope.Length#>));
+		public <#=variable.TypeName#> <#=variable.Variable#> => _state.GetVariable<<#=variable.TypeName#>>(IdOf.<#=variable.Variable#>, RosterVector.Take(<#=variable.RosterScope.Length#>));
 <# 
 	}
 #>
@@ -166,7 +166,7 @@
 	foreach (var roster in Model.Rosters) 
     {
 #>            
-		public RostersCollection<<#=roster.ClassName#>> <#=roster.Variable#> => storage.GetLevels<<#=roster.ClassName#>>(IdOf.<#=roster.Variable#>, <#=roster.RosterScope.Length == 1? "null" : "Identity"#>);
+		public RostersCollection<<#=roster.ClassName#>> <#=roster.Variable#> => _storage.GetLevels<<#=roster.ClassName#>>(IdOf.<#=roster.Variable#>, <#=roster.RosterScope.Length == 1? "null" : "Identity"#>);
 <# 
 	}
 #>

@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using Machine.Specifications;
 using Moq;
 using MvvmCross.Core.ViewModels;
@@ -10,6 +11,7 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.CensusQuestionnaireDashboardItemViewModelTests
@@ -24,6 +26,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.CensusQuestionnai
                 commandService: mockOfCommandService.Object,
                 viewModelNavigationService: mockOfViewModelNavigationService.Object,
                 principal: principal);
+
+            viewModel.Init(Create.Entity.QuestionnaireView(Create.Entity.QuestionnaireIdentity(Guid.NewGuid(), 1)));
         };
 
         Because of = () => viewModel.CreateNewInterviewCommand.Execute();
@@ -33,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.CensusQuestionnai
 
         It should_execute_create_intervew_on_client_command = () =>
             mockOfCommandService.Verify(x =>
-                x.ExecuteAsync(Moq.It.IsAny<CreateInterviewOnClientCommand>(), Moq.It.IsAny<string>(),
+                x.ExecuteAsync(Moq.It.IsAny<CreateInterview>(), Moq.It.IsAny<string>(),
                     Moq.It.IsAny<CancellationToken>()), Times.Once);
 
         It should_navigate_to_prefilled_questions_view_model = () =>

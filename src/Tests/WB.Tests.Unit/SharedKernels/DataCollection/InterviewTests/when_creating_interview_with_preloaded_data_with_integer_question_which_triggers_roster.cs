@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            interview.CreateInterviewWithPreloadedData(new CreateInterviewWithPreloadedData(interview.EventSourceId, userId, questionnaireId, 1, preloadedDataDto.Answers, answersTime, supervisorId, null, null, null));
+            interview.CreateInterview(Create.Command.CreateInterview(interview.EventSourceId, userId, questionnaireId, 1, preloadedDataDto.Answers, answersTime, supervisorId, null, null, null));
 
         Cleanup stuff = () =>
         {
@@ -56,8 +56,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext = null;
         };
 
-        It should_raise_InterviewFromPreloadedDataCreated_event = () =>
-            eventContext.ShouldContainEvent<InterviewFromPreloadedDataCreated>();
+        It should_raise_InterviewCreated_event = () =>
+            eventContext.ShouldContainEvent<InterviewCreated>();
 
         It should_raise_NumericIntegerQuestionAnswered_event = () =>
             eventContext.ShouldContainEvent<NumericIntegerQuestionAnswered>(@event
