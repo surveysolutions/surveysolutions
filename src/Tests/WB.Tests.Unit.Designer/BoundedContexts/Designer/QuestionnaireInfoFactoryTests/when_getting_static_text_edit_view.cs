@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
 {
     internal class when_getting_static_text_edit_view : QuestionnaireInfoFactoryTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireEntityDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
             questionnaireView = CreateQuestionnaireDocument();
             questionnaireEntityDetailsReaderMock
@@ -23,18 +22,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                 .Returns(questionnaireView);
 
             factory = CreateQuestionnaireInfoFactory(questionnaireEntityDetailsReaderMock.Object);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             result = factory.GetStaticTextEditView(questionnaireId, entityId);
 
-        It should_return_not_null_view = () =>
+        [NUnit.Framework.Test] public void should_return_not_null_view () =>
             result.ShouldNotBeNull();
 
-        It should_return_question_with_Id_equals_questionId = () =>
+        [NUnit.Framework.Test] public void should_return_question_with_Id_equals_questionId () =>
             result.Id.ShouldEqual(entityId);
 
-        It should_return_question_equals_g3 = () =>
+        [NUnit.Framework.Test] public void should_return_question_equals_g3 () =>
             result.Text.ShouldEqual(GetStaticText(entityId).Text);
 
         private static IStaticText GetStaticText(Guid entityId)

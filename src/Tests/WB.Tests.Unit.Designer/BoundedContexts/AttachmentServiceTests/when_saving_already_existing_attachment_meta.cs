@@ -10,24 +10,23 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
 {
     internal class when_saving_already_existing_attachment_meta : AttachmentServiceTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             attachmentMetaStorage.Setup(x => x.GetById(attachmentId)).Returns(expectedAttachmentMeta);
 
             attachmentService = Create.AttachmentService(attachmentMetaStorage: attachmentMetaStorage.Object);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             attachmentService.SaveMeta(attachmentId, questionnaireId, attachmentContentId, fileName);
 
-        It should_save_meta_storage = () =>
+        [NUnit.Framework.Test] public void should_save_meta_storage () =>
             attachmentMetaStorage.Verify(x => x.Store(expectedAttachmentMeta, attachmentId), Times.Once);
 
-        It should_meta_have_updated_properties = () =>
+        [NUnit.Framework.Test] public void should_meta_have_updated_properties () =>
         {
             expectedAttachmentMeta.ContentId.ShouldEqual(attachmentContentId);
             expectedAttachmentMeta.FileName.ShouldEqual(fileName);
-        };
+        }
 
         private static AttachmentService attachmentService;
         
@@ -41,7 +40,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
             FileName = "myfile.jpg",
             QuestionnaireId = Guid.Parse("33333333333333333333333333333333"),
             ContentId = "old content id"
-        };
+        }
         private static readonly Mock<IPlainStorageAccessor<AttachmentMeta>> attachmentMetaStorage = new Mock<IPlainStorageAccessor<AttachmentMeta>>();
     }
 }

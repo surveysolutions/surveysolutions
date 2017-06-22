@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -10,15 +10,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_questionnaire_has_no_gps_question : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(Create.Question(questionType: QuestionType.DateTime));
             verifier = CreateQuestionnaireVerifier();
-        };
+        }
 
-        Because of = () => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
+        private void BecauseOf() => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
-        It should_return_WB0211_warning = () => errors.ShouldContainWarning("WB0211");
+        [NUnit.Framework.Test] public void should_return_WB0211_warning () => errors.ShouldContainWarning("WB0211");
 
         static QuestionnaireDocument questionnaire;
         static QuestionnaireVerifier verifier;

@@ -15,8 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
     [Ignore("reference validation is turned off")]
     internal class when_adding_text_question_and_enablementCondition_reference_not_existing_roster : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
                 => processor.GetIdentifiersUsedInExpression("absentRoster.Max(x => x.age) > maxAge") == new[] { "absentRoster", "age", "maxAge" });
 
@@ -28,9 +27,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
             questionnaire.AddNumericQuestion(rosterQuestionId, parentId: rosterId,responsibleId:responsibleId, variableName:"age");
             
             questionnaire.AddNumericQuestion(existingQuestionId, parentId: chapterId, responsibleId:responsibleId, variableName: "maxAge");
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.AddTextQuestion(
                     questionId: questionId,
@@ -47,10 +46,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
                     mask: null,
                     responsibleId: responsibleId));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__not__valid__expression__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__not__valid__expression__ () =>
             new[] { "not", "valid", "expression", "absentroster", "question or roster" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 

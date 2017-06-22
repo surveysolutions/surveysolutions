@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Reflection;
 using Machine.Specifications;
@@ -10,8 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.InterviewCompilerTests
 {
     internal class when_loading_assembly_from_file : InterviewCompilerTestsContext
     {
-        private Establish context = () =>
-        {
+        private [NUnit.Framework.OneTimeSetUp] public void context () {
             compiler = CreateRoslynCompiler();
             emitResult = compiler.GenerateAssemblyAsString(id, testClass, new string[] { }, out resultAssembly);
 
@@ -25,19 +24,19 @@ namespace WB.Core.BoundedContexts.Designer.Tests.InterviewCompilerTests
                 Type calculator = compiledAssembly.GetType("InterviewEvaluator");
                 evaluator = Activator.CreateInstance(calculator) as IInterviewEvaluator;
             }
-        };
+        }
 
-        private Because of = () =>
+        private private void BecauseOf() =>
             evaluationResult = evaluator.Test();
 
-        private It should_result_succeded = () =>
+        private [NUnit.Framework.Test] public void should_result_succeded () =>
             evaluationResult.ShouldEqual(42);
 
         Cleanup stuff = () =>
         {
             if (File.Exists(filePath))
                 File.Delete(filePath);
-        };
+        }
 
         private static IDynamicCompiler compiler;
         private static Guid id = Guid.Parse("11111111111111111111111111111111");

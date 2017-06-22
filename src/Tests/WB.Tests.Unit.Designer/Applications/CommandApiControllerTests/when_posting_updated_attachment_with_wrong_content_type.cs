@@ -15,8 +15,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
 {
     internal class when_posting_updated_attachment_with_wrong_content_type : CommandApiControllerTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var updateAttachmentCommand = Create.Command.AddOrUpdateAttachment(questionnaireId, attachmentId, attachmentContentId, responsibleId, name);
 
             attachmentServiceMock.Setup(x => x.CreateAttachmentContentId(fileBytes)).Returns(attachmentContentId);
@@ -31,12 +30,12 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
             controller = CreateCommandController(
                 commandDeserializer: commandDeserializerMock.Object,
                 attachmentService: attachmentServiceMock.Object);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             message = controller.UpdateAttachment(new CommandController.AttachmentModel { File = new HttpFile { Buffer = fileBytes, FileName = fileName, MediaType = contentType }, Command = serializedUpdateAttachmentCommand });
 
-        It should_return_message_with_NotAcceptable_code = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_NotAcceptable_code () =>
             message.StatusCode.ShouldEqual(HttpStatusCode.NotAcceptable);
         
         private static CommandController controller;

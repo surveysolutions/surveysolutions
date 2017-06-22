@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
 {
     internal class when_loading_view_and_no_shared_persons : QuestionnaireInfoViewFactoryContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireDocument = CreateQuestionnaireDocument(questionnaireId, questionnaireTitle);
             questionnaireDocument.CreatedBy = userId;
 
@@ -26,15 +25,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
 
             factory = CreateQuestionnaireInfoViewFactory(repository: questionnaireInfoViewRepository,
                 accountsDocumentReader: accountDocumentRepository);
-        };
+        }
 
-        Because of = () => view = factory.Load(questionnaireId, userId);
+        private void BecauseOf() => view = factory.Load(questionnaireId, userId);
 
-        It should_be_only_owner_in_shared_persons_list = () =>
+        [NUnit.Framework.Test] public void should_be_only_owner_in_shared_persons_list () =>
         {
             view.SharedPersons.Count.ShouldEqual(1);
             view.SharedPersons[0].Email.ShouldEqual(userEmail);
-        };
+        }
 
         private static QuestionnaireInfoView view;
         private static QuestionnaireInfoViewFactory factory;

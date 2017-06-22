@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_option_filter_using_own_variable_name : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
-        {
+        private [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = Create.QuestionnaireDocument(children: new IComposite[]
             {
                 Create.Chapter(children: new IComposite[]
@@ -35,15 +34,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             );
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
                 verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_not_return_contain_error_WB0056 = () =>
+        [NUnit.Framework.Test] public void should_not_return_contain_error_WB0056 () =>
                 verificationMessages.ShouldNotContainError("WB0056");
 
-        It should_not_return_message_with_level_general = () =>
+        [NUnit.Framework.Test] public void should_not_return_message_with_level_general () =>
                 verificationMessages.GetError("WB0056").ShouldBeNull();
         
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

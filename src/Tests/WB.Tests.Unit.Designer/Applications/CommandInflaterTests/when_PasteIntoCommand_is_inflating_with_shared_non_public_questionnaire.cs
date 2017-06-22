@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
@@ -16,8 +16,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
 {
     internal class when_PasteIntoCommand_is_inflating_with_shared_non_public_questionnaire_but_shared : CommandInflaterTestsContext
     {
-        private Establish context = () =>
-        {
+        private [NUnit.Framework.OneTimeSetUp] public void context () {
             var membershipUserService = Mock.Of<IMembershipUserService>(
                 _ => _.WebUser == Mock.Of<IMembershipWebUser>(
                     u => u.UserId == actionUserId && u.MembershipUser.Email == actionUserEmail));
@@ -34,15 +33,15 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
             command = new PasteInto(questionnaireId, entityId, questionnaireId, pasteAfterId, entityId, actionUserId);
 
             commandInflater = CreateCommandInflater(membershipUserService, documentStorage, listStorage);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             commandInflater.PrepareDeserializedCommandForExecution(command);
 
-        It should_not_be_null = () =>
+        [NUnit.Framework.Test] public void should_not_be_null () =>
            command.SourceDocument.ShouldNotBeNull();
 
-        It should_questionnarie_id_as_provided = () =>
+        [NUnit.Framework.Test] public void should_questionnarie_id_as_provided () =>
             command.SourceDocument.PublicKey.ShouldEqual(questionnaireId);
 
         private static CommandInflater commandInflater;

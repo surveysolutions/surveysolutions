@@ -16,8 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     [Ignore("reference validation is turned off")]
     internal class when_verifying_questionnaire_with_question_that_has_custom_validation_with_unrecognized_variable_name : QuestionnaireVerifierTestsContext
     {
-       Establish context = () =>
-        {
+       [NUnit.Framework.OneTimeSetUp] public void context () {
             questionWithCustomValidation = Guid.Parse("10000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument(new SingleQuestion()
             {
@@ -34,24 +33,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .Returns(new string[] { UnrecognizableVariableName });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor.Object);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_1_message = () =>
+        [NUnit.Framework.Test] public void should_return_1_message () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_message_with_code__WB0020 = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_code__WB0020 () =>
             verificationMessages.Single().Code.ShouldEqual("WB0004");
 
-        It should_return_message_with_1_references = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_1_references () =>
             verificationMessages.Single().References.Count().ShouldEqual(1);
 
-        It should_return_first_message_reference_with_type_Question = () =>
+        [NUnit.Framework.Test] public void should_return_first_message_reference_with_type_Question () =>
             verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_first_message_reference_with_id_of_questionWithCustomValidation = () =>
+        [NUnit.Framework.Test] public void should_return_first_message_reference_with_id_of_questionWithCustomValidation () =>
             verificationMessages.Single().References.First().Id.ShouldEqual(questionWithCustomValidation);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

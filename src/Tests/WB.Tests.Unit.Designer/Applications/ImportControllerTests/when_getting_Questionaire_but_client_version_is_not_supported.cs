@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Web.Http;
 using Machine.Specifications;
@@ -16,8 +16,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
 {
     internal class when_getting_Questionaire_but_client_version_is_not_supported : ImportControllerTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             request = Create.DownloadQuestionnaireRequest(questionnaireId);
 
             var membershipUserService =
@@ -33,19 +32,19 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
             importController = CreateImportController(membershipUserService: membershipUserService,
                 questionnaireViewFactory: questionnaireViewFactory,
                 engineVersionService: expressionsEngineVersionService);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Only<HttpResponseException>(() =>
                 importController.Questionnaire(request));
 
-        It should_throw_HttpResponseException = () =>
+        [NUnit.Framework.Test] public void should_throw_HttpResponseException () =>
             exception.ShouldNotBeNull();
 
-        It should_throw_HttpResponseException_with_StatusCode_UpgradeRequired = () =>
+        [NUnit.Framework.Test] public void should_throw_HttpResponseException_with_StatusCode_UpgradeRequired () =>
             exception.Response.StatusCode.ShouldEqual(HttpStatusCode.UpgradeRequired);
 
-        It should_throw_HttpResponseException_with_explanation_in_ReasonPhrase = () =>
+        [NUnit.Framework.Test] public void should_throw_HttpResponseException_with_explanation_in_ReasonPhrase () =>
             exception.Response.ReasonPhrase.ShouldContain("You have an obsolete version of the Headquarters application. Please contact support@mysurvey.solutions to request an update.");
 
         private static ImportV2Controller importController;

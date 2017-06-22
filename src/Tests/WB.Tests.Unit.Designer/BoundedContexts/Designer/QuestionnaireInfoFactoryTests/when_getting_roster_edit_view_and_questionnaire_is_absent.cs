@@ -12,16 +12,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
 {
     internal class when_getting_roster_edit_view_and_questionnaire_is_absent : QuestionnaireInfoFactoryTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
             factory = CreateQuestionnaireInfoFactory(questionDetailsReaderMock.Object);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             result = factory.GetRosterEditView(questionnaireId, rosterId);
 
-        It should_return_null = () =>
+        [NUnit.Framework.Test] public void should_return_null () =>
             result.ShouldBeNull();
 
         private static QuestionnaireInfoFactory factory;

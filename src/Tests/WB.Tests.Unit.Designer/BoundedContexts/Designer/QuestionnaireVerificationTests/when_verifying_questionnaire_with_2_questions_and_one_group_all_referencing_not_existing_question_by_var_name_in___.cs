@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -17,8 +17,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     internal class when_verifying_questionnaire_with_2_questions_and_one_group_all_referencing_not_existing_question_by_var_name_in_enablement_condition :
             QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
-        {
+        private [NUnit.Framework.OneTimeSetUp] public void context () {
             const string EnablementConditionWithNotExistingQuestion = "[99999999999999999999999999999999] == 2";
 
             firstIncorrectQuestionId = Guid.Parse("11111111111111111111111111111111");
@@ -50,33 +49,33 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                         new[] { "notExistingVariableName" });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor: expressionProcessor);
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_3_messages = () =>
+        [NUnit.Framework.Test] public void should_return_3_messages () =>
             verificationMessages.Count().ShouldEqual(3);
 
-        It should_return_messages_each_with_code__WB0005__ = () =>
+        [NUnit.Framework.Test] public void should_return_messages_each_with_code__WB0005__ () =>
             verificationMessages.ShouldEachConformTo(error
                 => error.Code == "WB0005");
 
-        It should_return_messages_each_having_single_reference = () =>
+        [NUnit.Framework.Test] public void should_return_messages_each_having_single_reference () =>
             verificationMessages.ShouldEachConformTo(error
                 => error.References.Count() == 1);
 
-        It should_return_message_referencing_first_incorrect_question = () =>
+        [NUnit.Framework.Test] public void should_return_message_referencing_first_incorrect_question () =>
             verificationMessages.ShouldContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Question
                     && error.References.Single().Id == firstIncorrectQuestionId);
 
-        It should_return_message_referencing_second_incorrect_question = () =>
+        [NUnit.Framework.Test] public void should_return_message_referencing_second_incorrect_question () =>
             verificationMessages.ShouldContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Question
                     && error.References.Single().Id == secondIncorrectQuestionId);
 
-        It should_return_message_referencing_incorrect_group = () =>
+        [NUnit.Framework.Test] public void should_return_message_referencing_incorrect_group () =>
             verificationMessages.ShouldContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Group
                     && error.References.Single().Id == incorrectGroupId);

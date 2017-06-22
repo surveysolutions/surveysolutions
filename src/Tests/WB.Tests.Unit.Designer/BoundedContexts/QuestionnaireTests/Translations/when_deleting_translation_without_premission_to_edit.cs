@@ -8,29 +8,28 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Translations
 {
     internal class when_deleting_translation_without_premission_to_edit : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: ownerId);
             questionnaire.AddOrUpdateTranslation(Create.Command.AddOrUpdateTranslation(questionnaireId, translationId, "", ownerId));
 
             deleteTranslation = Create.Command.DeleteTranslation(questionnaireId, translationId, sharedPersonId);
 
             eventContext = new EventContext();
-        };
+        }
 
         Cleanup stuff = () =>
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() => questionnaire.DeleteTranslation(deleteTranslation));
 
-        It should_throw_questionnaire_exception = () =>
+        [NUnit.Framework.Test] public void should_throw_questionnaire_exception () =>
             exception.ShouldBeOfExactType(typeof(QuestionnaireException));
 
-        It should_throw_exception_with_type_DoesNotHavePermissionsForEdit = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_type_DoesNotHavePermissionsForEdit () =>
             ((QuestionnaireException)exception).ErrorType.ShouldEqual(DomainExceptionType.DoesNotHavePermissionsForEdit);
 
         private static Exception exception;
