@@ -200,8 +200,10 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
                 this.MapView.LocationDisplay.IsEnabled = !this.MapView.LocationDisplay.IsEnabled;
             }
-            catch 
-            {}
+            catch (ArgumentException)
+            {
+                
+            }
             
         });
 
