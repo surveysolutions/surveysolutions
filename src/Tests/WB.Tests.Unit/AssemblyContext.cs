@@ -21,6 +21,8 @@ using WB.Infrastructure.Native.Fetching;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Tests.Abc;
 
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("DynamicProxyGenAssembly2")]
+
 namespace WB.Tests.Unit
 {
     [SetUpFixture]
