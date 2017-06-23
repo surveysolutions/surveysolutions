@@ -60,8 +60,10 @@ try {
 	
 	CopyCapi -Project $ProjectHeadquarters -source $ExtPackageName -cleanUp $true | %{ if (-not $_) { Exit } }
 
-	#remove all leftovers after previous build
-	CleanBinAndObjFolders  | %{ if (-not $_) { Exit } }
+	#remove leftovers after previous build
+	
+	CleanFolders 'bin' | %{ if (-not $_) { Exit } }
+    CleanFolders 'obj' | %{ if (-not $_) { Exit } }
 	
 	$PackageName = 'WBCapi.apk'
 		. "$scriptFolder\build-android-package.ps1" `
