@@ -42,7 +42,6 @@ try {
 		Exit 
 	}}
 	
-	BuildWebPackage $ProjectDesigner $BuildConfiguration | %{ if (-not $_) { Exit } }
 
 	RunConfigTransform $ProjectHeadquarters $BuildConfiguration	
 	
@@ -80,6 +79,8 @@ try {
 	CopyCapi -Project $ProjectHeadquarters -source $PackageName -cleanUp $false | %{ if (-not $_) { Exit } }
 	
 	BuildWebPackage $ProjectHeadquarters $BuildConfiguration | %{ if (-not $_) { Exit } }
+	
+	BuildWebPackage $ProjectDesigner $BuildConfiguration | %{ if (-not $_) { Exit } }
 	
 	$artifactsFolder = (Get-Location).Path + "\Artifacts"
 	If (Test-Path "$artifactsFolder"){
