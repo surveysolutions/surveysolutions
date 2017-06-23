@@ -13,6 +13,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public class CreateNewViewModel : ListViewModel<IDashboardItem>
     {
+        public override int ItemsCount => this.UiItems.Count(
+            item => item is CensusQuestionnaireDashboardItemViewModel || item is AssignmentDashboardItemViewModel);
+
         public override GroupStatus InterviewStatus => GroupStatus.Disabled;
 
         private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
@@ -52,9 +55,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 : new List<IDashboardItem>(assignments.Count);
 
             uiItems.AddRange(assignments);
-
-            Items = assignments;
-            UiItems = new MvxObservableCollection<IDashboardItem>(uiItems);
+            
+            UiItems.ReplaceWith(uiItems);
 
             dashboardViewModel.IsInProgress = false;
         }
