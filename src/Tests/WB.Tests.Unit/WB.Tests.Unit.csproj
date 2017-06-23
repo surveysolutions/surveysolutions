@@ -1722,6 +1722,7 @@
     </None>
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Interview.Translations.Tests.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StatefulInterview.Synchronization.Tests.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StatefullInterview.InvalidQuestions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
