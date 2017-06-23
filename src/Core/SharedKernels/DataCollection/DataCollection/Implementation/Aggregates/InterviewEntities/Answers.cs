@@ -5,6 +5,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers
@@ -15,7 +16,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public AbstractAnswer Answer { get; set; }
     }
 
-    public abstract class AbstractAnswer { }
+    public abstract class AbstractAnswer
+    {
+        public abstract void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants);
+    }
 
     [DebuggerDisplay("{ToString()}")]
     public class TextAnswer : AbstractAnswer
@@ -33,6 +37,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public static TextAnswer FromString(string value) => value != null ? new TextAnswer(value.Trim()) : null;
 
         public override string ToString() => Value;
+
+        public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
+        {
+            questionInvariants.RequireTextPreloadValueAllowed();
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -49,6 +58,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public static NumericIntegerAnswer FromInt(int value) => new NumericIntegerAnswer(value);
 
         public override string ToString() => Value.ToString();
+
+        public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
+        {
+            questionInvariants.RequireNumericIntegerPreloadValueAllowed(this.Value);
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -67,6 +81,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public static NumericRealAnswer FromDecimal(decimal value) => new NumericRealAnswer((double) value);
 
         public override string ToString() => Value.ToString();
+
+        public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
+        {
+            questionInvariants.RequireNumericRealPreloadValueAllowed();
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -84,6 +103,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public static DateTimeAnswer FromDateTime(DateTime value) => new DateTimeAnswer(value);
 
         public override string ToString() => Value.ToString("yyyy-MM-ddTHH:mm:ss");
+
+        public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
+        {
+            questionInvariants.RequireDateTimePreloadValueAllowed();
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -101,6 +125,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public static CategoricalFixedSingleOptionAnswer FromDecimal(decimal selectedValue) => new CategoricalFixedSingleOptionAnswer((int) selectedValue);
 
         public override string ToString() => SelectedValue.ToString();
+
+        public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
+        {
+            questionInvariants.RequireFixedSingleOptionPreloadValueAllowed(this.SelectedValue);
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -126,6 +155,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             => checkedValues == null || !checkedValues.Any() ? null : new CategoricalFixedMultiOptionAnswer(checkedValues.Select(value => (int) value));
 
         public override string ToString() => string.Join(", ", CheckedValues);
+
+        public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
+        {
+            questionInvariants.RequireFixedMultipleOptionsPreloadValueAllowed(this.CheckedValues);
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -144,6 +178,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             => selectedValue == null ? null : new CategoricalLinkedSingleOptionAnswer(selectedValue);
 
         public override string ToString() => SelectedValue.ToString();
+
+        public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
+        {
+            
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -164,6 +203,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public RosterVector[] ToRosterVectorArray() => this.CheckedValues.ToArray();
 
         public override string ToString() => string.Join(", ", CheckedValues);
+
+        public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
+        {
+
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -187,6 +231,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 tupleArray.Select(tuple => new TextListAnswerRow(Convert.ToInt32(tuple.Item1), tuple.Item2.Trim())));
         
         public override string ToString() => string.Join(", ", Rows.Select(x => x.Text));
+
+
+        public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
+        {
+            questionInvariants.RequireTextListPreloadValueAllowed(this.ToTupleArray());
+        }
     }
 
    
@@ -207,8 +257,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public GeoLocation ToGeoLocation()
             => new GeoLocation(Value.Latitude, Value.Longitude, Value.Accuracy, Value.Altitude);
         
-
         public override string ToString() => Value.ToString();
+
+        public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
+        {
+            questionInvariants.RequireGpsCoordinatesPreloadValueAllowed();
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -226,6 +280,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public static QRBarcodeAnswer FromString(string decodedText) => decodedText != null ? new QRBarcodeAnswer(decodedText) : null;
 
         public override string ToString() => DecodedText;
+
+        public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
+        {
+            questionInvariants.RequireQRBarcodePreloadValueAllowed();
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -243,6 +302,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public static MultimediaAnswer FromString(string fileName) => fileName != null ? new MultimediaAnswer(fileName) : null;
 
         public override string ToString() => FileName;
+
+        public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
+        {
+        }
     }
     
     [DebuggerDisplay("{ToString()}")]
@@ -260,6 +323,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public static AreaAnswer FromArea(Area area) => area!= null ? new AreaAnswer(area) : null;
 
         public override string ToString() => Value.ToString();
+
+        public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
+        {
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -295,5 +362,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 this.CheckedOptions.Where(x => x.No).Select(x => (decimal) x.Value).ToArray());
 
         public override string ToString() => string.Join(", ", CheckedOptions);
+
+        public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
+        {
+            questionInvariants.RequireYesNoPreloadValueAllowed(this);
+        }
     }
 }

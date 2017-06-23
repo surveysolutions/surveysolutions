@@ -5,9 +5,9 @@ using WB.UI.Headquarters.Controllers;
 
 namespace WB.UI.Headquarters.Services
 {
-    public class InterviewImportStatus
+    public class AssignmentImportStatus
     {
-        public InterviewImportStatus()
+        public AssignmentImportStatus()
         {
             this.State = new InterviewImportState { Errors = new List<InterviewImportError>() };
         }

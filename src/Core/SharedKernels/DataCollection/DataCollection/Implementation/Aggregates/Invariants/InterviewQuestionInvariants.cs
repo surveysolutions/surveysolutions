@@ -15,7 +15,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants
 {
-    internal class InterviewQuestionInvariants
+    public class InterviewQuestionInvariants
     {
         private IQuestionOptionsRepository QuestionOptionsRepository => ServiceLocator.Current.GetInstance<IQuestionOptionsRepository>();
 

@@ -1412,20 +1412,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Select(x => x.Answers)
                 .ToArray();
 
-            var noAnswersOnQuestionnaireLevel = !answersGroupedByLevels.Any(x => x.FirstOrDefault()?.Identity.RosterVector.Length == 0);
+            var noAnswersOnQuestionnaireLevel = answersGroupedByLevels.All(x => x.FirstOrDefault()?.Identity.RosterVector.Length != 0);
             if (noAnswersOnQuestionnaireLevel)
                 changedInterviewTree.ActualizeTree();
 
             foreach (var answersInLevel in answersGroupedByLevels)
             {
-                this.ValidatePreloadValues(changedInterviewTree, questionnaire, answersInLevel);
-
                 foreach (InterviewAnswer answer in answersInLevel)
                 {
+                    answer.Answer.ValidateAsPreloaded(new InterviewQuestionInvariants(answer.Identity, questionnaire, this.tree));
                     var interviewTreeQuestion = changedInterviewTree.GetQuestion(answer.Identity);
                     // answers were not parsed correctly
                     if (interviewTreeQuestion == null)
                         continue;
+
                     interviewTreeQuestion.SetAnswer(answer.Answer);
 
                     if (commandAssignmentId.HasValue && questionnaire.IsPrefilled(answer.Identity.Id))
@@ -2176,69 +2176,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             => new ChangedVariable(variable.ChangedNode.Identity, variable.ChangedNode.Value);
 
         #endregion
-
-        private void ValidatePreloadValues(InterviewTree tree, IQuestionnaire questionnaire, List<InterviewAnswer> answers)
-        {
-            foreach (var interviewAnswer in answers)
-            {
-                Guid questionId = interviewAnswer.Identity.Id;
-                AbstractAnswer answer = interviewAnswer.Answer;
-
-                var questionIdentity = interviewAnswer.Identity;
-
-                QuestionType questionType = questionnaire.GetQuestionType(questionId);
-
-                var questionInvariants = new InterviewQuestionInvariants(questionIdentity, questionnaire, tree);
-
-                switch (questionType)
-                {
-                    case QuestionType.Text:
-                        questionInvariants.RequireTextPreloadValueAllowed();
-                        break;
-
-                    case QuestionType.Numeric:
-                        if (questionnaire.IsQuestionInteger(questionId))
-                            questionInvariants.RequireNumericIntegerPreloadValueAllowed(((NumericIntegerAnswer)answer).Value);
-                        else
-                            questionInvariants.RequireNumericRealPreloadValueAllowed();
-                        break;
-
-                    case QuestionType.DateTime:
-                        questionInvariants.RequireDateTimePreloadValueAllowed();
-                        break;
-
-                    case QuestionType.SingleOption:
-                        questionInvariants.RequireFixedSingleOptionPreloadValueAllowed(((CategoricalFixedSingleOptionAnswer)answer).SelectedValue);
-                        break;
-
-                    case QuestionType.MultyOption:
-                        if (questionnaire.IsQuestionYesNo(questionId))
-                            questionInvariants.RequireYesNoPreloadValueAllowed((YesNoAnswer)answer);
-                        else
-                            questionInvariants.RequireFixedMultipleOptionsPreloadValueAllowed(((CategoricalFixedMultiOptionAnswer)answer).CheckedValues);
-                        break;
-
-                    case QuestionType.QRBarcode:
-                        questionInvariants.RequireQRBarcodePreloadValueAllowed();
-                        break;
-
-                    case QuestionType.GpsCoordinates:
-                        questionInvariants.RequireGpsCoordinatesPreloadValueAllowed();
-                        break;
-
-                    case QuestionType.TextList:
-                        questionInvariants.RequireTextListPreloadValueAllowed(((TextListAnswer)answer).ToTupleArray());
-                        break;
-
-                    case QuestionType.Area:
-                        break;
-
-                    default:
-                        throw new InterviewException(
-                            $"Question {questionId} has type {questionType} which is not supported as initial identifying question. InterviewId: {this.EventSourceId}");
-                }
-            }
-        }
 
         private static AnswerComment ToAnswerComment(CommentSynchronizationDto answerComment,
             AnsweredQuestionSynchronizationDto answerDto)
