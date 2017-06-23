@@ -8,6 +8,7 @@ using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 using MvvmCross.Core.ViewModels;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -20,17 +21,20 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
     {
         public event Action<AreaEditorResult> OnAreaEditCompleted;
 
+        readonly ILogger logger;
         private readonly IMapService mapService;
         private readonly IUserInteractionService userInteractionService;
 
         public AreaEditorViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IMapService mapService,
-            IUserInteractionService userInteractionService)
+            IUserInteractionService userInteractionService,
+            ILogger logger)
             : base(principal, viewModelNavigationService)
         {
             this.userInteractionService = userInteractionService;
             this.mapService = mapService;
+            this.logger = logger;
         }
 
         public override void Load()
@@ -200,9 +204,9 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
                 this.MapView.LocationDisplay.IsEnabled = !this.MapView.LocationDisplay.IsEnabled;
             }
-            catch (ArgumentException)
+            catch (ArgumentException exc)
             {
-                
+                logger.Error("Error occured on map location switch.", exc);
             }
             
         });
