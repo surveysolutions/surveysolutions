@@ -36,7 +36,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.InterviewCompilerTests
         public void should_succeded() => emitResult.Success.Should().BeTrue();
 
         [Test]
-        public void should_not_produce_errors() => Assert.That(emitResult.Diagnostics, Is.Empty);
+        public void should_not_produce_errors() =>
+            emitResult.Diagnostics.Should().NotContain(x => x.Severity == DiagnosticSeverity.Error);
 
         private static IDynamicCompiler compiler;
         private static Guid id = Guid.Parse("11111111111111111111111111111111");
