@@ -36,7 +36,7 @@ try {
 	 	Exit 		
 	}
 	
-	BuildStaticContent "src\UI\Headquarters\WB.UI.Headquarters\Dependencies" $false | %{ if (-not $_) {
+	BuildStaticContent "src\UI\Headquarters\WB.UI.Headquarters\Dependencies" $true | %{ if (-not $_) {
 		Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
 		Write-Host "##teamcity[buildProblem description='Failed to build static content for HQ']"
 		Exit 
@@ -44,21 +44,7 @@ try {
 	
 	BuildWebPackage $ProjectDesigner $BuildConfiguration | %{ if (-not $_) { Exit } }
 
-	RunConfigTransform $ProjectHeadquarters $BuildConfiguration
-	
-	$PackageName = 'WBCapi.apk'
-		. "$scriptFolder\build-android-package.ps1" `
-			-VersionName $versionString `
-			-VersionCode $BuildNumber `
-			-BuildConfiguration $BuildConfiguration `
-			-KeystorePassword $KeystorePassword `
-			-KeystoreName 'WBCapi.keystore' `
-			-KeystoreAlias 'wbcapipublish' `
-			-CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
-			-OutFileName $PackageName `
-			-ExcludeExtra $true | %{ if (-not $_) { Exit } }
-	
-	CopyCapi -Project $ProjectHeadquarters -source $PackageName -cleanUp $true | %{ if (-not $_) { Exit } }
+	RunConfigTransform $ProjectHeadquarters $BuildConfiguration	
 	
 	$ExtPackageName = 'WBCapi.Ext.apk'
 		. "$scriptFolder\build-android-package.ps1" `
@@ -72,7 +58,26 @@ try {
 			-OutFileName $ExtPackageName `
 			-ExcludeExtra $false | %{ if (-not $_) { Exit } }	
 	
-	CopyCapi -Project $ProjectHeadquarters -source $ExtPackageName -cleanUp $false | %{ if (-not $_) { Exit } }
+	CopyCapi -Project $ProjectHeadquarters -source $ExtPackageName -cleanUp $true | %{ if (-not $_) { Exit } }
+
+	#remove leftovers after previous build
+	
+	CleanFolders 'bin' | %{ if (-not $_) { Exit } }
+    CleanFolders 'obj' | %{ if (-not $_) { Exit } }
+	
+	$PackageName = 'WBCapi.apk'
+		. "$scriptFolder\build-android-package.ps1" `
+			-VersionName $versionString `
+			-VersionCode $BuildNumber `
+			-BuildConfiguration $BuildConfiguration `
+			-KeystorePassword $KeystorePassword `
+			-KeystoreName 'WBCapi.keystore' `
+			-KeystoreAlias 'wbcapipublish' `
+			-CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
+			-OutFileName $PackageName `
+			-ExcludeExtra $true | %{ if (-not $_) { Exit } }
+	
+	CopyCapi -Project $ProjectHeadquarters -source $PackageName -cleanUp $false | %{ if (-not $_) { Exit } }
 	
 	BuildWebPackage $ProjectHeadquarters $BuildConfiguration | %{ if (-not $_) { Exit } }
 	

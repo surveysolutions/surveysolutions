@@ -412,7 +412,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If usernames are not specified you will need to assign a supervisor to all interviews in a later step..
+        ///   Looks up a localized string similar to If usernames are not specified you will need to assign a supervisor to all assignments in a later step..
         /// </summary>
         internal static string EmptySupervisorDescription {
             get {
@@ -1070,7 +1070,7 @@ namespace Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to Upload a file with identifying data to create new assignments.
-        ///Specify usernames for supervisors or enumerators to make batch interview assignments..
+        ///Specify usernames for supervisors or enumerators to make batch assignments..
         /// </summary>
         internal static string UploadDescription {
             get {

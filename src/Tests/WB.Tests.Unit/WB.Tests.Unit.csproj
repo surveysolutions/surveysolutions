@@ -60,6 +60,7 @@
     <PackageReference Include="System.Runtime.Handles" Version="4.3.0" />
     <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Numerics" Version="4.3.0" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StatefullInterview.InvalidQuestions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj" />
