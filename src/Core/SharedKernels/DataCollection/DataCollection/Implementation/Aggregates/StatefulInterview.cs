@@ -23,8 +23,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     {
         public StatefulInterview(IQuestionnaireStorage questionnaireRepository,
                                  IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider,
-                                 ISubstitionTextFactory substitionTextFactory)
-            : base(questionnaireRepository, expressionProcessorStatePrototypeProvider, substitionTextFactory)
+                                 ISubstitionTextFactory substitionTextFactory,
+                                 IInterviewTreeBuilder treeBuilder)
+            : base(questionnaireRepository, expressionProcessorStatePrototypeProvider, substitionTextFactory, treeBuilder)
         {
         }
 
