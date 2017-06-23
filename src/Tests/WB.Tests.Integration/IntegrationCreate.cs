@@ -115,7 +115,8 @@ namespace WB.Tests.Integration
         {
             var interview = new Interview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
-                Create.Service.SubstitionTextFactory());
+                Create.Service.SubstitionTextFactory(),
+                Create.Service.InterviewTreeBuilder());
 
             interview.CreateInterview(Create.Command.CreateInterview(
                 interviewId: interview.EventSourceId, 
@@ -137,7 +138,8 @@ namespace WB.Tests.Integration
         {
             var interview = new StatefulInterview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
-                Create.Service.SubstitionTextFactory());
+                Create.Service.SubstitionTextFactory(),
+                Create.Service.InterviewTreeBuilder());
           
             interview.CreateInterview(Create.Command.CreateInterview(
                 interviewId: Guid.NewGuid(),
@@ -176,7 +178,8 @@ namespace WB.Tests.Integration
             var interview = new StatefulInterview(
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ?? Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
-                Create.Service.SubstitionTextFactory());
+                Create.Service.SubstitionTextFactory(),
+                Create.Service.InterviewTreeBuilder());
 
             interview.CreateInterview(Create.Command.CreateInterview(
                 interviewId: interview.EventSourceId,

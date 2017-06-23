@@ -66,6 +66,7 @@ using WB.Core.Infrastructure.Versions;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
@@ -533,6 +534,11 @@ namespace WB.Tests.Abc.TestFactories
             var service = new AssignmentsService(accessor, Mock.Of<IInterviewAnswerSerializer>());
 
             return service;
+        }
+
+        public IInterviewTreeBuilder InterviewTreeBuilder()
+        {
+            return new InterviewTreeBuilder(Create.Service.SubstitionTextFactory());
         }
     }
 }

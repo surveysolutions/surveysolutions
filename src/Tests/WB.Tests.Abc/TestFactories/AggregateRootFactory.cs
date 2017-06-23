@@ -44,7 +44,8 @@ namespace WB.Tests.Abc.TestFactories
             var textFactoryMock = new Mock<ISubstitionTextFactory> {DefaultValue = DefaultValue.Mock};
             var interview = new Interview(questionnaireRepository ?? questionnaireDefaultRepository,
                 expressionProcessorStatePrototypeProvider ?? Stub.InterviewExpressionStateProvider(),
-                textFactory ?? textFactoryMock.Object);
+                textFactory ?? textFactoryMock.Object,
+                Create.Service.InterviewTreeBuilder());
 
             interview.SetId(interviewId ?? Guid.NewGuid());
 
@@ -102,7 +103,8 @@ namespace WB.Tests.Abc.TestFactories
             var statefulInterview = new StatefulInterview(
                 questionnaireRepository,
                 CreateDefaultInterviewExpressionStateProvider(),
-                Create.Service.SubstitionTextFactory());
+                Create.Service.SubstitionTextFactory(),
+                Create.Service.InterviewTreeBuilder());
 
             if (shouldBeInitialized)
             {
@@ -129,7 +131,8 @@ namespace WB.Tests.Abc.TestFactories
             var statefulInterview = new StatefulInterview(
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewExpressionStatePrototypeProvider ?? defaultExpressionStatePrototypeProvider,
-                Create.Service.SubstitionTextFactory());
+                Create.Service.SubstitionTextFactory(),
+                Create.Service.InterviewTreeBuilder());
 
             if (shouldBeInitialized)
             {
