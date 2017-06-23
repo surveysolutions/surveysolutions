@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IMvxMessenger messenger;
 
         private MvxSubscriptionToken startingLongOperationMessageSubscriptionToken;
-        
+
         public CreateNewViewModel CreateNew { get; }
         public StartedInterviewsViewModel StartedInterviews { get; }
         public CompletedInterviewsViewModel CompletedInterviews { get; }
@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public event EventHandler InterviewsCountChanged;
 
         public DashboardViewModel(IViewModelNavigationService viewModelNavigationService,
-            IPrincipal principal, 
+            IPrincipal principal,
             SynchronizationViewModel synchronization,
             IMvxMessenger messenger,
             CreateNewViewModel createNewViewModel,
@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
         public IMvxCommand SignOutCommand => new MvxCommand(this.SignOut);
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(this.NavigateToDiagnostics);
-        
+
         private bool isInProgress;
         public bool IsInProgress
         {
@@ -100,7 +100,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public string DashboardTitle
             => InterviewerUIResources.Dashboard_Title.FormatString(this.numberOfAssignedInterviews,
                 this.principal.CurrentUserIdentity.Name);
-        
+
         public override async void Load()
         {
             startingLongOperationMessageSubscriptionToken = this.messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
@@ -120,15 +120,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private async Task RefreshDashboardAsync()
         {
-            if(this.principal.CurrentUserIdentity == null)
+            if (this.principal.CurrentUserIdentity == null)
                 return;
 
-            await this.CreateNew.LoadAsync(this.Synchronization, this);
-            await this.StartedInterviews.LoadAsync();
-            await this.RejectedInterviews.LoadAsync();
-            await this.CompletedInterviews.LoadAsync();
-            
-            this.RaisePropertyChanged(() => this.DashboardTitle);
+            await Task.WhenAll(
+                 this.CreateNew.LoadAsync(this.Synchronization, this),
+                 Task.WhenAll(
+                     this.StartedInterviews.LoadAsync(),
+                     this.CompletedInterviews.LoadAsync(),
+                     this.RejectedInterviews.LoadAsync()
+                 ).ContinueWith(task => this.RaisePropertyChanged(() => this.DashboardTitle))
+            );
 
             IsLoaded = true;
         }
@@ -154,7 +156,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private void SignOut()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            
+
             this.viewModelNavigationService.SignOutAndNavigateToLogin();
         }
 
