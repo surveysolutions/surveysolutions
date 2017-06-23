@@ -15,6 +15,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 {
     internal class UserInteractionService : IUserInteractionService
     {
+
         private static readonly HashSet<Guid> userInteractions = new HashSet<Guid>();
         private static readonly object UserInteractionsLock = new object();
         private static TaskCompletionSource<object> userInteractionsAwaiter;
@@ -101,7 +102,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         public void ShowToast(string message)
         {
-            Toast.MakeText(this.CurrentActivity, message, ToastLength.Short).Show();
+            this.CurrentActivity.RunOnUiThread(() => Toast.MakeText(this.CurrentActivity, message, ToastLength.Short).Show());
         }
 
         public bool HasPendingUserInterations => userInteractions.Count > 0;

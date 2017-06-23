@@ -40,7 +40,37 @@
             var answer = null;
             switch (question.type()) {
                 case "Text":
-                case "AutoPropagate":
+                    if (!_.isUndefined(question.selectedOption())) {
+                        var inputValue = question.selectedOption().split(',').join('');
+
+                        if (_.isEmpty(inputValue))
+                            break;
+
+                        if (!_.isEmpty(question.mask())) {
+                            // doesn't match the mask
+                            var reqexpMask = question.mask().replace(new RegExp("\#", 'g'), "[0-9]");
+                            reqexpMask = reqexpMask.replace(new RegExp("\~", 'g'), "[A-Za-z]");
+                            reqexpMask = reqexpMask.replace(new RegExp("[*]", 'g'), "[A-Za-z0-9]");
+
+                            var matchResult = inputValue.match(new RegExp(reqexpMask)) || [];
+                            if (matchResult.length === 0) {
+                                break;
+                            }
+
+                            // is empty
+                            var defautMask = question.mask();
+                            defautMask = defautMask.replace(new RegExp("\#\~\*", 'g'), "_");
+                            if (inputValue === defautMask)
+                                break;
+                        }
+
+                        answer = {
+                            id: question.id(),
+                            answer: inputValue,
+                            settings: question.settings(),
+                            type: question.type()
+                        };
+                    }
                 case "Numeric":
                     if (!_.isUndefined(question.selectedOption())) {
                         answer = {

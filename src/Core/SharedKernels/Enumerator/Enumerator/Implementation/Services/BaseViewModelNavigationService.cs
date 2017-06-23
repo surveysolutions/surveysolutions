@@ -62,6 +62,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         }
 
         public void ShowWaitMessage()
-            => this.InvokeOnMainThread(() => this.userInteractionService.ShowToast(UIResources.Messages_WaitPendingOperation));
+            =>  this.userInteractionService.ShowToast(UIResources.Messages_WaitPendingOperation);
     }
 }
