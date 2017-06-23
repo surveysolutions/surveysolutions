@@ -433,7 +433,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             => this.Tree.FindQuestions()
                 .Where(question => !question.IsDisabled() 
                                 && !question.IsValid
-                                && !question.IsReadonly);
+                                && !question.IsReadonly
+                                && (!question.IsPrefilled || (question.IsPrefilled && this.CreatedOnClient))
+                                && !question.IsReadonly
+                );
 
         public int CountEnabledQuestions(Identity group)
             => this.Tree.GetGroup(group)?.CountEnabledQuestions() ?? 0;

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.GenericSubdomains.Portable;
@@ -14,6 +13,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public class RejectedInterviewsViewModel : ListViewModel<IDashboardItem>
     {
+        public override int ItemsCount => this.UiItems.OfType<InterviewDashboardItemViewModel>().Count();
+
         public override GroupStatus InterviewStatus => GroupStatus.StartedInvalid;
 
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
@@ -39,9 +40,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
             subTitle.Title = InterviewerUIResources.Dashboard_RejectedTabText;
             var uiItems = subTitle.ToEnumerable().Concat(rejectedInterviews).ToList();
-
-            this.Items = rejectedInterviews;
-            this.UiItems = new MvxObservableCollection<IDashboardItem>(uiItems);
+            
+            this.UiItems.ReplaceWith(uiItems);
         }
 
         private IEnumerable<IDashboardItem> GetRejectedInterviews()
