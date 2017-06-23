@@ -6,8 +6,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public abstract class ListViewModel<TListItem> : InterviewTabPanel where TListItem: class
     {
-        private IList<IDashboardItem> uiItems;
-        public IList<IDashboardItem> UiItems {
+        private MvxObservableCollection<IDashboardItem> uiItems;
+        public MvxObservableCollection<IDashboardItem> UiItems {
             get => this.uiItems;
             protected set => this.RaiseAndSetIfChanged(ref this.uiItems, value);
         }

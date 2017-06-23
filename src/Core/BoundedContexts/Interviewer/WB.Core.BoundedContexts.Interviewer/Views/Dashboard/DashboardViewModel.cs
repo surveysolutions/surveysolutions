@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Plugins.Messenger;
 using Ncqrs.Domain;
@@ -39,7 +40,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.viewModelNavigationService = viewModelNavigationService;
             this.messenger = messenger;
             this.Synchronization = synchronization;
-            this.Synchronization.SyncCompleted += (sender, args) => this.RefreshDashboard();
+            this.Synchronization.SyncCompleted += async (sender, args) => await this.RefreshDashboardAsync();
 
             this.CreateNew = createNewViewModel;
             this.StartedInterviews = startedInterviewsViewModel;
@@ -99,15 +100,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public string DashboardTitle
             => InterviewerUIResources.Dashboard_Title.FormatString(this.numberOfAssignedInterviews,
                 this.principal.CurrentUserIdentity.Name);
-
-        public override void Load()
+        
+        public override async void Load()
         {
             startingLongOperationMessageSubscriptionToken = this.messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
 
             this.Synchronization.Init();
             this.StartedInterviews.OnInterviewRemoved += this.OnInterviewRemoved;
             this.CompletedInterviews.OnInterviewRemoved += this.OnInterviewRemoved;
-            this.RefreshDashboard();
+
+            await this.RefreshDashboardAsync();
         }
 
         private void OnInterviewRemoved(object sender, EventArgs e)
@@ -116,15 +118,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.OnInterviewsCountChanged();
         }
 
-        private void RefreshDashboard()
+        private async Task RefreshDashboardAsync()
         {
             if(this.principal.CurrentUserIdentity == null)
                 return;
 
-            this.CreateNew.Load(this.Synchronization, this);
-            this.StartedInterviews.Load();
-            this.RejectedInterviews.Load();
-            this.CompletedInterviews.Load();
+            await this.CreateNew.LoadAsync(this.Synchronization, this);
+            await this.StartedInterviews.LoadAsync();
+            await this.RejectedInterviews.LoadAsync();
+            await this.CompletedInterviews.LoadAsync();
             
             this.RaisePropertyChanged(() => this.DashboardTitle);
 

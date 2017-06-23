@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.GenericSubdomains.Portable;
@@ -32,23 +33,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.principal = principal;
         }
 
-        public async void Load()
+        public async Task LoadAsync()
         {
-            this.Items = this.Items ?? new List<IDashboardItem>();
-            this.UiItems = this.UiItems ?? new List<IDashboardItem>();
-            this.Title = string.Format(InterviewerUIResources.Dashboard_CompletedLinkText, this.Items.Count);
+            var completedInterviews = await Task.Run(() => this.GetCompletedInterviews().ToList());
 
-            var items = await Task.Run(() => this.GetCompletedInterviews().ToList());
+            this.Title = string.Format(InterviewerUIResources.Dashboard_CompletedLinkText, completedInterviews.Count);
 
             var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
             subTitle.Title = InterviewerUIResources.Dashboard_CompletedTabText;
-            var uiItems = new List<IDashboardItem>(items.Count + 1) { subTitle };
-            uiItems.AddRange(items);
+            var uiItems = subTitle.ToEnumerable().Concat(completedInterviews).ToList();
 
-            this.Items = items;
-            this.UiItems = uiItems;
-
-            this.Title = string.Format(InterviewerUIResources.Dashboard_CompletedLinkText, this.Items.Count);
+            this.Items = completedInterviews;
+            this.UiItems = new MvxObservableCollection<IDashboardItem>(uiItems);
         }
 
         private IEnumerable<IDashboardItem> GetCompletedInterviews()
@@ -70,7 +66,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private void InterviewDashboardItem_OnItemRemoved(object sender, System.EventArgs e)
         {
-            this.Load();
+            var dashboardItem = (IDashboardItem) sender;
+
+            this.Items.Remove(dashboardItem);
+            this.UiItems.Remove(dashboardItem);
+
             this.OnInterviewRemoved(sender, e);
         }
     }

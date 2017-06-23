@@ -475,6 +475,9 @@
             var questionTypesDoesNotSupportValidations = ["Multimedia"];
             
             $scope.doesQuestionSupportValidations = function () {
+                if ($scope.activeQuestion && $scope.activeQuestion.type === 'Area')
+                    return false;
+
                 return $scope.activeQuestion && !_.contains(questionTypesDoesNotSupportValidations, $scope.activeQuestion.type)
                     && !($scope.activeQuestion.isCascade && $scope.activeQuestion.cascadeFromQuestionId);
             };
@@ -488,7 +491,6 @@
 
                 return false;
             };
-
 
             $scope.doesQuestionSupportEnablementConditions = function () {
                 return $scope.activeQuestion && ($scope.activeQuestion.questionScope != 'Identifying')
