@@ -354,5 +354,9 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new RosterInstancesRemoved(rosterInstances);
         }
+
+        public QuestionsMarkedAsReadonly QuestionsMarkedAsReadonly(params Identity[] questions)
+            => new QuestionsMarkedAsReadonly(questions);
+
     }
 }

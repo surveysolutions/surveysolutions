@@ -375,9 +375,6 @@
   <data name="DownloadTabTemplate" xml:space="preserve">
     <value>下载问卷的.tab模板</value>
   </data>
-  <data name="EmptySupervisorDescription" xml:space="preserve">
-    <value>如果未指定用户名，您需要在后续步骤中对所有的访谈分配督导员。</value>
-  </data>
   <data name="File" xml:space="preserve">
     <value>文件</value>
   </data>
