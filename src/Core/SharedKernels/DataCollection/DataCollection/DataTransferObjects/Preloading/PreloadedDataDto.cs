@@ -17,5 +17,12 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading
             Identity = new Identity(a.Key, x.RosterVector),
             Answer = a.Value
         })).ToList();
+
+        public List<InterviewAnswer>[] AnswersGroupedByLevels => Answers
+            .GroupBy(x => x.Identity.RosterVector.Length)
+            .Select(x => new { Depth = x.Key, Answers = x.ToList() })
+            .OrderBy(x => x.Depth)
+            .Select(x => x.Answers)
+            .ToArray();
     }
 }

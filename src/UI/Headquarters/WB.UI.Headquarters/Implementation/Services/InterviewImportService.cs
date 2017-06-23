@@ -19,7 +19,9 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Services;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Threading;
 using WB.UI.Headquarters.Resources;
@@ -34,6 +36,7 @@ namespace WB.UI.Headquarters.Implementation.Services
         private readonly ILogger logger;
         private readonly SampleImportSettings sampleImportSettings;
         private readonly IInterviewImportDataParsingService interviewImportDataParsingService;
+        private readonly IInterviewTreeBuilder interviewTreeBuilder;
 
         private readonly object lockStart = new object();
 
@@ -55,7 +58,8 @@ namespace WB.UI.Headquarters.Implementation.Services
             ITransactionManagerProvider transactionManagerProvider,
             IPlainStorageAccessor<Assignment> assignmentPlainStorageAccessor,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            IUserViewFactory userViewFactory)
+            IUserViewFactory userViewFactory, 
+            IInterviewTreeBuilder interviewTreeBuilder)
         {
             this.commandService = commandService;
             this.logger = logger;
@@ -67,7 +71,40 @@ namespace WB.UI.Headquarters.Implementation.Services
             this.transactionManagerProvider = transactionManagerProvider;
             this.assignmentPlainStorageAccessor = assignmentPlainStorageAccessor;
             this.userViewFactory = userViewFactory;
+            this.interviewTreeBuilder = interviewTreeBuilder;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+        }
+
+        public void VerifyAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId)
+        {
+            AssignmentImportData[] assignmentImportData = this.interviewImportDataParsingService.GetAssignmentsData(interviewImportProcessId, questionnaireIdentity, PreloadedContentType.Panel);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+
+            void VerifyAssignment(AssignmentImportData assignmentRecord)
+            {
+                var answersGroupedByLevels = assignmentRecord.PreloadedData.AnswersGroupedByLevels;
+
+                var tree = this.interviewTreeBuilder.BuildInterviewTree(Guid.NewGuid(), questionnaire);
+
+                var noAnswersOnQuestionnaireLevel = answersGroupedByLevels.All(x => x.FirstOrDefault()?.Identity.RosterVector.Length != 0);
+                if (noAnswersOnQuestionnaireLevel)
+                    tree.ActualizeTree();
+
+                foreach (var answersInLevel in answersGroupedByLevels)
+                {
+                    foreach (InterviewAnswer answer in answersInLevel)
+                    {
+                        answer.Answer.ValidateAsPreloaded(new InterviewQuestionInvariants(answer.Identity, questionnaire, tree));
+
+                        var interviewTreeQuestion = tree.GetQuestion(answer.Identity);
+
+                        interviewTreeQuestion?.SetAnswer(answer.Answer);
+                    }
+                    tree.ActualizeTree();
+                }
+            }
+
+            RunImportProcess(assignmentImportData, questionnaireIdentity, interviewImportProcessId, PreloadedContentType.Assignments, VerifyAssignment);
         }
 
         public void ImportAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, Guid? responsibleId, Guid headquartersId, PreloadedContentType mode)
@@ -126,7 +163,7 @@ namespace WB.UI.Headquarters.Implementation.Services
                 if (this.Status.IsInProgress)
                     return;
 
-                this.Status = new InterviewImportStatus
+                this.Status = new AssignmentImportStatus
                 {
                     QuestionnaireId = questionnaireIdentity.QuestionnaireId,
                     InterviewImportProcessId = interviewImportProcessId,
@@ -203,7 +240,7 @@ namespace WB.UI.Headquarters.Implementation.Services
             return string.Join(", ", importedInterview.PreloadedData.Data[0].Answers.Values.Where(x => x != null));
         }
         
-        public InterviewImportStatus Status { get; private set; } = new InterviewImportStatus();
+        public AssignmentImportStatus Status { get; private set; } = new AssignmentImportStatus();
 
         private void GetInterviewerAndSupervisorIdsByResponsibleId(Guid? responsibleId, 
             out Guid? responsibleSupervisorId, out Guid? responsibleInterviewerId)
