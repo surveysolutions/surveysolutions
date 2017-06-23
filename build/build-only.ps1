@@ -36,7 +36,7 @@ try {
 	 	Exit 		
 	}
 	
-	BuildStaticContent "src\UI\Headquarters\WB.UI.Headquarters\Dependencies" $false | %{ if (-not $_) {
+	BuildStaticContent "src\UI\Headquarters\WB.UI.Headquarters\Dependencies" $true | %{ if (-not $_) {
 		Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
 		Write-Host "##teamcity[buildProblem description='Failed to build static content for HQ']"
 		Exit 
