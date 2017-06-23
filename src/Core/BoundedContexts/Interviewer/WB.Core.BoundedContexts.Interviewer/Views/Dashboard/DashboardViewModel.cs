@@ -75,9 +75,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             set { this.typeOfInterviews = value; this.RaisePropertyChanged(); }
         }
 
-        private int numberOfAssignedInterviews => this.StartedInterviews.Items.Count
-                                                  + this.CompletedInterviews.Items.Count
-                                                  + this.RejectedInterviews.Items.Count;
+        private int numberOfAssignedInterviews => this.StartedInterviews.ItemsCount
+                                                  + this.CompletedInterviews.ItemsCount
+                                                  + this.RejectedInterviews.ItemsCount;
 
         private SynchronizationViewModel synchronization;
         public SynchronizationViewModel Synchronization

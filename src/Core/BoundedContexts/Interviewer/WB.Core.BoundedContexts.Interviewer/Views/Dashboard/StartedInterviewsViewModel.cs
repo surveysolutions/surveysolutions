@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.GenericSubdomains.Portable;
@@ -15,6 +14,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public class StartedInterviewsViewModel : ListViewModel<IDashboardItem>
     {
+        public override int ItemsCount => this.UiItems.OfType<InterviewDashboardItemViewModel>().Count();
+
         public override GroupStatus InterviewStatus => GroupStatus.Started;
 
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
@@ -36,16 +37,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public async Task LoadAsync()
         {
             var startedInterviews = await Task.Run(() => this.GetStartedInterviews().ToList());
-
-            this.Title = string.Format(InterviewerUIResources.Dashboard_StartedLinkText, startedInterviews.Count);
-
+            
             var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
             subTitle.Title = InterviewerUIResources.Dashboard_StartedTabText;
             var uiItems = subTitle.ToEnumerable().Concat(startedInterviews).ToList();
+            
+            this.UiItems.ReplaceWith(uiItems);
 
-            this.Items = startedInterviews;
-            this.UiItems = new MvxObservableCollection<IDashboardItem>(uiItems);
+            this.UpdateTitle();
         }
+
+        private void UpdateTitle() => 
+            this.Title = string.Format(InterviewerUIResources.Dashboard_StartedLinkText, this.ItemsCount);
 
         private IEnumerable<IDashboardItem> GetStartedInterviews()
         {
@@ -68,9 +71,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private void InterviewDashboardItem_OnItemRemoved(object sender, EventArgs e)
         {
             var dashboardItem = (IDashboardItem)sender;
-
-            this.Items.Remove(dashboardItem);
+            
             this.UiItems.Remove(dashboardItem);
+
+            this.UpdateTitle();
 
             this.OnInterviewRemoved(sender, e);
         }
