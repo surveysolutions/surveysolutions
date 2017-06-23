@@ -1,7 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net462</TargetFramework>
-    <SkipValidatePackageReferences>true</SkipValidatePackageReferences>
+    <RuntimeIdentifier>win7-x64</RuntimeIdentifier>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AppDomainToolkit" Version="1.0.4.3" />
@@ -27,9 +31,9 @@
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.3" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.3" />
     <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.2.3" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="1.1.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="2.2.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
-    <PackageReference Include="Microsoft.NETCore.Portable.Compatibility" Version="1.0.1" />
     <PackageReference Include="Microsoft.Owin" Version="3.1.0" />
     <PackageReference Include="Moq" Version="4.7.10" />
     <PackageReference Include="MvvmCross.Core" Version="4.4.0" />
@@ -42,8 +46,9 @@
     <PackageReference Include="NUnit" Version="3.6.1" />
     <PackageReference Include="RhinoMocks" Version="3.6.1" />
     <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.5" />
-    <PackageReference Include="System.IO" Version="4.3.0" />
+    <PackageReference Include="System.IO" Version="4.1.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.2" />
+    <PackageReference Include="system.runtime" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj" />
