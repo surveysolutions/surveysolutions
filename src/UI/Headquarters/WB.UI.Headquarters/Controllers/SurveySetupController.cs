@@ -334,6 +334,29 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(model);
         }
 
+        [ObserverNotAllowed]
+        public ActionResult InterviewVerificationProgress(Guid id)
+        {
+            this.ViewBag.ActivePage = MenuItem.Questionnaires;
+
+            AssignmentImportStatus status = this.interviewImportService.Status;
+
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(status.QuestionnaireId, status.QuestionnaireVersion));
+
+            if (questionnaireInfo == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            return this.View(new PreloadedDataInterviewProgressModel
+            {
+                Status = status,
+                QuestionnaireId = questionnaireInfo.QuestionnaireId,
+                Version = questionnaireInfo.Version,
+                QuestionnaireTitle = questionnaireInfo.Title,
+            });
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
@@ -385,7 +408,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
-            InterviewImportStatus status = this.interviewImportService.Status;
+            AssignmentImportStatus status = this.interviewImportService.Status;
 
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(status.QuestionnaireId, status.QuestionnaireVersion));
 

@@ -6,7 +6,7 @@ namespace WB.UI.Headquarters.Models
 {
     public class PreloadedDataInterviewProgressModel
     {
-        public InterviewImportStatus Status { get; set; }
+        public AssignmentImportStatus Status { get; set; }
 
         public Guid QuestionnaireId { get; set; }
 

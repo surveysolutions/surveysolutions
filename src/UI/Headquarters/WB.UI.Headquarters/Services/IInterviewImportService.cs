@@ -6,7 +6,9 @@ namespace WB.UI.Headquarters.Services
 {
     public interface IInterviewImportService
     {
-        InterviewImportStatus Status { get; }
+        AssignmentImportStatus Status { get; }
         void ImportAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, Guid? supervisorId, Guid headquartersId, PreloadedContentType mode);
+
+        void VerifyAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId);
     }
 }
