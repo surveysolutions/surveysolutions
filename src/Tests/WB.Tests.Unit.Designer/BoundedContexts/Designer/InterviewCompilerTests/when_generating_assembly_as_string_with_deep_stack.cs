@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Emit;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.InterviewCompilerTests
 {
     internal class when_generating_assembly_as_string_with_deep_stack : InterviewCompilerTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp]
+        [OneTimeSetUp]
         public void context () {
             compiler = CreateRoslynCompiler();
             referencedPortableAssemblies = CreateReferencesForCompiler();
@@ -32,8 +32,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.InterviewCompilerTests
                 IncreaseCallStackEndExec_TODO_Check_does_method_name_affect_stack(a + 1);
         }
 
-        [NUnit.Framework.Test] public void should_succeded () =>
-            emitResult.Success.ShouldEqual(true);
+        [Test] public void should_succeded () =>
+            Assert.That(emitResult.Success);
+
+        [Test]
+        public void should_not_produce_errors()
+        {
+            Assert.That(emitResult.Diagnostics, Is.Empty);
+        }
         
         private static IDynamicCompiler compiler;
         private static Guid id = Guid.Parse("11111111111111111111111111111111");
