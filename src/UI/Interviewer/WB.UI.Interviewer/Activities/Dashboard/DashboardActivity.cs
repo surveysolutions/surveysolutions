@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -81,20 +82,21 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         }
 
         private void CompletedInterviews_PropertyChanged(object sender, PropertyChangedEventArgs e)
-            => this.UpdateFragmentByViewModelPropertyChange<CompletedInterviewsFragment>((CompletedInterviewsViewModel) sender, e.PropertyName);
+            => this.UpdateFragmentByViewModelPropertyChange<CompletedInterviewsFragment>((CompletedInterviewsViewModel)sender, e.PropertyName);
 
         private void RejectedInterviews_PropertyChanged(object sender, PropertyChangedEventArgs e)
-            => this.UpdateFragmentByViewModelPropertyChange<RejectedInterviewsFragment>((RejectedInterviewsViewModel) sender, e.PropertyName);
+            => this.UpdateFragmentByViewModelPropertyChange<RejectedInterviewsFragment>((RejectedInterviewsViewModel)sender, e.PropertyName);
 
         private void StartedInterviews_PropertyChanged(object sender, PropertyChangedEventArgs e)
-            => this.UpdateFragmentByViewModelPropertyChange<StartedInterviewsFragment>((StartedInterviewsViewModel) sender, e.PropertyName);
+            => this.UpdateFragmentByViewModelPropertyChange<StartedInterviewsFragment>((StartedInterviewsViewModel)sender, e.PropertyName);
 
         private void UpdateFragmentByViewModelPropertyChange<TFragmentType>(ListViewModel<IDashboardItem> listViewModel,
             string propertyName = nameof(ListViewModel<IDashboardItem>.UiItems))
         {
             if (propertyName != nameof(ListViewModel<IDashboardItem>.UiItems)) return;
 
-            if (!this.fragmentStatePagerAdapter.HasFragmentForViewModel(listViewModel) && listViewModel.Items.Count > 0)
+            if (!this.fragmentStatePagerAdapter.HasFragmentForViewModel(listViewModel) && listViewModel.Items != null &&
+                listViewModel.Items.Count > 0)
             {
                 this.fragmentStatePagerAdapter.AddFragment(typeof(TFragmentType), listViewModel,
                     nameof(InterviewTabPanel.Title));

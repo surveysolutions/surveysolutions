@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -39,21 +38,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.viewModelNavigationService = viewModelNavigationService;
         }
 
-        public void Load(SynchronizationViewModel sync, DashboardViewModel dashboardViewModel)
+        public async Task LoadAsync(SynchronizationViewModel sync, DashboardViewModel dashboardViewModel)
         {
             this.Synchronization = sync;
-
-            LoadAsync(dashboardViewModel);
-
             this.Title = InterviewerUIResources.Dashboard_AssignmentsTabTitle;
-        }
 
-        private async void LoadAsync(DashboardViewModel dashboardViewModel)
-        {
             dashboardViewModel.IsInProgress = true;
-
-            this.Items = this.Items ?? new List<IDashboardItem>();
-            this.UiItems = this.UiItems ?? new List<IDashboardItem>();
 
             var assignments = await Task.Run(() => this.GetCensusQuestionnaires().Union(this.GetAssignments(dashboardViewModel)).ToList());
 
@@ -64,7 +54,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             uiItems.AddRange(assignments);
 
             Items = assignments;
-            UiItems = uiItems;
+            UiItems = new MvxObservableCollection<IDashboardItem>(uiItems);
 
             dashboardViewModel.IsInProgress = false;
         }
