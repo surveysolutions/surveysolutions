@@ -3,12 +3,6 @@
     <TargetFramework>netstandard1.5</TargetFramework>
     <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win+wpa81+wp80</PackageTargetFallback>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DefineConstants>TRACE;DEBUG;$(Constants)</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DefineConstants>$(Constants)</DefineConstants>
-  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross.Core" Version="4.4.0" />
     <PackageReference Include="MvvmCross.Platform" Version="4.4.0" />
