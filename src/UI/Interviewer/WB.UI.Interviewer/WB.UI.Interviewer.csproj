@@ -59,7 +59,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>$(Constants)</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>3</WarningLevel>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
