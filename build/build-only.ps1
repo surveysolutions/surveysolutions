@@ -63,7 +63,7 @@ try {
 		#remove leftovers after previous build
 		
 		#CleanFolders 'bin' | %{ if (-not $_) { Exit } }
-		CleanFolders 'obj' | %{ if (-not $_) { Exit } }
+		#CleanFolders 'obj' | %{ if (-not $_) { Exit } }
 		
 		$PackageName = 'WBCapi.apk'
 			. "$scriptFolder\build-android-package.ps1" `
