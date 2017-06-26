@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -63,10 +64,16 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
 
         private static CreateNewViewModel DashboardQuestionnairesViewModel()
             => new CreateNewViewModel(
-                Substitute.For<IPlainStorage<QuestionnaireView>>(), 
+                Substitute.For<IPlainStorage<QuestionnaireView>>(),
                 Substitute.For<IInterviewViewModelFactory>(),
                 Substitute.For<IAssignmentDocumentsStorage>(),
-                Mock.Of<IViewModelNavigationService>());
+                Substitute.For<IPlainStorage<InterviewView>>(),
+                Mock.Of<IViewModelNavigationService>(),
+                Mock.Of<IInterviewerPrincipal>(),
+                Mock.Of<IMvxMessenger>(),
+                Mock.Of<ICommandService>(),
+                Mock.Of<IInterviewAnswerSerializer>()
+            );
 
         private static StartedInterviewsViewModel DashboardStartedInterviewsViewModel()
             => new StartedInterviewsViewModel(Substitute.For<IPlainStorage<InterviewView>>(),
