@@ -93,7 +93,7 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
 	Write-Host "##teamcity[blockOpened name='Building Android project']"
 	Write-Host "##teamcity[progressStart 'Building |'$AndroidProject|' project']"
 
-	$projName = (Split-Path $AndroidProject -leaf).Replace(".", "_")
+	$projName = [System.IO.Path]::GetFileNameWithoutExtension($AndroidProject).Replace(".", "_")
 	$msBuildAndroidProject = "UI\$projName"
 	& (GetPathToMSBuild) (GetMainSolutionPath) $msBuildAndroidProject "/p:Configuration=$BuildConfiguration" /t:Clean  | Write-Host
 
