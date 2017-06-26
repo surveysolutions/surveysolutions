@@ -93,10 +93,10 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
 	Write-Host "##teamcity[blockOpened name='Building Android project']"
 	Write-Host "##teamcity[progressStart 'Building |'$AndroidProject|' project']"
 
-	& (GetPathToMSBuild) $AndroidProject "/p:Configuration=$BuildConfiguration" /t:Clean  | Write-Host
-
 	$msBuildAndroidProject = "UI\" + (Split-Path $AndroidProject -leaf).Replace(".", "_")
-	$command = "& $(GetPathToMSBuild) $(GetMainSolutionPath) $msBuildAndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' /p:Configuration=$BuildConfiguration /p:CodeContractsRunCodeAnalysis=false"
+	& (GetPathToMSBuild) (GetMainSolutionPath) $msBuildAndroidProject "/p:Configuration=$BuildConfiguration" /t:Clean  | Write-Host
+
+	$command = "& '$(GetPathToMSBuild)' $(GetMainSolutionPath) $msBuildAndroidProject /t:PackageForAndroid /v:m /nologo /p:Configuration=$BuildConfiguration /p:CodeContractsRunCodeAnalysis=false"
 
 	if($ExcludeExtensions)
 	{
