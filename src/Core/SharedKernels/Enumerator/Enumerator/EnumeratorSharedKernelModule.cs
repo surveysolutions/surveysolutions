@@ -5,6 +5,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -37,7 +38,7 @@ namespace WB.Core.SharedKernels.Enumerator
             this.Bind<IVariableToUIStringService>().To<VariableToUIStringService>();
             this.Bind<IOptionsRepository>().To<OptionsRepository>();
             this.Bind<IQuestionOptionsRepository>().To<QuestionOptionsRepository>();
-
+            this.Bind<IInterviewTreeBuilder>().To<InterviewTreeBuilder>();
             this.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>().InSingletonScope();
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
 
