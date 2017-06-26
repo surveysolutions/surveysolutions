@@ -95,9 +95,9 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
 
 	$projName = [System.IO.Path]::GetFileNameWithoutExtension($AndroidProject).Replace(".", "_")
 	$msBuildAndroidProject = "UI\$projName"
-	& (GetPathToMSBuild) (GetMainSolutionPath) $msBuildAndroidProject "/p:Configuration=$BuildConfiguration" /t:Clean  | Write-Host
+	& (GetPathToMSBuild) (GetMainSolutionPath) /t:$msBuildAndroidProject;Clean "/p:Configuration=$BuildConfiguration" /t:Clean  | Write-Host
 
-	$command = "& '$(GetPathToMSBuild)' $(GetMainSolutionPath) /t:$msBuildAndroidProject`;PackageForAndroid /v:m /nologo` /p:Configuration=$BuildConfiguration /p:CodeContractsRunCodeAnalysis=false"
+	$command = "'$(GetPathToMSBuild)' $(GetMainSolutionPath) /t:$msBuildAndroidProject;PackageForAndroid /v:m /nologo /p:Configuration=$BuildConfiguration /p:CodeContractsRunCodeAnalysis=false"
 
 	if($ExcludeExtensions)
 	{
@@ -109,7 +109,7 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
 	    Write-Host "##teamcity[message text='Building apk with extra']"
 	}
 	Write-Host("Building CAPI using $command")
-	Invoke-Expression $command | Write-Host
+	& $command | Write-Host
 
 	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
