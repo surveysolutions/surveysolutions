@@ -53,7 +53,7 @@ try {
 				-KeystorePassword $KeystorePassword `
 				-KeystoreName 'WBCapi.keystore' `
 				-KeystoreAlias 'wbcapipublish' `
-				-CapiProject 'WB.UI.Interviewer.csproj' `
+				-CapiProject 'UI\WB_UI_Interviewer' `
 				-OutFileName $ExtPackageName `
 				-ExcludeExtra $false | %{ if (-not $_) { Exit } }	
 		
@@ -72,7 +72,7 @@ try {
 				-KeystorePassword $KeystorePassword `
 				-KeystoreName 'WBCapi.keystore' `
 				-KeystoreAlias 'wbcapipublish' `
-				-CapiProject 'WB.UI.Interviewer.csproj' `
+				-CapiProject 'UI\WB_UI_Interviewer' `
 				-OutFileName $PackageName `
 				-ExcludeExtra $true | %{ if (-not $_) { Exit } }
 		
