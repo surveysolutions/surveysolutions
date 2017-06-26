@@ -5,7 +5,7 @@
     <dimen name="Area_Editor_margin_10">10dp</dimen>
     <dimen name="Area_Editor_margin_15">15dp</dimen>
     <dimen name="Area_Editor_margin_20">20dp</dimen>
-    <dimen name="Area_Editor_margin_20">25dp</dimen>
+    <dimen name="Area_Editor_margin_25">25dp</dimen>
     <dimen name="Area_Editor_margin_30">30dp</dimen>
     <dimen name="Area_Editor_margin_33">33dp</dimen>
     <dimen name="Area_Editor_margin_45">45dp</dimen>
