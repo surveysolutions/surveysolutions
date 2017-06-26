@@ -72,6 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                     Archived = x.Archived,
                     Responsible = x.Responsible.Name,
                     ResponsibleRole = x.Responsible.RoleIds.First().ToUserRole().ToString(),
+                    ResponsibleIsArchived = x.Responsible.IsArchived,
                     IdentifyingQuestions = this.GetIdentifyingColumnText(x)
                 }).ToList(),
             };
