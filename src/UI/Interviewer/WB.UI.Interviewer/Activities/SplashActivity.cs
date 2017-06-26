@@ -35,96 +35,23 @@ namespace WB.UI.Interviewer.Activities
 
         private void BackwardCompatibility()
         {
-            this.MoveCategoricalOptionsToPlainStorageIfNeeded();
+            this.AddTitleToOptionViewForSearching();
         }
 
-        [Obsolete("Released on the 1st of June. Version 5.9")]
-        private void MoveCategoricalOptionsToPlainStorageIfNeeded()
+        private void AddTitleToOptionViewForSearching()
         {
-            var optionsRepository = Mvx.Resolve<IOptionsRepository>();
+            var optionsStorage = Mvx.Resolve<IPlainStorage<OptionView>>();
 
-            var isMigrationNeeded = optionsRepository.IsEmpty(); //version less 5.9
+            var hasEmptySearchTitles = optionsStorage.Count(x => x.SearchTitle == null) > 0;
+            if (!hasEmptySearchTitles) return;
 
-            if (!isMigrationNeeded)
-            {
-                var optionsStorage = Mvx.Resolve<IPlainStorage<OptionView>>();
-#pragma warning disable 472
-                var isUpgradeNeeded = optionsStorage.Where(x => x.SortOrder == null).Any(); //version 5.10 upgrade
-#pragma warning restore 472
+            var allOptions = optionsStorage.LoadAll();
 
-                if (isUpgradeNeeded)
-                {
-                    isMigrationNeeded = true;
-                    var optionViewRemover = Mvx.Resolve<IPlainStorage<OptionView>>();
-                    optionViewRemover.RemoveAll();
-                }
-            }
+            foreach (var optionView in allOptions)
+                optionView.SearchTitle = optionView.Title.ToLower();
+            
+            optionsStorage.Store(allOptions);
 
-            MigrateDashboardToOfficialSqliteRelease();
-
-            if (!isMigrationNeeded)
-                return;
-
-            var questionnaireViewRepository = Mvx.Resolve<IPlainStorage<QuestionnaireView>>();
-            var questionnaireDocuments = Mvx.Resolve<IPlainStorage<QuestionnaireDocumentView>>();
-
-            var questionnaires = questionnaireViewRepository.LoadAll();
-            foreach (var questionnaireView in questionnaires)
-            {
-                var questionnaire = questionnaireDocuments.GetById(questionnaireView.Id);
-
-                var questionsWithLongOptionsList = questionnaire.QuestionnaireDocument.Find<SingleQuestion>(
-                    x => x.CascadeFromQuestionId.HasValue || (x.IsFilteredCombobox ?? false)).ToList();
-
-                foreach (var question in questionsWithLongOptionsList)
-                {
-                    optionsRepository.StoreOptionsForQuestion(questionnaireView.GetIdentity(), question.PublicKey, question.Answers, new List<TranslationDto>());
-                }
-            }
-        }
-
-        private void MigrateDashboardToOfficialSqliteRelease()
-        {
-            var dashboardItems = Mvx.Resolve<IPlainStorage<InterviewView>>();
-            var prefilledQuestions = Mvx.Resolve<IPlainStorage<PrefilledQuestionView>>();
-            var serializer = Mvx.Resolve<IJsonAllTypesSerializer>();
-
-            var allInterviews = dashboardItems.Where(x => x.AnswersOnPrefilledQuestions != null || x.GpsLocation != null).ToList();
-            foreach (InterviewView interviewToMigrate in allInterviews)
-            {
-                if (interviewToMigrate.AnswersOnPrefilledQuestions != null)
-                {
-                    InterviewAnswerOnPrefilledQuestionView[] oldAnswers =
-                        serializer.Deserialize<InterviewAnswerOnPrefilledQuestionView[]>(
-                            interviewToMigrate.AnswersOnPrefilledQuestions);
-
-                    var newPrefilled = oldAnswers.Select(x => new PrefilledQuestionView
-                    {
-                        Answer = x.Answer,
-                        Id = $"{interviewToMigrate.InterviewId:N}${x.QuestionId:N}",
-                        InterviewId = interviewToMigrate.InterviewId,
-                        QuestionId = x.QuestionId,
-                        QuestionText = x.QuestionText
-                    });
-
-                    prefilledQuestions.Store(newPrefilled);
-                    interviewToMigrate.AnswersOnPrefilledQuestions = null;
-                    dashboardItems.Store(interviewToMigrate);
-                }
-
-                if (interviewToMigrate.GpsLocation != null)
-                {
-                    var interviewGpsLocationView = serializer.Deserialize<InterviewGpsLocationView>(interviewToMigrate.GpsLocation);
-                    if (interviewGpsLocationView != null)
-                    {
-                        interviewToMigrate.LocationQuestionId = interviewGpsLocationView.PrefilledQuestionId;
-                        interviewToMigrate.LocationLongitude = interviewGpsLocationView.Coordinates?.Longitude;
-                        interviewToMigrate.LocationLatitude = interviewGpsLocationView.Coordinates?.Latitude;
-
-                        dashboardItems.Store(interviewToMigrate);
-                    }
-                }
-            }
         }
     }
 }
