@@ -94,20 +94,21 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
 	Write-Host "##teamcity[progressStart 'Building |'$AndroidProject|' project']"
 
 	& (GetPathToMSBuild) $AndroidProject "/p:Configuration=$BuildConfiguration" /t:Clean  | Write-Host
-	
-	$buildCommand = "$(GetPathToMSBuild) $(GetMainSolutionPath) /t:$AndroidProject /nologo /p:Configuration=$BuildConfiguration /p:CodeContractsRunCodeAnalysis=false"
+
+	$msBuildAndroidProject = "UI\" + (Split-Path $AndroidProject -leaf).Replace(".", "_")
+	$command = "$(GetPathToMSBuild) $msBuildAndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' /p:Configuration=$BuildConfiguration /p:CodeContractsRunCodeAnalysis=false"
 
 	if($ExcludeExtensions)
 	{
 	    Write-Host "##teamcity[message text='Building apk excluding extra']"		
-		$buildCommand += "/p:Constants=EXCLUDEEXTENSIONS"
+		$command += "/p:Constants=EXCLUDEEXTENSIONS"
 	}
 	else
 	{
 	    Write-Host "##teamcity[message text='Building apk with extra']"
 	}
-	"Executing $buildCommand"
-	Invoke-Expression $buildCommand
+	Write-Host("Building CAPI using $command")
+	Invoke-Expression $command | Write-Host
 
 	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
 

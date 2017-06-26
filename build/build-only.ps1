@@ -1,7 +1,7 @@
 param([string]$VersionPrefix,
 [INT]$BuildNumber,
 [string]$KeystorePassword,
-[string]$BuildConfiguration)
+[string]$BuildConfiguration="Release")
 
 $ErrorActionPreference = "Stop"
 
@@ -43,6 +43,7 @@ try {
 			Exit 
 		}}
 		
+
 		RunConfigTransform $ProjectHeadquarters $BuildConfiguration	
 		
 		$ExtPackageName = 'WBCapi.Ext.apk'
@@ -53,7 +54,7 @@ try {
 				-KeystorePassword $KeystorePassword `
 				-KeystoreName 'WBCapi.keystore' `
 				-KeystoreAlias 'wbcapipublish' `
-				-CapiProject 'UI\WB_UI_Interviewer' `
+				-CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
 				-OutFileName $ExtPackageName `
 				-ExcludeExtra $false | %{ if (-not $_) { Exit } }	
 		
@@ -72,7 +73,7 @@ try {
 				-KeystorePassword $KeystorePassword `
 				-KeystoreName 'WBCapi.keystore' `
 				-KeystoreAlias 'wbcapipublish' `
-				-CapiProject 'UI\WB_UI_Interviewer' `
+				-CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
 				-OutFileName $PackageName `
 				-ExcludeExtra $true | %{ if (-not $_) { Exit } }
 		
