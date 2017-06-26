@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard15</TargetFramework>
     <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wpa81</PackageTargetFallback>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     <AssemblyVersion>1.0.0.1</AssemblyVersion>
     <FileVersion>1.0.0.1</FileVersion>
   </PropertyGroup>
