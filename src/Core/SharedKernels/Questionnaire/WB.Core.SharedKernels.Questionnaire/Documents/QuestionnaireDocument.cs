@@ -117,6 +117,7 @@ namespace Main.Core.Documents
             int indexOfEntity = this.children.FindIndex(child => child.PublicKey == id);
             this.children[indexOfEntity] = newEntity;
             newEntity.SetParent(this);
+            this.LastEntryDate = DateTime.UtcNow;
         }
 
         public long LastEventSequence { get; set; }
@@ -139,12 +140,14 @@ namespace Main.Core.Documents
             var group = this.Find<Group>(parentId.Value);
 
             @group?.Insert(index, c, parentId);
+            this.LastEntryDate = DateTime.UtcNow;
         }
 
         public void RemoveChild(Guid childId)
         {
             IComposite child = this.children.Find(c => c.PublicKey == childId);
             this.children.Remove(child);
+            this.LastEntryDate = DateTime.UtcNow;
         }
 
         public void Add(IComposite c, Guid? parentKey)
@@ -166,6 +169,7 @@ namespace Main.Core.Documents
             }
             
             c.ConnectChildrenWithParent();
+            this.LastEntryDate = DateTime.UtcNow;
         }
 
         public void UpdateQuestion(Guid questionId, Action<IQuestion> update)
@@ -174,6 +178,7 @@ namespace Main.Core.Documents
 
             if (question != null)
                 update(question);
+            this.LastEntryDate = DateTime.UtcNow;
         }
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
@@ -216,6 +221,7 @@ namespace Main.Core.Documents
 
             var entityParent = this.GetParentById(oldEntityId);
             entityParent?.ReplaceChildEntityById(oldEntityId, newEntity);
+            this.LastEntryDate = DateTime.UtcNow;
         }
 
         public void UpdateGroup(Guid groupId, string title, string variableName, string description, string conditionExpression, bool hideIfDisabled)
@@ -236,6 +242,7 @@ namespace Main.Core.Documents
 
             if (@group != null)
                 update(@group);
+            this.LastEntryDate = DateTime.UtcNow;
         }
 
         public void RemoveEntity(Guid entityId)
@@ -246,6 +253,7 @@ namespace Main.Core.Documents
             IComposite entityParent = this.GetParentById(entityId);
 
             entityParent?.RemoveChild(entityId);
+            this.LastEntryDate = DateTime.UtcNow;
         }
         
         private IComposite GetParentOfItem(IComposite item)
@@ -424,6 +432,7 @@ namespace Main.Core.Documents
 
             sourceContainer.RemoveChild(itemId);
             targetContainer.Insert(targetIndex, item, targetGroupId);
+            this.LastEntryDate = DateTime.UtcNow;
         }
 
         private IComposite GetItemOrLogWarning(Guid itemId)
