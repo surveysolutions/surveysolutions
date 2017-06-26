@@ -752,6 +752,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to create interview. Reason: {0}.
+        /// </summary>
+        public static string FailedToCreateInterview {
+            get {
+                return ResourceManager.GetString("FailedToCreateInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to open interview.
         /// </summary>
         public static string FailedToLoadInterview {
