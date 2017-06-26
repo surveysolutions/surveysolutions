@@ -95,19 +95,19 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
 
 	$projName = [System.IO.Path]::GetFileNameWithoutExtension($AndroidProject).Replace(".", "_")
 	$msBuildAndroidProject = "UI\$projName"
-	& (GetPathToMSBuild) (GetMainSolutionPath) /t:$msBuildAndroidProject;Clean "/p:Configuration=$BuildConfiguration" | Write-Host
+	& (GetPathToMSBuild) (GetMainSolutionPath) /t:Clean /p:Configuration=$BuildConfiguration | Write-Host
 
 	if($ExcludeExtensions)
 	{
 	    Write-Host "##teamcity[message text='Building apk excluding extra']"		
  				
-		& (GetPathToMSBuild) (GetMainSolutionPath) /t:$msBuildAndroidProject;PackageForAndroid /v:m /nologo /p:Configuration=$BuildConfiguration /p:CodeContractsRunCodeAnalysis=false --% /p:Constants="EXCLUDEEXTENSIONS" | Write-Host
+		& (GetPathToMSBuild) (GetMainSolutionPath) /t:"$msBuildAndroidProject;PackageForAndroid" /v:m /nologo "/p:Configuration=$BuildConfiguration" /p:CodeContractsRunCodeAnalysis=false --% /p:Constants="EXCLUDEEXTENSIONS" | Write-Host
 	}
 	else
 	{
 	    Write-Host "##teamcity[message text='Building apk with extra']"
  		
-		& (GetPathToMSBuild) (GetMainSolutionPath) /t:$msBuildAndroidProject;PackageForAndroid /v:m /nologo /p:CodeContractsRunCodeAnalysis=false "/p:Configuration=$BuildConfiguration" | Write-Host
+		& (GetPathToMSBuild) (GetMainSolutionPath) /t:"$msBuildAndroidProject;PackageForAndroid" /v:m /nologo /p:CodeContractsRunCodeAnalysis=false "/p:Configuration=$BuildConfiguration" | Write-Host
 	}
 
 	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
