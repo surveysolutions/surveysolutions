@@ -182,10 +182,10 @@
                                             <!-- /ko -->
                                             <!-- /ko -->
                                             <td>
-                                                <!-- ko if:(ResponsibleRole() == 4 && ResponsibleIsArchived() == false)  -->
+                                                <!-- ko if:ResponsibleRole() == 4 -->
                                                 <a data-bind="attr: { href: $profileUrl + '/' + ResponsibleId() }, text: ResponsibleName"></a>
                                                 <!-- /ko -->
-                                                <!-- ko ifnot:(ResponsibleRole() == 4 && ResponsibleIsArchived() == false) -->
+                                                <!-- ko ifnot:ResponsibleRole() == 4 -->
                                                 <span data-bind="text: ResponsibleName"></span>
                                                 <!-- /ko -->
                                             </td>
