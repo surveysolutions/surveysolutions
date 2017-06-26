@@ -14,8 +14,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Aggregates
 
         public virtual string Name { get; protected set; }
 
-        public virtual bool IsArchived { get; protected set; }
-
         public virtual ReadonlyProfile ReadonlyProfile { get; protected set; }
 
         public virtual ISet<Guid> RoleIds { get; protected set; }

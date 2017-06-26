@@ -64,7 +64,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
                     ResponsibleId = x.ResponsibleId,
                     ResponsibleName = x.ResponsibleName,
                     ResponsibleRole = x.ResponsibleRole,
-                    ResponsibleIsArchived = x.Responsible.IsArchived,
                     Status = x.Status.ToString(),
                     HasErrors = x.HasErrors,
                     CanBeReassigned = x.Status == InterviewStatus.Created

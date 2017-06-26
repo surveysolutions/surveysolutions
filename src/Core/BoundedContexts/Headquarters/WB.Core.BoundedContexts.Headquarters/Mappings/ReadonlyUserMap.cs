@@ -5,7 +5,7 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Headquarters.Mappings
 {
-    [CommonStorage]
+    [PlainStorage]
     public class ReadonlyUserMap : ClassMapping<ReadonlyUser>
     {
         public ReadonlyUserMap()
@@ -18,7 +18,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                 map.Column("\"Id\"");
             });
             Property(x => x.Name, map => map.Column("\"UserName\""));
-            Property(x => x.IsArchived, map => map.Column("\"IsArchived\""));
             this.ManyToOne(x => x.ReadonlyProfile, oto =>
             {
                 oto.Cascade(Cascade.None);
@@ -37,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
         }
     }
 
-    [CommonStorage]
+    [PlainStorage]
     public class ProfileMap : ClassMapping<ReadonlyProfile>
     {
         public ProfileMap()

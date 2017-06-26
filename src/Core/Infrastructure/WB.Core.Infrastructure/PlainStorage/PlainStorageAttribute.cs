@@ -2,7 +2,7 @@
 
 namespace WB.Core.Infrastructure.PlainStorage
 {
-    public class CommonStorageAttribute : Attribute
+    public class PlainStorageAttribute : Attribute
     {
     }
 }

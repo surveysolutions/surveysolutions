@@ -56,7 +56,7 @@
                     responsivePriority: 3,
                     render: function (data, type, row) {
                         var resultString = '<span class="' + row.responsibleRole.toLowerCase() + '">';
-                        if (row.responsibleIsArchived == false && row.responsibleRole === '@UserRoles.Interviewer.ToString()') {
+                        if (row.responsibleRole === '@UserRoles.Interviewer.ToString()') {
                             resultString += '<a href="' + $profileUrl + "/" + row.responsibleId + '">' + data + "</a>";
                         } else {
                             resultString += data;
