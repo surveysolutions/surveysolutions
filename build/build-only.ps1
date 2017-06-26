@@ -43,7 +43,6 @@ try {
 			Exit 
 		}}
 		
-
 		RunConfigTransform $ProjectHeadquarters $BuildConfiguration	
 		
 		$ExtPackageName = 'WBCapi.Ext.apk'
@@ -54,7 +53,7 @@ try {
 				-KeystorePassword $KeystorePassword `
 				-KeystoreName 'WBCapi.keystore' `
 				-KeystoreAlias 'wbcapipublish' `
-				-CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
+				-CapiProject 'WB.UI.Interviewer.csproj' `
 				-OutFileName $ExtPackageName `
 				-ExcludeExtra $false | %{ if (-not $_) { Exit } }	
 		
@@ -62,8 +61,8 @@ try {
 
 		#remove leftovers after previous build
 		
-		#CleanFolders 'bin' | %{ if (-not $_) { Exit } }
-		#CleanFolders 'obj' | %{ if (-not $_) { Exit } }
+		CleanFolders 'bin' | %{ if (-not $_) { Exit } }
+		CleanFolders 'obj' | %{ if (-not $_) { Exit } }
 		
 		$PackageName = 'WBCapi.apk'
 			. "$scriptFolder\build-android-package.ps1" `
@@ -73,7 +72,7 @@ try {
 				-KeystorePassword $KeystorePassword `
 				-KeystoreName 'WBCapi.keystore' `
 				-KeystoreAlias 'wbcapipublish' `
-				-CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
+				-CapiProject 'WB.UI.Interviewer.csproj' `
 				-OutFileName $PackageName `
 				-ExcludeExtra $true | %{ if (-not $_) { Exit } }
 		
