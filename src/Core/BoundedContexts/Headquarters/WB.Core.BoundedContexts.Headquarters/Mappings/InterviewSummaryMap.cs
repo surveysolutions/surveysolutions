@@ -51,6 +51,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                 rel => { 
                     rel.OneToMany();
                 });
+
+            ManyToOne(x => x.Responsible, mto =>
+            {
+                mto.Column("ResponsibleId");
+                mto.Cascade(Cascade.None);
+                mto.Update(false);
+                mto.Insert(false);
+            });
         }
     }
 

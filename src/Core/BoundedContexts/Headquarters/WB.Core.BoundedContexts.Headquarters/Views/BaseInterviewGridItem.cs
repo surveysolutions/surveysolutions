@@ -11,6 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
         public Guid ResponsibleId { get; set; }
         public string ResponsibleName { get; set; }
         public UserRoles ResponsibleRole { get; set; }
+        public bool ResponsibleIsArchived { get; set; }
         public bool HasErrors { get; set; }
         public string Status { get; set; }
         public string LastEntryDate { get; set; }
