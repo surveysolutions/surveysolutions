@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Infrastructure.Shared.Enumerator.Internals.MapService;
+using System.Threading.Tasks;
 
 namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 {
@@ -39,7 +40,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
         public override void Load()
         {
-            this.AvailableMaps = this.mapService.GetAvailableMaps();
+            this.AvailableMaps = new MvxObservableCollection<MapDescription>(this.mapService.GetAvailableMaps());
             this.MapsList = this.AvailableMaps.Select(x => x.MapName).ToList();
 
             if (this.AvailableMaps.Count == 0) return;
@@ -58,8 +59,13 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             }
         }
 
-
-        private List<MapDescription> AvailableMaps = new List<MapDescription>();
+        private MvxObservableCollection<MapDescription> availableMaps = new MvxObservableCollection<MapDescription>();
+        public MvxObservableCollection<MapDescription> AvailableMaps
+        {
+            get => this.availableMaps;
+            protected set => this.RaiseAndSetIfChanged(ref this.availableMaps, value);
+        }
+        
 
         private List<string> mapsList = new List<string>();
         public List<string> MapsList
@@ -163,6 +169,16 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             }
         }
 
+        private IMvxAsyncCommand switchMapCommand;
+
+        public IMvxAsyncCommand SwitchMapCommand => this.switchMapCommand ?? (this.switchMapCommand
+            = new MvxAsyncCommand<MapDescription>(this.SwitchMapAsync, _ => !this.IsInProgress));
+
+        private async Task SwitchMapAsync(MapDescription map)
+        {
+            this.SelectedMap = map.MapName;
+         }
+
         public IMvxAsyncCommand RotateMapToNorth => new MvxAsyncCommand(async () =>
             await this.MapView?.SetViewpointRotationAsync(0));
 
@@ -211,6 +227,18 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             
         });
 
+        public IMvxCommand HidePanelComand => new MvxCommand(() =>
+        {
+            IsPanelVisible = false;
+        });
+
+        public IMvxCommand ShowPanelCommand => new MvxCommand(() =>
+        {
+            IsPanelVisible = !IsPanelVisible;
+        });
+
+        
+
         public IMvxAsyncCommand UpdateMapsCommand => new MvxAsyncCommand(async () =>
         {
             try
@@ -221,7 +249,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     this.cancellationTokenSource = new CancellationTokenSource();
                     await this.mapService.SyncMaps(this.cancellationTokenSource.Token).ConfigureAwait(false);
 
-                    this.AvailableMaps = this.mapService.GetAvailableMaps();
+                    this.AvailableMaps = new MvxObservableCollection<MapDescription>(this.mapService.GetAvailableMaps());
                     this.MapsList = this.AvailableMaps.Select(x => x.MapName).ToList();
 
                     if (this.Map == null)
@@ -386,5 +414,12 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             get => this.isInProgress;
             set => this.RaiseAndSetIfChanged(ref this.isInProgress, value);
         }
+
+        private bool isPanelVisible;
+        public bool IsPanelVisible
+        {
+            get => this.isPanelVisible;
+            set => this.RaiseAndSetIfChanged(ref this.isPanelVisible, value);
+        }        
     }
 }
