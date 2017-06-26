@@ -515,4 +515,22 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="AreaMap_LengthFormat" xml:space="preserve">
     <value>Perimeter:</value>
   </data>
+  <data name="AreaMap_Active_Map_Title" xml:space="preserve">
+    <value>ACTIVE MAP:</value>
+  </data>
+  <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
+    <value>MAPS AVAILABLE ON DEVICE</value>
+  </data>
+  <data name="AreaMap_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="AreaMap_Update_Maps" xml:space="preserve">
+    <value>Update maps</value>
+  </data>
+  <data name="MenuItem_Title_AreaCancel" xml:space="preserve">
+    <value>Exit Map Editor</value>
+  </data>
+  <data name="MenuItem_Title_AreaCancelEdit" xml:space="preserve">
+    <value>Clear all</value>
+  </data>
 </root>

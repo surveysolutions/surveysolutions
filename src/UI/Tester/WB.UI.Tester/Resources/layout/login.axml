@@ -72,6 +72,7 @@
                 <Button
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:padding ="10dp"
                     android:letterSpacing="0.1"
                     local:MvxBind="Click LoginCommand; Text Localization('LoginText'); Enabled If(IsInProgress, false, true)" />
                 <CheckBox
