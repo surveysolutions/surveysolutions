@@ -31,25 +31,22 @@ namespace WB.Tests.Integration.AssignmentsDeletionServiceTests
             sessionFactory = IntegrationCreate.SessionFactory(
                 this.connectionString, new List<Type>
                 {
-                    typeof(AssignmentMap),
-                    typeof(Core.BoundedContexts.Headquarters.Assignments.InterviewSummaryMap),
+                    typeof(ProfileMap),
                     typeof(ReadonlyUserMap),
-                    typeof(ProfileMap)
-                }, false, "plainstore");
+                    typeof(AssignmentMap),
+                    typeof(Core.BoundedContexts.Headquarters.Assignments.InterviewSummaryMap)
+                }, true, "plainstore");
             plainPostgresTransactionManager = new PlainPostgresTransactionManager(sessionFactory);
         }
 
         [Test]
-        [Ignore("Can't fix for now")]
         public async Task when_deleting_all_assignments_for_questionnaire()
         {
             Guid questionniareId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             int questionnaireVersion = 59;
 
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(questionniareId, questionnaireVersion);
-            Assignment assignment =
-                Create.Entity.Assignment(
-                    questionnaireIdentity: questionnaireIdentity);
+            Assignment assignment = Create.Entity.Assignment(questionnaireIdentity: questionnaireIdentity);
             assignment.IdentifyingData.Add(Create.Entity.IdentifyingAnswer(assignment, Create.Entity.Identity(Guid.NewGuid())));
             assignment.IdentifyingData.Add(Create.Entity.IdentifyingAnswer(assignment, Create.Entity.Identity(Guid.NewGuid())));
 
