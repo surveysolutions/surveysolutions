@@ -97,7 +97,7 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
 	$msBuildAndroidProject = "UI\$projName"
 	& (GetPathToMSBuild) (GetMainSolutionPath) $msBuildAndroidProject "/p:Configuration=$BuildConfiguration" /t:Clean  | Write-Host
 
-	$command = "& '$(GetPathToMSBuild)' $(GetMainSolutionPath) /t:$msBuildAndroidProject;PackageForAndroid /v:m /nologo /p:Configuration=$BuildConfiguration /p:CodeContractsRunCodeAnalysis=false"
+	$command = "& '$(GetPathToMSBuild)' $(GetMainSolutionPath) /t:`$msBuildAndroidProject`;PackageForAndroid` /v:m /nologo /p:Configuration=$BuildConfiguration /p:CodeContractsRunCodeAnalysis=false"
 
 	if($ExcludeExtensions)
 	{
