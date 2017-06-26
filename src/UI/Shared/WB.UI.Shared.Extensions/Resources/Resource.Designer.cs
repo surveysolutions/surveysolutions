@@ -1198,44 +1198,44 @@ namespace WB.UI.Shared.Extensions
 		public partial class Color
 		{
 			
-			// aapt resource value: 0x7f0d0098
-			public static int abc_background_cache_hint_selector_material_dark = 2131558552;
-			
 			// aapt resource value: 0x7f0d0099
-			public static int abc_background_cache_hint_selector_material_light = 2131558553;
+			public static int abc_background_cache_hint_selector_material_dark = 2131558553;
 			
 			// aapt resource value: 0x7f0d009a
-			public static int abc_btn_colored_borderless_text_material = 2131558554;
+			public static int abc_background_cache_hint_selector_material_light = 2131558554;
 			
 			// aapt resource value: 0x7f0d009b
-			public static int abc_btn_colored_text_material = 2131558555;
+			public static int abc_btn_colored_borderless_text_material = 2131558555;
 			
 			// aapt resource value: 0x7f0d009c
-			public static int abc_color_highlight_material = 2131558556;
+			public static int abc_btn_colored_text_material = 2131558556;
 			
 			// aapt resource value: 0x7f0d009d
-			public static int abc_hint_foreground_material_dark = 2131558557;
+			public static int abc_color_highlight_material = 2131558557;
 			
 			// aapt resource value: 0x7f0d009e
-			public static int abc_hint_foreground_material_light = 2131558558;
+			public static int abc_hint_foreground_material_dark = 2131558558;
+			
+			// aapt resource value: 0x7f0d009f
+			public static int abc_hint_foreground_material_light = 2131558559;
 			
 			// aapt resource value: 0x7f0d0001
 			public static int abc_input_method_navigation_guard = 2131558401;
 			
-			// aapt resource value: 0x7f0d009f
-			public static int abc_primary_text_disable_only_material_dark = 2131558559;
-			
 			// aapt resource value: 0x7f0d00a0
-			public static int abc_primary_text_disable_only_material_light = 2131558560;
+			public static int abc_primary_text_disable_only_material_dark = 2131558560;
 			
 			// aapt resource value: 0x7f0d00a1
-			public static int abc_primary_text_material_dark = 2131558561;
+			public static int abc_primary_text_disable_only_material_light = 2131558561;
 			
 			// aapt resource value: 0x7f0d00a2
-			public static int abc_primary_text_material_light = 2131558562;
+			public static int abc_primary_text_material_dark = 2131558562;
 			
 			// aapt resource value: 0x7f0d00a3
-			public static int abc_search_url_text = 2131558563;
+			public static int abc_primary_text_material_light = 2131558563;
+			
+			// aapt resource value: 0x7f0d00a4
+			public static int abc_search_url_text = 2131558564;
 			
 			// aapt resource value: 0x7f0d0002
 			public static int abc_search_url_text_normal = 2131558402;
@@ -1246,32 +1246,32 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0d0004
 			public static int abc_search_url_text_selected = 2131558404;
 			
-			// aapt resource value: 0x7f0d00a4
-			public static int abc_secondary_text_material_dark = 2131558564;
-			
 			// aapt resource value: 0x7f0d00a5
-			public static int abc_secondary_text_material_light = 2131558565;
+			public static int abc_secondary_text_material_dark = 2131558565;
 			
 			// aapt resource value: 0x7f0d00a6
-			public static int abc_tint_btn_checkable = 2131558566;
+			public static int abc_secondary_text_material_light = 2131558566;
 			
 			// aapt resource value: 0x7f0d00a7
-			public static int abc_tint_default = 2131558567;
+			public static int abc_tint_btn_checkable = 2131558567;
 			
 			// aapt resource value: 0x7f0d00a8
-			public static int abc_tint_edittext = 2131558568;
+			public static int abc_tint_default = 2131558568;
 			
 			// aapt resource value: 0x7f0d00a9
-			public static int abc_tint_seek_thumb = 2131558569;
+			public static int abc_tint_edittext = 2131558569;
 			
 			// aapt resource value: 0x7f0d00aa
-			public static int abc_tint_spinner = 2131558570;
+			public static int abc_tint_seek_thumb = 2131558570;
 			
 			// aapt resource value: 0x7f0d00ab
-			public static int abc_tint_switch_thumb = 2131558571;
+			public static int abc_tint_spinner = 2131558571;
 			
 			// aapt resource value: 0x7f0d00ac
-			public static int abc_tint_switch_track = 2131558572;
+			public static int abc_tint_switch_thumb = 2131558572;
+			
+			// aapt resource value: 0x7f0d00ad
+			public static int abc_tint_switch_track = 2131558573;
 			
 			// aapt resource value: 0x7f0d0005
 			public static int accent_material_dark = 2131558405;
@@ -1294,8 +1294,8 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0d000a
 			public static int background_material_light = 2131558410;
 			
-			// aapt resource value: 0x7f0d00ad
-			public static int bread_crumb_transparency = 2131558573;
+			// aapt resource value: 0x7f0d00ae
+			public static int bread_crumb_transparency = 2131558574;
 			
 			// aapt resource value: 0x7f0d000b
 			public static int bright_foreground_disabled_material_dark = 2131558411;
@@ -1411,8 +1411,8 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0d003b
 			public static int design_bottom_navigation_shadow_color = 2131558459;
 			
-			// aapt resource value: 0x7f0d00ae
-			public static int design_error = 2131558574;
+			// aapt resource value: 0x7f0d00af
+			public static int design_error = 2131558575;
 			
 			// aapt resource value: 0x7f0d003c
 			public static int design_fab_shadow_end_color = 2131558460;
@@ -1444,8 +1444,8 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0d0045
 			public static int design_textinput_error_color_light = 2131558469;
 			
-			// aapt resource value: 0x7f0d00af
-			public static int design_tint_password_toggle = 2131558575;
+			// aapt resource value: 0x7f0d00b0
+			public static int design_tint_password_toggle = 2131558576;
 			
 			// aapt resource value: 0x7f0d0013
 			public static int dim_foreground_disabled_material_dark = 2131558419;
@@ -1645,8 +1645,8 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0d0067
 			public static int question_input_button_unpressed = 2131558503;
 			
-			// aapt resource value: 0x7f0d00b0
-			public static int question_title_text = 2131558576;
+			// aapt resource value: 0x7f0d00b1
+			public static int question_title_text = 2131558577;
 			
 			// aapt resource value: 0x7f0d008e
 			public static int readonly_question_background = 2131558542;
@@ -1714,8 +1714,8 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0d0070
 			public static int sections_list_text_color = 2131558512;
 			
-			// aapt resource value: 0x7f0d00b1
-			public static int show_instructions = 2131558577;
+			// aapt resource value: 0x7f0d00b2
+			public static int show_instructions = 2131558578;
 			
 			// aapt resource value: 0x7f0d004c
 			public static int sideBarPrefilledQuestionText = 2131558476;
@@ -1726,17 +1726,20 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0d0038
 			public static int switch_thumb_disabled_material_light = 2131558456;
 			
-			// aapt resource value: 0x7f0d00b2
-			public static int switch_thumb_material_dark = 2131558578;
-			
 			// aapt resource value: 0x7f0d00b3
-			public static int switch_thumb_material_light = 2131558579;
+			public static int switch_thumb_material_dark = 2131558579;
+			
+			// aapt resource value: 0x7f0d00b4
+			public static int switch_thumb_material_light = 2131558580;
 			
 			// aapt resource value: 0x7f0d0039
 			public static int switch_thumb_normal_material_dark = 2131558457;
 			
 			// aapt resource value: 0x7f0d003a
 			public static int switch_thumb_normal_material_light = 2131558458;
+			
+			// aapt resource value: 0x7f0d0098
+			public static int text_color_light = 2131558552;
 			
 			static Color()
 			{
@@ -2880,8 +2883,26 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f020054
 			public static int avd_hide_password = 2130837588;
 			
+			// aapt resource value: 0x7f0201c3
+			public static int avd_hide_password_1 = 2130837955;
+			
+			// aapt resource value: 0x7f0201c4
+			public static int avd_hide_password_2 = 2130837956;
+			
+			// aapt resource value: 0x7f0201c5
+			public static int avd_hide_password_3 = 2130837957;
+			
 			// aapt resource value: 0x7f020055
 			public static int avd_show_password = 2130837589;
+			
+			// aapt resource value: 0x7f0201c6
+			public static int avd_show_password_1 = 2130837958;
+			
+			// aapt resource value: 0x7f0201c7
+			public static int avd_show_password_2 = 2130837959;
+			
+			// aapt resource value: 0x7f0201c8
+			public static int avd_show_password_3 = 2130837960;
 			
 			// aapt resource value: 0x7f020056
 			public static int back_to_parent = 2130837590;
@@ -4186,15 +4207,6 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f090058
 			public static int customPanel = 2131296344;
 			
-			// aapt resource value: 0x7f0900da
-			public static int dashboard_refresh = 2131296474;
-			
-			// aapt resource value: 0x7f0900db
-			public static int dashboard_settings = 2131296475;
-			
-			// aapt resource value: 0x7f0900dc
-			public static int dashboard_signout = 2131296476;
-			
 			// aapt resource value: 0x7f090066
 			public static int decor_content_parent = 2131296358;
 			
@@ -4314,6 +4326,9 @@ namespace WB.UI.Shared.Extensions
 			
 			// aapt resource value: 0x7f090089
 			public static int main_layout = 2131296393;
+			
+			// aapt resource value: 0x7f0900da
+			public static int map_editor_exit = 2131296474;
 			
 			// aapt resource value: 0x7f09008e
 			public static int mapsList = 2131296398;

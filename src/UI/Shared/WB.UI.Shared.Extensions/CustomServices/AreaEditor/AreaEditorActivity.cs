@@ -6,6 +6,7 @@ using Android.Views;
 using Android.Widget;
 using Esri.ArcGISRuntime.UI.Controls;
 using MvvmCross.Binding.BindingContext;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
@@ -55,5 +56,26 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             var container = this.FindViewById<LinearLayout>(Resource.Id.area_map_view_container);
             container.AddView(map);
         }
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            this.MenuInflater.Inflate(Resource.Menu.area_editor, menu);
+
+            menu.LocalizeMenuItem(Resource.Id.map_editor_exit, UIResources.MenuItem_Title_AreaCancelEdit);
+            menu.LocalizeMenuItem(Resource.Id.map_editor_clear, UIResources.MenuItem_Title_AreaCancel);
+            
+
+            return base.OnCreateOptionsMenu(menu);
+        }
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            if(item.ItemId == Resource.Id.map_editor_exit)
+                this.ViewModel.CancelCommand.Execute();
+            else if(item.ItemId == Resource.Id.map_editor_clear)
+                this.ViewModel.CancelEditCommand.Execute();
+
+            return base.OnOptionsItemSelected(item);
+        }
+
     }
 }

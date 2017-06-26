@@ -2,14 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" 
       xmlns:local="http://schemas.android.com/apk/res-auto"
       android:id="@+id/menu">
- <item
-      android:id="@+id/dashboard_refresh"
-      android:icon="@drawable/sync_maps"
-      local:showAsAction="ifRoom" />
- <item
-      android:id="@+id/dashboard_settings"
-      local:showAsAction="never" />
+ 
+ <!--<item
+      android:id="@+id/map_editor_clear"
+      local:showAsAction="never" />-->
   <item
-      android:id="@+id/dashboard_signout"
+      android:id="@+id/map_editor_exit"
       local:showAsAction="never" />
 </menu>
