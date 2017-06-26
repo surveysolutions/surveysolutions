@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using System.Diagnostics;
 
 namespace WB.UI.Interviewer.Activities
 {
@@ -33,6 +34,7 @@ namespace WB.UI.Interviewer.Activities
             Mvx.Resolve<IViewModelNavigationService>().NavigateToLogin();
         }
 
+        [Conditional("RELEASE")]
         private void BackwardCompatibility()
         {
             this.AddTitleToOptionViewForSearching();
