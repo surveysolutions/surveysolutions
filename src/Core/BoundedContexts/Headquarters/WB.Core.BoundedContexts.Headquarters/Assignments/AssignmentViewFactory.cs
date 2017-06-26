@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -21,7 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         private readonly IQuestionnaireStorage questionnaireStorage;
         
         public AssignmentViewFactory(IPlainStorageAccessor<Assignment> assignmentsStorage,
-            IQuestionnaireStorage questionnaireStorage, IInterviewAnswerSerializer answerSerializer)
+            IQuestionnaireStorage questionnaireStorage)
         {
             this.assignmentsStorage = assignmentsStorage;
             this.questionnaireStorage = questionnaireStorage;
@@ -67,7 +65,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                     ResponsibleId = x.ResponsibleId,
                     UpdatedAtUtc = x.UpdatedAtUtc,
                     Quantity = x.Quantity,
-                    InterviewsCount = x.InterviewSummaries.Count(s => s.IsDeleted == false),
+                    InterviewsCount = input.SupervisorId.HasValue ? 
+                                        x.InterviewSummaries.Count(s => !s.IsDeleted && s.TeamLeadId == input.SupervisorId) : 
+                                        x.InterviewSummaries.Count(s => !s.IsDeleted),
                     Id = x.Id,
                     Archived = x.Archived,
                     Responsible = x.Responsible.Name,
@@ -94,7 +94,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return identifyingColumnText;
         }
 
-        private IQueryable<Assignment> DefineOrderBy(IQueryable<Assignment> query, ListViewModelBase model)
+        private IQueryable<Assignment> DefineOrderBy(IQueryable<Assignment> query, AssignmentsInputModel model)
         {
             var orderBy = model.Orders.FirstOrDefault();
             if (orderBy == null)
@@ -104,16 +104,33 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
             if (orderBy.Field.Contains("InterviewsCount"))
             {
-                if (orderBy.Direction == OrderDirection.Asc)
-                {
-                    return query.OrderBy(x => x.InterviewSummaries.Count(s => s.IsDeleted == false));
-                }
-                else
-                {
-                    return query.OrderByDescending(x => x.InterviewSummaries.Count(s => s.IsDeleted == false));
-                }
+                return OrderByInterviewsCount(query, model, orderBy);
             }
             return query.OrderUsingSortExpression(model.Order).AsQueryable();
+        }
+
+        private static IQueryable<Assignment> OrderByInterviewsCount(IQueryable<Assignment> query, AssignmentsInputModel model, OrderRequestItem orderBy)
+        {
+            Expression<Func<Assignment, int>> orderByQuery1;
+            if (model.SupervisorId.HasValue)
+            {
+                orderByQuery1 = x => x.InterviewSummaries.Count(s => s.IsDeleted == false && s.TeamLeadId == model.SupervisorId);
+            }
+            else
+            {
+                orderByQuery1 = x => x.InterviewSummaries.Count(s => s.IsDeleted == false);
+            }
+            var orderByQuery = orderByQuery1;
+
+            if (orderBy.Direction == OrderDirection.Asc)
+            {
+                var defineOrderBy = query.OrderBy(orderByQuery);
+                return defineOrderBy;
+            }
+            else
+            {
+                return query.OrderByDescending(orderByQuery);
+            }
         }
 
         private IQueryable<Assignment> ApplyFilter(AssignmentsInputModel input, IQueryable<Assignment> assignments)
