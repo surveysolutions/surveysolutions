@@ -717,9 +717,6 @@
   <data name="InterviewerProfile_MemoryInfo" xml:space="preserve">
     <value>内存（可用/全部）</value>
   </data>
-  <data name="InterviewerProfile_NewOnDevice" xml:space="preserve">
-    <value>设备上的新任务</value>
-  </data>
   <data name="InterviewerProfile_NumberOfFailedSynchronizations" xml:space="preserve">
     <value>失败的同步数量</value>
   </data>
@@ -728,9 +725,6 @@
   </data>
   <data name="InterviewerProfile_PhoneFormat" xml:space="preserve">
     <value>电话号码：{0}</value>
-  </data>
-  <data name="InterviewerProfile_Rejected" xml:space="preserve">
-    <value>设备上的驳回任务</value>
   </data>
   <data name="InterviewerProfile_ServerDate" xml:space="preserve">
     <value>同步开始时的服务器时间</value>
