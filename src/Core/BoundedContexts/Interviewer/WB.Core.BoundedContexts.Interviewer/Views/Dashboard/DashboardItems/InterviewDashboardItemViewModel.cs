@@ -52,16 +52,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public void Init(InterviewView interview)
         {
-            var questionnaire = this.questionnaireViewRepository.GetById(interview.QuestionnaireId);
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(interview.QuestionnaireId);
 
-            var questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaire.Id);
+            if (string.IsNullOrWhiteSpace(interview.QuestionnaireTitle)) // only to support existing clients
+            {
+                var questionnaire = this.questionnaireViewRepository.GetById(interview.QuestionnaireId);
+                interview.QuestionnaireTitle = questionnaire.Title;
+            }
 
             this.InterviewId = interview.InterviewId;
             this.Status = this.GetDashboardCategoryForInterview(interview.Status, interview.StartedDateTime);
-            this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, questionnaire.Title, questionnaireIdentity.Version);
+            this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, interview.QuestionnaireTitle, questionnaireIdentity.Version);
             this.DateComment = this.GetInterviewDateCommentByStatus(interview);
             this.Comment = this.GetInterviewCommentByStatus(interview);
-            var questions = this.GetPrefilledQuestions();
+
+            var questions = this.GetPrefilledQuestions().ToList();
 
             this.PrefilledQuestions = questions.Take(3).ToList();
             this.DetailedPrefilledQuestions = questions.Skip(3).ToList();
@@ -166,14 +171,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             }
         }
 
-        private List<PrefilledQuestion> GetPrefilledQuestions()
+        private IEnumerable<PrefilledQuestion> GetPrefilledQuestions()
         {
             return this.prefilledQuestions.Where(_ => _.InterviewId == this.InterviewId)
                                           .OrderBy(x => x.SortIndex)
                                           .Select(fi => new PrefilledQuestion {
                                               Answer = fi.Answer,
                                               Question = fi.QuestionText
-                                          }).ToList();
+                                          });
         }
 
         public bool IsSupportedRemove { get; set; }
