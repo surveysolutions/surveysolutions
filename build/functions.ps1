@@ -17,6 +17,10 @@ function GetPathToConfigTransformator() {
     return "packages\WebConfigTransformRunner.1.0.0.1\Tools\WebConfigTransformRunner"
 }
 
+function GetMainSolutionPath(){
+     return "WB.sln"
+}
+
 function CleanFolders($Filter) {
     $progressMessage = "Cleaning $Filter folders"
     Write-Host "##teamcity[blockOpened name='$Filter']"
@@ -149,18 +153,6 @@ function ShouldSolutionBeIgnored($Solution) {
     return IsSetupSolution $Solution
 }
 
-function GetSolutionsToBuild() {
-    $foundSolutions = Get-ChildItem -Filter *.sln -Recurse -ErrorAction SilentlyContinue | ?{ $_.FullName -notmatch 'Dependencies' }  | %{ GetPathRelativeToCurrectLocation $_.FullName } 
-    $solutionsToIgnore = $foundSolutions | ?{ ShouldSolutionBeIgnored $_ }
-    $solutionsToBuild = $foundSolutions | ?{ -not (ShouldSolutionBeIgnored $_) }
-
-    if ($solutionsToIgnore.Count -gt 0) {
-        Write-Host "##teamcity[message status='WARNING' text='Ignored $($solutionsToIgnore.Count) solution(s): $([string]::Join(', ', $solutionsToIgnore))']"
-    }
-
-    return $solutionsToBuild
-}
-
 function TeamCityEncode([string]$value) {
     $result = $value.Replace("|", "||")
     $result = $result.Replace("'", "|'") 
@@ -196,65 +188,6 @@ function BuildSolution($Solution, $BuildConfiguration, [switch] $MultipleSolutio
     return $wasBuildSuccessfull
 }
 
-function BuildSolutions($BuildConfiguration,  [switch] $ClearBinAndObjFoldersBeforeEachSolution) {
-    Write-Host "##teamcity[blockOpened name='Building solutions']"
-
-    $solutionsToBuild = GetSolutionsToBuild
-
-    $failedSolutions = @()
-
-    if ($solutionsToBuild -ne $null) {
-        foreach ($solution in $solutionsToBuild) {
-
-            if ($ClearBinAndObjFoldersBeforeEachSolution) {
-                CleanBinAndObjFolders
-            }
-
-            $wasBuildSuccessfull = BuildSolution `
-                -Solution $solution `
-                -BuildConfiguration $BuildConfiguration `
-                -MultipleSolutions `
-                -IndexOfSolution ([array]::IndexOf($solutionsToBuild, $solution)) `
-                -CountOfSolutions $solutionsToBuild.Count `
-
-            if (-not $wasBuildSuccessfull) {
-                $failedSolutions += $solution
-            }
-        }
-    }
-
-    $wereAllSolutionsBuiltSuccessfully = $failedSolutions.Count -eq 0
-    if (-not $wereAllSolutionsBuiltSuccessfully) {
-        Write-Host "##teamcity[buildProblem description='Failed to build $($failedSolutions.Count) solution(s): $($failedSolutions -join ', ')']"
-    }
-
-    Write-Host "##teamcity[blockClosed name='Building solutions']"
-
-    return $wereAllSolutionsBuiltSuccessfully
-}
-
-
-function GetProjectsWithTests() {
-    return Get-ChildItem -Filter '*Tests*.csproj' -Recurse -ErrorAction SilentlyContinue | %{ GetPathRelativeToCurrectLocation $_.FullName }
-}
-
-function GetOutputAssembly($Project, $BuildConfiguration) {
-    $projectFileInfo = Get-Item $Project
-    $projectXml = [xml] (Get-Content $Project)
-
-    $projectFolder = $projectFileInfo.DirectoryName
-
-    $outputPath = $projectXml.Project.PropertyGroup `
-        | ?{ $_.Condition -like "*'$BuildConfiguration|*" } `
-        | %{ $_.OutputPath } `
-        | select -First 1
-
-    $assemblyName = $projectXml.Project.PropertyGroup.AssemblyName[0]
-
-    $fullPathToAssembly = Join-Path (Join-Path $projectFolder $outputPath) "$assemblyName.dll"
-
-    return GetPathRelativeToCurrectLocation $fullPathToAssembly
-}
 
 function RunConfigTransform($Project, $BuildConfiguration){
 	$file = get-childitem $Project
