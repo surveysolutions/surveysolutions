@@ -62,8 +62,6 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             this.MenuInflater.Inflate(Resource.Menu.area_editor, menu);
 
             menu.LocalizeMenuItem(Resource.Id.map_editor_exit, UIResources.MenuItem_Title_AreaCancelEdit);
-            menu.LocalizeMenuItem(Resource.Id.map_editor_clear, UIResources.MenuItem_Title_AreaCancel);
-            
 
             return base.OnCreateOptionsMenu(menu);
         }
@@ -71,9 +69,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         {
             if(item.ItemId == Resource.Id.map_editor_exit)
                 this.ViewModel.CancelCommand.Execute();
-            else if(item.ItemId == Resource.Id.map_editor_clear)
-                this.ViewModel.CancelEditCommand.Execute();
-
+            
             return base.OnOptionsItemSelected(item);
         }
 
