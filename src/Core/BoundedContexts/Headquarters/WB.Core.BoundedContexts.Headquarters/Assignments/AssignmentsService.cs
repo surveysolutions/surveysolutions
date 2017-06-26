@@ -88,8 +88,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         assignmentApiView.LocationLongitude = gpsAnswer.Value.Longitude;
                         assignmentApiView.LocationQuestionId = identifyingAnswer.Identity.Id;
                     }
-
-                    serializedAnswer.AnswerAsString = identifyingAnswer.AnswerAsString;
                 }
 
                 assignmentApiView.Answers.Add(serializedAnswer);
