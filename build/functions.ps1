@@ -18,7 +18,7 @@ function GetPathToConfigTransformator() {
 }
 
 function GetMainSolutionPath(){
-     return "WB.sln"
+     return "src\WB.sln"
 }
 
 function CleanFolders($Filter) {
