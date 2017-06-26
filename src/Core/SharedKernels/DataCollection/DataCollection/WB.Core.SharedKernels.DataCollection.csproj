@@ -8,7 +8,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
-    <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CommonServiceLocator" Version="1.3.0" />
