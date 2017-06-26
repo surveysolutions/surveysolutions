@@ -124,6 +124,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public IReadOnlyCollection<TEntity> FixedQuery(Expression<Func<TEntity, bool>> wherePredicate, Expression<Func<TEntity, int>> orderPredicate, int takeCount, int skip = 0)
             => this.RunInTransaction(table => table.Where(wherePredicate).OrderBy(orderPredicate).Skip(skip).Take(takeCount).ToReadOnlyCollection());
 
+        public IReadOnlyCollection<TResult> FixedQueryWithSelection<TResult>(
+            Expression<Func<TEntity, bool>> wherePredicate, Expression<Func<TEntity, int>> orderPredicate,
+            Expression<Func<TEntity, TResult>> selectPredicate,
+            int takeCount, int skip = 0) where TResult : class
+            => this.RunInTransaction(table => table.Where(wherePredicate).OrderBy(orderPredicate)
+                .Select(selectPredicate).Skip(skip).Take(takeCount).ToReadOnlyCollection());
+
         public virtual void RemoveAll()
         {
             RunInTransaction(table => table.Connection.DeleteAll<TEntity>());
