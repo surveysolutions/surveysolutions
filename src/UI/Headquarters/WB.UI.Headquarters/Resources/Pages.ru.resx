@@ -644,7 +644,7 @@
     <value>Интервьюеры</value>
   </data>
   <data name="InterviewerProfile_NewOnDevice" xml:space="preserve">
-    <value>новые интервью на устройстве</value>
+    <value>новые на устройстве</value>
   </data>
   <data name="InterviewerProfile_Rejected" xml:space="preserve">
     <value>возвращённые на устройство интервью</value>

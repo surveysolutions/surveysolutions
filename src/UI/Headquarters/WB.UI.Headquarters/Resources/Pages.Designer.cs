@@ -1330,7 +1330,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to new assignments on device.
+        ///   Looks up a localized string similar to new on device.
         /// </summary>
         public static string InterviewerProfile_NewOnDevice {
             get {
@@ -1366,7 +1366,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to rejected assignments again on device.
+        ///   Looks up a localized string similar to rejected again on device.
         /// </summary>
         public static string InterviewerProfile_Rejected {
             get {
