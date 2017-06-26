@@ -168,17 +168,10 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 }
             }
         }
+        
+        public IMvxCommand SwitchMapCommand => new MvxCommand<MapDescription>((MapDescription map) => { this.SelectedMap = map.MapName; });
 
-        private IMvxAsyncCommand switchMapCommand;
-
-        public IMvxAsyncCommand SwitchMapCommand => this.switchMapCommand ?? (this.switchMapCommand
-            = new MvxAsyncCommand<MapDescription>(this.SwitchMapAsync, _ => !this.IsInProgress));
-
-        private async Task SwitchMapAsync(MapDescription map)
-        {
-            this.SelectedMap = map.MapName;
-         }
-
+       
         public IMvxAsyncCommand RotateMapToNorth => new MvxAsyncCommand(async () =>
             await this.MapView?.SetViewpointRotationAsync(0));
 
