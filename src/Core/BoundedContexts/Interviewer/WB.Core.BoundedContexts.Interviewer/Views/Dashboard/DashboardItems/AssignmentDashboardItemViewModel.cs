@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
@@ -62,6 +64,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.PrefilledQuestions = GetPrefilledQuestions(identifyingData.Take(3));
             this.DetailedPrefilledQuestions = GetPrefilledQuestions(identifyingData.Skip(3));
             this.GpsLocation = this.GetAssignmentLocation(assignment);
+            this.dashboard = dashboardViewModel;
 
             dashboardViewModel.InterviewsCountChanged += (sender, args) => this.Refresh();
 
@@ -98,6 +101,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private AssignmentDocument assignment;
         private string title;
         private string comment;
+        private DashboardViewModel dashboard;
 
         public string QuestionnaireName => string.Format(InterviewerUIResources.DashboardItem_Title, this.assignment.Title, this.questionnaireIdentity.Version);
 
@@ -137,25 +141,42 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         private async Task CreateNewInterviewAsync()
         {
-            RaiseStartingLongOperation();
-            var interviewId = Guid.NewGuid();
-            var interviewerIdentity = this.principal.CurrentUserIdentity;
-            this.assignmentDocumentsStorage.FetchPreloadedData(this.assignment);
+            try
+            {
+                this.dashboard.IsInProgress = true;
 
-            List<InterviewAnswer> answers = this.GetAnswers(this.assignment.Answers);
+                var interviewId = Guid.NewGuid();
+                var interviewerIdentity = this.principal.CurrentUserIdentity;
+                this.assignmentDocumentsStorage.FetchPreloadedData(this.assignment);
 
-            ICommand createInterviewCommand = new CreateInterviewOnClientCommand(interviewId,
+                List<InterviewAnswer> answers = this.GetAnswers(this.assignment.Answers);
+
+                ICommand createInterviewCommand = new CreateInterviewOnClientCommand(interviewId,
                     interviewerIdentity.UserId,
-                    new QuestionnaireIdentity(this.questionnaireIdentity.QuestionnaireId, this.questionnaireIdentity.Version),
-                    DateTime.UtcNow, 
+                    new QuestionnaireIdentity(this.questionnaireIdentity.QuestionnaireId,
+                        this.questionnaireIdentity.Version),
+                    DateTime.UtcNow,
                     interviewerIdentity.SupervisorId,
                     null,
                     this.assignment.Id,
                     answers
                 );
 
-            await this.commandService.ExecuteAsync(createInterviewCommand);
-            this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
+                await this.commandService.ExecuteAsync(createInterviewCommand);
+                this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
+            }
+            catch (InterviewException e)
+            {
+                // This code is going to be removed after KP-9461. And according to research in KP-9513 we should reduce amount of dependencies in constructor
+
+                var userInteractionService = Mvx.Resolve<IUserInteractionService>(); 
+                Mvx.Resolve<ILoggerProvider>().GetFor<AssignmentDashboardItemViewModel>().Error(e.Message, e);
+                await userInteractionService.AlertAsync(string.Format(InterviewerUIResources.FailedToCreateInterview, e.Message), UIResources.Error); 
+            }
+            finally
+            {
+                this.dashboard.IsInProgress = false;
+            }
         }
 
         private List<InterviewAnswer> GetAnswers(List<AssignmentDocument.AssignmentAnswer> identifyingAnswers)
@@ -175,11 +196,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private AbstractAnswer ConvertToAbstractAnswer(AssignmentDocument.AssignmentAnswer assignmentAnswer)
         {
             return this.answerSerializer.Deserialize<AbstractAnswer>(assignmentAnswer.SerializedAnswer);
-        }
-
-        private void RaiseStartingLongOperation()
-        {
-            messenger.Publish(new StartingLongOperationMessage(this));
         }
 
         private List<PrefilledQuestion> GetPrefilledQuestions(IEnumerable<AssignmentDocument.AssignmentAnswer> identifyingAnswers)
