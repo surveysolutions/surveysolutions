@@ -101,7 +101,7 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
 	if($ExcludeExtensions)
 	{
 	    Write-Host "##teamcity[message text='Building apk excluding extra']"		
-		$command += "/p:Constants=EXCLUDEEXTENSIONS"
+		$command += " /p:Constants=EXCLUDEEXTENSIONS"
 	}
 	else
 	{
