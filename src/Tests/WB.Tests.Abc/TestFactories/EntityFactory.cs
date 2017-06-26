@@ -1629,6 +1629,7 @@ namespace WB.Tests.Abc.TestFactories
             }
 
             asDynamic.InterviewSummaries = interviewSummary;
+            asDynamic.Answers = null;
 
             return result;
         }

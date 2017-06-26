@@ -31,6 +31,7 @@ using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.MaskFormatter;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization;
 using WB.Core.Synchronization.MetaInfo;
@@ -60,6 +61,7 @@ namespace WB.UI.Headquarters.Injections
             this.Kernel.Bind<IInterviewImportService>().To<InterviewImportService>();
             this.Kernel.Bind<IFormDataConverterLogger>().To<FormDataConverterLogger>();
             this.Kernel.Bind<IMaskedFormatter>().To<MaskedFormatter>();
+            this.Kernel.Bind<IInterviewTreeBuilder>().To<InterviewTreeBuilder>();
             this.Kernel.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>();
             this.Kernel.Bind<IMetaInfoBuilder>().To<MetaInfoBuilder>();
             this.Kernel.Bind<IInterviewEntityViewFactory>().To<InterviewEntityViewFactory>();
