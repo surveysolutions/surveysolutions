@@ -39,7 +39,7 @@
                 }
                 else if(authorizedUser.IsSupervisor)
                 {
-                    <a class="navbar-brand" href="@Url.Action("Index", "Survey", new {area = ""})">@Users.Supervisor</a>
+                    <a class="navbar-brand" href="@Url.Action("Interviews", "Survey", new {area = ""})">@Users.Supervisor</a>
                 }
                 else if (authorizedUser.IsObserver)
                 {
