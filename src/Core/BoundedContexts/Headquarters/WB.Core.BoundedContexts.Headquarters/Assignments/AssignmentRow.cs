@@ -15,7 +15,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public int Id { get; set; }
         public string Responsible { get; set; }
         public string ResponsibleRole { get; set; }
-        public bool ResponsibleIsArchived { get; set; }
         public QuestionnaireIdentity QuestionnaireId { get; set; }
         public bool Archived { get; set; }
 

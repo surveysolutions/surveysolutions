@@ -33,7 +33,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 var summaries = DefineOrderBy(_, input)
                     .Where(x => ids.Contains(x.SummaryId))
                     .Fetch(x => x.AnswersToFeaturedQuestions)
-                    .Fetch(x => x.Responsible)
                     .ToList();
                 return summaries;
             });
@@ -60,7 +59,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     ResponsibleId = x.ResponsibleId,
                     ResponsibleName = x.ResponsibleName,
                     ResponsibleRole = x.ResponsibleRole,
-                    ResponsibleIsArchived = x.Responsible.IsArchived,
                     HasErrors = x.HasErrors,
                     Status = x.Status.ToString(),
                     CanDelete =    x.Status == InterviewStatus.Created

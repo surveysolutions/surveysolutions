@@ -92,7 +92,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             var mapper = new ModelMapper();
             var mappingTypes = this.settings.MappingAssemblies
                                             .SelectMany(x => x.GetExportedTypes())
-                                            .Where(x => (x.GetCustomAttribute<PlainStorageAttribute>() != null || x.GetCustomAttribute<CommonStorageAttribute>() != null) &&
+                                            .Where(x => x.GetCustomAttribute<PlainStorageAttribute>() != null &&
                                                         x.IsSubclassOfRawGeneric(typeof(ClassMapping<>)));
 
             mapper.AddMappings(mappingTypes);

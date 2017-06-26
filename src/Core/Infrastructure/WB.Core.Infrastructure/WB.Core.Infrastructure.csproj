@@ -165,7 +165,6 @@
     <Compile Include="PlainStorage\IEntitySerializer.cs" />
     <Compile Include="PlainStorage\IPlainStorageAccessor.cs" />
     <Compile Include="PlainStorage\IPlainTransactionManager.cs" />
-    <Compile Include="PlainStorage\CommonStorageAttribute.cs" />
     <Compile Include="PlainStorage\PlainStorageAttribute.cs" />
     <Compile Include="ReadSide\ICacheableRepositoryWriter.cs" />
     <Compile Include="ReadSide\IReadSideStatusService.cs" />
