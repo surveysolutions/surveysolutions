@@ -11,6 +11,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
@@ -27,7 +28,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             SampleImportSettings sampleImportSettings = null,
             IInterviewImportDataParsingService interviewImportDataParsingService=null,
             QuestionnaireDocument questionnaireDocument = null,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null)
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null,
+            IInterviewTreeBuilder interviewTreeBuilder = null)
         {
             var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, 1);
             var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(_ 
@@ -48,7 +50,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                 transactionManagerProvider: Create.Service.TransactionManagerProvider(),
                 assignmentPlainStorageAccessor: Mock.Of<IPlainStorageAccessor<Assignment>>(),
                 questionnaireBrowseViewFactory: questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
-                userViewFactory : Mock.Of<IUserViewFactory>());
+                userViewFactory : Mock.Of<IUserViewFactory>(),
+                interviewTreeBuilder: interviewTreeBuilder ?? Mock.Of<IInterviewTreeBuilder>());
         }
     }
 }
