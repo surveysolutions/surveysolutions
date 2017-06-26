@@ -10,7 +10,7 @@
   <TextView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:textColor="#ffff"
+      android:textColor="@color/text_color_light"
       android:textSize="18sp"
       android:textStyle="bold"
       local:MvxBind="Text MapName;" />

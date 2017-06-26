@@ -37,6 +37,7 @@
         <item name="android:layout_height">32dp</item>
         <item name="android:layout_gravity">right</item>
         <item name="android:scaleType">fitCenter</item>
+        <item name="android:paddingRight">20dp</item>
         <item name="android:background">@drawable/locator_icon</item>
     </style>
 

@@ -246,7 +246,10 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     this.MapsList = this.AvailableMaps.Select(x => x.MapName).ToList();
 
                     if (this.Map == null)
+                    {
                         this.ReloadMap();
+                        this.StartEditAreaCommand.Execute();
+                    }
                 }
                 else
                 {
@@ -370,15 +373,17 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 this.MapView.SketchEditor.UndoCommand.Execute(command);
         }
 
-        private void BtnDeleteCommand()
+        private void BtnCancelCommand()
         {
-            var command = this.MapView?.SketchEditor.DeleteCommand;
-            if (this.MapView?.SketchEditor?.DeleteCommand.CanExecute(command) ?? false)
-                this.MapView.SketchEditor.DeleteCommand.Execute(command);
+            var command = this.MapView?.SketchEditor.UndoCommand;
+            while (this.MapView?.SketchEditor?.UndoCommand.CanExecute(command) ?? false)
+            {
+                this.MapView.SketchEditor.UndoCommand.Execute(command);
+            }
         }
 
         public IMvxCommand UndoCommand => new MvxCommand(this.BtnUndo);
-        public IMvxCommand DeleteCommand => new MvxCommand(this.BtnDeleteCommand);
+        public IMvxCommand CancelEditCommand => new MvxCommand(this.BtnCancelCommand);
 
         private bool isEditing;
         public bool IsEditing
