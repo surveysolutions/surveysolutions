@@ -21,7 +21,7 @@
         <template v-for="question in questions">
             <div class="wrapper-info" v-if="question.isReadonly">
                 <div class="container-info" :id="question.identity">
-                    <p v-html="question.title"></p>
+                    <h5 v-html="question.title"></h5>
                     <p>
                         <b v-if="question.type == 'Gps'">
                             <a :href="getGpsUrl(question)" target="_blank">{{question.answer}}</a>
