@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_width="wrap_content"
     
-    android:layout_marginLeft="@dimen/Area_Editor_margin_30"
-    android:layout_marginTop="@dimen/Area_Editor_margin_10">
+    android:layout_marginLeft="@dimen/area_editor_common_margin_left"
+    android:layout_marginTop="@dimen/area_editor_list_item_margin_top">
   <TextView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

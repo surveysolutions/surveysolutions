@@ -1,23 +1,19 @@
 ﻿using Android.Views.InputMethods;
 using Android.Widget;
 using MvvmCross.Binding;
-using MvvmCross.Binding.Droid.Views;
-using MvvmCross.Droid.Support.V7.AppCompat.Widget;
+using WB.UI.Shared.Enumerator.CustomControls;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
-    public class MvxAutoCompleteTextViewHidePopupOnDoneBinding : BaseBinding<MvxAppCompatAutoCompleteTextView, object>
+    public class InstantAutoCompleteTextViewHidePopupOnDoneBinding : BaseBinding<InstantAutoCompleteTextView, object>
     {
-        public MvxAutoCompleteTextViewHidePopupOnDoneBinding(MvxAppCompatAutoCompleteTextView androidControl) : base(androidControl)
+        public InstantAutoCompleteTextViewHidePopupOnDoneBinding(InstantAutoCompleteTextView androidControl) : base(androidControl)
         {
         }
 
-        public override MvxBindingMode DefaultMode
-        {
-            get { return MvxBindingMode.TwoWay; }
-        }
+        public override MvxBindingMode DefaultMode => MvxBindingMode.OneWayToSource;
 
-        protected override void SetValueToView(MvxAppCompatAutoCompleteTextView view, object value) { }
+        protected override void SetValueToView(InstantAutoCompleteTextView view, object value) { }
 
         public override void SubscribeToEvents()
         {
