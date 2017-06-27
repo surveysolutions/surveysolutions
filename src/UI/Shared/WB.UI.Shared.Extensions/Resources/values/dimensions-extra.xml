@@ -1,22 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 
 <resources>
-    <dimen name="Area_Editor_margin_1">1dp</dimen>
-    <dimen name="Area_Editor_margin_10">10dp</dimen>
-    <dimen name="Area_Editor_margin_15">15dp</dimen>
-    <dimen name="Area_Editor_margin_20">20dp</dimen>
-    <dimen name="Area_Editor_margin_25">25dp</dimen>
-    <dimen name="Area_Editor_margin_30">30dp</dimen>
-    <dimen name="Area_Editor_margin_33">33dp</dimen>
-    <dimen name="Area_Editor_margin_45">45dp</dimen>
-    <dimen name="Area_Editor_margin_95">95dp</dimen>
-    <dimen name="Area_Editor_margin_120">120dp</dimen>
-    <dimen name="Area_Editor_margin_160">160dp</dimen>
-    <dimen name="Area_Editor_margin_200">200dp</dimen>
-    <dimen name="Area_Editor_margin_230">230dp</dimen>
-    <dimen name="Area_Editor_margin_280">280dp</dimen>
-    <dimen name="Area_Editor_margin_300">300dp</dimen>
-    <dimen name="Area_Editor_margin_320">320dp</dimen>
+    <dimen name="area_editor_list_item_margin_top">15dp</dimen>
+    <dimen name="area_editor_cancel_margin_right">15dp</dimen>
+    <dimen name="area_editor_common_margin_top">30dp</dimen>
+    <dimen name="area_editor_common_margin_right">30dp</dimen>
+    <dimen name="area_editor_common_margin_left">30dp</dimen>
+    <dimen name="area_editor_lower_panel_margin_bottom">33dp</dimen>
+    <dimen name="area_editor_undo_margin_top">95dp</dimen>
+    <dimen name="area_editor_zoom_out_margin_bottom">160dp</dimen>
+    <dimen name="area_editor_zoom_in_margin_bottom">230dp</dimen>
+    <dimen name="area_editor_compass_margin_bottom">300dp</dimen>
     
     <dimen name="button_corners_radius">6dp</dimen>
 </resources>

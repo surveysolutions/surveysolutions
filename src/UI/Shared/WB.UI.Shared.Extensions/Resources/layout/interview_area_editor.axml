@@ -30,13 +30,14 @@
                 local:MvxBind="Click ShowPanelCommand;">
                 <LinearLayout
                     android:id="@+id/area_map_view_title"
-                    android:layout_marginLeft="@dimen/Area_Editor_margin_20"
+                    
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/area_editor_common_margin_left"
                         android:id="@+id/areaEditor_No_Maps_Text"
                         android:textColor="@color/text_color_light"
                         android:textSize="16sp"
@@ -44,6 +45,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/area_editor_common_margin_left"
                         android:id="@+id/areaEditor_No_Maps_Text"
                         android:textColor="@color/text_color_light"
                         android:textSize="18sp"
@@ -52,7 +54,7 @@
                 </LinearLayout>
                 <ImageButton
                     style="@style/Area_LocationButton"
-                    local:MvxBind="Click SwitchLocatorCommand; Visibility(Map != null)" />
+                    local:MvxBind="Click SwitchLocatorCommand; Visibility Visibility(Map != null)" />
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
     </android.support.design.widget.CoordinatorLayout>
@@ -77,8 +79,8 @@
         android:id="@+id/areaEditor_No_Maps_Text"
         android:textColor="@color/text_color_light"
         android:textSize="16sp"
-        android:layout_marginTop="@dimen/Area_Editor_margin_30"
-        android:layout_marginLeft="@dimen/Area_Editor_margin_30"
+        android:layout_marginTop="@dimen/area_editor_common_margin_top"
+        android:layout_marginLeft="@dimen/area_editor_common_margin_left"
         local:MvxBind="Text Localization('AreaMap_Available_Maps_Title');"/>
       
       <TextView
@@ -87,15 +89,15 @@
           android:id="@+id/areaEditor_No_Maps_Text"
           android:textColor="@color/text_color_light"
           android:textSize="14sp"
-          android:layout_marginTop="@dimen/Area_Editor_margin_20"
-          android:layout_marginLeft="@dimen/Area_Editor_margin_30"
+          android:layout_marginTop="@dimen/area_editor_common_margin_top"
+          android:layout_marginLeft="@dimen/area_editor_common_margin_left"
           local:MvxBind="Text Localization('AreaMap_NoMapsFound'); Visibility Visibility(Map == null);" />
     <MvxRecyclerView
         android:id="@+id/mapsList"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/Area_Editor_margin_20"
+        android:layout_marginTop="@dimen/area_editor_common_margin_top"
         local:MvxBind="ItemsSource AvailableMaps; ItemClick SwitchMapCommand;"
         local:MvxItemTemplate="@layout/map_item" />
 
@@ -120,7 +122,7 @@
         <Button
             style="@style/Area_Screen_Button_Bordered"
             android:id="@+id/areaEditor_Close_Panel"
-            android:layout_marginLeft="@dimen/Area_Editor_margin_25"
+            android:layout_marginLeft="@dimen/area_editor_common_margin_right"
             local:MvxBind="Click HidePanelComand;Text Localization('AreaMap_Close');" />
       </LinearLayout>
       <LinearLayout
@@ -132,7 +134,7 @@
         <Button
             style="@style/Area_Screen_Button_Bordered"
             android:id="@+id/areaEditor_Update_Maps"
-            android:layout_marginRight="@dimen/Area_Editor_margin_20"
+            android:layout_marginRight="@dimen/area_editor_common_margin_right"
             local:MvxBind="Click UpdateMapsCommand; Text Localization('AreaMap_Update_Maps');" />
       </LinearLayout>
     </LinearLayout>
@@ -143,29 +145,29 @@
         style="@style/Area_Screen_Button_Bordered"
         android:id="@+id/areaEditor_Undo"
         local:MvxBind="Click UndoCommand;Text Localization('AreaMap_Undo'); Enabled CanUndo; Visibility Visibility(IsPanelVisible == false);"
-        android:layout_marginRight="@dimen/Area_Editor_margin_20"
-        android:layout_marginTop="@dimen/Area_Editor_margin_95" />
+        android:layout_marginRight="@dimen/area_editor_common_margin_right"
+        android:layout_marginTop="@dimen/area_editor_undo_margin_top" />
     <ImageButton
         style="@style/Area_CompassButton"
         android:layout_alignParentBottom="true"
         local:MvxBind="Click RotateMapToNorth; Visibility Visibility(Map != null);"
-        android:layout_marginBottom="@dimen/Area_Editor_margin_300"
-        android:layout_marginLeft="@dimen/Area_Editor_margin_30" />
+        android:layout_marginBottom="@dimen/area_editor_compass_margin_bottom"
+        android:layout_marginLeft="@dimen/area_editor_common_margin_left" />
     <ImageButton
         style="@style/Area_ZoomMapInButton"
         android:layout_alignParentBottom="true"
         local:MvxBind="Click ZoomMapIn; Visibility Visibility(Map != null);"
-        android:layout_marginBottom="@dimen/Area_Editor_margin_230"
-        android:layout_marginLeft="@dimen/Area_Editor_margin_30" />
+        android:layout_marginBottom="@dimen/area_editor_zoom_in_margin_bottom"
+        android:layout_marginLeft="@dimen/area_editor_common_margin_left" />
     <ImageButton
         style="@style/Area_ZoomMapOutButton"
         android:layout_alignParentBottom="true"
         local:MvxBind="Click ZoomMapOut; Visibility Visibility(Map != null);"
-        android:layout_marginBottom="@dimen/Area_Editor_margin_160"
-        android:layout_marginLeft="@dimen/Area_Editor_margin_30" />
+        android:layout_marginBottom="@dimen/area_editor_zoom_out_margin_bottom"
+        android:layout_marginLeft="@dimen/area_editor_common_margin_left" />
     <LinearLayout
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/Area_Editor_margin_33"
+        android:layout_marginBottom="@dimen/area_editor_lower_panel_margin_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -178,7 +180,6 @@
             android:id="@+id/area_stats"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/Area_Editor_margin_25"
             android:layout_gravity="left"
             android:layout_weight="0.6"
             android:gravity="center_vertical|left"
@@ -186,6 +187,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/area_editor_common_margin_left"
                 android:fontFamily="Roboto"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -195,6 +197,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/area_editor_common_margin_left"
                 android:fontFamily="Roboto"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -213,12 +216,12 @@
                 android:id="@+id/areaEditor_Cancel"
                 android:background="@color/text_color_light"
                 android:textColor="#000000"
-                android:layout_marginRight="@dimen/Area_Editor_margin_15"
+                android:layout_marginRight="@dimen/area_editor_cancel_margin_right"
                 local:MvxBind="Click CancelCommand;Text Localization('AreaMap_Cancel');" />
             <Button
                 style="@style/Area_Screen_Button"
                 android:id="@+id/areaEditor_Save"
-                android:layout_marginRight="@dimen/Area_Editor_margin_20"
+                android:layout_marginRight="@dimen/area_editor_common_margin_right"
                 local:MvxBind="Click SaveAreaCommand;Text Localization('AreaMap_Save'); Enabled CanSave;" />
         </LinearLayout>
     </LinearLayout>
