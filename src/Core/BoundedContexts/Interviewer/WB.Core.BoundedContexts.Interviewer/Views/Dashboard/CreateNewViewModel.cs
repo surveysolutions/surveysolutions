@@ -15,7 +15,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable.Services;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
@@ -162,15 +161,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
                 List<InterviewAnswer> answers = this.GetAnswers(assignment.Answers);
 
-                ICommand createInterviewCommand = new CreateInterviewOnClientCommand(interviewId,
+                ICommand createInterviewCommand = new CreateInterview(interviewId,
                     interviewerIdentity.UserId,
-                    new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId,
-                        questionnaireIdentity.Version),
+                    new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version),
+                    answers,
                     DateTime.UtcNow,
                     interviewerIdentity.SupervisorId,
                     null,
-                    assignment.Id,
-                    answers
+                    null,
+                    assignment.Id
                 );
 
                 await this.commandService.ExecuteAsync(createInterviewCommand);
