@@ -102,7 +102,22 @@ else
                         <li>@string.Format(Pages.InterviewerProfile_FullNameFormat, Model.FullName)</li>
                         <li>@string.Format(Pages.InterviewerProfile_PhoneFormat, Model.Phone)</li>
                     }
-                    <li><a href="@Url.Action("Edit", new {Id = Model.Id})">@Pages.InterviewerProfile_Info</a></li>
+                    
+                    <li>
+                        @if (!Model.IsArchived)
+                        {
+                            <a href="@Url.Action("Edit", new {Id = Model.Id})">@Pages.InterviewerProfile_Info</a>
+                        }
+                        else
+                        {
+                            @Pages.InterviewerIsArchived
+
+                            if (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator)
+                            {
+                                <text>(<a href="@Url.Action("UnArchive", new {Id = Model.Id})">@Pages.Unarchive</a>)</text>
+                            }
+                        }
+                    </li>
                 </ul>
             </div>
         </div>

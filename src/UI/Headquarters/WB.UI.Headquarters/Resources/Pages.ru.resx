@@ -999,4 +999,12 @@
   <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
     <value>квадратных метров</value>
   </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>Разархивировать</value>
+    <comment>Разархивировать</comment>
+  </data>
+  <data name="InterviewerIsArchived" xml:space="preserve">
+    <value>Интервьювер заархерирован</value>
+    <comment>Интервьювер заархерирован</comment>
+  </data>
 </root>
