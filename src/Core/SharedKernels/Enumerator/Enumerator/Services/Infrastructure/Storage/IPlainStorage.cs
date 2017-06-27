@@ -23,6 +23,10 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage
         IReadOnlyCollection<TEntity> FixedQuery(Expression<Func<TEntity, bool>> wherePredicate,
             Expression<Func<TEntity, int>> orderPredicate, int takeCount, int skip = 0);
 
+        IReadOnlyCollection<TResult> FixedQueryWithSelection<TResult>(Expression<Func<TEntity, bool>> wherePredicate,
+            Expression<Func<TEntity, int>> orderPredicate, Expression<Func<TEntity, TResult>> selectPredicate,
+            int takeCount, int skip = 0) where TResult : class;
+
         TEntity FirstOrDefault();
         IReadOnlyCollection<TEntity> LoadAll();
         int Count(Expression<Func<TEntity, bool>> predicate);

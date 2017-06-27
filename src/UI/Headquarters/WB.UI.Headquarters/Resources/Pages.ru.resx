@@ -644,7 +644,7 @@
     <value>Интервьюеры</value>
   </data>
   <data name="InterviewerProfile_NewOnDevice" xml:space="preserve">
-    <value>новые интервью на устройстве</value>
+    <value>новые на устройстве</value>
   </data>
   <data name="InterviewerProfile_Rejected" xml:space="preserve">
     <value>возвращённые на устройство интервью</value>
@@ -998,5 +998,13 @@
   </data>
   <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
     <value>квадратных метров</value>
+  </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>Разархивировать</value>
+    <comment>Разархивировать</comment>
+  </data>
+  <data name="InterviewerIsArchived" xml:space="preserve">
+    <value>Интервьювер заархерирован</value>
+    <comment>Интервьювер заархерирован</comment>
   </data>
 </root>

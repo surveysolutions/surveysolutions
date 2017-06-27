@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         IReadOnlyCollection<AssignmentDocument> LoadAll();
         void RemoveAll();
         void Remove(int assignmentId);
-
+        
         AssignmentDocument FetchPreloadedData(AssignmentDocument document);
     }
 }

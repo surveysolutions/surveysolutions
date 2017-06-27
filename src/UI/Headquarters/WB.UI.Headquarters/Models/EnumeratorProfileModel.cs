@@ -22,5 +22,6 @@ namespace WB.UI.Headquarters.Models
         public SynchronizationActivity SynchronizationActivity { get; set; }
         public DateTime? DeviceAssignmentDate { get; set; }
         public DateTime? LastSyncronizationDate { get; set; }
+        public bool IsArchived { get; set; }
     }
 }

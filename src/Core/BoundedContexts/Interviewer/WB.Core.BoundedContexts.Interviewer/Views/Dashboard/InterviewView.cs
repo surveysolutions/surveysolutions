@@ -36,5 +36,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public double? LocationLongitude { get; set; }
 
         public string Language { get; set; }
+
+        public string QuestionnaireTitle { get; set; }
     }
 }

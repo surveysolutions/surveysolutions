@@ -397,10 +397,10 @@
     <value>Interviewers</value>
   </data>
   <data name="InterviewerProfile_NewOnDevice" xml:space="preserve">
-    <value>new assignments on device</value>
+    <value>new on device</value>
   </data>
   <data name="InterviewerProfile_Rejected" xml:space="preserve">
-    <value>rejected assignments again on device</value>
+    <value>rejected again on device</value>
   </data>
   <data name="InterviewerProfile_WaitingForApproval" xml:space="preserve">
     <value>waiting for approval</value>
@@ -1003,5 +1003,11 @@
   </data>
   <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
     <value>square meters</value>
+  </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>Unarchive</value>
+  </data>
+  <data name="InterviewerIsArchived" xml:space="preserve">
+    <value>Interviewer is archived</value>
   </data>
 </root>

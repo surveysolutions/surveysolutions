@@ -651,28 +651,31 @@
     <value>№ {0}</value>
     <comment>{0} - Assignment id</comment>
   </data>
-  <data name="Dashboard_AssignmentCard_TitleCountdown">
+  <data name="Dashboard_AssignmentCard_TitleCountdown" xml:space="preserve">
     <value>{0} интервью</value>
     <comment>{0} - number of interviews to be created</comment>
   </data>
-  <data name="Dashboard_AssignmentCard_TitleCountdown_Unlimited">
+  <data name="Dashboard_AssignmentCard_TitleCountdown_Unlimited" xml:space="preserve">
     <value>Не ограничено</value>
   </data>
-  <data name="Dashboard_InterviewCard_Title">
+  <data name="Dashboard_InterviewCard_Title" xml:space="preserve">
     <value>№ {0}</value>
     <comment>{0} - Assignment id</comment>
   </data>
-  <data name="Dashboard_ShowLocation">
+  <data name="Dashboard_ShowLocation" xml:space="preserve">
     <value>Показать на карте</value>
   </data>
-  <data name="Dashboard_Open">
+  <data name="Dashboard_Open" xml:space="preserve">
     <value>Открыть</value>
   </data>
-  <data name="Dashboard_Discard">
+  <data name="Dashboard_Discard" xml:space="preserve">
     <value>Удалить</value>
   </data>
   <data name="Synchronization_Of_AssignmentsFormat" xml:space="preserve">
     <value>Синхронизация {0} из {1} заданий</value>
     <comment>Синхронизация {0} из {1} заданий</comment>
+  </data>
+  <data name="FailedToCreateInterview" xml:space="preserve">
+    <value>Не удалось создать интервью. Причина: {0}</value>
   </data>
 </root>

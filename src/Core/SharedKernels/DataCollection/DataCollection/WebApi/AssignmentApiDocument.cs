@@ -28,9 +28,6 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
 
             [JsonProperty("val")]
             public string SerializedAnswer { get; set; }
-
-            [JsonProperty("str")]
-            public string AnswerAsString { get; set; }
         }
     }
 
