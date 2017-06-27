@@ -745,6 +745,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                                                 row[columnIndex]),
                                             levelData.FileName));
                                 break;
+                            case ValueParsingResult.UnsupportedAreaQuestion:
+                                yield return
+                                    new PreloadedDataVerificationError("PL0038",
+                                        PreloadingVerificationMessages.PL0038_UnsupportedAreaQuestion,
+                                        new PreloadedDataVerificationReference(columnIndex, rowIndex,
+                                            PreloadedDataVerificationReferenceType.Cell,
+                                            string.Format("{0}:{1}", levelData.Header[columnIndex],
+                                                row[columnIndex]),
+                                            levelData.FileName));
+                                break;
                             case ValueParsingResult.GeneralErrorOccured:
                             default:
                                 yield return
