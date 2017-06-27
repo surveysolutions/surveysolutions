@@ -1754,54 +1754,6 @@ namespace WB.UI.Shared.Extensions
 		public partial class Dimension
 		{
 			
-			// aapt resource value: 0x7f080110
-			public static int Area_Editor_margin_1 = 2131230992;
-			
-			// aapt resource value: 0x7f080111
-			public static int Area_Editor_margin_10 = 2131230993;
-			
-			// aapt resource value: 0x7f080119
-			public static int Area_Editor_margin_120 = 2131231001;
-			
-			// aapt resource value: 0x7f080112
-			public static int Area_Editor_margin_15 = 2131230994;
-			
-			// aapt resource value: 0x7f08011a
-			public static int Area_Editor_margin_160 = 2131231002;
-			
-			// aapt resource value: 0x7f080113
-			public static int Area_Editor_margin_20 = 2131230995;
-			
-			// aapt resource value: 0x7f08011b
-			public static int Area_Editor_margin_200 = 2131231003;
-			
-			// aapt resource value: 0x7f08011c
-			public static int Area_Editor_margin_230 = 2131231004;
-			
-			// aapt resource value: 0x7f080114
-			public static int Area_Editor_margin_25 = 2131230996;
-			
-			// aapt resource value: 0x7f08011d
-			public static int Area_Editor_margin_280 = 2131231005;
-			
-			// aapt resource value: 0x7f080115
-			public static int Area_Editor_margin_30 = 2131230997;
-			
-			// aapt resource value: 0x7f08011e
-			public static int Area_Editor_margin_300 = 2131231006;
-			
-			// aapt resource value: 0x7f08011f
-			public static int Area_Editor_margin_320 = 2131231007;
-			
-			// aapt resource value: 0x7f080116
-			public static int Area_Editor_margin_33 = 2131230998;
-			
-			// aapt resource value: 0x7f080117
-			public static int Area_Editor_margin_45 = 2131230999;
-			
-			// aapt resource value: 0x7f080118
-			public static int Area_Editor_margin_95 = 2131231000;
-			
 			// aapt resource value: 0x7f0800c7
 			public static int Interview_Attachment_Large_margin_bottom = 2131230919;
 			
@@ -2362,6 +2314,36 @@ namespace WB.UI.Shared.Extensions
 			
 			// aapt resource value: 0x7f08000d
 			public static int abc_text_size_title_material_toolbar = 2131230733;
+			
+			// aapt resource value: 0x7f080111
+			public static int area_editor_cancel_margin_right = 2131230993;
+			
+			// aapt resource value: 0x7f080114
+			public static int area_editor_common_margin_left = 2131230996;
+			
+			// aapt resource value: 0x7f080113
+			public static int area_editor_common_margin_right = 2131230995;
+			
+			// aapt resource value: 0x7f080112
+			public static int area_editor_common_margin_top = 2131230994;
+			
+			// aapt resource value: 0x7f080119
+			public static int area_editor_compass_margin_bottom = 2131231001;
+			
+			// aapt resource value: 0x7f080110
+			public static int area_editor_list_item_margin_top = 2131230992;
+			
+			// aapt resource value: 0x7f080115
+			public static int area_editor_lower_panel_margin_bottom = 2131230997;
+			
+			// aapt resource value: 0x7f080116
+			public static int area_editor_undo_margin_top = 2131230998;
+			
+			// aapt resource value: 0x7f080118
+			public static int area_editor_zoom_in_margin_bottom = 2131231000;
+			
+			// aapt resource value: 0x7f080117
+			public static int area_editor_zoom_out_margin_bottom = 2131230999;
 			
 			// aapt resource value: 0x7f08010f
 			public static int button_corners_radius = 2131230991;
