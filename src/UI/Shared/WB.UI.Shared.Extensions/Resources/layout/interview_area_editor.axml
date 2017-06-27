@@ -52,7 +52,7 @@
                 </LinearLayout>
                 <ImageButton
                     style="@style/Area_LocationButton"
-                    local:MvxBind="Click SwitchLocatorCommand;" />
+                    local:MvxBind="Click SwitchLocatorCommand; Visibility(Map != null)" />
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
     </android.support.design.widget.CoordinatorLayout>
@@ -88,6 +88,7 @@
           android:textColor="@color/text_color_light"
           android:textSize="14sp"
           android:layout_marginTop="@dimen/Area_Editor_margin_20"
+          android:layout_marginLeft="@dimen/Area_Editor_margin_30"
           local:MvxBind="Text Localization('AreaMap_NoMapsFound'); Visibility Visibility(Map == null);" />
     <MvxRecyclerView
         android:id="@+id/mapsList"
