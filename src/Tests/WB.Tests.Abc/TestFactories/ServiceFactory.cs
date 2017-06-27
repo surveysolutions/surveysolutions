@@ -469,11 +469,6 @@ namespace WB.Tests.Abc.TestFactories
                 brokenPackagesFactory ?? Mock.Of<IBrokenInterviewPackagesViewFactory>());
         }
 
-        public IIdentifyingAnswerConverter IdentifyingAnswerConverter()
-        {
-            return new IdentifyingAnswerConverter();
-        }
-
         public TesterPlainInterviewFileStorage TesterPlainInterviewFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectory)
         {
             return new TesterPlainInterviewFileStorage(fileSystemAccessor, rootDirectory);

@@ -5,6 +5,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers
@@ -83,7 +84,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public static DateTimeAnswer FromDateTime(DateTime value) => new DateTimeAnswer(value);
 
-        public override string ToString() => Value.ToString("yyyy-MM-ddTHH:mm:ss");
+        public override string ToString() => AnswerUtils.AnswerToString(Value, isTimestamp: Value.Hour + Value.Minute + Value.Second > 0);
     }
 
     [DebuggerDisplay("{ToString()}")]
