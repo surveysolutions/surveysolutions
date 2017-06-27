@@ -226,4 +226,7 @@
   <data name="PL0037_ColumnIsNotIdentifying" xml:space="preserve">
     <value>Column cannot be mapped to non identifying question</value>
   </data>
+  <data name="PL0038_UnsupportedAreaQuestion" xml:space="preserve">
+    <value>Area question cannot be preloaded.</value>
+  </data>
 </root>
