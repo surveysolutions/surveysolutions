@@ -59,7 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         @where => @where.QuestionnaireId == questionnaireIdAsString &&
                                   @where.QuestionId == questionIdAsString &&
                                   @where.ParentValue == parentValueAsDecimal &&
-                                  @where.SearchTitle.Contains(filter) &&
+                                  (filter == "" || filter == null || @where.SearchTitle.Contains(filter)) &&
                                   (@where.TranslationId == translationIdAsString || @where.TranslationId == null),
                         @order => @order.SortOrder,
                         @select => new Option

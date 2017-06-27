@@ -5,7 +5,7 @@
   <LinearLayout style="@style/Interview_Question_Answer"
                 local:MvxBind="BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
 
-    <MvxAutoCompleteTextView
+    <InstantAutoCompleteTextView
       style="@style/Interview_Question_Answer_FilteredComboBox"
       android:completionThreshold="1"
       android:inputType="textVisiblePassword"
