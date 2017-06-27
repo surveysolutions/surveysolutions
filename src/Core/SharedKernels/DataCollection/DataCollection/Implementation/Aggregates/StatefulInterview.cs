@@ -430,7 +430,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public IEnumerable<Identity> GetAllInvalidEntitiesInInterview()
             => this.GetEnabledInvalidStaticTexts()
-                .Concat(this.GetEnabledInvalidQuestions().Select(question => question.Identity));
+                .Concat(this.GetEnabledInvalidQuestions(true).Select(question => question.Identity));
 
         public IEnumerable<Identity> GetInvalidEntitiesInInterview()
             => this.GetEnabledInvalidStaticTexts()
@@ -449,13 +449,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Where(staticText => !staticText.IsDisabled() && !staticText.IsValid)
                 .Select(staticText => staticText.Identity);
 
-        private IEnumerable<InterviewTreeQuestion> GetEnabledInvalidQuestions()
+        private IEnumerable<InterviewTreeQuestion> GetEnabledInvalidQuestions(bool includeAllPrefilled = false)
             => this.Tree.FindQuestions()
                 .Where(question => !question.IsDisabled() 
                                 && !question.IsValid
-                                && (!question.IsPrefilled || (question.IsPrefilled && this.CreatedOnClient))
                                 && !question.IsReadonly
-                );
+                                && (includeAllPrefilled || (!question.IsPrefilled || (question.IsPrefilled && this.CreatedOnClient))));
 
         public int CountEnabledQuestions(Identity group)
             => this.Tree.GetGroup(group)?.CountEnabledQuestions() ?? 0;
