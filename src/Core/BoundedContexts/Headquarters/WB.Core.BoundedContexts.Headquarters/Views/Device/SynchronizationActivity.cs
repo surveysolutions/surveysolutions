@@ -28,8 +28,19 @@
         public bool HasMoreThanMaxActionsCount
             => (this.DownloadedAssigmentsCount + this.UploadedInterviewsCount) > maxActionsCount;
 
-        public int DownloadedAssignmentsInProportionCount => (int) (this.DownloadedAssigmentsCount * this.actionWeight);
-        public int UploadedInterviewsInProportionCount => (int) (this.UploadedInterviewsCount * this.actionWeight);
+        public int DownloadedAssignmentsInProportionCount => this.NormalizeProportion(
+            (int) (this.DownloadedAssigmentsCount * this.actionWeight));
+
+        public int UploadedInterviewsInProportionCount => this.NormalizeProportion(
+            (int) (this.UploadedInterviewsCount * this.actionWeight));
+
+        private int NormalizeProportion(int actionsProportion)
+        {
+            if (actionsProportion > 0 && actionsProportion < 1)
+                return 1;
+
+            return actionsProportion;
+        }
 
         private int allActionsCount
             => this.DownloadedAssigmentsCount + this.UploadedInterviewsCount;

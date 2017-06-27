@@ -1582,7 +1582,8 @@ namespace WB.Tests.Abc.TestFactories
             public AssignmentApiDocumentBuilder WithAnswer(Identity questionId, string answer, string serializedAnswer = null, 
                 AbstractAnswer answerAsObj = null, double? latitude = null, double? longtitude = null)
             {
-                this._entity.Answers.Add(new AssignmentApiDocument.InterviewSerializedAnswer { AnswerAsString = answer,
+                this._entity.Answers.Add(new AssignmentApiDocument.InterviewSerializedAnswer
+                { 
                     Identity = questionId,
                     SerializedAnswer = serializedAnswer ?? (answerAsObj == null ? null :serializer.Serialize(answerAsObj))
                 });

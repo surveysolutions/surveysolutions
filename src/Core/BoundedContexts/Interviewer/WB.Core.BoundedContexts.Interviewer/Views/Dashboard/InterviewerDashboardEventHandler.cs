@@ -140,11 +140,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 ResponsibleId = responsibleId,
                 QuestionnaireId = questionnaireIdentity.ToString(),
                 Census = createdOnClient,
+                QuestionnaireTitle = questionnaireDocumentView.Title
             };
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, interviewView.Language);
 
-            var prefilledQuestions = new List<PrefilledQuestionView>();
+            var prefilledQuestionsList = new List<PrefilledQuestionView>();
             var featuredQuestions = questionnaireDocumentView.Children
                                                              .TreeToEnumerableDepthFirst(x => x.Children)
                                                              .OfType<IQuestion>()
@@ -163,7 +164,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                     var answerOnPrefilledQuestion = this.GetAnswerOnPrefilledQuestion(featuredQuestion.PublicKey, questionnaire, item?.Answer, interviewId);
                     answerOnPrefilledQuestion.SortIndex = prefilledQuestionSortIndex;
                     prefilledQuestionSortIndex++;
-                    prefilledQuestions.Add(answerOnPrefilledQuestion);
+                    prefilledQuestionsList.Add(answerOnPrefilledQuestion);
                 }
                 else
                 {
@@ -185,7 +186,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             var existingPrefilledForInterview = this.prefilledQuestions.Where(x => x.InterviewId == interviewId).ToList();
             this.prefilledQuestions.Remove(existingPrefilledForInterview);
-            this.prefilledQuestions.Store(prefilledQuestions);
+            this.prefilledQuestions.Store(prefilledQuestionsList);
 
             interviewView.StartedDateTime = startedDateTime;
             interviewView.InterviewerAssignedDateTime = assignedDateTime;

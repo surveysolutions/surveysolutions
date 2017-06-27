@@ -56,12 +56,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return RunInTransaction(table => table.Connection.Find<TEntity>(id));
         }
 
-        public void Remove(TKey id)
+        public virtual void Remove(TKey id)
         {
-            RunInTransaction(table => table.Connection.Delete<TEntity>(id));
+            RunInTransaction(table =>
+            {
+                table.Connection.Delete<TEntity>(id);
+                OnRemove(table, id);
+            });
         }
 
-        public void Remove(IEnumerable<TEntity> entities)
+        public virtual void Remove(IEnumerable<TEntity> entities)
         {
             try
             {
@@ -70,6 +74,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     foreach (var entity in entities.Where(entity => entity != null))
                     {
                         table.Connection.Delete(entity);
+                        OnRemove(table, entity.Id);
                     }
                 });
 
@@ -95,6 +100,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     foreach (var entity in entities.Where(entity => entity != null))
                     {
                         table.Connection.InsertOrReplace(entity);
+                        OnStore(table, entity);
                     }
                 });
             }
@@ -105,6 +111,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
         }
 
+        public virtual void OnStore(TableQuery<TEntity> query, TEntity entity) { }
+        public virtual void OnRemove(TableQuery<TEntity> query, TKey entityId) { }
+        
         public IReadOnlyCollection<TEntity> Where(Expression<Func<TEntity, bool>> predicate)
             => this.RunInTransaction(table => table.Where(predicate).ToReadOnlyCollection());
 
@@ -123,6 +132,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public IReadOnlyCollection<TEntity> FixedQuery(Expression<Func<TEntity, bool>> wherePredicate, Expression<Func<TEntity, int>> orderPredicate, int takeCount, int skip = 0)
             => this.RunInTransaction(table => table.Where(wherePredicate).OrderBy(orderPredicate).Skip(skip).Take(takeCount).ToReadOnlyCollection());
+
+        public IReadOnlyCollection<TResult> FixedQueryWithSelection<TResult>(
+            Expression<Func<TEntity, bool>> wherePredicate, Expression<Func<TEntity, int>> orderPredicate,
+            Expression<Func<TEntity, TResult>> selectPredicate,
+            int takeCount, int skip = 0) where TResult : class
+            => this.RunInTransaction(table => table.Where(wherePredicate).OrderBy(orderPredicate)
+                .Select(selectPredicate).Skip(skip).Take(takeCount).ToReadOnlyCollection());
 
         public virtual void RemoveAll()
         {

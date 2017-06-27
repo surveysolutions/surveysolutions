@@ -45,8 +45,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             Assert.That(this.assignmentResponse.Answers, Has.All.Matches<AssignmentApiDocument.InterviewSerializedAnswer>(f =>
                 this.assignment.Answers.Any(e =>
                     f.Identity == e.Identity &&
-                        f.AnswerAsString == e.AnswerAsString &&
-                        f.SerializedAnswer == e.SerializedAnswer)));
+                    f.SerializedAnswer == e.SerializedAnswer)));
         }
 
         [Test]
