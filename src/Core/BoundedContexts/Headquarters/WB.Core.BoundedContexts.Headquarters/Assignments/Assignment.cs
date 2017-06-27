@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -49,6 +50,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public virtual IList<InterviewAnswer> Answers { get; protected set; }
 
         public virtual ISet<InterviewSummary> InterviewSummaries { get; protected set; }
+
+        public virtual int? InterviewsNeeded
+        {
+            get
+            {
+                return this.Quantity.HasValue
+                    ? this.Quantity - this.InterviewSummaries.Count(x => !x.IsDeleted)
+                    : null;
+            }
+        }
 
         public virtual void Archive()
         {

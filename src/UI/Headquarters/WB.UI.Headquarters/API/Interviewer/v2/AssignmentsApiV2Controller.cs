@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -58,9 +59,7 @@ namespace WB.UI.Headquarters.API.Interviewer.v2
                 assignmentApiViews.Add(new AssignmentApiView
                 {
                     Id = assignment.Id,
-                    Quantity = assignment.Quantity.HasValue
-                        ? assignment.Quantity - assignment.InterviewSummaries.Count
-                        : null,
+                    Quantity = assignment.InterviewsNeeded,
                     QuestionnaireId = assignment.QuestionnaireId
                 });
             }
