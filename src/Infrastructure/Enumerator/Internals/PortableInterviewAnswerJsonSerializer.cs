@@ -22,7 +22,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals
                 NullValueHandling = NullValueHandling.Include,
                 FloatParseHandling = FloatParseHandling.Decimal,
                 Formatting = Formatting.Indented,
-                Binder = new InterviewAnswerSerializationBinder()
+                SerializationBinder = new InterviewAnswerSerializationBinder()
             };
         }
 
