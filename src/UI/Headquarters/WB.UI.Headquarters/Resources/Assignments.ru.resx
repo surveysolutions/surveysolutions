@@ -178,4 +178,7 @@
   <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
     <value>Введите максимальное число интервью которое возможно создать на основе этого задания</value>
   </data>
+  <data name="InterviewsNeeded" xml:space="preserve">
+    <value>Необходимо интервью</value>
+  </data>
 </root>

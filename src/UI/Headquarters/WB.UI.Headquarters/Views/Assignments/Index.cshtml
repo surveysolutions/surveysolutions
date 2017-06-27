@@ -65,27 +65,55 @@
                         return resultString;
                     }
                 },
+                @if (Model.IsHeadquarter)
                 {
-                    data: "interviewsCount",
-                    name: "InterviewsCount",
-                    "class": "type-numeric",
-                    searchHighlight: false,
-                    searchable: false,
-                    title: "@Assignments.InterviewsCount",
-                    render: function (data, type, row) {
-                        var result = "<a href='" + $interviewsUrl + "?assignmentId=" + row.id + "'>" + (data == null ? "@Assignments.Unlimited" : data) + "</a>";
-                        return result;
-                    }
-                },
+                    <text>
+                        {
+                            data: "interviewsCount",
+                            name: "InterviewsCount",
+                            "class": "type-numeric",
+                            searchHighlight: false,
+                            searchable: false,
+                            title: "@Assignments.InterviewsCount",
+                            render: function(data, type, row) {
+                                var result = "<a href='" +
+                                    $interviewsUrl +
+                                    "?assignmentId=" +
+                                    row.id +
+                                    "'>" +
+                                    (data == null ? "@Assignments.Unlimited" : data) +
+                                    "</a>";
+                                return result;
+                            }
+                        },
+                        {
+                            data: "quantity",
+                            name: "Quantity",
+                            "class": "type-numeric",
+                            title: "@Assignments.Quantity",
+                            orderable: true,
+                            searchable: false,
+                            "defaultContent": "<span>@Assignments.Unlimited</span>"
+                        },
+                    </text>
+                }
+                else
                 {
-                    data: "quantity",
-                    name: "Quantity",
-                    "class": "type-numeric",
-                    title: "@Assignments.Quantity",
-                    orderable: true,
-                    searchable: false,
-                    "defaultContent": "<span>@Assignments.Unlimited</span>"
-                },
+                    <text>
+                    {
+                        data: "quantity",
+                        name: "Quantity",
+                        "class": "type-numeric",
+                        title: "@Assignments.InterviewsNeeded",
+                        orderable: false,
+                        searchable: false,
+                        render: function (data, type, row) {
+                            return row.quantity - row.interviewsCount;
+                        },
+                        "defaultContent": "<span>@Assignments.Unlimited</span>"
+                    },
+                    </text>
+                }
                 {
                     data: "identifyingQuestions",
                     title: "@Assignments.IdentifyingQuestions",

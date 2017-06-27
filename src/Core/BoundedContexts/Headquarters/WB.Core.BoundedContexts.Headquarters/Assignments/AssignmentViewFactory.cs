@@ -65,9 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                     ResponsibleId = x.ResponsibleId,
                     UpdatedAtUtc = x.UpdatedAtUtc,
                     Quantity = x.Quantity,
-                    InterviewsCount = input.SupervisorId.HasValue ? 
-                                        x.InterviewSummaries.Count(s => !s.IsDeleted && s.TeamLeadId == input.SupervisorId) : 
-                                        x.InterviewSummaries.Count(s => !s.IsDeleted),
+                    InterviewsCount = x.InterviewSummaries.Count(s => !s.IsDeleted),
                     Id = x.Id,
                     Archived = x.Archived,
                     Responsible = x.Responsible.Name,
@@ -104,23 +102,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
             if (orderBy.Field.Contains("InterviewsCount"))
             {
-                return OrderByInterviewsCount(query, model, orderBy);
+                return OrderByInterviewsCount(query, orderBy);
             }
             return query.OrderUsingSortExpression(model.Order).AsQueryable();
         }
 
-        private static IQueryable<Assignment> OrderByInterviewsCount(IQueryable<Assignment> query, AssignmentsInputModel model, OrderRequestItem orderBy)
+        private static IQueryable<Assignment> OrderByInterviewsCount(IQueryable<Assignment> query, OrderRequestItem orderBy)
         {
-            Expression<Func<Assignment, int>> orderByQuery1;
-            if (model.SupervisorId.HasValue)
-            {
-                orderByQuery1 = x => x.InterviewSummaries.Count(s => s.IsDeleted == false && s.TeamLeadId == model.SupervisorId);
-            }
-            else
-            {
-                orderByQuery1 = x => x.InterviewSummaries.Count(s => s.IsDeleted == false);
-            }
-            var orderByQuery = orderByQuery1;
+            Expression<Func<Assignment, int>> orderByQuery = x => x.InterviewSummaries.Count(s => s.IsDeleted == false);
 
             if (orderBy.Direction == OrderDirection.Asc)
             {
