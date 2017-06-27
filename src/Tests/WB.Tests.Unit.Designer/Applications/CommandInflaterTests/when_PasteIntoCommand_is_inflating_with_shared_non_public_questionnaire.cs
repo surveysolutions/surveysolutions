@@ -9,7 +9,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Designer.Code.Implementation;
-using It = Machine.Specifications.It;
+
 using it = Moq.It;
 
 namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests

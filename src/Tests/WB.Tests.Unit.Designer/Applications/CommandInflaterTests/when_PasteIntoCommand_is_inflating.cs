@@ -7,7 +7,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membersh
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Code.Implementation;
-using It = Machine.Specifications.It;
+
 using it = Moq.It;
 
 namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests

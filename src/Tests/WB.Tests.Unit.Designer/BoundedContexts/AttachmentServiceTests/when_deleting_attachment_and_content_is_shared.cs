@@ -1,7 +1,7 @@
 using System;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
 {

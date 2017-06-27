@@ -2,7 +2,7 @@ using System;
 using System.Web.Http;
 using Machine.Specifications;
 using WB.UI.Designer.Api;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
 {

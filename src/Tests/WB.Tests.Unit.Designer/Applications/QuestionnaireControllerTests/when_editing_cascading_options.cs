@@ -7,7 +7,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.UI.Designer.Controllers;
-using It = Machine.Specifications.It;
+
 using NUnit.Framework;
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests

@@ -9,7 +9,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using Group = Main.Core.Entities.SubEntities.Group;
-using It = Machine.Specifications.It;
+
 using it = Moq.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormalizerTests

@@ -10,7 +10,7 @@ using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Mailers;
 using WB.UI.Designer.Models;
 using it = Moq.It;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.Applications.MailNotifierTests
 {

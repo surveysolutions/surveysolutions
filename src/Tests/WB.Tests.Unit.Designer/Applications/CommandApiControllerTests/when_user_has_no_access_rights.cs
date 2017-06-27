@@ -6,7 +6,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Designer.Api;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
 {
