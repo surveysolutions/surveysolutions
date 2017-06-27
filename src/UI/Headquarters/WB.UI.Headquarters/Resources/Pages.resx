@@ -1004,4 +1004,10 @@
   <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
     <value>square meters</value>
   </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>Unarchive</value>
+  </data>
+  <data name="InterviewerIsArchived" xml:space="preserve">
+    <value>Interviewer is archived</value>
+  </data>
 </root>
