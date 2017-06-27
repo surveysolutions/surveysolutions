@@ -970,6 +970,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interviewer is archived.
+        /// </summary>
+        public static string InterviewerIsArchived {
+            get {
+                return ResourceManager.GetString("InterviewerIsArchived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Android version.
         /// </summary>
         public static string InterviewerProfile_AndroidVersion {
@@ -2569,6 +2578,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Total {
             get {
                 return ResourceManager.GetString("Total", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unarchive.
+        /// </summary>
+        public static string Unarchive {
+            get {
+                return ResourceManager.GetString("Unarchive", resourceCulture);
             }
         }
         

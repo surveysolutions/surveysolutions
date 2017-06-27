@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -10,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.Documents;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -90,7 +92,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public async Task<ActionResult> InterviewerProfile(Guid id)
         {
             var interviewer = await this.userManager.FindByIdAsync(id);
-            if (interviewer == null || interviewer.IsArchived || !interviewer.IsInRole(UserRoles.Interviewer)) return this.HttpNotFound();
+            if (interviewer == null || !interviewer.IsInRole(UserRoles.Interviewer)) return this.HttpNotFound();
 
             var supervisor = await this.userManager.FindByIdAsync(interviewer.Profile.SupervisorId.Value);
 
@@ -121,6 +123,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 Id = interviewer.Id,
                 Email = interviewer.Email,
                 LoginName = interviewer.UserName,
+                IsArchived = interviewer.IsArchived,
                 FullName = interviewer.FullName,
                 Phone = interviewer.PhoneNumber,
                 SupervisorName = supervisor.UserName,
@@ -182,6 +185,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        [Authorize(Roles = "Administrator, Headquarter")]
+        public async Task<ActionResult> UnArchive(Guid id)
+        {
+            var interviewer = await this.userManager.FindByIdAsync(id);
+            if (interviewer == null)
+                throw new HttpException(404, string.Empty);
+
+            if (!interviewer.IsInRole(UserRoles.Interviewer))
+                throw new HttpException(403, string.Empty);
+
+            await this.userManager.UnarchiveUsersAsync(new[] { id });
+
+            return RedirectToAction("Profile", new { id = id });
         }
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
