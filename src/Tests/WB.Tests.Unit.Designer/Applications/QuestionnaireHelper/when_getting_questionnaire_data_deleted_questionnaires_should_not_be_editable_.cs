@@ -5,7 +5,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membersh
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Models;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireHelper
 {

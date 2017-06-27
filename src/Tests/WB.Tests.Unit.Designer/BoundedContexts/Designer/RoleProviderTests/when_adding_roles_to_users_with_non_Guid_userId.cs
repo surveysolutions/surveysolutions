@@ -4,7 +4,7 @@ using System.Web.Mvc;
 using Machine.Specifications;
 using Moq;
 using WB.UI.Shared.Web.MembershipProvider.Roles;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.RoleProviderTests
 {

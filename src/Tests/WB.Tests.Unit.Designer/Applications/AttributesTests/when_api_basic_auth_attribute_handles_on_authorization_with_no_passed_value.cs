@@ -7,7 +7,7 @@ using System.Web.Http.Routing;
 using Machine.Specifications;
 using Moq;
 using WB.UI.Designer.Api.Attributes;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.Applications.AttributesTests
 {
