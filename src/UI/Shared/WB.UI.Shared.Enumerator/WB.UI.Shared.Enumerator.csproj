@@ -311,13 +311,15 @@
     <Compile Include="CustomBindings\EditTextDateBinding.cs" />
     <Compile Include="CustomBindings\EditTextFocusValueChangedBinding.cs" />
     <Compile Include="CustomBindings\EditTextSetFocusBinding.cs" />
+    <Compile Include="CustomBindings\InstantAutoCompleteTextViewPartialTextTargetBinding.cs" />
+    <Compile Include="CustomBindings\InstantAutoCompleteTextViewSelectedObjectTargetBinding.cs" />
     <Compile Include="CustomBindings\ToParentGroupButtonBinding.cs" />
     <Compile Include="CustomBindings\GroupBackgroundColorBinding.cs" />
     <Compile Include="CustomBindings\ImageViewBitmapWithFallbackBinding.cs" />
     <Compile Include="CustomBindings\MaskedEditTextIsMaskedQuestionAnsweredBinding.cs" />
-    <Compile Include="CustomBindings\MvxAutoCompleteTextViewHidePopupOnDoneBinding.cs" />
-    <Compile Include="CustomBindings\MvxAutoCompleteTextViewResetTextBinding.cs" />
-    <Compile Include="CustomBindings\MvxAutoCompleteTextViewShowPopupOnFocusBinding.cs" />
+    <Compile Include="CustomBindings\InstantAutoCompleteTextViewHidePopupOnDoneBinding.cs" />
+    <Compile Include="CustomBindings\InstantAutoCompleteTextViewResetTextBinding.cs" />
+    <Compile Include="CustomBindings\InstantAutoCompleteTextViewShowPopupOnFocusBinding.cs" />
     <Compile Include="CustomBindings\ProgressBarIndeterminateBinding.cs" />
     <Compile Include="CustomBindings\FrameLayoutCurrentScreenBinding.cs" />
     <Compile Include="CustomBindings\NumericValueBinding.cs" />
@@ -341,6 +343,7 @@
     <Compile Include="CustomControls\DatePickerDialogFragment.cs" />
     <Compile Include="CustomControls\FlowLayout.cs" />
     <Compile Include="CustomControls\HttpImageView.cs" />
+    <Compile Include="CustomControls\InstantAutoComplete.cs" />
     <Compile Include="CustomControls\InterviewEntityAdapter.cs" />
     <Compile Include="CustomControls\InterviewTemplateSelector.cs" />
     <Compile Include="CustomControls\MaskedEditTextControl\MaskedEditText.cs" />
