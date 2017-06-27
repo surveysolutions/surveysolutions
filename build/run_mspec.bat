@@ -1,1 +1,0 @@
-..\packages\Machine.Specifications.Runner.Console.0.9.3\tools\mspec-clr4.exe --teamcity ..\src\Tests\WB.Tests.Integration\bin\Release\WB.Tests.Integration.dll ..\src\Tests\WB.Tests.Unit\bin\Release\WB.Tests.Unit.dll ..\src\Tests\WB.Tests.Unit.Designer\bin\Release\WB.Tests.Unit.Designer.dll
