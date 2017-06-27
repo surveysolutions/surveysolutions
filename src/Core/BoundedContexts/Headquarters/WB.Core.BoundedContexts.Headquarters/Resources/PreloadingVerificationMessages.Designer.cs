@@ -383,5 +383,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("PL0037_ColumnIsNotIdentifying", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Area question cannot be preloaded..
+        /// </summary>
+        public static string PL0038_UnsupportedAreaQuestion {
+            get {
+                return ResourceManager.GetString("PL0038_UnsupportedAreaQuestion", resourceCulture);
+            }
+        }
     }
 }
