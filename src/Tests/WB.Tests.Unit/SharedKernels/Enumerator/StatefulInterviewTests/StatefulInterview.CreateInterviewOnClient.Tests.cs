@@ -103,7 +103,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var question = Create.Entity.GpsCoordinateQuestion(questionId: questionId, variable: "gps", isPrefilled: true);
             var answer = GpsAnswer.FromGeoPosition(new GeoPosition(2,2,2,2, DateTimeOffset.UtcNow));
-            When_create_interview_with_identifier_data_Should_apply_answer(question, answer, "2,2[2]2");
+            When_create_interview_with_identifier_data_Should_apply_answer(question, answer, "2, 2");
         }
 
         private void When_create_interview_with_identifier_data_Should_apply_answer(IQuestion question, AbstractAnswer abstractAnswer, string stringAnswer)
