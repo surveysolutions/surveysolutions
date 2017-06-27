@@ -62,6 +62,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ACTIVE MAP:.
+        /// </summary>
+        public static string AreaMap_Active_Map_Title {
+            get {
+                return ResourceManager.GetString("AreaMap_Active_Map_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Area:.
         /// </summary>
         public static string AreaMap_AreaFormat {
@@ -71,11 +80,29 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MAPS AVAILABLE ON DEVICE.
+        /// </summary>
+        public static string AreaMap_Available_Maps_Title {
+            get {
+                return ResourceManager.GetString("AreaMap_Available_Maps_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string AreaMap_Cancel {
             get {
                 return ResourceManager.GetString("AreaMap_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string AreaMap_Close {
+            get {
+                return ResourceManager.GetString("AreaMap_Close", resourceCulture);
             }
         }
         
@@ -148,6 +175,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string AreaMap_Undo {
             get {
                 return ResourceManager.GetString("AreaMap_Undo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update maps.
+        /// </summary>
+        public static string AreaMap_Update_Maps {
+            get {
+                return ResourceManager.GetString("AreaMap_Update_Maps", resourceCulture);
             }
         }
         
@@ -969,6 +1005,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string LoginTitleText {
             get {
                 return ResourceManager.GetString("LoginTitleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit Map Editor.
+        /// </summary>
+        public static string MenuItem_Title_AreaCancel {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_AreaCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear all.
+        /// </summary>
+        public static string MenuItem_Title_AreaCancelEdit {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_AreaCancelEdit", resourceCulture);
             }
         }
         

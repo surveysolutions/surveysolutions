@@ -499,7 +499,9 @@ namespace WB.Tests.Abc.TestFactories
             return new AssignmentsSynchronizer(synchronizationService ?? Mock.Of<IAssignmentSynchronizationApi>(),
                 assignmentsRepository ?? Create.Storage.AssignmentDocumentsInmemoryStorage(),
                 questionnaireDownloader ?? Mock.Of<IQuestionnaireDownloader>(),
-                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
+                Mock.Of<IAnswerToStringConverter>(),
+                Mock.Of<IInterviewAnswerSerializer>());
         }
 
         public IAnswerToStringConverter AnswerToStringConverter()

@@ -516,4 +516,22 @@
     <value>Карта</value>
     <comment>Карта</comment>
   </data>
+  <data name="AreaMap_Active_Map_Title" xml:space="preserve">
+    <value>АКТИВНАЯ КАРТА:</value>
+  </data>
+  <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
+    <value>ДОСТУПНЫЕ НА УСТРОЙСТВЕ КАРТЫ</value>
+  </data>
+  <data name="AreaMap_Close" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="AreaMap_Update_Maps" xml:space="preserve">
+    <value>Обновить карты</value>
+  </data>
+  <data name="MenuItem_Title_AreaCancel" xml:space="preserve">
+    <value>Выйти из редактора</value>
+  </data>
+  <data name="MenuItem_Title_AreaCancelEdit" xml:space="preserve">
+    <value>Очистить все</value>
+  </data>
 </root>

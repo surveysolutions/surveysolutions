@@ -7,7 +7,9 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -20,16 +22,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
         private readonly IQuestionnaireDownloader questionnaireDownloader;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly IAnswerToStringConverter answerToStringConverter;
+        private readonly IInterviewAnswerSerializer answerSerializer;
 
         public AssignmentsSynchronizer(IAssignmentSynchronizationApi synchronizationService,
             IAssignmentDocumentsStorage assignmentsRepository,
             IQuestionnaireDownloader questionnaireDownloader,
-            IQuestionnaireStorage questionnaireStorage)
+            IQuestionnaireStorage questionnaireStorage,
+            IAnswerToStringConverter answerToStringConverter,
+            IInterviewAnswerSerializer answerSerializer)
         {
             this.synchronizationService = synchronizationService;
             this.assignmentsRepository = assignmentsRepository;
             this.questionnaireDownloader = questionnaireDownloader;
             this.questionnaireStorage = questionnaireStorage;
+            this.answerToStringConverter = answerToStringConverter;
+            this.answerSerializer = answerSerializer;
         }
 
         public virtual async Task SynchronizeAssignmentsAsync(IProgress<SyncProgressInfo> progress, SychronizationStatistics statistics, CancellationToken cancellationToken)
@@ -134,27 +142,26 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
             {
                 var isIdentifying = identifyingQuestionIds.Contains(answer.Identity.Id);
 
-                if (isIdentifying && questionnaire.GetQuestionType(answer.Identity.Id) != QuestionType.GpsCoordinates)
-                {
-                    identiAnswers.Add(new AssignmentDocument.AssignmentAnswer
-                    {
-                        AssignmentId = remote.Id,
-                        Identity = answer.Identity,
-                        AnswerAsString = answer.AnswerAsString,
-                        Question = isIdentifying ? questionnaire.GetQuestionTitle(answer.Identity.Id) : null,
-                        IsIdentifying = isIdentifying
-                    });
-                }
 
-                answers.Add(new AssignmentDocument.AssignmentAnswer
+                var assignmentAnswer = new AssignmentDocument.AssignmentAnswer
                 {
                     AssignmentId = remote.Id,
                     Identity = answer.Identity,
                     SerializedAnswer = answer.SerializedAnswer,
-                    AnswerAsString = answer.AnswerAsString,
                     Question = isIdentifying ? questionnaire.GetQuestionTitle(answer.Identity.Id) : null,
                     IsIdentifying = isIdentifying
-                });
+                };
+
+                if (isIdentifying && questionnaire.GetQuestionType(answer.Identity.Id) != QuestionType.GpsCoordinates)
+                {
+                    var abstractAnswer = this.answerSerializer.Deserialize<AbstractAnswer>(answer.SerializedAnswer);
+                    var answerAsString = this.answerToStringConverter.Convert(abstractAnswer?.ToString(), answer.Identity.Id, questionnaire);
+                    assignmentAnswer.AnswerAsString = answerAsString;
+
+                    identiAnswers.Add(assignmentAnswer);
+                }
+
+                answers.Add(assignmentAnswer);
             }
 
             local.Answers = answers;

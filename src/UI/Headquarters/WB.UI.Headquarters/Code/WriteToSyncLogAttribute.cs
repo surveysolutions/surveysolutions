@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 
@@ -41,6 +42,7 @@ namespace WB.UI.Headquarters.Code
         private IQuestionnaireStorage questionnaireStorage => ServiceLocator.Current.GetInstance<IQuestionnaireStorage>();
 
         private IUserViewFactory userViewFactory => ServiceLocator.Current.GetInstance<IUserViewFactory>();
+        private IInterviewAnswerSerializer answerSerializer => ServiceLocator.Current.GetInstance<IInterviewAnswerSerializer>();
 
         private ILogger logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<WriteToSyncLogAttribute>();
 
@@ -252,7 +254,7 @@ namespace WB.UI.Headquarters.Code
             var identityQuestions = questionnaire.GetPrefilledQuestions().ToHashSet();
 
             var answers = apiView.Answers
-                .Where(x => !string.IsNullOrEmpty(x.AnswerAsString))
+                .Where(x => !string.IsNullOrEmpty(x.SerializedAnswer))
                 .Where(x => identityQuestions.Contains(x.Identity.Id))
                 .Select(_ => GetAssignmentIdentifyingQuestionRow(_, questionnaire));
 
@@ -264,7 +266,9 @@ namespace WB.UI.Headquarters.Code
         private string GetAssignmentIdentifyingQuestionRow(AssignmentApiDocument.InterviewSerializedAnswer _, Core.SharedKernels.DataCollection.Aggregates.IQuestionnaire questionnaire)
         {
             string questionTitle = questionnaire.GetQuestionTitle(_.Identity.Id).RemoveHtmlTags();
-            return $"<li title='{questionTitle}'>{LimitStringLength(questionTitle)}: {_.AnswerAsString}</li>";
+            var abstractAnswer = this.answerSerializer.Deserialize<AbstractAnswer>(_.SerializedAnswer);
+            var stringAnswer = abstractAnswer?.ToString();
+            return $"<li title='{questionTitle}'>{LimitStringLength(questionTitle)}: {stringAnswer}</li>";
         }
 
         private string LimitStringLength(string text, int limit = 50)

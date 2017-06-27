@@ -221,28 +221,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.suggestionsCancellation?.Cancel();
             this.suggestionsCancellation = new CancellationTokenSource();
 
-            Answering.ExecuteActionAsync(token => Task.Run(() =>
+            Answering.ExecuteActionAsync(async (token) => await this.UpdateSuggestionsAsync(filter, token),
+                suggestionsCancellation.Token).ConfigureAwait(false);
+        }
+
+        private async Task UpdateSuggestionsAsync(string filter, CancellationToken token)
+        {
+            token.ThrowIfCancellationRequested();
+
+            var list = await Task.Run(() => this.GetSuggestionsList(filter).ToList(), token);
+
+            token.ThrowIfCancellationRequested();
+
+            if (list.Any())
             {
-                token.ThrowIfCancellationRequested();
-
-                var list = this.GetSuggestionsList(filter).ToList();
-
-                token.ThrowIfCancellationRequested();
-
-                if (filter != this.filterText) return;
-
-                this.InvokeOnMainThread(() =>
-                {
-                    if (list.Any())
-                    {
-                        this.AutoCompleteSuggestions = list;
-                    }
-                    else
-                    {
-                        this.SetSuggestionsEmpty();
-                    }
-                });
-            }, token), suggestionsCancellation.Token).ConfigureAwait(false);
+                this.AutoCompleteSuggestions = list;
+            }
+            else
+            {
+                this.SetSuggestionsEmpty();
+            }
         }
 
         private string resetTextInEditor;
@@ -321,6 +319,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async void SendAnswerFilteredComboboxQuestionCommand(string text)
         {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                await this.RemoveAnswerAsync();
+                return;
+            }
+
             var answerCategoricalOption = this.interview.GetOptionForQuestionWithFilter(this.questionIdentity, text);
 
             if (answerCategoricalOption == null)
