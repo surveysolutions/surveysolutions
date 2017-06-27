@@ -82,11 +82,6 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                 return ((GeoPosition) answer).ToString();
             }
 
-            if (answer is GeoLocationPoint)
-            {
-                var geoAnswer = answer as GeoLocationPoint;
-                return string.Format(CultureInfo.InvariantCulture, "[{0};{1}]", geoAnswer.Latitude, geoAnswer.Longitude);
-            }
             if (answer is InterviewTextListAnswers)
             {
                 return string.Join("|", ((InterviewTextListAnswers) answer).Answers.Select(x => x.Answer));
