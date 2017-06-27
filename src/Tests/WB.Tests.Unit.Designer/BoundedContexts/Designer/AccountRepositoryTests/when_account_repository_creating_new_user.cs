@@ -4,7 +4,7 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.Infrastructure.CommandBus;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountRepositoryTests
 {

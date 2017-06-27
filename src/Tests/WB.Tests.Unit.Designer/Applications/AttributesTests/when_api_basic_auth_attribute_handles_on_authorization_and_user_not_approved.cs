@@ -13,7 +13,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.UI.Designer.Api.Attributes;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.Applications.AttributesTests
 {

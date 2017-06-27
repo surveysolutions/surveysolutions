@@ -9,7 +9,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Api.Headquarters;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
 {

@@ -11,7 +11,7 @@ using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using It = Machine.Specifications.It;
+
 using TranslationInstance = WB.Core.BoundedContexts.Designer.Translations.TranslationInstance;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTests

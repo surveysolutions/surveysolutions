@@ -14,7 +14,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Api;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Models;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
 {
