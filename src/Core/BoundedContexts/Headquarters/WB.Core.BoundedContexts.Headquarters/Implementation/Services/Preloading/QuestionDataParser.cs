@@ -49,6 +49,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             if (question is IMultimediaQuestion)
                 return ParseFailed(ValueParsingResult.UnsupportedMultimediaQuestion, out parsedValue, out parsedSingleColumnAnswer);
 
+            if (question is AreaQuestion)
+                return ParseFailed(ValueParsingResult.UnsupportedAreaQuestion, out parsedValue, out parsedSingleColumnAnswer);
+
             if (answer.Contains(',') && this.QuestionTypesCommaFirbidden.Contains(question.QuestionType))
                 return ParseFailed(ValueParsingResult.CommaIsUnsupportedInAnswer, out parsedValue, out parsedSingleColumnAnswer);
 

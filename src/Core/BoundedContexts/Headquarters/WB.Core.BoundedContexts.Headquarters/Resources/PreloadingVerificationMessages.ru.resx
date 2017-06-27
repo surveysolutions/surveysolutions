@@ -137,4 +137,7 @@
   <data name="PL0037_ColumnIsNotIdentifying" xml:space="preserve">
     <value>Колонка должна быть связана только с идентифицирующим вопросом</value>
   </data>
+  <data name="PL0038_UnsupportedAreaQuestion" xml:space="preserve">
+    <value>Воспрос измерения площади не может быть загружен.</value>
+  </data>
 </root>
