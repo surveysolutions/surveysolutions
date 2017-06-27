@@ -102,7 +102,7 @@
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/area_editor_common_margin_top"
+        android:layout_marginTop="@dimen/area_editor_common_margin_top"
         android:orientation="horizontal"        
         android:weightSum="1.0"
         android:gravity="center_vertical|right"
