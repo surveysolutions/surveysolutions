@@ -85,7 +85,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             interviewHistoryView.Records[6].Action.ShouldEqual(InterviewHistoricalAction.AnswerSet);
 
         It should_answer_on_GeoLocationQuestionAnswered_be_1_2_3_4 = () =>
-            interviewHistoryView.Records[6].Parameters["answer"].ShouldEqual("1,2[3]4");
+            interviewHistoryView.Records[6].Parameters["answer"].ShouldEqual("1, 2");
 
         It should_action_of_MultipleOptionsLinkedQuestionAnswered_be_AnswerSet = () =>
          interviewHistoryView.Records[7].Action.ShouldEqual(InterviewHistoricalAction.AnswerSet);
