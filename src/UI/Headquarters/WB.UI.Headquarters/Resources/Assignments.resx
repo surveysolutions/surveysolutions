@@ -178,4 +178,7 @@
   <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
     <value>Select responsible (Supervisor or Interviewer) for this assignment</value>
   </data>
+  <data name="InterviewsNeeded" xml:space="preserve">
+    <value>Interviews needed</value>
+  </data>
 </root>
