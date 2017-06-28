@@ -126,7 +126,7 @@ namespace WB.UI.Designer.App_Start
             kernel.Bind<IAuthenticationService>().To<AuthenticationService>();
             kernel.Bind<IRecaptchaService>().To<RecaptchaService>();
             kernel.Bind<QuestionnaireDowngradeService>().ToSelf();
-            kernel.Bind<IQuestionnireHistotyVersionsService>().To<QuestionnireHistotyVersionsService>();
+            kernel.Bind<IQuestionnireHistoryVersionsService>().To<QuestionnireHistotyVersionsService>();
 
             return kernel;
         }

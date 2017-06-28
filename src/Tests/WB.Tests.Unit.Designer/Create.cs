@@ -553,7 +553,7 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static Questionnaire Questionnaire(IExpressionProcessor expressionProcessor = null, IQuestionnireHistotyVersionsService histotyVersionsService = null)
+        public static Questionnaire Questionnaire(IExpressionProcessor expressionProcessor = null, IQuestionnireHistoryVersionsService histotyVersionsService = null)
         {
             return new Questionnaire(
                 Mock.Of<ILogger>(),
@@ -564,7 +564,7 @@ namespace WB.Tests.Unit.Designer
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
                 Mock.Of<ITranslationsService>(),
-                histotyVersionsService ?? Mock.Of<IQuestionnireHistotyVersionsService>());
+                histotyVersionsService ?? Mock.Of<IQuestionnireHistoryVersionsService>());
         }
 
 
@@ -579,7 +579,7 @@ namespace WB.Tests.Unit.Designer
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
                 Mock.Of<ITranslationsService>(),
-                Mock.Of<IQuestionnireHistotyVersionsService>());
+                Mock.Of<IQuestionnireHistoryVersionsService>());
             questionnaire.Initialize(Guid.NewGuid(), document, new List<SharedPerson> {Create.SharedPerson(responsible)});
             return questionnaire;
         }
@@ -965,7 +965,7 @@ namespace WB.Tests.Unit.Designer
             {
                 return new UpdateStaticText(questionnaireId, entityId, text, attachmentName, responsibleId, enablementCondition, hideIfDisabled, validationConditions);
             }
-            
+
             public static AddOrUpdateAttachment AddOrUpdateAttachment(Guid questionnaireId, Guid attachmentId, string attachmentContentId, 
                 Guid responsibleId, string attachmentName, Guid? oldAttachmentId = null)
             {
@@ -1040,9 +1040,9 @@ namespace WB.Tests.Unit.Designer
                 return new ReplaceTextsCommand(Guid.Empty, userId ?? Guid.Empty, searchFor.ToLower(), replaceWith, matchCase, matchWholeWord, useRegex);
             }
             
-            public static AddStaticText AddStaticText(Guid questionnaireId, Guid staticTextId, string text, Guid responsibleId, Guid parentId)
+            public static AddStaticText AddStaticText(Guid questionnaireId, Guid staticTextId, string text, Guid responsibleId, Guid parentId, int? index = null)
             {
-                return new AddStaticText(questionnaireId, staticTextId, text, responsibleId, parentId);
+                return new AddStaticText(questionnaireId, staticTextId, text, responsibleId, parentId, index);
             }
             
             public static AddDefaultTypeQuestion AddDefaultTypeQuestion(Guid questionnaireId, Guid questionId, string text, Guid responsibleId, Guid parentId, int? tagretIndex = null)
@@ -1091,7 +1091,7 @@ namespace WB.Tests.Unit.Designer
                 attachmentMetaStorage: attachmentMetaStorage);
         }
 
-        public static QuestionnireHistotyVersionsService QuestionnireHistotyVersionsService(
+        public static QuestionnireHistotyVersionsService QuestionnireHistoryVersionsService(
             IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeItemStorage = null,
             IEntitySerializer<QuestionnaireDocument> entitySerializer = null)
         {

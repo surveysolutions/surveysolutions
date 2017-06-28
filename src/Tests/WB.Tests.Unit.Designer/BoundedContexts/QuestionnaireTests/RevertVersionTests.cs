@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             var currentQuestionnireDocument = CreateQuestionnaireDocument(createdBy: responsibleId);
             var oldQuestionnireDocument = CreateQuestionnaireDocument();
 
-            var histotyVersionsService = Mock.Of<IQuestionnireHistotyVersionsService>(s => s.GetByHistoryVersion(historyReferanceId) == oldQuestionnireDocument);
+            var histotyVersionsService = Mock.Of<IQuestionnireHistoryVersionsService>(s => s.GetByHistoryVersion(historyReferanceId) == oldQuestionnireDocument);
             var questionnaire = Create.Questionnaire(histotyVersionsService: histotyVersionsService);
             questionnaire.Initialize(questionnaireId, currentQuestionnireDocument, null);
             var command = Create.Command.RevertVersionQuestionnaire(questionnaireId, historyReferanceId, responsibleId);
@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             var currentQuestionnireDocument = CreateQuestionnaireDocument(createdBy: ownerId);
             var oldQuestionnireDocument = CreateQuestionnaireDocument();
 
-            var histotyVersionsService = Mock.Of<IQuestionnireHistotyVersionsService>(s => s.GetByHistoryVersion(historyReferanceId) == oldQuestionnireDocument);
+            var histotyVersionsService = Mock.Of<IQuestionnireHistoryVersionsService>(s => s.GetByHistoryVersion(historyReferanceId) == oldQuestionnireDocument);
             var questionnaire = Create.Questionnaire(histotyVersionsService: histotyVersionsService);
             questionnaire.Initialize(questionnaireId, currentQuestionnireDocument, new[] { new SharedPerson() { UserId = sharedPersonId} });
             var command = Create.Command.RevertVersionQuestionnaire(questionnaireId, historyReferanceId, sharedPersonId);
@@ -69,7 +69,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             var currentQuestionnireDocument = CreateQuestionnaireDocument(createdBy: responsibleId);
             var oldQuestionnireDocument = CreateQuestionnaireDocument();
 
-            var histotyVersionsService = Mock.Of<IQuestionnireHistotyVersionsService>(s => s.GetByHistoryVersion(historyReferanceId) == oldQuestionnireDocument);
+            var histotyVersionsService = Mock.Of<IQuestionnireHistoryVersionsService>(s => s.GetByHistoryVersion(historyReferanceId) == oldQuestionnireDocument);
             var questionnaire = Create.Questionnaire(histotyVersionsService: histotyVersionsService);
             questionnaire.Initialize(questionnaireId, currentQuestionnireDocument, null);
             var command = Create.Command.RevertVersionQuestionnaire(questionnaireId, historyReferanceId, personWhitoutPermissions);
