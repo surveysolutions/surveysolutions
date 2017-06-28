@@ -133,7 +133,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationService;
-        private readonly IQuestionnireHistotyVersionsService questionnireHistotyVersionsService;
+        private readonly IQuestionnireHistoryVersionsService questionnireHistotyVersionsService;
         private int affectedByReplaceEntries;
 
         #endregion
@@ -147,7 +147,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             ILookupTableService lookupTableService, 
             IAttachmentService attachmentService,
             ITranslationsService translationService,
-            IQuestionnireHistotyVersionsService questionnireHistotyVersionsService)
+            IQuestionnireHistoryVersionsService questionnireHistotyVersionsService)
         {
             this.logger = logger;
             this.clock = clock;

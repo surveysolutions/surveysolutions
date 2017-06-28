@@ -7,7 +7,7 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
-    public class QuestionnireHistotyVersionsService : IQuestionnireHistotyVersionsService
+    public class QuestionnireHistotyVersionsService : IQuestionnireHistoryVersionsService
     {
         private readonly IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeItemStorage;
         private readonly IEntitySerializer<QuestionnaireDocument> entitySerializer;
