@@ -25,10 +25,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             this.raiseEvents = false;
             this.assignment = assignmentDocument;
+            this.isExpanded = false;
             this.questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
-            var identifyingData = assignment.IdentifyingAnswers;
-            this.PrefilledQuestions = GetPrefilledQuestions(identifyingData.Take(3));
-            this.DetailedPrefilledQuestions = GetPrefilledQuestions(identifyingData.Skip(3));
+            this.detailedIdentifyingData = GetPrefilledQuestions(assignment.IdentifyingAnswers);
+            this.identifyingData = new List<PrefilledQuestion>(detailedIdentifyingData.Take(3));
+            this.PrefilledQuestions = new MvxObservableCollection<PrefilledQuestion>(identifyingData);
             this.GpsLocation = this.GetAssignmentLocation(assignment);
             this.ReceivedDate = assignment.ReceivedDateUtc.ToLocalTime().ToString("MMM d");
             this.ReceivedTime = assignment.ReceivedDateUtc.ToLocalTime().ToString("HH:mm");
@@ -91,13 +92,29 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             private set => RaiseAndSetIfChanged(ref this.comment, value);
         }
 
-        public List<PrefilledQuestion> PrefilledQuestions { get; private set; }
-        public List<PrefilledQuestion> DetailedPrefilledQuestions { get; private set; }
+        public MvxObservableCollection<PrefilledQuestion> PrefilledQuestions { get; private set; }
+        
 
         public string Title
         {
             get => this.title;
             private set => RaiseAndSetIfChanged(ref this.title, value);
+        }
+
+        private bool isExpanded = false;
+        public bool IsExpanded
+        {
+            get => this.isExpanded;
+            set
+            {
+                var preValue = this.isExpanded;
+                RaiseAndSetIfChanged(ref this.isExpanded, value, onChange: UpdatePrefilledQuestions);
+            }
+        }
+
+        private void UpdatePrefilledQuestions(bool isexpanded)
+        {
+            this.PrefilledQuestions.SwitchTo(isexpanded ? this.detailedIdentifyingData : this.identifyingData);
         }
 
         public bool AllowToCreateNewInterview
@@ -112,6 +129,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private bool allowToCreateNewInterview;
         private int interviewsByAssignmentCount;
         private IAssignmentItemService itemService;
+
+        public IMvxCommand ToggleExpanded => new MvxCommand(() => this.IsExpanded = !this.IsExpanded);
 
         public IMvxAsyncCommand CreateNewInterviewCommand => new MvxAsyncCommand(
             () => this.itemService.CreateInterviewAsync(assignment),
@@ -145,7 +164,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             get { return new MvxCommand(this.NavigateToGpsLocation, () => this.HasGpsLocation); }
         }
 
-        public bool HasExpandedView => this.PrefilledQuestions.Count > 0;
+        public bool HasExpandedView => this.detailedIdentifyingData.Count > 0;
 
         private void NavigateToGpsLocation()
         {
@@ -153,16 +172,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         }
 
         // it's much more performant, as original extension call new Action<...> on every call
-        private void RaiseAndSetIfChanged<TReturn>(ref TReturn backingField, TReturn newValue, [CallerMemberName] string propertyName = "")
+        private void RaiseAndSetIfChanged<TReturn>(ref TReturn backingField, TReturn newValue, [CallerMemberName] string propertyName = "", Action<TReturn> onChange = null)
         {
             if (EqualityComparer<TReturn>.Default.Equals(backingField, newValue)) return;
 
             backingField = newValue;
-
+            onChange?.Invoke(backingField);
             if(this.raiseEvents)
             this.RaisePropertyChanged(propertyName);
         }
 
         private bool raiseEvents = true;
+        private List<PrefilledQuestion> identifyingData;
+        private List<PrefilledQuestion> detailedIdentifyingData;
     }
 }

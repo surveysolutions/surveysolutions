@@ -1,22 +1,18 @@
-using System;
 using Android.Support.Transitions;
 using Android.Support.V7.Widget;
 using Android.Views;
 using MvvmCross.Binding.Droid.BindingContext;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
-using Object = Java.Lang.Object;
 
 namespace WB.UI.Interviewer.Activities.Dashboard
 {
     public class RecyclerViewAdapter : MvxRecyclerAdapter
     {
-        private readonly RecyclerView recyclerView;
         private readonly IMvxAndroidBindingContext bindingContext;
 
-        public RecyclerViewAdapter(RecyclerView recyclerView, IMvxAndroidBindingContext bindingContext)
+        public RecyclerViewAdapter(IMvxAndroidBindingContext bindingContext)
         {
-            this.recyclerView = recyclerView;
             this.bindingContext = bindingContext;
         }
 
@@ -41,30 +37,17 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             if (viewModel.HasExpandedView)
             {
                 var viewHolder = (ExpandableViewHolder)holder;
-                viewHolder.CardClick = DashboardItemOnClick;
+                viewHolder.CardClick = (sender) =>
+                {
+                    sender.DashboardItem.ClearAnimation();
+
+                    var transition = new ChangeBounds();
+                    transition.SetDuration(125);
+                    TransitionManager.BeginDelayedTransition(sender.DashboardItem, transition);
+
+                    viewModel.IsExpanded = !viewModel.IsExpanded;
+                };
             }
-        }
-
-        private void DashboardItemOnClick(ExpandableViewHolder sender)
-        {
-            bool shouldExpand = sender.DetailsView.Visibility == ViewStates.Gone;
-
-            ChangeBounds transition = new ChangeBounds();
-            transition.SetDuration(125);
-
-            if (shouldExpand)
-            {
-                sender.DetailsView.Visibility = ViewStates.Visible;
-                sender.ExpandHandle.Visibility = ViewStates.Gone;
-            }
-            else
-            {
-                sender.DetailsView.Visibility = ViewStates.Gone;
-                sender.ExpandHandle.Visibility = ViewStates.Visible;
-            }
-
-            TransitionManager.BeginDelayedTransition(this.recyclerView, transition);
-            sender.DashboardItem.Activated = shouldExpand;
         }
     }
 }
