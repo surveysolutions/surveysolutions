@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -50,6 +53,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
 
             this.Load();
+        }
+
+        // it's much more performant, as original extension call new Action<...> on every call
+        protected void RaiseAndSetIfChanged<TReturn>(ref TReturn backingField, TReturn newValue, 
+            [CallerMemberName] string propertyName = "")
+        {
+            if (EqualityComparer<TReturn>.Default.Equals(backingField, newValue)) return;
+            backingField = newValue;
+            this.RaisePropertyChanged(propertyName);
         }
     }
 }

@@ -69,10 +69,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                 Substitute.For<IAssignmentDocumentsStorage>(),
                 Substitute.For<IPlainStorage<InterviewView>>(),
                 Mock.Of<IViewModelNavigationService>(),
-                Mock.Of<IInterviewerPrincipal>(),
-                Mock.Of<IMvxMessenger>(),
-                Mock.Of<ICommandService>(),
-                Mock.Of<IInterviewAnswerSerializer>()
+                Mock.Of<IInterviewFromAssignmentCreatorService>()
             );
 
         private static StartedInterviewsViewModel DashboardStartedInterviewsViewModel()
