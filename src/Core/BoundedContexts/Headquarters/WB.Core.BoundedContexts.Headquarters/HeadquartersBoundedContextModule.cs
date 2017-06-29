@@ -12,7 +12,6 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.HealthCheck.Checks;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInformation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
@@ -59,6 +58,9 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Implementation.ReadSide;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
@@ -194,11 +196,11 @@ namespace WB.Core.BoundedContexts.Headquarters
             
             this.Bind<IAndroidPackageReader>().To<AndroidPackageReader>();
            
-            this.Bind<IPreloadingTemplateService>().To<PreloadingTemplateService>().WithConstructorArgument("folderPath", this.currentFolderPath);
+            this.Bind<IPreloadingTemplateService>().To<AssignmentImportTemplateGenerator>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IPreloadedDataRepository>().To<FilebasedPreloadedDataRepository>().InSingletonScope().WithConstructorArgument("folderPath", this.currentFolderPath);
-            this.Bind<IPreloadedDataVerifier>().To<PreloadedDataVerifier>();
+            this.Bind<IPreloadedDataVerifier>().To<ImportDataVerifier>();
             this.Bind<IQuestionDataParser>().To<QuestionDataParser>();
-            this.Bind<IPreloadedDataService>().To<PreloadedDataService>();
+            this.Bind<IPreloadedDataService>().To<ImportDataParsingService>();
 
             this.Bind<IExportFileNameService>().To<ExportExportFileNameService>();
 

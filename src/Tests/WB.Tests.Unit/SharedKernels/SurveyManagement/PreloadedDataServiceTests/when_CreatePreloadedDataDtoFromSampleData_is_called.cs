@@ -8,7 +8,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Tests.Abc;
 
@@ -44,13 +44,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                             }
                         }));
 
-            preloadedDataService = CreatePreloadedDataService(questionnaireDocument);
+            importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
         };
 
         Because of =
             () =>
                 result =
-                    preloadedDataService.CreatePreloadedDataDtoFromAssignmentData(CreatePreloadedDataByFile(new[] { "Id", "nq1" }, 
+                    importDataParsingService.CreatePreloadedDataDtoFromAssignmentData(CreatePreloadedDataByFile(new[] { "Id", "nq1" }, 
                     new[] { new[] { "1", "2" } }, 
                     "some file name"));
 
@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
         It should_result_has_1_items = () =>
            result.Length.ShouldEqual(1);
 
-        private static PreloadedDataService preloadedDataService;
+        private static ImportDataParsingService importDataParsingService;
         private static QuestionnaireDocument questionnaireDocument;
         private static PreloadedDataRecord[] result;
         private static Guid rosterGroupId = Guid.NewGuid();

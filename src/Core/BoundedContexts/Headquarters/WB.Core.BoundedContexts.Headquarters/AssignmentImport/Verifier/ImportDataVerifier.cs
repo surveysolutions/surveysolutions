@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Resources;
@@ -10,7 +12,6 @@ using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
@@ -18,16 +19,16 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
-namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading
+namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 {
-    internal class PreloadedDataVerifier : IPreloadedDataVerifier
+    internal class ImportDataVerifier : IPreloadedDataVerifier
     {
         private class UserToVerify
         {
-            public bool IsLocked { get; set; }
+            public bool IsLocked { get; }
             public bool IsSupervisorOrInterviewer => IsInterviewer || IsSupervisor; 
-            public bool IsSupervisor { get; set; }
-            public bool IsInterviewer { get; set; }
+            public bool IsSupervisor { get; }
+            public bool IsInterviewer { get; }
 
             public UserToVerify(bool isLocked, bool isSupervisor, bool isInterviewer)
             {
@@ -43,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
         private readonly IRosterStructureService rosterStructureService;
 
-        public PreloadedDataVerifier(
+        public ImportDataVerifier(
             IPreloadedDataServiceFactory preloadedDataServiceFactory,
             IUserViewFactory userViewFactory, 
             IQuestionnaireStorage questionnaireStorage,
@@ -57,13 +58,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             this.rosterStructureService = rosterStructureService;
         }
 
-        public VerificationStatus VerifyAssignmentsSample(Guid questionnaireId, long version, PreloadedDataByFile data)
+        public ImportDataVerificationState VerifyAssignmentsSample(Guid questionnaireId, long version, PreloadedDataByFile data)
         {
-            var status = new VerificationStatus();
+            var status = new ImportDataVerificationState();
 
             if (data?.Content == null || data.Content.Length == 0)
             {
-                status.Errors = new[] { new PreloadedDataVerificationError("PL0024", PreloadingVerificationMessages.PL0024_DataWasNotFound) };
+                status.Errors = new List<PanelImportVerificationError> { new PanelImportVerificationError("PL0024", PreloadingVerificationMessages.PL0024_DataWasNotFound) };
                 return status;
             }
 
@@ -71,11 +72,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
             if (preloadedDataService == null)
             {
-                status.Errors = new[] { new PreloadedDataVerificationError("PL0001", PreloadingVerificationMessages.PL0001_NoQuestionnaire) };
+                status.Errors = new List<PanelImportVerificationError> { new PanelImportVerificationError("PL0001", PreloadingVerificationMessages.PL0001_NoQuestionnaire) };
                 return status;
             }
 
-            var errors = new List<PreloadedDataVerificationError>();
+            var errors = new List<PanelImportVerificationError>();
 
             var datas = new[] { new PreloadedDataByFile(data.Id, preloadedDataService.GetValidFileNameForTopLevelQuestionnaire(), data.Header, data.Content) };
 
@@ -114,7 +115,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             return status;
         }
 
-        private void CountResposiblesInDataFile(PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService, VerificationStatus status)
+        private void CountResposiblesInDataFile(PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService, ImportDataVerificationState status)
         {
             var responsibleCache = new Dictionary<string, UserToVerify>();
 
@@ -134,7 +135,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                         continue;
                     }
 
-                    var userState = this.GetResponsible(responsibleCache, name);
+                    this.GetResponsibleAndUpdateCache(responsibleCache, name);
                 }
             }
 
@@ -147,49 +148,46 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             }
         }
 
-        private bool ShouldVerificationBeContinued(List<PreloadedDataVerificationError> errors)
+        private bool ShouldVerificationBeContinued(List<PanelImportVerificationError> errors)
         {
             return errors.Count < 100;
         }
 
-        public VerificationStatus VerifyPanel(Guid questionnaireId, long version, PreloadedDataByFile[] data)
+        public void VerifyPanelFiles(Guid questionnaireId, long version, PreloadedDataByFile[] data, AssignmentImportStatus status)
         {
-            VerificationStatus status = new VerificationStatus();
-
             if (data == null || !data.Any())
             {
-                status.Errors = new[]{ new PreloadedDataVerificationError("PL0024", PreloadingVerificationMessages.PL0024_DataWasNotFound) };
-                return status;
+                status.VerificationState.Errors = new List<PanelImportVerificationError> { new PanelImportVerificationError("PL0024", PreloadingVerificationMessages.PL0024_DataWasNotFound) };
+                return;
             }
 
             var preloadedDataService = this.CreatePreloadedDataService(questionnaireId, version);
             if (preloadedDataService == null)
             {
-                status.Errors = new[]{ new PreloadedDataVerificationError("PL0001", PreloadingVerificationMessages.PL0001_NoQuestionnaire)};
-                return status;
+                status.VerificationState.Errors = new List<PanelImportVerificationError>{ new PanelImportVerificationError("PL0001", PreloadingVerificationMessages.PL0001_NoQuestionnaire)};
+                return;
             }
 
-            var errorsMessagess =
-                from verifier in this.AtomicVerifiers
-                let errors =
-                    verifier.Invoke(data, preloadedDataService)
-                from error in errors
-                select error;
+            status.TotalCount = this.AtomicVerifiers.Count() + 1;
 
-            status.Errors = errorsMessagess.ToArray();
-
+            foreach (var verifier in AtomicVerifiers)
+            {
+                var errors = verifier.Invoke(data, preloadedDataService).ToList();
+                status.ProcessedCount++;
+                status.VerificationState.Errors.AddRange(errors);
+                Thread.Sleep(1000);
+            }
+            
             var topLevel = preloadedDataService.GetTopLevelData(data);
 
-            status.EntitiesCount = topLevel?.Content?.Length ?? 0;
-            if (!status.Errors.Any() && topLevel!=null)
+            status.VerificationState.EntitiesCount = topLevel?.Content?.Length ?? 0;
+            if (!status.VerificationState.Errors.Any() && topLevel!=null)
             {
-                CountResposiblesInDataFile(topLevel.ToEnumerable().ToArray(), preloadedDataService, status);
+                CountResposiblesInDataFile(topLevel.ToEnumerable().ToArray(), preloadedDataService, status.VerificationState);
             }
 
             var responsibleNameIndex = preloadedDataService.GetColumnIndexByHeaderName(topLevel, ServiceColumns.ResponsibleColumnName);
-            status.WasResponsibleProvided = responsibleNameIndex >= 0;
-
-            return status;
+            status.VerificationState.WasResponsibleProvided = responsibleNameIndex >= 0;
         }
         
         private IPreloadedDataService CreatePreloadedDataService(Guid questionnaireId, long version)
@@ -210,37 +208,30 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 questionnaireRosterStructure, questionnaire);
         }
 
-        private IEnumerable<Func<PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PreloadedDataVerificationError>>> AtomicVerifiers
+        private IEnumerable<Func<PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PanelImportVerificationError>>> AtomicVerifiers => new[]
         {
-            get
-            {
-                return new[]
-                {
-                    this.Verifier(this.ColumnWasntMappedOnQuestionInTemplate, "PL0003",
-                        PreloadingVerificationMessages.PL0003_ColumnWasntMappedOnQuestion,
-                        PreloadedDataVerificationReferenceType.Column),
-                    this.Verifier(this.FileWasntMappedOnQuestionnaireLevel, "PL0004",
-                        PreloadingVerificationMessages.PL0004_FileWasntMappedRoster,
-                        PreloadedDataVerificationReferenceType.File),
-                    this.Verifier(this.ServiceColumnsAreAbsent, "PL0007",
-                        PreloadingVerificationMessages.PL0007_ServiceColumnIsAbsent,
-                        PreloadedDataVerificationReferenceType.Column),
-                    this.Verifier(this.IdDuplication, "PL0006", PreloadingVerificationMessages.PL0006_IdDublication),
-                    this.Verifier(this.OrphanRosters, "PL0008", PreloadingVerificationMessages.PL0008_OrphanRosterRecord),
-                    this.Verifier(this.RosterIdIsInconsistencyWithRosterSizeQuestion, "PL0009",
-                        PreloadingVerificationMessages.PL0009_RosterIdIsInconsistantWithRosterSizeQuestion),
-                    this.ErrorsByQuestionsWasntParsed,
-                    this.Verifier(this.ColumnDuplications),
-                    this.Verifier(this.ErrorsByGpsQuestions, QuestionType.GpsCoordinates),
-                    this.Verifier(this.ErrorsByNumericQuestions, QuestionType.Numeric),
+            this.Verifier(this.ColumnWasntMappedOnQuestionInTemplate, "PL0003",
+                PreloadingVerificationMessages.PL0003_ColumnWasntMappedOnQuestion,
+                PreloadedDataVerificationReferenceType.Column),
+            this.Verifier(this.FileWasntMappedOnQuestionnaireLevel, "PL0004",
+                PreloadingVerificationMessages.PL0004_FileWasntMappedRoster,
+                PreloadedDataVerificationReferenceType.File),
+            this.Verifier(this.ServiceColumnsAreAbsent, "PL0007",
+                PreloadingVerificationMessages.PL0007_ServiceColumnIsAbsent,
+                PreloadedDataVerificationReferenceType.Column),
+            this.Verifier(this.IdDuplication, "PL0006", PreloadingVerificationMessages.PL0006_IdDublication),
+            this.Verifier(this.OrphanRosters, "PL0008", PreloadingVerificationMessages.PL0008_OrphanRosterRecord),
+            this.Verifier(this.RosterIdIsInconsistencyWithRosterSizeQuestion, "PL0009",
+                PreloadingVerificationMessages.PL0009_RosterIdIsInconsistantWithRosterSizeQuestion),
+            this.ErrorsByQuestionsWasntParsed,
+            this.Verifier(this.ColumnDuplications),
+            this.Verifier(this.ErrorsByGpsQuestions, QuestionType.GpsCoordinates),
+            this.Verifier(this.ErrorsByNumericQuestions, QuestionType.Numeric),
                     
-                    this.ErrorsByResposibleName
-                };
-            }
-        }
+            this.ErrorsByResposibleName
+        };
 
-        private IEnumerable<string> ColumnWasntMappedOnQuestionInTemplate(PreloadedDataByFile levelData,
-            IPreloadedDataService preloadedDataService)
+        private IEnumerable<string> ColumnWasntMappedOnQuestionInTemplate(PreloadedDataByFile levelData, IPreloadedDataService preloadedDataService)
         {
             var levelExportStructure = preloadedDataService.FindLevelInPreloadedData(levelData.FileName);
             if (levelExportStructure == null)
@@ -452,7 +443,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             }
         }
 
-        private IEnumerable<PreloadedDataVerificationError> ColumnDuplications(
+        private IEnumerable<PanelImportVerificationError> ColumnDuplications(
             PreloadedDataByFile preloadedDataByFile,
             IPreloadedDataService preloadedDataService)
         {
@@ -472,12 +463,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             return
                 columnNameOnCountOfOccurrenceMap.Where(c => c.Value.Count > 1).Select(
                     columnsWithDuplicate =>
-                        new PreloadedDataVerificationError("PL0031",
+                        new PanelImportVerificationError("PL0031",
                             PreloadingVerificationMessages.PL0031_ColumnNameDuplicatesFound,
                             columnsWithDuplicate.Value.ToArray()));
         }
 
-        private IEnumerable<PreloadedDataVerificationError> ErrorsByGpsQuestions(
+        private IEnumerable<PanelImportVerificationError> ErrorsByGpsQuestions(
             HeaderStructureForLevel level,
             ExportedHeaderItem gpsExportedQuestion,
             PreloadedDataByFile levelData,
@@ -497,7 +488,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
             if (latitudeColumnIndex < 0 || longitudeColumnIndex < 0)
             {
-                yield return new PreloadedDataVerificationError("PL0030", PreloadingVerificationMessages.PL0030_GpsFieldsRequired, this.CreateReference(0, levelData));
+                yield return new PanelImportVerificationError("PL0030", PreloadingVerificationMessages.PL0030_GpsFieldsRequired, this.CreateReference(0, levelData));
                 yield break;
             }
 
@@ -514,33 +505,33 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
                 if (!latitude.HasValue)
                 {
-                    yield return new PreloadedDataVerificationError("PL0030",
+                    yield return new PanelImportVerificationError("PL0030",
                         PreloadingVerificationMessages.PL0030_GpsMandatoryFilds,
                         this.CreateReference(latitudeColumnIndex, rowIndex, levelData));
                 }
 
                 if (!longitude.HasValue)
                 {
-                    yield return new PreloadedDataVerificationError("PL0030",
+                    yield return new PanelImportVerificationError("PL0030",
                         PreloadingVerificationMessages.PL0030_GpsMandatoryFilds,
                         this.CreateReference(longitudeColumnIndex, rowIndex, levelData));
                 }
 
                 if (latitude.HasValue && (latitude.Value < -90 || latitude.Value > 90))
-                    yield return new PreloadedDataVerificationError("PL0032",
+                    yield return new PanelImportVerificationError("PL0032",
                         PreloadingVerificationMessages
                             .PL0032_LatitudeMustBeGeaterThenN90AndLessThen90,
                         this.CreateReference(latitudeColumnIndex, rowIndex, levelData));
 
                 if (longitude.HasValue && (longitude.Value < -180 || longitude.Value > 180))
-                    yield return new PreloadedDataVerificationError("PL0033",
+                    yield return new PanelImportVerificationError("PL0033",
                         PreloadingVerificationMessages
                             .PL0033_LongitudeMustBeGeaterThenN180AndLessThen180,
                         this.CreateReference(longitudeColumnIndex, rowIndex, levelData));
             }
         }
 
-        private IEnumerable<PreloadedDataVerificationError> ErrorsByNumericQuestions(
+        private IEnumerable<PanelImportVerificationError> ErrorsByNumericQuestions(
             HeaderStructureForLevel level,
             ExportedHeaderItem numericExportedQuestion,
             PreloadedDataByFile levelData,
@@ -568,7 +559,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 if (parsedValue < 0)
                 {
                     
-                    yield return new PreloadedDataVerificationError("PL0022",
+                    yield return new PanelImportVerificationError("PL0022",
                         PreloadingVerificationMessages.PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative,
                         this.CreateReference(columnIndex, rowIndex, levelData));
                 }
@@ -579,7 +570,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
                 if (parsedValue > maxNumericValue)
                 {
-                    yield return new PreloadedDataVerificationError("PL0029",
+                    yield return new PanelImportVerificationError("PL0029",
                         string.Format(PreloadingVerificationMessages.PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40, maxNumericValue),
                         this.CreateReference(columnIndex, rowIndex, levelData));
                 }
@@ -604,7 +595,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 return null;
             }
         }
-        private IEnumerable<PreloadedDataVerificationError> ErrorsByQuestionsWasntParsed(PreloadedDataByFile[] allLevels,
+        private IEnumerable<PanelImportVerificationError> ErrorsByQuestionsWasntParsed(PreloadedDataByFile[] allLevels,
             IPreloadedDataService preloadedDataService)
         {
             foreach (var levelData in allLevels)
@@ -637,7 +628,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
                             case ValueParsingResult.AnswerAsDecimalWasNotParsed:
                                 yield return
-                                    new PreloadedDataVerificationError("PL0019",
+                                    new PanelImportVerificationError("PL0019",
                                         PreloadingVerificationMessages.PL0019_ExpectedDecimalNotParsed,
                                         new PreloadedDataVerificationReference(columnIndex, rowIndex,
                                             PreloadedDataVerificationReferenceType.Cell,
@@ -647,7 +638,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                                 break;
                             case ValueParsingResult.CommaIsUnsupportedInAnswer:
                                 yield return
-                                    new PreloadedDataVerificationError("PL0034",
+                                    new PanelImportVerificationError("PL0034",
                                         PreloadingVerificationMessages.PL0034_CommaSymbolIsNotAllowedInNumericAnswer,
                                         new PreloadedDataVerificationReference(columnIndex, rowIndex,
                                             PreloadedDataVerificationReferenceType.Cell,
@@ -657,7 +648,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                                 break;
                             case ValueParsingResult.AnswerAsIntWasNotParsed:
                                 yield return
-                                    new PreloadedDataVerificationError("PL0018",
+                                    new PanelImportVerificationError("PL0018",
                                         PreloadingVerificationMessages.PL0018_ExpectedIntNotParsed,
                                         new PreloadedDataVerificationReference(columnIndex, rowIndex,
                                             PreloadedDataVerificationReferenceType.Cell,
@@ -667,7 +658,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                                 break;
                             case ValueParsingResult.AnswerAsGpsWasNotParsed:
                                 yield return
-                                    new PreloadedDataVerificationError("PL0017",
+                                    new PanelImportVerificationError("PL0017",
                                         PreloadingVerificationMessages.PL0017_ExpectedGpsNotParsed,
                                         new PreloadedDataVerificationReference(columnIndex, rowIndex,
                                             PreloadedDataVerificationReferenceType.Cell,
@@ -677,7 +668,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                                 break;
                             case ValueParsingResult.AnswerAsDateTimeWasNotParsed:
                                 yield return
-                                    new PreloadedDataVerificationError("PL0016",
+                                    new PanelImportVerificationError("PL0016",
                                         PreloadingVerificationMessages.PL0016_ExpectedDateTimeNotParsed,
                                         new PreloadedDataVerificationReference(columnIndex, rowIndex,
                                             PreloadedDataVerificationReferenceType.Cell,
@@ -687,7 +678,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                                 break;
                             case ValueParsingResult.QuestionTypeIsIncorrect:
                                 yield return
-                                    new PreloadedDataVerificationError("PL0015",
+                                    new PanelImportVerificationError("PL0015",
                                         PreloadingVerificationMessages.PL0015_QuestionTypeIsIncorrect,
                                         new PreloadedDataVerificationReference(columnIndex, rowIndex,
                                             PreloadedDataVerificationReferenceType.Cell,
@@ -697,7 +688,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                                 break;
                             case ValueParsingResult.ParsedValueIsNotAllowed:
                                 yield return
-                                    new PreloadedDataVerificationError("PL0014",
+                                    new PanelImportVerificationError("PL0014",
                                         PreloadingVerificationMessages.PL0014_ParsedValueIsNotAllowed,
                                         new PreloadedDataVerificationReference(columnIndex, rowIndex,
                                             PreloadedDataVerificationReferenceType.Cell,
@@ -707,7 +698,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                                 break;
                             case ValueParsingResult.ValueIsNullOrEmpty:
                                 yield return
-                                    new PreloadedDataVerificationError("PL0013",
+                                    new PanelImportVerificationError("PL0013",
                                         PreloadingVerificationMessages.PL0013_ValueIsNullOrEmpty,
                                         new PreloadedDataVerificationReference(columnIndex, rowIndex,
                                             PreloadedDataVerificationReferenceType.Cell,
@@ -717,7 +708,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                                 break;
                             case ValueParsingResult.QuestionWasNotFound:
                                 yield return
-                                    new PreloadedDataVerificationError("PL0012",
+                                    new PanelImportVerificationError("PL0012",
                                         PreloadingVerificationMessages.PL0012_QuestionWasNotFound,
                                         new PreloadedDataVerificationReference(columnIndex, rowIndex,
                                             PreloadedDataVerificationReferenceType.Cell,
@@ -727,7 +718,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                                 break;
                             case ValueParsingResult.UnsupportedLinkedQuestion:
                                 yield return
-                                    new PreloadedDataVerificationError("PL0010",
+                                    new PanelImportVerificationError("PL0010",
                                         PreloadingVerificationMessages.PL0010_UnsupportedLinkedQuestion,
                                         new PreloadedDataVerificationReference(columnIndex, rowIndex,
                                             PreloadedDataVerificationReferenceType.Cell,
@@ -737,7 +728,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                                 break;
                             case ValueParsingResult.UnsupportedMultimediaQuestion:
                                 yield return
-                                    new PreloadedDataVerificationError("PL0023",
+                                    new PanelImportVerificationError("PL0023",
                                         PreloadingVerificationMessages.PL0023_UnsupportedMultimediaQuestion,
                                         new PreloadedDataVerificationReference(columnIndex, rowIndex,
                                             PreloadedDataVerificationReferenceType.Cell,
@@ -747,7 +738,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                                 break;
                             case ValueParsingResult.UnsupportedAreaQuestion:
                                 yield return
-                                    new PreloadedDataVerificationError("PL0038",
+                                    new PanelImportVerificationError("PL0038",
                                         PreloadingVerificationMessages.PL0038_UnsupportedAreaQuestion,
                                         new PreloadedDataVerificationReference(columnIndex, rowIndex,
                                             PreloadedDataVerificationReferenceType.Cell,
@@ -758,7 +749,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                             case ValueParsingResult.GeneralErrorOccured:
                             default:
                                 yield return
-                                    new PreloadedDataVerificationError("PL0011",
+                                    new PanelImportVerificationError("PL0011",
                                         PreloadingVerificationMessages.PL0011_GeneralError,
                                         new PreloadedDataVerificationReference(columnIndex, rowIndex,
                                             PreloadedDataVerificationReferenceType.Cell,
@@ -772,36 +763,30 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             }
         }
 
-        private Func<PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PreloadedDataVerificationError>> Verifier(
-            Func<PreloadedDataByFile, IPreloadedDataService, IEnumerable<PreloadedDataVerificationError>> fileValidator)
+        private Func<PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PanelImportVerificationError>> Verifier(
+            Func<PreloadedDataByFile, IPreloadedDataService, IEnumerable<PanelImportVerificationError>> fileValidator)
         {
-            return (data, preloadedDataService) =>
-            {
-                return data.SelectMany(level => fileValidator(level, preloadedDataService));
-            };
+            return (data, preloadedDataService) => data.SelectMany(level => fileValidator(level, preloadedDataService));
         }
 
-        private Func<PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PreloadedDataVerificationError>> Verifier(
-            Func<PreloadedDataByFile, IPreloadedDataService, IEnumerable<string>> getErrors, string code, string message,
+        private Func<PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PanelImportVerificationError>> Verifier(
+            Func<PreloadedDataByFile, IPreloadedDataService, IEnumerable<string>> getErrors, 
+            string code, 
+            string message,
             PreloadedDataVerificationReferenceType type)
         {
-            return (data, rosterDataService) =>
-                data.SelectMany(
-                    level =>
-                        getErrors(level, rosterDataService)
-                            .Select(
-                                entity =>
-                                    new PreloadedDataVerificationError(code, message,
-                                        new PreloadedDataVerificationReference(type, entity, level.FileName))));
+            return (data, rosterDataService) => data
+                .SelectMany(level => getErrors(level, rosterDataService)
+                .Select(entity => new PanelImportVerificationError(code, message, new PreloadedDataVerificationReference(type, entity, level.FileName))));
         }
 
-        private Func<PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PreloadedDataVerificationError>> Verifier(
-            Func<HeaderStructureForLevel,ExportedHeaderItem, PreloadedDataByFile, IPreloadedDataService, IEnumerable<PreloadedDataVerificationError>> exportedQuestionVerifier,
+        private Func<PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PanelImportVerificationError>> Verifier(
+            Func<HeaderStructureForLevel,ExportedHeaderItem, PreloadedDataByFile, IPreloadedDataService, IEnumerable<PanelImportVerificationError>> exportedQuestionVerifier,
             QuestionType questionType)
         {
             return (datas, preloadedDataService) =>
             {
-                var result = new List<PreloadedDataVerificationError>();
+                var result = new List<PanelImportVerificationError>();
 
                 foreach (var levelData in datas)
                 {
@@ -821,15 +806,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             };
         }
 
-        private Func<PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PreloadedDataVerificationError>> Verifier(
+        private Func<PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PanelImportVerificationError>> Verifier(
             Func<PreloadedDataByFile, PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PreloadedDataVerificationReference>>
                 getErrors, string code, string message)
         {
-            return (data, rosterDataService) => data.SelectMany(
-                level => getErrors(level, data, rosterDataService)
-                    .Select(
-                        entity =>
-                            new PreloadedDataVerificationError(code, message, entity)));
+            return (data, rosterDataService) =>
+            {
+                return data
+                    .SelectMany(level => getErrors(level, data, rosterDataService)
+                    .Select(entity => new PanelImportVerificationError(code, message, entity)));
+            };
         }
 
         private PreloadedDataVerificationReference CreateReference(int y, PreloadedDataByFile levelData)
@@ -849,7 +835,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 levelData.FileName);
         }
 
-        private IEnumerable<PreloadedDataVerificationError> ErrorsByQuantityColumn(PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService)
+        private IEnumerable<PanelImportVerificationError> ErrorsByQuantityColumn(PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService)
         {
             foreach (var levelData in allLevels)
             {
@@ -872,7 +858,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                     if (!int.TryParse(quantityString, out int quantity))
                     {
                         yield return
-                            new PreloadedDataVerificationError("PL0035",
+                            new PanelImportVerificationError("PL0035",
                                 PreloadingVerificationMessages.PL0035_QuantityNotParsed,
                                 new PreloadedDataVerificationReference(quantityColumnIndex, y,
                                     PreloadedDataVerificationReferenceType.Cell,
@@ -884,7 +870,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                     if (quantity < 1)
                     {
                         yield return
-                            new PreloadedDataVerificationError("PL0036",
+                            new PanelImportVerificationError("PL0036",
                                 PreloadingVerificationMessages.PL0036_QuantityShouldBePositive,
                                 new PreloadedDataVerificationReference(quantityColumnIndex, y,
                                     PreloadedDataVerificationReferenceType.Cell,
@@ -896,7 +882,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             }
         }
 
-        private IEnumerable<PreloadedDataVerificationError> ErrorsByResposibleName(PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService)
+        private IEnumerable<PanelImportVerificationError> ErrorsByResposibleName( PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService)
         {
             foreach (var levelData in allLevels)
             {
@@ -915,7 +901,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                     if (String.IsNullOrWhiteSpace(name))
                     {
                         yield return
-                            new PreloadedDataVerificationError("PL0025",
+                            new PanelImportVerificationError("PL0025",
                                 PreloadingVerificationMessages.PL0025_ResponsibleNameIsEmpty,
                                 new PreloadedDataVerificationReference(responsibleNameIndex, y,
                                     PreloadedDataVerificationReferenceType.Cell,
@@ -924,13 +910,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                         continue;
                     }
 
-                    var userState = this.GetResponsible(responsibleCache, name);
+                    var userState = this.GetResponsibleAndUpdateCache(responsibleCache, name);
 
                     if (userState == null)
                     {
 
                         yield return
-                            new PreloadedDataVerificationError("PL0026",
+                            new PanelImportVerificationError("PL0026",
                                 PreloadingVerificationMessages.PL0026_ResponsibleWasNotFound,
                                 new PreloadedDataVerificationReference(responsibleNameIndex, y,
                                     PreloadedDataVerificationReferenceType.Cell,
@@ -941,7 +927,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                     if (userState.IsLocked)
                     {
                         yield return
-                            new PreloadedDataVerificationError("PL0027",
+                            new PanelImportVerificationError("PL0027",
                                 PreloadingVerificationMessages.PL0027_ResponsibleIsLocked,
                                 new PreloadedDataVerificationReference(responsibleNameIndex, y,
                                     PreloadedDataVerificationReferenceType.Cell,
@@ -952,7 +938,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                     if (!userState.IsSupervisorOrInterviewer)
                     {
                         yield return
-                            new PreloadedDataVerificationError("PL0028",
+                            new PanelImportVerificationError("PL0028",
                                 PreloadingVerificationMessages.PL0028_UserIsNotSupervisorOrInterviewer,
                                 new PreloadedDataVerificationReference(responsibleNameIndex, y,
                                     PreloadedDataVerificationReferenceType.Cell,
@@ -963,7 +949,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             }
         }
 
-        private UserToVerify GetResponsible(Dictionary<string, UserToVerify> responsiblesCache, string userName)
+        private UserToVerify GetResponsibleAndUpdateCache(Dictionary<string, UserToVerify> responsiblesCache, string userName)
         {
             var userNameLowerCase = userName.ToLower();
             if (!responsiblesCache.ContainsKey(userNameLowerCase))

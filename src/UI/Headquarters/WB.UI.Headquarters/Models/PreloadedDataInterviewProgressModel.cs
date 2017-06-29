@@ -1,6 +1,5 @@
 ﻿using System;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
-using WB.UI.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 
 namespace WB.UI.Headquarters.Models
 {

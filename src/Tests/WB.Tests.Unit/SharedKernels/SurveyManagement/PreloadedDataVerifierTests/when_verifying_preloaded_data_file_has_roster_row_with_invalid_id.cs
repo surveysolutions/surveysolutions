@@ -8,11 +8,12 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Tests.Abc;
 using It = Machine.Specifications.It;
@@ -47,13 +48,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             preloadedDataServiceMock.Setup(x => x.GetAvailableIdListForParent(preloadedDataByFileTopLevel, Moq.It.IsAny<ValueVector<Guid>>(), new []{"1"}, files))
                 .Returns(new [] { 0 });
             preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFileTopLevel, Moq.It.IsAny<string>())).Returns(-1);
-            preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object);
+            importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object);
         };
 
         Because of =
             () =>
                 result =
-                    preloadedDataVerifier.VerifyPanel(questionnaireId, 1, files);
+                    importDataVerifier.VerifyPanelFiles(questionnaireId, 1, files);
 
         It should_result_has_1_error = () =>
             result.Errors.Count().ShouldEqual(1);
@@ -73,8 +74,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         It should_error_has_content_id_of_inconsistent_record = () =>
             result.Errors.First().References.First().Content.ShouldEqual("unparsed");
 
-        private static PreloadedDataVerifier preloadedDataVerifier;
-        private static VerificationStatus result;
+        private static ImportDataVerifier importDataVerifier;
+        private static ImportDataVerificationState result;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private static PreloadedDataByFile preloadedDataByFileTopLevel;

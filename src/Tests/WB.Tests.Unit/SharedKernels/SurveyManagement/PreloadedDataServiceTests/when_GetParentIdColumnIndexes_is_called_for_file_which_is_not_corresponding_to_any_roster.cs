@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
@@ -18,13 +18,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
             questionnaireDocument =
                 CreateQuestionnaireDocumentWithOneChapter();
 
-            preloadedDataService = CreatePreloadedDataService(questionnaireDocument);
+            importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
         };
 
         Because of =
             () =>
                 result =
-                    preloadedDataService.GetParentIdColumnIndexes(
+                    importDataParsingService.GetParentIdColumnIndexes(
                         CreatePreloadedDataByFile(new string[] { "Id" }, new string[][] { new string[] { "1" } },
                             "random file name"));
 
@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
             result.ShouldBeNull();
 
 
-        private static PreloadedDataService preloadedDataService;
+        private static ImportDataParsingService importDataParsingService;
         private static QuestionnaireDocument questionnaireDocument;
         private static int[] result;
     }

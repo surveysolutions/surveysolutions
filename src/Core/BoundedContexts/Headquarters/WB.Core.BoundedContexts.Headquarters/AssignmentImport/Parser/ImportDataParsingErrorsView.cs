@@ -1,44 +1,44 @@
 ﻿using System;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 
-namespace WB.Core.BoundedContexts.Headquarters.Views.PreloadedData
+namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
 {
-    public class PreloadedDataVerificationErrorsView
+    public class ImportDataParsingErrorsView
     {
-        public static PreloadedDataVerificationErrorsView CreatePrerequisiteError(
+        public static ImportDataParsingErrorsView CreatePrerequisiteError(
             Guid questionnaireId,
             long version,
             string questionnaireTitle,
             string error,
-            PreloadedContentType preloadedContentType,
+            AssignmentImportType assignmentImportType,
             string fileName = null)
-            => new PreloadedDataVerificationErrorsView(
+            => new ImportDataParsingErrorsView(
                 questionnaireId,
                 version,
                 questionnaireTitle,
-                new[] { new PreloadedDataVerificationError("PL0000", error) },
+                new[] { new PanelImportVerificationError("PL0000", error) },
                 false,
                 null,
-                preloadedContentType,
+                assignmentImportType,
                 fileName);
 
-        public PreloadedDataVerificationErrorsView(
+        public ImportDataParsingErrorsView(
             Guid questionnaireId, 
             long version, 
             string questionnaireTitle,
-            PreloadedDataVerificationError[] errors,
-            bool wasSupervsorProvided, 
+            PanelImportVerificationError[] errors,
+            bool wasSupervisorProvided, 
             string id, 
-            PreloadedContentType preloadedContentType, 
+            AssignmentImportType assignmentImportType, 
             string fileName = null)
         {
-            this.PreloadedContentType = preloadedContentType;
+            this.AssignmentImportType = assignmentImportType;
             this.FileName = fileName;
             this.Id = id;
             this.QuestionnaireId = questionnaireId;
             this.Version = version;
             this.Errors = errors;
-            this.WasSupervsorProvided = wasSupervsorProvided;
+            this.WasSupervisorProvided = wasSupervisorProvided;
             this.QuestionnaireTitle = questionnaireTitle;
         }
 
@@ -48,12 +48,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.PreloadedData
 
         public long Version { get; private set; }
 
-        public PreloadedDataVerificationError[] Errors { get; private set; }
+        public PanelImportVerificationError[] Errors { get; private set; }
 
-        public PreloadedContentType PreloadedContentType { get; private set; }
+        public AssignmentImportType AssignmentImportType { get; private set; }
         public string FileName { get; set; }
 
-        public bool WasSupervsorProvided { get; set; }
+        public bool WasSupervisorProvided { get; set; }
         public string QuestionnaireTitle { get; set; }
     }
 }

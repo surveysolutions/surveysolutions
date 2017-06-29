@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 
             var preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataService);
 
-            var result = preloadedDataVerifier.VerifyPanel(questionnaireId, 1, new[] { preloadedDataByFile });
+            var result = preloadedDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { preloadedDataByFile });
 
             Assert.That(result.Errors, Is.Empty);
         }

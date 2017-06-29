@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
@@ -14,13 +15,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
     {
         Establish context = () =>
         {
-            preloadedDataVerifier = CreatePreloadedDataVerifier();
+            importDataVerifier = CreatePreloadedDataVerifier();
         };
 
         Because of =
             () =>
                 result =
-                    preloadedDataVerifier.VerifyAssignmentsSample(Guid.NewGuid(), 1, new PreloadedDataByFile("1", "1", new string[0], new string[][] { new string[0] }));
+                    importDataVerifier.VerifyAssignmentsSample(Guid.NewGuid(), 1, new PreloadedDataByFile("1", "1", new string[0], new string[][] { new string[0] }));
 
         It should_result_has_1_error = () =>
             result.Errors.Count().ShouldEqual(1);
@@ -28,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         It should_return_single_PL0001_error = () =>
             result.Errors.First().Code.ShouldEqual("PL0001");
 
-        private static PreloadedDataVerifier preloadedDataVerifier;
-        private static VerificationStatus result;
+        private static ImportDataVerifier importDataVerifier;
+        private static ImportDataVerificationState result;
     }
 }

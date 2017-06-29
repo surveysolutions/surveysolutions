@@ -2,8 +2,7 @@
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Tests.Abc;
 
@@ -17,13 +16,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                 CreateQuestionnaireDocumentWithOneChapter(Create.Entity.FixedRoster(rosterId: rosterGroupId,
                         obsoleteFixedTitles: new[] { "1", "2" }, title: "Roster Group"));
 
-            preloadedDataService = CreatePreloadedDataService(questionnaireDocument);
+            importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
         };
 
         Because of =
             () =>
                 result =
-                    preloadedDataService.GetAvailableIdListForParent(
+                    importDataParsingService.GetAvailableIdListForParent(
                         CreatePreloadedDataByFile(new string[] { "Id" }, new string[][] { new string[] { "1" } },
                             questionnaireDocument.Title), new ValueVector<Guid> { rosterGroupId }, new []{"1"}, new PreloadedDataByFile[0]);
 
@@ -33,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
         It should_result_have_2_ids_1_and_2 = () =>
             result.SequenceEqual(new [] { 1, 2 });
 
-        private static PreloadedDataService preloadedDataService;
+        private static ImportDataParsingService importDataParsingService;
         private static QuestionnaireDocument questionnaireDocument;
         private static int[] result;
         private static Guid rosterGroupId = Guid.NewGuid();
