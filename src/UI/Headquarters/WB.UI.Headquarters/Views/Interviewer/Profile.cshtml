@@ -112,7 +112,7 @@ else
                         {
                             @Pages.InterviewerIsArchived
 
-                            if (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator)
+                            if (authorizedUser.IsAdministrator)
                             {
                                 <text>(<a href="@Url.Action("UnArchive", new {Id = Model.Id})">@Pages.Unarchive</a>)</text>
                             }
