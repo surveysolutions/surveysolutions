@@ -28,8 +28,7 @@ namespace Main.Core.Entities.SubEntities
 
         public override string ToString()
         {
-            return string.Format(CultureInfo.InvariantCulture, $"{Latitude}, {Longitude}");
-            //return string.Format(CultureInfo.InvariantCulture, "{0},{1}[{2}]{3}", Latitude, Longitude, Accuracy, Altitude);
+            return string.Format(CultureInfo.InvariantCulture, "{0},{1}[{2}]{3}", Latitude, Longitude, Accuracy, Altitude);
         }
 
         public static GeoPosition FromString(string value)
@@ -39,8 +38,8 @@ namespace Main.Core.Entities.SubEntities
             return new GeoPosition(
                 double.Parse(stringParts[0], CultureInfo.InvariantCulture),
                 double.Parse(stringParts[1], CultureInfo.InvariantCulture),
-                0,//double.Parse(stringParts[2], CultureInfo.InvariantCulture),
-                0,//double.Parse(stringParts[3], CultureInfo.InvariantCulture),
+                double.Parse(stringParts[2], CultureInfo.InvariantCulture),
+                double.Parse(stringParts[3], CultureInfo.InvariantCulture),
                 default(DateTimeOffset));
         }
 
