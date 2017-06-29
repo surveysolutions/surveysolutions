@@ -187,7 +187,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult> UnArchive(Guid id)
         {
             var interviewer = await this.userManager.FindByIdAsync(id);
