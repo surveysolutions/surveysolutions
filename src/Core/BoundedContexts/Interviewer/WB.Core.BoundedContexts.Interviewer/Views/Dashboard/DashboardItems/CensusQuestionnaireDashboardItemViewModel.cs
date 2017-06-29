@@ -60,6 +60,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         }
 
         public bool HasExpandedView => false;
+        
+        public bool IsExpanded { get; set; }
 
         private async Task CreateNewInterviewAsync()
         {
