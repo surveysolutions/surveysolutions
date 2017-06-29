@@ -432,10 +432,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private IEnumerable<InterviewTreeQuestion> GetEnabledInvalidQuestions(bool includeAllPrefilled = false)
             => this.Tree.FindQuestions()
-                .Where(question => !question.IsDisabled()
-                                   && !question.IsValid
-                                && (includeAllPrefilled || !question.IsReadonly)
-                                && (includeAllPrefilled || !question.IsPrefilled || (question.IsPrefilled && this.CreatedOnClient)));
+                .Where(question => !question.IsDisabled() && !question.IsValid && (includeAllPrefilled || !question.IsReadonly));
 
         public int CountEnabledQuestions(Identity group)
             => this.Tree.GetGroup(group)?.CountEnabledQuestions() ?? 0;
