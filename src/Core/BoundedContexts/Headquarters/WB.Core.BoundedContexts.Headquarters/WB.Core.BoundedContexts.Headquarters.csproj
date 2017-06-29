@@ -165,6 +165,11 @@
   <ItemGroup>
     <Compile Include="Aggregates\ReadonlyUser.cs" />
     <Compile Include="Aggregates\Tablet.cs" />
+    <Compile Include="AssignmentImport\IInterviewImportService.cs" />
+    <Compile Include="AssignmentImport\InterviewImportError.cs" />
+    <Compile Include="AssignmentImport\InterviewImportService.cs" />
+    <Compile Include="AssignmentImport\InterviewImportState.cs" />
+    <Compile Include="AssignmentImport\InterviewImportStatus.cs" />
     <Compile Include="Assignments\Assignment.cs" />
     <Compile Include="Assignments\AssignmentIdentifyingQuestionRow.cs" />
     <Compile Include="Assignments\AssignmentMap.cs" />
@@ -330,12 +335,12 @@
     <Compile Include="Implementation\Services\HealthCheck\HealthCheckService.cs" />
     <Compile Include="Implementation\Services\InterviewAnswersCommandValidator.cs" />
     <Compile Include="Implementation\Services\InterviewPreconditionsServiceSettings.cs" />
-    <Compile Include="Implementation\Services\Preloading\InterviewImportDataParsingService.cs" />
-    <Compile Include="Implementation\Services\Preloading\PreloadedDataRecord.cs" />
-    <Compile Include="Implementation\Services\Preloading\PreloadedDataService.cs" />
-    <Compile Include="Implementation\Services\Preloading\PreloadedDataVerifier.cs" />
-    <Compile Include="Implementation\Services\Preloading\PreloadingTemplateService.cs" />
-    <Compile Include="Implementation\Services\Preloading\QuestionDataParser.cs" />
+    <Compile Include="AssignmentImport\Parser\InterviewImportDataParsingService.cs" />
+    <Compile Include="AssignmentImport\Parser\PreloadedDataRecord.cs" />
+    <Compile Include="AssignmentImport\Parser\PreloadedDataService.cs" />
+    <Compile Include="AssignmentImport\Verifier\ImportDataVerifier.cs" />
+    <Compile Include="AssignmentImport\Templates\PreloadingTemplateService.cs" />
+    <Compile Include="AssignmentImport\Parser\QuestionDataParser.cs" />
     <Compile Include="Implementation\Services\QuestionnaireImportService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireNameValidator.cs" />
     <Compile Include="Implementation\Services\QuestionnaireUpgradeService.cs" />
@@ -347,6 +352,11 @@
     <Compile Include="Implementation\Services\SynchronizationLogViewFactory.cs" />
     <Compile Include="Implementation\Services\TabletInformation\FileBasedTabletInformationService.cs" />
     <Compile Include="Mappings\ReadonlyUserMap.cs" />
+    <Compile Include="Resources\Interviews.Designer.cs">
+      <DependentUpon>Interviews.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resources\TroubleshootingMessages.ru.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -520,7 +530,7 @@
     <Compile Include="ValueObjects\PreloadedData\PreloadedDataVerificationError.cs" />
     <Compile Include="ValueObjects\PreloadedData\PreloadedDataVerificationReference.cs" />
     <Compile Include="ValueObjects\PreloadedData\PreloadedDataVerificationReferenceType.cs" />
-    <Compile Include="ValueObjects\PreloadedData\VerificationStatus.cs" />
+    <Compile Include="AssignmentImport\VerificationStatus.cs" />
     <Compile Include="ValueObjects\ValueParsingResult.cs" />
     <Compile Include="Views\BaseInterviewGridItem.cs" />
     <Compile Include="Views\BrokenInterviewPackages\BrokenInterviewPackageExceptionTypesView.cs" />
@@ -614,12 +624,12 @@
     <Compile Include="Views\Interview\StatisticsLineGroupedByUserAndTemplate.cs" />
     <Compile Include="Views\Interview\TimeSpanBetweenStatuses.cs" />
     <Compile Include="Views\ListViewModelBase.cs" />
-    <Compile Include="Views\PreloadedData\PreloadedContentMetaData.cs" />
-    <Compile Include="Views\PreloadedData\PreloadedContentType.cs" />
-    <Compile Include="Views\PreloadedData\PreloadedDataByFile.cs" />
-    <Compile Include="Views\PreloadedData\PreloadedDataVerificationErrorsView.cs" />
-    <Compile Include="Views\PreloadedData\PreloadedFileMetaData.cs" />
-    <Compile Include="Views\PreloadedData\PreloadedMetaDataView.cs" />
+    <Compile Include="AssignmentImport\Parser\PreloadedContentMetaData.cs" />
+    <Compile Include="AssignmentImport\PreloadedContentType.cs" />
+    <Compile Include="AssignmentImport\Parser\PreloadedDataByFile.cs" />
+    <Compile Include="AssignmentImport\Parser\ImportDataParsingErrorsView.cs" />
+    <Compile Include="AssignmentImport\Parser\PreloadedFileMetaData.cs" />
+    <Compile Include="AssignmentImport\Parser\PreloadedMetaDataView.cs" />
     <Compile Include="Views\Preloading\QuestionnairePreloadingDataInputModel.cs" />
     <Compile Include="Views\Preloading\QuestionnairePreloadingDataItem.cs" />
     <Compile Include="Views\Preloading\QuestionnairePreloadingDataViewFactory.cs" />
@@ -835,6 +845,17 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.zh.resx">
       <DependentUpon>HeadquarterUserCommandValidatorMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Interviews.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Interviews.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Interviews.ru.resx">
+      <DependentUpon>Interviews.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Interviews.zh.resx">
+      <DependentUpon>Interviews.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\PreloadingVerificationMessages.pt.resx">
       <DependentUpon>PreloadingVerificationMessages.resx</DependentUpon>

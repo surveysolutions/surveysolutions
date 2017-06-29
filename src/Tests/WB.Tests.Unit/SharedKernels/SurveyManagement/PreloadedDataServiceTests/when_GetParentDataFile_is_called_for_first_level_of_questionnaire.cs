@@ -7,8 +7,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
@@ -21,13 +20,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                 CreateQuestionnaireDocumentWithOneChapter(Create.Entity.FixedRoster(rosterId: rosterGroupId, title: "Roster Group", variable: "roster",
                         obsoleteFixedTitles: new[] { "1" }));
 
-            preloadedDataService = CreatePreloadedDataService(questionnaireDocument);
+            importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
         };
 
         Because of =
            () =>
                result =
-                   preloadedDataService.GetParentDataFile("roster", new[] { CreatePreloadedDataByFile(null, null, "roster"), CreatePreloadedDataByFile(null, null, questionnaireDocument.Title) });
+                   importDataParsingService.GetParentDataFile("roster", new[] { CreatePreloadedDataByFile(null, null, "roster"), CreatePreloadedDataByFile(null, null, questionnaireDocument.Title) });
 
         It should_return_not_null_result = () =>
             result.ShouldNotBeNull();
@@ -35,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
         It should_result_filename_be_equal_to_top_level_file = () =>
             result.FileName.SequenceEqual(questionnaireDocument.Title);
 
-        private static PreloadedDataService preloadedDataService;
+        private static ImportDataParsingService importDataParsingService;
         private static QuestionnaireDocument questionnaireDocument;
         private static PreloadedDataByFile result;
         private static Guid rosterGroupId = Guid.NewGuid();

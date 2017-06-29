@@ -1756,7 +1756,6 @@
     <Compile Include="Filters\InstallationAttribute.cs" />
     <Compile Include="Controllers\Profile\SupervisorController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
-    <Compile Include="Implementation\Services\InterviewImportService.cs" />
     <Compile Include="Injections\HeadquartersRegistry.cs" />
     <Compile Include="Models\GlobalHelper.cs" />
     <Compile Include="Models\HistoryItemView.cs" />
@@ -1910,12 +1909,8 @@
     <Compile Include="ServiceLocationModule.cs" />
     <Compile Include="Services\IImageProcessingService.cs" />
     <Compile Include="Services\IInterviewCreatorFromAssignment.cs" />
-    <Compile Include="Services\IInterviewImportService.cs" />
     <Compile Include="Services\ImageProcessingService.cs" />
     <Compile Include="Services\InterviewImportColumn.cs" />
-    <Compile Include="Services\InterviewImportError.cs" />
-    <Compile Include="Services\InterviewImportState.cs" />
-    <Compile Include="Services\InterviewImportStatus.cs" />
     <Compile Include="Services\IRestoreDeletedQuestionnaireProjectionsService.cs" />
     <Compile Include="Services\VersionCheckService.cs" />
     <Compile Include="Services\IVersionCheckService.cs" />

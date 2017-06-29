@@ -1,5 +1,4 @@
-﻿@using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData
-@model WB.UI.Headquarters.Models.PreloadedDataConfirmationModel
+﻿@model WB.UI.Headquarters.Models.PreloadedDataConfirmationModel
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = BatchUpload.VerifySampleData;
@@ -90,7 +89,7 @@
                     @Html.HiddenFor(x => x.SupervisorsCount)
                     @Html.HiddenFor(x => x.FileName)
                     @Html.HiddenFor(x => x.WasResponsibleProvided)
-                    @Html.HiddenFor(x => x.PreloadedContentType)
+                    @Html.HiddenFor(x => x.AssignmentImportType)
 
                     <input id="responsibleId" name="responsibleId" type="hidden" data-bind="value: selectedResponsibleId">
                     if (hasModelLevelErrors)

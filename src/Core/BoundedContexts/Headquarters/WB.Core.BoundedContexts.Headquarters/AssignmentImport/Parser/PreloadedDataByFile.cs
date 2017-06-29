@@ -1,6 +1,4 @@
-﻿using Main.Core.Entities.SubEntities;
-
-namespace WB.Core.BoundedContexts.Headquarters.Views.PreloadedData
+﻿namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
 {
     public class PreloadedDataByFile
     {

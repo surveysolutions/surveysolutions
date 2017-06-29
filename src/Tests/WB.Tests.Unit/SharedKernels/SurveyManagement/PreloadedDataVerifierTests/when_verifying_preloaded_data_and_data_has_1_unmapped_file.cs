@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using It = Machine.Specifications.It;
 
@@ -18,13 +19,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         {
             questionnaire = CreateQuestionnaireDocumentWithOneChapter();
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire);
+            importDataVerifier = CreatePreloadedDataVerifier(questionnaire);
         };
 
         Because of =
             () =>
                 result =
-                    preloadedDataVerifier.VerifyPanel(questionnaireId, 1, new[] { CreatePreloadedDataByFile() });
+                    importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { CreatePreloadedDataByFile() });
         
         It should_result_has_1_error = () =>
            result.Errors.Count().ShouldEqual(1);
@@ -35,8 +36,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         It should_return_reference_with_File_type = () =>
             result.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.File);
 
-        private static PreloadedDataVerifier preloadedDataVerifier;
-        private static VerificationStatus result;
+        private static ImportDataVerifier importDataVerifier;
+        private static ImportDataVerificationState result;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
     }
