@@ -84,7 +84,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public static DateTimeAnswer FromDateTime(DateTime value) => new DateTimeAnswer(value);
 
-        public override string ToString() => AnswerUtils.AnswerToString(Value, isTimestamp: Value.Hour + Value.Minute + Value.Second > 0);
+        public override string ToString() => Value.ToString("yyyy-MM-ddTHH:mm:ss");
     }
 
     [DebuggerDisplay("{ToString()}")]
