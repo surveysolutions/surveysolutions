@@ -10,7 +10,6 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
-
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public class DashboardViewModel : BaseViewModel, IDisposable
@@ -19,6 +18,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IMvxMessenger messenger;
 
         private MvxSubscriptionToken startingLongOperationMessageSubscriptionToken;
+        private MvxSubscriptionToken stopLongOperationMessageSubscriptionToken;
 
         public CreateNewViewModel CreateNew { get; }
         public StartedInterviewsViewModel StartedInterviews { get; }
@@ -57,53 +57,50 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                            () => !this.Synchronization.IsSynchronizationInProgress));
             }
         }
+
         public IMvxCommand SignOutCommand => new MvxCommand(this.SignOut);
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(this.NavigateToDiagnostics);
 
         private bool isInProgress;
         public bool IsInProgress
         {
-            get { return this.isInProgress; }
-            set { this.isInProgress = value; this.RaisePropertyChanged(); }
+            get => this.isInProgress;
+            set => RaiseAndSetIfChanged(ref this.isInProgress, value);
         }
 
         private GroupStatus typeOfInterviews;
         public GroupStatus TypeOfInterviews
         {
-            get { return this.typeOfInterviews; }
-            set { this.typeOfInterviews = value; this.RaisePropertyChanged(); }
+            get => this.typeOfInterviews;
+            set => RaiseAndSetIfChanged(ref this.typeOfInterviews , value);
         }
 
-        private int numberOfAssignedInterviews => this.StartedInterviews.ItemsCount
+        private int NumberOfAssignedInterviews => this.StartedInterviews.ItemsCount
                                                   + this.CompletedInterviews.ItemsCount
                                                   + this.RejectedInterviews.ItemsCount;
 
         private SynchronizationViewModel synchronization;
         public SynchronizationViewModel Synchronization
         {
-            get { return synchronization; }
-            set
-            {
-                this.synchronization = value;
-                this.RaisePropertyChanged();
-            }
+            get => synchronization;
+            set => RaiseAndSetIfChanged(ref this.synchronization, value);
         }
 
         private bool isLoaded;
         public bool IsLoaded
         {
-            get { return this.isLoaded; }
-            set { this.isLoaded = value; this.RaisePropertyChanged(); }
+            get => this.isLoaded;
+            set => RaiseAndSetIfChanged(ref this.isLoaded, value);
         }
 
         public string DashboardTitle
-            => InterviewerUIResources.Dashboard_Title.FormatString(this.numberOfAssignedInterviews,
+            => InterviewerUIResources.Dashboard_Title.FormatString(this.NumberOfAssignedInterviews.ToString(),
                 this.principal.CurrentUserIdentity.Name);
 
         public override async void Load()
         {
             startingLongOperationMessageSubscriptionToken = this.messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
-
+            stopLongOperationMessageSubscriptionToken = this.messenger.Subscribe<StopingLongOperationMessage>(this.DashboardItemOnStopLongOperation);
             this.Synchronization.Init();
             this.StartedInterviews.OnInterviewRemoved += this.OnInterviewRemoved;
             this.CompletedInterviews.OnInterviewRemoved += this.OnInterviewRemoved;
@@ -122,8 +119,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             if (this.principal.CurrentUserIdentity == null)
                 return;
 
+            this.IsInProgress = true;
+
             await Task.WhenAll(
-                 this.CreateNew.LoadAsync(this.Synchronization, this),
+                 this.CreateNew.LoadAsync(this.Synchronization, InterviewsCountChanged),
                  Task.WhenAll(
                      this.StartedInterviews.LoadAsync(),
                      this.CompletedInterviews.LoadAsync(),
@@ -131,6 +130,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                  ).ContinueWith(task => this.RaisePropertyChanged(() => this.DashboardTitle))
             );
 
+            this.IsInProgress = false;
             IsLoaded = true;
         }
 
@@ -164,9 +164,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IsInProgress = true;
         }
 
+        private void DashboardItemOnStopLongOperation(StopingLongOperationMessage message)
+        {
+            IsInProgress = false;
+        }
+
         public void Dispose()
         {
             messenger.Unsubscribe<StartingLongOperationMessage>(startingLongOperationMessageSubscriptionToken);
+            messenger.Unsubscribe<StopingLongOperationMessage>(stopLongOperationMessageSubscriptionToken);
             this.StartedInterviews.OnInterviewRemoved -= this.OnInterviewRemoved;
             this.CompletedInterviews.OnInterviewRemoved -= this.OnInterviewRemoved;
         }

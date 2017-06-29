@@ -8,4 +8,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages
         {
         }
     }
+
+    public class StopingLongOperationMessage : MvxMessage
+    {
+        public StopingLongOperationMessage(object sender) : base(sender)
+        {
+        }
+    }
 }
