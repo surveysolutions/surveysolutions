@@ -18,6 +18,7 @@ $SupportToolSolution = 'src\Tools\support\support.sln'
 
 $versionString = (GetVersionString 'src\core')
 UpdateProjectVersion $BuildNumber -ver $versionString
+Write-Host "##teamcity[setParameter name='system.VersionString' value='$versionString']"
 try {
 	
 	$buildSuccessful = BuildSolution `
