@@ -7,11 +7,12 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
@@ -27,13 +28,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 
             preloadedDataServiceMock=new Mock<IPreloadedDataService>();
             preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(QuestionnaireCsvFileName)).Returns(new HeaderStructureForLevel());
-            preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object);
+            importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object);
         };
 
         Because of =
             () =>
                 result =
-                    preloadedDataVerifier.VerifyPanel(questionnaireId, 1, new[] { preloadedDataByFile });
+                    importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { preloadedDataByFile });
 
         It should_result_has_1_error = () =>
             result.Errors.Count().ShouldEqual(1);
@@ -44,8 +45,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         It should_return_reference_with_Column_type = () =>
             result.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
 
-        private static PreloadedDataVerifier preloadedDataVerifier;
-        private static VerificationStatus result;
+        private static ImportDataVerifier importDataVerifier;
+        private static ImportDataVerificationState result;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private static PreloadedDataByFile preloadedDataByFile;

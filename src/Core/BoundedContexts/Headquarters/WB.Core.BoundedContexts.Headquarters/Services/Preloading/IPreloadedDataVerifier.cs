@@ -1,12 +1,12 @@
 ﻿using System;
-using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 
 namespace WB.Core.BoundedContexts.Headquarters.Services.Preloading
 {
     public interface IPreloadedDataVerifier
     {
-        VerificationStatus VerifyAssignmentsSample(Guid questionnaireId, long version, PreloadedDataByFile data);
-        VerificationStatus VerifyPanel(Guid questionnaireId, long version, PreloadedDataByFile[] data);
+        ImportDataVerificationState VerifyAssignmentsSample(Guid questionnaireId, long version, PreloadedDataByFile data);
+        void VerifyPanelFiles(Guid questionnaireId, long version, PreloadedDataByFile[] data, AssignmentImportStatus status);
     }
 }

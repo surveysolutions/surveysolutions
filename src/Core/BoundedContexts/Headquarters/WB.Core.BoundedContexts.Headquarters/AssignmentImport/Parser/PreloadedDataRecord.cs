@@ -1,7 +1,7 @@
 ﻿using System;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 
-namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading
+namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
 {
     public class PreloadedDataRecord
     {

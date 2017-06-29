@@ -8,13 +8,14 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using System.Collections.Generic;
 using Main.Core.Entities.Composite;
 using System.Linq;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTests
 {
@@ -81,11 +82,11 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
 
             this.preloadedDataVerifier
                 .Setup(v => v.VerifyAssignmentsSample(qid.QuestionnaireId, qid.Version, It.IsAny<PreloadedDataByFile>()))
-                .Returns(new VerificationStatus
+                .Returns(new ImportDataVerificationState
                 {
-                    Errors = new List<PreloadedDataVerificationError>
+                    Errors = new List<PanelImportVerificationError>
                     {
-                        new PreloadedDataVerificationError("CODE", "Message")
+                        new PanelImportVerificationError("CODE", "Message")
                     }
                 });
 
@@ -122,7 +123,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
 
             this.preloadedDataVerifier
                 .Setup(v => v.VerifyAssignmentsSample(qid.QuestionnaireId, qid.Version, It.IsAny<PreloadedDataByFile>()))
-                .Returns(new VerificationStatus() { Errors = new PreloadedDataVerificationError[0] });
+                .Returns(new ImportDataVerificationState() { Errors = new PanelImportVerificationError[0] });
 
             this.controller.Create(new CreateAssignmentApiRequest
             {
@@ -154,7 +155,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
 
             this.preloadedDataVerifier
                 .Setup(v => v.VerifyAssignmentsSample(qid.QuestionnaireId, qid.Version, It.IsAny<PreloadedDataByFile>()))
-                .Returns(new VerificationStatus { Errors = new PreloadedDataVerificationError[0] });
+                .Returns(new ImportDataVerificationState { Errors = new PanelImportVerificationError[0] });
 
             this.controller.Create(new CreateAssignmentApiRequest
             {

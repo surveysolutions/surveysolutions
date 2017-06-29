@@ -7,7 +7,6 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -19,9 +18,9 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
-namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading
+namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
 {
-    internal class PreloadedDataService : IPreloadedDataService
+    internal class ImportDataParsingService : IPreloadedDataService
     {
         private readonly QuestionnaireExportStructure exportStructure;
         private readonly Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes;
@@ -53,7 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         }
 
 
-        public PreloadedDataService(QuestionnaireExportStructure exportStructure,
+        public ImportDataParsingService(QuestionnaireExportStructure exportStructure,
             Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes,
             QuestionnaireDocument questionnaireDocument, 
             IQuestionDataParser dataParser,

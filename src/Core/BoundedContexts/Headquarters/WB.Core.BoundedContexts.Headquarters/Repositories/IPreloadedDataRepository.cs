@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 
 namespace WB.Core.BoundedContexts.Headquarters.Repositories
 {

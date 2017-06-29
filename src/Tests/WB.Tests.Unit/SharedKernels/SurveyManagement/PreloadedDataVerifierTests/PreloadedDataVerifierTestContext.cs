@@ -7,15 +7,15 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
@@ -28,10 +28,10 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
-    [Subject(typeof(PreloadedDataVerifier))]
+    [Subject(typeof(ImportDataVerifier))]
     internal class PreloadedDataVerifierTestContext
     {
-        protected static PreloadedDataVerifier CreatePreloadedDataVerifier(
+        protected static ImportDataVerifier CreatePreloadedDataVerifier(
             QuestionnaireDocument questionnaireDocument = null, 
             IPreloadedDataService preloadedDataService = null,
             IUserViewFactory userViewFactory=null)
@@ -54,10 +54,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                 ? null
                 : new RosterStructureService().GetRosterScopes(questionnaireDocument));
 
-            var preloadedService = new PreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure,
+            var preloadedService = new ImportDataParsingService(questionnaireExportStructure, questionnaireRosterStructure,
                 questionnaireDocument, new QuestionDataParser(), Mock.Of<IUserViewFactory>());
             return
-                new PreloadedDataVerifier(
+                new ImportDataVerifier(
                     Mock.Of<IPreloadedDataServiceFactory>(
                         _ =>
                             _.CreatePreloadedDataService(Moq.It.IsAny<QuestionnaireExportStructure>(),

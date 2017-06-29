@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Web.Http;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
@@ -41,12 +42,13 @@ namespace WB.UI.Headquarters.Controllers
             var status = this.interviewImportService.Status;
             return new InterviewImportStatusApiView
             {
-                QuestionnaireId = status.QuestionnaireId,
-                QuestionnaireVersion = status.QuestionnaireVersion,
+                Stage = status.Stage.ToString(),
+                QuestionnaireId = status.QuestionnaireId.QuestionnaireId,
+                QuestionnaireVersion = status.QuestionnaireId.Version,
                 QuestionnaireTitle = status.QuestionnaireTitle,
                 IsInProgress = status.IsInProgress,
-                TotalInterviewsCount = status.TotalInterviewsCount,
-                CreatedInterviewsCount = status.CreatedInterviewsCount,
+                TotalInterviewsCount = status.TotalCount,
+                CreatedInterviewsCount = status.ProcessedCount,
                 EstimatedTime = TimeSpan.FromMilliseconds(status.EstimatedTime).ToString(@"dd\.hh\:mm\:ss"),
                 ElapsedTime = TimeSpan.FromMilliseconds(status.ElapsedTime).ToString(@"dd\.hh\:mm\:ss"),
                 HasErrors = status.State.Errors.Any(),
@@ -97,6 +99,7 @@ namespace WB.UI.Headquarters.Controllers
             public string ElapsedTime { get; set; }
             public string EstimatedTime { get; set; }
             public bool HasErrors { get; set; }
+            public string Stage { get; set; }
         }
     }
 }

@@ -2,9 +2,10 @@
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
@@ -26,11 +27,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             var preloadedDataService =
                 Create.Service.PreloadedDataService(questionnaire);
 
-            preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataService);
+            importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataService);
         };
 
         Because of =
-            () => result = preloadedDataVerifier.VerifyPanel(questionnaireId, 1, new[] { preloadedDataByFile });
+            () => result = importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { preloadedDataByFile });
 
         It should_result_has_1_errors = () =>
             result.Errors.Count().ShouldEqual(1);
@@ -54,8 +55,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             result.Errors.First().References.First().PositionY.ShouldEqual(0);
 
 
-        private static PreloadedDataVerifier preloadedDataVerifier;
-        private static VerificationStatus result;
+        private static ImportDataVerifier importDataVerifier;
+        private static ImportDataVerificationState result;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private static Guid numericQuestionId;

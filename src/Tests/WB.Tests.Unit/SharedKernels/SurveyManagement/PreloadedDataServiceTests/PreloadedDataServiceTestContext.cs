@@ -7,11 +7,10 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
@@ -21,10 +20,10 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
 {
-    [Subject(typeof(PreloadedDataService))]
+    [Subject(typeof(ImportDataParsingService))]
     internal class PreloadedDataServiceTestContext
     {
-        protected static PreloadedDataService CreatePreloadedDataService(QuestionnaireDocument questionnaireDocument = null)
+        protected static ImportDataParsingService CreatePreloadedDataService(QuestionnaireDocument questionnaireDocument = null)
         {
             var questionnaireExportStructure = (questionnaireDocument == null
                 ? null
@@ -40,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                 : new RosterStructureService().GetRosterScopes(questionnaireDocument));
 
             var userViewFactory = new Mock<IUserViewFactory>();
-            return new PreloadedDataService(questionnaireExportStructure, questionnaireRosterScopes, questionnaireDocument,
+            return new ImportDataParsingService(questionnaireExportStructure, questionnaireRosterScopes, questionnaireDocument,
                 new QuestionDataParser(), userViewFactory.Object);
         }
 
