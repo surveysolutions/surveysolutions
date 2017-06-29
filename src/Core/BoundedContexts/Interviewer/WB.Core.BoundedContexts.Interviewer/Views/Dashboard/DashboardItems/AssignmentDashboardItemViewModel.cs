@@ -38,12 +38,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.raiseEvents = true;
         }
         
-        public void Init(AssignmentDocument assignmentDocument, DashboardViewModel dashboardViewModel, IAssignmentItemService itemService, int interviewsCount)
+        public void Init(AssignmentDocument assignmentDocument, EventHandler interviewsCountChanged, CreateNewViewModel itemService, int interviewsCount)
         {
             this.itemService = itemService;
             this.interviewsByAssignmentCount = interviewsCount;
             Bind(assignmentDocument);
-            dashboardViewModel.InterviewsCountChanged += (sender, args) => this.Refresh();
+            interviewsCountChanged += (sender, args) => this.Refresh();
         }
 
         private void Refresh()
@@ -93,7 +93,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         }
 
         public MvxObservableCollection<PrefilledQuestion> PrefilledQuestions { get; private set; }
-        
 
         public string Title
         {
@@ -105,11 +104,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         public bool IsExpanded
         {
             get => this.isExpanded;
-            set
-            {
-                var preValue = this.isExpanded;
-                RaiseAndSetIfChanged(ref this.isExpanded, value, onChange: UpdatePrefilledQuestions);
-            }
+            set => RaiseAndSetIfChanged(ref this.isExpanded, value, onChange: UpdatePrefilledQuestions);
         }
 
         private void UpdatePrefilledQuestions(bool isexpanded)
@@ -128,7 +123,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         private bool allowToCreateNewInterview;
         private int interviewsByAssignmentCount;
-        private IAssignmentItemService itemService;
+        private CreateNewViewModel itemService;
 
         public IMvxCommand ToggleExpanded => new MvxCommand(() => this.IsExpanded = !this.IsExpanded);
 
