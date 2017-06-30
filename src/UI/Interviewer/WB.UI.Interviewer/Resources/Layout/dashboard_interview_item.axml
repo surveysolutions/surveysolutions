@@ -91,7 +91,9 @@
         style="@style/Dashboard_InterviewItem_CreateButton"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content" 
-        app:MvxBind="Text Localization('Dashboard_Open'); Click LoadDashboardItemCommand; Visible IsExpanded;"
+        app:MvxBind="Text Localization('Dashboard_Open'); 
+          Click LoadDashboardItemCommand;
+          Visible (IsExpanded || Not(HasExpandedView));"
         app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
         app:layout_constraintTop_toBottomOf="@+id/expandHandle"
         app:layout_constraintBottom_toBottomOf="parent" />
@@ -100,7 +102,7 @@
         android:id="@+id/discard"
         app:MvxBind="Click RemoveInterviewCommand;
               Text Localization('Dashboard_Discard');
-              Visible IsSupportedRemove; Visible IsExpanded;"
+              Visible Or(And(IsSupportedRemove, IsExpanded), Not(HasExpandedView));"
         style="@style/Dashboard_InterviewItem_RemoveInterviewButton"
         app:layout_constraintBaseline_toBaselineOf="@+id/new_button"
         app:layout_constraintBottom_toBottomOf="@+id/new_button"
@@ -109,7 +111,7 @@
       <TextView
         android:id="@+id/show_location"
         style="@style/Dashboard_Location"
-        app:MvxBind="Visible And(HasGpsLocation, IsExpanded);                               
+        app:MvxBind="Visible And(HasGpsLocation, Or(IsExpanded, Not(HasExpandedView)));
                 Text Localization('Dashboard_ShowLocation');                               
                 Click NavigateToGpsLocationCommand;"
 

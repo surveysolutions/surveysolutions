@@ -552,7 +552,7 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static Questionnaire Questionnaire(IExpressionProcessor expressionProcessor = null, IQuestionnireHistoryVersionsService histotyVersionsService = null)
+        public static Questionnaire Questionnaire(IExpressionProcessor expressionProcessor = null, IQuestionnireHistoryVersionsService historyVersionsService = null)
         {
             return new Questionnaire(
                 Mock.Of<ILogger>(),
@@ -563,7 +563,7 @@ namespace WB.Tests.Unit.Designer
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
                 Mock.Of<ITranslationsService>(),
-                histotyVersionsService ?? Mock.Of<IQuestionnireHistoryVersionsService>());
+                historyVersionsService ?? Mock.Of<IQuestionnireHistoryVersionsService>());
         }
 
 
@@ -1090,11 +1090,11 @@ namespace WB.Tests.Unit.Designer
                 attachmentMetaStorage: attachmentMetaStorage);
         }
 
-        public static QuestionnireHistotyVersionsService QuestionnireHistoryVersionsService(
+        public static QuestionnireHistoryVersionsService QuestionnireHistoryVersionsService(
             IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeItemStorage = null,
             IEntitySerializer<QuestionnaireDocument> entitySerializer = null)
         {
-            return new QuestionnireHistotyVersionsService(
+            return new QuestionnireHistoryVersionsService(
                 questionnaireChangeItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireChangeRecord>>(),
                 entitySerializer ?? new EntitySerializer<QuestionnaireDocument>());
         }
