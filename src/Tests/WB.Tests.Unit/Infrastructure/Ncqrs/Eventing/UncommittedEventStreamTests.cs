@@ -1,5 +1,4 @@
 using System;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing;
 using NUnit.Framework;

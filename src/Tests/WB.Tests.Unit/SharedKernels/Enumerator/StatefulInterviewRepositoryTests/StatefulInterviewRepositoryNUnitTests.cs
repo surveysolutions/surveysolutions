@@ -1,8 +1,8 @@
 ﻿using System;
-using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Eventing;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewRepositoryTests

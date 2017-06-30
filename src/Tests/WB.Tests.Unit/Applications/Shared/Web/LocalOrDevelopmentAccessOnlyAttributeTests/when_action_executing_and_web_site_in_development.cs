@@ -2,8 +2,8 @@
 using System.Collections.Specialized;
 using System.Web.Mvc;
 using Machine.Specifications;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Filters;
 using It = Machine.Specifications.It;
