@@ -41,13 +41,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.assignmentsRepository = assignmentsRepository;
         }
 
-        public async Task CreateInterviewAsync(AssignmentDocument assignment)
+        public async Task CreateInterviewAsync(int assignmentId)
         {
             try
             {
                 this.messenger.Publish(new StartingLongOperationMessage(this));
                 var interviewId = Guid.NewGuid();
                 var interviewerIdentity = this.interviewerPrincipal.CurrentUserIdentity;
+                var assignment = this.assignmentsRepository.GetById(assignmentId);
                 this.assignmentsRepository.FetchPreloadedData(assignment);
                 var questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
 

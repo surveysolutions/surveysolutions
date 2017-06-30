@@ -67,12 +67,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.DateComment = this.GetInterviewDateCommentByStatus(interview);
             this.Comment = this.GetInterviewCommentByStatus(interview);
 
-            var questions = this.GetPrefilledQuestions().ToList();
-
-            this.detailedIdentifyingData = questions;
+            this.detailedIdentifyingData = this.GetPrefilledQuestions().ToList();
             this.identifyingData = new List<PrefilledQuestion>(detailedIdentifyingData.Take(3));
             this.PrefilledQuestions = new MvxObservableCollection<PrefilledQuestion>(identifyingData);
-                      
 
             this.GpsLocation = this.GetInterviewLocation(interview);
             this.IsSupportedRemove = interview.CanBeDeleted;
