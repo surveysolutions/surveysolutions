@@ -1,5 +1,5 @@
-using Microsoft.Practices.ServiceLocation;
 using Ninject.Modules;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Infrastructure.Native.Ioc;
 
 namespace WB.UI.Designer

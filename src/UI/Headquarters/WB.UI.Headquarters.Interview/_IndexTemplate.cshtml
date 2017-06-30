@@ -1,4 +1,5 @@
-﻿@{ Layout = null; }
+﻿@using WB.Core.GenericSubdomains.Portable.ServiceLocation
+@{ Layout = null; }
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,7 +26,7 @@
             "signalrPath": '@Url.Content("~/signalr/hubs")',
             "verboseLogging": <%= htmlWebpackPlugin.options.verboseLogging %>,
             "assetsPath": '@Url.Content("~/InterviewApp")/',
-            "appVersion": '@(Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetInstance<WB.Core.Infrastructure.Versions.IProductVersion>())',
+            "appVersion": '@(ServiceLocator.Current.GetInstance<WB.Core.Infrastructure.Versions.IProductVersion>())',
             "googleApiKey": '@(WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapApiKey)'
         }
     </script>

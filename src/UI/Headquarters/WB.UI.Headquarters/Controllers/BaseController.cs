@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using System.Web.Mvc;
-using Microsoft.Practices.ServiceLocation;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using WB.Core.BoundedContexts.Headquarters.Services;

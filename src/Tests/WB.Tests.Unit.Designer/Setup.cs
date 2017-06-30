@@ -9,7 +9,6 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using Main.Core.Documents;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
@@ -20,6 +19,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.Tests.Unit.Designer
 {

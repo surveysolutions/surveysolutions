@@ -2,8 +2,8 @@
 using Android.Graphics;
 using Android.Util;
 using Android.Widget;
-using Microsoft.Practices.ServiceLocation;
 using MvvmCross.Platform.Droid.Platform;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {

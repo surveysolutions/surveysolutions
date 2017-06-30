@@ -1,5 +1,5 @@
 using System.Web.Mvc;
-using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Transactions;
 
 namespace WB.UI.Shared.Web.Filters

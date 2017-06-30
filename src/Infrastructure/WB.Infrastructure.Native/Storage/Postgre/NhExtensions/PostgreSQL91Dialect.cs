@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Net;
-using Microsoft.Practices.ServiceLocation;
 using NHibernate;
 using NHibernate.Dialect;
 using NHibernate.SqlTypes;
 using NHibernate.UserTypes;
 using Npgsql;
 using NpgsqlTypes;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions

@@ -6,11 +6,11 @@ using System.Threading;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Headquarters.Resources;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.UI.Headquarters.Code
 {

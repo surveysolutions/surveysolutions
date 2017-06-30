@@ -1,6 +1,5 @@
 using Flurl.Http;
 using ICSharpCode.SharpZipLib;
-using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
 using Plugin.Geolocator;
@@ -11,6 +10,7 @@ using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;

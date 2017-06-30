@@ -1,8 +1,8 @@
 using System;
 using Machine.Specifications;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Domain;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Tests.Abc;

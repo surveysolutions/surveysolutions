@@ -1,4 +1,4 @@
-using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {

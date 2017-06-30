@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using FluentMigrator;
-using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Infrastructure.Native;
 

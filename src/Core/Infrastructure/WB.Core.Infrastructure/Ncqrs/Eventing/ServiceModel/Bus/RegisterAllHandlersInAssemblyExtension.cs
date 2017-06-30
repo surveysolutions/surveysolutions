@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable.Services;
 

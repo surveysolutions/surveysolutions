@@ -8,9 +8,9 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Tests.Abc;
 using WB.Tests.Abc.TestFactories;
 

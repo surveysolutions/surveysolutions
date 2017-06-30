@@ -1,6 +1,6 @@
 using System;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories

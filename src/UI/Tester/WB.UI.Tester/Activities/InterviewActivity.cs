@@ -1,8 +1,8 @@
 using Android.App;
 using Android.Views;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
 

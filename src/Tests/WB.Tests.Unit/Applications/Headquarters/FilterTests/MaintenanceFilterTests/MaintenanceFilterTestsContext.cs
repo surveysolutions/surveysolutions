@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Tests.Abc;
