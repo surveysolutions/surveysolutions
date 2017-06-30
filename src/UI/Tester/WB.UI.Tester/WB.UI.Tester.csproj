@@ -210,9 +210,6 @@
       <HintPath>..\..\..\..\packages\Portable.Ninject.3.3.1\lib\monoandroid\Ninject.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NinjectAdapter">
-      <HintPath>..\..\..\..\packages\CommonServiceLocator.NinjectAdapter.1.0.0.0\lib\NinjectAdapter.dll</HintPath>
-    </Reference>
     <Reference Include="Nito.AsyncEx, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Nito.AsyncEx.4.0.1\lib\MonoAndroid\Nito.AsyncEx.dll</HintPath>
       <Private>True</Private>
