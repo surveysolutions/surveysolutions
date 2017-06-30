@@ -675,7 +675,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 var answeredQuestion = new AnsweredQuestionSynchronizationDto(question.Identity.Id,
                     question.Identity.RosterVector,
-                    GetAnswerAsObject(question),
+                    question.GetAnswerAsObject(question),
                     comments);
 
                 if (question.IsAnswered() || answeredQuestion.HasComments())
@@ -775,29 +775,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public bool IsReadOnlyQuestion(Identity identity)
         {
             return Tree.GetQuestion(identity).IsReadonly;
-        }
-
-        private object GetAnswerAsObject(InterviewTreeQuestion question)
-        {
-            if (!question.IsAnswered()) return null;
-
-            if (question.IsText) return question.AsText.GetAnswer()?.Value;
-            if (question.IsMultimedia) return question.AsMultimedia.GetAnswer()?.FileName;
-            if (question.IsQRBarcode) return question.AsQRBarcode.GetAnswer()?.DecodedText;
-            if (question.IsInteger) return question.AsInteger.GetAnswer()?.Value;
-            if (question.IsDouble) return question.AsDouble.GetAnswer()?.Value;
-            if (question.IsDateTime) return question.AsDateTime.GetAnswer()?.Value;
-            if (question.IsGps) return question.AsGps.GetAnswer()?.Value;
-            if (question.IsTextList) return question.AsTextList.GetAnswer()?.ToTupleArray();
-            if (question.IsSingleLinkedOption) return question.AsSingleLinkedOption.GetAnswer()?.SelectedValue;
-            if (question.IsMultiLinkedOption) return question.AsMultiLinkedOption.GetAnswer()?.CheckedValues;
-            if (question.IsSingleFixedOption) return question.AsSingleFixedOption.GetAnswer()?.SelectedValue;
-            if (question.IsMultiFixedOption) return question.AsMultiFixedOption.GetAnswer()?.ToDecimals()?.ToArray();
-            if (question.IsYesNo) return question.AsYesNo.GetAnswer()?.ToAnsweredYesNoOptions()?.ToArray();
-            if (question.IsSingleLinkedToList) return question.AsSingleLinkedToList.GetAnswer().SelectedValue;
-            if (question.IsMultiLinkedToList) return question.AsMultiLinkedToList.GetAnswer()?.ToDecimals()?.ToHashSet();
-
-            return null;
         }
     }
 }
