@@ -123,7 +123,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
 
             this.preloadedDataVerifier
                 .Setup(v => v.VerifyAssignmentsSample(qid.QuestionnaireId, qid.Version, It.IsAny<PreloadedDataByFile>()))
-                .Returns(new ImportDataVerificationState() { Errors = new PanelImportVerificationError[0] });
+                .Returns(new ImportDataVerificationState() { Errors = new List<PanelImportVerificationError>() });
 
             this.controller.Create(new CreateAssignmentApiRequest
             {
