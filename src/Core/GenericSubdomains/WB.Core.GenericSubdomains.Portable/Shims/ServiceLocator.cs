@@ -55,7 +55,7 @@ namespace Microsoft.Practices.ServiceLocation
     ///     to retrieve services (instances identified by type and optional
     ///     name) from a container.
     /// </summary>
-    public interface IServiceLocator : IServiceProvider
+    public interface IServiceLocator
     {
         /// <summary>
         ///     Get an instance of the given <paramref name="serviceType" />.
