@@ -92,7 +92,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
             {
                 ContentType = restFile.ContentType,
                 Content = restFile.Content,
-                Id = restFile.ContentHash,
+                Id = restFile.ContentHash.Trim('"'),
                 Size = restFile.ContentLength ?? restFile.Content.LongLength
             };
 

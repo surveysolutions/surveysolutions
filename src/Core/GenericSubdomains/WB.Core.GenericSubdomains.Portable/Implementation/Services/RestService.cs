@@ -213,11 +213,13 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         }
 
         public async Task<RestFile> DownloadFileAsync(string url,
-            Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, RestCredentials credentials = null,
-            CancellationToken? token = null)
+            Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, 
+            RestCredentials credentials = null,
+            CancellationToken? token = null,
+            Dictionary<string, string> customHeaders = null)
         {
             var response = this.ExecuteRequestAsync(url: url, credentials: credentials, method: HttpMethod.Get,
-                userCancellationToken: token, request: null);
+                userCancellationToken: token, request: null, customHeaders: customHeaders);
 
             var restResponse = await this.ReceiveBytesWithProgressAsync(response: response, token: token ?? default(CancellationToken),
                         onDownloadProgressChanged: onDownloadProgressChanged).ConfigureAwait(false);
@@ -225,7 +227,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             var fileContent = this.GetDecompressedContentFromHttpResponseMessage(restResponse);
 
             return new RestFile(content: fileContent, contentType: restResponse.RawContentType,
-                contentHash: restResponse.ETag, contentLength: restResponse.Length, fileName: restResponse.FileName);
+                contentHash: restResponse.ETag, contentLength: restResponse.Length, fileName: restResponse.FileName, 
+                statusCode: restResponse.StatusCode);
         }
 
         public async Task SendStreamAsync(Stream streamData, string url, RestCredentials credentials,
@@ -310,17 +313,21 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             return new RestResponse
             {
                 Response = responseContent,
-                ContentType = this.GetContentType(responseMessage.Content.Headers.ContentType.MediaType),
+                ContentType = this.GetContentType(responseMessage.Content.Headers.ContentType?.MediaType),
                 ContentCompressionType = this.GetContentCompressionType(responseMessage.Content.Headers),
                 RawContentType = responseMessage.Content?.Headers?.ContentType?.MediaType,
                 Length = responseMessage.Content?.Headers?.ContentLength,
-                ETag = responseMessage.Headers?.ETag?.Tag.Trim('"'),
-                FileName = responseMessage.Content?.Headers?.ContentDisposition?.FileName
+                ETag = responseMessage.Headers?.ETag?.Tag,
+                FileName = responseMessage.Content?.Headers?.ContentDisposition?.FileName,
+                StatusCode = responseMessage.StatusCode
             };
         }
 
         private RestContentType GetContentType(string mediaType)
         {
+            if (mediaType.IsNullOrEmpty())
+                return RestContentType.Unknown;
+
             if (mediaType.IndexOf("json", StringComparison.OrdinalIgnoreCase) > -1 || mediaType.IndexOf("javascript", StringComparison.OrdinalIgnoreCase) > -1)
                 return RestContentType.Json;
 
@@ -392,6 +399,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             public long? Length { get; set; }
             public string ETag { get; set; }
             public string FileName { get; set; }
+            public HttpStatusCode StatusCode { get; set; }
         }
 
         internal enum RestContentType { Unknown, Json }
