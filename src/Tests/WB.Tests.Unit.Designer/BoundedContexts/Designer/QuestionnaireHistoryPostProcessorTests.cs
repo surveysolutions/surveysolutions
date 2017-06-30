@@ -111,9 +111,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
                 return this.Fluent;
             }
-            public FluentSyntax QuestionnireHistotyVersionsService(IQuestionnireHistoryVersionsService histotyVersionsService)
+            public FluentSyntax QuestionnireHistoryVersionsService(IQuestionnireHistoryVersionsService historyVersionsService)
             {
-                Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(histotyVersionsService);
+                Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(historyVersionsService);
                 return this.Fluent;
             }
 
@@ -358,7 +358,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 And.QuestionnaireChangeRecordStorage(out historyStorage).
                 And.EntitySerializer<QuestionnaireDocument>().
                 And.AccountDocumentStorage().
-                And.QuestionnireHistotyVersionsService(Create.QuestionnireHistoryVersionsService()).
+                And.QuestionnireHistoryVersionsService(Create.QuestionnireHistoryVersionsService()).
                 And.AccountDocument(questionnaireOwner, ownerName).
                 And.QuestionnaireStateTrackerStorage().
                 And.QuestionnaireDocument(out questionnaireDocument, id: questionnaireId, title: questionnnaireTitle, userId: questionnaireOwner).
