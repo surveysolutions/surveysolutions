@@ -175,7 +175,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 var errors = verifier.Invoke(data, preloadedDataService).ToList();
                 status.ProcessedCount++;
                 status.VerificationState.Errors.AddRange(errors);
-                Thread.Sleep(1000);
             }
             
             var topLevel = preloadedDataService.GetTopLevelData(data);

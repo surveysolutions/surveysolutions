@@ -1,741 +1,388 @@
 ﻿using System;
-
 using System.Collections.Generic;
-
 using System.Diagnostics;
-
 using System.Linq;
-
 using Main.Core.Entities.SubEntities;
-
 using WB.Core.GenericSubdomains.Portable;
-
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-
-using WB.Core.SharedKernels.DataCollection.Utils;
-
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
-
 using WB.Core.SharedKernels.Questionnaire.Documents;
 
-
-
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers
-
 {
-
-    public class InterviewAnswer 
-
+    public class InterviewAnswer
     {
-
-        public Identity Identity { get; set;  }
-
+        public Identity Identity { get; set; }
         public AbstractAnswer Answer { get; set; }
-
     }
-
-
 
     public abstract class AbstractAnswer
-
     {
-
         public abstract void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants);
-
     }
 
-
-
     [DebuggerDisplay("{ToString()}")]
-
     public class TextAnswer : AbstractAnswer
-
     {
-
-        protected  TextAnswer() { }
-
-
-
+        protected TextAnswer() { }
         private TextAnswer(string value)
-
         {
-
             if (value == null) throw new ArgumentNullException(nameof(value));
 
             this.Value = value;
-
         }
-
-
 
         public string Value { get; set; }
 
-
-
         public static TextAnswer FromString(string value) => value != null ? new TextAnswer(value.Trim()) : null;
-
-
 
         public override string ToString() => Value;
 
-
-
         public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
-
         {
-
             questionInvariants.RequireTextPreloadValueAllowed();
-
         }
-
     }
 
-
-
     [DebuggerDisplay("{ToString()}")]
-
     public class NumericIntegerAnswer : AbstractAnswer
-
     {
-
         protected NumericIntegerAnswer() { }
 
         private NumericIntegerAnswer(int value)
-
         {
-
             this.Value = value;
-
         }
-
-
 
         public int Value { get; set; }
 
-
-
         public static NumericIntegerAnswer FromInt(int value) => new NumericIntegerAnswer(value);
-
-
 
         public override string ToString() => Value.ToString();
 
-
-
         public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
-
         {
-
             questionInvariants.RequireNumericIntegerPreloadValueAllowed(this.Value);
-
         }
-
     }
 
-
-
     [DebuggerDisplay("{ToString()}")]
-
     public class NumericRealAnswer : AbstractAnswer
-
     {
-
         protected NumericRealAnswer() { }
 
         private NumericRealAnswer(double value)
-
         {
-
             this.Value = value;
-
         }
-
-
 
         public double Value { get; set; }
 
-
-
         public static NumericRealAnswer FromDouble(double value) => new NumericRealAnswer(value);
 
-
-
-        public static NumericRealAnswer FromDecimal(decimal value) => new NumericRealAnswer((double) value);
-
-
+        public static NumericRealAnswer FromDecimal(decimal value) => new NumericRealAnswer((double)value);
 
         public override string ToString() => Value.ToString();
 
-
-
         public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
-
         {
-
             questionInvariants.RequireNumericRealPreloadValueAllowed();
-
         }
-
     }
 
-
-
     [DebuggerDisplay("{ToString()}")]
-
     public class DateTimeAnswer : AbstractAnswer
-
     {
-
         protected DateTimeAnswer() { }
 
-
-
         private DateTimeAnswer(DateTime value)
-
         {
-
             this.Value = value;
-
         }
 
-
-
         public DateTime Value { get; set; }
-
-
 
         public static DateTimeAnswer FromDateTime(DateTime value) => new DateTimeAnswer(value);
 
         public override string ToString() => Value.ToString("yyyy-MM-ddTHH:mm:ss");
 
         public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
-
         {
-
             questionInvariants.RequireDateTimePreloadValueAllowed();
-
         }
-
-
     }
-
-
 
     [DebuggerDisplay("{ToString()}")]
 
     public class CategoricalFixedSingleOptionAnswer : AbstractAnswer
-
     {
-
         protected CategoricalFixedSingleOptionAnswer() { }
 
         private CategoricalFixedSingleOptionAnswer(int selectedValue)
-
         {
-
             this.SelectedValue = selectedValue;
-
         }
-
-
 
         public int SelectedValue { get; set; }
 
-
-
         public static CategoricalFixedSingleOptionAnswer FromInt(int selectedValue) => new CategoricalFixedSingleOptionAnswer(selectedValue);
 
-        public static CategoricalFixedSingleOptionAnswer FromDecimal(decimal selectedValue) => new CategoricalFixedSingleOptionAnswer((int) selectedValue);
-
-
+        public static CategoricalFixedSingleOptionAnswer FromDecimal(decimal selectedValue) => new CategoricalFixedSingleOptionAnswer((int)selectedValue);
 
         public override string ToString() => SelectedValue.ToString();
 
-
-
         public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
-
         {
-
             questionInvariants.RequireFixedSingleOptionPreloadValueAllowed(this.SelectedValue);
-
         }
-
     }
-
-
 
     [DebuggerDisplay("{ToString()}")]
 
     public class CategoricalFixedMultiOptionAnswer : AbstractAnswer
-
     {
-
         protected CategoricalFixedMultiOptionAnswer() { }
 
         private CategoricalFixedMultiOptionAnswer(IEnumerable<int> checkedValues)
-
         {
-
             if (checkedValues == null) throw new ArgumentNullException(nameof(checkedValues));
 
             this.CheckedValues = checkedValues.ToReadOnlyCollection();
-
         }
-
-
 
         public IReadOnlyCollection<int> CheckedValues { get; set; }
 
-
-
-        public IEnumerable<decimal> ToDecimals() => this.CheckedValues.Select(value => (decimal) value);
-
-
+        public IEnumerable<decimal> ToDecimals() => this.CheckedValues.Select(value => (decimal)value);
 
         public IEnumerable<int> ToInts() => this.CheckedValues;
 
-
-
         public static CategoricalFixedMultiOptionAnswer FromInts(int[] checkedValues)
-
             => checkedValues == null || !checkedValues.Any() ? null : new CategoricalFixedMultiOptionAnswer(checkedValues);
 
-
-
         public static CategoricalFixedMultiOptionAnswer FromDecimalArray(decimal[] checkedValues)
-
-            => checkedValues == null || !checkedValues.Any() ? null : new CategoricalFixedMultiOptionAnswer(checkedValues.Select(value => (int) value));
-
-
+            => checkedValues == null || !checkedValues.Any() ? null : new CategoricalFixedMultiOptionAnswer(checkedValues.Select(value => (int)value));
 
         public override string ToString() => string.Join(", ", CheckedValues);
 
-
-
         public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
-
         {
-
             questionInvariants.RequireFixedMultipleOptionsPreloadValueAllowed(this.CheckedValues);
-
         }
 
     }
 
-
-
     [DebuggerDisplay("{ToString()}")]
-
     public class CategoricalLinkedSingleOptionAnswer : AbstractAnswer
-
     {
-
         protected CategoricalLinkedSingleOptionAnswer() { }
 
         private CategoricalLinkedSingleOptionAnswer(RosterVector selectedValue)
-
         {
-
             if (selectedValue == null) throw new ArgumentNullException(nameof(selectedValue));
 
             this.SelectedValue = selectedValue;
-
         }
-
-
 
         public RosterVector SelectedValue { get; set; }
 
-
-
         public static CategoricalLinkedSingleOptionAnswer FromRosterVector(RosterVector selectedValue)
-
             => selectedValue == null ? null : new CategoricalLinkedSingleOptionAnswer(selectedValue);
-
-
 
         public override string ToString() => SelectedValue.ToString();
 
-
-
         public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
-
         {
-
-            
-
         }
-
     }
 
-
-
     [DebuggerDisplay("{ToString()}")]
-
     public class CategoricalLinkedMultiOptionAnswer : AbstractAnswer
-
     {
-
         protected CategoricalLinkedMultiOptionAnswer() { }
 
         private CategoricalLinkedMultiOptionAnswer(IEnumerable<RosterVector> checkedValues)
-
         {
-
             if (checkedValues == null) throw new ArgumentNullException(nameof(checkedValues));
 
             this.CheckedValues = checkedValues.ToReadOnlyCollection();
-
         }
-
-
 
         public IReadOnlyCollection<RosterVector> CheckedValues { get; set; }
 
-
-
         public static CategoricalLinkedMultiOptionAnswer FromRosterVectors(IEnumerable<RosterVector> checkedValues)
-
             => checkedValues == null ? null : new CategoricalLinkedMultiOptionAnswer(checkedValues);
-
-
 
         public RosterVector[] ToRosterVectorArray() => this.CheckedValues.ToArray();
 
-
-
         public override string ToString() => string.Join(", ", CheckedValues);
 
-
-
         public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
-
         {
-
-
-
         }
-
     }
 
-
-
     [DebuggerDisplay("{ToString()}")]
-
     public class TextListAnswer : AbstractAnswer
-
     {
-
         protected TextListAnswer() { }
 
         private TextListAnswer(IEnumerable<TextListAnswerRow> rows)
-
         {
-
             if (rows == null) throw new ArgumentNullException(nameof(rows));
 
             this.Rows = rows.ToReadOnlyCollection();
-
         }
-
-
 
         public IReadOnlyCollection<TextListAnswerRow> Rows { get; set; }
 
-
-
         public Tuple<decimal, string>[] ToTupleArray() => this.Rows.Select(row => Tuple.Create((decimal)row.Value, row.Text)).ToArray();
-
-
 
         public static TextListAnswer FromTextListAnswerRows(IEnumerable<TextListAnswerRow> rows) => rows == null ? null : new TextListAnswer(rows);
 
-
-
         public static TextListAnswer FromTupleArray(Tuple<decimal, string>[] tupleArray)
-
             => tupleArray == null ? null : new TextListAnswer(
-
-                tupleArray.Select(tuple => new TextListAnswerRow(Convert.ToInt32(tuple.Item1), tuple.Item2.Trim())));
-
-        
+               tupleArray.Select(tuple => new TextListAnswerRow(Convert.ToInt32(tuple.Item1), tuple.Item2.Trim())));
 
         public override string ToString() => string.Join(", ", Rows.Select(x => x.Text));
 
-
-
-
-
         public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
-
         {
-
             questionInvariants.RequireTextListPreloadValueAllowed(this.ToTupleArray());
-
         }
-
     }
 
-
-
-   
-
     [DebuggerDisplay("{ToString()}")]
-
     public class GpsAnswer : AbstractAnswer
-
     {
-
         protected GpsAnswer() { }
-
         private GpsAnswer(GeoPosition value)
-
         {
-
             if (value == null) throw new ArgumentNullException(nameof(value));
 
             this.Value = value;
-
         }
-
-
 
         public GeoPosition Value { get; set; }
 
-
-
         public static GpsAnswer FromGeoPosition(GeoPosition value) => value != null ? new GpsAnswer(value) : null;
 
-
-
         public GeoLocation ToGeoLocation()
-
             => new GeoLocation(Value.Latitude, Value.Longitude, Value.Accuracy, Value.Altitude);
-
-        
 
         public override string ToString() => Value.ToString();
 
-
-
         public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
-
         {
-
-            questionInvariants.RequireGpsCoordinatesPreloadValueAllowed();
+            questionInvariants.RequireGpsCoordinatesPreloadValueAllowed(Value);
 
         }
-
     }
-
-
-
     [DebuggerDisplay("{ToString()}")]
-
     public class QRBarcodeAnswer : AbstractAnswer
-
     {
-
         protected QRBarcodeAnswer() { }
 
         private QRBarcodeAnswer(string decodedText)
-
         {
-
             if (decodedText == null) throw new ArgumentNullException(nameof(decodedText));
-
             this.DecodedText = decodedText;
-
         }
-
-
 
         public string DecodedText { get; set; }
-
-
-
         public static QRBarcodeAnswer FromString(string decodedText) => decodedText != null ? new QRBarcodeAnswer(decodedText) : null;
-
-
-
         public override string ToString() => DecodedText;
-
-
-
         public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
-
         {
-
             questionInvariants.RequireQRBarcodePreloadValueAllowed();
-
         }
-
     }
 
-
-
     [DebuggerDisplay("{ToString()}")]
-
     public class MultimediaAnswer : AbstractAnswer
-
     {
-
         protected MultimediaAnswer() { }
 
         private MultimediaAnswer(string fileName)
-
         {
-
             if (fileName == null) throw new ArgumentNullException(nameof(fileName));
 
             this.FileName = fileName;
-
         }
-
-
 
         public string FileName { get; set; }
 
-
-
         public static MultimediaAnswer FromString(string fileName) => fileName != null ? new MultimediaAnswer(fileName) : null;
-
-
 
         public override string ToString() => FileName;
 
-
-
         public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
-
         {
-
         }
-
     }
 
-    
-
     [DebuggerDisplay("{ToString()}")]
-
     public class AreaAnswer : AbstractAnswer
-
     {
-
         protected AreaAnswer() { }
 
         private AreaAnswer(Area area)
-
         {
-
             if (area == null) throw new ArgumentNullException(nameof(area));
 
             this.Value = area;
-
         }
-
-
 
         public Area Value { get; set; }
 
-
-
-        public static AreaAnswer FromArea(Area area) => area!= null ? new AreaAnswer(area) : null;
-
-
+        public static AreaAnswer FromArea(Area area) => area != null ? new AreaAnswer(area) : null;
 
         public override string ToString() => Value.ToString();
 
-
-
         public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
-
         {
-
         }
-
     }
 
-
-
     [DebuggerDisplay("{ToString()}")]
-
     public class YesNoAnswer : AbstractAnswer
-
     {
-
         protected YesNoAnswer() { }
 
         private YesNoAnswer(IEnumerable<CheckedYesNoAnswerOption> checkedOptions)
-
         {
-
             if (checkedOptions == null) throw new ArgumentNullException(nameof(checkedOptions));
 
             this.CheckedOptions = checkedOptions.ToReadOnlyCollection();
-
         }
-
-
 
         public IReadOnlyCollection<CheckedYesNoAnswerOption> CheckedOptions { get; set; }
 
-
-
         public IEnumerable<AnsweredYesNoOption> ToAnsweredYesNoOptions() => this.CheckedOptions.Select(option => new AnsweredYesNoOption(option.Value, option.Yes));
 
-
-
         public static YesNoAnswer FromCheckedYesNoAnswerOptions(IEnumerable<CheckedYesNoAnswerOption> checkedOptions)
-
             => checkedOptions == null ? null : new YesNoAnswer(checkedOptions);
 
-
-
         public static YesNoAnswer FromAnsweredYesNoOptions(IEnumerable<AnsweredYesNoOption> answeredOptions)
-
             => answeredOptions == null ? null : new YesNoAnswer(
-
-                answeredOptions.Select(option => new CheckedYesNoAnswerOption((int) option.OptionValue, option.Yes)));
-
-
+                answeredOptions.Select(option => new CheckedYesNoAnswerOption((int)option.OptionValue, option.Yes)));
 
         public static YesNoAnswer FromYesNoAnswersOnly(YesNoAnswersOnly yesNoAnswersOnly)
-
             => yesNoAnswersOnly == null ? null : new YesNoAnswer(
-
                 Enumerable.Concat(
-
-                    yesNoAnswersOnly.Yes.Select(yesOption => new CheckedYesNoAnswerOption((int) yesOption, true)),
-
-                    yesNoAnswersOnly.No.Select(noOption => new CheckedYesNoAnswerOption((int) noOption, false))));
-
-
+                    yesNoAnswersOnly.Yes.Select(yesOption => new CheckedYesNoAnswerOption((int)yesOption, true)),
+                    yesNoAnswersOnly.No.Select(noOption => new CheckedYesNoAnswerOption((int)noOption, false))));
 
         public YesNoAnswersOnly ToYesNoAnswersOnly()
-
             => new YesNoAnswersOnly(
-
-                this.CheckedOptions.Where(x => x.Yes).Select(x => (decimal) x.Value).ToArray(),
-
-                this.CheckedOptions.Where(x => x.No).Select(x => (decimal) x.Value).ToArray());
-
-
+                this.CheckedOptions.Where(x => x.Yes).Select(x => (decimal)x.Value).ToArray(),
+                this.CheckedOptions.Where(x => x.No).Select(x => (decimal)x.Value).ToArray());
 
         public override string ToString() => string.Join(", ", CheckedOptions);
 
-
-
         public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
-
         {
-
             questionInvariants.RequireYesNoPreloadValueAllowed(this);
-
         }
-
     }
-
 }
 

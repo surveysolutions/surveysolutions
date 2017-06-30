@@ -9,6 +9,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         void ImportAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, Guid? supervisorId, Guid headquartersId, AssignmentImportType mode);
 
-        void VerifyAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId);
+        void VerifyAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, string fileName);
     }
 }
