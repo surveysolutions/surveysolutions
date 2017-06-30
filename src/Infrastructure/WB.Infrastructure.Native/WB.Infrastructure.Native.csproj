@@ -171,6 +171,7 @@
     <Compile Include="Files\FileInfrastructureModule.cs" />
     <Compile Include="Files\Implementation\FileSystem\FileSystemIOAccessor.cs" />
     <Compile Include="Files\Implementation\FileSystem\ZipArchiveUtils.cs" />
+    <Compile Include="Ioc\NativeNinjectServiceLocatorAdapter.cs" />
     <Compile Include="Ioc\ServiceLocatorLoggerProvider.cs" />
     <Compile Include="LegacyAssemblySettings.cs" />
     <Compile Include="Logging\NLogLogger.cs" />
