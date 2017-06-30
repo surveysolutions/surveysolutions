@@ -51,8 +51,8 @@ namespace WB.UI.Headquarters.Controllers
                 CreatedInterviewsCount = status.ProcessedCount,
                 EstimatedTime = TimeSpan.FromMilliseconds(status.EstimatedTime).ToString(@"dd\.hh\:mm\:ss"),
                 ElapsedTime = TimeSpan.FromMilliseconds(status.ElapsedTime).ToString(@"dd\.hh\:mm\:ss"),
-                HasErrors = status.State.Errors.Any(),
-                InterviewsWithError = status.State.Errors.Count,
+                HasErrors = status.State.Errors.Any() || status.VerificationState.Errors.Any(),
+                InterviewsWithError = status.State.Errors.Count + status.VerificationState.Errors.Count,
                 InterviewImportProcessId = status.InterviewImportProcessId
             };
         }

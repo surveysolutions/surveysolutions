@@ -20,5 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         public int EnumeratorsCount { get; set; }
 
         public int SupervisorsCount { get; set; }
+
+        public string FileName { get; set; }
     }
 }

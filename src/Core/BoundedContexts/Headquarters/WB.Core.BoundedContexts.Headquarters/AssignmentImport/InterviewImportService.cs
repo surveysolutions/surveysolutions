@@ -81,14 +81,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
         }
 
-        public void VerifyAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId)
+        public void VerifyAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, string fileName)
         {
-            AssignmentImportData[] assignmentImportData = this.interviewImportDataParsingService.GetAssignmentsData(interviewImportProcessId, questionnaireIdentity, AssignmentImportType.Panel);
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
-
             if (StartImportProcess(questionnaireIdentity, interviewImportProcessId, AssignmentImportType.Assignments)) return;
 
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+
             this.Status.Stage = AssignmentImportStage.FileVerification;
+            this.Status.VerificationState.FileName = fileName;
 
             PreloadedDataByFile[] preloadedPanelData = this.preloadedDataRepository.GetPreloadedDataOfPanel(interviewImportProcessId);
 
@@ -116,8 +116,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     }
                     tree.ActualizeTree();
                 }
-
-                Thread.Sleep(1000);
             }
 
             if (this.Status.VerificationState.Errors.Any())
@@ -130,6 +128,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             this.Status.TotalCount = this.Status.VerificationState.EntitiesCount;
             this.Status.Stage = AssignmentImportStage.AssignmentDataVerification;
 
+            AssignmentImportData[] assignmentImportData = this.interviewImportDataParsingService.GetAssignmentsData(interviewImportProcessId, questionnaireIdentity, AssignmentImportType.Panel);
             RunImportProcess(assignmentImportData, questionnaireIdentity, VerifyAssignment);
         }
 
