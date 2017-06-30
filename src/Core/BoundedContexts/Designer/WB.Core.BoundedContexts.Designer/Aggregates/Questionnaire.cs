@@ -133,7 +133,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationService;
-        private readonly IQuestionnireHistoryVersionsService questionnireHistotyVersionsService;
+        private readonly IQuestionnireHistoryVersionsService questionnireHistoryVersionsService;
         private int affectedByReplaceEntries;
 
         #endregion
@@ -147,7 +147,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             ILookupTableService lookupTableService, 
             IAttachmentService attachmentService,
             ITranslationsService translationService,
-            IQuestionnireHistoryVersionsService questionnireHistotyVersionsService)
+            IQuestionnireHistoryVersionsService questionnireHistoryVersionsService)
         {
             this.logger = logger;
             this.clock = clock;
@@ -157,7 +157,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
             this.translationService = translationService;
-            this.questionnireHistotyVersionsService = questionnireHistotyVersionsService;
+            this.questionnireHistoryVersionsService = questionnireHistoryVersionsService;
         }
 
         #region Questionnaire command handlers
@@ -3746,7 +3746,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
             var historyReferanceId = command.HistoryReferanceId;
-            var questionnire = questionnireHistotyVersionsService.GetByHistoryVersion(historyReferanceId);
+            var questionnire = questionnireHistoryVersionsService.GetByHistoryVersion(historyReferanceId);
             if (questionnire == null)
                 throw new ArgumentException($"Questionnire {Id} of version {historyReferanceId} didn't find");
 
