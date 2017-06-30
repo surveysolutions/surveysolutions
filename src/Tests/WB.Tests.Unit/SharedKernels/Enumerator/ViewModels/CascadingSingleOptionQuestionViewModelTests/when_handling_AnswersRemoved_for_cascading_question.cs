@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.Handle(Create.Event.AnswersRemoved(questionIdentity));
 
         It should_set_ShouldClearText_in_null = () =>
-            cascadingModel.ResetTextInEditor.ShouldBeNull();
+            cascadingModel.ResetTextInEditor.ShouldBeEmpty();
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
         
