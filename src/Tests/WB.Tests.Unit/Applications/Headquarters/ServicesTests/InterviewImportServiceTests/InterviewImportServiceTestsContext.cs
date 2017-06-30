@@ -56,8 +56,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                 questionnaireBrowseViewFactory: questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
                 userViewFactory : Mock.Of<IUserViewFactory>(),
                 interviewTreeBuilder: interviewTreeBuilder ?? Mock.Of<IInterviewTreeBuilder>(),
-                preloadedDataRepository ?? Mock.Of<IPreloadedDataRepository>(),
-                preloadedDataVerifier ?? Mock.Of<IPreloadedDataVerifier>());
+                preloadedDataRepository: preloadedDataRepository ?? Mock.Of<IPreloadedDataRepository>(),
+                preloadedDataVerifier: preloadedDataVerifier ?? Mock.Of<IPreloadedDataVerifier>());
         }
     }
 }
