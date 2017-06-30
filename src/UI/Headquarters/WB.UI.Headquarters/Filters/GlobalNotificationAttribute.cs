@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Headquarters.API;
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using Main.DenormalizerStorage;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
@@ -10,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;

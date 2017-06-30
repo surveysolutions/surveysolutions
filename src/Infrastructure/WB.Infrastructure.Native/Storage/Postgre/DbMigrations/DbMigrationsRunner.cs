@@ -2,7 +2,7 @@
 using FluentMigrator.Runner;
 using FluentMigrator.Runner.Announcers;
 using FluentMigrator.Runner.Initialization;
-using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations

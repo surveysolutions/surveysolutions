@@ -1,9 +1,9 @@
-using Microsoft.Practices.ServiceLocation;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Transactions;
 using WB.UI.Designer.Controllers;
 

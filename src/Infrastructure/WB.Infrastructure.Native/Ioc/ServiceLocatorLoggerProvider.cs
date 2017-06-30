@@ -1,5 +1,5 @@
 using System;
-using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.Core.GenericSubdomains.Portable.Services
 {

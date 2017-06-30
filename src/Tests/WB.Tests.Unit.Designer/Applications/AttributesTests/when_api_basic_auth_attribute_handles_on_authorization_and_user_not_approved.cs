@@ -7,13 +7,12 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Routing;
 using System.Web.Security;
 using Machine.Specifications;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.UI.Designer.Api.Attributes;
-
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.Tests.Unit.Designer.Applications.AttributesTests
 {

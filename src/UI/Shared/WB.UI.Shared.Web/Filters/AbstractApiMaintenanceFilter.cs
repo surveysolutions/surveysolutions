@@ -1,8 +1,8 @@
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.ReadSide;
 using System.Web.Http.Filters;
 using System.Web.Http.Controllers;
 using System.Net.Http;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.UI.Shared.Web.Filters
 {

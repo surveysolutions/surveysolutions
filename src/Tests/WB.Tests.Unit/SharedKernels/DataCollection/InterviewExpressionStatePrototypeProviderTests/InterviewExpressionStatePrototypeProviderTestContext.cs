@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reflection;
 using Machine.Specifications;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;

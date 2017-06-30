@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Events;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing;
 using NUnit.Framework;

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using Ninject.Parameters;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.Infrastructure.Shared.Enumerator.Internals
 {

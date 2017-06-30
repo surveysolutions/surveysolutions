@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
 
 namespace WB.UI.Shared.Web.DataAnnotations

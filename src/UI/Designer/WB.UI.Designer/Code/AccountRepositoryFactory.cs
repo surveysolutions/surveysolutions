@@ -1,6 +1,6 @@
-﻿using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.Designer.Services.Accounts;
+﻿using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Views.Account;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Shared.Web.MembershipProvider.Settings;
 

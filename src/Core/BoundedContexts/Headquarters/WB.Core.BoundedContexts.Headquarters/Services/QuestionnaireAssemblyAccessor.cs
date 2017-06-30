@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
-using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
