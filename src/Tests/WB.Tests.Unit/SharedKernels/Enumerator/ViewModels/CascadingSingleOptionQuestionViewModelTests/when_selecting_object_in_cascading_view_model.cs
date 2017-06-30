@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 {
     internal class when_selecting_object_in_cascading_view_model : CascadingSingleOptionQuestionViewModelTestContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             SetUp();
 
@@ -43,10 +43,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
 
             cascadingModel.FilterText = "ti";
+
+            selectedObject = cascadingModel.AutoCompleteSuggestions[1];
         };
 
-        Because of = () =>
-            cascadingModel.SelectedObject = cascadingModel.AutoCompleteSuggestions[1];
+        private Because of = () =>
+            cascadingModel.SelectedObject = selectedObject;
 
         It should_send_answer_command = () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Once);
@@ -55,8 +57,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.SelectedObject.ShouldNotBeNull();
 
         It should_set_SelectedObject_with_specified_value = () =>
-            cascadingModel.SelectedObject.ShouldEqual(cascadingModel.AutoCompleteSuggestions[1]);
+            cascadingModel.SelectedObject.ShouldEqual(selectedObject);
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
+        private static CascadingSingleOptionQuestionViewModel.CascadingComboboxItemViewModel selectedObject;
     }
 }
