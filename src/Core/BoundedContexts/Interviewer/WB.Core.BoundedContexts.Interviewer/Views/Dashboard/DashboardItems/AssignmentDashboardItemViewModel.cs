@@ -38,9 +38,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.raiseEvents = true;
         }
         
-        public void Init(AssignmentDocument assignmentDocument, EventHandler interviewsCountChanged, CreateNewViewModel itemService, int interviewsCount)
+        public void Init(AssignmentDocument assignmentDocument, EventHandler interviewsCountChanged, CreateNewViewModel createNewViewModel, int interviewsCount)
         {
-            this.itemService = itemService;
+            this.createNewViewModel = createNewViewModel;
             this.interviewsByAssignmentCount = interviewsCount;
             Bind(assignmentDocument);
             interviewsCountChanged += (sender, args) => this.Refresh();
@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         private void Refresh()
         {
-            this.interviewsByAssignmentCount = this.itemService.GetInterviewsCount(this.assignment.Id);
+            this.interviewsByAssignmentCount = this.createNewViewModel.GetInterviewsCount(this.assignment.Id);
             BindTitle();
         }
 
@@ -123,12 +123,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         private bool allowToCreateNewInterview;
         private int interviewsByAssignmentCount;
-        private CreateNewViewModel itemService;
+        private CreateNewViewModel createNewViewModel;
 
         public IMvxCommand ToggleExpanded => new MvxCommand(() => this.IsExpanded = !this.IsExpanded);
 
         public IMvxAsyncCommand CreateNewInterviewCommand => new MvxAsyncCommand(
-            () => this.itemService.CreateInterviewAsync(assignment),
+            () => this.createNewViewModel.CreateInterviewAsync(assignment.Id),
             () => AllowToCreateNewInterview);
 
         private List<PrefilledQuestion> GetPrefilledQuestions(IEnumerable<AssignmentDocument.AssignmentAnswer> identifyingAnswers)

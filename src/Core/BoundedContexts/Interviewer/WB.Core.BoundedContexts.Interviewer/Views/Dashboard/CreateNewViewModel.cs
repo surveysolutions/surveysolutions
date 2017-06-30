@@ -111,9 +111,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             return this.interviewViewRepository.Count(iv => iv.Assignment == assignmentId);
         }
 
-        public Task CreateInterviewAsync(AssignmentDocument assignment)
+        public Task CreateInterviewAsync(int assignmentId)
         {
-            return interviewFromAssignmentCreator.CreateInterviewAsync(assignment);
+            return interviewFromAssignmentCreator.CreateInterviewAsync(assignmentId);
         }
     }
 }

@@ -12,5 +12,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         void Remove(int assignmentId);
         
         AssignmentDocument FetchPreloadedData(AssignmentDocument document);
+        AssignmentDocument GetById(int assignmentId);
     }
 }
