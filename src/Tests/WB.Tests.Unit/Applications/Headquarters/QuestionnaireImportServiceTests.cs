@@ -92,7 +92,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             var mockOfRestService = new Mock<IRestService>();
             mockOfRestService.Setup(x =>
-                x.DownloadFileAsync(Moq.It.IsAny<string>(), null, Moq.It.IsAny<RestCredentials>(), null)).Returns(Task.FromResult(new RestFile(new byte[] { 1 }, "image/png", "content id", 0, "file.png")));
+                x.DownloadFileAsync(Moq.It.IsAny<string>(), null, Moq.It.IsAny<RestCredentials>(), null, null)).Returns(Task.FromResult(new RestFile(new byte[] { 1 }, "image/png", "content id", 0, "file.png", HttpStatusCode.OK)));
             mockOfRestService.Setup(x => x.GetAsync<QuestionnaireCommunicationPackage>(Moq.It.IsAny<string>(), Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<object>(), Moq.It.IsAny<RestCredentials>(), Moq.It.IsAny<CancellationToken?>()))
                 .Returns(Task.FromResult(new QuestionnaireCommunicationPackage()));
 
@@ -108,7 +108,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
             await service.Import(Guid.NewGuid(), "null", false);
 
             // Assert
-            mockOfRestService.Verify(x => x.DownloadFileAsync(Moq.It.IsAny<string>(), null, Moq.It.IsAny<RestCredentials>(), null), Times.Exactly(2));
+            mockOfRestService.Verify(x => x.DownloadFileAsync(Moq.It.IsAny<string>(), null, Moq.It.IsAny<RestCredentials>(), null, null), Times.Exactly(2));
             mockOfAttachmentContentService.Verify(x => x.SaveAttachmentContent(questionnaireAttachments[0].ContentId, Moq.It.IsAny<string>(), Moq.It.IsAny<byte[]>()), Times.Never);
             mockOfAttachmentContentService.Verify(x => x.SaveAttachmentContent(questionnaireAttachments[1].ContentId, Moq.It.IsAny<string>(), Moq.It.IsAny<byte[]>()), Times.Once);
             mockOfAttachmentContentService.Verify(x => x.SaveAttachmentContent(questionnaireAttachments[2].ContentId, Moq.It.IsAny<string>(), Moq.It.IsAny<byte[]>()), Times.Once);

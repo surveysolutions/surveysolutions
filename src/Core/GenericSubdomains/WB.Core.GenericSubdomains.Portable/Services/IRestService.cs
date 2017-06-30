@@ -24,7 +24,9 @@ namespace WB.Core.GenericSubdomains.Portable.Services
 
         Task<RestFile> DownloadFileAsync(string url,
             Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null,
-            RestCredentials credentials = null, CancellationToken? token = null);
+            RestCredentials credentials = null, 
+            CancellationToken? token = null, 
+            Dictionary<string, string> customHeaders = null);
 
         Task SendStreamAsync(Stream stream, string url, 
             RestCredentials credentials, 
