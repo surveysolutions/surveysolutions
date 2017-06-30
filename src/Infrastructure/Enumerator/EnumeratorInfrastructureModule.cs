@@ -3,7 +3,6 @@ using ICSharpCode.SharpZipLib;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
-using NinjectAdapter;
 using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
 using Plugin.Media;
@@ -30,7 +29,7 @@ namespace WB.Infrastructure.Shared.Enumerator
     {
         public override void Load()
         {
-            ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.Kernel));
+            ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocatorAdapter(this.Kernel));
             this.Bind<IServiceLocator>().ToConstant(ServiceLocator.Current);
 
             this.Bind<IEventTypeResolver>().ToConstant(
