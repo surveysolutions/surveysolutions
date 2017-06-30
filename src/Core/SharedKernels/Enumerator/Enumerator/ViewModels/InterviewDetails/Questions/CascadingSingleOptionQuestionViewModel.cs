@@ -99,8 +99,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var cascadingQuestionParentId = questionnaire.GetCascadingQuestionParentId(entityIdentity.Id);
             if (!cascadingQuestionParentId.HasValue) throw new ArgumentNullException("parent of cascading question is missing");
 
-            
-
             this.questionIdentity = entityIdentity;
             this.interviewGuid = interview.Id;
             this.interviewId = interviewId;
@@ -120,9 +118,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 var answerOption = interview.GetOptionForQuestionWithoutFilter(this.questionIdentity,
                     singleOptionQuestion.GetAnswer().SelectedValue, (int?)this.answerOnParentQuestion);
 
+
                 this.selectedObject = this.CreateFormattedOptionModel(answerOption);
                 this.ResetTextInEditor = this.selectedObject.OriginalText;
                 this.FilterText = this.selectedObject.OriginalText;
+
+                this.DefaultText = answerOption == null ? String.Empty : answerOption.Title;
+                this.ResetTextInEditor = this.DefaultText;
             }
             else
             {
@@ -177,6 +179,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                                 this.questionIdentity,
                                 DateTime.UtcNow));
 
+                        this.ClearText();
                         this.QuestionState.Validity.ExecutedWithoutExceptions();
                     }
                     catch (InterviewException exception)
@@ -229,6 +232,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.CanRemoveAnswer = !string.IsNullOrEmpty(this.filterText);
             }
         }
+
+        public string DefaultText { get; set; }
 
         private bool canRemoveAnswer;
 
@@ -348,13 +353,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
 
                 if (this.selectedObject != null)
+                {
                     this.resetTextInEditor = this.selectedObject.OriginalText;
+                    this.FilterText = selectedObject.OriginalText;
+                    this.DefaultText = selectedObject.OriginalText;
+                }
+
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
             {
                 this.QuestionState.Validity.ProcessException(ex);
             }
+        }
+
+        private void ClearText()
+        {
+            this.ResetTextInEditor = string.Empty;
+            this.DefaultText = null;
         }
 
         public void Handle(SingleOptionQuestionAnswered @event)
@@ -384,6 +400,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     this.ResetTextInEditor = null;
                     this.CanRemoveAnswer = false;
+                    this.ClearText();
                 }
             }
         }
