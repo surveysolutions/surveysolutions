@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null,
             IInterviewTreeBuilder interviewTreeBuilder = null,
             IPreloadedDataRepository preloadedDataRepository = null,
-            IPreloadedDataVerifier preloadedDataVerifier = null,)
+            IPreloadedDataVerifier preloadedDataVerifier = null)
         {
             var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, 1);
             var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(_ 
