@@ -371,7 +371,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 {
                     Content = restFile.Content,
                     ContentType = restFile.ContentType,
-                    Id = restFile.ContentHash,
+                    Id = restFile.ContentHash.Trim('"'),
                     Size = restFile.ContentLength ?? restFile.Content.Length
                 };
                 return attachmentContent;
@@ -577,7 +577,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task<CompanyLogoInfo> GetCompanyLogo(string storedClientEtag, CancellationToken cancellationToken)
         {
-            var response = await this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync(
+            var response = await this.TryGetRestResponseOrThrowAsync(() => this.restService.DownloadFileAsync(
                 url: this.logoController,
                 credentials: this.restCredentials,
                 customHeaders: !string.IsNullOrEmpty(storedClientEtag) ? new Dictionary<string, string> {{"If-None-Match", storedClientEtag }} : null,
@@ -592,8 +592,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             {
                 HasCustomLogo = true,
                 LogoNeedsToBeUpdated = true,
-                Logo = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false),
-                Etag = response.Headers.ETag.Tag
+                Logo = response.Content,
+                Etag = response.ContentHash
             };
         }
     }
