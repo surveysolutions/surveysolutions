@@ -23,21 +23,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         };
 
         Because of =
-            () =>
-                result =
-                    importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { CreatePreloadedDataByFile() });
+            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { CreatePreloadedDataByFile() }, status);
         
         It should_result_has_1_error = () =>
-           result.Errors.Count().ShouldEqual(1);
+            status.VerificationState.Errors.Count().ShouldEqual(1);
 
         It should_return_single_PL0004_error = () =>
-            result.Errors.First().Code.ShouldEqual("PL0004");
+            status.VerificationState.Errors.First().Code.ShouldEqual("PL0004");
 
         It should_return_reference_with_File_type = () =>
-            result.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.File);
+            status.VerificationState.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.File);
 
         private static ImportDataVerifier importDataVerifier;
-        private static ImportDataVerificationState result;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
     }

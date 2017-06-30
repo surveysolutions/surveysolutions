@@ -31,29 +31,27 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         };
 
         Because of =
-            () => result = importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { preloadedDataByFile });
+            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { preloadedDataByFile }, status);
 
         It should_result_has_1_errors = () =>
-            result.Errors.Count().ShouldEqual(1);
+            status.VerificationState.Errors.Count().ShouldEqual(1);
 
         It should_return_single_PL0030_error = () =>
-            result.Errors.First().Code.ShouldEqual("PL0030");
+            status.VerificationState.Errors.First().Code.ShouldEqual("PL0030");
 
         It should_return_error_with_single_reference = () =>
-            result.Errors.First().References.Count().ShouldEqual(1);
+            status.VerificationState.Errors.First().References.Count().ShouldEqual(1);
 
         It should_return_error_with_single_reference_of_type_Cell = () =>
-            result.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
+            status.VerificationState.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
 
         It should_return_error_with_single_reference_pointing_on_first_row = () =>
-            result.Errors.First().References.First().PositionY.ShouldEqual(0);
+            status.VerificationState.Errors.First().References.First().PositionY.ShouldEqual(0);
 
         private static ImportDataVerifier importDataVerifier;
-        private static ImportDataVerificationState result;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private static Guid gpsQuestionId;
         private static PreloadedDataByFile preloadedDataByFile;
-         
     }
 }

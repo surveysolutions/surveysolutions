@@ -34,30 +34,27 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         };
 
         Because of =
-            () =>
-                result =
-                    importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { preloadedDataByFile });
+            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { preloadedDataByFile }, status);
 
         It should_result_has_1_error = () =>
-            result.Errors.Count().ShouldEqual(1);
+            status.VerificationState.Errors.Count().ShouldEqual(1);
 
         It should_return_single_PL0006_error = () =>
-            result.Errors.First().Code.ShouldEqual("PL0006");
+            status.VerificationState.Errors.First().Code.ShouldEqual("PL0006");
 
         It should_return_reference_with_Cell_type = () =>
-            result.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
+            status.VerificationState.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
 
         It should_error_PositionX_be_equal_to_0 = () =>
-          result.Errors.First().References.First().PositionX.ShouldEqual(0);
+            status.VerificationState.Errors.First().References.First().PositionX.ShouldEqual(0);
 
         It should_error_PositionY_be_equal_to_1 = () =>
-          result.Errors.First().References.First().PositionY.ShouldEqual(1);
+            status.VerificationState.Errors.First().References.First().PositionY.ShouldEqual(1);
 
         It should_error_has_content_with_id_and_parent_id = () =>
-            result.Errors.First().References.First().Content.ShouldEqual("id:1, parentId: ");
+            status.VerificationState.Errors.First().References.First().Content.ShouldEqual("id:1, parentId: ");
 
         private static ImportDataVerifier importDataVerifier;
-        private static ImportDataVerificationState result;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private static PreloadedDataByFile preloadedDataByFile;
