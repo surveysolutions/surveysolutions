@@ -32,14 +32,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         };
 
         Because of =
-            () =>
-                result = importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { preloadedDataByFile });
+            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { preloadedDataByFile }, status);
 
         It should_result_has_0_errors = () =>
-            result.Errors.Count().ShouldEqual(0);
+            status.VerificationState.Errors.Count().ShouldEqual(0);
 
         private static ImportDataVerifier importDataVerifier;
-        private static ImportDataVerificationState result;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private static Guid gpsQuestionId;

@@ -35,19 +35,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         };
 
         Because of =
-            () => result = importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { preloadedDataByFile });
+            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { preloadedDataByFile }, status);
 
         It should_result_has_1_error = () =>
-            result.Errors.Count().ShouldEqual(1);
+            status.VerificationState.Errors.Count().ShouldEqual(1);
 
         It should_return_single_PL0029_error = () =>
-            result.Errors.First().Code.ShouldEqual("PL0029");
+            status.VerificationState.Errors.First().Code.ShouldEqual("PL0029");
 
         It should_return_reference_with_Cell_type = () =>
-            result.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
+            status.VerificationState.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
 
         private static ImportDataVerifier importDataVerifier;
-        private static ImportDataVerificationState result;
         private static QuestionnaireDocument questionnaire;
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid numericQuestionId = Guid.Parse("22222222222222222222222222222222");

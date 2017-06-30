@@ -18,15 +18,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             importDataVerifier = CreatePreloadedDataVerifier();
         };
 
-        Because of = () => result = importDataVerifier.VerifyPanelFiles(Guid.NewGuid(), 1, new PreloadedDataByFile[0]);
+        Because of = () => importDataVerifier.VerifyPanelFiles(Guid.NewGuid(), 1, new PreloadedDataByFile[0], status);
 
         It should_result_has_1_error = () =>
-            result.Errors.Count().ShouldEqual(1);
+            status.VerificationState.Errors.Count().ShouldEqual(1);
 
         It should_return_single_PL0001_error = () =>
-            result.Errors.First().Code.ShouldEqual("PL0024");
+            status.VerificationState.Errors.First().Code.ShouldEqual("PL0024");
 
         private static ImportDataVerifier importDataVerifier;
-        private static ImportDataVerificationState result;
     }
 }

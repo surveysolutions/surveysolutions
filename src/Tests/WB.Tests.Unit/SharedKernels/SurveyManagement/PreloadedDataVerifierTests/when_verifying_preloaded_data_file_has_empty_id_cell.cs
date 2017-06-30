@@ -37,24 +37,21 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         };
 
         Because of =
-            () =>
-                result =
-                    importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { preloadedDataByFile });
+            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { preloadedDataByFile }, status);
 
         It should_result_has_1_error = () =>
-            result.Errors.Count().ShouldEqual(1);
+            status.VerificationState.Errors.Count().ShouldEqual(1);
 
         It should_return_single_PL0006_error = () =>
-            result.Errors.First().Code.ShouldEqual("PL0006");
+            status.VerificationState.Errors.First().Code.ShouldEqual("PL0006");
 
         It should_return_reference_with_Cell_type = () =>
-            result.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
+            status.VerificationState.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
 
         It should_error_has_content_empty_string = () =>
-            result.Errors.First().References.First().Content.ShouldEqual("");
+            status.VerificationState.Errors.First().References.First().Content.ShouldEqual("");
 
         private static ImportDataVerifier importDataVerifier;
-        private static ImportDataVerificationState result;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private static PreloadedDataByFile preloadedDataByFile;
