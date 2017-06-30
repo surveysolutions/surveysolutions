@@ -84,7 +84,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         private IPlainKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTackerStorage
             => ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireStateTracker>>();
 
-        private IQuestionnireHistoryVersionsService questionnireHistotyVersionsService 
+        private IQuestionnireHistoryVersionsService questionnireHistoryVersionsService 
             => ServiceLocator.Current.GetInstance<IQuestionnireHistoryVersionsService>();
 
         #region Questionnaire
@@ -649,7 +649,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             references.ForEach(r => r.QuestionnaireChangeRecord = questionnaireChangeItem);
             questionnaireChangeItem.References = references.ToHashSet();
-            questionnaireChangeItem.ResultingQuestionnaireDocument = questionnireHistotyVersionsService.GetResultingQuestionnaireDocument(questionnaireDocument);
+            questionnaireChangeItem.ResultingQuestionnaireDocument = questionnireHistoryVersionsService.GetResultingQuestionnaireDocument(questionnaireDocument);
 
             this.questionnaireChangeItemStorage.Store(questionnaireChangeItem, questionnaireChangeItem.QuestionnaireChangeRecordId);
         }
