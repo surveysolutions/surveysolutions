@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard15</TargetFramework>
-    <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wpa81</PackageTargetFallback>
     <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
@@ -9,9 +8,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <NoWarn>1701;1702;1705;612;618;1030</NoWarn>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="CommonServiceLocator" Version="1.3.0" />
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj" />
