@@ -55,21 +55,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object);
         };
 
-        private Because of =
-            () =>
-                result = importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { preloadedDataByFile });
+        Because of =
+            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { preloadedDataByFile }, status);
 
-        private It should_result_has_1_error = () =>
-            result.Errors.Count().ShouldEqual(1);
+        It should_result_has_1_error = () =>
+            status.VerificationState.Errors.Count().ShouldEqual(1);
 
-        private It should_return_single_PL0013_error = () =>
-            result.Errors.First().Code.ShouldEqual("PL0013");
+        It should_return_single_PL0013_error = () =>
+            status.VerificationState.Errors.First().Code.ShouldEqual("PL0013");
 
-        private It should_return_reference_with_Cell_type = () =>
-            result.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
+        It should_return_reference_with_Cell_type = () =>
+            status.VerificationState.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
 
         private static ImportDataVerifier importDataVerifier;
-        private static ImportDataVerificationState result;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private static Guid questionId;

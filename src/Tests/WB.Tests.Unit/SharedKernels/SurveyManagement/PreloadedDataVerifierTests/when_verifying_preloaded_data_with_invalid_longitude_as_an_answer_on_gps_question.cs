@@ -31,44 +31,43 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         };
 
         Because of =
-            () => result = importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { preloadedDataByFile });
+            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { preloadedDataByFile }, status);
 
         It should_result_has_2_errors = () =>
-            result.Errors.Count().ShouldEqual(2);
+            status.VerificationState.Errors.Count().ShouldEqual(2);
 
         It should_return_first_PL0030_error = () =>
-            result.Errors.First().Code.ShouldEqual("PL0033");
+            status.VerificationState.Errors.First().Code.ShouldEqual("PL0033");
 
         It should_return_first_error_with_single_reference = () =>
-            result.Errors.First().References.Count().ShouldEqual(1);
+            status.VerificationState.Errors.First().References.Count().ShouldEqual(1);
 
         It should_return_first_error_with_single_reference_of_type_Cell = () =>
-            result.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
+            status.VerificationState.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
 
         It should_return_first_error_with_single_reference_pointing_on_first_row = () =>
-            result.Errors.First().References.First().PositionY.ShouldEqual(0);
+            status.VerificationState.Errors.First().References.First().PositionY.ShouldEqual(0);
 
         It should_return_first_error_with_single_reference_pointing_on_third_column = () =>
-            result.Errors.First().References.First().PositionX.ShouldEqual(2);
+            status.VerificationState.Errors.First().References.First().PositionX.ShouldEqual(2);
 
         It should_return_second_PL0030_error = () =>
-            result.Errors.Second().Code.ShouldEqual("PL0033");
+            status.VerificationState.Errors.Second().Code.ShouldEqual("PL0033");
 
         It should_return_second_error_with_single_reference = () =>
-            result.Errors.Second().References.Count().ShouldEqual(1);
+            status.VerificationState.Errors.Second().References.Count().ShouldEqual(1);
 
         It should_return_second_error_with_single_reference_of_type_Cell = () =>
-            result.Errors.Second().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
+            status.VerificationState.Errors.Second().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
 
         It should_return_second_error_with_single_reference_pointing_on_first_row = () =>
-            result.Errors.Second().References.First().PositionY.ShouldEqual(1);
+            status.VerificationState.Errors.Second().References.First().PositionY.ShouldEqual(1);
 
         It should_return_second_error_with_single_reference_pointing_on_third_column = () =>
-            result.Errors.Second().References.First().PositionX.ShouldEqual(2);
+            status.VerificationState.Errors.Second().References.First().PositionX.ShouldEqual(2);
 
 
         private static ImportDataVerifier importDataVerifier;
-        private static ImportDataVerificationState result;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private static Guid gpsQuestionId;

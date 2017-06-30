@@ -31,29 +31,28 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         };
 
         Because of =
-            () => result = importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { preloadedDataByFile });
+            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { preloadedDataByFile }, status);
 
         It should_result_has_1_errors = () =>
-            result.Errors.Count().ShouldEqual(1);
+            status.VerificationState.Errors.Count().ShouldEqual(1);
 
         It should_return_single_PL0030_error = () =>
-            result.Errors.First().Code.ShouldEqual("PL0017");
+            status.VerificationState.Errors.First().Code.ShouldEqual("PL0017");
 
         It should_return_error_with_single_reference = () =>
-            result.Errors.First().References.Count().ShouldEqual(1);
+            status.VerificationState.Errors.First().References.Count().ShouldEqual(1);
 
         It should_return_error_with_single_reference_of_type_Cell = () =>
-            result.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
+            status.VerificationState.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
 
         It should_return_error_with_single_reference_pointing_on_fourth_column = () =>
-           result.Errors.First().References.First().PositionX.ShouldEqual(3);
+            status.VerificationState.Errors.First().References.First().PositionX.ShouldEqual(3);
 
         It should_return_error_with_single_reference_pointing_on_second_row = () =>
-            result.Errors.First().References.First().PositionY.ShouldEqual(0);
+            status.VerificationState.Errors.First().References.First().PositionY.ShouldEqual(0);
 
 
         private static ImportDataVerifier importDataVerifier;
-        private static ImportDataVerificationState result;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private static Guid gpsQuestionId;

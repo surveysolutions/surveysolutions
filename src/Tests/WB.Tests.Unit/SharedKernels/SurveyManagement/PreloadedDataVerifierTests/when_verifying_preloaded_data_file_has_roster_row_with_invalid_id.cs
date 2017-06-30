@@ -52,30 +52,27 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         };
 
         Because of =
-            () =>
-                result =
-                    importDataVerifier.VerifyPanelFiles(questionnaireId, 1, files);
+            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, files, status);
 
         It should_result_has_1_error = () =>
-            result.Errors.Count().ShouldEqual(1);
+            status.VerificationState.Errors.Count().ShouldEqual(1);
 
         It should_return_single_PL0009_error = () =>
-            result.Errors.First().Code.ShouldEqual("PL0009");
+            status.VerificationState.Errors.First().Code.ShouldEqual("PL0009");
 
         It should_return_reference_with_Cell_type = () =>
-            result.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
+            status.VerificationState.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
 
         It should_error_PositionX_be_equal_to_0 = () =>
-          result.Errors.First().References.First().PositionX.ShouldEqual(0);
+            status.VerificationState.Errors.First().References.First().PositionX.ShouldEqual(0);
 
         It should_error_PositionY_be_equal_to_0 = () =>
-          result.Errors.First().References.First().PositionY.ShouldEqual(0);
+            status.VerificationState.Errors.First().References.First().PositionY.ShouldEqual(0);
 
         It should_error_has_content_id_of_inconsistent_record = () =>
-            result.Errors.First().References.First().Content.ShouldEqual("unparsed");
+            status.VerificationState.Errors.First().References.First().Content.ShouldEqual("unparsed");
 
         private static ImportDataVerifier importDataVerifier;
-        private static ImportDataVerificationState result;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private static PreloadedDataByFile preloadedDataByFileTopLevel;
