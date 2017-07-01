@@ -38,6 +38,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             IPreloadedDataService preloadedDataService = null,
             IUserViewFactory userViewFactory=null)
         {
+            status = Create.Entity.AssignmentImportStatus();
+
             var questionnaire = (questionnaireDocument == null
                 ? null
                 : new PlainQuestionnaire(questionnaireDocument, 1, null));
@@ -95,6 +97,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             };
         }
 
-        protected static readonly AssignmentImportStatus status = Create.Entity.AssignmentImportStatus();
+        protected static AssignmentImportStatus status = Create.Entity.AssignmentImportStatus();
     }
 }
