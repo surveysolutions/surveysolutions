@@ -1854,23 +1854,26 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 var clonedGroup = entityToInsertAsGroup.Clone();
                 clonedGroup.TreeToEnumerable(x => x.Children).ForEach(c =>
                 {
-                    TypeSwitch.Do(c,
-                        TypeSwitch.Case<Group>(g =>
-                        {
+                    switch (c)
+                    {
+                        case Group g:
                             g.PublicKey = replacementIdDictionary[g.PublicKey];
                             g.RosterSizeQuestionId = GetIdOrReturnSameId(replacementIdDictionary, g.RosterSizeQuestionId);
                             g.RosterTitleQuestionId = GetIdOrReturnSameId(replacementIdDictionary, g.RosterTitleQuestionId);
-                        }),
-                        TypeSwitch.Case<IQuestion>(q =>
-                        {
+                            break;
+                        case IQuestion q:
                             ((AbstractQuestion)q).PublicKey = replacementIdDictionary[q.PublicKey];
                             q.CascadeFromQuestionId = GetIdOrReturnSameId(replacementIdDictionary, q.CascadeFromQuestionId);
                             q.LinkedToQuestionId = GetIdOrReturnSameId(replacementIdDictionary, q.LinkedToQuestionId);
                             q.LinkedToRosterId = GetIdOrReturnSameId(replacementIdDictionary, q.LinkedToRosterId);
-                        }),
-                        TypeSwitch.Case<Variable>(v => v.PublicKey = replacementIdDictionary[v.PublicKey]),
-                        TypeSwitch.Case<StaticText>(st => st.PublicKey = replacementIdDictionary[st.PublicKey])
-                    );
+                            break;
+                        case Variable v:
+                            v.PublicKey = replacementIdDictionary[v.PublicKey];
+                            break;
+                        case StaticText st:
+                            st.PublicKey = replacementIdDictionary[st.PublicKey];
+                            break;
+                    }
                 });
                 this.innerDocument.Insert(targetIndex, clonedGroup, targetToPasteIn.PublicKey);
                 return;
