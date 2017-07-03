@@ -32,11 +32,18 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         private MvxFragmentStatePagerAdapter fragmentStatePagerAdapter;
         private ViewPager viewPager;
 
-        protected override void OnSaveInstanceState(Bundle outState)
+        protected override void OnPause()
         {
-            this.RemoveFragments();
+            base.OnPause();
 
-            base.OnSaveInstanceState(outState);
+            this.RemoveFragments();
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+
+            this.CreateFragments();
         }
 
         protected override void OnCreate(Bundle bundle)
@@ -106,7 +113,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
         protected override void OnStart()
         {
-            this.CreateFragments();
             base.OnStart();
             this.BindService(new Intent(this, typeof(SyncBgService)), new SyncServiceConnection(this), Bind.AutoCreate);
         }
@@ -123,13 +129,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             base.OnViewModelSet();
             this.ViewModel.Synchronization.SyncBgService = this;
-        }
-
-        protected override void OnDestroy()
-        {
-            this.RemoveFragments();
-
-            base.OnDestroy();
         }
 
         public override void OnBackPressed() {}
