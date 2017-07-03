@@ -102,21 +102,21 @@
         android:id="@+id/discard"
         app:MvxBind="Click RemoveInterviewCommand;
               Text Localization('Dashboard_Discard');
-              Visible Or(And(IsSupportedRemove, IsExpanded), Not(HasExpandedView));"
+              Visible And(IsSupportedRemove, Or(IsExpanded, Not(HasExpandedView)));"
         style="@style/Dashboard_InterviewItem_RemoveInterviewButton"
         app:layout_constraintBaseline_toBaselineOf="@+id/new_button"
         app:layout_constraintBottom_toBottomOf="@+id/new_button"
         app:layout_constraintLeft_toRightOf="@+id/new_button" />
-      
-      <TextView
-        android:id="@+id/show_location"
-        style="@style/Dashboard_Location"
-        app:MvxBind="Visible And(HasGpsLocation, Or(IsExpanded, Not(HasExpandedView)));
+
+    <TextView
+      android:id="@+id/show_location"
+      style="@style/Dashboard_Location"
+      app:MvxBind="Visible And(HasGpsLocation, Or(IsExpanded, Not(HasExpandedView)));
                 Text Localization('Dashboard_ShowLocation');                               
                 Click NavigateToGpsLocationCommand;"
 
-        app:layout_constraintBottom_toBottomOf="@+id/discard"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/discard" />
+      app:layout_constraintBottom_toBottomOf="@+id/new_button"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/new_button" />
   </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>
