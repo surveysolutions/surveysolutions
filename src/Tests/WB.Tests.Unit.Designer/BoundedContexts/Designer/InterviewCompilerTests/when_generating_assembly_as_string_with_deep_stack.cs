@@ -8,11 +8,10 @@ using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.InterviewCompilerTests
 {
-    [Ignore("Can't fix it. Passes localy, but fails on TeamCity ")]
     internal class when_generating_assembly_as_string_with_deep_stack : InterviewCompilerTestsContext
     {
-        [OneTimeSetUp]
-        public void context()
+        [Test]
+        public void should_succeded()
         {
             compiler = CreateRoslynCompiler();
             referencedPortableAssemblies = CreateReferencesForCompiler();
@@ -23,9 +22,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.InterviewCompilerTests
 
             generatedClasses = classes;
             emitResult = IncreaseCallStackEndExec_TODO_Check_does_method_name_affect_stack(1);
+
+            emitResult.Success.Should().BeTrue();
+            emitResult.Diagnostics.Should().NotContain(x => x.Severity == DiagnosticSeverity.Error);
         }
 
-        private static EmitResult IncreaseCallStackEndExec_TODO_Check_does_method_name_affect_stack(int a)
+        private EmitResult IncreaseCallStackEndExec_TODO_Check_does_method_name_affect_stack(int a)
         {
             return a > staskDepthToAdd ?
                 compiler.TryGenerateAssemblyAsStringAndEmitResult(id, generatedClasses, referencedPortableAssemblies, out resultAssembly) :
@@ -33,27 +35,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.InterviewCompilerTests
         }
 
 
-        [Test]
-        public void should_succeded() => emitResult.Success.Should().BeTrue();
+        private IDynamicCompiler compiler;
+        private Guid id = Guid.Parse("11111111111111111111111111111111");
+        private string resultAssembly;
+        private EmitResult emitResult;
+        private Dictionary<string, string> generatedClasses;
+        private PortableExecutableReference[] referencedPortableAssemblies;
 
-        [Test]
-        public void should_not_produce_errors() =>
-            emitResult.Diagnostics.Should().NotContain(x => x.Severity == DiagnosticSeverity.Error);
+        private string fileName = "validation:11111111111111111111111111111112";
 
-        private static IDynamicCompiler compiler;
-        private static Guid id = Guid.Parse("11111111111111111111111111111111");
-        private static string resultAssembly;
-        private static EmitResult emitResult;
-        private static Dictionary<string, string> generatedClasses;
-        private static PortableExecutableReference[] referencedPortableAssemblies;
-
-        private static string fileName = "validation:11111111111111111111111111111112";
-
-        private static int staskDepthToAdd = 130;
+        private int staskDepthToAdd = 130;
 
 
 
-        public static string testClassToCompile =
+        public string testClassToCompile =
             @"
 using System;
 using System.Collections.Generic;
