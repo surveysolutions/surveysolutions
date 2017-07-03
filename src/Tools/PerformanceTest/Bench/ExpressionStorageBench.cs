@@ -35,14 +35,29 @@ namespace PerformanceTest
                     Create.Option("2", text: "Disable roster")
                 }),
                 Create.NumericIntegerQuestion(numericId, "num_roster"),
-                Create.NumericRoster(Guid.NewGuid(), "roster_numeric", numericId, GenerateChildQuestions(100, "num"))
+                Create.NumericRoster(Guid.NewGuid(), "roster_numeric", numericId, GenerateChildRosterQuestions(20, "num").ToArray())
             });
 
             return questionnaireDocument;
 
             IComposite[] GenerateChildQuestions(int num, string prefix)
             {
-                return Enumerable.Range(1, num).Select(x => Create.TextQuestion(variable: $"{prefix}_{x}")).ToArray();
+                return Enumerable.Range(1, num).Select(x => 
+                    Create.TextQuestion(variable: $"{prefix}_{x}")).ToArray();
+            }
+            
+            IEnumerable<IComposite> GenerateChildRosterQuestions(int num, string prefix)
+            {
+                var numeric = Create.NumericIntegerQuestion(Guid.NewGuid(), "numeric_nested" + prefix);
+                yield return numeric;
+
+                foreach (var x in Enumerable.Range(1, num))
+                {
+                    yield return Create.NumericRoster(Guid.NewGuid(), $"nested_roster_{x}", numeric.PublicKey,
+                        Create.TextQuestion(Guid.NewGuid(), "someText22" + x),
+                        Create.GpsCoordinateQuestion(Guid.NewGuid(), "gps22"  + x)
+                    );
+                }
             }
         }
         
