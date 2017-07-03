@@ -4,9 +4,9 @@ using Android.OS;
 using Android.App;
 using Android.Content;
 using MvvmCross.Platform;
-using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 
 namespace WB.UI.Interviewer.Services
 {
