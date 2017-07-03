@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Infrastructure.Shared.Enumerator.Internals.MapService;
 using System.Threading.Tasks;
+using Esri.ArcGISRuntime.Location;
 
 namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 {
@@ -165,9 +166,18 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                             if (this.StartEditAreaCommand.CanExecute())
                                 this.StartEditAreaCommand.Execute();
                         };
+
+                    if(this.mapView.LocationDisplay != null)
+                        this.mapView.LocationDisplay.StatusChanged +=
+                            delegate(object sender, StatusChangedEventArgs evntArgs)
+                            {
+                                IslocationServiceStarted = evntArgs.IsStarted;
+                            };
                 }
             }
         }
+
+        private bool IslocationServiceStarted = false;
         
         public IMvxCommand SwitchMapCommand => new MvxCommand<MapDescription>((MapDescription map) => { this.SelectedMap = map.MapName; });
 
@@ -212,11 +222,11 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     this.MapView.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.Off;
 
                 var locationDisplayState = this.MapView.LocationDisplay.IsEnabled;
-                if (!locationDisplayState && !this.MapView.LocationDisplay.Started && !this.MapView.LocationDisplay.DataSource.IsStarted)
+                if (!locationDisplayState && !IslocationServiceStarted)
                 {
+                    
                     this.MapView.LocationDisplay.IsEnabled = true;
                 }
-                
                 else
                     this.MapView.LocationDisplay.IsEnabled = false;
             }
