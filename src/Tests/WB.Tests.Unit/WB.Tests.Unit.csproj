@@ -1263,7 +1263,6 @@
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="EventContextExtenstions.cs" />
     <Compile Include="Execute.cs" />
-    <Compile Include="GenericSubdomains\Utils\MonadsTests\MonadsTests.cs" />
     <Compile Include="GenericSubdomains\Utils\PasswordHasherTests\PasswordHasherTestContext.cs" />
     <Compile Include="GenericSubdomains\Utils\PasswordHasherTests\when_hashing__hello_world__password.cs" />
     <Compile Include="GenericSubdomains\Utils\when_sorting_by_property_from_parent_class_with_OrderBy_from_QueryableExtensions.cs" />
@@ -1693,7 +1692,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Applications\Headquarters\PublicApiTests\ApiTests\" />
-    <Folder Include="GenericSubdomains\Utils\HttpStatisticiantTests\" />
     <Folder Include="Properties\" />
     <Folder Include="Resources\" />
     <Folder Include="SharedKernels\Enumerator\Services\QuestionnaireModelBuilderTests\" />
