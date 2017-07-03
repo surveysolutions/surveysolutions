@@ -1,10 +1,9 @@
 using System;
 using System.Linq;
 using Machine.Specifications;
-using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
-using Nito.AsyncEx.Synchronous;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
