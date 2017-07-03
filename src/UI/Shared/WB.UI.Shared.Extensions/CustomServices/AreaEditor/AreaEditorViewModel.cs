@@ -212,8 +212,11 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     this.MapView.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.Off;
 
                 var locationDisplayState = this.MapView.LocationDisplay.IsEnabled;
-                if (!locationDisplayState && !this.MapView.LocationDisplay.Started)
+                if (!locationDisplayState && !this.MapView.LocationDisplay.Started && !this.MapView.LocationDisplay.DataSource.IsStarted)
+                {
                     this.MapView.LocationDisplay.IsEnabled = true;
+                }
+                
                 else
                     this.MapView.LocationDisplay.IsEnabled = false;
             }
