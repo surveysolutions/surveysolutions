@@ -76,14 +76,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         private void ActualizeRoster(Guid rosterId)
         {
-
             RosterManager rosterManager = this.Tree.GetRosterManager(rosterId);
 
             List<Identity> expectedRosterIdentities = rosterManager.CalcuateExpectedIdentities(this.Identity);
             List<Identity> actualRosterIdentities =
                 this.children.Where(x => x.Identity.Id == rosterId).Select(x => x.Identity).ToList();
 
-            var rostersToRemove = actualRosterIdentities.Except(expectedRosterIdentities).ToList();
+            var rostersToRemove = actualRosterIdentities.Except(expectedRosterIdentities);
             var rostersToAdd = expectedRosterIdentities.Except(actualRosterIdentities).ToList();
             var rostersToUpdate = actualRosterIdentities.Except(rostersToRemove).ToList();
 
