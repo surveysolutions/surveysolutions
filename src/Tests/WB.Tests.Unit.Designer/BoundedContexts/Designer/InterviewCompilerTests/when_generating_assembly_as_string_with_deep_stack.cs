@@ -23,8 +23,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.InterviewCompilerTests
             generatedClasses = classes;
             emitResult = IncreaseCallStackEndExec_TODO_Check_does_method_name_affect_stack(1);
 
-            emitResult.Success.Should().BeTrue();
             emitResult.Diagnostics.Should().NotContain(x => x.Severity == DiagnosticSeverity.Error);
+            emitResult.Success.Should().BeTrue();
         }
 
         private EmitResult IncreaseCallStackEndExec_TODO_Check_does_method_name_affect_stack(int a)
