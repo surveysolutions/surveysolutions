@@ -184,7 +184,7 @@
     <Compile Include="CustomServices\AreaEditor\AreaEditorResult.cs" />
     <Compile Include="CustomServices\AreaEditor\AreaEditorViewModel.cs" />
     <Compile Include="CustomServices\AreaEditor\AreaEditService.cs" />
-    <Compile Include="Resources\Resource.Designer.cs" />
+    <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
