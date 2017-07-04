@@ -489,7 +489,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             };
         }
 
-        private static ValidationView ToValidationView(SubstitionText[] validationMessages,
+        private static ValidationView ToValidationView(SubstitutionText[] validationMessages,
             FailedValidationCondition validationCondition, int failedValidationIndex)
             => new ValidationView
             {

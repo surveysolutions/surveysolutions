@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private bool isDisabled;
         private List<IInterviewTreeNode> children = new List<IInterviewTreeNode>();
 
-        protected InterviewTreeGroup(Identity identity, SubstitionText title, IEnumerable<QuestionnaireItemReference> childrenReferences)
+        protected InterviewTreeGroup(Identity identity, SubstitutionText title, IEnumerable<QuestionnaireItemReference> childrenReferences)
         {
             this.childEntitiesReferences = childrenReferences.ToList();
 
@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public Identity Identity { get; private set; }
-        public SubstitionText Title { get; private set; }
+        public SubstitutionText Title { get; private set; }
         public InterviewTree Tree { get; private set; }
         public IInterviewTreeNode Parent { get; private set; }
         public IEnumerable<IInterviewTreeNode> Parents { get; private set; } = Enumerable.Empty<IInterviewTreeNode>();
@@ -223,7 +223,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void Disable() => this.isDisabled = true;
         public void Enable() => this.isDisabled = false;
 
-        public void SetTitle(SubstitionText title)
+        public void SetTitle(SubstitutionText title)
         {
             this.Title = title;
             this.Title.SetTree(this.Tree);
@@ -304,7 +304,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeSubSection : InterviewTreeGroup
     {
-        public InterviewTreeSubSection(Identity identity, SubstitionText title, IEnumerable<QuestionnaireItemReference> childrenReferences) : base(identity, title, childrenReferences)
+        public InterviewTreeSubSection(Identity identity, SubstitutionText title, IEnumerable<QuestionnaireItemReference> childrenReferences) : base(identity, title, childrenReferences)
         {
         }
 
@@ -314,7 +314,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeSection : InterviewTreeGroup
     {
-        public InterviewTreeSection(Identity identity, SubstitionText title, IEnumerable<QuestionnaireItemReference> childrenReferences) : base(identity, title, childrenReferences)
+        public InterviewTreeSection(Identity identity, SubstitutionText title, IEnumerable<QuestionnaireItemReference> childrenReferences) : base(identity, title, childrenReferences)
         {
         }
 
