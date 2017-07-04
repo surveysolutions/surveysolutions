@@ -291,7 +291,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Bind<IHealthCheckService>().To<HealthCheckService>();
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
-            this.Bind<ISubstitionTextFactory>().To<SubstitionTextFactory>();
+            this.Bind<ISubstitutionTextFactory>().To<SubstitutionTextFactory>();
 
             this.Bind<ITranslationStorage>().To<TranslationStorage>();
             this.Bind<IQuestionnaireTranslator>().To<QuestionnaireTranslator>();

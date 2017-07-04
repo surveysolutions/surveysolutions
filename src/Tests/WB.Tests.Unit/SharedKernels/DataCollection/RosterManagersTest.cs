@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var questionnaire = new Mock<IQuestionnaire>();
             questionnaire.Setup(x => x.GetRosterSizeQuestion(rosterId)).Returns(rosterSizeQuestionId);
             
-            var textFactoryMock = new Mock<ISubstitionTextFactory> { DefaultValue = DefaultValue.Mock };
+            var textFactoryMock = new Mock<ISubstitutionTextFactory> { DefaultValue = DefaultValue.Mock };
             var roster = new YesNoRosterManager(tree, questionnaire.Object, rosterId, textFactoryMock.Object);
 
             //act
@@ -80,7 +80,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
             var tree = Create.Entity.InterviewTree(sections: sourceTreeMainSection, questionnaire: questionnaire);
 
-            var roster = new NumericRosterManager(tree, questionnaire, rosterId, Create.Service.SubstitionTextFactory());
+            var roster = new NumericRosterManager(tree, questionnaire, rosterId, Create.Service.SubstitutionTextFactory());
 
             //act
             roster.UpdateRoster(numericRoster, parentEntityId, rosterIdentity, 2);

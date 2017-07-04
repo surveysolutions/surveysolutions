@@ -8,23 +8,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 {
     public class InterviewTreeBuilder : IInterviewTreeBuilder
     {
-        private readonly ISubstitionTextFactory substitionTextFactory;
+        private readonly ISubstitutionTextFactory substitutionTextFactory;
 
-        public InterviewTreeBuilder(ISubstitionTextFactory substitionTextFactory)
+        public InterviewTreeBuilder(ISubstitutionTextFactory substitutionTextFactory)
         {
-            this.substitionTextFactory = substitionTextFactory;
+            this.substitutionTextFactory = substitutionTextFactory;
         }
 
         public InterviewTree BuildInterviewTree(Guid interviewId, IQuestionnaire questionnaire)
         {
-            var tree = new InterviewTree(interviewId, questionnaire, this.substitionTextFactory);
-            var sections = this.BuildInterviewTreeSections(tree, questionnaire, this.substitionTextFactory).ToArray();
+            var tree = new InterviewTree(interviewId, questionnaire, this.substitutionTextFactory);
+            var sections = this.BuildInterviewTreeSections(tree, questionnaire, this.substitutionTextFactory).ToArray();
 
             tree.SetSections(sections);
             return tree;
         }
 
-        private IEnumerable<InterviewTreeSection> BuildInterviewTreeSections(InterviewTree tree, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory)
+        private IEnumerable<InterviewTreeSection> BuildInterviewTreeSections(InterviewTree tree, IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory)
         {
             var sectionIds = questionnaire.GetAllSections();
 
@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
         }
 
-        private InterviewTreeSection BuildInterviewTreeSection(InterviewTree tree, Identity sectionIdentity, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory)
+        private InterviewTreeSection BuildInterviewTreeSection(InterviewTree tree, Identity sectionIdentity, IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory)
         {
             var section = InterviewTree.CreateSection(tree, questionnaire, textFactory, sectionIdentity);
 
@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return section;
         }
 
-        private InterviewTreeSubSection BuildInterviewTreeSubSection(InterviewTree tree, Identity groupIdentity, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory)
+        private InterviewTreeSubSection BuildInterviewTreeSubSection(InterviewTree tree, Identity groupIdentity, IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory)
         {
             var subSection = InterviewTree.CreateSubSection(tree, questionnaire, textFactory, groupIdentity);
 
@@ -55,7 +55,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return subSection;
         }
 
-        private IEnumerable<IInterviewTreeNode> BuildInterviewTreeGroupChildren(InterviewTree tree, Identity groupIdentity, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory)
+        private IEnumerable<IInterviewTreeNode> BuildInterviewTreeGroupChildren(InterviewTree tree, Identity groupIdentity, IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory)
         {
             var childIds = questionnaire.GetChildEntityIds(groupIdentity.Id);
 

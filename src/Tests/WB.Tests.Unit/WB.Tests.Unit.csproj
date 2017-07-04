@@ -578,8 +578,8 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTreeTests.cs" />
     <Compile Include="SharedKernels\DataCollection\RosterManagersTest.cs" />
     <Compile Include="SharedKernels\DataCollection\RosterVectorTests.cs" />
-    <Compile Include="SharedKernels\DataCollection\SubstitionTextTests.cs" />
-    <Compile Include="SharedKernels\DataCollection\SubstitionTextFactoryTests.cs" />
+    <Compile Include="SharedKernels\DataCollection\SubstitutionTextTests.cs" />
+    <Compile Include="SharedKernels\DataCollection\SubstitutionTextFactoryTests.cs" />
     <Compile Include="SharedKernels\Enumerator\CompositeCollectionTests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question_which_is_ordered_roster_size_question.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\InterviewViewModelFactoryTests\InterviewViewModelFactoryTest.cs" />
