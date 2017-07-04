@@ -86,8 +86,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var rostersToAdd = expectedRosterIdentities.Except(actualRosterIdentities).ToList();
             var rostersToUpdate = actualRosterIdentities.Except(rostersToRemove).ToList();
 
-            foreach (var rosterToRemove in rostersToRemove)
-                this.RemoveChild(rosterToRemove);
+            this.RemoveChilds(rostersToRemove.ToList());
 
             if (rostersToAdd.Any() || rostersToUpdate.Any())
             {
@@ -99,7 +98,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
                     var sortIndex = expectedRosterIdentities.IndexOf(rosterToAdd);
                     rosterManager.UpdateRoster(expectedRoster, this.Identity, rosterToAdd, sortIndex);
-
 
                     int indexOfRosterInstance = this.IndexOfFirstRosterInstance(expectedRoster) + sortIndex;
 
@@ -205,6 +203,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (nodeToRemove != null) this.children.Remove(nodeToRemove);
 
             Tree?.ProcessRemovedNodeByIdentity(identity);
+        }
+
+        public void RemoveChilds(List<Identity> identities)
+        {
+            var ids = identities.ToHashSet();
+            children.RemoveAll(child => ids.Contains(child.Identity));
+            Tree?.ProcessRemovedNodesByIdentities(identities);
         }
 
         public bool IsDisabled() => this.isDisabled || (this.Parent?.IsDisabled() ?? false);
