@@ -60,8 +60,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             this.viewModelNavigationService.NavigateTo<AreaEditorViewModel>(new
             {
                 geometry = area?.Geometry,
-                mapName = area?.MapName,
-                areaSize = area?.AreaSize
+                mapName = area?.MapName
             });
 
             AreaEditorActivity.OnAreaEditCompleted += (editResult =>
