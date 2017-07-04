@@ -33,8 +33,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             changedTreeMainSection.AddChild(Create.Entity.InterviewTreeQuestion(addedQuestionIdentity));
             changedTreeMainSection.AddChild(Create.Entity.InterviewTreeRoster(addedRosterIdentity));
 
-            var sourceTree = Create.Entity.InterviewTree(interviewId, sourceTreeMainSection);
-            var changedTree = Create.Entity.InterviewTree(interviewId, changedTreeMainSection);
+            var sourceTree = Create.Entity.InterviewTree(interviewId, sections: new[] {sourceTreeMainSection});
+            var changedTree = Create.Entity.InterviewTree(interviewId, sections: new[] {changedTreeMainSection});
             //act
             var diff = sourceTree.Compare(changedTree).ToList();
             //assert
@@ -62,8 +62,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             sourceTreeMainSection.AddChild(Create.Entity.InterviewTreeQuestion(addedQuestionIdentity));
             sourceTreeMainSection.AddChild(Create.Entity.InterviewTreeRoster(addedRosterIdentity));
 
-            var sourceTree = Create.Entity.InterviewTree(interviewId, sourceTreeMainSection);
-            var changedTree = Create.Entity.InterviewTree(interviewId, changedTreeMainSection);
+            var sourceTree = Create.Entity.InterviewTree(interviewId, sections: new[] {sourceTreeMainSection});
+            var changedTree = Create.Entity.InterviewTree(interviewId, sections: new[] {changedTreeMainSection});
             //act
             var diff = sourceTree.Compare(changedTree).ToList();
             //assert
@@ -686,7 +686,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             => CreateSimpleTree(interviewId, Create.Entity.InterviewTreeSection(sectionIdentity, children: question));
 
         private static InterviewTree CreateSimpleTree(Guid interviewId, InterviewTreeSection section)
-            => Create.Entity.InterviewTree(interviewId, new[] { section });
+            => Create.Entity.InterviewTree(interviewId, sections: new[] { section });
 
         private static InterviewTree CreateTreeForClone()
         {
@@ -732,7 +732,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                     Create.Entity.InterviewTreeRoster(Create.Entity.Identity(Guid.Parse("40666666666666666666666666666666")), rosterType: RosterType.YesNo, rosterSizeQuestion: Guid.NewGuid()),
                 })
             });
-            var sourceTree = Create.Entity.InterviewTree(interviewId, sourceTreeMainSection);
+            var sourceTree = Create.Entity.InterviewTree(interviewId, sections: new[] {sourceTreeMainSection});
             return sourceTree;
         }
     }
