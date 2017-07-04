@@ -72,11 +72,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         public List<string> MapsList
         {
             get => this.mapsList;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref this.mapsList, value);
-                RaisePropertyChanged(() => SelectedMap); //workaround to fix binding
-            }
+            set => this.RaiseAndSetIfChanged(ref this.mapsList, value);
         }
 
         private string selectedMap;
@@ -128,7 +124,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             }
         }
 
-        public void Init(string geometry, string mapName, double? areaSize)
+        public void Init(string geometry, string mapName)
         {
             this.MapName = mapName;
 
@@ -166,8 +162,6 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                             if (this.StartEditAreaCommand.CanExecute())
                                 this.StartEditAreaCommand.Execute();
                         };
-
-
                 }
             }
         }
