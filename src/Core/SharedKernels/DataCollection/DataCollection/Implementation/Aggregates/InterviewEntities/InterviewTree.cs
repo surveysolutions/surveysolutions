@@ -24,12 +24,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         private IQuestionnaire questionnaire;
-        private readonly ISubstitionTextFactory textFactory;
+        private readonly ISubstitutionTextFactory textFactory;
 
         private Dictionary<Identity, IInterviewTreeNode> nodesCache = new Dictionary<Identity, IInterviewTreeNode>();
         private Dictionary<Guid, List<IInterviewTreeNode>> nodesIdCache = null;
 
-        public InterviewTree(Guid interviewId, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory)
+        public InterviewTree(Guid interviewId, IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory)
         {
             this.InterviewId = interviewId.FormatGuid();
             this.questionnaire = questionnaire;
@@ -288,13 +288,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return CreateQuestion(this, this.questionnaire, this.textFactory, questionIdentity);
         }
 
-        public static InterviewTreeQuestion CreateQuestion(InterviewTree tree, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory, Identity questionIdentity)
+        public static InterviewTreeQuestion CreateQuestion(InterviewTree tree, IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory, Identity questionIdentity)
         {
             QuestionType questionType = questionnaire.GetQuestionType(questionIdentity.Id);
 
-            SubstitionText title = textFactory.CreateText(questionIdentity, questionnaire.GetQuestionTitle(questionIdentity.Id), questionnaire);
+            SubstitutionText title = textFactory.CreateText(questionIdentity, questionnaire.GetQuestionTitle(questionIdentity.Id), questionnaire);
 
-            IEnumerable<SubstitionText> CreateText()
+            IEnumerable<SubstitutionText> CreateText()
             {
                 foreach (var message in questionnaire.GetValidationMessages(questionIdentity.Id))
                 {
@@ -302,7 +302,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 }
             }
 
-            SubstitionText[] validationMessages = CreateText().ToArray();
+            SubstitutionText[] validationMessages = CreateText().ToArray();
 
             string variableName = questionnaire.GetQuestionVariableName(questionIdentity.Id);
             bool isYesNoQuestion = questionnaire.IsQuestionYesNo(questionIdentity.Id);
@@ -373,17 +373,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return CreateSubSection(this, this.questionnaire, textFactory, subSectionIdentity);
         }
 
-        public static InterviewTreeSubSection CreateSubSection(InterviewTree tree, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory, Identity subSectionIdentity)
+        public static InterviewTreeSubSection CreateSubSection(InterviewTree tree, IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory, Identity subSectionIdentity)
         {
             var childrenReferences = questionnaire.GetChidrenReferences(subSectionIdentity.Id);
-            SubstitionText title = textFactory.CreateText(subSectionIdentity, questionnaire.GetGroupTitle(subSectionIdentity.Id), questionnaire);
+            SubstitutionText title = textFactory.CreateText(subSectionIdentity, questionnaire.GetGroupTitle(subSectionIdentity.Id), questionnaire);
             return new InterviewTreeSubSection(subSectionIdentity, title, childrenReferences);
         }
 
-        public static InterviewTreeSection CreateSection(InterviewTree tree, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory, Identity sectionIdentity)
+        public static InterviewTreeSection CreateSection(InterviewTree tree, IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory, Identity sectionIdentity)
         {
             var childrenReferences = questionnaire.GetChidrenReferences(sectionIdentity.Id);
-            SubstitionText title = textFactory.CreateText(sectionIdentity, questionnaire.GetGroupTitle(sectionIdentity.Id), questionnaire);
+            SubstitutionText title = textFactory.CreateText(sectionIdentity, questionnaire.GetGroupTitle(sectionIdentity.Id), questionnaire);
             return new InterviewTreeSection(sectionIdentity, title, childrenReferences);
         }
 
@@ -392,10 +392,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return CreateStaticText(this, this.questionnaire, textFactory, staticTextIdentity);
         }
 
-        public static InterviewTreeStaticText CreateStaticText(InterviewTree tree, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory, Identity staticTextIdentity)
+        public static InterviewTreeStaticText CreateStaticText(InterviewTree tree, IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory, Identity staticTextIdentity)
         {
-            SubstitionText title = textFactory.CreateText(staticTextIdentity, questionnaire.GetStaticText(staticTextIdentity.Id), questionnaire);
-            SubstitionText[] validationMessages = questionnaire.GetValidationMessages(staticTextIdentity.Id)
+            SubstitutionText title = textFactory.CreateText(staticTextIdentity, questionnaire.GetStaticText(staticTextIdentity.Id), questionnaire);
+            SubstitutionText[] validationMessages = questionnaire.GetValidationMessages(staticTextIdentity.Id)
                 .Select(x => textFactory.CreateText(staticTextIdentity, x, questionnaire))
                 .ToArray();
             return new InterviewTreeStaticText(staticTextIdentity, title, validationMessages);

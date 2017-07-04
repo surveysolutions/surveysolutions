@@ -23,9 +23,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     {
         public StatefulInterview(IQuestionnaireStorage questionnaireRepository,
                                  IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider,
-                                 ISubstitionTextFactory substitionTextFactory,
+                                 ISubstitutionTextFactory substitutionTextFactory,
                                  IInterviewTreeBuilder treeBuilder)
-            : base(questionnaireRepository, expressionProcessorStatePrototypeProvider, substitionTextFactory, treeBuilder)
+            : base(questionnaireRepository, expressionProcessorStatePrototypeProvider, substitutionTextFactory, treeBuilder)
         {
         }
 
@@ -337,7 +337,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public string GetBrowserReadyTitleHtml(Identity entityIdentity)
             => this.GetTitleSubstitutionText(entityIdentity)?.BrowserReadyText ?? string.Empty;
 
-        private SubstitionText GetTitleSubstitutionText(Identity entityIdentity)
+        private SubstitutionText GetTitleSubstitutionText(Identity entityIdentity)
             => this.Tree.GetQuestion(entityIdentity)?.Title
             ?? this.Tree.GetGroup(entityIdentity)?.Title
             ?? this.Tree.GetStaticText(entityIdentity)?.Title;

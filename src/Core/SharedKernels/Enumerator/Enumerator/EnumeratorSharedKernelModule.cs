@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.Enumerator
             this.Bind<ISideBarSectionViewModelsFactory>().To<SideBarSectionViewModelFactory>();
             this.Bind<IDynamicTextViewModelFactory>().To<DynamicTextViewModelFactory>();
 
-            this.Bind<ISubstitionTextFactory>().To<SubstitionTextFactory>();
+            this.Bind<ISubstitutionTextFactory>().To<SubstitutionTextFactory>();
             this.Bind<ISubstitutionService>().To<SubstitutionService>().InScope(ctx => BaseInterviewViewModel.CurrentInterviewScope);
             this.Bind<IVariableToUIStringService>().To<VariableToUIStringService>();
             this.Bind<IOptionsRepository>().To<OptionsRepository>();

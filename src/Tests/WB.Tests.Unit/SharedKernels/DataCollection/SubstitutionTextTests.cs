@@ -6,18 +6,15 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Services;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection
 {
-    [TestOf(typeof(SubstitionText))]
+    [TestOf(typeof(SubstitutionText))]
     [TestFixture]
-    public class SubstitionTextTests
+    public class SubstitutionTextTests
     {
         [Test]
         public void When_ReplaceSubstitutions_for_element_with_referancec_on_parent_rosters_Then_should_return_text_with_roster_titles()
@@ -52,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var tree = Create.Entity.InterviewTree(sections: sourceTreeMainSection);
 
 
-            var substitionTextFactory = Create.Service.SubstitionTextFactory();
+            var substitionTextFactory = Create.Service.SubstitutionTextFactory();
             var questionIdentity = Create.Entity.Identity(questionId, new RosterVector(new decimal[] { 2, 1 }));
             var substitionText = substitionTextFactory.CreateText(questionIdentity, "title: %r1% %r2%", questionnire);
             substitionText.SetTree(tree);
@@ -74,7 +71,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var substitutedVariableId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             var substitutedRosterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-            SubstitionText text = CreateSubstitionText(targetEntityId,
+            SubstitutionText text = CreateSubstitutionText(targetEntityId,
                 "%rostertitle% %question% %variable%",
                 new SubstitutionVariable
                 {
@@ -123,14 +120,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.That(substitutedRawText, Is.EqualTo($"{rosterRawValue} {questionRawAnswer} {variableRawValue}"));
         }
 
-        private SubstitionText CreateSubstitionText(
+        private SubstitutionText CreateSubstitutionText(
             Identity id,
             string template,
             List<SubstitutionVariable> ByQuestions,
             List<SubstitutionVariable> ByRosters,
             List<SubstitutionVariable> ByVariables)
         {
-            SubstitionText text = new SubstitionText(id,
+            SubstitutionText text = new SubstitutionText(id,
                 template,
                 new SubstitutionVariables
                 {
