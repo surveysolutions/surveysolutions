@@ -51,6 +51,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IJsonAllTypesSerializer jsonSerializer;
         private readonly IEnumeratorSettings enumeratorSettings;
+        public static BaseInterviewViewModel CurrentInterviewScope;
 
         protected BaseInterviewViewModel(
             IQuestionnaireStorage questionnaireRepository,
@@ -85,6 +86,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.BreadCrumbs = breadCrumbsViewModel;
             this.Sections = sectionsViewModel;
+            CurrentInterviewScope = this;
         }
 
         private bool isInProgress;
