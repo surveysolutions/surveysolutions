@@ -133,11 +133,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 string url = string.Concat(interviewerApiUrl, "compatibility/", this.interviewerSettings.GetDeviceId(), "/",
                     this.syncProtocolVersionProvider.GetProtocolVersion());
 
-                var respose = await this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync(
-                    url: url,
-                    credentials: credentials ?? this.restCredentials, token: token)).ConfigureAwait(false);
+                var response = await this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<string>(
+                    url: url, credentials: credentials ?? this.restCredentials, token: token)).ConfigureAwait(false);
 
-                string response = await respose.Content.ReadAsStringAsync().ConfigureAwait(false);
                 if (response == null || response.Trim('"') != "449634775")
                 {
                     throw new SynchronizationException(SynchronizationExceptionType.InvalidUrl, InterviewerUIResources.InvalidEndpoint);
