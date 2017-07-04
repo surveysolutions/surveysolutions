@@ -50,9 +50,9 @@
                         android:textStyle="bold"
                         local:MvxBind="Text SelectedMap;" />
                 </LinearLayout>
-                <ImageButton
+                <Button
                     style="@style/Area_LocationButton"
-                    local:MvxBind="Click SwitchLocatorCommand; Visibility Visibility(Map != null)" />
+                    local:MvxBind="Click SwitchLocatorCommand; Clickable IsLocationServiceSwitchEnabled; Enabled IsLocationServiceSwitchEnabled; Visibility Visibility(Map != null)" />
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
     </android.support.design.widget.CoordinatorLayout>
