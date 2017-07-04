@@ -94,7 +94,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var rosterSizeQuestion = this.GetRosterSizeQuestion(parentIdentity, this.rosterSizeQuestionId)?.AsInteger;
             var integerAnswer = rosterSizeQuestion?.IsAnswered ?? false? rosterSizeQuestion.GetAnswer().Value : 0;
             return Enumerable.Range(0, integerAnswer)
-                .Select(index => new RosterIdentity(rosterId, parentIdentity.RosterVector, index, index).ToIdentity())
+                .Select(index => 
+                    new Identity(rosterId, parentIdentity.RosterVector.ExtendWithOneCoordinate(index)))
                 .ToList();
         }
 
