@@ -161,13 +161,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         private int IndexOfFirstRosterInstance(InterviewTreeRoster roster)
         {
-            var firstRosterInstance = this.children
-                .OfType<InterviewTreeRoster>()
-                .FirstOrDefault(x => x.Identity.Id == roster.Identity.Id);
+            int index = 0;
 
-            return firstRosterInstance == null
-                ? this.IndexOfExpectedFirstRosterInstance(roster.Identity.Id)
-                : this.children.IndexOf(firstRosterInstance);
+            foreach (IInterviewTreeNode child in this.children)
+            {
+                if (child is InterviewTreeRoster treeRoster)
+                {
+                    if (treeRoster.Identity.Id == roster.Identity.Id)
+                    {
+                        return index;
+                    }
+                }
+
+                index++;
+            }
+
+            return this.IndexOfExpectedFirstRosterInstance(roster.Identity.Id);
         }
 
         private int IndexOfExpectedFirstRosterInstance(Guid rosterId)
