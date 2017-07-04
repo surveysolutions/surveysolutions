@@ -87,7 +87,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             => this.nodesCache.Values.OfType<InterviewTreeRoster>();
 
         public IEnumerable<IInterviewTreeNode> FindEntity(Guid nodeId)
-            => this.nodesIdCache.GetOrEmpty(nodeId);
+        {
+            var result = this.nodesIdCache.GetOrEmpty(nodeId);
+
+            if(result == null) // require rebuild of cache
+            {
+                result = WarmNodesIdCache(nodeId);
+            }
+
+            return result;
+        }
+
+        private List<IInterviewTreeNode> WarmNodesIdCache(Guid nodeId)
+        {
+            var result = this.nodesCache.Where(x => x.Key.Id == nodeId).Select(x => x.Value).ToList();
+            this.nodesIdCache[nodeId] = result;
+            return result;
+        }
 
         public IInterviewTreeNode GetNodeByIdentity(Identity identity)
         {
@@ -101,7 +117,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             foreach (var treeSection in this.Sections)
                 treeSection.ActualizeChildren();
         }
-        
+
         public void RemoveNode(Identity identity)
         {
             // should not be null here, looks suspicious
@@ -280,14 +296,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             IEnumerable<SubstitionText> CreateText()
             {
-                foreach(var message in questionnaire.GetValidationMessages(questionIdentity.Id))
+                foreach (var message in questionnaire.GetValidationMessages(questionIdentity.Id))
                 {
                     yield return textFactory.CreateText(questionIdentity, message, questionnaire);
                 }
             }
 
             SubstitionText[] validationMessages = CreateText().ToArray();
-            
+
             string variableName = questionnaire.GetQuestionVariableName(questionIdentity.Id);
             bool isYesNoQuestion = questionnaire.IsQuestionYesNo(questionIdentity.Id);
             bool isDecimalQuestion = !questionnaire.IsQuestionInteger(questionIdentity.Id);
@@ -326,7 +342,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     commonParentRosterForLinkedQuestion = new Identity(targetRoster.Value, commonParentRosterVector);
                 }
             }
-            
+
             return new InterviewTreeQuestion(questionIdentity,
                 title: title,
                 variableName: variableName,
@@ -341,8 +357,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 linkedSourceId: sourceForLinkedQuestion,
                 commonParentRosterIdForLinkedQuestion: commonParentRosterForLinkedQuestion,
                 validationMessages: validationMessages,
-                isInterviewerQuestion : isInterviewerQuestion,
-                isPrefilled : isPrefilled,
+                isInterviewerQuestion: isInterviewerQuestion,
+                isPrefilled: isPrefilled,
                 isSupervisors: isSupervisors,
                 isHidden: isHidden);
         }
@@ -415,7 +431,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             throw new ArgumentException("Unknown roster type");
         }
-        
+
         private void WarmUpCache()
         {
             this.nodesCache = new Dictionary<Identity, IInterviewTreeNode>();
@@ -436,6 +452,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 this.nodesIdCache.Add(node.Identity.Id, new List<IInterviewTreeNode>());
             }
 
+            if(nodesIdCache[node.Identity.Id] == null)
+            {
+                WarmNodesIdCache(node.Identity.Id);
+                return;
+            }
+
             this.nodesIdCache[node.Identity.Id].Add(node);
         }
 
@@ -448,11 +470,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             foreach (var nodeToRemove in nodesToRemove)
             {
                 this.nodesCache.Remove(nodeToRemove.Identity);
-                this.nodesIdCache[nodeToRemove.Identity.Id].RemoveAll(iitn => iitn.Identity == nodeToRemove.Identity);
+                this.nodesIdCache[nodeToRemove.Identity.Id] = null;
             }
 
             this.nodesCache.Remove(identity);
-            this.nodesIdCache[identity.Id].RemoveAll(iitn => iitn.Identity == identity);
+            this.nodesIdCache[identity.Id] = null;
+        }
+
+        public void ProcessRemovedNodesByIdentities(List<Identity> ids)
+        {
+            var nodesToRemove = ids.Select(id => this.nodesCache.GetOrNull(id))
+                .Where(tree => tree != null)
+                .SelectMany(tree => tree.TreeToEnumerable(n => n.Children));
+
+            foreach (var nodeToRemove in nodesToRemove)
+            {
+                this.nodesCache.Remove(nodeToRemove.Identity);
+                this.nodesIdCache[nodeToRemove.Identity.Id] = null;
+            }
+
+            foreach (var id in ids)
+            {
+                this.nodesCache.Remove(id);
+                this.nodesIdCache[id.Id] = null;
+            }
         }
 
         public void ProcessAddedNode(IInterviewTreeNode node)
@@ -499,13 +540,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return this.questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title;
         }
 
-        public IEnumerable<IInterviewTreeNode> GetAllNodesInEnumeratorOrder() => 
+        public IEnumerable<IInterviewTreeNode> GetAllNodesInEnumeratorOrder() =>
             this.Sections.Cast<IInterviewTreeNode>().TreeToEnumerableDepthFirst(node => node.Children);
 
         public RosterVector GetNodeCoordinatesInEnumeratorOrder(Identity identity)
         {
             var node = GetNodeByIdentity(identity);
-            if(node == null) return RosterVector.Empty;
+            if (node == null) return RosterVector.Empty;
 
             var address = new List<int>();
             int index;
