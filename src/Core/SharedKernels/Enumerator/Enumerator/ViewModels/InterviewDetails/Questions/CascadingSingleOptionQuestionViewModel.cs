@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -279,12 +280,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (model == null) throw new ArgumentNullException(nameof(model));
 
-            if (hint != null)
+            if (!hint.IsNullOrEmpty())
             {
                 //Insert and IndexOf with culture specific search cannot be used together 
                 //http://stackoverflow.com/questions/4923187/string-indexof-and-replace
                 var startIndexOfSearchedText = model.Title.IndexOf(hint, StringComparison.OrdinalIgnoreCase);
-                if (startIndexOfSearchedText > 0)
+                if (startIndexOfSearchedText > -1)
                 {
                     return new CascadingComboboxItemViewModel
                     {

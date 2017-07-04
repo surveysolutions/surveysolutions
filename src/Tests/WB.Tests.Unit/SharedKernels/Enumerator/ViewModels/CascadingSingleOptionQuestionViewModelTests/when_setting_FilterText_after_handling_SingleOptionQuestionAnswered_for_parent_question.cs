@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
@@ -82,15 +81,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         };
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
-        protected static readonly List<CategoricalOption> options = new List<CategoricalOption>
-        {
-            Create.Entity.CategoricalQuestionOption(1, "title abc 1", 1),
-            Create.Entity.CategoricalQuestionOption(2, "title def 2", 1),
-            Create.Entity.CategoricalQuestionOption(3, "title klo 3", 1),
-            Create.Entity.CategoricalQuestionOption(4, "title gha 4", 2),
-            Create.Entity.CategoricalQuestionOption(5, "title ccc 5", 2),
-            Create.Entity.CategoricalQuestionOption(6, "title bcw 6", 2)
-        };
 
         private static readonly Mock<IStatefulInterview> StatefulInterviewMock = new Mock<IStatefulInterview>();
     }
