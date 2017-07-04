@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform.Core;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -13,7 +14,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
@@ -32,11 +32,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             public string OriginalText { get; set; }
             public decimal Value { get; set; }
             public decimal ParentValue { get; set; }
-            public bool Selected { get; set; }
 
             public override string ToString()
             {
-                return this.OriginalText;
+                return this.Text.Replace("</b>", "").Replace("<b>", "");
             }
         }
 
@@ -49,12 +48,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private string interviewId;
         private Guid interviewGuid;
         private decimal? answerOnParentQuestion = null;
-
+        private CancellationTokenSource suggestionsCancellation;
+        
+        private readonly QuestionStateViewModel<SingleOptionQuestionAnswered> questionState;
         public IQuestionStateViewModel QuestionState => this.questionState;
 
         public AnsweringViewModel Answering { get; private set; }
         public QuestionInstructionViewModel InstructionViewModel { get; set; }
         private readonly ILiteEventRegistry eventRegistry;
+        private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
 
         public Identity Identities => this.questionIdentity;
 
@@ -67,20 +69,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering, 
             QuestionInstructionViewModel instructionViewModel,
-            ILiteEventRegistry eventRegistry)
+            ILiteEventRegistry eventRegistry,
+            IMvxMainThreadDispatcher mainThreadDispatcher)
         {
-            if (principal == null) throw new ArgumentNullException(nameof(principal));
-            if (questionnaireRepository == null) throw new ArgumentNullException(nameof(questionnaireRepository));
-            if (interviewRepository == null) throw new ArgumentNullException(nameof(interviewRepository));
-
-            this.principal = principal;
-            this.questionnaireRepository = questionnaireRepository;
-            this.interviewRepository = interviewRepository;
+            this.principal = principal ?? throw new ArgumentNullException(nameof(principal));
+            this.questionnaireRepository = questionnaireRepository ?? throw new ArgumentNullException(nameof(questionnaireRepository));
+            this.interviewRepository = interviewRepository ?? throw new ArgumentNullException(nameof(interviewRepository));
 
             this.questionState = questionStateViewModel;
             this.Answering = answering;
             this.InstructionViewModel = instructionViewModel;
             this.eventRegistry = eventRegistry;
+            this.mainThreadDispatcher = mainThreadDispatcher;
+            answering.Delay = TimeSpan.FromMilliseconds(500);
         }
 
         public Identity Identity => this.questionIdentity;
@@ -97,7 +98,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             var cascadingQuestionParentId = questionnaire.GetCascadingQuestionParentId(entityIdentity.Id);
-            if (!cascadingQuestionParentId.HasValue) throw new ArgumentNullException("parent of cascading question is missing");
+            if (!cascadingQuestionParentId.HasValue) throw new NullReferenceException($"Parent of cascading question {entityIdentity} is missing");
 
             this.questionIdentity = entityIdentity;
             this.interviewGuid = interview.Id;
@@ -112,14 +113,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer().SelectedValue;
             }
 
-            var singleOptionQuestion = interview.GetSingleOptionQuestion(entityIdentity);
+            this.UpdateOptionsState(interview);
+            this.eventRegistry.Subscribe(this, interviewId);
+        }
+
+        private void UpdateOptionsState(IStatefulInterview interview)
+        {
+            var singleOptionQuestion = interview.GetSingleOptionQuestion(this.Identity);
+
             if (singleOptionQuestion.IsAnswered)
             {
-                var answerOption = interview.GetOptionForQuestionWithoutFilter(this.questionIdentity,
-                    singleOptionQuestion.GetAnswer().SelectedValue, (int?)this.answerOnParentQuestion);
+                var selectedValue = singleOptionQuestion.GetAnswer().SelectedValue;
+                var answerOption = interview.GetOptionForQuestionWithoutFilter(this.questionIdentity, selectedValue, (int?) this.answerOnParentQuestion);
 
-
-                this.selectedObject = this.CreateFormattedOptionModel(answerOption);
+                this.SelectedObject = this.CreateFormattedOptionModel(answerOption);
                 this.ResetTextInEditor = this.selectedObject.OriginalText;
                 this.FilterText = this.selectedObject.OriginalText;
 
@@ -128,10 +135,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             else
             {
-                this.FilterText = string.Empty;
+                this.UpdateSuggestionsList(this.FilterText ?? DefaultText ?? string.Empty);
             }
-
-            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         private string resetTextInEditor;
@@ -150,14 +155,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private IMvxCommand valueChangeCommand;
-        public IMvxCommand ValueChangeCommand
-        {
-            get
-            {
-                return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand<string>(async enteredText => await this.FindMatchOptionAndSendAnswerQuestionCommandAsync(enteredText)));
-            }
-        }
+        public IMvxCommand ValueChangeCommand => new MvxAsyncCommand<string>(this.FindMatchOptionAndSendAnswerQuestionAsync);
 
         public IMvxCommand RemoveAnswerCommand
         {
@@ -193,30 +191,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private CascadingComboboxItemViewModel selectedObject;
         public CascadingComboboxItemViewModel SelectedObject
         {
-            get { return this.selectedObject; }
-            set
-            {
-                if (this.selectedObject == value)
-                    return;
-                
-                this.selectedObject = value;
-                if (this.selectedObject != null)
-                {
-                    Action sendCommand = async () => await this.SendAnswerFilteredComboboxQuestionCommandAsync(this.selectedObject.Value);
-                    sendCommand();
-                }
-                this.RaisePropertyChanged();
-            }
+            get => this.selectedObject;
+            set => this.RaiseAndSetIfChanged(ref this.selectedObject, value);
         }
 
-        private bool isInitialized = false;
-        private string filterText = string.Empty;
+        private string filterText;
         public string FilterText
         {
-            get { return this.filterText; }
+            get => this.filterText;
             set
             {
-                if (value == this.filterText && this.isInitialized)
+                if (value == this.filterText)
                 {
                     return;
                 }
@@ -224,11 +209,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.filterText = value;
                 
                 this.UpdateSuggestionsList(this.filterText);
-
-                this.isInitialized = true;
-
                 this.RaisePropertyChanged();
-
                 this.CanRemoveAnswer = !string.IsNullOrEmpty(this.filterText);
             }
         }
@@ -236,7 +217,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public string DefaultText { get; set; }
 
         private bool canRemoveAnswer;
-
         public bool CanRemoveAnswer
         {
             set
@@ -247,20 +227,35 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.RaisePropertyChanged(); 
                 }
             }
-            get { return canRemoveAnswer; }
+            get => canRemoveAnswer;
         }
 
         private void UpdateSuggestionsList(string textHint)
         {
+            this.suggestionsCancellation?.Cancel();
+            this.suggestionsCancellation = new CancellationTokenSource();
+
+            Answering.ExecuteActionAsync(async token =>
+                await Task.Run(() => this.UpdateSuggestions(textHint, token), token),
+                suggestionsCancellation.Token).ConfigureAwait(false);
+        }
+
+        private void UpdateSuggestions(string textHint, CancellationToken token)
+        {
+            if (token.IsCancellationRequested) return;
+
             var list = this.GetSuggestionsList(textHint).ToList();
 
-            if (list.Any())
+            if (!token.IsCancellationRequested)
             {
-                this.AutoCompleteSuggestions = list;
-            }
-            else
-            {
-                this.SetSuggestionsEmpty();
+                if (list.Count > 0)
+                {
+                    this.mainThreadDispatcher.RequestMainThreadAction(() => this.AutoCompleteSuggestions = list);
+                }
+                else
+                {
+                    this.mainThreadDispatcher.RequestMainThreadAction(this.SetSuggestionsEmpty);
+                }
             }
         }
 
@@ -284,18 +279,31 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (model == null) throw new ArgumentNullException(nameof(model));
 
-            var text = (!string.IsNullOrEmpty(hint) && !string.IsNullOrEmpty(model.Title)) ?
-                Regex.Replace(model.Title, Regex.Escape(hint), "<b>" + hint + "</b>", RegexOptions.IgnoreCase) :
-                model.Title;
+            if (hint != null)
+            {
+                //Insert and IndexOf with culture specific search cannot be used together 
+                //http://stackoverflow.com/questions/4923187/string-indexof-and-replace
+                var startIndexOfSearchedText = model.Title.IndexOf(hint, StringComparison.OrdinalIgnoreCase);
+                if (startIndexOfSearchedText > 0)
+                {
+                    return new CascadingComboboxItemViewModel
+                    {
+                        Text = model.Title.Insert(startIndexOfSearchedText + hint.Length, "</b>")
+                            .Insert(startIndexOfSearchedText, "<b>"),
+                        Value = model.Value,
+                        OriginalText = model.Title,
+                        ParentValue = model.ParentValue.Value
+                    };
+                }
+            }
 
             return new CascadingComboboxItemViewModel
-                   {
-                       Text = text,
-                       OriginalText = model.Title,
-                       Value = model.Value,
-                       ParentValue = model.ParentValue.Value,
-                       Selected = this.SelectedObject != null && model.Value == this.SelectedObject.Value
-                   };
+            {
+                Text = model.Title,
+                OriginalText = model.Title,
+                Value = model.Value,
+                ParentValue = model.ParentValue.Value
+            };
         }
 
         private void SetSuggestionsEmpty()
@@ -304,41 +312,32 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private List<CascadingComboboxItemViewModel> autoCompleteSuggestions = new List<CascadingComboboxItemViewModel>();
-        private readonly QuestionStateViewModel<SingleOptionQuestionAnswered> questionState;
-
 
         public List<CascadingComboboxItemViewModel> AutoCompleteSuggestions
         {
-            get { return this.autoCompleteSuggestions; }
-            set { this.autoCompleteSuggestions = value; this.RaisePropertyChanged(); }
+            get => this.autoCompleteSuggestions;
+            set => this.RaiseAndSetIfChanged(ref this.autoCompleteSuggestions, value);
         }
 
-        private async Task FindMatchOptionAndSendAnswerQuestionCommandAsync(string enteredText)
+        private async Task FindMatchOptionAndSendAnswerQuestionAsync(string enteredText)
         {
             if (!this.answerOnParentQuestion.HasValue)
                 return;
 
             var interview = this.interviewRepository.Get(this.interviewId);
 
-            var answerViewModel = interview.GetOptionForQuestionWithFilter(this.questionIdentity, enteredText, (int)answerOnParentQuestion.Value);
+            var categoricalOption = interview.GetOptionForQuestionWithFilter(this.questionIdentity, enteredText, (int)answerOnParentQuestion.Value);
                 
-            if (answerViewModel == null)
+            if (categoricalOption == null)
             {
                 this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(string.Format(UIResources.Interview_Question_Cascading_NoMatchingValue, enteredText));
                 return;
             }
 
-            var answerValue = answerViewModel.Value;
-            if (this.selectedObject != null && answerValue == this.selectedObject.Value)
-            {
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
-                return;
-            }
-
-            await this.SendAnswerFilteredComboboxQuestionCommandAsync(answerValue);
+            await this.SendAnswerFilteredComboboxQuestionCommandAsync(categoricalOption.Value);
         }
 
-        private async Task SendAnswerFilteredComboboxQuestionCommandAsync(decimal answerValue)
+        private async Task SendAnswerFilteredComboboxQuestionCommandAsync(int answerValue)
         {
             var command = new AnswerSingleOptionQuestionCommand(
                 this.interviewGuid,
@@ -346,7 +345,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.questionIdentity.Id,
                 this.questionIdentity.RosterVector,
                 DateTime.UtcNow,
-                Convert.ToInt32(answerValue));
+                answerValue);
 
             try
             {
