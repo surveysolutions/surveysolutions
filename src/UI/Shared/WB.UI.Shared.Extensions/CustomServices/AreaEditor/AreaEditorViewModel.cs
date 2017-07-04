@@ -294,16 +294,18 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             this.IsEditing = true;
             try
             {
-                this.MapView.SketchEditor.GeometryChanged += delegate (object sender, GeometryChangedEventArgs args)
+                this.MapView.SketchEditor.GeometryChanged += delegate(object sender, GeometryChangedEventArgs args)
                 {
                     var geometry = args.NewGeometry;
+                    bool isCanCalculateAreaDimensions = IsCanCalculateAreaDimensions(geometry);
                     try
                     {
-                        this.GeometryArea = GeometryEngine.AreaGeodetic(geometry).ToString("#.##");
-                        this.GeometryLength = GeometryEngine.LengthGeodetic(geometry).ToString("#.##");
+                        this.GeometryArea = (isCanCalculateAreaDimensions ? GeometryEngine.AreaGeodetic(geometry) : 0).ToString("#.##");
+                        this.GeometryLength = (isCanCalculateAreaDimensions ? GeometryEngine.LengthGeodetic(geometry) : 0).ToString("#.##");
                     }
                     catch (Exception e)
                     {
+                        Console.WriteLine("LOG MESSAGE EXCEPTION");
                         Console.WriteLine(e);
                         Console.WriteLine(geometry.ToJson());
                         throw;
@@ -318,9 +320,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 Geometry result;
                 if (this.Geometry == null)
                 {
-                    await this.MapView.SetViewpointRotationAsync(0).ConfigureAwait(false);//workaround to fix Map is not prepared.
-                    result = await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polygon, true)
-                        .ConfigureAwait(false);
+                    await this.MapView.SetViewpointRotationAsync(0).ConfigureAwait(false); //workaround to fix Map is not prepared.
+                    result = await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polygon, true).ConfigureAwait(false);
                 }
                 else
                 {
@@ -368,6 +369,35 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 Close(this);
             }
         });
+
+        private bool IsCanCalculateAreaDimensions(Geometry geometry)
+        {
+            if (geometry == null)
+                return false;
+
+            if (geometry.GeometryType != GeometryType.Polygon || geometry.Dimension != GeometryDimension.Area)
+                return false;
+
+            var polygon = geometry as Polygon;
+            if (polygon == null)
+                return false;
+
+            if (polygon.Parts.Count < 1)
+                return false;
+
+            var readOnlyPart = polygon.Parts[0];
+            if (readOnlyPart.PointCount < 3)
+                return false;
+
+            var groupedPoints = from point in readOnlyPart.Points
+                group point by new { X = point.X, Y = point.Y } into xyPoint
+                select new { X = xyPoint.Key.X, Y = xyPoint.Key.Y, Count = xyPoint.Count() };
+
+            if (groupedPoints.Count() < 3)
+                return false;
+
+            return true;
+        }
 
         private string geometryArea = "0";
         public string GeometryArea
