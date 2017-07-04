@@ -107,10 +107,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             base.UpdateRoster(roster, parentIdentity, rosterIdentity, sortIndex);
 
-            var rosterTitle = rosterTitleQuestionId.HasValue ? null : (rosterIdentity.RosterVector.Last() + 1).ToString(CultureInfo.InvariantCulture);
-            var rosterTitleQuestionIdentity = this.rosterTitleQuestionId.HasValue
-                ? new Identity(this.rosterTitleQuestionId.Value, rosterIdentity.RosterVector)
-                : null;
+            
+            Identity rosterTitleQuestionIdentity = null;
+            string rosterTitle;
+
+            if (this.rosterTitleQuestionId.HasValue)
+            {
+                rosterTitleQuestionIdentity = new Identity(this.rosterTitleQuestionId.Value,
+                    rosterIdentity.RosterVector);
+
+                rosterTitle = this.interviewTree.GetQuestion(rosterTitleQuestionIdentity)?.GetAnswerAsString();
+            }
+            else rosterTitle = (rosterIdentity.RosterVector.Last() + 1).ToString(CultureInfo.InvariantCulture);
+            
 
             roster.AsNumeric.RosterTitleQuestionIdentity = rosterTitleQuestionIdentity;
             roster.SetRosterTitle(rosterTitle);
