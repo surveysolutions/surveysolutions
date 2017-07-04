@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
+using System.Threading.Tasks;
 using MvvmCross.Test.Core;
 using Moq;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -35,14 +38,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
             var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
 
-            return new CascadingSingleOptionQuestionViewModel(
+            var cascadingSingleOptionQuestionViewModel = new CascadingSingleOptionQuestionViewModel(
                 principal, 
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(), 
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 QuestionStateMock.Object,
                 AnsweringViewModelMock.Object,
                 Mock.Of<QuestionInstructionViewModel>(),
-                EventRegistry.Object);
+                EventRegistry.Object,
+                Stub.MvxMainThreadDispatcher());
+            return cascadingSingleOptionQuestionViewModel;
         }
 
         protected static IQuestionnaireStorage SetupQuestionnaireRepositoryWithCascadingQuestion(IOptionsRepository optionsRepository = null)
@@ -64,10 +69,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
         protected static void SetUp()
         {
-            
             navigationState = Create.Other.NavigationState();
             QuestionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
-            AnsweringViewModelMock = new Mock<AnsweringViewModel> { DefaultValue = DefaultValue.Mock };
+            var userInterfaceStateService = Mock.Of<IUserInterfaceStateService>(
+                x => x.WaitWhileUserInterfaceIsRefreshingAsync() == Task.FromResult(true)
+                );
+            
+            AnsweringViewModelMock = new Mock<AnsweringViewModel>(Mock.Of<ICommandService>(), userInterfaceStateService);
+            
             EventRegistry = new Mock<ILiteEventRegistry>();
         }
 
