@@ -75,8 +75,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 {
                     new QuestionnaireFeature
                     {
-                          HasQuestionnaire = questionnaire => false,
-                          Description = "New expression storage"
+                          HasQuestionnaire = questionnaire => questionnaire.Find<AbstractQuestion>(q => q.QuestionType == QuestionType.Area).Any(),
+                          Description = "New expression storage or contains Area Question"
                     }
                 }
             }
