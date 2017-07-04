@@ -10,9 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
@@ -33,7 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator
             this.Bind<IDynamicTextViewModelFactory>().To<DynamicTextViewModelFactory>();
 
             this.Bind<ISubstitionTextFactory>().To<SubstitionTextFactory>();
-            this.Bind<ISubstitutionService>().To<SubstitutionService>();
+            this.Bind<ISubstitutionService>().To<SubstitutionService>().InScope(ctx => BaseInterviewViewModel.CurrentInterviewScope);
             this.Bind<IVariableToUIStringService>().To<VariableToUIStringService>();
             this.Bind<IOptionsRepository>().To<OptionsRepository>();
             this.Bind<IQuestionOptionsRepository>().To<QuestionOptionsRepository>();

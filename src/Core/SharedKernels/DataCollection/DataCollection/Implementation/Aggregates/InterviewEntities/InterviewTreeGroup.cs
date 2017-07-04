@@ -179,15 +179,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         private int IndexOfExpectedFirstRosterInstance(Guid rosterId)
         {
-            var rosterQuestionnaireReference = this.childEntitiesReferences.Find(x => x.Id == rosterId);
-            var indexOfRosterInQuestionnaireGroup = this.childEntitiesReferences.IndexOf(rosterQuestionnaireReference);
+            int indexOfRosterInQuestionnaireGroup = 0;
 
-            var prevRosters = this.childEntitiesReferences.Where((reference, index) =>
+            foreach (var itemReference in childEntitiesReferences)
+            {
+                if (itemReference.Id == rosterId) break;
+                indexOfRosterInQuestionnaireGroup++;
+            }
+            
+            var prevRosters = this.childEntitiesReferences
+                .Where((reference, index) =>
                 index < indexOfRosterInQuestionnaireGroup && reference.Type == QuestionnaireReferenceType.Roster)
                 .Select(x => x.Id)
-                .ToList();
+                .ToHashSet();
 
-            var prevRosterInstances = this.children.Select(x => x.Identity.Id).Count(x => prevRosters.Contains(x));
+            var prevRosterInstances = this.children.Count(x => prevRosters.Contains(x.Identity.Id));
 
             return indexOfRosterInQuestionnaireGroup - prevRosters.Count + prevRosterInstances;
         }
