@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI;
@@ -14,8 +15,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Infrastructure.Shared.Enumerator.Internals.MapService;
-using System.Threading.Tasks;
-using Esri.ArcGISRuntime.Location;
+using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 {
@@ -167,18 +167,11 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                                 this.StartEditAreaCommand.Execute();
                         };
 
-                    if(this.mapView.LocationDisplay != null)
-                        this.mapView.LocationDisplay.StatusChanged +=
-                            delegate(object sender, StatusChangedEventArgs evntArgs)
-                            {
-                                IslocationServiceStarted = evntArgs.IsStarted;
-                            };
+
                 }
             }
         }
-
-        private bool IslocationServiceStarted = false;
-        
+       
         public IMvxCommand SwitchMapCommand => new MvxCommand<MapDescription>((MapDescription map) => { this.SelectedMap = map.MapName; });
 
        
@@ -214,19 +207,20 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
         public IMvxCommand SwitchLocatorCommand => new MvxCommand(() =>
         {
+            if (!IsLocationServiceSwitchEnabled)
+                return;
+
             //temporary catch for KP-9486
             //esri was notified
             try
             {
+                IsLocationServiceSwitchEnabled = false;
+
                 if (!this.MapView.LocationDisplay.IsEnabled)
                     this.MapView.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.Off;
 
-                var locationDisplayState = this.MapView.LocationDisplay.IsEnabled;
-                if (!locationDisplayState && !IslocationServiceStarted)
-                {
-                    
+                if (!this.MapView.LocationDisplay.IsEnabled)
                     this.MapView.LocationDisplay.IsEnabled = true;
-                }
                 else
                     this.MapView.LocationDisplay.IsEnabled = false;
             }
@@ -234,7 +228,16 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             {
                 logger.Error("Error occured on map location switch.", exc);
             }
-            
+            finally
+            {
+                //workaround for maps location service error
+                Task.Run(() =>
+                {
+                    Thread.Sleep(3000);
+                    IsLocationServiceSwitchEnabled = true;
+                });
+            }
+
         });
 
         public IMvxCommand HidePanelComand => new MvxCommand(() =>
@@ -465,6 +468,13 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         {
             get => this.isPanelVisible;
             set => this.RaiseAndSetIfChanged(ref this.isPanelVisible, value);
-        }        
+        }
+
+        private bool isLocationServiceSwitchEnabled = true; 
+        public bool IsLocationServiceSwitchEnabled
+        {
+            get => this.isLocationServiceSwitchEnabled;
+            set => this.RaiseAndSetIfChanged(ref this.isLocationServiceSwitchEnabled, value);
+        }
     }
 }
