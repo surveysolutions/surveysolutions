@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Globalization;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -62,6 +63,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         InterviewTreeSingleOptionLinkedToListQuestion GetSingleOptionLinkedToListQuestion(Identity identity);
 
+        InterviewTreeAreaQuestion GetAreaQuestion(Identity identity);
+
         InterviewTreeQuestion GetQuestion(Identity identity);
 
         InterviewTreeStaticText GetStaticText(Identity identity);
@@ -70,7 +73,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool IsEntityValid(Identity identity);
 
-        IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId);
+        IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId, string defaltErrorMessageFallback);
 
         bool IsEnabled(Identity entityIdentity);
 
@@ -165,5 +168,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Identity> GetAllIdentitiesForEntityId(Guid id);
         bool AcceptsInterviewerAnswers();
         IReadOnlyCollection<IInterviewTreeNode> GetAllSections();
+        InterviewSynchronizationDto GetSynchronizationDto();
+        bool IsReadOnlyQuestion(Identity identity);
     }
 }

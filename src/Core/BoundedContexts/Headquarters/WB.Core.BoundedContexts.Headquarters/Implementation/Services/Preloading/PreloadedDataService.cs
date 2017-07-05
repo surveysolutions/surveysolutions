@@ -16,7 +16,6 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -97,7 +96,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             return this.GetDataFileByLevelName(allLevels, parentLevel.LevelName);
         }
 
-        public decimal[] GetAvailableIdListForParent(PreloadedDataByFile parentDataFile, ValueVector<Guid> levelScopeVector, string[] parentIdValues, PreloadedDataByFile[] allLevels)
+        public int[] GetAvailableIdListForParent(PreloadedDataByFile parentDataFile, ValueVector<Guid> levelScopeVector, string[] parentIdValues, PreloadedDataByFile[] allLevels)
         {
             if (parentIdValues == null || parentIdValues.Length == 0)
                 return null;
@@ -119,7 +118,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             if (rosterScopeDescription.Type == RosterScopeType.Fixed)
             {
                 return this.GroupsCache.ContainsKey(levelScopeVector.Last()) 
-                    ? this.GroupsCache[levelScopeVector.Last()].FixedRosterTitles.Select(x => x.Value).ToArray() 
+                    ? this.GroupsCache[levelScopeVector.Last()].FixedRosterTitles.Select(x => Convert.ToInt32(x.Value)).ToArray() 
                     : null;
             }
 
@@ -141,23 +140,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 parentDataFile.Header, row);
 
             if (rosterSizeAnswer == null)
-                return new decimal[0];
+                return new int[0];
 
             if (rosterScopeDescription.Type == RosterScopeType.Numeric)
             {
-                return Enumerable.Range(0, ((NumericIntegerAnswer) rosterSizeAnswer).Value)
-                    .Select(i => (decimal) i).ToArray();
+                return Enumerable.Range(0, ((NumericIntegerAnswer) rosterSizeAnswer).Value).ToArray();
             }
 
             if (rosterScopeDescription.Type == RosterScopeType.MultyOption)
             {
                 var multiOptionAnswer = rosterSizeAnswer as CategoricalFixedMultiOptionAnswer;
                 if (multiOptionAnswer != null)
-                    return multiOptionAnswer.CheckedValues.Select(v => (decimal) v).ToArray();
+                    return multiOptionAnswer.CheckedValues.ToArray();
 
                 var yesNoAnswer = rosterSizeAnswer as YesNoAnswer;
                 if(yesNoAnswer != null)
-                    return yesNoAnswer.CheckedOptions.Where(v=>v.Yes).Select(v => (decimal)v.Value).ToArray();
+                    return yesNoAnswer.CheckedOptions.Where(v=>v.Yes).Select(v => v.Value).ToArray();
             }
 
             if (rosterScopeDescription.Type == RosterScopeType.TextList)
@@ -235,7 +233,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             return this.GetDataFileByLevelName(allLevels, topLevelExportData.LevelName);
         }
 
-        public PreloadedDataRecord[] CreatePreloadedDataDtosFromPanelData(PreloadedDataByFile[] allLevels)
+        public AssignmentPreloadedDataRecord[] CreatePreloadedDataDtosFromPanelData(PreloadedDataByFile[] allLevels)
         {
             var topLevelData = this.GetTopLevelData(allLevels);
             
@@ -246,17 +244,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             var interviewersCache = new Dictionary<string, UserView>();
             var idColumnIndex = this.GetIdColumnIndex(topLevelData);
             var responsibleNameIndex = this.GetResponsibleNameIndex(topLevelData);
-            var result = new List<PreloadedDataRecord>();
+            var quantityIndex = this.GetQuantityIndex(topLevelData);
+            var result = new List<AssignmentPreloadedDataRecord>();
             
             foreach (var topLevelRow in topLevelData.Content)
             {
                 var rowId = topLevelRow[idColumnIndex];
                 var answersByTopLevel = this.BuildAnswerForLevel(topLevelRow, topLevelData.Header, topLevelData.FileName);
-                var levels = new List<PreloadedLevelDto>() { new PreloadedLevelDto(new decimal[0], answersByTopLevel) };
+                var levels = new List<PreloadedLevelDto> { new PreloadedLevelDto(new decimal[0], answersByTopLevel) };
                 var answersinsideRosters = this.GetHierarchicalAnswersByLevelName(topLevelData.FileName, new[] { rowId }, allLevels);
                 levels.AddRange(answersinsideRosters);
 
                 var responsibleName = this.CheckAndGetSupervisorNameForLevel(topLevelRow, responsibleNameIndex);
+                int? quantity = this.CheckAndGetQuantityForLevel(topLevelRow, quantityIndex);
 
                 Guid? interviewerId = null;
                 Guid? supervisorId = null;
@@ -271,28 +271,32 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                     supervisorId = this.GetSupervisorIdAndUpdateCache(supervisorsCache, responsibleName);
                 }
 
-                result.Add(new PreloadedDataRecord
+                result.Add(new AssignmentPreloadedDataRecord
                 {
                     PreloadedDataDto = new PreloadedDataDto(levels.ToArray()),
                     SupervisorId = supervisorId,
-                    InterviewerId = interviewerId
+                    InterviewerId = interviewerId,
+                    Quantity = quantity
                 });
             }
             return result.ToArray();
         }
 
-        public PreloadedDataRecord[] CreatePreloadedDataDtoFromSampleData(PreloadedDataByFile sampleDataFile)
+        public AssignmentPreloadedDataRecord[] CreatePreloadedDataDtoFromAssignmentData(PreloadedDataByFile sampleDataFile)
         {
-            var result = new List<PreloadedDataRecord>();
+            var result = new List<AssignmentPreloadedDataRecord>();
             var supervisorsCache = new Dictionary<string, Guid>();
 
             var interviewersCache = new Dictionary<string, UserView>();
 
             var responsibleNameIndex = this.GetResponsibleNameIndex(sampleDataFile);
+            var quantityIndex = this.GetQuantityIndex(sampleDataFile);
             var topLevelFileName = this.GetValidFileNameForTopLevelQuestionnaire();
             foreach (var contentRow in sampleDataFile.Content)
             {
                 var answersToFeaturedQuestions = this.BuildAnswerForLevel(contentRow, sampleDataFile.Header, topLevelFileName);
+
+                int? quantity = this.CheckAndGetQuantityForLevel(contentRow, quantityIndex); 
 
                 var responsibleName = this.CheckAndGetSupervisorNameForLevel(contentRow, responsibleNameIndex);
                 Guid? interviewerId = null;
@@ -307,12 +311,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 {
                     supervisorId = this.GetSupervisorIdAndUpdateCache(supervisorsCache, responsibleName);
                 }
-                result.Add(new PreloadedDataRecord
-                    {
+
+                result.Add(new AssignmentPreloadedDataRecord
+                {
                         PreloadedDataDto = new PreloadedDataDto(new[] { new PreloadedLevelDto(new decimal[0], answersToFeaturedQuestions)}),
                         SupervisorId = supervisorId,
-                        InterviewerId = interviewerId
-                    });
+                        InterviewerId = interviewerId,
+                        Quantity = quantity
+                });
             }
             return result.ToArray();
         }
@@ -322,9 +328,31 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             return dataFile.Header.ToList().FindIndex(header => string.Equals(header, ServiceColumns.ResponsibleColumnName, StringComparison.InvariantCultureIgnoreCase));
         }
 
+        private int GetQuantityIndex(PreloadedDataByFile dataFile)
+        {
+            return dataFile.Header.ToList().FindIndex(header => string.Equals(header, ServiceColumns.AssignmentsCountColumnName, StringComparison.InvariantCultureIgnoreCase));
+        }
+
         private string CheckAndGetSupervisorNameForLevel(string[] row, int supervisorNameIndex)
         {
             return (supervisorNameIndex >= 0) ? row[supervisorNameIndex] : string.Empty;
+        }
+
+        private int? CheckAndGetQuantityForLevel(string[] row, int quantityIndex)
+        {
+            const int defaultQuantityValue = 1;
+
+            if (quantityIndex < 0)
+                return defaultQuantityValue;
+
+            var quantityString = row[quantityIndex].Trim();
+            if (quantityString == "-1" || quantityString == "INF")
+                return null;
+
+            if (int.TryParse(quantityString, out int quantity))
+                return quantity;
+
+            return defaultQuantityValue;
         }
 
         public string GetValidFileNameForTopLevelQuestionnaire()

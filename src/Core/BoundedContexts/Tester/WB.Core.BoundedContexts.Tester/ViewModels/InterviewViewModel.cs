@@ -19,7 +19,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
     public class InterviewViewModel : BaseInterviewViewModel
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
-        private readonly IUserInteractionService userInteractionService;
 
         private QuestionnaireDownloadViewModel QuestionnaireDownloader { get; }
 
@@ -40,14 +39,12 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IJsonAllTypesSerializer jsonSerializer,
             VibrationViewModel vibrationViewModel,
             IEnumeratorSettings enumeratorSettings,
-            IUserInteractionService userInteractionService,
             QuestionnaireDownloadViewModel questionnaireDownloader)
             : base(questionnaireRepository, interviewRepository, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
                 interviewViewModelFactory, commandService, jsonSerializer, vibrationViewModel, enumeratorSettings)
         {
             this.viewModelNavigationService = viewModelNavigationService;
-            this.userInteractionService = userInteractionService;
             this.QuestionnaireDownloader = questionnaireDownloader;
         }
 
@@ -87,8 +84,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 var interview = this.interviewRepository.Get(this.interviewId);
                 string questionnaireId = interview.QuestionnaireIdentity.QuestionnaireId.FormatGuid();
 
-                bool succeeded = await this.QuestionnaireDownloader.LoadQuestionnaireAsync(
-                    questionnaireId, this.QuestionnaireTitle, new Progress<string>(), CancellationToken.None);
+                bool succeeded = await this.QuestionnaireDownloader.ReloadQuestionnaireAsync(
+                    questionnaireId, this.QuestionnaireTitle, interview, this.navigationState.CurrentNavigationIdentity,
+                    new Progress<string>(), CancellationToken.None);
 
                 if (!succeeded) return;
 

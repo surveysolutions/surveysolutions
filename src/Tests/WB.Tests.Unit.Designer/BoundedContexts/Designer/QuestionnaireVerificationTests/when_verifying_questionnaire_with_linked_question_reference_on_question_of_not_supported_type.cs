@@ -12,25 +12,30 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_linked_question_reference_on_question_of_not_supported_type : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             linkedQuestionId = Guid.Parse("10000000000000000000000000000000");
             notSupportedForLinkingQuestionId = Guid.Parse("13333333333333333333333333333333");
             questionnaire = CreateQuestionnaireDocument(
-                new SingleQuestion()
-            {
-                PublicKey = notSupportedForLinkingQuestionId,
-                StataExportCaption = "var1",
-                QuestionType = QuestionType.SingleOption,
-                Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
-            },
-                new SingleQuestion()
-            {
-                PublicKey = linkedQuestionId,
-                LinkedToQuestionId = notSupportedForLinkingQuestionId,
-                StataExportCaption = "var2",
-                Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
-            });
+                Create.SingleQuestion(
+                    notSupportedForLinkingQuestionId,
+                    variable: "var1",
+                    options: new List<Answer>
+                    {
+                        new Answer() {AnswerValue = "1", AnswerText = "opt 1"},
+                        new Answer() {AnswerValue = "2", AnswerText = "opt 2"}
+                    }
+                ),
+                Create.SingleQuestion(
+                    linkedQuestionId,
+                    linkedToQuestionId: notSupportedForLinkingQuestionId,
+                    variable: "var2",
+                    options: new List<Answer>
+                    {
+                        new Answer {AnswerValue = "1", AnswerText = "opt 1"},
+                        new Answer {AnswerValue = "2", AnswerText = "opt 2"}
+                    }
+                ));
             verifier = CreateQuestionnaireVerifier();
         };
 

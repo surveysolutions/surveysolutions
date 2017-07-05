@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using NConsole;
 using Ninject;
 using NLog;
@@ -10,25 +9,8 @@ namespace support
 {
     class Program
     {
-        const int StdOutputHandle = -11;
-        const uint EnableVirtualTerminalProcessing = 4;
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        static extern IntPtr GetStdHandle(int nStdHandle);
-
-        [DllImport("kernel32.dll")]
-        static extern bool GetConsoleMode(IntPtr hConsoleHandle, out uint lpMode);
-
-        [DllImport("kernel32.dll")]
-        static extern bool SetConsoleMode(IntPtr hConsoleHandle, uint dwMode);
         static void Main(string[] args)
         {
-            var handle = GetStdHandle(StdOutputHandle);
-            uint mode;
-            GetConsoleMode(handle, out mode);
-            mode |= EnableVirtualTerminalProcessing;
-            SetConsoleMode(handle, mode);
-
             var logger = LogManager.GetLogger("support");
 
             var ninjectKernel = new StandardKernel();

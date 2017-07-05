@@ -82,11 +82,6 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                 return ((GeoPosition) answer).ToString();
             }
 
-            if (answer is GeoLocationPoint)
-            {
-                var geoAnswer = answer as GeoLocationPoint;
-                return string.Format(CultureInfo.InvariantCulture, "[{0};{1}]", geoAnswer.Latitude, geoAnswer.Longitude);
-            }
             if (answer is InterviewTextListAnswers)
             {
                 return string.Join("|", ((InterviewTextListAnswers) answer).Answers.Select(x => x.Answer));
@@ -132,7 +127,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                     if (answer.AnswerText.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0 &&
                         parentOption == parentQuestionValue)
                         yield return
-                            new CategoricalOption()
+                            new CategoricalOption
                             {
                                 Value = Convert.ToInt32(ParseAnswerOptionValueOrThrow(answer.AnswerValue, question.PublicKey)),
                                 Title = answer.AnswerText,

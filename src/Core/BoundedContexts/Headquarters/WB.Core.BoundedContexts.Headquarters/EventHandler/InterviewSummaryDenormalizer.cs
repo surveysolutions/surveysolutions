@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
@@ -39,8 +40,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, AnswerRemoved>,
         IUpdateHandler<InterviewSummary, InterviewKeyAssigned>,
         IUpdateHandler<InterviewSummary, InterviewReceivedByInterviewer>,
-        IUpdateHandler<InterviewSummary, InterviewReceivedBySupervisor>
-
+        IUpdateHandler<InterviewSummary, InterviewReceivedBySupervisor>,
+        IUpdateHandler<InterviewSummary, AreaQuestionAnswered>
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IUserViewFactory users;
@@ -98,7 +99,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         }
 
         private InterviewSummary CreateInterviewSummary(Guid userId, Guid questionnaireId, long questionnaireVersion,
-            Guid eventSourceId, DateTime eventTimeStamp, bool wasCreatedOnClient)
+            Guid eventSourceId, DateTime eventTimeStamp, bool wasCreatedOnClient, int? assignmentId)
         {
             var responsible = this.users.GetUser(new UserViewInputModel(userId));
             var questionnarie = this.GetQuestionnaire(questionnaireId, questionnaireVersion);
@@ -113,7 +114,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 QuestionnaireTitle = questionnarie.Title,
                 ResponsibleId = userId, // Creator is responsible
                 ResponsibleName = responsible != null ? responsible.UserName : "<UNKNOWN USER>",
-                ResponsibleRole = responsible.Roles.First()
+                ResponsibleRole = responsible.Roles.First(),
+                AssignmentId = assignmentId
             };
 
             return interviewSummary;
@@ -135,19 +137,19 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewCreated> @event)
         {
             return this.CreateInterviewSummary(@event.Payload.UserId, @event.Payload.QuestionnaireId,
-                @event.Payload.QuestionnaireVersion, @event.EventSourceId, @event.EventTimeStamp, wasCreatedOnClient: false);
+                @event.Payload.QuestionnaireVersion, @event.EventSourceId, @event.EventTimeStamp, false, @event.Payload.AssignmentId);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewFromPreloadedDataCreated> @event)
         {
             return this.CreateInterviewSummary(@event.Payload.UserId, @event.Payload.QuestionnaireId,
-                @event.Payload.QuestionnaireVersion, @event.EventSourceId, @event.EventTimeStamp, wasCreatedOnClient: false);
+                @event.Payload.QuestionnaireVersion, @event.EventSourceId, @event.EventTimeStamp, false, @event.Payload.AssignmentId);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewOnClientCreated> @event)
         {
             return this.CreateInterviewSummary(@event.Payload.UserId, @event.Payload.QuestionnaireId,
-             @event.Payload.QuestionnaireVersion, @event.EventSourceId, @event.EventTimeStamp, wasCreatedOnClient: true);
+             @event.Payload.QuestionnaireVersion, @event.EventSourceId, @event.EventTimeStamp, wasCreatedOnClient: true, assignmentId: @event.Payload.AssignmentId);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewStatusChanged> @event)
@@ -364,6 +366,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             var responsible = this.users.GetUser(new UserViewInputModel(responsibleId));
             return responsible != null ? responsible.UserName : "<UNKNOWN RESPONSIBLE>";
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AreaQuestionAnswered> @event)
+        {
+            var area = new Area(@event.Payload.Geometry, @event.Payload.MapName, @event.Payload.AreaSize, @event.Payload.Length, 
+                @event.Payload.Coordinates, @event.Payload.DistanceToEditor);
+            return this.AnswerQuestion(state, @event.Payload.QuestionId, area, @event.EventTimeStamp);
         }
     }
 }

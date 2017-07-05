@@ -15,18 +15,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnablementViewModelT
     {
         Establish context = () =>
         {
-            var plainQuestionnaire = new PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
              {
                 Create.Entity.MultyOptionsQuestion(multiQuestionId, options: new [] { Create.Entity.Option("1")}),
                 Create.Entity.Roster(rosterSizeQuestionId:multiQuestionId, children: new IComposite[]
                 {
                     Create.Entity.NumericIntegerQuestion(id: numericQuestionId)
                 })
-             }), 0);
+             });
 
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(plainQuestionnaire);
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
 
-            interview = Create.AggregateRoot.StatefulInterview(questionnaire: plainQuestionnaire);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
             interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), multiQuestionIdentity.Id, multiQuestionIdentity.RosterVector, DateTime.Now, new [] { 1 });
 
             var interviewRepository = Setup.StatefulInterviewRepository(interview);

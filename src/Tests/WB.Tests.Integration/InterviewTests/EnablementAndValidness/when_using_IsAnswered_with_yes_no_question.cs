@@ -6,7 +6,6 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Tests.Abc;
 
@@ -23,21 +22,21 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 AssemblyContext.SetupServiceLocator();
 
                 var yesNoQuestionVariable = "cat";
-                QuestionnaireDocument questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(Guid.Parse("11111111111111111111111111111111"),
-                    children: new IComposite[]
+                QuestionnaireDocument questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(Guid.Parse("11111111111111111111111111111111"), 
+                    new IComposite[]
                     {
-                        Abc.Create.Entity.MultyOptionsQuestion(id: yesNoQuestionId, 
+                        Create.Entity.MultyOptionsQuestion(yesNoQuestionId, 
                             variable:yesNoQuestionVariable,
                             yesNoView: true,
                             options: new List<Answer> {
-                                Abc.Create.Entity.Answer("one", 1),
-                                Abc.Create.Entity.Answer("two", 2),
+                                Create.Entity.Answer("one", 1),
+                                Create.Entity.Answer("two", 2)
                                 }
                         ),
-                        Abc.Create.Entity.Group(groupId, "Group X", null, $"IsAnswered({yesNoQuestionVariable})", false, null)
+                        Create.Entity.Group(groupId, "Group X", null, $"IsAnswered({yesNoQuestionVariable})", false, null)
                     });
 
-                var interview = SetupInterview(questionnaireDocument);
+                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
 
                 using (var eventContext = new EventContext())
                 {
@@ -45,7 +44,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                     return new InvokeResults
                     {
-                        GroupEnabled = eventContext.AnyEvent<GroupsEnabled>(x => x.Groups.Any(q => q.Id == groupId)),
+                        GroupEnabled = eventContext.AnyEvent<GroupsEnabled>(x => x.Groups.Any(q => q.Id == groupId))
                     };
                 }
             });

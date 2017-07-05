@@ -135,9 +135,6 @@
   <data name="StartInfo" xml:space="preserve">
     <value>Начать web интервью для {0}</value>
   </data>
-  <data name="WebInterviewSetup_Description" xml:space="preserve">
-    <value>Чтоб начать web интервью выберите интервьюера</value>
-  </data>
   <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
     <value>Настройка web интервью</value>
   </data>
@@ -147,15 +144,12 @@
   <data name="WebInterviewStarted" xml:space="preserve">
     <value>Web интервью для {0} начато</value>
   </data>
-  <data name="WebLinkTitle" xml:space="preserve">
-    <value>Используйте эту ссылку чтоб начать интервью</value>
-  </data>
   <data name="DownloadTitle" xml:space="preserve">
     <value>Скачать ({0})</value>
     <comment>{0} - count of interviews in file</comment>
   </data>
-  <data name="ExportTitle" xml:space="preserve">
-    <value>Вы можете скачать интервью в статусе `Интервьюер назначен` для доставки ссылок респондентам</value>
+  <data name="ExportAssignmentsTitle" xml:space="preserve">
+    <value>Вы можете скачать задания назначенные интервьюерам для доставки ссылок респондентам</value>
   </data>
   <data name="StopWebInterview" xml:space="preserve">
     <value>Остановить web интервью</value>

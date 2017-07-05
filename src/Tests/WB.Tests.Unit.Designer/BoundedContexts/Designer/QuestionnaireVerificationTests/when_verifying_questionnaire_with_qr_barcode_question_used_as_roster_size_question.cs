@@ -4,7 +4,6 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 
@@ -12,22 +11,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_qr_barcode_question_used_as_roster_size_question : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             questionnaire = CreateQuestionnaireDocument(
                 new Group()
-            {
-                PublicKey = groupId,
-                IsRoster = true,
-                VariableName = "a",
-                RosterSizeSource = RosterSizeSourceType.Question,
-                RosterSizeQuestionId = rosterSizeQuestionId
-            },
-                new QRBarcodeQuestion()
-            {
-                PublicKey = rosterSizeQuestionId,
-                StataExportCaption = "var"
-            });
+                {
+                    PublicKey = groupId,
+                    IsRoster = true,
+                    VariableName = "a",
+                    RosterSizeSource = RosterSizeSourceType.Question,
+                    RosterSizeQuestionId = rosterSizeQuestionId
+                },
+                Create.QRBarcodeQuestion(
+                    rosterSizeQuestionId,
+                    variable: "var"
+                ));
 
             verifier = CreateQuestionnaireVerifier();
         };

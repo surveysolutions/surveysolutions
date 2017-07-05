@@ -41,7 +41,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public virtual async Task SendAnswerQuestionCommandAsync(AnswerQuestionCommand answerCommand)
         {
-            await this.ExecuteCommand(answerCommand).ConfigureAwait(false);
+            try
+            {
+                await this.ExecuteCommand(answerCommand).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Failed to answer question {answerCommand.Question}. CommandType: {answerCommand.GetType()}. Interview Id {answerCommand.InterviewId}", e);
+            }
         }
 
         public virtual Task SendRemoveAnswerCommandAsync(RemoveAnswerCommand command)
@@ -51,7 +58,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public async Task ExecuteActionAsync(Func<CancellationToken, Task> action, CancellationToken cancellationToken = default(CancellationToken))
         {
-            CancellationTokenSource cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken); //cancellationSource ?? new CancellationTokenSource();
+            CancellationTokenSource cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
             try
             {

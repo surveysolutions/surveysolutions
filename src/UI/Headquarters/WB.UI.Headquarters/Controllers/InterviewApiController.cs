@@ -50,7 +50,8 @@ namespace WB.UI.Headquarters.Controllers
                 QuestionnaireVersion = data.TemplateVersion,
                 TeamLeadName = data.ResponsibleName,
                 Status = data.Status,
-                SearchBy = data.SearchBy
+                SearchBy = data.SearchBy,
+                AssignmentId = data.AssignmentId
             };
 
             var allInterviews = this.allInterviewsViewFactory.Load(input);
@@ -73,7 +74,8 @@ namespace WB.UI.Headquarters.Controllers
                 SearchBy = data.SearchBy,
                 Status = data.Status,
                 ResponsibleName = data.ResponsibleName,
-                ViewerId = this.authorizedUser.Id
+                ViewerId = this.authorizedUser.Id,
+                AssignmentId = data.AssignmentId
             };
 
             var teamInterviews =  this.teamInterviewViewFactory.Load(input);

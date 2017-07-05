@@ -2,7 +2,7 @@
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{689346D7-30AC-420E-BC5B-588CC186A466}</ProjectGuid>
@@ -40,6 +40,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Implementation\Services\IDesignerApiService.cs" />
+    <Compile Include="Implementation\Services\TesterMapSynchronizer.cs" />
+    <Compile Include="Implementation\Services\TesterPlainInterviewFileStorage.cs" />
     <Compile Include="Implementation\Services\QuestionnaireImportService.cs" />
     <Compile Include="Properties\TesterUIResources.id-ID.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -50,6 +52,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>TesterUIResources.km.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\TesterUIResources.ru1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TesterUIResources.ru.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\TesterUIResources.th-TH.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -122,6 +129,9 @@
       <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.PictureChooser.4.4.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.PictureChooser.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\Portable.Ninject.3.3.1\lib\portable-net4+sl5+wp8+win8+wpa81+monotouch+monoandroid+Xamarin.iOS\Ninject.dll</HintPath>
       <Private>True</Private>
@@ -131,16 +141,13 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="SQLitePCLRaw.batteries_green, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a84b7dcfb1391f7f, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\SQLitePCLRaw.bundle_green.1.1.2\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.batteries_green.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\..\..\..\packages\SQLitePCLRaw.bundle_green.1.1.5\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.batteries_green.dll</HintPath>
     </Reference>
     <Reference Include="SQLitePCLRaw.batteries_v2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8226ea5df37bcae9, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\SQLitePCLRaw.bundle_green.1.1.2\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.batteries_v2.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\..\..\..\packages\SQLitePCLRaw.bundle_green.1.1.5\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.batteries_v2.dll</HintPath>
     </Reference>
     <Reference Include="SQLitePCLRaw.core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1488e028ca7ab535, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\SQLitePCLRaw.core.1.1.2\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.core.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\..\..\..\packages\SQLitePCLRaw.core.1.1.5\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.core.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.Extensions, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net45+win8+wpa81\System.Net.Http.Extensions.dll</HintPath>
@@ -187,11 +194,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Properties\TesterUIResources.es.resx">
       <SubType>Designer</SubType>
-      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>TesterUIResources.es1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\TesterUIResources.fr.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>TesterUIResources.fr1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\TesterUIResources.id-ID.resx">
@@ -203,7 +208,6 @@
       <LastGenOutput>TesterUIResources.km.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\TesterUIResources.pt.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>TesterUIResources.pt1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\TesterUIResources.resx">
@@ -211,8 +215,10 @@
       <LastGenOutput>TesterUIResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\TesterUIResources.ru-RU.resx">
+    <EmbeddedResource Include="Properties\TesterUIResources.ru.resx">
       <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TesterUIResources.ru1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\TesterUIResources.th-TH.resx">
       <Generator>ResXFileCodeGenerator</Generator>

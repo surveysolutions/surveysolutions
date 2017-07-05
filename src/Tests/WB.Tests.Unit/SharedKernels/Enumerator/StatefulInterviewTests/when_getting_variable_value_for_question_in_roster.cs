@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using Machine.Specifications;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
@@ -14,10 +11,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         Establish context = () =>
         {
             expectedVariableValue = 555;
-            questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             variableId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var variableRosterVector = new[] {0m};
+            var variableRosterVector = Create.RosterVector(0);
 
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(new []
             {
@@ -28,14 +24,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             });
 
             interview = Setup.StatefulInterview(questionnaireDocument);
-            interview.Apply(Create.Event.InterviewSynchronized(
-                Create.Entity.InterviewSynchronizationDto(variables: new Dictionary<InterviewItemId, object>
-                {
-                    {new InterviewItemId(variableId, variableRosterVector), expectedVariableValue}
-                })));
+            interview.Apply(Create.Event.VariablesChanged(Create.Entity.ChangedVariable(Create.Identity(variableId, variableRosterVector), expectedVariableValue)));
         };
 
-        Because of = () => actualVariableValue = interview.GetVariableValueByOrDeeperRosterLevel(variableId, new []{0m, 1m});
+        Because of = () => actualVariableValue = interview.GetVariableValueByOrDeeperRosterLevel(variableId, Create.RosterVector(0, 1));
 
         It should_reduce_roster_vector_to_find_target_variable_value = () => actualVariableValue.ShouldEqual(expectedVariableValue);
 
@@ -43,7 +35,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         private static Guid variableId;
         private static int expectedVariableValue;
         private static object actualVariableValue;
-        private static Guid questionnaireId;
     }
 }
 

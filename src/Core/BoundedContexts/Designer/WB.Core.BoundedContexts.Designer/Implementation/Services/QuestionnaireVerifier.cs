@@ -10,6 +10,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
+using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
@@ -107,7 +108,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Error<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionIsTooLong, "WB0104", index => string.Format(VerificationMessages.WB0104_ValidationConditionIsTooLong, index)),
             ErrorForTranslation<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsTooLong, "WB0105", index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index)),
             Error<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionIsEmpty, "WB0106", index => string.Format(VerificationMessages.WB0106_ValidationConditionIsEmpty, index)),
-            ErrorForTranslation<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsEmpty, "WB0107", index => string.Format(VerificationMessages.WB0107_ValidationMessageIsEmpty, index)),
+            
             Error<IQuestion>(OptionFilterExpressionHasLengthMoreThan10000Characters, "WB0028", VerificationMessages.WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters),
             Error<IQuestion>(QuestionWithOptionsFilterCannotBePrefilled, "WB0029", VerificationMessages.WB0029_QuestionWithOptionsFilterCannotBePrefilled),
             ErrorForTranslation<IQuestion>(QuestionTitleIsTooLong, "WB0259", VerificationMessages.WB0259_QuestionTitleIsTooLong),
@@ -137,17 +138,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.CriticalForLookupTable(LookupTableMoreThan10Columns, "WB0043", VerificationMessages.WB0043_LookupTableMoreThan11Columns),
             this.CriticalForLookupTable(LookupTableMoreThan5000Rows, "WB0044", VerificationMessages.WB0044_LookupTableMoreThan5000Rows),
             this.CriticalForLookupTable(LookupTableNotUniqueRowcodeValues, "WB0047", VerificationMessages.WB0047_LookupTableNotUniqueRowcodeValues),
-
             ErrorForAttachment(AttachmentHasEmptyContent, "WB0111", VerificationMessages.WB0111_AttachmentHasEmptyContent),
-
             ErrorForTranslation(TranslationNameIsInvalid, "WB0256", VerificationMessages.WB0256_TranslationNameIsInvalid),
             ErrorForTranslation(TranslationHasEmptyContent, "WB0257", VerificationMessages.WB0257_TranslationHasEmptyContent),
             ErrorForTranslation(TranslationsHasDuplicatedNames, "WB0258", VerificationMessages.WB0258_TranslationsHaveDuplicatedNames),
-
             Error(QuestionnaireHasRostersPropagationsExededLimit, "WB0261", VerificationMessages.WB0261_RosterStructureTooExplosive),
             Error<IGroup>(RosterHasPropagationExededLimit, "WB0262", VerificationMessages.WB0262_RosterHasTooBigPropagation),
             Error<IGroup>(FirstChapterHasEnablingCondition, "WB0263", VerificationMessages.WB0263_FirstChapterHasEnablingCondition),
             ErrorForTranslation<IComposite>(this.IsNotSupportSubstitution, "WB0268", VerificationMessages.WB0268_DoesNotSupportSubstitution),
+            Error<IQuestion>(QuestionTitleEmpty, "WB0269", VerificationMessages.WB0269_QuestionTitleIsEmpty),
 
             Error_ManyGpsPrefilledQuestions_WB0006,
             ErrorsByCircularReferences,
@@ -196,7 +195,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             QuestionType.Text,
             QuestionType.TextList,
             QuestionType.QRBarcode,
-            QuestionType.Multimedia
+            QuestionType.Multimedia,
+            QuestionType.Area
         };
 
         private static readonly HashSet<QuestionType> QuestionTypesValidToBeRosterTitles = new HashSet<QuestionType>
@@ -256,6 +256,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly ITranslationsService translationService;
         private readonly IQuestionnaireTranslator questionnaireTranslator;
         private readonly ITopologicalSorter<string> topologicalSorter;
+        private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
 
         private static readonly Regex VariableNameRegex = new Regex("^(?!.*[_]{2})[A-Za-z][_A-Za-z0-9]*(?<!_)$");
         private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w \-\(\)\\/]*$");
@@ -272,7 +273,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             IAttachmentService attachmentService,
             ITopologicalSorter<string> topologicalSorter, 
             ITranslationsService translationService, 
-            IQuestionnaireTranslator questionnaireTranslator)
+            IQuestionnaireTranslator questionnaireTranslator, 
+            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService)
         {
             this.expressionProcessor = expressionProcessor;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -286,6 +288,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.topologicalSorter = topologicalSorter;
             this.translationService = translationService;
             this.questionnaireTranslator = questionnaireTranslator;
+            this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
         }
 
         private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> AtomicVerifiers
@@ -548,8 +551,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             string resultAssembly;
 
+
+            var questionnaireVersionToCompileAssembly =
+                this.questionnaireCompilationVersionService.GetById(questionnaire.PublicKey)?.Version 
+                ?? Math.Max(20, this.engineVersionService.GetQuestionnaireContentVersion(questionnaire));
+
             return this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
-                questionnaire, this.engineVersionService.GetQuestionnaireContentVersion(questionnaire),
+                questionnaire, questionnaireVersionToCompileAssembly,
                 out resultAssembly);
         }
 
@@ -932,7 +940,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return string.IsNullOrWhiteSpace(macro.Name);
         }
 
-        private static bool MacroHasInvalidName(Macro macro, MultiLanguageQuestionnaireDocument questionnaire)
+        private bool MacroHasInvalidName(Macro macro, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return !IsVariableNameValid(macro.Name);
         }
@@ -967,7 +975,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return string.IsNullOrWhiteSpace(table.TableName);
         }
 
-        private static bool LookupTableHasInvalidName(Guid tableId, LookupTable table, MultiLanguageQuestionnaireDocument questionnaire)
+        private bool LookupTableHasInvalidName(Guid tableId, LookupTable table, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return !IsVariableNameValid(table.TableName);
         }
@@ -985,9 +993,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return lookupTableContent == null;
         }
 
-        private static bool LookupTableHasInvalidHeaders(LookupTable table, LookupTableContent tableContent, MultiLanguageQuestionnaireDocument questionnaire)
+        private bool LookupTableHasInvalidHeaders(LookupTable table, LookupTableContent tableContent, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            return !tableContent.VariableNames.All(IsVariableNameValid);
+            foreach (var tableContentVariableName in tableContent.VariableNames)
+            {
+                if (!IsVariableNameValid(tableContentVariableName))
+                    return true;
+
+                if(!string.IsNullOrWhiteSpace(tableContentVariableName) && this.keywordsProvider.GetAllReservedKeywords().Contains(tableContentVariableName.ToLower()))
+                    return true;
+            }
+
+            return false;
         }
 
         private static bool LookupTableMoreThan10Columns(LookupTable table, LookupTableContent tableContent, MultiLanguageQuestionnaireDocument questionnaire)
@@ -1276,14 +1293,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool QuestionTitleIsTooLong(IQuestion question)
             => question.QuestionText?.Length > 500;
 
+        private static bool QuestionTitleEmpty(IQuestion question)
+            => string.IsNullOrWhiteSpace(question.QuestionText);
+
         private static bool GroupTitleIsTooLong(IGroup group)
             => group.Title?.Length > 500;
 
         private static bool ValidationConditionIsEmpty(ValidationCondition validationCondition)
             => string.IsNullOrWhiteSpace(validationCondition.Expression);
 
-        private static bool ValidationMessageIsEmpty(ValidationCondition validationCondition)
-            => string.IsNullOrWhiteSpace(validationCondition.Message);
+        /*private static bool ValidationMessageIsEmpty(ValidationCondition validationCondition)
+            => string.IsNullOrWhiteSpace(validationCondition.Message);*/
 
         private static bool IsQuestionAllowedToBeRosterSizeSource(IQuestion question)
             => IsNumericRosterSizeQuestion(question) ||
@@ -1372,13 +1392,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return !VariableNameRegex.IsMatch(question.StataExportCaption);
         }
 
-        private static bool IsVariableNameValid(string variableName)
+        private bool IsVariableNameValid(string variableName)
         {
             if (string.IsNullOrEmpty(variableName))
                 return true;
 
             if (variableName.Length > DefaultVariableLengthLimit)
                 return false;
+
             return VariableNameRegex.IsMatch(variableName);
         }
         
@@ -1404,14 +1425,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return string.IsNullOrEmpty(question.StataExportCaption);
         }
 
-        private static bool VariableHasInvalidName(IVariable variable)
+        private bool VariableHasInvalidName(IVariable variable)
         {
             if (string.IsNullOrWhiteSpace(variable.Name))
                 return false;
             return !IsVariableNameValid(variable.Name);
         }
 
-        private static bool RosterHasInvalidVariableName(IGroup group)
+        private bool RosterHasInvalidVariableName(IGroup group)
         {
             if (!group.IsRoster)
                 return false;

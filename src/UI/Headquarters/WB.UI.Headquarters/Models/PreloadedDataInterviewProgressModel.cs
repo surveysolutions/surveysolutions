@@ -1,4 +1,5 @@
 ﻿using System;
+using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.Models

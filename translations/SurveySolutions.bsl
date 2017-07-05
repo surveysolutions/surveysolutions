@@ -15,6 +15,7 @@
           <lis>
             <li lc="nn-nn" tx="You have already imported another questionnaire with title '{0}' from Designer. If you still want to import this particular one, please give it a different name it in Designer." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Вы уже импотрировали другой опросник с таким заголовком '{0}'. Пожалуйста переименуйте этот опросник на Дизайнере, если хотите импортировать его." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="您已经从问卷设计网站中导入了另外一个标题为“{0}”的问卷。如果您仍然要导入这个问卷，请在问卷设计网站中将问卷改为一个不同的名称。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\CommandValidatorsMessages.resx" nm="UserDontHavePermissionsToAnswer" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="CommandValidatorsMessages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -37,6 +38,7 @@
         <it rn="Resources\ErrorMessages.resx" nm="PleaseFillCaptcha" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="ErrorMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Please fill in the captcha field" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="请填写验证码" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\ErrorMessages.resx" nm="Questionnaire_verification_failed" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="ErrorMessages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -45,7 +47,7 @@
             <li lc="pt" tx="Questionário solicitado &quot;{0}&quot; tem erros. Por favor, verifique se o questionário sobre Designer." ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="The questionnaire &quot;{0}&quot; has compilation errors. Please correct them in Designer." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Требуемый вопросник «{0}» имеет ошибки. Пожалуйста, проверьте вопросник на дизайнере." ts="Translated" qs="Approved" />
-            <li lc="zh" tx="请求的问卷&quot;{0}&quot;存在错误。请在问卷设计网站上验证问卷。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="zh" tx="问卷&quot;{0}&quot;存在编译错误。请在问卷设计网站上验证问卷。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\ErrorMessages.resx" nm="RequestTimeout" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="ErrorMessages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -63,7 +65,7 @@
             <li lc="pt" tx="Ocorreu um erro interno do servidor. Entre em contato com o suporte ao cliente de soluções de pesquisa." ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Internal server error occurred. Please contact the Survey Solutions customer support team at support@mysurvey.solutions." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Произошла внутренняя ошибка сервера. Пожалуйста, свяжитесь со службой поддержки Survey Solutions" ts="Translated" qs="Approved" />
-            <li lc="zh" tx="服务器内部出现了错误。请联系Survey Solutions客户支持。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="zh" tx="服务器出现内部错误。请联系Survey Solutions客户支持。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\ErrorMessages.resx" nm="ServiceUnavailable" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="ErrorMessages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -72,7 +74,7 @@
             <li lc="pt" tx="Servidor não está disponível.  Por favor, certifique-se de que o site 'Designer' está disponível e não é no modo de manutenção" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
             <li lc="nn-nn" tx="Designer unavailable.  Please make sure that Designer is not in the maintenance mode" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Сервер недоступен. Пожалуйста, убедитесь, что веб-сайт «Designer» доступен и он не находится в режиме обслуживания" ts="Translated" qs="Approved" />
-            <li lc="zh" tx="服务器不可用。请确保问卷设计网站可用且没有处于维护模式" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="问卷设计网站不可用。请确保问卷设计网站可用且没有处于维护模式" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\ErrorMessages.resx" nm="SiteAccessNotAllowed" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="ErrorMessages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -81,7 +83,7 @@
             <li lc="pt" tx="Você não tem acesso a este site. Contacte o administrador." ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="You do not have permission to access this site. Contact your administrator." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="У вас нет доступа к этому сайту. Обратитесь к администратору." ts="Translated" qs="Approved" />
-            <li lc="zh" tx="您不能访问这个网站。请联系管理员。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="zh" tx="您没有权限访问这个网站。请联系管理员。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\ErrorMessages.resx" nm="TemplateNotFound" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="ErrorMessages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -90,7 +92,7 @@
             <li lc="pt" tx="Questionário solicitado &quot;{0}&quot; não pode ser encontrado. Por favor, atualize a lista de questionários." ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="The questionnaire &quot;{0}&quot; cannot be found. Please refresh the list of questionnaires." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Не удается найти запрошенный вопросник «{0}». Пожалуйста обновите список вопросников." ts="Translated" qs="Approved" />
-            <li lc="zh" tx="找不到请求的问卷&quot;{0}&quot;。请刷新问卷列表。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="zh" tx="找不到问卷&quot;{0}&quot;。请刷新问卷列表。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\FileBasedDataExportRepositoryWriterMessages.resx" nm="Administrator" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="FileBasedDataExportRepositoryWriterMessages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -143,7 +145,7 @@
             <li lc="nn-nn" tx="Interview with id '{0}' is missing" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервью с id «{0}»-отсутствует" ts="Translated" qs="Approved" />
             <li lc="fr" tx="L'entretien avec l'identifiant « {0} » est manquant" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="没有编号为'{0}'的访谈" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="编号为'{0}'的访谈缺失" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Entrevista com id '{0}' está ausente" ts="Translated" qs="ToReview" />
           </lis>
         </it>
@@ -188,7 +190,7 @@
             <li lc="nn-nn" tx="User name '{0}' is already taken by an archived user. Please choose a different user name." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Имя «{0}» используется архивным пользователем" ts="Translated" qs="Approved" />
             <li lc="fr" tx="Nom d’utilisateur « {0} » est déjà prise par un utilisateur archivé" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="zh" tx="用户名'{0}'已被归档用户使用" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="zh" tx="用户名'{0}'已被归档用户占用。请选择一个不同的用户名。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="pt" tx="Nome de usuário '{0}' é tomada pelos usuários arquivados" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
@@ -197,7 +199,7 @@
             <li lc="nn-nn" tx="User name '{0}' is already taken. Please choose another user name." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Имя «{0}» уже используется" ts="Translated" qs="Approved" />
             <li lc="fr" tx="Nom de l’utilisateur « {0} » est déjà prise" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="zh" tx="用户名'{0}'已被使用" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="zh" tx="用户名'{0}'已被占用。请选择一个不同的用户名。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="pt" tx="Nome de usuário '{0}' é tomado" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
@@ -205,12 +207,13 @@
           <lis>
             <li lc="nn-nn" tx="You can't unarchive interviewer {0} until supervisor is unarchived" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервьюер {0} не может быть разархивирован, до тех пор, пока супервизор заархивирован" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="在取消归档督导员之前，您不能将调查员{0}取消归档" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\PreloadingVerificationMessages.resx" nm="PL0001_NoQuestionnaire" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="PreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="[PL0001] Questionnaire is missing in HQ" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="[PL0001] 问卷模板缺失。" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="[PL0001] 总部中缺少问卷" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="[PL0001] Modelo de questionário está faltando." er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
@@ -303,15 +306,15 @@
         <it rn="Resources\PreloadingVerificationMessages.resx" nm="PL0014_ParsedValueIsNotAllowed" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="PreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="[PL0014] Value not allowed for this question in questionnaire" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="[PL0014] 提供的问题数值不被允许。" ts="Translated" qs="ToReview" />
-            <li lc="pt" tx="[PL0014] Valor da pergunta fornecido não é permitido." er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="zh" tx="[PL0014] 提供的问题数值不被允许。" ts="Changed" qs="ToReview" />
+            <li lc="pt" tx="[PL0014] Valor da pergunta fornecido não é permitido." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\PreloadingVerificationMessages.resx" nm="PL0015_QuestionTypeIsIncorrect" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="PreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="[PL0015] Type of question is not correct." ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="[PL0015] 问题类型不正确。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="pt" tx="[PL0015] Tipo de pergunta não é correto." ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="[PL0015] 问题类型不正确。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="pt" tx="[PL0015] Tipo de pergunta não é correto." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\PreloadingVerificationMessages.resx" nm="PL0016_ExpectedDateTimeNotParsed" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="PreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -452,72 +455,84 @@
           <lis>
             <li lc="nn-nn" tx="If the interview you are trying to locate is not in the list, please instruct the interviewer to complete the interview and synchronize again." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Если интервью, которое вы пытаетесь найти отсутствует в списке, пожалуйста, попросите интервьювера закрыть интервью и повторить синхронизацию." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="如果您要查找的访谈不在列表中，请让调查员完成问卷并同步。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\TroubleshootingMessages.resx" nm="MissingCensusInterviews_SomeBrokenPackages_Message" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="TroubleshootingMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="If the interview you are trying to locate is not in the list, please instruct the interviewer to complete the interview and synchronize again. Then, search for the interview again. If the interview is not located on the second search, contact support team." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Если интервью, которые вы пытаетесь найти отсутствует в списке, пожалуйста, попросите интервьювера закрыть интервью и повторить синхронизацию и повторите поиск заново. Если и после этого вы не увидите интервью в списке, то обратитесь в службу поддержки." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="如果您要查找的访谈不在列表中，请让调查员完成问卷并同步。然后再次搜索访谈。如果再次搜索后仍然无法找到访谈，请联系支持团队。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\TroubleshootingMessages.resx" nm="NoData_ContactSupport" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="TroubleshootingMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="The data from interview {0} were corrupted. Contact support to recover that interview" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервью  {0} повреждено. Обратитесь в службу поддержки для его восстановления." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="访谈{0}的数据损坏。请联系支持恢复访谈。" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\TroubleshootingMessages.resx" nm="NoData_ContactSupportWithMoreDetails" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="TroubleshootingMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Please contact support to provide more details" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Пожалуйста обратитесь в службу поддержки для предоставления более подробной информации" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="请联系支持提供更多详细信息" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\TroubleshootingMessages.resx" nm="NoData_InterveiwWasNotUploadedYet" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="TroubleshootingMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interview {0} has not been synced yet" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервью  {0} еще не было загружено на сервер." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="访谈{0}还没有被同步" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\TroubleshootingMessages.resx" nm="NoData_InterviewDeleted" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="TroubleshootingMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interview {0} was deleted by HQ or Administrator, and thus cannot be recovered" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервью  {0} было удалено HQ или администратором и не может быть восстановлено" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="访谈{0}被总部或管理员删除，因此无法恢复" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\TroubleshootingMessages.resx" nm="NoData_InterviewerChangedDevice" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="TroubleshootingMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="The interviewer changed tablets. The data for interview {0} might be lost because data are deleted when interviewers move from one tablet to another. If this is the case, that interview cannot be recovered" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервьювер сменил устройство. Данные по интервью  {0} могли быть утеряны в связи с перепривязкой устройств. В этом случае данные по интервью не могут быть восстановлены." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="调查员更换了平板电脑。访谈{0}的数据可能已经丢失，因为当调查员从一个平板电脑换到另外一个平板电脑的时候，数据会被删除。如果是这种情况，这个访谈不能被恢复。" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\TroubleshootingMessages.resx" nm="NoData_InterviewWasNotReceived" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="TroubleshootingMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interview {0} has not yet been received by interviewer {1}. The interviewer has not synced yet." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервью  {0} еще не было получено ответвенным за него интервьювером {1}." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="访谈{0}还没有被调查员{1}收到。调查员还没有同步。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\TroubleshootingMessages.resx" nm="NoData_InterviewWasReassigned" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="TroubleshootingMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interview {0} was re-assigned to a different interviewer. The interview is currently on that latter interviewer's tablet." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервью  {0} было переназначено на другого интервьювера. Интревью находится на устройстве ответственного за него человека и еще не было синхронизировано с сервером." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="访谈{0}被重新分配到了另外一个调查员。现在这个访谈在后一个调查员的平板电脑上。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\TroubleshootingMessages.resx" nm="NoData_NoIssuesInterviewOnServer" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="TroubleshootingMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interview {0} has no issues recorded on the server.&lt;br /&gt;Please get more information from the person currently responsible for that interview.&lt;br /&gt;If problem persists, contact support to provide further details" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Проблем с данным интервью {0} на сервере не обнаружено.&lt;br /&gt;Уточните ситуацию у интервьюера.&lt;br /&gt;Если проблема не разрешится, обратитесь в службу технической поддержки для более детальной информации." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="服务器中没有记录访谈{0}的任何问题。&lt;br /&gt;请从负责这个访谈的人员中获得更多的信息。&lt;br /&gt;如果问题仍然存在，请联系支持以提供进一步的详细信息" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\TroubleshootingMessages.resx" nm="NoData_NotFound" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="TroubleshootingMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interview {0} cannot be found" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервью  {0} не найдено" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="未找到访谈{0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\TroubleshootingMessages.resx" nm="NoData_QuestionnaireDeleted" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="TroubleshootingMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="The server administrator deleted the questionnaire for interview {0}. As a consequence, all interviews associated with this questionnaire were deleted and cannot be restored" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Опросник интервью  {0} был удален администратором сервера. Все интервью, собранные по этому опроснику утеряны и не могут быть восстановлены." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="服务器管理员删除了访谈{0}的问卷。因此，所有基于该问卷的访谈都已经被删除且无法恢复" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\UserPreloadingServiceMessages.resx" nm="FileColumnsCantBeMappedFormat" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="UserPreloadingServiceMessages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -662,45 +677,53 @@
         <it rn="App_GlobalResources\BatchUpload.resx" nm="AssignedToMultipleEnumerators" ns="{0} - count of enumerators (always &gt; 1)" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Assigned to {0} enumerators" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="已分配给{0}个调查员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="AssignedToMultipleSupervisors" ns="{0} - count of supervisors (always &gt; 1)" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Assigned to {0} supervisors" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="已分配给{0}个督导员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="AssignedToSingleEnumerator" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Assigned to 1 enumerator" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="已分配给1个调查员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="AssignedToSingleSupervisor" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Assigned to 1 supervisor" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="已分配给1个督导员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="BackToImport" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Back to import" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Вернуться на страницу импорта опросника" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="返回导入" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="BatchDescription" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Upload archive with identifying tab file and collected data." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Загрузить архив с заполненым tab файлом и собранными данными.&#xD;&#xA;Вы можете использовать файлы полученные с помощью &quot;Экспорта данных&quot;" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="zh" tx="上传包含识别.tab文件和已收集数据的归档。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="BatchFileVerificationFailed" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Verification of the uploaded file failed" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Проверка загружаемого файла не удалась" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="上传文件验证失败" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="BatchTitle" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Identifying and collected data (archive)" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Идентифицирующие и собранные данные (архив)" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="识别和已收集的数据（归档）" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="BatchUpload_Title" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -716,6 +739,7 @@
           <lis>
             <li lc="nn-nn" tx="creating multiple interviews" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="создание многих интервью" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="正在创建多个访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="BrowseTeams" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -731,6 +755,7 @@
           <lis>
             <li lc="nn-nn" tx="Cell" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Ячейка" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="单元" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="Code" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -754,6 +779,7 @@
         <it rn="App_GlobalResources\BatchUpload.resx" nm="CreateInterviews" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Create interviews" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="创建访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="CreateSample" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -778,6 +804,7 @@
           <lis>
             <li lc="nn-nn" tx="Creating multiple interviews" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Создать множество интервью  используя файл" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="正在创建多个访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="CreatingUsers" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -792,11 +819,13 @@
         <it rn="App_GlobalResources\BatchUpload.resx" nm="DataForMultipleInterviewsFound" ns="{0} - count of interviews (always &gt; 1)" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Data for {0} interviews found" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="找到{0}个访谈的数据" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="DataForSingleInterviewFound" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Data for 1 interview found" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="找到1个访谈的数据" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="DataIsValid" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -830,6 +859,7 @@
           <lis>
             <li lc="nn-nn" tx="Variables marked as Identifying in Designer. Download a" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Список полей, которые обязательны для создания интервью. Загрузить шаблон в формате tab для опросника." ts="Changed" qs="Approved" />
+            <li lc="zh" tx="问卷设计网站中标记为识别问题的变量。下载" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="DownloadInvalidInterviews" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -845,12 +875,14 @@
           <lis>
             <li lc="nn-nn" tx=".tab template." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="tab. шаблон для опросника" ts="Translated" qs="Approved" />
+            <li lc="zh" tx=".tab模板。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="DownloadTabTemplate" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Download .tab template for this questionnaire" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Скачать tab шаблон для этого опросника" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="下载问卷的.tab模板" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="DownloadTemplateArchive" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -866,6 +898,7 @@
           <lis>
             <li lc="nn-nn" tx="If usernames are not specified you will need to assign a supervisor to all interviews in a later step." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Если имена пользователей не указаны в загружаемом файле, вы должны будете позже указать одного супервизора для всех интервью." ts="Changed" qs="Approved" />
+            <li lc="zh" tx="如果未指定用户名，您需要在后续步骤中对所有的访谈分配督导员。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="EstimatedTime" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -881,6 +914,7 @@
           <lis>
             <li lc="nn-nn" tx="File" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Файл" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="文件" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="FileName" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -959,17 +993,20 @@
           <lis>
             <li lc="nn-nn" tx="Hide list of required identifying data" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Спрятать список обязательных идентифицирующих данных." ts="Changed" qs="Approved" />
+            <li lc="zh" tx="隐藏必填的识别数据列表" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="ImportFrom" ns="{0} - imported file name, {1} - questionnaire name and version " rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Importing information from {0} for {1}" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Импортирование из {0} для {1}" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="正在从{0}和{1}中导入信息" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="Importing" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Importing" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="导入中" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="ImportInProgress" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -993,17 +1030,20 @@
         <it rn="App_GlobalResources\BatchUpload.resx" nm="ImportInterviews_Done" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Done:" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="完成：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="ImportInterviews_NoneFailed" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="None failed" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="没有失败" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="ImportInterviews_PageTitle" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Creating multiple interviews with batch upload" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Создание многих интервью загрузкой файла" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="通过批量上传模式创建多个访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="ImportInterviews_SelectButtonText" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -1027,11 +1067,13 @@
         <it rn="App_GlobalResources\BatchUpload.resx" nm="ImportInterviewsFor" ns="{0} - questionnaire name and version" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Importing interviews for {0}" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="正在为{0}导入访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="ImportProgressFormat" ns="{0} - count of created interviews; {1} - total number to be created" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="{0} of {1}" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="{1}中的{0}个" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="ImportSample" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -1056,11 +1098,13 @@
           <lis>
             <li lc="nn-nn" tx="No interviews were created" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервью не созданы " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
+            <li lc="zh" tx="没有创建访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="InterviewsImport_ImportingProgressPageTitle" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Importing interviews" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="正在导入访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="InVerificationProcess" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -1094,12 +1138,14 @@
           <lis>
             <li lc="nn-nn" tx="You can create individual interiews by entering all required data in {0}" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Вы можете создать одно интервью при помощи ввода всех необходимых данных используя {0}." ts="Changed" qs="Approved" />
+            <li lc="zh" tx="您可以通过输入{0}中必须填写的数据创建单个访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="ManualModeLinkTitle" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="manual mode" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="ручной режим" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="手动模式" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="Message" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -1115,16 +1161,19 @@
           <lis>
             <li lc="nn-nn" tx="{0} errors found" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Обнаружено {0} ошибок" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="找到{0}个错误" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="MultipleInterviewFailedToBeCreated" ns="{0} - count of created interviews (always &gt; 1)" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="{0} interviews failed to be created" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="{0}个访谈创建失败" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="MultipleInterviewsCreated" ns="{0} - count of created interviews (always &gt; 1)" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="{0} interviews created" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="已经创建{0}个访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="NumberInterviewCreated" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -1167,30 +1216,35 @@
           <lis>
             <li lc="nn-nn" tx="Required identifying data" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Обязательные идентифицирующие данные." ts="Changed" qs="Approved" />
+            <li lc="zh" tx="必填的识别数据" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="Prerequisite_FileOpen" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Uploaded file cannot be opened. Please check that it is in correct format." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Не удаётся открыть загруженный файл. Пожалуйста, убедитесь в правильности его формата." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="不能打开上传的文件。请检查格式是否正确。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="Prerequisite_TabOrTxtFile" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Only .tab and .txt files are allowed for upload." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Только файлы с расширением .tab и .txt разрешены для загрузки." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="只允许上传.tab和.txt格式的文件。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="Prerequisite_UnsupportedFiles" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="The following files are not supported: {0}." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Следующие файлы не поддерживаются для загрузки: {0}." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="不支持下面的文件：{0}。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="Prerequisite_ZipFile" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Only .zip files are allowed for upload." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Только файлы с расширением .zip разрешены для загрузки." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="只允许上传.zip格式的文件。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="Processing" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -1261,6 +1315,7 @@
             <li lc="nn-nn" tx="Go to running interview import process" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Перейти к запущенному процессу импорта интервью" ts="Translated" qs="Approved" />
             <li lc="pt" tx="Ir para o processo de importação de entrevista em execução" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="正在进行的导入过程" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="SampleCreationCompleted" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -1302,36 +1357,42 @@
         <it rn="App_GlobalResources\BatchUpload.resx" nm="SelectSupervisorToAssign" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Select the supervisor for this batch" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="选择督导员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="SimpleDescription" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Upload tab separated file with necessary identifying data. Optionally, specify usernames of supervisors or enumerators in the _responsible column." ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Загрузите tab форматированные данные со всеми необходимыми идентифицирующими данными и ответственными людьми (опционально)" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="上传包含必填识别信息且以tab分隔的文件。可以在_responsible一列指定调查员或督导员的名称。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="SimpleTitle" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Identifying data only" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Только идентифицирующие данные (один файл)" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="仅识别数据" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="SingleErrorFound" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="1 error found" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="1 ошибка найдена" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="发现1个错误" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="SingleInterviewCreated" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="1 interview created" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="1 интервью создано" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="已创建1个访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="SingleInterviewFailedToBeCreated" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="1 interview failed to be created" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="1 интервью не удалось создать" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="1个访谈创建失败" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="Status" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -1347,6 +1408,7 @@
           <lis>
             <li lc="nn-nn" tx="Supervisor must be selected" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Необходимо выбрать супервизора" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="必须选择督导员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="Upload" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -1371,6 +1433,7 @@
           <lis>
             <li lc="nn-nn" tx="Upload a file with identifying data to create new interviews.&#xD;&#xA;Specify usernames for supervisors or enumerators to make batch interview assignments." ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Создание множества интервью с помощью загрузки файла с обязательными идентифицирующими данными. Вы можете выборочно добавить ответственных для интервью (супервизоров и интервьюеров) по их именам." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="上传一个包含识别数据的文件以创建新的访谈。指定督导员或调查员用户名来批量分配调查任务。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="Uploaded" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -1422,6 +1485,7 @@
           <lis>
             <li lc="nn-nn" tx="Upload .tab file" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Загрузить .tab файл" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="上传.tab文件" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="UploadUsers" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -1437,6 +1501,7 @@
           <lis>
             <li lc="nn-nn" tx="Only files with {0} and {1} extensions are allowed for upload." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Только файлы с расширением {0} или {1} разрешены для загрузки." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="只允许上传扩展名为{0}和{1}的文件。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="UploadUsers_Title" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -1461,6 +1526,7 @@
           <lis>
             <li lc="nn-nn" tx="Upload .zip file" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Загрузить .zip файл" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="上传.zip文件" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="UserBatchUploads" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -1520,6 +1586,7 @@
         <it rn="App_GlobalResources\BatchUpload.resx" nm="VerificationCompleted" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Verification complete" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="验证完成" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="Verify" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -1553,6 +1620,7 @@
           <lis>
             <li lc="nn-nn" tx="View list of required identifying data" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Посмотреть список обязательных данных" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="查看必填的识别数据列表" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Common.resx" nm="Admin" rc="" dnt="false" nms="Resources" cln="Common" bac="Content" hgt="0" wdt="0">
@@ -1587,7 +1655,7 @@
             <li lc="nn-nn" tx="Approve" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Утвердить" ts="Translated" qs="Approved" />
             <li lc="fr" tx="Approuver" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="审核通过" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="zh" tx="审核通过" er="" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Aprovar" ts="Translated" qs="ToReview" />
           </lis>
         </it>
@@ -1595,6 +1663,7 @@
           <lis>
             <li lc="nn-nn" tx="Assign" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Назначить" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="分配" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Common.resx" nm="Assignment" rc="" dnt="false" nms="Resources" cln="Common" bac="Content" hgt="0" wdt="0">
@@ -1673,12 +1742,14 @@
           <lis>
             <li lc="nn-nn" tx="Hide" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Спрятать" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="隐藏" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Common.resx" nm="InterviewKey" rc="" dnt="false" nms="Resources" cln="Common" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interview Key" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Идентификатор" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="访谈键" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Common.resx" nm="Interviews" rc="" dnt="false" nms="Resources" cln="Common" bac="Content" hgt="0" wdt="0">
@@ -1738,12 +1809,14 @@
         <it rn="App_GlobalResources\Common.resx" nm="NewVersionAvailable" rc="" dnt="false" nms="Resources" cln="Common" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="New Version Available:" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="有新版本：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Common.resx" nm="No" rc="" dnt="false" nms="Resources" cln="Common" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="No" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Нет" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="否" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Common.resx" nm="NoResultsFound" rc="" dnt="false" nms="Resources" cln="Common" bac="Content" hgt="0" wdt="0">
@@ -1849,6 +1922,7 @@
           <lis>
             <li lc="nn-nn" tx="Show identifying" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Показать идентифицирующие" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="显示识别" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Common.resx" nm="SignIn" rc="" dnt="false" nms="Resources" cln="Common" bac="Content" hgt="0" wdt="0">
@@ -1918,6 +1992,7 @@
           <lis>
             <li lc="nn-nn" tx="Yes" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Да" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="是" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Common.resx" nm="НasErrors" rc="" dnt="false" nms="Resources" cln="Common" bac="Content" hgt="0" wdt="0">
@@ -2041,6 +2116,7 @@
           <lis>
             <li lc="nn-nn" tx="Delete questionnaire" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Удалить опросник" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="删除问卷" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Dashboard.resx" nm="History" rc="" dnt="false" nms="Resources" cln="Dashboard" bac="Content" hgt="0" wdt="0">
@@ -2056,6 +2132,7 @@
           <lis>
             <li lc="nn-nn" tx="Import date" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Дата загрузки" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="导入日期" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Dashboard.resx" nm="ImportTemplate" rc="" dnt="false" nms="Resources" cln="Dashboard" bac="Content" hgt="0" wdt="0">
@@ -2089,6 +2166,7 @@
           <lis>
             <li lc="nn-nn" tx="Questionnaire" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Опросник" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="问卷" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Dashboard.resx" nm="Questionnaires" rc="" dnt="false" nms="Resources" cln="Dashboard" bac="Content" hgt="0" wdt="0">
@@ -2104,12 +2182,14 @@
           <lis>
             <li lc="nn-nn" tx="1. Click Import Template  button to load a questionnaire from Designer" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="1. Кликните по кнопке Иморт Опросника для загрузки шаблона с Дизайнера" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="1. 点击导入模板按钮从问卷设计网站导入一个问卷" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Dashboard.resx" nm="SurveySetupIntroMessage2" rc="" dnt="false" nms="Resources" cln="Dashboard" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="2. Click on a questionnaire from the list to create interview assignments" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="2. Кликните по опроснику из списка для создания интервью" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="2. 点击列表中的一个问卷创建新的访谈任务" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Dashboard.resx" nm="Title" rc="" dnt="false" nms="Resources" cln="Dashboard" bac="Content" hgt="0" wdt="0">
@@ -2134,6 +2214,7 @@
           <lis>
             <li lc="nn-nn" tx="Web interview setup" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Настройка web интервью" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="网络访谈设置" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="BinaryData" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
@@ -2149,18 +2230,21 @@
           <lis>
             <li lc="nn-nn" tx="Archive with binary data (e.g., pictures)" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Собранные бинарные данные (изображения)" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="二进制数据存档（图片等）" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="Bytes" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="MB" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="МБ" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="兆" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="Completed" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Completed" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Обработано" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="已完成" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="ConfirmStop" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
@@ -2194,6 +2278,7 @@
           <lis>
             <li lc="nn-nn" tx="Not generated" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Не создавалось" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="未生成" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="DDI" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
@@ -2209,18 +2294,21 @@
           <lis>
             <li lc="nn-nn" tx="Data Documentation Initiative XML data" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="DDI данные в формате XML" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="数据文档倡议（DDI）XML数据" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="Download" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Download" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Скачать" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="下载" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="ErrorThereAreRunningProcesses" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="You can't change the export settings because the export process is already running." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Вы не можите изменять настройки экспорта пока имеются запущенные экспорт процессы." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="您不能改变导出设置，因为导出过程已经开始运行" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="export" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
@@ -2236,18 +2324,21 @@
           <lis>
             <li lc="nn-nn" tx="Pressing Generate button creates a data archive of interviews available on the server at that time. The time of archive creation and the archive size are shown in the table. The last generated data archive can be downloaded by pressing Download button. Press Generate button again to create a new archive." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="По нажатию кнопки «Создать» генерируется архив данных интервью доступных на сервере в текущий момент. Время создания и размер архива показаны в таблице. Последний созданный архив можно загрузить нажав  кнопку «Скачать». Нажмите кнопку «Создать» для того чтобы получить обновленный архив" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="点击生成按钮创建一个数据归档。表格中将显示归档创建的时间和大小。最近一次生成的数据归档可以通过点击下载按钮下载。要创建新的归档，请再次点击生成按钮。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="ExportRange" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Export range:" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Диапазон экспорта:" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="导出范围：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="FileSizeTitle" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="File size" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Размер файла" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="文件大小" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="Format" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
@@ -2263,30 +2354,35 @@
           <lis>
             <li lc="nn-nn" tx="format" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="формат" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="格式" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="Generate" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Generate" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Создать" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="生成" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="Generating" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Generating" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Создается" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="生成中" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="ItemsInQueue" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Items in export queue:" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Количество экспортных файлов в очереди: " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
+            <li lc="ru" tx="Количество экспортных файлов в очереди: " er="" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="导出队列中的项目：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="LastGeneratedTitle" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Last generated" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Дата генерации" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="最近一次生成" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="LastUpdateDate" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
@@ -2302,6 +2398,7 @@
           <lis>
             <li lc="nn-nn" tx="Main Survey Data" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Основные данные обследования" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="调查主数据" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="Metadata" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
@@ -2326,6 +2423,7 @@
           <lis>
             <li lc="nn-nn" tx="No Data available" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Данные недоступны" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="没有数据" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="ParaData" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
@@ -2341,6 +2439,7 @@
           <lis>
             <li lc="nn-nn" tx="Metadata on the interview process (events and timing)" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Доступные данные, описывающие процесс сбора" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="访谈过程的元数据（事件及时间）" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="Progress" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
@@ -2356,6 +2455,7 @@
           <lis>
             <li lc="nn-nn" tx="Queued" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Поставлено в очередь" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="队列" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="StartDate" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
@@ -2371,30 +2471,35 @@
           <lis>
             <li lc="nn-nn" tx="Status of exported interviews" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Статус  экспортируемых интервью" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="已导出访谈的状态" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="SurveyTemplateTitle" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="(version) Survey template " ts="Changed" qs="ToReview" />
             <li lc="ru" tx="(версия) Шаблон обследования" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="（版本）调查模板" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="TabularFormat" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Tabular Format" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Табличный формат" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="Tabular格式" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="XMLFileDescription" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="XML format" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="XML формат" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="XML格式" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="ZipArchiveDescription" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Zip archive with main interview data" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Зип архив с собранными данными" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="访谈主数据的zip压缩包" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\HQ.resx" nm="CreateOneMore" rc="" dnt="false" nms="Resources" cln="HQ" bac="Content" hgt="0" wdt="0">
@@ -2428,6 +2533,7 @@
           <lis>
             <li lc="nn-nn" tx="Observer user &lt;b&gt;{0}&lt;/b&gt; was successfully created." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Наблюдатель &lt;b&gt;{0}&lt;/b&gt; был успешно создан." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="成功创建了观察员用户&lt;b&gt;{0}&lt;/b&gt;。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\HQ.resx" nm="QuestionnaireClonedAndRenamedFormat" rc="" dnt="false" nms="Resources" cln="HQ" bac="Content" hgt="0" wdt="0">
@@ -2461,11 +2567,13 @@
           <lis>
             <li lc="nn-nn" tx="Supervisor &lt;b&gt;{0}&lt;/b&gt; was successfully created." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Супервизор &lt;b&gt;{0}&lt;/b&gt; был успешно создан." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="成功创建了督导员&lt;b&gt;{0}&lt;/b&gt;。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\HQ.resx" nm="SupervisorNotFound" rc="" dnt="false" nms="Resources" cln="HQ" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Could create interviewer. Selected supervior do not exist" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="不能创建调查员。选择的督导员不存在" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\HQ.resx" nm="UserNotExists" rc="" dnt="false" nms="Resources" cln="HQ" bac="Content" hgt="0" wdt="0">
@@ -2481,6 +2589,7 @@
           <lis>
             <li lc="nn-nn" tx="Headquarters user {0} was successfully created." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Хедквотер пользователь &lt;b&gt;{0}&lt;/b&gt; был успешно создан." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="成功创建了总部用户{0}。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\HQ.resx" nm="UserWasUpdatedFormat" rc="" dnt="false" nms="Resources" cln="HQ" bac="Content" hgt="0" wdt="0">
@@ -2721,6 +2830,7 @@
           <lis>
             <li lc="nn-nn" tx="Troubleshooting" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Устранение неполадок" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="故障排除" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\MainMenu.resx" nm="UserBatchUpload" rc="" dnt="false" nms="Resources" cln="MainMenu" bac="Content" hgt="0" wdt="0">
@@ -2853,24 +2963,28 @@
           <lis>
             <li lc="nn-nn" tx="This will allow interviewers to create assignments in the field. The questionnaire will be downloaded on all devices." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="После этого действия опросник будет отправлен на все планшеты" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="这将允许调查员自行创建访问任务。问卷将被下载到所有的设备上。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\QuestionnaireImport.resx" nm="CensusImportTitle" rc="" dnt="false" nms="Resources" cln="QuestionnaireImport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Census mode import" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Иморт опросника в режиме &quot;переписи&quot;" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="普查模式导入" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\QuestionnaireImport.resx" nm="Chapters" rc="" dnt="false" nms="Resources" cln="QuestionnaireImport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Sections" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Секции " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
+            <li lc="zh" tx="部分" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\QuestionnaireImport.resx" nm="CreatedAt" rc="" dnt="false" nms="Resources" cln="QuestionnaireImport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Created on" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Создано" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="创建于" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\QuestionnaireImport.resx" nm="DesignerQuestionnaires" rc="" dnt="false" nms="Resources" cln="QuestionnaireImport" bac="Content" hgt="0" wdt="0">
@@ -2886,6 +3000,7 @@
           <lis>
             <li lc="nn-nn" tx="Sub-sections" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Саб-секции" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="子部分" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\QuestionnaireImport.resx" nm="Import" rc="" dnt="false" nms="Resources" cln="QuestionnaireImport" bac="Content" hgt="0" wdt="0">
@@ -2901,6 +3016,7 @@
           <lis>
             <li lc="nn-nn" tx="Create a new version  (#{0})" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Создать новую #{0} версию опросника" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="创建一个新版本（#{0}）" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\QuestionnaireImport.resx" nm="ImportInCensus" rc="" dnt="false" nms="Resources" cln="QuestionnaireImport" bac="Content" hgt="0" wdt="0">
@@ -2916,24 +3032,28 @@
           <lis>
             <li lc="nn-nn" tx="Import Questionnaire:" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Импорт Опросника" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="导入问卷：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\QuestionnaireImport.resx" nm="ImportModeTitle" rc="" dnt="false" nms="Resources" cln="QuestionnaireImport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Questionnaire import mode" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Режим импорта опросника" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="问卷导入模式" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\QuestionnaireImport.resx" nm="LastModifiedAt" rc="" dnt="false" nms="Resources" cln="QuestionnaireImport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Last modified on" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Обновлено" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="上一次修改于" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\QuestionnaireImport.resx" nm="ListOfMyQuestionnaires" rc="" dnt="false" nms="Resources" cln="QuestionnaireImport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="list of my questionnaires" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="список моих опросников" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="我的问卷列表" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\QuestionnaireImport.resx" nm="LoginToDesignerError" rc="" dnt="false" nms="Resources" cln="QuestionnaireImport" bac="Content" hgt="0" wdt="0">
@@ -2945,40 +3065,52 @@
             <li lc="pt" tx="Não foi possível conectar ao designer. Por favor, verifique esse designer está disponível e tente &lt;a href='{0}'&gt;novamente&lt;/a&gt;" ts="Changed" qs="ToReview" />
           </lis>
         </it>
+        <it rn="App_GlobalResources\QuestionnaireImport.resx" nm="MyQuestionnairesTitle" rc="" dnt="false" nms="Resources" cln="QuestionnaireImport" bac="Content" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Designer: My Questionnaires" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Designer: Мои опросники" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="App_GlobalResources\QuestionnaireImport.resx" nm="QuestionnaireExists" rc="" dnt="false" nms="Resources" cln="QuestionnaireImport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="You have already imported this questionnaire" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Этот опросник был ранее импортирован " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
+            <li lc="zh" tx="你已经导入了这份问卷" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\QuestionnaireImport.resx" nm="Questions" rc="" dnt="false" nms="Resources" cln="QuestionnaireImport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Questions" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Вопросы" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="问题" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\QuestionnaireImport.resx" nm="QuestionsWithConditions" rc="" dnt="false" nms="Resources" cln="QuestionnaireImport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="{0} of them with conditions" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="{0} с условиями " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
+            <li lc="zh" tx="其中{0}个含有条件" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\QuestionnaireImport.resx" nm="RegularImportSubTitle" rc="" dnt="false" nms="Resources" cln="QuestionnaireImport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="This will allow you to create individual assignments that may contain identifying data. Only those assignments will appear on interviewer devices." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Эта функция позволит Вам создать индивидуальное назначение, которое может содержать идентифицирующие вопросы. Только эти назначения появятся на планшете в приложении Interviewer. " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
+            <li lc="ru" tx="Эта функция позволит Вам создать индивидуальное назначение, которое может содержать идентифицирующие вопросы. Только эти назначения появятся на планшете в приложении Interviewer. " er="" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="这将允许您创建包含识别数据的单个任务。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\QuestionnaireImport.resx" nm="RegularImportTitle" rc="" dnt="false" nms="Resources" cln="QuestionnaireImport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Sample mode import" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Импортировать опросник как шаблон для индивидуальных назначений " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
+            <li lc="zh" tx="抽样模式导入" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\QuestionnaireImport.resx" nm="Rosters" rc="" dnt="false" nms="Resources" cln="QuestionnaireImport" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Rosters" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Ростеры" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="登记表" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\QuestionnaireImport.resx" nm="SignInToDesigner" rc="" dnt="false" nms="Resources" cln="QuestionnaireImport" bac="Content" hgt="0" wdt="0">
@@ -3147,6 +3279,7 @@
           <lis>
             <li lc="nn-nn" tx="Template Version" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Версия шаблона" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="模板版本" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Reports.resx" nm="Variables" rc="" dnt="false" nms="Resources" cln="Reports" bac="Content" hgt="0" wdt="0">
@@ -3171,12 +3304,14 @@
           <lis>
             <li lc="nn-nn" tx="Are you sure you want to change protection state? You will need to regenerate exported data in order to open it." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Вы уверены, что хотите изменить настройки шифрования? Экспортные данные необходимо будет обновить перед тем как скачать." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="您确定要改变保护状态吗？您需要重新生成要导出的数据。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Settings.resx" nm="CurrentLogo" rc="" dnt="false" nms="Resources" cln="Settings" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Current logo" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Текущий логотип" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="当前标识" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Settings.resx" nm="EnableEncryption" rc="" dnt="false" nms="Resources" cln="Settings" bac="Content" hgt="0" wdt="0">
@@ -3192,6 +3327,7 @@
           <lis>
             <li lc="nn-nn" tx="Check Enable encryption box to encrypt export data archives and protect them with the provided password. Change password by pressing the circular error button. After encryption, only people who know the password can open the exported data." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Установите флажок «Включить шифрование» для шифрования архивов данных экспорта и защиты их с помощью предоставленного пароля. Измените пароль, нажав круговую кнопку. После шифрования только пользователи, знающие пароль, могут открыть архивы данных." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="勾选“启用加密”将导出数据归档进行加密并使用提供的密码保护。点击刷新按钮更改密码。启用加密后，只有知道密码得到人才可以打开导出数据。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Settings.resx" nm="ExportEncryption_Title" rc="" dnt="false" nms="Resources" cln="Settings" bac="Content" hgt="0" wdt="0">
@@ -3216,60 +3352,70 @@
           <lis>
             <li lc="nn-nn" tx="Are you sure you want to delete global note?" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Вы уверены, что хотите удалить глобальное сообщение?" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="您确定雅删除全局注释吗？" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Settings.resx" nm="GlobalNoteSaved" rc="" dnt="false" nms="Resources" cln="Settings" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Note saved" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Сохранено" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="未保存" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Settings.resx" nm="GlobalNoteSettings" rc="" dnt="false" nms="Resources" cln="Settings" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Global note" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Настройка уведомления" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="全局注释" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Settings.resx" nm="GlobalNoteSettings_Description" rc="" dnt="false" nms="Resources" cln="Settings" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Specify text in the Global Note field to be shown on the top of every screen on the server." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Укажите текст в поле «Глобальное сообщение», который будет отображаться в верхней части каждой страницы на сервере." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="在全局注释中添加文本以在服务器的每个界面显示" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Settings.resx" nm="GlobalNotice" rc="" dnt="false" nms="Resources" cln="Settings" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Global note" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Глобальное сообщение" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="全局注释" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Settings.resx" nm="Logo" rc="" dnt="false" nms="Resources" cln="Settings" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Company logo" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Логотип" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="公司标识" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Settings.resx" nm="LogoNotUpdated" rc="" dnt="false" nms="Resources" cln="Settings" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Company logo was not updated. Please provide a valid image" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Логотип не был обновлён. Предоставьте правильное изображение" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="公司标识未更新。请提供有效的图片" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Settings.resx" nm="LogoSettings" rc="" dnt="false" nms="Resources" cln="Settings" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Company logo" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Настройки логотипа" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="公司标识" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Settings.resx" nm="LogoSettings_Description" rc="" dnt="false" nms="Resources" cln="Settings" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Company logo shows a custom image on the server login page and on the login page of the Interviewer app. Click the Choose file button to upload an image from your computer to the server." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Логотип компании показывает пользовательское изображение на странице входа на сервер и на странице входа в приложение интервьюера. Нажмите кнопку «Выбрать файл», чтобы загрузить изображение со своего компьютера на сервер." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="公司标识会在服务器登录界面和调查员程序登录界面显示一个自定义的图片。点击上传文件按钮从您的计算机向服务器上传文件。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Settings.resx" nm="LogoUpdated" rc="" dnt="false" nms="Resources" cln="Settings" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Company logo updated" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Логотип обновлён" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="公司标识已更新" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Settings.resx" nm="Password" rc="" dnt="false" nms="Resources" cln="Settings" bac="Content" hgt="0" wdt="0">
@@ -3294,6 +3440,7 @@
           <lis>
             <li lc="nn-nn" tx="Remove logo" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Удалить " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
+            <li lc="zh" tx="删除标识" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Settings.resx" nm="Settings_Title" rc="" dnt="false" nms="Resources" cln="Settings" bac="Content" hgt="0" wdt="0">
@@ -3316,6 +3463,7 @@
           <lis>
             <li lc="nn-nn" tx="Date when the account was created" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Data em que foi criada a conta do observador" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="账号创建日期" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Users.resx" nm="AddAPIUser" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
@@ -3340,6 +3488,7 @@
           <lis>
             <li lc="nn-nn" tx="Add interviewer" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Добавить интервьювера" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="添加调查员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Users.resx" nm="AddObserver" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
@@ -3378,6 +3527,12 @@
             <li lc="pt" tx="Usuários do API" ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="App_GlobalResources\Users.resx" nm="ApiUsersCountDescription" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="({0} api users)" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="({0} API пользователь(ей) )" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="App_GlobalResources\Users.resx" nm="ArchivedSupervisors" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Archived supervisors" ts="Translated" qs="ToReview" />
@@ -3391,6 +3546,7 @@
           <lis>
             <li lc="nn-nn" tx="Archiving Status" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Архив статус" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="归档状态" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Users.resx" nm="ClickToReturn" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
@@ -3505,6 +3661,7 @@
           <lis>
             <li lc="nn-nn" tx="Date when the headquarter account was created" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Data, quando foi criada a conta de sede" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="总部账户创建日期" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Users.resx" nm="Headquarters" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
@@ -3516,10 +3673,17 @@
             <li lc="pt" tx="Sede" ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="App_GlobalResources\Users.resx" nm="HeadquartersCountDescription" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="({0} headquarters)" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="({0} хедквотер(ов) )" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="App_GlobalResources\Users.resx" nm="HeadquartersEmail" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Headquarter's email" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Sede do e-mail" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="总部电子邮箱" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Users.resx" nm="ImpersonateAsUser" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
@@ -3549,6 +3713,12 @@
             <li lc="pt" tx="Entrevistadores" ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="App_GlobalResources\Users.resx" nm="InterviewersCountDescription" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="({0} interviewers)" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="({0} интервьювер(ов) )" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="App_GlobalResources\Users.resx" nm="Locked" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Locked" ts="Translated" qs="ToReview" />
@@ -3571,12 +3741,14 @@
           <lis>
             <li lc="nn-nn" tx="Number of interviewers who has not successfully synchronized their tablets to the server yet" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Número de entrevistadores, que não foi sincronizado com êxito seus comprimidos para o servidor ainda" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="平板电脑尚未与服务器成功同步的调查员数量" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Users.resx" nm="NumberOfInterviewersInTeam" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Number of interviewers in the team" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Número de entrevistadores na equipe" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="团队中的调查员数量" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Users.resx" nm="Observer" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
@@ -3606,16 +3778,24 @@
             <li lc="pt" tx="Observadores" ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="App_GlobalResources\Users.resx" nm="ObserversCountDescription" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="({0} observers)" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="({0} наблюдатель(ей) )" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="App_GlobalResources\Users.resx" nm="ObserversEmail" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Observer's email" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="E-mail do observador" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Электронная почта наблюдателя " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
+            <li lc="zh" tx="观察员电子邮箱" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Users.resx" nm="Remove" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Remove" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="删除" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Users.resx" nm="Supervisor" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
@@ -3631,6 +3811,7 @@
           <lis>
             <li lc="nn-nn" tx="Date when the supervisor account was created" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Data, quando foi criada a conta de supervisor" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="督导员账号创建日期" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Users.resx" nm="SupervisorEmail" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
@@ -3638,6 +3819,7 @@
             <li lc="nn-nn" tx="Supervisor's email" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="E-mail do supervisor" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Почта супервизора" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="督导员电子邮箱" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Users.resx" nm="Supervisors" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
@@ -3653,17 +3835,20 @@
           <lis>
             <li lc="nn-nn" tx="Edit Supervisor" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Редактирование супервизора" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="编辑督导员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Users.resx" nm="SupervisorsCountDescription" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="({0} supervisors)" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="({0} супервизоров)" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="（{0}个调查员）" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Users.resx" nm="SupervisorsInTeam" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="supervisors in your team" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="您团队中的督导员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Users.resx" nm="TotalInterviewers" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
@@ -3687,7 +3872,7 @@
             <li lc="nn-nn" tx="Login name" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Имя" ts="Changed" qs="Approved" />
             <li lc="fr" tx="Nom" ts="Changed" qs="ToReview" />
-            <li lc="zh" tx="用户名" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
+            <li lc="zh" tx="用户名" er="" ts="Changed" qs="ToReview" />
             <li lc="pt" tx="Nome de login" ts="Translated" qs="ToReview" />
           </lis>
         </it>
@@ -3696,7 +3881,7 @@
             <li lc="fr" tx="Enquêteurs actifs" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="nn-nn" tx="Active interviewers" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Активные интервьюеры" ts="Translated" qs="Approved" />
-            <li lc="zh" tx="活动的调查员" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="zh" tx="活动的调查员" er="" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Entrevistadores ativos" ts="Translated" qs="ToReview" />
           </lis>
         </it>
@@ -3803,101 +3988,118 @@
           <lis>
             <li lc="nn-nn" tx=": activate to sort column in ascending order" ts="Translated" qs="ToReview" />
             <li lc="ru" tx=": активировать для сортировки столбца по возрастанию" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="：激活按升序排列" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\DataTables.resx" nm="Aria_SortDescending" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="DataTables" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx=": activate to sort column in descending order" ts="Translated" qs="ToReview" />
             <li lc="ru" tx=": активировать для сортировки столбца по убыванию" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="：激活按降序排列" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\DataTables.resx" nm="EmptyTable" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="DataTables" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="No data available in the table" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="В таблице отсутствуют данные" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="表格中没有数据" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\DataTables.resx" nm="Info" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="DataTables" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Showing _START_ to _END_ of _TOTAL_ entries" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Записи с _START_ до _END_ из _TOTAL_ записей" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="显示_TOTAL_个条目中的_START_-_END_个" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\DataTables.resx" nm="InfoEmpty" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="DataTables" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Showing 0 to 0 of 0 entries" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Записи с 0 до 0 из 0 записей" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="显示0个条目中的0-0个" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\DataTables.resx" nm="InfoFiltered" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="DataTables" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="(filtered from _MAX_ total entries)" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="(отфильтровано из _MAX_ записей)" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="（从_MAX_个总条目中过滤）" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\DataTables.resx" nm="InfoThousands" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="DataTables" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="," ts="Translated" qs="ToReview" />
             <li lc="ru" tx="," ts="Translated" qs="Approved" />
+            <li lc="zh" tx="，" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\DataTables.resx" nm="LengthMenu" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="DataTables" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Show _MENU_ entries" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Показать _MENU_ записей" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="显示_MENU_条目" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\DataTables.resx" nm="LoadingRecords" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="DataTables" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Loading..." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Загрузка записей..." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="加载中" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\DataTables.resx" nm="Paginate_First" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="DataTables" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="First" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Первая" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="第一个" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\DataTables.resx" nm="Paginate_Last" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="DataTables" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Last" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Последняя" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="最后一个" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\DataTables.resx" nm="Paginate_Next" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="DataTables" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Next" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Следующая" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="下一个" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\DataTables.resx" nm="Paginate_Previous" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="DataTables" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Previous" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Предыдущая" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="上一个" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\DataTables.resx" nm="Processing" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="DataTables" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Processing..." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Подождите..." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="处理中" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\DataTables.resx" nm="Search" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="DataTables" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Search:" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Поиск:" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="搜索：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\DataTables.resx" nm="ZeroRecords" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="DataTables" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="No matching records found" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Записи отсутствуют" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="未找到匹配的记录" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Details.resx" nm="ChooseResponsibleInterviewer" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Details" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interview has no responsible. Please, choose responsible interviewer" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="访谈没有负责人。请选择调查员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\EnumNames.resx" nm="InterviewStatus_ApprovedByHeadquarters" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="EnumNames" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -3940,35 +4142,41 @@
           <lis>
             <li lc="nn-nn" tx="Administrator" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Администратор" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="管理员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\EnumNames.resx" nm="UserRoles_ApiUser" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="EnumNames" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="ApiUser" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Пользователь Апи" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="API用户" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\EnumNames.resx" nm="UserRoles_Headquarter" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="EnumNames" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Headquarter" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="总部" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\EnumNames.resx" nm="UserRoles_Interviewer" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="EnumNames" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interviewer" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервьюер" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="调查员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\EnumNames.resx" nm="UserRoles_Observer" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="EnumNames" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Observer" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Наблюдатель" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="观察员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\EnumNames.resx" nm="UserRoles_Supervisor" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="EnumNames" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Supervisor" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Супервизер" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="督导员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\FieldsAndValidations.resx" nm="BatchUploadModel_FileName" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -4002,12 +4210,14 @@
           <lis>
             <li lc="nn-nn" tx="Could not update user information because current user does not exist" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Невозможно обновить информация по польвателю, потому что он не существует" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="不能更新用户信息，因为当前用户不存在" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\FieldsAndValidations.resx" nm="CannotUpdate_CurrentUserIsArchived" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Could not update user information because current user is archived" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Невозможно обновить информацию по пользователю, потому что пользователь архивирован" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="不能更新用户信息因为当前用户已经被归档" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\FieldsAndValidations.resx" nm="CloneQuestionnaireModel_NewTitle_Error_Required" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -4031,6 +4241,7 @@
         <it rn="Resources\FieldsAndValidations.resx" nm="ConfirmNewPasswordFieldName" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Confirm new password" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="确认新密码" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\FieldsAndValidations.resx" nm="ConfirmPasswordErrorMassage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -4055,6 +4266,7 @@
           <lis>
             <li lc="nn-nn" tx="Confirm password is required" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Укажите подтверждение пароля" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="确认密码是必填项" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\FieldsAndValidations.resx" nm="EmailErrorMessage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -4123,18 +4335,21 @@
         <it rn="Resources\FieldsAndValidations.resx" nm="NewPasswordFieldName" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="New password" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="新密码" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\FieldsAndValidations.resx" nm="OldPasswordErrorMessage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="To change password provide valid existing password" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Не верный старый пароль" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="要更改密码，请提供有效的当前密码" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\FieldsAndValidations.resx" nm="OldPasswordFieldName" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Old password" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Старый пароль" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="旧密码" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\FieldsAndValidations.resx" nm="PasswordErrorMessage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -4168,6 +4383,7 @@
           <lis>
             <li lc="nn-nn" tx="Person name has invalid characters. Only letters, dots, spaces, and apostrophes are allowed" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Имя пользователя может содержать только буквы, пробелы, точки и апосторофы" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="个人姓名含有无效字符。 只允许使用字母、点、空格和单引号。" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\FieldsAndValidations.resx" nm="PersonNameErrorMessage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -4192,6 +4408,7 @@
           <lis>
             <li lc="nn-nn" tx="Phone number cannot contain more than {1} characters" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Номер телефона не может содержать больше {1} символов" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="电话号码不能包含超过{1}的字符" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\FieldsAndValidations.resx" nm="PhoneErrorMessage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -4296,6 +4513,7 @@
         <it rn="Resources\FieldsAndValidations.resx" nm="UserName_Taken" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Please choose another username" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="请选择其他用户名" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\FieldsAndValidations.resx" nm="UserNameErrorMessage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -4320,42 +4538,49 @@
           <lis>
             <li lc="ru" tx="Выберите опросник для импорта" ts="Translated" qs="Approved" />
             <li lc="nn-nn" tx="Select a questionnaire to import" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="请选择一个要导入的问卷" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\ImportQuestionnaire.resx" nm="QuestionnaireCannotBeFound" ns="{0} - questionnaire title" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="ImportQuestionnaire" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="ru" tx="Опросник не найден. Пожалуйста обновите список опросников" ts="Changed" qs="Approved" />
             <li lc="nn-nn" tx="Requested questionnaire cannot be found. Please refresh the list of questionnaires" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="未找到请求的问卷。请刷新问卷列表。" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\ImportQuestionnaire.resx" nm="SignedInBlock" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="ImportQuestionnaire" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="ru" tx="Вы вошли на Designer как {0}." ts="Translated" qs="Approved" />
             <li lc="nn-nn" tx="You are signed in on Designer as {0}." ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="您在问卷设计网站以{0}登录。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\ImportQuestionnaire.resx" nm="SignOut" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="ImportQuestionnaire" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="ru" tx="выход" ts="Translated" qs="Approved" />
             <li lc="nn-nn" tx="sign out" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="注销" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\ImportQuestionnaire.resx" nm="Table_CreatedBy" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="ImportQuestionnaire" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="ru" tx="Создано пользователем" ts="Translated" qs="Approved" />
             <li lc="nn-nn" tx="Created by" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="创建" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\ImportQuestionnaire.resx" nm="Table_LastModified" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="ImportQuestionnaire" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="ru" tx="Последнее изменение" ts="Translated" qs="Approved" />
             <li lc="nn-nn" tx="Last modified" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="上一次修改" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\ImportQuestionnaire.resx" nm="Table_Title" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="ImportQuestionnaire" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="ru" tx="название" ts="Translated" qs="Approved" />
             <li lc="nn-nn" tx="title" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="标题" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Interviews.resx" nm="ApproveConfirmMessage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -4398,12 +4623,20 @@
           <lis>
             <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be assigned.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Note!&lt;/b&gt; Only interviews that are not in status &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt; could be reassigned." ts="Changed" qs="ToReview" />
             <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будут назначены.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Внимание!&lt;/b&gt;Только интервью, которые не в статусе &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;, могут быть переназначены." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将被分配。&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;注意！&lt;/b&gt;只有状态未处于&lt;i&gt;{1}&lt;/i&gt;和&lt;i&gt;{2}&lt;/i&gt;状态的问卷可以被重新分配。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\Interviews.resx" nm="ChooseResponsibleInterviewer" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="No responsible chosen for some interview(s). Please choose a responsible interviewer." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Нет ответственного для некоторых интервью. Пожалуйста выберите ответственного." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="一些访谈没有选择负责人。请选择一个调查员。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+          </lis>
+        </it>
+        <it rn="Resources\Interviews.resx" nm="ChooseResponsibleSupervisor" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="No responsible chosen for some interview(s). Please choose a responsible supervisor." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Нет ответственного для некоторых интервью. Пожалуйста выберите ответственного.&#xD;&#xA;" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Interviews.resx" nm="ContinueConfirmMessage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -4411,7 +4644,7 @@
             <li lc="fr" tx="Voulez-vous continuer?" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Do you want to continue?" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Вы хотите продолжить?" ts="Translated" qs="Approved" />
-            <li lc="zh" tx="您想要继续吗？" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="zh" tx="您要继续吗？" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="pt" tx="Você quer continuar?" ts="Translated" qs="ToReview" />
           </lis>
         </it>
@@ -4420,7 +4653,7 @@
             <li lc="fr" tx="Voulez-vous continuer?" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Do you want to continue?" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Вы хотите продолжить?" ts="Translated" qs="Approved" />
-            <li lc="zh" tx="您想要继续吗？" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="zh" tx="您要继续吗？" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="pt" tx="Você quer continuar?" ts="Translated" qs="ToReview" />
           </lis>
         </it>
@@ -4436,16 +4669,19 @@
         <it rn="Resources\Interviews.resx" nm="ImportInterviews_FailedToImportInterview_NoSupervisor" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Error during import of interview with identifying questions {0}. Resposible supervisor is missing" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="导入访谈失败：{0}。未指定督导员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Interviews.resx" nm="ImportInterviews_GenericError" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Error during import of interview with identifying questions {0}. SupervisorId {1}, InterviewerId {2}, QuestionnaireId {3}, HeadquartersId: {4}Exception: {5}" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="导入访谈失败：{0}。SupervisorId {1}, InterviewerId {2}, QuestionnaireId {3}, HeadquartersId: {4}Exception: {5}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Interviews.resx" nm="ImportInterviews_IncorrectDatafile" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Datafile is incorrect" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="数据文件不正确" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Interviews.resx" nm="RejectConfirmMessage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -4506,54 +4742,63 @@
           <lis>
             <li lc="nn-nn" tx="This is free tool for creating questionnaires for The World Bank’s CAPI platform. It can be found at" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Это бесплатный инструмент, для создания опросников в программе, разработанной Мировым Банком, CAPI. Найти его можно здесь" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="这是一个为世界银行CAPI平台创建问卷的免费工具。可以在下面的网址中找到：" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\LoginToDesigner.resx" nm="InvalidCredentials" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="LoginToDesigner" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="User is not authorized. Please check your login and password." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Пользователь не авторизирован. Пожалуйста, проверьте Ваши логин и пароль. " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
+            <li lc="ru" tx="Пользователь не авторизирован. Пожалуйста, проверьте Ваши логин и пароль. " er="" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="用户未认证。请检查您的用户名和密码。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\LoginToDesigner.resx" nm="PageHeader" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="LoginToDesigner" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Use your Survey Solutions Designer credentials to access your questionnaires." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Пожалуйста, чтобы получить доступ к опроснику, войдите, используя свою учетную запись на Дизайнере" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="请使用您的Survey Solutions问卷设计网站账号来访问您的问卷。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\LoginToDesigner.resx" nm="Questionnaire" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="LoginToDesigner" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Questionnaire" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Опросник " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
+            <li lc="zh" tx="问卷" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\LoginToDesigner.resx" nm="UnableToImportNewQuestionnaire" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="LoginToDesigner" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Unabile to import new questionnaire:" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Опросник не может быть заимпортирован " er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="zh" tx="不能导入新问卷：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\LoginToDesigner.resx" nm="UserDesignerCredentials" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="LoginToDesigner" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Please sign in with credentials you normally use to access your questionnaires at the Designer site and in the Tester app" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Пожалуйста, войдите на сайт, используя свою учетную запись сайта Designer и приложения Tester" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="请使用您在问卷设计网站和问卷测试程序中的账号登陆" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\OutdatedBrowser.resx" nm="HellowText" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="OutdatedBrowser" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Unfortunately your browser is outdated" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Ваш браузер устарел" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="非常遗憾您的浏览器已过时" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\OutdatedBrowser.resx" nm="LinkToUpdate" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="OutdatedBrowser" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="You can find the latest version using this page:" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Вы сможете обновить браузер используя следующую страницу:" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="您可以在下面的页面上找到最新的版本：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\OutdatedBrowser.resx" nm="PleaseUpdate" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="OutdatedBrowser" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="In order to continue please update " ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Чтобы продолжить пожалуйста обновитесь" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="为了继续请更新" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="AccessDenied_Title" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -4569,30 +4814,35 @@
           <lis>
             <li lc="nn-nn" tx="Change password" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Сменить пароль" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="更改密码" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="AccountManage_ChangePasswordHelp" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Use the form below to change the password for the account" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Используйте форму ниже чтобы сменить пароль аккаунта" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="请使用下面的账号更改密码" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="AccountManage_EditPublicInformation" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Edit profile public information details" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Изменить данные общедоступной информации профиля" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="编辑详细信息" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="AccountManage_Login" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Login" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Логин" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="登录" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="AccountManage_Role" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Role" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Роль" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="角色" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="AccountManage_SaveChanges" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -4608,6 +4858,7 @@
           <lis>
             <li lc="nn-nn" tx="Edit {0} profile" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Редактирование профиля {0}" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="编辑{0}档案" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="AnyOption" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -4642,7 +4893,7 @@
             <li lc="fr" tx="Approuver" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Approve" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Утвердить" ts="Translated" qs="Approved" />
-            <li lc="zh" tx="通过审核" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="zh" tx="审核通过" er="" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Aprovar" ts="Translated" qs="ToReview" />
           </lis>
         </it>
@@ -4748,6 +4999,7 @@
         <it rn="Resources\Pages.resx" nm="ConfirmationNeededTitle" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Confirmation Needed" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="需要确认" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Create" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -4808,6 +5060,7 @@
           <lis>
             <li lc="nn-nn" tx="Filters" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Фильтры" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="过滤器" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Forbidden_Title" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -4823,6 +5076,7 @@
           <lis>
             <li lc="nn-nn" tx="Download latest interviewer app" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Скачать последнюю версию" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="下载最新的调查员程序" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="GlobalSettings_DeleteQuestionnareConfirmation" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -4992,7 +5246,7 @@
             <li lc="fr" tx="le" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="on" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="на" ts="Translated" qs="Approved" />
-            <li lc="zh" tx="操作日期" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="操作日期" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="pt" tx="na" ts="Translated" qs="ToReview" />
           </lis>
         </it>
@@ -5027,6 +5281,7 @@
           <lis>
             <li lc="nn-nn" tx="Installation instruction" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Инструкции установки" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="安装指南" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewController_RepeatLastStatus" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5087,6 +5342,7 @@
           <lis>
             <li lc="nn-nn" tx="original" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="[По умолчанию]" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="原始" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewDetails_EnabledButtonLabel" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5147,6 +5403,7 @@
           <lis>
             <li lc="nn-nn" tx="No items satisfying selected filter" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Нет элементов, удовлетворяющих выбранному фильтру" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="未找到满足过滤器的项目" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewDetails_PendingPackageLabel" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5198,6 +5455,7 @@
           <lis>
             <li lc="nn-nn" tx="Language" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Язык" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="语言" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewDetails_UnansweredButtonLabel" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5312,306 +5570,411 @@
           <lis>
             <li lc="nn-nn" tx="Android version" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Версия Android" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="安卓版本" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_Approved" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="done interviews (completed and approved by hq)" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="заполненые интервью (завершенные и подтвержденные )" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="已完成的访谈（完成且被总部审核通过）" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_AssignedToFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="{0} (supervisor: {1})" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="{0} (супервизор: {1})" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="{0}（督导员：{1}）" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_AverageSyncSpeed" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Average synch speed" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Средняя скорость синхронизации" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="平均同步速度" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_BatteryStatus" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Battery status (%)" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Состояние батареи (%)" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="电池状态（%）" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_BatteryStatus_SaverIsOff" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="off" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="выключена" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="关" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_BatteryStatus_SaverIsOn" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="on" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="включена" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="开" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_BatteryStatusFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="{0}%, power source: {1}, battery saver is {2}" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="{0}%, источник питания: {1}, экономия заряда батареи: {2}" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="{0}%，电源：{1}，省电模式：{2}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_ConnectionMobileFormat" ns="{0} - NetworkType, {1} Network subtype, {2} - Mobile operator name, i.e. Vodafon" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Type: {0} {1}, Operator: {2}" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Соединение: тип: {0} {1}, мобильный оператор: {2}" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="类型：{0} {1}，操作员：{2}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_ConnectionSpeed" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Connection speed" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Скорость соединения" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="连接速度" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_ConnectionType" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Connection type" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Тип соединения" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="连接类型" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_ConnectionWifiFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Type: {0}" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Соединение: {0}" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="类型：{0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_DatabaseInfo" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Database" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="База данных" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="数据库" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_DataStatsFormat" ns="{0}, {1} - Data amount " rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="{0} uploaded, {1} downloaded" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="{0} загружено, {1} скаченно" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="已上传{0}，已下载{1}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_DeviceAndConnectionStatistics" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Device and connection statistics" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Устройство и статистика по соединению" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="设备和连接统计" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\Pages.resx" nm="InterviewerProfile_DeviceAssignmentDate" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Device assignment date" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Дата подключения устройства" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_DeviceDate" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Tablet time at the beginning of synchronization" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Время на устройстве при начале синхронизации" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="同步开始时的设备时间" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_DeviceId" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Device ID" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Идентификатор устройства" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="设备编号" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_DeviceInfo" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Detailed device info" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Детальная информация о устройстве" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="设备详细信息" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_DeviceLanguage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Device language" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Язык устройства" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="设备语言" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_DeviceLocation" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Device location or last known location" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Местонахождение устройства или последнее известное местонахождение устройства" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="设备位置或已知的最后位置" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_DeviceModel" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Device model" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Модель устройства" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="设备型号" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_DeviceOrientation" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Device orientation" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Ориентация экрана" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="设备方向" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_DeviceSerial" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Device serial number" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Серийный номер устройства" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="设备序列号" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_DownloadedInterviewsCount" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interviews received by Interviewer" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Количество интервью отправленных на устройство" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="调查员已收到的访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_DownloadedQuestionnairesCount" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Questionnaires received by Interviewer" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Количество опросников отправленных на устройство" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="调查员已收到的问卷" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_EmailFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="E-mail: {0}" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="E-mail: {0}" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="电子邮箱：{0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_FullNameFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Full name: {0}" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="ФИО: {0}" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="全名：{0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_Info" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Edit personal info" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Редактировать данные пользователя" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="编辑个人信息" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_InterviewerAppVersion" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interviewer App version" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Версия Survey Solutions" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="调查员程序版本" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_InterviewerCanBeUpdated" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Can be updated" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Может быть обновлён" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="可以更新" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_Interviewers" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interviewers" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервьюеры" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="调查员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_InterviewerUpdatedDate" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Last Survey Solutions updated date" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Дата последнего обновления Survey Solutions" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="上一个更新Survey Solutions的日期" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_InterviewerUpToDate" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Up to date" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Актуальная" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="最新" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_InterviewerVersion" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Survey Solutions version" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Версия Survey Solutions" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="Survey Solutions版本" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_LastConnectionStatistics" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Last connection statistics" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Статистика последнего соединения" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="上一次连接的统计" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_LastFailedSync" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Last failed sync" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Последняя оборванная синхронизация" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="上一次失败的同步" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_LastSuccessSync" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Last successful sync" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Последняя успешная синхронизация" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="上一次成功的同步" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_MemoryInfo" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Memory (available/total)" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Память (доступно/всего)" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="内存（可用/全部）" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_NewOnDevice" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="new assignments on device" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="новые интервью на устройстве" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="设备上的新任务" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_NumberOfFailedSynchronizations" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Total number of failed synchronizations" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Общее количество оборванных синхронизаций" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="失败的同步数量" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_NumberOfSuccessSynchronizations" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Total number of success synchronizations" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Общее количество успешных синхронизаций" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="成功同步的数量" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_PhoneFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Phone number: {0}" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Телефон: {0}" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="电话号码：{0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_Rejected" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="rejected assignments again on device" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="возвращённые на устройство интервью" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="设备上的驳回任务" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_ServerDate" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Server time at the beginning of synchronization" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Время на сервере при начале синхронизации" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="同步开始时的服务器时间" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_SignalStrength" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Signal strength" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Мощность сигнала" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="信号强度" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_StartedAssignments" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Assignments that have been started, but not completed" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Кол-во интервью которые были начаты, но не закончены" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="已经开始但尚未完成的任务" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_StorageInfo" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Storage (available/total)" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Хранилище данных (доступно/всего)" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="存储空间（可用/全部）" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\Pages.resx" nm="InterviewerProfile_Sync_Activity_Census_Desc" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Census template update" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Скачанные опросники" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\Pages.resx" nm="InterviewerProfile_Sync_Activity_Census_Timeline_Desc" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Census templates updates" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Обновление опросников" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\Pages.resx" nm="InterviewerProfile_Sync_Activity_Downloaded_Interview_Desc" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Downloaded assignment" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Скачанные интервью" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\Pages.resx" nm="InterviewerProfile_Sync_Activity_Failed_Sync" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Failed synchronizations attempt" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Сбой при попытке синхронизации" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\Pages.resx" nm="InterviewerProfile_Sync_Activity_Nothing_To_Sync" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Successful connection, nothing to sync" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Успешное соединение, нечего синхронизировать" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\Pages.resx" nm="InterviewerProfile_Sync_Activity_Started_Interview_Desc" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Number of unfinished or unsynchronized assignments on device every given moment" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Количество незаконченных или не синхронизированных интервью на устройстве в каждый момент синхронизации" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\Pages.resx" nm="InterviewerProfile_Sync_Activity_Title" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Recent synchronizations activity" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Последние данные по синхронизации" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\Pages.resx" nm="InterviewerProfile_Sync_Activity_Uploaded_Interview_Desc" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Uploaded to server for approval" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Загруженные на сервер для подтверждения" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_TitleFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interviewer: {0}" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервьюер: {0}" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="调查员：{0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_TotalSyncTime" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Synchronization duration" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Длительность синхронизации" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="同步持续时间" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_UploadedInterviewsCount" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Completed interviews received from Interviewer" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Количество интервью полученных с устройства" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="从调查员收到的已完成的访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_WaitingForApproval" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="waiting for approval" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="ожидающие подтверждения" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="等待批准" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Interviewers_ActiveUsers" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5619,7 +5982,7 @@
             <li lc="fr" tx="Utilisateurs actifs" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
             <li lc="nn-nn" tx="Active interviewers" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Активные пользователи" ts="Changed" qs="Approved" />
-            <li lc="zh" tx="活动的用户" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
+            <li lc="zh" tx="活动的调查员" er="" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Entrevistadores ativos" ts="Translated" qs="ToReview" />
           </lis>
         </it>
@@ -5637,7 +6000,7 @@
             <li lc="fr" tx="Utilisateurs archivés" ts="Changed" qs="ToReview" />
             <li lc="nn-nn" tx="Archived interviewers" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Архивные пользователи" ts="Changed" qs="Approved" />
-            <li lc="zh" tx="归档的用户" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="已归档的调查员" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Entrevistadores arquivados" ts="Translated" qs="ToReview" />
           </lis>
         </it>
@@ -5709,6 +6072,7 @@
             <li lc="nn-nn" tx="Date when the interviewer account was created" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Data em que foi criada a conta do entrevistador" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Дата создания учетной записи интервьюера" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="调查员账号创建日期" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Interviewers_EmailTitle" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5732,18 +6096,21 @@
         <it rn="Resources\Pages.resx" nm="Interviewers_InterviewerNeverConnected" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Never connected" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="从未连接" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Interviewers_InterviewerVersion" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="App version" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Версия интервьюера" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="应用程序版本" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Interviewers_InterviewerVersionTooltip" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interviewer App version reported during last synchronization of his/her tablet to the server" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Версия интервьювера полученная по время последней синхронизации планшета" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="上一次同步时的调查员程序版本" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Interviewers_NotConnected" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5759,18 +6126,21 @@
           <lis>
             <li lc="nn-nn" tx="Never connected" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Несинхронизированные" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="从未连接" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Interviewers_OutdatedOption" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Outdated" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Устаревшая" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="过期" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Interviewers_Selected" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="interviewer(s) selected" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="интервьюер(ов) выбрано" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="调查员被选中" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Interviewers_SupervisorTitle" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5787,6 +6157,7 @@
             <li lc="nn-nn" tx="Login name of the interviewer’s supervisor" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Nome de login do supervisor do entrevistador" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Имя супервизора" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="调查员所属督导员的登录名" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Interviewers_Title" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5811,6 +6182,7 @@
           <lis>
             <li lc="nn-nn" tx="Up to date" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Актуальная" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="最新" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Interviewers_UserNameTitle" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5818,7 +6190,7 @@
             <li lc="fr" tx="Nom" ts="Changed" qs="ToReview" />
             <li lc="nn-nn" tx="Login name" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Имя" ts="Changed" qs="Approved" />
-            <li lc="zh" tx="名称" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
+            <li lc="zh" tx="用户名" er="" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Nome de login" ts="Translated" qs="ToReview" />
           </lis>
         </it>
@@ -5835,6 +6207,7 @@
           <lis>
             <li lc="nn-nn" tx="interview(s) selected" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="интервью выбрано" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="访谈被选中" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Layout_Filter" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5877,6 +6250,7 @@
           <lis>
             <li lc="nn-nn" tx="Login" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Логин" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="登录" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="LogOn_Legend" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5981,11 +6355,13 @@
         <it rn="Resources\Pages.resx" nm="OperationFailedDescription" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Error occurred please try again later." ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="发生错误，请稍候再试。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="OperationFailedTitle" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Operation failed" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="操作失败" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="PackagesInfo_DeviceId" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6055,120 +6431,140 @@
           <lis>
             <li lc="nn-nn" tx="Password" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Пароль" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="密码" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Profile_ApiUserCreate" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Create API user" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Создать API пользователя" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="创建API用户" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Profile_ApiUserEditFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Edit API user profile: &lt;strong&gt;{0}&lt;/strong&gt;" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Редактирование профиля API пользователя: &lt;strong&gt;{0}&lt;/strong&gt;" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="编辑API用户资料：&lt;strong&gt;{0}&lt;/strong&gt;" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Profile_ApiUsersList" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="API users" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="API пользователи" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="API用户" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Profile_ApiUserWasCreated" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="API User &lt;b&gt;{0}&lt;/b&gt; was successfully created" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="API пользователь &lt;b&gt;{0}&lt;/b&gt; был успешно создан" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="成功创建了API用户：&lt;b&gt;{0}&lt;/b&gt;" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Profile_HeadquartersCreate" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Create headquarters" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Создать хедквотера" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="创建总部" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Profile_HeadquartersEditFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Edit headquarters profile: &lt;strong&gt;{0}&lt;/strong&gt;" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Редактирование профиля хедквотера: &lt;strong&gt;{0}&lt;/strong&gt;" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="编辑总部资料：&lt;strong&gt;{0}&lt;/strong&gt;" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Profile_HeadquartersList" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Headquarters" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Хедквотеры" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="总部" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Profile_InterviewerCreate" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Create interviewer profile" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Создать интервьюера" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="创建调查员资料" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Profile_InterviewerEditFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Edit interviewer profile: &lt;strong&gt;{0}&lt;/strong&gt;" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Редактирование профиля интервьюера: &lt;strong&gt;{0}&lt;/strong&gt;" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="编辑调查员资料：&lt;strong&gt;{0}&lt;/strong&gt;" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Profile_InterviewerProfile" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interviewer profile" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Профиль интервьюера" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="调查员资料" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Profile_InterviewersList" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interviewers" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервьюеры" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="调查员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Profile_ObserverCreate" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Create observer" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Создать пользователя" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
+            <li lc="zh" tx="创建观察员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Profile_ObserverEditFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Edit observer profile: &lt;strong&gt;{0}&lt;/strong&gt;" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Редактирование профиля наблюдателя: &lt;strong&gt;{0}&lt;/strong&gt;" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="编辑观察员资料：&lt;strong&gt;{0}&lt;/strong&gt;" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Profile_ObserversList" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Observers" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Наблюдатели" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="观察员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Profile_SupervisorCreate" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Create supervisor" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Создать супервизора" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="创建督导员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Profile_SupervisorEditFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Edit supervisor profile: &lt;strong&gt;{0}&lt;/strong&gt;" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Редактирование профиля супервизора: &lt;strong&gt;{0}&lt;/strong&gt;" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="编辑督导员资料：&lt;strong&gt;{0}&lt;/strong&gt;" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Profile_SupervisorsList" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Supervisors" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Супервизоры" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="督导员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="PublicSection" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Personal information details (optional) &lt;br&gt; will be visible to HQ users only" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Персональная информация (опциально) &lt;br&gt; видима только для HQ пользователей" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="个人详细信息（可选）&lt;br&gt;将仅对总部账户可见" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="QuestionnaireNameFormat" ns="{0} - Questionnaire name, {1} - Questionnaire version" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="{0} (ver. {1})" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="{0} (вер. {1})" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="{0} (版本：{1})" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="RejectedByHeadquarters" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6220,6 +6616,7 @@
           <lis>
             <li lc="nn-nn" tx="This action will create individual user with supervisor rights,&#xD;&#xA;        &lt;br&gt;to create several users you can use &lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;user batch creation&lt;/a&gt;." ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Это действие создаст индивидуального пользователя с правами супервизора&lt;br&gt;&#xD;&#xA;Чтобы создать нескольких пользователей сразу, воспользуйтесь функцией  &lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;массового создания пользователей&lt;/a&gt;" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="zh" tx="这个动作将创建具有督导员权限的单个用户。&lt;br&gt;要创建多个用户，您可以使用&lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;批量用户创建&lt;/a&gt;。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="SupervisorAssigned" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6234,46 +6631,54 @@
         <it rn="Resources\Pages.resx" nm="Supervisors_ActiveUsers" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Active supervisors" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="活动的督导员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Supervisors_Archive" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Archive" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Архивировать" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="归档" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Supervisors_ArchivedUsers" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Archived supervisors" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="已归档的督导员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Supervisors_ArchiveStatusTitle" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Archive status" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="归档状态" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Supervisors_ArchiveSupervisorsConfirmMessage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="If the interviewer has completed interviews in census mode on his tablet then the data will be lost." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Если интервьювер имеет законченные интервью в режиме переписи на это планшете, то они будут потерянны." ts="Translated" qs="Approved" />
+            <li lc="zh" tx="如果调查员在平板电脑上有已经完成的处于普查状态的访谈，那么数据将丢失。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Supervisors_Selected" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="supervisor(s) selected" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="супервизор(ов) выбрано" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="督导员被选中" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Supervisors_Unarchive" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Unarchive" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Разархивировать" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="取消归档" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Supervisors_UnarchiveSupervisorsConfirm" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Do you want to continue?" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Вы хотите продолжить?" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="您想要继续吗？" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Survey_CreatedOnClientTitle" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6361,30 +6766,35 @@
           <lis>
             <li lc="nn-nn" tx="{0} interview(s) from {1} responsible(s)" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="{0} интервью от {1} ответственных" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="来自{1}个负责人的{0}个访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="SurveysAndStatuses_InterviewerTitle" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interviewer (team)" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервьвер (команда)" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="调查员（团队）" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="SurveysAndStatuses_Overview" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Surveys and statuses" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Состояние созданных и собранных интервью" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="调查和状态" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="SurveysAndStatuses_SupervisorStatisticsFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="{0} interview(s) from {1} responsible(s)" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="{0} интервью от {1} ответственных" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="来自{1}个负责人的{0}个访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="SurveysAndStatuses_SupervisorTitle" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Supervisor (teams)" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Супервизор (команды)" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="督导员（团队）" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="SurveysStatuses_ApprovedByHQ" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6526,6 +6936,7 @@
           <lis>
             <li lc="nn-nn" tx="Update" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Обновить" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="更新" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Upload_Upload" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6677,7 +7088,7 @@
             <li lc="fr" tx="Par" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="By" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Кем" ts="Translated" qs="Approved" />
-            <li lc="zh" tx="By" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="操作人" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Por" ts="Translated" qs="ToReview" />
           </lis>
         </it>
@@ -6711,6 +7122,7 @@
         <it rn="Resources\PeriodicStatusReport.resx" nm="InTheSupervisorTeamFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="PeriodicStatusReport" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="in the {0} team" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="在{0}的团队中" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\PeriodicStatusReport.resx" nm="Month" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="PeriodicStatusReport" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6733,11 +7145,11 @@
         </it>
         <it rn="Resources\PeriodicStatusReport.resx" nm="NumberOfCompletedInterviewsDescription" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="PeriodicStatusReport" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="Nombre d’entretiens achevés par un {0}. Sont comptés comme deux événements distincts d'achèvement le rejet et la correction d'un même entretien." ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Nombre d’entretiens achevés par un {0}. Sont comptés comme deux événements distincts d'achèvement le rejet et la correction d'un même entretien." ts="Changed" qs="ToReview" />
             <li lc="nn-nn" tx="Number of interview completions by a {0}. Rejected and then completed interviews are counted as separate completion events." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Количество завершенных интервью. Кем: {0} Отклоненные и затем завершенные интервью считаются как отдельный случай." ts="Changed" qs="Approved" />
-            <li lc="zh" tx="一个{0}已经完成的访谈数量。驳回后完成的访谈另计。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="pt" tx="Número de conclusões da entrevista por um {0}. Rejeitado e depois completou entrevistas são contadas como eventos separados de conclusão." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Количество завершенных интервью командой {0}. Отклоненные и затем завершенные интервью считаются как отдельный случай." er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="一个{0}已经完成的访谈数量。驳回后完成的访谈另计。" er="" ts="Changed" qs="ToReview" />
+            <li lc="pt" tx="Número de conclusões da entrevista por um {0}. Rejeitado e depois completou entrevistas são contadas como eventos separados de conclusão." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\PeriodicStatusReport.resx" nm="NumberOfInterviewsApprovedByHQ" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="PeriodicStatusReport" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6915,12 +7327,14 @@
           <lis>
             <li lc="nn-nn" tx="Account password successfully updated" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Пароль аккаунта успешно изменён" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="成功更新了账户密码" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Strings.resx" nm="HQ_AccountController_AccountPasswordChangedSuccessfullyFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Strings" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Password for account &lt;b&gt;{0}&lt;/b&gt; successfully updated" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Пароль для аккаунта &lt;b&gt;{0}&lt;/b&gt; успешно изменён" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="成功更新了账户&lt;b&gt;{0}&lt;/b&gt;的密码" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Strings.resx" nm="HQ_AccountController_AccountUpdatedSuccessfully" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Strings" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6936,6 +7350,7 @@
           <lis>
             <li lc="nn-nn" tx="Information about &lt;b&gt;{0}&lt;/b&gt; successfully updated" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Информация об &lt;b&gt;{0}&lt;/b&gt; успешно обновлена" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="成功更新了&lt;b&gt;{0}&lt;/b&gt;的信息" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Strings.resx" nm="HQ_Views_Manage_Title" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Strings" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7257,11 +7672,13 @@
           <lis>
             <li lc="nn-nn" tx="Download translations for questionnaire &lt;b&gt;{0}&lt;/b&gt; [{1}]" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Загрузка переводов для опросника &lt;b&gt;{0}&lt;/b&gt; [{1}]" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="下载问卷&lt;b&gt;{0}&lt;/b&gt; [{1}]的翻译" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\SyncLogMessages.resx" nm="InterviewerFailedToLogin" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="SyncLogMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interviewer failed to login" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="调查员登录失败" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\SyncLogMessages.resx" nm="InterviewerHasDevice" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="SyncLogMessages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7276,6 +7693,7 @@
         <it rn="Resources\SyncLogMessages.resx" nm="InterviewerLoggedIn" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="SyncLogMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interviewer logged in and aquired AuthToken" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="调查员已登录并获得了认证令牌" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\SyncLogMessages.resx" nm="InterviewPackageProcessed" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="SyncLogMessages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7498,162 +7916,189 @@
           <lis>
             <li lc="nn-nn" tx="Specify an interview key or interview id to search." ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Укажите ключ или интервью ID для поиска." ts="Changed" qs="Approved" />
+            <li lc="zh" tx="请指定一个要搜索的访谈键（XX-XX-XX-XX）或访谈编号。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="InterviewDataIsMissingTitle" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="An interviewer claims an interview was completed and synchronized, but I see no data for that interview on the server" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Интервьюер утверждает, что интервью было закончено и синхронизировано, но я не вижу данных на сервере" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="调查员声称一个访谈已经完成并同步，但我在服务器上并没有看到这个访谈的数据" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="MissingCensusInterviews_Filters_Dates" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Search interviews synchronized between two dates" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Найти интервью, синхронизированные между двумя датами" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="搜索在两个日期间同步的访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="MissingCensusInterviews_Filters_DatesPlaceholder" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Select dates" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Выберите даты" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="选择日期" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="MissingCensusInterviews_Filters_Interviewer" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interviewer" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервьювер" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="调查员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="MissingCensusInterviews_Filters_InterviewerPlaceholder" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Select interviewer" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Выберите интервьювера" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="选择调查员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="MissingCensusInterviews_Filters_Questionnaire" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Questionnaire" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Опросник" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="问卷" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="MissingCensusInterviews_Filters_QuestionnairePlaceholder" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Select questionnaire" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Выберите опросник" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="选择问卷" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="MissingCensusInterviews_Filters_Search" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Search" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Поиск" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="搜索" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="MissingCensusInterviews_FiltersTitle" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Filter Conditions" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Условия поиска" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="过滤条件" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="MissingCensusInterviews_Instructions" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="To locate an interview, please provide name of the questionnaire.&lt;br/&gt;&#xD;&#xA;Select an interviewer and timeframe to narrow down your search result" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Чтобы найти интервью, выберите название опросника.&lt;br/&gt;&#xD;&#xA;Выберите интервьювера и диапазон дат, чтобы ограничить результаты поиска" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="为了查找一个访谈，请提供问卷的名称。&lt;br&gt;选择调查员和时间范围以缩小搜索结果" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="MissingCensusInterviews_MoreThanOneInterviewsFound_Message_Format" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="{0} interviews satisfy filter conditions" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="{0} интервью удовлетворяют условиям поиска" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="{0}个访谈满足过滤条件" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="MissingCensusInterviews_NothingFound_Message" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="No interviews satisfy filter conditions" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Нет интервью, удовлетворяющих критериям поиска" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="没有满足过滤条件的访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="MissingCensusInterviews_OneInterviewFound_Message" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="One interview satisfies filter conditions" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Одно интервью удовлетворяет критериям поиска" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="1个满足过滤条件的访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="MissingCensusInterviews_PageHeader" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Locating specific census interview" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Поиск интервью, собранных в census режиме " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
+            <li lc="zh" tx="正在查找特定的普查模式的访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="MissingCensusInterviewsDescription" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Provide an interviewer login name, name of a questionnaire and a date range" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Вам потребуется выбрать название опросника, имя интервьюера и диапазон дат" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="请提供一个调查员登录名、问卷名称和日期范围" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="MissingCensusInterviewsTitle" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="I need to locate an interview in a census mode" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Я не могу найти интервью, собранное в режиме census" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="我需要查找处于普查模式的一个访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="NoData_Description" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Specify an interview key (XX-XX-XX-XX) or interview id to search." ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Укажите ключ интервью (XX-XX-XX-XX) или идентификатор интервью для поиска." ts="Changed" qs="Approved" />
+            <li lc="zh" tx="请指定一个要搜索的访谈键（XX-XX-XX-XX）或访谈编号。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="NoData_Filters_InterviewKey" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interview key or interview id" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Ключ интервью или идентификатор интервью" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="访谈键或访谈编号" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="NoData_Filters_InterviewKeyPlaceholder" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Enter interview key or id" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Введите ключ или идентификатор интервью" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="输入访谈键或编号" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="NoData_Title" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="I see no data for synchronized interview on the server" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Я не вижу данных для синхронизированных интервью на сервере" ts="Changed" qs="Approved" />
+            <li lc="zh" tx="服务器上未找到已同步的访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="SupportSite" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Click on the link of an issue you want to resolve. For the problems not listed below, visit the Survey Solutions &lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;support site&lt;/a&gt;." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Перейдите по ссылке, которая описывает ваш вопрос, чтобы увидеть предлагаемые решения. Если проблема, с которой вы столкнулись, не описана ниже, перейдите на &lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;сайт технической поддержки&lt;/a&gt; Survey Solutions." ts="Changed" qs="Approved" />
+            <li lc="zh" tx="点击您要解决的问题的链接。如果您的问题没有出现在列表中，请访问Survey Solutions&lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;支持网站&lt;/a&gt;。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="TableTitle_Enumerator" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Enumerator" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервьювер" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="调查员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="TableTitle_InterviewId" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interview id" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Id интервью" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="访谈编号" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="TableTitle_LastUpdate" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Last update" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Дата последнего обновления" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="最近一次更新" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="TableTitle_Status" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Status" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Статус" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="状态" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="Title" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Troubleshooting" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Устранение неполадок" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="故障排除" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\UserPreloadingVerificationMessages.resx" nm="PLU0001" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UserPreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7759,317 +8204,377 @@
           <lis>
             <li lc="nn-nn" tx="Full name should not contain more than 100 characters" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Полное имя не может содержать больше 100 символов" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="全名不应超过100个字符" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\UserPreloadingVerificationMessages.resx" nm="PLU0013" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UserPreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Phone number should not contain more than 15 characters" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Номер телефона не может содержать больше 15 символов" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="电话号码不应超过15个字符" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\UserPreloadingVerificationMessages.resx" nm="PLU0014" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UserPreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="User name has invalid characters. Only letters, dots, spaces, and apostrophes are allowed" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Имя пользователя может содержать только буквы, пробелы, точки и апосторофы" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="用户名含有无效字符。 只允许使用字母、点、空格和单引号。" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="CompletionText" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="This interview has been completed" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="访谈已完成" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="DiscardAndStart" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Restart" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="重新开始" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Error_CookiesTurnedOff" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Cookies are not enabled in your browser. Please enable cookies in your browser preferences to continue" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="您的浏览器未启用cookies。请在浏览器偏好中启用cookies然后继续。" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Error_InterviewExpired" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="The link has expired" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="链接已过期" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Error_NoActionsNeeded" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="The information on that interview has been recorded. No further actions are required" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="该访谈的信息已经记录。不需要进行其他操作。" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Error_NotFound" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interview not found" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="未找到访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="FinishInterviewText" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="This interview has been completed" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="访谈已完成" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="HasPreviousStartedInterview" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="You have started an interview" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="您已经开始了一个访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="InProgressText" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="In progress" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="处理中" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Interview_Group_AnsweredQuestions_Many" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="{0} answers" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="{0}个答案" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Interview_Group_AnsweredQuestions_One" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="one answer" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="1个答案" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Interview_Group_InvalidAnswers_ManyFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="{0} errors" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="{0}个错误" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Interview_Group_InvalidAnswers_One" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="one error" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="1个错误" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Interview_Group_Status_CompletedFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Section completed: {0}" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="已完成的部分：{0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Interview_Group_Status_NotStarted" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Section not started" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="尚未开始的部分" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Interview_Group_Status_StartedIncompleteFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Section started: {0}" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="已经开始的部分：{0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Interview_Group_Subgroups_ManyFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="{0} sub-sections" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="{0}个子部分" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Interview_Group_Subgroups_One" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="one sub-section" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="1个子部分" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Interview_Group_Subgroups_Zero" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="no sub-sections" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="没有子部分" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="InterviewCompletionDateFormatText" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interview completion date: " ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="访谈完成日期：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="InterviewIdFormatText" ns="{0} - human interview id" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interview ID: {0}" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="访谈编号：{0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="InterviewStartDateFormatText" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interview start date: " ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="访谈开始日期：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="InvitationSmallText" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="The interview process requires an internet connection. No additional software is needed." ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="访谈过程需要互联网连接，但不需要其他软件。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="InvitationText" ns="{0} - name of the questionnaire without version" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="You have been invited to take part in the following survey: &quot;{0}&quot;" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="您被邀请参加下面的调查：“{0}”" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="NotStartedText" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Not started" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="尚未开始" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Original_Language" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Original" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="原始" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="OrStartInterview" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Or you can start a new interview" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="或者您可以开始一个新的访问" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="PictureQuestionNotAPicture" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Only image files are accepted" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="仅接受图片文件" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="PleaseFillCaptcha" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Please fill in the captcha field" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="请填写验证码" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="RefreshPage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Refresh page" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="刷新页面" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Resume_InvitationSmallText" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interview process requires internet connection, no additional software is needed" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="访谈过程需要互联网连接，但不需要其他软件。" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Resume_InvitationText" ns="{0} - name of the questionnaire without version" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="You can navigate to interview in the following survey: &quot;{0}&quot;" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="您可以浏览以下调查中的访谈：“{0}”" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Resume_WelcomeText" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Hello and Welcome to the Survey Solutions Web Survey" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="您好，欢迎使用Survey Solutions网络访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="ServerUnderLoad" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="We're sorry, too many people are accessing this website at the same time. We're working on this problem. Please try again later." ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="非常抱歉，同时访问网站的人的太多。我们正在解决这个问题。请稍后再试。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Start" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Start interview" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="开始访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="StartedInterviewText" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="This interview has not been completed" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="这份访谈还没有完成" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="StartPageTitle" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Web Survey" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="网络调查" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Stopped" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Web interview stopped" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="已停止网络访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="SurveyFormatText" ns="{0} - name of the questionnaire without version" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Survey: &quot;{0}&quot;" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="调查：“{0}”" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="ToInterview" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="To interview" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="进行访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="WebSurvey" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Survey Solutions Web Survey" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="Survey Solutions网络访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="WelcomeText" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Hello and Welcome to the Survey Solutions Web Survey" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="您好，欢迎使用Survey Solutions网络访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterviewSetup.resx" nm="BackToQuestionnaires" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterviewSetup" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Back to Survey Setup" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Назад к опросникам" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="回到问卷设置" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterviewSetup.resx" nm="Done" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterviewSetup" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Done" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Завершено" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="完成" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterviewSetup.resx" nm="DownloadTitle" ns="{0} - count of interviews in file" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterviewSetup" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Download ({0})" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Скачать ({0})" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="下载{0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterviewSetup.resx" nm="ExportTitle" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterviewSetup" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="You can download interviews in status `Interviewer Assigned` to deliver links to respondents" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Вы можете скачать интервью в статусе `Интервьюер назначен` для доставки ссылок респондентам" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="您可以下载状态为“已分配调查员”的问卷，并把链接发送给受访者" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterviewSetup.resx" nm="SelectInterviwer" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterviewSetup" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Select interviewer" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Выберите интервьюера" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="选择调查员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterviewSetup.resx" nm="Start" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterviewSetup" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Start" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Начать" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="开始" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterviewSetup.resx" nm="Started_Title" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterviewSetup" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Web interview started" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Web интервью начато" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="已经开始网络访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterviewSetup.resx" nm="StartInfo" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterviewSetup" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Starting web interview for {0}" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Начать web интервью для {0}" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="正在为{0}启用网络访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterviewSetup.resx" nm="StopWebInterview" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterviewSetup" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Stop Web Interview" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Остановить web интервью" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="停止网络访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterviewSetup.resx" nm="UseCaptcha" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterviewSetup" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Enable spam protection" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="启用垃圾保护" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterviewSetup.resx" nm="WebInterviewSetup_Description" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterviewSetup" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="To start web interview, select the interviewer that is going to be used as the assignee" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Чтоб начать web интервью выберите интервьюера" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="请选择调查员以开始网络访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterviewSetup.resx" nm="WebInterviewSetup_PageHeader" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterviewSetup" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Web interview setup" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Настройка web интервью" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="网络访谈设置" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterviewSetup.resx" nm="WebInterviewSetup_Title" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterviewSetup" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Web interview setup" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Настройка web интервью" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="网络访谈设置" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterviewSetup.resx" nm="WebInterviewStarted" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterviewSetup" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Web interview for {0} started" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Web интервью для {0} начато" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="{0}的网络访谈已经开始" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterviewSetup.resx" nm="WebLinkTitle" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterviewSetup" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Use this link to start interview" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Используйте эту ссылку чтоб начать интервью" ts="Translated" qs="Approved" />
+            <li lc="zh" tx="使用这个链接开始访谈" ts="Translated" qs="ToReview" />
           </lis>
         </it>
       </items>
@@ -8088,21 +8593,25 @@
         <it rn="Resources\Captcha.resx" nm="EnterText" rc="" dnt="false" nms="WB.UI.Shared.Web.Resources" cln="Captcha" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Enter the text you see above" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="请输入上面的文本" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Captcha.resx" nm="InvalidCaptcha" rc="" dnt="false" nms="WB.UI.Shared.Web.Resources" cln="Captcha" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Invalid captcha" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="无效的验证码" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Captcha.resx" nm="Required" rc="" dnt="false" nms="WB.UI.Shared.Web.Resources" cln="Captcha" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Is required field" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="是否为必填项" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Captcha.resx" nm="TryAnother" rc="" dnt="false" nms="WB.UI.Shared.Web.Resources" cln="Captcha" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Try another" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="尝试另一个" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\ErrorMessages.resx" nm="ExcessiveRequestAttemptsDetected" rc="" dnt="false" nms="WB.UI.Shared.Web.Resources" cln="ErrorMessages" bac="EmbeddedResource" hgt="0" wdt="0">

@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.statefulInterviewRepository = statefulInterviewRepository;
         }
 
-        public DetailsViewModel GetInterviewDetails(Guid interviewId, InterviewDetailsFilter filter, Identity currentGroupIdentity)
+        public DetailsViewModel GetInterviewDetails(Guid interviewId, InterviewDetailsFilter questionsTypes, Identity currentGroupIdentity)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
             InterviewSummary interviewSummary = this.interviewSummaryRepository.GetById(interviewId);
@@ -79,13 +79,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             var interviewGroupViews = rootNode.ToEnumerable()
                                               .Concat(interview.GetAllGroupsAndRosters().Select(this.ToGroupView)).ToList();
 
-            var interviewEntityViews = this.GetFilteredEntities(interview, interviewData, questionnaire, questionnaireDocument, currentGroupIdentity, filter);
-            if (filter != InterviewDetailsFilter.All)
+            var interviewEntityViews = this.GetFilteredEntities(interview, interviewData, questionnaire, questionnaireDocument, currentGroupIdentity, questionsTypes);
+            if (questionsTypes != InterviewDetailsFilter.All)
                 interviewEntityViews = this.GetEntitiesWithoutEmptyGroupsAndRosters(interviewEntityViews);
 
             return new DetailsViewModel
             {
-                Filter = filter,
+                QuestionsTypes = questionsTypes,
                 SelectedGroupId = currentGroupIdentity,
                 FilteredEntities = interviewEntityViews,
                 InterviewDetails = new InterviewDetailsView
@@ -138,7 +138,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         private IEnumerable<InterviewEntityView> GetFilteredEntities(IStatefulInterview interview,
             InterviewData interviewData, IQuestionnaire questionnaire, QuestionnaireDocument questionnaireDocument, Identity currentGroupIdentity,
-            InterviewDetailsFilter filter)
+            InterviewDetailsFilter questionsTypes)
         {
             var groupEntities = currentGroupIdentity == null || currentGroupIdentity.Id == questionnaire.QuestionnaireId
                 ? interview.GetAllSections()
@@ -146,7 +146,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             foreach (var entity in this.GetQuestionsFirstAndGroupsAfterFrom(groupEntities))
             {
-                if (!IsEntityInFilter(filter, entity, interviewData)) continue;
+                if (!IsEntityInFilter(questionsTypes, entity, interviewData)) continue;
 
                 var question = entity as InterviewTreeQuestion;
                 var group = entity as InterviewTreeGroup;
@@ -296,6 +296,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             if (interviewQuestion.IsDouble)
                 return interviewQuestion.AsDouble.GetAnswer().Value;
+
+            if (interviewQuestion.IsArea)
+                return interviewQuestion.AsArea.GetAnswer().Value;
 
             return null;
         }

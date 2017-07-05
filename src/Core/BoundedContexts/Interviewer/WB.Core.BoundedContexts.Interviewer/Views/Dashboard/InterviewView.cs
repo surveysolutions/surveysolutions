@@ -13,6 +13,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public string QuestionnaireId { get; set; }
         public Guid ResponsibleId { get; set; }
         public InterviewStatus Status { get; set; }
+        public int? Assignment { get; set; }
         
         public string LastInterviewerOrSupervisorComment { get; set; }
         public bool CanBeDeleted { get; set; }
@@ -35,5 +36,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public double? LocationLongitude { get; set; }
 
         public string Language { get; set; }
+
+        public string QuestionnaireTitle { get; set; }
     }
 }

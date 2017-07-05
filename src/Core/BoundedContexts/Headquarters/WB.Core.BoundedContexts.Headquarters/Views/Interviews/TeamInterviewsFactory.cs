@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Infrastructure.Native.Fetching;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
 {
@@ -11,16 +13,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
         TeamInterviewsView Load(TeamInterviewsInputModel input);
     }
 
-    public class TeamInterviewsFactory : ITeamInterviewsFactory
+    internal sealed class TeamInterviewsFactory : ITeamInterviewsFactory
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> reader;
-        private readonly IQueryableReadSideRepositoryReader<QuestionAnswer> featuredQuestionAnswersReader;
 
-        public TeamInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> reader,
-            IQueryableReadSideRepositoryReader<QuestionAnswer> featuredQuestionAnswersReader)
+        public TeamInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> reader)
         {
             this.reader = reader;
-            this.featuredQuestionAnswersReader = featuredQuestionAnswersReader;
         }
 
         public TeamInterviewsView Load(TeamInterviewsInputModel input)
@@ -31,8 +30,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
                 var seachIndexContents = this.DefineOrderBy(items, input)
                     .Skip((input.Page - 1) * input.PageSize)
                     .Take(input.PageSize)
+                    .Select(x => x.SummaryId)
+                    .ToArray();
+
+                var summaries = DefineOrderBy(_, input)
+                    .Where(x => seachIndexContents.Contains(x.SummaryId))
+                    .Fetch(x => x.AnswersToFeaturedQuestions)
                     .ToList();
-                return seachIndexContents;
+
+                return summaries;
             });
 
 
@@ -42,16 +48,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
                 return counter.Count();
             });
 
-            var selectedSummaries = interviewsPage.Select(x => x.SummaryId).ToArray();
-            var answersToFeaturedQuestions = this.featuredQuestionAnswersReader.Query(_ => 
-                                                        _.Where(x => selectedSummaries.Contains(x.InterviewSummary.SummaryId))
-                                                        .OrderBy(x => x.Position)
-                                                        .ToList());
-
             var teamInterviewsViewItems = interviewsPage
                 .Select(x => new TeamInterviewsViewItem {
                     FeaturedQuestions = 
-                        answersToFeaturedQuestions.Where(a => a.InterviewSummary.SummaryId == x.SummaryId).Select(a => new InterviewFeaturedQuestion
+                        x.AnswersToFeaturedQuestions.Select(a => new InterviewFeaturedQuestion
                         {
                             Id = a.Questionid,
                             Answer = a.Answer,
@@ -73,8 +73,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
                     CanApprove = x.Status == InterviewStatus.Completed || x.Status == InterviewStatus.RejectedByHeadquarters,
                     CanReject = x.Status == InterviewStatus.Completed || x.Status == InterviewStatus.RejectedByHeadquarters,
                     IsNeedInterviewerAssign = !x.IsAssignedToInterviewer,
-                    CreatedOnClient = x.WasCreatedOnClient,
-                    ReceivedByInterviewer = x.ReceivedByInterviewer
+                    AssignmentId = x.AssignmentId,
+                    ReceivedByInterviewer = x.ReceivedByInterviewer,
                 }).ToList();
             return new TeamInterviewsView
             {
@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
 
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
-                items = items.Where(x => x.Key.StartsWith(input.SearchBy) || x.AnswersToFeaturedQuestions.Any(a => a.Answer.ToLower().Contains(input.SearchBy.ToLower())));
+                items = items.Where(x => x.Key.StartsWith(input.SearchBy) || x.AnswersToFeaturedQuestions.Any(a => a.Answer.ToLower().StartsWith(input.SearchBy.ToLower())));
             }
 
             if (input.Status.HasValue)
@@ -119,12 +119,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
                 items = items.Where(x => x.ResponsibleName.ToLower() == lowerResponsibleName || x.TeamLeadName.ToLower() == lowerResponsibleName);
             }
 
+            if (input.AssignmentId.HasValue)
+            {
+                items = items.Where(x => x.AssignmentId == input.AssignmentId);
+            }
+
             return items;
         }
 
         private IQueryable<InterviewSummary> DefineOrderBy(IQueryable<InterviewSummary> query, TeamInterviewsInputModel model)
         {
-            var orderBy = model.Orders.FirstOrDefault();
+            var orderBy = model.Orders?.FirstOrDefault();
             if (orderBy == null)
             {
                 return query.OrderByDescending(x => x.UpdateDate);

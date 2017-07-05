@@ -50,7 +50,9 @@
   <dimen name="Interview_Question_Errors_Title_margin_top">10dp</dimen>
   <dimen name="Interview_Question_Errors_Details_margin_top">10dp</dimen>
 
-  <dimen name="Interview_Question_Progress_Indicator_height">2dp</dimen>
+  <dimen name="Interview_Question_Progress_Indicator_height">4dp</dimen>
+  <dimen name="Progress_Indicator_height">6dp</dimen>
+  <dimen name="Progress_Indicator_padding_top">6dp</dimen>
 
   <dimen name="Interview_Group_margin_bottom">14dp</dimen>
   <dimen name="Interview_Group_margin_top">20dp</dimen>
@@ -89,5 +91,8 @@
   <dimen name="Interview_Cover_Marker_Line_width">14dp</dimen>
   <dimen name="Interview_Cover_Prefilled_vertical_padding">9dp</dimen>
   <dimen name="Interview_Cover_Prefilled_Block_vertical_padding">24dp</dimen>
+  
+  <dimen name="Interview_Question_Readonly_padding">1dp</dimen>
+  <dimen name="Interview_Question_Readonly_active_width">4dp</dimen>
 
 </resources>

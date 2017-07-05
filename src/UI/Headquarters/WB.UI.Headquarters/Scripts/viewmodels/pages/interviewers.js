@@ -1,5 +1,5 @@
-﻿Supervisor.VM.Interviewers = function (listViewUrl, archiveUsersApiUrl, interviewersPageUrl, supervisorsUrl) {
-    Supervisor.VM.Interviewers.superclass.constructor.apply(this, arguments);
+﻿Supervisor.VM.Interviewers = function (listViewUrl, archiveUsersUrl, ajax, interviewersPageUrl, supervisorsUrl) {
+    Supervisor.VM.Interviewers.superclass.constructor.apply(this, [listViewUrl, archiveUsersUrl, ajax]);
 
     var self = this;
 
@@ -18,77 +18,17 @@
     self.SelectedSupervisor = ko.observable();
 
     self.Archived = ko.observable(false);
-    self.ConnectedToDevice = ko.observable('');
-    self.SearchBy = ko.observable('');
-
-    self.archiveUser = function (userViewItem) {
-        self.sendRequestIfConfirmed("#confirm-archive-template", "#confirm-archive-continue-message-template", [userViewItem], true);
-    };
-
-    self.unarchiveUser = function (userViewItem) {
-        self.sendRequestIfConfirmed("#confirm-unarchive-template", "#confirm-unarchive-continue-message-template", [userViewItem], false);
-    };
-
-    self.unarchiveInterviewers = function () {
-        self.sendRequestIfConfirmed("#confirm-unarchive-template", "#confirm-unarchive-continue-message-template", self.GetSelectedItemsAfterFilter(function (item) { return true; }), false);
-    };
-
-    self.archiveInterviewers = function () {
-        self.sendRequestIfConfirmed("#confirm-archive-template", "#confirm-archive-continue-message-template", self.GetSelectedItemsAfterFilter(function (item) { return true; }), true);
-    };
-
-    self.sendRequestIfConfirmed = function (confirm_template, confirm_continue_template, filteredItems, archive) {
-        self.AskConfirmationAndRunActionIfTrue(confirm_template, confirm_continue_template,
-            function (filteredItems) {
-
-                var request = {
-                    userIds: filteredItems.map(function(user) { return user.UserId() }),
-                    archive: archive
-                };
-
-                self.SendRequest(archiveUsersApiUrl, request, function () {
-                    setTimeout(function () { self.search(); }, 100);
-                });
-            },
-            filteredItems);
-    };
-
-    self.AskConfirmationAndRunActionIfTrue = function (confirm_template, confirm_continue_template, action, filteredItems) {
-        var messageHtml = self.getBindedHtmlTemplate(confirm_template, filteredItems);
-
-        if (filteredItems.length === 0) {
-            bootbox.alert(messageHtml);
-            return;
-        }
-
-        messageHtml += $(confirm_continue_template).html();
-
-        bootbox.confirm(messageHtml, function (result) {
-            if (result) {
-                action(filteredItems);
-            }
-        });
-    };
+    self.InterviewerOptionFilter = ko.observable('');
 
     self.GetFilterMethod = function () {
 
-        var supervisorName = _.isUndefined(self.SelectedSupervisor()) ? null : self.SelectedSupervisor().UserName;
-
-        self.Url.query['supervisor'] = supervisorName || "";
-        self.Url.query['archived'] = self.Archived() || "";
-        self.Url.query['connectedToDevice'] = self.ConnectedToDevice() || "";
-        self.Url.query['searchBy'] = self.SearchBy() || "";
-
-        if (Modernizr.history) {
-            window.history.pushState({}, "Interviews", self.Url.toString());
-        }
-
         return {
-            SupervisorName: supervisorName,
-            Archived: self.Archived,
-            ConnectedToDevice: self.ConnectedToDevice,
-            SearchBy: self.SearchBy
-        };
+            SupervisorName : _.isUndefined(self.SelectedSupervisor())
+                                ? null
+                                : self.SelectedSupervisor().UserName,
+            Archived : self.Archived(),
+            InterviewerOptionFilter : self.InterviewerOptionFilter()
+        }
     };
 
     self.load = function () {
@@ -97,20 +37,20 @@
             self.SelectedSupervisor({ UserName: self.QueryString['supervisor'] });
         }
 
-        self.SearchBy(decodeURIComponent(self.QueryString['searchBy'] || ""));
         self.Archived(self.QueryString['archived']);
-        self.ConnectedToDevice(self.QueryString['connectedToDevice']);
+        self.InterviewerOptionFilter(self.QueryString['InterviewerOptionFilter']);
 
         self.Url.query['supervisor'] = self.QueryString['supervisor'] || "";
         self.Url.query['archived'] = self.QueryString['archived'] || "";
-        self.Url.query['connectedToDevice'] = self.QueryString['connectedToDevice'] || "";
-        self.Url.query['searchBy'] = self.QueryString['searchBy'] || "";
+        self.Url.query['InterviewerOptionFilter'] = self.QueryString['InterviewerOptionFilter'] || "";
 
-        self.SelectedSupervisor.subscribe(self.filter);
-        self.Archived.subscribe(self.filter);
-        self.ConnectedToDevice.subscribe(self.filter);
-
-        self.search();
-    };
+        self.SelectedSupervisor.subscribe(self.reloadDataTable);
+        self.Archived.subscribe(self.reloadDataTable);
+        self.InterviewerOptionFilter.subscribe(self.reloadDataTable);
+        
+        self.initDataTable(this.onDataTableDataReceived, this.onTableInitComplete);
+        self.reloadDataTable();
+    }
 };
-Supervisor.Framework.Classes.inherit(Supervisor.VM.Interviewers, Supervisor.VM.ListView);
+
+Supervisor.Framework.Classes.inherit(Supervisor.VM.Interviewers, Supervisor.VM.EditableUsers);

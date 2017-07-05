@@ -5,12 +5,12 @@ using System.Web.Http;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Infrastructure.Security;
 using WB.UI.Headquarters.Models;
 
 namespace WB.UI.Headquarters.API

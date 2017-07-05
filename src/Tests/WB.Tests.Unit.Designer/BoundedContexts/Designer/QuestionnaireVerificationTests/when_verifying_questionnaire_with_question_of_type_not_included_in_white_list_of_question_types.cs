@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             questionId = Guid.Parse("1111CCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new SingleQuestion()
+                new SingleQuestion("test")
                 {
                     PublicKey = questionId,
                     QuestionType = QuestionType.YesNo,

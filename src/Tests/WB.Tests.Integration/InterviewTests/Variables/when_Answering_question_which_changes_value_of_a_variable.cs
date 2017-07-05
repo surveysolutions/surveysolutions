@@ -2,7 +2,6 @@
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -11,47 +10,6 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.Variables
 {
-    internal class when_removing_asnwer_which_changes_value_of_a_variable_that_uses_in_substitution : InterviewTestsContext
-    {
-        Establish context = () =>
-        {
-            QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(id: QuestionnaireId,
-                children: new IComposite[]
-                {
-                    Create.Entity.NumericIntegerQuestion(id: n1Id, variable: "n1"),
-                    Create.Entity.NumericIntegerQuestion(id: n2Id, variable: "n2"),
-                    Create.Entity.Variable(variableId, VariableType.LongInteger, "v1", "n1+n2"),
-                    Create.Entity.NumericIntegerQuestion(id: n3Id, variable: "n3", questionText: "title with %v1%"),
-                });
-
-            interview = SetupStatefullInterview(questionnaire);
-            interview.AnswerNumericIntegerQuestion(userId, n1Id, new decimal[0], DateTime.Now, 1);
-            interview.AnswerNumericIntegerQuestion(userId, n2Id, new decimal[0], DateTime.Now, 2);
-            eventContext = new EventContext();
-        };
-
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
-
-        Because of = () =>
-            interview.RemoveAnswer(n1Id, new decimal[0], userId, DateTime.Now);
-
-        It should_raise_VariablesValuesChanged_event_for_the_variable = () =>
-            interview.GetTitleText(Create.Identity(n3Id)).ShouldEqual("title with [...]");
-
-        private static EventContext eventContext;
-        private static StatefulInterview interview;
-        private static readonly Guid QuestionnaireId = Guid.Parse("10000000000000000000000000000000");
-        private static readonly Guid userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
-        private static readonly Guid n1Id = Guid.Parse("11111111111111111111111111111111");
-        private static readonly Guid n2Id = Guid.Parse("22222222222222222222222222222222");
-        private static readonly Guid n3Id = Guid.Parse("33333333333333333333333333333333");
-        private static readonly Guid variableId =  Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-    }
-
     internal class when_Answering_question_which_changes_value_of_a_variable : InterviewTestsContext
     {
         Establish context = () =>
@@ -61,14 +19,14 @@ namespace WB.Tests.Integration.InterviewTests.Variables
             textQuetionId = Guid.Parse("21111111111111111111111111111111");
             variableId = Guid.Parse("22222222222222222222222222222222");
 
-            QuestionnaireDocument questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
+            QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
                 children: new IComposite[]
                 {
-                    Abc.Create.Entity.TextQuestion(questionId: textQuetionId, variable: "txt"),
+                    Create.Entity.TextQuestion(textQuetionId, variable: "txt"),
                     Create.Entity.Variable(variableId, VariableType.LongInteger, "v1", "txt.Length")
                 });
 
-            interview = SetupInterview(questionnaireDocument: questionnaire);
+            interview = SetupInterview(questionnaire);
             eventContext = new EventContext();
         };
 

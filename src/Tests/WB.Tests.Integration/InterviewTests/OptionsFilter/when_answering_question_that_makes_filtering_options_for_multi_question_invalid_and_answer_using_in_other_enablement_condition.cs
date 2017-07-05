@@ -8,7 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 {
@@ -26,22 +26,20 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                 var options = new List<Answer>
                 {
-                    Abc.Create.Entity.Option(value: "1", text: "Option 1"),
-                    Abc.Create.Entity.Option(value: "2", text: "Option 2"),
-                    Abc.Create.Entity.Option(value: "11", text: "Option 11"),
-                    Abc.Create.Entity.Option(value: "12", text: "Option 12"),
+                    Create.Entity.Option("1", "Option 1"),
+                    Create.Entity.Option("2", "Option 2"),
+                    Create.Entity.Option("11", "Option 11"),
+                    Create.Entity.Option("12", "Option 12")
                 };
 
-                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
+                var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, new IComposite[]
                 {
-                    Abc.Create.Entity.SingleQuestion(q1Id, variable: "q1", options: options),
-                    Abc.Create.Entity.MultyOptionsQuestion(q2Id, variable: "q2", options: options, optionsFilter: "@optioncode < (int)q1"),
-                    Abc.Create.Entity.SingleQuestion(q3Id, variable: "q3", options: options, enablementCondition: "q2.Contains(2)")
+                    Create.Entity.SingleQuestion(q1Id, "q1", options: options),
+                    Create.Entity.MultyOptionsQuestion(q2Id, variable: "q2", options: options, optionsFilter: "@optioncode < (int)q1"),
+                    Create.Entity.SingleQuestion(q3Id, "q3", options: options, enablementCondition: "q2.Contains(2)")
                 });
 
-                ILatestInterviewExpressionState interviewState = GetInterviewExpressionState(questionnaireDocument);
-
-                var interview = SetupInterview(questionnaireDocument, precompiledState: interviewState);
+                var interview = SetupInterview(questionnaireDocument);
 
                 interview.AnswerSingleOptionQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 12);
                 interview.AnswerMultipleOptionsQuestion(userId, q2Id, RosterVector.Empty, DateTime.Now, new []{ 1, 2, 11 });

@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountRepositoryTests
         It should_execute_RegisterAccountCommand_with_specified_validatedUserId = () =>
             commandService.Verify(command => command.Execute(Moq.It.Is<RegisterUser>(cp => cp.UserId == validatedUserId), Moq.It.IsAny<string>()));
 
-        private static CQRSAccountRepository accountRepository;
+        private static DesignerAccountRepository accountRepository;
         private static Mock<ICommandService> commandService;
         private static Guid validatedUserId;
     }

@@ -3,6 +3,11 @@
 	  xmlns:local="http://schemas.android.com/apk/res-auto"
       android:id="@+id/menu">
   <item
+      android:id="@+id/interview_reload"
+      android:icon="@drawable/dashboard_refresh_icon"
+      local:showAsAction="ifRoom" />
+
+  <item
       android:id="@+id/prefilled_questions_dashboard"
       local:showAsAction="never" />
   <item

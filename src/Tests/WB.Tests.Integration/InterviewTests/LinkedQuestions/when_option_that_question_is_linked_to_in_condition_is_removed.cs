@@ -38,7 +38,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                var interview = SetupInterview(questionnaireDocument);
 
                interview.AnswerTextListQuestion(userId, listQuestionId, RosterVector.Empty, DateTime.Now, new[] {Tuple.Create(0m, "one")});
-               interview.AnswerSingleOptionQuestion(userId, linkedSingleOptionQuestion, RosterVector.Empty, DateTime.Now, 0m);
+               interview.AnswerSingleOptionQuestion(userId, linkedSingleOptionQuestion, RosterVector.Empty, DateTime.Now, 0);
                interview.AnswerMultipleOptionsQuestion(userId, linkedMultioptionQuestion, RosterVector.Empty, DateTime.Now, new [] {0});
 
                using (var eventContext = new EventContext())

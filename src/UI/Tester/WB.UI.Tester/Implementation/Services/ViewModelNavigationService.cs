@@ -6,10 +6,12 @@ using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.UI.Shared.Enumerator.CustomServices.AreaEditor;
 using WB.UI.Tester.Activities;
 
 namespace WB.UI.Tester.Implementation.Services

@@ -13,5 +13,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
         public bool ReceivedByInterviewer { get; set; }
         public Guid? ViewerId { get; set; }
         public string SearchBy { get; set; }
+        public int? AssignmentId { get; set; }
     }
 }

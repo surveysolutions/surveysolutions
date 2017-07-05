@@ -34,7 +34,6 @@ using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -60,12 +59,13 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Implementation.ReadSide;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations.Impl;
 using WB.Core.BoundedContexts.Headquarters.Services.Internal;
 using WB.Core.BoundedContexts.Headquarters.Troubleshooting;
-using WB.Core.Synchronization.Implementation.ImportManager;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -122,7 +122,6 @@ namespace WB.Core.BoundedContexts.Headquarters
                     typeof(DataCollectionSharedKernelAssemblyMarker).Assembly,
                     typeof(HeadquartersBoundedContextModule).Assembly));
 
-            this.Bind<IBackupManager>().To<DefaultBackupManager>();
             this.Bind<SyncSettings>().ToConstant(this.syncSettings);
 
             CommandRegistry.Setup<Tablet>()
@@ -149,7 +148,7 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .InitializesWith<CreateInterviewFromSynchronizationMetadata>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewFromSynchronizationMetadata(command.Id, command.UserId, command.QuestionnaireId, command.QuestionnaireVersion, command.InterviewStatus, command.FeaturedQuestionsMeta, command.Comments, command.RejectedDateTime, command.InterviewerAssignedDateTime, command.Valid, command.CreatedOnClient))
                 .InitializesWith<SynchronizeInterviewEventsCommand>(command => command.InterviewId, aggregate => aggregate.SynchronizeInterviewEvents)
                 .InitializesWith<CreateInterviewCommand>(command => command.InterviewId, aggregate => aggregate.CreateInterview)
-                .InitializesWith<CreateInterviewOnClientCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewOnClient(command.QuestionnaireIdentity, command.SupervisorId, command.AnswersTime, command.UserId, command.InterviewKey))
+                .InitializesWith<CreateInterviewOnClientCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewOnClient(command))
                 .InitializesWith<CreateInterviewWithPreloadedData>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewWithPreloadedData(command))
                 
                 .StatelessHandles<HardDeleteInterview>(command => command.InterviewId, (command, aggregate) => aggregate.HardDelete(command.UserId))
@@ -172,6 +171,7 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<ApproveInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Approve(command.UserId, command.Comment, command.ApproveTime))
                 .Handles<AssignInterviewerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AssignInterviewer(command.UserId, command.InterviewerId, command.AssignTime))
                 .Handles<AssignSupervisorCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AssignSupervisor(command.UserId, command.SupervisorId))
+                .Handles<AssignResponsibleCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AssignResponsible(command))
                 .Handles<CommentAnswerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CommentAnswer(command.UserId, command.QuestionId, command.RosterVector, command.CommentTime, command.Comment))
                 .Handles<DeleteInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Delete(command.UserId))
                 .Handles<HqApproveInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.HqApprove(command.UserId, command.Comment))
@@ -234,7 +234,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IQuantityReportFactory>().To<QuantityReportFactory>();
             this.Bind<ISpeedReportFactory>().To<SpeedReportFactory>();
             this.Bind<ISampleUploadViewFactory>().To<SampleUploadViewFactory>();
-            this.Bind<ITakeNewInterviewViewFactory>().To<TakeNewInterviewViewFactory>();
             this.Bind<IAllUsersAndQuestionnairesFactory>().To<AllUsersAndQuestionnairesFactory>();
             this.Bind<IQuestionnairePreloadingDataViewFactory>().To<QuestionnairePreloadingDataViewFactory>();
             this.Bind<IInterviewTroubleshootFactory>().To<InterviewTroubleshootFactory>();
@@ -360,6 +359,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IWebInterviewConfigProvider>().To<WebInterviewConfigProvider>();
             
             this.Bind<IDeviceSyncInfoRepository>().To<DeviceSyncInfoRepository>();
+            this.Bind<IAssignmentViewFactory>().To<AssignmentViewFactory>();
+            this.Bind<IAssignmentsService>().To<AssignmentsService>();
+            this.Bind<IAssignmetnsDeletionService>().To<AssignmetnsDeletionService>();
         }
     }
 }

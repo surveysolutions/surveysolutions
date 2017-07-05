@@ -13,12 +13,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
         }
 
-        public override string ToString() => $"Variable ({this.Identity})";
+        public override string ToString()
+        {
+            var formattableString = $"Variable ({this.Identity}). Value = {Value ?? "'NULL'"}";
+            
+            return formattableString;
+        }
 
         public void SetValue(object value) => this.Value = value;
         public override IInterviewTreeNode Clone()
         {
             return (IInterviewTreeNode)this.MemberwiseClone();
+        }
+
+        public override void Accept(IInterviewTreeUpdater updater)
+        {
+            updater.UpdateEnablement(this);
+            updater.UpdateVariable(this);
         }
     }
 }

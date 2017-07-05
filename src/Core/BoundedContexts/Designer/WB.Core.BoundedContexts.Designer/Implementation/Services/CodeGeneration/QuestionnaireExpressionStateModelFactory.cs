@@ -7,9 +7,11 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Services.TopologicalSorter;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -763,6 +765,62 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return questionModel;
         }
 
+        public static string GenerateQuestionTypeName(IQuestion question, QuestionnaireDocument questionnaire)
+        {
+            switch (question.QuestionType)
+            {
+                case QuestionType.Text:
+                    return "string";
+
+                case QuestionType.AutoPropagate:
+                    return "long?";
+
+                case QuestionType.Numeric:
+                    return (question as NumericQuestion).IsInteger ? "long?" : "double?";
+
+                case QuestionType.QRBarcode:
+                    return "string";
+
+                case QuestionType.MultyOption:
+                    var multiOtion = question as MultyOptionsQuestion;
+                    if (multiOtion != null && multiOtion.YesNoView)
+                        return nameof(YesNoAnswers);
+
+                    if (question.LinkedToQuestionId == null && question.LinkedToRosterId == null)
+                        return "decimal[]";
+
+                    if (question.LinkedToQuestionId.HasValue && questionnaire.Find<ITextListQuestion>(question.LinkedToQuestionId.Value) != null)
+                    {
+                        return "decimal[]";
+                    }
+                    return "decimal[][]";
+
+                case QuestionType.DateTime:
+                    return "DateTime?";
+
+                case QuestionType.SingleOption:
+                    if (question.LinkedToQuestionId == null && question.LinkedToRosterId == null) return "decimal?";
+
+                    if (question.LinkedToQuestionId.HasValue && questionnaire.Find<ITextListQuestion>(question.LinkedToQuestionId.Value) != null)
+                    {
+                        return "decimal?";
+                    }
+
+                    return "decimal[]";
+                case QuestionType.TextList:
+                    return "Tuple<decimal, string>[]";
+
+                case QuestionType.GpsCoordinates:
+                    return "GeoLocation";
+
+                case QuestionType.Multimedia:
+                    return "string";
+
+                default:
+                    throw new ArgumentException("Unknown question type.");
+            }
+        }
+
         private bool IsLinkedToListQuestion(QuestionnaireDocument questionnaire, IQuestion question)
         {
             if (!question.LinkedToQuestionId.HasValue)
@@ -994,63 +1052,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     dependencies[entityId].Add(dependentEntityId);
             }
         }
-
-        private static string GenerateQuestionTypeName(IQuestion question, QuestionnaireDocument questionnaire)
-        {
-            switch (question.QuestionType)
-            {
-                case QuestionType.Text:
-                    return "string";
-
-                case QuestionType.AutoPropagate:
-                    return "long?";
-
-                case QuestionType.Numeric:
-                    return (question as NumericQuestion).IsInteger ? "long?" : "double?";
-
-                case QuestionType.QRBarcode:
-                    return "string";
-
-                case QuestionType.MultyOption:
-                    var multiOtion = question as MultyOptionsQuestion;
-                    if (multiOtion != null && multiOtion.YesNoView)
-                        return typeof(YesNoAnswers).Name;
-
-                    if (question.LinkedToQuestionId == null && question.LinkedToRosterId == null)
-                        return "decimal[]";
-
-                    if (question.LinkedToQuestionId.HasValue && questionnaire.Find<ITextListQuestion>(question.LinkedToQuestionId.Value)!=null)
-                    {
-                        return "decimal[]";
-                    }
-                    return "decimal[][]";
-
-                case QuestionType.DateTime:
-                    return "DateTime?";
-
-                case QuestionType.SingleOption:
-                    if (question.LinkedToQuestionId == null && question.LinkedToRosterId == null) return "decimal?";
-
-                    if (question.LinkedToQuestionId.HasValue && questionnaire.Find<ITextListQuestion>(question.LinkedToQuestionId.Value) != null)
-                    {
-                        return "decimal?";
-                    }
-
-                    return "decimal[]";
-                case QuestionType.TextList:
-                    return "Tuple<decimal, string>[]";
-
-                case QuestionType.GpsCoordinates:
-                    return "GeoLocation";
-
-                case QuestionType.Multimedia:
-                    return "string";
-
-                default:
-                    throw new ArgumentException("Unknown question type.");
-            }
-        }
-
+        
         private List<Guid> GetIdsOfEntitiesInvolvedInExpression(string conditionExpression, Dictionary<string, Guid> variableNames)
         {
             var identifiersUsedInExpression = this.expressionProcessor.GetIdentifiersUsedInExpression(conditionExpression);

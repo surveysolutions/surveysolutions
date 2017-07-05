@@ -59,10 +59,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (!isTextChanged)
                 return;
 
-            if (this.Target == null)
-                return;
-
-            if (this.Target.Visibility != ViewStates.Visible)
+            if (Target?.Visibility != ViewStates.Visible)
                 return;
 
             if (this.command == null)

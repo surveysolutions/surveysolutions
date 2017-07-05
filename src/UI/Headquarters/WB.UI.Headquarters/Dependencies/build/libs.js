@@ -50818,88 +50818,36 @@ return DataTable.select;
 }));
 
 /*
-PNotify 3.0.0 sciactive.com/pnotify/
+PNotify 3.2.0 sciactive.com/pnotify/
 (C) 2015 Hunter Perrin; Google, Inc.
 license Apache-2.0
 */
-(function(b,k){"function"===typeof define&&define.amd?define("pnotify",["jquery"],function(q){return k(q,b)}):"object"===typeof exports&&"undefined"!==typeof module?module.exports=k(require("jquery"),global||b):b.PNotify=k(b.jQuery,b)})(this,function(b,k){var q=function(l){var k={dir1:"down",dir2:"left",push:"bottom",spacing1:36,spacing2:36,context:b("body"),modal:!1},g,h,n=b(l),r=function(){h=b("body");d.prototype.options.stack.context=h;n=b(l);n.bind("resize",function(){g&&clearTimeout(g);g=setTimeout(function(){d.positionAll(!0)},
-10)})},s=function(c){var a=b("<div />",{"class":"ui-pnotify-modal-overlay"});a.prependTo(c.context);c.overlay_close&&a.click(function(){d.removeStack(c)});return a},d=function(c){this.parseOptions(c);this.init()};b.extend(d.prototype,{version:"3.0.0",options:{title:!1,title_escape:!1,text:!1,text_escape:!1,styling:"brighttheme",addclass:"",cornerclass:"",auto_display:!0,width:"300px",min_height:"16px",type:"notice",icon:!0,animation:"fade",animate_speed:"normal",shadow:!0,hide:!0,delay:8E3,mouse_reset:!0,
-remove:!0,insert_brs:!0,destroy:!0,stack:k},modules:{},runModules:function(c,a){var p,b;for(b in this.modules)p="object"===typeof a&&b in a?a[b]:a,"function"===typeof this.modules[b][c]&&(this.modules[b].notice=this,this.modules[b].options="object"===typeof this.options[b]?this.options[b]:{},this.modules[b][c](this,"object"===typeof this.options[b]?this.options[b]:{},p))},state:"initializing",timer:null,animTimer:null,styles:null,elem:null,container:null,title_container:null,text_container:null,animating:!1,
-timerHide:!1,init:function(){var c=this;this.modules={};b.extend(!0,this.modules,d.prototype.modules);this.styles="object"===typeof this.options.styling?this.options.styling:d.styling[this.options.styling];this.elem=b("<div />",{"class":"ui-pnotify "+this.options.addclass,css:{display:"none"},"aria-live":"assertive","aria-role":"alertdialog",mouseenter:function(a){if(c.options.mouse_reset&&"out"===c.animating){if(!c.timerHide)return;c.cancelRemove()}c.options.hide&&c.options.mouse_reset&&c.cancelRemove()},
-mouseleave:function(a){c.options.hide&&c.options.mouse_reset&&"out"!==c.animating&&c.queueRemove();d.positionAll()}});"fade"===this.options.animation&&this.elem.addClass("ui-pnotify-fade-"+this.options.animate_speed);this.container=b("<div />",{"class":this.styles.container+" ui-pnotify-container "+("error"===this.options.type?this.styles.error:"info"===this.options.type?this.styles.info:"success"===this.options.type?this.styles.success:this.styles.notice),role:"alert"}).appendTo(this.elem);""!==
-this.options.cornerclass&&this.container.removeClass("ui-corner-all").addClass(this.options.cornerclass);this.options.shadow&&this.container.addClass("ui-pnotify-shadow");!1!==this.options.icon&&b("<div />",{"class":"ui-pnotify-icon"}).append(b("<span />",{"class":!0===this.options.icon?"error"===this.options.type?this.styles.error_icon:"info"===this.options.type?this.styles.info_icon:"success"===this.options.type?this.styles.success_icon:this.styles.notice_icon:this.options.icon})).prependTo(this.container);
-this.title_container=b("<h4 />",{"class":"ui-pnotify-title"}).appendTo(this.container);!1===this.options.title?this.title_container.hide():this.options.title_escape?this.title_container.text(this.options.title):this.title_container.html(this.options.title);this.text_container=b("<div />",{"class":"ui-pnotify-text","aria-role":"alert"}).appendTo(this.container);!1===this.options.text?this.text_container.hide():this.options.text_escape?this.text_container.text(this.options.text):this.text_container.html(this.options.insert_brs?
-String(this.options.text).replace(/\n/g,"<br />"):this.options.text);"string"===typeof this.options.width&&this.elem.css("width",this.options.width);"string"===typeof this.options.min_height&&this.container.css("min-height",this.options.min_height);d.notices="top"===this.options.stack.push?b.merge([this],d.notices):b.merge(d.notices,[this]);"top"===this.options.stack.push&&this.queuePosition(!1,1);this.options.stack.animation=!1;this.runModules("init");this.options.auto_display&&this.open();return this},
-update:function(c){var a=this.options;this.parseOptions(a,c);this.elem.removeClass("ui-pnotify-fade-slow ui-pnotify-fade-normal ui-pnotify-fade-fast");"fade"===this.options.animation&&this.elem.addClass("ui-pnotify-fade-"+this.options.animate_speed);this.options.cornerclass!==a.cornerclass&&this.container.removeClass("ui-corner-all "+a.cornerclass).addClass(this.options.cornerclass);this.options.shadow!==a.shadow&&(this.options.shadow?this.container.addClass("ui-pnotify-shadow"):this.container.removeClass("ui-pnotify-shadow"));
-!1===this.options.addclass?this.elem.removeClass(a.addclass):this.options.addclass!==a.addclass&&this.elem.removeClass(a.addclass).addClass(this.options.addclass);!1===this.options.title?this.title_container.slideUp("fast"):this.options.title!==a.title&&(this.options.title_escape?this.title_container.text(this.options.title):this.title_container.html(this.options.title),!1===a.title&&this.title_container.slideDown(200));!1===this.options.text?this.text_container.slideUp("fast"):this.options.text!==
-a.text&&(this.options.text_escape?this.text_container.text(this.options.text):this.text_container.html(this.options.insert_brs?String(this.options.text).replace(/\n/g,"<br />"):this.options.text),!1===a.text&&this.text_container.slideDown(200));this.options.type!==a.type&&this.container.removeClass(this.styles.error+" "+this.styles.notice+" "+this.styles.success+" "+this.styles.info).addClass("error"===this.options.type?this.styles.error:"info"===this.options.type?this.styles.info:"success"===this.options.type?
-this.styles.success:this.styles.notice);if(this.options.icon!==a.icon||!0===this.options.icon&&this.options.type!==a.type)this.container.find("div.ui-pnotify-icon").remove(),!1!==this.options.icon&&b("<div />",{"class":"ui-pnotify-icon"}).append(b("<span />",{"class":!0===this.options.icon?"error"===this.options.type?this.styles.error_icon:"info"===this.options.type?this.styles.info_icon:"success"===this.options.type?this.styles.success_icon:this.styles.notice_icon:this.options.icon})).prependTo(this.container);
-this.options.width!==a.width&&this.elem.animate({width:this.options.width});this.options.min_height!==a.min_height&&this.container.animate({minHeight:this.options.min_height});this.options.hide?a.hide||this.queueRemove():this.cancelRemove();this.queuePosition(!0);this.runModules("update",a);return this},open:function(){this.state="opening";this.runModules("beforeOpen");var c=this;this.elem.parent().length||this.elem.appendTo(this.options.stack.context?this.options.stack.context:h);"top"!==this.options.stack.push&&
-this.position(!0);this.animateIn(function(){c.queuePosition(!0);c.options.hide&&c.queueRemove();c.state="open";c.runModules("afterOpen")});return this},remove:function(c){this.state="closing";this.timerHide=!!c;this.runModules("beforeClose");var a=this;this.timer&&(l.clearTimeout(this.timer),this.timer=null);this.animateOut(function(){a.state="closed";a.runModules("afterClose");a.queuePosition(!0);a.options.remove&&a.elem.detach();a.runModules("beforeDestroy");if(a.options.destroy&&null!==d.notices){var c=
-b.inArray(a,d.notices);-1!==c&&d.notices.splice(c,1)}a.runModules("afterDestroy")});return this},get:function(){return this.elem},parseOptions:function(c,a){this.options=b.extend(!0,{},d.prototype.options);this.options.stack=d.prototype.options.stack;for(var p=[c,a],m,f=0;f<p.length;f++){m=p[f];if("undefined"===typeof m)break;if("object"!==typeof m)this.options.text=m;else for(var e in m)this.modules[e]?b.extend(!0,this.options[e],m[e]):this.options[e]=m[e]}},animateIn:function(c){this.animating=
-"in";var a=this;c=function(){a.animTimer&&clearTimeout(a.animTimer);"in"===a.animating&&(a.elem.is(":visible")?(this&&this.call(),a.animating=!1):a.animTimer=setTimeout(c,40))}.bind(c);"fade"===this.options.animation?(this.elem.one("webkitTransitionEnd mozTransitionEnd MSTransitionEnd oTransitionEnd transitionend",c).addClass("ui-pnotify-in"),this.elem.css("opacity"),this.elem.addClass("ui-pnotify-fade-in"),this.animTimer=setTimeout(c,650)):(this.elem.addClass("ui-pnotify-in"),c())},animateOut:function(c){this.animating=
-"out";var a=this;c=function(){a.animTimer&&clearTimeout(a.animTimer);"out"===a.animating&&("0"!=a.elem.css("opacity")&&a.elem.is(":visible")?a.animTimer=setTimeout(c,40):(a.elem.removeClass("ui-pnotify-in"),this&&this.call(),a.animating=!1))}.bind(c);"fade"===this.options.animation?(this.elem.one("webkitTransitionEnd mozTransitionEnd MSTransitionEnd oTransitionEnd transitionend",c).removeClass("ui-pnotify-fade-in"),this.animTimer=setTimeout(c,650)):(this.elem.removeClass("ui-pnotify-in"),c())},position:function(c){var a=
-this.options.stack,b=this.elem;"undefined"===typeof a.context&&(a.context=h);if(a){"number"!==typeof a.nextpos1&&(a.nextpos1=a.firstpos1);"number"!==typeof a.nextpos2&&(a.nextpos2=a.firstpos2);"number"!==typeof a.addpos2&&(a.addpos2=0);var d=!b.hasClass("ui-pnotify-in");if(!d||c){a.modal&&(a.overlay?a.overlay.show():a.overlay=s(a));b.addClass("ui-pnotify-move");var f;switch(a.dir1){case "down":f="top";break;case "up":f="bottom";break;case "left":f="right";break;case "right":f="left"}c=parseInt(b.css(f).replace(/(?:\..*|[^0-9.])/g,
-""));isNaN(c)&&(c=0);"undefined"!==typeof a.firstpos1||d||(a.firstpos1=c,a.nextpos1=a.firstpos1);var e;switch(a.dir2){case "down":e="top";break;case "up":e="bottom";break;case "left":e="right";break;case "right":e="left"}c=parseInt(b.css(e).replace(/(?:\..*|[^0-9.])/g,""));isNaN(c)&&(c=0);"undefined"!==typeof a.firstpos2||d||(a.firstpos2=c,a.nextpos2=a.firstpos2);if("down"===a.dir1&&a.nextpos1+b.height()>(a.context.is(h)?n.height():a.context.prop("scrollHeight"))||"up"===a.dir1&&a.nextpos1+b.height()>
-(a.context.is(h)?n.height():a.context.prop("scrollHeight"))||"left"===a.dir1&&a.nextpos1+b.width()>(a.context.is(h)?n.width():a.context.prop("scrollWidth"))||"right"===a.dir1&&a.nextpos1+b.width()>(a.context.is(h)?n.width():a.context.prop("scrollWidth")))a.nextpos1=a.firstpos1,a.nextpos2+=a.addpos2+("undefined"===typeof a.spacing2?25:a.spacing2),a.addpos2=0;"number"===typeof a.nextpos2&&(a.animation?b.css(e,a.nextpos2+"px"):(b.removeClass("ui-pnotify-move"),b.css(e,a.nextpos2+"px"),b.css(e),b.addClass("ui-pnotify-move")));
-switch(a.dir2){case "down":case "up":b.outerHeight(!0)>a.addpos2&&(a.addpos2=b.height());break;case "left":case "right":b.outerWidth(!0)>a.addpos2&&(a.addpos2=b.width())}"number"===typeof a.nextpos1&&(a.animation?b.css(f,a.nextpos1+"px"):(b.removeClass("ui-pnotify-move"),b.css(f,a.nextpos1+"px"),b.css(f),b.addClass("ui-pnotify-move")));switch(a.dir1){case "down":case "up":a.nextpos1+=b.height()+("undefined"===typeof a.spacing1?25:a.spacing1);break;case "left":case "right":a.nextpos1+=b.width()+("undefined"===
-typeof a.spacing1?25:a.spacing1)}}return this}},queuePosition:function(b,a){g&&clearTimeout(g);a||(a=10);g=setTimeout(function(){d.positionAll(b)},a);return this},cancelRemove:function(){this.timer&&l.clearTimeout(this.timer);this.animTimer&&l.clearTimeout(this.animTimer);"closing"===this.state&&(this.state="open",this.animating=!1,this.elem.addClass("ui-pnotify-in"),"fade"===this.options.animation&&this.elem.addClass("ui-pnotify-fade-in"));return this},queueRemove:function(){var b=this;this.cancelRemove();
-this.timer=l.setTimeout(function(){b.remove(!0)},isNaN(this.options.delay)?0:this.options.delay);return this}});b.extend(d,{notices:[],reload:q,removeAll:function(){b.each(d.notices,function(){this.remove&&this.remove(!1)})},removeStack:function(c){b.each(d.notices,function(){this.remove&&this.options.stack===c&&this.remove(!1)})},positionAll:function(c){g&&clearTimeout(g);g=null;if(d.notices&&d.notices.length)b.each(d.notices,function(){var a=this.options.stack;a&&(a.overlay&&a.overlay.hide(),a.nextpos1=
-a.firstpos1,a.nextpos2=a.firstpos2,a.addpos2=0,a.animation=c)}),b.each(d.notices,function(){this.position()});else{var a=d.prototype.options.stack;a&&(delete a.nextpos1,delete a.nextpos2)}},styling:{brighttheme:{container:"brighttheme",notice:"brighttheme-notice",notice_icon:"brighttheme-icon-notice",info:"brighttheme-info",info_icon:"brighttheme-icon-info",success:"brighttheme-success",success_icon:"brighttheme-icon-success",error:"brighttheme-error",error_icon:"brighttheme-icon-error"},jqueryui:{container:"ui-widget ui-widget-content ui-corner-all",
-notice:"ui-state-highlight",notice_icon:"ui-icon ui-icon-info",info:"",info_icon:"ui-icon ui-icon-info",success:"ui-state-default",success_icon:"ui-icon ui-icon-circle-check",error:"ui-state-error",error_icon:"ui-icon ui-icon-alert"},bootstrap3:{container:"alert",notice:"alert-warning",notice_icon:"glyphicon glyphicon-exclamation-sign",info:"alert-info",info_icon:"glyphicon glyphicon-info-sign",success:"alert-success",success_icon:"glyphicon glyphicon-ok-sign",error:"alert-danger",error_icon:"glyphicon glyphicon-warning-sign"}}});
-d.styling.fontawesome=b.extend({},d.styling.bootstrap3);b.extend(d.styling.fontawesome,{notice_icon:"fa fa-exclamation-circle",info_icon:"fa fa-info",success_icon:"fa fa-check",error_icon:"fa fa-warning"});l.document.body?r():b(r);return d};return q(k)});
-
-(function(e,d){"function"===typeof define&&define.amd?define("pnotify.animate",["jquery","pnotify"],d):"object"===typeof exports&&"undefined"!==typeof module?module.exports=d(require("jquery"),require("./pnotify")):d(e.jQuery,e.PNotify)})(this,function(e,d){d.prototype.options.animate={animate:!1,in_class:"",out_class:""};d.prototype.modules.animate={init:function(a,b){this.setUpAnimations(a,b);a.attention=function(c,b){a.elem.one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend",
-function(){a.elem.removeClass(c);b&&b.call(a)}).addClass("animated "+c)}},update:function(a,b,c){b.animate!=c.animate&&this.setUpAnimations(a,b)},setUpAnimations:function(a,b){if(b.animate){a.options.animation="none";a.elem.removeClass("ui-pnotify-fade-slow ui-pnotify-fade-normal ui-pnotify-fade-fast");a._animateIn||(a._animateIn=a.animateIn);a._animateOut||(a._animateOut=a.animateOut);a.animateIn=this.animateIn.bind(this);a.animateOut=this.animateOut.bind(this);var c=400;"slow"===a.options.animate_speed?
-c=600:"fast"===a.options.animate_speed?c=200:0<a.options.animate_speed&&(c=a.options.animate_speed);c/=1E3;a.elem.addClass("animated").css({"-webkit-animation-duration":c+"s","-moz-animation-duration":c+"s","animation-duration":c+"s"})}else a._animateIn&&a._animateOut&&(a.animateIn=a._animateIn,delete a._animateIn,a.animateOut=a._animateOut,delete a._animateOut,a.elem.addClass("animated"))},animateIn:function(a){this.notice.animating="in";var b=this;a=function(){this&&this.call();b.notice.animating=
-!1}.bind(a);this.notice.elem.show().one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend",a).removeClass(this.options.out_class).addClass("ui-pnotify-in").addClass(this.options.in_class)},animateOut:function(a){this.notice.animating="out";var b=this;a=function(){b.notice.elem.removeClass("ui-pnotify-in");this&&this.call();b.notice.animating=!1}.bind(a);this.notice.elem.one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend",a).removeClass(this.options.in_class).addClass(this.options.out_class)}}});
-
-(function(d,e){"function"===typeof define&&define.amd?define("pnotify.buttons",["jquery","pnotify"],e):"object"===typeof exports&&"undefined"!==typeof module?module.exports=e(require("jquery"),require("./pnotify")):e(d.jQuery,d.PNotify)})(this,function(d,e){e.prototype.options.buttons={closer:!0,closer_hover:!0,sticker:!0,sticker_hover:!0,show_on_nonblock:!1,labels:{close:"Close",stick:"Stick",unstick:"Unstick"},classes:{closer:null,pin_up:null,pin_down:null}};e.prototype.modules.buttons={closer:null,
-sticker:null,init:function(a,b){var c=this;a.elem.on({mouseenter:function(b){!c.options.sticker||a.options.nonblock&&a.options.nonblock.nonblock&&!c.options.show_on_nonblock||c.sticker.trigger("pnotify:buttons:toggleStick").css("visibility","visible");!c.options.closer||a.options.nonblock&&a.options.nonblock.nonblock&&!c.options.show_on_nonblock||c.closer.css("visibility","visible")},mouseleave:function(a){c.options.sticker_hover&&c.sticker.css("visibility","hidden");c.options.closer_hover&&c.closer.css("visibility",
-"hidden")}});this.sticker=d("<div />",{"class":"ui-pnotify-sticker","aria-role":"button","aria-pressed":a.options.hide?"false":"true",tabindex:"0",title:a.options.hide?b.labels.stick:b.labels.unstick,css:{cursor:"pointer",visibility:b.sticker_hover?"hidden":"visible"},click:function(){a.options.hide=!a.options.hide;a.options.hide?a.queueRemove():a.cancelRemove();d(this).trigger("pnotify:buttons:toggleStick")}}).bind("pnotify:buttons:toggleStick",function(){var b=null===c.options.classes.pin_up?a.styles.pin_up:
-c.options.classes.pin_up,e=null===c.options.classes.pin_down?a.styles.pin_down:c.options.classes.pin_down;d(this).attr("title",a.options.hide?c.options.labels.stick:c.options.labels.unstick).children().attr("class","").addClass(a.options.hide?b:e).attr("aria-pressed",a.options.hide?"false":"true")}).append("<span />").trigger("pnotify:buttons:toggleStick").prependTo(a.container);(!b.sticker||a.options.nonblock&&a.options.nonblock.nonblock&&!b.show_on_nonblock)&&this.sticker.css("display","none");
-this.closer=d("<div />",{"class":"ui-pnotify-closer","aria-role":"button",tabindex:"0",title:b.labels.close,css:{cursor:"pointer",visibility:b.closer_hover?"hidden":"visible"},click:function(){a.remove(!1);c.sticker.css("visibility","hidden");c.closer.css("visibility","hidden")}}).append(d("<span />",{"class":null===b.classes.closer?a.styles.closer:b.classes.closer})).prependTo(a.container);(!b.closer||a.options.nonblock&&a.options.nonblock.nonblock&&!b.show_on_nonblock)&&this.closer.css("display",
-"none")},update:function(a,b){!b.closer||a.options.nonblock&&a.options.nonblock.nonblock&&!b.show_on_nonblock?this.closer.css("display","none"):b.closer&&this.closer.css("display","block");!b.sticker||a.options.nonblock&&a.options.nonblock.nonblock&&!b.show_on_nonblock?this.sticker.css("display","none"):b.sticker&&this.sticker.css("display","block");this.sticker.trigger("pnotify:buttons:toggleStick");this.closer.find("span").attr("class","").addClass(null===b.classes.closer?a.styles.closer:b.classes.closer);
-b.sticker_hover?this.sticker.css("visibility","hidden"):a.options.nonblock&&a.options.nonblock.nonblock&&!b.show_on_nonblock||this.sticker.css("visibility","visible");b.closer_hover?this.closer.css("visibility","hidden"):a.options.nonblock&&a.options.nonblock.nonblock&&!b.show_on_nonblock||this.closer.css("visibility","visible")}};d.extend(e.styling.brighttheme,{closer:"brighttheme-icon-closer",pin_up:"brighttheme-icon-sticker",pin_down:"brighttheme-icon-sticker brighttheme-icon-stuck"});d.extend(e.styling.jqueryui,
-{closer:"ui-icon ui-icon-close",pin_up:"ui-icon ui-icon-pin-w",pin_down:"ui-icon ui-icon-pin-s"});d.extend(e.styling.bootstrap2,{closer:"icon-remove",pin_up:"icon-pause",pin_down:"icon-play"});d.extend(e.styling.bootstrap3,{closer:"glyphicon glyphicon-remove",pin_up:"glyphicon glyphicon-pause",pin_down:"glyphicon glyphicon-play"});d.extend(e.styling.fontawesome,{closer:"fa fa-times",pin_up:"fa fa-pause",pin_down:"fa fa-play"})});
-
-(function(b,a){"function"===typeof define&&define.amd?define("pnotify.callbacks",["jquery","pnotify"],a):"object"===typeof exports&&"undefined"!==typeof module?module.exports=a(require("jquery"),require("./pnotify")):a(b.jQuery,b.PNotify)})(this,function(b,a){var c=a.prototype.init,d=a.prototype.open,e=a.prototype.remove;a.prototype.init=function(){this.options.before_init&&this.options.before_init(this.options);c.apply(this,arguments);this.options.after_init&&this.options.after_init(this)};a.prototype.open=
-function(){var a;this.options.before_open&&(a=this.options.before_open(this));!1!==a&&(d.apply(this,arguments),this.options.after_open&&this.options.after_open(this))};a.prototype.remove=function(a){var b;this.options.before_close&&(b=this.options.before_close(this,a));!1!==b&&(e.apply(this,arguments),this.options.after_close&&this.options.after_close(this,a))}});
-
-(function(e,c){"function"===typeof define&&define.amd?define("pnotify.confirm",["jquery","pnotify"],c):"object"===typeof exports&&"undefined"!==typeof module?module.exports=c(require("jquery"),require("./pnotify")):c(e.jQuery,e.PNotify)})(this,function(e,c){c.prototype.options.confirm={confirm:!1,prompt:!1,prompt_class:"",prompt_default:"",prompt_multi_line:!1,align:"right",buttons:[{text:"Ok",addClass:"",promptTrigger:!0,click:function(b,a){b.remove();b.get().trigger("pnotify.confirm",[b,a])}},{text:"Cancel",
-addClass:"",click:function(b){b.remove();b.get().trigger("pnotify.cancel",b)}}]};c.prototype.modules.confirm={container:null,prompt:null,init:function(b,a){this.container=e('<div class="ui-pnotify-action-bar" style="margin-top:5px;clear:both;" />').css("text-align",a.align).appendTo(b.container);a.confirm||a.prompt?this.makeDialog(b,a):this.container.hide()},update:function(b,a){a.confirm?(this.makeDialog(b,a),this.container.show()):this.container.hide().empty()},afterOpen:function(b,a){a.prompt&&
-this.prompt.focus()},makeDialog:function(b,a){var h=!1,l=this,g,d;this.container.empty();a.prompt&&(this.prompt=e("<"+(a.prompt_multi_line?'textarea rows="5"':'input type="text"')+' style="margin-bottom:5px;clear:both;" />').addClass(("undefined"===typeof b.styles.input?"":b.styles.input)+" "+("undefined"===typeof a.prompt_class?"":a.prompt_class)).val(a.prompt_default).appendTo(this.container));for(var m=a.buttons[0]&&a.buttons[0]!==c.prototype.options.confirm.buttons[0],f=0;f<a.buttons.length;f++)if(!(null===
-a.buttons[f]||m&&c.prototype.options.confirm.buttons[f]&&c.prototype.options.confirm.buttons[f]===a.buttons[f])){g=a.buttons[f];h?this.container.append(" "):h=!0;d=e('<button type="button" class="ui-pnotify-action-button" />').addClass(("undefined"===typeof b.styles.btn?"":b.styles.btn)+" "+("undefined"===typeof g.addClass?"":g.addClass)).text(g.text).appendTo(this.container).on("click",function(k){return function(){"function"==typeof k.click&&k.click(b,a.prompt?l.prompt.val():null)}}(g));a.prompt&&
-!a.prompt_multi_line&&g.promptTrigger&&this.prompt.keypress(function(b){return function(a){13==a.keyCode&&b.click()}}(d));b.styles.text&&d.wrapInner('<span class="'+b.styles.text+'"></span>');b.styles.btnhover&&d.hover(function(a){return function(){a.addClass(b.styles.btnhover)}}(d),function(a){return function(){a.removeClass(b.styles.btnhover)}}(d));if(b.styles.btnactive)d.on("mousedown",function(a){return function(){a.addClass(b.styles.btnactive)}}(d)).on("mouseup",function(a){return function(){a.removeClass(b.styles.btnactive)}}(d));
-if(b.styles.btnfocus)d.on("focus",function(a){return function(){a.addClass(b.styles.btnfocus)}}(d)).on("blur",function(a){return function(){a.removeClass(b.styles.btnfocus)}}(d))}}};e.extend(c.styling.jqueryui,{btn:"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only",btnhover:"ui-state-hover",btnactive:"ui-state-active",btnfocus:"ui-state-focus",input:"",text:"ui-button-text"});e.extend(c.styling.bootstrap2,{btn:"btn",input:""});e.extend(c.styling.bootstrap3,{btn:"btn btn-default",
-input:"form-control"});e.extend(c.styling.fontawesome,{btn:"btn btn-default",input:"form-control"})});
-
-(function(e,c){"function"===typeof define&&define.amd?define("pnotify.desktop",["jquery","pnotify"],c):"object"===typeof exports&&"undefined"!==typeof module?module.exports=c(require("jquery"),require("./pnotify")):c(e.jQuery,e.PNotify)})(this,function(e,c){var d,f=function(a,b){f="Notification"in window?function(a,b){return new Notification(a,b)}:"mozNotification"in navigator?function(a,b){return navigator.mozNotification.createNotification(a,b.body,b.icon).show()}:"webkitNotifications"in window?
-function(a,b){return window.webkitNotifications.createNotification(b.icon,a,b.body)}:function(a,b){return null};return f(a,b)};c.prototype.options.desktop={desktop:!1,fallback:!0,icon:null,tag:null};c.prototype.modules.desktop={tag:null,icon:null,genNotice:function(a,b){this.icon=null===b.icon?"http://sciactive.com/pnotify/includes/desktop/"+a.options.type+".png":!1===b.icon?null:b.icon;if(null===this.tag||null!==b.tag)this.tag=null===b.tag?"PNotify-"+Math.round(1E6*Math.random()):b.tag;a.desktop=
-f(a.options.title,{icon:this.icon,body:b.text||a.options.text,tag:this.tag});!("close"in a.desktop)&&"cancel"in a.desktop&&(a.desktop.close=function(){a.desktop.cancel()});a.desktop.onclick=function(){a.elem.trigger("click")};a.desktop.onclose=function(){"closing"!==a.state&&"closed"!==a.state&&a.remove()}},init:function(a,b){b.desktop&&(d=c.desktop.checkPermission(),0!==d?b.fallback||(a.options.auto_display=!1):this.genNotice(a,b))},update:function(a,b,c){0!==d&&b.fallback||!b.desktop||this.genNotice(a,
-b)},beforeOpen:function(a,b){0!==d&&b.fallback||!b.desktop||a.elem.css({left:"-10000px"}).removeClass("ui-pnotify-in")},afterOpen:function(a,b){0!==d&&b.fallback||!b.desktop||(a.elem.css({left:"-10000px"}).removeClass("ui-pnotify-in"),"show"in a.desktop&&a.desktop.show())},beforeClose:function(a,b){0!==d&&b.fallback||!b.desktop||a.elem.css({left:"-10000px"}).removeClass("ui-pnotify-in")},afterClose:function(a,b){0!==d&&b.fallback||!b.desktop||(a.elem.css({left:"-10000px"}).removeClass("ui-pnotify-in"),
-"close"in a.desktop&&a.desktop.close())}};c.desktop={permission:function(){"undefined"!==typeof Notification&&"requestPermission"in Notification?Notification.requestPermission():"webkitNotifications"in window&&window.webkitNotifications.requestPermission()},checkPermission:function(){return"undefined"!==typeof Notification&&"permission"in Notification?"granted"===Notification.permission?0:1:"webkitNotifications"in window?0==window.webkitNotifications.checkPermission()?0:1:1}};d=c.desktop.checkPermission()});
-
-(function(b,a){"function"===typeof define&&define.amd?define("pnotify.history",["jquery","pnotify"],a):"object"===typeof exports&&"undefined"!==typeof module?module.exports=a(require("jquery"),require("./pnotify")):a(b.jQuery,b.PNotify)})(this,function(b,a){var c,e;b(function(){b("body").on("pnotify.history-all",function(){b.each(a.notices,function(){this.modules.history.inHistory&&(this.elem.is(":visible")?this.options.hide&&this.queueRemove():this.open&&this.open())})}).on("pnotify.history-last",
-function(){var b="top"===a.prototype.options.stack.push,d=b?0:-1,c;do{c=-1===d?a.notices.slice(d):a.notices.slice(d,d+1);if(!c[0])return!1;d=b?d+1:d-1}while(!c[0].modules.history.inHistory||c[0].elem.is(":visible"));c[0].open&&c[0].open()})});a.prototype.options.history={history:!0,menu:!1,fixed:!0,maxonscreen:Infinity,labels:{redisplay:"Redisplay",all:"All",last:"Last"}};a.prototype.modules.history={inHistory:!1,init:function(a,d){a.options.destroy=!1;this.inHistory=d.history;d.menu&&"undefined"===
-typeof c&&(c=b("<div />",{"class":"ui-pnotify-history-container "+a.styles.hi_menu,mouseleave:function(){c.animate({top:"-"+e+"px"},{duration:100,queue:!1})}}).append(b("<div />",{"class":"ui-pnotify-history-header",text:d.labels.redisplay})).append(b("<button />",{"class":"ui-pnotify-history-all "+a.styles.hi_btn,text:d.labels.all,mouseenter:function(){b(this).addClass(a.styles.hi_btnhov)},mouseleave:function(){b(this).removeClass(a.styles.hi_btnhov)},click:function(){b(this).trigger("pnotify.history-all");
-return!1}})).append(b("<button />",{"class":"ui-pnotify-history-last "+a.styles.hi_btn,text:d.labels.last,mouseenter:function(){b(this).addClass(a.styles.hi_btnhov)},mouseleave:function(){b(this).removeClass(a.styles.hi_btnhov)},click:function(){b(this).trigger("pnotify.history-last");return!1}})).appendTo("body"),e=b("<span />",{"class":"ui-pnotify-history-pulldown "+a.styles.hi_hnd,mouseenter:function(){c.animate({top:"0"},{duration:100,queue:!1})}}).appendTo(c).offset().top+2,c.css({top:"-"+e+
-"px"}),d.fixed&&c.addClass("ui-pnotify-history-fixed"))},update:function(a,b){this.inHistory=b.history;b.fixed&&c?c.addClass("ui-pnotify-history-fixed"):c&&c.removeClass("ui-pnotify-history-fixed")},beforeOpen:function(c,d){if(a.notices&&a.notices.length>d.maxonscreen){var e;e="top"!==c.options.stack.push?a.notices.slice(0,a.notices.length-d.maxonscreen):a.notices.slice(d.maxonscreen,a.notices.length);b.each(e,function(){this.remove&&this.remove()})}}};b.extend(a.styling.jqueryui,{hi_menu:"ui-state-default ui-corner-bottom",
-hi_btn:"ui-state-default ui-corner-all",hi_btnhov:"ui-state-hover",hi_hnd:"ui-icon ui-icon-grip-dotted-horizontal"});b.extend(a.styling.bootstrap2,{hi_menu:"well",hi_btn:"btn",hi_btnhov:"",hi_hnd:"icon-chevron-down"});b.extend(a.styling.bootstrap3,{hi_menu:"well",hi_btn:"btn btn-default",hi_btnhov:"",hi_hnd:"glyphicon glyphicon-chevron-down"});b.extend(a.styling.fontawesome,{hi_menu:"well",hi_btn:"btn btn-default",hi_btnhov:"",hi_hnd:"fa fa-chevron-down"})});
-
-(function(g,c){"function"===typeof define&&define.amd?define("pnotify.mobile",["jquery","pnotify"],c):"object"===typeof exports&&"undefined"!==typeof module?module.exports=c(require("jquery"),require("./pnotify")):c(g.jQuery,g.PNotify)})(this,function(g,c){c.prototype.options.mobile={swipe_dismiss:!0,styling:!0};c.prototype.modules.mobile={swipe_dismiss:!0,init:function(a,b){var c=this,d=null,e=null,f=null;this.swipe_dismiss=b.swipe_dismiss;this.doMobileStyling(a,b);a.elem.on({touchstart:function(b){c.swipe_dismiss&&
-(d=b.originalEvent.touches[0].screenX,f=a.elem.width(),a.container.css("left","0"))},touchmove:function(b){d&&c.swipe_dismiss&&(e=b.originalEvent.touches[0].screenX-d,b=(1-Math.abs(e)/f)*a.options.opacity,a.elem.css("opacity",b),a.container.css("left",e))},touchend:function(){if(d&&c.swipe_dismiss){if(40<Math.abs(e)){var b=0>e?-2*f:2*f;a.elem.animate({opacity:0},100);a.container.animate({left:b},100);a.remove()}else a.elem.animate({opacity:a.options.opacity},100),a.container.animate({left:0},100);
-f=e=d=null}},touchcancel:function(){d&&c.swipe_dismiss&&(a.elem.animate({opacity:a.options.opacity},100),a.container.animate({left:0},100),f=e=d=null)}})},update:function(a,b){this.swipe_dismiss=b.swipe_dismiss;this.doMobileStyling(a,b)},doMobileStyling:function(a,b){if(b.styling)if(a.elem.addClass("ui-pnotify-mobile-able"),480>=g(window).width())a.options.stack.mobileOrigSpacing1||(a.options.stack.mobileOrigSpacing1=a.options.stack.spacing1,a.options.stack.mobileOrigSpacing2=a.options.stack.spacing2),
-a.options.stack.spacing1=0,a.options.stack.spacing2=0;else{if(a.options.stack.mobileOrigSpacing1||a.options.stack.mobileOrigSpacing2)a.options.stack.spacing1=a.options.stack.mobileOrigSpacing1,delete a.options.stack.mobileOrigSpacing1,a.options.stack.spacing2=a.options.stack.mobileOrigSpacing2,delete a.options.stack.mobileOrigSpacing2}else a.elem.removeClass("ui-pnotify-mobile-able"),a.options.stack.mobileOrigSpacing1&&(a.options.stack.spacing1=a.options.stack.mobileOrigSpacing1,delete a.options.stack.mobileOrigSpacing1),
-a.options.stack.mobileOrigSpacing2&&(a.options.stack.spacing2=a.options.stack.mobileOrigSpacing2,delete a.options.stack.mobileOrigSpacing2)}}});
-
-(function(h,f){"function"===typeof define&&define.amd?define("pnotify.nonblock",["jquery","pnotify"],f):"object"===typeof exports&&"undefined"!==typeof module?module.exports=f(require("jquery"),require("./pnotify")):f(h.jQuery,h.PNotify)})(this,function(h,f){var l=/^on/,m=/^(dbl)?click$|^mouse(move|down|up|over|out|enter|leave)$|^contextmenu$/,n=/^(focus|blur|select|change|reset)$|^key(press|down|up)$/,p=/^(scroll|resize|(un)?load|abort|error)$/,k=function(c,b){var d;c=c.toLowerCase();document.createEvent&&
-this.dispatchEvent?(c=c.replace(l,""),c.match(m)?(h(this).offset(),d=document.createEvent("MouseEvents"),d.initMouseEvent(c,b.bubbles,b.cancelable,b.view,b.detail,b.screenX,b.screenY,b.clientX,b.clientY,b.ctrlKey,b.altKey,b.shiftKey,b.metaKey,b.button,b.relatedTarget)):c.match(n)?(d=document.createEvent("UIEvents"),d.initUIEvent(c,b.bubbles,b.cancelable,b.view,b.detail)):c.match(p)&&(d=document.createEvent("HTMLEvents"),d.initEvent(c,b.bubbles,b.cancelable)),d&&this.dispatchEvent(d)):(c.match(l)||
-(c="on"+c),d=document.createEventObject(b),this.fireEvent(c,d))},g,e=function(c,b,d){c.elem.addClass("ui-pnotify-nonblock-hide");var a=document.elementFromPoint(b.clientX,b.clientY);c.elem.removeClass("ui-pnotify-nonblock-hide");var f=h(a),e=f.css("cursor");"auto"===e&&"A"===a.tagName&&(e="pointer");c.elem.css("cursor","auto"!==e?e:"default");g&&g.get(0)==a||(g&&(k.call(g.get(0),"mouseleave",b.originalEvent),k.call(g.get(0),"mouseout",b.originalEvent)),k.call(a,"mouseenter",b.originalEvent),k.call(a,
-"mouseover",b.originalEvent));k.call(a,d,b.originalEvent);g=f};f.prototype.options.nonblock={nonblock:!1};f.prototype.modules.nonblock={init:function(c,b){var d=this;c.elem.on({mouseenter:function(a){d.options.nonblock&&a.stopPropagation();d.options.nonblock&&c.elem.addClass("ui-pnotify-nonblock-fade")},mouseleave:function(a){d.options.nonblock&&a.stopPropagation();g=null;c.elem.css("cursor","auto");d.options.nonblock&&"out"!==c.animating&&c.elem.removeClass("ui-pnotify-nonblock-fade")},mouseover:function(a){d.options.nonblock&&
-a.stopPropagation()},mouseout:function(a){d.options.nonblock&&a.stopPropagation()},mousemove:function(a){d.options.nonblock&&(a.stopPropagation(),e(c,a,"onmousemove"))},mousedown:function(a){d.options.nonblock&&(a.stopPropagation(),a.preventDefault(),e(c,a,"onmousedown"))},mouseup:function(a){d.options.nonblock&&(a.stopPropagation(),a.preventDefault(),e(c,a,"onmouseup"))},click:function(a){d.options.nonblock&&(a.stopPropagation(),e(c,a,"onclick"))},dblclick:function(a){d.options.nonblock&&(a.stopPropagation(),
-e(c,a,"ondblclick"))}})}}});
-
+!function(t,i){"function"==typeof define&&define.amd?define("pnotify",["jquery"],function(s){return i(s,t)}):"object"==typeof exports&&"undefined"!=typeof module?module.exports=i(require("jquery"),global||t):t.PNotify=i(t.jQuery,t)}("undefined"!=typeof window?window:this,function(t,i){var s=function(i){var e,o,n={dir1:"down",dir2:"left",push:"bottom",spacing1:36,spacing2:36,context:t("body"),modal:!1},a=t(i),r=function(){o=t("body"),c.prototype.options.stack.context=o,a=t(i),a.bind("resize",function(){e&&clearTimeout(e),e=setTimeout(function(){c.positionAll(!0)},10)})},h=function(i){var s=t("<div />",{class:"ui-pnotify-modal-overlay"});return s.prependTo(i.context),i.overlay_close&&s.click(function(){c.removeStack(i)}),s},c=function(t){this.state="initializing",this.timer=null,this.animTimer=null,this.styles=null,this.elem=null,this.container=null,this.title_container=null,this.text_container=null,this.animating=!1,this.timerHide=!1,this.parseOptions(t),this.init()};return t.extend(c.prototype,{version:"3.2.0",options:{title:!1,title_escape:!1,text:!1,text_escape:!1,styling:"brighttheme",addclass:"",cornerclass:"",auto_display:!0,width:"300px",min_height:"16px",type:"notice",icon:!0,animation:"fade",animate_speed:"normal",shadow:!0,hide:!0,delay:8e3,mouse_reset:!0,remove:!0,insert_brs:!0,destroy:!0,stack:n},modules:{},runModules:function(t,i){var s;for(var e in this.modules)s="object"==typeof i&&e in i?i[e]:i,"function"==typeof this.modules[e][t]&&(this.modules[e].notice=this,this.modules[e].options="object"==typeof this.options[e]?this.options[e]:{},this.modules[e][t](this,"object"==typeof this.options[e]?this.options[e]:{},s))},init:function(){var i=this;return this.modules={},t.extend(!0,this.modules,c.prototype.modules),"object"==typeof this.options.styling?this.styles=this.options.styling:this.styles=c.styling[this.options.styling],this.elem=t("<div />",{class:"ui-pnotify "+this.options.addclass,css:{display:"none"},"aria-live":"assertive","aria-role":"alertdialog",mouseenter:function(t){if(i.options.mouse_reset&&"out"===i.animating){if(!i.timerHide)return;i.cancelRemove()}i.options.hide&&i.options.mouse_reset&&i.cancelRemove()},mouseleave:function(t){i.options.hide&&i.options.mouse_reset&&"out"!==i.animating&&i.queueRemove(),c.positionAll()}}),"fade"===this.options.animation&&this.elem.addClass("ui-pnotify-fade-"+this.options.animate_speed),this.container=t("<div />",{class:this.styles.container+" ui-pnotify-container "+("error"===this.options.type?this.styles.error:"info"===this.options.type?this.styles.info:"success"===this.options.type?this.styles.success:this.styles.notice),role:"alert"}).appendTo(this.elem),""!==this.options.cornerclass&&this.container.removeClass("ui-corner-all").addClass(this.options.cornerclass),this.options.shadow&&this.container.addClass("ui-pnotify-shadow"),!1!==this.options.icon&&t("<div />",{class:"ui-pnotify-icon"}).append(t("<span />",{class:!0===this.options.icon?"error"===this.options.type?this.styles.error_icon:"info"===this.options.type?this.styles.info_icon:"success"===this.options.type?this.styles.success_icon:this.styles.notice_icon:this.options.icon})).prependTo(this.container),this.title_container=t("<h4 />",{class:"ui-pnotify-title"}).appendTo(this.container),!1===this.options.title?this.title_container.hide():this.options.title_escape?this.title_container.text(this.options.title):this.title_container.html(this.options.title),this.text_container=t("<div />",{class:"ui-pnotify-text","aria-role":"alert"}).appendTo(this.container),!1===this.options.text?this.text_container.hide():this.options.text_escape?this.text_container.text(this.options.text):this.text_container.html(this.options.insert_brs?String(this.options.text).replace(/\n/g,"<br />"):this.options.text),"string"==typeof this.options.width&&this.elem.css("width",this.options.width),"string"==typeof this.options.min_height&&this.container.css("min-height",this.options.min_height),"top"===this.options.stack.push?c.notices=t.merge([this],c.notices):c.notices=t.merge(c.notices,[this]),"top"===this.options.stack.push&&this.queuePosition(!1,1),this.options.stack.animation=!1,this.runModules("init"),this.state="closed",this.options.auto_display&&this.open(),this},update:function(i){var s=this.options;return this.parseOptions(s,i),this.elem.removeClass("ui-pnotify-fade-slow ui-pnotify-fade-normal ui-pnotify-fade-fast"),"fade"===this.options.animation&&this.elem.addClass("ui-pnotify-fade-"+this.options.animate_speed),this.options.cornerclass!==s.cornerclass&&this.container.removeClass("ui-corner-all "+s.cornerclass).addClass(this.options.cornerclass),this.options.shadow!==s.shadow&&(this.options.shadow?this.container.addClass("ui-pnotify-shadow"):this.container.removeClass("ui-pnotify-shadow")),!1===this.options.addclass?this.elem.removeClass(s.addclass):this.options.addclass!==s.addclass&&this.elem.removeClass(s.addclass).addClass(this.options.addclass),!1===this.options.title?this.title_container.slideUp("fast"):this.options.title!==s.title&&(this.options.title_escape?this.title_container.text(this.options.title):this.title_container.html(this.options.title),!1===s.title&&this.title_container.slideDown(200)),!1===this.options.text?this.text_container.slideUp("fast"):this.options.text!==s.text&&(this.options.text_escape?this.text_container.text(this.options.text):this.text_container.html(this.options.insert_brs?String(this.options.text).replace(/\n/g,"<br />"):this.options.text),!1===s.text&&this.text_container.slideDown(200)),this.options.type!==s.type&&this.container.removeClass(this.styles.error+" "+this.styles.notice+" "+this.styles.success+" "+this.styles.info).addClass("error"===this.options.type?this.styles.error:"info"===this.options.type?this.styles.info:"success"===this.options.type?this.styles.success:this.styles.notice),(this.options.icon!==s.icon||!0===this.options.icon&&this.options.type!==s.type)&&(this.container.find("div.ui-pnotify-icon").remove(),!1!==this.options.icon&&t("<div />",{class:"ui-pnotify-icon"}).append(t("<span />",{class:!0===this.options.icon?"error"===this.options.type?this.styles.error_icon:"info"===this.options.type?this.styles.info_icon:"success"===this.options.type?this.styles.success_icon:this.styles.notice_icon:this.options.icon})).prependTo(this.container)),this.options.width!==s.width&&this.elem.animate({width:this.options.width}),this.options.min_height!==s.min_height&&this.container.animate({minHeight:this.options.min_height}),this.options.hide?s.hide||this.queueRemove():this.cancelRemove(),this.queuePosition(!0),this.runModules("update",s),this},open:function(){this.state="opening",this.runModules("beforeOpen");var t=this;return this.elem.parent().length||this.elem.appendTo(this.options.stack.context?this.options.stack.context:o),"top"!==this.options.stack.push&&this.position(!0),this.animateIn(function(){t.queuePosition(!0),t.options.hide&&t.queueRemove(),t.state="open",t.runModules("afterOpen")}),this},remove:function(s){this.state="closing",this.timerHide=!!s,this.runModules("beforeClose");var e=this;return this.timer&&(i.clearTimeout(this.timer),this.timer=null),this.animateOut(function(){if(e.state="closed",e.runModules("afterClose"),e.queuePosition(!0),e.options.remove&&e.elem.detach(),e.runModules("beforeDestroy"),e.options.destroy&&null!==c.notices){var i=t.inArray(e,c.notices);-1!==i&&c.notices.splice(i,1)}e.runModules("afterDestroy")}),this},get:function(){return this.elem},parseOptions:function(i,s){this.options=t.extend(!0,{},c.prototype.options),this.options.stack=c.prototype.options.stack;for(var e,o=[i,s],n=0;n<o.length&&void 0!==(e=o[n]);n++)if("object"!=typeof e)this.options.text=e;else for(var a in e)this.modules[a]?t.extend(!0,this.options[a],e[a]):this.options[a]=e[a]},animateIn:function(t){this.animating="in";var i=this,s=function(){i.animTimer&&clearTimeout(i.animTimer),"in"===i.animating&&(i.elem.is(":visible")?(t&&t.call(),i.animating=!1):i.animTimer=setTimeout(s,40))};"fade"===this.options.animation?(this.elem.one("webkitTransitionEnd mozTransitionEnd MSTransitionEnd oTransitionEnd transitionend",s).addClass("ui-pnotify-in"),this.elem.css("opacity"),this.elem.addClass("ui-pnotify-fade-in"),this.animTimer=setTimeout(s,650)):(this.elem.addClass("ui-pnotify-in"),s())},animateOut:function(i){this.animating="out";var s=this,e=function(){if(s.animTimer&&clearTimeout(s.animTimer),"out"===s.animating)if("0"!=s.elem.css("opacity")&&s.elem.is(":visible"))s.animTimer=setTimeout(e,40);else{if(s.elem.removeClass("ui-pnotify-in"),s.options.stack.overlay){var o=!1;t.each(c.notices,function(t,i){i!=s&&i.options.stack===s.options.stack&&"closed"!=i.state&&(o=!0)}),o||s.options.stack.overlay.hide()}i&&i.call(),s.animating=!1}};"fade"===this.options.animation?(this.elem.one("webkitTransitionEnd mozTransitionEnd MSTransitionEnd oTransitionEnd transitionend",e).removeClass("ui-pnotify-fade-in"),this.animTimer=setTimeout(e,650)):(this.elem.removeClass("ui-pnotify-in"),e())},position:function(t){var i=this.options.stack,s=this.elem;if(void 0===i.context&&(i.context=o),i){"number"!=typeof i.nextpos1&&(i.nextpos1=i.firstpos1),"number"!=typeof i.nextpos2&&(i.nextpos2=i.firstpos2),"number"!=typeof i.addpos2&&(i.addpos2=0);var e=!s.hasClass("ui-pnotify-in");if(!e||t){i.modal&&(i.overlay?i.overlay.show():i.overlay=h(i)),s.addClass("ui-pnotify-move");var n,r,c;switch(i.dir1){case"down":c="top";break;case"up":c="bottom";break;case"left":c="right";break;case"right":c="left"}n=parseInt(s.css(c).replace(/(?:\..*|[^0-9.])/g,"")),isNaN(n)&&(n=0),void 0!==i.firstpos1||e||(i.firstpos1=n,i.nextpos1=i.firstpos1);var p;switch(i.dir2){case"down":p="top";break;case"up":p="bottom";break;case"left":p="right";break;case"right":p="left"}switch(r=parseInt(s.css(p).replace(/(?:\..*|[^0-9.])/g,"")),isNaN(r)&&(r=0),void 0!==i.firstpos2||e||(i.firstpos2=r,i.nextpos2=i.firstpos2),("down"===i.dir1&&i.nextpos1+s.height()>(i.context.is(o)?a.height():i.context.prop("scrollHeight"))||"up"===i.dir1&&i.nextpos1+s.height()>(i.context.is(o)?a.height():i.context.prop("scrollHeight"))||"left"===i.dir1&&i.nextpos1+s.width()>(i.context.is(o)?a.width():i.context.prop("scrollWidth"))||"right"===i.dir1&&i.nextpos1+s.width()>(i.context.is(o)?a.width():i.context.prop("scrollWidth")))&&(i.nextpos1=i.firstpos1,i.nextpos2+=i.addpos2+(void 0===i.spacing2?25:i.spacing2),i.addpos2=0),"number"==typeof i.nextpos2&&(i.animation?s.css(p,i.nextpos2+"px"):(s.removeClass("ui-pnotify-move"),s.css(p,i.nextpos2+"px"),s.css(p),s.addClass("ui-pnotify-move"))),i.dir2){case"down":case"up":s.outerHeight(!0)>i.addpos2&&(i.addpos2=s.height());break;case"left":case"right":s.outerWidth(!0)>i.addpos2&&(i.addpos2=s.width())}switch("number"==typeof i.nextpos1&&(i.animation?s.css(c,i.nextpos1+"px"):(s.removeClass("ui-pnotify-move"),s.css(c,i.nextpos1+"px"),s.css(c),s.addClass("ui-pnotify-move"))),i.dir1){case"down":case"up":i.nextpos1+=s.height()+(void 0===i.spacing1?25:i.spacing1);break;case"left":case"right":i.nextpos1+=s.width()+(void 0===i.spacing1?25:i.spacing1)}}return this}},queuePosition:function(t,i){return e&&clearTimeout(e),i||(i=10),e=setTimeout(function(){c.positionAll(t)},i),this},cancelRemove:function(){return this.timer&&i.clearTimeout(this.timer),this.animTimer&&i.clearTimeout(this.animTimer),"closing"===this.state&&(this.state="open",this.animating=!1,this.elem.addClass("ui-pnotify-in"),"fade"===this.options.animation&&this.elem.addClass("ui-pnotify-fade-in")),this},queueRemove:function(){var t=this;return this.cancelRemove(),this.timer=i.setTimeout(function(){t.remove(!0)},isNaN(this.options.delay)?0:this.options.delay),this}}),t.extend(c,{notices:[],reload:s,removeAll:function(){t.each(c.notices,function(t,i){i.remove&&i.remove(!1)})},removeStack:function(i){t.each(c.notices,function(t,s){s.remove&&s.options.stack===i&&s.remove(!1)})},positionAll:function(i){if(e&&clearTimeout(e),e=null,c.notices&&c.notices.length)t.each(c.notices,function(t,s){var e=s.options.stack;e&&(e.overlay&&e.overlay.hide(),e.nextpos1=e.firstpos1,e.nextpos2=e.firstpos2,e.addpos2=0,e.animation=i)}),t.each(c.notices,function(t,i){i.position()});else{var s=c.prototype.options.stack;s&&(delete s.nextpos1,delete s.nextpos2)}},styling:{brighttheme:{container:"brighttheme",notice:"brighttheme-notice",notice_icon:"brighttheme-icon-notice",info:"brighttheme-info",info_icon:"brighttheme-icon-info",success:"brighttheme-success",success_icon:"brighttheme-icon-success",error:"brighttheme-error",error_icon:"brighttheme-icon-error"},bootstrap3:{container:"alert",notice:"alert-warning",notice_icon:"glyphicon glyphicon-exclamation-sign",info:"alert-info",info_icon:"glyphicon glyphicon-info-sign",success:"alert-success",success_icon:"glyphicon glyphicon-ok-sign",error:"alert-danger",error_icon:"glyphicon glyphicon-warning-sign"}}}),c.styling.fontawesome=t.extend({},c.styling.bootstrap3),t.extend(c.styling.fontawesome,{notice_icon:"fa fa-exclamation-circle",info_icon:"fa fa-info",success_icon:"fa fa-check",error_icon:"fa fa-warning"}),i.document.body?r():t(r),c};return s(i)});
+//# sourceMappingURL=pnotify.js.map
+// Animate
+!function(n,i){"function"==typeof define&&define.amd?define("pnotify.animate",["jquery","pnotify"],i):"object"==typeof exports&&"undefined"!=typeof module?module.exports=i(require("jquery"),require("./pnotify")):i(n.jQuery,n.PNotify)}("undefined"!=typeof window?window:this,function(n,i){return i.prototype.options.animate={animate:!1,in_class:"",out_class:""},i.prototype.modules.animate={init:function(n,i){this.setUpAnimations(n,i),n.attention=function(i,t){n.elem.one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend",function(){n.elem.removeClass(i),t&&t.call(n)}).addClass("animated "+i)}},update:function(n,i,t){i.animate!=t.animate&&this.setUpAnimations(n,i)},setUpAnimations:function(n,i){if(i.animate){n.options.animation="none",n.elem.removeClass("ui-pnotify-fade-slow ui-pnotify-fade-normal ui-pnotify-fade-fast"),n._animateIn||(n._animateIn=n.animateIn),n._animateOut||(n._animateOut=n.animateOut),n.animateIn=this.animateIn.bind(this),n.animateOut=this.animateOut.bind(this);var t=400;"slow"===n.options.animate_speed?t=600:"fast"===n.options.animate_speed?t=200:n.options.animate_speed>0&&(t=n.options.animate_speed),t/=1e3,n.elem.addClass("animated").css({"-webkit-animation-duration":t+"s","-moz-animation-duration":t+"s","animation-duration":t+"s"})}else n._animateIn&&n._animateOut&&(n.animateIn=n._animateIn,delete n._animateIn,n.animateOut=n._animateOut,delete n._animateOut,n.elem.addClass("animated"))},animateIn:function(n){this.notice.animating="in";var i=this;n=function(){i.notice.elem.removeClass(i.options.in_class),this&&this.call(),i.notice.animating=!1}.bind(n),this.notice.elem.show().one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend",n).removeClass(this.options.out_class).addClass("ui-pnotify-in").addClass(this.options.in_class)},animateOut:function(n){this.notice.animating="out";var i=this;n=function(){i.notice.elem.removeClass("ui-pnotify-in "+i.options.out_class),this&&this.call(),i.notice.animating=!1}.bind(n),this.notice.elem.one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend",n).removeClass(this.options.in_class).addClass(this.options.out_class)}},i});
+//# sourceMappingURL=pnotify.animate.js.map
+// Buttons
+!function(o,s){"function"==typeof define&&define.amd?define("pnotify.buttons",["jquery","pnotify"],s):"object"==typeof exports&&"undefined"!=typeof module?module.exports=s(require("jquery"),require("./pnotify")):s(o.jQuery,o.PNotify)}("undefined"!=typeof window?window:this,function(o,s){return s.prototype.options.buttons={closer:!0,closer_hover:!0,sticker:!0,sticker_hover:!0,show_on_nonblock:!1,labels:{close:"Close",stick:"Stick",unstick:"Unstick"},classes:{closer:null,pin_up:null,pin_down:null}},s.prototype.modules.buttons={init:function(s,i){var n=this;s.elem.on({mouseenter:function(o){!n.options.sticker||s.options.nonblock&&s.options.nonblock.nonblock&&!n.options.show_on_nonblock||n.sticker.trigger("pnotify:buttons:toggleStick").css("visibility","visible"),!n.options.closer||s.options.nonblock&&s.options.nonblock.nonblock&&!n.options.show_on_nonblock||n.closer.css("visibility","visible")},mouseleave:function(o){n.options.sticker_hover&&n.sticker.css("visibility","hidden"),n.options.closer_hover&&n.closer.css("visibility","hidden")}}),this.sticker=o("<div />",{class:"ui-pnotify-sticker","aria-role":"button","aria-pressed":s.options.hide?"false":"true",tabindex:"0",title:s.options.hide?i.labels.stick:i.labels.unstick,css:{cursor:"pointer",visibility:i.sticker_hover?"hidden":"visible"},click:function(){s.options.hide=!s.options.hide,s.options.hide?s.queueRemove():s.cancelRemove(),o(this).trigger("pnotify:buttons:toggleStick")}}).bind("pnotify:buttons:toggleStick",function(){var i=null===n.options.classes.pin_up?s.styles.pin_up:n.options.classes.pin_up,e=null===n.options.classes.pin_down?s.styles.pin_down:n.options.classes.pin_down;o(this).attr("title",s.options.hide?n.options.labels.stick:n.options.labels.unstick).children().attr("class","").addClass(s.options.hide?i:e).attr("aria-pressed",s.options.hide?"false":"true")}).append("<span />").trigger("pnotify:buttons:toggleStick").prependTo(s.container),(!i.sticker||s.options.nonblock&&s.options.nonblock.nonblock&&!i.show_on_nonblock)&&this.sticker.css("display","none"),this.closer=o("<div />",{class:"ui-pnotify-closer","aria-role":"button",tabindex:"0",title:i.labels.close,css:{cursor:"pointer",visibility:i.closer_hover?"hidden":"visible"},click:function(){s.remove(!1),n.sticker.css("visibility","hidden"),n.closer.css("visibility","hidden")}}).append(o("<span />",{class:null===i.classes.closer?s.styles.closer:i.classes.closer})).prependTo(s.container),(!i.closer||s.options.nonblock&&s.options.nonblock.nonblock&&!i.show_on_nonblock)&&this.closer.css("display","none")},update:function(o,s){!s.closer||o.options.nonblock&&o.options.nonblock.nonblock&&!s.show_on_nonblock?this.closer.css("display","none"):s.closer&&this.closer.css("display","block"),!s.sticker||o.options.nonblock&&o.options.nonblock.nonblock&&!s.show_on_nonblock?this.sticker.css("display","none"):s.sticker&&this.sticker.css("display","block"),this.sticker.trigger("pnotify:buttons:toggleStick"),this.closer.find("span").attr("class","").addClass(null===s.classes.closer?o.styles.closer:s.classes.closer),s.sticker_hover?this.sticker.css("visibility","hidden"):o.options.nonblock&&o.options.nonblock.nonblock&&!s.show_on_nonblock||this.sticker.css("visibility","visible"),s.closer_hover?this.closer.css("visibility","hidden"):o.options.nonblock&&o.options.nonblock.nonblock&&!s.show_on_nonblock||this.closer.css("visibility","visible")}},o.extend(s.styling.brighttheme,{closer:"brighttheme-icon-closer",pin_up:"brighttheme-icon-sticker",pin_down:"brighttheme-icon-sticker brighttheme-icon-stuck"}),o.extend(s.styling.bootstrap3,{closer:"glyphicon glyphicon-remove",pin_up:"glyphicon glyphicon-pause",pin_down:"glyphicon glyphicon-play"}),o.extend(s.styling.fontawesome,{closer:"fa fa-times",pin_up:"fa fa-pause",pin_down:"fa fa-play"}),s});
+//# sourceMappingURL=pnotify.buttons.js.map
+// Callbacks
+!function(o,t){"function"==typeof define&&define.amd?define("pnotify.callbacks",["jquery","pnotify"],t):"object"==typeof exports&&"undefined"!=typeof module?module.exports=t(require("jquery"),require("./pnotify")):t(o.jQuery,o.PNotify)}("undefined"!=typeof window?window:this,function(o,t){var i=t.prototype.init,e=t.prototype.open,n=t.prototype.remove;return t.prototype.init=function(){this.options.before_init&&this.options.before_init(this.options),i.apply(this,arguments),this.options.after_init&&this.options.after_init(this)},t.prototype.open=function(){var o;this.options.before_open&&(o=this.options.before_open(this)),!1!==o&&(e.apply(this,arguments),this.options.after_open&&this.options.after_open(this))},t.prototype.remove=function(o){var t;this.options.before_close&&(t=this.options.before_close(this,o)),!1!==t&&(n.apply(this,arguments),this.options.after_close&&this.options.after_close(this,o))},t});
+//# sourceMappingURL=pnotify.callbacks.js.map
+// Confirm
+!function(t,n){"function"==typeof define&&define.amd?define("pnotify.confirm",["jquery","pnotify"],n):"object"==typeof exports&&"undefined"!=typeof module?module.exports=n(require("jquery"),require("./pnotify")):n(t.jQuery,t.PNotify)}("undefined"!=typeof window?window:this,function(t,n){return n.prototype.options.confirm={confirm:!1,prompt:!1,prompt_class:"",prompt_default:"",prompt_multi_line:!1,align:"right",buttons:[{text:"Ok",addClass:"",promptTrigger:!0,click:function(t,n){t.remove(),t.get().trigger("pnotify.confirm",[t,n])}},{text:"Cancel",addClass:"",click:function(t){t.remove(),t.get().trigger("pnotify.cancel",t)}}]},n.prototype.modules.confirm={init:function(n,o){this.container=t('<div class="ui-pnotify-action-bar" style="margin-top:5px;clear:both;" />').css("text-align",o.align).appendTo(n.container),o.confirm||o.prompt?this.makeDialog(n,o):this.container.hide()},update:function(t,n){n.confirm?(this.makeDialog(t,n),this.container.show()):this.container.hide().empty()},afterOpen:function(t,n){n.prompt&&this.prompt.focus()},makeDialog:function(o,e){var i,s,r=!1,p=this;this.container.empty(),e.prompt&&(this.prompt=t("<"+(e.prompt_multi_line?'textarea rows="5"':'input type="text"')+' style="margin-bottom:5px;clear:both;" />').addClass((void 0===o.styles.input?"":o.styles.input)+" "+(void 0===e.prompt_class?"":e.prompt_class)).val(e.prompt_default).appendTo(this.container));for(var u=e.buttons[0]&&e.buttons[0]!==n.prototype.options.confirm.buttons[0],c=0;c<e.buttons.length;c++)null===e.buttons[c]||u&&n.prototype.options.confirm.buttons[c]&&n.prototype.options.confirm.buttons[c]===e.buttons[c]||(i=e.buttons[c],r?this.container.append(" "):r=!0,s=t('<button type="button" class="ui-pnotify-action-button" />').addClass((void 0===o.styles.btn?"":o.styles.btn)+" "+(void 0===i.addClass?"":i.addClass)).text(i.text).appendTo(this.container).on("click",function(t){return function(){"function"==typeof t.click&&t.click(o,e.prompt?p.prompt.val():null)}}(i)),e.prompt&&!e.prompt_multi_line&&i.promptTrigger&&this.prompt.keypress(function(t){return function(n){13==n.keyCode&&t.click()}}(s)),o.styles.text&&s.wrapInner('<span class="'+o.styles.text+'"></span>'),o.styles.btnhover&&s.hover(function(t){return function(){t.addClass(o.styles.btnhover)}}(s),function(t){return function(){t.removeClass(o.styles.btnhover)}}(s)),o.styles.btnactive&&s.on("mousedown",function(t){return function(){t.addClass(o.styles.btnactive)}}(s)).on("mouseup",function(t){return function(){t.removeClass(o.styles.btnactive)}}(s)),o.styles.btnfocus&&s.on("focus",function(t){return function(){t.addClass(o.styles.btnfocus)}}(s)).on("blur",function(t){return function(){t.removeClass(o.styles.btnfocus)}}(s)))}},t.extend(n.styling.bootstrap3,{btn:"btn btn-default",input:"form-control"}),t.extend(n.styling.fontawesome,{btn:"btn btn-default",input:"form-control"}),n});
+//# sourceMappingURL=pnotify.confirm.js.map
+// Desktop
+!function(i,t){"function"==typeof define&&define.amd?define("pnotify.desktop",["jquery","pnotify"],t):"object"==typeof exports&&"undefined"!=typeof module?module.exports=t(require("jquery"),require("./pnotify")):t(i.jQuery,i.PNotify)}("undefined"!=typeof window?window:this,function(i,t){var o,n=function(i,t){return(n="Notification"in window?function(i,t){return new Notification(i,t)}:"mozNotification"in navigator?function(i,t){return navigator.mozNotification.createNotification(i,t.body,t.icon).show()}:"webkitNotifications"in window?function(i,t){return window.webkitNotifications.createNotification(t.icon,i,t.body)}:function(i,t){return null})(i,t)};return t.prototype.options.desktop={desktop:!1,fallback:!0,icon:null,tag:null,title:null,text:null},t.prototype.modules.desktop={genNotice:function(i,t){null===t.icon?this.icon="http://sciactive.com/pnotify/includes/desktop/"+i.options.type+".png":!1===t.icon?this.icon=null:this.icon=t.icon,null!==this.tag&&null===t.tag||(this.tag=null===t.tag?"PNotify-"+Math.round(1e6*Math.random()):t.tag),i.desktop=n(t.title||i.options.title,{icon:this.icon,body:t.text||i.options.text,tag:this.tag}),!("close"in i.desktop)&&"cancel"in i.desktop&&(i.desktop.close=function(){i.desktop.cancel()}),i.desktop.onclick=function(){i.elem.trigger("click")},i.desktop.onclose=function(){"closing"!==i.state&&"closed"!==i.state&&i.remove()}},init:function(i,n){if(n.desktop){if(0!==(o=t.desktop.checkPermission()))return void(n.fallback||(i.options.auto_display=!1));this.genNotice(i,n)}},update:function(i,t,n){0!==o&&t.fallback||!t.desktop||this.genNotice(i,t)},beforeOpen:function(i,t){0!==o&&t.fallback||!t.desktop||i.elem.css({left:"-10000px"}).removeClass("ui-pnotify-in")},afterOpen:function(i,t){0!==o&&t.fallback||!t.desktop||(i.elem.css({left:"-10000px"}).removeClass("ui-pnotify-in"),"show"in i.desktop&&i.desktop.show())},beforeClose:function(i,t){0!==o&&t.fallback||!t.desktop||i.elem.css({left:"-10000px"}).removeClass("ui-pnotify-in")},afterClose:function(i,t){0!==o&&t.fallback||!t.desktop||(i.elem.css({left:"-10000px"}).removeClass("ui-pnotify-in"),"close"in i.desktop&&i.desktop.close())}},t.desktop={permission:function(){"undefined"!=typeof Notification&&"requestPermission"in Notification?Notification.requestPermission():"webkitNotifications"in window&&window.webkitNotifications.requestPermission()},checkPermission:function(){return"undefined"!=typeof Notification&&"permission"in Notification?"granted"===Notification.permission?0:1:"webkitNotifications"in window&&0==window.webkitNotifications.checkPermission()?0:1}},o=t.desktop.checkPermission(),t});
+//# sourceMappingURL=pnotify.desktop.js.map
+// History
+!function(t,i){"function"==typeof define&&define.amd?define("pnotify.history",["jquery","pnotify"],i):"object"==typeof exports&&"undefined"!=typeof module?module.exports=i(require("jquery"),require("./pnotify")):i(t.jQuery,t.PNotify)}("undefined"!=typeof window?window:this,function(t,i){var e,o;return t(function(){t("body").on("pnotify.history-all",function(){t.each(i.notices,function(){this.modules.history.inHistory&&(this.elem.is(":visible")?this.options.hide&&this.queueRemove():this.open&&this.open())})}).on("pnotify.history-last",function(){var t,e="top"===i.prototype.options.stack.push,o=e?0:-1;do{if(t=-1===o?i.notices.slice(o):i.notices.slice(o,o+1),!t[0])return!1;o=e?o+1:o-1}while(!t[0].modules.history.inHistory||t[0].elem.is(":visible"));t[0].open&&t[0].open()})}),i.prototype.options.history={history:!0,menu:!1,fixed:!0,maxonscreen:1/0,labels:{redisplay:"Redisplay",all:"All",last:"Last"}},i.prototype.modules.history={init:function(i,n){if(i.options.destroy=!1,this.inHistory=n.history,n.menu&&void 0===e){e=t("<div />",{class:"ui-pnotify-history-container "+i.styles.hi_menu,mouseleave:function(){e.css("top","-"+o+"px")}}).append(t("<div />",{class:"ui-pnotify-history-header",text:n.labels.redisplay})).append(t("<button />",{class:"ui-pnotify-history-all "+i.styles.hi_btn,text:n.labels.all,mouseenter:function(){t(this).addClass(i.styles.hi_btnhov)},mouseleave:function(){t(this).removeClass(i.styles.hi_btnhov)},click:function(){return t(this).trigger("pnotify.history-all"),!1}})).append(t("<button />",{class:"ui-pnotify-history-last "+i.styles.hi_btn,text:n.labels.last,mouseenter:function(){t(this).addClass(i.styles.hi_btnhov)},mouseleave:function(){t(this).removeClass(i.styles.hi_btnhov)},click:function(){return t(this).trigger("pnotify.history-last"),!1}})).appendTo("body");var s=t("<span />",{class:"ui-pnotify-history-pulldown "+i.styles.hi_hnd,mouseenter:function(){e.css("top","0")}}).appendTo(e);o=s.offset().top+2,e.css("top","-"+o+"px"),n.fixed&&e.addClass("ui-pnotify-history-fixed")}},update:function(t,i){this.inHistory=i.history,i.fixed&&e?e.addClass("ui-pnotify-history-fixed"):e&&e.removeClass("ui-pnotify-history-fixed")},beforeOpen:function(e,o){if(i.notices&&i.notices.length>o.maxonscreen){var n;n="top"!==e.options.stack.push?i.notices.slice(0,i.notices.length-o.maxonscreen):i.notices.slice(o.maxonscreen,i.notices.length),t.each(n,function(){this.remove&&this.remove()})}}},t.extend(i.styling.brighttheme,{hi_menu:"ui-pnotify-history-brighttheme",hi_btn:"",hi_btnhov:"",hi_hnd:""}),t.extend(i.styling.bootstrap3,{hi_menu:"well",hi_btn:"btn btn-default",hi_btnhov:"",hi_hnd:"glyphicon glyphicon-chevron-down"}),t.extend(i.styling.fontawesome,{hi_menu:"well",hi_btn:"btn btn-default",hi_btnhov:"",hi_hnd:"fa fa-chevron-down"}),i});
+//# sourceMappingURL=pnotify.history.js.map
+// Mobile
+!function(i,o){"function"==typeof define&&define.amd?define("pnotify.mobile",["jquery","pnotify"],o):"object"==typeof exports&&"undefined"!=typeof module?module.exports=o(require("jquery"),require("./pnotify")):o(i.jQuery,i.PNotify)}("undefined"!=typeof window?window:this,function(i,o){return o.prototype.options.mobile={swipe_dismiss:!0,styling:!0},o.prototype.modules.mobile={init:function(i,o){var t=this,e=null,n=null,s=null;this.swipe_dismiss=o.swipe_dismiss,this.doMobileStyling(i,o),i.elem.on({touchstart:function(o){t.swipe_dismiss&&(e=o.originalEvent.touches[0].screenX,s=i.elem.width(),i.container.css("left","0"))},touchmove:function(o){if(e&&t.swipe_dismiss){var a=o.originalEvent.touches[0].screenX;n=a-e;var c=(1-Math.abs(n)/s)*i.options.opacity;i.elem.css("opacity",c),i.container.css("left",n)}},touchend:function(){if(e&&t.swipe_dismiss){if(Math.abs(n)>40){var o=n<0?-2*s:2*s;i.elem.animate({opacity:0},100),i.container.animate({left:o},100),i.remove()}else i.elem.animate({opacity:i.options.opacity},100),i.container.animate({left:0},100);e=null,n=null,s=null}},touchcancel:function(){e&&t.swipe_dismiss&&(i.elem.animate({opacity:i.options.opacity},100),i.container.animate({left:0},100),e=null,n=null,s=null)}})},update:function(i,o){this.swipe_dismiss=o.swipe_dismiss,this.doMobileStyling(i,o)},doMobileStyling:function(o,t){t.styling?(o.elem.addClass("ui-pnotify-mobile-able"),i(window).width()<=480?(o.options.stack.mobileOrigSpacing1||(o.options.stack.mobileOrigSpacing1=o.options.stack.spacing1,o.options.stack.mobileOrigSpacing2=o.options.stack.spacing2),o.options.stack.spacing1=0,o.options.stack.spacing2=0):(o.options.stack.mobileOrigSpacing1||o.options.stack.mobileOrigSpacing2)&&(o.options.stack.spacing1=o.options.stack.mobileOrigSpacing1,delete o.options.stack.mobileOrigSpacing1,o.options.stack.spacing2=o.options.stack.mobileOrigSpacing2,delete o.options.stack.mobileOrigSpacing2)):(o.elem.removeClass("ui-pnotify-mobile-able"),o.options.stack.mobileOrigSpacing1&&(o.options.stack.spacing1=o.options.stack.mobileOrigSpacing1,delete o.options.stack.mobileOrigSpacing1),o.options.stack.mobileOrigSpacing2&&(o.options.stack.spacing2=o.options.stack.mobileOrigSpacing2,delete o.options.stack.mobileOrigSpacing2))}},o});
+//# sourceMappingURL=pnotify.mobile.js.map
+// Nonblock
+!function(o,e){"function"==typeof define&&define.amd?define("pnotify.nonblock",["jquery","pnotify"],e):"object"==typeof exports&&"undefined"!=typeof module?module.exports=e(require("jquery"),require("./pnotify")):e(o.jQuery,o.PNotify)}("undefined"!=typeof window?window:this,function(o,e){var n,t=function(e,n){var t;if(e=e.toLowerCase(),document.createEvent&&this.dispatchEvent){if(e=e.replace(/^on/,""),e.match(/^(dbl)?click$|^mouse(move|down|up|over|out|enter|leave)$|^contextmenu$/)?(o(this).offset(),t=document.createEvent("MouseEvents"),t.initMouseEvent(e,n.bubbles,n.cancelable,n.view,n.detail,n.screenX,n.screenY,n.clientX,n.clientY,n.ctrlKey,n.altKey,n.shiftKey,n.metaKey,n.button,n.relatedTarget)):e.match(/^(focus|blur|select|change|reset)$|^key(press|down|up)$/)?(t=document.createEvent("UIEvents"),t.initUIEvent(e,n.bubbles,n.cancelable,n.view,n.detail)):e.match(/^(scroll|resize|(un)?load|abort|error)$/)&&(t=document.createEvent("HTMLEvents"),t.initEvent(e,n.bubbles,n.cancelable)),!t)return;this.dispatchEvent(t)}else e.match(/^on/)||(e="on"+e),t=document.createEventObject(n),this.fireEvent(e,t)},i=function(e,i,c){e.elem.addClass("ui-pnotify-nonblock-hide");var l=document.elementFromPoint(i.clientX,i.clientY);e.elem.removeClass("ui-pnotify-nonblock-hide");var s=o(l),a=s.css("cursor");"auto"===a&&"A"===l.tagName&&(a="pointer"),e.elem.css("cursor","auto"!==a?a:"default"),n&&n.get(0)==l||(n&&(t.call(n.get(0),"mouseleave",i.originalEvent),t.call(n.get(0),"mouseout",i.originalEvent)),t.call(l,"mouseenter",i.originalEvent),t.call(l,"mouseover",i.originalEvent)),t.call(l,c,i.originalEvent),n=s};return e.prototype.options.nonblock={nonblock:!1},e.prototype.modules.nonblock={init:function(o,e){var t=this;o.elem.on({mouseenter:function(e){t.options.nonblock&&e.stopPropagation(),t.options.nonblock&&o.elem.addClass("ui-pnotify-nonblock-fade")},mouseleave:function(e){t.options.nonblock&&e.stopPropagation(),n=null,o.elem.css("cursor","auto"),t.options.nonblock&&"out"!==o.animating&&o.elem.removeClass("ui-pnotify-nonblock-fade")},mouseover:function(o){t.options.nonblock&&o.stopPropagation()},mouseout:function(o){t.options.nonblock&&o.stopPropagation()},mousemove:function(e){t.options.nonblock&&(e.stopPropagation(),i(o,e,"onmousemove"))},mousedown:function(e){t.options.nonblock&&(e.stopPropagation(),e.preventDefault(),i(o,e,"onmousedown"))},mouseup:function(e){t.options.nonblock&&(e.stopPropagation(),e.preventDefault(),i(o,e,"onmouseup"))},click:function(e){t.options.nonblock&&(e.stopPropagation(),i(o,e,"onclick"))},dblclick:function(e){t.options.nonblock&&(e.stopPropagation(),i(o,e,"ondblclick"))}})}},e});
+//# sourceMappingURL=pnotify.nonblock.js.map
 /*!
  * Bootstrap-select v1.12.2 (http://silviomoreto.github.io/bootstrap-select)
  *
@@ -52797,9 +52745,9 @@ e(c,a,"ondblclick"))}})}}});
 }));
 
 /**
- * jQuery contextMenu v2.4.4 - Plugin for simple contextMenu handling
+ * jQuery contextMenu v2.5.0 - Plugin for simple contextMenu handling
  *
- * Version: v2.4.4
+ * Version: v2.5.0
  *
  * Authors: Björn Brala (SWIS.nl), Rodney Rehm, Addy Osmani (patches for FF)
  * Web: http://swisnl.github.io/jQuery-contextMenu/
@@ -52809,7 +52757,7 @@ e(c,a,"ondblclick"))}})}}});
  * Licensed under
  *   MIT License http://www.opensource.org/licenses/mit-license
  *
- * Date: 2017-03-15T09:15:10.934Z
+ * Date: 2017-05-25T11:30:28.900Z
  */
 
 // jscs:disable
@@ -52969,7 +52917,8 @@ e(c,a,"ondblclick"))}})}}});
                     offset = opt.$menu.position();
                 } else {
                     // x and y are given (by mouse event)
-                    offset = {top: y, left: x};
+                    var offsetParentOffset = opt.$menu.offsetParent().offset();
+                    offset = {top: y - offsetParentOffset.top, left: x -offsetParentOffset.left};
                 }
 
                 // correct offset if viewport demands it
@@ -53245,7 +53194,6 @@ e(c,a,"ondblclick"))}})}}});
                     offset;
 
                 e.preventDefault();
-                e.stopImmediatePropagation();
 
                 setTimeout(function () {
                     var $window;
@@ -53266,13 +53214,13 @@ e(c,a,"ondblclick"))}})}}});
                             sel.removeAllRanges();
                             sel.addRange(range);
                         }
-
+                        $(target).trigger(e);
                         root.$layer.show();
                     }
 
                     if (root.reposition && triggerAction) {
                         if (document.elementFromPoint) {
-                            if (root.$trigger.is(target) || root.$trigger.has(target).length) {
+                            if (root.$trigger.is(target)) {
                                 root.position.call(root.$trigger, root, x, y);
                                 return;
                             }
@@ -53347,7 +53295,7 @@ e(c,a,"ondblclick"))}})}}});
                 // If targetZIndex is heigher then opt.zIndex dont progress any futher.
                 // This is used to make sure that if you are using a dialog with a input / textarea / contenteditable div
                 // and its above the contextmenu it wont steal keys events
-                if (targetZIndex > opt.zIndex) {
+                if (opt.$menu && parseInt(targetZIndex,10) > parseInt(opt.$menu.css("zIndex"),10)) {
                     return;
                 }
                 switch (e.keyCode) {
@@ -53634,6 +53582,7 @@ e(c,a,"ondblclick"))}})}}});
                     return;
                 }
 
+
                 $this.trigger('contextmenu:focus');
             },
             // :hover done manually so key handling is possible
@@ -53650,6 +53599,10 @@ e(c,a,"ondblclick"))}})}}});
                     e.preventDefault();
                     e.stopImmediatePropagation();
                     root.$selected = opt.$selected = opt.$node;
+                    return;
+                }
+
+                if(opt && opt.$menu && opt.$menu.hasClass('context-menu-visible')){
                     return;
                 }
 
@@ -53684,7 +53637,7 @@ e(c,a,"ondblclick"))}})}}});
                 }
 
                 // hide menu if callback doesn't stop that
-                if (callback.call(root.$trigger, key, root) !== false) {
+                if (callback.call(root.$trigger, key, root, e) !== false) {
                     root.$menu.trigger('contextmenu:hide');
                 } else if (root.$menu.parent().length) {
                     op.update.call(root.$trigger, root);
@@ -53721,6 +53674,11 @@ e(c,a,"ondblclick"))}})}}});
 
                 // remember selected
                 opt.$selected = root.$selected = $this;
+
+
+                if(opt && opt.$node && opt.$node.hasClass('context-menu-submenu')){
+                    opt.$node.addClass(root.classNames.hover);
+                }
 
                 // position sub-menu - do after show so dumb $.ui.position can keep up
                 if (opt.$node) {
@@ -53890,6 +53848,7 @@ e(c,a,"ondblclick"))}})}}});
                 if (typeof root === 'undefined') {
                     root = opt;
                 }
+
                 // create contextMenu
                 opt.$menu = $('<ul class="context-menu-list"></ul>').addClass(opt.className || '').data({
                     'contextMenu': opt,
@@ -54226,7 +54185,7 @@ e(c,a,"ondblclick"))}})}}});
                                 break;
 
                             case 'select':
-                                item.$input.val(item.selected || '');
+                                item.$input.val((item.selected === 0 ? "0" : item.selected) || '');
                                 break;
                         }
                     }
@@ -54689,14 +54648,13 @@ e(c,a,"ondblclick"))}})}}});
                         disabled: !!$node.attr('disabled'),
                         callback: (function () {
                             return function () {
-                                $node.click();
+                                $node.get(0).click()
                             };
                         })()
                     };
                     break;
 
                 // http://www.whatwg.org/specs/web-apps/current-work/multipage/commands.html#using-the-command-element-to-define-a-command
-
                 case 'menuitem':
                 case 'command':
                     switch ($node.attr('type')) {
@@ -54709,7 +54667,7 @@ e(c,a,"ondblclick"))}})}}});
                                 icon: $node.attr('icon'),
                                 callback: (function () {
                                     return function () {
-                                        $node.click();
+                                        $node.get(0).click()
                                     };
                                 })()
                             };
@@ -57005,3 +56963,1374 @@ if (!window.document.documentElement.classList && Object.defineProperty && typeo
 }
 
 if (typeof module !== "undefined") module.exports = Flatpickr;
+
+﻿/*!
+ * jQuery Validate Unobtrusive Bootstrap 1.2.3
+ *
+ * https://github.com/sandrocaseiro/jquery.validate.unobtrusive.bootstrap
+ *
+ * Copyright 2014 Sandro Caseiro
+ * Released under the MIT license:
+ *   http://www.opensource.org/licenses/mit-license.php
+ */
+
+(function($)
+{
+	function escapeAttributeValue(value)
+	{
+		// As mentioned on http://api.jquery.com/category/selectors/
+		return value.replace(/([!"#$%&'()*+,./:;<=>?@\[\\\]^`{|}~])/g, "\\$1");
+	}
+
+	function addErrorClass(element)
+	{
+		var group = element.closest('.form-group');
+		if (group && group.length > 0)
+		{
+			group.addClass('has-error').removeClass('has-success');
+		}
+	}
+
+	function addSuccessClass(element)
+	{
+		var group = element.closest('.form-group');
+		if (group && group.length > 0)
+		{
+			group.addClass('has-success').removeClass('has-error');
+		}
+	}
+
+	function onError(formElement, errorPlacementBase, error, inputElement)
+	{
+		errorPlacementBase(error, inputElement);
+
+		if ($(inputElement).hasClass('input-validation-error'))
+		{
+			addErrorClass(inputElement)
+		}
+	}
+
+	function onSuccess(successBase, error)
+	{
+		var container = error.data("unobtrusiveContainer");
+
+		successBase(error);
+
+		if (container)
+		{
+			addSuccessClass(container);
+		}
+	}
+
+	$.fn.validateBootstrap = function(refresh)
+	{
+		return this.each(function()
+		{
+			var $this = $(this);
+			if (refresh)
+			{
+				$this.removeData('validator');
+				$this.removeData('unobtrusiveValidation');
+				$.validator.unobtrusive.parse($this);
+			}
+			
+			var validator = $this.data('validator');
+
+			if (validator)
+			{
+				validator.settings.errorClass += ' text-danger';
+				var errorPlacementBase = validator.settings.errorPlacement;
+				var successBase = validator.settings.success;
+
+				validator.settings.errorPlacement = function(error, inputElement)
+				{
+					onError($this, errorPlacementBase, error, inputElement);
+				};
+
+				validator.settings.success = function(error)
+				{
+					onSuccess(successBase, error);
+				}
+
+				$this.find('.input-validation-error').each(function()
+				{
+					var errorElement = $this.find("[data-valmsg-for='" + escapeAttributeValue($(this)[0].name) + "']");
+					var newElement = $(document.createElement(validator.settings.errorElement))
+						.addClass('text-danger')
+						.attr('for', escapeAttributeValue($(this)[0].name))
+						.text(errorElement.text());
+					onError($this, errorPlacementBase, newElement, $(this));
+				});
+			}
+			// if validation isn't enabled, but the form has the validation error message element, add error class to container
+			else
+			{
+				$this.find('.input-validation-error').each(function()
+				{
+					addErrorClass($(this));
+				});
+			}
+		});
+	};
+
+	$(function()
+	{
+		$('form').validateBootstrap();
+	});
+
+}(jQuery));
+/*! Responsive 2.1.1
+ * 2014-2016 SpryMedia Ltd - datatables.net/license
+ */
+
+/**
+ * @summary     Responsive
+ * @description Responsive tables plug-in for DataTables
+ * @version     2.1.1
+ * @file        dataTables.responsive.js
+ * @author      SpryMedia Ltd (www.sprymedia.co.uk)
+ * @contact     www.sprymedia.co.uk/contact
+ * @copyright   Copyright 2014-2016 SpryMedia Ltd.
+ *
+ * This source file is free software, available under the following license:
+ *   MIT license - http://datatables.net/license/mit
+ *
+ * This source file is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the license files for details.
+ *
+ * For details please refer to: http://www.datatables.net
+ */
+(function( factory ){
+	if ( typeof define === 'function' && define.amd ) {
+		// AMD
+		define( ['jquery', 'datatables.net'], function ( $ ) {
+			return factory( $, window, document );
+		} );
+	}
+	else if ( typeof exports === 'object' ) {
+		// CommonJS
+		module.exports = function (root, $) {
+			if ( ! root ) {
+				root = window;
+			}
+
+			if ( ! $ || ! $.fn.dataTable ) {
+				$ = require('datatables.net')(root, $).$;
+			}
+
+			return factory( $, root, root.document );
+		};
+	}
+	else {
+		// Browser
+		factory( jQuery, window, document );
+	}
+}(function( $, window, document, undefined ) {
+'use strict';
+var DataTable = $.fn.dataTable;
+
+
+/**
+ * Responsive is a plug-in for the DataTables library that makes use of
+ * DataTables' ability to change the visibility of columns, changing the
+ * visibility of columns so the displayed columns fit into the table container.
+ * The end result is that complex tables will be dynamically adjusted to fit
+ * into the viewport, be it on a desktop, tablet or mobile browser.
+ *
+ * Responsive for DataTables has two modes of operation, which can used
+ * individually or combined:
+ *
+ * * Class name based control - columns assigned class names that match the
+ *   breakpoint logic can be shown / hidden as required for each breakpoint.
+ * * Automatic control - columns are automatically hidden when there is no
+ *   room left to display them. Columns removed from the right.
+ *
+ * In additional to column visibility control, Responsive also has built into
+ * options to use DataTables' child row display to show / hide the information
+ * from the table that has been hidden. There are also two modes of operation
+ * for this child row display:
+ *
+ * * Inline - when the control element that the user can use to show / hide
+ *   child rows is displayed inside the first column of the table.
+ * * Column - where a whole column is dedicated to be the show / hide control.
+ *
+ * Initialisation of Responsive is performed by:
+ *
+ * * Adding the class `responsive` or `dt-responsive` to the table. In this case
+ *   Responsive will automatically be initialised with the default configuration
+ *   options when the DataTable is created.
+ * * Using the `responsive` option in the DataTables configuration options. This
+ *   can also be used to specify the configuration options, or simply set to
+ *   `true` to use the defaults.
+ *
+ *  @class
+ *  @param {object} settings DataTables settings object for the host table
+ *  @param {object} [opts] Configuration options
+ *  @requires jQuery 1.7+
+ *  @requires DataTables 1.10.3+
+ *
+ *  @example
+ *      $('#example').DataTable( {
+ *        responsive: true
+ *      } );
+ *    } );
+ */
+var Responsive = function ( settings, opts ) {
+	// Sanity check that we are using DataTables 1.10 or newer
+	if ( ! DataTable.versionCheck || ! DataTable.versionCheck( '1.10.3' ) ) {
+		throw 'DataTables Responsive requires DataTables 1.10.3 or newer';
+	}
+
+	this.s = {
+		dt: new DataTable.Api( settings ),
+		columns: [],
+		current: []
+	};
+
+	// Check if responsive has already been initialised on this table
+	if ( this.s.dt.settings()[0].responsive ) {
+		return;
+	}
+
+	// details is an object, but for simplicity the user can give it as a string
+	// or a boolean
+	if ( opts && typeof opts.details === 'string' ) {
+		opts.details = { type: opts.details };
+	}
+	else if ( opts && opts.details === false ) {
+		opts.details = { type: false };
+	}
+	else if ( opts && opts.details === true ) {
+		opts.details = { type: 'inline' };
+	}
+
+	this.c = $.extend( true, {}, Responsive.defaults, DataTable.defaults.responsive, opts );
+	settings.responsive = this;
+	this._constructor();
+};
+
+$.extend( Responsive.prototype, {
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Constructor
+	 */
+
+	/**
+	 * Initialise the Responsive instance
+	 *
+	 * @private
+	 */
+	_constructor: function ()
+	{
+		var that = this;
+		var dt = this.s.dt;
+		var dtPrivateSettings = dt.settings()[0];
+		var oldWindowWidth = $(window).width();
+
+		dt.settings()[0]._responsive = this;
+
+		// Use DataTables' throttle function to avoid processor thrashing on
+		// resize
+		$(window).on( 'resize.dtr orientationchange.dtr', DataTable.util.throttle( function () {
+			// iOS has a bug whereby resize can fire when only scrolling
+			// See: http://stackoverflow.com/questions/8898412
+			var width = $(window).width();
+
+			if ( width !== oldWindowWidth ) {
+				that._resize();
+				oldWindowWidth = width;
+			}
+		} ) );
+
+		// DataTables doesn't currently trigger an event when a row is added, so
+		// we need to hook into its private API to enforce the hidden rows when
+		// new data is added
+		dtPrivateSettings.oApi._fnCallbackReg( dtPrivateSettings, 'aoRowCreatedCallback', function (tr, data, idx) {
+			if ( $.inArray( false, that.s.current ) !== -1 ) {
+				$('>td, >th', tr).each( function ( i ) {
+					var idx = dt.column.index( 'toData', i );
+
+					if ( that.s.current[idx] === false ) {
+						$(this).css('display', 'none');
+					}
+				} );
+			}
+		} );
+
+		// Destroy event handler
+		dt.on( 'destroy.dtr', function () {
+			dt.off( '.dtr' );
+			$( dt.table().body() ).off( '.dtr' );
+			$(window).off( 'resize.dtr orientationchange.dtr' );
+
+			// Restore the columns that we've hidden
+			$.each( that.s.current, function ( i, val ) {
+				if ( val === false ) {
+					that._setColumnVis( i, true );
+				}
+			} );
+		} );
+
+		// Reorder the breakpoints array here in case they have been added out
+		// of order
+		this.c.breakpoints.sort( function (a, b) {
+			return a.width < b.width ? 1 :
+				a.width > b.width ? -1 : 0;
+		} );
+
+		this._classLogic();
+		this._resizeAuto();
+
+		// Details handler
+		var details = this.c.details;
+
+		if ( details.type !== false ) {
+			that._detailsInit();
+
+			// DataTables will trigger this event on every column it shows and
+			// hides individually
+			dt.on( 'column-visibility.dtr', function (e, ctx, col, vis) {
+				that._classLogic();
+				that._resizeAuto();
+				that._resize();
+			} );
+
+			// Redraw the details box on each draw which will happen if the data
+			// has changed. This is used until DataTables implements a native
+			// `updated` event for rows
+			dt.on( 'draw.dtr', function () {
+				that._redrawChildren();
+			} );
+
+			$(dt.table().node()).addClass( 'dtr-'+details.type );
+		}
+
+		dt.on( 'column-reorder.dtr', function (e, settings, details) {
+			that._classLogic();
+			that._resizeAuto();
+			that._resize();
+		} );
+
+		// Change in column sizes means we need to calc
+		dt.on( 'column-sizing.dtr', function () {
+			that._resizeAuto();
+			that._resize();
+		});
+
+		// On Ajax reload we want to reopen any child rows which are displayed
+		// by responsive
+		dt.on( 'preXhr.dtr', function () {
+			var rowIds = [];
+			dt.rows().every( function () {
+				if ( this.child.isShown() ) {
+					rowIds.push( this.id(true) );
+				}
+			} );
+
+			dt.one( 'draw.dtr', function () {
+				dt.rows( rowIds ).every( function () {
+					that._detailsDisplay( this, false );
+				} );
+			} );
+		});
+
+		dt.on( 'init.dtr', function (e, settings, details) {
+			that._resizeAuto();
+			that._resize();
+
+			// If columns were hidden, then DataTables needs to adjust the
+			// column sizing
+			if ( $.inArray( false, that.s.current ) ) {
+				dt.columns.adjust();
+			}
+		} );
+
+		// First pass - draw the table for the current viewport size
+		this._resize();
+	},
+
+
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Private methods
+	 */
+
+	/**
+	 * Calculate the visibility for the columns in a table for a given
+	 * breakpoint. The result is pre-determined based on the class logic if
+	 * class names are used to control all columns, but the width of the table
+	 * is also used if there are columns which are to be automatically shown
+	 * and hidden.
+	 *
+	 * @param  {string} breakpoint Breakpoint name to use for the calculation
+	 * @return {array} Array of boolean values initiating the visibility of each
+	 *   column.
+	 *  @private
+	 */
+	_columnsVisiblity: function ( breakpoint )
+	{
+		var dt = this.s.dt;
+		var columns = this.s.columns;
+		var i, ien;
+
+		// Create an array that defines the column ordering based first on the
+		// column's priority, and secondly the column index. This allows the
+		// columns to be removed from the right if the priority matches
+		var order = columns
+			.map( function ( col, idx ) {
+				return {
+					columnIdx: idx,
+					priority: col.priority
+				};
+			} )
+			.sort( function ( a, b ) {
+				if ( a.priority !== b.priority ) {
+					return a.priority - b.priority;
+				}
+				return a.columnIdx - b.columnIdx;
+			} );
+
+		// Class logic - determine which columns are in this breakpoint based
+		// on the classes. If no class control (i.e. `auto`) then `-` is used
+		// to indicate this to the rest of the function
+		var display = $.map( columns, function ( col ) {
+			return col.auto && col.minWidth === null ?
+				false :
+				col.auto === true ?
+					'-' :
+					$.inArray( breakpoint, col.includeIn ) !== -1;
+		} );
+
+		// Auto column control - first pass: how much width is taken by the
+		// ones that must be included from the non-auto columns
+		var requiredWidth = 0;
+		for ( i=0, ien=display.length ; i<ien ; i++ ) {
+			if ( display[i] === true ) {
+				requiredWidth += columns[i].minWidth;
+			}
+		}
+
+		// Second pass, use up any remaining width for other columns. For
+		// scrolling tables we need to subtract the width of the scrollbar. It
+		// may not be requires which makes this sub-optimal, but it would
+		// require another full redraw to make complete use of those extra few
+		// pixels
+		var scrolling = dt.settings()[0].oScroll;
+		var bar = scrolling.sY || scrolling.sX ? scrolling.iBarWidth : 0;
+		var widthAvailable = dt.table().container().offsetWidth - bar;
+		var usedWidth = widthAvailable - requiredWidth;
+
+		// Control column needs to always be included. This makes it sub-
+		// optimal in terms of using the available with, but to stop layout
+		// thrashing or overflow. Also we need to account for the control column
+		// width first so we know how much width is available for the other
+		// columns, since the control column might not be the first one shown
+		for ( i=0, ien=display.length ; i<ien ; i++ ) {
+			if ( columns[i].control ) {
+				usedWidth -= columns[i].minWidth;
+			}
+		}
+
+		// Allow columns to be shown (counting by priority and then right to
+		// left) until we run out of room
+		var empty = false;
+		for ( i=0, ien=order.length ; i<ien ; i++ ) {
+			var colIdx = order[i].columnIdx;
+
+			if ( display[colIdx] === '-' && ! columns[colIdx].control && columns[colIdx].minWidth ) {
+				// Once we've found a column that won't fit we don't let any
+				// others display either, or columns might disappear in the
+				// middle of the table
+				if ( empty || usedWidth - columns[colIdx].minWidth < 0 ) {
+					empty = true;
+					display[colIdx] = false;
+				}
+				else {
+					display[colIdx] = true;
+				}
+
+				usedWidth -= columns[colIdx].minWidth;
+			}
+		}
+
+		// Determine if the 'control' column should be shown (if there is one).
+		// This is the case when there is a hidden column (that is not the
+		// control column). The two loops look inefficient here, but they are
+		// trivial and will fly through. We need to know the outcome from the
+		// first , before the action in the second can be taken
+		var showControl = false;
+
+		for ( i=0, ien=columns.length ; i<ien ; i++ ) {
+			if ( ! columns[i].control && ! columns[i].never && ! display[i] ) {
+				showControl = true;
+				break;
+			}
+		}
+
+		for ( i=0, ien=columns.length ; i<ien ; i++ ) {
+			if ( columns[i].control ) {
+				display[i] = showControl;
+			}
+		}
+
+		// Finally we need to make sure that there is at least one column that
+		// is visible
+		if ( $.inArray( true, display ) === -1 ) {
+			display[0] = true;
+		}
+
+		return display;
+	},
+
+
+	/**
+	 * Create the internal `columns` array with information about the columns
+	 * for the table. This includes determining which breakpoints the column
+	 * will appear in, based upon class names in the column, which makes up the
+	 * vast majority of this method.
+	 *
+	 * @private
+	 */
+	_classLogic: function ()
+	{
+		var that = this;
+		var calc = {};
+		var breakpoints = this.c.breakpoints;
+		var dt = this.s.dt;
+		var columns = dt.columns().eq(0).map( function (i) {
+			var column = this.column(i);
+			var className = column.header().className;
+			var priority = dt.settings()[0].aoColumns[i].responsivePriority;
+
+			if ( priority === undefined ) {
+				var dataPriority = $(column.header()).data('priority');
+
+				priority = dataPriority !== undefined ?
+					dataPriority * 1 :
+					10000;
+			}
+
+			return {
+				className: className,
+				includeIn: [],
+				auto:      false,
+				control:   false,
+				never:     className.match(/\bnever\b/) ? true : false,
+				priority:  priority
+			};
+		} );
+
+		// Simply add a breakpoint to `includeIn` array, ensuring that there are
+		// no duplicates
+		var add = function ( colIdx, name ) {
+			var includeIn = columns[ colIdx ].includeIn;
+
+			if ( $.inArray( name, includeIn ) === -1 ) {
+				includeIn.push( name );
+			}
+		};
+
+		var column = function ( colIdx, name, operator, matched ) {
+			var size, i, ien;
+
+			if ( ! operator ) {
+				columns[ colIdx ].includeIn.push( name );
+			}
+			else if ( operator === 'max-' ) {
+				// Add this breakpoint and all smaller
+				size = that._find( name ).width;
+
+				for ( i=0, ien=breakpoints.length ; i<ien ; i++ ) {
+					if ( breakpoints[i].width <= size ) {
+						add( colIdx, breakpoints[i].name );
+					}
+				}
+			}
+			else if ( operator === 'min-' ) {
+				// Add this breakpoint and all larger
+				size = that._find( name ).width;
+
+				for ( i=0, ien=breakpoints.length ; i<ien ; i++ ) {
+					if ( breakpoints[i].width >= size ) {
+						add( colIdx, breakpoints[i].name );
+					}
+				}
+			}
+			else if ( operator === 'not-' ) {
+				// Add all but this breakpoint
+				for ( i=0, ien=breakpoints.length ; i<ien ; i++ ) {
+					if ( breakpoints[i].name.indexOf( matched ) === -1 ) {
+						add( colIdx, breakpoints[i].name );
+					}
+				}
+			}
+		};
+
+		// Loop over each column and determine if it has a responsive control
+		// class
+		columns.each( function ( col, i ) {
+			var classNames = col.className.split(' ');
+			var hasClass = false;
+
+			// Split the class name up so multiple rules can be applied if needed
+			for ( var k=0, ken=classNames.length ; k<ken ; k++ ) {
+				var className = $.trim( classNames[k] );
+
+				if ( className === 'all' ) {
+					// Include in all
+					hasClass = true;
+					col.includeIn = $.map( breakpoints, function (a) {
+						return a.name;
+					} );
+					return;
+				}
+				else if ( className === 'none' || col.never ) {
+					// Include in none (default) and no auto
+					hasClass = true;
+					return;
+				}
+				else if ( className === 'control' ) {
+					// Special column that is only visible, when one of the other
+					// columns is hidden. This is used for the details control
+					hasClass = true;
+					col.control = true;
+					return;
+				}
+
+				$.each( breakpoints, function ( j, breakpoint ) {
+					// Does this column have a class that matches this breakpoint?
+					var brokenPoint = breakpoint.name.split('-');
+					var re = new RegExp( '(min\\-|max\\-|not\\-)?('+brokenPoint[0]+')(\\-[_a-zA-Z0-9])?' );
+					var match = className.match( re );
+
+					if ( match ) {
+						hasClass = true;
+
+						if ( match[2] === brokenPoint[0] && match[3] === '-'+brokenPoint[1] ) {
+							// Class name matches breakpoint name fully
+							column( i, breakpoint.name, match[1], match[2]+match[3] );
+						}
+						else if ( match[2] === brokenPoint[0] && ! match[3] ) {
+							// Class name matched primary breakpoint name with no qualifier
+							column( i, breakpoint.name, match[1], match[2] );
+						}
+					}
+				} );
+			}
+
+			// If there was no control class, then automatic sizing is used
+			if ( ! hasClass ) {
+				col.auto = true;
+			}
+		} );
+
+		this.s.columns = columns;
+	},
+
+
+	/**
+	 * Show the details for the child row
+	 *
+	 * @param  {DataTables.Api} row    API instance for the row
+	 * @param  {boolean}        update Update flag
+	 * @private
+	 */
+	_detailsDisplay: function ( row, update )
+	{
+		var that = this;
+		var dt = this.s.dt;
+		var details = this.c.details;
+
+		if ( details && details.type !== false ) {
+			var res = details.display( row, update, function () {
+				return details.renderer(
+					dt, row[0], that._detailsObj(row[0])
+				);
+			} );
+
+			if ( res === true || res === false ) {
+				$(dt.table().node()).triggerHandler( 'responsive-display.dt', [dt, row, res, update] );
+			}
+		}
+	},
+
+
+	/**
+	 * Initialisation for the details handler
+	 *
+	 * @private
+	 */
+	_detailsInit: function ()
+	{
+		var that    = this;
+		var dt      = this.s.dt;
+		var details = this.c.details;
+
+		// The inline type always uses the first child as the target
+		if ( details.type === 'inline' ) {
+			details.target = 'td:first-child, th:first-child';
+		}
+
+		// Keyboard accessibility
+		dt.on( 'draw.dtr', function () {
+			that._tabIndexes();
+		} );
+		that._tabIndexes(); // Initial draw has already happened
+
+		$( dt.table().body() ).on( 'keyup.dtr', 'td, th', function (e) {
+			if ( e.keyCode === 13 && $(this).data('dtr-keyboard') ) {
+				$(this).click();
+			}
+		} );
+
+		// type.target can be a string jQuery selector or a column index
+		var target   = details.target;
+		var selector = typeof target === 'string' ? target : 'td, th';
+
+		// Click handler to show / hide the details rows when they are available
+		$( dt.table().body() )
+			.on( 'click.dtr mousedown.dtr mouseup.dtr', selector, function (e) {
+				// If the table is not collapsed (i.e. there is no hidden columns)
+				// then take no action
+				if ( ! $(dt.table().node()).hasClass('collapsed' ) ) {
+					return;
+				}
+
+				// Check that the row is actually a DataTable's controlled node
+				if ( $.inArray( $(this).closest('tr').get(0), dt.rows().nodes().toArray() ) === -1 ) {
+					return;
+				}
+
+				// For column index, we determine if we should act or not in the
+				// handler - otherwise it is already okay
+				if ( typeof target === 'number' ) {
+					var targetIdx = target < 0 ?
+						dt.columns().eq(0).length + target :
+						target;
+
+					if ( dt.cell( this ).index().column !== targetIdx ) {
+						return;
+					}
+				}
+
+				// $().closest() includes itself in its check
+				var row = dt.row( $(this).closest('tr') );
+
+				// Check event type to do an action
+				if ( e.type === 'click' ) {
+					// The renderer is given as a function so the caller can execute it
+					// only when they need (i.e. if hiding there is no point is running
+					// the renderer)
+					that._detailsDisplay( row, false );
+				}
+				else if ( e.type === 'mousedown' ) {
+					// For mouse users, prevent the focus ring from showing
+					$(this).css('outline', 'none');
+				}
+				else if ( e.type === 'mouseup' ) {
+					// And then re-allow at the end of the click
+					$(this).blur().css('outline', '');
+				}
+			} );
+	},
+
+
+	/**
+	 * Get the details to pass to a renderer for a row
+	 * @param  {int} rowIdx Row index
+	 * @private
+	 */
+	_detailsObj: function ( rowIdx )
+	{
+		var that = this;
+		var dt = this.s.dt;
+
+		return $.map( this.s.columns, function( col, i ) {
+			// Never and control columns should not be passed to the renderer
+			if ( col.never || col.control ) {
+				return;
+			}
+
+			return {
+				title:       dt.settings()[0].aoColumns[ i ].sTitle,
+				data:        dt.cell( rowIdx, i ).render( that.c.orthogonal ),
+				hidden:      dt.column( i ).visible() && !that.s.current[ i ],
+				columnIndex: i,
+				rowIndex:    rowIdx
+			};
+		} );
+	},
+
+
+	/**
+	 * Find a breakpoint object from a name
+	 *
+	 * @param  {string} name Breakpoint name to find
+	 * @return {object}      Breakpoint description object
+	 * @private
+	 */
+	_find: function ( name )
+	{
+		var breakpoints = this.c.breakpoints;
+
+		for ( var i=0, ien=breakpoints.length ; i<ien ; i++ ) {
+			if ( breakpoints[i].name === name ) {
+				return breakpoints[i];
+			}
+		}
+	},
+
+
+	/**
+	 * Re-create the contents of the child rows as the display has changed in
+	 * some way.
+	 *
+	 * @private
+	 */
+	_redrawChildren: function ()
+	{
+		var that = this;
+		var dt = this.s.dt;
+
+		dt.rows( {page: 'current'} ).iterator( 'row', function ( settings, idx ) {
+			var row = dt.row( idx );
+
+			that._detailsDisplay( dt.row( idx ), true );
+		} );
+	},
+
+
+	/**
+	 * Alter the table display for a resized viewport. This involves first
+	 * determining what breakpoint the window currently is in, getting the
+	 * column visibilities to apply and then setting them.
+	 *
+	 * @private
+	 */
+	_resize: function ()
+	{
+		var that = this;
+		var dt = this.s.dt;
+		var width = $(window).width();
+		var breakpoints = this.c.breakpoints;
+		var breakpoint = breakpoints[0].name;
+		var columns = this.s.columns;
+		var i, ien;
+		var oldVis = this.s.current.slice();
+
+		// Determine what breakpoint we are currently at
+		for ( i=breakpoints.length-1 ; i>=0 ; i-- ) {
+			if ( width <= breakpoints[i].width ) {
+				breakpoint = breakpoints[i].name;
+				break;
+			}
+		}
+		
+		// Show the columns for that break point
+		var columnsVis = this._columnsVisiblity( breakpoint );
+		this.s.current = columnsVis;
+
+		// Set the class before the column visibility is changed so event
+		// listeners know what the state is. Need to determine if there are
+		// any columns that are not visible but can be shown
+		var collapsedClass = false;
+		for ( i=0, ien=columns.length ; i<ien ; i++ ) {
+			if ( columnsVis[i] === false && ! columns[i].never && ! columns[i].control ) {
+				collapsedClass = true;
+				break;
+			}
+		}
+
+		$( dt.table().node() ).toggleClass( 'collapsed', collapsedClass );
+
+		var changed = false;
+
+		dt.columns().eq(0).each( function ( colIdx, i ) {
+			if ( columnsVis[i] !== oldVis[i] ) {
+				changed = true;
+				that._setColumnVis( colIdx, columnsVis[i] );
+			}
+		} );
+
+		if ( changed ) {
+			this._redrawChildren();
+
+			// Inform listeners of the change
+			$(dt.table().node()).trigger( 'responsive-resize.dt', [dt, this.s.current] );
+		}
+	},
+
+
+	/**
+	 * Determine the width of each column in the table so the auto column hiding
+	 * has that information to work with. This method is never going to be 100%
+	 * perfect since column widths can change slightly per page, but without
+	 * seriously compromising performance this is quite effective.
+	 *
+	 * @private
+	 */
+	_resizeAuto: function ()
+	{
+		var dt = this.s.dt;
+		var columns = this.s.columns;
+
+		// Are we allowed to do auto sizing?
+		if ( ! this.c.auto ) {
+			return;
+		}
+
+		// Are there any columns that actually need auto-sizing, or do they all
+		// have classes defined
+		if ( $.inArray( true, $.map( columns, function (c) { return c.auto; } ) ) === -1 ) {
+			return;
+		}
+
+		// Clone the table with the current data in it
+		var tableWidth   = dt.table().node().offsetWidth;
+		var columnWidths = dt.columns;
+		var clonedTable  = dt.table().node().cloneNode( false );
+		var clonedHeader = $( dt.table().header().cloneNode( false ) ).appendTo( clonedTable );
+		var clonedBody   = $( dt.table().body() ).clone( false, false ).empty().appendTo( clonedTable ); // use jQuery because of IE8
+
+		// Header
+		var headerCells = dt.columns()
+			.header()
+			.filter( function (idx) {
+				return dt.column(idx).visible();
+			} )
+			.to$()
+			.clone( false )
+			.css( 'display', 'table-cell' );
+
+		// Body rows - we don't need to take account of DataTables' column
+		// visibility since we implement our own here (hence the `display` set)
+		$(clonedBody)
+			.append( $(dt.rows( { page: 'current' } ).nodes()).clone( false ) )
+			.find( 'th, td' ).css( 'display', '' );
+
+		// Footer
+		var footer = dt.table().footer();
+		if ( footer ) {
+			var clonedFooter = $( footer.cloneNode( false ) ).appendTo( clonedTable );
+			var footerCells = dt.columns()
+				.footer()
+				.filter( function (idx) {
+					return dt.column(idx).visible();
+				} )
+				.to$()
+				.clone( false )
+				.css( 'display', 'table-cell' );
+
+			$('<tr/>')
+				.append( footerCells )
+				.appendTo( clonedFooter );
+		}
+
+		$('<tr/>')
+			.append( headerCells )
+			.appendTo( clonedHeader );
+
+		// In the inline case extra padding is applied to the first column to
+		// give space for the show / hide icon. We need to use this in the
+		// calculation
+		if ( this.c.details.type === 'inline' ) {
+			$(clonedTable).addClass( 'dtr-inline collapsed' );
+		}
+		
+		// It is unsafe to insert elements with the same name into the DOM
+		// multiple times. For example, cloning and inserting a checked radio
+		// clears the chcecked state of the original radio.
+		$( clonedTable ).find( '[name]' ).removeAttr( 'name' );
+		
+		var inserted = $('<div/>')
+			.css( {
+				width: 1,
+				height: 1,
+				overflow: 'hidden'
+			} )
+			.append( clonedTable );
+
+		inserted.insertBefore( dt.table().node() );
+
+		// The cloned header now contains the smallest that each column can be
+		headerCells.each( function (i) {
+			var idx = dt.column.index( 'fromVisible', i );
+			columns[ idx ].minWidth =  this.offsetWidth || 0;
+		} );
+
+		inserted.remove();
+	},
+
+	/**
+	 * Set a column's visibility.
+	 *
+	 * We don't use DataTables' column visibility controls in order to ensure
+	 * that column visibility can Responsive can no-exist. Since only IE8+ is
+	 * supported (and all evergreen browsers of course) the control of the
+	 * display attribute works well.
+	 *
+	 * @param {integer} col      Column index
+	 * @param {boolean} showHide Show or hide (true or false)
+	 * @private
+	 */
+	_setColumnVis: function ( col, showHide )
+	{
+		var dt = this.s.dt;
+		var display = showHide ? '' : 'none'; // empty string will remove the attr
+
+		$( dt.column( col ).header() ).css( 'display', display );
+		$( dt.column( col ).footer() ).css( 'display', display );
+		dt.column( col ).nodes().to$().css( 'display', display );
+	},
+
+
+	/**
+	 * Update the cell tab indexes for keyboard accessibility. This is called on
+	 * every table draw - that is potentially inefficient, but also the least
+	 * complex option given that column visibility can change on the fly. Its a
+	 * shame user-focus was removed from CSS 3 UI, as it would have solved this
+	 * issue with a single CSS statement.
+	 *
+	 * @private
+	 */
+	_tabIndexes: function ()
+	{
+		var dt = this.s.dt;
+		var cells = dt.cells( { page: 'current' } ).nodes().to$();
+		var ctx = dt.settings()[0];
+		var target = this.c.details.target;
+
+		cells.filter( '[data-dtr-keyboard]' ).removeData( '[data-dtr-keyboard]' );
+
+		var selector = typeof target === 'number' ?
+			':eq('+target+')' :
+			target;
+
+		// This is a bit of a hack - we need to limit the selected nodes to just
+		// those of this table
+		if ( selector === 'td:first-child, th:first-child' ) {
+			selector = '>td:first-child, >th:first-child';
+		}
+
+		$( selector, dt.rows( { page: 'current' } ).nodes() )
+			.attr( 'tabIndex', ctx.iTabIndex )
+			.data( 'dtr-keyboard', 1 );
+	}
+} );
+
+
+/**
+ * List of default breakpoints. Each item in the array is an object with two
+ * properties:
+ *
+ * * `name` - the breakpoint name.
+ * * `width` - the breakpoint width
+ *
+ * @name Responsive.breakpoints
+ * @static
+ */
+Responsive.breakpoints = [
+	{ name: 'desktop',  width: Infinity },
+	{ name: 'tablet-l', width: 1024 },
+	{ name: 'tablet-p', width: 768 },
+	{ name: 'mobile-l', width: 480 },
+	{ name: 'mobile-p', width: 320 }
+];
+
+
+/**
+ * Display methods - functions which define how the hidden data should be shown
+ * in the table.
+ *
+ * @namespace
+ * @name Responsive.defaults
+ * @static
+ */
+Responsive.display = {
+	childRow: function ( row, update, render ) {
+		if ( update ) {
+			if ( $(row.node()).hasClass('parent') ) {
+				row.child( render(), 'child' ).show();
+
+				return true;
+			}
+		}
+		else {
+			if ( ! row.child.isShown()  ) {
+				row.child( render(), 'child' ).show();
+				$( row.node() ).addClass( 'parent' );
+
+				return true;
+			}
+			else {
+				row.child( false );
+				$( row.node() ).removeClass( 'parent' );
+
+				return false;
+			}
+		}
+	},
+
+	childRowImmediate: function ( row, update, render ) {
+		if ( (! update && row.child.isShown()) || ! row.responsive.hasHidden() ) {
+			// User interaction and the row is show, or nothing to show
+			row.child( false );
+			$( row.node() ).removeClass( 'parent' );
+
+			return false;
+		}
+		else {
+			// Display
+			row.child( render(), 'child' ).show();
+			$( row.node() ).addClass( 'parent' );
+
+			return true;
+		}
+	},
+
+	// This is a wrapper so the modal options for Bootstrap and jQuery UI can
+	// have options passed into them. This specific one doesn't need to be a
+	// function but it is for consistency in the `modal` name
+	modal: function ( options ) {
+		return function ( row, update, render ) {
+			if ( ! update ) {
+				// Show a modal
+				var close = function () {
+					modal.remove(); // will tidy events for us
+					$(document).off( 'keypress.dtr' );
+				};
+
+				var modal = $('<div class="dtr-modal"/>')
+					.append( $('<div class="dtr-modal-display"/>')
+						.append( $('<div class="dtr-modal-content"/>')
+							.append( render() )
+						)
+						.append( $('<div class="dtr-modal-close">&times;</div>' )
+							.click( function () {
+								close();
+							} )
+						)
+					)
+					.append( $('<div class="dtr-modal-background"/>')
+						.click( function () {
+							close();
+						} )
+					)
+					.appendTo( 'body' );
+
+				$(document).on( 'keyup.dtr', function (e) {
+					if ( e.keyCode === 27 ) {
+						e.stopPropagation();
+
+						close();
+					}
+				} );
+			}
+			else {
+				$('div.dtr-modal-content')
+					.empty()
+					.append( render() );
+			}
+
+			if ( options && options.header ) {
+				$('div.dtr-modal-content').prepend(
+					'<h2>'+options.header( row )+'</h2>'
+				);
+			}
+		};
+	}
+};
+
+
+/**
+ * Display methods - functions which define how the hidden data should be shown
+ * in the table.
+ *
+ * @namespace
+ * @name Responsive.defaults
+ * @static
+ */
+Responsive.renderer = {
+	listHidden: function () {
+		return function ( api, rowIdx, columns ) {
+			var data = $.map( columns, function ( col ) {
+				return col.hidden ?
+					'<li data-dtr-index="'+col.columnIndex+'" data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
+						'<span class="dtr-title">'+
+							col.title+
+						'</span> '+
+						'<span class="dtr-data">'+
+							col.data+
+						'</span>'+
+					'</li>' :
+					'';
+			} ).join('');
+
+			return data ?
+				$('<ul data-dtr-index="'+rowIdx+'" class="dtr-details"/>').append( data ) :
+				false;
+		}
+	},
+
+	tableAll: function ( options ) {
+		options = $.extend( {
+			tableClass: ''
+		}, options );
+
+		return function ( api, rowIdx, columns ) {
+			var data = $.map( columns, function ( col ) {
+				return '<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
+						'<td>'+col.title+':'+'</td> '+
+						'<td>'+col.data+'</td>'+
+					'</tr>';
+			} ).join('');
+
+			return $('<table class="'+options.tableClass+' dtr-details" width="100%"/>').append( data );
+		}
+	}
+};
+
+/**
+ * Responsive default settings for initialisation
+ *
+ * @namespace
+ * @name Responsive.defaults
+ * @static
+ */
+Responsive.defaults = {
+	/**
+	 * List of breakpoints for the instance. Note that this means that each
+	 * instance can have its own breakpoints. Additionally, the breakpoints
+	 * cannot be changed once an instance has been creased.
+	 *
+	 * @type {Array}
+	 * @default Takes the value of `Responsive.breakpoints`
+	 */
+	breakpoints: Responsive.breakpoints,
+
+	/**
+	 * Enable / disable auto hiding calculations. It can help to increase
+	 * performance slightly if you disable this option, but all columns would
+	 * need to have breakpoint classes assigned to them
+	 *
+	 * @type {Boolean}
+	 * @default  `true`
+	 */
+	auto: true,
+
+	/**
+	 * Details control. If given as a string value, the `type` property of the
+	 * default object is set to that value, and the defaults used for the rest
+	 * of the object - this is for ease of implementation.
+	 *
+	 * The object consists of the following properties:
+	 *
+	 * * `display` - A function that is used to show and hide the hidden details
+	 * * `renderer` - function that is called for display of the child row data.
+	 *   The default function will show the data from the hidden columns
+	 * * `target` - Used as the selector for what objects to attach the child
+	 *   open / close to
+	 * * `type` - `false` to disable the details display, `inline` or `column`
+	 *   for the two control types
+	 *
+	 * @type {Object|string}
+	 */
+	details: {
+		display: Responsive.display.childRow,
+
+		renderer: Responsive.renderer.listHidden(),
+
+		target: 0,
+
+		type: 'inline'
+	},
+
+	/**
+	 * Orthogonal data request option. This is used to define the data type
+	 * requested when Responsive gets the data to show in the child row.
+	 *
+	 * @type {String}
+	 */
+	orthogonal: 'display'
+};
+
+
+/*
+ * API
+ */
+var Api = $.fn.dataTable.Api;
+
+// Doesn't do anything - work around for a bug in DT... Not documented
+Api.register( 'responsive()', function () {
+	return this;
+} );
+
+Api.register( 'responsive.index()', function ( li ) {
+	li = $(li);
+
+	return {
+		column: li.data('dtr-index'),
+		row:    li.parent().data('dtr-index')
+	};
+} );
+
+Api.register( 'responsive.rebuild()', function () {
+	return this.iterator( 'table', function ( ctx ) {
+		if ( ctx._responsive ) {
+			ctx._responsive._classLogic();
+		}
+	} );
+} );
+
+Api.register( 'responsive.recalc()', function () {
+	return this.iterator( 'table', function ( ctx ) {
+		if ( ctx._responsive ) {
+			ctx._responsive._resizeAuto();
+			ctx._responsive._resize();
+		}
+	} );
+} );
+
+Api.register( 'responsive.hasHidden()', function () {
+	var ctx = this.context[0];
+
+	return ctx._responsive ?
+		$.inArray( false, ctx._responsive.s.current ) !== -1 :
+		false;
+} );
+
+
+/**
+ * Version information
+ *
+ * @name Responsive.version
+ * @static
+ */
+Responsive.version = '2.1.1';
+
+
+$.fn.dataTable.Responsive = Responsive;
+$.fn.DataTable.Responsive = Responsive;
+
+// Attach a listener to the document which listens for DataTables initialisation
+// events so we can automatically initialise
+$(document).on( 'preInit.dt.dtr', function (e, settings, json) {
+	if ( e.namespace !== 'dt' ) {
+		return;
+	}
+
+	if ( $(settings.nTable).hasClass( 'responsive' ) ||
+		 $(settings.nTable).hasClass( 'dt-responsive' ) ||
+		 settings.oInit.responsive ||
+		 DataTable.defaults.responsive
+	) {
+		var init = settings.oInit.responsive;
+
+		if ( init !== false ) {
+			new Responsive( settings, $.isPlainObject( init ) ? init : {}  );
+		}
+	}
+} );
+
+
+return Responsive;
+}));

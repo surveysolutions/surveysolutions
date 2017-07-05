@@ -15,6 +15,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public int FailedToUploadInterviwesCount { get; set; }
         public int FailedToCreateInterviewsCount { get; set; }
 
+        public int NewAssignmentsCount { get; set; }
+        public int RemovedAssignmentsCount { get; set; }
+
         public int FailedInterviewsCount => this.FailedToCreateInterviewsCount + this.FailedToUploadInterviwesCount;
     }
 }

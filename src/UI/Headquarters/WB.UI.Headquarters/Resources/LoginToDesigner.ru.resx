@@ -117,11 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AccessForbidden" xml:space="preserve">
+    <value>Сервер не зарегистрирован на Дизайнере. Пожалуйста, обратитесь в службу поддержки для регистрации.</value>
+  </data>
   <data name="DesignerAppDescription" xml:space="preserve">
     <value>Это бесплатный инструмент, для создания опросников в программе, разработанной Мировым Банком, CAPI. Найти его можно здесь</value>
   </data>
   <data name="InvalidCredentials" xml:space="preserve">
     <value>Пользователь не авторизирован. Пожалуйста, проверьте Ваши логин и пароль. </value>
+  </data>
+  <data name="LoginWatermark" xml:space="preserve">
+    <value>Логин или email</value>
   </data>
   <data name="PageHeader" xml:space="preserve">
     <value>Пожалуйста, чтобы получить доступ к опроснику, войдите, используя свою учетную запись на Дизайнере</value>

@@ -1,5 +1,7 @@
-﻿using Microsoft.Practices.ServiceLocation;
-using Moq;
+﻿using Autofac;
+using Autofac.Extras.CommonServiceLocator;
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -11,21 +13,21 @@ namespace PerformanceTest
     {
         public static void MockedServiceLocator()
         {
-            var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
+            var cont = new ContainerBuilder();
+            cont.RegisterType<RoslynExpressionProcessor>().As<IExpressionProcessor>().SingleInstance();
 
-            IExpressionProcessor roslynExpressionProcessor = new RoslynExpressionProcessor();
+            cont.RegisterType<FileSystemIOAccessor>().As<IFileSystemAccessor>().SingleInstance();
+            cont.RegisterType<Mocks.LookupTableServiceStub>().As<ILookupTableService>();
 
-            serviceLocatorMock
-                .Setup(locator => locator.GetInstance<IExpressionProcessor>())
-                .Returns(roslynExpressionProcessor);
+            cont.RegisterType<MacrosSubstitutionService>().As<IMacrosSubstitutionService>();
 
-            var fileSystemIoAccessor = new FileSystemIOAccessor();
+            cont.RegisterType<ExpressionsPlayOrderProvider>().As<IExpressionsPlayOrderProvider>();
 
-            serviceLocatorMock
-                .Setup(locator => locator.GetInstance<IFileSystemAccessor>())
-                .Returns(fileSystemIoAccessor);
-
-            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+            var kernel = cont.Build();
+            
+            // Set the service locator to an AutofacServiceLocator.
+            var csl = new AutofacServiceLocator(kernel);
+            ServiceLocator.SetLocatorProvider(() => csl);
         }
     }
 }

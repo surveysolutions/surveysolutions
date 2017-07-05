@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -18,17 +20,26 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
-    public class SynchronizationService : ISynchronizationService
+    public class SynchronizationService : ISynchronizationService, IAssignmentSynchronizationApi
     {
         private const string apiVersion = "v2";
+
+#if !EXCLUDEEXTENSIONS
+        private readonly string checkVersionUrl = "api/interviewer/extended/";
+#else
+        private readonly string checkVersionUrl = "api/interviewer/";
+#endif
         private const string interviewerApiUrl = "api/interviewer/";
         private readonly string devicesController = string.Concat(interviewerApiUrl, apiVersion, "/devices");
         private readonly string usersController = string.Concat(interviewerApiUrl, apiVersion, "/users");
         private readonly string interviewsController = string.Concat(interviewerApiUrl, apiVersion, "/interviews");
         private readonly string logoController = string.Concat(interviewerApiUrl, apiVersion, "/companyLogo");
         private readonly string questionnairesController = string.Concat(interviewerApiUrl, apiVersion, "/questionnaires");
+        private readonly string assignmentsController = string.Concat(interviewerApiUrl, apiVersion, "/assignments");
         private readonly string translationsController = string.Concat(interviewerApiUrl, apiVersion, "/translations");
         private readonly string attachmentContentController = string.Concat(interviewerApiUrl, apiVersion, "/attachments");
+
+        private readonly string mapsListUrl = "/configuration/maps.json";
 
         private readonly IPrincipal principal;
         private readonly IRestService restService;
@@ -59,7 +70,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.logger = logger;
         }
 
-        #region [Interviewer Api]
+#region [Interviewer Api]
 
         public async Task<string> LoginAsync(LogonInfo logonInfo, RestCredentials credentials, CancellationToken? token = null)
         {
@@ -70,7 +81,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     request: logonInfo,
                     credentials: credentials,
                     token: token));
-                
+
                 return authToken;
             }
             catch (RestException ex)
@@ -85,6 +96,26 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 this.restService.GetAsync<InterviewerApiView>(url: string.Concat(this.usersController, "/current"),
                 credentials: credentials ?? this.restCredentials, token: token));
         }
+        #endregion
+
+        #region AssignmentsApi
+
+        public Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken)
+        {
+            var response = this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<AssignmentApiView>>(
+                url: this.assignmentsController, credentials: this.restCredentials, token: cancellationToken));
+
+            return response;
+        }
+
+        public Task<AssignmentApiDocument> GetAssignmentAsync(int id, CancellationToken cancellationToken)
+        {
+            var response = this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<AssignmentApiDocument>(
+                url: $"{this.assignmentsController}/{id}", credentials: this.restCredentials, token: cancellationToken));
+
+            return response;
+        }
+
         #endregion
 
         #region [Device Api]
@@ -162,9 +193,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 credentials: credentials ?? this.restCredentials, token: token));
         }
 
-        #endregion
+#endregion
 
-        #region [Questionnaire Api]
+#region [Questionnaire Api]
 
 
         public Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged,
@@ -191,7 +222,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 token: token,
                 credentials: this.restCredentials));
         }
-
+        
         public Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<QuestionnaireIdentity>>(
@@ -202,8 +233,26 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public Task<List<QuestionnaireIdentity>> GetServerQuestionnairesAsync(CancellationToken cancellationToken)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<QuestionnaireIdentity>>(
-              url: string.Concat(this.questionnairesController, "/list"),
-              credentials: this.restCredentials, token: cancellationToken));
+               url: string.Concat(this.questionnairesController, "/list"), credentials: this.restCredentials, token: cancellationToken));
+        }
+      
+        public Task<List<MapView>> GetMapList(CancellationToken cancellationToken)
+        {
+            return  this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<MapView>>(
+                url: this.mapsListUrl, token: cancellationToken));
+        }
+        
+        public Task<byte[]> GetMapContent(string url,CancellationToken cancellationToken)
+        {
+            return this.TryGetRestResponseOrThrowAsync(async () =>
+            {
+                var restFile = await this.restService.DownloadFileAsync(
+                    url: url,
+                    token: cancellationToken,
+                    credentials: this.restCredentials).ConfigureAwait(false);
+
+                return restFile.Content;
+            });
         }
 
         public Task<List<TranslationDto>> GetQuestionnaireTranslationAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken)
@@ -229,9 +278,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 credentials: this.restCredentials)).ConfigureAwait(false);
         }
 
-        #endregion
+#endregion
 
-        #region [Interview Api]
+#region [Interview Api]
 
         public Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token)
         {
@@ -292,9 +341,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 token: token));
         }
 
-        #endregion
+#endregion
         
-        #region Attachments
+#region Attachments
         public Task<List<string>> GetAttachmentContentsAsync(QuestionnaireIdentity questionnaire, 
             Action<decimal, long, long> onDownloadProgressChanged,
             CancellationToken token)
@@ -322,21 +371,31 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 {
                     Content = restFile.Content,
                     ContentType = restFile.ContentType,
-                    Id = restFile.ContentHash,
+                    Id = restFile.ContentHash.Trim('"'),
                     Size = restFile.ContentLength ?? restFile.Content.Length
                 };
                 return attachmentContent;
             });
-        } 
+        }
         #endregion
 
         #region [Application Api]
+        public Task<byte[]> GetApplicationAsync(CancellationToken token) => 
+            this.TryGetRestResponseOrThrowAsync(async () =>
+        {
+            var restFile = await this.restService.DownloadFileAsync(url: checkVersionUrl, token: token,
+                credentials: this.restCredentials).ConfigureAwait(false);
 
-        public Task<byte[]> GetApplicationAsync(CancellationToken token)
+            return restFile.Content;
+        });
+
+        public Task<byte[]> GetApplicationPatchAsync(CancellationToken token)
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>
             {
-                var restFile = await this.restService.DownloadFileAsync(url: interviewerApiUrl, token: token,
+                var interviewerPatchApiUrl = $"{checkVersionUrl}patch/{this.interviewerSettings.GetApplicationVersionCode()}";
+
+                var restFile = await this.restService.DownloadFileAsync(url: interviewerPatchApiUrl, token: token,
                     credentials: this.restCredentials).ConfigureAwait(false);
 
                 return restFile.Content;
@@ -347,7 +406,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>
                 await this.restService.GetAsync<int?>(
-                    url: string.Concat(interviewerApiUrl, "/latestversion"),
+                    url: string.Concat(checkVersionUrl, "latestversion"),
                     credentials: this.restCredentials, token: token).ConfigureAwait(false));
         }
 
@@ -372,7 +431,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             }).ConfigureAwait(false);
         }
 
-        #endregion
+#endregion
 
         private async Task TryGetRestResponseOrThrowAsync(Func<Task> restRequestTask)
         {
@@ -518,7 +577,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task<CompanyLogoInfo> GetCompanyLogo(string storedClientEtag, CancellationToken cancellationToken)
         {
-            var response = await this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync(
+            var response = await this.TryGetRestResponseOrThrowAsync(() => this.restService.DownloadFileAsync(
                 url: this.logoController,
                 credentials: this.restCredentials,
                 customHeaders: !string.IsNullOrEmpty(storedClientEtag) ? new Dictionary<string, string> {{"If-None-Match", storedClientEtag }} : null,
@@ -533,8 +592,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             {
                 HasCustomLogo = true,
                 LogoNeedsToBeUpdated = true,
-                Logo = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false),
-                Etag = response.Headers.ETag.Tag
+                Logo = response.Content,
+                Etag = response.ContentHash
             };
         }
     }

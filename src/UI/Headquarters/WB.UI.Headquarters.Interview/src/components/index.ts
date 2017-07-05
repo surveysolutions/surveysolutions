@@ -1,7 +1,7 @@
 import Vue from "vue"
 
 import Breadcrumbs from "./Breadcrumbs"
-import CoverReadonly from "./CoverReadonly"
+import Cover from "./Cover"
 import Layout from "./Layout"
 import Navbar from "./Navbar"
 import Section from "./Section"
@@ -11,5 +11,5 @@ Vue.component("Layout", Layout)
 Vue.component("Navbar", Navbar)
 Vue.component("Sidebar", Sidebar)
 Vue.component("Breadcrumbs", Breadcrumbs)
-Vue.component("CoverReadonly", CoverReadonly)
+Vue.component("Cover", Cover)
 Vue.component("Section", Section)

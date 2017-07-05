@@ -25,22 +25,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            verificationMessages = verifier.Verify(Create.QuestionnaireView(questionnaire)).ToList();
 
-        It should_return_1_message = () =>
-            verificationMessages.Count().ShouldEqual(1);
-
-        It should_return_messages_each_with_code__WB00107__ = () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0107");
+        It should_return_1_message_with_code_WB0107 = () =>
+            verificationMessages.Count(x => x.Code == "WB0107").ShouldEqual(1);
 
         It should_return_messages_each_having_single_reference = () =>
-            verificationMessages.Single().References.Count().ShouldEqual(1);
+            verificationMessages.Single(x => x.Code == "WB0107").References.Count().ShouldEqual(1);
 
         It should_return_messages_each_referencing_static_text = () =>
-            verificationMessages.Single().References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.StaticText);
+            verificationMessages.Single(x => x.Code == "WB0107").References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.StaticText);
 
         It should_return_message_referencing_first_incorrect_question = () =>
-            verificationMessages.Single().References.Single().Id.ShouldEqual(staticTextId);
+            verificationMessages.Single(x => x.Code == "WB0107").References.Single().Id.ShouldEqual(staticTextId);
 
         private static List<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

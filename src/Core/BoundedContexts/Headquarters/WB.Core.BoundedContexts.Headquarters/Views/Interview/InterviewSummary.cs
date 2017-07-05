@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
@@ -61,6 +62,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual bool WasCreatedOnClient { get; set; }
         public virtual bool ReceivedByInterviewer { get; set; }
         public virtual bool IsAssignedToInterviewer { get; set; }
+
+        public virtual int? AssignmentId { get; set; }
 
         public virtual void AnswerFeaturedQuestion(Guid questionId, string answer)
         {

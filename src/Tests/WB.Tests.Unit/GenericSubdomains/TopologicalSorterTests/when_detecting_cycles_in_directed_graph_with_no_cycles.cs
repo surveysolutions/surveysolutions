@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Machine.Specifications;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Tests.Abc;
 

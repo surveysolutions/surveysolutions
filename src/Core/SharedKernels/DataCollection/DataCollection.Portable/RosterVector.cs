@@ -14,11 +14,51 @@ namespace WB.Core.SharedKernels.DataCollection
         public static readonly RosterVector Empty = new int[] { };
         private readonly int[] coordinates;
         private decimal[] coordinatesAsDecimals;
-        
+
+        public static RosterVector Convert(object obj)
+        {
+            var answerAsRosterVector = obj as RosterVector;
+            if (answerAsRosterVector != null)
+            {
+                return answerAsRosterVector;
+            }
+            
+            var answerAsDecimalArray = obj as decimal[];
+            if (answerAsDecimalArray != null)
+                return new RosterVector(answerAsDecimalArray);
+
+            var answerAsIntArray = obj as int[];
+            if (answerAsIntArray != null)
+                return new RosterVector(answerAsIntArray);
+
+            throw new ArgumentException(nameof(obj));
+        }
+
+        public static RosterVector[] ConvertToArray(object obj)
+        {
+            var answerAsRosterVector = obj as RosterVector[];
+            if (answerAsRosterVector != null)
+                return answerAsRosterVector;
+
+            var answerAsIntArrayArray = obj as int[][];
+            if(answerAsIntArrayArray != null)
+                return answerAsIntArrayArray.Select(intArray => (RosterVector)intArray).ToArray();
+
+            var answerAsDecimalArrayArray = obj as decimal[][];
+            if (answerAsDecimalArrayArray != null)
+                return answerAsDecimalArrayArray.Select(desimalArray => (RosterVector)desimalArray).ToArray();
+
+            var readOnlyCollection = obj as IReadOnlyCollection<RosterVector>;
+            if (readOnlyCollection != null)
+                return readOnlyCollection.ToArray();
+
+            throw new ArgumentException(nameof(obj));
+        }
+
         public RosterVector(IEnumerable<decimal> coordinates)
         {
             if (coordinates == null) throw new ArgumentNullException(nameof(coordinates));
-            this.coordinates = coordinates.Select(Convert.ToInt32).ToArray();
+            this.coordinates = coordinates.Select(System.Convert.ToInt32).ToArray();
         }
 
         public RosterVector(IEnumerable<int> coordinates)
@@ -33,7 +73,7 @@ namespace WB.Core.SharedKernels.DataCollection
 
         [Obsolete("version 5.19. started transition to ints as vector. should be removed later")]
         public decimal[] CoordinatesAsDecimals => this.coordinatesAsDecimals
-            ?? (this.coordinatesAsDecimals = this.coordinates.Select(Convert.ToDecimal).ToArray());
+            ?? (this.coordinatesAsDecimals = this.coordinates.Select(System.Convert.ToDecimal).ToArray());
 
         public override bool Equals(object obj)
         {

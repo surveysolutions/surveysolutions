@@ -5,7 +5,6 @@
     @include transition(background, 0.2s);
     word-break: break-word;
 	&:disabled, &.disabled{
-		//background-image: repeating-linear-gradient(-45deg, #d7d7d7, #d7d7d7 3px, $gray_light 2px, $gray_light 6px); 
 		border-color: transparent !important;	
 		color: #fff !important;
 		cursor: not-allowed;
@@ -14,9 +13,6 @@
 			border-color: $gray-super-light;
 			outline: none;
 		}
-	}
-	&:focus{
-		/* outline: 1px auto $blue; */
 	}
 }
 a.disabled{
@@ -95,7 +91,6 @@ a.disabled{
 		@include rotate(-45deg);
 		top: 9px;
 	}
-
 	&:hover, &:focus, &:active{
 		span{
 			background-color: rgba(255,255,255, 1);
@@ -155,7 +150,6 @@ a.disabled{
 	}
 	&.flagged, &:active{
     	background-position: 0 0;
-    	/* outline: none; */
     	&:hover, &:focus{
     		background-position: -19px 0;
     	}
@@ -342,4 +336,33 @@ a.disabled{
 		background-color: darken(#fff, 10%);
 	    border-color: darken($gray_light, 10%);
 	}
+}
+.get-interviewer-app{
+	@include transition(all, 0.2s);
+    width: 248px;
+    background: #000  url("#{$assetsPath}/img/HQ-login-mobile-get-button-logo.png") no-repeat;
+    background-size: 55px;
+    margin-bottom: 25px;
+    @extend %uppercase-font;
+    text-decoration: none;
+    color: rgba(255,255,255, 0.9);
+    background-position: 15px 10px;
+    text-decoration: none;
+    padding: 10px 27px 10px 85px;
+    text-align: left;
+    border-radius: 10px;
+    display: block;
+    &:hover, &:focus{
+        text-decoration: none;
+        color: rgba(255,255,255, 0.9);
+		box-shadow: inset 0 0 40px rgb(255, 255, 255);
+    }   
+    span{
+        display: block;
+        &.version{
+            text-transform: none;
+            margin-top: 5px;
+            color: rgba(255,255,255, 0.5);
+        }
+    }
 }

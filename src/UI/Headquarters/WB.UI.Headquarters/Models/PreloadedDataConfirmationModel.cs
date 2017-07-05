@@ -20,6 +20,7 @@ namespace WB.UI.Headquarters.Models
         public PreloadedDataQuestionnaireModel Questionnaire { get; set; }
         public string CurrentProcessId { get; set; }
     }
+
     public class PreloadedDataConfirmationModel : IValidatableObject
     {
         public string Id { get; set; }
@@ -34,18 +35,18 @@ namespace WB.UI.Headquarters.Models
 
         public string FileName { get; set; }
 
-        public Guid? SupervisorId { get; set; }
+        public Guid? ResponsibleId { get; set; }
 
-        public bool WasSupervsorProvided { get; set; }
+        public bool WasResponsibleProvided { get; set; }
 
-        public int InterviewsCount { get; set; }
+        public int EntitiesCount { get; set; }
         public int EnumeratorsCount { get; set; }
         public int SupervisorsCount { get; set; }
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (!this.WasSupervsorProvided && !this.SupervisorId.HasValue)
+            if (!this.WasResponsibleProvided && !this.ResponsibleId.HasValue)
             {
-                yield return new ValidationResult(BatchUpload.SupervisorMustBeSelected, new[] { nameof(this.SupervisorId) });
+                yield return new ValidationResult(BatchUpload.SupervisorMustBeSelected, new[] { nameof(this.ResponsibleId) });
             }
         }
     }

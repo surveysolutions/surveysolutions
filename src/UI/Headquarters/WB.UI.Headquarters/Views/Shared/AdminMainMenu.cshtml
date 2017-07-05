@@ -9,12 +9,12 @@
             @MainMenu.Reports <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-            @Html.MainMenuItem("SurveysAndStatuses", "HQ", @MainMenu.SurveysAndStatuses, MenuItem.Surveys)
-            @Html.MainMenuItem("SupervisorsAndStatuses", "HQ", @MainMenu.TeamsAndStatuses, MenuItem.Summary)
-            @Html.MainMenuItem("MapReport", "HQ", @MainMenu.MapReport, MenuItem.MapReport)
-            @Html.MainMenuItem("InterviewsChart", "HQ", @MainMenu.CumulativeChart, MenuItem.InterviewsChart)
-            @Html.MainMenuItem("QuantityBySupervisors", "PeriodicStatusReport", @MainMenu.Quantity, MenuItem.NumberOfCompletedInterviews)
-            @Html.MainMenuItem("SpeedBySupervisors", "PeriodicStatusReport", @MainMenu.Speed, MenuItem.SpeedOfCompletingInterviews)
+            @Html.MainMenuItem("SurveysAndStatuses", "Reports", @MainMenu.SurveysAndStatuses, MenuItem.Surveys)
+            @Html.MainMenuItem("SupervisorsAndStatuses", "Reports", @MainMenu.TeamsAndStatuses, MenuItem.Summary)
+            @Html.MainMenuItem("MapReport", "Reports", @MainMenu.MapReport, MenuItem.MapReport)
+            @Html.MainMenuItem("InterviewsChart", "Reports", @MainMenu.CumulativeChart, MenuItem.InterviewsChart)
+            @Html.MainMenuItem("QuantityBySupervisors", "Reports", @MainMenu.Quantity, MenuItem.NumberOfCompletedInterviews)
+            @Html.MainMenuItem("SpeedBySupervisors", "Reports", @MainMenu.Speed, MenuItem.SpeedOfCompletingInterviews)
         </ul>
     </li>
     @Html.MainMenuItem("Interviews", "HQ", @MainMenu.Interviews, MenuItem.Docs)
@@ -32,7 +32,15 @@
             @Html.MainMenuItem("UserBatchUploads", "BatchUserUpload", @MainMenu.UserBatchUpload, MenuItem.UserBatchUpload)
         </ul>
     </li>
-    @Html.MainMenuItem("Index", "SurveySetup", @MainMenu.Questionnaires, MenuItem.Questionnaires)
+    <li class="dropdown  @(page == MenuItem.Questionnaires || page == MenuItem.Assignments ? "active" : "")">
+        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.SurveySetup">
+            @MainMenu.SurveySetup <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            @Html.MainMenuItem("Index", "SurveySetup", @MainMenu.Questionnaires, MenuItem.Questionnaires)
+            @Html.MainMenuItem("Index", "Assignments", @MainMenu.Assignments, MenuItem.Assignments)
+        </ul>
+    </li>
     @Html.MainMenuItem("Index", "DataExport", @MainMenu.DataExport, MenuItem.DataExport)
 </ul>
 <ul class="nav navbar-nav navbar-right">

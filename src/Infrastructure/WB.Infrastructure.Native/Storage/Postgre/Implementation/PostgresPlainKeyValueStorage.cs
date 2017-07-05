@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Data;
-using System.Data.SqlClient;
-using NHibernate;
-using Npgsql;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {

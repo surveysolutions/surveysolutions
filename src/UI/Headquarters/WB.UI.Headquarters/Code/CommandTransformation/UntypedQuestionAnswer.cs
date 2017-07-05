@@ -3,7 +3,7 @@ using Main.Core.Entities.SubEntities;
 
 namespace WB.UI.Headquarters.Code.CommandTransformation
 {
-    internal class UntypedQuestionAnswer
+    public class UntypedQuestionAnswer
     {
         public Guid Id { get; set; }
         public object Answer { get; set; }

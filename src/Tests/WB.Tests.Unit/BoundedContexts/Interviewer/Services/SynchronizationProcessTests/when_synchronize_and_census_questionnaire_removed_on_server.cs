@@ -17,7 +17,7 @@ using It = Moq.It;
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {
     [Subject(typeof(SynchronizationProcess))]
-    internal class when_synchronize_and_census_questionnaire_removed_on_server 
+    internal class when_synchronize_and_census_questionnaire_removed_on_server
     {
         [Test]
         public async Task should_progress_report_1_deleted_interview()

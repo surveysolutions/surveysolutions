@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using NConsole;
 
@@ -10,7 +11,8 @@ namespace support
             host.WriteLine("usage: support <command> [<args>]");
             host.WriteLine("These are common Support commands used in various situations:");
             host.WriteLine();
-            host.WriteLine("Health check of Survey Solutions services", true);
+            host.WriteHighlitedText("Health check of Survey Solutions services", ConsoleColor.DarkGreen);
+            host.WriteLine();
             host.WriteLine("usage: support healh-check /path:\"<path>\"");
             host.WriteLine("                    [--all] [--survey-solutions | -ss]");
             host.WriteLine("                    [--database-connection | -dbc]");
@@ -36,7 +38,8 @@ namespace support
             host.WriteLine("--database-permissions");
             host.WriteLine("   Check permissions to Headquarters database. Check that user which connected to database is owner of that database");
             host.WriteLine();
-            host.WriteLine("Archive Headquarters log files", true);
+            host.WriteHighlitedText("Archive Headquarters log files", ConsoleColor.DarkGreen);
+            host.WriteLine();
             host.WriteLine("usage: support archive-logs /path:\"<path>\"");
             host.WriteLine();
             host.WriteLine("Options:");

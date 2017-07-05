@@ -1,7 +1,11 @@
 namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage
 {
-    public interface IPlainStorageEntity
+    public interface IPlainStorageEntity : IPlainStorageEntity<string>
     {
-        string Id { get; }
+    }
+
+    public interface IPlainStorageEntity<out TKey>
+    {
+        TKey Id { get; }
     }
 }

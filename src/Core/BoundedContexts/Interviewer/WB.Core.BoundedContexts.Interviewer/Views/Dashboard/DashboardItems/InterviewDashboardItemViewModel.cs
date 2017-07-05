@@ -4,24 +4,22 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using System.Runtime.CompilerServices;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 {
-    public class InterviewDashboardItemViewModel : IDashboardItem
+    public class InterviewDashboardItemViewModel : MvxNotifyPropertyChanged, IDashboardItem
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IUserInteractionService userInteractionService;
-        private readonly IMvxMessenger messenger;
         private readonly IExternalAppLauncher externalAppLauncher;
         private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly IPlainStorage<PrefilledQuestionView> prefilledQuestions;
@@ -30,15 +28,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         public string QuestionnaireName { get; private set; }
         public Guid InterviewId { get; private set; }
         public DashboardInterviewStatus Status { get; private set; }
-        public List<PrefilledQuestion> PrefilledQuestions { get; private set; }
+        public MvxObservableCollection<PrefilledQuestion> PrefilledQuestions { get; private set; }
+
         public string DateComment { get; private set; }
         public string Comment { get; private set; }
-        public bool HasComment { get; private set; }
+
+        public event EventHandler OnItemRemoved;
 
         public InterviewDashboardItemViewModel(
             IViewModelNavigationService viewModelNavigationService,
             IUserInteractionService userInteractionService,
-            IMvxMessenger messenger,
             IExternalAppLauncher externalAppLauncher,
             IPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IPlainStorage<PrefilledQuestionView> prefilledQuestions,
@@ -46,7 +45,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.userInteractionService = userInteractionService;
-            this.messenger = messenger;
             this.externalAppLauncher = externalAppLauncher;
             this.questionnaireViewRepository = questionnaireViewRepository;
             this.prefilledQuestions = prefilledQuestions;
@@ -55,20 +53,38 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public void Init(InterviewView interview)
         {
-            var questionnaire = this.questionnaireViewRepository.GetById(interview.QuestionnaireId);
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(interview.QuestionnaireId);
 
-            var questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaire.Id);
+            if (string.IsNullOrWhiteSpace(interview.QuestionnaireTitle)) // only to support existing clients
+            {
+                var questionnaire = this.questionnaireViewRepository.GetById(interview.QuestionnaireId);
+                interview.QuestionnaireTitle = questionnaire.Title;
+            }
 
             this.InterviewId = interview.InterviewId;
             this.Status = this.GetDashboardCategoryForInterview(interview.Status, interview.StartedDateTime);
-            this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, questionnaire.Title, questionnaireIdentity.Version);
+            this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, interview.QuestionnaireTitle, questionnaireIdentity.Version);
             this.DateComment = this.GetInterviewDateCommentByStatus(interview);
             this.Comment = this.GetInterviewCommentByStatus(interview);
-            this.PrefilledQuestions = this.GetTop3PrefilledQuestions();
+
+            var questions = this.GetPrefilledQuestions().ToList();
+
+            this.detailedIdentifyingData = questions;
+            this.identifyingData = new List<PrefilledQuestion>(detailedIdentifyingData.Take(3));
+            this.PrefilledQuestions = new MvxObservableCollection<PrefilledQuestion>(identifyingData);
+                      
+
             this.GpsLocation = this.GetInterviewLocation(interview);
             this.IsSupportedRemove = interview.CanBeDeleted;
-            this.HasComment = !string.IsNullOrEmpty(this.Comment);
+            this.HasExpandedView = this.PrefilledQuestions.Count > 0;
+
+            if (interview.Assignment != null)
+            {
+                this.Title = string.Format(InterviewerUIResources.Dashboard_InterviewCard_Title, interview.Assignment);
+            }
         }
+
+        public string Title { get; private set; }
 
         private InterviewGpsCoordinatesView GetInterviewLocation(InterviewView interview)
         {
@@ -149,8 +165,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             {
                 case DashboardInterviewStatus.New:
                     return InterviewerUIResources.DashboardItem_NotStarted;
-                case DashboardInterviewStatus.InProgress:
-                    return InterviewerUIResources.DashboardItem_InProgress;
                 case DashboardInterviewStatus.Completed:
                     return interview.LastInterviewerOrSupervisorComment;
                 case DashboardInterviewStatus.Rejected:
@@ -160,24 +174,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             }
         }
 
-        private List<PrefilledQuestion> GetTop3PrefilledQuestions()
+        private IEnumerable<PrefilledQuestion> GetPrefilledQuestions()
         {
             return this.prefilledQuestions.Where(_ => _.InterviewId == this.InterviewId)
                                           .OrderBy(x => x.SortIndex)
                                           .Select(fi => new PrefilledQuestion {
                                               Answer = fi.Answer,
                                               Question = fi.QuestionText
-                                          }).Take(3).ToList();
+                                          });
         }
 
         public bool IsSupportedRemove { get; set; }
 
-        public IMvxCommand RemoveInterviewCommand
-        {
-            get { return new MvxAsyncCommand(RemoveInterview, () => this.isInterviewReadyToLoad); }
-        }
+        public IMvxAsyncCommand RemoveInterviewCommand
+            => new MvxAsyncCommand(this.RemoveInterviewAsync, () => this.isInterviewReadyToLoad);
 
-        private async Task RemoveInterview()
+        private async Task RemoveInterviewAsync()
         {
             this.isInterviewReadyToLoad = false;
 
@@ -192,17 +204,33 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 return;
             }
             this.interviewerInterviewFactory.RemoveInterview(this.InterviewId);
-            RaiseRemovedDashboardItem();
+            this.OnItemRemoved(this, EventArgs.Empty);
         }
 
-        public IMvxCommand LoadDashboardItemCommand
+        public IMvxAsyncCommand LoadDashboardItemCommand
+            => new MvxAsyncCommand(this.LoadInterviewAsync, () => this.isInterviewReadyToLoad);
+
+        public bool HasExpandedView { get; private set; }
+
+        private bool isExpanded = false;
+        public bool IsExpanded
         {
-            get { return new MvxAsyncCommand(LoadInterview, () => this.isInterviewReadyToLoad); }
+            get => this.isExpanded;
+            set
+            {
+                var preValue = this.isExpanded;
+                RaiseAndSetIfChanged(ref this.isExpanded, value, onChange: UpdatePrefilledQuestions);
+            }
+        }
+
+        private void UpdatePrefilledQuestions(bool isexpanded)
+        {
+            this.PrefilledQuestions.SwitchTo(isexpanded ? this.detailedIdentifyingData : this.identifyingData);
         }
 
         private bool isInterviewReadyToLoad = true;
 
-        public async Task LoadInterview()
+        public async Task LoadInterviewAsync()
         {
             this.isInterviewReadyToLoad = false;
             try
@@ -229,9 +257,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             }
         }
 
-        private void RaiseRemovedDashboardItem()
+        // it's much more performant, as original extension call new Action<...> on every call
+        private void RaiseAndSetIfChanged<TReturn>(ref TReturn backingField, TReturn newValue, [CallerMemberName] string propertyName = "", Action<TReturn> onChange = null)
         {
-            messenger.Publish(new RemovedDashboardItemMessage(this));
+            if (EqualityComparer<TReturn>.Default.Equals(backingField, newValue)) return;
+
+            backingField = newValue;
+            onChange?.Invoke(backingField);
+            if (this.raiseEvents)
+                this.RaisePropertyChanged(propertyName);
         }
+
+        private bool raiseEvents = true;
+        private List<PrefilledQuestion> identifyingData;
+        private List<PrefilledQuestion> detailedIdentifyingData;
     }
 }

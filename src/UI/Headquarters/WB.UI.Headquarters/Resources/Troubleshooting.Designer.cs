@@ -188,7 +188,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Locating specific census interview.
+        ///   Looks up a localized string similar to Locating specific interview.
         /// </summary>
         public static string MissingCensusInterviews_PageHeader {
             get {
@@ -206,7 +206,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to I need to locate an interview in a census mode.
+        ///   Looks up a localized string similar to I need to locate an interview.
         /// </summary>
         public static string MissingCensusInterviewsTitle {
             get {
@@ -251,7 +251,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Click on the link of an issue you want to resolve. For the problems not listed below, visit Survey Solutions &lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;support site&lt;/a&gt;..
+        ///   Looks up a localized string similar to Click on the link of an issue you want to resolve. For the problems not listed below, visit the Survey Solutions &lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;support site&lt;/a&gt;..
         /// </summary>
         public static string SupportSite {
             get {

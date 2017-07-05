@@ -25,33 +25,32 @@
             switch (item.type()) {
                 case "SingleOption":
                     item.isFilteredCombobox = ko.observable(dto.Settings.IsFilteredCombobox || false);
-                    item.selectedOption.extend({ required: true });
                     
                     if (dto.Settings.IsFilteredCombobox) {
                         item.selectedOption.extend({
                             validation:[
                             {
-                                validator: function (value, params) {
-                                    var opt = _.find(item.options(), function(option) {
-                                        return option.label() === value.label();
-                                    });
+                                    validator: function(value, params) {
+                                        if (_.isUndefined(value)) return true;
+                                        var opt = _.find(item.options(),
+                                            function(option) {
+                                                return option.label() === value.label();
+                                            });
 
-                                    return !_.isUndefined(opt);
-                                },
+                                        return !_.isUndefined(opt);
+                                    },
                                 message: "Choose one of suggested values"
                             }]
                         });
                     };
                     break;
                 case "MultyOption":
-                    item.selectedOptions.extend({ notempty: true });
                     break;
                 case "AutoPropagate":
                 case "Numeric":
                     item.settings(dto.Settings);
                     var isSettingsEmpty = _.isEmpty(dto.Settings);
                     var isInteger = isSettingsEmpty || dto.Settings.IsInteger;
-                    item.selectedOption.extend({ required: true });
                     if (isInteger) {
                         item.selectedOption.extend({ numericValidator: -1, numberLengthValidator: 'integer' });
                     }
@@ -67,10 +66,7 @@
                     break;
                 case "DateTime":
                     item.settings(dto.Settings);
-                    if (!item.settings().IsTimestamp) {
-                        item.selectedOption(new Date());
-                    }
-                    item.selectedOption.extend({ required: true, date: true });
+                    item.selectedOption.extend({ date: true });
                     break;
                 case "Text":
                     item.settings(dto.Settings);
@@ -79,11 +75,10 @@
                         if (!_.isEmpty(dto.Settings.Mask))
                             item.mask(dto.Settings.Mask);
                     }
-                    item.selectedOption.extend({ required: true });
                     break;
                 case "GpsCoordinates":
-                    item.latitude.extend({ gps_latitude: true, required: true });
-                    item.longitude.extend({ gps_longitude: true, required: true });
+                    item.latitude.extend({ gps_latitude: true });
+                    item.longitude.extend({ gps_longitude: true });
 
                     item.showMapUrl = function() {
                         return "http://maps.google.com/maps?q=" + item.latitude() + "," + item.longitude();

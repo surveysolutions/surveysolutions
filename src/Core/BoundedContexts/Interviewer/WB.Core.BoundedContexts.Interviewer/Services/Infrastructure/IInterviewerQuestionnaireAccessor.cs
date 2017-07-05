@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Main.Core.Documents;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -15,6 +18,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
 
         Task StoreQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaireIdentity, byte[] assembly);
 
+        QuestionnaireDocument GetQuestionnaire(QuestionnaireIdentity questionnaireIdentity);
+
         List<QuestionnaireIdentity> GetCensusQuestionnaireIdentities();
 
         bool IsQuestionnaireExists(QuestionnaireIdentity questionnaireIdentity);
@@ -23,7 +28,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
 
         List<QuestionnaireIdentity> GetAllQuestionnaireIdentities();
 
-        bool IsAttachmentUsedAsync(string contentId);
+        IReadOnlyCollection<QuestionnaireDocumentView> LoadAll();
 
         void StoreTranslations(QuestionnaireIdentity questionnaireIdentity, List<TranslationInstance> translationInstances);
     }

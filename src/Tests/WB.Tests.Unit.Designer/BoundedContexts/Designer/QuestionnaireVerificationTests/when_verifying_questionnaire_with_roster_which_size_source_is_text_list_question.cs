@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -18,7 +19,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
             {
-                new TextListQuestion { QuestionType = QuestionType.TextList, PublicKey = textListQuestionId, StataExportCaption = "var", MaxAnswerCount = 20 },
+                Create.TextListQuestion (textListQuestionId, maxAnswerCount: 20, variable: "list" ),
                 new Group { IsRoster = true, RosterSizeSource = RosterSizeSourceType.Question,VariableName = "a", RosterSizeQuestionId = textListQuestionId, PublicKey = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA") },
             });
 
@@ -26,12 +27,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
         It should_not_produce_any_messages = () =>
             verificationMessages.ShouldBeEmpty();
 
-        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
+        private static List<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
     }

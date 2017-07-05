@@ -62,6 +62,150 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ACTIVE MAP:.
+        /// </summary>
+        public static string AreaMap_Active_Map_Title {
+            get {
+                return ResourceManager.GetString("AreaMap_Active_Map_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Area:.
+        /// </summary>
+        public static string AreaMap_AreaFormat {
+            get {
+                return ResourceManager.GetString("AreaMap_AreaFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MAPS AVAILABLE ON DEVICE.
+        /// </summary>
+        public static string AreaMap_Available_Maps_Title {
+            get {
+                return ResourceManager.GetString("AreaMap_Available_Maps_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string AreaMap_Cancel {
+            get {
+                return ResourceManager.GetString("AreaMap_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string AreaMap_Close {
+            get {
+                return ResourceManager.GetString("AreaMap_Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        public static string AreaMap_Edit {
+            get {
+                return ResourceManager.GetString("AreaMap_Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Perimeter:.
+        /// </summary>
+        public static string AreaMap_LengthFormat {
+            get {
+                return ResourceManager.GetString("AreaMap_LengthFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Location.
+        /// </summary>
+        public static string AreaMap_Location {
+            get {
+                return ResourceManager.GetString("AreaMap_Location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Map.
+        /// </summary>
+        public static string AreaMap_MapTitle {
+            get {
+                return ResourceManager.GetString("AreaMap_MapTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No changes we made to be saved..
+        /// </summary>
+        public static string AreaMap_NoChangesInfo {
+            get {
+                return ResourceManager.GetString("AreaMap_NoChangesInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No maps were found. Please update maps.
+        /// </summary>
+        public static string AreaMap_NoMapsFound {
+            get {
+                return ResourceManager.GetString("AreaMap_NoMapsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string AreaMap_Save {
+            get {
+                return ResourceManager.GetString("AreaMap_Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Undo.
+        /// </summary>
+        public static string AreaMap_Undo {
+            get {
+                return ResourceManager.GetString("AreaMap_Undo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update maps.
+        /// </summary>
+        public static string AreaMap_Update_Maps {
+            get {
+                return ResourceManager.GetString("AreaMap_Update_Maps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update failed.
+        /// </summary>
+        public static string AreaMap_UpdateFailed {
+            get {
+                return ResourceManager.GetString("AreaMap_UpdateFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update maps.
+        /// </summary>
+        public static string AreaMap_UpdateMaps {
+            get {
+                return ResourceManager.GetString("AreaMap_UpdateMaps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
@@ -136,6 +280,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your device doesn&apos;t support this functionality.
+        /// </summary>
+        public static string Device_Does_Not_Support {
+            get {
+                return ResourceManager.GetString("Device_Does_Not_Support", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Synchronization endpoint.
         /// </summary>
         public static string EndpointHint {
@@ -150,6 +303,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string EndpointText {
             get {
                 return ResourceManager.GetString("EndpointText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
             }
         }
         
@@ -694,6 +856,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tap to edit area.
+        /// </summary>
+        public static string Interview_Questions_Area_SaveAnswer {
+            get {
+                return ResourceManager.GetString("Interview_Questions_Area_SaveAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tap to record GPS.
         /// </summary>
         public static string Interview_Questions_Gps_SaveAnswer {
@@ -838,6 +1009,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exit Map Editor.
+        /// </summary>
+        public static string MenuItem_Title_AreaCancel {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_AreaCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear all.
+        /// </summary>
+        public static string MenuItem_Title_AreaCancelEdit {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_AreaCancelEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please wait until the current operation is completed.
         /// </summary>
         public static string Messages_WaitPendingOperation {
@@ -870,6 +1059,33 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string MissingPermissions_Storage {
             get {
                 return ResourceManager.GetString("MissingPermissions_Storage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pick from gallery.
+        /// </summary>
+        public static string Multimedia_PickFromGallery {
+            get {
+                return ResourceManager.GetString("Multimedia_PickFromGallery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select an option.
+        /// </summary>
+        public static string Multimedia_PictureSource {
+            get {
+                return ResourceManager.GetString("Multimedia_PictureSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Take photo.
+        /// </summary>
+        public static string Multimedia_TakePhoto {
+            get {
+                return ResourceManager.GetString("Multimedia_TakePhoto", resourceCulture);
             }
         }
         
@@ -1068,6 +1284,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string VariableEmptyValue {
             get {
                 return ResourceManager.GetString("VariableEmptyValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your version of application doesn&apos;t support this functionality.
+        /// </summary>
+        public static string Version_Not_Supports {
+            get {
+                return ResourceManager.GetString("Version_Not_Supports", resourceCulture);
             }
         }
         

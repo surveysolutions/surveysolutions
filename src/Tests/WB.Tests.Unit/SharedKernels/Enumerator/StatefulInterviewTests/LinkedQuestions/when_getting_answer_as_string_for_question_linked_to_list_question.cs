@@ -26,13 +26,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
             Guid rosterId = Guid.Parse("11111111111111111111111111111111");
             
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                    Create.Entity.TextListQuestion(textListQuestionId),
+                    Create.Entity.TextListQuestion(textListQuestionId, variable: "q1"),
                     Create.Entity.SingleOptionQuestion(this.linkedSingleOptionQuestionid, variable: "single", linkedToQuestionId: textListQuestionId, answers: new List<Answer>()),
                     Create.Entity.MultyOptionsQuestion(this.linkedMultiOptionQuestionid, variable: "multi", linkedToQuestionId: textListQuestionId, options: new List<Answer>()),
-                    Create.Entity.TextQuestion(textWithSubstitutionOnSingleQuestionid, text: "Result: %single%"),
-                    Create.Entity.TextQuestion(textWithSubstitutionOnMultiQuestionid, text: "Result: %multi%"));
+                    Create.Entity.TextQuestion(textWithSubstitutionOnSingleQuestionid, variable: "q2", text: "Result: %single%"),
+                    Create.Entity.TextQuestion(textWithSubstitutionOnMultiQuestionid, variable: "q3", text: "Result: %multi%"));
 
-            interview = Create.AggregateRoot.StatefulInterview(questionnaire: Create.Entity.PlainQuestionnaire(questionnaire));
+            interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
 
             interview.AnswerTextListQuestion(userId, textListQuestionId, RosterVector.Empty, DateTime.Now, new[]
             {
@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
         [Test]
         public void Should_return_answer_string_value_when_linked_single_option_question_answered()
         {
-            interview.AnswerSingleOptionQuestion(userId, this.linkedSingleOptionQuestionid, RosterVector.Empty, DateTime.Now, 1m);
+            interview.AnswerSingleOptionQuestion(userId, this.linkedSingleOptionQuestionid, RosterVector.Empty, DateTime.Now, 1);
 
             var answerAsString = this.interview.GetAnswerAsString(Create.Entity.Identity(this.linkedSingleOptionQuestionid));
             Assert.That(answerAsString, Is.EqualTo("one"));

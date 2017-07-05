@@ -29,6 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(QuestionnaireCsvFileName)).Returns(new HeaderStructureForLevel());
 
             preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(Moq.It.IsAny<PreloadedDataByFile>(), "_responsible")).Returns(-1);
+            preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(Moq.It.IsAny<PreloadedDataByFile>(), "_quantity")).Returns(-1);
 
             preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object);
         };
@@ -36,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         Because of =
             () =>
                 result =
-                    preloadedDataVerifier.VerifySample(questionnaireId, 1, preloadedDataByFile);
+                    preloadedDataVerifier.VerifyAssignmentsSample(questionnaireId, 1, preloadedDataByFile);
 
         It should_result_has_no_errors = () =>
            result.Errors.ShouldBeEmpty();

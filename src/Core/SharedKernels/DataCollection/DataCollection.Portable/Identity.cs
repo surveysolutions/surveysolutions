@@ -7,7 +7,7 @@ namespace WB.Core.SharedKernels.DataCollection
     /// <summary>
     /// Full identity of group or question: id and roster vector.
     /// </summary>
-    [DebuggerDisplay("{ToString()}")]
+    [DebuggerDisplay("{" + nameof(ToString) + "()}")]
     public sealed class Identity
     {
         private int? hashCode;
@@ -27,9 +27,12 @@ namespace WB.Core.SharedKernels.DataCollection
             return this.hashCode.Value;
         }
 
-        public Guid Id { get; }
+        public Guid Id { get; private set; }
 
-        public RosterVector RosterVector { get; }
+        public RosterVector RosterVector { get; private set; }
+
+        // ReSharper disable once UnusedMember.Local # used by NHibernate
+        private Identity() { }
 
         public Identity(Guid id, RosterVector rosterVector)
         {

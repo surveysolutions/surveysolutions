@@ -397,10 +397,10 @@
     <value>Interviewers</value>
   </data>
   <data name="InterviewerProfile_NewOnDevice" xml:space="preserve">
-    <value>new assignments on device</value>
+    <value>new on device</value>
   </data>
   <data name="InterviewerProfile_Rejected" xml:space="preserve">
-    <value>rejected assignments again on device</value>
+    <value>rejected again on device</value>
   </data>
   <data name="InterviewerProfile_WaitingForApproval" xml:space="preserve">
     <value>waiting for approval</value>
@@ -444,6 +444,9 @@
   <data name="InterviewerProfile_DeviceId" xml:space="preserve">
     <value>Device ID</value>
   </data>
+  <data name="InterviewerProfile_DeviceAssignmentDate" xml:space="preserve">
+    <value>Device assignment date</value>
+  </data>
   <data name="InterviewerProfile_DeviceSerial" xml:space="preserve">
     <value>Device serial number</value>
   </data>
@@ -476,6 +479,9 @@
   </data>
   <data name="InterviewerProfile_LastFailedSync" xml:space="preserve">
     <value>Last failed sync</value>
+  </data>
+  <data name="InterviewerProfile_LastSyncronizationDate" xml:space="preserve">
+    <value>Last communication date</value>
   </data>
   <data name="InterviewerProfile_TotalSyncTime" xml:space="preserve">
     <value>Synchronization duration</value>
@@ -517,6 +523,24 @@
   </data>
   <data name="InterviewerProfile_DeviceAndConnectionStatistics" xml:space="preserve">
     <value>Device and connection statistics</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Downloaded_Assignments_Desc" xml:space="preserve">
+    <value>Downloaded assignments</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Uploaded_Interview_Desc" xml:space="preserve">
+    <value>Uploaded to server for approval</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Nothing_To_Sync" xml:space="preserve">
+    <value>Successful connection, nothing to sync</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Failed_Sync" xml:space="preserve">
+    <value>Failed synchronizations attempt</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_All_Assignments_Desc" xml:space="preserve">
+    <value>Number of unfinished or unsynchronized assignments on device every given moment</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Title" xml:space="preserve">
+    <value>Recent synchronizations activity</value>
   </data>
   <data name="InterviewerProfile_LastConnectionStatistics" xml:space="preserve">
     <value>Last connection statistics</value>
@@ -567,10 +591,10 @@
     <value>Surveys and statuses</value>
   </data>
   <data name="SurveysAndStatuses_SupervisorStatisticsFormat" xml:space="preserve">
-    <value>{0} interview(s) from {1} responsible(s)</value>
+    <value>{0} interviews</value>
   </data>
   <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
-    <value>{0} interview(s) from {1} responsible(s)</value>
+    <value>{0} interviews</value>
   </data>
   <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
     <value>Connected to the server</value>
@@ -597,7 +621,7 @@
     <value>Interviewer(s) will be archived.</value>
   </data>
   <data name="Interviewers_ArchiveInterviewersConfirmMessage" xml:space="preserve">
-    <value>If the interviewer has completed interviews in census mode on his tablet then the data will be lost.</value>
+    <value>If the interviewer has completed interviews on his tablet then the data will be lost.</value>
   </data>
   <data name="Index_cshtml_Execute_Do_you_want_to_continue_" xml:space="preserve">
     <value>Do you want to continue?</value>
@@ -842,7 +866,7 @@
     <value>Do you want to continue?</value>
   </data>
   <data name="Supervisors_ArchiveSupervisorsConfirmMessage" xml:space="preserve">
-    <value>If the interviewer has completed interviews in census mode on his tablet then the data will be lost.</value>
+    <value>If the interviewer has completed interviews on his tablet then the data will be lost.</value>
   </data>
   <data name="Supervisors_Selected" xml:space="preserve">
     <value>supervisor(s) selected</value>
@@ -903,5 +927,87 @@
   </data>
   <data name="Profile_ApiUsersList" xml:space="preserve">
     <value>API users</value>
+  </data>
+  <data name="Assignments_PageTitle" xml:space="preserve">
+    <value>Assignments</value>
+  </data>
+  <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
+    <value>(ver. {1}) {0} </value>
+    <comment>{0} - Questionnaire name, {1} - Questionnaire version</comment>
+  </data>
+  <data name="HQ_LockWarning" xml:space="preserve">
+    <value>Locked headquarters (box checked) cannot login and perform any actions on the server.</value>
+  </data>
+  <data name="Interviewer_LockWarning" xml:space="preserve">
+    <value>Locked interviewers (box is checked) cannot connect their tablets with the server and send interviews to the server.</value>
+  </data>
+  <data name="Supervisor_LockWarning" xml:space="preserve">
+    <value>Locked supervisor (box checked) cannot login and perform any actions on the server.</value>
+  </data>
+  <data name="Users_API_Instruction1" xml:space="preserve">
+    <value>Press Add API button to create a new API user.</value>
+  </data>
+  <data name="Users_API_Instruction2" xml:space="preserve">
+    <value>Click on a Login Name to modify profile of an existing API user. </value>
+  </data>
+  <data name="Users_Headquarters_Instruction1" xml:space="preserve">
+    <value>Press Add Headquarters button to create a new HQ user.</value>
+  </data>
+  <data name="Users_Headquarters_Instruction2" xml:space="preserve">
+    <value>Click on a Login Name to modify profile of an existing HQ user. </value>
+  </data>
+  <data name="Users_Interviewers_Instruction1" xml:space="preserve">
+    <value>Press Add Interviewer button to create a new Interviewer.</value>
+  </data>
+  <data name="Users_Interviewers_Instruction2" xml:space="preserve">
+    <value>Click on a Login Name to see information on an interviewer and to modify an Interviewer profile.</value>
+  </data>
+  <data name="Users_Observers_Instruction1" xml:space="preserve">
+    <value>Press Add Observer button to create a new Observer.</value>
+  </data>
+  <data name="Users_Observers_Instruction2" xml:space="preserve">
+    <value>Click on a Login Name to modify profile of an existing Observer user. </value>
+  </data>
+  <data name="Users_Supervisors_Instruction1" xml:space="preserve">
+    <value>Press Add Supervisor button to create a new supervisor.</value>
+  </data>
+  <data name="Users_Supervisors_Instruction2" xml:space="preserve">
+    <value>Click on a Login Name to modify profile of an existing Supervisor. </value>
+  </data>
+  <data name="InterviewDetails_MoreDetails" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="GetLatestAppDescription" xml:space="preserve">
+    <value>Download and install this version of the Interviewer app for surveys that use no ESRI GIS functionality. This apk does not include an ESRI SDK and thus is much smaller in size and faster to download compared to the version with SDK.</value>
+  </data>
+  <data name="GetLatestAppExtendedDescription" xml:space="preserve">
+    <value>Download and install this version of the interviewer app only if you use advanced ESRI GIS functionality. This apk contains large ESRI SDK, is large in size and might take long time to download.</value>
+  </data>
+  <data name="DownloadPage_Instructions" xml:space="preserve">
+    <value>Installation instructions</value>
+  </data>
+  <data name="DownloadPage_Title" xml:space="preserve">
+    <value>The Computer-assisted Personal Interview technology developed by the World Bank.</value>
+  </data>
+  <data name="DownloadPage_Welcome" xml:space="preserve">
+    <value>Welcome to Survey Solutions Interviewer download page</value>
+  </data>
+  <data name="DownloadPage_PageTitle" xml:space="preserve">
+    <value>Download Interviewer app</value>
+  </data>
+  <data name="DownloadPage_Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="AreaQestion_Area" xml:space="preserve">
+    <value>Area</value>
+  </data>
+  <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
+    <value>square meters</value>
+  </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>Unarchive</value>
+  </data>
+  <data name="InterviewerIsArchived" xml:space="preserve">
+    <value>Interviewer is archived</value>
   </data>
 </root>

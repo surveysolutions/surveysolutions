@@ -3,6 +3,13 @@ function GetPathRelativeToCurrectLocation($FullPath) {
 }
 
 function GetPathToMSBuild() {
+    if (Test-Path "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\MSBuild.exe"){
+        return "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\MSBuild.exe"
+    }
+    if (Test-Path "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin\MSBuild.exe"){
+        return "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin\MSBuild.exe"
+    }
+
     return 'C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe'
 }
 
@@ -306,14 +313,24 @@ function BuildWebPackage($Project, $BuildConfiguration) {
     return $wasBuildSuccessfull
 }
 
-function CopyCapi($Project, $source) {
+function CopyCapi($Project, $source, $cleanUp) {
 	$file = get-childitem $Project
 	$DestinationFolder = $file.directoryname + "\Externals"
+	
+	Write-Host "##teamcity[message text='Prepare to copy apk with option cleanUp = $cleanUp']"
 
-	If (Test-Path "$DestinationFolder"){
-		Remove-Item "$DestinationFolder" -Force -Recurse
+	if($cleanUp)
+	{
+	  if (Test-Path "$DestinationFolder"){
+		  Write-Host "##teamcity[message text='Clean up target folder $DestinationFolder']"
+		  
+		  Remove-Item "$DestinationFolder" -Force -Recurse
+	  }
+	  New-Item -ItemType directory -Path "$DestinationFolder"
 	}
-	New-Item -ItemType directory -Path "$DestinationFolder"
+	
+	Write-Host "##teamcity[message text='Copy apk with option clean from $source']"
+	
 	Copy-Item "$source" "$DestinationFolder" -Recurse
 }
 
@@ -350,4 +367,31 @@ function UpdateProjectVersion([string]$BuildNumber, [string]$ver)
 	foreach ($file in $foundFiles) {
 		UpdateSourceVersion -Version $ver -BuildNumber $BuildNumber -file $file
 	}
+}
+
+function CreateZip($sourceFolder, $zipfile)
+{
+	If(Test-path $zipfile) {Remove-item $zipfile}
+	
+	Add-Type -assembly "system.io.compression.filesystem"	
+	[io.compression.zipfile]::CreateFromDirectory($sourceFolder, $zipfile)
+}
+
+function BuildAndDeploySupportTool($SupportToolSolution, $BuildConfiguration)
+{
+	Write-Host "##teamcity[blockOpened name='Building and deploying support console application']"
+	BuildSolution `
+                -Solution $SupportToolSolution `
+                -BuildConfiguration $BuildConfiguration
+				
+    $file = get-childitem $SupportToolSolution
+	
+	$binDir = $file.directoryname + "\bin\"
+	$sourceDir = $binDir + $BuildConfiguration
+	$destZipFile = $binDir + "support.zip"
+	
+	CreateZip $sourceDir $destZipFile
+	MoveArtifacts $destZipFile "Tools"
+	
+	Write-Host "##teamcity[blockClosed name='Building and deploying support console application']"
 }

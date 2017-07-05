@@ -273,7 +273,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (linkedQuestionId == null)
                 return false;
             return this.GetQuestionOrThrow(linkedQuestionId.Value).QuestionType == QuestionType.TextList;
-        } 
+        }
 
         public Guid[] GetQuestionsLinkedToRoster()
         {
@@ -285,9 +285,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.QuestionCache.Values.Where(x => x.LinkedToQuestionId.HasValue).Select(x => x.PublicKey).ToArray();
         }
 
-        public Guid GetQuestionIdByVariable(string variable)
+        public Guid? GetQuestionIdByVariable(string variable)
         {
-            return this.QuestionCache.Values.Single(x => x.StataExportCaption == variable).PublicKey;
+            return this.QuestionCache.Values.FirstOrDefault(x => x.StataExportCaption == variable)?.PublicKey;
         }
 
         public Guid GetVariableIdByVariableName(string variableName)
@@ -323,7 +323,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
              => this.cacheOfMultiSelectAnswerOptionsAsValues.GetOrAdd(questionId, x
                 => this.GetMultiSelectAnswerOptionsAsValuesImpl(questionId));
         
-        public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string filter)
+        public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string searchFor)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
             CheckShouldQestionProvideOptions(question, questionId);
@@ -332,11 +332,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
                 return QuestionOptionsRepository.GetOptionsForQuestion(new QuestionnaireIdentity(this.QuestionnaireId, Version),
-                    questionId, parentQuestionValue, filter, this.translation);
+                    questionId, parentQuestionValue, searchFor, this.translation);
             }
 
             //regular options
-            return AnswerUtils.GetCategoricalOptionsFromQuestion(question, parentQuestionValue, filter);
+            return AnswerUtils.GetCategoricalOptionsFromQuestion(question, parentQuestionValue, searchFor);
         }
 
         public CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText, int? parentQuestionValue)
@@ -1562,6 +1562,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     x => (x.LinkedToQuestionId == linkedSourceEntityId)
                       || (x.LinkedToRosterId == linkedSourceEntityId))
                     .Select(x => x.PublicKey);
+        }
+
+        public bool IsUsingExpressionStorage()
+        {
+            return this.QuestionnaireDocument.IsUsingExpressionStorage;
+        }
+
+        public List<Guid> GetExpressionsPlayOrder()
+        {
+            return this.QuestionnaireDocument.ExpressionsPlayOrder;
+        }
+
+        public bool HasAnyCascadingOptionsForSelectedParentOption(Guid cascadingQuestionId, Guid parenQuestionId,
+            int selectedParentValue)
+        {
+            var options = this.GetOptionsForQuestion(cascadingQuestionId, selectedParentValue, string.Empty);
+            return options.Any();
         }
     }
 }

@@ -130,13 +130,13 @@
     <value>Su aplicación no es compatible con el servidor. Actualice la aplicación del entrevistador.</value>
   </data>
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
-    <value>Terminado {0}</value>
+    <value>Terminado ({0})</value>
   </data>
   <data name="Dashboard_CreateInterview" xml:space="preserve">
     <value>Crear entrevista</value>
   </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
-    <value>Nuevo {0}</value>
+    <value>Nuevo ({0})</value>
   </data>
   <data name="Dashboard_NoInterviewsSyncButton" xml:space="preserve">
     <value>Sincronizar</value>
@@ -154,16 +154,13 @@
     <value>Esta entrevista está completada. Desea reiniciar la entrevista?</value>
   </data>
   <data name="Dashboard_RejectedLinkText" xml:space="preserve">
-    <value>Rechazado {0}</value>
+    <value>Rechazado ({0})</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
     <value>Está seguro que desea eliminar esta entrevista «{0}» ?</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
-    <value>Comenzó {0}</value>
-  </data>
-  <data name="Dashboard_Title" xml:space="preserve">
-    <value>{0} tareas para {1}</value>
+    <value>Comenzó ({0})</value>
   </data>
   <data name="DashboardItem_CensusModeComment" xml:space="preserve">
     <value>Modo de censo, entrevistas creadas: {0}</value>
@@ -173,9 +170,6 @@
   </data>
   <data name="DashboardItem_CreatedOn" xml:space="preserve">
     <value>Creado el {0}</value>
-  </data>
-  <data name="DashboardItem_InProgress" xml:space="preserve">
-    <value>En progreso</value>
   </data>
   <data name="DashboardItem_NotStarted" xml:space="preserve">
     <value>No se inició</value>

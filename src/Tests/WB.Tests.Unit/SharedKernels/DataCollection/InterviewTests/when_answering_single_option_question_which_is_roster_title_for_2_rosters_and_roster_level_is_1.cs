@@ -96,7 +96,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid rosterAId;
         private static Guid rosterBId;
         private static string selectedOptionTitle;
-        private static decimal selectedOptionValue;
+        private static int selectedOptionValue;
         private static Guid numericQuestionId = Guid.Parse("22222222222222222222222222222222");
     }
 }

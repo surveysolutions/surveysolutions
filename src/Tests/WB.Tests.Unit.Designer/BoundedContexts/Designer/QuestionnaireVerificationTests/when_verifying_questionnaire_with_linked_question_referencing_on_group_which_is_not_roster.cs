@@ -11,17 +11,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_linked_question_referencing_on_group_which_is_not_roster : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             linkedQuestionId = Guid.Parse("10000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument(
                 Create.Group(groupId: groupId, title: "title"),
-                new SingleQuestion()
-            {
-                PublicKey = linkedQuestionId,
-                LinkedToRosterId = groupId,
-                StataExportCaption = "var"
-            });
+                Create.SingleQuestion(
+                    linkedQuestionId,
+                    linkedToRosterId: groupId,
+                    variable: "var"
+                ));
             verifier = CreateQuestionnaireVerifier();
         };
 

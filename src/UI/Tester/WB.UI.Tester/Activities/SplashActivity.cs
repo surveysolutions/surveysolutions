@@ -4,6 +4,7 @@ using Android.Content.PM;
 using MvvmCross.Droid.Views;
 using MvvmCross.Platform;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -22,6 +23,7 @@ namespace WB.UI.Tester.Activities
         protected override void TriggerFirstNavigate()
         {
             ClearAttachmentStorage();
+            ClearPlainInterviewStorage();
 
             Mvx.Resolve<IPlainStorage<TranslationInstance>>().RemoveAll();
 
@@ -45,6 +47,12 @@ namespace WB.UI.Tester.Activities
 
             var attachmentContentDataStorage = Mvx.Resolve<IPlainStorage<AttachmentContentData>>();
             attachmentContentDataStorage.RemoveAll();
+        }
+
+        private void ClearPlainInterviewStorage()
+        {
+            var plainFileCleaner = Mvx.Resolve<IPlainFileCleaner>();
+            plainFileCleaner.Clear();
         }
     }
 }

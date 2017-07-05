@@ -12,6 +12,7 @@ using Ninject.Web.Mvc.FilterBindingSyntax;
 using Ninject.Web.WebApi.FilterBindingSyntax;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -21,7 +22,6 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.UI.Headquarters.Views;
 using WB.UI.Shared.Web.Filters;
-using WB.Infrastructure.Security;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.SampleRecordsAccessors;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
@@ -33,7 +33,6 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.MaskFormatter;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization;
-using WB.Core.Synchronization.Implementation.ImportManager;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
@@ -70,7 +69,6 @@ namespace WB.UI.Headquarters.Injections
             this.Kernel.Bind<ISupportedVersionProvider>().To<SupportedVersionProvider>();
             this.Kernel.Bind<IDataExportProcessDetails>().To<DataExportProcessDetails>();
             
-            this.Kernel.Bind<IBackupManager>().To<DefaultBackupManager>();
             this.Kernel.Bind<IRecordsAccessor>().To<CsvRecordsAccessor>();
             this.Kernel.Bind<IExceptionFilter>().To<HandleUIExceptionAttribute>();
 
@@ -154,7 +152,9 @@ namespace WB.UI.Headquarters.Injections
             base.Load();
 
             this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer());
-            this.Bind<IJsonAllTypesSerializer>().ToMethod((ctx) => new JsonAllTypesSerializer());
+            this.Bind<IInterviewAnswerSerializer>().ToMethod(ctx => new NewtonInterviewAnswerJsonSerializer());
+            
+            this.Bind<IJsonAllTypesSerializer>().ToMethod(ctx => new JsonAllTypesSerializer());
 
             this.Bind<IStringCompressor>().To<JsonCompressor>();
             this.Bind<IRestServiceSettings>().To<DesignerQuestionnaireApiRestServiceSettings>().InSingletonScope();

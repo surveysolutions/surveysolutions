@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
 using System.Web.Http;
+using WB.Core.BoundedContexts.Headquarters.Implementation.ReadSide;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
-using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -147,7 +147,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpGet]
         public IEnumerable<QuestionnaireView> Questionnaires()
-            => this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel()).Questionnaires?.Select(questionnaire=>new QuestionnaireView
+            => this.allUsersAndQuestionnairesFactory.Load().Questionnaires?.Select(questionnaire=>new QuestionnaireView
             {
                 Identity = new QuestionnaireIdentity(questionnaire.TemplateId, questionnaire.TemplateVersion).ToString(),
                 Title = $"(ver. {questionnaire.TemplateVersion}) {questionnaire.TemplateName}"

@@ -23,7 +23,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;$(Constants)</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -33,7 +33,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>$(Constants)</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -85,16 +85,13 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="SQLitePCLRaw.batteries_green, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a84b7dcfb1391f7f, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\SQLitePCLRaw.bundle_green.1.1.2\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.batteries_green.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\..\..\..\packages\SQLitePCLRaw.bundle_green.1.1.5\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.batteries_green.dll</HintPath>
     </Reference>
     <Reference Include="SQLitePCLRaw.batteries_v2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8226ea5df37bcae9, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\SQLitePCLRaw.bundle_green.1.1.2\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.batteries_v2.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\..\..\..\packages\SQLitePCLRaw.bundle_green.1.1.5\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.batteries_v2.dll</HintPath>
     </Reference>
     <Reference Include="SQLitePCLRaw.core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1488e028ca7ab535, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\SQLitePCLRaw.core.1.1.2\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.core.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\..\..\..\packages\SQLitePCLRaw.core.1.1.5\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -114,6 +111,7 @@
     <Compile Include="Implementation\Services\InterviewerInterviewAccessor.cs" />
     <Compile Include="Implementation\Services\InterviewerQuestionnaireAccessor.cs" />
     <Compile Include="Implementation\Services\InterviewEventStreamOptimizer.cs" />
+    <Compile Include="Implementation\Services\MapSynchronizer.cs" />
     <Compile Include="Implementation\Services\QuestionnaireContentVersionProvider.cs" />
     <Compile Include="Implementation\Services\QuestionnaireKeyValueStorage.cs" />
     <Compile Include="Implementation\Storage\IInterviewerEventStorage.cs" />
@@ -128,11 +126,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Implementation\Services\AnswerToStringConverter.cs" />
+    <Compile Include="Services\IAnswerToStringConverter.cs" />
+    <Compile Include="Services\Synchronization\AssignmentDocumentsStorage.cs" />
+    <Compile Include="Services\Synchronization\AssignmentsSynchronizer.cs" />
     <Compile Include="Services\CompanyLogoInfo.cs" />
+    <Compile Include="Services\IArchivePatcherService.cs" />
     <Compile Include="Services\IBattery.cs" />
     <Compile Include="Services\IDeviceInformationService.cs" />
     <Compile Include="Services\IDeviceOrientation.cs" />
-    <Compile Include="Services\IInterviewerDashboardFactory.cs" />
     <Compile Include="Services\IInterviewerSettings.cs" />
     <Compile Include="Services\Infrastructure\AttachmentsCleanupService.cs" />
     <Compile Include="Services\Infrastructure\IInterviewerInterviewAccessor.cs" />
@@ -149,17 +151,28 @@
     <Compile Include="Services\RestorePackageInfo.cs" />
     <Compile Include="Services\SynchronizationProcess.cs" />
     <Compile Include="Services\Synchronization\CompanyLogoSynchronizer.cs" />
+    <Compile Include="Services\IAssignmentDocumentsStorage.cs" />
+    <Compile Include="Services\Synchronization\IAssignmentsSynchronizer.cs" />
+    <Compile Include="Services\Synchronization\IQuestionnaireDownloader.cs" />
+    <Compile Include="Services\Synchronization\QuestionnaireDownloader.cs" />
     <Compile Include="Services\SyncProgressDto.cs" />
+    <Compile Include="Views\AssignmentDocument.cs" />
     <Compile Include="Views\BackupRestoreViewModel.cs" />
     <Compile Include="Views\BandwidthTestViewModel.cs" />
     <Compile Include="Views\CompanyLogo.cs" />
+    <Compile Include="Views\Dashboard\CompletedInterviewsViewModel.cs" />
+    <Compile Include="Views\Dashboard\DashboardItems\AssignmentDashboardItemViewModel.cs" />
+    <Compile Include="Views\Dashboard\DashboardItems\DashboardSubTitleViewModel.cs" />
+    <Compile Include="Views\Dashboard\ListViewModel.cs" />
+    <Compile Include="Views\Dashboard\CreateNewViewModel.cs" />
+    <Compile Include="Views\Dashboard\RejectedInterviewsViewModel.cs" />
+    <Compile Include="Views\Dashboard\StartedInterviewsViewModel.cs" />
     <Compile Include="Views\Dashboard\PrefilledQuestionView.cs" />
+    <Compile Include="Views\Dashboard\InterviewTabPanel.cs" />
     <Compile Include="Views\DeviceInfo.cs" />
     <Compile Include="Views\DiagnosticsViewModel.cs" />
     <Compile Include="Views\Dashboard\InterviewerDashboardEventHandler.cs" />
-    <Compile Include="Views\Dashboard\Messages\RemovedDashboardItemMessage.cs" />
     <Compile Include="Views\Dashboard\Messages\StartingLongOperationMessage.cs" />
-    <Compile Include="Implementation\Services\InterviewerDashboardFactory.cs" />
     <Compile Include="Views\FinishInstallationViewModel.cs" />
     <Compile Include="Views\InterviewAnswerOnPrefilledQuestionView.cs" />
     <Compile Include="Views\InterviewerCompleteInterviewViewModel.cs" />
@@ -170,7 +183,6 @@
     <Compile Include="Views\InterviewMultimediaView.cs" />
     <Compile Include="Views\Dashboard\InterviewView.cs" />
     <Compile Include="Views\Dashboard\DashboardItems\CensusQuestionnaireDashboardItemViewModel.cs" />
-    <Compile Include="Views\Dashboard\DashboardInformation.cs" />
     <Compile Include="Views\Dashboard\DashboardInterviewStatus.cs" />
     <Compile Include="Views\Dashboard\DashboardItems\IDashboardItem.cs" />
     <Compile Include="Views\Dashboard\DashboardItems\InterviewDashboardItemViewModel.cs" />
@@ -229,38 +241,48 @@
   <ItemGroup>
     <EmbeddedResource Include="Properties\InterviewerUIResources.es.resx">
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.fr.resx">
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.id-ID.resx">
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.km.resx">
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.pt.resx">
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InterviewerUIResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\InterviewerUIResources.ru-RU.resx">
+    <EmbeddedResource Include="Properties\InterviewerUIResources.ru.resx">
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.th-TH.resx">
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.uk-UA.resx">
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.vi-VN.resx">
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.zh-CN.resx">
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

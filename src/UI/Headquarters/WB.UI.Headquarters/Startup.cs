@@ -1,7 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Net;
-using System.Net.Mime;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,7 +10,6 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.SessionState;
-using Ionic.Zlib;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.SignalR;
@@ -30,8 +26,6 @@ using NLog;
 using Owin;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
-using WB.Core.BoundedContexts.Headquarters.Services.HealthCheck;
-using WB.Core.BoundedContexts.Headquarters.ValueObjects.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Versions;
@@ -54,6 +48,7 @@ namespace WB.UI.Headquarters
         static Startup()
         {
             SetupNConfig();
+            //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
         }
 
         public void Configuration(IAppBuilder app)
@@ -64,7 +59,6 @@ namespace WB.UI.Headquarters
             var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Startup>();
             logger.Info($@"Starting Headquarters {ServiceLocator.Current.GetInstance<IProductVersion>()}");
             UpdateAppVersion();
-            HealthCheck();
             ConfigureAuth(app);
             InitializeAppShutdown(app);
             InitializeMVC();
@@ -245,26 +239,6 @@ namespace WB.UI.Headquarters
 
         private static void UpdateAppVersion()
             => ServiceLocator.Current.GetInstance<IProductVersionHistory>().RegisterCurrentVersion();
-
-        private static void HealthCheck()
-        {
-            var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Startup>();
-            var healthCheckService = ServiceLocator.Current.GetInstance<IHealthCheckService>();
-
-            try
-            {
-                var checkStatus = healthCheckService.Check();
-                if (checkStatus.Status == HealthCheckStatus.Down)
-                {
-                    logger.Fatal($"Initial Health Check for {Dns.GetHostName()} failed. " +
-                                 $"Result: {checkStatus.GetStatusDescription()}");
-                }
-            }
-            catch (Exception exc)
-            {
-                logger.Fatal(@"Error on checking application health.", exc);
-            }
-        }
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {

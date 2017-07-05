@@ -29,12 +29,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     VariableName = "a",
                     Children = new List<IComposite>
                     {
-                        new TextListQuestion
-                        {
-                            PublicKey = Guid.NewGuid(),
-                            StataExportCaption = "var1",
-                            QuestionType = QuestionType.TextList
-                        },
+                        Create.TextListQuestion
+                        (
+                            questionId: Guid.NewGuid(),
+                            variable: "var1"
+                        ),
                         new Group
                         {
                             PublicKey = Guid.NewGuid(),

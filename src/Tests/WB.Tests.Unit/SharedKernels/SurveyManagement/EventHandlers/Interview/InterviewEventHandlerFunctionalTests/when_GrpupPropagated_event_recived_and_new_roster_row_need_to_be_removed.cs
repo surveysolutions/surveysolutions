@@ -2,7 +2,6 @@
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 

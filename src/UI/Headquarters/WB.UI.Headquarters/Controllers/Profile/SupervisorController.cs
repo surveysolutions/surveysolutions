@@ -13,7 +13,6 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Filters;
-using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -36,7 +35,6 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator, Headquarter")]
         [ObserverNotAllowed]
@@ -61,12 +59,6 @@ namespace WB.UI.Headquarters.Controllers
 
         [Authorize(Roles = "Administrator, Headquarter, Observer")]
         public ActionResult Index()
-        {
-            return this.View();
-        }
-
-        [Authorize(Roles = "Administrator, Headquarter, Observer")]
-        public ActionResult Archived()
         {
             return this.View();
         }

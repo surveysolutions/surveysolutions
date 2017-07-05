@@ -14,16 +14,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewFactory
     {
         protected static QuestionnaireDocument CreateQuestionnaireDocument(string questionnaireId, string chapterId)
         {
-            return new QuestionnaireDocument()
+            return new QuestionnaireDocument
             {
                 PublicKey = Guid.Parse(questionnaireId),
-                Children = new List<IComposite>() { new Group() { PublicKey = Guid.Parse(chapterId) } }.ToReadOnlyCollection()
+                Children = new List<IComposite> { new Group { PublicKey = Guid.Parse(chapterId) } }.ToReadOnlyCollection()
             };
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithoutChapters(string questionnaireId)
         {
-            return new QuestionnaireDocument()
+            return new QuestionnaireDocument
             {
                 PublicKey = Guid.Parse(questionnaireId)
             };
@@ -32,7 +32,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewFactory
         protected static ChapterInfoViewFactory CreateChapterInfoViewFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> repository = null)
         {
-            return new ChapterInfoViewFactory(repository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>());
+            return new ChapterInfoViewFactory(
+                repository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(),
+                Create.QuestionTypeToCSharpTypeMapper());
         }
     }
 }

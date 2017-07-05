@@ -10,11 +10,13 @@ angular.module('designerApp')
                 visible: false,
                 time: new Date()
             };
+
             $scope.questionnaire = {
                 questionsCount: 0,
                 groupsCount: 0,
                 rostersCount: 0
             };
+
             var openCompilationPage = 'ctrl+shift+b';
             var focusTreePane = 'shift+alt+x';
             var focusEditorPane = 'shift+alt+e';
@@ -42,7 +44,6 @@ angular.module('designerApp')
                     } catch(e) {
                         notificationService.notice(e);//"Make sure popups are not blocked");
                     }
-                    //printWindow.print();
                     event.preventDefault();
                 }
             });
@@ -203,7 +204,8 @@ angular.module('designerApp')
                 QRBarcode: 'icon-qrbarcode',
                 Text: 'icon-text',
                 SingleOption: 'icon-singleoption',
-                Multimedia: 'icon-photo'
+                Multimedia: 'icon-photo',
+                Area: 'icon-area'
             };
 
             $scope.items = [];
@@ -307,12 +309,18 @@ angular.module('designerApp')
                 $rootScope.$broadcast("variablesChanged", {});
             };
 
-            $rootScope.addOrUpdateLocalVariable = function (variableId, variableName) {
+            $rootScope.updateSelfVariable = function(type) {
+                var selfVar = _.find($scope.variableNames, { name: "self" });
+                selfVar.type = type;
+            }
+
+            $rootScope.addOrUpdateLocalVariable = function (variableId, variableName, type) {
                 var current = _.find($scope.variableNames, { id: variableId });
                 if (!_.isUndefined(current)) {
                     current.name = variableName;
+                    current.type = type;
                 } else {
-                    $scope.variableNames.push({ id: variableId, name: variableName });
+                    $scope.variableNames.push({ id: variableId, name: variableName, type: type });
                 }
                 
                 $rootScope.$broadcast("variablesChanged", {});
@@ -323,6 +331,57 @@ angular.module('designerApp')
                
                 $rootScope.$broadcast("variablesChanged", {});
             };
+
+            function isNotLinkedOrLinkedToTextList(question) {
+                var notLinked = question.linkedToType == null && question.linkedToEntity == null;
+                var linkedToTl = question.linkedToType === "textlist" ||
+                    (question.linkedToEntity || {}).type === "textlist";
+
+                return notLinked || linkedToTl;
+            }
+
+            $rootScope.updateVariableTypes = function(question) {
+                var type = $rootScope.getUnderlyingVariableType(question);
+                $rootScope.updateSelfVariable(type);
+                $rootScope.addOrUpdateLocalVariable(question.itemId, question.variable, type);
+            }
+
+            $rootScope.getUnderlyingVariableType = function(question) {
+                switch (question.type) {
+                    case "Text":
+                    case "Multimedia":
+                    case "QRBarcode":
+                        return "string";
+                    case "TextList":
+                        return "TextList"; // real type is TextListAnswerRow[]
+                    case "DateTime":
+                        return "DateTime?";
+                    case "GpsCoordinates":
+                        return "GeoLocation";
+                    case 'MultyOption':
+                        if (question.yesNoView) {
+                            return "YesNoAnswers"; // real type is YesNoAndAnswersMissings
+                        }
+                        if (isNotLinkedOrLinkedToTextList(question)) {
+                            return "int[]";
+                        }
+                        return "RosterVector[]";
+                    case "SingleOption":
+                        if (isNotLinkedOrLinkedToTextList(question)) {
+                            return "int?";
+                        }
+
+                        return "RosterVector";
+                    case "Numeric":
+                        if (question.isInteger) {
+                            return "int?";
+                        }
+
+                        return "double?";
+                }
+
+                return null;
+            }
 
             $rootScope.$on('groupDeleted', function (scope, removedItemId) {
                 $scope.questionnaire.groupsCount--;
@@ -422,16 +481,16 @@ angular.module('designerApp')
 
             $scope.setupAceForSubstitutions = function (editor) {
                 editor.setOptions({
-                    maxLines: Infinity,
+                    maxLines: 30,
                     fontSize: 16,
                     highlightActiveLine: false,
+                    indentedSoftWrap: false,
+                    showLineNumbers: false,
                     theme: "ace/theme/github-extended"
                 });
 
                 var textExtendableMode = window.ace.require("ace/mode/text-extended").Mode;
                 editor.getSession().setMode(new textExtendableMode());
-                editor.getSession().setUseWrapMode(true);
-                editor.getSession().setTabSize(0);
                 setCommonAceOptions(editor);
             };
 
@@ -454,13 +513,15 @@ angular.module('designerApp')
             };
 
             $scope.getVariablesNames = function () {
-                return _.pluck($rootScope.variableNames, "name");
+                return _($rootScope.variableNames);
             }
 
             $scope.aceEditorUpdateMode = function(editor) {
                 if (editor) {
                     var CSharpExtendableMode = window.ace.require("ace/mode/csharp-extended").Mode;
-                    editor.getSession().setMode(new CSharpExtendableMode($scope.getVariablesNames));
+                    editor.getSession().setMode(new CSharpExtendableMode(function () {
+                        return _.pluck($rootScope.variableNames, "name");
+                    }));
 
                     var variablesCompletor =
                     {
@@ -468,10 +529,10 @@ angular.module('designerApp')
                             var i = 0;
                             callback(null,
                                 $scope.getVariablesNames()
-                                .sort()
+                                .sortBy('name')
                                 .reverse()
                                 .map(function(variable) {
-                                    return { name: variable, value: variable, score: i++, meta: "variable" }
+                                    return { name: variable.name, value: variable.name, score: i++, meta: variable.type }
                                 }));
                         },
 

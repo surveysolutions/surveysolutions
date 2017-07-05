@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MvvmCross.Platform;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -88,10 +89,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var newOptions = interview.GetTopFilteredOptionsForQuestion(questionIdentity, null, Filter, Count)
                                 .ToList();
 
-            var currentOptions = this.Options;
             var listOfNewOptions = newOptions.ToList();
 
-            if (!Enumerable.SequenceEqual(currentOptions, listOfNewOptions, new CategoricalOptionEqualityComparer()))
+            var existingOptions = this.Options;
+            if (existingOptions == null || !listOfNewOptions.SequenceEqual(existingOptions, new CategoricalOptionEqualityComparer()))
             {
                 this.Options = listOfNewOptions;
                 this.OptionsChanged?.Invoke(this, EventArgs.Empty);

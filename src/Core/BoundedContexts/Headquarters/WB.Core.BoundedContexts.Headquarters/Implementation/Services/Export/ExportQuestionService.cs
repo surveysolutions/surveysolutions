@@ -57,6 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
                 case QuestionType.Numeric:
                 case QuestionType.Text:
                 case QuestionType.QRBarcode:
+                case QuestionType.Area:
                     return new string[] { this.ConvertAnswerToStringValue(question.Answer, header) };
 
                 case QuestionType.MultyOption:

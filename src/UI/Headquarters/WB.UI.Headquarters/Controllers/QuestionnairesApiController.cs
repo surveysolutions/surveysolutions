@@ -53,7 +53,7 @@ namespace WB.UI.Headquarters.Controllers
                 Page = request.PageIndex,
                 PageSize = request.PageSize,
                 Orders = request.GetSortOrderRequestItems(),
-                Filter = request.Search.Value,
+                SearchFor = request.Search.Value,
                 IsAdminMode = true
             };
 
@@ -87,7 +87,7 @@ namespace WB.UI.Headquarters.Controllers
                 Page = data.PageIndex,
                 PageSize = data.PageSize,
                 Orders = data.SortOrder ?? new List<OrderRequestItem>(),
-                Filter = data.Filter
+                SearchFor = data.SeachFor
             };
 
             return this.questionnaireBrowseViewFactory.Load(input);
@@ -110,7 +110,7 @@ namespace WB.UI.Headquarters.Controllers
             var questionnaires = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel
             {
                 PageSize = pageSize,
-                Filter = query,
+                SearchFor = query,
                 IsAdminMode = true,
                 OnlyCensus = censusOnly
             });

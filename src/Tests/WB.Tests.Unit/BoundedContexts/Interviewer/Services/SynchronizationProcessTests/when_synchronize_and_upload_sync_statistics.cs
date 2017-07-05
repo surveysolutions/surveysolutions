@@ -9,6 +9,7 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -22,7 +23,7 @@ using It = Moq.It;
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {
     [Subject(typeof(SynchronizationProcess))]
-    internal class when_synchronize_and_upload_sync_statistics 
+    internal class when_synchronize_and_upload_sync_statistics
     {
         private Mock<ISynchronizationService> synchronizationServiceMock;
 
@@ -65,12 +66,12 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 .ReturnsAsync(new List<QuestionnaireIdentity>(new[] { questionnaireIdentity }));
             synchronizationServiceMock.Setup(x => x.GetInterviewsAsync(Moq.It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new List<InterviewApiView>());
-
+            
             var interviewerQuestionnaireAccessor = Mock.Of<IInterviewerQuestionnaireAccessor>(
                 x => x.GetCensusQuestionnaireIdentities() == new List<QuestionnaireIdentity>(new[] { questionnaireIdentity })
                      && x.GetAllQuestionnaireIdentities() == new List<QuestionnaireIdentity>(new[] { questionnaireIdentity })
             );
-            
+
             this.httpStatistician = new Mock<IHttpStatistician>();
 
             this.httpStatistician.Setup(s => s.GetStats()).Returns(new HttpStats

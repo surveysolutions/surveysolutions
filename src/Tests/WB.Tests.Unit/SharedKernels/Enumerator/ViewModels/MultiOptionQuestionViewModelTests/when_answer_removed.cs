@@ -8,7 +8,6 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
 
@@ -27,20 +26,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
 
-            var questionnaire =
-                Create.Entity.QuestionnaireDocumentWithOneChapter(
-                    Create.Entity.MultyOptionsQuestion(questionGuid, new List<Answer>()
-                    {
-                        Create.Entity.Answer("one", 1)
-                    }, areAnswersOrdered: true));
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.MultyOptionsQuestion(questionGuid, new List<Answer> { Create.Entity.Answer("one", 1) }, areAnswersOrdered: true));
 
-            IQuestionnaire plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire, 1);
-
-            StatefulInterview interview = Create.AggregateRoot.StatefulInterview(questionnaire: plainQuestionnaire);
+            StatefulInterview interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
             interview.AnswerMultipleOptionsQuestion(userId, questionGuid, RosterVector.Empty, DateTime.Now, new[] {1});
 
             viewModel = CreateViewModel(
-                questionnaireStorage: Stub<IQuestionnaireStorage>.Returning(plainQuestionnaire),
+                questionnaireStorage: Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire),
                 interviewRepository: Stub<IStatefulInterviewRepository>.Returning((IStatefulInterview)interview),
                 filteredOptionsViewModel: Create.ViewModel.FilteredOptionsViewModel(questionId, questionnaire, interview));
 

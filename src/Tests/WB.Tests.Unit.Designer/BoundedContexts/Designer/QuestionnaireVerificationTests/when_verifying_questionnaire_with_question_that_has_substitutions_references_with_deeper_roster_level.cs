@@ -22,12 +22,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             var rosterGroupId = Guid.Parse("13333333333333333333333333333333");
             var rosterSizeQuestionId = Guid.Parse("11133333333333333333333333333333");
             questionnaire = CreateQuestionnaireDocument(
-                new NumericQuestion()
-                {
-                    PublicKey = rosterSizeQuestionId,
-                    IsInteger = true,
-                    StataExportCaption = "var1"
-                },
+                Create.NumericIntegerQuestion(
+                    rosterSizeQuestionId,
+                    variable: "var1"
+                ),
                 new Group()
                 {
                     PublicKey = rosterGroupId,
@@ -35,19 +33,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     VariableName = "a",
                     RosterSizeQuestionId = rosterSizeQuestionId,
                     Children = new IComposite[]{
-                        new NumericQuestion()
-                        {
-                            PublicKey = underDeeperRosterLevelQuestionId,
-                            StataExportCaption = underDeeperRosterLevelQuestionVariableName
-                        }}.ToReadOnlyCollection()
+                        Create.NumericRealQuestion(
+                            underDeeperRosterLevelQuestionId,
+                            variable: underDeeperRosterLevelQuestionVariableName
+                        )}.ToReadOnlyCollection()
                 },
-                new SingleQuestion()
-                {
-                        PublicKey = questionWithSubstitutionsId,
-                        StataExportCaption = "var2",
-                        QuestionText = string.Format("hello %{0}%", underDeeperRosterLevelQuestionVariableName),
-                        Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
-                });
+                Create.SingleQuestion(
+                        questionWithSubstitutionsId,
+                        variable: "var2",
+                        title: string.Format("hello %{0}%", underDeeperRosterLevelQuestionVariableName),
+                        options: new List<Answer>() { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
+                ));
 
             verifier = CreateQuestionnaireVerifier();
         };

@@ -1,26 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using Machine.Specifications;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
+using FluentAssertions;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
+using NUnit.Framework;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
+    [TestFixture]
     internal class when_creating_interview : InterviewTestsContext
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void context()
         {
             eventContext = new EventContext();
 
@@ -33,35 +28,46 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.Version == questionnaireVersion);
 
+            command = Create.Command.CreateInterviewCommand(questionnaireId: questionnaireId,
+                questionnaireVersion: questionnaireVersion,
+                responsibleSupervisorId: responsibleSupervisorId,
+                answersToFeaturedQuestions: answersToFeaturedQuestions, 
+                userId: userId);
+
             interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
-        };
 
-        Because of = () =>
-            interview.CreateInterview(questionnaireId, questionnaireVersion, responsibleSupervisorId, answersToFeaturedQuestions, DateTime.Now, userId);
+            //Act
+            interview.CreateInterview(command);
+        }
 
-        It should_raise_InterviewCreated_event = () =>
+        [Test]
+        public void should_raise_InterviewCreated_event() =>
             eventContext.ShouldContainEvent<InterviewCreated>();
 
-        It should_provide_questionnaire_id_in_InterviewCreated_event = () =>
+        [Test]
+        public void should_provide_questionnaire_id_in_InterviewCreated_event() =>
             eventContext.GetEvent<InterviewCreated>()
-                .QuestionnaireId.ShouldEqual(questionnaireId);
+                .QuestionnaireId.Should().Be(questionnaireId);
 
-        It should_provide_questionnaire_verstion_in_InterviewCreated_event = () =>
+        [Test]
+        public void should_provide_questionnaire_verstion_in_InterviewCreated_event() =>
             eventContext.GetEvent<InterviewCreated>()
-                .QuestionnaireVersion.ShouldEqual(questionnaireVersion);
+                .QuestionnaireVersion.Should().Be(questionnaireVersion);
 
-        Cleanup stuff = () =>
+        [OneTimeTearDown]
+        public void TearDown()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        private static EventContext eventContext;
-        private static Guid questionnaireId;
-        private static long questionnaireVersion;
-        private static Guid userId;
-        private static Guid responsibleSupervisorId;
-        private static Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions;
-        private static Interview interview;
+        private EventContext eventContext;
+        private Guid questionnaireId;
+        private long questionnaireVersion;
+        private Guid userId;
+        private Guid responsibleSupervisorId;
+        private Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions;
+        private Interview interview;
+        private CreateInterviewCommand command;
     }
 }
