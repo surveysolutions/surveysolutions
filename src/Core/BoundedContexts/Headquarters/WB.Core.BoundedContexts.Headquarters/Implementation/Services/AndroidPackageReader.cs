@@ -1,6 +1,6 @@
 using System.IO;
-using ICSharpCode.SharpZipLib.Zip;
 using Iteedee.ApkReader;
+using System.IO.Compression;
 using WB.Core.BoundedContexts.Headquarters.Services;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
@@ -11,35 +11,35 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         {
             byte[] manifestData = null;
             byte[] resourcesData = null;
-            using (ZipInputStream zip = new ZipInputStream(File.OpenRead(pathToApkFile)))
+            using (ZipArchive zip = new ZipArchive(File.OpenRead(pathToApkFile)))
             {
-                using (var filestream = new FileStream(pathToApkFile, FileMode.Open, FileAccess.Read))
+                var allFound = 0;
+                foreach (var zipArchiveEntry in zip.Entries)
                 {
-                    ZipFile zipfile = new ZipFile(filestream);
-                    ZipEntry item;
-                    while ((item = zip.GetNextEntry()) != null)
+                    if (zipArchiveEntry.Name.ToLower() == "androidmanifest.xml")
                     {
-                        if (item.Name.ToLower() == "androidmanifest.xml")
+                        manifestData = new byte[50 * 1024];
+                        using (Stream strm = zipArchiveEntry.Open())
                         {
-                            manifestData = new byte[50 * 1024];
-                            using (Stream strm = zipfile.GetInputStream(item))
-                            {
-                                strm.Read(manifestData, 0, manifestData.Length);
-                            }
-
+                            strm.Read(manifestData, 0, manifestData.Length);
                         }
-                        if (item.Name.ToLower() == "resources.arsc")
-                        {
-                            using (Stream strm = zipfile.GetInputStream(item))
-                            {
-                                using (BinaryReader s = new BinaryReader(strm))
-                                {
-                                    resourcesData = s.ReadBytes((int)s.BaseStream.Length);
-
-                                }
-                            }
-                        }
+                        allFound++;
                     }
+                    if (zipArchiveEntry.Name.ToLower() == "resources.arsc")
+                    {
+                        using (Stream strm = zipArchiveEntry.Open())
+                        {
+                            using (BinaryReader s = new BinaryReader(strm))
+                            {
+                                resourcesData = s.ReadBytes((int)s.BaseStream.Length);
+
+                            }
+                        }
+                        allFound++;
+                    }
+
+                    if(allFound > 1)
+                        break;
                 }
             }
 
