@@ -10,7 +10,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
     {
         private const string SubstitutionVariableDelimiter = "%";
         private static readonly string AllowedSubstitutionVariableNameRegexp = String.Format(@"(?<={0})(\w+(?={0}))", SubstitutionVariableDelimiter);
-        private static readonly Regex AllowedSubstitutionVariableNameRx = new Regex(AllowedSubstitutionVariableNameRegexp);
+        private static readonly Regex AllowedSubstitutionVariableNameRx = new Regex(AllowedSubstitutionVariableNameRegexp, RegexOptions.Compiled);
         private readonly ConcurrentDictionary<string, string[]> cache = new ConcurrentDictionary<string, string[]>();
         private readonly string rosterTitle;
 
