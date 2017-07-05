@@ -70,7 +70,7 @@ namespace WB.UI.Interviewer.CustomControls
 
         public override int Count => this._fragments.Count;
 
-        public void AddFragment(Type fragType, MvxViewModel model, string titlePropertyName, int position = -1)
+        public void InsertFragment(Type fragType, MvxViewModel model, string titlePropertyName, int position = -1)
         {
             if (position < 0 && this._fragments.Count == 0)
                 position = 0;

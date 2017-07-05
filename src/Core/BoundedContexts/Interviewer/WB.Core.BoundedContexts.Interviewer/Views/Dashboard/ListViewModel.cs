@@ -11,6 +11,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             protected set => this.RaiseAndSetIfChanged(ref this.uiItems, value);
         }
 
-        public abstract int ItemsCount { get; }
+        private int itemsCount;
+        public int ItemsCount
+        {
+            get => this.itemsCount;
+            protected set => this.RaiseAndSetIfChanged(ref this.itemsCount, value);
+        }
     }
 }
