@@ -71,7 +71,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User name &apos;{0}&apos; is taken by archived users.
+        ///   Looks up a localized string similar to User name &apos;{0}&apos; is already taken by an archived user. Please choose a different user name..
         /// </summary>
         public static string UserNameIsTakenByArchivedUsersFormat {
             get {
@@ -80,7 +80,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User name &apos;{0}&apos; is taken.
+        ///   Looks up a localized string similar to User name &apos;{0}&apos; is already taken. Please choose another user name..
         /// </summary>
         public static string UserNameIsTakenFormat {
             get {
@@ -89,7 +89,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can&apos;t unarchive interviewer {0} until supervisor is archived.
+        ///   Looks up a localized string similar to You can&apos;t unarchive interviewer {0} until supervisor is unarchived.
         /// </summary>
         public static string YouCantUnarchiveInterviewerUntilSupervisorIsArchivedFormat {
             get {
