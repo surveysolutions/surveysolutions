@@ -88,8 +88,8 @@
     <Reference Include="Flurl, Version=2.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Flurl.2.3.0\lib\netstandard1.4\Flurl.dll</HintPath>
     </Reference>
-    <Reference Include="Flurl.Http">
-      <HintPath>..\..\..\packages\Flurl.Http.1.1.1\lib\portable40-net45+sl5+win8+wp8+wpa81\Flurl.Http.dll</HintPath>
+    <Reference Include="Flurl.Http, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Flurl.Http.1.1.2\lib\net45\Flurl.Http.dll</HintPath>
     </Reference>
     <Reference Include="Humanizer, Version=2.2.0.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Humanizer.Core.2.2.0\lib\netstandard1.0\Humanizer.dll</HintPath>
