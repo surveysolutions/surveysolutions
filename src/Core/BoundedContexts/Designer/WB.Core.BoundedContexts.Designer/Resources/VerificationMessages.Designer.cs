@@ -332,7 +332,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lookup table has invalid column headers.
+        ///   Looks up a localized string similar to Lookup table has invalid column headers..
         /// </summary>
         internal static string WB0031_LookupTableHasInvalidHeaders {
             get {
@@ -698,15 +698,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0071_StaticTextIsEmpty {
             get {
                 return ResourceManager.GetString("WB0071_StaticTextIsEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Section cannot contain more than 500 child items..
-        /// </summary>
-        internal static string WB0072_ChapterItemsLimit {
-            get {
-                return ResourceManager.GetString("WB0072_ChapterItemsLimit", resourceCulture);
             }
         }
         
@@ -1644,6 +1635,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0268_DoesNotSupportSubstitution {
             get {
                 return ResourceManager.GetString("WB0268_DoesNotSupportSubstitution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question cannot have empty text..
+        /// </summary>
+        internal static string WB0269_QuestionTitleIsEmpty {
+            get {
+                return ResourceManager.GetString("WB0269_QuestionTitleIsEmpty", resourceCulture);
             }
         }
     }

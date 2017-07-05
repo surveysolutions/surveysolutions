@@ -9,6 +9,3 @@
   <TextView style="@style/Dashboard_InterviewItem_PrefilledQuestion_Answer"
      local:MvxBind="Text Answer;" />
 </LinearLayout>
-
-
-

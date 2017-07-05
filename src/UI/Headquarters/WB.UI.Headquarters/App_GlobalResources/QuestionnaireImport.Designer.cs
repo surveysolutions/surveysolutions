@@ -19,7 +19,7 @@ namespace Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option or rebuild the Visual Studio project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Web.Application.StronglyTypedResourceProxyBuilder", "14.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Web.Application.StronglyTypedResourceProxyBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class QuestionnaireImport {
@@ -61,29 +61,11 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Before log in, please make sure that the &apos;Designer&apos; website is available.
+        ///   Looks up a localized string similar to Before logging in, please make sure that the &apos;Designer&apos; website is available.
         /// </summary>
         internal static string BeforeSignInToDesigner {
             get {
                 return ResourceManager.GetString("BeforeSignInToDesigner", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This will allow interviewers to create assignments in the field, and the questionnaire will be downloaded on all devices..
-        /// </summary>
-        internal static string CensusImportSubTitle {
-            get {
-                return ResourceManager.GetString("CensusImportSubTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Census mode import.
-        /// </summary>
-        internal static string CensusImportTitle {
-            get {
-                return ResourceManager.GetString("CensusImportTitle", resourceCulture);
             }
         }
         
@@ -124,29 +106,11 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import in Sample mode.
-        /// </summary>
-        internal static string Import {
-            get {
-                return ResourceManager.GetString("Import", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Create a new version  (#{0}).
         /// </summary>
         internal static string ImportAsNewVersion {
             get {
                 return ResourceManager.GetString("ImportAsNewVersion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Import in census mode.
-        /// </summary>
-        internal static string ImportInCensus {
-            get {
-                return ResourceManager.GetString("ImportInCensus", resourceCulture);
             }
         }
         
@@ -196,6 +160,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Designer: My Questionnaires.
+        /// </summary>
+        internal static string MyQuestionnairesTitle {
+            get {
+                return ResourceManager.GetString("MyQuestionnairesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have already imported this questionnaire.
         /// </summary>
         internal static string QuestionnaireExists {
@@ -223,7 +196,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This will allow you to create individual assignments that may contain identifying data, and only those assignments will appear on interviewer devices..
+        ///   Looks up a localized string similar to This will allow you to create individual assignments that may contain identifying data. Only those assignments will appear on interviewer devices..
         /// </summary>
         internal static string RegularImportSubTitle {
             get {
@@ -232,7 +205,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sample mode import.
+        ///   Looks up a localized string similar to Import.
         /// </summary>
         internal static string RegularImportTitle {
             get {
@@ -250,7 +223,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please sign in to designer.
+        ///   Looks up a localized string similar to Please sign in to Designer.
         /// </summary>
         internal static string SignInToDesigner {
             get {
@@ -259,7 +232,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sign in to designer.
+        ///   Looks up a localized string similar to Sign in to Designer.
         /// </summary>
         internal static string SignInToDesignerTitle {
             get {

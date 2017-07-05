@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
+using NHibernate.Util;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
@@ -112,7 +113,7 @@ namespace WB.UI.Headquarters.Controllers
         
         public ActionResult ResetPrivilegedUserPassword()
         {
-            return this.View(new UserModel());
+            return this.View(new UserEditModel());
         }
 
         public ActionResult RestoreAllDeletedQuestionnaireProjections()
@@ -130,21 +131,28 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ResetUserPassword(UserModel model)
+        public async Task<ActionResult> ResetPrivilegedUserPassword(UserEditModel model)
         {
             if (ModelState.IsValid)
             {
                 var user = await this.userManager.FindByNameAsync(model.UserName);
-                var updateResult = await this.userManager.UpdateUserAsync(user, model.Password);
+                var updateResult = await this.userManager.ChangePasswordAsync(user, model.Password);
 
                 if (updateResult.Succeeded)
                 {
                     this.Success($"Password for user '{user.UserName}' successfully changed");
                 }
-                AddErrors(updateResult);
+                else
+                {
+                    AddErrors(updateResult);
+                    foreach (var error in updateResult.Errors)
+                    {
+                        this.Error(error, true);
+                    }
+                }
             }
 
-            return RedirectToAction("ResetPrivilegedUserPassword");
+            return this.View(model);
         }
 
         private IRevalidateInterviewsAdministrationService RevalidateInterviewsAdministrationService
@@ -217,7 +225,6 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult SynchronizationLog() => this.View();
 
-        public ActionResult EventStore() => this.View();
         public ActionResult BrokenInterviewPackages() => this.View();
     }
 }

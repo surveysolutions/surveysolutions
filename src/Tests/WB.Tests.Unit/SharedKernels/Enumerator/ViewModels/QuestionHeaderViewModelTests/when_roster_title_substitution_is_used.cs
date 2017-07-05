@@ -3,11 +3,7 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
 using It = Machine.Specifications.It;
@@ -20,22 +16,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
         {
             substitutionTargetQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-            var questionnaireMock = Mock.Of<IQuestionnaire>(_
-               => _.GetQuestionTitle(substitutionTargetQuestionId) == "uses %rostertitle%"
-               && _.GetQuestionInstruction(substitutionTargetQuestionId) == "Instruction"
-               );
-        
-            var plainQuestionnaire = new PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Entity.FixedRoster(children: new IComposite[]
                 {
                     Create.Entity.NumericIntegerQuestion(id: substitutionTargetQuestionId, questionText: "title with %rostertitle%")
                 })
-            }), 0);
+            });
 
-            var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == plainQuestionnaire);
+            var questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
 
-            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: plainQuestionnaire);
+            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(Moq.It.IsAny<string>()) == interview);
 

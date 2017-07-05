@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using MvvmCross.Droid.Support.V7.RecyclerView.ItemTemplates;
-using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -54,6 +53,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (AnsweringViewModel), Resource.Layout.interview_question__progressbar},
             {typeof (YesNoQuestionOptionViewModel), Resource.Layout.interview_question_yesno_item},
             {typeof (VariableViewModel), Resource.Layout.interview_variable},
+            {typeof (ReadOnlyQuestionViewModel), Resource.Layout.interview_question_readonly},
+            {typeof (AreaQuestionViewModel), Resource.Layout.interview_question_area}
         };
 
         public int GetItemViewType(object forItemObject)

@@ -15,27 +15,26 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
         {
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.Entity.NumericIntegerQuestion(id: rosterSizeQuestionId),
+                Create.Entity.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: "q1"),
                 Create.Entity.Roster(rosterId: roster1Id, rosterSizeQuestionId: rosterSizeQuestionId, children: new IComposite[]
                 {
-                    Create.Entity.MultipleOptionsQuestion(questionId: nestedRosterSizeQuestionId, textAnswers: new []{ Create.Entity.Option("1", "Multi 1"), Create.Entity.Option("2", "Multi 2") }  ),
+                    Create.Entity.MultipleOptionsQuestion(questionId: nestedRosterSizeQuestionId, variable: "q2", textAnswers: new []{ Create.Entity.Option("1", "Multi 1"), Create.Entity.Option("2", "Multi 2") }  ),
                     Create.Entity.Roster(rosterId: roster2Id, rosterSizeQuestionId: nestedRosterSizeQuestionId, children: new IComposite[]
                     {
-                        Create.Entity.TextQuestion(questionId: sourceOfLinkedQuestionId),
-                        Create.Entity.NumericIntegerQuestion(roster3TriggerId),
+                        Create.Entity.TextQuestion(questionId: sourceOfLinkedQuestionId, variable: "q3"),
+                        Create.Entity.NumericIntegerQuestion(roster3TriggerId, variable: "q4"),
                         Create.Entity.Roster(roster3Id,
                             rosterSizeSourceType: RosterSizeSourceType.Question,
                             rosterSizeQuestionId: roster3TriggerId,
                             children: new IComposite[]
                             {
-                                Create.Entity.SingleQuestion(id: linkedSingleQuestionId, linkedToQuestionId: sourceOfLinkedQuestionId)
+                                Create.Entity.SingleQuestion(id: linkedSingleQuestionId, linkedToQuestionId: sourceOfLinkedQuestionId, variable: "q5")
                             })
                     })
                 })
             });
-            var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, 0);
 
-            interview = Create.AggregateRoot.StatefulInterview(questionnaire: plainQuestionnaire);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaireDocument);
             interview.AnswerNumericIntegerQuestion(interviewerId, rosterSizeQuestionId, RosterVector.Empty, DateTime.UtcNow, 2);
             interview.AnswerMultipleOptionsQuestion(interviewerId, nestedRosterSizeQuestionId, Create.Entity.RosterVector(0), DateTime.UtcNow, new[] { 1, 2 });
             interview.AnswerMultipleOptionsQuestion(interviewerId, nestedRosterSizeQuestionId, Create.Entity.RosterVector(1), DateTime.UtcNow, new[] { 1, 2 });

@@ -133,7 +133,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationService;
-        private readonly IQuestionnireHistotyVersionsService questionnireHistotyVersionsService;
+        private readonly IQuestionnireHistoryVersionsService questionnireHistoryVersionsService;
         private int affectedByReplaceEntries;
 
         #endregion
@@ -147,7 +147,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             ILookupTableService lookupTableService, 
             IAttachmentService attachmentService,
             ITranslationsService translationService,
-            IQuestionnireHistotyVersionsService questionnireHistotyVersionsService)
+            IQuestionnireHistoryVersionsService questionnireHistoryVersionsService)
         {
             this.logger = logger;
             this.clock = clock;
@@ -157,7 +157,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
             this.translationService = translationService;
-            this.questionnireHistotyVersionsService = questionnireHistotyVersionsService;
+            this.questionnireHistoryVersionsService = questionnireHistoryVersionsService;
         }
 
         #region Questionnaire command handlers
@@ -927,7 +927,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 mask: null,
                 isFilteredCombobox: false,
                 cascadeFromQuestionId: null,
-                capital: false,
                 answerOrder: null,
                 answers: null,
                 isInteger: null,
@@ -943,7 +942,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (command.Index.HasValue)
             {
                 this.innerDocument.MoveItem(command.QuestionId, command.ParentGroupId, command.Index.Value);
-                this.innerDocument.CheckIsQuestionHeadAndUpdateRosterProperties(command.QuestionId, command.ParentGroupId);
             }
         }
 
@@ -958,7 +956,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfQuestionIsUsedAsCascadingParent(questionId);
 
             this.innerDocument.RemoveEntity(questionId);
-            this.innerDocument.RemoveHeadPropertiesFromRosters(questionId);
+           
         }
 
         public void MoveQuestion(Guid questionId, Guid targetGroupId, int targetIndex, Guid responsibleId)
@@ -993,7 +991,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionIsRosterSizeAndItsMovedToIncorrectGroup(question, targetGroup);
 
             this.innerDocument.MoveItem(questionId, targetGroupId, targetIndex);
-            this.innerDocument.CheckIsQuestionHeadAndUpdateRosterProperties(questionId, targetGroupId);
         }
 
         public void UpdateTextQuestion(UpdateTextQuestion command)
@@ -1022,7 +1019,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         command.HideIfDisabled,
                         null,
                         command.IsPreFilled,
-                        false,
                         command.Instructions,
                         command.Properties,
                         command.Mask,
@@ -1062,7 +1058,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         command.HideIfDisabled,
                         Order.AZ,
                         command.IsPreFilled,
-                        false,
                         command.Instructions,
                         command.Properties,
                         null, null, null, null,
@@ -1102,7 +1097,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 command.HideIfDisabled,
                 null,
                 command.IsPreFilled,
-                false,
                 command.Instructions,
                 command.Properties,
                 null, null, null, null, null,null, null, null, null, null, null,null,
@@ -1143,7 +1137,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 variableLabel,
                 enablementCondition,
                 hideIfDisabled,
-                null, false, false,
+                null, false, 
                 instructions,
                 properties,
                 null,
@@ -1219,7 +1213,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 hideIfDisabled,
                 null,
                 isPreFilled,
-                false,
                 instructions,
                 properties,
                 null,
@@ -1267,7 +1260,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 categoricalOneAnswerQuestion.HideIfDisabled,
                 null,
                 categoricalOneAnswerQuestion.Featured,
-                false,
                 categoricalOneAnswerQuestion.Instructions,
                 categoricalOneAnswerQuestion.Properties,
                 null,
@@ -1311,7 +1303,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 categoricalOneAnswerQuestion.HideIfDisabled,
                 null,
                 categoricalOneAnswerQuestion.Featured,
-                false,
                 categoricalOneAnswerQuestion.Instructions,
                 categoricalOneAnswerQuestion.Properties,
                 null,
@@ -1360,7 +1351,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 command.HideIfDisabled,
                 Order.AZ,
                 command.IsPreFilled,
-                false,
                 command.Instructions,
                 command.Properties,
                 null,
@@ -1411,7 +1401,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     command.HideIfDisabled,
                     Order.AZ,
                     false,
-                    false,
                     command.Instructions,
                     command.Properties,
                     null,
@@ -1427,6 +1416,59 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     null,
                     null,
                     command.ValidationConditions,
+                    null,
+                    false);
+
+            if (question != null)
+            {
+                this.innerDocument.ReplaceEntity(question, newQuestion);
+            }
+        }
+
+        public void UpdateAreaQuestion(UpdateAreaQuestion command)
+        {
+            var title = command.Title;
+            var variableName = command.VariableName;
+
+            PrepareGeneralProperties(ref title, ref variableName);
+
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
+            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
+
+            var isPrefilled = false;
+
+            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
+
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(command.QuestionId, parentGroup, title, variableName, isPrefilled,
+                QuestionType.Area, command.ResponsibleId, null);
+
+            var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
+            IQuestion newQuestion = CreateQuestion(
+                    command.QuestionId,
+                    QuestionType.Area,
+                    command.Scope,
+                    command.Title,
+                    command.VariableName,
+                    command.VariableLabel,
+                    command.EnablementCondition,
+                    command.HideIfDisabled,
+                    Order.AZ,
+                    false,
+                    command.Instructions,
+                    command.Properties,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    new List<ValidationCondition>(),
                     null,
                     false);
 
@@ -1460,7 +1502,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     enablementCondition,
                     hideIfDisabled,
                     Order.AZ,
-                    false,
                     false,
                     instructions,
                     properties,
@@ -1512,7 +1553,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     command.EnablementCondition,
                     command.HideIfDisabled,
                     Order.AZ,
-                    false,
                     false,
                     command.Instructions,
                     command.Properties,
@@ -1785,10 +1825,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 var question = (AbstractQuestion)entityToInsertAsQuestion.Clone();
                 question.PublicKey = pasteItemId;
                 this.innerDocument.Insert(targetIndex, question, targetToPasteIn.PublicKey);
-
-                if (entityToInsertAsQuestion.Capital)
-                    this.innerDocument.MoveHeadQuestionPropertiesToRoster(pasteItemId, targetToPasteIn.PublicKey);
-
                 return;
             }
 
@@ -1872,7 +1908,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(Guid questionId, IGroup parentGroup, string title, string variableName, bool isPrefilled, QuestionType questionType, Guid responsibleId, IList<ValidationCondition> validationCoditions)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
-            this.ThrowDomainExceptionIfTitleIsEmptyOrTooLong(title);
 
             int variableLengthLimit = RestrictedVariableLengthQuestionTypes.Contains(questionType)
                 ? DefaultRestrictedVariableLengthLimit
@@ -2130,18 +2165,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(
                     DomainExceptionType.GroupNotFound,
                     string.Format("sub-section with public key {0} can't be found", groupPublicKey));
-            }
-        }
-
-        private void ThrowDomainExceptionIfTitleIsEmptyOrTooLong(string title)
-        {
-            if (string.IsNullOrEmpty(title))
-                throw new QuestionnaireException(DomainExceptionType.QuestionTitleRequired, "Question text can't be empty");
-
-            if (title.Length > MaxTitleLength)
-            {
-                throw new QuestionnaireException(DomainExceptionType.TitleIsTooLarge,
-                    string.Format("Question text can't have more than {0} symbols", MaxTitleLength));
             }
         }
 
@@ -3594,7 +3617,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         
         private static IQuestion CreateQuestion(Guid publicKey, QuestionType questionType, QuestionScope questionScope,
             string questionText, string stataExportCaption, string variableLabel, string conditionExpression,
-            bool hideIfDisabled, Order? answerOrder, bool featured, bool capital, string instructions,
+            bool hideIfDisabled, Order? answerOrder, bool featured, string instructions,
             QuestionProperties questionProperties, string mask, Answer[] answers,
             Guid? linkedToQuestionId, Guid? linkedToRosterId, bool? isInteger,
             int? countOfDecimalPlaces, bool? areAnswersOrdered, int? maxAllowedAnswers,
@@ -3661,6 +3684,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     question = new MultimediaQuestion();
                     break;
 
+                case QuestionType.Area:
+                    question = new AreaQuestion();
+                    break;
+
                 default:
                     throw new NotSupportedException(string.Format("Question type is not supported: {0}", questionType));
             }
@@ -3679,7 +3706,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             question.Featured = featured;
             question.Instructions = instructions;
             question.Properties = questionProperties ?? new QuestionProperties(false, false);
-            question.Capital = capital;
             question.LinkedToQuestionId = linkedToQuestionId;
             question.LinkedToRosterId = linkedToRosterId;
             question.LinkedFilterExpression = linkedFilterExpression;
@@ -3720,7 +3746,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
             var historyReferanceId = command.HistoryReferanceId;
-            var questionnire = questionnireHistotyVersionsService.GetByHistoryVersion(historyReferanceId);
+            var questionnire = questionnireHistoryVersionsService.GetByHistoryVersion(historyReferanceId);
             if (questionnire == null)
                 throw new ArgumentException($"Questionnire {Id} of version {historyReferanceId} didn't find");
 

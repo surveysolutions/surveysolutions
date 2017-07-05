@@ -123,12 +123,6 @@
   <data name="DesignerQuestionnaires" xml:space="preserve">
     <value>Вопросники</value>
   </data>
-  <data name="Import" xml:space="preserve">
-    <value>Импорт</value>
-  </data>
-  <data name="ImportInCensus" xml:space="preserve">
-    <value>Импорт как "перепись"</value>
-  </data>
   <data name="LoginToDesignerError" xml:space="preserve">
     <value>Не удалось подключиться к Designer. Пожалуйста проверьте, что Designer доступен и попробуйте &lt;a href='{0}'&gt;еще раз&lt;/a&gt;</value>
   </data>
@@ -171,19 +165,16 @@
   <data name="QuestionnaireExists" xml:space="preserve">
     <value>Этот опросник был ранее импортирован </value>
   </data>
-  <data name="CensusImportSubTitle" xml:space="preserve">
-    <value>После этого действия опросник будет отправлен на все планшеты</value>
-  </data>
-  <data name="CensusImportTitle" xml:space="preserve">
-    <value>Иморт опросника в режиме "переписи"</value>
-  </data>
   <data name="ImportAsNewVersion" xml:space="preserve">
     <value>Создать новую #{0} версию опросника</value>
   </data>
   <data name="RegularImportTitle" xml:space="preserve">
-    <value>Импортировать опросник как шаблон для индивидуальных назначений </value>
+    <value>Импортировать опросник</value>
   </data>
   <data name="RegularImportSubTitle" xml:space="preserve">
     <value>Эта функция позволит Вам создать индивидуальное назначение, которое может содержать идентифицирующие вопросы. Только эти назначения появятся на планшете в приложении Interviewer. </value>
+  </data>
+  <data name="MyQuestionnairesTitle" xml:space="preserve">
+    <value>Designer: Мои опросники</value>
   </data>
 </root>

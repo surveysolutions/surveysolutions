@@ -24,6 +24,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public QuestionState QuestionState { get; set; }
         public IReadOnlyList<FailedValidationCondition> FailedValidationConditions { get; set; }
 
+        public bool IsReadonly()
+        {
+            return this.QuestionState.HasFlag(QuestionState.Readonly);
+        }
+
         public bool IsInvalid()
         {
             return !this.QuestionState.HasFlag(QuestionState.Valid);

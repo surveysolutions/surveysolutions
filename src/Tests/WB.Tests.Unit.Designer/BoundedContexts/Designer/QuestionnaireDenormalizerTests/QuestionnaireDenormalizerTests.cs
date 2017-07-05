@@ -80,7 +80,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
                 Mock.Of<ITranslationsService>(),
-                Mock.Of<IQuestionnireHistotyVersionsService>());
+                Mock.Of<IQuestionnireHistoryVersionsService>());
             questionnaireAr.Initialize(document.PublicKey, document, Enumerable.Empty<SharedPerson>());
             return questionnaireAr;
         }

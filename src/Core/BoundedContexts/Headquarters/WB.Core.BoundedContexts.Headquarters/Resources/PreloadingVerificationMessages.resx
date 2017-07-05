@@ -157,10 +157,10 @@
     <value>Provided value is null or empty</value>
   </data>
   <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
-    <value>[PL0014] Value not allowed for this question in questionnaire</value>
+    <value>Provided question value not allowed.</value>
   </data>
   <data name="PL0015_QuestionTypeIsIncorrect" xml:space="preserve">
-    <value>[PL0015] Type of question is not correct.</value>
+    <value>Type of question is not correct.</value>
   </data>
   <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
     <value>Invalid Date or Time value entered in the date question.</value>
@@ -216,5 +216,17 @@
   </data>
   <data name="PL0034_CommaSymbolIsNotAllowedInNumericAnswer" xml:space="preserve">
     <value>Invalid decimal separator. The "," symbol is not allowed in numeric answers. Please use "." instead.</value>
+  </data>
+  <data name="PL0035_QuantityNotParsed" xml:space="preserve">
+    <value>Only integer values are allowed.</value>
+  </data>
+  <data name="PL0036_QuantityShouldBePositive" xml:space="preserve">
+    <value>Quantity should be more then 0.</value>
+  </data>
+  <data name="PL0037_ColumnIsNotIdentifying" xml:space="preserve">
+    <value>Column cannot be mapped to non identifying question</value>
+  </data>
+  <data name="PL0038_UnsupportedAreaQuestion" xml:space="preserve">
+    <value>Area question cannot be preloaded.</value>
   </data>
 </root>

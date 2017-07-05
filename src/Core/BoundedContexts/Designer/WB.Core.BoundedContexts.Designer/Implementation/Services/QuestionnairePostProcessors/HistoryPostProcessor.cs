@@ -72,7 +72,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, UpdateLookupTable>,
         ICommandPostProcessor<Questionnaire, DeleteLookupTable>,
         ICommandPostProcessor<Questionnaire, ReplaceTextsCommand>,
-        ICommandPostProcessor<Questionnaire, RevertVersionQuestionnaire>
+        ICommandPostProcessor<Questionnaire, RevertVersionQuestionnaire>,
+        ICommandPostProcessor<Questionnaire, UpdateAreaQuestion>
     {
         private IPlainStorageAccessor<User> accountStorage
             => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<User>>();
@@ -83,8 +84,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         private IPlainKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTackerStorage
             => ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireStateTracker>>();
 
-        private IQuestionnireHistotyVersionsService questionnireHistotyVersionsService 
-            => ServiceLocator.Current.GetInstance<IQuestionnireHistotyVersionsService>();
+        private IQuestionnireHistoryVersionsService questionnireHistoryVersionsService 
+            => ServiceLocator.Current.GetInstance<IQuestionnireHistoryVersionsService>();
 
         #region Questionnaire
 
@@ -373,9 +374,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         private void UpdateRoster(Guid questionnaireId, bool isRoster, Guid groupId, Guid responsibleId, QuestionnaireDocument questionnaireDocument)
         {
+            var questionnaire = questionnaireStateTackerStorage.GetById(questionnaireId.FormatGuid());
             if (isRoster)
             {
-                var questionnaire = questionnaireStateTackerStorage.GetById(questionnaireId.FormatGuid());
                 if (questionnaire.RosterState.ContainsKey(groupId))
                     return;
 
@@ -394,8 +395,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             }
             else
             {
-                var questionnaire = questionnaireStateTackerStorage.GetById(questionnaireId.FormatGuid());
-
                 if (questionnaire.GroupsState.ContainsKey(groupId))
                     return;
 
@@ -526,6 +525,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, UpdateTextQuestion command) => this.AddQuestionChanges(aggregate, command);
         public void Process(Questionnaire aggregate, UpdateMultiOptionQuestion command) => this.AddQuestionChanges(aggregate, command);
         public void Process(Questionnaire aggregate, UpdateSingleOptionQuestion command)=> this.AddQuestionChanges(aggregate, command);
+        public void Process(Questionnaire aggregate, UpdateAreaQuestion command) => this.AddQuestionChanges(aggregate, command);
 
         private void AddQuestionChanges(Questionnaire aggregate, AbstractUpdateQuestionCommand command)
         {
@@ -541,6 +541,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         private void MoveEntity(Guid questionnaireId, Guid entityId, Guid? targetGroupOrRosterId, Guid responsibleId, QuestionnaireDocument questionnaireDocument)
         {
             var questionnaire = questionnaireStateTackerStorage.GetById(questionnaireId.FormatGuid());
+
+            questionnaire.Parents[entityId] = targetGroupOrRosterId;
+            this.questionnaireStateTackerStorage.Store(questionnaire, questionnaireId.FormatGuid());
 
             var moveReferences = new List<QuestionnaireChangeReference>();
             if (targetGroupOrRosterId.HasValue)
@@ -646,7 +649,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             references.ForEach(r => r.QuestionnaireChangeRecord = questionnaireChangeItem);
             questionnaireChangeItem.References = references.ToHashSet();
-            questionnaireChangeItem.ResultingQuestionnaireDocument = questionnireHistotyVersionsService.GetResultingQuestionnaireDocument(questionnaireDocument);
+            questionnaireChangeItem.ResultingQuestionnaireDocument = questionnireHistoryVersionsService.GetResultingQuestionnaireDocument(questionnaireDocument);
 
             this.questionnaireChangeItemStorage.Store(questionnaireChangeItem, questionnaireChangeItem.QuestionnaireChangeRecordId);
         }

@@ -37,6 +37,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return this.inMemroyStorage.Values.AsQueryable().Count(predicate);
         }
 
+        public int Count() => this.inMemroyStorage.Values.Count;
+
         public void RemoveAll()
         {
             this.inMemroyStorage.Clear();
@@ -44,8 +46,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public IReadOnlyCollection<TEntity> FixedQuery(Expression<Func<TEntity, bool>> wherePredicate, Expression<Func<TEntity, int>> orderPredicate, int takeCount, int skip = 0)
         {
-            return this.inMemroyStorage.Values.AsQueryable().Where(wherePredicate).OrderBy(orderPredicate).Take(takeCount).ToReadOnlyCollection();
+            return this.inMemroyStorage.Values.AsQueryable().Where(wherePredicate).OrderBy(orderPredicate).Skip(skip).Take(takeCount).ToReadOnlyCollection();
         }
+
+        public IReadOnlyCollection<TResult> FixedQueryWithSelection<TResult>(
+            Expression<Func<TEntity, bool>> wherePredicate, Expression<Func<TEntity, int>> orderPredicate,
+            Expression<Func<TEntity, TResult>> selectPredicate, int takeCount, int skip = 0)
+            where TResult : class 
+            => this.inMemroyStorage.Values.AsQueryable().Where(wherePredicate).OrderBy(orderPredicate).Select(selectPredicate).Skip(skip).Take(takeCount).ToReadOnlyCollection();
 
         public void Remove(IEnumerable<TEntity> entities)
         {

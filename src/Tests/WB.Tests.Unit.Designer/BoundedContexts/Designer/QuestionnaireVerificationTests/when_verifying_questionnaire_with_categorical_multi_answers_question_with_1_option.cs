@@ -18,6 +18,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             {
                 PublicKey = questionId,
                 StataExportCaption = "var",
+                QuestionText = "test",
                 Answers = new List<Answer>() {new Answer() {AnswerValue = "1", AnswerText = "option text"}}
             });
          

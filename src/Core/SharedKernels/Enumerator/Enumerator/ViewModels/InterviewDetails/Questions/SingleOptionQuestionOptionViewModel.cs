@@ -13,20 +13,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public event EventHandler AnswerRemoved;
         public EnablementViewModel Enablement { get; set; }
 
-        public decimal Value { get; set; }
+        public int Value { get; set; }
 
         private string title;
         public string Title
         {
-            get { return this.title; }
-            set { this.RaiseAndSetIfChanged(ref this.title, value); }
+            get => this.title;
+            set => this.RaiseAndSetIfChanged(ref this.title, value);
         }
 
         private bool selected;
 
         public bool Selected
         {
-            get { return this.selected; }
+            get => this.selected;
 
             set
             {
@@ -41,19 +41,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
 
-        public IMvxCommand RemoveAnswerCommand
-        {
-            get
-            {
-                return new MvxCommand(OnAnswerRemoved);
-            }
-        }
+        public IMvxCommand RemoveAnswerCommand => new MvxCommand(OnAnswerRemoved);
 
         public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; set; }
 
         private void OnBeforeSelected()
         {
-            if (this.BeforeSelected != null) this.BeforeSelected.Invoke(this, EventArgs.Empty);
+            this.BeforeSelected?.Invoke(this, EventArgs.Empty);
         }
 
         protected virtual void OnAnswerRemoved()
@@ -67,9 +61,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         public bool Equals(SingleOptionQuestionOptionViewModel x, SingleOptionQuestionOptionViewModel y)
         {
-            return (x.Title == y.Title
-                    && x.Value == y.Value
-                    && x.Selected == y.Selected);
+            return x.Title == y.Title
+                   && x.Value == y.Value
+                   && x.Selected == y.Selected;
         }
 
         public int GetHashCode(SingleOptionQuestionOptionViewModel obj)

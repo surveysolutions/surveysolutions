@@ -42,9 +42,6 @@
       <HintPath>..\..\..\packages\AngleSharp.0.9.9\lib\net45\AngleSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Castle.Core">
-      <HintPath>..\..\..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
-    </Reference>
     <Reference Include="DotNetZip, Version=1.10.1.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\DotNetZip.1.10.1\lib\net20\DotNetZip.dll</HintPath>
       <Private>True</Private>
@@ -74,10 +71,6 @@
     </Reference>
     <Reference Include="Humanizer, Version=2.0.1.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Humanizer.Core.2.0.1\lib\dotnet\Humanizer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
@@ -186,10 +179,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Fetching\EagerFetch.cs" />
+    <Compile Include="Fetching\FetchRequest.cs" />
+    <Compile Include="Fetching\IFetchingProvider.cs" />
+    <Compile Include="Fetching\IFetchRequest.cs" />
+    <Compile Include="Fetching\NhFetchingProvider.cs" />
     <Compile Include="InitializationException.cs" />
     <Compile Include="Files\FileInfrastructureModule.cs" />
     <Compile Include="Files\Implementation\FileSystem\FileSystemIOAccessor.cs" />
     <Compile Include="Files\Implementation\FileSystem\ZipArchiveUtils.cs" />
+    <Compile Include="Ioc\ServiceLocatorLoggerProvider.cs" />
     <Compile Include="LegacyAssemblySettings.cs" />
     <Compile Include="Logging\NLogLogger.cs" />
     <Compile Include="Logging\NLogLoggerProvider.cs" />
@@ -202,6 +201,7 @@
     <Compile Include="Storage\Esent\Implementation\EsentCachedReadSideStorage.cs" />
     <Compile Include="Storage\EventSerializerSettings.cs" />
     <Compile Include="Storage\MainCoreAssemblyRedirectSerializationBaseBinder.cs" />
+    <Compile Include="Storage\NewtonInterviewAnswerJsonSerializer.cs" />
     <Compile Include="Storage\NewtonJsonSerializer.cs" />
     <Compile Include="Storage\NewToOldAssemblyRedirectSerializationBinder.cs" />
     <Compile Include="Storage\OldToNewAssemblyRedirectSerializationBinder.cs" />
@@ -251,6 +251,8 @@
     <Compile Include="Storage\Postgre\PostgresPlainStorageSettings.cs" />
     <Compile Include="Storage\Postgre\PostgresKeyValueModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\QueryableExtensions.cs" />
+    <Compile Include="Utils\WhereClouseHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -264,7 +266,7 @@
       <Name>WB.Core.GenericSubdomains.Portable</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
-      <Project>{553b4fc2-5fc7-4256-b14d-82758d64a3bd}</Project>
+      <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
       <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">

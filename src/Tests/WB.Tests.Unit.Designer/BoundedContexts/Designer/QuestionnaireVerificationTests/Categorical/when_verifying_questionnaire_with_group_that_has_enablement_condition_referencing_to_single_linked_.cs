@@ -28,14 +28,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                         {
                             PublicKey = linkedSourceQuestionId,
                             QuestionType = QuestionType.Text,
-                            StataExportCaption = "var"
+                            StataExportCaption = "var",
+                            QuestionText = "test"
                         }
                     }),
                 new SingleQuestion()
                 {
                     PublicKey = categoricalQuestionId,
                     StataExportCaption = "var1",
-                    LinkedToQuestionId = linkedSourceQuestionId
+                    LinkedToQuestionId = linkedSourceQuestionId,
+                    QuestionText = "test"
                 },
                 new Group()
                 {

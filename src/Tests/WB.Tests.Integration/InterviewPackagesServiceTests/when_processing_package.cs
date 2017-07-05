@@ -29,7 +29,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
     {
         Establish context = () =>
         {
-            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap) });
+            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap) }, true);
             plainPostgresTransactionManager = new PlainPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 
             pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
@@ -64,7 +64,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 synchronizedEvents:
                     new IEvent[]
                     {
-                        new InterviewOnClientCreated(Guid.NewGuid(), Guid.NewGuid(), 111),
+                        Create.Event.InterviewOnClientCreated(Guid.NewGuid(), 111),
                         new InterviewerAssigned(Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow),
                         new SupervisorAssigned(Guid.NewGuid(), Guid.NewGuid()),
                         new DateTimeQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[] { 2, 5, 8}, DateTime.UtcNow, DateTime.Today),  

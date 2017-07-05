@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -79,17 +80,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 {
                     Id = substitutedQuestionId,
                     Name = "question"
-                }.ToEnumerable(),
+                }.ToEnumerable().ToList(),
                 new SubstitutionVariable()
                 {
                     Id = substitutedRosterId,
                     Name = "rostertitle"
-                }.ToEnumerable(),
+                }.ToEnumerable().ToList(),
                 new SubstitutionVariable()
                 {
                     Id = substitutedVariableId,
                     Name = "variable"
-                }.ToEnumerable()
+                }.ToEnumerable().ToList()
             );
 
             var questionRawAnswer = "<b>question answer</b>";
@@ -125,9 +126,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         private SubstitionText CreateSubstitionText(
             Identity id,
             string template,
-            IEnumerable<SubstitutionVariable> ByQuestions,
-            IEnumerable<SubstitutionVariable> ByRosters,
-            IEnumerable<SubstitutionVariable> ByVariables)
+            List<SubstitutionVariable> ByQuestions,
+            List<SubstitutionVariable> ByRosters,
+            List<SubstitutionVariable> ByVariables)
         {
             SubstitionText text = new SubstitionText(id,
                 template,

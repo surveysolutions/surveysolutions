@@ -123,12 +123,6 @@
   <data name="DesignerQuestionnaires" xml:space="preserve">
     <value>问卷设计网站中的问卷</value>
   </data>
-  <data name="Import" xml:space="preserve">
-    <value>导入</value>
-  </data>
-  <data name="ImportInCensus" xml:space="preserve">
-    <value>以普查模式导入</value>
-  </data>
   <data name="LoginToDesignerError" xml:space="preserve">
     <value>未能连接到问卷设计网站。请检查网站是否可用并&lt;a href='{0}'&gt;重试&lt;/a&gt;</value>
   </data>
@@ -137,5 +131,47 @@
   </data>
   <data name="SignInToDesignerTitle" xml:space="preserve">
     <value>登录问卷设计网站</value>
+  </data>
+  <data name="Chapters" xml:space="preserve">
+    <value>部分</value>
+  </data>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>创建于</value>
+  </data>
+  <data name="Gropus" xml:space="preserve">
+    <value>子部分</value>
+  </data>
+  <data name="ImportAsNewVersion" xml:space="preserve">
+    <value>创建一个新版本（#{0}）</value>
+  </data>
+  <data name="ImportModePageTitle" xml:space="preserve">
+    <value>导入问卷：</value>
+  </data>
+  <data name="ImportModeTitle" xml:space="preserve">
+    <value>问卷导入模式</value>
+  </data>
+  <data name="LastModifiedAt" xml:space="preserve">
+    <value>上一次修改于</value>
+  </data>
+  <data name="ListOfMyQuestionnaires" xml:space="preserve">
+    <value>我的问卷列表</value>
+  </data>
+  <data name="QuestionnaireExists" xml:space="preserve">
+    <value>你已经导入了这份问卷</value>
+  </data>
+  <data name="Questions" xml:space="preserve">
+    <value>问题</value>
+  </data>
+  <data name="QuestionsWithConditions" xml:space="preserve">
+    <value>其中{0}个含有条件</value>
+  </data>
+  <data name="RegularImportSubTitle" xml:space="preserve">
+    <value>这将允许您创建包含识别数据的单个任务。</value>
+  </data>
+  <data name="RegularImportTitle" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="Rosters" xml:space="preserve">
+    <value>登记表</value>
   </data>
 </root>

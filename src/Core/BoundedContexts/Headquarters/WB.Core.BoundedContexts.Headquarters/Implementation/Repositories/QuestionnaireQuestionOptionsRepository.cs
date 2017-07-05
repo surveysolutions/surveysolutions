@@ -17,11 +17,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
         }
 
         public IEnumerable<CategoricalOption> GetOptionsForQuestion(QuestionnaireIdentity qestionnaireIdentity, 
-            Guid questionId, int? parentQuestionValue, string filter, Translation translation)
+            Guid questionId, int? parentQuestionValue, string searchFor, Translation translation)
         {
             var questionnaire = questionnaireRepository.GetQuestionnaire(qestionnaireIdentity, translation?.Name);
             
-            return questionnaire.GetOptionsForQuestionFromStructure(questionId, parentQuestionValue, filter);
+            return questionnaire.GetOptionsForQuestionFromStructure(questionId, parentQuestionValue, searchFor);
         }
 
         public CategoricalOption GetOptionForQuestionByOptionText(QuestionnaireIdentity qestionnaireIdentity, Guid questionId, string optionText, int? parentQuestionValue, Translation translation)

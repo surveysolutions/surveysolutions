@@ -162,6 +162,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Filters\ApiNoCacheAttribute.cs" />
     <Compile Include="Attributes\NoTransactionAttribute.cs" />
     <Compile Include="Captcha\ICaptchaService.cs" />
     <Compile Include="Captcha\NoCaptchaProvider.cs" />
@@ -194,7 +195,6 @@
     <Compile Include="Filters\ControlPanelAccessAttribute.cs" />
     <Compile Include="Filters\PlainApiTransactionFilter.cs" />
     <Compile Include="Filters\PlainTransactionFilter.cs" />
-    <Compile Include="Filters\PreventDoubleSubmitAttribute.cs" />
     <Compile Include="Filters\EnforceHttpsHandler.cs" />
     <Compile Include="Filters\ITokenVerifier.cs" />
     <Compile Include="Filters\RequireSecureConnectionAttribute.cs" />
@@ -246,10 +246,6 @@
       <Project>{D6616C1D-7C3A-4576-B82B-098721CD4417}</Project>
       <Name>WB.Core.SharedKernels.Questionnaire</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
-      <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>
-      <Name>WB.Infrastructure.Native</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -261,6 +257,7 @@
       <LastGenOutput>Captcha.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Captcha.zh.resx" />
     <EmbeddedResource Include="Resources\ErrorMessages.pt.resx" />
     <EmbeddedResource Include="Resources\ErrorMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>

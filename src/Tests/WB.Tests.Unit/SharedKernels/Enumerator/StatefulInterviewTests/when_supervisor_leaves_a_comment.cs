@@ -16,11 +16,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         {
             Guid questionid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             Guid supervisorId = Guid.Parse("11111111111111111111111111111111");
-            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                Create.Entity.TextQuestion(questionid, scope: QuestionScope.Hidden));
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion(questionid, scope: QuestionScope.Hidden));
 
-            var interview = Create.AggregateRoot.StatefulInterview(
-                questionnaire: Create.Entity.PlainQuestionnaire(questionnaire));
+            var interview = Create.AggregateRoot.StatefulInterview(questionnaire.PublicKey, Guid.NewGuid(), questionnaire);
 
             interview.AssignInterviewer(supervisorId, Guid.NewGuid(), DateTime.Now);
             interview.CommentAnswer(supervisorId, questionid, RosterVector.Empty, DateTime.Now, "in comment");
@@ -40,8 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.TextQuestion(questionid, scope: QuestionScope.Supervisor));
 
-            var interview = Create.AggregateRoot.StatefulInterview(
-                questionnaire: Create.Entity.PlainQuestionnaire(questionnaire));
+            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
 
             interview.AssignInterviewer(supervisorId, Guid.NewGuid(), DateTime.Now);
             interview.CommentAnswer(supervisorId, questionid, RosterVector.Empty, DateTime.Now, "in comment");
@@ -61,8 +58,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.TextQuestion(questionid, preFilled: true));
 
-            var interview = Create.AggregateRoot.StatefulInterview(
-                questionnaire: Create.Entity.PlainQuestionnaire(questionnaire));
+            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
 
             interview.AssignInterviewer(supervisorId, Guid.NewGuid(), DateTime.Now);
             interview.CommentAnswer(supervisorId, questionid, RosterVector.Empty, DateTime.Now, "in comment");

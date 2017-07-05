@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
@@ -70,11 +71,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewData, InterviewDeclaredValid>,
         IUpdateHandler<InterviewData, InterviewHardDeleted>,
         IUpdateHandler<InterviewData, AnswerRemoved>,
+        IUpdateHandler<InterviewData, QuestionsMarkedAsReadonly>,
 
         IUpdateHandler<InterviewData, VariablesChanged>,
         IUpdateHandler<InterviewData, VariablesDisabled>,
         IUpdateHandler<InterviewData, VariablesEnabled>,
-        IUpdateHandler<InterviewData, TranslationSwitched>
+        IUpdateHandler<InterviewData, TranslationSwitched>,
+        IUpdateHandler<InterviewData, AreaQuestionAnswered>
     {
         private readonly IUserViewFactory users;
         private readonly IQuestionnaireStorage questionnaireStorage;
@@ -280,6 +283,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     question.QuestionState = question.QuestionState | QuestionState.Flagged;
                 else
                     question.QuestionState &= ~QuestionState.Flagged;
+            });
+        }
+
+        private static InterviewData SetReadonlyStateForQuestion(InterviewData interview, decimal[] vector, Guid questionId)
+        {
+            return UpdateQuestion(interview, vector, questionId, (question) =>
+            {
+                question.QuestionState = question.QuestionState | QuestionState.Readonly;
             });
         }
 
@@ -821,6 +832,21 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             interview.CurrentLanguage = @event.Payload.Language;
             return interview;
+        }
+
+        public InterviewData Update(InterviewData state, IPublishedEvent<QuestionsMarkedAsReadonly> @event)
+        {
+            return @event.Payload.Questions.Aggregate(
+                    state,
+                    (document, question) => SetReadonlyStateForQuestion(document, question.RosterVector, question.Id));
+        }
+
+        public InterviewData Update(InterviewData state, IPublishedEvent<AreaQuestionAnswered> @event)
+        {
+            return this.SaveAnswer(state, @event.Payload.RosterVector, @event.Payload.QuestionId,
+                new Area(@event.Payload.Geometry, @event.Payload.MapName, @event.Payload.AreaSize, @event.Payload.Length, 
+                @event.Payload.Coordinates, @event.Payload.DistanceToEditor), 
+                true);
         }
     }
 }

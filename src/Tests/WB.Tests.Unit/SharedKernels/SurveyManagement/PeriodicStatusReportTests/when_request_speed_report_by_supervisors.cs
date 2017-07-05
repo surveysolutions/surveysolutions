@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Tests.Abc;
+using WB.UI.Headquarters.Controllers;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PeriodicStatusReportTests
 {
-    internal class when_request_speed_report_by_supervisors : PeriodicStatusReportControllerTestContext
+    internal class when_request_speed_report_by_supervisors
     {
         Establish context = () =>
         {
-            periodicStatusReportController = CreatePeriodicStatusReportController();
+            reportController = Create.Controller.ReportsController();
         };
 
         Because of = () =>
-            result = periodicStatusReportController.SpeedBySupervisors() as ViewResult;
+            result = reportController.SpeedBySupervisors() as ViewResult;
 
         It should_active_page_be_SpeedOfCompletedInterviews = () =>
             ((MenuItem)result.ViewBag.ActivePage).ShouldEqual(MenuItem.SpeedOfCompletingInterviews);
@@ -36,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PeriodicStatusReportTests
         It should_ReportName_be_Speed = () =>
            ((PeriodicStatusReportModel)result.Model).ReportName.ShouldEqual("Speed");
 
-        private static PeriodicStatusReportController periodicStatusReportController;
+        private static ReportsController reportController;
         private static ViewResult result;
     }
 }

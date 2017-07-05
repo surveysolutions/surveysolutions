@@ -117,9 +117,15 @@ namespace Main.Core.Documents
             int indexOfEntity = this.children.FindIndex(child => child.PublicKey == id);
             this.children[indexOfEntity] = newEntity;
             newEntity.SetParent(this);
+            this.LastEntryDate = DateTime.UtcNow;
         }
 
         public long LastEventSequence { get; set; }
+
+        public bool IsUsingExpressionStorage { get; set; }
+
+        // fill in before export to HQ or Tester
+        public List<Guid> ExpressionsPlayOrder { get; set; }
 
         public void Insert(int index, IComposite c, Guid? parentId)
         {
@@ -134,12 +140,14 @@ namespace Main.Core.Documents
             var group = this.Find<Group>(parentId.Value);
 
             @group?.Insert(index, c, parentId);
+            this.LastEntryDate = DateTime.UtcNow;
         }
 
         public void RemoveChild(Guid childId)
         {
             IComposite child = this.children.Find(c => c.PublicKey == childId);
             this.children.Remove(child);
+            this.LastEntryDate = DateTime.UtcNow;
         }
 
         public void Add(IComposite c, Guid? parentKey)
@@ -161,6 +169,7 @@ namespace Main.Core.Documents
             }
             
             c.ConnectChildrenWithParent();
+            this.LastEntryDate = DateTime.UtcNow;
         }
 
         public void UpdateQuestion(Guid questionId, Action<IQuestion> update)
@@ -169,6 +178,7 @@ namespace Main.Core.Documents
 
             if (question != null)
                 update(question);
+            this.LastEntryDate = DateTime.UtcNow;
         }
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
@@ -211,6 +221,7 @@ namespace Main.Core.Documents
 
             var entityParent = this.GetParentById(oldEntityId);
             entityParent?.ReplaceChildEntityById(oldEntityId, newEntity);
+            this.LastEntryDate = DateTime.UtcNow;
         }
 
         public void UpdateGroup(Guid groupId, string title, string variableName, string description, string conditionExpression, bool hideIfDisabled)
@@ -231,6 +242,7 @@ namespace Main.Core.Documents
 
             if (@group != null)
                 update(@group);
+            this.LastEntryDate = DateTime.UtcNow;
         }
 
         public void RemoveEntity(Guid entityId)
@@ -241,6 +253,7 @@ namespace Main.Core.Documents
             IComposite entityParent = this.GetParentById(entityId);
 
             entityParent?.RemoveChild(entityId);
+            this.LastEntryDate = DateTime.UtcNow;
         }
         
         private IComposite GetParentOfItem(IComposite item)
@@ -419,6 +432,7 @@ namespace Main.Core.Documents
 
             sourceContainer.RemoveChild(itemId);
             targetContainer.Insert(targetIndex, item, targetGroupId);
+            this.LastEntryDate = DateTime.UtcNow;
         }
 
         private IComposite GetItemOrLogWarning(Guid itemId)
@@ -477,58 +491,6 @@ namespace Main.Core.Documents
             this.Translations.ForEach(x => doc.Translations.Add(x.Clone()));
 
             return doc;
-        }
-
-        public void CheckIsQuestionHeadAndUpdateRosterProperties(Guid itemToCheckId, Guid? groupPublicKey)
-        {
-            IQuestion item = this.GetItemOrLogWarning(itemToCheckId) as IQuestion;
-            if (item != null && item.Capital)
-            {
-                RemoveHeadPropertiesFromRosters(itemToCheckId);
-                MoveHeadQuestionPropertiesToRoster(itemToCheckId, groupPublicKey);
-            }
-        }
-
-        public void MoveHeadQuestionPropertiesToRoster(Guid questionId, Guid? groupPublicKey)
-        {
-            if (groupPublicKey == null)
-            {
-                IComposite questionParent = this.GetParentById(questionId);
-                groupPublicKey = questionParent.PublicKey;
-            }
-
-            var foundGroup = this.Find<IGroup>(group => group.PublicKey == groupPublicKey).FirstOrDefault() as Group;
-            if (foundGroup == null)
-            {
-                return;
-            }
-            if (foundGroup.IsRoster)
-            {
-                foundGroup.RosterTitleQuestionId = questionId;
-            }
-
-            if (foundGroup.RosterSizeQuestionId != null)
-            {
-                var scopeGroups = this.Find<IGroup>(group => group.RosterSizeQuestionId == foundGroup.RosterSizeQuestionId);
-                foreach (var scopeGroup in scopeGroups)
-                {
-                    var @group = scopeGroup as Group;
-                    if (@group != null && @group.IsRoster)
-                        @group.RosterTitleQuestionId = questionId;
-                }
-            }
-        }
-
-        public void RemoveHeadPropertiesFromRosters(Guid questionId)
-        {
-            var scopeGroups = this.Find<IGroup>(group => group.RosterTitleQuestionId == questionId);  
-          
-            foreach (var scopeGroup in scopeGroups)
-                    {
-                        var @group = scopeGroup as Group;
-                        if (@group != null)
-                            @group.RosterTitleQuestionId = null;
-                    }
         }
     }
 }

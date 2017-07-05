@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -41,13 +42,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 expressionProcessorStatePrototypeProvider: expressionProcessorStatePrototypeProvider,
                 textFactory: textFactory);
 
-            interview.CreateInterview(
-                questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
-                1,
-                supervisorId ?? new Guid("D222D222D222D222D222D222D222D222"),
-                answersToFeaturedQuestions ?? new Dictionary<Guid, AbstractAnswer>(),
-                answersTime ?? new DateTime(2012, 12, 20),
-                userId ?? new Guid("F000F000F000F000F000F000F000F000"));
+            interview.CreateInterview(new CreateInterviewCommand(interview.EventSourceId, userId ?? new Guid("F000F000F000F000F000F000F000F000"), questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"), 
+                answersToFeaturedQuestions ?? new Dictionary<Guid, AbstractAnswer>(), answersTime ?? new DateTime(2012, 12, 20), supervisorId ?? new Guid("D222D222D222D222D222D222D222D222"), 1, null));
 
             return interview;
         }

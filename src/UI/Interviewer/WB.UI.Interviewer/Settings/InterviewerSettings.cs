@@ -205,6 +205,11 @@ namespace WB.UI.Interviewer.Settings
         public string RestoreFolder { get; }
         public string BandwidthTestUri { get; } = @"Dependencies/img/logo.png";
 
+        public string InstallationFilePath => Application.Context.PackageManager
+            .GetInstalledApplications(PackageInfoFlags.MetaData)
+            .FirstOrDefault(x => x.PackageName == Application.Context.PackageName)
+            .SourceDir;
+
         private void SaveCurrentSettings(Action<ApplicationSettingsView> onChanging)
         {
             var settings = this.CurrentSettings;

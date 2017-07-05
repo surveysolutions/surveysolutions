@@ -9,7 +9,8 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     {
         public SynchronizationMetadataApplied(Guid userId, Guid questionnaireId, long questionnaireVersion, InterviewStatus status,
             AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, bool createdOnClient, string comments,
-            DateTime? rejectedDateTime, DateTime? interviewerAssignedDateTime)
+            DateTime? rejectedDateTime, DateTime? interviewerAssignedDateTime,
+            bool usesExpressionStorage = false)
             : base(userId)
         {
             this.InterviewerAssignedDateTime = interviewerAssignedDateTime;
@@ -20,6 +21,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             this.Status = status;
             this.FeaturedQuestionsMeta = featuredQuestionsMeta;
             this.CreatedOnClient = createdOnClient;
+            this.UsesExpressionStorage = usesExpressionStorage;
         }
 
         public Guid QuestionnaireId { get; private set; }
@@ -33,5 +35,6 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public string Comments { get; private set; }
         public DateTime? RejectedDateTime { get; private set; }
         public DateTime? InterviewerAssignedDateTime { get; private set; }
+        public bool UsesExpressionStorage { get; set; }
     }
 }

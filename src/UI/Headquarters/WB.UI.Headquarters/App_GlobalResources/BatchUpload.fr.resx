@@ -198,9 +198,6 @@
   <data name="ImportInterviews_SelectButtonText" xml:space="preserve">
     <value>Sélectionner</value>
   </data>
-  <data name="ImportInterviews_SelectSupervisor" xml:space="preserve">
-    <value>Sélectionner le superviseur</value>
-  </data>
   <data name="ImportSample" xml:space="preserve">
     <value>Importer l'échantillon</value>
   </data>

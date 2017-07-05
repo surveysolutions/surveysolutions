@@ -2,6 +2,7 @@
 using Ninject;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Commands.Account;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
@@ -25,16 +26,15 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.CommandBus;
 using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
+using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
+using WB.Core.BoundedContexts.Designer.Services.TopologicalSorter;
 using WB.Core.BoundedContexts.Designer.Translations;
-using WB.Core.BoundedContexts.Designer.Views.AllowedAddresses;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
@@ -69,6 +69,7 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IAccountListViewFactory>().To<AccountListViewFactory>();
             this.Bind<IAccountViewFactory>().To<AccountViewFactory>();
             this.Bind<IAllowedAddressService>().To<AllowedAddressService>();
+            this.Bind<IQuestionnaireCompilationVersionService>().To<QuestionnaireCompilationVersionService>();
             this.Bind<IIpAddressProvider>().To<IpAddressProvider>();
             this.Bind<ITranslationsService>().To<TranslationsService>();
             this.Bind<IQuestionnaireTranslator>().To<QuestionnaireTranslator>();
@@ -81,6 +82,9 @@ namespace WB.Core.BoundedContexts.Designer
 
             this.Bind<IDesignerEngineVersionService>().To<DesignerEngineVersionService>().InSingletonScope();
             this.Bind<ICodeGenerator>().To<CodeGenerator>();
+            this.Bind<ICodeGeneratorV2>().To<CodeGeneratorV2>();
+            this.Bind<IQuestionTypeToCSharpTypeMapper>().To<QuestionTypeToCSharpTypeMapper>();
+            this.Bind<ICodeGenerationModelsFactory>().To<CodeGenerationModelsFactory>();
             this.Bind<ILookupTableService>().To<LookupTableService>();
             this.Bind<IAttachmentService>().To<AttachmentService>();
             this.Bind(typeof(ITopologicalSorter<>)).To(typeof(TopologicalSorter<>));
@@ -139,6 +143,7 @@ namespace WB.Core.BoundedContexts.Designer
                 .Handles<UpdateGpsCoordinatesQuestion>((command, aggregate) => aggregate.UpdateGpsCoordinatesQuestion(command), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
                 .Handles<UpdateMultimediaQuestion>((command, aggregate) => aggregate.UpdateMultimediaQuestion(command.QuestionId, command.Title, command.VariableName, command.VariableLabel, command.EnablementCondition, command.HideIfDisabled, command.Instructions, command.ResponsibleId, command.Scope, command.Properties), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
                 .Handles<UpdateMultiOptionQuestion>((command, aggregate) => aggregate.UpdateMultiOptionQuestion(command.QuestionId, command.Title, command.VariableName, command.VariableLabel, command.Scope, command.EnablementCondition, command.HideIfDisabled, command.Instructions, command.ResponsibleId, command.Options, command.LinkedToEntityId, command.AreAnswersOrdered, command.MaxAllowedAnswers, command.YesNoView, command.ValidationConditions, command.LinkedFilterExpression, command.Properties), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
+                .Handles<UpdateAreaQuestion>((command, aggregate) => aggregate.UpdateAreaQuestion(command), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
                 .Handles<UpdateNumericQuestion>((command, aggregate) => aggregate.UpdateNumericQuestion(command), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
                 .Handles<UpdateQRBarcodeQuestion>((command, aggregate) => aggregate.UpdateQRBarcodeQuestion(command), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
                 .Handles<UpdateQuestionnaire>(aggregate => aggregate.UpdateQuestionnaire, config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())

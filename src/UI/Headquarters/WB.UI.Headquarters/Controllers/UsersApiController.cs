@@ -6,7 +6,6 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
-using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -45,12 +44,12 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [CamelCase]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public DataTableResponse<InterviewerListItem> AllInterviewers([FromBody] DataTableRequestWithFilter filter)
+        public DataTableResponse<InterviewerListItem> AllInterviewers([FromBody] DataTableRequestWithFilter reqest)
         {
             Guid? supervisorId = null;
 
-            if (!string.IsNullOrWhiteSpace(filter.SupervisorName))
-                supervisorId = this.userManager.FindByName(filter.SupervisorName)?.Id;
+            if (!string.IsNullOrWhiteSpace(reqest.SupervisorName))
+                supervisorId = this.userManager.FindByName(reqest.SupervisorName)?.Id;
 
             // Headquarter and Admin can view interviewers by any supervisor
             // Supervisor can view only their interviewers
@@ -60,18 +59,18 @@ namespace WB.UI.Headquarters.Controllers
 
             var interviewerApkVersion = interviewerVersionReader.Version;
 
-            var interviewers = this.usersFactory.GetInterviewers(filter.PageIndex, 
-                filter.PageSize, 
-                filter.GetSortOrder(), 
-                filter.Search.Value, 
-                filter.Archived, 
-                filter.InterviewerOptionFilter, 
+            var interviewers = this.usersFactory.GetInterviewers(reqest.PageIndex, 
+                reqest.PageSize, 
+                reqest.GetSortOrder(), 
+                reqest.Search.Value, 
+                reqest.Archived, 
+                reqest.InterviewerOptionFilter, 
                 interviewerApkVersion,
                 supervisorId);
             
             return new DataTableResponse<InterviewerListItem>
             {
-                Draw = filter.Draw + 1,
+                Draw = reqest.Draw + 1,
                 RecordsTotal = interviewers.TotalCount,
                 RecordsFiltered = interviewers.TotalCount,
                 Data = interviewers.Items.Select(x => new InterviewerListItem

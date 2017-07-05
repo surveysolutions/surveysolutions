@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 {
@@ -74,9 +75,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             QuestionnaireListInputModel input)
         {
             var result = _.Where(x => x.IsDeleted == false);
-            if (!string.IsNullOrEmpty(input.Filter))
+            if (!string.IsNullOrEmpty(input.SearchFor))
             {
-                var filterLowerCase = input.Filter.Trim().ToLower();
+                var filterLowerCase = input.SearchFor.Trim().ToLower();
                 result =
                     result.Where(
                         x => x.Title.ToLower().Contains(filterLowerCase) || x.CreatorName.ToLower().Contains(filterLowerCase));

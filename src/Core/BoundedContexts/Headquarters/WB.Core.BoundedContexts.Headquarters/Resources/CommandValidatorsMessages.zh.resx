@@ -120,4 +120,7 @@
   <data name="UserDontHavePermissionsToAnswer" xml:space="preserve">
     <value>只有作为负责人的督导员才可以回答督导员问题</value>
   </data>
+  <data name="QuestionnaireNameUniqueFormat" xml:space="preserve">
+    <value>您已经从问卷设计网站中导入了另外一个标题为“{0}”的问卷。如果您仍然要导入这个问卷，请在问卷设计网站中将问卷改为一个不同的名称。</value>
+  </data>
 </root>

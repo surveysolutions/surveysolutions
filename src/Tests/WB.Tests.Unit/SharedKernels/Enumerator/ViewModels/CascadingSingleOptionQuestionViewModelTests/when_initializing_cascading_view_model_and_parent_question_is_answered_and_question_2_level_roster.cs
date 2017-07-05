@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.SelectedObject.ShouldBeNull();
 
         It should_not_set_filter_text = () =>
-            cascadingModel.FilterText.ShouldBeEmpty();
+            cascadingModel.FilterText.ShouldBeNull();
 
         It should_set_not_empty_list_in_AutoCompleteSuggestions = () =>
             cascadingModel.AutoCompleteSuggestions.ShouldNotBeEmpty();

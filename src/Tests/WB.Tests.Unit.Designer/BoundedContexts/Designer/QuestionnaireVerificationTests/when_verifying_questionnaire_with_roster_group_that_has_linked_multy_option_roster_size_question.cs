@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
                     Children = new IComposite[]
                     {
-                        new NumericQuestion()
+                        new NumericQuestion("test")
                         {
                             PublicKey = referencedQuestionId,
                             QuestionType = QuestionType.Numeric,

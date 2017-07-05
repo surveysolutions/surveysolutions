@@ -13,12 +13,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
     {
         Establish context = () =>
         {
-            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[] {
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[] {
                 Create.Entity.NumericIntegerQuestion(numericId, variable: "n"),
                 Create.Entity.StaticText(staticTextId, validationConditions: new List<ValidationCondition> { Create.Entity.ValidationCondition("n == 2")})
-            }));
+            });
 
-            var questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), questionnaire);
+            var questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
 
             var statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
             statefulInterview.AnswerNumericIntegerQuestion(Guid.NewGuid(), numericId, RosterVector.Empty, DateTime.Now, 3);

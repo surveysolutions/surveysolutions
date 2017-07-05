@@ -12,24 +12,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_linked_question_reference_on_question_not_under_propagated_group : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             linkedQuestionId = Guid.Parse("10000000000000000000000000000000");
             notUnderPropagatedGroupLinkingQuestionId = Guid.Parse("12222222222222222222222222222222");
             questionnaire = CreateQuestionnaireDocument(
-                new NumericQuestion
-            {
-                PublicKey = notUnderPropagatedGroupLinkingQuestionId,
-                StataExportCaption = "var1",
-                QuestionType = QuestionType.Numeric
-            },
-                new SingleQuestion()
-            {
-                PublicKey = linkedQuestionId,
-                LinkedToQuestionId = notUnderPropagatedGroupLinkingQuestionId,
-                StataExportCaption = "var2",
-                Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
-            });
+                Create.NumericIntegerQuestion(
+                    notUnderPropagatedGroupLinkingQuestionId,
+                    variable: "var1"
+                ),
+                Create.SingleQuestion(
+                    linkedQuestionId,
+                    linkedToQuestionId: notUnderPropagatedGroupLinkingQuestionId,
+                    variable: "var2",
+                    options: new List<Answer>
+                    {
+                        new Answer() {AnswerValue = "1", AnswerText = "opt 1"},
+                        new Answer() {AnswerValue = "2", AnswerText = "opt 2"}
+                    }
+                ));
             verifier = CreateQuestionnaireVerifier();
         };
 
@@ -40,7 +41,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages.Count().ShouldEqual(1);
 
         It should_return_message_with_code__WB0013 = () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0013");
+            verificationMessages.ShouldContainError("WB0013");
 
         It should_return_message_with_two_references = () =>
             verificationMessages.Single().References.Count().ShouldEqual(2);

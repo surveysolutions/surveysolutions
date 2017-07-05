@@ -55,18 +55,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Because of = () =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_1_message = () =>
-            verificationMessages.Count().ShouldEqual(2);
-
         It should_return_first_error_with_code__WB0261 = () =>
-            verificationMessages.First().Code.ShouldEqual("WB0261");
+            verificationMessages.ShouldContainError("WB0261");
 
         It should_return_first_error_with_code__WB0262 = () =>
-            verificationMessages.Second().Code.ShouldEqual("WB0262");
+            verificationMessages.ShouldContainError("WB0262");
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
-        private static Guid rosterGroupId = Guid.Parse("10000000000000000000000000000000");
     }
 }

@@ -697,12 +697,14 @@
                 question.title = data.title;
                 question.variable = data.variable;
                 question.type = data.type;
-                question.linkedToQuestionId = data.linkedToQuestionId;
                 question.hasValidation = data.hasValidation;
                 question.hasCondition = data.hasCondition;
+                question.linkedToEntityId = data.linkedToEntityId;
+                question.linkedToType = data.linkedToType;
+                question.isInteger = data.isInteger;
+                question.yesNoView = data.yesNoView;
 
-                $rootScope.addOrUpdateLocalVariable(data.itemId, data.variable);
-
+                $rootScope.updateVariableTypes(question);
             });
 
             $rootScope.$on('staticTextUpdated', function (event, data) {
@@ -719,7 +721,8 @@
                 if (_.isNull(variable)) return;
                 variable.variableData.name = data.name;
                 variable.variableData.label = data.label;
-                $rootScope.addOrUpdateLocalVariable(data.itemId, data.name);
+                $rootScope.updateSelfVariable(data.type);
+                $rootScope.addOrUpdateLocalVariable(data.itemId, data.name, data.type);
             });
 
             $rootScope.$on('groupUpdated', function (event, data) {
@@ -739,8 +742,8 @@
                 roster.title = data.title;
                 roster.variable = data.variable;
                 roster.hasCondition = data.hasCondition;
-
-                $rootScope.addOrUpdateLocalVariable(data.itemId, data.variable);
+                $rootScope.updateSelfVariable(data.type);
+                $rootScope.addOrUpdateLocalVariable(data.itemId, data.variable, data.type);
             });
         }
     );

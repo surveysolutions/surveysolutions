@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 {
@@ -23,9 +24,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         {
             var inteviewsGroupByTemplateAndStatus = this.interviewSummaryReader.Query(_ =>
             {
-                IQueryable<InterviewSummary> filetredInterviews = ApplyFilter(input, _);
+                IQueryable<InterviewSummary> filteredInterviews = ApplyFilter(input, _);
 
-                var interviews = (from f in filetredInterviews
+                var interviews = (from f in filteredInterviews
                                  group f by new {f.QuestionnaireId, f.QuestionnaireVersion, f.QuestionnaireTitle, f.Status} into g
                                  select new CounterObject
                                  {

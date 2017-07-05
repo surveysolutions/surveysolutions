@@ -293,6 +293,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     return "barcode";
                 case QuestionType.Multimedia:
                     return "picture";
+                case QuestionType.Area:
+                    return "area";
                 default:
                     return string.Empty;
             }

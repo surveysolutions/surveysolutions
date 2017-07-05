@@ -5,6 +5,7 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -40,11 +41,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             eventContext = new EventContext();
 
+            command = Create.Command.CreateInterviewCommand(questionnaireId, 1, supervisorId,
+                answersToFeaturedQuestions, userId);
             interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>
-            interview.CreateInterview(questionnaireId, 1, supervisorId, answersToFeaturedQuestions, DateTime.Now, userId);
+            interview.CreateInterview(command);
 
         It should_raise_RosterInstancesAdded_event_with_3_instances = () =>
             eventContext.GetEvent<RosterInstancesAdded>().Instances.Count().ShouldEqual(3);
@@ -65,5 +68,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid supervisorId;
         private static Guid fixedRosterId;
         private static Interview interview;
+        private static CreateInterviewCommand command;
     }
 }

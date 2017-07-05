@@ -126,4 +126,18 @@
   <data name="PL0024_DataWasNotFound" xml:space="preserve">
     <value>Загруженные данные не обнаружены</value>
   </data>
+  <data name="PL0035_QuantityNotParsed" xml:space="preserve">
+    <value>Только целые значения разрешины.</value>
+    <comment>Только целые значения разрешины.</comment>
+  </data>
+  <data name="PL0036_QuantityShouldBePositive" xml:space="preserve">
+    <value>Количество должно быть больше 0.</value>
+    <comment>Количество должно быть больше 0.</comment>
+  </data>
+  <data name="PL0037_ColumnIsNotIdentifying" xml:space="preserve">
+    <value>Колонка должна быть связана только с идентифицирующим вопросом</value>
+  </data>
+  <data name="PL0038_UnsupportedAreaQuestion" xml:space="preserve">
+    <value>Воспрос измерения площади не может быть загружен.</value>
+  </data>
 </root>

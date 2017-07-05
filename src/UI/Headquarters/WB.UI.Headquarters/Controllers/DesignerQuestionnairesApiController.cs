@@ -44,10 +44,10 @@ namespace WB.UI.Headquarters.Controllers
                 credentials: this.designerUserCredentials.Get(),
                 queryString: new
                 {
-                    Filter = request.Search.Value,
                     PageIndex = request.PageIndex,
                     PageSize = request.PageSize,
-                    SortOrder = request.GetSortOrder()
+                    SortOrder = request.GetSortOrder(),
+                    Filter = request.Search.Value
                 });
 
             return new DataTableResponse<QuestionnaireToBeImported>

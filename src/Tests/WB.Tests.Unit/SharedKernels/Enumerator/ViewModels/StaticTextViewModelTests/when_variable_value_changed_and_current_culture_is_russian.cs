@@ -11,7 +11,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Tests.Abc;
 using It = Machine.Specifications.It;
@@ -20,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
 {
     internal class when_variable_value_changed_and_current_culture_is_russian : StaticTextViewModelTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             var substitutedVariable1Identity = new Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
             var substitutedVariable2Identity = new Identity(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), RosterVector.Empty);
@@ -30,14 +29,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
 
             changedCulture = new ChangeCurrentCulture(new CultureInfo("ru-Ru"));
 
-            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Entity.StaticText(publicKey: staticTextIdentity.Id, text: $"Your first variable is %{substitutedVariable1Name}% and second is %{substitutedVariable2Name}%"),
                 Create.Entity.Variable(variableName: substitutedVariable1Name, id: substitutedVariable1Identity.Id),
                 Create.Entity.Variable(variableName: substitutedVariable2Name, id: substitutedVariable2Identity.Id)
-            }));
+            });
 
-            interview = Create.AggregateRoot.StatefulInterview(questionnaire.QuestionnaireId, Guid.NewGuid(), questionnaire);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaire.PublicKey, Guid.NewGuid(), questionnaire);
             interview.Apply(Create.Event.VariablesChanged(new[]
             {
                 new ChangedVariable(substitutedVariable1Identity,  new DateTime(2016, 1, 31)),
@@ -47,13 +46,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interview.EventSourceId.FormatGuid()) == interview);
 
-            var questionnaireRepository = new Mock<IQuestionnaireStorage>();
-            questionnaireRepository.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(questionnaire);
+            var questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
 
             ILiteEventRegistry registry = Create.Service.LiteEventRegistry();
             liteEventBus = Create.Service.LiteEventBus(registry);
 
-            viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository, registry);
+            viewModel = CreateViewModel(questionnaireRepository, interviewRepository, registry);
             viewModel.Init(interview.EventSourceId.FormatGuid(), staticTextIdentity, null);
         };
 

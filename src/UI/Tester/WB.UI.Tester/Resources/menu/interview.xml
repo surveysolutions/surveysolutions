@@ -19,7 +19,8 @@
   </item>
   <item
       android:id="@+id/interview_reload"
-      local:showAsAction="never" />
+      android:icon="@drawable/dashboard_refresh_icon"
+      local:showAsAction="ifRoom" />
   <item
       android:id="@+id/interview_settings"
       local:showAsAction="never" />

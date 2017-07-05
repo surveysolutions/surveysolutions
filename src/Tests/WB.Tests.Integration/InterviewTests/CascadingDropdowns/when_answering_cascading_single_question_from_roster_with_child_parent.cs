@@ -8,7 +8,7 @@ using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using It = Machine.Specifications.It;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 {
@@ -31,30 +31,30 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 var topRosterId = Guid.Parse("44444444444444444444444444444444");
 
 
-                var questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Abc.Create.Entity.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
+                var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Create.Entity.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
                     {
-                         Abc.Create.Entity.Option(value: "1", text: "parent option 1"),
-                         Abc.Create.Entity.Option(value: "2", text: "parent option 2")
+                         Create.Entity.Option("1", "parent option 1"),
+                         Create.Entity.Option("2", "parent option 2")
                     }),
-                    Abc.Create.Entity.Roster(topRosterId,
+                    Create.Entity.Roster(topRosterId,
                         variable: "varRoster",
                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
                         fixedTitles: new[] { "a", "b" },
                         children: new List<IComposite>
                         {
-                             Abc.Create.Entity.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
+                             Create.Entity.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
                                 options:
                                     new List<Answer>
                                     {
-                                         Abc.Create.Entity.Option(value: "1", text: "child 1 for parent option 1", parentValue: "1"),
-                                         Abc.Create.Entity.Option(value: "3", text: "child 1 for parent option 2", parentValue: "2")
+                                         Create.Entity.Option("1", "child 1 for parent option 1", "1"),
+                                         Create.Entity.Option("3", "child 1 for parent option 2", "2")
                                     }
                                 )
                         })
                     );
 
-                Interview interview = SetupInterview(questionnaire);
+                Interview interview = SetupInterviewWithExpressionStorage(questionnaire);
 
                 interview.AnswerSingleOptionQuestion(actorId, parentSingleOptionQuestionId, RosterVector.Empty, DateTime.Now, 1);
 

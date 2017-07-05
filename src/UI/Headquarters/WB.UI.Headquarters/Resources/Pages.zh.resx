@@ -133,7 +133,7 @@
     <value>督导员已审核通过</value>
   </data>
   <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
-    <value>通过审核</value>
+    <value>审核通过</value>
   </data>
   <data name="ApproveRejectPartialView_ApproveLabel" xml:space="preserve">
     <value>将访谈通过审核</value>
@@ -343,13 +343,13 @@
     <value>调查员：{0}</value>
   </data>
   <data name="Interviewers_ActiveUsers" xml:space="preserve">
-    <value>活动的用户</value>
+    <value>活动的调查员</value>
   </data>
   <data name="Interviewers_Archive" xml:space="preserve">
     <value>归档</value>
   </data>
   <data name="Interviewers_ArchivedUsers" xml:space="preserve">
-    <value>归档的用户</value>
+    <value>已归档的调查员</value>
   </data>
   <data name="Interviewers_ArchiveInterviewers" xml:space="preserve">
     <value>调查员将被归档。</value>
@@ -388,7 +388,7 @@
     <value>取消归档</value>
   </data>
   <data name="Interviewers_UserNameTitle" xml:space="preserve">
-    <value>名称</value>
+    <value>用户名</value>
   </data>
   <data name="InterviewHistory_Header" xml:space="preserve">
     <value>访谈历史</value>
@@ -563,5 +563,329 @@
   </data>
   <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
     <value>已连接到设备</value>
+  </data>
+  <data name="AccountManage_ChangePassword" xml:space="preserve">
+    <value>更改密码</value>
+  </data>
+  <data name="AccountManage_ChangePasswordHelp" xml:space="preserve">
+    <value>请使用下面的账号更改密码</value>
+  </data>
+  <data name="AccountManage_EditPublicInformation" xml:space="preserve">
+    <value>编辑详细信息</value>
+  </data>
+  <data name="AccountManage_Login" xml:space="preserve">
+    <value>登录</value>
+  </data>
+  <data name="AccountManage_Role" xml:space="preserve">
+    <value>角色</value>
+  </data>
+  <data name="AccountManage_Title" xml:space="preserve">
+    <value>编辑{0}档案</value>
+  </data>
+  <data name="ConfirmationNeededTitle" xml:space="preserve">
+    <value>需要确认</value>
+  </data>
+  <data name="FilterTitle" xml:space="preserve">
+    <value>过滤器</value>
+  </data>
+  <data name="GetLatestApp" xml:space="preserve">
+    <value>下载最新的调查员程序</value>
+  </data>
+  <data name="InstallationInstruction" xml:space="preserve">
+    <value>安装指南</value>
+  </data>
+  <data name="InterviewDetails_DefaultTranslation" xml:space="preserve">
+    <value>原始</value>
+  </data>
+  <data name="InterviewDetails_NoItems" xml:space="preserve">
+    <value>未找到满足过滤器的项目</value>
+  </data>
+  <data name="InterviewDetails_TranslationLabel" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="InterviewerProfile_AndroidVersion" xml:space="preserve">
+    <value>安卓版本</value>
+  </data>
+  <data name="InterviewerProfile_Approved" xml:space="preserve">
+    <value>已完成的访谈（完成且被总部审核通过）</value>
+  </data>
+  <data name="InterviewerProfile_AssignedToFormat" xml:space="preserve">
+    <value>{0}（督导员：{1}）</value>
+  </data>
+  <data name="InterviewerProfile_AverageSyncSpeed" xml:space="preserve">
+    <value>平均同步速度</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatus" xml:space="preserve">
+    <value>电池状态（%）</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatus_SaverIsOff" xml:space="preserve">
+    <value>关</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatus_SaverIsOn" xml:space="preserve">
+    <value>开</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatusFormat" xml:space="preserve">
+    <value>{0}%，电源：{1}，省电模式：{2}</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionMobileFormat" xml:space="preserve">
+    <value>类型：{0} {1}，操作员：{2}</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionSpeed" xml:space="preserve">
+    <value>连接速度</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionType" xml:space="preserve">
+    <value>连接类型</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
+    <value>类型：{0}</value>
+  </data>
+  <data name="InterviewerProfile_DatabaseInfo" xml:space="preserve">
+    <value>数据库</value>
+  </data>
+  <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
+    <value>已上传{0}，已下载{1}</value>
+  </data>
+  <data name="InterviewerProfile_DeviceAndConnectionStatistics" xml:space="preserve">
+    <value>设备和连接统计</value>
+  </data>
+  <data name="InterviewerProfile_DeviceDate" xml:space="preserve">
+    <value>同步开始时的设备时间</value>
+  </data>
+  <data name="InterviewerProfile_DeviceId" xml:space="preserve">
+    <value>设备编号</value>
+  </data>
+  <data name="InterviewerProfile_DeviceInfo" xml:space="preserve">
+    <value>设备详细信息</value>
+  </data>
+  <data name="InterviewerProfile_DeviceLanguage" xml:space="preserve">
+    <value>设备语言</value>
+  </data>
+  <data name="InterviewerProfile_DeviceLocation" xml:space="preserve">
+    <value>设备位置或已知的最后位置</value>
+  </data>
+  <data name="InterviewerProfile_DeviceModel" xml:space="preserve">
+    <value>设备型号</value>
+  </data>
+  <data name="InterviewerProfile_DeviceOrientation" xml:space="preserve">
+    <value>设备方向</value>
+  </data>
+  <data name="InterviewerProfile_DeviceSerial" xml:space="preserve">
+    <value>设备序列号</value>
+  </data>
+  <data name="InterviewerProfile_DownloadedInterviewsCount" xml:space="preserve">
+    <value>调查员已收到的访谈</value>
+  </data>
+  <data name="InterviewerProfile_DownloadedQuestionnairesCount" xml:space="preserve">
+    <value>调查员已收到的问卷</value>
+  </data>
+  <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
+    <value>电子邮箱：{0}</value>
+  </data>
+  <data name="InterviewerProfile_FullNameFormat" xml:space="preserve">
+    <value>全名：{0}</value>
+  </data>
+  <data name="InterviewerProfile_Info" xml:space="preserve">
+    <value>编辑个人信息</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerAppVersion" xml:space="preserve">
+    <value>调查员程序版本</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerCanBeUpdated" xml:space="preserve">
+    <value>可以更新</value>
+  </data>
+  <data name="InterviewerProfile_Interviewers" xml:space="preserve">
+    <value>调查员</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerUpdatedDate" xml:space="preserve">
+    <value>上一个更新Survey Solutions的日期</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerUpToDate" xml:space="preserve">
+    <value>最新</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerVersion" xml:space="preserve">
+    <value>Survey Solutions版本</value>
+  </data>
+  <data name="InterviewerProfile_LastConnectionStatistics" xml:space="preserve">
+    <value>上一次连接的统计</value>
+  </data>
+  <data name="InterviewerProfile_LastFailedSync" xml:space="preserve">
+    <value>上一次失败的同步</value>
+  </data>
+  <data name="InterviewerProfile_LastSuccessSync" xml:space="preserve">
+    <value>上一次成功的同步</value>
+  </data>
+  <data name="InterviewerProfile_MemoryInfo" xml:space="preserve">
+    <value>内存（可用/全部）</value>
+  </data>
+  <data name="InterviewerProfile_NumberOfFailedSynchronizations" xml:space="preserve">
+    <value>失败的同步数量</value>
+  </data>
+  <data name="InterviewerProfile_NumberOfSuccessSynchronizations" xml:space="preserve">
+    <value>成功同步的数量</value>
+  </data>
+  <data name="InterviewerProfile_PhoneFormat" xml:space="preserve">
+    <value>电话号码：{0}</value>
+  </data>
+  <data name="InterviewerProfile_ServerDate" xml:space="preserve">
+    <value>同步开始时的服务器时间</value>
+  </data>
+  <data name="InterviewerProfile_SignalStrength" xml:space="preserve">
+    <value>信号强度</value>
+  </data>
+  <data name="InterviewerProfile_StartedAssignments" xml:space="preserve">
+    <value>已经开始但尚未完成的任务</value>
+  </data>
+  <data name="InterviewerProfile_StorageInfo" xml:space="preserve">
+    <value>存储空间（可用/全部）</value>
+  </data>
+  <data name="InterviewerProfile_TitleFormat" xml:space="preserve">
+    <value>调查员：{0}</value>
+  </data>
+  <data name="InterviewerProfile_TotalSyncTime" xml:space="preserve">
+    <value>同步持续时间</value>
+  </data>
+  <data name="InterviewerProfile_UploadedInterviewsCount" xml:space="preserve">
+    <value>从调查员收到的已完成的访谈</value>
+  </data>
+  <data name="InterviewerProfile_WaitingForApproval" xml:space="preserve">
+    <value>等待批准</value>
+  </data>
+  <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
+    <value>调查员账号创建日期</value>
+  </data>
+  <data name="Interviewers_InterviewerNeverConnected" xml:space="preserve">
+    <value>从未连接</value>
+  </data>
+  <data name="Interviewers_InterviewerVersion" xml:space="preserve">
+    <value>应用程序版本</value>
+  </data>
+  <data name="Interviewers_InterviewerVersionTooltip" xml:space="preserve">
+    <value>上一次同步时的调查员程序版本</value>
+  </data>
+  <data name="Interviewers_NotSyncedOption" xml:space="preserve">
+    <value>从未连接</value>
+  </data>
+  <data name="Interviewers_OutdatedOption" xml:space="preserve">
+    <value>过期</value>
+  </data>
+  <data name="Interviewers_Selected" xml:space="preserve">
+    <value>调查员被选中</value>
+  </data>
+  <data name="Interviewers_SupervisorTooltip" xml:space="preserve">
+    <value>调查员所属督导员的登录名</value>
+  </data>
+  <data name="Interviewers_UpToDateOption" xml:space="preserve">
+    <value>最新</value>
+  </data>
+  <data name="Interviews_Selected" xml:space="preserve">
+    <value>访谈被选中</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>登录</value>
+  </data>
+  <data name="OperationFailedDescription" xml:space="preserve">
+    <value>发生错误，请稍候再试。</value>
+  </data>
+  <data name="OperationFailedTitle" xml:space="preserve">
+    <value>操作失败</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>密码</value>
+  </data>
+  <data name="Profile_ApiUserCreate" xml:space="preserve">
+    <value>创建API用户</value>
+  </data>
+  <data name="Profile_ApiUserEditFormat" xml:space="preserve">
+    <value>编辑API用户资料：&lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_ApiUsersList" xml:space="preserve">
+    <value>API用户</value>
+  </data>
+  <data name="Profile_ApiUserWasCreated" xml:space="preserve">
+    <value>成功创建了API用户：&lt;b&gt;{0}&lt;/b&gt;</value>
+  </data>
+  <data name="Profile_HeadquartersCreate" xml:space="preserve">
+    <value>创建总部</value>
+  </data>
+  <data name="Profile_HeadquartersEditFormat" xml:space="preserve">
+    <value>编辑总部资料：&lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_HeadquartersList" xml:space="preserve">
+    <value>总部</value>
+  </data>
+  <data name="Profile_InterviewerCreate" xml:space="preserve">
+    <value>创建调查员资料</value>
+  </data>
+  <data name="Profile_InterviewerEditFormat" xml:space="preserve">
+    <value>编辑调查员资料：&lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_InterviewerProfile" xml:space="preserve">
+    <value>调查员资料</value>
+  </data>
+  <data name="Profile_InterviewersList" xml:space="preserve">
+    <value>调查员</value>
+  </data>
+  <data name="Profile_ObserverCreate" xml:space="preserve">
+    <value>创建观察员</value>
+  </data>
+  <data name="Profile_ObserverEditFormat" xml:space="preserve">
+    <value>编辑观察员资料：&lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_ObserversList" xml:space="preserve">
+    <value>观察员</value>
+  </data>
+  <data name="Profile_SupervisorCreate" xml:space="preserve">
+    <value>创建督导员</value>
+  </data>
+  <data name="Profile_SupervisorEditFormat" xml:space="preserve">
+    <value>编辑督导员资料：&lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_SupervisorsList" xml:space="preserve">
+    <value>督导员</value>
+  </data>
+  <data name="PublicSection" xml:space="preserve">
+    <value>个人详细信息（可选）&lt;br&gt;将仅对总部账户可见</value>
+  </data>
+  <data name="QuestionnaireNameFormat" xml:space="preserve">
+    <value>{0} (版本：{1})</value>
+  </data>
+  <data name="Supervisor_CreateText" xml:space="preserve">
+    <value>这个动作将创建具有督导员权限的单个用户。&lt;br&gt;要创建多个用户，您可以使用&lt;a href="{0}" target="_blank"&gt;批量用户创建&lt;/a&gt;。</value>
+  </data>
+  <data name="Supervisors_ActiveUsers" xml:space="preserve">
+    <value>活动的督导员</value>
+  </data>
+  <data name="Supervisors_Archive" xml:space="preserve">
+    <value>归档</value>
+  </data>
+  <data name="Supervisors_ArchivedUsers" xml:space="preserve">
+    <value>已归档的督导员</value>
+  </data>
+  <data name="Supervisors_ArchiveStatusTitle" xml:space="preserve">
+    <value>归档状态</value>
+  </data>
+  <data name="Supervisors_ArchiveSupervisorsConfirmMessage" xml:space="preserve">
+    <value>如果调查员在平板电脑上有已经完成的处于普查状态的访谈，那么数据将丢失。</value>
+  </data>
+  <data name="Supervisors_Selected" xml:space="preserve">
+    <value>督导员被选中</value>
+  </data>
+  <data name="Supervisors_Unarchive" xml:space="preserve">
+    <value>取消归档</value>
+  </data>
+  <data name="Supervisors_UnarchiveSupervisorsConfirm" xml:space="preserve">
+    <value>您想要继续吗？</value>
+  </data>
+  <data name="SurveysAndStatuses_InterviewerTitle" xml:space="preserve">
+    <value>调查员（团队）</value>
+  </data>
+  <data name="SurveysAndStatuses_Overview" xml:space="preserve">
+    <value>调查和状态</value>
+  </data>
+  <data name="SurveysAndStatuses_SupervisorTitle" xml:space="preserve">
+    <value>督导员（团队）</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>更新</value>
   </data>
 </root>

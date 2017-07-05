@@ -81,13 +81,16 @@ namespace WB.Tests.Abc.TestFactories
             => new InterviewCreated(
                 userId: Guid.NewGuid(),
                 questionnaireId: questionnaireId ?? Guid.NewGuid(),
-                questionnaireVersion: questionnaireVersion ?? 7);
+                questionnaireVersion: questionnaireVersion ?? 7,
+                assignmentId: null,
+                usesExpressionStorage: true);
 
         public InterviewFromPreloadedDataCreated InterviewFromPreloadedDataCreated(Guid? questionnaireId = null, long? questionnaireVersion = null)
             => new InterviewFromPreloadedDataCreated(
                 Guid.NewGuid(),
                 questionnaireId ?? Guid.NewGuid(),
-                questionnaireVersion ?? 1);
+                questionnaireVersion ?? 1, 
+                null);
 
         public InterviewHardDeleted InterviewHardDeleted(Guid? userId = null)
             => new InterviewHardDeleted(userId: userId ?? Guid.NewGuid());
@@ -96,7 +99,7 @@ namespace WB.Tests.Abc.TestFactories
             => new InterviewOnClientCreated(
                 Guid.NewGuid(),
                 questionnaireId ?? Guid.NewGuid(),
-                questionnaireVersion ?? 1);
+                questionnaireVersion ?? 1, null);
 
         public InterviewReceivedByInterviewer InterviewReceivedByInterviewer()
             => new InterviewReceivedByInterviewer();
@@ -351,5 +354,9 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new RosterInstancesRemoved(rosterInstances);
         }
+
+        public QuestionsMarkedAsReadonly QuestionsMarkedAsReadonly(params Identity[] questions)
+            => new QuestionsMarkedAsReadonly(questions);
+
     }
 }

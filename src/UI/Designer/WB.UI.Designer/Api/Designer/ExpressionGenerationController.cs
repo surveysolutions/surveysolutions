@@ -71,14 +71,13 @@ namespace WB.UI.Designer.Api
         }
 
         [HttpGet]
-        public HttpResponseMessage GetLatestVersionAssembly(Guid id)
+        public HttpResponseMessage GetLatestVersionAssembly(Guid id, int? version)
         {
             //do async
-            
+            var supervisorVersion = version ?? this.engineVersionService.LatestSupportedVersion;
             var questionnaire = this.GetQuestionnaire(id).Source;
             string assembly;
-            var generated = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire,
-                this.engineVersionService.LatestSupportedVersion, out assembly);
+            var generated = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire, supervisorVersion, out assembly);
             if (generated.Success)
             {
                 var response = new HttpResponseMessage(HttpStatusCode.OK)

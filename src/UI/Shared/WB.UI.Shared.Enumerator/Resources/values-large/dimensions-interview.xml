@@ -40,4 +40,7 @@
   <dimen name="Interview_Comment_Caption_margin_bottom">8dp</dimen>
 
   <dimen name="Interview_Entity_Title_margin_top">18dp</dimen>
+
+  <dimen name="Interview_Readonly_Question_Layout_margin_left">36dp</dimen>
+  <dimen name="Interview_Readonly_Question_Layout_margin_right">90dp</dimen>
 </resources>

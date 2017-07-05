@@ -73,7 +73,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, DeleteLookupTable>,
         ICommandPostProcessor<Questionnaire, UpdateCascadingComboboxOptions>,
         ICommandPostProcessor<Questionnaire, UpdateFilteredComboboxOptions>,
-        ICommandPostProcessor<Questionnaire, RevertVersionQuestionnaire>
+        ICommandPostProcessor<Questionnaire, RevertVersionQuestionnaire>,
+        ICommandPostProcessor<Questionnaire, UpdateAreaQuestion>
     {
         private IPlainStorageAccessor<User> accountStorage
             => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<User>>();
@@ -117,7 +118,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 if (creatorId.HasValue)
                 {
                     questionnaireListViewItem.SharedPersons.Where(p => p.IsOwner && p.UserId != creatorId).ForEach(p => p.IsOwner = false);
-                    var owner = questionnaireListViewItem.SharedPersons.SingleOrDefault(p => p.UserId == creatorId);
+                    var owner = questionnaireListViewItem.SharedPersons.FirstOrDefault(p => p.UserId == creatorId);
                     if (owner != null)
                     {
                         owner.IsOwner = true;
@@ -297,6 +298,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, DeleteLookupTable command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, UpdateCascadingComboboxOptions command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, UpdateFilteredComboboxOptions command) => this.Update(command.QuestionnaireId.FormatGuid());
+        public void Process(Questionnaire aggregate, UpdateAreaQuestion command) => this.Update(command.QuestionnaireId.FormatGuid());
+
         public void Process(Questionnaire aggregate, RevertVersionQuestionnaire command)
             => this.Update(command.QuestionnaireId.FormatGuid(), aggregate.QuestionnaireDocument.Title, aggregate.QuestionnaireDocument.IsPublic);
     }

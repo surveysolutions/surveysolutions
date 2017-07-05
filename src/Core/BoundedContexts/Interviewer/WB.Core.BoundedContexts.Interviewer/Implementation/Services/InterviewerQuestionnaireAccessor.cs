@@ -115,6 +115,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             await this.questionnaireAssemblyFileAccessor.StoreAssemblyAsync(questionnaireIdentity, assembly);
         }
 
+        public QuestionnaireDocument GetQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
+        {
+            return this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
+        }
+
         public void StoreTranslations(QuestionnaireIdentity questionnaireIdentity, List<TranslationInstance> translationInstances)
         {
             this.RemoveTranslations(questionnaireIdentity);
@@ -145,10 +150,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                  .ToList();
         }
 
-        public bool IsAttachmentUsedAsync(string contentId)
+        public IReadOnlyCollection<QuestionnaireDocumentView> LoadAll()
         {
-            var questionnaireDocumentViews = this.questionnaireDocuments.LoadAll().Where(x => !x.QuestionnaireDocument.IsDeleted).ToList();
-            return questionnaireDocumentViews.Count > 0 && questionnaireDocumentViews.Any(x => x.QuestionnaireDocument.Attachments.Any(a => a.ContentId == contentId));
+            return this.questionnaireDocuments.LoadAll();
         }
 
         public bool IsQuestionnaireExists(QuestionnaireIdentity questionnaireIdentity)

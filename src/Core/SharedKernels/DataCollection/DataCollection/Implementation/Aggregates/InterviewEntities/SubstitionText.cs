@@ -46,11 +46,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public string BrowserReadyText { get; private set; }
 
         public bool HasSubstitutions => this.substitutionVariables!= null &&
-                (this.substitutionVariables.ByRosters.Any() ||
-                this.substitutionVariables.ByVariables.Any() || 
-                this.substitutionVariables.ByQuestions.Any());
-
-
+                (this.substitutionVariables.ByRosters.Count > 0 ||
+                this.substitutionVariables.ByVariables.Count > 0 ||
+                this.substitutionVariables.ByQuestions.Count > 0);
+        
         public void ReplaceSubstitutions()
         {
             if (!this.HasSubstitutions)

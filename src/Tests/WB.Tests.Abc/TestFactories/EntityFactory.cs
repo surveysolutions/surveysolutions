@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
+using ReflectionMagic;
+using WB.Core.BoundedContexts.Headquarters.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
@@ -30,6 +34,7 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -43,6 +48,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -212,14 +218,20 @@ namespace WB.Tests.Abc.TestFactories
         public FailedValidationCondition FailedValidationCondition(int? failedConditionIndex = null)
             => new FailedValidationCondition(failedConditionIndex ?? 1117);
 
-        public Group FixedRoster(Guid? rosterId = null, IEnumerable<string> obsoleteFixedTitles = null, IEnumerable<IComposite> children = null, string variable = "roster_var", string title = "Roster X", FixedRosterTitle[] fixedTitles = null)
-            => Create.Entity.Roster(
-                rosterId: rosterId,
-                children: children,
-                title: title,
-                variable: variable,
-                fixedRosterTitles: fixedTitles,
-                fixedTitles: obsoleteFixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
+        public Group FixedRoster(Guid? rosterId = null,
+            string enablementCondition = null,
+            IEnumerable<string> obsoleteFixedTitles = null,
+            IEnumerable<IComposite> children = null,
+            string variable = "roster_var",
+            string title = "Roster X",
+            FixedRosterTitle[] fixedTitles = null) => Create.Entity.Roster(
+                        rosterId: rosterId,
+                        children: children,
+                        title: title,
+                        variable: variable,
+                        enablementCondition: enablementCondition,
+                        fixedRosterTitles: fixedTitles,
+                        fixedTitles: obsoleteFixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
 
         public FixedRosterTitle FixedTitle(decimal value, string title = null)
             => new FixedRosterTitle(value, title ?? $"Fixed title {value}");
@@ -413,6 +425,8 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewSummary InterviewSummary()
             => new InterviewSummary();
 
+
+
         public InterviewSummary InterviewSummary(
             Guid? interviewId = null,
             Guid? questionnaireId = null,
@@ -427,7 +441,8 @@ namespace WB.Tests.Abc.TestFactories
             DateTime? updateDate = null,
             bool? wasCreatedOnClient= null,
             bool isDeleted = false,
-            bool receivedByInterviewer = false)
+            bool receivedByInterviewer = false,
+            int? assignmentId = null)
             => new InterviewSummary
             {
                 InterviewId = interviewId ?? Guid.NewGuid(),
@@ -443,7 +458,8 @@ namespace WB.Tests.Abc.TestFactories
                 UpdateDate = updateDate ?? new DateTime(2017, 3, 23),
                 WasCreatedOnClient = wasCreatedOnClient ?? false,
                 IsDeleted = isDeleted,
-                ReceivedByInterviewer = receivedByInterviewer
+                ReceivedByInterviewer = receivedByInterviewer,
+                AssignmentId = assignmentId
             };
 
         public InterviewSynchronizationDto InterviewSynchronizationDto(
@@ -456,6 +472,7 @@ namespace WB.Tests.Abc.TestFactories
             HashSet<InterviewItemId> disabledQuestions = null,
             HashSet<InterviewItemId> validQuestions = null,
             HashSet<InterviewItemId> invalidQuestions = null,
+            HashSet<InterviewItemId> readonlyQuestions = null,
             Guid? interviewId = null,
             Dictionary<Identity, IList<FailedValidationCondition>> failedValidationConditions = null,
             InterviewStatus status = InterviewStatus.InterviewerAssigned,
@@ -482,6 +499,7 @@ namespace WB.Tests.Abc.TestFactories
                 disabledStaticTexts ?? new List<Identity>(),
                 validQuestions ?? new HashSet<InterviewItemId>(),
                 invalidQuestions ?? new HashSet<InterviewItemId>(),
+                readonlyQuestions ?? new HashSet<InterviewItemId>(),
                 validStaticTexts ?? new List<Identity>(),
                 invalidStaticTexts ?? new List<KeyValuePair<Identity, List<FailedValidationCondition>>>(),
                 rosterGroupInstances ?? new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(),
@@ -546,12 +564,12 @@ namespace WB.Tests.Abc.TestFactories
 
         public MultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null,
             string validationExpression = null, bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null, Guid? linkedToRosterId = null,
-            bool isYesNo = false, bool hideIfDisabled = false, string optionsFilterExpression = null, Answer[] textAnswers = null,
+            bool isYesNo = false, bool hideIfDisabled = false, string optionsFilterExpression = null, Answer[] textAnswers = null, string variable = "mo_question",
             params int[] answers)
             => new MultyOptionsQuestion("Question MO")
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
-                StataExportCaption = "mo_question",
+                StataExportCaption = variable,
                 ConditionExpression = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
@@ -735,8 +753,8 @@ namespace WB.Tests.Abc.TestFactories
                 IsDeleted = deleted
             };
 
-        public QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire)
-            => new QuestionnaireBrowseItem(questionnaire, 1, false, 1);
+        public QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire, bool supportsAssignments = true)
+            => new QuestionnaireBrowseItem(questionnaire, 1, false, 1, supportsAssignments);
 
         public QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
             => new QuestionnaireDocument
@@ -1529,6 +1547,148 @@ namespace WB.Tests.Abc.TestFactories
                 LastLinkDate = lastLinkDate,
                 LastUploadInterviewDate = lastUploadInterviewDate
             };
+        }
+
+        public AssignmentApiView AssignmentApiView(int id, int? quantity, QuestionnaireIdentity questionnaireIdentity = null)
+        {
+            return new AssignmentApiView
+            {
+                Id = id,
+                Quantity = quantity,
+                QuestionnaireId = questionnaireIdentity
+            };
+        }
+
+        public AssignmentApiDocumentBuilder AssignmentApiDocument(int id, int? quantity, QuestionnaireIdentity questionnaireIdentity = null)
+        {
+            return new AssignmentApiDocumentBuilder(new AssignmentApiDocument
+            {
+                Id = id,
+                Quantity = quantity,
+                QuestionnaireId = questionnaireIdentity
+            });
+        }
+
+        public class AssignmentApiDocumentBuilder
+        {
+            private readonly AssignmentApiDocument _entity;
+            private static readonly NewtonInterviewAnswerJsonSerializer serializer = new NewtonInterviewAnswerJsonSerializer();
+
+            public AssignmentApiDocumentBuilder(AssignmentApiDocument entity)
+            {
+                _entity = entity;
+            }
+
+            public AssignmentApiDocumentBuilder WithAnswer(Identity questionId, string answer, string serializedAnswer = null, 
+                AbstractAnswer answerAsObj = null, double? latitude = null, double? longtitude = null)
+            {
+                this._entity.Answers.Add(new AssignmentApiDocument.InterviewSerializedAnswer
+                { 
+                    Identity = questionId,
+                    SerializedAnswer = serializedAnswer ?? (answerAsObj == null ? null :serializer.Serialize(answerAsObj))
+                });
+
+                if (latitude != null && longtitude != null)
+                {
+                    this._entity.LocationQuestionId = questionId.Id;
+                    this._entity.LocationLatitude = latitude;
+                    this._entity.LocationLongitude = longtitude;
+                }
+
+                return this;
+            }
+
+            public AssignmentApiDocument Build() => this._entity;
+        }
+
+        public Assignment Assignment(int? id = null,
+            QuestionnaireIdentity questionnaireIdentity = null,
+            int? quantity = null,
+            Guid? assigneeSupervisorId = null,
+            string responsibleName = null,
+            ISet<InterviewSummary> interviewSummary = null)
+        {
+            var result = new Assignment();
+            var asDynamic = result.AsDynamic();
+            asDynamic.Quantity = quantity;
+            asDynamic.Id = id ?? 0;
+            result.QuestionnaireId = questionnaireIdentity;
+
+            var readonlyUser = new ReadonlyUser();
+            var readonlyProfile = new ReadonlyProfile();
+            
+            readonlyUser.AsDynamic().ReadonlyProfile = readonlyProfile;
+            asDynamic.Responsible = readonlyUser;
+
+            if (assigneeSupervisorId.HasValue)
+            {
+                readonlyProfile.AsDynamic().SupervisorId = assigneeSupervisorId;
+            }
+            if (!string.IsNullOrEmpty(responsibleName))
+            {
+                readonlyUser.AsDynamic().Name = responsibleName;
+            }
+
+            asDynamic.InterviewSummaries = interviewSummary;
+
+            return result;
+        }
+
+        public IdentifyingAnswer IdentifyingAnswer(Assignment assignment = null, Identity identity = null, string answer = null, string answerAsString = null)
+        {
+            var result = new IdentifyingAnswer();
+            
+            dynamic dynamic = result.AsDynamic();
+            dynamic.Assignment = assignment;
+            dynamic.Identity = identity;
+            dynamic.Answer = answer;
+            dynamic.AnswerAsString = answerAsString;
+            return result;
+        }
+
+        public AssignmentDocumentBuilder AssignmentDocument(int id, int? quantity = null, int interviewsCount = 0, string questionnaireIdentity = null)
+        {
+            return new AssignmentDocumentBuilder(new AssignmentDocument
+            {
+                Id = id,
+                Quantity = quantity,
+                QuestionnaireId = questionnaireIdentity
+            });
+        }
+
+        public class AssignmentDocumentBuilder
+        {
+            private readonly AssignmentDocument _entity;
+
+            public AssignmentDocumentBuilder(AssignmentDocument entity)
+            {
+                _entity = entity;
+            }
+
+            public AssignmentDocumentBuilder WithAnswer(Identity identity, string answer, bool identifying = false)
+            {
+                this._entity.Answers = this._entity.Answers ?? new List<AssignmentDocument.AssignmentAnswer>();
+                this._entity.IdentifyingAnswers = this._entity.IdentifyingAnswers ?? new List<AssignmentDocument.AssignmentAnswer>();
+                
+                var assignmentAnswer = new AssignmentDocument.AssignmentAnswer
+                {
+                    AssignmentId = this._entity.Id,
+                    AnswerAsString = answer,
+                    IsIdentifying = identifying,
+                    Identity = identity
+                };
+
+                this._entity.Answers.Add(assignmentAnswer);
+
+                if (identifying)
+                {
+                    this._entity.IdentifyingAnswers.Add(assignmentAnswer);
+                }
+
+                return this;
+            }
+
+            public AssignmentDocument Build() => this._entity;
         }
     }
 }

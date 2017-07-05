@@ -59,9 +59,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
                     $"Cannot import questionnaire. Assembly file is empty. QuestionnaireId: {this.Id}");
 
             this.StoreQuestionnaireAndProjectionsAsNewVersion(
-                questionnaireDocument, command.SupportingAssembly,
-                command.AllowCensusMode, command.QuestionnaireContentVersion,
-                command.QuestionnaireVersion);
+                questionnaireDocument, 
+                command.SupportingAssembly,
+                command.AllowCensusMode, 
+                command.QuestionnaireContentVersion,
+                command.QuestionnaireVersion,
+                isSupportAssignments: true
+                );
         }
 
         public void CloneQuestionnaire(CloneQuestionnaire command)
@@ -85,7 +89,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
                 assemblyAsBase64, 
                 questionnaireBrowseItem.AllowCensusMode, 
                 questionnaireBrowseItem.QuestionnaireContentVersion,
-                command.NewQuestionnaireVersion
+                command.NewQuestionnaireVersion,
+                questionnaireBrowseItem.AllowAssignments
                 );
         }
 
@@ -112,7 +117,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             string assemblyAsBase64, 
             bool isCensus, 
             long questionnaireContentVersion, 
-            long questionnaireVersion)
+            long questionnaireVersion,
+            bool isSupportAssignments)
         {
             var identity = new QuestionnaireIdentity(this.Id, questionnaireVersion);
             
@@ -123,7 +129,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             string projectionId = GetProjectionId(identity);
 
             this.questionnaireBrowseItemStorage.Store(
-                new QuestionnaireBrowseItem(questionnaireDocument, identity.Version, isCensus, questionnaireContentVersion),
+                new QuestionnaireBrowseItem(questionnaireDocument, identity.Version, isCensus, questionnaireContentVersion, isSupportAssignments),
                 projectionId);
 
             this.questionnaireQuestionsInfoStorage.Store(

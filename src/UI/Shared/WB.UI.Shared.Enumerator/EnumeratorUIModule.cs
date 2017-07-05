@@ -1,6 +1,5 @@
 using Ninject.Modules;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.UI.Shared.Enumerator.CustomServices;
 
 namespace WB.UI.Shared.Enumerator

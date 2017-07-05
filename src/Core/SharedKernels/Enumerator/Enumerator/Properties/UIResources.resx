@@ -204,6 +204,9 @@
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>Tap to take barcode</value>
   </data>
+  <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
+    <value>Tap to edit area</value>
+  </data>
   <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
     <value>Section completed: {0}</value>
   </data>
@@ -457,5 +460,77 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="Ok" xml:space="preserve">
     <value>Ok</value>
+  </data>
+  <data name="Multimedia_PickFromGallery" xml:space="preserve">
+    <value>Pick from gallery</value>
+  </data>
+  <data name="Multimedia_PictureSource" xml:space="preserve">
+    <value>Select an option</value>
+  </data>
+  <data name="Multimedia_TakePhoto" xml:space="preserve">
+    <value>Take photo</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="AreaMap_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="AreaMap_Location" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="AreaMap_NoChangesInfo" xml:space="preserve">
+    <value>No changes we made to be saved.</value>
+  </data>
+  <data name="AreaMap_NoMapsFound" xml:space="preserve">
+    <value>No maps were found. Please update maps</value>
+  </data>
+  <data name="AreaMap_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="AreaMap_Undo" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="AreaMap_UpdateMaps" xml:space="preserve">
+    <value>Update maps</value>
+  </data>
+  <data name="Version_Not_Supports" xml:space="preserve">
+    <value>Your version of application doesn't support this functionality</value>
+  </data>
+  <data name="AreaMap_UpdateFailed" xml:space="preserve">
+    <value>Update failed</value>
+  </data>
+  <data name="Device_Does_Not_Support" xml:space="preserve">
+    <value>Your device doesn't support this functionality</value>
+  </data>
+  <data name="AreaMap_MapTitle" xml:space="preserve">
+    <value>Map</value>
+  </data>
+  <data name="AreaMap_AreaFormat" xml:space="preserve">
+    <value>Area:</value>
+  </data>
+  <data name="AreaMap_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="AreaMap_LengthFormat" xml:space="preserve">
+    <value>Perimeter:</value>
+  </data>
+  <data name="AreaMap_Active_Map_Title" xml:space="preserve">
+    <value>ACTIVE MAP:</value>
+  </data>
+  <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
+    <value>MAPS AVAILABLE ON DEVICE</value>
+  </data>
+  <data name="AreaMap_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="AreaMap_Update_Maps" xml:space="preserve">
+    <value>Update maps</value>
+  </data>
+  <data name="MenuItem_Title_AreaCancel" xml:space="preserve">
+    <value>Exit Map Editor</value>
+  </data>
+  <data name="MenuItem_Title_AreaCancelEdit" xml:space="preserve">
+    <value>Clear all</value>
   </data>
 </root>

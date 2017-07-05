@@ -135,9 +135,6 @@
   <data name="StartInfo" xml:space="preserve">
     <value>Starting web interview for {0}</value>
   </data>
-  <data name="WebInterviewSetup_Description" xml:space="preserve">
-    <value>To start web interview, select the interviewer that is going to be used as the assignee</value>
-  </data>
   <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
     <value>Web interview setup</value>
   </data>
@@ -147,9 +144,6 @@
   <data name="WebInterviewStarted" xml:space="preserve">
     <value>Web interview for {0} started</value>
   </data>
-  <data name="WebLinkTitle" xml:space="preserve">
-    <value>Use this link to start interview</value>
-  </data>
   <data name="UseCaptcha" xml:space="preserve">
     <value>Enable spam protection</value>
   </data>
@@ -157,8 +151,8 @@
     <value>Download ({0})</value>
     <comment>{0} - count of interviews in file</comment>
   </data>
-  <data name="ExportTitle" xml:space="preserve">
-    <value>You can download interviews in status `Interviewer Assigned` to deliver links to respondents</value>
+  <data name="ExportAssignmentsTitle" xml:space="preserve">
+    <value>You can download list of created assignments that are assigned to interviewer in order to deliver web links to respondents</value>
   </data>
   <data name="StopWebInterview" xml:space="preserve">
     <value>Stop Web Interview</value>

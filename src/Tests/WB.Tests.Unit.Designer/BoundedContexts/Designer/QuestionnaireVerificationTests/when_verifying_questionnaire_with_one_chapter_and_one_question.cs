@@ -12,8 +12,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new TextQuestion() {StataExportCaption = "var"}
-                );
+                Create.TextQuestion(variable: "var", text: "test")
+            );
 
             verifier = CreateQuestionnaireVerifier();
         };

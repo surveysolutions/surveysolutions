@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 {
@@ -30,39 +31,39 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 var questionnaireId = Guid.NewGuid();
                 var userId = Guid.NewGuid();
 
-                var questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Abc.Create.Entity.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
+                var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Create.Entity.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
                     {
-                        Abc.Create.Entity.Option(value: "1", text: "parent option 1"),
-                        Abc.Create.Entity.Option(value: "2", text: "parent option 2")
+                        Create.Entity.Option("1", "parent option 1"),
+                        Create.Entity.Option("2", "parent option 2")
                     }),
-                    Abc.Create.Entity.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
+                    Create.Entity.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
                         options: new List<Answer>
                                  {
-                                     Abc.Create.Entity.Option(value: "11", text: "child 1 for parent option 1", parentValue: "1"),
-                                     Abc.Create.Entity.Option(value: "12", text: "child 2 for parent option 1", parentValue: "1"),
-                                     Abc.Create.Entity.Option(value: "21", text: "child 1 for parent option 2", parentValue: "2"),
-                                     Abc.Create.Entity.Option(value: "21", text: "child 2 for parent option 2", parentValue: "2"),
+                                     Create.Entity.Option("11", "child 1 for parent option 1", "1"),
+                                     Create.Entity.Option("12", "child 2 for parent option 1", "1"),
+                                     Create.Entity.Option("21", "child 1 for parent option 2", "2"),
+                                     Create.Entity.Option("21", "child 2 for parent option 2", "2")
                                  }),
-                    Abc.Create.Entity.SingleQuestion(grandChildCascadedComboboxId, "q3", cascadeFromQuestionId: childCascadedComboboxId,
+                    Create.Entity.SingleQuestion(grandChildCascadedComboboxId, "q3", cascadeFromQuestionId: childCascadedComboboxId,
                         options: new List<Answer>
                                  {
-                                     Abc.Create.Entity.Option(value: "111", text: "grand child 1 for parent option 11", parentValue: "11"),
-                                     Abc.Create.Entity.Option(value: "112", text: "grand child 2 for parent option 11", parentValue: "11"),
-                                     Abc.Create.Entity.Option(value: "121", text: "grand child 3 for parent option 12", parentValue: "12"),
-                                     Abc.Create.Entity.Option(value: "122", text: "grand child 4 for parent option 12", parentValue: "12"),
-                                     Abc.Create.Entity.Option(value: "211", text: "grand child 1 for parent option 21", parentValue: "21"),
-                                     Abc.Create.Entity.Option(value: "212", text: "grand child 2 for parent option 21", parentValue: "21"),
-                                     Abc.Create.Entity.Option(value: "221", text: "grand child 3 for parent option 22", parentValue: "22"),
-                                     Abc.Create.Entity.Option(value: "222", text: "grand child 4 for parent option 22", parentValue: "22"),
+                                     Create.Entity.Option("111", "grand child 1 for parent option 11", "11"),
+                                     Create.Entity.Option("112", "grand child 2 for parent option 11", "11"),
+                                     Create.Entity.Option("121", "grand child 3 for parent option 12", "12"),
+                                     Create.Entity.Option("122", "grand child 4 for parent option 12", "12"),
+                                     Create.Entity.Option("211", "grand child 1 for parent option 21", "21"),
+                                     Create.Entity.Option("212", "grand child 2 for parent option 21", "21"),
+                                     Create.Entity.Option("221", "grand child 3 for parent option 22", "22"),
+                                     Create.Entity.Option("222", "grand child 4 for parent option 22", "22")
                                  })
                     );
 
                 var interview = SetupInterview(questionnaire, new List<object>());
 
                 interview.AnswerSingleOptionQuestion(userId, parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 1);
-                interview.AnswerSingleOptionQuestion(userId, childCascadedComboboxId, new decimal[] { }, DateTime.Now, 12m);
-                interview.AnswerSingleOptionQuestion(userId, grandChildCascadedComboboxId, new decimal[] { }, DateTime.Now, 122m);
+                interview.AnswerSingleOptionQuestion(userId, childCascadedComboboxId, new decimal[] { }, DateTime.Now, 12);
+                interview.AnswerSingleOptionQuestion(userId, grandChildCascadedComboboxId, new decimal[] { }, DateTime.Now, 122);
 
                 using (var eventContext = new EventContext())
                 {

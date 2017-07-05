@@ -16,13 +16,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
             var validationExpression = "some validation";
 
-            questionnaire = CreateQuestionnaireDocument(new MultimediaQuestion()
-            {
-                PublicKey = questionId,
-                StataExportCaption = "var",
-                ValidationExpression = validationExpression,
-                ValidationMessage = "message"
-            });
+            questionnaire = CreateQuestionnaireDocument(
+                Create.MultimediaQuestion(
+                questionId,
+                variable: "var",
+                validationExpression: validationExpression,
+                validationMessage: "message"
+            ));
 
             verifier = CreateQuestionnaireVerifier();
         };

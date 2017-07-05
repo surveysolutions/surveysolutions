@@ -15,17 +15,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
             prefilledTextListquestionId = Guid.Parse("10000000000000000000000000000000");
             textQuestionId = Guid.Parse("20000000000000000000000000000000");
-            questionnaire = CreateQuestionnaireDocument(new TextListQuestion()
-            {
-                PublicKey = prefilledTextListquestionId,
-                StataExportCaption = "var1",
-                Featured = true
-            },
-            new TextListQuestion()
-            {
-                StataExportCaption = "var2",
-                PublicKey = textQuestionId
-            });
+            questionnaire = CreateQuestionnaireDocument(
+            Create.TextListQuestion(
+                prefilledTextListquestionId,
+                variable: "var1",
+                featured: true
+            ),
+            Create.TextListQuestion(
+                variable: "var2",
+                questionId: textQuestionId
+            ));
 
             verifier = CreateQuestionnaireVerifier();
         };

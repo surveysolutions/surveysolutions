@@ -10,40 +10,38 @@ using MvvmCross.Core.Views;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Converters;
 using MvvmCross.Platform.IoC;
-using Ncqrs.Eventing.Storage;
 using Ninject;
 using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
+using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator;
-using WB.Core.SharedKernels.Enumerator.Events;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Infrastructure.Shared.Enumerator;
+using WB.Infrastructure.Shared.Enumerator.Internals.MapService;
 using WB.Infrastructure.Shared.Enumerator.Ninject;
 using WB.UI.Interviewer.Activities;
+using WB.UI.Interviewer.Activities.Dashboard;
 using WB.UI.Interviewer.Converters;
 using WB.UI.Interviewer.CustomBindings;
 using WB.UI.Interviewer.Implementations.Services;
 using WB.UI.Interviewer.Infrastructure;
 using WB.UI.Interviewer.Ninject;
-using WB.UI.Interviewer.Services;
 using WB.UI.Interviewer.Settings;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Ninject;
 using Xamarin;
-using Xamarin.InsightsCore;
 
 namespace WB.UI.Interviewer
 {
@@ -97,6 +95,9 @@ namespace WB.UI.Interviewer
                 {typeof(RelinkDeviceViewModel), typeof(RelinkDeviceActivity)},
                 {typeof(InterviewerCompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
                 {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)},
+#if !EXCLUDEEXTENSIONS
+                {typeof (WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
+#endif
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();
@@ -113,6 +114,7 @@ namespace WB.UI.Interviewer
             base.FillValueConverters(registry);
 
             registry.AddOrOverwrite("Localization", new InterviewerLocalizationValueConverter());
+            registry.AddOrOverwrite("StatusToDasboardBackground", new StatusToDasboardBackgroundConverter());
             registry.AddOrOverwrite("InterviewStatusToColor", new InterviewStatusToColorConverter());
             registry.AddOrOverwrite("SynchronizationStatusToDrawable", new SynchronizationStatusToDrawableConverter());
             registry.AddOrOverwrite("ValidationStyleBackground", new TextEditValidationStyleBackgroundConverter());
@@ -127,8 +129,7 @@ namespace WB.UI.Interviewer
 
             base.FillTargetFactories(registry);
         }
-
-
+        
         protected override IMvxIoCProvider CreateIocProvider()
         {
             return new NinjectMvxIocProvider(this.CreateAndInitializeIoc());
@@ -158,18 +159,25 @@ namespace WB.UI.Interviewer
                 .WithConstructorArgument("backupFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Backup"))
                 .WithConstructorArgument("restoreFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Restore"));
             kernel.Bind<ISynchronizationService>().To<SynchronizationService>();
+            kernel.Bind<IAssignmentSynchronizationApi>().To<SynchronizationService>();
             kernel.Bind<IBattery>().To<AndroidBattery>();
             kernel.Bind<IDeviceOrientation>().To<AndroidDeviceOrientation>();
             kernel.Bind<IDeviceInformationService>().To<DeviceInformationService>();
+            kernel.Bind<IArchivePatcherService>().To<ArchivePatcherService>();
 
             kernel.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
             kernel.Bind<IQuestionnaireContentVersionProvider>().To<QuestionnaireContentVersionProvider>().InSingletonScope();
 
             kernel.Bind<ISynchronizationProcess>().To<SynchronizationProcess>();
+            kernel.Bind<IQuestionnaireDownloader>().To<QuestionnaireDownloader>();
+            kernel.Bind<IAssignmentsSynchronizer>().To<AssignmentsSynchronizer>();
             kernel.Bind<AttachmentsCleanupService>().ToSelf();
 
             kernel.Bind<InterviewerDashboardEventHandler>().ToSelf().InSingletonScope();
             kernel.Get<InterviewerDashboardEventHandler>();
+
+            kernel.Bind<IMapSynchronizer>().To<MapSynchronizer>();
+            kernel.Bind<IMapService>().To<MapService>();
 
             return kernel;
         }
@@ -193,6 +201,9 @@ namespace WB.UI.Interviewer
             {
                 typeof(Setup).Assembly,
                 typeof(LoginViewModel).Assembly,
+#if !EXCLUDEEXTENSIONS
+                typeof(WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel).Assembly
+#endif
             });
         }
     }

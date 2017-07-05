@@ -50,14 +50,14 @@
         self.reloadDataTable();
     };
 
-    self.getLinkToInterviews = function(data, row, interviewStatus) {
+    self.getLinkToInterviews = function(data, row, interviewStatus, templateId, templateVersion) {
         if (data === 0 || row.DT_RowClass === totalRowClass) return "<span>" + data + "</span>";
 
         var queryObject = {};
 
-        if (row.questionnaireId) {
-            queryObject.templateId = row.questionnaireId;
-            queryObject.templateVersion = row.questionnaireVersion;
+        if (!_.isUndefined(templateId) && !_.isUndefined(templateVersion)) {
+            queryObject.templateId = templateId;
+            queryObject.templateVersion = templateVersion;
         }
 
         if (row.responsible) {
@@ -69,6 +69,7 @@
         }
 
         var queryString = $.param(queryObject);
+
         var linkUrl = $interviewsUrl + (queryString ? "?" + queryString : "");
 
         return "<a href=\"" + linkUrl + "\">" + data + "</a>";

@@ -171,9 +171,6 @@
   <data name="NumberOfCompletedInterviews" xml:space="preserve">
     <value>Nombre d’entretiens achevés</value>
   </data>
-  <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
-    <value>Nombre d’entretiens achevés par un {0}. Sont comptés comme deux événements distincts d'achèvement le rejet et la correction d'un même entretien.</value>
-  </data>
   <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
     <value>Nombre d’entetiens approuvés par le quartier général</value>
   </data>

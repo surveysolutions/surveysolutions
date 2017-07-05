@@ -1,26 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Machine.Specifications;
-using Microsoft.Practices.ServiceLocation;
+using FluentAssertions;
 using Moq;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
+using NUnit.Framework;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
-using it = Moq.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
+    [TestFixture]
     internal class when_creating_interview_and_questionnaire_does_not_exist : InterviewTestsContext
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void context()
         {
             questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -29,21 +25,25 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var repositoryWithoutQuestionnaire = Mock.Of<IQuestionnaireStorage>();
 
-            interview = Create.AggregateRoot.Interview(questionnaireRepository: repositoryWithoutQuestionnaire);
-        };
+            command = Create.Command.CreateInterviewCommand(questionnaireId, 1, responsibleSupervisorId,
+                answersToFeaturedQuestions, userId: userId);
+           interview = Create.AggregateRoot.Interview(questionnaireRepository: repositoryWithoutQuestionnaire);
 
-        Because of = () =>
-            exception = Catch.Exception(() =>
-                interview.CreateInterview(questionnaireId, 1, responsibleSupervisorId, answersToFeaturedQuestions, DateTime.Now, userId));
+           // Act
+           act =() => interview.CreateInterview(command);
+        }
+         
 
-        It should_throw_interview_exception = () =>
-            exception.ShouldBeOfExactType<InterviewException>();
+        [Test]
+        public void should_throw_interview_exception() =>
+            this.act.ShouldThrow<InterviewException>();
 
-        private static Exception exception;
-        private static Guid questionnaireId;
-        private static Guid userId;
-        private static Guid responsibleSupervisorId;
-        private static Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions;
-        private static Interview interview;
+        private Guid questionnaireId;
+        private Guid userId;
+        private Guid responsibleSupervisorId;
+        private Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions;
+        private Interview interview;
+        private CreateInterviewCommand command;
+        private Action act;
     }
 }

@@ -7316,7 +7316,7 @@ input[type="number"]::-webkit-outer-spin-button {
 .icon {
   width: 20px;
   height: 20px;
-  background: url(i/icons1.png);
+  background: url(i/icons2.png);
   background-position-x: 0;
   overflow: hidden;
 }
@@ -7368,6 +7368,9 @@ input[type="number"]::-webkit-outer-spin-button {
 .icon-tranlsation {
   background-position: 0 -510px;
 }
+.icon-area {
+  background-position: 0 -540px;
+}
 .icon-error.icon-numeric {
   background-position: -30px 0;
 }
@@ -7415,6 +7418,9 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 .icon-error.icon-translation {
   background-position: -30px -510px;
+}
+.icon-error.icon-area {
+  background-position: -30px -540px;
 }
 .mCSB_container {
   margin-right: 0;
@@ -7502,7 +7508,7 @@ input#edit-group-title {
   vertical-align: middle;
   width: 20px;
   height: 20px;
-  background-image: url(i/icons1.png);
+  background-image: url(i/icons2.png);
   background-position-x: 0;
   overflow: hidden;
 }

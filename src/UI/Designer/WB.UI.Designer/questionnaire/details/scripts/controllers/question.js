@@ -94,11 +94,12 @@
 
                 $scope.activeQuestion.questionScope = question.isPreFilled ? 'Identifying' : question.questionScope;
 
-                $scope.setQuestionType(question.type);
-
                 $scope.setLinkSource(question.linkedToEntityId, question.linkedFilterExpression);
                 $scope.setCascadeSource(question.cascadeFromQuestionId);
+                $scope.setQuestionType(question.type);
 
+                $rootScope.updateVariableTypes($scope.activeQuestion);
+                
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = false;
 
                 if (!_.isNull($scope.questionForm) && !_.isUndefined($scope.questionForm)) {
@@ -124,8 +125,7 @@
                         $scope.initialQuestion = angular.copy(data);
                         dataBind(data);
                         utilityService.scrollToValidationCondition($state.params.indexOfEntityInProperty);
-
-
+                        
                         var focusId = null;
                         switch ($state.params.property) {
                             case 'Title':
@@ -183,7 +183,10 @@
                             hasValidation: hasQuestionValidations($scope.activeQuestion),
                             title: $scope.activeQuestion.title,
                             variable: $scope.activeQuestion.variable,
-                            hideIfDisabled: $scope.activeQuestion.hideIfDisabled
+                            hideIfDisabled: $scope.activeQuestion.hideIfDisabled,
+                            yesNoView: $scope.activeQuestion.yesNoView,
+                            isInteger: $scope.activeQuestion.isInteger,
+                            linkedToType: $scope.activeQuestion.linkedToEntity == null ? null : $scope.activeQuestion.linkedToEntity.type
                         });
 
                         var notIsFilteredCombobox = !$scope.activeQuestion.isFilteredCombobox;
@@ -247,6 +250,10 @@
                     $scope.activeQuestion.questionScope = 'Interviewer';
                 }
 
+                if (type === 'Area' && $scope.activeQuestion.questionScope === 'Supervisor') {
+                    $scope.activeQuestion.questionScope = 'Interviewer';
+                }
+
                 if (type === 'MultyOption' && $scope.activeQuestion.questionScope === 'Identifying') {
                     $scope.activeQuestion.questionScope = 'Interviewer';
                 }
@@ -261,6 +268,7 @@
                 }
 
                 markFormAsChanged();
+
             };
 
             $scope.cancelQuestion = function () {
@@ -390,16 +398,16 @@
                 if (!currentQuestion)
                     return [];
                 var allScopes = currentQuestion.allQuestionScopeOptions;
-                if (!currentQuestion.isCascade && !currentQuestion.isLinked && $.inArray(currentQuestion.type, ['TextList', 'QRBarcode', 'Multimedia', 'GpsCoordinates', 'MultyOption']) < 0)
+                if (!currentQuestion.isCascade && !currentQuestion.isLinked && $.inArray(currentQuestion.type, ['TextList', 'QRBarcode', 'Multimedia', 'GpsCoordinates', 'MultyOption', 'Area']) < 0)
                     return allScopes;
 
                 return allScopes.filter(function (o) {
-                    if (currentQuestion.type == 'MultyOption')
+                    if (currentQuestion.type === 'MultyOption')
                         return o.value !== 'Identifying';
 
-                    if (currentQuestion.type == 'GpsCoordinates')
+                    if (currentQuestion.type === 'GpsCoordinates')
                         return o.value !== 'Supervisor';
-
+                    
                     return o.value !== 'Identifying' && o.value !== 'Supervisor';
                 });
             };
@@ -467,6 +475,9 @@
             var questionTypesDoesNotSupportValidations = ["Multimedia"];
             
             $scope.doesQuestionSupportValidations = function () {
+                if ($scope.activeQuestion && $scope.activeQuestion.type === 'Area')
+                    return false;
+
                 return $scope.activeQuestion && !_.contains(questionTypesDoesNotSupportValidations, $scope.activeQuestion.type)
                     && !($scope.activeQuestion.isCascade && $scope.activeQuestion.cascadeFromQuestionId);
             };
@@ -480,7 +491,6 @@
 
                 return false;
             };
-
 
             $scope.doesQuestionSupportEnablementConditions = function () {
                 return $scope.activeQuestion && ($scope.activeQuestion.questionScope != 'Identifying')

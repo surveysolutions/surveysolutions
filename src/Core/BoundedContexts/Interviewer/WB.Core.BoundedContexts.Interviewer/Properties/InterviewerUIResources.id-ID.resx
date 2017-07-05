@@ -130,14 +130,14 @@
     <value>Aplikasi Anda tidak kompatibel dengan server satu. Perbarui aplikasi Pewawancara Anda.</value>
   </data>
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
-    <value>Selesai {0}</value>
+    <value>Selesai ({0})</value>
   </data>
   <data name="Dashboard_CreateInterview" xml:space="preserve">
     <value>Membuat
 Wawancara</value>
   </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
-    <value>Baru {0}</value>
+    <value>Baru ({0})</value>
   </data>
   <data name="Dashboard_NoInterviewsSyncButton" xml:space="preserve">
     <value>Menyinkronkan</value>
@@ -157,16 +157,13 @@ untuk instruksi lebih lanjut</value>
     <value>Wawancara ini selesai. Apakah Anda ingin memulai kembali wawancara?</value>
   </data>
   <data name="Dashboard_RejectedLinkText" xml:space="preserve">
-    <value> ditolak {0}</value>
+    <value> ditolak ({0})</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
     <value>Apakah Anda yakin Anda ingin menghapus wawancara ini "{0}" ?</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
-    <value>dimulai {0}</value>
-  </data>
-  <data name="Dashboard_Title" xml:space="preserve">
-    <value>{0} tugas untuk {1}</value>
+    <value>dimulai ({0})</value>
   </data>
   <data name="DashboardItem_AssignedOn" xml:space="preserve">
     <value>Selesai pada {0}</value>
@@ -179,9 +176,6 @@ untuk instruksi lebih lanjut</value>
   </data>
   <data name="DashboardItem_CreatedOn" xml:space="preserve">
     <value>Ditetapkan pada {0}</value>
-  </data>
-  <data name="DashboardItem_InProgress" xml:space="preserve">
-    <value>Sedang berlangsung</value>
   </data>
   <data name="DashboardItem_NotStarted" xml:space="preserve">
     <value>Belum dimulai</value>

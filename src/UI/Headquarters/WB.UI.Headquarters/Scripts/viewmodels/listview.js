@@ -134,8 +134,8 @@
         });
     };
 
-    var datatable;
-    self.initDataTable = function(onDataReceivedCallback) {
+    
+    self.initDataTable = function (onDataReceivedCallback, onTableInitComplete) {
         $.fn.dataTable.ext.errMode = 'none';
 
         var tableColumns = self.getDataTableColumns();
@@ -151,11 +151,12 @@
             });
         }
 
-        datatable = $('table#data_holder').DataTable(
+        self.Datatable = $('table#data_holder').DataTable(
         {
             language:
             {
                 "url": window.input.settings.config.dataTableTranslationsUrl
+                /*searchPlaceholder: "@Pages.Search"*/
             },
             ajax: function(data, callback, settings) {
                 var request = self.Filter() || {};
@@ -177,13 +178,34 @@
             processing: true,
             serverSide: true,
             deferRender: true,
-            footerCallback: self.footerCallback
+            searchHighlight: true,
+            footerCallback: self.footerCallback,
+            "createdRow": function(row, data, dataIndex) {
+                $(row).addClass('with-context-menu');
+                if (data.isDisabled) {
+                    $(row).addClass('disabled');
+                }
+            },
+            order: self.defaultOrder,
+            initComplete: function (settings, json) {
+                if (!_.isUndefined(onTableInitComplete))
+                    onTableInitComplete();
+
+                // Replace throttling with debounce https://github.com/DataTables/DataTables/issues/809#issuecomment-293918587
+                var $input = $(this).find("input[type='search']");
+                var searchDelay = this.api().settings()[0].searchDelay;
+
+                $input.off().on('keyup cut paste',
+                    _.debounce(function() { api.search($input.val()).draw(); },
+                    searchDelay));
+            }
         });
     };
     self.reloadDataTable = function() {
-        datatable.ajax.reload();
+        self.Datatable.ajax.reload();
     };
 
     self.getDataTableColumns = function () { return []; }
+
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.ListView, Supervisor.VM.BasePage);

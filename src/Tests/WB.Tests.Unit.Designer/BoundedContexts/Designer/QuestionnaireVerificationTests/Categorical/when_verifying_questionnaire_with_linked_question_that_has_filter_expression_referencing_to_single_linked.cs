@@ -20,24 +20,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
             var linkedSourceQuestionId = Guid.Parse("33333333333333333333333333333333");
             questionnaire = CreateQuestionnaireDocument(
-                   Create.FixedRoster(variable:"a",
+                   Create.FixedRoster(variable: "a",
                         fixedTitles: new[] { "fixed title 1", "fixed title 2" },
                         children: new IComposite[]
-                        { new TextQuestion()
                         {
-                            PublicKey = linkedSourceQuestionId,
-                            QuestionType = QuestionType.Text,
-                            StataExportCaption = "var"
-                        }}),
-                new SingleQuestion()
-                {
-                    PublicKey = categoricalQuestionId,
-                    StataExportCaption = "var1",
-                    LinkedToQuestionId = linkedSourceQuestionId
-                },
+                            Create.TextQuestion(
+                                linkedSourceQuestionId,
+                                variable: "var"
+                            )}),
+                   Create.SingleOptionQuestion(
+                    categoricalQuestionId,
+                    variable: "var1",
+                    linkedToQuestionId: linkedSourceQuestionId
+                ),
                 Create.SingleOptionQuestion(questionId: questionWithFilterId,
                     variable: "s546i",
-                    linkedToQuestionId : linkedSourceQuestionId,
+                    linkedToQuestionId: linkedSourceQuestionId,
                     linkedFilterExpression: "var1")
                 );
 

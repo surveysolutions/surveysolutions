@@ -90,7 +90,11 @@ namespace WB.UI.Shared.Web.Captcha
 
             if (HttpContext.Current != null)
             {
-                HttpContext.Current.Response.Cookies.Remove(ShouldShowCaptchaCookieName);
+                HttpContext.Current.Response.SetCookie(new HttpCookie(ShouldShowCaptchaCookieName)
+                {
+                    Value = string.Empty,
+                    Expires = DateTime.MinValue
+                });
             }
         }
 

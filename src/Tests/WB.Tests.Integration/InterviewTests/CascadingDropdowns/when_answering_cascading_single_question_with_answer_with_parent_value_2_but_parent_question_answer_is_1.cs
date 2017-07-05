@@ -2,14 +2,10 @@ using System;
 using System.Collections.Generic;
 using AppDomainToolkit;
 using Machine.Specifications;
-using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 {
@@ -31,35 +27,35 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 
                 Setup.MockedServiceLocator();
 
-                var questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Abc.Create.Entity.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
+                var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Create.Entity.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
                     {
-                         Abc.Create.Entity.Option(value: "1", text: "parent option 1"),
-                         Abc.Create.Entity.Option(value: "2", text: "parent option 2")
+                         Create.Entity.Option("1", "parent option 1"),
+                         Create.Entity.Option("2", "parent option 2")
                     }),
-                    Abc.Create.Entity.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
+                    Create.Entity.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
                         options: new List<Answer>
                         {
-                             Abc.Create.Entity.Option(value: "1.1", text: "child 1 for parent option 1", parentValue: "1"),
-                             Abc.Create.Entity.Option(value: "1.2", text: "child 2 for parent option 1", parentValue: "1"),
-                             Abc.Create.Entity.Option(value: "2.1", text: "child 1 for parent option 2", parentValue: "2"),
-                             Abc.Create.Entity.Option(value: "2.2", text: "child 2 for parent option 2", parentValue: "2"),
-                             Abc.Create.Entity.Option(value: "2.3", text: "child 3 for parent option 2", parentValue: "2"),
+                             Create.Entity.Option("11", "child 1 for parent option 1", "1"),
+                             Create.Entity.Option("12", "child 2 for parent option 1", "1"),
+                             Create.Entity.Option("21", "child 1 for parent option 2", "2"),
+                             Create.Entity.Option("22", "child 2 for parent option 2", "2"),
+                             Create.Entity.Option("23", "child 3 for parent option 2", "2")
                         })
                     );
 
-                var interview = SetupInterview(questionnaire, new List<object>
+                var interview = SetupInterviewWithExpressionStorage(questionnaire, new List<object>
                 {
-                    Abc.Create.Event.SingleOptionQuestionAnswered(
+                    Create.Event.SingleOptionQuestionAnswered(
                         parentSingleOptionQuestionId, new decimal[] { }, 1, null, null
                     ),
-                    Abc.Create.Event.QuestionsEnabled(Create.Identity(childCascadedComboboxId)),
+                    Create.Event.QuestionsEnabled(Create.Identity(childCascadedComboboxId))
                 });
 
                 using (var eventContext = new EventContext())
                 {
                     var exception = Catch.Exception(() =>
-                        interview.AnswerSingleOptionQuestion(actorId, childCascadedComboboxId, new decimal[] { }, DateTime.Now, 2.2m)
+                        interview.AnswerSingleOptionQuestion(actorId, childCascadedComboboxId, new decimal[] { }, DateTime.Now, 22)
                         );
 
                     return new InvokeResults

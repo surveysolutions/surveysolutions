@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 
         public bool IsOnlyOwnerItems { get; set; }
 
-        public string Filter { get; set; }
+        public string SearchFor { get; set; }
 
         public bool? OnlyCensus { get; set; }
 

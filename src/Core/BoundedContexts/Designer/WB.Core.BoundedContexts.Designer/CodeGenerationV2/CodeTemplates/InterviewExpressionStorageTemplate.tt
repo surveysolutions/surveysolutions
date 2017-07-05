@@ -1,0 +1,92 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="Main.Core.Entities.SubEntities" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="WB.Core.SharedKernels.DataCollection.ExpressionStorage" #>
+<#@ import namespace="WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Helpers" #>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
+
+namespace WB.Core.SharedKernels.DataCollection.Generated
+{
+	public class <#=Model.ClassName#> : <#=typeof(IInterviewExpressionStorage).Name#> 
+	{
+		private Dictionary<Guid, Func<RosterVector, <#=Model.ClassName#>, <#=typeof(IInterviewLevel).Name#>>> levelFactory = new Dictionary<Guid, Func<RosterVector, <#=Model.ClassName#>, <#=typeof(IInterviewLevel).Name#>>>();
+		public <#=Model.ClassName#>()
+		{
+			levelFactory.Add(IdOf.<#= CodeGeneratorV2.QuestionnaireIdName#>, (v, s) => new <#= CodeGeneratorV2.QuestionnaireLevel#>(v, s));
+<#
+		foreach (var roster in Model.AllRosters) 
+		{
+#>
+			levelFactory.Add(IdOf.<#= roster.Variable #>, (v, s) => new <#= roster.ClassName#>(v, s));
+<#
+		}
+#>	
+		}
+
+		public void Initialize(<#=typeof(IInterviewStateForExpressions).Name#> state) 
+		{
+			this.state = state;
+		}
+
+		internal <#=typeof(IInterviewStateForExpressions).Name#> state;
+
+		public <#=typeof(IInterviewLevel).Name#>  GetLevel(Identity rosterIdentity)
+		{
+			return CreateLevel(rosterIdentity);
+		}
+		
+		public RostersCollection<T> GetLevels<T>(Guid levelId, Identity forRosterIdentity) where T : class, IInterviewLevel, IIndexedInterviewLevel
+        {
+			var rosterIdentities = this.state.FindEntitiesFromSameOrDeeperLevel(levelId, forRosterIdentity);
+			var rosters = rosterIdentities.Select(CreateLevel).Cast<T>().ToList();
+            return new RostersCollection<T>(rosters);
+        }
+
+		private <#=typeof(IInterviewLevel).Name#> CreateLevel(Identity rosterIdentity)
+		{
+			if (levelFactory.ContainsKey(rosterIdentity.Id))
+				return levelFactory[rosterIdentity.Id](rosterIdentity.RosterVector, this);
+			return null;
+		}
+	}
+
+<#
+	foreach (var level in Model.Levels) 
+	{
+		var template = CreateLevelTemplate(level, Model);
+		this.Write(template.TransformText());
+	}
+#>
+
+	public static class IdOf
+	{
+<#
+		foreach (var pair in Model.IdMap)
+		{
+#>
+		public static readonly Guid <#=pair.Value#> = <#= pair.Key.AsBytesString() #>;
+<#
+		}
+#>
+	}
+
+	public class QuestionnaireRandom
+	{
+		public QuestionnaireRandom(<#=typeof(IInterviewPropertiesForExpressions).Name#> properties)
+		{
+			this.Properties = properties;
+		}
+		private <#=typeof(IInterviewPropertiesForExpressions).Name#> Properties;
+			
+		public double IRnd() => Properties.Random;
+	}
+}

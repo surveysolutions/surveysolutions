@@ -1,4 +1,3 @@
-using System;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
