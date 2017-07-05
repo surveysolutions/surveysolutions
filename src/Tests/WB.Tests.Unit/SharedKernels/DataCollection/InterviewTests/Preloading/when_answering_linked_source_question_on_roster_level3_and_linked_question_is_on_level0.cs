@@ -30,9 +30,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Preloading
                     })
                 })
             });
-            var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, 0);
 
-            interview = Create.AggregateRoot.StatefulInterview(questionnaire: plainQuestionnaire, shouldBeInitialized: false);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaireDocument, shouldBeInitialized: false);
         };
 
         Because of = () =>

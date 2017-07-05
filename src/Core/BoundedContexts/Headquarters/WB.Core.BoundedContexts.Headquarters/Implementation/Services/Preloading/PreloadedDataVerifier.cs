@@ -57,9 +57,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             this.rosterStructureService = rosterStructureService;
         }
 
-        public VerificationStatus VerifySample(Guid questionnaireId, long version, PreloadedDataByFile data)
+        public VerificationStatus VerifyAssignmentsSample(Guid questionnaireId, long version, PreloadedDataByFile data)
         {
-            VerificationStatus status = new VerificationStatus(); 
+            var status = new VerificationStatus();
 
             if (data?.Content == null || data.Content.Length == 0)
             {
@@ -68,15 +68,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             }
 
             IPreloadedDataService preloadedDataService = this.CreatePreloadedDataService(questionnaireId, version);
+
             if (preloadedDataService == null)
             {
                 status.Errors = new[] { new PreloadedDataVerificationError("PL0001", PreloadingVerificationMessages.PL0001_NoQuestionnaire) };
                 return status;
             }
+
             var errors = new List<PreloadedDataVerificationError>();
 
             var datas = new[] { new PreloadedDataByFile(data.Id, preloadedDataService.GetValidFileNameForTopLevelQuestionnaire(), data.Header, data.Content) };
-            //var datas = new[] { new PreloadedDataByFile(data.Id, data.FileName, data.Header, data.Content) };
 
             errors.AddRange(
                 this.Verifier(this.ColumnWasntMappedOnQuestionInTemplate, "PL0003",
@@ -90,6 +91,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 errors.AddRange(this.ErrorsByResposibleName(datas, preloadedDataService));
 
             if (this.ShouldVerificationBeContinued(errors))
+                errors.AddRange(this.ErrorsByQuantityColumn(datas, preloadedDataService));
+
+            if (this.ShouldVerificationBeContinued(errors))
                 errors.AddRange(this.Verifier(this.ErrorsByGpsQuestions, QuestionType.GpsCoordinates)(datas, preloadedDataService));
 
             if (this.ShouldVerificationBeContinued(errors))
@@ -99,7 +103,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 errors.AddRange(this.Verifier(this.ColumnDuplications)(datas, preloadedDataService));
 
             status.Errors = errors.Count > 100 ? errors.Take(100).ToList() : errors;
-            status.InterviewsCount = datas.FirstOrDefault()?.Content.Length ?? 0;
+            status.EntitiesCount = datas.FirstOrDefault()?.Content.Length ?? 0;
             if (!status.Errors.Any())
             {
                 CountResposiblesInDataFile(datas, preloadedDataService, status);
@@ -113,6 +117,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         private void CountResposiblesInDataFile(PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService, VerificationStatus status)
         {
             var responsibleCache = new Dictionary<string, UserToVerify>();
+
             foreach (var levelData in allLevels)
             {
                 var responsibleNameIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, ServiceColumns.ResponsibleColumnName);
@@ -132,6 +137,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                     var userState = this.GetResponsible(responsibleCache, name);
                 }
             }
+
             foreach (var userState in responsibleCache.Values)
             {
                 if (userState.IsInterviewer)
@@ -174,7 +180,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
             var topLevel = preloadedDataService.GetTopLevelData(data);
 
-            status.InterviewsCount = topLevel?.Content?.Length ?? 0;
+            status.EntitiesCount = topLevel?.Content?.Length ?? 0;
             if (!status.Errors.Any() && topLevel!=null)
             {
                 CountResposiblesInDataFile(topLevel.ToEnumerable().ToArray(), preloadedDataService, status);
@@ -319,6 +325,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             if (levelExportStructure.LevelScopeVector == null || levelExportStructure.LevelScopeVector.Length == 0)
             {
                 yield return ServiceColumns.ResponsibleColumnName;
+                yield return ServiceColumns.AssignmentsCountColumnName;
             }
             
         }
@@ -389,7 +396,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             {
                 var idValue = levelData.Content[y][idCoulmnIndexFile];
                 
-                decimal[] ids = preloadedDataService.GetAvailableIdListForParent(parentDataFile, levelExportStructure.LevelScopeVector,
+                var ids = preloadedDataService.GetAvailableIdListForParent(parentDataFile, levelExportStructure.LevelScopeVector,
                     this.CreateParentIdsVector(levelData.Content[y], parentIdColumnIndexes), allLevels);
 
                 if (ids == null)
@@ -400,7 +407,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                     yield return
                         new PreloadedDataVerificationReference(idCoulmnIndexFile, y, PreloadedDataVerificationReferenceType.Cell, idValue,
                             levelData.FileName);
-                if (!ids.Contains(decimalId))
+                if (!ids.Contains(Convert.ToInt32(decimalId)))
                     yield return
                         new PreloadedDataVerificationReference(idCoulmnIndexFile, y, PreloadedDataVerificationReferenceType.Cell, idValue,
                             levelData.FileName);
@@ -738,6 +745,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                                                 row[columnIndex]),
                                             levelData.FileName));
                                 break;
+                            case ValueParsingResult.UnsupportedAreaQuestion:
+                                yield return
+                                    new PreloadedDataVerificationError("PL0038",
+                                        PreloadingVerificationMessages.PL0038_UnsupportedAreaQuestion,
+                                        new PreloadedDataVerificationReference(columnIndex, rowIndex,
+                                            PreloadedDataVerificationReferenceType.Cell,
+                                            string.Format("{0}:{1}", levelData.Header[columnIndex],
+                                                row[columnIndex]),
+                                            levelData.FileName));
+                                break;
                             case ValueParsingResult.GeneralErrorOccured:
                             default:
                                 yield return
@@ -830,6 +847,53 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 string.Format("{0}:{1}", levelData.Header[x],
                     levelData.Content[y][x]),
                 levelData.FileName);
+        }
+
+        private IEnumerable<PreloadedDataVerificationError> ErrorsByQuantityColumn(PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService)
+        {
+            foreach (var levelData in allLevels)
+            {
+                var quantityColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, ServiceColumns.AssignmentsCountColumnName);
+
+                if (quantityColumnIndex < 0)
+                    continue;
+
+                for (int y = 0; y < levelData.Content.Length; y++)
+                {
+                    var row = levelData.Content[y];
+                    var quantityString = row[quantityColumnIndex]?.Trim();
+
+                    if (String.IsNullOrWhiteSpace(quantityString))
+                        continue;
+
+                    if (quantityString == "-1" || quantityString == "INF")
+                        continue;
+
+                    if (!int.TryParse(quantityString, out int quantity))
+                    {
+                        yield return
+                            new PreloadedDataVerificationError("PL0035",
+                                PreloadingVerificationMessages.PL0035_QuantityNotParsed,
+                                new PreloadedDataVerificationReference(quantityColumnIndex, y,
+                                    PreloadedDataVerificationReferenceType.Cell,
+                                    "",
+                                    levelData.FileName));
+                        continue;
+                    }
+
+                    if (quantity < 1)
+                    {
+                        yield return
+                            new PreloadedDataVerificationError("PL0036",
+                                PreloadingVerificationMessages.PL0036_QuantityShouldBePositive,
+                                new PreloadedDataVerificationReference(quantityColumnIndex, y,
+                                    PreloadedDataVerificationReferenceType.Cell,
+                                    "",
+                                    levelData.FileName));
+                        continue;
+                    }
+                }
+            }
         }
 
         private IEnumerable<PreloadedDataVerificationError> ErrorsByResposibleName(PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService)

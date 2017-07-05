@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -36,7 +35,7 @@ namespace WB.UI.Headquarters.Controllers
             this.ViewBag.EnableInterviewHistory = this.interviewDataExportSettings.EnableInterviewHistory;
 
             AllUsersAndQuestionnairesView usersAndQuestionnaires =
-                this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
+                this.allUsersAndQuestionnairesFactory.Load();
 
             ExportModel export = new ExportModel();
             export.Questionnaires = usersAndQuestionnaires.Questionnaires;

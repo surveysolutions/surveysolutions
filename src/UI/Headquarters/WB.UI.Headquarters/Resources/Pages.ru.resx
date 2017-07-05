@@ -337,7 +337,7 @@
     <value>Вы хотите продолжить?</value>
   </data>
   <data name="Interviewers_ArchiveInterviewersConfirmMessage" xml:space="preserve">
-    <value>Интервью на планшете будут потеряны если они созданы в census режиме.</value>
+    <value>Интервью на планшете будут потеряны.</value>
   </data>
   <data name="Interviewers_ArchiveStatusTitle" xml:space="preserve">
     <value>Статус</value>
@@ -364,10 +364,10 @@
     <value>Состояние созданных и собранных интервью</value>
   </data>
   <data name="SurveysAndStatuses_SupervisorStatisticsFormat" xml:space="preserve">
-    <value>{0} интервью от {1} ответственных</value>
+    <value>{0} интервью</value>
   </data>
   <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
-    <value>{0} интервью от {1} ответственных</value>
+    <value>{0} интервью</value>
   </data>
   <data name="SurveysAndStatuses_InterviewerTitle" xml:space="preserve">
     <value>Интервьвер (команда)</value>
@@ -644,7 +644,7 @@
     <value>Интервьюеры</value>
   </data>
   <data name="InterviewerProfile_NewOnDevice" xml:space="preserve">
-    <value>новые интервью на устройстве</value>
+    <value>новые на устройстве</value>
   </data>
   <data name="InterviewerProfile_Rejected" xml:space="preserve">
     <value>возвращённые на устройство интервью</value>
@@ -894,5 +894,117 @@
   </data>
   <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
     <value>Подключен к планшету</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Title" xml:space="preserve">
+    <value>Последние данные по синхронизации</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_All_Assignments_Desc" xml:space="preserve">
+    <value>Количество незаконченных или не синхронизированных интервью на устройстве в каждый момент синхронизации</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Failed_Sync" xml:space="preserve">
+    <value>Сбой при попытке синхронизации</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Nothing_To_Sync" xml:space="preserve">
+    <value>Успешное соединение, нечего синхронизировать</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Uploaded_Interview_Desc" xml:space="preserve">
+    <value>Загруженные на сервер для подтверждения</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Downloaded_Assignments_Desc" xml:space="preserve">
+    <value>Скачанные задания</value>
+  </data>
+  <data name="InterviewerProfile_DeviceAssignmentDate" xml:space="preserve">
+    <value>Дата подключения устройства</value>
+    <comment>Дата подключения устройства</comment>
+  </data>
+  <data name="InterviewerProfile_LastSyncronizationDate" xml:space="preserve">
+    <value>Дата последнего соединения</value>
+  </data>
+  <data name="Assignments_PageTitle" xml:space="preserve">
+    <value>Задания</value>
+  </data>
+  <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
+    <value>(вер. {1}) {0} </value>
+    <comment>{0} - Questionnaire name, {1} - Questionnaire version</comment>
+  </data>
+  <data name="ConfirmationNeededTitle" xml:space="preserve">
+    <value>Требуется подверждение</value>
+  </data>
+  <data name="HQ_LockWarning" xml:space="preserve">
+    <value>Заблокированный хедквотер (галочка отмечена) не сможет войти на сайт и совершить какие-либо действия</value>
+  </data>
+  <data name="Interviewer_LockWarning" xml:space="preserve">
+    <value>Заблокированный интервьювер (галочка отмечена) не сможет соединиться с сервером со своего планшета и отправить собранные данные </value>
+  </data>
+  <data name="Supervisor_LockWarning" xml:space="preserve">
+    <value>Заблокированный супервизор (галочка отмечена) не сможет войти на сайт и совершить какие-либо действия</value>
+  </data>
+  <data name="Users_API_Instruction1" xml:space="preserve">
+    <value>Нажмите на кнопку Добавить API Пользователя, чтобы создать нового API пользователя.</value>
+  </data>
+  <data name="Users_API_Instruction2" xml:space="preserve">
+    <value>Кликните по Логину, чтобы изменить профиль существующего API пользователя.</value>
+  </data>
+  <data name="Users_Headquarters_Instruction1" xml:space="preserve">
+    <value>Нажмите на кнопку Добавить Хэдквотера, чтобы создать нового хэдквотера.</value>
+  </data>
+  <data name="Users_Headquarters_Instruction2" xml:space="preserve">
+    <value>Кликните по Логину, чтобы изменить профиль существующего хэдквотера.</value>
+  </data>
+  <data name="Users_Interviewers_Instruction1" xml:space="preserve">
+    <value>Нажмите на кнопку Добавить Интервьюера, чтобы создать нового интервьюера.</value>
+  </data>
+  <data name="Users_Interviewers_Instruction2" xml:space="preserve">
+    <value>Кликните по Логину, чтобы просмотреть информацию о интервьюере и изменить профиль существующего интервьюера.</value>
+  </data>
+  <data name="Users_Observers_Instruction1" xml:space="preserve">
+    <value>Нажмите на кнопку Добавить Наблюдателя, чтобы создать нового наблюдателя.</value>
+  </data>
+  <data name="Users_Observers_Instruction2" xml:space="preserve">
+    <value>Кликните по Логину, чтобы изменить профиль существующего наблюдателя.</value>
+  </data>
+  <data name="Users_Supervisors_Instruction1" xml:space="preserve">
+    <value>Нажмите на кнопку Добавить Супервизора, чтобы создать нового Супервизора.</value>
+  </data>
+  <data name="Users_Supervisors_Instruction2" xml:space="preserve">
+    <value>Кликните по Логину, чтобы изменить профиль существующего супервизора.</value>
+  </data>
+  <data name="InterviewDetails_MoreDetails" xml:space="preserve">
+    <value>Детали</value>
+  </data>
+  <data name="GetLatestAppDescription" xml:space="preserve">
+    <value>Скачайте и установите эту версию приложения Интервьвер для опросов не содержащих функциональности ESRI GIS. Эта версия не содержит ESRI SDK и таким образом на много меньше по размеру и быстрее по скорости скачивания по сравнению с версией, содержащей SDK.</value>
+  </data>
+  <data name="GetLatestAppExtendedDescription" xml:space="preserve">
+    <value>Скачайте и установите эту версию приложения Интервьвер только, если вы используете расширенную функциональность ESRI GIS. Эта версия содержит ESRI SDK, больше по размеру и скачивание может быть долгим.</value>
+  </data>
+  <data name="DownloadPage_Instructions" xml:space="preserve">
+    <value>Инструкции по установке</value>
+  </data>
+  <data name="DownloadPage_Title" xml:space="preserve">
+    <value>Технология опросов с помощью компьютерных систем, разработанная Мировым Банком.</value>
+  </data>
+  <data name="DownloadPage_Welcome" xml:space="preserve">
+    <value>Добро пожаловать на страницу загрузки</value>
+  </data>
+  <data name="DownloadPage_PageTitle" xml:space="preserve">
+    <value>Скачивание приложения Интервьюер</value>
+  </data>
+  <data name="DownloadPage_Version" xml:space="preserve">
+    <value>Версия</value>
+  </data>
+  <data name="AreaQestion_Area" xml:space="preserve">
+    <value>Площадь</value>
+  </data>
+  <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
+    <value>квадратных метров</value>
+  </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>Разархивировать</value>
+    <comment>Разархивировать</comment>
+  </data>
+  <data name="InterviewerIsArchived" xml:space="preserve">
+    <value>Интервьювер заархерирован</value>
+    <comment>Интервьювер заархерирован</comment>
   </data>
 </root>

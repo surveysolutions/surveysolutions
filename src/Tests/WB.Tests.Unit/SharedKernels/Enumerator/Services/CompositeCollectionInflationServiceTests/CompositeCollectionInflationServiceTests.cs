@@ -29,18 +29,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
             //Arrange
             var enabledQuestionIdentity1 = new Identity(Guid.NewGuid(), RosterVector.Empty);
             var enabledQuestionIdentity2 = new Identity(Guid.NewGuid(), RosterVector.Empty);
-            IQuestionnaire questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.Entity.TextQuestion(enabledQuestionIdentity2.Id, instruction: "some instruction"),
-                Create.Entity.TextQuestion(enabledQuestionIdentity1.Id)
-            }));
+                Create.Entity.TextQuestion(enabledQuestionIdentity2.Id, instruction: "some instruction", variable: "q1"),
+                Create.Entity.TextQuestion(enabledQuestionIdentity1.Id, variable: "q2")
+            });
 
             var questionnaireId = Guid.NewGuid();
             string interviewId = "interview id";
             var liteEventRegistry = Create.Service.LiteEventRegistry();
             var statefulInterview = Create.AggregateRoot.StatefulInterview(userId: null, questionnaire: questionnaire, questionnaireId: questionnaireId);
             var statefullInterviewRepository = Create.Fake.StatefulInterviewRepositoryWith(statefulInterview);
-            var questionnaireRepositoryWithOneQuestionnaire = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, questionnaire);
+            var questionnaireRepositoryWithOneQuestionnaire = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
 
             var enabledQuestionViewModel1 = Create.ViewModel.TextQuestionViewModel(interviewRepository: statefullInterviewRepository,
                 eventRegistry: liteEventRegistry, questionnaireStorage: questionnaireRepositoryWithOneQuestionnaire);
@@ -82,18 +82,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
             //Arrange
             var disabledQuestionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
             var enabledQuestionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
-            IQuestionnaire questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.Entity.TextQuestion(enabledQuestionIdentity.Id, instruction: "some instruction"),
-                Create.Entity.TextQuestion(disabledQuestionIdentity.Id)
-            }));
+                Create.Entity.TextQuestion(enabledQuestionIdentity.Id, instruction: "some instruction", variable: "q1"),
+                Create.Entity.TextQuestion(disabledQuestionIdentity.Id, variable: "q2")
+            });
 
             var questionnaireId = Guid.NewGuid();
             string interviewId = "interview id";
             var liteEventRegistry = Create.Service.LiteEventRegistry();
             var statefulInterview = Create.AggregateRoot.StatefulInterview(userId: null, questionnaire: questionnaire, questionnaireId: questionnaireId);
             var statefullInterviewRepository = Create.Fake.StatefulInterviewRepositoryWith(statefulInterview);
-            var questionnaireRepositoryWithOneQuestionnaire = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, questionnaire);
+            var questionnaireRepositoryWithOneQuestionnaire = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
 
             var disabledQuestionViewModel = Create.ViewModel.TextQuestionViewModel(interviewRepository: statefullInterviewRepository,
                 eventRegistry: liteEventRegistry, questionnaireStorage: questionnaireRepositoryWithOneQuestionnaire);
@@ -131,17 +131,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
         {
             //Arrange
             var disabledQuestionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
-            IQuestionnaire questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.Entity.TextQuestion(disabledQuestionIdentity.Id, hideIfDisabled: true)
-            }));
+                Create.Entity.TextQuestion(disabledQuestionIdentity.Id, hideIfDisabled: true, variable: "q1")
+            });
 
             var questionnaireId = Guid.NewGuid();
             string interviewId = "interview id";
             var liteEventRegistry = Create.Service.LiteEventRegistry();
             var statefulInterview = Create.AggregateRoot.StatefulInterview(userId: null, questionnaire: questionnaire, questionnaireId: questionnaireId);
             var statefullInterviewRepository = Create.Fake.StatefulInterviewRepositoryWith(statefulInterview);
-            var questionnaireRepositoryWithOneQuestionnaire = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, questionnaire);
+            var questionnaireRepositoryWithOneQuestionnaire = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
 
             var disabledQuestionViewModel = Create.ViewModel.TextQuestionViewModel(interviewRepository: statefullInterviewRepository,
                 eventRegistry: liteEventRegistry, questionnaireStorage: questionnaireRepositoryWithOneQuestionnaire);
@@ -176,18 +176,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
             //Arrange
             var invalidQuestionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
             var validQuestionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
-            IQuestionnaire questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.Entity.TextQuestion(validQuestionIdentity.Id),
-                Create.Entity.TextQuestion(invalidQuestionIdentity.Id)
-            }));
+                Create.Entity.TextQuestion(validQuestionIdentity.Id, variable: "q1"),
+                Create.Entity.TextQuestion(invalidQuestionIdentity.Id, variable: "q2")
+            });
 
             var questionnaireId = Guid.NewGuid();
             string interviewId = "interview id";
             var liteEventRegistry = Create.Service.LiteEventRegistry();
-            var statefulInterview = Create.AggregateRoot.StatefulInterview(userId: null, questionnaire: questionnaire, questionnaireId: questionnaireId);
+            var statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, userId: null, questionnaire: questionnaire);
             var statefullInterviewRepository = Create.Fake.StatefulInterviewRepositoryWith(statefulInterview);
-            var questionnaireRepositoryWithOneQuestionnaire = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, questionnaire);
+            var questionnaireRepositoryWithOneQuestionnaire = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
 
             var invalidQuestionViewModel = Create.ViewModel.TextQuestionViewModel(interviewRepository: statefullInterviewRepository,
                 eventRegistry: liteEventRegistry, questionnaireStorage: questionnaireRepositoryWithOneQuestionnaire);
@@ -224,18 +224,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
             //Arrange
             var questionWithProgressIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
             var questionWithoutProgressIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
-            IQuestionnaire questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.Entity.TextQuestion(questionWithoutProgressIdentity.Id),
-                Create.Entity.TextQuestion(questionWithProgressIdentity.Id)
-            }));
+                Create.Entity.TextQuestion(questionWithoutProgressIdentity.Id, variable: "q1"),
+                Create.Entity.TextQuestion(questionWithProgressIdentity.Id, variable: "q2")
+            });
 
             var questionnaireId = Guid.NewGuid();
             string interviewId = "interview id";
             var liteEventRegistry = Create.Service.LiteEventRegistry();
             var statefulInterview = Create.AggregateRoot.StatefulInterview(userId: null, questionnaire: questionnaire, questionnaireId: questionnaireId);
             var statefullInterviewRepository = Create.Fake.StatefulInterviewRepositoryWith(statefulInterview);
-            var questionnaireRepositoryWithOneQuestionnaire = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, questionnaire);
+            var questionnaireRepositoryWithOneQuestionnaire = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
 
             var answeringViewModel = Create.ViewModel.AnsweringViewModel();
 

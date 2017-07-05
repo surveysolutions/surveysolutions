@@ -19,7 +19,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             var answeredQuestionId = Guid.Parse("11111111111111111111111111111111");
             var dependentGroupId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
-            var interview = SetupInterview(questionnaireDocument: Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            var interview = SetupInterviewWithExpressionStorage(questionnaireDocument: Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Abc.Create.Entity.NumericIntegerQuestion(answeredQuestionId, "q1"),
                 Abc.Create.Entity.Group(dependentGroupId, "Group X", null, "q1 > 0", false, null),

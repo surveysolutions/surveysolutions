@@ -1,7 +1,6 @@
-﻿using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Security;
+﻿using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
-using WB.Infrastructure.Security;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation
 {

@@ -1,5 +1,4 @@
-﻿using System;
-using Moq;
+﻿using Moq;
 using MvvmCross.Plugins.Messenger;
 using MvvmCross.Test.Core;
 using NSubstitute;
@@ -8,8 +7,11 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
 {
@@ -20,20 +22,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
         public DashboardViewModelTests()
         {
             base.Setup();
-        }
-
-        [Test]
-        public void When_start_async_and_no_user_logged_in_Then_should_never_called_get_interviewer_dashboard_async_from_dashboard_factory()
-        {
-            // arrange
-            var dashboardFactory = new Mock<IInterviewerDashboardFactory>();
-            var viewModel = CreateDashboardViewModel(dashboardFactory: dashboardFactory.Object);
-            
-            //act
-            viewModel.Load();
-
-            //assert
-            dashboardFactory.Verify(m => m.GetInterviewerDashboardAsync(Moq.It.IsAny<Guid>()), Times.Never());
         }
 
         [Test]
@@ -58,18 +46,45 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
 
         private static DashboardViewModel CreateDashboardViewModel(
             IViewModelNavigationService viewModelNavigationService = null,
-            IInterviewerDashboardFactory dashboardFactory = null,
             IInterviewerPrincipal principal = null,
             SynchronizationViewModel synchronization = null,
             IMvxMessenger messenger = null,
             ICommandService commandService = null)
         {
-            return new DashboardViewModel(viewModelNavigationService: viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
-                 dashboardFactory: dashboardFactory ?? Mock.Of<IInterviewerDashboardFactory>(),
-                 principal: principal ?? Mock.Of<IInterviewerPrincipal>(),
-                 synchronization: synchronization ?? Substitute.For<SynchronizationViewModel>(),
-                 messenger: messenger ?? Mock.Of<IMvxMessenger>(),
-                 commandService: commandService ?? Mock.Of<ICommandService>());
+            return new DashboardViewModel(
+                    viewModelNavigationService: viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
+                    principal: principal ?? Mock.Of<IInterviewerPrincipal>(),
+                    synchronization: synchronization ?? Substitute.For<SynchronizationViewModel>(),
+                    messenger: messenger ?? Mock.Of<IMvxMessenger>(),
+                    createNewViewModel: DashboardQuestionnairesViewModel(),
+                    startedInterviewsViewModel: DashboardStartedInterviewsViewModel(),
+                    completedInterviewsViewModel: DashboardCompletedInterviewsViewModel(),
+                    rejectedInterviewsViewModel: DashboardRejectedInterviewsViewModel());
         }
+
+        private static CreateNewViewModel DashboardQuestionnairesViewModel()
+            => new CreateNewViewModel(
+                Substitute.For<IPlainStorage<QuestionnaireView>>(),
+                Substitute.For<IInterviewViewModelFactory>(),
+                Substitute.For<IAssignmentDocumentsStorage>(),
+                Substitute.For<IPlainStorage<InterviewView>>(),
+                Mock.Of<IViewModelNavigationService>(),
+                Mock.Of<IInterviewerPrincipal>(),
+                Mock.Of<IMvxMessenger>(),
+                Mock.Of<ICommandService>(),
+                Mock.Of<IInterviewAnswerSerializer>()
+            );
+
+        private static StartedInterviewsViewModel DashboardStartedInterviewsViewModel()
+            => new StartedInterviewsViewModel(Substitute.For<IPlainStorage<InterviewView>>(),
+                Substitute.For<IInterviewViewModelFactory>(), Substitute.For<IPrincipal>());
+
+        private static CompletedInterviewsViewModel DashboardCompletedInterviewsViewModel()
+            => new CompletedInterviewsViewModel(Substitute.For<IPlainStorage<InterviewView>>(),
+                Substitute.For<IInterviewViewModelFactory>(), Substitute.For<IPrincipal>());
+
+        private static RejectedInterviewsViewModel DashboardRejectedInterviewsViewModel()
+            => new RejectedInterviewsViewModel(Substitute.For<IPlainStorage<InterviewView>>(),
+                Substitute.For<IInterviewViewModelFactory>(), Substitute.For<IPrincipal>());
     }
 }

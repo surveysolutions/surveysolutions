@@ -135,14 +135,8 @@
   <data name="ApprovedDataStata" xml:space="preserve">
     <value>Approved data Stata</value>
   </data>
-  <data name="BatchUpload" xml:space="preserve">
-    <value>Batch upload</value>
-  </data>
   <data name="BinaryData" xml:space="preserve">
     <value>Binary data</value>
-  </data>
-  <data name="Census" xml:space="preserve">
-    <value>Census</value>
   </data>
   <data name="CloneQuestionnaire" xml:space="preserve">
     <value>Clone questionnaire</value>
@@ -159,8 +153,8 @@
   <data name="LastEntryDate" xml:space="preserve">
     <value>Last Entry Date</value>
   </data>
-  <data name="NewInterview" xml:space="preserve">
-    <value>New interview</value>
+  <data name="NewAssignment" xml:space="preserve">
+    <value>New assignment</value>
   </data>
   <data name="Questionnaires" xml:space="preserve">
     <value>Questionnaires</value>
@@ -184,12 +178,15 @@
     <value>Questionnaire</value>
   </data>
   <data name="SurveySetupIntroMessage1" xml:space="preserve">
-    <value>1. Click Import Template  button to load a questionnaire from Designer</value>
+    <value>Click Import Template  button to load a questionnaire from Designer</value>
   </data>
   <data name="SurveySetupIntroMessage2" xml:space="preserve">
-    <value>2. Click on a questionnaire from the list to create interview assignments</value>
+    <value>Click on a questionnaire from the list to create interview assignments</value>
   </data>
   <data name="WebInterviewSetup" xml:space="preserve">
     <value>Web interview setup</value>
+  </data>
+  <data name="UploadAssignments" xml:space="preserve">
+    <value>Upload assignments</value>
   </data>
 </root>

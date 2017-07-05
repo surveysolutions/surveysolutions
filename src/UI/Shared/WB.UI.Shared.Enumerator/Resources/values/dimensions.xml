@@ -33,4 +33,10 @@
   <dimen name="Interview_Question_Answer_FilteredComboBox_verticalOffset">6dp</dimen>
   <dimen name="Interview_Group_button_padding">17dp</dimen>
   <dimen name="Interview_Confirmation_EditText_margin">16dp</dimen>
+
+  <dimen name="Interview_Readonly_Question_Answer_layout_height">50dp</dimen>
+  <dimen name="Interview_Readonly_Question_Answer_margin_left">14dp</dimen>
+  <dimen name="Interview_Readonly_Question_Answer_padding">14dp</dimen>
+  <dimen name="Interview_Readonly_Question_Icon_margin_top">14dp</dimen>
+  <dimen name="Interview_Readonly_Question_Layout_margin_bottom">40dp</dimen>
 </resources>

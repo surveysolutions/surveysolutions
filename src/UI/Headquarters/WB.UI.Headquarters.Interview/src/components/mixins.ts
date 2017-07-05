@@ -6,10 +6,6 @@ export const entityPartial = {
         $me() {
             const id = this.id || this.$parent.id
 
-            if (id == null) {
-                console.error("Cannot identify entity id")
-            }
-
             return this.$store.state.entityDetails[id] || {
                 isAnswered: false,
                 validity: {
@@ -73,13 +69,13 @@ export function detailsMixin(fetchMethod: string, defaults) {
                 })
             },
             handleEmptyAnswer(answer) {
-                const answ = answer || ""
+                const answ = answer === undefined || answer === null || answer === "" ? null : answer
 
-                if (answ === (this.$me.answer || "")) {
+                if (answ === this.$me.answer) {
                     return true
                 }
 
-                if (answ === "" && this.$me.isAnswered) {
+                if ((answ === "" || answ === null) && this.$me.isAnswered) {
                     this.removeAnswer()
                     return true
                 }

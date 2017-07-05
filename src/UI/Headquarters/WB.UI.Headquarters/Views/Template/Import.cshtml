@@ -2,67 +2,32 @@
 @using WB.UI.Headquarters.Models.Template
 @model WB.UI.Headquarters.Models.Template.ImportQuestionnaireListModel
 @{
+    ViewBag.Title = QuestionnaireImport.MyQuestionnairesTitle;
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
 @section scripts
 {
+    @Scripts.Render("~/js/main-no-libs")
     @Scripts.Render("~/js/common")
-
+    @Scripts.Render("~/js/list")
+    @Scripts.Render("~/js/importquestionaires")
+    
     <script type="text/javascript">
-        'use strict';
 
-        $(function () {
-            var notifier = new Notifier();
+        var questionnaireListUrl = "@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DesignerQuestionnairesApi", action = "QuestionnairesList" })";
+        var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "ExecuteCommands"})';
 
-            var questionnaireListUrl = "@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DesignerQuestionnairesApi", action = "QuestionnairesList" })";
-            var questionnaireImportModeUrl = "@Url.Action("ImportMode", "Template")";
+        $(function() {
+            var model = new Supervisor.VM.ImportQuestionnaires(questionnaireListUrl);
 
-            var requestHeaders = {};
-            requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
-
-            var onTableInitComplete = function () {
-                $('#DataTables_Table_0_filter label').on('click', function (e) {
-                    if (e.target !== this)
-                        return;
-                    if ($(this).hasClass("active")) {
-                        $(this).removeClass("active");
-                    }
-                    else {
-                        $(this).addClass("active");
-                    }
-                    $(".column-questionnaire-title").toggleClass("padding-left-slide");
-                });
-            };
-
-            $.fn.dataTable.ext.errMode = 'none';
-
-            var table = $('table.import-interview')
-                .on('init.dt', onTableInitComplete)
-                .on('xhr.dt', function (e, settings, json, xhr) {
-                    if (xhr.status === 401)
-                        location.reload();
-                    else if (xhr.status != undefined && xhr.status !== 200)
-                        notifier.showError("@Pages.OperationFailedTitle", "@Pages.OperationFailedDescription");
-                })
-                .DataTable({
-                    processing: true,
-                    language:
-                    {
-                        "url": window.input.settings.config.dataTableTranslationsUrl
-                    },
-                    serverSide: true,
-                    ajax: {
-                        url: questionnaireListUrl,
-                        type: "POST",
-                        headers: requestHeaders
-                    },
-                    columns: [
+            model.getDataTableColumns = function() {
+                return [
                         {
                             data: "title",
                             name: "Title", // case-sensitive!
                             render: function (data, type, row) {
-                                return "<a href=" + questionnaireImportModeUrl + "/" + row.id + ">" + data + "</a>";
+                                return "<a href=" + "@Url.Action("ImportMode", "Template")" + "/" + row.id + ">" + data + "</a>";
                             }
                         },
                         {
@@ -75,17 +40,15 @@
                             name: "CreatorName",  // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
                             "class": "created-by"
                         }
-                    ],
-                    rowId: 'id',
-                    pagingType: "full_numbers",
-                    lengthChange: false, // do not show page size selector
-                    pageLength: 50, // page size
-                    "order": [[1, 'desc']],
-                    conditionalPaging: true
-                });
+                    ];
+            };
+
+            ko.applyBindings(model);
+            model.load();
         });
     </script>
 }
+
 <main class="import-wrapper">
     <div class="container-fluid">
         <div class="row">
@@ -97,7 +60,7 @@
                 </div>
                 <ol class="breadcrumb">
                     <li>
-                        @Html.ActionLink(MainMenu.Questionnaires, "Index", "SurveySetup")
+                        @Html.ActionLink(MainMenu.SurveySetup, "Index", "SurveySetup")
                     </li>
                     <li>
                         @Html.ActionLink(QuestionnaireImport.ListOfMyQuestionnaires, "Import")
@@ -110,7 +73,7 @@
 
     <div class="container-fluid">
         <div class="row">
-            <table class="table table-hover table-ordered import-interview">
+            <table id="data_holder" class="table table-hover table-ordered import-interview">
                 <thead>
                 <tr>
                     <th class="column-questionnaire-title with-search">@ImportQuestionnaire.Table_Title</th>

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform;
 using Plugin.Permissions.Abstractions;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -12,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -19,7 +21,7 @@ using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class MultimediaQuestionViewModel : MvxNotifyPropertyChanged, 
+    public class MultimediaQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
         ILiteEventHandler<AnswersRemoved>,
         ICompositeQuestion,
@@ -29,6 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IPictureChooser pictureChooser;
+        private readonly IUserInteractionService userInteractionService;
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
         private readonly ILiteEventRegistry eventRegistry;
         private Guid interviewId;
@@ -43,6 +46,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             ILiteEventRegistry eventRegistry,
             IQuestionnaireStorage questionnaireStorage,
             IPictureChooser pictureChooser,
+            IUserInteractionService userInteractionService,
             QuestionStateViewModel<PictureQuestionAnswered> questionStateViewModel,
             QuestionInstructionViewModel instructionViewModel,
             AnsweringViewModel answering)
@@ -53,6 +57,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.eventRegistry = eventRegistry;
             this.questionnaireStorage = questionnaireStorage;
             this.pictureChooser = pictureChooser;
+            this.userInteractionService = userInteractionService;
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
@@ -103,11 +108,27 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var pictureFileName = this.GetPictureFileName();
 
+            var choosen = await this.userInteractionService.SelectOneOptionFromList(UIResources.Multimedia_PictureSource, new[]
+            {
+                UIResources.Multimedia_TakePhoto,
+                UIResources.Multimedia_PickFromGallery
+            });
+
             try
             {
-                using (Stream pictureStream = await this.pictureChooser.TakePicture())
+                Stream pictureStream = null;
+                if (choosen == UIResources.Multimedia_TakePhoto)
                 {
-                    if (pictureStream != null)
+                    pictureStream = await this.pictureChooser.TakePicture();
+                }
+                else if (choosen == UIResources.Multimedia_PickFromGallery)
+                {
+                    pictureStream = await this.pictureChooser.ChoosePictureGallery();
+                }
+
+                if (pictureStream != null)
+                {
+                    using (pictureStream)
                     {
                         this.StorePictureFile(pictureStream, pictureFileName);
 
@@ -122,7 +143,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         try
                         {
                             await this.Answering.SendAnswerQuestionCommandAsync(command);
-                            this.Answer = this.plainInterviewFileStorage.GetInterviewBinaryData(this.interviewId, pictureFileName);
+                            this.Answer =
+                                this.plainInterviewFileStorage.GetInterviewBinaryData(this.interviewId,
+                                    pictureFileName);
                             this.QuestionState.Validity.ExecutedWithoutExceptions();
                         }
                         catch (InterviewException ex)

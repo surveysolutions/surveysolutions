@@ -223,6 +223,33 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Area.
+        /// </summary>
+        public static string AreaQestion_Area {
+            get {
+                return ResourceManager.GetString("AreaQestion_Area", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to square meters.
+        /// </summary>
+        public static string AreaQestion_AreaUnitMeter {
+            get {
+                return ResourceManager.GetString("AreaQestion_AreaUnitMeter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assignments.
+        /// </summary>
+        public static string Assignments_PageTitle {
+            get {
+                return ResourceManager.GetString("Assignments_PageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Attention!.
         /// </summary>
         public static string Attention {
@@ -295,6 +322,51 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Installation instructions.
+        /// </summary>
+        public static string DownloadPage_Instructions {
+            get {
+                return ResourceManager.GetString("DownloadPage_Instructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download Interviewer app.
+        /// </summary>
+        public static string DownloadPage_PageTitle {
+            get {
+                return ResourceManager.GetString("DownloadPage_PageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Computer-assisted Personal Interview technology developed by the World Bank..
+        /// </summary>
+        public static string DownloadPage_Title {
+            get {
+                return ResourceManager.GetString("DownloadPage_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version.
+        /// </summary>
+        public static string DownloadPage_Version {
+            get {
+                return ResourceManager.GetString("DownloadPage_Version", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Welcome to Survey Solutions Interviewer download page.
+        /// </summary>
+        public static string DownloadPage_Welcome {
+            get {
+                return ResourceManager.GetString("DownloadPage_Welcome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         public static string EditQuestion_Save {
@@ -354,6 +426,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string GetLatestApp {
             get {
                 return ResourceManager.GetString("GetLatestApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download and install this version of the Interviewer app for surveys that use no ESRI GIS functionality. This apk does not include an ESRI SDK and thus is much smaller in size and faster to download compared to the version with SDK..
+        /// </summary>
+        public static string GetLatestAppDescription {
+            get {
+                return ResourceManager.GetString("GetLatestAppDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download and install this version of the interviewer app only if you use advanced ESRI GIS functionality. This apk contains large ESRI SDK, is large in size and might take long time to download..
+        /// </summary>
+        public static string GetLatestAppExtendedDescription {
+            get {
+                return ResourceManager.GetString("GetLatestAppExtendedDescription", resourceCulture);
             }
         }
         
@@ -547,6 +637,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Locked headquarters (box checked) cannot login and perform any actions on the server..
+        /// </summary>
+        public static string HQ_LockWarning {
+            get {
+                return ResourceManager.GetString("HQ_LockWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you want to continue?.
         /// </summary>
         public static string Index_cshtml_Execute_Do_you_want_to_continue_ {
@@ -682,6 +781,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Details.
+        /// </summary>
+        public static string InterviewDetails_MoreDetails {
+            get {
+                return ResourceManager.GetString("InterviewDetails_MoreDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No items satisfying selected filter.
         /// </summary>
         public static string InterviewDetails_NoItems {
@@ -750,6 +858,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string InterviewDetails_UnansweredButtonLabel {
             get {
                 return ResourceManager.GetString("InterviewDetails_UnansweredButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Locked interviewers (box is checked) cannot connect their tablets with the server and send interviews to the server..
+        /// </summary>
+        public static string Interviewer_LockWarning {
+            get {
+                return ResourceManager.GetString("Interviewer_LockWarning", resourceCulture);
             }
         }
         
@@ -849,6 +966,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string InterviewerEdit_TitleFormat {
             get {
                 return ResourceManager.GetString("InterviewerEdit_TitleFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer is archived.
+        /// </summary>
+        public static string InterviewerIsArchived {
+            get {
+                return ResourceManager.GetString("InterviewerIsArchived", resourceCulture);
             }
         }
         
@@ -984,6 +1110,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string InterviewerProfile_DeviceAndConnectionStatistics {
             get {
                 return ResourceManager.GetString("InterviewerProfile_DeviceAndConnectionStatistics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Device assignment date.
+        /// </summary>
+        public static string InterviewerProfile_DeviceAssignmentDate {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_DeviceAssignmentDate", resourceCulture);
             }
         }
         
@@ -1186,6 +1321,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Last communication date.
+        /// </summary>
+        public static string InterviewerProfile_LastSyncronizationDate {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_LastSyncronizationDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Memory (available/total).
         /// </summary>
         public static string InterviewerProfile_MemoryInfo {
@@ -1195,7 +1339,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to new assignments on device.
+        ///   Looks up a localized string similar to new on device.
         /// </summary>
         public static string InterviewerProfile_NewOnDevice {
             get {
@@ -1231,7 +1375,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to rejected assignments again on device.
+        ///   Looks up a localized string similar to rejected again on device.
         /// </summary>
         public static string InterviewerProfile_Rejected {
             get {
@@ -1272,6 +1416,60 @@ namespace WB.UI.Headquarters.Resources {
         public static string InterviewerProfile_StorageInfo {
             get {
                 return ResourceManager.GetString("InterviewerProfile_StorageInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of unfinished or unsynchronized assignments on device every given moment.
+        /// </summary>
+        public static string InterviewerProfile_Sync_Activity_All_Assignments_Desc {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_Sync_Activity_All_Assignments_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloaded assignments.
+        /// </summary>
+        public static string InterviewerProfile_Sync_Activity_Downloaded_Assignments_Desc {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_Sync_Activity_Downloaded_Assignments_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed synchronizations attempt.
+        /// </summary>
+        public static string InterviewerProfile_Sync_Activity_Failed_Sync {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_Sync_Activity_Failed_Sync", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successful connection, nothing to sync.
+        /// </summary>
+        public static string InterviewerProfile_Sync_Activity_Nothing_To_Sync {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_Sync_Activity_Nothing_To_Sync", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recent synchronizations activity.
+        /// </summary>
+        public static string InterviewerProfile_Sync_Activity_Title {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_Sync_Activity_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uploaded to server for approval.
+        /// </summary>
+        public static string InterviewerProfile_Sync_Activity_Uploaded_Interview_Desc {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_Sync_Activity_Uploaded_Interview_Desc", resourceCulture);
             }
         }
         
@@ -1357,7 +1555,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If the interviewer has completed interviews in census mode on his tablet then the data will be lost..
+        ///   Looks up a localized string similar to If the interviewer has completed interviews on his tablet then the data will be lost..
         /// </summary>
         public static string Interviewers_ArchiveInterviewersConfirmMessage {
             get {
@@ -1969,6 +2167,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (ver. {1}) {0} .
+        /// </summary>
+        public static string QuestionnaireNameVersionFirst {
+            get {
+                return ResourceManager.GetString("QuestionnaireNameVersionFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rejected by headquarters.
         /// </summary>
         public static string RejectedByHeadquarters {
@@ -2024,6 +2231,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Locked supervisor (box checked) cannot login and perform any actions on the server..
+        /// </summary>
+        public static string Supervisor_LockWarning {
+            get {
+                return ResourceManager.GetString("Supervisor_LockWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Supervisor assigned.
         /// </summary>
         public static string SupervisorAssigned {
@@ -2069,7 +2285,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If the interviewer has completed interviews in census mode on his tablet then the data will be lost..
+        ///   Looks up a localized string similar to If the interviewer has completed interviews on his tablet then the data will be lost..
         /// </summary>
         public static string Supervisors_ArchiveSupervisorsConfirmMessage {
             get {
@@ -2186,7 +2402,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} interview(s) from {1} responsible(s).
+        ///   Looks up a localized string similar to {0} interviews.
         /// </summary>
         public static string SurveysAndStatuses_InterviewerStatisticsFormat {
             get {
@@ -2213,7 +2429,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} interview(s) from {1} responsible(s).
+        ///   Looks up a localized string similar to {0} interviews.
         /// </summary>
         public static string SurveysAndStatuses_SupervisorStatisticsFormat {
             get {
@@ -2366,6 +2582,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unarchive.
+        /// </summary>
+        public static string Unarchive {
+            get {
+                return ResourceManager.GetString("Unarchive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update.
         /// </summary>
         public static string Update {
@@ -2380,6 +2605,96 @@ namespace WB.UI.Headquarters.Resources {
         public static string Upload_Upload {
             get {
                 return ResourceManager.GetString("Upload_Upload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Press Add API button to create a new API user..
+        /// </summary>
+        public static string Users_API_Instruction1 {
+            get {
+                return ResourceManager.GetString("Users_API_Instruction1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click on a Login Name to modify profile of an existing API user. .
+        /// </summary>
+        public static string Users_API_Instruction2 {
+            get {
+                return ResourceManager.GetString("Users_API_Instruction2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Press Add Headquarters button to create a new HQ user..
+        /// </summary>
+        public static string Users_Headquarters_Instruction1 {
+            get {
+                return ResourceManager.GetString("Users_Headquarters_Instruction1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click on a Login Name to modify profile of an existing HQ user. .
+        /// </summary>
+        public static string Users_Headquarters_Instruction2 {
+            get {
+                return ResourceManager.GetString("Users_Headquarters_Instruction2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Press Add Interviewer button to create a new Interviewer..
+        /// </summary>
+        public static string Users_Interviewers_Instruction1 {
+            get {
+                return ResourceManager.GetString("Users_Interviewers_Instruction1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click on a Login Name to see information on an interviewer and to modify an Interviewer profile..
+        /// </summary>
+        public static string Users_Interviewers_Instruction2 {
+            get {
+                return ResourceManager.GetString("Users_Interviewers_Instruction2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Press Add Observer button to create a new Observer..
+        /// </summary>
+        public static string Users_Observers_Instruction1 {
+            get {
+                return ResourceManager.GetString("Users_Observers_Instruction1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click on a Login Name to modify profile of an existing Observer user. .
+        /// </summary>
+        public static string Users_Observers_Instruction2 {
+            get {
+                return ResourceManager.GetString("Users_Observers_Instruction2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Press Add Supervisor button to create a new supervisor..
+        /// </summary>
+        public static string Users_Supervisors_Instruction1 {
+            get {
+                return ResourceManager.GetString("Users_Supervisors_Instruction1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click on a Login Name to modify profile of an existing Supervisor. .
+        /// </summary>
+        public static string Users_Supervisors_Instruction2 {
+            get {
+                return ResourceManager.GetString("Users_Supervisors_Instruction2", resourceCulture);
             }
         }
         

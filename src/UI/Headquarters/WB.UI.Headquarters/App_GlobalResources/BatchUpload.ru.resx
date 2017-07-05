@@ -177,8 +177,8 @@
   <data name="ImportInterviews_SelectButtonText" xml:space="preserve">
     <value>Выберите</value>
   </data>
-  <data name="ImportInterviews_SelectSupervisor" xml:space="preserve">
-    <value>Выберите супервизора</value>
+  <data name="ImportInterviews_SelectResponsible" xml:space="preserve">
+    <value>Выберите ответственного</value>
   </data>
   <data name="InVerificationProcess" xml:space="preserve">
     <value>в процессе проверки, проверено</value>
@@ -341,19 +341,20 @@
     <value>Идентифицирующие и собранные данные (архив)</value>
   </data>
   <data name="EmptySupervisorDescription" xml:space="preserve">
-    <value>Если имена пользователей не указаны в загружаемом файле, вы должны будете позже указать одного супервизора для всех интервью.</value>
+    <value>Если имена пользователей не указаны в загружаемом файле, вы должны будете позже указать одного супервизора для всех заданий.</value>
   </data>
   <data name="ManualModeDescription" xml:space="preserve">
-    <value>Вы можете создать одно интервью при помощи ввода всех необходимых данных используя {0}.</value>
+    <value>Вы можете создать одно задание при помощи ввода всех необходимых данных используя {0}.</value>
   </data>
   <data name="SimpleDescription" xml:space="preserve">
-    <value>Загрузите tab форматированные данные со всеми необходимыми идентифицирующими данными и ответственными людьми (опционально)</value>
+    <value>Загрузите tab форматированные данные со всеми необходимыми идентифицирующими данными и ответственными людьми (опционально) в _responsible колонку, в _quantity кологку можно указать необходимое количество интервью по заданию.
+ </value>
   </data>
   <data name="SimpleTitle" xml:space="preserve">
     <value>Только идентифицирующие данные (один файл)</value>
   </data>
   <data name="UploadDescription" xml:space="preserve">
-    <value>Создание множества интервью с помощью загрузки файла с обязательными идентифицирующими данными. Вы можете выборочно добавить ответственных для интервью (супервизоров и интервьюеров) по их именам.</value>
+    <value>Создание множества заданий с помощью загрузки файла с обязательными идентифицирующими данными. Вы можете выборочно добавить ответственных для интервью (супервизоров и интервьюеров) по их именам.</value>
   </data>
   <data name="UploadTabFile" xml:space="preserve">
     <value>Загрузить .tab файл</value>
@@ -435,5 +436,38 @@
   </data>
   <data name="Prerequisite_ZipFile" xml:space="preserve">
     <value>Только файлы с расширением .zip разрешены для загрузки.</value>
+  </data>
+  <data name="CreateAssignments" xml:space="preserve">
+    <value>Создать задания</value>
+  </data>
+  <data name="DataForSingleAssignmentFound" xml:space="preserve">
+    <value>Найдены данные для 1 задания</value>
+  </data>
+  <data name="DataForMultipleAssignmentsFound" xml:space="preserve">
+    <value>Найдены данные для {0} задания(ий)</value>
+  </data>
+  <data name="CreatingMultipleAssignments" xml:space="preserve">
+    <value>Создать множество заданий используя файл</value>
+  </data>
+  <data name="ImportAssignmentsFor" xml:space="preserve">
+    <value>Импорт заданий для {0}</value>
+  </data>
+  <data name="SingleAssignmentCreated" xml:space="preserve">
+    <value>1 задание создано</value>
+  </data>
+  <data name="MultipleAssignmentsCreated" xml:space="preserve">
+    <value>{0} заданий создано</value>
+  </data>
+  <data name="SingleAssignmentFailedToBeCreated" xml:space="preserve">
+    <value>1 задание не было создано</value>
+  </data>
+  <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
+    <value>{0} заданий не было создано</value>
+  </data>
+  <data name="DownloadInvalidAssignments" xml:space="preserve">
+    <value>Загрузить задания с ошибками</value>
+  </data>
+  <data name="SelectResponsibleToAssign" xml:space="preserve">
+    <value>Выберите ответственного за эти задания</value>
   </data>
 </root>

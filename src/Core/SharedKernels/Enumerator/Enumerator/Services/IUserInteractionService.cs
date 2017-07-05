@@ -13,5 +13,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         void ShowToast(string message);
 
         bool HasPendingUserInterations { get; }
+
+        Task<string> SelectOneOptionFromList(string message,
+            string[] options);
     }
 }

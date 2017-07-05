@@ -12,7 +12,7 @@ namespace WB.UI.Designer.Code
             int? pageIndex = null, 
             string sortBy = null, 
             int? sortOrder = null, 
-            string filter = null);
+            string searchFor = null);
 
         IPagedList<QuestionnaireListViewModel> GetQuestionnaires(
             Guid viewerId,
@@ -20,7 +20,7 @@ namespace WB.UI.Designer.Code
             int? pageIndex = null, 
             string sortBy = null, 
             int? sortOrder = null, 
-            string filter = null);
+            string searchFor = null);
 
         IPagedList<QuestionnaireListViewModel> GetQuestionnairesByViewerId(Guid viewerId,
             bool isAdmin);

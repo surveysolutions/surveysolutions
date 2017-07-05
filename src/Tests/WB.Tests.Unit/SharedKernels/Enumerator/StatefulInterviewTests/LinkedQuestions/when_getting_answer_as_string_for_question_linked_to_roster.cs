@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
                     Create.Entity.SingleOptionQuestion(this.linkedSingleOptionQuestionid, linkedToRosterId: rosterId),
                     Create.Entity.MultyOptionsQuestion(this.linkedMultiOptionQuestionid, linkedToRosterId: rosterId));
 
-            interview = Create.AggregateRoot.StatefulInterview(questionnaire: Create.Entity.PlainQuestionnaire(questionnaire));
+            interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
 
             interview.AnswerTextListQuestion(userId, textListQuestionId, RosterVector.Empty, DateTime.Now, new[] { Tuple.Create(0m, "zero")});
         }

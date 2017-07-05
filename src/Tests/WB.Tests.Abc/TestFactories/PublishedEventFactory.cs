@@ -25,7 +25,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public IPublishedEvent<InterviewCreated> InterviewCreated(
             Guid? interviewId = null, string userId = null, string questionnaireId = null, long questionnaireVersion = 0)
-            => new InterviewCreated(ToGuid(userId) ?? Guid.NewGuid(), ToGuid(questionnaireId) ?? Guid.NewGuid(), questionnaireVersion)
+            => new InterviewCreated(ToGuid(userId) ?? Guid.NewGuid(), ToGuid(questionnaireId) ?? Guid.NewGuid(), questionnaireVersion, null)
                 .ToPublishedEvent(eventSourceId: interviewId);
 
         public IPublishedEvent<InterviewDeleted> InterviewDeleted(string userId = null, string origin = null, Guid? interviewId = null)
@@ -39,7 +39,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public IPublishedEvent<InterviewFromPreloadedDataCreated> InterviewFromPreloadedDataCreated(
             Guid? interviewId = null, string userId = null, string questionnaireId = null, long questionnaireVersion = 0)
-            => new InterviewFromPreloadedDataCreated(ToGuid(userId) ?? Guid.NewGuid(), ToGuid(questionnaireId) ?? Guid.NewGuid(), questionnaireVersion)
+            => new InterviewFromPreloadedDataCreated(ToGuid(userId) ?? Guid.NewGuid(), ToGuid(questionnaireId) ?? Guid.NewGuid(), questionnaireVersion, null)
                 .ToPublishedEvent(eventSourceId: interviewId);
 
         public IPublishedEvent<InterviewHardDeleted> InterviewHardDeleted(string userId = null, Guid? interviewId = null)
@@ -48,7 +48,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public IPublishedEvent<InterviewOnClientCreated> InterviewOnClientCreated(
             Guid? interviewId = null, string userId = null, string questionnaireId = null, long questionnaireVersion = 0)
-            => new InterviewOnClientCreated(ToGuid(userId) ?? Guid.NewGuid(), ToGuid(questionnaireId) ?? Guid.NewGuid(), questionnaireVersion)
+            => new InterviewOnClientCreated(ToGuid(userId) ?? Guid.NewGuid(), ToGuid(questionnaireId) ?? Guid.NewGuid(), questionnaireVersion, null)
                 .ToPublishedEvent(eventSourceId: interviewId);
 
         public IPublishedEvent<InterviewRejectedByHQ> InterviewRejectedByHQ(Guid? interviewId = null, string userId = null, string comment = null)

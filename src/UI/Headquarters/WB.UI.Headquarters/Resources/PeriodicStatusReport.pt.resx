@@ -171,9 +171,6 @@
   <data name="NumberOfCompletedInterviews" xml:space="preserve">
     <value>Número de entrevistas concluídas</value>
   </data>
-  <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
-    <value>Número de conclusões da entrevista por um {0}. Rejeitado e depois completou entrevistas são contadas como eventos separados de conclusão.</value>
-  </data>
   <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
     <value>Número de entrevistas aprovado pela HQ</value>
   </data>

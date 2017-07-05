@@ -23,5 +23,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         string RestoreFolder { get; }
 
         string BandwidthTestUri { get; }
+        string InstallationFilePath { get; }
     }
 }

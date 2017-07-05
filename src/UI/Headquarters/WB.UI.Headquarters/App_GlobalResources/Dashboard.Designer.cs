@@ -19,7 +19,7 @@ namespace Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option or rebuild the Visual Studio project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Web.Application.StronglyTypedResourceProxyBuilder", "14.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Web.Application.StronglyTypedResourceProxyBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Dashboard {
@@ -124,29 +124,11 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Batch upload.
-        /// </summary>
-        internal static string BatchUpload {
-            get {
-                return ResourceManager.GetString("BatchUpload", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Binary data.
         /// </summary>
         internal static string BinaryData {
             get {
                 return ResourceManager.GetString("BinaryData", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Census.
-        /// </summary>
-        internal static string Census {
-            get {
-                return ResourceManager.GetString("Census", resourceCulture);
             }
         }
         
@@ -214,11 +196,11 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New interview.
+        ///   Looks up a localized string similar to New assignment.
         /// </summary>
-        internal static string NewInterview {
+        internal static string NewAssignment {
             get {
-                return ResourceManager.GetString("NewInterview", resourceCulture);
+                return ResourceManager.GetString("NewAssignment", resourceCulture);
             }
         }
         
@@ -241,7 +223,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1. Click Import Template  button to load a questionnaire from Designer.
+        ///   Looks up a localized string similar to Click Import Template  button to load a questionnaire from Designer.
         /// </summary>
         internal static string SurveySetupIntroMessage1 {
             get {
@@ -250,7 +232,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 2. Click on a questionnaire from the list to create interview assignments.
+        ///   Looks up a localized string similar to Click on a questionnaire from the list to create interview assignments.
         /// </summary>
         internal static string SurveySetupIntroMessage2 {
             get {
@@ -264,6 +246,15 @@ namespace Resources {
         internal static string Title {
             get {
                 return ResourceManager.GetString("Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload assignments.
+        /// </summary>
+        internal static string UploadAssignments {
+            get {
+                return ResourceManager.GetString("UploadAssignments", resourceCulture);
             }
         }
         

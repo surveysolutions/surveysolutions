@@ -15,24 +15,23 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
         {
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.Entity.TextListQuestion(questionId: rosterSizeQuestion1Id),
-                Create.Entity.ListRoster(roster1Id, rosterSizeQuestionId: rosterSizeQuestion1Id, children: new IComposite[]
+                Create.Entity.TextListQuestion(questionId: rosterSizeQuestion1Id, variable: "q1"),
+                Create.Entity.ListRoster(roster1Id, variable: "r1", rosterSizeQuestionId: rosterSizeQuestion1Id, children: new IComposite[]
                 {
-                    Create.Entity.TextListQuestion(questionId: rosterSizeQuestion2Id),
-                    Create.Entity.ListRoster(roster2Id, rosterSizeQuestionId: rosterSizeQuestion2Id, children: new IComposite[]
+                    Create.Entity.TextListQuestion(questionId: rosterSizeQuestion2Id, variable: "q2"),
+                    Create.Entity.ListRoster(roster2Id, variable: "r2", rosterSizeQuestionId: rosterSizeQuestion2Id, children: new IComposite[]
                     {
-                        Create.Entity.TextListQuestion(questionId: rosterSizeQuestion3Id),
-                        Create.Entity.ListRoster(roster3Id, rosterSizeQuestionId: rosterSizeQuestion3Id, children: new IComposite[]
+                        Create.Entity.TextListQuestion(questionId: rosterSizeQuestion3Id, variable: "q3"),
+                        Create.Entity.ListRoster(roster3Id, variable: "r3", rosterSizeQuestionId: rosterSizeQuestion3Id, children: new IComposite[]
                         {
-                            Create.Entity.SingleOptionQuestion(questionId: linkedSingleQuestionId, linkedToRosterId: roster3Id),
-                            Create.Entity.MultipleOptionsQuestion(questionId: linkedMultiQuestionId, linkedToRosterId: roster3Id),
+                            Create.Entity.SingleOptionQuestion(questionId: linkedSingleQuestionId, linkedToRosterId: roster3Id, variable: "q4"),
+                            Create.Entity.MultipleOptionsQuestion(questionId: linkedMultiQuestionId, linkedToRosterId: roster3Id, variable: "q5"),
                         }),
                     }),
                 }),
             });
-            var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, 0);
 
-            interview = Create.AggregateRoot.StatefulInterview(questionnaire: plainQuestionnaire);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaireDocument);
             interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion1Id, RosterVector.Empty, DateTime.UtcNow, new[]
             {
                 new Tuple<decimal, string>(1, "house 1"),

@@ -1,10 +1,12 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 {
@@ -42,9 +44,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 
                 }
 
-                if (!string.IsNullOrEmpty(input.Filter))
+                if (!string.IsNullOrEmpty(input.SearchFor))
                 {
-                    var filterLowerCase = input.Filter.ToLower();
+                    var filterLowerCase = input.SearchFor.ToLower();
                     query = query.Where(x => x.Title.ToLower().Contains(filterLowerCase));
                 }
 
@@ -75,6 +77,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
         public QuestionnaireBrowseItem GetById(QuestionnaireIdentity identity)
         {
             return this.reader.GetById(identity.ToString());
+        }
+
+        public List<QuestionnaireBrowseItem> GetByIds(params QuestionnaireIdentity[] identities)
+        {
+            var ids = identities.Select(id => id.ToString()).ToArray();
+            return this.reader.Query(x => x.Where(qbi => ids.Contains(qbi.Id))).ToList();
         }
     }
 }

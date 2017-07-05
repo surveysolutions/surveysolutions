@@ -135,14 +135,8 @@
   <data name="ApprovedDataStata" xml:space="preserve">
     <value>Утвержденные данные Stata</value>
   </data>
-  <data name="BatchUpload" xml:space="preserve">
-    <value>Загрузка данных</value>
-  </data>
   <data name="BinaryData" xml:space="preserve">
     <value>Бинарные данные</value>
-  </data>
-  <data name="Census" xml:space="preserve">
-    <value>Census</value>
   </data>
   <data name="CloneQuestionnaire" xml:space="preserve">
     <value>Клонировать опросник </value>
@@ -159,8 +153,8 @@
   <data name="LastEntryDate" xml:space="preserve">
     <value>Обновлен</value>
   </data>
-  <data name="NewInterview" xml:space="preserve">
-    <value>Новое интервью</value>
+  <data name="NewAssignment" xml:space="preserve">
+    <value>Новое задание</value>
   </data>
   <data name="Questionnaires" xml:space="preserve">
     <value>Опросники</value>
@@ -181,15 +175,18 @@
     <value>Опросник</value>
   </data>
   <data name="SurveySetupIntroMessage2" xml:space="preserve">
-    <value>2. Кликните по опроснику из списка для создания интервью</value>
+    <value>Кликните по опроснику из списка для создания интервью</value>
   </data>
   <data name="SurveySetupIntroMessage1" xml:space="preserve">
-    <value>1. Кликните по кнопке Иморт Опросника для загрузки шаблона с Дизайнера</value>
+    <value>Кликните по кнопке Иморт Опросника для загрузки шаблона с Дизайнера</value>
   </data>
   <data name="WebInterviewSetup" xml:space="preserve">
     <value>Настройка web интервью</value>
   </data>
   <data name="DeleteQuestionnaire" xml:space="preserve">
     <value>Удалить опросник</value>
+  </data>
+  <data name="UploadAssignments" xml:space="preserve">
+    <value>Загрузить задания</value>
   </data>
 </root>

@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.API;
+using WB.UI.Headquarters.API.PublicApi;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
@@ -47,7 +48,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
             controller = CreateExportController(dataExportStatusReader: mockOfDataExportStatusReader.Object);
         };
 
-        Because of = () => result = controller.ProcessDetails(questionnaireIdentity.ToString(), "tabular");
+        Because of = () => result = controller.ProcessDetails(questionnaireIdentity.ToString(), DataExportFormat.Tabular);
 
         It should_return_http_ok_response = () =>
             result.ShouldBeOfExactType<OkNegotiatedContentResult<ExportController.ExportDetails>>();
@@ -56,7 +57,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
         {
             var jsonResult = ((OkNegotiatedContentResult<ExportController.ExportDetails>) result).Content;
 
-            jsonResult.ExportStatus.ShouldEqual(dataExportStatusView.DataExports[0].StatusOfLatestExportProcess.ToString());
+            jsonResult.ExportStatus.ShouldEqual(dataExportStatusView.DataExports[0].StatusOfLatestExportProcess);
             jsonResult.HasExportedFile.ShouldEqual(dataExportStatusView.DataExports[0].HasDataToExport);
             jsonResult.LastUpdateDate.ShouldEqual(dataExportStatusView.DataExports[0].LastUpdateDate);
             jsonResult.RunningProcess.ProgressInPercents.ShouldEqual(

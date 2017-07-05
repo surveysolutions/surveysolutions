@@ -120,7 +120,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 TotalConnectionSpeed = statistics.TotalConnectionSpeed,
                 TotalDownloadedBytes = statistics.TotalDownloadedBytes,
                 TotalUploadedBytes = statistics.TotalUploadedBytes,
-                TotalSyncDuration = statistics.TotalSyncDuration
+                TotalSyncDuration = statistics.TotalSyncDuration,
+                
+                AssignmentsOnDeviceCount = statistics.AssignmentsOnDeviceCount,
+                NewAssignmentsCount = statistics.NewAssignmentsCount
             };
             this.deviceSyncInfoRepository.AddOrUpdate(deviceInfo);
 

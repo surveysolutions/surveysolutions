@@ -16,17 +16,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Establish context = () =>
         {
             singleQuestionId = Guid.Parse("10000000000000000000000000000000");
-            questionnaire = CreateQuestionnaireDocument(new SingleQuestion
-            {
-                PublicKey = singleQuestionId,
-                StataExportCaption = "var",
-                Answers = new List<Answer>()
+            questionnaire = CreateQuestionnaireDocument(
+                Create.SingleOptionQuestion(
+                singleQuestionId,
+                variable: "var",
+                answers: new List<Answer>()
                 {
                     new Answer { AnswerValue = "1", AnswerText = "1" }, 
                     new Answer { AnswerValue = "1", AnswerText = "1" }
-                },
-                QuestionType = QuestionType.SingleOption
-            });
+                }
+            ));
 
             verifier = CreateQuestionnaireVerifier();
         };

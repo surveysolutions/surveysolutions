@@ -23,31 +23,28 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             rosterSizeQuestionId = Guid.Parse("11133333333333333333333333333333");
 
             questionnaire = CreateQuestionnaireDocument(
-                new NumericQuestion()
-                {
-                    PublicKey = rosterSizeQuestionId,
-                    IsInteger = true,
-                    StataExportCaption = "rosterSize"
-                },
+                Create.NumericIntegerQuestion(
+                    rosterSizeQuestionId,
+                    variable: "rosterSize"
+                ),
                 new Group()
                 {
                     PublicKey = rosterGroupId,
                     IsRoster = true,
                     VariableName = "a",
                     RosterSizeQuestionId = rosterSizeQuestionId,
-                    Children = new IComposite[]{ new NumericQuestion()
-                    {
-                        PublicKey = underDeeperRosterLevelQuestionId,
-                        StataExportCaption = underDeeperRosterLevelQuestionVariableName
-                    }}.ToReadOnlyCollection()
+                    Children = new IComposite[]{
+                        Create.NumericIntegerQuestion(
+                        underDeeperRosterLevelQuestionId,
+                        variable: underDeeperRosterLevelQuestionVariableName
+                    )}.ToReadOnlyCollection()
                 },
-                new SingleQuestion()
-                {
-                    PublicKey = questionWithSubstitutionsId,
-                    StataExportCaption = "var2",
-                    QuestionText = string.Format("hello %{0}%", underDeeperRosterLevelQuestionVariableName),
-                    Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
-                });
+                Create.SingleOptionQuestion(
+                    questionWithSubstitutionsId,
+                    variable: "var2",
+                    title: string.Format("hello %{0}%", underDeeperRosterLevelQuestionVariableName),
+                    answers: new List<Answer> { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
+                ));
 
             verifier = CreateQuestionnaireVerifier();
         };

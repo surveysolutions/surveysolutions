@@ -6,16 +6,18 @@ namespace Main.Core.Entities.SubEntities
 {
     public class GeoPosition
     {
-        private static string[] propertyNames = new[] {"Latitude", "Longitude", "Accuracy", "Altitude", "Timestamp"};
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public double Accuracy { get; set; }
         public double Altitude { get; set; }
         public DateTimeOffset Timestamp { get; set; }
 
-        public GeoPosition(){}
+        public GeoPosition()
+        {
+        }
 
-        public GeoPosition(double latitude, double longitude, double accuracy, double altitude, DateTimeOffset timestamp)
+        public GeoPosition(double latitude, double longitude, double accuracy, double altitude,
+            DateTimeOffset timestamp)
         {
             this.Latitude = latitude;
             this.Longitude = longitude;
@@ -44,10 +46,7 @@ namespace Main.Core.Entities.SubEntities
         public static object ParseProperty(string value, string propertyName)
         {
             if (!PropertyNames.Any(p => p.Equals(propertyName, StringComparison.OrdinalIgnoreCase)))
-                throw new ArgumentException(
-                    String.Format("{0} property is missing at GeoPosition object. Value {1} can't be parsed",
-                        propertyName,
-                        value));
+                throw new ArgumentException($"{propertyName} property is missing at GeoPosition object. Value {value} can't be parsed");
 
             if (propertyName.Equals("Timestamp", StringComparison.OrdinalIgnoreCase))
                 return DateTimeOffset.Parse(value, CultureInfo.InvariantCulture.DateTimeFormat);
@@ -55,7 +54,7 @@ namespace Main.Core.Entities.SubEntities
             return double.Parse(value, CultureInfo.InvariantCulture.NumberFormat);
         }
 
-        public static string[] PropertyNames { get { return propertyNames; } }
+        public static string[] PropertyNames { get; } = new[] {"Latitude", "Longitude", "Accuracy", "Altitude", "Timestamp"};
 
         public override bool Equals(object obj)
         {
@@ -63,8 +62,10 @@ namespace Main.Core.Entities.SubEntities
             return geoPosition != null && this.Equals(geoPosition);
         }
 
-        protected bool Equals(GeoPosition other) => this.Latitude.Equals(other.Latitude) && this.Longitude.Equals(other.Longitude) &&
-                                                    this.Accuracy.Equals(other.Accuracy) && this.Altitude.Equals(other.Altitude) &&
+        protected bool Equals(GeoPosition other) => this.Latitude.Equals(other.Latitude) &&
+                                                    this.Longitude.Equals(other.Longitude) &&
+                                                    this.Accuracy.Equals(other.Accuracy) &&
+                                                    this.Altitude.Equals(other.Altitude) &&
                                                     this.Timestamp.Equals(other.Timestamp);
 
         public override int GetHashCode()
@@ -72,10 +73,10 @@ namespace Main.Core.Entities.SubEntities
             unchecked
             {
                 var hashCode = this.Latitude.GetHashCode();
-                hashCode = (hashCode*397) ^ this.Longitude.GetHashCode();
-                hashCode = (hashCode*397) ^ this.Accuracy.GetHashCode();
-                hashCode = (hashCode*397) ^ this.Altitude.GetHashCode();
-                hashCode = (hashCode*397) ^ this.Timestamp.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.Longitude.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.Accuracy.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.Altitude.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.Timestamp.GetHashCode();
                 return hashCode;
             }
         }

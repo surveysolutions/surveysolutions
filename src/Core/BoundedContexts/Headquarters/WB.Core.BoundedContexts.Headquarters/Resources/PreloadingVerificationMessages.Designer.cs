@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [PL0001] Questionnaire template is missing..
+        ///   Looks up a localized string similar to [PL0001] Questionnaire is missing in HQ.
         /// </summary>
         public static string PL0001_NoQuestionnaire {
             get {
@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to One ore more parent Id columns are missing..
+        ///   Looks up a localized string similar to One or more parent Id column is missing..
         /// </summary>
         public static string PL0007_ServiceColumnIsAbsent {
             get {
@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked question is not supported in data preloading..
+        ///   Looks up a localized string similar to Linked questions cannot be preloaded..
         /// </summary>
         public static string PL0010_UnsupportedLinkedQuestion {
             get {
@@ -160,7 +160,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question was not found..
+        ///   Looks up a localized string similar to Question found in the uploaded file(s) that does not exist in the questionnaire.
         /// </summary>
         public static string PL0012_QuestionWasNotFound {
             get {
@@ -178,7 +178,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [PL0014] Provided question value not allowed..
+        ///   Looks up a localized string similar to Provided question value not allowed..
         /// </summary>
         public static string PL0014_ParsedValueIsNotAllowed {
             get {
@@ -187,7 +187,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [PL0015] Type of question is not correct..
+        ///   Looks up a localized string similar to Type of question is not correct..
         /// </summary>
         public static string PL0015_QuestionTypeIsIncorrect {
             get {
@@ -196,7 +196,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid Date or Time value..
+        ///   Looks up a localized string similar to Invalid Date or Time value entered in the date question..
         /// </summary>
         public static string PL0016_ExpectedDateTimeNotParsed {
             get {
@@ -241,7 +241,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Picture question is not supported in data preloading..
+        ///   Looks up a localized string similar to Picture question cannot be preloaded..
         /// </summary>
         public static string PL0023_UnsupportedMultimediaQuestion {
             get {
@@ -250,7 +250,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preloading data was not found.
+        ///   Looks up a localized string similar to Preloading data were not found.
         /// </summary>
         public static string PL0024_DataWasNotFound {
             get {
@@ -259,7 +259,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The name of Responsible was not provided.
+        ///   Looks up a localized string similar to Responsible field was not provided for 1 or more observations.
         /// </summary>
         public static string PL0025_ResponsibleNameIsEmpty {
             get {
@@ -268,7 +268,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provided Responsible was not found.
+        ///   Looks up a localized string similar to Responsible does not exist for 1 or more observations.
         /// </summary>
         public static string PL0026_ResponsibleWasNotFound {
             get {
@@ -277,7 +277,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Responsible is locked.
+        ///   Looks up a localized string similar to Responsible is a locked user for 1 or more observations.
         /// </summary>
         public static string PL0027_ResponsibleIsLocked {
             get {
@@ -286,7 +286,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provided User is not Supervisor or Interviewer.
+        ///   Looks up a localized string similar to User is not Supervisor or Interviewer for 1 or more observations.
         /// </summary>
         public static string PL0028_UserIsNotSupervisorOrInterviewer {
             get {
@@ -295,7 +295,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer on roster size question cannot be greater than {0}..
+        ///   Looks up a localized string similar to Answer to roster size question cannot be greater than {0}..
         /// </summary>
         public static string PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40 {
             get {
@@ -304,7 +304,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Gps question required Latitude and Longitude columns.
+        ///   Looks up a localized string similar to GPS questions require separate columns for Latitude and Longitude.
         /// </summary>
         public static string PL0030_GpsFieldsRequired {
             get {
@@ -313,7 +313,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Identifying gps question requires Latitude and Longitude to be set..
+        ///   Looks up a localized string similar to Identifying GPS question requires Latitude and Longitude to be set..
         /// </summary>
         public static string PL0030_GpsMandatoryFilds {
             get {
@@ -322,7 +322,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Column name duplicates found..
+        ///   Looks up a localized string similar to Two or more columns have the same name..
         /// </summary>
         public static string PL0031_ColumnNameDuplicatesFound {
             get {
@@ -349,11 +349,47 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &quot;,&quot; symbol is not allowed in numeric answers. Please use &quot;.&quot; as decimal separator..
+        ///   Looks up a localized string similar to Invalid decimal separator. The &quot;,&quot; symbol is not allowed in numeric answers. Please use &quot;.&quot; instead..
         /// </summary>
         public static string PL0034_CommaSymbolIsNotAllowedInNumericAnswer {
             get {
                 return ResourceManager.GetString("PL0034_CommaSymbolIsNotAllowedInNumericAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only integer values are allowed..
+        /// </summary>
+        public static string PL0035_QuantityNotParsed {
+            get {
+                return ResourceManager.GetString("PL0035_QuantityNotParsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quantity should be more then 0..
+        /// </summary>
+        public static string PL0036_QuantityShouldBePositive {
+            get {
+                return ResourceManager.GetString("PL0036_QuantityShouldBePositive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Column cannot be mapped to non identifying question.
+        /// </summary>
+        public static string PL0037_ColumnIsNotIdentifying {
+            get {
+                return ResourceManager.GetString("PL0037_ColumnIsNotIdentifying", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Area question cannot be preloaded..
+        /// </summary>
+        public static string PL0038_UnsupportedAreaQuestion {
+            get {
+                return ResourceManager.GetString("PL0038_UnsupportedAreaQuestion", resourceCulture);
             }
         }
     }

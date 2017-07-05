@@ -138,14 +138,8 @@
   <data name="ApprovedDataStata" xml:space="preserve">
     <value>Données approuvées Stata</value>
   </data>
-  <data name="BatchUpload" xml:space="preserve">
-    <value>Importation par lots</value>
-  </data>
   <data name="BinaryData" xml:space="preserve">
     <value>Données binaires</value>
-  </data>
-  <data name="Census" xml:space="preserve">
-    <value>Mode recensement</value>
   </data>
   <data name="CloneQuestionnaire" xml:space="preserve">
     <value>Cloner questionnaire</value>
@@ -162,8 +156,8 @@
   <data name="LastEntryDate" xml:space="preserve">
     <value>Dernière date d’entrée</value>
   </data>
-  <data name="NewInterview" xml:space="preserve">
-    <value>Nouveau entretien</value>
+  <data name="NewAssignment" xml:space="preserve">
+    <value/>
   </data>
   <data name="Questionnaires" xml:space="preserve">
     <value>Questionnaires</value>

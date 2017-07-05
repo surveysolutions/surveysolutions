@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         Guid[] GetQuestionsLinkedToQuestion();
 
-        Guid GetQuestionIdByVariable(string variable);
+        Guid? GetQuestionIdByVariable(string variable);
 
         Guid GetVariableIdByVariableName(string variableName);
 
@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<decimal> GetMultiSelectAnswerOptionsAsValues(Guid questionId);
 
-        IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string filter);
+        IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string searchFor);
 
         CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText, int? parentQuestionValue);
 
@@ -253,5 +253,9 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool HasStaticText(Guid entityId);
         Guid GetFirstSectionId();
         IEnumerable<Guid> GetLinkedToSourceEntity(Guid linkedSourceEntityId);
+        bool IsUsingExpressionStorage();
+
+        List<Guid> GetExpressionsPlayOrder();
+        bool HasAnyCascadingOptionsForSelectedParentOption(Guid cascadingQuestionId, Guid parenQuestionId, int selectedParentValue);
     }
 }

@@ -62,9 +62,10 @@
 <div class="modal-footer">
     <div ng-switch on="step">
         <div ng-switch-when="search">
+            <p class="wb-label">Matching lines: {{foundReferences.length}}</p>
             <button type="button" class="btn btn-lg btn-primary" ng-disabled="searchForm.searchFor.length === 0" ng-click="findAll()">Find all</button>
-            <button type="button" 
-                    class="btn btn-lg btn-primary" 
+            <button type="button"
+                    class="btn btn-lg btn-primary"
                     ng-if="!isReadOnlyForUser"
                     ng-disabled="foundReferences.length === 0"
                     ng-click="confirmReplaceAll()">

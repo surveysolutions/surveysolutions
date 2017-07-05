@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.OptionsFilter
@@ -23,29 +20,26 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
             {
                 Setup.MockedServiceLocator();
 
-                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Abc.Create.Entity.Roster(rosterId, variable: "parent", rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                        fixedRosterTitles: new[] { IntegrationCreate.FixedTitle(1, "Roster 1"), IntegrationCreate.FixedTitle(2, "Roster 2") }, children: new IComposite[]
-                        {
-                            Abc.Create.Entity.MultyOptionsQuestion(q1Id, variable: "q1", optionsFilter: "@optioncode < 10")
-                        })
-                    );
-
-                ILatestInterviewExpressionState interviewState = GetInterviewExpressionState(questionnaireDocument);
-
-                var interview = SetupInterview(questionnaireDocument, precompiledState: interviewState);
-
-                IEnumerable<CategoricalOption> options = new List<CategoricalOption>()
+                List<Answer> options = new List<Answer>
                 {
-                    Create.Entity.CategoricalQuestionOption(1, "Option 1", null),
-                    Create.Entity.CategoricalQuestionOption(2, "Option 2", null),
-                    Create.Entity.CategoricalQuestionOption(11, "Option 11", null),
-                    Create.Entity.CategoricalQuestionOption(12, "Option 12", null),
+                    Create.Entity.Option(1, "Option 1"),
+                    Create.Entity.Option(2, "Option 2"),
+                    Create.Entity.Option(11, "Option 11"),
+                    Create.Entity.Option(12, "Option 12")
                 };
+
+                var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Create.Entity.FixedRoster(rosterId, variable: "parent", fixedTitles: new[] { IntegrationCreate.FixedTitle(1, "Roster 1"), IntegrationCreate.FixedTitle(2, "Roster 2") }, children: new IComposite[]
+                    {
+                        Create.Entity.MultyOptionsQuestion(q1Id, variable: "q1", optionsFilter: "@optioncode < 10", options: options)
+                    })
+                );
+
+                var interview = SetupInterview(questionnaireDocument);
 
                 results = new InvokeResults
                 {
-                    CountOfFilteredOptions = interviewState.FilterOptionsForQuestion(Abc.Create.Identity(q1Id, Abc.Create.Entity.RosterVector(new[] {1})), options).Count()
+                    CountOfFilteredOptions = interview.GetFirstTopFilteredOptionsForQuestion(Create.Identity(q1Id, Create.Entity.RosterVector(new[] {1})), null, "").Count
                 };
                 return results;
             });

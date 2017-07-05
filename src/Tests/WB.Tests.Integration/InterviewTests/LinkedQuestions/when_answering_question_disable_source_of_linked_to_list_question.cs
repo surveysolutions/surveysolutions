@@ -3,7 +3,6 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -21,8 +20,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     children: new IComposite[]
                     {
                         Abc.Create.Entity.NumericIntegerQuestion(intQuestionId, variable: "num"),
-                        Abc.Create.Entity.TextListQuestion(questionId: listQuestionId, variable: "list",
-                            enablementCondition: "num == 1"),
+                        Abc.Create.Entity.TextListQuestion(questionId: listQuestionId, variable: "list", enablementCondition: "num == 1"),
                         Abc.Create.Entity.SingleOptionQuestion(questionId: linkedSingleOptionQuestion, variable: "lnkSgl", linkedToQuestionId: listQuestionId),
                         Abc.Create.Entity.MultyOptionsQuestion(id: linkedMultioptionQuestion, variable: "lnkMul", linkedToQuestionId: listQuestionId),
                     });
@@ -31,7 +29,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
                 interview.AnswerNumericIntegerQuestion(userId, intQuestionId, RosterVector.Empty, DateTime.Now, 1);
                 interview.AnswerTextListQuestion(userId, listQuestionId, RosterVector.Empty, DateTime.Now, new[] { Tuple.Create(0m, "one") });
-                interview.AnswerSingleOptionQuestion(userId, linkedSingleOptionQuestion, RosterVector.Empty, DateTime.Now, 0m);
+                interview.AnswerSingleOptionQuestion(userId, linkedSingleOptionQuestion, RosterVector.Empty, DateTime.Now, 0);
                 interview.AnswerMultipleOptionsQuestion(userId, linkedMultioptionQuestion, RosterVector.Empty, DateTime.Now, new[] { 0 });
 
                 using (var eventContext = new EventContext())

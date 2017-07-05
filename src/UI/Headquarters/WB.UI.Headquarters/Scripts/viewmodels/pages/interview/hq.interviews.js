@@ -13,12 +13,12 @@
         );
     };
     self.Assign = function () {
-        var commandName = "AssignSupervisorCommand";
+        var commandName = "AssignResponsibleCommand";
         var messageTemplateId = "#confirm-assign-to-other-team-template";
         var continueMessageTemplateId = "#confirm-continue-message-template";
       
         var eligibleSelectedItems = self.GetSelectedItemsAfterFilter(function (item) {
-            return item.CanBeReassigned() && item.ResponsibleId() !== self.AssignTo().UserId;
+            return item.CanBeReassigned() && item.ResponsibleId() !== self.AssignTo().ResponsibleId;
         });
         
         var popupViewModel = {
@@ -41,7 +41,8 @@
                 if (itemsThatShouldBeReassigned.length > 0) {
                     var getParamsToAssignToOtherTeam = function(interview) {
                         return {
-                            SupervisorId: self.AssignTo().UserId,
+                            SupervisorId: self.AssignTo().SupervisorId,
+                            InterviewerId: self.AssignTo().InterviewerId,
                             InterviewId: interview.InterviewId
                         }
                     };
@@ -90,12 +91,12 @@
     };
 
     self.AssignInterview = function () {
-        var commandName = "AssignSupervisorCommand";
+        var commandName = "AssignResponsibleCommand";
         var messageTemplateId = "#assign-interview-template";
         var continueMessageTemplateId = "#confirm-continue-message-template";
 
         var eligibleSelectedItems = self.GetSelectedItemsAfterFilter(function (item) {
-            return item.CanBeReassigned();// && item.ResponsibleId() !== self.AssignTo().UserId;
+            return item.CanBeReassigned();
         });
 
         var countInterviewsToAssign = ko.observable(0);
@@ -134,7 +135,8 @@
                 if (itemsThatShouldBeReassigned.length > 0) {
                     var getParamsToAssignToOtherTeam = function (interview) {
                         return {
-                            SupervisorId: model.Users.AssignTo().UserId,
+                            SupervisorId: model.Users.AssignTo().SupervisorId,
+                            InterviewerId: model.Users.AssignTo().InterviewerId,
                             InterviewId: interview.InterviewId
                         }
                     };

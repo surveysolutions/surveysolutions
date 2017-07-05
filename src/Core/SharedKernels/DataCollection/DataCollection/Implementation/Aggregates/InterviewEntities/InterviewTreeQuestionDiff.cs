@@ -52,6 +52,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 if (this.SourceNode.IsTextList) return !this.SourceNode.AsTextList.EqualByAnswer(this.ChangedNode.AsTextList);
                 if (this.SourceNode.IsSingleLinkedToList) return !this.SourceNode.AsSingleLinkedToList.EqualByAnswer(this.ChangedNode.AsSingleLinkedToList);
                 if (this.SourceNode.IsMultiLinkedToList) return !this.SourceNode.AsMultiLinkedToList.EqualByAnswer(this.ChangedNode.AsMultiLinkedToList);
+                if (this.SourceNode.IsArea) return !this.SourceNode.AsArea.EqualByAnswer(this.ChangedNode.AsArea);
 
                 return false;
             }
@@ -79,12 +80,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 if (this.ChangedNode == null) return false;
                 if (!this.ChangedNode.IsLinkedToListQuestion) return false;
 
-                var sourceOptions = this.SourceNode?.AsLinkedToList.Options ?? EmptyArray<decimal>.Value;
+                var sourceOptions = this.SourceNode?.AsLinkedToList.Options ?? EmptyArray<int>.Value;
 
                 if (sourceOptions.Length != this.ChangedNode.AsLinkedToList.Options.Length)
                     return true;
 
                 return !sourceOptions.SequenceEqual(this.ChangedNode.AsLinkedToList.Options);
+            }
+        }
+
+        public bool NodeIsMarkedAsReadonly
+        {
+            get
+            {
+                if (this.ChangedNode == null) return false;
+                if (this.IsNodeAdded) return this.ChangedNode.IsReadonly;
+                return !SourceNode.IsReadonly && this.ChangedNode.IsReadonly;
             }
         }
     }

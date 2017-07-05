@@ -141,8 +141,8 @@
   <data name="CreatedOnClient" xml:space="preserve">
     <value>Créé sur la tablette</value>
   </data>
-  <data name="CreateNewInterview" xml:space="preserve">
-    <value>Créer un nouveau entertien</value>
+  <data name="CreateNewAssignment" xml:space="preserve">
+    <value/>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Supprimer</value>

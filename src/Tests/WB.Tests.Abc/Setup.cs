@@ -4,15 +4,17 @@ using System.Linq;
 using System.Linq.Expressions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.DenormalizerStorage;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
@@ -103,12 +105,6 @@ namespace WB.Tests.Abc
         public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(IQuestionnaire questionnaire)
             => Stub<IQuestionnaireStorage>.Returning(questionnaire);
 
-        private static IQuestionnaireStorage QuestionnaireRepository(QuestionnaireDocument questionnaireDocument)
-            => Mock.Of<IQuestionnaireStorage>(repository
-                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument)
-                && repository.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument
-                && repository.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()) == questionnaireDocument);
-
         public static IEventHandler FailingFunctionalEventHandler()
             => FailingFunctionalEventHandlerHavingUniqueType<object>();
 
@@ -188,6 +184,9 @@ namespace WB.Tests.Abc
 
         public static StatefulInterview StatefulInterview(QuestionnaireDocument questionnaireDocument, bool census = true)
         {
+            questionnaireDocument.IsUsingExpressionStorage = true;
+            questionnaireDocument.ExpressionsPlayOrder = Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(questionnaireDocument.AsReadOnly());
+
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
 
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument);
@@ -247,31 +246,6 @@ namespace WB.Tests.Abc
             return filteredOptionsViewModel.Object;
         }
 
-        public static InterviewDetailsViewFactory InterviewDetailsViewFactory(
-            Guid interviewId, QuestionnaireDocument questionnaireDocument, 
-            ILatestInterviewExpressionState interviewExpressionState)
-        {
-            var questionnaireRepository = Setup.QuestionnaireRepository(questionnaireDocument);
-
-            var interview = Create.AggregateRoot.StatefulInterview(
-                interviewExpressionStatePrototypeProvider: Stub<IInterviewExpressionStatePrototypeProvider>.Returning(interviewExpressionState),
-                questionnaireRepository: questionnaireRepository);
-
-            var interviewData = Create.Entity.InterviewData(questionnaireId: questionnaireDocument.PublicKey);
-            var interviewSummary = Create.Entity.InterviewSummary(interviewId,
-                interview.QuestionnaireIdentity.QuestionnaireId, interview.QuestionnaireIdentity.Version,
-                interview.Status);
-            var interviewSummaryRepository = new InMemoryReadSideRepositoryAccessor<InterviewSummary>();
-            interviewSummaryRepository.Store(interviewSummary, interviewId);
-
-            return Create.Service.InterviewDetailsViewFactory(
-                questionnaireStorage: questionnaireRepository,
-                interviewStore: new TestInMemoryWriter<InterviewData>(interviewId.FormatGuid(), interviewData),
-                statefulInterviewRepository: Stub<IStatefulInterviewRepository>.Returning<IStatefulInterview>(interview),
-                interviewSummaryRepository: interviewSummaryRepository
-                );
-        }
-
         internal static void ApplyInterviewEventsToViewModels(IEventSourcedAggregateRoot interview, ILiteEventRegistry eventRegistry, Guid interviewId)
         {
             foreach (var evnt in interview.GetUnCommittedChanges().Select(x => Create.Other.CommittedEvent(x, interviewId)))
@@ -303,6 +277,17 @@ namespace WB.Tests.Abc
             var questionnaireRepository = Create.Fake.QuestionnaireRepository(questionnaireDocuments.ToArray());
 
             return Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaireRepository);
+        }
+
+        public static IInterviewSynchronizationDtoFactory InterviewSynchronizationDtoFactory(QuestionnaireDocument document)
+        {
+            var questionnaire = new PlainQuestionnaire(document, 1, null);
+            return new InterviewSynchronizationDtoFactory(
+                Mock.Of<IReadSideRepositoryWriter<InterviewStatuses>>(),
+                Mock.Of<IReadSideKeyValueStorage<InterviewLinkedQuestionOptions>>(),
+                Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == document &&
+                    _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == questionnaire),
+                new RosterStructureService());
         }
     }
 }

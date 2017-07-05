@@ -15,7 +15,6 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string QuestionnaireTitle { get; set; }
         public string HumanId { get; set; }
         public string FirstSectionId { get; set; }
-        public bool IsSampleMode { get; set; }
     }
 
     public class LanguageInfo
@@ -142,14 +141,14 @@ namespace WB.UI.Headquarters.Models.WebInterview
     public class InterviewTextListQuestion : GenericQuestion
     {
         public int? MaxAnswersCount { get; set; }
-        public List<TextListAnswerRow> Rows { get; set; }
+        public List<TextListAnswerRowDto> Rows { get; set; }
         public bool IsRosterSize { get; set; }
 
         public override string ToString() => string.Join(@", ", Rows);
     }
 
     [DebuggerDisplay("{ToString()}")]
-    public class TextListAnswerRow
+    public class TextListAnswerRowDto
     {
         public decimal Value { get; set; }
         public string Text { get; set; }

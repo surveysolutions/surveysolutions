@@ -147,7 +147,7 @@
   <data name="Quantity" xml:space="preserve">
     <value>Количество</value>
   </data>
-  <data name="Questionnaires" xml:space="preserve">
+  <data name="SurveySetup" xml:space="preserve">
     <value>Настройка обследований</value>
   </data>
   <data name="QueueSizeTitle" xml:space="preserve">
@@ -185,5 +185,11 @@
   </data>
   <data name="Troubleshooting" xml:space="preserve">
     <value>Устранение неполадок</value>
+  </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>Задания</value>
+  </data>
+  <data name="Questionnaires" xml:space="preserve">
+    <value>Опросники</value>
   </data>
 </root>

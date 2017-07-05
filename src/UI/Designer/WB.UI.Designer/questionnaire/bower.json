@@ -12,7 +12,7 @@
   ],
   "dependencies": {
     "jquery": "^3.1.1",
-    "ace-builds": "^1.2.6",
+    "ace-builds": "^1.2.7",
     "angular": "^1.6.4",
     "angular-animate": "^1.6.4",
     "angular-block-ui": "0.2.2",
@@ -21,7 +21,7 @@
     "angular-elastic": "^2.5.1",
     "angular-hotkeys": "chieffancypants/angular-hotkeys#^1.7.0",
     "angular-loading-bar": "^0.9.0",
-    "angular-perfect-scrollbar": "~0.1.4",
+    "angular-perfect-scrollbar": "^0.1.0",
     "angular-pnotify": "^0.1.2",
     "angular-resource": "^1.6.4",
     "angular-sanitize": "^1.6.4",
@@ -47,7 +47,8 @@
     "angular-ui-router": "^0.4.2",
     "pnotify": "^3.0.0",
     "xss": "^0.3.3",
-    "perfect-scrollbar": "^0.6.16"
+    "perfect-scrollbar": "^0.6.16",
+    "html5shiv": "^3.7.3"
   },
   "resolutions": {
     "angular": "^1.6.4"

@@ -19,6 +19,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization
                         //assign
                         { "AssignInterviewerCommand", typeof (AssignInterviewerCommand) },
                         { "AssignSupervisorCommand", typeof (AssignSupervisorCommand) },
+                        { "AssignResponsibleCommand", typeof (AssignResponsibleCommand) },
                         // flags and comments
                         { "SetFlagToAnswerCommand", typeof (SetFlagToAnswerCommand) },
                         { "RemoveFlagFromAnswerCommand", typeof (RemoveFlagFromAnswerCommand ) },

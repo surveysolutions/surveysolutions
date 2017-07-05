@@ -138,8 +138,8 @@
   <data name="CreatedOnClient" xml:space="preserve">
     <value>Создан на клиенте</value>
   </data>
-  <data name="CreateNewInterview" xml:space="preserve">
-    <value>Создать новое интервью</value>
+  <data name="CreateNewAssignment" xml:space="preserve">
+    <value>Создать новое назначение</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Удалить</value>

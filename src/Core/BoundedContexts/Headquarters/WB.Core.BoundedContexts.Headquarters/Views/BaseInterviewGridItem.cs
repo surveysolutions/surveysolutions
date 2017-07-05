@@ -14,6 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
         public bool HasErrors { get; set; }
         public string Status { get; set; }
         public string LastEntryDate { get; set; }
-        public bool CreatedOnClient { get; set; }
+        public int? AssignmentId { get; set; }
+
     }
 }

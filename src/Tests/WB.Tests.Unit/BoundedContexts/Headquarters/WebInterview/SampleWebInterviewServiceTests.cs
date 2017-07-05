@@ -1,17 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using CsvHelper;
 using CsvHelper.Configuration;
+using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.WebInterview.Impl;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
-using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
 {
@@ -33,10 +32,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
 
             reader.Read();
 
-            Assert.That(reader.FieldHeaders.Length, Is.EqualTo(3));
+            Assert.That(reader.FieldHeaders.Length, Is.EqualTo(2));
             Assert.That(reader.FieldHeaders[0], Is.EqualTo("interview__link"));
-            Assert.That(reader.FieldHeaders[1], Is.EqualTo("interview__key"));
-            Assert.That(reader.FieldHeaders[2], Is.EqualTo("id"));
+            Assert.That(reader.FieldHeaders[1], Is.EqualTo("id"));
 
             var csvReaderException = Assert.Throws<CsvReaderException>(() => reader.Read(), "Only header row should be written to the output file");
             Assert.That(csvReaderException.Message, Does.Contain("exhausted all records"));
@@ -46,19 +44,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         public void When_generating_for_questionnaire_without_prefilled_questions_Should_ouput_links()
         {
             var questionnaireId = Create.Entity.QuestionnaireIdentity();
-            Guid interviewId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-            var interviewKey = "key";
 
-            var summary = Create.Entity.InterviewSummary(questionnaireId: questionnaireId.QuestionnaireId,
-                questionnaireVersion: questionnaireId.Version,
-                key: interviewKey,
-                status: InterviewStatus.InterviewerAssigned,
-                interviewId: interviewId);
-
-            TestInMemoryWriter<InterviewSummary> summaries =
-                new TestInMemoryWriter<InterviewSummary>(interviewId.FormatGuid(), summary);
-
-            var service = this.GetService(summaries);
+            var assignmentId = 5;
+            var assignment = Create.Entity.Assignment(id: assignmentId, questionnaireIdentity: questionnaireId, assigneeSupervisorId: Guid.NewGuid());
+            var assignments = Create.Service.AssignmentService(assignment);
+            var service = this.GetService(assignments: assignments);
 
             // Act
             byte[] ouptutBytes = service.Generate(questionnaireId, "http://baseurl");
@@ -67,14 +57,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             var reader = GetCsvReader(ouptutBytes);
 
             reader.Read();
-            Assert.That(reader.FieldHeaders.Length, Is.EqualTo(3));
+            Assert.That(reader.FieldHeaders.Length, Is.EqualTo(2));
             Assert.That(reader.FieldHeaders[0], Is.EqualTo("interview__link"));
-            Assert.That(reader.FieldHeaders[1], Is.EqualTo("interview__key"));
-            Assert.That(reader.FieldHeaders[2], Is.EqualTo("id"));
+            Assert.That(reader.FieldHeaders[1], Is.EqualTo("id"));
 
-            Assert.That(reader.GetField(0), Is.EqualTo($"http://baseurl/{interviewId:N}/Cover"));
-            Assert.That(reader.GetField(1), Is.EqualTo(interviewKey));
-            Assert.That(reader.GetField(2), Is.EqualTo($"{interviewId:N}"));
+            Assert.That(reader.GetField(0), Is.EqualTo($"http://baseurl/{assignmentId}/Start"));
+            Assert.That(reader.GetField(1), Is.EqualTo($"{assignmentId}"));
         }
 
         [Test]
@@ -86,23 +74,18 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         public void when_question_title_contains_not_allowed_characters_should_trim_it(string prefilledQuestionTitle, string expectedHeader)
         {
             var questionnaireId = Create.Entity.QuestionnaireIdentity();
-            var summary = Create.Entity.InterviewSummary(questionnaireId: questionnaireId.QuestionnaireId,
-                questionnaireVersion: questionnaireId.Version,
-                status: InterviewStatus.InterviewerAssigned);
-            var prefilledQuestionAnswer = new QuestionAnswer
-            {
-                Id = 25,
-                InterviewSummary = summary,
-                Title = prefilledQuestionTitle,
-                Answer = "bla"
-            };
-            summary.AnswersToFeaturedQuestions.Add(prefilledQuestionAnswer);
+            var questionId = Create.Entity.Identity(Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+            
+            var assignment = Create.Entity.Assignment(id: 5, questionnaireIdentity: questionnaireId, assigneeSupervisorId: Guid.NewGuid());
+            assignment.IdentifyingData.Add(Create.Entity.IdentifyingAnswer(assignment, answer: "bla", identity: questionId));
 
-            TestInMemoryWriter<InterviewSummary> summaries =
-                new TestInMemoryWriter<InterviewSummary>(summary.SummaryId, summary);
-            TestInMemoryWriter<QuestionAnswer> answers = new TestInMemoryWriter<QuestionAnswer>(prefilledQuestionAnswer.Id.ToString(), prefilledQuestionAnswer);
+            IAssignmentsService assignments = Create.Service.AssignmentService(assignment);
 
-            var service = this.GetService(summaries, answers);
+            var questionnaires = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId,
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.TextQuestion(questionId.Id, text: prefilledQuestionTitle)));
+
+            var service = this.GetService(assignments, questionnaires);
 
             // Act
             byte[] ouptutBytes = service.Generate(questionnaireId, "http://baseurl");
@@ -111,8 +94,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             var reader = GetCsvReader(ouptutBytes);
 
             reader.Read();
-            Assert.That(reader.FieldHeaders[3], Is.EqualTo(expectedHeader));
-            Assert.That(reader.FieldHeaders[3], Is.EqualTo(expectedHeader));
+            Assert.That(reader.FieldHeaders[2], Is.EqualTo(expectedHeader));
+            Assert.That(reader.FieldHeaders[2], Is.EqualTo(expectedHeader));
         }
 
         private static CsvReader GetCsvReader(byte[] ouptutBytes)
@@ -129,15 +112,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             return reader;
         }
 
-        private SampleWebInterviewService GetService(
-            IQueryableReadSideRepositoryReader<InterviewSummary> summaries = null,
-            IQueryableReadSideRepositoryReader<QuestionAnswer> answers = null,
-            InterviewDataExportSettings exportSettings = null)
+        private SampleWebInterviewService GetService(IAssignmentsService assignments = null, IQuestionnaireStorage questionnaireStorage = null)
         {
+            var assignmentsService = new Mock<IAssignmentsService>();
+            assignmentsService.Setup(x => x.GetAssignmentsReadyForWebInterview(It.IsAny<QuestionnaireIdentity>()))
+                .Returns(new List<Assignment>());
             return new SampleWebInterviewService(
-                summaries ?? new TestInMemoryWriter<InterviewSummary>(),
-                answers ?? new TestInMemoryWriter<QuestionAnswer>(),
-                exportSettings ?? new InterviewDataExportSettings { InterviewIdsQueryBatchSize = 10 });
+                assignments ?? assignmentsService.Object,
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
         }
     }
 }

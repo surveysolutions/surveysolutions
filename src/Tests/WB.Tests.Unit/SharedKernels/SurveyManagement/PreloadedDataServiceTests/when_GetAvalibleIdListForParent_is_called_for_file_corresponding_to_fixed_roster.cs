@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -35,11 +31,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
             result.ShouldNotBeNull();
 
         It should_result_have_2_ids_1_and_2 = () =>
-            result.SequenceEqual(new decimal[] { 1, 2 });
+            result.SequenceEqual(new [] { 1, 2 });
 
         private static PreloadedDataService preloadedDataService;
         private static QuestionnaireDocument questionnaireDocument;
-        private static decimal[] result;
+        private static int[] result;
         private static Guid rosterGroupId = Guid.NewGuid();
     }
 }

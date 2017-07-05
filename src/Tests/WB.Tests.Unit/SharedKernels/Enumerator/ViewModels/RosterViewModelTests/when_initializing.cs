@@ -56,9 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
                 Create.Entity.Roster(rosterId: roster1Id, rosterSizeQuestionId: question1Id)
             });
 
-            var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, 0);
-
-            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: plainQuestionnaire);
+            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaireDocument);
             interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), question1Id, RosterVector.Empty, DateTime.Now, new[] { 3, 4 });
             interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), question1Id, RosterVector.Empty, DateTime.Now, new []{ 3, 1, 4, 2 });
 
@@ -96,9 +94,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
                 Create.Entity.Roster(rosterId: roster1Id, rosterSizeQuestionId: question1Id)
             });
 
-            var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, 0);
-
-            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: plainQuestionnaire);
+            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaireDocument);
             interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(Guid.NewGuid(), question1Id, RosterVector.Empty, new []
             {
                 Create.Entity.AnsweredYesNoOption(3m, true),
@@ -146,9 +142,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
                 Create.Entity.Roster(rosterId: roster1Id, rosterSizeQuestionId: question1Id)
             });
 
-            var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, 0);
-
-            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: plainQuestionnaire);
+            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaireDocument);
             interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), question1Id, RosterVector.Empty, DateTime.Now, new[] { 3, 4 });
             interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), question1Id, RosterVector.Empty, DateTime.Now, new[] { 3, 1, 4, 2 });
 
@@ -186,9 +180,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
                 Create.Entity.Roster(rosterId: roster1Id, rosterSizeQuestionId: question1Id)
             });
 
-            var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, 0);
-
-            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: plainQuestionnaire);
+            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaireDocument);
             interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(Guid.NewGuid(), question1Id, RosterVector.Empty, new[]
             {
                 Create.Entity.AnsweredYesNoOption(3m, true),

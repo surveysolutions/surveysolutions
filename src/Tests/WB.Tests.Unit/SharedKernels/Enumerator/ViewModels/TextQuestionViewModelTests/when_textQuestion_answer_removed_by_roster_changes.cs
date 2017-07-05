@@ -34,9 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextQuestionViewMode
                 })
             });
 
-            var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, 0);
-
-            this.interview = Create.AggregateRoot.StatefulInterview(questionnaire: plainQuestionnaire);
+            this.interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaireDocument);
 
             var statefulInterviewRepository = Mock.Of<IStatefulInterviewRepository>(x => 
                 x.Get(this.interview.Id.ToString()) == this.interview

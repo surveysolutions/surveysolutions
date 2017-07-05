@@ -1,6 +1,7 @@
 ﻿@using WB.Core.GenericSubdomains.Portable
 @model UserEditModel
 @{
+    ViewBag.ActivePage = MenuItem.Interviewers;
     ViewBag.Title = Pages.Profile_InterviewerEditFormat.FormatString(Model.UserName).RemoveHtmlTags();
     ViewBag.PageTitle = Pages.Profile_InterviewerEditFormat.FormatString(Model.UserName);
     Layout = "~/Views/Shared/Profile/_UserEditorLayout.cshtml";
@@ -13,4 +14,8 @@
 @section PostDetailsSection
 {
     @Html.EditorFor(x => x.IsLockedBySupervisor, "CheckboxFormField")
+}
+@section LockWarningSection
+{
+    <p>@Pages.Interviewer_LockWarning</p>
 }

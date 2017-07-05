@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -27,6 +28,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         Task LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire);
 
         Task<byte[]> GetApplicationAsync(CancellationToken token);
+        Task<byte[]> GetApplicationPatchAsync(CancellationToken token);
         Task<int?> GetLatestApplicationVersionAsync(CancellationToken token);
         Task SendBackupAsync(string filePath, CancellationToken token);
 
@@ -45,5 +47,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         Task<CompanyLogoInfo> GetCompanyLogo(string storedClientEtag, CancellationToken cancellationToken);
         Task SendSyncStatisticsAsync(SyncStatisticsApiView statistics, CancellationToken token, RestCredentials credentials);
         Task SendUnexpectedExceptionAsync(UnexpectedExceptionApiView exception, CancellationToken token);
+        
+        Task<List<MapView>> GetMapList(CancellationToken cancellationToken);
+        Task<byte[]> GetMapContent(string url, CancellationToken cancellationToken);
     }
 }

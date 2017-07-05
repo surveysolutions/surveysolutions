@@ -91,6 +91,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assignment.
+        /// </summary>
+        public static string Assignment {
+            get {
+                return ResourceManager.GetString("Assignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apply on {0} interview(s) which Interviewer already received.
         /// </summary>
         public static string AssignReceivedConfirm {
@@ -165,7 +174,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error during import of interview with identifying questions {0}. SupervisorId {1}, InterviewerId {2}, QuestionnaireId {3}, HeadquartersId: {4}Exception: {5}.
+        ///   Looks up a localized string similar to Error during import of interview with identifying questions {0}. InterviewerId {1}, QuestionnaireId {2}, Exception: {3}.
         /// </summary>
         public static string ImportInterviews_GenericError {
             get {

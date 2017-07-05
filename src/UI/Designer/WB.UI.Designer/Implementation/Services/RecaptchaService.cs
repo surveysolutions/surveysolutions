@@ -27,7 +27,7 @@ namespace WB.UI.Designer.Implementation.Services
 
         public bool IsValid(string clientResponse)
         {
-            string secretKey = this.configurationManager.AppSettings["ReCaptchaPrivateKey"];
+            string secretKey = this.configurationManager.AppSettings["reCaptchaPrivateKey"];
 
             RecaptchaResponse recaptchaResponse = null;
 

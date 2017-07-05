@@ -2,7 +2,6 @@
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -16,31 +15,27 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         Establish context = () =>
         {
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
-
             
             var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
             {
                 Abc.Create.Entity.SingleQuestion(id: linkedToQuestionId, linkedToQuestionId: titleQuestionId, variable: "link_single"),
                 Abc.Create.Entity.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
-                Abc.Create.Entity.Roster(rosterId: rosterId, rosterSizeSourceType: RosterSizeSourceType.Question,
-                    rosterSizeQuestionId: triggerQuestionId, rosterTitleQuestionId: titleQuestionId, variable: "ros1",
-                    children: new IComposite[]
-                    {
-                        Abc.Create.Entity.NumericRealQuestion(id: titleQuestionId, variable: "link_source")
-                    }),
-                Abc.Create.Entity.TextQuestion(questionId: disabledQuestionsId, variable: "txt_disabled",
-                    enablementCondition: "IsAnswered(link_single)")
+                Abc.Create.Entity.NumericRoster(rosterId: rosterId, rosterSizeQuestionId: triggerQuestionId, rosterTitleQuestionId: titleQuestionId, variable: "ros1", children: new IComposite[]
+                {
+                    Abc.Create.Entity.NumericRealQuestion(id: titleQuestionId, variable: "link_source")
+                }),
+                Abc.Create.Entity.TextQuestion(questionId: disabledQuestionsId, variable: "txt_disabled", enablementCondition: "IsAnswered(link_single)")
             });
 
             interview = SetupInterview(questionnaireDocument);
             interview.AnswerNumericIntegerQuestion(userId, triggerQuestionId, RosterVector.Empty, DateTime.Now, 1);
-            interview.AnswerNumericRealQuestion(userId, titleQuestionId, Abc.Create.Entity.RosterVector(new[] {0}), DateTime.Now, 18.5);
+            interview.AnswerNumericRealQuestion(userId, titleQuestionId, Abc.Create.RosterVector(0), DateTime.Now, 18.5);
             eventContext = new EventContext();
         };
 
         Because of = () =>
             interview.AnswerSingleOptionLinkedQuestion(userId: userId, questionId: linkedToQuestionId,
-                 answerTime: DateTime.Now, rosterVector: new decimal[0], selectedRosterVector: new [] { 0m });
+                 answerTime: DateTime.Now, rosterVector: RosterVector.Empty, selectedRosterVector: Abc.Create.RosterVector(0));
 
         Cleanup stuff = () =>
         {

@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal,
             IPasswordHasher passwordHasher,
-            IPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
+            IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IPlainStorage<CompanyLogo> logoStorage,
             ISynchronizationService synchronizationService,
             ILogger logger)
@@ -131,7 +131,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             var restCredentials = new RestCredentials {Login = this.UserName};
             this.IsInProgress = true;
-
+            this.ErrorMessage = String.Empty;
+            
             try
             {
                 var token = await this.synchronizationService.LoginAsync(new LogonInfo

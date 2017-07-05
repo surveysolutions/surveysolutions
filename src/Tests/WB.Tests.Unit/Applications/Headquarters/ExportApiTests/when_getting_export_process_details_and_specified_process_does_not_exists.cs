@@ -3,10 +3,12 @@ using System.Web.Http;
 using System.Web.Http.Results;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.API;
+using WB.UI.Headquarters.API.PublicApi;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
@@ -22,7 +24,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
             controller = CreateExportController(dataExportStatusReader: mockOfDataExportStatusReader.Object);
         };
 
-        Because of = () => result = controller.ProcessDetails(questionnaireIdentity.ToString(), "tabular");
+        Because of = () => result = controller.ProcessDetails(questionnaireIdentity.ToString(), DataExportFormat.Tabular);
 
         It should_return_http_not_found_response = () =>
             result.ShouldBeOfExactType<NotFoundResult>();

@@ -4,8 +4,6 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 
@@ -21,7 +19,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     fixedTitles: new[] {"1", "2"},
                     variable: nonUniqueVariableName,
                     children: new IComposite[]
-                    {new TextListQuestion() {PublicKey = Guid.NewGuid(), StataExportCaption = "var1"}})
+                    {Create.TextListQuestion(variable: "var1")})
             });
             questionnaire.Title = nonUniqueVariableName;
             verifier = CreateQuestionnaireVerifier();

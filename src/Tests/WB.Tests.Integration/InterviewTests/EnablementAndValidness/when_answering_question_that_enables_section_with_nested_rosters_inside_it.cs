@@ -1,15 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
@@ -28,47 +24,39 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 Guid userId = Guid.NewGuid();
 
-                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocument(questionnaireId,
-                    Abc.Create.Entity.Group(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), children: new IComposite[]
+                var questionnaireDocument = Create.Entity.QuestionnaireDocument(questionnaireId,
+                    Create.Entity.Group(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), children: new IComposite[]
                     {
-                        Abc.Create.Entity.NumericIntegerQuestion(numId, variable: "x1")
+                        Create.Entity.NumericIntegerQuestion(numId, "x1")
                     }),
-                    Abc.Create.Entity.Group(Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"), enablementCondition: "x1 == 1", children: new IComposite[]
+                    Create.Entity.Group(Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"), enablementCondition: "x1 == 1", children: new IComposite[]
                     {
-                        Abc.Create.Entity.TextListQuestion(questionId: list1Id, variable: "l1"),
-                        Abc.Create.Entity.Roster(roster1Id, rosterSizeQuestionId: list1Id, variable: "r1", rosterSizeSourceType:RosterSizeSourceType.Question, children: new IComposite[]
+                        Create.Entity.TextListQuestion(list1Id, variable: "l1"),
+                        Create.Entity.ListRoster(roster1Id, rosterSizeQuestionId: list1Id, variable: "r1", children: new IComposite[]
                         {
-                            Abc.Create.Entity.TextListQuestion(questionId: list2Id, variable: "l2"),
-                            Abc.Create.Entity.Roster(roster2Id, rosterSizeQuestionId: list2Id, variable: "r2", rosterSizeSourceType:RosterSizeSourceType.Question, children: new IComposite[]
+                            Create.Entity.TextListQuestion(list2Id, variable: "l2"),
+                            Create.Entity.ListRoster(roster2Id, rosterSizeQuestionId: list2Id, variable: "r2", children: new IComposite[]
                             {
-                                Abc.Create.Entity.TextQuestion(questionId: textId, variable: null)
+                                Create.Entity.TextQuestion(textId, variable: null)
                             })
                         })
                     }));
 
                 var interview = SetupStatefullInterview(questionnaireDocument);
-                interview.AnswerNumericIntegerQuestion(Abc.Create.Command.AnswerNumericIntegerQuestionCommand(interview.Id, userId, questionId: numId, answer: 1));
+                interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestionCommand(interview.Id, userId, numId, 1));
                 interview.AnswerTextListQuestion(userId, list1Id, RosterVector.Empty, DateTime.Now, new[] { Tuple.Create(1m, "Hello") });
-                interview.AnswerTextListQuestion(userId, list2Id, Abc.Create.Entity.RosterVector(new[] {1}), DateTime.Now, new[] { Tuple.Create(1m, "World") });
-
+                interview.AnswerTextListQuestion(userId, list2Id, Create.Entity.RosterVector(new[] {1}), DateTime.Now, new[] { Tuple.Create(1m, "World") });
+                interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestionCommand(questionId: numId, answer: 2));
                 var invokeResults = new InvokeResults();
-                using (var eventContext = new EventContext())
-                {
-                    interview.AnswerNumericIntegerQuestion(Abc.Create.Command.AnswerNumericIntegerQuestionCommand(questionId: numId, answer: 2));
-                    invokeResults.SubGroupGotEnablementEvents = eventContext.AnyEvent<GroupsDisabled>(x => x.Groups.Any(y => y.Id == roster2Id));
-                }
-
-
+                
                 using (new EventContext())
                 {
                     interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), numId, RosterVector.Empty, DateTime.Now, 1);
-                    invokeResults.TopRosterIsEnabled = interview.IsEnabled(Abc.Create.Identity(roster1Id, Abc.Create.Entity.RosterVector(new[] {1})));
-                    invokeResults.NestedRosterIsEnabled = interview.IsEnabled(Abc.Create.Identity(roster2Id, Abc.Create.Entity.RosterVector(new[] {1, 1})));
+                    invokeResults.TopRosterIsEnabled = interview.IsEnabled(Create.Identity(roster1Id, Create.Entity.RosterVector(new[] {1})));
+                    invokeResults.NestedRosterIsEnabled = interview.IsEnabled(Create.Identity(roster2Id, Create.Entity.RosterVector(new[] {1, 1})));
                     return invokeResults;
                 }
             });
-
-        It should_not_raise_enablement_events_for_subgroups = () => results.SubGroupGotEnablementEvents.ShouldBeFalse();
 
         It should_mark_nested_roster_as_enabled = () => results.NestedRosterIsEnabled.ShouldBeTrue();
 
@@ -96,7 +84,6 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         {
             public bool TopRosterIsEnabled { get; set; }
             public bool NestedRosterIsEnabled { get; set; }
-            public bool SubGroupGotEnablementEvents { get; set; }
         }
     }
 }

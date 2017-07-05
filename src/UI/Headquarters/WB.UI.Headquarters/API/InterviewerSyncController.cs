@@ -107,6 +107,11 @@ namespace WB.UI.Headquarters.API
         {
             string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(InterviewerApkInfo.Directory), InterviewerApkInfo.FileName);
 
+            return this.CheckFileAndResponse(pathToFile);
+        }
+
+        private HttpResponseMessage CheckFileAndResponse(string pathToFile)
+        {
             if (this.fileSystemAccessor.IsFileExists(pathToFile))
             {
                 var response = new HttpResponseMessage(HttpStatusCode.OK)
@@ -123,6 +128,15 @@ namespace WB.UI.Headquarters.API
             }
 
             return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public HttpResponseMessage GetLatestExtendedVersion()
+        {
+            string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(InterviewerApkInfo.Directory), InterviewerApkInfo.ExtendedFileName);
+
+            return this.CheckFileAndResponse(pathToFile);
         }
 
         [HttpGet]

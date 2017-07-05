@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 {
@@ -31,36 +32,36 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 var topRosterId = Guid.Parse("44444444444444444444444444444444");
                 var numericId = Guid.Parse("55555555555555555555555555555555");
 
-                var questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Abc.Create.Entity.NumericIntegerQuestion(numericId, variable: "numeric"),
-                    Abc.Create.Entity.Roster(topRosterId,
+                var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Create.Entity.NumericIntegerQuestion(numericId, "numeric"),
+                    Create.Entity.Roster(topRosterId,
                         variable: "varRoster",
                         rosterSizeSourceType: RosterSizeSourceType.Question,
                         rosterSizeQuestionId: numericId,
                         children: new List<IComposite>
                         {
-                            Abc.Create.Entity.SingleQuestion(parentSingleOptionQuestionId, "q1", enablementCondition: "numeric > 4",
+                            Create.Entity.SingleQuestion(parentSingleOptionQuestionId, "q1", "numeric > 4",
                                 options: new List<Answer>
                                 {
-                                    Abc.Create.Entity.Option(value: "1", text: "parent option 1"),
-                                    Abc.Create.Entity.Option(value: "2", text: "parent option 2")
+                                    Create.Entity.Option("1", "parent option 1"),
+                                    Create.Entity.Option("2", "parent option 2")
                                 }),
-                            Abc.Create.Entity.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
+                            Create.Entity.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
                                 options:
                                     new List<Answer>
                                     {
-                                        Abc.Create.Entity.Option(value: "1", text: "child 1 for parent option 1", parentValue: "1"),
-                                        Abc.Create.Entity.Option(value: "3", text: "child 1 for parent option 2", parentValue: "2")
+                                        Create.Entity.Option("1", "child 1 for parent option 1", "1"),
+                                        Create.Entity.Option("3", "child 1 for parent option 2", "2")
                                     }
                                 ),
-                            Abc.Create.Entity.SingleQuestion(grandChildCascadedComboboxId, "q3", cascadeFromQuestionId: childCascadedComboboxId,
+                            Create.Entity.SingleQuestion(grandChildCascadedComboboxId, "q3", cascadeFromQuestionId: childCascadedComboboxId,
                                 options:
                                     new List<Answer>
                                     {
-                                        Abc.Create.Entity.Option(value: "1", text: "child 1 for parent option 1", parentValue: "1"),
-                                        Abc.Create.Entity.Option(value: "3", text: "child 1 for parent option 2", parentValue: "2")
+                                        Create.Entity.Option("1", "child 1 for parent option 1", "1"),
+                                        Create.Entity.Option("3", "child 1 for parent option 2", "2")
                                     }
-                                ),
+                                )
 
                         })
                     );
@@ -76,7 +77,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                         WasAnyQuestionEnabled = eventContext.AnyEvent<QuestionsEnabled>(),
                         WasAnyParentQuestionDisabled = eventContext.AnyEvent<QuestionsDisabled>(x => x.Questions.Any(q => q.Id == parentSingleOptionQuestionId)),
                         WasAnyChildQuestionDisabled = eventContext.AnyEvent<QuestionsDisabled>(x => x.Questions.Any(q => q.Id == childCascadedComboboxId)),
-                        WasAnyGrandChildQuestionDisabled = eventContext.AnyEvent<QuestionsDisabled>(x => x.Questions.Any(q => q.Id == grandChildCascadedComboboxId)),
+                        WasAnyGrandChildQuestionDisabled = eventContext.AnyEvent<QuestionsDisabled>(x => x.Questions.Any(q => q.Id == grandChildCascadedComboboxId))
                     };
                 }
             });

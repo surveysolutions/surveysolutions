@@ -29,7 +29,7 @@
 .icon {
     width: 20px;
     height: 20px;
-    background: url(../i/icons1.png);
+    background: url(../i/icons2.png);
     background-position-x: 0;
     overflow: hidden;
 }
@@ -98,6 +98,9 @@
     background-position: 0 -17*@icon-dim;
 }
 
+.icon-area {
+    background-position: 0 -18*@icon-dim;
+}
 
 .icon-error {
     &.icon-numeric {
@@ -160,5 +163,8 @@
     }
     &.icon-translation {
         background-position: -@icon-dim -17*@icon-dim;
+    }
+    &.icon-area {
+        background-position: -@icon-dim -18*@icon-dim;
     }
 }

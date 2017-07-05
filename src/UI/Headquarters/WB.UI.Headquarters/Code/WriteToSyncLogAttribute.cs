@@ -14,11 +14,14 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 
 using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Utils;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.UI.Headquarters.Code
 {
@@ -35,10 +38,11 @@ namespace WB.UI.Headquarters.Code
 
         private IAuthorizedUser authorizedUser => ServiceLocator.Current.GetInstance<IAuthorizedUser>();
 
-        private IQuestionnaireBrowseViewFactory questionnaireBrowseItemFactory
-            => ServiceLocator.Current.GetInstance<IQuestionnaireBrowseViewFactory>();
+        private IQuestionnaireBrowseViewFactory questionnaireBrowseItemFactory => ServiceLocator.Current.GetInstance<IQuestionnaireBrowseViewFactory>();
+        private IQuestionnaireStorage questionnaireStorage => ServiceLocator.Current.GetInstance<IQuestionnaireStorage>();
 
         private IUserViewFactory userViewFactory => ServiceLocator.Current.GetInstance<IUserViewFactory>();
+        private IInterviewAnswerSerializer answerSerializer => ServiceLocator.Current.GetInstance<IInterviewAnswerSerializer>();
 
         private ILogger logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<WriteToSyncLogAttribute>();
 
@@ -156,6 +160,12 @@ namespace WB.UI.Headquarters.Code
                             ? SyncLogMessages.InterviewerLoggedIn
                             : SyncLogMessages.InterviewerFailedToLogin;
                         break;
+                    case SynchronizationLogType.GetAssignmentsList:
+                        logItem.Log = GetAssignmentsLogMessage(context);
+                        break;
+                    case SynchronizationLogType.GetAssignment:
+                        logItem.Log = GetAssignmentLogMessage(context);
+                        break;
                     default:
                         throw new ArgumentException("logAction");
                 }
@@ -212,13 +222,61 @@ namespace WB.UI.Headquarters.Code
         private string GetQuestionnaireLogMessage(string messageFormat, HttpActionExecutedContext context)
         {
             var questionnaire = this.questionnaireBrowseItemFactory.GetById(
-                new QuestionnaireIdentity(context.GetActionArgumentOrDefault<Guid>("id", Guid.Empty),
+                new QuestionnaireIdentity(context.GetActionArgumentOrDefault("id", Guid.Empty),
                     context.GetActionArgumentOrDefault<int>("version", -1)));
 
             if (questionnaire == null)
                 return messageFormat.FormatString(UnknownStringArgumentValue, UnknownStringArgumentValue);
 
             return messageFormat.FormatString(questionnaire.Title, new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version));
+        }
+
+        private string GetAssignmentsLogMessage(HttpActionExecutedContext context)
+        {
+            var assignmentsApiView = this.GetResponseObject<List<AssignmentApiView>>(context);
+            
+            return SyncLogMessages.GetAssignmentsFormat.FormatString(assignmentsApiView.Count,
+                string.Join("", assignmentsApiView.Select(av => $"<li>{GetAssignmentLogMessage(av)}</li>")));
+        }
+
+        private string GetAssignmentLogMessage(AssignmentApiView view)
+        {
+            QuestionnaireIdentity assignmentQuestionnaireId = view.QuestionnaireId;
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(assignmentQuestionnaireId, null);
+            return $"{view.Id}: <strong>{questionnaire.Title}</strong> [{view.QuestionnaireId}]";
+        }
+
+        private string GetAssignmentLogMessage(HttpActionExecutedContext context)
+        {
+            var apiView = this.GetResponseObject<AssignmentApiDocument>(context);
+            QuestionnaireIdentity assignmentQuestionnaireId = apiView.QuestionnaireId;
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(assignmentQuestionnaireId, null);
+            var identityQuestions = questionnaire.GetPrefilledQuestions().ToHashSet();
+
+            var answers = apiView.Answers
+                .Where(x => !string.IsNullOrEmpty(x.SerializedAnswer))
+                .Where(x => identityQuestions.Contains(x.Identity.Id))
+                .Select(_ => GetAssignmentIdentifyingQuestionRow(_, questionnaire));
+
+            var answersString = string.Join("", answers);
+            return SyncLogMessages.GetAssignmentFormat.FormatString(
+                $"{apiView.Id}: <strong>{questionnaire.Title}</strong> [{apiView.QuestionnaireId}] <ul>{answersString}</ul>");
+        }
+
+        private string GetAssignmentIdentifyingQuestionRow(AssignmentApiDocument.InterviewSerializedAnswer _, Core.SharedKernels.DataCollection.Aggregates.IQuestionnaire questionnaire)
+        {
+            string questionTitle = questionnaire.GetQuestionTitle(_.Identity.Id).RemoveHtmlTags();
+            var abstractAnswer = this.answerSerializer.Deserialize<AbstractAnswer>(_.SerializedAnswer);
+            var stringAnswer = abstractAnswer?.ToString();
+            return $"<li title='{questionTitle}'>{LimitStringLength(questionTitle)}: {stringAnswer}</li>";
+        }
+
+        private string LimitStringLength(string text, int limit = 50)
+        {
+            if (text.Length > limit) {
+                return text.Substring(0, limit) + "...";
+            }
+            return text;
         }
 
         private T GetResponseObject<T>(HttpActionExecutedContext context) where T : class

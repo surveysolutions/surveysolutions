@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -33,11 +34,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             eventContext = new EventContext();
 
+            command = Create.Command.CreateInterviewCommand(questionnaireId, 1, supervisorId,
+                answersToFeaturedQuestions, answersTime: answersTime, userId: userId);
             interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>
-            interview.CreateInterview(questionnaireId, 1, supervisorId, answersToFeaturedQuestions, answersTime, userId);
+            interview.CreateInterview(command);
 
         Cleanup stuff = () =>
         {
@@ -62,5 +65,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid prefilledQuestionId;
         private static string prefilledQuestionAnswer;
         private static Interview interview;
+        private static CreateInterviewCommand command;
     }
 }

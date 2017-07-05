@@ -12,9 +12,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.ByQuestions = new List<SubstitutionVariable>();
         }
 
-        public IEnumerable<SubstitutionVariable> ByQuestions { get; set; }
-        public IEnumerable<SubstitutionVariable> ByVariables { get; set; }
-        public IEnumerable<SubstitutionVariable> ByRosters { get; set; }
+        public List<SubstitutionVariable> ByQuestions { get; set; }
+        public List<SubstitutionVariable> ByVariables { get; set; }
+        public List<SubstitutionVariable> ByRosters { get; set; }
     }
 
     public class SubstitutionVariable

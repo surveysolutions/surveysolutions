@@ -5,6 +5,7 @@ using Main.Core.Entities.Composite;
 using Moq;
 using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -47,12 +48,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var interviewExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(_ =>
                 _.GetExpressionState(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == expressionState);
 
+            command = Create.Command.CreateInterviewCommand(questionnaireId, questionnaireVersion, responsibleSupervisorId,
+                answersToFeaturedQuestions, userId);
             interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository,
                 expressionProcessorStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
         };
 
         Because of = () =>
-            interview.CreateInterview(questionnaireId, questionnaireVersion, responsibleSupervisorId, answersToFeaturedQuestions, DateTime.Now, userId);
+            interview.CreateInterview(command);
 
         It should_call_ProcessValidationExpressions_once = () =>
             expressionState.Received(1).ProcessValidationExpressions();
@@ -64,5 +67,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Interview interview;
         private static Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions;
         private static ILatestInterviewExpressionState expressionState;
+        private static CreateInterviewCommand command;
     }
 }

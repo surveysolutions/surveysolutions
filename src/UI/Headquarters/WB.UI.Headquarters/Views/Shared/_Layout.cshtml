@@ -39,7 +39,7 @@
                 }
                 else if(authorizedUser.IsSupervisor)
                 {
-                    <a class="navbar-brand" href="@Url.Action("Index", "Survey", new {area = ""})">@Users.Supervisor</a>
+                    <a class="navbar-brand" href="@Url.Action("Interviews", "Survey", new {area = ""})">@Users.Supervisor</a>
                 }
                 else if (authorizedUser.IsObserver)
                 {
@@ -121,7 +121,7 @@
                     <span id="compile-config" style="color: red">Web Debug</span>
                 }
                 <text>|</text>
-                <a href="@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewerSync", action = "GetLatestVersion" })">@Common.GetInterviewerApp</a>
+                <a href="@Url.Action("Index","Download")">@Common.GetInterviewerApp</a>
                  
                 @if (ServiceLocator.Current.GetInstance<IVersionCheckService>().DoesNewVersionExist())
                 {

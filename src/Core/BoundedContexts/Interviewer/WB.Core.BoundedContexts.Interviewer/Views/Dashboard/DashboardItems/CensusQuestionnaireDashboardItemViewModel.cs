@@ -49,6 +49,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.Comment = InterviewerUIResources.DashboardItem_CensusModeComment.FormatString(interviewsByQuestionnareCount);
         }
 
+        public DashboardInterviewStatus Status => DashboardInterviewStatus.New;
         public string QuestionnaireName { get; set; }
         public string Comment { get; set; }
 
@@ -57,6 +58,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             get { return new MvxCommand(async () => await this.CreateNewInterviewAsync()); }
         }
+
+        public bool HasExpandedView => false;
+        
+        public bool IsExpanded { get; set; }
 
         private async Task CreateNewInterviewAsync()
         {
@@ -67,7 +72,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
                 interviewerIdentity.UserId, this.questionnaireIdentity, DateTime.UtcNow,
                 interviewerIdentity.SupervisorId,
-                null);
+                null, null, null);
             await this.commandService.ExecuteAsync(createInterviewOnClientCommand);
             this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
         }

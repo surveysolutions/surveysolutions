@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.MaskFormatter;
@@ -47,6 +48,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
             if (question is IMultimediaQuestion)
                 return ParseFailed(ValueParsingResult.UnsupportedMultimediaQuestion, out parsedValue, out parsedSingleColumnAnswer);
+
+            if (question is AreaQuestion)
+                return ParseFailed(ValueParsingResult.UnsupportedAreaQuestion, out parsedValue, out parsedSingleColumnAnswer);
 
             if (answer.Contains(',') && this.QuestionTypesCommaFirbidden.Contains(question.QuestionType))
                 return ParseFailed(ValueParsingResult.CommaIsUnsupportedInAnswer, out parsedValue, out parsedSingleColumnAnswer);

@@ -130,13 +130,13 @@
     <value>ការស្នើសុំរបស់អ្នកមិនអាចទទួលយកបានទេ ជាមួយ server.  ធ្វើបច្ចុប្បន្នភាព ការស្នើសុំសម្ភាសន៍របស់អ្នកម្តងទៀត។​ </value>
   </data>
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
-    <value>បញ្ចប់ {0}</value>
+    <value>បញ្ចប់ ({0})</value>
   </data>
   <data name="Dashboard_CreateInterview" xml:space="preserve">
     <value>បង្កើតសម្ភាសន៍</value>
   </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
-    <value>ថ្មី {0}</value>
+    <value>ថ្មី ({0})</value>
   </data>
   <data name="Dashboard_NoInterviewsSyncButton" xml:space="preserve">
     <value>គ្រប់គ្រងរួម</value>
@@ -154,16 +154,13 @@
     <value>ការសម្ភាសន៍បានបញ្ចប់។ តើអ្នកចងចាប់ផ្តើមសម្ភាសន៍ដែរឬទេ?​</value>
   </data>
   <data name="Dashboard_RejectedLinkText" xml:space="preserve">
-    <value>បដិសេធ{0} </value>
+    <value>បដិសេធ({0})</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
     <value>តើអ្នកប្រាកដទេថាអ្នកចង់លុបការសម្ភាសន៍នេះ{0}?</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
-    <value>ចាប់ផ្តើម {0}</value>
-  </data>
-  <data name="Dashboard_Title" xml:space="preserve">
-    <value>{0} កិច្ចការសំរាប់ {1}</value>
+    <value>ចាប់ផ្តើម ({0})</value>
   </data>
   <data name="DashboardItem_AssignedOn" xml:space="preserve">
     <value>ផ្តោតលើ {0}</value>
@@ -176,9 +173,6 @@
   </data>
   <data name="DashboardItem_CreatedOn" xml:space="preserve">
     <value>បង្កើតលើ {0}</value>
-  </data>
-  <data name="DashboardItem_InProgress" xml:space="preserve">
-    <value>ក្ន្ងងដំណើរការ</value>
   </data>
   <data name="DashboardItem_NotStarted" xml:space="preserve">
     <value>មិនទាន់ចាប់ផ្តើម</value>

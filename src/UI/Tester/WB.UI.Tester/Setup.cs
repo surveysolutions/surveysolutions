@@ -49,6 +49,9 @@ namespace WB.UI.Tester
                 {typeof (DashboardViewModel), typeof (DashboardActivity)},
                 {typeof (CompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
                 {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)},
+#if !EXCLUDEEXTENSIONS
+                { typeof (WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
+#endif
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();
@@ -67,6 +70,10 @@ namespace WB.UI.Tester
             return base.GetViewModelAssemblies().Union(new[]
             {
                 typeof(TesterBoundedContextModule).Assembly,
+
+#if !EXCLUDEEXTENSIONS
+                typeof(WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel).Assembly
+#endif
 
             });
         }

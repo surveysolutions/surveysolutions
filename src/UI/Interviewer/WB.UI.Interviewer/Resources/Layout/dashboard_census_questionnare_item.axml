@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
-    style="@style/Dashboard_InterviewListItem">
-  <LinearLayout style="@style/Dashboard_InterviewItem_Layout" >
-    <LinearLayout style="@style/Dashboard_InterviewItem_StatusPanel" />
+    style="@style/Dashboard_InterviewListItem"
+    android:id="@+id/dashboardItem">
+  <LinearLayout style="@style/Dashboard_InterviewItem_Layout">
+    <LinearLayout style="@style/Dashboard_InterviewItem_StatusPanel"
+                  local:MvxBind="BackgroundStyle InterviewStatusToColor(Status);"/>
     <LinearLayout style="@style/Dashboard_InterviewItem_InformationBlock">
 
       <TextView style="@style/Dashboard_InterviewItem_Title"
@@ -14,8 +16,14 @@
                        Click CreateNewInterviewCommand;" />
 
       <TextView  style="@style/Dashboard_InterviewItem_Comment"
-          local:MvxBind="Text Comment;" />
+                 android:layout_marginBottom="@dimen/Dashboard_InterviewItem_InformationBlock_margin"
+                 local:MvxBind="Text Comment;" />
 
     </LinearLayout>
   </LinearLayout>
+  <LinearLayout android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/dashboardItemDetails"
+                android:orientation="vertical"
+                android:visibility="gone"/>
 </LinearLayout>

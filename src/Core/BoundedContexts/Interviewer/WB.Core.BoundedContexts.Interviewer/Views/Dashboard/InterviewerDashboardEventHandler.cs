@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -15,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
@@ -39,24 +41,29 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                                          ILitePublishedEventHandler<AnswersRemoved>,
 
                                          ILitePublishedEventHandler<InterviewOnClientCreated>,
+                                         ILitePublishedEventHandler<InterviewFromPreloadedDataCreated>,
                                          ILitePublishedEventHandler<AnswerRemoved>,
 
                                          ILitePublishedEventHandler<TranslationSwitched>,
                                          ILitePublishedEventHandler<MultipleOptionsLinkedQuestionAnswered>,
-                                         ILitePublishedEventHandler<SingleOptionLinkedQuestionAnswered>
+                                         ILitePublishedEventHandler<SingleOptionLinkedQuestionAnswered>,
+                                         ILitePublishedEventHandler<AreaQuestionAnswered>
     {
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPlainStorage<PrefilledQuestionView> prefilledQuestions;
         private readonly IQuestionnaireStorage questionnaireRepository;
+        private readonly IAnswerToStringConverter answerToStringConverter;
 
         public InterviewerDashboardEventHandler(IPlainStorage<InterviewView> interviewViewRepository, 
             IPlainStorage<PrefilledQuestionView> prefilledQuestions,
             IQuestionnaireStorage questionnaireRepository,
-            ILiteEventRegistry liteEventRegistry)
+            ILiteEventRegistry liteEventRegistry,
+            IAnswerToStringConverter answerToStringConverter)
         {
             this.interviewViewRepository = interviewViewRepository;
             this.prefilledQuestions = prefilledQuestions;
             this.questionnaireRepository = questionnaireRepository;
+            this.answerToStringConverter = answerToStringConverter;
 
             liteEventRegistry.Subscribe(this);
         }
@@ -77,7 +84,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 false,
                 evnt.Payload.InterviewerAssignedDateTime,
                 null,
-                evnt.Payload.RejectedDateTime);
+                evnt.Payload.RejectedDateTime,
+                null);
         }
 
 
@@ -94,15 +102,29 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 true,
                 evnt.EventTimeStamp,
                 evnt.EventTimeStamp,
-                null);
+                null, 
+                evnt.Payload.AssignmentId);
+        }
+
+        public void Handle(IPublishedEvent<InterviewFromPreloadedDataCreated> evnt)
+        {
+            this.AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId,
+                evnt.Payload.QuestionnaireVersion,
+                evnt.EventSourceId,
+                evnt.Payload.UserId,
+                InterviewStatus.InterviewerAssigned,
+                null,
+                new AnsweredQuestionSynchronizationDto[0],
+                true,
+                true,
+                evnt.EventTimeStamp,
+                evnt.EventTimeStamp,
+                null,
+                evnt.Payload.AssignmentId);
         }
 
 
-        private void AddOrUpdateInterviewToDashboard(
-            Guid questionnaireId, long questionnaireVersion, Guid interviewId, Guid responsibleId, InterviewStatus status,
-            string comments, IEnumerable<AnsweredQuestionSynchronizationDto> answeredQuestions,
-            bool createdOnClient, bool canBeDeleted,
-            DateTime? assignedDateTime, DateTime? startedDateTime, DateTime? rejectedDateTime)
+        private void AddOrUpdateInterviewToDashboard(Guid questionnaireId, long questionnaireVersion, Guid interviewId, Guid responsibleId, InterviewStatus status, string comments, IEnumerable<AnsweredQuestionSynchronizationDto> answeredQuestions, bool createdOnClient, bool canBeDeleted, DateTime? assignedDateTime, DateTime? startedDateTime, DateTime? rejectedDateTime, int? assignmentId)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
             var questionnaireDocumentView = this.questionnaireRepository.GetQuestionnaireDocument(questionnaireIdentity);
@@ -118,11 +140,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 ResponsibleId = responsibleId,
                 QuestionnaireId = questionnaireIdentity.ToString(),
                 Census = createdOnClient,
+                QuestionnaireTitle = questionnaireDocumentView.Title
             };
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, interviewView.Language);
 
-            var prefilledQuestions = new List<PrefilledQuestionView>();
+            var prefilledQuestionsList = new List<PrefilledQuestionView>();
             var featuredQuestions = questionnaireDocumentView.Children
                                                              .TreeToEnumerableDepthFirst(x => x.Children)
                                                              .OfType<IQuestion>()
@@ -141,7 +164,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                     var answerOnPrefilledQuestion = this.GetAnswerOnPrefilledQuestion(featuredQuestion.PublicKey, questionnaire, item?.Answer, interviewId);
                     answerOnPrefilledQuestion.SortIndex = prefilledQuestionSortIndex;
                     prefilledQuestionSortIndex++;
-                    prefilledQuestions.Add(answerOnPrefilledQuestion);
+                    prefilledQuestionsList.Add(answerOnPrefilledQuestion);
                 }
                 else
                 {
@@ -163,12 +186,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             var existingPrefilledForInterview = this.prefilledQuestions.Where(x => x.InterviewId == interviewId).ToList();
             this.prefilledQuestions.Remove(existingPrefilledForInterview);
-            this.prefilledQuestions.Store(prefilledQuestions);
+            this.prefilledQuestions.Store(prefilledQuestionsList);
 
             interviewView.StartedDateTime = startedDateTime;
             interviewView.InterviewerAssignedDateTime = assignedDateTime;
             interviewView.RejectedDateTime = rejectedDateTime;
             interviewView.CanBeDeleted = canBeDeleted;
+            interviewView.Assignment = assignmentId;
             interviewView.LastInterviewerOrSupervisorComment = comments;
             interviewView.LocationQuestionId = prefilledGpsQuestionId;
 
@@ -199,54 +223,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private PrefilledQuestionView GetAnswerOnPrefilledQuestion(Guid prefilledQuestion, IQuestionnaire questionnaire, object answer, Guid interviewId)
         {
-            Func<decimal, string> getCategoricalOptionText = null;
-
-            var questionType = questionnaire.GetQuestionType(prefilledQuestion);
-
-            if (answer != null)
-            {
-                switch (questionType)
-                {
-                    case QuestionType.DateTime:
-                        DateTime dateTimeAnswer;
-                        if (answer is string)
-                            dateTimeAnswer = DateTime.Parse((string) answer);
-                        else
-                            dateTimeAnswer = (DateTime) answer;
-
-                        var isTimestamp = questionnaire.IsTimestampQuestion(prefilledQuestion);
-                        var localTime = dateTimeAnswer.ToLocalTime();
-                        answer = isTimestamp 
-                            ? localTime.ToString(CultureInfo.CurrentCulture)
-                            : localTime.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
-                        break;
-                    case QuestionType.MultyOption:
-                    case QuestionType.SingleOption:
-                        if (answer.GetType().IsArray)
-                        {
-                            answer =
-                                (answer as object[]).Select(x => Convert.ToDecimal(x, CultureInfo.InvariantCulture))
-                                    .ToArray();
-                        }
-                        else
-                        {
-                            answer = Convert.ToDecimal(answer, CultureInfo.InvariantCulture);
-                        }
-                        getCategoricalOptionText = (option) => questionnaire.GetOptionForQuestionByOptionValue(prefilledQuestion, option).Title;
-                        break;
-                    case QuestionType.Numeric:
-                        decimal answerTyped = answer is string ? decimal.Parse((string)answer, CultureInfo.InvariantCulture) : Convert.ToDecimal(answer);
-                        if (questionnaire.ShouldUseFormatting(prefilledQuestion))
-                        {
-                            answer = answerTyped.FormatDecimal();
-                        }
-                        else
-                        {
-                            answer = answerTyped.ToString(CultureInfo.CurrentCulture);
-                        }
-                        break;
-                }
-            }
+            string stringAnswer = this.answerToStringConverter.Convert(answer, prefilledQuestion, questionnaire);
 
             return new PrefilledQuestionView
             {
@@ -254,7 +231,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 InterviewId = interviewId,
                 QuestionId = prefilledQuestion,
                 QuestionText = questionnaire.GetQuestionTitle(prefilledQuestion),
-                Answer = answer == null ? null : AnswerUtils.AnswerToString(answer, getCategoricalOptionText)
+                Answer = stringAnswer
             };
         }
 
@@ -271,7 +248,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 canBeDeleted: false,
                 assignedDateTime: evnt.Payload.InterviewData.InterviewerAssignedDateTime,
                 startedDateTime: null,
-                rejectedDateTime: evnt.Payload.InterviewData.RejectDateTime);
+                rejectedDateTime: evnt.Payload.InterviewData.RejectDateTime, 
+                assignmentId: null);
         }
 
         public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
@@ -471,6 +449,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             interviewView.Language = @event.Payload.Language;
 
             this.interviewViewRepository.Store(interviewView);
+        }
+
+        public void Handle(IPublishedEvent<AreaQuestionAnswered> evnt)
+        {
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, new Area(evnt.Payload.Geometry, evnt.Payload.MapName, 
+                evnt.Payload.AreaSize, evnt.Payload.Length, evnt.Payload.Coordinates, evnt.Payload.DistanceToEditor), evnt.Payload.AnswerTimeUtc);
         }
     }
 }

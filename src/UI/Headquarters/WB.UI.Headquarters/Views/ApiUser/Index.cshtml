@@ -6,58 +6,19 @@
 
 @section scripts
 {
+    @Scripts.Render("~/js/main-no-libs")
     @Scripts.Render("~/js/common")
+    @Scripts.Render("~/js/list")
+    @Scripts.Render("~/js/users")
+
     <script type="text/javascript">
-        'use strict';
 
-        var ApiUsersModel = function (ajax, notifier) {
-            var self = this;
+        var observersListUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "AllApiUsers" })';
 
-            self.table = null;
-
-            var headquartersListUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "AllApiUsers" })';
-
-            var requestHeaders = {};
-            requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
-
-            $.fn.dataTable.ext.errMode = 'none';
-
-            var onTableInitComplete = function () {
-                $('.dataTables_filter label').on('click', function (e) {
-                    if (e.target !== this)
-                        return;
-                    if ($(this).hasClass("active")) {
-                        $(this).removeClass("active");
-                    } else {
-                        $(this).addClass("active");
-                        $(this).children("input[type='search']").delay(200).queue(function () { $(this).focus(); $(this).dequeue(); });
-                    }
-                });
-            };
-
-            self.table = $('table#api-users')
-                .on('init.dt', onTableInitComplete)
-                .on('xhr.dt', function (e, settings, json, xhr) {
-                    if (xhr.status === 401)
-                        location.reload();
-                    else if (xhr.status != undefined && xhr.status !== 200)
-                        notifier.showError("@Pages.OperationFailedTitle", "@Pages.OperationFailedDescription");
-                })
-                .DataTable({
-                    language:
-                    {
-                        "url": window.input.settings.config.dataTableTranslationsUrl,
-                        searchPlaceholder: "@Pages.Search"
-                    },
-                    ajax: {
-                        url: headquartersListUrl,
-                        type: "POST",
-                        headers: requestHeaders
-                    },
-                    "createdRow": function (row, data, dataIndex) {
-                        $(row).addClass('with-context-menu');
-                    },
-                    columns: [
+        $(function() {
+            var model = new Supervisor.VM.Users(observersListUrl);
+            model.getDataTableColumns = function() {
+                return [
                         {
                             data: "userName",
                             name: "UserName", // case-sensitive!
@@ -75,41 +36,34 @@
                             name: "IsLockedByHQ", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
                             "class": "date"
                         }
-                    ],
-                    searchHighlight: true,
-                    rowId: 'userId',
-                    pagingType: "full_numbers",
-                    lengthChange: false, // do not show page size selector
-                    pageLength: 50, // page size
-                    "order": [[1, 'desc']],
-                    processing: true,
-                    serverSide: true,
-                    conditionalPaging: true
-                });
+                    ];
+            };
 
-            return self;
-        };
-
-        $(function () {
-            var notifier = new Notifier();
-            var model = new ApiUsersModel(new Ajax(notifier), notifier);
+            ko.applyBindings(model);
+            model.load(); 
         });
     </script>
 }
+
 <main>
     <div class="container-fluid">
         @Html.Partial("_alerts")
         <div class="row">
             <div class="page-header clearfix">
                 <div>
-                    <h1>@Users.APIUsers</h1>
+                    <h1>@Html.Raw(string.Format(Users.ApiUsersCountDescription, @"<span data-bind='text: UsersCount'></span>"))</h1>
                     <a class="btn btn-success" href="@Url.Action("Create", "ApiUser", new {area = string.Empty})">@Users.AddAPIUser</a>
                 </div>
             </div>
             <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">
+                <ol class="list-unstyled">
+                    <li>@Pages.Users_API_Instruction1</li>
+                    <li>@Pages.Users_API_Instruction2</li>
+                </ol>
             </div>
         </div>
-        <table id="api-users" class="table table-striped table-bordered table-condensed table-hover table-ordered">
+        <table id="data_holder" class="table table-striped table-bordered table-condensed table-hover table-ordered"
+               data-order="[[ 1, &quot;asc&quot; ]]" data-searching="true">
             <thead>
             <tr>
                 <th>@Users.UserName</th>

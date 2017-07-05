@@ -26,7 +26,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                         {
                             new Answer() {AnswerValue = "1", AnswerText = "opt 1"},
                             new Answer() {AnswerValue = "2", AnswerText = "opt 2"}
-                        }
+                        },
+                    QuestionText = "test"
                 },
                 new Group()
                 {

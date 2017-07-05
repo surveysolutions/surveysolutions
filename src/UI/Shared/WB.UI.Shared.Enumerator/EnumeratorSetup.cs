@@ -14,6 +14,7 @@ using MvvmCross.Binding.Combiners;
 using MvvmCross.Core.Views;
 using MvvmCross.Droid.Platform;
 using MvvmCross.Droid.Support.V7.AppCompat;
+using MvvmCross.Droid.Support.V7.AppCompat.Target;
 using MvvmCross.Droid.Support.V7.AppCompat.Widget;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Platform;
@@ -105,6 +106,7 @@ namespace WB.UI.Shared.Enumerator
             registry.AddOrOverwrite("IsStringNotEmpty", new IsStringNotEmptyConverter());
             registry.AddOrOverwrite("MediaButtonStyleBackground", new MediaQuestionButtonBackgroundConverter());
             registry.AddOrOverwrite("SectionStyleBackground", new SectionStyleBackgroundConverter());
+            registry.AddOrOverwrite("VisibleOrInvisible", new VisibleOrInvisibleValueConverter());
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
@@ -126,9 +128,6 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<Button>("ToParentButtonGroupStyle", button => new ToParentGroupButtonBinding(button));
             registry.RegisterCustomBindingFactory<TextView>("GroupStatus", textView => new TextViewGroupStatusBinding(textView));
             registry.RegisterCustomBindingFactory<View>("HideKeyboardOnClick", view => new ViewHideKeyboardOnClickBinding(view));
-            registry.RegisterCustomBindingFactory<MvxAppCompatAutoCompleteTextView>("HidePopupOnDone", view => new MvxAutoCompleteTextViewHidePopupOnDoneBinding(view));
-            registry.RegisterCustomBindingFactory<MvxAppCompatAutoCompleteTextView>("ResetText", view => new MvxAutoCompleteTextViewResetTextBinding(view));
-            registry.RegisterCustomBindingFactory<MvxAppCompatAutoCompleteTextView>("ShowPopupOnFocus", view => new MvxAutoCompleteTextViewShowPopupOnFocusBinding(view));
             registry.RegisterCustomBindingFactory<ViewGroup>("ColorByInterviewStatus", view => new ViewGroupColorByInterviewStatusBinding(view));
             registry.RegisterCustomBindingFactory<ViewGroup>("StatusBarColorByInterviewStatus", view => new ViewGroupStatusBarColorByInterviewStatusBinding(view));
             registry.RegisterCustomBindingFactory<View>("Transparent", view => new ViewTransparentBinding(view));
@@ -140,7 +139,28 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<FrameLayout>("CurrentScreen", (frameLayout) => new FrameLayoutCurrentScreenBinding(frameLayout));
             registry.RegisterCustomBindingFactory<ImageView>("BitmapWithFallback", (img) => new ImageViewBitmapWithFallbackBinding(img));
             MvxAppCompatSetupHelper.FillTargetFactories(registry);
+
+            RegisterAutoCompleteTextViewBindings(registry);
             base.FillTargetFactories(registry);
+        }
+
+        private static void RegisterAutoCompleteTextViewBindings(IMvxTargetBindingFactoryRegistry registry)
+        {
+            registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>("HidePopupOnDone",
+                view => new InstantAutoCompleteTextViewHidePopupOnDoneBinding(view));
+            registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>("ResetText",
+                view => new InstantAutoCompleteTextViewResetTextBinding(view));
+            registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>("ShowPopupOnFocus",
+                view => new InstantAutoCompleteTextViewShowPopupOnFocusBinding(view));
+
+            registry.RegisterPropertyInfoBindingFactory(
+                typeof(InstantAutoCompleteTextViewPartialTextTargetBinding),
+                typeof(InstantAutoCompleteTextView),
+                nameof(InstantAutoCompleteTextView.PartialText));
+            registry.RegisterPropertyInfoBindingFactory(
+                typeof(InstantAutoCompleteTextViewSelectedObjectTargetBinding),
+                typeof(InstantAutoCompleteTextView),
+                nameof(InstantAutoCompleteTextView.SelectedObject));
         }
 
         protected override IEnumerable<Assembly> AndroidViewAssemblies =>
@@ -157,6 +177,7 @@ namespace WB.UI.Shared.Enumerator
             return new[]
             {
                 typeof(EnumeratorSharedKernelModule).Assembly,
+                typeof(EnumeratorUIModule).Assembly,
             };
         }
     }

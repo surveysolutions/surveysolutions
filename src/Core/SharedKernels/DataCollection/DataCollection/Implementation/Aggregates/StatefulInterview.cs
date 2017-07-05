@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -49,7 +50,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.CreatedOnClient = true;
             this.properties.InterviewerId = @event.UserId;
-
+            this.UsesExpressionStorage = @event.UsesExpressionStorage;
             this.sourceInterview = this.Tree.Clone();
         }
 
@@ -85,41 +86,53 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ActualizeRostersIfQuestionIsRosterSize(answerDto.Id);
             }
 
-            // titles for numeric questions should be recalculated afterward because answers for roster title questions
-            // could be not processed by the time roster instance was created.
-            this.Tree.FindRosters().Where(x => x.IsNumeric).ForEach(x => x.UpdateRosterTitle());
+            if (this.UsesExpressionStorage)
+            {
+                this.UpdateTreeWithDependentChanges(this.Tree, this.GetQuestionnaireOrThrow(), removeLinkedAnswers: false);
+            }
+            else
+            {
+                // titles for numeric questions should be recalculated afterward because answers for roster title questions
+                // could be not processed by the time roster instance was created.
+                this.Tree.FindRosters().Where(x => x.IsNumeric).ForEach(x => x.UpdateRosterTitle());
 
-            foreach (var disabledGroup in @event.InterviewData.DisabledGroups)
-                this.Tree.GetGroup(Identity.Create(disabledGroup.Id, disabledGroup.InterviewItemRosterVector))?.Disable();
+                foreach (var disabledGroup in @event.InterviewData.DisabledGroups)
+                    this.Tree.GetGroup(Identity.Create(disabledGroup.Id, disabledGroup.InterviewItemRosterVector))?.Disable();
 
-            foreach (var disabledQuestion in @event.InterviewData.DisabledQuestions)
-                this.Tree.GetQuestion(Identity.Create(disabledQuestion.Id, disabledQuestion.InterviewItemRosterVector))?.Disable();
+                foreach (var disabledQuestion in @event.InterviewData.DisabledQuestions)
+                    this.Tree.GetQuestion(Identity.Create(disabledQuestion.Id, disabledQuestion.InterviewItemRosterVector))?.Disable();
 
-            foreach (var invalidQuestion in @event.InterviewData.FailedValidationConditions)
-                this.Tree.GetQuestion(invalidQuestion.Key)?.MarkInvalid(invalidQuestion.Value);
+                foreach (var invalidQuestion in @event.InterviewData.FailedValidationConditions)
+                    this.Tree.GetQuestion(invalidQuestion.Key)?.MarkInvalid(invalidQuestion.Value);
 
-            foreach (var disabledStaticText in @event.InterviewData.DisabledStaticTexts)
-                this.Tree.GetStaticText(disabledStaticText)?.Disable();
+                foreach (var disabledStaticText in @event.InterviewData.DisabledStaticTexts)
+                    this.Tree.GetStaticText(disabledStaticText)?.Disable();
 
-            foreach (var invalidStaticText in @event.InterviewData.InvalidStaticTexts)
-                this.Tree.GetStaticText(invalidStaticText.Key)?.MarkInvalid(invalidStaticText.Value);
+                foreach (var invalidStaticText in @event.InterviewData.InvalidStaticTexts)
+                    this.Tree.GetStaticText(invalidStaticText.Key)?.MarkInvalid(invalidStaticText.Value);
 
-            foreach (var validStaticText in @event.InterviewData.ValidStaticTexts)
-                this.Tree.GetStaticText(validStaticText)?.MarkValid();
+                foreach (var validStaticText in @event.InterviewData.ValidStaticTexts)
+                    this.Tree.GetStaticText(validStaticText)?.MarkValid();
 
-            foreach (var variable in @event.InterviewData.Variables)
-                this.Tree.GetVariable(Identity.Create(variable.Key.Id, variable.Key.InterviewItemRosterVector))?.SetValue(variable.Value);
+                foreach (var variable in @event.InterviewData.Variables)
+                    this.Tree.GetVariable(Identity.Create(variable.Key.Id, variable.Key.InterviewItemRosterVector))?.SetValue(variable.Value);
 
-            foreach (var disabledVariable in @event.InterviewData.DisabledVariables)
-                this.Tree.GetVariable(Identity.Create(disabledVariable.Id, disabledVariable.InterviewItemRosterVector))?.Disable();
+                foreach (var disabledVariable in @event.InterviewData.DisabledVariables)
+                    this.Tree.GetVariable(Identity.Create(disabledVariable.Id, disabledVariable.InterviewItemRosterVector))?.Disable();
 
-            this.Tree.ReplaceSubstitutions();
-
-            CalculateLinkedToListOptionsOnTree(this.Tree, false); 
-
-            base.UpdateExpressionState(this.sourceInterview, this.Tree, this.ExpressionProcessorStatePrototype);
+                this.Tree.ReplaceSubstitutions();
             
-            this.UpdateLinkedQuestions(this.Tree, this.ExpressionProcessorStatePrototype, false);
+                CalculateLinkedToListOptionsOnTree(this.Tree, this.ExpressionProcessorStatePrototype, false);
+
+                base.UpdateExpressionState(this.sourceInterview, this.Tree, this.ExpressionProcessorStatePrototype);
+
+                this.UpdateLinkedQuestions(this.Tree, this.ExpressionProcessorStatePrototype, false);
+            }
+
+            foreach (var readonlyQuestion in @event.InterviewData.ReadonlyQuestions)
+            {
+                this.Tree.GetQuestion(Identity.Create(readonlyQuestion.Id, readonlyQuestion.InterviewItemRosterVector))?.MarkAsReadonly();
+            }
 
             this.CreatedOnClient = @event.InterviewData.CreatedOnClient;
             this.properties.SupervisorId = @event.InterviewData.SupervisorId;
@@ -220,36 +233,39 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public InterviewTreeStaticText GetStaticText(Identity identity) => this.Tree.GetStaticText(identity);
 
         public InterviewTreeMultiOptionLinkedToListQuestion GetMultiOptionLinkedToListQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsMultiLinkedToList;
-        
+
+        public InterviewTreeAreaQuestion GetAreaQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsArea;
+
         public IEnumerable<InterviewTreeSection> GetEnabledSections() => this.Tree.Sections.Where(s => !s.IsDisabled());
 
         #region Command handlers
 
-        public void CreateInterviewOnClient(QuestionnaireIdentity questionnaireIdentity, Guid supervisorId, DateTime answersTime, Guid userId, InterviewKey key)
+        public void CreateInterviewOnClient(CreateInterviewOnClientCommand command)
         {
-            this.QuestionnaireIdentity = questionnaireIdentity;
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            this.QuestionnaireIdentity = command.QuestionnaireIdentity;
 
             var changedInterviewTree = this.Tree.Clone();
 
             changedInterviewTree.ActualizeTree();
+            base.PutAnswers(changedInterviewTree, command.Answers, command.AssignmentId);
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, Enumerable.Empty<Identity>(), questionnaire);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             //apply events
-            this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireIdentity.QuestionnaireId, questionnaire.Version));
+            this.ApplyEvent(new InterviewOnClientCreated(command.UserId, command.QuestionnaireIdentity.QuestionnaireId, questionnaire.Version, command.AssignmentId, questionnaire.IsUsingExpressionStorage()));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
-            this.ApplyEvents(treeDifference, userId);
+            this.ApplyEvents(treeDifference, command.UserId);
 
-            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
+            this.ApplyEvent(new SupervisorAssigned(command.UserId, command.SupervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
 
-            this.ApplyEvent(new InterviewerAssigned(userId, userId, answersTime));
+            this.ApplyEvent(new InterviewerAssigned(command.UserId, command.UserId, command.AnswersTime));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
 
-            this.ApplyInterviewKey(key);
+            this.ApplyInterviewKey(command.InterviewKey);
         }
 
         public void Complete(Guid userId, string comment, DateTime completeTime)
@@ -278,6 +294,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             new InterviewPropertiesInvariants(this.properties).ThrowIfInterviewHardDeleted();
 
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
             base.CreateInterviewFromSynchronizationMetadata(command.SynchronizedInterview.Id,
                 command.UserId,
                 command.SynchronizedInterview.QuestionnaireId,
@@ -288,12 +306,43 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.SynchronizedInterview.RejectDateTime,
                 command.SynchronizedInterview.InterviewerAssignedDateTime,
                 true,
-                command.CreatedOnClient
+                command.CreatedOnClient,
+                questionnaire.IsUsingExpressionStorage()
             );
 
             this.ApplyEvent(new InterviewSynchronized(command.SynchronizedInterview));
         }
-        
+
+        public void CreateInterviewFromSnapshot(CreateInterviewFromSnapshotCommand command)
+        {
+            var questionnaireIdentity = new QuestionnaireIdentity(command.SynchronizedInterview.QuestionnaireId, command.SynchronizedInterview.QuestionnaireVersion);
+            this.QuestionnaireIdentity = questionnaireIdentity;
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
+            new InterviewPropertiesInvariants(this.properties).ThrowIfInterviewHardDeleted();
+
+            base.CreateInterviewFromSynchronizationMetadata(command.InterviewId,
+                command.UserId,
+                command.SynchronizedInterview.QuestionnaireId,
+                command.SynchronizedInterview.QuestionnaireVersion,
+                command.SynchronizedInterview.Status,
+                new AnsweredQuestionSynchronizationDto[0], 
+                command.SynchronizedInterview.Comments,
+                command.SynchronizedInterview.RejectDateTime,
+                command.SynchronizedInterview.InterviewerAssignedDateTime,
+                true,
+                command.SynchronizedInterview.CreatedOnClient,
+                questionnaire.IsUsingExpressionStorage()
+            );
+
+            this.ApplyEvent(new InterviewSynchronized(command.SynchronizedInterview));
+
+            var answeredQuestions = this.Tree.AllNodes.OfType<InterviewTreeQuestion>().Where(q => q.IsAnswered()).Select(q => q.Identity);
+            this.UpdateTreeWithDependentChanges(this.Tree, questionnaire);
+        }
+
+
+
         #endregion
 
         public bool HasGroup(Identity group) => this.Tree.GetGroup(group) != null;
@@ -333,7 +382,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             => this.Tree.FindEntityInQuestionBranch(entityId, questionIdentity) as InterviewTreeQuestion;
 
         public IEnumerable<Identity> FindQuestionsFromSameOrDeeperLevel(Guid entityId, Identity questionIdentity)
-            => this.Tree.FindQuestionsFromSameOrDeeperLevel(entityId, questionIdentity);
+            => this.Tree.FindEntitiesFromSameOrDeeperLevel(entityId, questionIdentity);
 
         public bool IsQuestionPrefilled(Identity entityIdentity)
         {
@@ -381,7 +430,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public IEnumerable<Identity> GetAllInvalidEntitiesInInterview()
             => this.GetEnabledInvalidStaticTexts()
-                .Concat(this.GetEnabledInvalidQuestions().Select(question => question.Identity));
+                .Concat(this.GetEnabledInvalidQuestions(true).Select(question => question.Identity));
 
         public IEnumerable<Identity> GetInvalidEntitiesInInterview()
             => this.GetEnabledInvalidStaticTexts()
@@ -400,11 +449,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Where(staticText => !staticText.IsDisabled() && !staticText.IsValid)
                 .Select(staticText => staticText.Identity);
 
-        private IEnumerable<InterviewTreeQuestion> GetEnabledInvalidQuestions()
+        private IEnumerable<InterviewTreeQuestion> GetEnabledInvalidQuestions(bool includeAllPrefilled = false)
             => this.Tree.FindQuestions()
                 .Where(question => !question.IsDisabled() 
                                 && !question.IsValid
-                                && (!question.IsPrefilled || (question.IsPrefilled && this.CreatedOnClient)));
+                                && (includeAllPrefilled || !question.IsReadonly)
+                                && (includeAllPrefilled || !question.IsPrefilled || (question.IsPrefilled && this.CreatedOnClient)));
 
         public int CountEnabledQuestions(Identity group)
             => this.Tree.GetGroup(group)?.CountEnabledQuestions() ?? 0;
@@ -517,13 +567,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return staticText?.IsValid ?? false;
         }
 
-        public IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId)
+        public IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId, string defaltErrorMessageFallback)
         {
             var question = this.Tree.GetQuestion(questionOrStaticTextId);
             if (question?.FailedValidations != null)
             {
                 var questionValidationMassages = question.ValidationMessages
-                    .Select(substitutionText => substitutionText.Text)
+                    .Select(substitutionText => string.IsNullOrWhiteSpace(substitutionText.Text) ? defaltErrorMessageFallback : substitutionText.Text)
                     .ToList();
 
                 if (questionValidationMassages.Count == 1) return new[] {questionValidationMassages[0]};
@@ -538,7 +588,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (staticText?.FailedValidations != null)
             {
                 var staticTextValidationMassages = staticText.ValidationMessages
-                    .Select(substitutionText => substitutionText.Text)
+                    .Select(substitutionText => string.IsNullOrWhiteSpace(substitutionText.Text) ? defaltErrorMessageFallback : substitutionText.Text)
                     .ToList();
 
                 if (staticTextValidationMassages.Count == 1) return new[] {staticTextValidationMassages[0]};
@@ -598,6 +648,133 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IReadOnlyCollection<IInterviewTreeNode> GetAllSections()
         {
             return this.Tree.Sections;
+        }
+
+        public InterviewSynchronizationDto GetSynchronizationDto()
+        {
+            var answeredQuestions = new List<AnsweredQuestionSynchronizationDto>();
+            var disabledGroups = new HashSet<InterviewItemId>();
+            var disabledQuestions = new HashSet<InterviewItemId>();
+            var disabledStaticTexts = new List<Identity>();
+            var validAnsweredQuestions = new HashSet<InterviewItemId>();
+            var invalidAnsweredQuestions = new HashSet<InterviewItemId>();
+            var readonlyQuestions = new HashSet<InterviewItemId>();
+            var validStaticTexts = new List<Identity>();
+            var invalidStaticTexts = new List<KeyValuePair<Identity, List<FailedValidationCondition>>>();
+            var failedValidationConditions = new Dictionary<Identity, IList<FailedValidationCondition>>();
+
+            foreach (var question in Tree.FindQuestions())
+            {
+                CommentSynchronizationDto[] comments = question.AnswerComments.Select(ac => new CommentSynchronizationDto()
+                {
+                    Date = ac.CommentTime,
+                    Text = ac.Comment,
+                    UserId = ac.UserId,
+                    UserRole = ac.UserRole
+                }).ToArray();
+
+                var answeredQuestion = new AnsweredQuestionSynchronizationDto(question.Identity.Id,
+                    question.Identity.RosterVector,
+                    question.GetAnswerAsObject(question),
+                    comments);
+
+                if (question.IsAnswered() || answeredQuestion.HasComments())
+                {
+                    answeredQuestions.Add(answeredQuestion);
+                }
+
+                if (question.IsDisabled())
+                {
+                    disabledQuestions.Add(new InterviewItemId(question.Identity.Id, question.Identity.RosterVector));
+                }
+                else
+                {
+                    if (question.IsAnswered() && !question.IsValid)
+                    {
+                        invalidAnsweredQuestions.Add(new InterviewItemId(question.Identity.Id, question.Identity.RosterVector));
+                        failedValidationConditions.Add(question.Identity, question.FailedValidations.ToList());
+                    }
+                    if (question.IsValid)
+                    {
+                        validAnsweredQuestions.Add(new InterviewItemId(question.Identity.Id, question.Identity.RosterVector));
+                    }
+                }
+
+                if (question.IsReadonly)
+                {
+                    readonlyQuestions.Add(new InterviewItemId(question.Identity.Id, question.Identity.RosterVector));
+                }
+            }
+
+            foreach (var group in Tree.AllNodes.OfType<InterviewTreeGroup>())
+            {
+                if (group.IsDisabled())
+                    disabledGroups.Add(new InterviewItemId(group.Identity.Id, group.Identity.RosterVector));
+            }
+
+            foreach (var staticText in Tree.FindStaticTexts())
+            {
+                var staticTextIdentity = staticText.Identity;
+                if (!staticText.IsDisabled())
+                {
+                    if (!staticText.IsValid)
+                    {
+                        invalidStaticTexts.Add(new KeyValuePair<Identity, List<FailedValidationCondition>>(
+                            staticTextIdentity, staticText.FailedValidations.ToList()));
+                    }
+                }
+                else
+                {
+                    disabledStaticTexts.Add(staticTextIdentity);
+                }
+            }
+
+            Dictionary<InterviewItemId, object> variableValues = new Dictionary<InterviewItemId, object>();
+            HashSet<InterviewItemId> disabledVariables = new HashSet<InterviewItemId>();
+
+            foreach (var variable in Tree.AllNodes.OfType<InterviewTreeVariable>())
+            {
+                if (variable.IsDisabled())
+                {
+                    disabledVariables.Add(new InterviewItemId(variable.Identity.Id, variable.Identity.RosterVector));
+                }
+                else if (variable.HasValue)
+                {
+                    variableValues.Add(new InterviewItemId(variable.Identity.Id, variable.Identity.RosterVector), variable.Value);
+                }
+            }
+
+            return new InterviewSynchronizationDto(
+                id: Id,
+                status: Status,
+                comments: SupervisorRejectComment,
+                rejectDateTime:  this.properties.RejectDateTime,
+                interviewerAssignedDateTime : this.properties.InterviewerAssignedDateTime,
+                userId: CurrentResponsibleId,
+                supervisorId: this.properties.SupervisorId,
+                questionnaireId: QuestionnaireIdentity.QuestionnaireId,
+                questionnaireVersion: QuestionnaireIdentity.Version,
+                answers: answeredQuestions.ToArray(),
+                disabledGroups: disabledGroups,
+                disabledQuestions: disabledQuestions,
+                disabledStaticTexts: disabledStaticTexts,
+                validAnsweredQuestions: validAnsweredQuestions,
+                invalidAnsweredQuestions: invalidAnsweredQuestions,
+                readonlyQuestions: readonlyQuestions,
+                validStaticTexts: validStaticTexts,
+                invalidStaticTexts: invalidStaticTexts,
+                rosterGroupInstances: null /* Obsolete */,
+                failedValidationConditions: failedValidationConditions.ToList(),
+                linkedQuestionOptions: null /* Obsolete */,
+                variables: variableValues,
+                disabledVariables: disabledVariables,
+                wasCompleted: this.properties.WasCompleted,
+                createdOnClient: CreatedOnClient);
+        }
+
+        public bool IsReadOnlyQuestion(Identity identity)
+        {
+            return Tree.GetQuestion(identity).IsReadonly;
         }
     }
 }

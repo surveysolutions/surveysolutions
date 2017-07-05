@@ -1,23 +1,24 @@
 ﻿@using System.Runtime.Serialization.Formatters
 @using System.Web.Optimization
 @using Newtonsoft.Json
+@using WB.UI.Headquarters.API
 
-@model WB.Core.BoundedContexts.Headquarters.Views.TakeNew.TakeNewInterviewView
+@model WB.Core.BoundedContexts.Headquarters.Views.TakeNew.TakeNewAssignmentView
 
 @{
-    ViewBag.Title = Common.CreateNewInterview;
+    ViewBag.Title = Common.CreateNewAssignment;
 }
 
 <div class="page-header">
     <h3>
-        @Common.CreateNewInterview <small data-bind="text: questionnaire().title"></small>
+        @Common.CreateNewAssignment <small data-bind="text: questionnaire().title"></small>
     </h3>
 </div>
 
 
 @section styles
 {
-    @Styles.Render("~/css/interview-new")
+    @Styles.Render("~/css/assignment-new")
     <style type="text/css">
         .form-group .control-label {
             font-weight: normal;
@@ -27,7 +28,7 @@
 
 @section scripts
 {
-    @Scripts.Render("~/js/interview-general", "~/js/interview-new")
+    @Scripts.Render("~/js/interview-general", "~/js/assignment-new")
     <script type="text/javascript">
         $(function() {
             var questionnaire = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
@@ -36,15 +37,14 @@
                                     TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
                                 }));
 
-            var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "Execute"})';
-            var interviewListUrl = '@Url.Action("Interviews", "HQ", new {}, Request.Url.Scheme)';
-            var supervisorsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Supervisors"})';
+            var assignmentsApiUrl = "@Url.Content("~/api/Assignments/Create")";
+            var assignmentListUrl = '@Url.Action("Index", "Assignments", new {}, Request.Url.Scheme)';
+            var supervisorsUrl = "@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"})";
 
-            var model = new Supervisor.VM.NewInterview(commandExecutionUrl, questionnaire, interviewListUrl, supervisorsUrl);
+            var model = new Supervisor.VM.NewAssignment(questionnaire, assignmentListUrl, supervisorsUrl, assignmentsApiUrl);
 
             model.load();
-
-            /*ko.validation.group(model);*/
+            
             ko.applyBindings(model);
         });
 
@@ -131,7 +131,7 @@
             <div class="col-sm-2">
                 <div class="input-group">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                    <input class="form-control" type="text" data-date-format="yyyy-mm-dd" data-bind="datepicker: selectedOption, datepickerOptions: {date: selectedOption }"/>
+                    <input class="form-control" type="text" data-date-format="yyyy-mm-dd" data-bind="datepicker: selectedOption, datepickerOptions: {clearBtn: true }"/>
                 </div>
                 <span class="help-block" data-bind="validationMessage: selectedOption"></span>
             </div>
@@ -204,19 +204,41 @@
 }
 
 <div class="row-fluid" id="featured-questions-region" data-bind="visible: IsPageLoaded">
+    
     <div id="featured-questions" class="form-horizontal">
-        <!-- ko foreach: questions -->
-        <!-- ko template:  { name: type(), data: $data } -->
+        <!-- ko if: questions().length > 0 -->
+            <p class="col-sm-offset-2">@Assignments.CreateAssignment_AnswersInstruction</p>
+            <!-- ko foreach: questions -->
+            <!-- ko template: { name: type(), data: $data } -->
+            <!-- /ko -->
+            <!-- /ko -->
+            <div class="form-group" style="padding-top: 20px"></div>
         <!-- /ko -->
-        <!-- /ko -->
+        <p class="col-sm-offset-2">@Assignments.CreateAssignment_QuantityInstruction</p>
+        <p class="col-sm-offset-2">@Assignments.CreateAssignment_ResponsibleInstruction</p>
+        <div class="form-group" data-bind="validationElement: quantity">
+            <label class="col-sm-2 control-label"><strong>@Assignments.Quantity</strong></label>
+            <div class="col-sm-2">
+                <div class="input-group">
+                    <input class="form-control" type="text" data-bind="numericformatter: quantity, value: quantity" maxlength="9" autocomplete="off"
+                           placeholder="@Assignments.Unlimited"/>
+                    <div class="input-group-btn" data-bind="click: function(){ quantity(undefined); }">
+                        <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <span class="help-block" data-bind="validationMessage: quantity"></span>
+            </div>
+        </div>
         <div class="form-group" data-bind="validationElement: responsible">
-            <label class="col-sm-2 control-label">@Common.Responsible</label>
+            <label class="col-sm-2 control-label"><strong>@Common.Responsible</strong></label>
             <div class="col-md-2">
                 <div class="input-group">
-                    <input class="form-control" data-bind="typeahead: responsible, typeaheadOptions: {source: supervisors, displayText: function(item){return item.UserName}, autoSelect: true}, valueupdate:'afterkeydown'" type="text" />
+                    <input class="form-control" data-bind="typeahead: responsible, typeaheadOptions: {source: supervisors, displayText: function(item){return item.value}, autoSelect: true}, valueupdate:'afterkeydown'" type="text"/>
                     <span data-bind="spinner: isSupervisorsLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
                     <div class="input-group-btn" data-bind="click: function(){ responsible(undefined); }">
-                        <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                        <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </div>
                     </div>
                 </div>
                 <span class="help-block" data-bind="validationMessage: responsible"></span>
@@ -226,7 +248,7 @@
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-2">
             <button type="submit" class="btn btn-primary" data-bind="click: saveCommand, enable: isSaveEnable">@Common.Create</button>
-            @Html.ActionLink(Common.Cancel, "Index", "SurveySetup", new { }, new { @class = "btn btn-default" })
+            @Html.ActionLink(Common.Cancel, "Index", "SurveySetup", new {}, new {@class = "btn btn-default"})
         </div>
     </div>
 </div>

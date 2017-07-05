@@ -4,8 +4,11 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -13,20 +16,30 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
     public class ChapterInfoViewFactory : IChapterInfoViewFactory
     {
+        private readonly IQuestionTypeToCSharpTypeMapper questionnaireTypeMapper; 
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
-        private readonly string[] predefinedVariables = {"self", "@optioncode", "@rowindex", "@rowname", "@rowcode" };
+        private readonly IReadOnlyList<VariableName> predefinedVariables = new List<VariableName>
+        {
+            new VariableName(null, "self", null),
+            new VariableName(null, "@optioncode", "int"),
+            new VariableName(null, "@rowindex", "int"),
+            new VariableName(null, "@rowname", "string"),
+            new VariableName(null, "@rowcode", "int")
+        };
 
-
-        public ChapterInfoViewFactory(IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage)
+        public ChapterInfoViewFactory(
+            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage, 
+            IQuestionTypeToCSharpTypeMapper questionnaireTypeMapper)
         {
             this.questionnaireStorage = questionnaireStorage;
+            this.questionnaireTypeMapper = questionnaireTypeMapper;
         }
 
         public NewChapterView Load(string questionnaireId, string chapterId)
         {
-            var document = this.questionnaireStorage.GetById(questionnaireId);
+            var document = this.questionnaireStorage.GetById(questionnaireId).AsReadOnly();
             var chapterPublicKey = Guid.Parse(chapterId);
-            var isExistsChapter = document.Children.Any(c => c.PublicKey == chapterPublicKey);
+            var isExistsChapter = document.Find<IGroup>(chapterPublicKey)!=null;
             if (!isExistsChapter)
                 return null;
 
@@ -37,9 +50,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             };
         }
 
-        private IQuestionnaireItem ConvertToChapterView(QuestionnaireDocument document, Guid chapterPublicKey)
+        private IQuestionnaireItem ConvertToChapterView(ReadOnlyQuestionnaireDocument document, Guid chapterPublicKey)
         {
-            var chapter = (IGroup)document.Children.Single(c => c.PublicKey == chapterPublicKey);
+            var chapter = document.Find<IGroup>(chapterPublicKey);
 
             IQuestionnaireItem root = null;
             var allGroupViews = new Dictionary<Guid, GroupInfoView>();
@@ -77,29 +90,29 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         private VariableView ConvertToVariableInfoView(IVariable variable)
         {
-            return new VariableView()
+            return new VariableView
             {
                 Id = variable.PublicKey,
                 ItemId = variable.PublicKey.FormatGuid(),
-                VariableData = new VariableData(variable.Type, variable.Name, variable.Expression, variable.Label),
+                VariableData = new VariableData(variable.Type, variable.Name, variable.Expression, variable.Label)
             };
         }
 
         private StaticTextInfoView ConvertToStaticTextInfoView(IStaticText staticText)
         {
-            return new StaticTextInfoView()
+            return new StaticTextInfoView
             {
                 ItemId = staticText.PublicKey.FormatGuid(),
                 Text = staticText.Text,
                 AttachmentName = staticText.AttachmentName,
                 HasCondition = !string.IsNullOrWhiteSpace(staticText.ConditionExpression),
-                HasValidation = staticText.ValidationConditions.Count > 0,
+                HasValidation = staticText.ValidationConditions.Count > 0
             };
         }
 
         private GroupInfoView ConvertToGroupInfoView(IGroup group)
         {
-            return new GroupInfoView()
+            return new GroupInfoView
             {
                 ItemId = group.PublicKey.FormatGuid(),
                 Title = group.Title,
@@ -115,7 +128,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         private QuestionInfoView ConvertToQuestionInfoView(IQuestion question)
         {
-            return new QuestionInfoView()
+            return new QuestionInfoView
             {
                 ItemId = question.PublicKey.FormatGuid(),
                 Title = question.QuestionText,
@@ -125,24 +138,35 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 Type = question.QuestionType,
                 LinkedToQuestionId = question.LinkedToQuestionId?.FormatGuid(),
                 LinkedToRosterId = question.LinkedToRosterId?.FormatGuid(),
-                LinkedFilterExpression = question.LinkedFilterExpression,
+                LinkedFilterExpression = question.LinkedFilterExpression
             };
         }
 
-        private VariableName[] CollectVariableNames(QuestionnaireDocument document)
+        private VariableName[] CollectVariableNames(ReadOnlyQuestionnaireDocument document)
         {
-            List<VariableName> variables = predefinedVariables.Select(x => new VariableName(null, x)).ToList();
+            List<VariableName> variables = predefinedVariables.ToList();
 
-            var questionnaireItems = document.TreeToEnumerable<IComposite>(x => x.Children);
+            var questionnaireItems = document.Find<IComposite>();
 
             var variableNames = questionnaireItems
-                .Select(x => new VariableName(x.PublicKey.FormatGuid(), x.GetVariable()))
+                .Select(x => new VariableName(x.PublicKey.FormatGuid(), x.GetVariable(), GetQuestionType(x, document)))
                 .Where(variableName => !string.IsNullOrWhiteSpace(variableName.Name))
                 .ToList();
 
             variables.AddRange(variableNames);
 
             return variables.ToArray();
+        }
+
+        public string GetQuestionType(IComposite entity, ReadOnlyQuestionnaireDocument questionnaire)
+        {
+            var variable = entity as IVariable;
+            if (variable != null) return questionnaireTypeMapper.GetVariableType(variable.Type);
+
+            var question = entity as IQuestion;
+            if (question!=null) return questionnaireTypeMapper.GetQuestionType(question, questionnaire).Replace(typeof(YesNoAndAnswersMissings).Name, "YesNoAnswers");
+
+            return entity is IGroup ? "Roster" : null;
         }
     }
 }

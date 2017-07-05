@@ -11,6 +11,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Services.Accounts;
 
 namespace WB.Tests.Unit.Designer.Applications.AttributesTests
 {
@@ -44,6 +45,8 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
             Setup.InstanceToMockedServiceLocator<IIpAddressProvider>(ipAddressProviderMock.Object);
             Setup.InstanceToMockedServiceLocator<IMembershipUserService>(membershipUserServiceMock.Object);
             Setup.InstanceToMockedServiceLocator<IAllowedAddressService>(allowedAddressServiceMock.Object);
+            Setup.InstanceToMockedServiceLocator<IAccountRepository>(
+                Mock.Of<IAccountRepository>(x => x.GetByNameOrEmail(userName) == Mock.Of<IMembershipAccount>(a => a.UserName == userName)));
         }
 
         [Test]
@@ -55,7 +58,7 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
 
             attribute.OnAuthorization(actionContext);
 
-            Assert.AreEqual(userName, Thread.CurrentPrincipal.Identity.Name);
+            Assert.That(Thread.CurrentPrincipal.Identity.Name, Is.EqualTo(userName));
         }
 
         [Test]
@@ -69,7 +72,7 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
 
             attribute.OnAuthorization(actionContext);
 
-            Assert.AreEqual(HttpStatusCode.Unauthorized, actionContext.Response.StatusCode);
+            Assert.AreEqual(HttpStatusCode.Forbidden, actionContext.Response.StatusCode);
         }
 
         [Test]
@@ -101,7 +104,7 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
 
             attribute.OnAuthorization(actionContext);
 
-            Assert.AreEqual(HttpStatusCode.Unauthorized, actionContext.Response.StatusCode);
+            Assert.AreEqual(HttpStatusCode.Forbidden, actionContext.Response.StatusCode);
         }
 
         private static string userName = "name";

@@ -4,7 +4,6 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Infrastructure.Security;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
 {

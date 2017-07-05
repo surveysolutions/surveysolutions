@@ -16,14 +16,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             get
             {
                 var statefulInterview = this.GetCallerInterview();
-                var responsibleId = this.webInterviewConfigProvider.Get(statefulInterview.QuestionnaireIdentity)
-                    .ResponsibleId;
-                if (responsibleId != null)
-                    return responsibleId.Value;
-                else
-                {
-                    return statefulInterview.CurrentResponsibleId;
-                }
+                return statefulInterview.CurrentResponsibleId;
             }
         }
 
@@ -50,7 +43,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 this.commandResponsibleId, identity.Id, identity.RosterVector, DateTime.UtcNow, text));
         }
 
-        public void AnswerTextListQuestion(string questionIdenty, TextListAnswerRow[] rows)
+        public void AnswerTextListQuestion(string questionIdenty, TextListAnswerRowDto[] rows)
         {
             var identity = Identity.Parse(questionIdenty);
             this.ExecuteQuestionCommand(new AnswerTextListQuestionCommand(this.GetCallerInterview().Id,

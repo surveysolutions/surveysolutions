@@ -35,11 +35,10 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 });
 
                 var userId = Guid.NewGuid();
-                ILatestInterviewExpressionState interviewState = GetInterviewExpressionState(questionnaireDocument);
                 
                 using (var eventContext = new EventContext())
                 {
-                    var interview = SetupInterview(questionnaireDocument, precompiledState: interviewState);
+                    var interview = SetupInterview(questionnaireDocument);
                     interview.AnswerTextQuestion(userId, questionId, RosterVector.Empty, DateTime.Now, "test");
 
                     return new InvokeResult

@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
@@ -57,7 +58,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewHistoryView, AnswersRemoved>,
         IUpdateHandler<InterviewHistoryView, UnapprovedByHeadquarters>,
         IUpdateHandler<InterviewHistoryView, InterviewReceivedByInterviewer>,
-        IUpdateHandler<InterviewHistoryView, InterviewReceivedBySupervisor>
+        IUpdateHandler<InterviewHistoryView, InterviewReceivedBySupervisor>,
+        IUpdateHandler<InterviewHistoryView, AreaQuestionAnswered>
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IUserViewFactory userReader;
@@ -628,6 +630,17 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             this.AddHistoricalRecord(state, InterviewHistoricalAction.ReceivedBySupervisor, null, @event.EventTimeStamp);
 
             return state;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AreaQuestionAnswered> @event)
+        {
+            this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, @event.Payload.AnswerTimeUtc,
+            this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(
+                new Area(@event.Payload.Geometry, @event.Payload.MapName, @event.Payload.AreaSize, @event.Payload.Length, 
+                @event.Payload.Coordinates, @event.Payload.DistanceToEditor)),
+            @event.Payload.RosterVector));
+
+            return view;
         }
     }
 }

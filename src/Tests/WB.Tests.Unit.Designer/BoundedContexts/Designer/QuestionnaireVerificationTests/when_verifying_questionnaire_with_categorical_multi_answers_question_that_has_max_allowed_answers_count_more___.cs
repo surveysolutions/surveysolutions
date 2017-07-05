@@ -15,19 +15,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireDocument(new MultyOptionsQuestion()
-            {
-                PublicKey = multyOptionsQuestionId,
-                StataExportCaption = "var",
-                Answers = new List<Answer>() { new Answer() { AnswerValue = "2", AnswerText = "2" }, new Answer() { AnswerValue = "1", AnswerText = "1" } },
-                MaxAllowedAnswers = 3
-            });
+            questionnaire = CreateQuestionnaireDocument(Create.MultyOptionsQuestion(
+                multyOptionsQuestionId,
+                options: new List<Answer>() { new Answer() { AnswerValue = "2", AnswerText = "2" }, new Answer() { AnswerValue = "1", AnswerText = "1" } },
+                maxAllowedAnswers: 3,
+                variable: "var1"
+            ));
 
             verifier = CreateQuestionnaireVerifier();
         };
 
         Because of = () => 
-            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
         It should_return_1_message = () => 
             verificationMessages.Count().ShouldEqual(1);

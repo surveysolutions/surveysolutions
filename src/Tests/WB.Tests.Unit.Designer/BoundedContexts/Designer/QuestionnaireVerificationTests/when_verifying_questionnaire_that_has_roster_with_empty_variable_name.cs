@@ -20,7 +20,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 Create.FixedRoster(rosterId: rosterId, variable:null,
                     fixedTitles: new[] {"1", "2"},
                     children: new IComposite[]
-                    {new TextListQuestion() {PublicKey = Guid.NewGuid(), StataExportCaption = "var"}})
+                    {
+                        Create.TextListQuestion(variable: "var")
+                    })
             });
 
             verifier = CreateQuestionnaireVerifier();

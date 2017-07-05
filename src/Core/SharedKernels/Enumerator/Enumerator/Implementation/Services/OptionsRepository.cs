@@ -21,98 +21,94 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             this.optionsStorage = optionsStorage;
         }
-        
-        public IEnumerable<CategoricalOption> GetFilteredQuestionOptions(QuestionnaireIdentity questionnaireId, Guid questionId, 
+
+        private class Option: OptionValue
+        {
+            public string Title { get; set; }
+
+            public decimal? ParentValue { get; set; }
+
+            public string TranslationId { get; set; }
+        }
+
+        private class OptionValue
+        {
+            public decimal Value { get; set; }
+        }
+
+        public IEnumerable<CategoricalOption> GetFilteredQuestionOptions(QuestionnaireIdentity questionnaireId,
+            Guid questionId,
             int? parentValue, string filter, Guid? translationId)
         {
             var questionnaireIdAsString = questionnaireId.ToString();
             var questionIdAsString = questionId.FormatGuid();
             var translationIdAsString = translationId.FormatGuid();
 
-            filter = filter ?? String.Empty;
-            var parentValueAsDecimal = parentValue.HasValue ? Convert.ToDecimal(parentValue) : (decimal?) null;
+            filter = (filter ?? String.Empty).ToLower();
+            decimal? parentValueAsDecimal = parentValue ?? null;
 
-            int batchsize = 50;
-            int lastLoadedSortIndex = -1;
+            int take = 50;
+            int skip = 0;
 
-            if (translationIdAsString == null)
+            List<Option> optionViews;
+
+            do
             {
-                List<OptionView> optionViews;
-
-                do
-                {
-                    optionViews = this.optionsStorage
-                        .FixedQuery(x => x.QuestionnaireId == questionnaireIdAsString &&
-                                    x.QuestionId == questionIdAsString &&
-                                    x.ParentValue == parentValueAsDecimal &&
-                                    x.Title.ToLower().Contains(filter.ToLower()) &&
-                                    x.SortOrder > lastLoadedSortIndex &&
-                                    x.TranslationId == null,
-                               y => y.SortOrder,
-                               batchsize)
-                        .ToList();
-
-                    foreach (var option in optionViews)
-                    {
-                        yield return new CategoricalOption
+                optionViews = this.optionsStorage
+                    .FixedQueryWithSelection(
+                        @where => @where.QuestionnaireId == questionnaireIdAsString &&
+                                  @where.QuestionId == questionIdAsString &&
+                                  @where.ParentValue == parentValueAsDecimal &&
+                                  (filter == "" || filter == null || @where.SearchTitle.Contains(filter)) &&
+                                  (@where.TranslationId == translationIdAsString || @where.TranslationId == null),
+                        @order => @order.SortOrder,
+                        @select => new Option
                         {
-                            ParentValue = option.ParentValue.HasValue ? Convert.ToInt32(option.ParentValue) : (int?) null,
-                            Value = Convert.ToInt32(option.Value),
-                            Title = option.Title
-                        };
-                    }
+                            Value = @select.Value,
+                            Title = @select.Title,
+                            ParentValue = @select.ParentValue,
+                            TranslationId = @select.TranslationId
+                        },
+                        take, skip)
+                    .ToList();
 
-                    lastLoadedSortIndex = optionViews.LastOrDefault()?.SortOrder ?? 0;
-
-                    // increasing batch zise on each query iteration, but no more then 1000
-                    batchsize = Math.Min((int) (batchsize*2), 1000);
-                } while (optionViews.Any());
-            }
-
-            else
-            {
-                List<OptionView> mixedOptions;
-                
-                do
+                if (translationIdAsString != null)
                 {
-                    mixedOptions = this.optionsStorage
-                            .FixedQuery(x => x.QuestionnaireId == questionnaireIdAsString &&
-                                             x.QuestionId == questionIdAsString &&
-                                             x.ParentValue == parentValueAsDecimal &&
-                                             x.Title.ToLower().Contains(filter.ToLower()) &&
-                                             x.SortOrder > lastLoadedSortIndex &&
-                                             (x.TranslationId == translationIdAsString || x.TranslationId == null),
-                                        y => y.SortOrder,
-                                        batchsize)
-                             .ToList();
-                    
-                    lastLoadedSortIndex = mixedOptions.LastOrDefault()?.SortOrder ?? 0;
-
-                    var defaultOptionValuesToCheck = mixedOptions.Where(x => x.TranslationId == null).Select(y => y.Value).ToList();
+                    var defaultOptionValuesToCheck = optionViews.Where(x => x.TranslationId == null)
+                        .Select(y => y.Value).ToList();
 
                     var translatedOptions = this.optionsStorage
-                            .FixedQuery(x => x.QuestionnaireId == questionnaireIdAsString &&
-                                             x.QuestionId == questionIdAsString &&
-                                             x.ParentValue == parentValueAsDecimal &&
-                                             defaultOptionValuesToCheck.Contains(x.Value) &&
-                                             x.TranslationId == translationIdAsString ,
-                                        y => y.SortOrder,
-                                        batchsize)
-                             .Select(y => y.Value)
-                             .ToList();
+                        .FixedQueryWithSelection(
+                            @where => @where.QuestionnaireId == questionnaireIdAsString &&
+                                      @where.QuestionId == questionIdAsString &&
+                                      @where.ParentValue == parentValueAsDecimal &&
+                                      defaultOptionValuesToCheck.Contains(@where.Value) &&
+                                      @where.TranslationId == translationIdAsString,
+                            @order => @order.SortOrder,
+                            @select => new OptionValue {Value = @select.Value},
+                            take)
+                        .Select(x => x.Value)
+                        .ToList();
 
-                    foreach (var option in mixedOptions.Where(x => x.TranslationId != null || !translatedOptions.Contains(x.Value)))
+                    optionViews = optionViews
+                        .Where(x => x.TranslationId != null || !translatedOptions.Contains(x.Value)).ToList();
+                }
+
+                foreach (var option in optionViews)
+                {
+                    yield return new CategoricalOption
                     {
-                        yield return new CategoricalOption
-                        {
-                            ParentValue = option.ParentValue.HasValue ? Convert.ToInt32(option.ParentValue) : (int?)null,
-                            Value = Convert.ToInt32(option.Value),
-                            Title = option.Title
-                        };
-                    }
+                        ParentValue = option.ParentValue.HasValue ? Convert.ToInt32(option.ParentValue) : (int?) null,
+                        Value = Convert.ToInt32(option.Value),
+                        Title = option.Title
+                    };
+                }
 
-                } while (mixedOptions.Any());
-            }
+                skip += take;
+                // increasing batch size on each query iteration, but no more then 1000
+                take = Math.Min(skip * 2, 1000);
+            } while (optionViews.Any());
+
         }
 
         public CategoricalOption GetQuestionOption(QuestionnaireIdentity questionnaireId, Guid questionId, string optionTitle, int? parentQuestionValue, Guid? translationId)
@@ -207,6 +203,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     Value = value,
                     ParentValue = parentValue,
                     Title = answer.AnswerText,
+                    SearchTitle = answer.AnswerText?.ToLower(),
                     SortOrder = index,
                     TranslationId = null
                 };
@@ -224,6 +221,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         Value = value,
                         ParentValue = parentValue,
                         Title = y.Value,
+                        SearchTitle = y.Value?.ToLower(),
                         SortOrder = ++index,
                         TranslationId = y.TranslationId.FormatGuid()
                     }).ToList();
