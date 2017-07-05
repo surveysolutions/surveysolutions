@@ -1220,6 +1220,55 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(newHistoryItems[1].ResultingQuestionnaireDocument, Is.Null);
         }
 
+        [Test]
+        public void When_move_question_to_another_group_Then_parents_should_be_updated()
+        {
+            // arrange
+            Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
+            Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
+            Guid groupAId = Guid.Parse("33333333333333333333333333333333");
+            Guid groupBId = Guid.Parse("44444444444444444444444444444444");
+            Guid questionId = Guid.Parse("66666666666666666666666666666666");
+
+            AssemblyContext.SetupServiceLocator();
+            var historyStorage = new TestPlainStorage<QuestionnaireChangeRecord>();
+            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireChangeRecord>>(historyStorage);
+
+            var tracker = new QuestionnaireStateTracker
+            {
+                CreatedBy = responsibleId,
+                GroupsState = new Dictionary<Guid, string>() {{groupAId, ""}, {groupBId, ""}},
+                QuestionsState = new Dictionary<Guid, string>() {{questionId, ""}}
+            };
+
+            var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
+            questionnaireStateTackerStorage.Store(
+                tracker,
+                questionnaireId.FormatGuid());
+            Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
+
+            Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+
+            SetupEntitySerializer();
+
+            var questionnaire = Create.Questionnaire();
+            questionnaire.Initialize(questionnaireId, Create.QuestionnaireDocumentWithOneChapter(), Enumerable.Empty<SharedPerson>());
+
+            var moveQuestionCommand = Create.Command.MoveQuestion(questionnaireId, questionId, responsibleId, groupBId);
+
+            var historyPostProcessor = CreateHistoryPostProcessor();
+            // act
+            
+            historyPostProcessor.Process(questionnaire, moveQuestionCommand);
+
+            // assert
+            var newHistoryItems = historyStorage.Query(historyItems => historyItems.ToArray());
+            var questionParent = tracker.Parents[questionId];
+
+            Assert.That(newHistoryItems.Length, Is.EqualTo(1));
+            Assert.That(questionParent, Is.EqualTo(groupBId));
+        }
+
         private void SetupEntitySerializer()
         {
             Setup.InstanceToMockedServiceLocator<IEntitySerializer<QuestionnaireDocument>>(new EntitySerializer<QuestionnaireDocument>());
