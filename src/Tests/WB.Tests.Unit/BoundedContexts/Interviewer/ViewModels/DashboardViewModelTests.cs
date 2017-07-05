@@ -68,8 +68,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                 Substitute.For<IInterviewViewModelFactory>(),
                 Substitute.For<IAssignmentDocumentsStorage>(),
                 Substitute.For<IPlainStorage<InterviewView>>(),
-                Mock.Of<IViewModelNavigationService>(),
-                Mock.Of<IInterviewFromAssignmentCreatorService>()
+                Mock.Of<IViewModelNavigationService>()
             );
 
         private static StartedInterviewsViewModel DashboardStartedInterviewsViewModel()

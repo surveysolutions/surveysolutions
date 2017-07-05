@@ -26,6 +26,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public string QuestionnaireName { get; private set; }
         public Guid InterviewId { get; private set; }
+        public int? AssignmentId { get; private set; }
         public DashboardInterviewStatus Status { get; private set; }
 
         public string DateComment { get; private set; }
@@ -60,6 +61,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             }
 
             this.InterviewId = interview.InterviewId;
+            this.AssignmentId = interview.Assignment;
             this.Status = this.GetDashboardCategoryForInterview(interview.Status, interview.StartedDateTime);
             this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, interview.QuestionnaireTitle, questionnaireIdentity.Version.ToString());
             this.DateComment = this.GetInterviewDateCommentByStatus(interview);
