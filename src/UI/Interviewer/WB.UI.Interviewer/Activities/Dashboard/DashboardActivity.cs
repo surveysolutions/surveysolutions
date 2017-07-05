@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -58,9 +57,9 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             this.fragmentStatePagerAdapter.RemoveAllFragments();
             this.viewPager.PageSelected -= this.ViewPager_PageSelected;
 
-            this.ViewModel.StartedInterviews.UiItems.CollectionChanged -= this.StartedInterviews_CollectionChanged;
-            this.ViewModel.RejectedInterviews.UiItems.CollectionChanged -= this.RejectedInterviews_CollectionChanged;
-            this.ViewModel.CompletedInterviews.UiItems.CollectionChanged -= this.CompletedInterview_CollectionChanged;
+            this.ViewModel.StartedInterviews.PropertyChanged -= this.StartedInterviewsOnPropertyChanged;
+            this.ViewModel.RejectedInterviews.PropertyChanged -= this.RejectedInterviewsOnPropertyChanged;
+            this.ViewModel.CompletedInterviews.PropertyChanged -= this.CompletedInterviewsOnPropertyChanged;
         }
 
         private void CreateFragments()
@@ -71,38 +70,45 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             this.viewPager.Adapter = this.fragmentStatePagerAdapter;
             this.viewPager.PageSelected += this.ViewPager_PageSelected;
 
-            this.ViewModel.StartedInterviews.UiItems.CollectionChanged += this.StartedInterviews_CollectionChanged;
-            this.ViewModel.RejectedInterviews.UiItems.CollectionChanged += this.RejectedInterviews_CollectionChanged;
-            this.ViewModel.CompletedInterviews.UiItems.CollectionChanged += this.CompletedInterview_CollectionChanged;
+            this.ViewModel.StartedInterviews.PropertyChanged += this.StartedInterviewsOnPropertyChanged;
+            this.ViewModel.RejectedInterviews.PropertyChanged += this.RejectedInterviewsOnPropertyChanged;
+            this.ViewModel.CompletedInterviews.PropertyChanged += this.CompletedInterviewsOnPropertyChanged;
 
             this.ViewModel.TypeOfInterviews = this.ViewModel.CreateNew.InterviewStatus;
 
-            this.fragmentStatePagerAdapter.AddFragment(typeof(QuestionnairesFragment), this.ViewModel.CreateNew,
+            this.fragmentStatePagerAdapter.InsertFragment(typeof(QuestionnairesFragment), this.ViewModel.CreateNew,
                 nameof(InterviewTabPanel.Title));
 
-            this.UpdateFragmentByViewModelPropertyChange<StartedInterviewsFragment>(this.ViewModel.StartedInterviews);
-            this.UpdateFragmentByViewModelPropertyChange<RejectedInterviewsFragment>(this.ViewModel.RejectedInterviews);
-            this.UpdateFragmentByViewModelPropertyChange<CompletedInterviewsFragment>(this.ViewModel.CompletedInterviews);
+            var itemsCountPropertyCountName = nameof(ListViewModel<IDashboardItem>.ItemsCount);
+
+            this.StartedInterviewsOnPropertyChanged(this.ViewModel.StartedInterviews,
+                new PropertyChangedEventArgs(itemsCountPropertyCountName));
+            this.RejectedInterviewsOnPropertyChanged(this.ViewModel.RejectedInterviews,
+                new PropertyChangedEventArgs(itemsCountPropertyCountName));
+            this.CompletedInterviewsOnPropertyChanged(this.ViewModel.CompletedInterviews,
+                new PropertyChangedEventArgs(itemsCountPropertyCountName));
 
             var tabLayout = this.FindViewById<TabLayout>(Resource.Id.tabs);
             tabLayout.SetupWithViewPager(this.viewPager);
         }
 
-        private void CompletedInterview_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-            => this.UpdateFragmentByViewModelPropertyChange<CompletedInterviewsFragment>(this.ViewModel.CompletedInterviews);
+        private void CompletedInterviewsOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+            => this.UpdateFragmentByViewModelPropertyChange<CompletedInterviewsFragment>((ListViewModel<IDashboardItem>)sender, propertyChangedEventArgs.PropertyName, 3);
 
-        private void RejectedInterviews_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-            => this.UpdateFragmentByViewModelPropertyChange<RejectedInterviewsFragment>(this.ViewModel.RejectedInterviews);
+        private void RejectedInterviewsOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+            => this.UpdateFragmentByViewModelPropertyChange<RejectedInterviewsFragment>((ListViewModel<IDashboardItem>)sender, propertyChangedEventArgs.PropertyName, 2);
 
-        private void StartedInterviews_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-            => this.UpdateFragmentByViewModelPropertyChange<StartedInterviewsFragment>(this.ViewModel.StartedInterviews);
-
-        private void UpdateFragmentByViewModelPropertyChange<TFragmentType>(ListViewModel<IDashboardItem> listViewModel)
+        private void StartedInterviewsOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+            => this.UpdateFragmentByViewModelPropertyChange<StartedInterviewsFragment>((ListViewModel<IDashboardItem>)sender, propertyChangedEventArgs.PropertyName, 1);
+        
+        private void UpdateFragmentByViewModelPropertyChange<TFragmentType>(ListViewModel<IDashboardItem> listViewModel, string propertyName, int position)
         {
+            if (propertyName != nameof(ListViewModel<IDashboardItem>.ItemsCount)) return;
+
             if (!this.fragmentStatePagerAdapter.HasFragmentForViewModel(listViewModel) && listViewModel.ItemsCount > 0)
             {
-                this.fragmentStatePagerAdapter.AddFragment(typeof(TFragmentType), listViewModel,
-                    nameof(InterviewTabPanel.Title));
+                this.fragmentStatePagerAdapter.InsertFragment(typeof(TFragmentType), listViewModel,
+                    nameof(InterviewTabPanel.Title), position);
             }
 
             if (this.fragmentStatePagerAdapter.HasFragmentForViewModel(listViewModel) && listViewModel.ItemsCount == 0)

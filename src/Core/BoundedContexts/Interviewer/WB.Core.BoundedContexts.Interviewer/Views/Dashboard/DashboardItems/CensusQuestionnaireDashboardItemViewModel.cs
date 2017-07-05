@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Plugins.Messenger;
@@ -56,10 +55,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         public string Comment { get; set; }
 
 
-        public IMvxCommand CreateNewInterviewCommand
-        {
-            get { return new MvxCommand(async () => await this.CreateNewInterviewAsync()); }
-        }
+        public IMvxCommand CreateNewInterviewCommand => new MvxAsyncCommand(this.CreateNewInterviewAsync);
 
         public bool HasExpandedView => false;
         
@@ -79,9 +75,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
         }
 
-        private void RaiseStartingLongOperation()
-        {
-            messenger.Publish(new StartingLongOperationMessage(this));
-        }
+        private void RaiseStartingLongOperation() => this.messenger.Publish(new StartingLongOperationMessage(this));
     }
 }
