@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If the interview you are trying to locate is not in the list, please instruct the interviewer to complete the interview and repeat synchronization..
+        ///   Looks up a localized string similar to If the interview you are trying to locate is not in the list, please instruct the interviewer to complete the interview and synchronize again..
         /// </summary>
         public static string MissingCensusInterviews_NoBrokenPackages_Message {
             get {
@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If the interview you are trying to locate is not in the list, please instruct the interviewer to complete the interview and repeat synchronization and repeat the search. If the interview is not located on the second search, contact support team..
+        ///   Looks up a localized string similar to If the interview you are trying to locate is not in the list, please instruct the interviewer to complete the interview and synchronize again. Then, search for the interview again. If the interview is not located on the second search, contact support team..
         /// </summary>
         public static string MissingCensusInterviews_SomeBrokenPackages_Message {
             get {
@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The interview {0} data were corrupted. Contact support to recover that interview.
+        ///   Looks up a localized string similar to The data from interview {0} were corrupted. Contact support to recover that interview.
         /// </summary>
         public static string NoData_ContactSupport {
             get {
@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The interview {0} was not uploaded to the server yet.
+        ///   Looks up a localized string similar to Interview {0} has not been synced yet.
         /// </summary>
         public static string NoData_InterveiwWasNotUploadedYet {
             get {
@@ -106,7 +106,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The interview  {0}  was erased by HQ or Administrator and cannot be recovered.
+        ///   Looks up a localized string similar to Interview {0} was deleted by HQ or Administrator, and thus cannot be recovered.
         /// </summary>
         public static string NoData_InterviewDeleted {
             get {
@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The interviewer changed tablets. The data for interview {0} might be lost because of the tablets been relinked. If this is the case, that interview cannot be recovered.
+        ///   Looks up a localized string similar to The interviewer changed tablets. The data for interview {0} might be lost because data are deleted when interviewers move from one tablet to another. If this is the case, that interview cannot be recovered.
         /// </summary>
         public static string NoData_InterviewerChangedDevice {
             get {
@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The interview {0} was not received by responsible interviewer {1}.
+        ///   Looks up a localized string similar to Interview {0} has not yet been received by interviewer {1}. The interviewer has not synced yet..
         /// </summary>
         public static string NoData_InterviewWasNotReceived {
             get {
@@ -133,7 +133,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The interview  {0} was re-assigned to a different interviewer. The interview is currently on that interviewer&apos;s tablet and has not been synchronized with the server.
+        ///   Looks up a localized string similar to Interview {0} was re-assigned to a different interviewer. The interview is currently on that latter interviewer&apos;s tablet..
         /// </summary>
         public static string NoData_InterviewWasReassigned {
             get {
@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No issues were found with interview  {0} on the server side.&lt;br /&gt;Clarify the situation with the person currently responsible for that interview.&lt;br /&gt;If problem persists, contact support to provide further details.
+        ///   Looks up a localized string similar to Interview {0} has no issues recorded on the server.&lt;br /&gt;Please get more information from the person currently responsible for that interview.&lt;br /&gt;If problem persists, contact support to provide further details.
         /// </summary>
         public static string NoData_NoIssuesInterviewOnServer {
             get {
@@ -151,7 +151,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The interview  {0} is not found.
+        ///   Looks up a localized string similar to Interview {0} cannot be found.
         /// </summary>
         public static string NoData_NotFound {
             get {
@@ -160,7 +160,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The questionnaire for interview  {0} was deleted by the server administrator. All interviews associated with this questionnaire are lost and cannot be restored.
+        ///   Looks up a localized string similar to The server administrator deleted the questionnaire for interview {0}. As a consequence, all interviews associated with this questionnaire were deleted and cannot be restored.
         /// </summary>
         public static string NoData_QuestionnaireDeleted {
             get {
