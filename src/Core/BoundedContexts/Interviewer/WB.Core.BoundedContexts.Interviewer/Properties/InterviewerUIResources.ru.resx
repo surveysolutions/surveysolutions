@@ -648,7 +648,7 @@
     <comment>Создано интервью: {0}</comment>
   </data>
   <data name="Dashboard_Assignment_CardTitle" xml:space="preserve">
-    <value>№ {0}</value>
+    <value>№ {0}: {1}</value>
     <comment>{0} - Assignment id</comment>
   </data>
   <data name="Dashboard_AssignmentCard_TitleCountdown" xml:space="preserve">

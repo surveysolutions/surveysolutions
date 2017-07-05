@@ -74,7 +74,7 @@ namespace WB.UI.Interviewer.CustomControls
         {
             if (position < 0 && this._fragments.Count == 0)
                 position = 0;
-            else if (position < 0 && this._fragments.Count > 0)
+            else if ((position < 0 || position > this._fragments.Count) && this._fragments.Count > 0)
                 position = this._fragments.Count;
 
             this._fragments.Insert(position, new ViewPagerItem
