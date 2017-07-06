@@ -419,7 +419,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Infrastructure\Enumerator\DevicePasswordHasher.cs">
+    <Compile Include="..\..\UI\Shared\WB.UI.Shared.Enumerator\Services\DevicePasswordHasher.cs">
       <Link>GenericSubdomains\Utils\PasswordHasherTests\DevicePasswordHasher.cs</Link>
     </Compile>
     <Compile Include="Applications\Headquarters\ApiUserControllerTests\ApiUserControllerTestContext.cs" />

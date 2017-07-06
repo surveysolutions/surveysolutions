@@ -206,10 +206,6 @@
       <Project>{0F1DDEFE-DF5C-4856-A89C-241F3BD41B5F}</Project>
       <Name>WB.Core.SharedKernels.Enumerator</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Infrastructure\Enumerator\WB.Infrastructure.Shared.Enumerator.csproj">
-      <Project>{E41DEB5C-2AD6-463F-9F76-10299FC2D9D1}</Project>
-      <Name>WB.Infrastructure.Shared.Enumerator</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WB.UI.Shared.Enumerator\WB.UI.Shared.Enumerator.csproj">
       <Project>{5DAA7EAF-9A68-4302-AE74-EF0DAA0BD169}</Project>
       <Name>WB.UI.Shared.Enumerator</Name>
