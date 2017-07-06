@@ -1,7 +1,7 @@
 ﻿using Machine.Specifications;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Infrastructure.Shared.Enumerator;
+using WB.UI.Shared.Enumerator.Services;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils.PasswordHasherTests
 {
