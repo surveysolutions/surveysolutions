@@ -6,11 +6,6 @@ namespace WB.Core.GenericSubdomains.Utils
 {
     public static class ActionUtils
     {
-        public static void ExecuteInIndependentTryCatchBlocks(params Action[] actions)
-        {
-            ExecuteInIndependentTryCatchBlocks(actions.AsEnumerable());
-        }
-
         public static void ExecuteInIndependentTryCatchBlocks<TExecutee>(IEnumerable<TExecutee> executees, Action<TExecutee> execute)
         {
             ExecuteInIndependentTryCatchBlocks(

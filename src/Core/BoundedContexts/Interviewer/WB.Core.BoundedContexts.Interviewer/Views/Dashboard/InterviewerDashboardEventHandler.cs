@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.Questionnaire.Documents;
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public class InterviewerDashboardEventHandler : BaseDenormalizer,
+                                         ILitePublishedEventHandler<InterviewCreated>,
                                          ILitePublishedEventHandler<SynchronizationMetadataApplied>,
                                          ILitePublishedEventHandler<InterviewSynchronized>,
                                          ILitePublishedEventHandler<InterviewStatusChanged>,
@@ -88,6 +89,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 null);
         }
 
+        public void Handle(IPublishedEvent<InterviewCreated> evnt)
+        {
+            this.AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId,
+                evnt.Payload.QuestionnaireVersion,
+                evnt.EventSourceId,
+                evnt.Payload.UserId,
+                InterviewStatus.InterviewerAssigned,
+                null,
+                new AnsweredQuestionSynchronizationDto[0],
+                true,
+                true,
+                evnt.EventTimeStamp,
+                evnt.EventTimeStamp,
+                null,
+                evnt.Payload.AssignmentId);
+        }
 
         public void Handle(IPublishedEvent<InterviewOnClientCreated> evnt)
         {
@@ -140,8 +157,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 ResponsibleId = responsibleId,
                 QuestionnaireId = questionnaireIdentity.ToString(),
                 Census = createdOnClient,
-                QuestionnaireTitle = questionnaireDocumentView.Title
-            };
+                QuestionnaireTitle = questionnaireDocumentView.Title,
+                Status = status,
+                StartedDateTime = startedDateTime,
+                InterviewerAssignedDateTime = assignedDateTime,
+                RejectedDateTime = rejectedDateTime,
+                CanBeDeleted = canBeDeleted,
+                Assignment = assignmentId,
+                LastInterviewerOrSupervisorComment = comments
+        };
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, interviewView.Language);
 
@@ -182,19 +206,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 }
             }
 
-            interviewView.Status = status;
+            interviewView.LocationQuestionId = prefilledGpsQuestionId;
 
             var existingPrefilledForInterview = this.prefilledQuestions.Where(x => x.InterviewId == interviewId).ToList();
             this.prefilledQuestions.Remove(existingPrefilledForInterview);
             this.prefilledQuestions.Store(prefilledQuestionsList);
-
-            interviewView.StartedDateTime = startedDateTime;
-            interviewView.InterviewerAssignedDateTime = assignedDateTime;
-            interviewView.RejectedDateTime = rejectedDateTime;
-            interviewView.CanBeDeleted = canBeDeleted;
-            interviewView.Assignment = assignmentId;
-            interviewView.LastInterviewerOrSupervisorComment = comments;
-            interviewView.LocationQuestionId = prefilledGpsQuestionId;
 
             if (gpsCoordinates != null)
             {

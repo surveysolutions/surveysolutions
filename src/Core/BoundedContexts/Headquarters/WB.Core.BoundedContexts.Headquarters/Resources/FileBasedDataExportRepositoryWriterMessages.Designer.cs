@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class FileBasedDataExportRepositoryWriterMessages {
+    public class FileBasedDataExportRepositoryWriterMessages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.Headquarters.Resources.FileBasedDataExportRepositoryWrite" +
@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Administrator.
         /// </summary>
-        internal static string Administrator {
+        public static string Administrator {
             get {
                 return ResourceManager.GetString("Administrator", resourceCulture);
             }
@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Api User.
         /// </summary>
-        internal static string ApiUser {
+        public static string ApiUser {
             get {
                 return ResourceManager.GetString("ApiUser", resourceCulture);
             }
@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to File content is missing for file name {0} interview {1}.
         /// </summary>
-        internal static string FileContentIsMissingForFileNameAndInterviewFormat {
+        public static string FileContentIsMissingForFileNameAndInterviewFormat {
             get {
                 return ResourceManager.GetString("FileContentIsMissingForFileNameAndInterviewFormat", resourceCulture);
             }
@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Headquarter.
         /// </summary>
-        internal static string Headquarter {
+        public static string Headquarter {
             get {
                 return ResourceManager.GetString("Headquarter", resourceCulture);
             }
@@ -100,16 +100,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Interviewer.
         /// </summary>
-        internal static string Interviewer {
+        public static string Interviewer {
             get {
                 return ResourceManager.GetString("Interviewer", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview with id &apos;{0}&apos; is absent.
+        ///   Looks up a localized string similar to Interview with id &apos;{0}&apos; is missing.
         /// </summary>
-        internal static string InterviewWithIdIsAbsentFormat {
+        public static string InterviewWithIdIsAbsentFormat {
             get {
                 return ResourceManager.GetString("InterviewWithIdIsAbsentFormat", resourceCulture);
             }
@@ -118,7 +118,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Supervisor.
         /// </summary>
-        internal static string Supervisor {
+        public static string Supervisor {
             get {
                 return ResourceManager.GetString("Supervisor", resourceCulture);
             }
@@ -127,7 +127,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to &lt;UNKNOWN ROLE&gt;.
         /// </summary>
-        internal static string UnknownRole {
+        public static string UnknownRole {
             get {
                 return ResourceManager.GetString("UnknownRole", resourceCulture);
             }
@@ -136,7 +136,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to &lt;UNKNOWN USER&gt;.
         /// </summary>
-        internal static string UnknownUser {
+        public static string UnknownUser {
             get {
                 return ResourceManager.GetString("UnknownUser", resourceCulture);
             }

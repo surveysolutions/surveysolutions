@@ -12,13 +12,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
             if (variable == null) return string.Empty;
 
             var variableAsString = variable.ToString();
-
-            TypeSwitch.Do(
-                variable,
-                TypeSwitch.Case<int>(value => { variableAsString = value.ToString(CultureInfo.CurrentCulture); }),
-                TypeSwitch.Case<double>(value => { variableAsString = value.ToString(CultureInfo.CurrentCulture); }),
-                TypeSwitch.Case<DateTime>(value => { variableAsString = value.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern); }),
-                TypeSwitch.Case<bool>(value => { variableAsString = value.ToString(); }));
+            switch (variable)
+            {
+                case int i:
+                    variableAsString = i.ToString(CultureInfo.CurrentCulture);
+                    break;
+                case double d:
+                    variableAsString = d.ToString(CultureInfo.CurrentCulture);
+                    break;
+                case bool b:
+                    variableAsString = b.ToString();
+                    break;
+                case DateTime dt:
+                    variableAsString = dt.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
+                    break;
+            }
 
             return variableAsString;
         }

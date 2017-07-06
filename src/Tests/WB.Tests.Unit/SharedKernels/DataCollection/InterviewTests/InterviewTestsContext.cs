@@ -8,7 +8,6 @@ using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -36,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             IQuestionnaireStorage questionnaireRepository = null, 
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
-            var textFactory = Create.Service.SubstitionTextFactory();
+            var textFactory = Create.Service.SubstitutionTextFactory();
             var interview = Create.AggregateRoot.Interview(
                 questionnaireRepository: questionnaireRepository,
                 expressionProcessorStatePrototypeProvider: expressionProcessorStatePrototypeProvider,

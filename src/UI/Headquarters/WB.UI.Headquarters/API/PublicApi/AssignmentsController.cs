@@ -26,6 +26,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.API.PublicApi
@@ -41,7 +42,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly IPreloadedDataVerifier preloadedDataVerifier;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IInterviewCreatorFromAssignment interviewCreatorFromAssignment;
-
+        private readonly IInterviewAnswerSerializer answerSerializer;
 
         public AssignmentsController(
             IAssignmentViewFactory assignmentViewFactory,
@@ -51,7 +52,8 @@ namespace WB.UI.Headquarters.API.PublicApi
             HqUserManager userManager,
             ILogger logger,
             IQuestionnaireStorage questionnaireStorage,
-            IInterviewCreatorFromAssignment interviewCreatorFromAssignment) : base(logger)
+            IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
+            IInterviewAnswerSerializer answerSerializer) : base(logger)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.assignmentsStorage = assignmentsStorage;
@@ -59,6 +61,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.userManager = userManager;
             this.questionnaireStorage = questionnaireStorage;
             this.interviewCreatorFromAssignment = interviewCreatorFromAssignment;
+            this.answerSerializer = answerSerializer;
             this.preloadedDataVerifier = preloadedDataVerifier;
         }
 
@@ -173,7 +176,20 @@ namespace WB.UI.Headquarters.API.PublicApi
             try
             {
                 var answers = createItem.IdentifyingData
-                    .Select(item => IdentifyingAnswer.Create(assignment, questionnaire, item.Answer, item.Identity, item.Variable))
+                    .Select(item => IdentifyingAnswer.Create(assignment, questionnaire, item.Answer, item.Identity, item.Variable, transformAnswers: true))
+                    .Select(item =>
+                    {
+                        var answer = CommandTransformator.ParseQuestionAnswer(new UntypedQuestionAnswer
+                        {
+                            Id = item.Identity.Id,
+                            Answer = item.Answer,
+                            Type = questionnaire.GetQuestionType(item.Identity.Id)
+                        });
+
+                        item.Answer = this.answerSerializer.Serialize(answer.Value);
+
+                        return item;
+                    })
                     .ToList();
 
                 assignment.SetIdentifyingData(answers);
@@ -185,13 +201,16 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             var preloadData = this.ConvertToPreloadedData(assignment, questionnaire);
 
-            var verifyResult = this.preloadedDataVerifier.VerifyAssignmentsSample(questionnaireId.QuestionnaireId, questionnaireId.Version, preloadData);
+            var verifyResult = this.preloadedDataVerifier.VerifyAssignmentsSample(questionnaireId.QuestionnaireId,
+                questionnaireId.Version, preloadData);
+
             verifyResult.WasResponsibleProvided = true;
 
             if (!verifyResult.Errors.Any())
             {
                 this.assignmentsStorage.Store(assignment, null);
-                interviewCreatorFromAssignment.CreateInterviewIfQuestionnaireIsOld(responsible, questionnaireId, assignment.Id, createItem.IdentifyingData);
+                interviewCreatorFromAssignment.CreateInterviewIfQuestionnaireIsOld(responsible, questionnaireId, assignment.Id,
+                    assignment.IdentifyingData);
                 assignment = this.assignmentsStorage.GetById(assignment.Id);
 
                 return new CreateAssignmentResult

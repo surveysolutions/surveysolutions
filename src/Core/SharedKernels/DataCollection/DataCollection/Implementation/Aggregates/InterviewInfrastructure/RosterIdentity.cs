@@ -7,10 +7,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public class RosterIdentity
     {
-        public Guid GroupId { get; private set; }
-        public decimal[] OuterRosterVector { get; private set; }
-        public decimal RosterInstanceId { get; private set; }
-        public int? SortIndex { get; private set; }
+        public Guid GroupId { get; }
+        public decimal[] OuterRosterVector { get; }
+        public decimal RosterInstanceId { get;  }
+        public int? SortIndex { get; }
 
         public RosterIdentity(Guid groupId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex = null)
         {
@@ -22,8 +22,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public Identity ToIdentity()
         {
-            var extendedRosterVector = new List<decimal>(OuterRosterVector) { RosterInstanceId };
-            return new Identity(GroupId, extendedRosterVector.ToArray());
+            return new Identity(GroupId, new RosterVector(OuterRosterVector).ExtendWithOneCoordinate((int)RosterInstanceId));
         }
     }
 

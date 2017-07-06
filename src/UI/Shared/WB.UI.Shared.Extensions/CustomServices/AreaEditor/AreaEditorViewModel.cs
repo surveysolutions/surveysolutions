@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI;
@@ -14,7 +15,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Infrastructure.Shared.Enumerator.Internals.MapService;
-using System.Threading.Tasks;
+using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 {
@@ -165,10 +166,12 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                             if (this.StartEditAreaCommand.CanExecute())
                                 this.StartEditAreaCommand.Execute();
                         };
+
+
                 }
             }
         }
-        
+       
         public IMvxCommand SwitchMapCommand => new MvxCommand<MapDescription>((MapDescription map) => { this.SelectedMap = map.MapName; });
 
        
@@ -204,15 +207,19 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
         public IMvxCommand SwitchLocatorCommand => new MvxCommand(() =>
         {
+            if (!IsLocationServiceSwitchEnabled)
+                return;
+
             //temporary catch for KP-9486
             //esri was notified
             try
             {
+                IsLocationServiceSwitchEnabled = false;
+
                 if (!this.MapView.LocationDisplay.IsEnabled)
                     this.MapView.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.Off;
 
-                var locationDisplayState = this.MapView.LocationDisplay.IsEnabled;
-                if (!locationDisplayState && !this.MapView.LocationDisplay.Started)
+                if (!this.MapView.LocationDisplay.IsEnabled)
                     this.MapView.LocationDisplay.IsEnabled = true;
                 else
                     this.MapView.LocationDisplay.IsEnabled = false;
@@ -221,7 +228,16 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             {
                 logger.Error("Error occured on map location switch.", exc);
             }
-            
+            finally
+            {
+                //workaround for maps location service error
+                Task.Run(() =>
+                {
+                    Thread.Sleep(3000);
+                    IsLocationServiceSwitchEnabled = true;
+                });
+            }
+
         });
 
         public IMvxCommand HidePanelComand => new MvxCommand(() =>
@@ -281,16 +297,18 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             this.IsEditing = true;
             try
             {
-                this.MapView.SketchEditor.GeometryChanged += delegate (object sender, GeometryChangedEventArgs args)
+                this.MapView.SketchEditor.GeometryChanged += delegate(object sender, GeometryChangedEventArgs args)
                 {
                     var geometry = args.NewGeometry;
+                    bool isCanCalculateAreaDimensions = IsCanCalculateAreaDimensions(geometry);
                     try
                     {
-                        this.GeometryArea = GeometryEngine.AreaGeodetic(geometry).ToString("#.##");
-                        this.GeometryLength = GeometryEngine.LengthGeodetic(geometry).ToString("#.##");
+                        this.GeometryArea = (isCanCalculateAreaDimensions ? GeometryEngine.AreaGeodetic(geometry) : 0).ToString("#.##");
+                        this.GeometryLength = (isCanCalculateAreaDimensions ? GeometryEngine.LengthGeodetic(geometry) : 0).ToString("#.##");
                     }
                     catch (Exception e)
                     {
+                        Console.WriteLine("LOG MESSAGE EXCEPTION");
                         Console.WriteLine(e);
                         Console.WriteLine(geometry.ToJson());
                         throw;
@@ -305,9 +323,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 Geometry result;
                 if (this.Geometry == null)
                 {
-                    await this.MapView.SetViewpointRotationAsync(0).ConfigureAwait(false);//workaround to fix Map is not prepared.
-                    result = await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polygon, true)
-                        .ConfigureAwait(false);
+                    await this.MapView.SetViewpointRotationAsync(0).ConfigureAwait(false); //workaround to fix Map is not prepared.
+                    result = await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polygon, true).ConfigureAwait(false);
                 }
                 else
                 {
@@ -355,6 +372,35 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 Close(this);
             }
         });
+
+        private bool IsCanCalculateAreaDimensions(Geometry geometry)
+        {
+            if (geometry == null)
+                return false;
+
+            if (geometry.GeometryType != GeometryType.Polygon || geometry.Dimension != GeometryDimension.Area)
+                return false;
+
+            var polygon = geometry as Polygon;
+            if (polygon == null)
+                return false;
+
+            if (polygon.Parts.Count < 1)
+                return false;
+
+            var readOnlyPart = polygon.Parts[0];
+            if (readOnlyPart.PointCount < 3)
+                return false;
+
+            var groupedPoints = from point in readOnlyPart.Points
+                group point by new { X = point.X, Y = point.Y } into xyPoint
+                select new { X = xyPoint.Key.X, Y = xyPoint.Key.Y, Count = xyPoint.Count() };
+
+            if (groupedPoints.Count() < 3)
+                return false;
+
+            return true;
+        }
 
         private string geometryArea = "0";
         public string GeometryArea
@@ -422,6 +468,13 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         {
             get => this.isPanelVisible;
             set => this.RaiseAndSetIfChanged(ref this.isPanelVisible, value);
-        }        
+        }
+
+        private bool isLocationServiceSwitchEnabled = true; 
+        public bool IsLocationServiceSwitchEnabled
+        {
+            get => this.isLocationServiceSwitchEnabled;
+            set => this.RaiseAndSetIfChanged(ref this.isLocationServiceSwitchEnabled, value);
+        }
     }
 }

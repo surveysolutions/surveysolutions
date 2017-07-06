@@ -47,13 +47,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                         QuestionnaireTitle =            questionnaire.QuestionnaireTitle,
                         ResponsibleName = input.ResponsibleName ?? string.Empty,
                         TeamLeadName = input.TeamLeadName ?? string.Empty,
-                        SupervisorAssignedCount =       Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.SupervisorAssigned).InterviewsCount),
-                        InterviewerAssignedCount =      Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.InterviewerAssigned).InterviewsCount),
-                        CompletedCount =                Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.Completed).InterviewsCount),
-                        ApprovedBySupervisorCount =     Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.ApprovedBySupervisor).InterviewsCount),
-                        RejectedBySupervisorCount =     Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.RejectedBySupervisor).InterviewsCount),
-                        ApprovedByHeadquartersCount =   Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.ApprovedByHeadquarters).InterviewsCount),
-                        RejectedByHeadquartersCount =   Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.RejectedByHeadquarters).InterviewsCount),
+                        SupervisorAssignedCount =       CountInStatus(interviews, questionnaire, InterviewStatus.SupervisorAssigned)?.InterviewsCount ?? 0,
+                        InterviewerAssignedCount =      CountInStatus(interviews, questionnaire, InterviewStatus.InterviewerAssigned)?.InterviewsCount ?? 0,
+                        CompletedCount =                CountInStatus(interviews, questionnaire, InterviewStatus.Completed)?.InterviewsCount ?? 0,
+                        ApprovedBySupervisorCount =     CountInStatus(interviews, questionnaire, InterviewStatus.ApprovedBySupervisor)?.InterviewsCount ?? 0,
+                        RejectedBySupervisorCount =     CountInStatus(interviews, questionnaire, InterviewStatus.RejectedBySupervisor)?.InterviewsCount ?? 0,
+                        ApprovedByHeadquartersCount =   CountInStatus(interviews, questionnaire, InterviewStatus.ApprovedByHeadquarters)?.InterviewsCount ?? 0,
+                        RejectedByHeadquartersCount =   CountInStatus(interviews, questionnaire, InterviewStatus.RejectedByHeadquarters)?.InterviewsCount ?? 0,
                         TotalCount =                    interviews.Where(x => x.QuestionnaireId == questionnaire.QuestionnaireId && x.QuestionnaireVersion == questionnaire.QuestionnaireVersion).Sum(x => x.InterviewsCount)
                     });
                 }

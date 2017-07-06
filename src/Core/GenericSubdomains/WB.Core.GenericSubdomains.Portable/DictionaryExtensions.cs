@@ -15,9 +15,6 @@ namespace WB.Core.GenericSubdomains.Portable
             dictionary.GetOrAdd(key1).Add(key2, value);
         }
 
-        public static TValue GetOrUpdate<TKey1, TKey2, TValue>(this Dictionary<TKey1, Dictionary<TKey2, TValue>> dictionary, TKey1 key1, TKey2 key2, Func<TValue> valueInit)
-            => dictionary.GetOrAdd(key1).GetOrUpdate(key2, valueInit);
-
         public static TValue GetOrAdd<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key)
             where TValue : new()
         {
@@ -48,20 +45,11 @@ namespace WB.Core.GenericSubdomains.Portable
             return value;
         }
 
-        public static TValue GetOrUpdate<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, Func<TKey, TValue> valueInit)
-            => dict.GetOrUpdate(key, () => valueInit.Invoke(key));
-
         public static TValue GetOrNull<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
             where TValue : class
         {
             TValue value;
             return dictionary.TryGetValue(key, out value) ? value : null;
-        }
-
-        public static TValue? GetOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
-            where TValue : struct
-        {
-            return dictionary.ContainsKey(key) ? dictionary[key] : null as TValue?;
         }
 
         public static List<TValue> GetOrEmpty<TKey, TValue>(this IDictionary<TKey, List<TValue>> dictionary, TKey key)
@@ -74,17 +62,5 @@ namespace WB.Core.GenericSubdomains.Portable
             TValue _;
             return dictionary.TryRemove(key, out _);
         }
-
-        public static ConcurrentDictionary<TKey, TElement> ToConcurrentDictionary<TSource, TKey, TElement>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector,
-            Func<TSource, TElement> elementSelector)
-        {
-            return new ConcurrentDictionary<TKey, TElement>(source.ToDictionary(keySelector, elementSelector));
-        }
-
-        public static IDictionary<TKey, IReadOnlyList<TValue>> ToDictionary<TKey, TValue>(this IList<KeyValuePair<TKey, IList<TValue>>> source)
-            => source?.ToDictionary(x => x.Key, x => (IReadOnlyList<TValue>) x.Value) ?? new Dictionary<TKey, IReadOnlyList<TValue>>();
-
-        public static IDictionary<TKey, IReadOnlyList<TValue>> ToDictionary<TKey, TValue>(this IList<KeyValuePair<TKey, List<TValue>>> source)
-            => source?.ToDictionary(x => x.Key, x => (IReadOnlyList<TValue>)x.Value) ?? new Dictionary<TKey, IReadOnlyList<TValue>>();
     }
 }

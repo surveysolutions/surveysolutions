@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -14,15 +12,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public class StartedInterviewsViewModel : ListViewModel<IDashboardItem>
     {
-        public override int ItemsCount => this.UiItems.OfType<InterviewDashboardItemViewModel>().Count();
-
         public override GroupStatus InterviewStatus => GroupStatus.Started;
 
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IInterviewViewModelFactory viewModelFactory;
         private readonly IPrincipal principal;
 
-        public event EventHandler OnInterviewRemoved;
+        public event EventHandler<InterviewRemovedArgs> OnInterviewRemoved;
+        private IReadOnlyCollection<InterviewView> dbItems;
 
         public StartedInterviewsViewModel(
             IPlainStorage<InterviewView> interviewViewRepository,
@@ -34,49 +31,58 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.principal = principal;
         }
 
-        public async Task LoadAsync()
+        public async void Load()
         {
-            var startedInterviews = await Task.Run(() => this.GetStartedInterviews().ToList());
-            
-            var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
-            subTitle.Title = InterviewerUIResources.Dashboard_StartedTabText;
-            var uiItems = subTitle.ToEnumerable().Concat(startedInterviews).ToList();
-            
-            this.UiItems.ReplaceWith(uiItems);
+            this.dbItems = this.GetDbItems();
 
+            this.ItemsCount = this.dbItems.Count;
             this.UpdateTitle();
+
+            var uiItems = await Task.Run(() => this.GetUiItems());
+            this.UiItems.ReplaceWith(uiItems);
         }
 
         private void UpdateTitle() => 
             this.Title = string.Format(InterviewerUIResources.Dashboard_StartedLinkText, this.ItemsCount);
 
-        private IEnumerable<IDashboardItem> GetStartedInterviews()
+        private IReadOnlyCollection<InterviewView> GetDbItems()
         {
             var interviewerId = this.principal.CurrentUserIdentity.UserId;
 
-            var interviewViews = this.interviewViewRepository.Where(interview =>
+            return this.interviewViewRepository.Where(interview =>
                 interview.ResponsibleId == interviewerId &&
                 (interview.Status == SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus.InterviewerAssigned ||
-                interview.Status == SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus.Restarted));
+                 interview.Status == SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus.Restarted));
+        }
 
-            foreach (var interviewView in interviewViews)
+        private IEnumerable<IDashboardItem> GetUiItems()
+        {
+            var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
+            subTitle.Title = InterviewerUIResources.Dashboard_StartedTabText;
+
+            yield return subTitle;
+
+            foreach (var interviewView in this.dbItems)
             {
                 var interviewDashboardItem = this.viewModelFactory.GetNew<InterviewDashboardItemViewModel>();
                 interviewDashboardItem.Init(interviewView);
                 interviewDashboardItem.OnItemRemoved += this.InterviewDashboardItem_OnItemRemoved;
+
                 yield return interviewDashboardItem;
             }
         }
 
         private void InterviewDashboardItem_OnItemRemoved(object sender, EventArgs e)
         {
-            var dashboardItem = (IDashboardItem)sender;
-            
-            this.UiItems.Remove(dashboardItem);
+            var dashboardItem = (InterviewDashboardItemViewModel)sender;
 
+            this.ItemsCount--;
             this.UpdateTitle();
 
-            this.OnInterviewRemoved(sender, e);
+            this.UiItems.Remove(dashboardItem);
+
+            this.OnInterviewRemoved(sender,
+                new InterviewRemovedArgs(dashboardItem.AssignmentId, dashboardItem.InterviewId));
         }
     }
 }

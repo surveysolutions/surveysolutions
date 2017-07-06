@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -34,15 +32,6 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals
         public T Deserialize<T>(string payload)
         {
             return JsonConvert.DeserializeObject<T>(payload, this.jsonSerializerSettings);
-        }
-        
-        public void SerializeToStream(object value, Type type, Stream stream)
-        {
-            using (var writer = new StreamWriter(stream))
-            using (var jsonWriter = new JsonTextWriter(writer))
-            {
-                JsonSerializer.Create(jsonSerializerSettings).Serialize(jsonWriter, value, type);
-            }
         }
     }
 }

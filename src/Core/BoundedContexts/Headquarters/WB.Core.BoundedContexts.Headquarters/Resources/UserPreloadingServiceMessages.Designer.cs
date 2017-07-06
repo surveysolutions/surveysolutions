@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class UserPreloadingServiceMessages {
+    public class UserPreloadingServiceMessages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.Headquarters.Resources.UserPreloadingServiceMessages", typeof(UserPreloadingServiceMessages).Assembly);
@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,36 +61,36 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to file &apos;{0}&apos; contains following columns which can&apos;t be mapped on any existing user&apos;s property: {1}.
+        ///   Looks up a localized string similar to The file &apos;{0}&apos; contains the following columns that can&apos;t be mapped to any user property (e.g., full name, phone number, etc.) : {1}.
         /// </summary>
-        internal static string FileColumnsCantBeMappedFormat {
+        public static string FileColumnsCantBeMappedFormat {
             get {
                 return ResourceManager.GetString("FileColumnsCantBeMappedFormat", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to max number of validation errors {0} have been reached.
+        ///   Looks up a localized string similar to Max number of validation errors {0} has been reached.
         /// </summary>
-        internal static string MaxNumberOfValidationErrorsHaveBeenReachedFormat {
+        public static string MaxNumberOfValidationErrorsHaveBeenReachedFormat {
             get {
                 return ResourceManager.GetString("MaxNumberOfValidationErrorsHaveBeenReachedFormat", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The dataset contains {0} records, but max allowed record number is {1}.
+        ///   Looks up a localized string similar to The dataset contains {0} records, but the max allowed number of records is {1}.
         /// </summary>
-        internal static string TheDatasetMaxRecordNumberReachedFormat {
+        public static string TheDatasetMaxRecordNumberReachedFormat {
             get {
                 return ResourceManager.GetString("TheDatasetMaxRecordNumberReachedFormat", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to user preloading process with id &apos;{0}&apos; can&apos;t be finished because only {1} created out of {2}.
+        ///   Looks up a localized string similar to User preloading process with id &apos;{0}&apos; can&apos;t be finished because only {1} created out of {2}.
         /// </summary>
-        internal static string userPreloadingProcessCantBeFinishedFormat {
+        public static string userPreloadingProcessCantBeFinishedFormat {
             get {
                 return ResourceManager.GetString("userPreloadingProcessCantBeFinishedFormat", resourceCulture);
             }
@@ -99,52 +99,52 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to User preloading process &apos;{0}&apos; is in state &apos;{1}&apos;,it is not allowed to delete processes in states: {2}..
         /// </summary>
-        internal static string UserPreloadingProcessIsInStateButMustBeInStateOneOfTheFollowingStatesFormat {
+        public static string UserPreloadingProcessIsInStateButMustBeInStateOneOfTheFollowingStatesFormat {
             get {
                 return ResourceManager.GetString("UserPreloadingProcessIsInStateButMustBeInStateOneOfTheFollowingStatesFormat", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to user preloading process with id &apos;{0}&apos; can&apos;t create more users then {1}.
+        ///   Looks up a localized string similar to User preloading process with id &apos;{0}&apos; can&apos;t create more users than {1}.
         /// </summary>
-        internal static string UserPreloadingProcessWithIdCantCreateMoreUsersFormat {
+        public static string UserPreloadingProcessWithIdCantCreateMoreUsersFormat {
             get {
                 return ResourceManager.GetString("UserPreloadingProcessWithIdCantCreateMoreUsersFormat", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to user preloading process with id &apos;{0}&apos;has {1} error(s)..
+        ///   Looks up a localized string similar to User preloading process with id &apos;{0}&apos;has {1} error(s)..
         /// </summary>
-        internal static string UserPreloadingProcessWithIdHasErrorsFormat {
+        public static string UserPreloadingProcessWithIdHasErrorsFormat {
             get {
                 return ResourceManager.GetString("UserPreloadingProcessWithIdHasErrorsFormat", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to user preloading process with id &apos;{0}&apos; is missing.
+        ///   Looks up a localized string similar to User preloading process with id &apos;{0}&apos; is missing.
         /// </summary>
-        internal static string UserPreloadingProcessWithIdIisMissingFormat {
+        public static string UserPreloadingProcessWithIdIisMissingFormat {
             get {
                 return ResourceManager.GetString("UserPreloadingProcessWithIdIisMissingFormat", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to user preloading process with id &apos;{0}&apos; is in state &apos;{1}&apos;, but must be in state &apos;{2}&apos;.
+        ///   Looks up a localized string similar to User preloading process with id &apos;{0}&apos; is in state &apos;{1}&apos;, but must be in state &apos;{2}&apos;.
         /// </summary>
-        internal static string UserPreloadingProcessWithIdInInvalidStateFormat {
+        public static string UserPreloadingProcessWithIdInInvalidStateFormat {
             get {
                 return ResourceManager.GetString("UserPreloadingProcessWithIdInInvalidStateFormat", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to validation progress in percents can&apos;t be negative or greater then 100, but the value is {0}.
+        ///   Looks up a localized string similar to Validation progress in percents can&apos;t be negative or greater than 100, but the value is {0}.
         /// </summary>
-        internal static string validationProgressInPercentsCantBeNegativeOrGreaterThen100Format {
+        public static string validationProgressInPercentsCantBeNegativeOrGreaterThen100Format {
             get {
                 return ResourceManager.GetString("validationProgressInPercentsCantBeNegativeOrGreaterThen100Format", resourceCulture);
             }
