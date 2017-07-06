@@ -1,7 +1,7 @@
-﻿namespace WB.UI.Shared.Web.MembershipProvider.Roles
-{
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
+namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Roles
+{
     /// <summary>
     /// A user and it's roles
     /// </summary>

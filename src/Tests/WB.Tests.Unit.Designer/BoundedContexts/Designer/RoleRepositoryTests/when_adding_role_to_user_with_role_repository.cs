@@ -2,9 +2,9 @@ using System;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Commands.Account;
+using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.Infrastructure.CommandBus;
-using WB.UI.Shared.Web.MembershipProvider.Roles;
 
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.RoleRepositoryTests

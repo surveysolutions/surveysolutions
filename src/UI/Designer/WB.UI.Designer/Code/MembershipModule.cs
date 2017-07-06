@@ -1,10 +1,10 @@
 ﻿using Ninject.Modules;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.PasswordStrategies;
+using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
-using WB.UI.Shared.Web.MembershipProvider.Roles;
 using WB.UI.Shared.Web.MembershipProvider.Settings;
 
 namespace WB.UI.Designer.Code

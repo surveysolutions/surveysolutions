@@ -1,5 +1,5 @@
 ﻿using System;
-using WB.UI.Shared.Web.MembershipProvider.Roles;
+using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Account
 {
