@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.TopologicalSorter;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
@@ -25,7 +26,6 @@ using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.Su
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -254,8 +254,8 @@ namespace WB.Tests.Abc.TestFactories
                 TransactionManager = Mock.Of<ITransactionManagerProvider>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>())
             };
 
-        public PreloadedDataService PreloadedDataService(QuestionnaireDocument questionnaire)
-            => new PreloadedDataService(
+        public ImportDataParsingService PreloadedDataService(QuestionnaireDocument questionnaire)
+            => new ImportDataParsingService(
                 new ExportViewFactory(new FileSystemIOAccessor(), 
                                       new ExportQuestionService(), 
                                       Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire && 

@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
@@ -14,18 +15,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
     {
         Establish context = () =>
         {
-            preloadedDataVerifier = CreatePreloadedDataVerifier();
+            importDataVerifier = CreatePreloadedDataVerifier();
         };
 
-        Because of = () => result = preloadedDataVerifier.VerifyPanel(Guid.NewGuid(), 1, new PreloadedDataByFile[0]);
+        Because of = () => importDataVerifier.VerifyPanelFiles(Guid.NewGuid(), 1, new PreloadedDataByFile[0], status);
 
         It should_result_has_1_error = () =>
-            result.Errors.Count().ShouldEqual(1);
+            status.VerificationState.Errors.Count().ShouldEqual(1);
 
         It should_return_single_PL0001_error = () =>
-            result.Errors.First().Code.ShouldEqual("PL0024");
+            status.VerificationState.Errors.First().Code.ShouldEqual("PL0024");
 
-        private static PreloadedDataVerifier preloadedDataVerifier;
-        private static VerificationStatus result;
+        private static ImportDataVerifier importDataVerifier;
     }
 }

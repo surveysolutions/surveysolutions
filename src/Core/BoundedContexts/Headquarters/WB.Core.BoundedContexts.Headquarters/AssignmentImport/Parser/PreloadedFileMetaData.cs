@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace WB.Core.BoundedContexts.Headquarters.Views.PreloadedData
+namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
 {
     [DebuggerDisplay("{FileName}")]
     public class PreloadedFileMetaData

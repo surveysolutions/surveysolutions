@@ -2,8 +2,8 @@
 using System.Linq;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             
             var mockOfSamplePreloadingDataParsingService = new Mock<IInterviewImportDataParsingService>();
 
-            mockOfSamplePreloadingDataParsingService.Setup(x => x.GetAssignmentsData("sampleId", questionnaireIdentity, PreloadedContentType.Assignments))
+            mockOfSamplePreloadingDataParsingService.Setup(x => x.GetAssignmentsData("sampleId", questionnaireIdentity, AssignmentImportType.Assignments))
                 .Returns((AssignmentImportData[])null);
 
             interviewImportService =
@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
         };
 
         Because of = () => 
-            interviewImportService.ImportAssignments(questionnaireIdentity, "sampleId", null, Guid.Parse("22222222222222222222222222222222"), PreloadedContentType.Assignments);
+            interviewImportService.ImportAssignments(questionnaireIdentity, "sampleId", null, Guid.Parse("22222222222222222222222222222222"), AssignmentImportType.Assignments);
 
         It should_in_progress_be_false = () =>
             interviewImportService.Status.IsInProgress.ShouldBeFalse();

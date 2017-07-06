@@ -4,12 +4,11 @@ using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
-namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading
+namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
 {
     internal class InterviewImportDataParsingService : IInterviewImportDataParsingService
     {
@@ -35,11 +34,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             this.rosterStructureService = rosterStructureService;
         }
 
-        public AssignmentImportData[] GetAssignmentsData(string interviewImportProcessId, QuestionnaireIdentity questionnaireIdentity, PreloadedContentType mode)
+        public AssignmentImportData[] GetAssignmentsData(string interviewImportProcessId, QuestionnaireIdentity questionnaireIdentity, AssignmentImportType mode)
         {
             var preloadedDataService = this.GetPreloadedDataService(questionnaireIdentity);
 
-            AssignmentPreloadedDataRecord[] dataToPreload = mode == PreloadedContentType.Panel 
+            AssignmentPreloadedDataRecord[] dataToPreload = mode == AssignmentImportType.Panel 
                 ? preloadedDataService.CreatePreloadedDataDtosFromPanelData(this.preloadedDataRepository.GetPreloadedDataOfPanel(interviewImportProcessId))
                 : preloadedDataService.CreatePreloadedDataDtoFromAssignmentData(this.preloadedDataRepository.GetPreloadedDataOfSample(interviewImportProcessId));
 

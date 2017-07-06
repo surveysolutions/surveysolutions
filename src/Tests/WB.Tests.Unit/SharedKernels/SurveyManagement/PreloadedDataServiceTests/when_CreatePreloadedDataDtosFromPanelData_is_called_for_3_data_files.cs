@@ -8,7 +8,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Tests.Abc;
 
@@ -56,13 +56,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                                 })
                         }));
 
-            preloadedDataService = CreatePreloadedDataService(questionnaireDocument);
+            importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
         };
 
         Because of =
             () =>
                 result =
-                    preloadedDataService.CreatePreloadedDataDtosFromPanelData(new[]
+                    importDataParsingService.CreatePreloadedDataDtosFromPanelData(new[]
                     {
                         CreatePreloadedDataByFile(new[] { "Id", "nq1" }, new[]
                         {
@@ -123,7 +123,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
         It should_second_result_fifth_data_record_has_2_2_roster_vector = () =>
           result[1].PreloadedDataDto.Data[4].RosterVector.SequenceEqual(new decimal[] { 2, 2 }).ShouldBeTrue();
 
-        private static PreloadedDataService preloadedDataService;
+        private static ImportDataParsingService importDataParsingService;
         private static QuestionnaireDocument questionnaireDocument;
         private static PreloadedDataRecord[] result;
         private static Guid rosterGroupId = Guid.NewGuid();

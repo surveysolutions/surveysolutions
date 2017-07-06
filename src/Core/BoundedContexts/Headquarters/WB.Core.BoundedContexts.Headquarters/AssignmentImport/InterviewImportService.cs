@@ -4,29 +4,29 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.UI.Headquarters.Services;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Threading;
-using WB.UI.Headquarters.Resources;
 
-namespace WB.UI.Headquarters.Implementation.Services
+namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 {
     public class InterviewImportService : IInterviewImportService
     {
@@ -40,12 +40,14 @@ namespace WB.UI.Headquarters.Implementation.Services
 
         private readonly object lockStart = new object();
 
-        private IPlainTransactionManager plainTransactionManager => plainTransactionManagerProvider.GetPlainTransactionManager();
+        private IPlainTransactionManager PlainTransactionManager => plainTransactionManagerProvider.GetPlainTransactionManager();
         private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
         private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly IPlainStorageAccessor<Assignment> assignmentPlainStorageAccessor;
         private readonly IUserViewFactory userViewFactory;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+        private readonly IPreloadedDataRepository preloadedDataRepository;
+        private readonly IPreloadedDataVerifier preloadedDataVerifier;
 
         public InterviewImportService(
             ICommandService commandService,
@@ -59,7 +61,9 @@ namespace WB.UI.Headquarters.Implementation.Services
             IPlainStorageAccessor<Assignment> assignmentPlainStorageAccessor,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IUserViewFactory userViewFactory, 
-            IInterviewTreeBuilder interviewTreeBuilder)
+            IInterviewTreeBuilder interviewTreeBuilder, 
+            IPreloadedDataRepository preloadedDataRepository, 
+            IPreloadedDataVerifier preloadedDataVerifier)
         {
             this.commandService = commandService;
             this.logger = logger;
@@ -72,13 +76,23 @@ namespace WB.UI.Headquarters.Implementation.Services
             this.assignmentPlainStorageAccessor = assignmentPlainStorageAccessor;
             this.userViewFactory = userViewFactory;
             this.interviewTreeBuilder = interviewTreeBuilder;
+            this.preloadedDataRepository = preloadedDataRepository;
+            this.preloadedDataVerifier = preloadedDataVerifier;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
         }
 
-        public void VerifyAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId)
+        public void VerifyAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, string fileName)
         {
-            AssignmentImportData[] assignmentImportData = this.interviewImportDataParsingService.GetAssignmentsData(interviewImportProcessId, questionnaireIdentity, PreloadedContentType.Panel);
+            if (StartImportProcess(questionnaireIdentity, interviewImportProcessId, AssignmentImportType.Assignments)) return;
+
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+
+            this.Status.Stage = AssignmentImportStage.FileVerification;
+            this.Status.VerificationState.FileName = fileName;
+
+            PreloadedDataByFile[] preloadedPanelData = this.preloadedDataRepository.GetPreloadedDataOfPanel(interviewImportProcessId);
+
+            this.preloadedDataVerifier.VerifyPanelFiles(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, preloadedPanelData, this.Status);
 
             void VerifyAssignment(AssignmentImportData assignmentRecord)
             {
@@ -104,10 +118,21 @@ namespace WB.UI.Headquarters.Implementation.Services
                 }
             }
 
-            RunImportProcess(assignmentImportData, questionnaireIdentity, interviewImportProcessId, PreloadedContentType.Assignments, VerifyAssignment);
+            if (this.Status.VerificationState.Errors.Any())
+            {
+                FinishImportProcess();
+                return;
+            }
+
+            this.Status.ProcessedCount = 0;
+            this.Status.TotalCount = this.Status.VerificationState.EntitiesCount;
+            this.Status.Stage = AssignmentImportStage.AssignmentDataVerification;
+
+            AssignmentImportData[] assignmentImportData = this.interviewImportDataParsingService.GetAssignmentsData(interviewImportProcessId, questionnaireIdentity, AssignmentImportType.Panel);
+            RunImportProcess(assignmentImportData, questionnaireIdentity, VerifyAssignment);
         }
 
-        public void ImportAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, Guid? responsibleId, Guid headquartersId, PreloadedContentType mode)
+        public void ImportAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, Guid? responsibleId, Guid headquartersId, AssignmentImportType mode)
         {
             AssignmentImportData[] assignmentImportData = this.interviewImportDataParsingService.GetAssignmentsData(interviewImportProcessId, questionnaireIdentity, mode);
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
@@ -130,7 +155,7 @@ namespace WB.UI.Headquarters.Implementation.Services
                 var responsibleInterviewerId = assignmentRecord.SupervisorId.HasValue ? assignmentRecord.InterviewerId : interviewerIdByResponsible;
                 var assignmentResponsibleId = responsibleInterviewerId ?? responsibleSupervisorId;
 
-                var questionnaireBrowseItem = this.plainTransactionManager.ExecuteInQueryTransaction(() => this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity));
+                var questionnaireBrowseItem = this.PlainTransactionManager.ExecuteInQueryTransaction(() => this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity));
 
                 List<InterviewAnswer> answers = assignmentRecord.PreloadedData.Answers;
                 var assignment = new Assignment(questionnaireIdentity, assignmentResponsibleId, assignmentRecord.Quantity);
@@ -140,44 +165,22 @@ namespace WB.UI.Headquarters.Implementation.Services
                 assignment.SetAnswers(answers);
 
                 // need save assignment firstly for get real assignmentId
-                this.plainTransactionManager.ExecuteInPlainTransaction(() => this.assignmentPlainStorageAccessor.Store(assignment, null));
+                this.PlainTransactionManager.ExecuteInPlainTransaction(() => this.assignmentPlainStorageAccessor.Store(assignment, null));
 
                 bool isSupportAssignments = questionnaireBrowseItem.AllowAssignments;
                 if (!isSupportAssignments)
                 {
-                    this.transactionManagerProvider.GetTransactionManager().ExecuteInQueryTransaction(() => this.plainTransactionManager.ExecuteInPlainTransaction(() => this.commandService.Execute(new CreateInterview(Guid.NewGuid(), headquartersId, questionnaireIdentity, supervisorId: responsibleSupervisorId, interviewerId: responsibleInterviewerId, answersTime: DateTime.UtcNow, answers: answers, interviewKey: this.interviewKeyGenerator.Get(), assignmentId: assignment.Id))));
+                    this.transactionManagerProvider.GetTransactionManager().ExecuteInQueryTransaction(() => this.PlainTransactionManager.ExecuteInPlainTransaction(() => this.commandService.Execute(new CreateInterview(Guid.NewGuid(), headquartersId, questionnaireIdentity, supervisorId: responsibleSupervisorId, interviewerId: responsibleInterviewerId, answersTime: DateTime.UtcNow, answers: answers, interviewKey: this.interviewKeyGenerator.Get(), assignmentId: assignment.Id))));
                 }
             }
 
-            RunImportProcess(assignmentImportData, questionnaireIdentity, interviewImportProcessId, PreloadedContentType.Assignments, ImportAction);
+            if (StartImportProcess(questionnaireIdentity, interviewImportProcessId, AssignmentImportType.Assignments)) return;
+            this.Status.Stage = AssignmentImportStage.AssignmentCreation;
+            RunImportProcess(assignmentImportData, questionnaireIdentity, ImportAction);
         }
 
-        private void RunImportProcess(AssignmentImportData[] records, 
-            QuestionnaireIdentity questionnaireIdentity, 
-            string interviewImportProcessId, 
-            PreloadedContentType preloadedContentType, 
-            Action<AssignmentImportData> importAction)
+        private void RunImportProcess(AssignmentImportData[] records, QuestionnaireIdentity questionnaireIdentity, Action<AssignmentImportData> importAction)
         {
-            lock (lockStart)
-            {
-                if (this.Status.IsInProgress)
-                    return;
-
-                this.Status = new AssignmentImportStatus
-                {
-                    QuestionnaireId = questionnaireIdentity.QuestionnaireId,
-                    InterviewImportProcessId = interviewImportProcessId,
-                    QuestionnaireVersion = questionnaireIdentity.Version,
-                    StartedDateTime = DateTime.Now,
-                    CreatedInterviewsCount = 0,
-                    ElapsedTime = 0,
-                    EstimatedTime = 0,
-                    State = { Columns = new string[0], Errors = new List<InterviewImportError>() },
-                    IsInProgress = true,
-                    PreloadedContentType = preloadedContentType
-                };
-            }
-
             try
             {
                 var questionnaireDocument = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
@@ -193,14 +196,14 @@ namespace WB.UI.Headquarters.Implementation.Services
                     return;
                 }
 
-                this.Status.TotalInterviewsCount = records.Length;
+                this.Status.TotalCount = records.Length;
 
                 int createdInterviewsCount = 0;
                 Stopwatch elapsedTime = Stopwatch.StartNew();
 
                 Parallel.ForEach(records,
                     new ParallelOptions { MaxDegreeOfParallelism = this.sampleImportSettings.InterviewsImportParallelTasksLimit },
-                    (record) =>
+                    record =>
                     {
                         try
                         {
@@ -221,18 +224,47 @@ namespace WB.UI.Headquarters.Implementation.Services
                             ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
                         }
 
-                        this.Status.CreatedInterviewsCount = Interlocked.Increment(ref createdInterviewsCount);
+                        this.Status.ProcessedCount = Interlocked.Increment(ref createdInterviewsCount);
                         this.Status.ElapsedTime = elapsedTime.ElapsedMilliseconds;
-                        this.Status.TimePerInterview = this.Status.ElapsedTime / this.Status.CreatedInterviewsCount;
-                        this.Status.EstimatedTime = this.Status.TimePerInterview * this.Status.TotalInterviewsCount;
+                        this.Status.TimePerItem = this.Status.ElapsedTime / this.Status.ProcessedCount;
+                        this.Status.EstimatedTime = this.Status.TimePerItem * this.Status.TotalCount;
                     });
 
-                this.logger.Info($"Imported {this.Status.TotalInterviewsCount:N0} of interviews. Took {elapsedTime.Elapsed:c} to complete");
+                this.logger.Info($"Imported {this.Status.TotalCount:N0} of interviews. Took {elapsedTime.Elapsed:c} to complete");
             }
             finally
             {
-                this.Status.IsInProgress = false;
+                FinishImportProcess();
             }
+        }
+
+        private bool StartImportProcess(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId,
+            AssignmentImportType assignmentImportType)
+        {
+            lock (lockStart)
+            {
+                if (this.Status.IsInProgress)
+                    return true;
+
+                this.Status = new AssignmentImportStatus
+                {
+                    QuestionnaireId = questionnaireIdentity,
+                    InterviewImportProcessId = interviewImportProcessId,
+                    StartedDateTime = DateTime.Now,
+                    ProcessedCount = 0,
+                    ElapsedTime = 0,
+                    EstimatedTime = 0,
+                    State = {Columns = new string[0], Errors = new List<InterviewImportError>()},
+                    IsInProgress = true,
+                    AssignmentImportType = assignmentImportType
+                };
+            }
+            return false;
+        }
+
+        private void FinishImportProcess()
+        {
+            this.Status.IsInProgress = false;
         }
 
         private string FormatInterviewImportData(InterviewImportData importedInterview)
@@ -267,7 +299,7 @@ namespace WB.UI.Headquarters.Implementation.Services
 
         private UserView GetUserById(Guid userId)
         {
-            return this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+            return this.PlainTransactionManager.ExecuteInPlainTransaction(() =>
             {
                 var user = this.userViewFactory.GetUser(new UserViewInputModel(userId));
                 if (user == null || user.IsArchived)
