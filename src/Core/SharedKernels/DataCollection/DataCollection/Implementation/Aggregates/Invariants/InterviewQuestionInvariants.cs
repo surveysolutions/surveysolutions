@@ -205,9 +205,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireNotEmptyTexts(answers)
                 .RequireMaxAnswersCountLimit(answers);
 
-        public void RequireGpsCoordinatesPreloadValueAllowed()
+        public void RequireGpsCoordinatesPreloadValueAllowed(GeoPosition answer)
             => this
-                .RequireQuestionDeclared(QuestionType.GpsCoordinates);
+                .RequireQuestionDeclared(QuestionType.GpsCoordinates)
+                .RequireGpsCoordinatesBeInRange(answer);
 
         public void RequireGpsCoordinatesAnswerAllowed()
             => this
@@ -315,6 +316,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
             return this;
         }
+
+        private InterviewQuestionInvariants RequireGpsCoordinatesBeInRange(GeoPosition answer)
+        {
+            if (answer.Latitude < -90 || answer.Latitude > 90)
+                throw new AnswerNotAcceptedException(
+                    $"For question {this.FormatQuestionForException()} was provided answer with Latitude {answer.Latitude} should be in range (-90, 90) . {this.InfoForException}");
+
+            if (answer.Longitude < -180 || answer.Longitude > 180)
+                throw new AnswerNotAcceptedException(
+                    $"For question {this.FormatQuestionForException()} was provided answer with Longitude {answer.Longitude} should be in range (-180, 180) . {this.InfoForException}");
+
+            return this;
+        }
+
+        
 
         private InterviewQuestionInvariants RequireOptionsExist(IReadOnlyCollection<int> values)
         {
@@ -515,9 +531,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             => this.Questionnaire.HasQuestion(this.QuestionId)
                 ? this.Questionnaire.GetQuestionVariableName(this.QuestionId) ?? "<<NO VARIABLE>>"
                 : "<<MISSING>>";
-
-        private static string JoinUsingCommas(IEnumerable<QuestionType> values)
-            => JoinUsingCommas(values.Select(value => value.ToString()));
 
         private static string JoinUsingCommas(IEnumerable<decimal> values)
             => JoinUsingCommas(values.Select(value => value.ToString(CultureInfo.InvariantCulture)));

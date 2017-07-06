@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.Core.BoundedContexts.Headquarters.Views.PreloadedData
+namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
 {
     public class PreloadedMetaDataView
     {

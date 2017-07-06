@@ -1,4 +1,4 @@
-namespace WB.UI.Headquarters.Services
+namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 {
     public class InterviewImportError
     {

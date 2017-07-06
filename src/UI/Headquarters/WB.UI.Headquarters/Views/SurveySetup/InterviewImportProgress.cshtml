@@ -1,5 +1,4 @@
-﻿@using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData
-@model WB.UI.Headquarters.Models.PreloadedDataInterviewProgressModel
+﻿@model WB.UI.Headquarters.Models.PreloadedDataInterviewProgressModel
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = BatchUpload.InterviewsImport_ImportingProgressPageTitle;
@@ -21,8 +20,8 @@
             self.questionnaireTitle = '@Model.QuestionnaireTitle';
 
             self.status = {
-                createdInterviewsCount: ko.observable(@Model.Status.CreatedInterviewsCount),
-                totalInterviewsCount: ko.observable(@Model.Status.TotalInterviewsCount),
+                createdInterviewsCount: ko.observable(@Model.Status.ProcessedCount),
+                totalInterviewsCount: ko.observable(@Model.Status.TotalCount),
                 interviewsWithError: ko.observable(@Model.Status.State.Errors.Count),
                 elapsedTime: ko.observable('@Model.Status.ElapsedTime'),
                 estimatedTime: ko.observable("@Model.Status.EstimatedTime"),
@@ -127,7 +126,7 @@
                 </a>
                 <div class="cancelable-progress" data-bind="if: status.isInProgress()">
                     <div class="progress">
-                        <div class="progress-bar progress-bar-success" data-bind="style: { width: (100 * status.createdInterviewsCount()/status.totalInterviewsCount()) + '%' }, attr: {'aria-valuemax': status.totalInterviewsCount, 'aria-valuenow': status.createdInterviewsCount}" role="progressbar" aria-valuenow="@Model.Status.CreatedInterviewsCount" aria-valuemin="0" aria-valuemax="@Model.Status.TotalInterviewsCount">
+                        <div class="progress-bar progress-bar-success" data-bind="style: { width: (100 * status.createdInterviewsCount()/status.totalInterviewsCount()) + '%' }, attr: {'aria-valuemax': status.totalInterviewsCount, 'aria-valuenow': status.createdInterviewsCount}" role="progressbar" aria-valuenow="@Model.Status.ProcessedCount" aria-valuemin="0" aria-valuemax="@Model.Status.TotalCount">
                             <span class="sr-only"></span>
                         </div>
                     </div>

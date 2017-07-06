@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -26,34 +27,31 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 
             preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(QuestionnaireCsvFileName)).Returns(new HeaderStructureForLevel());
 
-            preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object);
+            importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object);
         };
 
         Because of =
-            () =>
-                result =
-                    preloadedDataVerifier.VerifyPanel(questionnaireId, 1, new[] { CreatePreloadedDataByFile(new string[0], null, QuestionnaireCsvFileName) });
+            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { CreatePreloadedDataByFile(new string[0], null, QuestionnaireCsvFileName) }, status);
 
         It should_result_has_1_error = () =>
-           result.Errors.Count().ShouldEqual(1);
+            status.VerificationState.Errors.Count().ShouldEqual(1);
 
         It should_return_first_PL0007_error = () =>
-            result.Errors.First().Code.ShouldEqual("PL0007");
+            status.VerificationState.Errors.First().Code.ShouldEqual("PL0007");
 
         It should_return_second_PL0007_error = () =>
-            result.Errors.Last().Code.ShouldEqual("PL0007");
+            status.VerificationState.Errors.Last().Code.ShouldEqual("PL0007");
 
         It should_return_reference_of_first_error_with_Column_type = () =>
-            result.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
+            status.VerificationState.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
 
         It should_return_reference_of_second_error_with_Column_type = () =>
-            result.Errors.Last().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
+            status.VerificationState.Errors.Last().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
 
         It should_firt_error_has_content_with_id = () =>
-            result.Errors.First().References.First().Content.ShouldEqual("Id");
+            status.VerificationState.Errors.First().References.First().Content.ShouldEqual("Id");
 
-        private static PreloadedDataVerifier preloadedDataVerifier;
-        private static VerificationStatus result;
+        private static ImportDataVerifier importDataVerifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private const string QuestionnaireCsvFileName = "questionnaire.csv";
