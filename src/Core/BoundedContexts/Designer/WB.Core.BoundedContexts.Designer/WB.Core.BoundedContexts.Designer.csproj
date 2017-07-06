@@ -385,6 +385,10 @@
     <Compile Include="Implementation\Services\QuestionnireHistotyVersionsService.cs" />
     <Compile Include="Mappings\AllowedAddressMap.cs" />
     <Compile Include="Mappings\QuestionnaireCompilationVersionMap.cs" />
+    <Compile Include="MembershipProvider\Roles\IRoleRepository.cs" />
+    <Compile Include="MembershipProvider\Roles\IUserWithRoles.cs" />
+    <Compile Include="MembershipProvider\Roles\RoleProvider.cs" />
+    <Compile Include="MembershipProvider\Roles\SimpleRoleEnum.cs" />
     <Compile Include="QuestionnaireCompilationForOldVersions\IQuestionnaireCompilationVersionService.cs" />
     <Compile Include="QuestionnaireCompilationForOldVersions\QuestionnaireCompilationVersion.cs" />
     <Compile Include="QuestionnaireCompilationForOldVersions\QuestionnaireCompilationVersionService.cs" />
@@ -655,10 +659,6 @@
     <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
       <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
       <Name>WB.Infrastructure.Native</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
-      <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
-      <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
       <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
