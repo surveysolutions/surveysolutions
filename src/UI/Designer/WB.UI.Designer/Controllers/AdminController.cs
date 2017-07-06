@@ -16,6 +16,7 @@ using ICSharpCode.SharpZipLib.Zip;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Account;
@@ -26,7 +27,6 @@ using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
 using WB.UI.Shared.Web.Extensions;
-using WB.UI.Shared.Web.MembershipProvider.Roles;
 using WebMatrix.WebData;
 
 namespace WB.UI.Designer.Controllers

@@ -90,5 +90,49 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Repositories
             Assert.That(result.Days[4].Quarters[2].DownloadedAssigmentsCount, Is.EqualTo(1));
             Assert.That(result.Days[4].Quarters[2].UploadedInterviewsCount, Is.EqualTo(1));
         }
+        [Test]
+        public void when_getting_synchronization_activity_with_19_downloaded_assignments_and_1_uploaded_interview_then_downloaded_items_should_be_6_and_uploaded_1()
+        {
+            //arrange
+            var interviewerId = Guid.Parse("11111111111111111111111111111111");
+            var deviceId = "111111";
+            var lastSyncDate = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 1, 0, 0);
+
+            var repository = this.Create(new[]
+            {
+                new DeviceSyncInfo
+                {
+                    InterviewerId = interviewerId,
+                    DeviceId = deviceId,
+                    SyncDate = lastSyncDate,
+                    Statistics = new SyncStatistics
+                    {
+                        AssignmentsOnDeviceCount = 0,
+                        NewAssignmentsCount = 19,
+                        UploadedInterviewsCount = 0
+                    }
+                },
+                new DeviceSyncInfo
+                {
+                    InterviewerId = interviewerId,
+                    DeviceId = deviceId,
+                    SyncDate = lastSyncDate.AddMinutes(10),
+                    Statistics = new SyncStatistics
+                    {
+                        AssignmentsOnDeviceCount = 19,
+                        NewAssignmentsCount = 0,
+                        UploadedInterviewsCount = 1
+                    }
+                }
+            });
+
+            //act
+            var result = repository.GetSynchronizationActivity(interviewerId, deviceId);
+
+            //assert
+
+            Assert.That(result.Days[6].Quarters[0].DownloadedAssignmentsInProportionCount, Is.EqualTo(5));
+            Assert.That(result.Days[6].Quarters[0].UploadedInterviewsInProportionCount, Is.EqualTo(1));
+        }
     }
 }

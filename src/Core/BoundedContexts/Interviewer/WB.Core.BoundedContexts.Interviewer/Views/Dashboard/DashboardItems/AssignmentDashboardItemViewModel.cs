@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
@@ -10,7 +9,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 {
-    public class AssignmentDashboardItemViewModel : MvxNotifyPropertyChanged, IDashboardItem
+    public class AssignmentDashboardItemViewModel : ExpandableQuestionsDashboardItemViewModel
     {
         private readonly IExternalAppLauncher externalAppLauncher;
         private readonly IInterviewFromAssignmentCreatorService interviewFromAssignmentCreator;
@@ -23,8 +22,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         }
         
         private AssignmentDocument assignment;
-        private List<PrefilledQuestion> identifyingData;
-        private List<PrefilledQuestion> detailedIdentifyingData;
         private int interviewsByAssignmentCount;
 
         public void Init(AssignmentDocument assignmentDocument, int interviewsCount)
@@ -46,11 +43,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                     Longitude = assignmentDocument.LocationLongitude.Value
                 };
 
-            this.detailedIdentifyingData = assignment.IdentifyingAnswers.Select(ToIdentifyingQuestion).ToList();
-            this.identifyingData = detailedIdentifyingData.Take(3).ToList();
-            
+            this.DetailedIdentifyingData = assignment.IdentifyingAnswers.Select(ToIdentifyingQuestion).ToList();
+            this.IdentifyingData = this.DetailedIdentifyingData.Take(3).ToList();
+
             this.UpdateTitle();
-            this.UpdateIdentifyingQuestions(false);
+
+            this.HasExpandedView = this.DetailedIdentifyingData.Count > 0;
+            this.IsExpanded = false;
         }
         
         public int AssignmentId => this.assignment.Id;
@@ -59,9 +58,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         public string ReceivedDate { get; private set; }
         public string ReceivedTime { get; private set; }
         public InterviewGpsCoordinatesView GpsLocation { get; private set; }
-
-        public MvxObservableCollection<PrefilledQuestion> PrefilledQuestions { get; } =
-            new MvxObservableCollection<PrefilledQuestion>();
 
         private int interviewsLeftByAssignmentCount => this.assignment.Quantity.Value - this.interviewsByAssignmentCount;
 
@@ -72,21 +68,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 ? InterviewerUIResources.Dashboard_AssignmentCard_TitleCountdown.FormatString(interviewsLeftByAssignmentCount)
                 : InterviewerUIResources.Dashboard_AssignmentCard_TitleCountdown_Unlimited);
 
-        private bool isExpanded;
-        public bool IsExpanded
-        {
-            get => this.isExpanded;
-            set
-            {
-                if (this.isExpanded != value) this.UpdateIdentifyingQuestions(value);
-                this.RaiseAndSetIfChanged(ref this.isExpanded, value);
-            }
-    }
-
         public bool AllowToCreateNewInterview => Math.Max(0, interviewsLeftByAssignmentCount) > 0;
 
         public bool HasGpsLocation => this.GpsLocation != null;
-        public bool HasExpandedView => this.detailedIdentifyingData.Count > 0;
 
         public IMvxAsyncCommand CreateNewInterviewCommand => new MvxAsyncCommand(
             () => this.interviewFromAssignmentCreator.CreateInterviewAsync(assignment.Id),
@@ -102,9 +86,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 Answer = identifyingAnswer.AnswerAsString,
                 Question = identifyingAnswer.Question
             };
-
-        private void UpdateIdentifyingQuestions(bool showAll)
-            => this.PrefilledQuestions.SwitchTo(showAll ? this.detailedIdentifyingData : this.identifyingData);
 
         private void UpdateTitle()
         {

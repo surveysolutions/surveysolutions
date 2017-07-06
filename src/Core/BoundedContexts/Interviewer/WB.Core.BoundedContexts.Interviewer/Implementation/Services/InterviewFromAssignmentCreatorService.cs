@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     answers,
                     DateTime.UtcNow,
                     interviewerIdentity.SupervisorId,
-                    null,
+                    interviewerIdentity.UserId,
                     null,
                     assignment.Id
                 );
