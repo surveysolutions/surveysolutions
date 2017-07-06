@@ -2,9 +2,10 @@
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
@@ -26,36 +27,35 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             var preloadedDataService =
                 Create.Service.PreloadedDataService(questionnaire);
 
-            preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataService);
+            importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataService);
         };
 
         Because of =
-            () => result = preloadedDataVerifier.VerifyPanel(questionnaireId, 1, new[] { preloadedDataByFile });
+            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { preloadedDataByFile }, status);
 
         It should_result_has_1_errors = () =>
-            result.Errors.Count().ShouldEqual(1);
+            status.VerificationState.Errors.Count().ShouldEqual(1);
 
         It should_return_single_PL0030_error = () =>
-            result.Errors.First().Code.ShouldEqual("PL0034");
+            status.VerificationState.Errors.First().Code.ShouldEqual("PL0034");
 
         It should_return_single_error_with_explanation_in_message = () =>
-           result.Errors.First().Message.ToLower().ToSeparateWords().ShouldContain("symbol", "not", "allowed", "numeric", "answers", "please", "use", "decimal", "separator");
+            status.VerificationState.Errors.First().Message.ToLower().ToSeparateWords().ShouldContain("symbol", "not", "allowed", "numeric", "answers", "please", "use", "decimal", "separator");
 
         It should_return_error_with_single_reference = () =>
-            result.Errors.First().References.Count().ShouldEqual(1);
+            status.VerificationState.Errors.First().References.Count().ShouldEqual(1);
 
         It should_return_error_with_single_reference_of_type_Cell = () =>
-            result.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
+            status.VerificationState.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
 
         It should_return_error_with_single_reference_pointing_on_second_column = () =>
-           result.Errors.First().References.First().PositionX.ShouldEqual(1);
+            status.VerificationState.Errors.First().References.First().PositionX.ShouldEqual(1);
 
         It should_return_error_with_single_reference_pointing_on_first_row = () =>
-            result.Errors.First().References.First().PositionY.ShouldEqual(0);
+            status.VerificationState.Errors.First().References.First().PositionY.ShouldEqual(0);
 
 
-        private static PreloadedDataVerifier preloadedDataVerifier;
-        private static VerificationStatus result;
+        private static ImportDataVerifier importDataVerifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private static Guid numericQuestionId;

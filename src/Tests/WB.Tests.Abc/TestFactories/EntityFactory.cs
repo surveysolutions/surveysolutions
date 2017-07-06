@@ -11,6 +11,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using ReflectionMagic;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
@@ -1702,6 +1703,11 @@ namespace WB.Tests.Abc.TestFactories
                 Identity = identity,
                 Answer = answer
             };
+        }
+
+        public AssignmentImportStatus AssignmentImportStatus()
+        {
+            return new AssignmentImportStatus();
         }
     }
 }

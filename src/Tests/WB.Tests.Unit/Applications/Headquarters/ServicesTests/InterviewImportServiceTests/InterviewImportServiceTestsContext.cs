@@ -1,8 +1,10 @@
 ﻿using System;
 using Main.Core.Documents;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
@@ -29,7 +31,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             IInterviewImportDataParsingService interviewImportDataParsingService=null,
             QuestionnaireDocument questionnaireDocument = null,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null,
-            IInterviewTreeBuilder interviewTreeBuilder = null)
+            IInterviewTreeBuilder interviewTreeBuilder = null,
+            IPreloadedDataRepository preloadedDataRepository = null,
+            IPreloadedDataVerifier preloadedDataVerifier = null)
         {
             var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, 1);
             var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(_ 
@@ -51,7 +55,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                 assignmentPlainStorageAccessor: Mock.Of<IPlainStorageAccessor<Assignment>>(),
                 questionnaireBrowseViewFactory: questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
                 userViewFactory : Mock.Of<IUserViewFactory>(),
-                interviewTreeBuilder: interviewTreeBuilder ?? Mock.Of<IInterviewTreeBuilder>());
+                interviewTreeBuilder: interviewTreeBuilder ?? Mock.Of<IInterviewTreeBuilder>(),
+                preloadedDataRepository: preloadedDataRepository ?? Mock.Of<IPreloadedDataRepository>(),
+                preloadedDataVerifier: preloadedDataVerifier ?? Mock.Of<IPreloadedDataVerifier>());
         }
     }
 }

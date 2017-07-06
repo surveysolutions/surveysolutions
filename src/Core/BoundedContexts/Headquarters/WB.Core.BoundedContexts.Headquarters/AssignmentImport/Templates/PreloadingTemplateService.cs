@@ -10,9 +10,9 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
-namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading
+namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates
 {
-    internal class PreloadingTemplateService : IPreloadingTemplateService
+    internal class AssignmentImportTemplateGenerator : IPreloadingTemplateService
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ITabularFormatExportService tabularFormatExportService;
@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         private const string FolderName = "PreLoadingTemplates";
         private readonly string path;
 
-        public PreloadingTemplateService(
+        public AssignmentImportTemplateGenerator(
             IFileSystemAccessor fileSystemAccessor,
             string folderPath,
             ITabularFormatExportService tabularFormatExportService, 

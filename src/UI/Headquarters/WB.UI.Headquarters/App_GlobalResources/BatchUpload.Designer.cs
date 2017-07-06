@@ -655,6 +655,87 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Verification of assignment data.
+        /// </summary>
+        internal static string Import_VerificationOfAssignmentData {
+            get {
+                return ResourceManager.GetString("Import_VerificationOfAssignmentData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verification of assignments for questionnaire {0}.
+        /// </summary>
+        internal static string Import_VerificationOfAssignments_ForQuestionnaire {
+            get {
+                return ResourceManager.GetString("Import_VerificationOfAssignments_ForQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verification of data file.
+        /// </summary>
+        internal static string Import_VerificationOfDataFile {
+            get {
+                return ResourceManager.GetString("Import_VerificationOfDataFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to step {0} of {1}.
+        /// </summary>
+        internal static string Import_VerificationOfDataFile_Progress {
+            get {
+                return ResourceManager.GetString("Import_VerificationOfDataFile_Progress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verification of data file succeeded.
+        /// </summary>
+        internal static string Import_VerificationOfDataFile_Succeeded {
+            get {
+                return ResourceManager.GetString("Import_VerificationOfDataFile_Succeeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 assignment verified successfully.
+        /// </summary>
+        internal static string Import_Verification_1_AssignmentVerified {
+            get {
+                return ResourceManager.GetString("Import_Verification_1_AssignmentVerified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 error.
+        /// </summary>
+        internal static string Import_Verification_1_Error {
+            get {
+                return ResourceManager.GetString("Import_Verification_1_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} assignments verified successfully.
+        /// </summary>
+        internal static string Import_Verification_AssignmentsVerified {
+            get {
+                return ResourceManager.GetString("Import_Verification_AssignmentsVerified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} errors.
+        /// </summary>
+        internal static string Import_Verification_Errors {
+            get {
+                return ResourceManager.GetString("Import_Verification_Errors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No interviews were created.
         /// </summary>
         internal static string InterviewsAreNotCreated {
