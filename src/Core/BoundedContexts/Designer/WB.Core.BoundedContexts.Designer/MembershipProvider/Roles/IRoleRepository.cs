@@ -1,9 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 
-namespace WB.UI.Shared.Web.MembershipProvider.Roles
+namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Roles
 {
-    using System.Collections.Generic;
-
     /// <summary>
     /// Repository used to find users and their roles.
     /// </summary>

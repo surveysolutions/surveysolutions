@@ -188,10 +188,6 @@
     <Compile Include="Filters\TransactionFilter.cs" />
     <Compile Include="Mappings\ProductVersionChangeMap.cs" />
     <Compile Include="MembershipProvider\Accounts\PasswordPolicy.cs" />
-    <Compile Include="MembershipProvider\Roles\IRoleRepository.cs" />
-    <Compile Include="MembershipProvider\Roles\IUserWithRoles.cs" />
-    <Compile Include="MembershipProvider\Roles\RoleProvider.cs" />
-    <Compile Include="MembershipProvider\Roles\SimpleRoleEnum.cs" />
     <Compile Include="MembershipProvider\Settings\MembershipProviderSettings.cs" />
     <Compile Include="Captcha\CaptchaModule.cs" />
     <Compile Include="Modules\ModuleExtensions.cs" />
@@ -248,6 +244,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ErrorMessages.zh.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MembershipProvider\Roles\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
