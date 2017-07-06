@@ -215,7 +215,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             var ids = identities.ToHashSet();
             children.RemoveAll(child => ids.Contains(child.Identity));
-            Tree?.ProcessRemovedNodesByIdentities(identities);
+
+            foreach (var id in identities)
+            {
+                Tree?.ProcessRemovedNodeByIdentity(id);
+            }
         }
 
         public bool IsDisabled() => this.isDisabled || (this.Parent?.IsDisabled() ?? false);

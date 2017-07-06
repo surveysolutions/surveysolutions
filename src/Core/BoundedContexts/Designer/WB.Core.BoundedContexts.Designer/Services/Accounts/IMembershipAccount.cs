@@ -1,7 +1,5 @@
 
 using System;
-using WB.Core.GenericSubdomains.Portable;
-using WB.UI.Shared.Web.MembershipProvider.Accounts;
 
 namespace WB.Core.BoundedContexts.Designer.Services.Accounts
 {
@@ -32,9 +30,6 @@ namespace WB.Core.BoundedContexts.Designer.Services.Accounts
         /// <summary>
         /// Gets or sets password question that must be answered to reset password
         /// </summary>
-        /// <remarks>
-        /// Controlled by the <see cref="IPasswordPolicy.IsPasswordQuestionRequired"/> property.
-        /// </remarks>
         string PasswordQuestion { get; set; }
 
         /// <summary>

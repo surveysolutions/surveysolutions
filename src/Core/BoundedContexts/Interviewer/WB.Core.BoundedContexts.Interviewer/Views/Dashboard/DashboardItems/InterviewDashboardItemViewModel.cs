@@ -31,8 +31,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public string DateComment { get; private set; }
         public string Comment { get; private set; }
+        public bool IsSupportedRemove { get; set; }
+        public string Title { get; private set; }
+        public InterviewGpsCoordinatesView GpsLocation { get; private set; }
+        public bool HasGpsLocation => this.GpsLocation != null;
+
+        public IMvxAsyncCommand RemoveInterviewCommand
+            => new MvxAsyncCommand(this.RemoveInterviewAsync, () => this.isInterviewReadyToLoad);
+        public IMvxAsyncCommand LoadDashboardItemCommand
+            => new MvxAsyncCommand(this.LoadInterviewAsync, () => this.isInterviewReadyToLoad);
+        public IMvxCommand NavigateToGpsLocationCommand => new MvxCommand(
+            () => this.externalAppLauncher.LaunchMapsWithTargetLocation(this.GpsLocation.Latitude, this.GpsLocation.Longitude),
+            () => this.HasGpsLocation);
 
         public event EventHandler OnItemRemoved;
+        private bool isInterviewReadyToLoad = true;
 
         public InterviewDashboardItemViewModel(
             IViewModelNavigationService viewModelNavigationService,
@@ -67,68 +80,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.DateComment = this.GetInterviewDateCommentByStatus(interview);
             this.Comment = this.GetInterviewCommentByStatus(interview);
 
-            this.DetailedIdentifyingData = this.GetPrefilledQuestions().ToList();
-            this.IdentifyingData = new List<PrefilledQuestion>(DetailedIdentifyingData.Take(3));
-
-            this.IsExpanded = false;
-
-            this.GpsLocation = this.GetInterviewLocation(interview);
-            this.IsSupportedRemove = interview.CanBeDeleted;
-            this.HasExpandedView = this.PrefilledQuestions.Count > 0;
-
-            if (interview.Assignment != null)
-            {
-                this.Title = string.Format(InterviewerUIResources.Dashboard_InterviewCard_Title, interview.Assignment.ToString());
-            }
-        }
-
-        public string Title { get; private set; }
-
-        private InterviewGpsCoordinatesView GetInterviewLocation(InterviewView interview)
-        {
             if (interview.LocationQuestionId.HasValue && interview.LocationLatitude.HasValue && interview.LocationLongitude.HasValue)
             {
-                return new InterviewGpsCoordinatesView
+                this.GpsLocation = new InterviewGpsCoordinatesView
                 {
                     Latitude = interview.LocationLatitude ?? 0,
                     Longitude = interview.LocationLongitude ?? 0
                 };
             }
+            this.IsSupportedRemove = interview.CanBeDeleted;
 
-            return null;
-        }
+            if (interview.Assignment != null)
+                this.Title = string.Format(InterviewerUIResources.Dashboard_InterviewCard_Title, interview.Assignment.ToString());
 
-        private DashboardInterviewStatus GetDashboardCategoryForInterview(InterviewStatus interviewStatus, DateTime? startedDateTime)
-        {
-            switch (interviewStatus)
-            {
-                case InterviewStatus.RejectedBySupervisor:
-                    return DashboardInterviewStatus.Rejected;
-                case InterviewStatus.Completed:
-                    return DashboardInterviewStatus.Completed;
-                case InterviewStatus.Restarted:
-                    return DashboardInterviewStatus.InProgress;
-                case InterviewStatus.InterviewerAssigned:
-                    return startedDateTime.HasValue
-                        ? DashboardInterviewStatus.InProgress
-                        : DashboardInterviewStatus.New;
+            this.DetailedIdentifyingData = this.GetPrefilledQuestions().ToList();
+            this.IdentifyingData = this.DetailedIdentifyingData.Take(3).ToList();
 
-                default:
-                    throw new ArgumentException("Can't identify status for interview: {0}".FormatString(interviewStatus));
-            }
-        }
-
-        public InterviewGpsCoordinatesView GpsLocation { get; private set; }
-        public bool HasGpsLocation => this.GpsLocation != null;
-
-        public IMvxCommand NavigateToGpsLocationCommand
-        {
-            get { return new MvxCommand(this.NavigateToGpsLocation, () => this.HasGpsLocation); }
-        }
-
-        private void NavigateToGpsLocation()
-        {
-            this.externalAppLauncher.LaunchMapsWithTargetLocation(this.GpsLocation.Latitude, this.GpsLocation.Longitude);
+            this.HasExpandedView = this.PrefilledQuestions.Count > 0;
+            this.IsExpanded = false;
         }
 
         private string GetInterviewDateCommentByStatus(InterviewView interview)
@@ -157,6 +126,26 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             return string.Format(formatString, utcDateTime.ToLocalTime().ToString(CultureInfo.CurrentUICulture));
         }
 
+        private DashboardInterviewStatus GetDashboardCategoryForInterview(InterviewStatus interviewStatus, DateTime? startedDateTime)
+        {
+            switch (interviewStatus)
+            {
+                case InterviewStatus.RejectedBySupervisor:
+                    return DashboardInterviewStatus.Rejected;
+                case InterviewStatus.Completed:
+                    return DashboardInterviewStatus.Completed;
+                case InterviewStatus.Restarted:
+                    return DashboardInterviewStatus.InProgress;
+                case InterviewStatus.InterviewerAssigned:
+                    return startedDateTime.HasValue
+                        ? DashboardInterviewStatus.InProgress
+                        : DashboardInterviewStatus.New;
+
+                default:
+                    throw new ArgumentException("Can't identify status for interview: {0}".FormatString(interviewStatus));
+            }
+        }
+
         private string GetInterviewCommentByStatus(InterviewView interview)
         {
             switch (this.Status)
@@ -181,11 +170,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                                           });
         }
 
-        public bool IsSupportedRemove { get; set; }
-
-        public IMvxAsyncCommand RemoveInterviewCommand
-            => new MvxAsyncCommand(this.RemoveInterviewAsync, () => this.isInterviewReadyToLoad);
-
         private async Task RemoveInterviewAsync()
         {
             this.isInterviewReadyToLoad = false;
@@ -203,11 +187,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.interviewerInterviewFactory.RemoveInterview(this.InterviewId);
             this.OnItemRemoved(this, EventArgs.Empty);
         }
-
-        public IMvxAsyncCommand LoadDashboardItemCommand
-            => new MvxAsyncCommand(this.LoadInterviewAsync, () => this.isInterviewReadyToLoad);
-
-        private bool isInterviewReadyToLoad = true;
 
         public async Task LoadInterviewAsync()
         {

@@ -1,5 +1,5 @@
 ﻿
-namespace WB.UI.Shared.Web.MembershipProvider.Roles
+namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Roles
 {
     public enum SimpleRoleEnum
     {
