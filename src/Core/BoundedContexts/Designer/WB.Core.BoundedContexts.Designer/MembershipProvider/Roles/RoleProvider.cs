@@ -1,15 +1,13 @@
-﻿using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+﻿using System;
+using System.Collections.Specialized;
+using System.Configuration.Provider;
+using System.Linq;
+using System.Web.Hosting;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Transactions;
 
-namespace WB.UI.Shared.Web.MembershipProvider.Roles
+namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Roles
 {
-    using System;
-    using System.Collections.Specialized;
-    using System.Configuration.Provider;
-    using System.Linq;
-    using System.Web.Hosting;
-    using System.Web.Mvc;
-
     public class RoleProvider : System.Web.Security.RoleProvider
     {
         private IRoleRepository _roleService;
@@ -25,7 +23,7 @@ namespace WB.UI.Shared.Web.MembershipProvider.Roles
             {
                 if (this._roleService == null)
                 {
-                    this._roleService = DependencyResolver.Current.GetService<IRoleRepository>();
+                    this._roleService = ServiceLocator.Current.GetInstance<IRoleRepository>();
                     if (this._roleService == null)
                         throw new InvalidOperationException(
                             "You need to assign a locator to the ServiceLocator property and it should be able to lookup IRoleRepository.");

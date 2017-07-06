@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
-using WB.UI.Shared.Web.MembershipProvider.Accounts;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.PasswordStrategies
 {
