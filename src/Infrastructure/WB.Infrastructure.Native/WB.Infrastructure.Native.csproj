@@ -25,7 +25,6 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
     <PackageReference Include="Microsoft.Database.Collections.Generic" Version="1.9.3.2" />
     <PackageReference Include="Microsoft.Database.Isam" Version="1.9.3.2" />
-    <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
     <PackageReference Include="Microsoft.Web.Infrastructure" Version="1.0.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="NHibernate" Version="4.1.1.4000" />
