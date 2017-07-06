@@ -29,7 +29,6 @@ namespace WB.UI.Tester.Ninject
 
                 new DataCollectionSharedKernelModule().AsNinject(),
                 new EnumeratorSharedKernelModule(),
-                new EnumeratorInfrastructureModule(),
 
                 new TesterBoundedContextModule().AsNinject(),
                 new TesterInfrastructureModule(basePath),
