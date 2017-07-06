@@ -88,13 +88,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public IEnumerable<IInterviewTreeNode> FindEntity(Guid nodeId)
         {
-            var result = this.nodesIdCache.GetOrEmpty(nodeId);
-
-            if(result == null) // require rebuild of cache
-            {
-                result = WarmNodesIdCache(nodeId);
-            }
-
+            var result = this.nodesIdCache.GetOrEmpty(nodeId) ?? WarmNodesIdCache(nodeId);
             return result;
         }
 
@@ -463,9 +457,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void ProcessRemovedNodeByIdentity(Identity identity)
         {
-            if (!this.nodesCache.ContainsKey(identity)) return;
+            if (!this.nodesCache.TryGetValue(identity, out var treeNode)) return;
 
-            var nodesToRemove = this.nodesCache[identity].TreeToEnumerable(node => node.Children);
+            var nodesToRemove = treeNode.TreeToEnumerable(node => node.Children);
 
             foreach (var nodeToRemove in nodesToRemove)
             {
@@ -476,26 +470,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.nodesCache.Remove(identity);
             this.nodesIdCache[identity.Id] = null;
         }
-
-        public void ProcessRemovedNodesByIdentities(List<Identity> ids)
-        {
-            var nodesToRemove = ids.Select(id => this.nodesCache.GetOrNull(id))
-                .Where(tree => tree != null)
-                .SelectMany(tree => tree.TreeToEnumerable(n => n.Children));
-
-            foreach (var nodeToRemove in nodesToRemove)
-            {
-                this.nodesCache.Remove(nodeToRemove.Identity);
-                this.nodesIdCache[nodeToRemove.Identity.Id] = null;
-            }
-
-            foreach (var id in ids)
-            {
-                this.nodesCache.Remove(id);
-                this.nodesIdCache[id.Id] = null;
-            }
-        }
-
+        
         public void ProcessAddedNode(IInterviewTreeNode node)
         {
             this.AddNodeToCache(node);
