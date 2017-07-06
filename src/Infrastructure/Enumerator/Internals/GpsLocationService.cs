@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Plugin.Geolocator.Abstractions;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
@@ -22,7 +24,8 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals
         {
             await this.permissions.AssureHasPermission(Permission.Location);
             this.Geolocator.DesiredAccuracy = desiredAccuracy;
-            Position position = await this.Geolocator.GetPositionAsync(timeoutMilliseconds: timeoutSec*1000)
+            var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSec));
+            Position position = await this.Geolocator.GetPositionAsync(token: cancellationToken.Token)
                                                      .ConfigureAwait(false);
 
             return new GpsLocation(position.Accuracy, position.Altitude, position.Latitude, position.Longitude, position.Timestamp);
