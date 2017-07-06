@@ -4,7 +4,7 @@ using System.IO;
 using ICSharpCode.SharpZipLib.VirtualFileSystem;
 using VFSFileAttributes = ICSharpCode.SharpZipLib.VirtualFileSystem.FileAttributes;
 
-namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
+namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
 {
     internal class AndroidFileSystem : IVirtualFileSystem
     {

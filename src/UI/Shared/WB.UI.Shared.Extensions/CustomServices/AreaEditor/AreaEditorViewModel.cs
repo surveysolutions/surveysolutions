@@ -14,8 +14,8 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
-using WB.Infrastructure.Shared.Enumerator.Internals.MapService;
 using WB.Core.SharedKernels.Enumerator.Utils;
+using WB.UI.Shared.Enumerator.Services.Internals.MapService;
 
 namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 {

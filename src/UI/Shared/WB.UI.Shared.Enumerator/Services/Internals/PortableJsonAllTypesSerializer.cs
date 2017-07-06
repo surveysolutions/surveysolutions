@@ -6,7 +6,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
 
-namespace WB.Infrastructure.Shared.Enumerator.Internals
+namespace WB.UI.Shared.Enumerator.Services.Internals
 {
     public class PortableJsonAllTypesSerializer : IJsonAllTypesSerializer
     {

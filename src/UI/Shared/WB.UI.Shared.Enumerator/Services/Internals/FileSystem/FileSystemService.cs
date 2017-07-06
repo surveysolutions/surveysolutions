@@ -1,11 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using WB.Core.Infrastructure.FileSystem;
 
-namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
+namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
 {
     internal class FileSystemService : IFileSystemAccessor
     {

@@ -2,7 +2,7 @@ using Ninject;
 using Ninject.Modules;
 using WB.Core.Infrastructure.Modularity;
 
-namespace WB.Infrastructure.Shared.Enumerator.Ninject
+namespace WB.UI.Shared.Enumerator.Services.Ninject
 {
     public class NinjectModuleAdapter<TModule> : NinjectModule, IIocRegistry
         where TModule : IModule

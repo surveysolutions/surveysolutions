@@ -13,11 +13,11 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
-using WB.Infrastructure.Shared.Enumerator;
 using WB.UI.Interviewer.Infrastructure.Logging;
 using IPrincipal = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.IPrincipal;
-using WB.Infrastructure.Shared.Enumerator.Internals;
 using WB.UI.Interviewer.Services;
+using WB.UI.Shared.Enumerator.Services;
+using WB.UI.Shared.Enumerator.Services.Internals;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.UI.Interviewer.Infrastructure
