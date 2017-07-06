@@ -4,7 +4,7 @@ using MWBarcodeScanner;
 using Plugin.Permissions.Abstractions;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
-namespace WB.Infrastructure.Shared.Enumerator.Internals
+namespace WB.UI.Shared.Enumerator.Services.Internals
 {
     internal class QRBarcodeScanService : IQRBarcodeScanService
     {

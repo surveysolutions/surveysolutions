@@ -6,12 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
-using Java.IO;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using File = System.IO.File;
 
-namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
+namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
 {
     class ZipArchiveUtils : IArchiveUtils
     {

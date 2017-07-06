@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace WB.Infrastructure.Shared.Enumerator
+namespace WB.UI.Shared.Enumerator.Services
 {
     public class AndroidPathUtils
     {

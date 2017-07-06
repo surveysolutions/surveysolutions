@@ -16,7 +16,6 @@ using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Infrastructure.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Tester.Infrastructure.Internals;
 using WB.UI.Tester.Infrastructure.Internals.Log;
@@ -26,8 +25,9 @@ using WB.UI.Tester.Infrastructure.Internals.Settings;
 using WB.UI.Tester.Infrastructure.Internals.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.UI.Shared.Enumerator.Services;
+using WB.UI.Shared.Enumerator.Services.Internals;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
-using WB.Infrastructure.Shared.Enumerator.Internals;
 
 namespace WB.UI.Tester.Infrastructure
 {

@@ -6,10 +6,10 @@ using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator;
-using WB.Infrastructure.Shared.Enumerator;
-using WB.Infrastructure.Shared.Enumerator.Ninject;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Ninject;
+using WB.UI.Shared.Enumerator.Services;
+using WB.UI.Shared.Enumerator.Services.Ninject;
 using WB.UI.Tester.Infrastructure;
 
 namespace WB.UI.Tester.Ninject

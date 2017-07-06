@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using WB.Infrastructure.Shared.Enumerator;
+using WB.UI.Shared.Enumerator.Services;
 
 namespace WB.UI.Interviewer.Infrastructure
 {

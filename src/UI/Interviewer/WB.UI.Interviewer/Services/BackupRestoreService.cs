@@ -11,7 +11,7 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Infrastructure.Shared.Enumerator;
+using WB.UI.Shared.Enumerator.Services;
 
 namespace WB.UI.Interviewer.Services
 {

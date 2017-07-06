@@ -2,12 +2,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Plugin.Geolocator.Abstractions;
-using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 
-namespace WB.Infrastructure.Shared.Enumerator.Internals
+namespace WB.UI.Shared.Enumerator.Services.Internals
 {
     internal class GpsLocationService : IGpsLocationService
     {

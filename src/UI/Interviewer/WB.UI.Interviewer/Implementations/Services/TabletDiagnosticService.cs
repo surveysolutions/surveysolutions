@@ -13,8 +13,8 @@ using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Infrastructure.Shared.Enumerator;
 using WB.UI.Interviewer.Activities;
+using WB.UI.Shared.Enumerator.Services;
 
 namespace WB.UI.Interviewer.Implementations.Services
 {

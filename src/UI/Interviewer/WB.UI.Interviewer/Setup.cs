@@ -26,9 +26,6 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.SurveyManagement;
-using WB.Infrastructure.Shared.Enumerator;
-using WB.Infrastructure.Shared.Enumerator.Internals.MapService;
-using WB.Infrastructure.Shared.Enumerator.Ninject;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Interviewer.Activities.Dashboard;
 using WB.UI.Interviewer.Converters;
@@ -41,6 +38,9 @@ using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Ninject;
+using WB.UI.Shared.Enumerator.Services;
+using WB.UI.Shared.Enumerator.Services.Internals.MapService;
+using WB.UI.Shared.Enumerator.Services.Ninject;
 using Xamarin;
 
 namespace WB.UI.Interviewer

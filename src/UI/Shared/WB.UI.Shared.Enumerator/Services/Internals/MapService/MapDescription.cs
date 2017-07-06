@@ -1,4 +1,4 @@
-﻿namespace WB.Infrastructure.Shared.Enumerator.Internals.MapService
+﻿namespace WB.UI.Shared.Enumerator.Services.Internals.MapService
 {
     public class MapDescription
     {
