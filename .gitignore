@@ -25,6 +25,7 @@ StyleCop.Cache
 _ReSharper.*
 
 *.ncrunchsolution.user
+*.ncrunchproject
 _NCrunch_*
 nCrunchTemp_*
 
