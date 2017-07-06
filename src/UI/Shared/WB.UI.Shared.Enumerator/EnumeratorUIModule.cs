@@ -21,10 +21,10 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Infrastructure.Shared.Enumerator;
-using WB.Infrastructure.Shared.Enumerator.Internals;
-using WB.Infrastructure.Shared.Enumerator.Internals.FileSystem;
 using WB.UI.Shared.Enumerator.CustomServices;
+using WB.UI.Shared.Enumerator.Services;
+using WB.UI.Shared.Enumerator.Services.Internals;
+using WB.UI.Shared.Enumerator.Services.Internals.FileSystem;
 
 namespace WB.UI.Shared.Enumerator
 {

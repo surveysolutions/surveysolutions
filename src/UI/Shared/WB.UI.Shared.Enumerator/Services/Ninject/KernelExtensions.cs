@@ -8,7 +8,7 @@ using Ninject.Infrastructure;
 using Ninject.Planning.Bindings;
 using WB.Core.GenericSubdomains.Utils;
 
-namespace WB.Infrastructure.Shared.Enumerator.Ninject
+namespace WB.UI.Shared.Enumerator.Services.Ninject
 {
     public static class KernelExtensions
     {

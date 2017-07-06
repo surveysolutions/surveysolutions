@@ -1,7 +1,7 @@
 using System.IO;
 using ICSharpCode.SharpZipLib.VirtualFileSystem;
 
-namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
+namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
 {
     internal class AndroidFileInfo : AndroidFileSystemEntryInfo, IFileInfo
     {

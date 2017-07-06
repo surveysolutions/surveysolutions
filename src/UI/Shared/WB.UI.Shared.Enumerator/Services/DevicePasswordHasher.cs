@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using WB.Core.GenericSubdomains.Portable;
 
-namespace WB.Infrastructure.Shared.Enumerator
+namespace WB.UI.Shared.Enumerator.Services
 {
     public class DevicePasswordHasher : IPasswordHasher
     {

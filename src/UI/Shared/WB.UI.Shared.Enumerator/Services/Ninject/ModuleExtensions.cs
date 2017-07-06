@@ -1,7 +1,7 @@
 using Ninject.Modules;
 using WB.Core.Infrastructure.Modularity;
 
-namespace WB.Infrastructure.Shared.Enumerator.Ninject
+namespace WB.UI.Shared.Enumerator.Services.Ninject
 {
     public static class ModuleExtensions
     {

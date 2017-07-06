@@ -14,8 +14,8 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Infrastructure.Shared.Enumerator;
 using WB.UI.Interviewer.Settings;
+using WB.UI.Shared.Enumerator.Services;
 using Permission = Plugin.Permissions.Abstractions.Permission;
 
 namespace WB.UI.Interviewer.Implementations.Services

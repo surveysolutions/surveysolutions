@@ -4,7 +4,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Newtonsoft.Json.Serialization;
 
-namespace WB.Infrastructure.Shared.Enumerator.Internals
+namespace WB.UI.Shared.Enumerator.Services.Internals
 {
     [Obsolete("Resolves old namespaces. Could be dropped after incompatibility shift with the next version.")]
     public class PortableOldToNewAssemblyRedirectSerializationBinder : DefaultSerializationBinder

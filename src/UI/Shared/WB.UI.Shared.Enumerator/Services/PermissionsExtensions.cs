@@ -4,7 +4,7 @@ using Plugin.Permissions.Abstractions;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Utils;
 
-namespace WB.Infrastructure.Shared.Enumerator
+namespace WB.UI.Shared.Enumerator.Services
 {
     public static class PermissionsExtensions
     {

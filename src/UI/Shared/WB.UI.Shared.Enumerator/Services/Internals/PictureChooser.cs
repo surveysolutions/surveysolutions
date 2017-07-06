@@ -4,7 +4,7 @@ using Plugin.Media.Abstractions;
 using Plugin.Permissions.Abstractions;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 
-namespace WB.Infrastructure.Shared.Enumerator.Internals
+namespace WB.UI.Shared.Enumerator.Services.Internals
 {
     internal class PictureChooser : IPictureChooser
     {
