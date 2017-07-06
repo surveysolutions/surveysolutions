@@ -184,15 +184,9 @@ namespace WB.UI.Headquarters.Controllers
 
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
-            return this.View("InterviewVerificationProgress", new PreloadedDataInterviewProgressModel
-            {
-                Status = this.interviewImportService.Status,
-                QuestionnaireId = questionnaireInfo.QuestionnaireId,
-                Version = questionnaireInfo.Version,
-                QuestionnaireTitle = questionnaireInfo.Title
-            });
+            this.interviewImportService.Status.QuestionnaireId = questionnaireIdentity;
 
-           
+            return this.RedirectToAction("InterviewVerificationProgress", new { id = interviewImportProcessId });
         }
 
         [HttpPost]
@@ -415,7 +409,7 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var questionnaireIdentity = new QuestionnaireIdentity(model.QuestionnaireId, model.Version);
-
+            this.interviewImportService.Status.QuestionnaireId = questionnaireIdentity;
             if (!this.ModelState.IsValid)
             {
                 var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
@@ -455,7 +449,7 @@ namespace WB.UI.Headquarters.Controllers
 
             AssignmentImportStatus status = this.interviewImportService.Status;
 
-            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(status.QuestionnaireId ?? this.TempData[$"Import-{id.FormatGuid()}-questionnaireId"] as QuestionnaireIdentity);
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(status.QuestionnaireId);
 
             if (questionnaireInfo == null)
             {
