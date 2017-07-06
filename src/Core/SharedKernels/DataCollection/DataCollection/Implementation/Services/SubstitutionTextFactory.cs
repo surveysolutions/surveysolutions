@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -8,13 +6,13 @@ using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
 {
-    public class SubstitionTextFactory : ISubstitionTextFactory
+    public class SubstitutionTextFactory : ISubstitutionTextFactory
     {
         private readonly ISubstitutionService substitutionService;
         private readonly IVariableToUIStringService variableToUiStringService;
-        public SubstitionTextFactory() { }
+        public SubstitutionTextFactory() { }
 
-        public SubstitionTextFactory(
+        public SubstitutionTextFactory(
             ISubstitutionService substitutionService, 
             IVariableToUIStringService variableToUiStringService)
         {
@@ -22,7 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
             this.variableToUiStringService = variableToUiStringService;
         }
 
-        public SubstitionText CreateText(Identity identity, string text, IQuestionnaire questionnaire)
+        public SubstitutionText CreateText(Identity identity, string text, IQuestionnaire questionnaire)
         {
             string[] variableNames = this.substitutionService.GetAllSubstitutionVariableNames(text);
 
@@ -58,7 +56,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
                 });
             }
 
-            return new SubstitionText(identity, text, substitutionVariables, this.substitutionService, this.variableToUiStringService);
+            return new SubstitutionText(identity, text, substitutionVariables, this.substitutionService, this.variableToUiStringService);
         }
     }
 }

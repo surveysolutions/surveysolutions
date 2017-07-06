@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Linq;
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
-using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection
 {
-    [TestOf(typeof(SubstitionTextFactory))]
+    [TestOf(typeof(SubstitutionTextFactory))]
     [TestFixture]
-    public class SubstitionTextFactoryTests
+    public class SubstitutionTextFactoryTests
     {
         [Test]
         public void When_CreateText_with_referance_one_parent_rosteres_Then_should_return_substition_text_with_substitions()
@@ -32,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             });
 
             var questionnire = Create.Entity.PlainQuestionnaire(questionnireDocument);
-            var substitionTextFactory = Create.Service.SubstitionTextFactory();
+            var substitionTextFactory = Create.Service.SubstitutionTextFactory();
             var questionIdentity = Create.Entity.Identity(questionId, Create.Entity.RosterVector(1, 1));
 
             //act

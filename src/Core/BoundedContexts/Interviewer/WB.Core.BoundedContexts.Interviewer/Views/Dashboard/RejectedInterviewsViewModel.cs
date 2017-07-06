@@ -1,9 +1,7 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -13,13 +11,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public class RejectedInterviewsViewModel : ListViewModel<IDashboardItem>
     {
-        public override int ItemsCount => this.UiItems.OfType<InterviewDashboardItemViewModel>().Count();
-
         public override GroupStatus InterviewStatus => GroupStatus.StartedInvalid;
 
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IInterviewViewModelFactory viewModelFactory;
         private readonly IPrincipal principal;
+
+        private IReadOnlyCollection<InterviewView> dbItems;
 
         public RejectedInterviewsViewModel(
             IPlainStorage<InterviewView> interviewViewRepository,
@@ -31,28 +29,34 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.principal = principal;
         }
 
-        public async Task LoadAsync()
+        public async void Load()
         {
-            var rejectedInterviews = await Task.Run(() => this.GetRejectedInterviews().ToList());
+            this.dbItems = this.GetDbItems();
 
-            this.Title = string.Format(InterviewerUIResources.Dashboard_RejectedLinkText, rejectedInterviews.Count);
+            this.ItemsCount = this.dbItems.Count;
+            this.Title = string.Format(InterviewerUIResources.Dashboard_RejectedLinkText, this.ItemsCount);
 
-            var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
-            subTitle.Title = InterviewerUIResources.Dashboard_RejectedTabText;
-            var uiItems = subTitle.ToEnumerable().Concat(rejectedInterviews).ToList();
-            
+            var uiItems = await Task.Run(() => this.GetUiItems());
             this.UiItems.ReplaceWith(uiItems);
         }
 
-        private IEnumerable<IDashboardItem> GetRejectedInterviews()
+        private IReadOnlyCollection<InterviewView> GetDbItems()
         {
             var interviewerId = this.principal.CurrentUserIdentity.UserId;
-            
-            var interviewViews = this.interviewViewRepository.Where(interview =>
+
+            return this.interviewViewRepository.Where(interview =>
                 interview.ResponsibleId == interviewerId &&
                 interview.Status == SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus.RejectedBySupervisor);
+        }
 
-            foreach (var interviewView in interviewViews)
+        private IEnumerable<IDashboardItem> GetUiItems()
+        {
+            var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
+            subTitle.Title = InterviewerUIResources.Dashboard_RejectedTabText;
+
+            yield return subTitle;
+
+            foreach (var interviewView in this.dbItems)
             {
                 var interviewDashboardItem = this.viewModelFactory.GetNew<InterviewDashboardItemViewModel>();
                 interviewDashboardItem.Init(interviewView);

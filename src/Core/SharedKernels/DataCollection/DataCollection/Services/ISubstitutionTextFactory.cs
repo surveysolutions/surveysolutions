@@ -3,8 +3,8 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 
 namespace WB.Core.SharedKernels.DataCollection.Services
 {
-    public interface ISubstitionTextFactory
+    public interface ISubstitutionTextFactory
     {
-        SubstitionText CreateText(Identity identity, string text, IQuestionnaire questionnaire);
+        SubstitutionText CreateText(Identity identity, string text, IQuestionnaire questionnaire);
     }
 }

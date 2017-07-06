@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Services;
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
     [DebuggerDisplay("{ToString()}")]
-    public class SubstitionText
+    public class SubstitutionText
     {
         private readonly Identity identity;
         private readonly ISubstitutionService substitutionService;
@@ -16,11 +16,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private readonly SubstitutionVariables substitutionVariables;
         private InterviewTree tree;
 
-        public SubstitionText()
+        public SubstitutionText()
         {
         }
 
-        public SubstitionText(
+        public SubstitutionText(
             Identity identity,
             string text,
             SubstitutionVariables variables,
@@ -117,6 +117,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public override string ToString() => this.Text;
 
-        public SubstitionText Clone() => (SubstitionText) this.MemberwiseClone();
+        public SubstitutionText Clone() => (SubstitutionText) this.MemberwiseClone();
     }
 }

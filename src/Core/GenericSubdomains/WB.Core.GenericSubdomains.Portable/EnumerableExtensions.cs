@@ -11,54 +11,6 @@ namespace WB.Core.GenericSubdomains.Portable
             where T : struct
             => vector1.Zip(vector2, (x, y) => x.Equals(y) ? x as T? : null as T?).TakeWhile(x => x != null).Select(x => x.Value);
 
-        public static IEnumerable<T> GetCommonBeginning<T>(this IEnumerable<T> vector1, IEnumerable<T> vector2)
-            where T : class
-            => vector1.Zip(vector2, (x, y) => x.Equals(y) ? x as T : null as T).TakeWhile(x => x != null).Select(x => x);
-
-        public static IEnumerable<T> DistinctBy<T, TIdentity>(this IEnumerable<T> source, Func<T, TIdentity> keySelector)
-        {
-            return source.Distinct(By(keySelector));
-        }
-
-        private static IEqualityComparer<TSource> By<TSource, TIdentity>(Func<TSource, TIdentity> keySelector)
-        {
-            return new DelegateComparer<TSource, TIdentity>(keySelector);
-        }
-
-        private class DelegateComparer<T, TIdentity> : IEqualityComparer<T>
-        {
-            private readonly Func<T, TIdentity> keySelector;
-
-            public DelegateComparer(Func<T, TIdentity> keySelector)
-            {
-                this.keySelector = keySelector;
-            }
-
-            public bool Equals(T x, T y)
-            {
-                return Equals(this.keySelector(x), this.keySelector(y));
-            }
-
-            public int GetHashCode(T obj)
-            {
-                return this.keySelector(obj).GetHashCode();
-            }
-        }
-
-        public static IEnumerable<T> WithoutLast<T>(this IEnumerable<T> source)
-        {
-            using (var e = source.GetEnumerator())
-            {
-                if (e.MoveNext())
-                {
-                    for (var value = e.Current; e.MoveNext(); value = e.Current)
-                    {
-                        yield return value;
-                    }
-                }
-            }
-        }
-
         public static IEnumerable<T> ToEnumerable<T>(this T element)
         {
             yield return element;
@@ -80,37 +32,6 @@ namespace WB.Core.GenericSubdomains.Portable
         public static IEnumerable<T> Except<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
         {
             return enumerable.Where(element => !predicate.Invoke(element));
-        }
-
-        public static IEnumerable<TResult> SelectUsingPrevCurrNext<TSource, TResult>(this IEnumerable<TSource> enumerable, Func<TSource, TSource, TSource, TResult> selector)
-            where TSource : class
-        {
-            var enumerator = enumerable.GetEnumerator();
-            if (!enumerator.MoveNext())
-                yield break;
-
-            TSource current = enumerator.Current;
-
-            if (!enumerator.MoveNext())
-            {
-                yield return selector.Invoke(null, current, null);
-                yield break;
-            }
-
-            TSource next = enumerator.Current;
-
-            yield return selector.Invoke(null, current, next);
-
-            while (enumerator.MoveNext())
-            {
-                TSource prev = current;
-                current = next;
-                next = enumerator.Current;
-
-                yield return selector.Invoke(prev, current, next);
-            }
-
-            yield return selector.Invoke(current, next, null);
         }
 
         public static string GetOrderRequestString(this IEnumerable<OrderRequestItem> orders)

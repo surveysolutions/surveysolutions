@@ -2,7 +2,6 @@
 using BenchmarkDotNet.Running;
 using JetBrains.Profiler.Windows.Api;
 
-
 namespace PerformanceTest
 {
     class Program
@@ -14,7 +13,7 @@ namespace PerformanceTest
             exx.IterationSetup();
             exx.AnswerSimpleTextQuestion();
             exx.TriggerRosterByAnswerSingleOptionQuestion();
-            exx.TriggerRosterSizeChange();
+            exx.TriggerRosterSizeChangeUpDown();
 
             switch (args.FirstOrDefault())
             {
@@ -22,11 +21,8 @@ namespace PerformanceTest
                 case "trace":
                     var trace = new ExpressionStorageBench();
                     trace.IterationSetup();
-                    trace.TriggerRosterSizeChange();
-                    trace.TriggerRosterSizeChange();
-                    trace.TriggerRosterSizeChange();
-                    trace.TriggerRosterSizeChange();
-
+                    trace.TriggerRosterSizeChangeUpDown();
+                    
                     try
                     {
                         if (PerformanceProfiler.IsActive)
@@ -35,9 +31,9 @@ namespace PerformanceTest
                             PerformanceProfiler.Start();
                         }
 
-                        for (int i = 0; i < 10; i++)
+                        for (int i = 0; i < 1; i++)
                         {
-                            trace.TriggerRosterSizeChange();
+                            trace.TriggerRosterSizeChangeUpDown();
                         }
                     }
                     finally
@@ -49,18 +45,21 @@ namespace PerformanceTest
                 case "memory":
                     var mem = new ExpressionStorageBench();
                     mem.IterationSetup();
-                    mem.TriggerRosterSizeChange();
+                    mem.TriggerRosterSizeChangeUpDown();
 
                     try
                     {
                         if (MemoryProfiler.IsActive && MemoryProfiler.CanControlAllocations)
                             MemoryProfiler.EnableAllocations();
 
+                        //mem.SetRosterSize(60);
+
                         MemoryProfiler.Dump();
 
-                        for (int i = 0; i < 10; i++)
+                        //mem.SetRosterSize(0);
+                        for (int i = 0; i < 1; i++)
                         {
-                            mem.TriggerRosterSizeChange();
+                            mem.TriggerRosterSizeChangeUpDown();
                         }
                     }
                     finally

@@ -10,14 +10,19 @@ using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -362,19 +367,41 @@ namespace PerformanceTest
         public static Interview Interview(Guid? questionnaireId = null,
             IQuestionnaireStorage questionnaireRepository = null, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
+            var sTextF = Create.SubstitionTextFactory();
+            var treeBuilder = new InterviewTreeBuilder(Create.SubstitionTextFactory());
             var interview = new Interview(questionnaireRepository ?? new Mocks.QuestionnaireStorageStub(),
                 expressionProcessorStatePrototypeProvider ?? new Mocks.InterviewExpressionStatePrototypeProviderStub(),
-                Create.SubstitionTextFactory());
+                sTextF,
+                treeBuilder);
 
-            interview.CreateInterview(
-                questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
-                1,
-                new Guid("D222D222D222D222D222D222D222D222"),
-                new Dictionary<Guid, AbstractAnswer>(),
-                new DateTime(2012, 12, 20),
-                new Guid("F111F111F111F111F111F111F111F111"));
+            interview.CreateInterview( new CreateInterview(
+                interviewId: interview.EventSourceId,
+                userId: new Guid("F111F111F111F111F111F111F111F111"),
+                questionnaireId: new QuestionnaireIdentity(questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"), 1),
+                answers: new List<InterviewAnswer>(),
+                answersTime: new DateTime(2012, 12, 20),
+                supervisorId: new Guid("D222D222D222D222D222D222D222D222"),
+                interviewerId: Guid.NewGuid(),
+                interviewKey: new InterviewKey(3),
+                assignmentId: 1));
 
             return interview;
+
+            //var interview = new Interview(questionnaireRepository ?? new Mocks.QuestionnaireStorageStub(),
+            //    expressionProcessorStatePrototypeProvider ?? new Mocks.InterviewExpressionStatePrototypeProviderStub(),
+            //    Create.SubstitionTextFactory());
+
+            //var createCommand = new CreateInterview(Guid.NewGuid(), )
+
+            //interview.CreateInterview(
+            //    questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
+            //    1,
+            //    new Guid("D222D222D222D222D222D222D222D222"),
+            //    new Dictionary<Guid, AbstractAnswer>(),
+            //    new DateTime(2012, 12, 20),
+            //    new Guid("F111F111F111F111F111F111F111F111"));
+
+            //return interview;
         }
 
         public static FileSystemIOAccessor FileSystemIOAccessor()
