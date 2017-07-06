@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Repositories
             var interviewerId = Guid.Parse("11111111111111111111111111111111");
             var deviceId = "111111";
             var twoDaysAgo = DateTime.UtcNow.AddDays(-2);
-            var lastSyncDate = new DateTime(twoDaysAgo.Year, twoDaysAgo.Month, twoDaysAgo.Day - 2, 13, 0, 0);
+            var lastSyncDate = new DateTime(twoDaysAgo.Year, twoDaysAgo.Month, twoDaysAgo.Day, 13, 0, 0);
 
             var repository = this.Create(new[]
             {
