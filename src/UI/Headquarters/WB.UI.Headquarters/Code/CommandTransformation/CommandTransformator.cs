@@ -21,9 +21,10 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
 
         public ICommand TransformCommnadIfNeeded(ICommand command, Guid? responsibleId = null)
         {
-            TypeSwitch.Do(
-                command,
-                TypeSwitch.Case<CreateInterviewControllerCommand>(cmd => { command = this.GetCreateInterviewCommand(cmd); }));
+            if (command is CreateInterviewControllerCommand)
+            {
+                command = this.GetCreateInterviewCommand((CreateInterviewControllerCommand) command);
+            }
 
             var interviewCommand = command as InterviewCommand;
             if (interviewCommand != null)

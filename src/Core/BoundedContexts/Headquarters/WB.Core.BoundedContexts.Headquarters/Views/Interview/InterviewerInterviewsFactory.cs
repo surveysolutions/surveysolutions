@@ -83,7 +83,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             var interviewData = this.interviewDataRepository.GetById(interviewId);
 
-#warning do not sort status history by date! Status timestamp is taken from event timestamp and occasionally timestamp of an earlier event could be greater then timestamp of the latest events. StatusHistory is ordered list and the order of statuses is preserved by db.
+            // do not sort status history by date! Status timestamp is taken from event timestamp and occasionally timestamp of an earlier event could be greater then timestamp of the latest events. StatusHistory is ordered list and the order of statuses is preserved by db.
             var fullStatusHistory = this
                 .interviewStatusesFactory
                 .Load(new ChangeStatusInputModel { InterviewId = interviewId })

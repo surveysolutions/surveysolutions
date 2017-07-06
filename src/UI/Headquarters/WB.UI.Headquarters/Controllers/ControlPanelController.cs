@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
+using NHibernate.Util;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
@@ -130,21 +131,28 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ResetUserPassword(UserEditModel model)
+        public async Task<ActionResult> ResetPrivilegedUserPassword(UserEditModel model)
         {
             if (ModelState.IsValid)
             {
                 var user = await this.userManager.FindByNameAsync(model.UserName);
-                var updateResult = await this.userManager.UpdateUserAsync(user, model.Password);
+                var updateResult = await this.userManager.ChangePasswordAsync(user, model.Password);
 
                 if (updateResult.Succeeded)
                 {
                     this.Success($"Password for user '{user.UserName}' successfully changed");
                 }
-                AddErrors(updateResult);
+                else
+                {
+                    AddErrors(updateResult);
+                    foreach (var error in updateResult.Errors)
+                    {
+                        this.Error(error, true);
+                    }
+                }
             }
 
-            return RedirectToAction("ResetPrivilegedUserPassword");
+            return this.View(model);
         }
 
         private IRevalidateInterviewsAdministrationService RevalidateInterviewsAdministrationService

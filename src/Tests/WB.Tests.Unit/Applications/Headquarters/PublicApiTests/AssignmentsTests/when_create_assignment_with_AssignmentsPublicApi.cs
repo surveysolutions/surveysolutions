@@ -171,10 +171,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             this.preloadedDataVerifier.Verify(ass => ass.VerifyAssignmentsSample(
                 It.IsAny<Guid>(), It.IsAny<long>(),
                 It.Is<PreloadedDataByFile>(pdf => pdf.Header.SequenceEqual(new[] { "text1", "text2" }))), Times.Once);
-
-            this.preloadedDataVerifier.Verify(ass => ass.VerifyAssignmentsSample(
-                It.IsAny<Guid>(), It.IsAny<long>(),
-                It.Is<PreloadedDataByFile>(pdf => pdf.Content[0].SequenceEqual(new[] { "1", "2" }))), Times.Once);
         }
     }
 }

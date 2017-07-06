@@ -1343,12 +1343,13 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public InterviewTreeRoster InterviewTreeRoster(Identity rosterIdentity, bool isDisabled = false, string rosterTitle = null,
-            RosterType rosterType = RosterType.Fixed, Guid? rosterSizeQuestion = null,
+            RosterType rosterType = RosterType.Fixed, Guid? rosterSizeQuestion = null, Identity rosterTitleQuestionIdentity = null,
             params IInterviewTreeNode[] children)
         {
-            var titleWithSubstitutions = Create.Entity.SubstitionText(rosterIdentity, "Title");
+            var titleWithSubstitutions = Create.Entity.SubstitutionText(rosterIdentity, "Title");
             var roster =  new InterviewTreeRoster(rosterIdentity, titleWithSubstitutions, rosterType: rosterType,
                 rosterSizeQuestion: rosterSizeQuestion,
+                rosterTitleQuestionIdentity: rosterTitleQuestionIdentity,
                 childrenReferences: Enumerable.Empty<QuestionnaireItemReference>()) {RosterTitle = rosterTitle};
             roster.SetChildren(children.ToList());
             return roster;
@@ -1357,7 +1358,7 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewTreeSubSection InterviewTreeSubSection(Identity groupIdentity, bool isDisabled = false, 
             params IInterviewTreeNode[] children)
         {
-            var titleWithSubstitutions = Create.Entity.SubstitionText(groupIdentity, "Title");
+            var titleWithSubstitutions = Create.Entity.SubstitutionText(groupIdentity, "Title");
             var subSection = new InterviewTreeSubSection(groupIdentity, titleWithSubstitutions, Enumerable.Empty<QuestionnaireItemReference>());
             subSection.AddChildren(children);
             if (isDisabled) subSection.Disable();
@@ -1368,7 +1369,7 @@ namespace WB.Tests.Abc.TestFactories
         {
             sectionIdentity = sectionIdentity ?? Create.Entity.Identity(Guid.NewGuid());
 
-            var titleWithSubstitutions = Create.Entity.SubstitionText(sectionIdentity, "Title");
+            var titleWithSubstitutions = Create.Entity.SubstitutionText(sectionIdentity, "Title");
             var section = new InterviewTreeSection(sectionIdentity, titleWithSubstitutions, Enumerable.Empty<QuestionnaireItemReference>());
             section.AddChildren(children);
             if (isDisabled)
@@ -1379,7 +1380,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewTreeStaticText InterviewTreeStaticText(Identity staticTextIdentity, bool isDisabled = false)
         {
-            var titleWithSubstitutions = Create.Entity.SubstitionText(staticTextIdentity, "Title");
+            var titleWithSubstitutions = Create.Entity.SubstitutionText(staticTextIdentity, "Title");
             var staticText = new InterviewTreeStaticText(staticTextIdentity, titleWithSubstitutions);
             if (isDisabled) staticText.Disable();
             return staticText;
@@ -1405,7 +1406,7 @@ namespace WB.Tests.Abc.TestFactories
             string variableName = "var", QuestionType questionType = QuestionType.Text, object answer = null, IEnumerable<RosterVector> linkedOptions = null,
             Guid? cascadingParentQuestionId = null, bool isYesNo = false, bool isDecimal = false, Guid? linkedSourceId = null, Guid[] questionsUsingForSubstitution = null)
         {
-            var titleWithSubstitutions = Create.Entity.SubstitionText(questionIdentity, title);
+            var titleWithSubstitutions = Create.Entity.SubstitutionText(questionIdentity, title);
             var question = new InterviewTreeQuestion(questionIdentity, titleWithSubstitutions, variableName, questionType, answer, linkedOptions, 
                 cascadingParentQuestionId, isYesNo,  isDecimal, false, false, linkedSourceId);
 
@@ -1413,18 +1414,20 @@ namespace WB.Tests.Abc.TestFactories
             return question;
         }
 
-        public SubstitionText SubstitionText(Identity identity, 
+        public SubstitutionText SubstitutionText(Identity identity, 
             string title,
             SubstitutionVariables variables = null)
         {
-            return new SubstitionText(identity, title, variables ?? new SubstitutionVariables(), Mock.Of<ISubstitutionService>(), Mock.Of<IVariableToUIStringService>());
+            return new SubstitutionText(identity, title, variables ?? new SubstitutionVariables(), Mock.Of<ISubstitutionService>(), Mock.Of<IVariableToUIStringService>());
         }
 
-        public InterviewTree InterviewTree(Guid? interviewId = null, params InterviewTreeSection[] sections)
+        public InterviewTree InterviewTree(Guid? interviewId = null, IQuestionnaire questionnaire = null,
+            params InterviewTreeSection[] sections)
         {
             var tree = new InterviewTree(
                 interviewId ?? Guid.NewGuid(),
-                Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument()), Create.Service.SubstitionTextFactory());
+                questionnaire ?? Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument()),
+                Create.Service.SubstitutionTextFactory());
 
             tree.SetSections(sections);
 

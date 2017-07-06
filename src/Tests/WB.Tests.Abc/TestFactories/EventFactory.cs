@@ -227,7 +227,7 @@ namespace WB.Tests.Abc.TestFactories
                 new ChangedRosterInstanceTitleDto(
                     new RosterInstance(
                         rosterId ?? Guid.NewGuid(),
-                        outerRosterVector ?? rosterVector?.WithoutLast().ToArray() ?? RosterVector.Empty,
+                        outerRosterVector ?? rosterVector?.Shrink() ?? RosterVector.Empty,
                         instanceId ?? rosterVector?.Last() ?? 0.0m),
                     rosterTitle ?? "title")
             });

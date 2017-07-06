@@ -11,7 +11,6 @@ using MvvmCross.Platform;
 using MvvmCross.Platform.Converters;
 using MvvmCross.Platform.IoC;
 using Ninject;
-using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
@@ -19,6 +18,7 @@ using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
@@ -138,7 +138,6 @@ namespace WB.UI.Interviewer
         private IKernel CreateAndInitializeIoc()
         {
             var kernel = new StandardKernel(
-
                 new NcqrsModule().AsNinject(),
                 new InfrastructureModuleMobile().AsNinject(),
                 new InterviewerInfrastructureModule(),

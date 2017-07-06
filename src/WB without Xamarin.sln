@@ -19,9 +19,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SharedKernel", "SharedKerne
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{CA9E537B-E2ED-4A63-B936-834C9A8C194B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure", "Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj", "{44762E2D-1380-441B-B924-7CAEAFAF5955}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Core.Infrastructure", "Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj", "{44762E2D-1380-441B-B924-7CAEAFAF5955}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernel.Structures", "Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj", "{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Core.SharedKernel.Structures", "Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj", "{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Tests.Integration", "Tests\WB.Tests.Integration\WB.Tests.Integration.csproj", "{39A777F1-EF3F-457F-80EC-46470EF236E4}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -34,35 +34,32 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SharedKernels", "SharedKern
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataCollection", "DataCollection", "{F4A36E3A-6AB6-48BE-B6E9-6F43FFD6F72F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.DataCollection", "Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj", "{89B14B50-5305-45E2-9835-7A05BD0B97A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Core.SharedKernels.DataCollection", "Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj", "{89B14B50-5305-45E2-9835-7A05BD0B97A9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BoundedContexts", "BoundedContexts", "{E3404571-E3D0-47E8-94FC-001982D11D59}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContexts.Designer", "Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj", "{DCBFC3F0-8E8C-4529-B474-B6A79225450E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContexts.Headquarters", "Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj", "{3017EC6D-AE4A-4C19-A653-352999592A7E}"
-	ProjectSection(ProjectDependencies) = postProject
-		{3464F3AE-094C-4DEC-8725-59506328E597} = {3464F3AE-094C-4DEC-8725-59506328E597}
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Core.BoundedContexts.Headquarters", "Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj", "{3017EC6D-AE4A-4C19-A653-352999592A7E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Headquarters", "UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj", "{D3EFCC0C-4A50-484D-A9FF-252DC7916ECD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.DataCollection.Portable", "Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj", "{553B4FC2-5FC7-4256-B14D-82758D64A3BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Core.SharedKernels.DataCollection.Portable", "Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj", "{553B4FC2-5FC7-4256-B14D-82758D64A3BD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Tests.Unit", "Tests\WB.Tests.Unit\WB.Tests.Unit.csproj", "{4A3E17E6-7FCE-488C-899E-DD13FD40F289}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E8409CAF-AF6F-489D-8FF6-FA1E03A80F7F} = {E8409CAF-AF6F-489D-8FF6-FA1E03A80F7F}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContexts.Interviewer", "Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj", "{C6ED30A9-4D14-48D1-8311-C2267DFD424F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Core.BoundedContexts.Interviewer", "Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj", "{C6ED30A9-4D14-48D1-8311-C2267DFD424F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.GenericSubdomains.Portable", "Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj", "{1BB55F28-7905-424D-9AA6-05E4048DFB0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Core.GenericSubdomains.Portable", "Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj", "{1BB55F28-7905-424D-9AA6-05E4048DFB0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContexts.Tester", "Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\WB.Core.BoundedContexts.Tester.csproj", "{689346D7-30AC-420E-BC5B-588CC186A466}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Core.BoundedContexts.Tester", "Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\WB.Core.BoundedContexts.Tester.csproj", "{689346D7-30AC-420E-BC5B-588CC186A466}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Enumerator", "Enumerator", "{572464F5-0EC9-4ABE-9B6D-C74B6E11C782}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.Enumerator", "Core\SharedKernels\Enumerator\Enumerator\WB.Core.SharedKernels.Enumerator.csproj", "{0F1DDEFE-DF5C-4856-A89C-241F3BD41B5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Core.SharedKernels.Enumerator", "Core\SharedKernels\Enumerator\Enumerator\WB.Core.SharedKernels.Enumerator.csproj", "{0F1DDEFE-DF5C-4856-A89C-241F3BD41B5F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{27286D23-04D1-475F-A9AE-E799855896E5}"
 EndProject
@@ -70,9 +67,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Infrastructure.Native", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Questionnaire", "Questionnaire", "{84C73772-4C66-43DF-95D6-8CA44DF0DA62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.Questionnaire", "Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj", "{D6616C1D-7C3A-4576-B82B-098721CD4417}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Core.SharedKernels.Questionnaire", "Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj", "{D6616C1D-7C3A-4576-B82B-098721CD4417}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Tests.Unit.Designer", "Tests\WB.Tests.Unit.Designer\WB.Tests.Unit.Designer.csproj", "{6F9898A0-BC15-49AB-88C3-1DFA76BA9ECB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Tests.Unit.Designer", "Tests\WB.Tests.Unit.Designer\WB.Tests.Unit.Designer.csproj", "{6F9898A0-BC15-49AB-88C3-1DFA76BA9ECB}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E8409CAF-AF6F-489D-8FF6-FA1E03A80F7F} = {E8409CAF-AF6F-489D-8FF6-FA1E03A80F7F}
 	EndProjectSection

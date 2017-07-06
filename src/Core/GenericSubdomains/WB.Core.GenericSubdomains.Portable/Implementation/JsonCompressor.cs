@@ -44,17 +44,6 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             }
         }
 
-        public T DecompressDeflate<T>(Stream stream)
-        {
-            using (var zip = new DeflateStream(stream, CompressionMode.Decompress))
-            {
-                using (var reader = new StreamReader(zip, Encoding.UTF8))
-                {
-                    return this.jsonSerrializer.Deserialize<T>(reader.ReadToEnd());
-                }
-            }
-        }
-
         public byte[] DecompressGZip(byte[] payload)
         {
             using (var msi = new MemoryStream(payload))
@@ -79,25 +68,6 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
                 }
                 return mso.ToArray();
             }
-        }
-
-        public string CompressObject(object s)
-        {
-            var bytes = Encoding.Unicode.GetBytes(this.jsonSerrializer.Serialize(s));
-            using (var msi = new MemoryStream(bytes))
-            using (var mso = new MemoryStream())
-            {
-                using (var gs = new GZipStream(mso, CompressionMode.Compress))
-                {
-                    msi.CopyTo(gs);
-                }
-                return Convert.ToBase64String(mso.ToArray());
-            }
-        }
-
-        public Stream CompressGZip(object s)
-        {
-            return this.Compress(this.jsonSerrializer.Serialize(s));
         }
 
         public T DecompressString<T>(string s) where T:class 
@@ -127,21 +97,6 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
                     msi.CopyTo(gs);
                 }
                 return Convert.ToBase64String(mso.ToArray());
-            }
-        }
-
-        public string DecompressString(string s)
-        {
-            var bytes = Convert.FromBase64String(s);
-            using (var msi = new MemoryStream(bytes))
-            using (var mso = new MemoryStream())
-            {
-                using (var gs = new GZipStream(msi, CompressionMode.Decompress))
-                {
-                    gs.CopyTo(mso);
-                }
-                var arrayOfData = mso.ToArray();
-                return Encoding.Unicode.GetString(arrayOfData, 0, arrayOfData.Length);
             }
         }
     }

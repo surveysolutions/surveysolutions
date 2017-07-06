@@ -80,7 +80,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private readonly IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider;
 
-        private readonly ISubstitionTextFactory substitionTextFactory;
+        private readonly ISubstitutionTextFactory substitutionTextFactory;
 
         private readonly IInterviewTreeBuilder treeBuilder;
 
@@ -88,12 +88,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public Interview(IQuestionnaireStorage questionnaireRepository,
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider,
-            ISubstitionTextFactory substitionTextFactory, 
+            ISubstitutionTextFactory substitutionTextFactory, 
             IInterviewTreeBuilder treeBuilder)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.expressionProcessorStatePrototypeProvider = expressionProcessorStatePrototypeProvider;
-            this.substitionTextFactory = substitionTextFactory;
+            this.substitutionTextFactory = substitutionTextFactory;
             this.treeBuilder = treeBuilder;
         }
 
@@ -2458,11 +2458,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 InterviewTreeQuestion question = node as InterviewTreeQuestion;
                 if (question != null)
                 {
-                    SubstitionText title = this.substitionTextFactory.CreateText(question.Identity,
+                    SubstitutionText title = this.substitutionTextFactory.CreateText(question.Identity,
                         questionnaire.GetQuestionTitle(question.Identity.Id), questionnaire);
 
-                    SubstitionText[] validationMessages = questionnaire.GetValidationMessages(question.Identity.Id)
-                        .Select(x => this.substitionTextFactory.CreateText(question.Identity, x, questionnaire))
+                    SubstitutionText[] validationMessages = questionnaire.GetValidationMessages(question.Identity.Id)
+                        .Select(x => this.substitutionTextFactory.CreateText(question.Identity, x, questionnaire))
                         .ToArray();
 
                     question.SetTitle(title);
@@ -2473,7 +2473,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 InterviewTreeGroup groupOrRoster = node as InterviewTreeGroup;
                 if (groupOrRoster != null)
                 {
-                    SubstitionText title = this.substitionTextFactory.CreateText(groupOrRoster.Identity,
+                    SubstitutionText title = this.substitutionTextFactory.CreateText(groupOrRoster.Identity,
                         questionnaire.GetGroupTitle(groupOrRoster.Identity.Id), questionnaire);
 
                     groupOrRoster.SetTitle(title);
@@ -2483,11 +2483,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 InterviewTreeStaticText staticText = node as InterviewTreeStaticText;
                 if (staticText != null)
                 {
-                    SubstitionText title = this.substitionTextFactory.CreateText(staticText.Identity,
+                    SubstitutionText title = this.substitutionTextFactory.CreateText(staticText.Identity,
                        questionnaire.GetStaticText(staticText.Identity.Id), questionnaire);
 
-                    SubstitionText[] validationMessages = questionnaire.GetValidationMessages(staticText.Identity.Id)
-                        .Select(x => this.substitionTextFactory.CreateText(staticText.Identity, x, questionnaire))
+                    SubstitutionText[] validationMessages = questionnaire.GetValidationMessages(staticText.Identity.Id)
+                        .Select(x => this.substitutionTextFactory.CreateText(staticText.Identity, x, questionnaire))
                         .ToArray();
 
                     staticText.SetTitle(title);

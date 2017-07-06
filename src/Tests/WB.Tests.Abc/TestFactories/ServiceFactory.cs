@@ -329,9 +329,9 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaireExportStructureStorage: questionnaireExportStructureStorage ?? Substitute.For<IQuestionnaireExportStructureStorage>());
         }
 
-        public ISubstitionTextFactory SubstitionTextFactory()
+        public ISubstitutionTextFactory SubstitutionTextFactory()
         {
-            return new SubstitionTextFactory(Create.Service.SubstitutionService(), Create.Service.VariableToUIStringService());
+            return new SubstitutionTextFactory(Create.Service.SubstitutionService(), Create.Service.VariableToUIStringService());
         }
 
         public InterviewViewModelFactory InterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository,
@@ -535,7 +535,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public IInterviewTreeBuilder InterviewTreeBuilder()
         {
-            return new InterviewTreeBuilder(Create.Service.SubstitionTextFactory());
+            return new InterviewTreeBuilder(Create.Service.SubstitutionTextFactory());
         }
     }
 }

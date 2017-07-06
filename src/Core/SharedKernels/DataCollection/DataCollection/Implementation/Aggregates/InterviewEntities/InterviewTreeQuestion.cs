@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class InterviewTreeQuestion : InterviewTreeLeafNode, ISubstitutable, IInterviewTreeValidateable
     {
         public InterviewTreeQuestion(Identity identity, 
-            SubstitionText title, 
+            SubstitutionText title, 
             string variableName,
             QuestionType questionType, 
             object answer, 
@@ -28,14 +28,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             bool isTimestampQuestion = false, 
             Guid? linkedSourceId = null, 
             Identity commonParentRosterIdForLinkedQuestion = null, 
-            SubstitionText[] validationMessages = null,
+            SubstitutionText[] validationMessages = null,
             bool isInterviewerQuestion = true,
             bool isPrefilled = false,
             bool isSupervisors = false,
             bool isHidden = false)
             : base(identity)
         {
-            this.ValidationMessages = validationMessages ?? new SubstitionText[0];
+            this.ValidationMessages = validationMessages ?? new SubstitutionText[0];
             this.Title = title;
             this.VariableName = variableName;
             this.IsInterviewer = isInterviewerQuestion;
@@ -134,9 +134,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public List<AnswerComment> AnswerComments { get; set; } = new List<AnswerComment>();
 
-        public SubstitionText Title { get; private set; }
+        public SubstitutionText Title { get; private set; }
 
-        public SubstitionText[] ValidationMessages { get; private set; }
+        public SubstitutionText[] ValidationMessages { get; private set; }
         
         public string VariableName { get; }
         public bool IsInterviewer { get; private set; }
@@ -148,13 +148,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public IReadOnlyList<FailedValidationCondition> FailedValidations { get; private set; }
 
-        public void SetTitle(SubstitionText title) 
+        public void SetTitle(SubstitutionText title) 
         {
             this.Title = title;
             this.Title.SetTree(this.Tree);
         }
 
-        public void SetValidationMessages(SubstitionText[] validationMessages)
+        public void SetValidationMessages(SubstitutionText[] validationMessages)
         {
             if (validationMessages == null) throw new ArgumentNullException(nameof(validationMessages));
             this.ValidationMessages = validationMessages;

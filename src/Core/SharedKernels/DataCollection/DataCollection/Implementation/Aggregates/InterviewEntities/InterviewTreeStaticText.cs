@@ -9,15 +9,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeStaticText : InterviewTreeLeafNode, ISubstitutable, IInterviewTreeValidateable
     {
-        public SubstitionText Title { get; private set; }
+        public SubstitutionText Title { get; private set; }
 
-        public SubstitionText[] ValidationMessages { get; private set; }
+        public SubstitutionText[] ValidationMessages { get; private set; }
 
-        public InterviewTreeStaticText(Identity identity, SubstitionText title, SubstitionText[] validationMessages = null)
+        public InterviewTreeStaticText(Identity identity, SubstitutionText title, SubstitutionText[] validationMessages = null)
             : base(identity)
         {
             this.Title = title;
-            this.ValidationMessages = validationMessages ?? new SubstitionText[0];
+            this.ValidationMessages = validationMessages ?? new SubstitutionText[0];
             this.FailedValidations = new List<FailedValidationCondition>();
         }
 
@@ -25,13 +25,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public IReadOnlyList<FailedValidationCondition> FailedValidations { get; private set; }
 
-        public void SetTitle(SubstitionText title)
+        public void SetTitle(SubstitutionText title)
         {
             this.Title = title;
             this.Title.SetTree(this.Tree);
         }
 
-        public void SetValidationMessages(SubstitionText[] validationMessages)
+        public void SetValidationMessages(SubstitutionText[] validationMessages)
         {
             if (validationMessages == null) throw new ArgumentNullException(nameof(validationMessages));
             this.ValidationMessages = validationMessages;

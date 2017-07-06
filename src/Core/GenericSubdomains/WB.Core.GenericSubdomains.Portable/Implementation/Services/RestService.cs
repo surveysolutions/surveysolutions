@@ -168,23 +168,23 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             }
         }
 
-        public Task<HttpResponseMessage> GetAsync(string url, object queryString, RestCredentials credentials, bool forceNoCache, Dictionary<string, string> customHeaders,
-            CancellationToken? token)
+        public Task GetAsync(string url, object queryString, RestCredentials credentials, bool forceNoCache, 
+            Dictionary<string, string> customHeaders, CancellationToken? token)
         {
             return this.ExecuteRequestAsync(url: url,
-                    queryString: queryString,
-                    credentials: credentials,
-                    method: HttpMethod.Get,
-                    customHeaders: customHeaders,
-                    forceNoCache: forceNoCache,
-                    userCancellationToken: token,
-                    request: null);
+                queryString: queryString,
+                credentials: credentials,
+                method: HttpMethod.Get,
+                customHeaders: customHeaders,
+                forceNoCache: forceNoCache,
+                userCancellationToken: token,
+                request: null);
         }
 
-        public Task<HttpResponseMessage> PostAsync(string url, object request = null, RestCredentials credentials = null,
-            CancellationToken? token = null)
+        public Task PostAsync(string url, object request = null, RestCredentials credentials = null, CancellationToken? token = null)
         {
-            return this.ExecuteRequestAsync(url: url, credentials: credentials,
+            return this.ExecuteRequestAsync(url: url, 
+                credentials: credentials,
                 method: HttpMethod.Post,
                 request: request,
                 userCancellationToken: token);
