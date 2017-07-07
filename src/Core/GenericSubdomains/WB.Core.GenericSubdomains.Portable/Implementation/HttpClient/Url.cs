@@ -44,8 +44,10 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
 
             foreach (var keyValuePair in QueryParams)
             {
-                stringBuilder.Append(keyValuePair.Key).Append('=').Append(keyValuePair.Value);
+                stringBuilder.Append(keyValuePair.Key).Append('=').Append(keyValuePair.Value).Append('&');
             }
+            stringBuilder.Remove(stringBuilder.Length - 1, 1);
+
             return stringBuilder.ToString();
         }
     }
