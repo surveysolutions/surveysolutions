@@ -8,12 +8,10 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Flurl;
-using Flurl.Http;
-using Flurl.Http.Content;
 using WB.Core.GenericSubdomains.Portable.Implementation.Compression;
 using WB.Core.GenericSubdomains.Portable.Properties;
 using WB.Core.GenericSubdomains.Portable.Services;
+
 
 namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 {
@@ -24,6 +22,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         private readonly IJsonAllTypesSerializer synchronizationSerializer;
         private readonly IStringCompressor stringCompressor;
         private readonly IHttpStatistician httpStatistician;
+        private readonly IHttpClientFactory httpClientFactory;
 
         public RestService(
             IRestServiceSettings restServiceSettings,
@@ -31,13 +30,15 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             IJsonAllTypesSerializer synchronizationSerializer,
             IStringCompressor stringCompressor,
             IRestServicePointManager restServicePointManager,
-            IHttpStatistician httpStatistician)
+            IHttpStatistician httpStatistician,
+            IHttpClientFactory httpClientFactory)
         {
             this.restServiceSettings = restServiceSettings;
             this.networkService = networkService;
             this.synchronizationSerializer = synchronizationSerializer;
             this.stringCompressor = stringCompressor;
             this.httpStatistician = httpStatistician;
+            this.httpClientFactory = httpClientFactory;
 
             if (this.restServiceSettings.AcceptUnsignedSslCertificate)
                 restServicePointManager?.AcceptUnsignedSslCertificate();
@@ -84,51 +85,66 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             var linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(requestTimeoutToken,
                 userCancellationToken ?? default(CancellationToken));
 
-            var fullUrl = this.restServiceSettings.Endpoint
-                .AppendPathSegment(url)
-                .SetQueryParams(queryString);
+            var fullUrl = new Url(this.restServiceSettings.Endpoint, url, queryString);
 
-            IFlurlClient restClient = fullUrl
-                .WithTimeout(this.restServiceSettings.Timeout)
-                .AllowHttpStatus(HttpStatusCode.NotModified, HttpStatusCode.NoContent)
-                .CollectHttpStats(this.httpStatistician)
-                .WithHeader("User-Agent", this.restServiceSettings.UserAgent)
-                .WithHeader("Accept-Encoding", "gzip,deflate");
-            
+            var httpMessageHandler = httpClientFactory.CreateMessageHandler();
+            HttpClient httpClient = httpClientFactory.CreateClient(fullUrl, httpMessageHandler, httpStatistician);
+            httpClient.Timeout = this.restServiceSettings.Timeout;
+            httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(this.restServiceSettings.UserAgent));
+            httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip,deflate"));
+
             if (forceNoCache)
             {
-                restClient.WithHeader("Cache-Control", "no-cache");
+                httpClient.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue() { NoCache = true };
             }
 
             if (credentials?.Token != null)
             {
                 string base64String = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{credentials.Login}:{credentials.Token}"));
-                restClient.WithHeader("Authorization", new AuthenticationHeaderValue(ApiAuthenticationScheme.AuthToken.ToString(), base64String));
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(ApiAuthenticationScheme.AuthToken.ToString(), base64String);
             }
-
-            if (credentials?.Password != null && credentials?.Token == null)
+            else if (credentials?.Password != null)
             {
-                restClient.WithBasicAuth(credentials.Login, credentials.Password);
+                var value = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{credentials.Login}:{credentials.Password}"));
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", value);
             }
 
             if (customHeaders != null)
             {
                 foreach (var customHeader in customHeaders)
                 {
-                    restClient.WithHeader(customHeader.Key, customHeader.Value);
+                    httpClient.DefaultRequestHeaders.Add(customHeader.Key, customHeader.Value);
                 }
             }
 
+            var request = new HttpRequestMessage()
+            {
+                RequestUri = new Uri(fullUrl.ToString()),
+                Method = method,
+                Content = httpContent
+            };
+
+            //var call = new HttpCall(request);
+
             try
             {
-                return await restClient.SendAsync(method, httpContent, linkedCancellationTokenSource.Token).ConfigureAwait(false);
+                var httpResponseMessage = await httpClient.SendAsync(request, linkedCancellationTokenSource.Token).ConfigureAwait(false);
+
+                if (httpResponseMessage.IsSuccessStatusCode
+                    || httpResponseMessage.StatusCode == HttpStatusCode.NotModified
+                    || httpResponseMessage.StatusCode == HttpStatusCode.NoContent)
+                {
+                    return httpResponseMessage;
+                }
+
+                throw new RestException(httpResponseMessage.ReasonPhrase, statusCode: httpResponseMessage.StatusCode);
             }
             catch (OperationCanceledException ex)
             {
                 // throwed when receiving bytes in ReceiveBytesWithProgressAsync method and user canceling request
                 throw new RestException("Request canceled by user", type: RestExceptionType.RequestCanceledByUser, innerException: ex);
             }
-            catch (FlurlHttpException ex)
+            catch (ExtendedMessageHandlerException ex)
             {
                 if (ex.GetSelfOrInnerAs<TaskCanceledException>() != null)
                 {
@@ -146,13 +162,12 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 }
                 else if (ex.Call.Response != null)
                 {
-                    throw new RestException(ex.Call.Response.ReasonPhrase, statusCode: ex.Call.Response.StatusCode,
-                           innerException: ex);
+                    throw new RestException(ex.Call.Response.ReasonPhrase, statusCode: ex.Call.Response.StatusCode, innerException: ex);
                 }
                 else
                 {
                     // https://github.com/tmenier/Flurl/issues/163
-                    var exceptionInnerException = ex.Call?.Exception?.InnerException;
+                    var exceptionInnerException = ex.InnerException;
                     if (exceptionInnerException != null)
                     {
                         var exceptionTypeName = exceptionInnerException.GetType().Name;
@@ -258,7 +273,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             return data == null
                 ? null
                 : new CompressedContent(
-                    new CapturedStringContent(this.synchronizationSerializer.Serialize(data), Encoding.UTF8, "application/json"), new GZipCompressor());
+                    new StringContent(this.synchronizationSerializer.Serialize(data), Encoding.UTF8, "application/json"), new GZipCompressor());
         }
 
         private async Task<T> ReceiveCompressedJsonWithProgressAsync<T>(Task<HttpResponseMessage> response,
