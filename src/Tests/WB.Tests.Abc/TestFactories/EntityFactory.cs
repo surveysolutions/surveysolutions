@@ -1633,7 +1633,8 @@ namespace WB.Tests.Abc.TestFactories
                 readonlyUser.AsDynamic().Name = responsibleName;
             }
 
-            asDynamic.InterviewSummaries = interviewSummary;
+            if(interviewSummary != null)
+                asDynamic.InterviewSummaries = interviewSummary;
             asDynamic.Answers = null;
 
             return result;
