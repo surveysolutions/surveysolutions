@@ -9,7 +9,6 @@
     <NoWarn>1701;1702;1705;612;618;1030</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Flurl.Http" Version="1.1.2" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
   <ItemGroup>
