@@ -14,11 +14,14 @@ using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -168,63 +171,80 @@ namespace WB.UI.Headquarters.API.PublicApi
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound, $@"Questionnaire not found: {createItem?.QuestionnaireId}"));
             }
 
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireId, null)
-               ?? throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound, $@"Questionnaire not found: {createItem?.QuestionnaireId}"));
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireId, null);
+
+            if (questionnaire == null)
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound, $@"Questionnaire not found: {createItem?.QuestionnaireId}"));
 
             var assignment = new Assignment(questionnaireId, responsible.Id, createItem.Quantity);
 
-            try
+            var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
+
+
+            List<InterviewAnswer> answers = new List<InterviewAnswer>();
+
+            foreach (var item in createItem.IdentifyingData)
             {
-                var answers = createItem.IdentifyingData
-                    .Select(item => IdentifyingAnswer.Create(assignment, questionnaire, item.Answer, item.Identity, item.Variable, transformAnswers: true))
-                    .Select(item =>
-                    {
-                        var answer = CommandTransformator.ParseQuestionAnswer(new UntypedQuestionAnswer
-                        {
-                            Id = item.Identity.Id,
-                            Answer = item.Answer,
-                            Type = questionnaire.GetQuestionType(item.Identity.Id)
-                        });
-
-                        item.Answer = this.answerSerializer.Serialize(answer.Value);
-
-                        return item;
-                    })
-                    .ToList();
-
-                assignment.SetIdentifyingData(answers);
-            }
-            catch (ArgumentException ae)
-            {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, ae.Message));
-            }
-
-            var preloadData = this.ConvertToPreloadedData(assignment, questionnaire);
-
-            var verifyResult = this.preloadedDataVerifier.VerifyAssignmentsSample(questionnaireId.QuestionnaireId,
-                questionnaireId.Version, preloadData);
-
-            verifyResult.WasResponsibleProvided = true;
-
-            if (!verifyResult.Errors.Any())
-            {
-                this.assignmentsStorage.Store(assignment, null);
-                interviewCreatorFromAssignment.CreateInterviewIfQuestionnaireIsOld(responsible, questionnaireId, assignment.Id,
-                    assignment.IdentifyingData);
-                assignment = this.assignmentsStorage.GetById(assignment.Id);
-
-                return new CreateAssignmentResult
+                Identity identity;
+                try
                 {
-                    Assignment = mapper.Map<AssignmentDetails>(assignment),
-                    VerificationStatus = verifyResult
-                };
+                    identity = string.IsNullOrEmpty(item.Identity)
+                        ? new Identity(questionnaire.GetQuestionIdByVariable(item.Variable).Value, RosterVector.Empty)
+                        : Identity.Parse(item.Identity);
+                }
+                catch (Exception ae)
+                {
+                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
+                        (string.IsNullOrEmpty(item.Identity) 
+                        ? "Question Identity cannot be parsed. Expected format: GuidWithoutDashes_Int1-Int2, where _Int1-Int2 - codes of parent rosters (empty if question is not inside any roster). For example: 11111111111111111111111111111111_0-1 should be used for question on the second level"
+                        : "Question cannot be identified by provided variable name") +
+                        Environment.NewLine + 
+                        ae.Message));
+                }
+                KeyValuePair<Guid, AbstractAnswer> answer;
+                try
+                {
+                    answer = CommandTransformator.ParseQuestionAnswer(new UntypedQuestionAnswer
+                    {
+                        Id = identity.Id,
+                        Answer = item.Answer,
+                        Type = questionnaire.GetQuestionType(identity.Id)
+                    });
+                }
+                catch (Exception ae)
+                {
+                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
+                        $"Answer '{item.Answer}' canot be parsed for question with Identity '{item.Identity}' and variable '{item.Variable}'." +
+                        Environment.NewLine +
+                        ae.Message));
+                }
+
+                answers.Add(new InterviewAnswer
+                {
+                    Identity = identity,
+                    Answer = answer.Value
+                });
             }
 
-            throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, new CreateAssignmentResult
+            List<IdentifyingAnswer> identifyingAnswers = answers.Where(x => identifyingQuestionIds.Contains(x.Identity.Id)).Select(a => IdentifyingAnswer.Create(assignment, questionnaire, a.Answer.ToString(), a.Identity)).ToList();
+            assignment.SetIdentifyingData(identifyingAnswers);
+            assignment.SetAnswers(answers);
+           
+            this.assignmentsStorage.Store(assignment, null);
+            interviewCreatorFromAssignment.CreateInterviewIfQuestionnaireIsOld(responsible, questionnaireId, assignment.Id,
+                assignment.IdentifyingData);
+            assignment = this.assignmentsStorage.GetById(assignment.Id);
+
+            return new CreateAssignmentResult
             {
-                Assignment = mapper.Map<AssignmentDetails>(assignment),
-                VerificationStatus = verifyResult
-            }));
+                Assignment = mapper.Map<AssignmentDetails>(assignment)
+            };
+
+            //throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, new CreateAssignmentResult
+            //{
+            //    Assignment = mapper.Map<AssignmentDetails>(assignment),
+            //    VerificationStatus = verifyResult
+            //}));
         }
 
         /// <summary>
@@ -328,29 +348,12 @@ namespace WB.UI.Headquarters.API.PublicApi
         public AssignmentDetails Unarchive(int id)
         {
             var assignment = assignmentsStorage.GetById(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
-        
+
             assignment.Unarchive();
 
             assignmentsStorage.Store(assignment, id);
 
             return this.mapper.Map<AssignmentDetails>(assignmentsStorage.GetById(id));
-        }
-
-        private PreloadedDataByFile ConvertToPreloadedData(Assignment assignment, IQuestionnaire questionnaire)
-        {
-            var id = $@"Assignment_{assignment.Id}_{questionnaire.Title}";
-
-            var headers = assignment.IdentifyingData.Select(data =>
-            {
-                if (string.IsNullOrWhiteSpace(data.VariableName))
-                    return questionnaire.GetQuestionVariableName(data.Identity.Id);
-
-                return data.VariableName;
-            }).ToArray();
-
-            var content = new[] { assignment.IdentifyingData.Select(data => data.Answer).ToArray() };
-
-            return new PreloadedDataByFile(id, id, headers, content);
         }
     }
 }
