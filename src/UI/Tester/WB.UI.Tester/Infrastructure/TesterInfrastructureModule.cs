@@ -65,6 +65,7 @@ namespace WB.UI.Tester.Infrastructure
             this.Bind<INetworkService>().To<AndroidNetworkService>();
             this.Bind<IEnumeratorSettings>().To<TesterSettings>();
             this.Bind<IRestServicePointManager>().To<RestServicePointManager>();
+            this.Bind<IHttpClientFactory>().To<DefaultHttpClientFactory>();
             this.Bind<IRestService>().To<RestService>();
 
             this.Bind<ISerializer>().ToMethod((ctx) => new PortableJsonSerializer());
