@@ -477,7 +477,6 @@
     <Compile Include="BoundedContexts\Tester\Services\TesterPlainInterviewFileStorageTests.cs" />
     <Compile Include="GenericSubdomains\TreeTest.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\NotificationService\LazyNotificationServiceTests.cs" />
-    <Compile Include="GenericSubdomains\Utils\HttpStatisticianTests\HttpStatisticianTests.cs" />
     <Compile Include="Infrastructure\CqrsPostgresTransactionManagerTests.cs" />
     <Compile Include="Infrastructure\EventSourcedAggregateRootRepositoryTests\EventSourcedAggregateRootRepositoryWithExtendedCacheTests.cs" />
     <Compile Include="Applications\Shared\Web\AttachmentsControllerTests\when_getting_attachment_content_and_headers_contains_etag.cs" />
