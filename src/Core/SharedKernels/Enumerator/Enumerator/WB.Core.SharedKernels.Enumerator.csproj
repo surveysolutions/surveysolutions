@@ -22,6 +22,8 @@
     <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.5" />
     <PackageReference Include="SQLitePCLRaw.core" Version="1.1.5" />
     <PackageReference Include="System.ComponentModel" Version="4.3.0" />
+    <PackageReference Include="System.IO.Compression" Version="4.3.0" />
+    <PackageReference Include="System.IO.Compression.ZipFile" Version="4.3.0" />
     <PackageReference Include="Xam.Plugin.Geolocator" Version="4.0.1" />
   </ItemGroup>
   <ItemGroup>
