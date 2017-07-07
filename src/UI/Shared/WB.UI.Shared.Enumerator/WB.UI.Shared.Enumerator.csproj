@@ -48,9 +48,6 @@
     <Reference Include="Flurl.Http, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Flurl.Http.1.1.2\lib\monoandroid\Flurl.Http.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib.Portable, Version=0.86.0.51803, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\SharpZipLib.Portable.0.86.0.0003\lib\portable-net45+netcore45+wp8+win8+wpa81+MonoTouch+MonoAndroid+Xamarin.iOS10\ICSharpCode.SharpZipLib.Portable.dll</HintPath>
-    </Reference>
     <Reference Include="Java.Interop" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -387,12 +384,7 @@
     <Compile Include="EnumeratorSetup.cs" />
     <Compile Include="Services\AndroidPathUtils.cs" />
     <Compile Include="Services\DevicePasswordHasher.cs" />
-    <Compile Include="Services\Internals\FileSystem\AndroidDirectoryInfo.cs" />
-    <Compile Include="Services\Internals\FileSystem\AndroidFileInfo.cs" />
-    <Compile Include="Services\Internals\FileSystem\AndroidFileSystem.cs" />
-    <Compile Include="Services\Internals\FileSystem\AndroidFileSystemEntryInfo.cs" />
     <Compile Include="Services\Internals\FileSystem\FileSystemService.cs" />
-    <Compile Include="Services\Internals\FileSystem\ZipArchiveUtils.cs" />
     <Compile Include="Services\Internals\GpsLocationService.cs" />
     <Compile Include="Services\Internals\MapService\IMapService.cs" />
     <Compile Include="Services\Internals\MapService\MapDescription.cs" />

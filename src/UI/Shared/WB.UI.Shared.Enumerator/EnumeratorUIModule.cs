@@ -1,5 +1,4 @@
 using Flurl.Http;
-using ICSharpCode.SharpZipLib;
 using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
 using Plugin.Geolocator;
@@ -18,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Implementation.Utils;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -48,8 +48,7 @@ namespace WB.UI.Shared.Enumerator
                     typeof(DataCollectionSharedKernelAssemblyMarker).Assembly,
                     typeof(EnumeratorSharedKernelModule).Assembly));
 
-            VFS.SetCurrent(new AndroidFileSystem());
-            this.Bind<IArchiveUtils>().To<ZipArchiveUtils>();
+            this.Bind<IEnumeratorArchiveUtils>().To<ZipArchiveUtils>();
 
             this.Bind<IFileSystemAccessor>().To<FileSystemService>().InSingletonScope();
             this.Bind<IQRBarcodeScanService>().To<QRBarcodeScanService>();
