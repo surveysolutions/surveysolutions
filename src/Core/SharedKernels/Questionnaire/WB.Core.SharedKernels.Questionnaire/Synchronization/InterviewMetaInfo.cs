@@ -1,9 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace WB.Core.SharedKernel.Structures.Synchronization
 {
-    using System.Collections.Generic;
-
     public class InterviewMetaInfo
     {
         public InterviewMetaInfo()
