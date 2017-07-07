@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -113,7 +114,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public bool IsMaskedQuestionAnswered { get; set; }
         
-        public IMvxAsyncCommand ValueChangeCommand => new MvxAsyncCommand<string>(this.SaveAnswer);
+        public ICommand ValueChangeCommand => new MvxAsyncCommand<string>(this.SaveAnswer);
 
         private IMvxCommand answerRemoveCommand;
         private readonly QuestionStateViewModel<TextQuestionAnswered> questionState;
