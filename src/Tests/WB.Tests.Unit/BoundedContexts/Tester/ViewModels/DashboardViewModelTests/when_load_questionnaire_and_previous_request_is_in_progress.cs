@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             viewModel.IsInProgress = true;
         };
 
-        Because of = () => viewModel.LoadQuestionnaireCommand.Execute();
+        Because of = () => viewModel.LoadQuestionnaireCommand.Execute(new QuestionnaireListItem());
 
         It should_not_be_loaded_new_questionnaire = () => mockOfDesignerApiService.Verify(_ => _.GetQuestionnaireAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<CancellationToken>()), Times.Never);
         
