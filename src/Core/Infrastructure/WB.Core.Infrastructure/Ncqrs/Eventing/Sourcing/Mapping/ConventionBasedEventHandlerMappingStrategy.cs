@@ -62,7 +62,7 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
             var targetType = target.GetType();
             var handlers = new List<ISourcedEventHandler>();
 
-            var methodsToMatch = targetType.GetMethods();
+            var methodsToMatch = targetType.GetTypeInfo().GetMethods();
 
             var matchedMethods = from method in methodsToMatch
                                  let parameters = GetParameters(method)
@@ -94,7 +94,7 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
         public bool CanHandleEvent(object target, Type committedEvent)
         {
             var targetType = target.GetType();
-            var methodsToMatch = targetType.GetMethods();
+            var methodsToMatch = targetType.GetTypeInfo().GetMethods();
 
             foreach (var method in methodsToMatch)
             {
