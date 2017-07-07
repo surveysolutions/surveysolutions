@@ -209,7 +209,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                         Id = identity.Id,
                         Answer = item.Answer,
                         Type = questionnaire.GetQuestionType(identity.Id)
-                    });
+                    }, questionnaire);
                 }
                 catch (Exception ae)
                 {
@@ -231,8 +231,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             assignment.SetAnswers(answers);
            
             this.assignmentsStorage.Store(assignment, null);
-            interviewCreatorFromAssignment.CreateInterviewIfQuestionnaireIsOld(responsible, questionnaireId, assignment.Id,
-                assignment.IdentifyingData);
+            interviewCreatorFromAssignment.CreateInterviewIfQuestionnaireIsOld(responsible.Id, questionnaireId, assignment.Id, answers);
             assignment = this.assignmentsStorage.GetById(assignment.Id);
 
             return new CreateAssignmentResult

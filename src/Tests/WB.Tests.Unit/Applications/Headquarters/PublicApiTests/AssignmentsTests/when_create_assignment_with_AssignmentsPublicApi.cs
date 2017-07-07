@@ -15,6 +15,7 @@ using WB.UI.Headquarters.API.PublicApi.Models;
 using System.Collections.Generic;
 using Main.Core.Entities.Composite;
 using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTests
 {
@@ -162,14 +163,14 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 Responsible = "any",
                 IdentifyingData = new List<AssignmentIdentifyingDataItem>
                 {
-                    new AssignmentIdentifyingDataItem{ Answer = "1", Identity = Create.Entity.Identity(Id.g1) },
+                    new AssignmentIdentifyingDataItem{ Answer = "1", Identity = Id.g1.FormatGuid() },
                     new AssignmentIdentifyingDataItem{ Answer = "2", Variable = "text2" }
                 }
             });
 
             this.preloadedDataVerifier.Verify(ass => ass.VerifyAssignmentsSample(
                 It.IsAny<Guid>(), It.IsAny<long>(),
-                It.Is<PreloadedDataByFile>(pdf => pdf.Header.SequenceEqual(new[] { "text1", "text2" }))), Times.Once);
+                It.Is<PreloadedDataByFile>(pdf => Enumerable.SequenceEqual(pdf.Header, new[] { "text1", "text2" }))), Times.Once);
         }
     }
 }
