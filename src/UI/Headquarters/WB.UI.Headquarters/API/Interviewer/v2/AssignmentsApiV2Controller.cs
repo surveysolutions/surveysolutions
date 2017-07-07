@@ -20,7 +20,7 @@ namespace WB.UI.Headquarters.API.Interviewer.v2
         private readonly IAssignmentsService assignmentsService;
 
         public AssignmentsApiV2Controller(IAuthorizedUser authorizedUser,
-            IAssignmentsService assignmentsService, IAssignmentViewFactory assignmentViewFactory)
+            IAssignmentsService assignmentsService)
         {
             this.authorizedUser = authorizedUser;
             this.assignmentsService = assignmentsService;

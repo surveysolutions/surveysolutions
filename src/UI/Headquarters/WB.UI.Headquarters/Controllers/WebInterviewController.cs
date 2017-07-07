@@ -256,7 +256,7 @@ namespace WB.UI.Headquarters.Controllers
                 return this.HttpNotFound();
             }
 
-            if (assignment.Archived || assignment.InterviewsNeeded == 0)
+            if (assignment.Archived || assignment.IsCompleted)
             {
                 throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
             }
