@@ -8,16 +8,19 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.UI.Headquarters.Code.CommandTransformation
 {
     public class CommandTransformator
     {
         private static IAuthorizedUser authorizedUser => ServiceLocator.Current.GetInstance<IAuthorizedUser>();
+        private static IQuestionnaireStorage questionnaireStorage => ServiceLocator.Current.GetInstance<IQuestionnaireStorage>();
 
         public ICommand TransformCommnadIfNeeded(ICommand command, Guid? responsibleId = null)
         {
@@ -61,8 +64,11 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
 
         private CreateInterview GetCreateInterviewCommand(CreateInterviewControllerCommand command)
         {
-            List<InterviewAnswer> answers = command.AnswersToFeaturedQuestions
-                .Select(ParseQuestionAnswer)
+            var questionnaireIdentity = new QuestionnaireIdentity(command.QuestionnaireId, command.QuestionnaireVersion);
+            var questionnaire = questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+
+            var answers = command.AnswersToFeaturedQuestions
+                .Select(x => ParseQuestionAnswer(x, questionnaire))
                 .Select(x => new InterviewAnswer
                 {
                     Identity = new Identity(x.Key, null),
@@ -86,7 +92,7 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
             return resultCommand;
         }
 
-        public static KeyValuePair<Guid, AbstractAnswer> ParseQuestionAnswer(UntypedQuestionAnswer answer)
+        public static KeyValuePair<Guid, AbstractAnswer> ParseQuestionAnswer(UntypedQuestionAnswer answer, IQuestionnaire questionnaire)
         {
             string answerAsString = answer.Answer.ToString();
             AbstractAnswer answerValue = null;
@@ -99,7 +105,7 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
                 case QuestionType.Numeric:
                     try
                     {
-                        if (answer.Settings != null && (bool) answer.Settings.IsInteger)
+                        if (questionnaire.IsQuestionInteger(answer.Id))
                             answerValue = NumericIntegerAnswer.FromInt(answerAsString.Parse<int>());
                         else
                             answerValue = NumericRealAnswer.FromDouble(answerAsString.Parse<double>());
@@ -116,8 +122,18 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
                     answerValue = CategoricalFixedSingleOptionAnswer.FromInt(answerAsString.Parse<int>());
                     break;
                 case QuestionType.MultyOption:
-                    int[] answerAsIntArray = JsonArrayToStringArray(answer.Answer).Select(x=>x.Parse<int>()).ToArray();
-                    answerValue = CategoricalFixedMultiOptionAnswer.FromInts(answerAsIntArray);
+                    if (questionnaire.IsQuestionYesNo(answer.Id))
+                    {
+                        CheckedYesNoAnswerOption[] answerAsIntArray = JsonArrayToStringArray(answer.Answer)
+                            .Select(CheckedYesNoAnswerOption.Parse)
+                            .ToArray();
+                        answerValue = YesNoAnswer.FromCheckedYesNoAnswerOptions(answerAsIntArray);
+                    }
+                    else
+                    {
+                        int[] answerAsIntArray = JsonArrayToStringArray(answer.Answer).Select(x => x.Parse<int>()).ToArray();
+                        answerValue = CategoricalFixedMultiOptionAnswer.FromInts(answerAsIntArray);
+                    }
                     break;
                 case QuestionType.GpsCoordinates:
                     var splitedCoordinates = answerAsString.Split('$');
