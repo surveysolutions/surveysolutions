@@ -90,32 +90,6 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             var httpMessageHandler = httpClientFactory.CreateMessageHandler();
             HttpClient httpClient = httpClientFactory.CreateClient(fullUrl, httpMessageHandler, httpStatistician);
             httpClient.Timeout = this.restServiceSettings.Timeout;
-            httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(this.restServiceSettings.UserAgent));
-            httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip,deflate"));
-
-            if (forceNoCache)
-            {
-                httpClient.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue() { NoCache = true };
-            }
-
-            if (credentials?.Token != null)
-            {
-                string base64String = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{credentials.Login}:{credentials.Token}"));
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(ApiAuthenticationScheme.AuthToken.ToString(), base64String);
-            }
-            else if (credentials?.Password != null)
-            {
-                var value = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{credentials.Login}:{credentials.Password}"));
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", value);
-            }
-
-            if (customHeaders != null)
-            {
-                foreach (var customHeader in customHeaders)
-                {
-                    httpClient.DefaultRequestHeaders.Add(customHeader.Key, customHeader.Value);
-                }
-            }
 
             var request = new HttpRequestMessage()
             {
@@ -124,7 +98,32 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 Content = httpContent
             };
 
-            //var call = new HttpCall(request);
+            request.Headers.Add("User-Agent", this.restServiceSettings.UserAgent);
+            request.Headers.Add("Accept-Encoding", "gzip,deflate");
+
+            if (forceNoCache)
+            {
+                request.Headers.CacheControl = new CacheControlHeaderValue() { NoCache = true };
+            }
+
+            if (credentials?.Token != null)
+            {
+                string base64String = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{credentials.Login}:{credentials.Token}"));
+                request.Headers.Authorization = new AuthenticationHeaderValue(ApiAuthenticationScheme.AuthToken.ToString(), base64String);
+            }
+            else if (credentials?.Password != null)
+            {
+                var value = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{credentials.Login}:{credentials.Password}"));
+                request.Headers.Authorization = new AuthenticationHeaderValue("Basic", value);
+            }
+
+            if (customHeaders != null)
+            {
+                foreach (var customHeader in customHeaders)
+                {
+                    request.Headers.Add(customHeader.Key, customHeader.Value);
+                }
+            }
 
             try
             {
