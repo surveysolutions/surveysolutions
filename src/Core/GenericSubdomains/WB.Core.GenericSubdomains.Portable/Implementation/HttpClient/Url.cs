@@ -33,19 +33,18 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
 
         public override string ToString()
         {
-            var uri = new Uri(Host);
+            var stringBuilder = new StringBuilder(Host.TrimEnd('/'));
             if (!Path.IsNullOrEmpty())
-                uri = new Uri(uri, Path);
+                stringBuilder.Append('/').Append(Path.Trim('/'));
 
             if (QueryParams == null || !QueryParams.Any())
-                return uri.ToString();
+                return stringBuilder.ToString();
 
-            var stringBuilder = new StringBuilder(uri.ToString());
             stringBuilder.Append("?");
 
             foreach (var keyValuePair in QueryParams)
             {
-                stringBuilder.Append(keyValuePair.Key).Append(":").Append(keyValuePair.Value);
+                stringBuilder.Append(keyValuePair.Key).Append('=').Append(keyValuePair.Value);
             }
             return stringBuilder.ToString();
         }

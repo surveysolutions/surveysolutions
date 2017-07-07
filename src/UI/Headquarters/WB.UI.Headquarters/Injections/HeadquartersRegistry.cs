@@ -161,6 +161,7 @@ namespace WB.UI.Headquarters.Injections
             this.Bind<IStringCompressor>().To<JsonCompressor>();
             this.Bind<IRestServiceSettings>().To<DesignerQuestionnaireApiRestServiceSettings>().InSingletonScope();
 
+            this.Bind<IHttpClientFactory>().To<DefaultHttpClientFactory>();
             this.Bind<IRestService>()
                 .To<RestService>()
                 .WithConstructorArgument("networkService", _ => null)
