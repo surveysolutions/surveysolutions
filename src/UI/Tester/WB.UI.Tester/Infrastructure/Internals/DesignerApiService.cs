@@ -107,7 +107,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
 
         private async Task<QuestionnaireListItem[]> GetPageOfQuestionnairesAsync(int pageIndex, CancellationToken token)
         {
-            var  batchOfServerQuestionnaires = await this.restService.GetAsync<Core.SharedKernels.SurveySolutions.Api.Designer.QuestionnaireListItem[]>(
+            var  batchOfServerQuestionnaires = await this.restService.GetAsync<Core.SharedKernels.SurveySolutions.Api.Designer.TesterQuestionnaireListItem[]>(
                 url: $"{this.apiPrefix}/questionnaires",
                 token: token,
                 credentials: this.RestCredentials,
