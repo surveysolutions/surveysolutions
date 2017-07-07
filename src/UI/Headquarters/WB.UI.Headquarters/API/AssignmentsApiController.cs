@@ -164,7 +164,7 @@ namespace WB.UI.Headquarters.API
             var answers = new List<InterviewAnswer>();
             var identifyingAnswers = new List<IdentifyingAnswer>();
 
-            foreach (var answer in untypedQuestionAnswers.Select(CommandTransformator.ParseQuestionAnswer))
+            foreach (var answer in untypedQuestionAnswers.Select(x => CommandTransformator.ParseQuestionAnswer(x, questionnaire)))
             {
                 identifyingAnswers.Add(IdentifyingAnswer.Create(assignment, questionnaire, answer.Value.ToString(), Identity.Create(answer.Key, null)));
                 answers.Add(new InterviewAnswer

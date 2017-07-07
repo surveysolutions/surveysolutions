@@ -65,7 +65,7 @@ namespace WB.UI.Designer.Api.Headquarters
             var questionnaire = questionnaireView.Source.Clone();
             questionnaire.Macros = null;
             questionnaire.LookupTables = null;
-            questionnaire.IsUsingExpressionStorage = true;
+            questionnaire.IsUsingExpressionStorage = questionnaireContentVersion > 19;
 
             return new QuestionnaireCommunicationPackage
             {
