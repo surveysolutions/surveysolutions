@@ -5,7 +5,6 @@ using System.Runtime.Serialization;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
-using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.UI.Headquarters.API.PublicApi.Models
 {
@@ -17,7 +16,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
     public class AssignmentIdentifyingDataItem
     {
-        public Identity Identity { get; set; }
+        public string Identity { get; set; }
         public string Variable { get; set; }
         public string Answer { get; set; }
     }
