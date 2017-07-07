@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace WB.Core.SharedKernels.SurveySolutions.Api.Designer
 {
     [DebuggerDisplay("{Title} | shared: {IsShared}, public: {IsPublic}")]
-    public class QuestionnaireListItem
+    public class TesterQuestionnaireListItem
     {
         public string Id { get; set; }
         public string Title { get; set; }
