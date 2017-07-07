@@ -1,6 +1,6 @@
 using MvvmCross.Platform.Plugins;
 
-namespace WB.UI.Interviewer.Bootstrap
+namespace WB.Tests.Abc.Bootstrap
 {
     public class MessengerPluginBootstrap
         : MvxPluginBootstrapAction<MvvmCross.Plugins.Messenger.PluginLoader>
