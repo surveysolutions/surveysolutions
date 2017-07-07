@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
 using WB.Core.GenericSubdomains.Portable;
@@ -156,7 +157,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public IMvxCommand ValueChangeCommand => new MvxAsyncCommand<string>(this.FindMatchOptionAndSendAnswerQuestionAsync);
+        public ICommand ValueChangeCommand => new MvxAsyncCommand<string>(this.FindMatchOptionAndSendAnswerQuestionAsync);
 
         public IMvxCommand RemoveAnswerCommand
         {

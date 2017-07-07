@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -73,7 +74,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public IMvxAsyncCommand AnswerCommand => new MvxAsyncCommand<DateTime>(this.SendAnswerAsync);
+        public IMvxAsyncCommand<DateTime> AnswerCommand => new MvxAsyncCommand<DateTime>(this.SendAnswerAsync);
         public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
 
         private async Task RemoveAnswerAsync()
