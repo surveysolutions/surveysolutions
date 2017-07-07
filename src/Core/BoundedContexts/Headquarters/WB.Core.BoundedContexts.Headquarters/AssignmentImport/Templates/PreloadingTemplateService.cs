@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates
                 return null;
             }
 
-            this.archiveUtils.ZipDirectory(dataDirectoryPath, archiveFilePath);
+            this.archiveUtils.ZipDirectoryToFile(dataDirectoryPath, archiveFilePath);
 
             return archiveFilePath;
         }

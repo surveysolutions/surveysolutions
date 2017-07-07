@@ -152,26 +152,39 @@ namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
             return File.ReadAllText(fileName);
         }
 
-        public void CopyFileOrDirectory(string sourceDir, string targetDir, bool overrideAll = false)
+        public void CopyFileOrDirectory(string sourceDir, string targetDir, bool overrideAll = false, string[] fileExtentionsFilter = null)
         {
+            CopyFileOrDirectoryInt(sourceDir, targetDir, targetDir, overrideAll, fileExtentionsFilter);
+        }
+
+        private void CopyFileOrDirectoryInt(string sourceDir, string targetDir, string targetGlobalDir, bool overrideAll, string[] fileExtentionsFilter)
+        {
+
             FileAttributes attr = File.GetAttributes(sourceDir);
             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
             {
                 var sourceDirectoryName = this.GetFileName(sourceDir);
                 if (sourceDirectoryName == null)
                     return;
+
+                var dirList = this.GetDirectoriesInDirectory(sourceDir);
+
                 var destDir = this.CombinePath(targetDir, sourceDirectoryName);
-                this.CreateDirectory(destDir);
+                if (!Directory.Exists(destDir))
+                    this.CreateDirectory(destDir);
 
-                foreach (var file in this.GetFilesInDirectory(sourceDir))
-                    File.Copy(file, this.CombinePath(destDir, this.GetFileName(file)), overrideAll);
+                foreach (var directory in dirList)
+                {
+                    if(!Path.GetFullPath(directory).Equals(Path.GetFullPath(targetGlobalDir)))
+                        this.CopyFileOrDirectory(directory, destDir, overrideAll);
+                }
 
-                foreach (var directory in this.GetDirectoriesInDirectory(sourceDir))
-                    this.CopyFileOrDirectory(directory, destDir, overrideAll);
+                foreach (var file in this.GetFilesInDirectory(sourceDir, false))
+                    this.CopyFile(file, targetDir, overrideAll, fileExtentionsFilter);
             }
             else
             {
-                this.CopyFile(sourceDir, targetDir, overrideAll);
+                this.CopyFile(sourceDir, targetDir, overrideAll, fileExtentionsFilter);
             }
         }
 
@@ -190,11 +203,18 @@ namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
             return Regex.Replace(s, @"[^\u0000-\u007F]", string.Empty);
         }
 
-        private void CopyFile(string sourcePath, string backupFolderPath, bool overrideAll = false)
+        private void CopyFile(string sourcePath, string backupFolderPath, bool overrideAll, string[] fileExtentionsFilter)
         {
             var sourceFileName = this.GetFileName(sourcePath);
             if (sourceFileName == null)
                 return;
+
+            if (fileExtentionsFilter != null)
+            {
+                if(!fileExtentionsFilter.Contains(Path.GetExtension(sourcePath), StringComparer.InvariantCultureIgnoreCase))
+                    return;                
+            }
+
             File.Copy(sourcePath, this.CombinePath(backupFolderPath, sourceFileName), overrideAll);
         }
 
