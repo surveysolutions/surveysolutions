@@ -1,4 +1,3 @@
-using Flurl.Http;
 using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
 using Plugin.Geolocator;
@@ -8,6 +7,7 @@ using Plugin.Media.Abstractions;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -57,10 +57,6 @@ namespace WB.UI.Shared.Enumerator
             this.Bind<IGeolocator>().ToMethod(context => CrossGeolocator.Current);
             this.Bind<IMedia>().ToMethod(context => CrossMedia.Current);
             this.Bind<IPermissions>().ToMethod(context => CrossPermissions.Current);
-
-            FlurlHttp.Configure(c => {
-                c.HttpClientFactory = new ModernHttpClientFactory();
-            });
 
             this.Bind<IAttachmentContentStorage>().To<AttachmentContentStorage>().InSingletonScope();
             this.Bind<ITranslationStorage>().To<TranslationsStorage>();
