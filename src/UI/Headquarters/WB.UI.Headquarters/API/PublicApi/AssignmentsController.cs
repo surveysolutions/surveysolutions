@@ -11,6 +11,7 @@ using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -226,7 +227,19 @@ namespace WB.UI.Headquarters.API.PublicApi
             var result = importService.VerifyAssignment(answers.GroupedByLevels(), questionnaire);
 
             if (!result.status)
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, result.errorMessage));
+            {
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, new CreateAssignmentResult
+                {
+                    Assignment = mapper.Map<AssignmentDetails>(assignment),
+                    VerificationStatus = new ImportDataVerificationState
+                    {
+                        Errors = new List<PanelImportVerificationError>
+                        {
+                            new PanelImportVerificationError("PL0011", result.errorMessage)
+                        }
+                    }
+                }));
+            }
 
             this.assignmentsStorage.Store(assignment, null);
             interviewCreatorFromAssignment.CreateInterviewIfQuestionnaireIsOld(responsible.Id, questionnaireId,

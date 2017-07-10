@@ -1,4 +1,3 @@
-using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -12,11 +11,10 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using System.Collections.Generic;
-using Main.Core.Entities.Composite;
-using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTests
 {
@@ -81,16 +79,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 .Setup(m => m.Map(It.IsAny<CreateAssignmentApiRequest>(), It.IsAny<Assignment>()))
                 .Returns(assignment);
 
-            this.preloadedDataVerifier
-                .Setup(v => v.VerifyAssignmentsSample(qid.QuestionnaireId, qid.Version, It.IsAny<PreloadedDataByFile>()))
-                .Returns(new ImportDataVerificationState
-                {
-                    Errors = new List<PanelImportVerificationError>
-                    {
-                        new PanelImportVerificationError("CODE", "Message")
-                    }
-                });
-
             try
             {
                 this.controller.Create(new CreateAssignmentApiRequest
@@ -122,9 +110,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 .Setup(m => m.Map(It.IsAny<CreateAssignmentApiRequest>(), It.IsAny<Assignment>()))
                 .Returns(assignment);
 
-            this.preloadedDataVerifier
-                .Setup(v => v.VerifyAssignmentsSample(qid.QuestionnaireId, qid.Version, It.IsAny<PreloadedDataByFile>()))
-                .Returns(new ImportDataVerificationState() { Errors = new List<PanelImportVerificationError>() });
+            this.interviewImportService
+                .Setup(x => x.VerifyAssignment(It.IsAny<List<InterviewAnswer>[]>(), It.IsAny<IQuestionnaire>()))
+                .Returns((true, null));
 
             this.controller.Create(new CreateAssignmentApiRequest
             {
