@@ -166,7 +166,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 else
                 {
                     // https://github.com/tmenier/Flurl/issues/163
-                    var exceptionInnerException = ex.InnerException;
+                    var exceptionInnerException = ex.Call?.Exception?.InnerException;
                     if (exceptionInnerException != null)
                     {
                         var exceptionTypeName = exceptionInnerException.GetType().Name;
