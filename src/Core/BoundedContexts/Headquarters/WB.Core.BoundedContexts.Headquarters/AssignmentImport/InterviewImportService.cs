@@ -18,7 +18,10 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
@@ -94,28 +97,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             this.preloadedDataVerifier.VerifyPanelFiles(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, preloadedPanelData, this.Status);
 
-            void VerifyAssignment(AssignmentImportData assignmentRecord)
+            void VerifyAssignmentAction(AssignmentImportData assignmentRecord)
             {
-                var answersGroupedByLevels = assignmentRecord.PreloadedData.AnswersGroupedByLevels;
-
-                var tree = this.interviewTreeBuilder.BuildInterviewTree(Guid.NewGuid(), questionnaire);
-
-                var noAnswersOnQuestionnaireLevel = answersGroupedByLevels.All(x => x.FirstOrDefault()?.Identity.RosterVector.Length != 0);
-                if (noAnswersOnQuestionnaireLevel)
-                    tree.ActualizeTree();
-
-                foreach (var answersInLevel in answersGroupedByLevels)
-                {
-                    foreach (InterviewAnswer answer in answersInLevel)
-                    {
-                        answer.Answer.ValidateAsPreloaded(new InterviewQuestionInvariants(answer.Identity, questionnaire, tree));
-
-                        var interviewTreeQuestion = tree.GetQuestion(answer.Identity);
-
-                        interviewTreeQuestion?.SetAnswer(answer.Answer);
-                    }
-                    tree.ActualizeTree();
-                }
+                var result = VerifyAssignment(assignmentRecord.PreloadedData.Answers.GroupedByLevels(), questionnaire);
+                if (!result.status)
+                    throw new InterviewException(result.errorMessage);
             }
 
             if (this.Status.VerificationState.Errors.Any())
@@ -129,7 +115,39 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             this.Status.Stage = AssignmentImportStage.AssignmentDataVerification;
 
             AssignmentImportData[] assignmentImportData = this.interviewImportDataParsingService.GetAssignmentsData(interviewImportProcessId, questionnaireIdentity, AssignmentImportType.Panel);
-            RunImportProcess(assignmentImportData, questionnaireIdentity, VerifyAssignment);
+            RunImportProcess(assignmentImportData, questionnaireIdentity, VerifyAssignmentAction);
+        }
+        public (bool status, string errorMessage) VerifyAssignment(List<InterviewAnswer>[] answersGroupedByLevels, IQuestionnaire questionnaire)
+        {
+            try
+            {
+                var tree = this.interviewTreeBuilder.BuildInterviewTree(Guid.NewGuid(), questionnaire);
+
+                var noAnswersOnQuestionnaireLevel =
+                    answersGroupedByLevels.All(x => x.FirstOrDefault()?.Identity.RosterVector.Length != 0);
+                if (noAnswersOnQuestionnaireLevel)
+                    tree.ActualizeTree();
+
+                foreach (var answersInLevel in answersGroupedByLevels)
+                {
+                    foreach (InterviewAnswer answer in answersInLevel)
+                    {
+                        answer.Answer.ValidateAsPreloaded(new InterviewQuestionInvariants(answer.Identity, questionnaire,
+                            tree));
+
+                        var interviewTreeQuestion = tree.GetQuestion(answer.Identity);
+
+                        interviewTreeQuestion?.SetAnswer(answer.Answer);
+                    }
+                    tree.ActualizeTree();
+                }
+            }
+            catch (Exception e)
+            {
+                return (false, e.Message);
+            }
+
+            return (true, null);
         }
 
         public void ImportAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, Guid? responsibleId, Guid headquartersId, AssignmentImportType mode)
@@ -164,7 +182,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 assignment.SetIdentifyingData(identifyingAnswers);
                 assignment.SetAnswers(answers);
 
-                // need save assignment firstly for get real assignmentId
+                // need save an assignment first to get a real assignmentId
                 this.PlainTransactionManager.ExecuteInPlainTransaction(() => this.assignmentPlainStorageAccessor.Store(assignment, null));
 
                 bool isSupportAssignments = questionnaireBrowseItem.AllowAssignments;
