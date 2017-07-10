@@ -1,4 +1,3 @@
-using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -8,15 +7,10 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.Core.BoundedContexts.Headquarters.Factories;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
-using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
@@ -37,12 +31,14 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         protected Mock<IPreloadedDataVerifier> preloadedDataVerifier;
         protected Mock<IQuestionnaireStorage> questionnaireStorage;
         protected Mock<ILogger> logger;
+        protected Mock<IInterviewImportService> interviewImportService;
 
         [SetUp]
         public virtual void Setup()
         {
             this.PrepareMocks();
 
+            
             this.controller = new AssignmentsController(
                 this.assignmentViewFactory.Object,
                 this.assignmentsStorage.Object,
@@ -51,7 +47,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 this.logger.Object,
                 this.questionnaireStorage.Object,
                 Mock.Of<IInterviewCreatorFromAssignment>(),
-                Mock.Of<IInterviewImportService>());
+                interviewImportService.Object);
 
             this.controller.Request = new HttpRequestMessage();
             this.controller.Configuration = new HttpConfiguration();
@@ -66,13 +62,14 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             this.preloadedDataVerifier = new Mock<IPreloadedDataVerifier>();
             this.questionnaireStorage = new Mock<IQuestionnaireStorage>();
             this.logger = new Mock<ILogger>();
+            this.interviewImportService = new Mock<IInterviewImportService>();
         }
 
         protected void SetupResponsibleUser(HqUser user)
         {
             this.userManager.Setup(um => um.FindByNameAsync(It.IsAny<string>())).Returns(Task.FromResult(user));
         }
-        
+
         protected void SetupAssignment(Assignment assignment)
         {
             this.assignmentsStorage.Setup(ass => ass.GetById(It.IsAny<int>())).Returns(assignment);
