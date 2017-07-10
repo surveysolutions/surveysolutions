@@ -1,5 +1,5 @@
 ﻿using System.Net.Http;
-using Flurl.Http.Configuration;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 
 namespace WB.UI.Shared.Enumerator.Services.Internals
 {
