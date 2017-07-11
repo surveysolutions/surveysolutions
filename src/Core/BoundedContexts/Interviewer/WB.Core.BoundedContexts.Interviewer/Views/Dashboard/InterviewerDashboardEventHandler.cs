@@ -48,7 +48,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                                          ILitePublishedEventHandler<TranslationSwitched>,
                                          ILitePublishedEventHandler<MultipleOptionsLinkedQuestionAnswered>,
                                          ILitePublishedEventHandler<SingleOptionLinkedQuestionAnswered>,
-                                         ILitePublishedEventHandler<AreaQuestionAnswered>
+                                         ILitePublishedEventHandler<AreaQuestionAnswered>,
+                                         ILitePublishedEventHandler<InterviewKeyAssigned>
     {
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPlainStorage<PrefilledQuestionView> prefilledQuestions;
@@ -471,6 +472,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, new Area(evnt.Payload.Geometry, evnt.Payload.MapName, 
                 evnt.Payload.AreaSize, evnt.Payload.Length, evnt.Payload.Coordinates, evnt.Payload.DistanceToEditor), evnt.Payload.AnswerTimeUtc);
+        }
+
+        public void Handle(IPublishedEvent<InterviewKeyAssigned> @event)
+        {
+            InterviewView interviewView = this.interviewViewRepository.GetById(@event.EventSourceId.FormatGuid());
+            if (interviewView == null)
+                return;
+
+            interviewView.InterviewKey = @event.Payload.Key.ToString();
+            this.interviewViewRepository.Store(interviewView);
         }
     }
 }

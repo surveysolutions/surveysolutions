@@ -380,6 +380,7 @@
     <Compile Include="Ninject\InterviewerUIModule.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Services\BackupRestoreService.cs" />
+    <Compile Include="Services\InterviewerInterviewUniqueKeyGenerator.cs" />
     <Compile Include="Services\SyncServiceConnection.cs" />
     <Compile Include="Services\SyncBgService.cs" />
     <Compile Include="Services\SyncServiceBinder.cs" />

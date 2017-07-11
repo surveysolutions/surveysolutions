@@ -1,6 +1,6 @@
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace WB.Core.BoundedContexts.Headquarters.Services
+namespace WB.Core.SharedKernels.DataCollection.Services
 {
     public interface IInterviewUniqueKeyGenerator
     {
