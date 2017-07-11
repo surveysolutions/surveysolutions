@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             rows.Count.ShouldEqual(2);
 
         It should_add_first_header_that_corresponds_to_interview = () =>
-            rows[0].First().ShouldEqual(new object[] { "Id", "1","a", "ssSys_IRnd"});
+            rows[0].First().ShouldEqual(new object[] { "Id", "1","a", "ssSys_IRnd", "Key" });
 
         It should_add_second_header_that_corresponds_to_nested_roster_level_of_the_interview = () =>
             rows[1].First().ShouldEqual(new object[] { "Id", "r1", "r2", "1", "a", "ParentId1", "ParentId2" });
