@@ -30,10 +30,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         public DashboardInterviewStatus Status { get; private set; }
 
         public string DateComment { get; private set; }
+
         public string Comment { get; private set; }
+
         public bool IsSupportedRemove { get; set; }
+
         public string Title { get; private set; }
+
         public InterviewGpsCoordinatesView GpsLocation { get; private set; }
+
         public bool HasGpsLocation => this.GpsLocation != null;
 
         public IMvxAsyncCommand RemoveInterviewCommand
@@ -91,7 +96,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.IsSupportedRemove = interview.CanBeDeleted;
 
             if (interview.Assignment != null)
-                this.Title = string.Format(InterviewerUIResources.Dashboard_InterviewCard_Title, interview.Assignment.ToString());
+            {
+                this.Title = string.Format(InterviewerUIResources.Dashboard_InterviewCard_Title, interview.Assignment.ToString(), interview.InterviewKey);
+            }
 
             this.DetailedIdentifyingData = this.GetPrefilledQuestions().ToList();
             this.IdentifyingData = this.DetailedIdentifyingData.Take(3).ToList();

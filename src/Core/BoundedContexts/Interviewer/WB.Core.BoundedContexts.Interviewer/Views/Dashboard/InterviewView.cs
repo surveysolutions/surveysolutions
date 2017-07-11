@@ -38,5 +38,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public string Language { get; set; }
 
         public string QuestionnaireTitle { get; set; }
+
+        public string InterviewKey { get; set; }
     }
 }

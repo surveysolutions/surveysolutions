@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 
@@ -30,8 +31,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly ICommandService commandService;
         private readonly IInterviewAnswerSerializer answerSerializer;
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
+        private readonly IInterviewUniqueKeyGenerator keyGenerator;
 
-        public InterviewFromAssignmentCreatorService(IMvxMessenger messenger, ICommandService commandService, IInterviewerPrincipal interviewerPrincipal, IViewModelNavigationService viewModelNavigationService, IInterviewAnswerSerializer answerSerializer, IAssignmentDocumentsStorage assignmentsRepository)
+        public InterviewFromAssignmentCreatorService(IMvxMessenger messenger,
+            ICommandService commandService,
+            IInterviewerPrincipal interviewerPrincipal,
+            IViewModelNavigationService viewModelNavigationService,
+            IInterviewAnswerSerializer answerSerializer,
+            IAssignmentDocumentsStorage assignmentsRepository,
+            IInterviewUniqueKeyGenerator keyGenerator)
         {
             this.messenger = messenger;
             this.commandService = commandService;
@@ -39,6 +47,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.viewModelNavigationService = viewModelNavigationService;
             this.answerSerializer = answerSerializer;
             this.assignmentsRepository = assignmentsRepository;
+            this.keyGenerator = keyGenerator;
         }
 
         public async Task CreateInterviewAsync(int assignmentId)
@@ -61,7 +70,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     DateTime.UtcNow,
                     interviewerIdentity.SupervisorId,
                     interviewerIdentity.UserId,
-                    null,
+                    keyGenerator.Get(),
                     assignment.Id
                 );
 
