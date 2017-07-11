@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.UI.Headquarters.Models.WebInterview
@@ -162,12 +163,21 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public bool HideInstructions { get; set; }
         public bool IsAnswered { get; set; }
         public Validity Validity { get; set; } = new Validity();
+        public Comment[] Comments { get; set; }
     }
 
     public class Validity
     {
         public bool IsValid { get; set; }
         public string[] Messages { get; set; }
+    }
+
+    public class Comment
+    {
+        public string Text { get; set; }
+        public bool IsOwnComment { get; set; }
+        public UserRoles UserRole { get; set; }
+        public DateTime CommentTime { get; set; }
     }
 
     public abstract class InterviewEntity
