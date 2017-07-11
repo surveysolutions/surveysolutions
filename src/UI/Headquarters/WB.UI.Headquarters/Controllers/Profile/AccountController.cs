@@ -23,7 +23,7 @@ using WB.UI.Shared.Web.Extensions;
 namespace WB.UI.Headquarters.Controllers
 {
     [ValidateInput(false)]
-    [Authorize(Roles = @"Administrator, Headquarter, Supervisor, ApiUser, Observer")]
+    [Authorize(Roles = @"Administrator, Headquarter, Supervisor, ApiUser, Observer, Interviewer")] // UserRoles.
     public class AccountController : TeamController
     {
         private readonly ICaptchaProvider captchaProvider;
@@ -66,6 +66,9 @@ namespace WB.UI.Headquarters.Controllers
 
                 case UserRoles.Observer:
                     return this.RedirectToAction("Index", "Headquarters");
+
+                case UserRoles.Interviewer:
+                    return this.RedirectToAction("CreateNew", "InterviewerHq");
 
                 default:
                     return this.RedirectToAction("NotFound", "Error");

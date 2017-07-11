@@ -70,12 +70,14 @@
                 else if (authorizedUser.IsSupervisor)
                 {
                     @Html.Partial("SupervisorMainMenu")
+                } else if (authorizedUser.IsInterviewer)
+                {
+                    @Html.Partial("InterviewerMainMenu")
                 }
                 else
                 {
                     @Html.Partial("ObserverMainMenu")
-                }
-            </div><!-- /.navbar-collapse -->
+                }else</div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
 </header>
