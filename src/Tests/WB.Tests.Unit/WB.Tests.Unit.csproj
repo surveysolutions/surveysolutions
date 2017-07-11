@@ -552,6 +552,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Substitutions\when_removing_answer_from_text_list_question_that_is_used_as_source.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_synchronizing_census_interview_for_the_first_time.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_synchronizing_interview_events_of_interview_with_key_assigned.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_synchronizing_interview_with_assignment_and_interview_key.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_single_linked_to_List_question_and_answer_is_specified.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_multi_linked_to_List_question_and_answer_is_specified.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_applying_VariablesChanged_event_for_deleted_variable.cs" />
@@ -678,6 +679,7 @@
     <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\when_creating_InterviewQuestionView_for_Single_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\when_creating_InterviewQuestionView_for_Timestamp_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewSynchronizationDtoFactoryTests\InterviewSynchronizationDtoFactoryTests.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\InterviewSynchronizationDtoFactoryTests\when_generating_for_interview_with_key_and_assignment_id.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Merger\when_merging_questionnaire_and_interview_data_with_question_in_nested_roster_has_substitution_reference_on_parent_roster.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Merger\when_merging_questionnaire_and_interview_data_with_static_text_with_substitution_on_single_linked_referanced_to_list.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataServiceTests\when_CreatePreloadedDataDtoFromSampleData_and_some_anwers_is_null.cs" />

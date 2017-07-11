@@ -137,6 +137,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.properties.InterviewerId = @event.InterviewData.UserId;
             this.SupervisorRejectComment = @event.InterviewData.Comments;
 
+            if (@event.InterviewData.InterviewKey != null)
+            {
+                this.Apply(new InterviewKeyAssigned(@event.InterviewData.InterviewKey));
+            }
+
             this.sourceInterview = this.Tree.Clone();
         }
 
@@ -281,7 +286,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.CreatedOnClient,
                 questionnaire.IsUsingExpressionStorage()
             );
-
+            var synchronizedInterviewInterviewKey = command.SynchronizedInterview.InterviewKey;
+            if (synchronizedInterviewInterviewKey != null)
+            {
+                this.ApplyEvent(new InterviewKeyAssigned(synchronizedInterviewInterviewKey));
+            }
             this.ApplyEvent(new InterviewSynchronized(command.SynchronizedInterview));
         }
 

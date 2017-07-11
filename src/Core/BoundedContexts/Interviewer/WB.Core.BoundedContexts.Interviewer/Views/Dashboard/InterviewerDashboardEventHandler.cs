@@ -208,6 +208,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
 
             interviewView.LocationQuestionId = prefilledGpsQuestionId;
+            interviewView.Assignment = assignmentId;
 
             var existingPrefilledForInterview = this.prefilledQuestions.Where(x => x.InterviewId == interviewId).ToList();
             this.prefilledQuestions.Remove(existingPrefilledForInterview);
@@ -266,7 +267,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 assignedDateTime: evnt.Payload.InterviewData.InterviewerAssignedDateTime,
                 startedDateTime: null,
                 rejectedDateTime: evnt.Payload.InterviewData.RejectDateTime, 
-                assignmentId: null);
+                assignmentId: evnt.Payload.InterviewData.AssignmentId);
         }
 
         public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
