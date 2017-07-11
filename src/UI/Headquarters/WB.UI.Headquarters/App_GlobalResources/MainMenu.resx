@@ -165,6 +165,18 @@
   <data name="Supervisors" xml:space="preserve">
     <value>Supervisors</value>
   </data>
+  <data name="CreateNew">
+    <value>Create new</value>
+  </data>
+  <data name="Started">
+    <value>Started</value>
+  </data>
+  <data name="Completed">
+    <value>Completed</value>
+  </data>
+  <data name="Rejected">
+    <value>Rejected</value>
+  </data>
   <data name="SurveysAndStatuses" xml:space="preserve">
     <value>Surveys and Statuses</value>
   </data>
