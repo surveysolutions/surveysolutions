@@ -11,6 +11,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 {
