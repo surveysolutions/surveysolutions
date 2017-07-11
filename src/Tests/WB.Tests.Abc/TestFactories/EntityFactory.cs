@@ -483,8 +483,11 @@ namespace WB.Tests.Abc.TestFactories
             List<Identity> validStaticTexts = null,
             List<KeyValuePair<Identity, List<FailedValidationCondition>>> invalidStaticTexts = null,
             Dictionary<InterviewItemId, object> variables = null,
-            HashSet<InterviewItemId> disabledVariables = null)
-            => new InterviewSynchronizationDto(
+            HashSet<InterviewItemId> disabledVariables = null,
+            InterviewKey interviewKey = null,
+            int? assignmentId = null)
+        {
+            return new InterviewSynchronizationDto(
                 interviewId ?? Guid.NewGuid(),
                 status,
                 "",
@@ -504,11 +507,17 @@ namespace WB.Tests.Abc.TestFactories
                 validStaticTexts ?? new List<Identity>(),
                 invalidStaticTexts ?? new List<KeyValuePair<Identity, List<FailedValidationCondition>>>(),
                 rosterGroupInstances ?? new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(),
-                failedValidationConditions?.ToList() ?? new List<KeyValuePair<Identity, IList<FailedValidationCondition>>>(),
+                failedValidationConditions?.ToList() ??
+                new List<KeyValuePair<Identity, IList<FailedValidationCondition>>>(),
                 new Dictionary<InterviewItemId, RosterVector[]>(),
                 variables ?? new Dictionary<InterviewItemId, object>(),
                 disabledVariables ?? new HashSet<InterviewItemId>(),
-                wasCompleted ?? false);
+                wasCompleted ?? false)
+            {
+                InterviewKey = interviewKey,
+                AssignmentId = assignmentId
+            };
+        }
 
         public InterviewView InterviewView(Guid? prefilledQuestionId = null, Guid? interviewId = null, string questionnaireId = null, InterviewStatus? status = null)
         {
