@@ -88,6 +88,10 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public HashSet<InterviewItemId> InvalidAnsweredQuestions { get;  set; }
         public HashSet<InterviewItemId> ReadonlyQuestions { get;  set; }
 
+        public InterviewKey InterviewKey { get; set; }
+
+        public int? AssignmentId { get; set; }
+
         public IList<KeyValuePair<Identity, IList<FailedValidationCondition>>> FailedValidationConditions { get; set; }
         [Obsolete("Since all intervewers will be version 5.16+")]
         public Dictionary<InterviewItemId, RosterSynchronizationDto[]> RosterGroupInstances { get; set; }

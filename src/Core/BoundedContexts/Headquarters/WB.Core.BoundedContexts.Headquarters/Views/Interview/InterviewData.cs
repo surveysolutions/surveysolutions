@@ -22,5 +22,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public bool IsMissingAssignToInterviewer { get; set; }
 
         public string InterviewKey { get; set; }
+        public int? AssignmentId { get; set; }
     }
 }
