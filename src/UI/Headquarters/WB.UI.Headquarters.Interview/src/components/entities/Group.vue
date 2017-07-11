@@ -1,5 +1,5 @@
 <template>
-    <wb-question :question="$me" :questionCssClassName="statusClass" noTitle="true" noValidation="true" noInstructions="true">
+    <wb-question :question="$me" :questionCssClassName="statusClass" noTitle="true" noValidation="true" noInstructions="true" noComments="true">
         <div class="options-group">
                 <router-link :to="navigateTo" class="btn btn-roster-section" :class="btnStatusClass">
                     <span v-html="$me.title"></span><span v-if="this.$me.isRoster"> - <i>{{rosterTitle}}</i></span>
