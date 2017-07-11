@@ -87,10 +87,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor, Interviewer")]
         [ActionName("Profile")]
-        public async Task<ActionResult> InterviewerProfile(Guid id)
+        public async Task<ActionResult> InterviewerProfile(Guid? userId)
         {
+            var id = userId ?? this.authorizedUser.Id;
             var interviewer = await this.userManager.FindByIdAsync(id);
             if (interviewer == null || !interviewer.IsInRole(UserRoles.Interviewer)) return this.HttpNotFound();
 
