@@ -168,10 +168,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         {
             switch (serviceVariable.VariableType)
             {
-                case ServiceVariableType.InterviewRandom :
-                        return interview.InterviewId.GetRandomDouble().ToString(CultureInfo.InvariantCulture);
+                case ServiceVariableType.InterviewRandom:
+                    return interview.InterviewId.GetRandomDouble().ToString(CultureInfo.InvariantCulture);
+                case ServiceVariableType.InterviewKey:
+                    return interview.InterviewKey;
             }
-            
+
             return String.Empty;
         }
 
@@ -392,7 +394,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         private HeaderStructureForLevel BuildHeaderByTemplate(QuestionnaireDocument questionnaire, ValueVector<Guid> levelVector,
             Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes, Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
         {
-            var rootGroups = this.GetRootGroupsForLevel(questionnaire, rosterScopes, levelVector);
+            IEnumerable<IGroup> rootGroups = this.GetRootGroupsForLevel(questionnaire, rosterScopes, levelVector);
 
             if (!rootGroups.Any())
                 throw new InvalidOperationException("level is absent in template");
