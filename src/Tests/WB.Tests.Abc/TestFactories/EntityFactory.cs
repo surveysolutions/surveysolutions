@@ -15,9 +15,13 @@ using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Troubleshooting.Views;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
@@ -34,6 +38,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -44,6 +49,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -357,12 +363,22 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewDataExportLevelView InterviewDataExportLevelView(Guid interviewId, params InterviewDataExportRecord[] records)
             => new InterviewDataExportLevelView(new ValueVector<Guid>(), "test", records);
 
-        public InterviewDataExportRecord InterviewDataExportRecord(Guid interviewId, params ExportQuestionService[] questions)
-            => new InterviewDataExportRecord("test", new string[0], new string[0], new string[0])
-            {
-                Answers = questions.Select(x => string.Join("\n", x)).ToArray(),
-                LevelName = ""
-            };
+        public InterviewDataExportRecord InterviewDataExportRecord(
+            Guid interviewId,
+            string levelName = "",
+            string[] referenceValues = null,
+            string[] parentLevelIds = null,
+            string[] systemVariableValues = null,
+            string[] answers = null)
+            => new InterviewDataExportRecord(interviewId.FormatGuid(), 
+               referenceValues?? new string[0],
+               parentLevelIds ?? new string[0],
+               systemVariableValues ?? new string[0])
+               { 
+                   Answers = answers ?? new string[0],
+                   LevelName = levelName,
+                   InterviewId = interviewId
+               };
 
         public InterviewDataExportView InterviewDataExportView(
             Guid? interviewId = null,
@@ -825,6 +841,7 @@ namespace WB.Tests.Abc.TestFactories
         public QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, Guid? id = null, params IComposite[] children)
             => new QuestionnaireDocument
             {
+                Title = "Questionnaire",
                 PublicKey = id ?? Guid.NewGuid(),
                 Children = new List<IComposite>
                 {
@@ -1729,6 +1746,26 @@ namespace WB.Tests.Abc.TestFactories
         public AssignmentImportStatus AssignmentImportStatus()
         {
             return new AssignmentImportStatus();
+        }
+
+        public QuestionnaireExportStructure QuestionnaireExportStructure(QuestionnaireDocument questionnaire)
+        {
+            var fileSystemAccessor = new Mock<IFileSystemAccessor>();
+            fileSystemAccessor
+                .Setup(x => x.MakeStataCompatibleFileName(It.IsAny<string>()))
+                .Returns((string f) => f);
+
+            var exportViewFactory = new ExportViewFactory(
+                fileSystemAccessor.Object,
+                Mock.Of<IExportQuestionService>(),
+                Mock.Of<IQuestionnaireStorage>(),
+                new RosterStructureService());
+            return exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, new QuestionnaireIdentity(Guid.NewGuid(), 1));
+        }
+
+        public ExportQuestionService ExportQuestionService()
+        {
+            return new ExportQuestionService();
         }
     }
 }

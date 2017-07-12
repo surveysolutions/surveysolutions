@@ -3,7 +3,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
-namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExport.ExportedQuestionTests
+namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
 {
     public class when_creating_export_structure_for_ordered_yes_no_question : ExportedQuestionTestContext
     {

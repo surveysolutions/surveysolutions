@@ -1,7 +1,7 @@
 ﻿using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 
-namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExport.ExportedQuestionTests
+namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
 {
     public class when_creating_export_structure_for_text_list_question : ExportedQuestionTestContext
     {

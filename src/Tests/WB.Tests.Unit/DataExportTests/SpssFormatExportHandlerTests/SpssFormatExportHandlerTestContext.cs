@@ -11,7 +11,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 
-namespace WB.Tests.Unit.BoundedContexts.Headquarters.SpssFormatExportHandlerTests
+namespace WB.Tests.Unit.DataExportTests.SpssFormatExportHandlerTests
 {
     [Subject(typeof(SpssFormatExportHandler))]
     internal class SpssFormatExportHandlerTestContext

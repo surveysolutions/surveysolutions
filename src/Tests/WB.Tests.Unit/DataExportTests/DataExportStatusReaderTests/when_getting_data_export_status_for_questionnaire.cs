@@ -2,17 +2,17 @@
 using System.Linq;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
+using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
-using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExportStatusReaderTests
+namespace WB.Tests.Unit.DataExportTests.DataExportStatusReaderTests
 {
     internal class when_getting_data_export_status_for_questionnaire: DataExportStatusReaderTestContext
     {
