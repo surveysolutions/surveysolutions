@@ -73,7 +73,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, DeleteLookupTable>,
         ICommandPostProcessor<Questionnaire, ReplaceTextsCommand>,
         ICommandPostProcessor<Questionnaire, RevertVersionQuestionnaire>,
-        ICommandPostProcessor<Questionnaire, UpdateAreaQuestion>
+        ICommandPostProcessor<Questionnaire, UpdateAreaQuestion>,
+        ICommandPostProcessor<Questionnaire, UpdateAudioQuestion>
     {
         private IPlainStorageAccessor<User> accountStorage
             => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<User>>();
@@ -526,6 +527,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, UpdateMultiOptionQuestion command) => this.AddQuestionChanges(aggregate, command);
         public void Process(Questionnaire aggregate, UpdateSingleOptionQuestion command)=> this.AddQuestionChanges(aggregate, command);
         public void Process(Questionnaire aggregate, UpdateAreaQuestion command) => this.AddQuestionChanges(aggregate, command);
+        public void Process(Questionnaire aggregate, UpdateAudioQuestion command) => this.AddQuestionChanges(aggregate, command);
 
         private void AddQuestionChanges(Questionnaire aggregate, AbstractUpdateQuestionCommand command)
         {

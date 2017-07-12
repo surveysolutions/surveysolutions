@@ -228,6 +228,8 @@
                 return false;
             };
 
+            var questionsWithOnlyInterviewerScope = ['GpsCoordinates', 'Audio', 'Area'];
+
             $scope.setQuestionType = function (type) {
                 $scope.activeQuestion.type = type;
                 $scope.activeQuestion.typeName = _.find($scope.activeQuestion.questionTypeOptions, { value: type }).text;
@@ -246,11 +248,7 @@
                         $scope.activeQuestion.questionScope = 'Interviewer';
                     }
                 }
-                if (type === 'GpsCoordinates' && $scope.activeQuestion.questionScope === 'Supervisor') {
-                    $scope.activeQuestion.questionScope = 'Interviewer';
-                }
-
-                if (type === 'Area' && $scope.activeQuestion.questionScope === 'Supervisor') {
+                if (_.contains(questionsWithOnlyInterviewerScope, type)) {
                     $scope.activeQuestion.questionScope = 'Interviewer';
                 }
 
@@ -394,12 +392,18 @@
                 markFormAsChanged();
             };
 
+            var onlyInterviewerQuestionTypes = ['TextList', 'QRBarcode', 'Multimedia', 'GpsCoordinates', 'MultyOption', 'Area', "Audio"]
+
             $scope.getQuestionScopes = function (currentQuestion) {
                 if (!currentQuestion)
                     return [];
                 var allScopes = currentQuestion.allQuestionScopeOptions;
-                if (!currentQuestion.isCascade && !currentQuestion.isLinked && $.inArray(currentQuestion.type, ['TextList', 'QRBarcode', 'Multimedia', 'GpsCoordinates', 'MultyOption', 'Area']) < 0)
+                if (!currentQuestion.isCascade &&
+                    !currentQuestion.isLinked &&
+                    !_.contains(onlyInterviewerQuestionTypes, currentQuestion.type))
+                {
                     return allScopes;
+                }
 
                 return allScopes.filter(function (o) {
                     if (currentQuestion.type === 'MultyOption')
@@ -472,12 +476,9 @@
                 }
             };
 
-            var questionTypesDoesNotSupportValidations = ["Multimedia"];
+            var questionTypesDoesNotSupportValidations = ["Multimedia", "Audio", "Area"];
             
             $scope.doesQuestionSupportValidations = function () {
-                if ($scope.activeQuestion && $scope.activeQuestion.type === 'Area')
-                    return false;
-
                 return $scope.activeQuestion && !_.contains(questionTypesDoesNotSupportValidations, $scope.activeQuestion.type)
                     && !($scope.activeQuestion.isCascade && $scope.activeQuestion.cascadeFromQuestionId);
             };
