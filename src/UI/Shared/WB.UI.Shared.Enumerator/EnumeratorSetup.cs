@@ -146,17 +146,9 @@ namespace WB.UI.Shared.Enumerator
 
         private static void RegisterAutoCompleteTextViewBindings(IMvxTargetBindingFactoryRegistry registry)
         {
-            registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>("HidePopupOnDone",
-                view => new InstantAutoCompleteTextViewHidePopupOnDoneBinding(view));
-            registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>("ResetText",
-                view => new InstantAutoCompleteTextViewResetTextBinding(view));
-            registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>("ShowPopupOnFocus",
-                view => new InstantAutoCompleteTextViewShowPopupOnFocusBinding(view));
-
-            registry.RegisterPropertyInfoBindingFactory(
-                typeof(InstantAutoCompleteTextViewPartialTextTargetBinding),
-                typeof(InstantAutoCompleteTextView),
-                nameof(InstantAutoCompleteTextView.PartialText));
+            registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>(
+                nameof(InstantAutoCompleteTextView.PartialText),
+                (ctrl) => new InstantAutoCompleteTextViewPartialTextTargetBinding(ctrl));
             registry.RegisterPropertyInfoBindingFactory(
                 typeof(InstantAutoCompleteTextViewSelectedObjectTargetBinding),
                 typeof(InstantAutoCompleteTextView),

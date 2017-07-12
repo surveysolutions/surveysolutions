@@ -595,6 +595,7 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_creating_interview_from_snapshot_with_questions_answer.cs" />
     <Compile Include="SharedKernels\Enumerator\Utils\ObservableRangeCollectionTests.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_setting_FilterText_and_text_contains_special_regex_characters.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredSingleOptionQuestionViewModelTests\when_initing_view_model.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedToRosterQuestionViewModelTests.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\QuestionHeaderViewModelTests\when_answered_datetime_question_used_in_substitution_title.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SidebarSectionsViewModelTests.cs" />
@@ -936,7 +937,6 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredSingleOptionQuestionViewModelTests\FilteredSingleOptionQuestionViewModelTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredSingleOptionQuestionViewModelTests\when_entering_filter_text.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredSingleOptionQuestionViewModelTests\when_selecting_one_from_option_list.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredSingleOptionQuestionViewModelTests\when_initing_view_model.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredSingleOptionQuestionViewModelTests\when_creating_filtered_single_option_view_model.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionQuestionViewModelTests\when_toggling_answer_and_user_rejects_reduce_roster_size.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\NavigationStateTests\when_initializing_navigation_state.cs" />

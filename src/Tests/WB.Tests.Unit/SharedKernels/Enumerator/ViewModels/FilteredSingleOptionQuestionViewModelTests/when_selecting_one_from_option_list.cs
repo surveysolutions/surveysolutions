@@ -2,6 +2,8 @@ using System;
 using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -36,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             questionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
             answeringViewModelMock = new Mock<AnsweringViewModel>() { DefaultValue = DefaultValue.Mock };
 
-            var filteredOptionsViewModel = Setup.FilteredOptionsViewModel();
+            var filteredOptionsViewModel = Abc.Setup.FilteredOptionsViewModel();
 
             viewModel = CreateFilteredSingleOptionQuestionViewModel(
                 questionStateViewModel: questionStateMock.Object,
@@ -51,14 +53,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
         };
 
         Because of = () =>
-            viewModel.SelectedObject = new FilteredSingleOptionQuestionViewModel.FilteredComboboxItemViewModel() { Text = "html", Value = 4 };
+            viewModel.SelectedObject = new FilteredComboboxItemViewModel() { Text = "html", Value = 4 };
 
-        It should_set_nonnull_answer = () =>
-            viewModel.SelectedObject.ShouldNotBeNull();
-
-        It should_set_to_answer_backend_value = () =>
-            viewModel.SelectedObject.Value.ShouldEqual(4);
-
+        It should_save_answer = () =>
+            answeringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerSingleOptionQuestionCommand>(y=>y.SelectedValue == 4)), Times.Once);
 
         private static FilteredSingleOptionQuestionViewModel viewModel;
         private static Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> questionStateMock;
