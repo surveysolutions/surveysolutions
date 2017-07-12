@@ -171,7 +171,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 case ServiceVariableType.InterviewRandom:
                     return interview.InterviewId.GetRandomDouble().ToString(CultureInfo.InvariantCulture);
                 case ServiceVariableType.InterviewKey:
-                    return interview.InterviewKey;
+                    return interview.InterviewKey ?? string.Empty;
             }
 
             return String.Empty;
