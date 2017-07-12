@@ -192,4 +192,20 @@
   <data name="Questionnaires" xml:space="preserve">
     <value>Опросники</value>
   </data>
+  <data name="CreateNew" xml:space="preserve">
+    <value>Создать</value>
+    <comment>Создать</comment>
+  </data>
+  <data name="Started" xml:space="preserve">
+    <value>Начатые</value>
+    <comment>Начатые</comment>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Завершенные</value>
+    <comment>Завершенные</comment>
+  </data>
+  <data name="Rejected" xml:space="preserve">
+    <value>Отклоненные</value>
+    <comment>Отклоненные</comment>
+  </data>
 </root>

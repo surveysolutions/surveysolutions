@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                 return userId != null ? Guid.Parse(userId) : Guid.Empty;
             }
         }
-       
+
         public string UserName => this.authenticationManager.User.Identity.Name;
 
         public string DeviceId => this.authenticationManager.User.FindFirst(DeviceClaimType)?.Value;
