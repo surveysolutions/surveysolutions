@@ -57,5 +57,9 @@ export default {
     },
     SET_HAS_PREFILLED_QUESTIONS(state, hasPrefilledQuestions) {
         state.hasPrefilledQuestions = hasPrefilledQuestions
+    },
+    SET_QUESTION_COMMENTS(state, { questionId, comments }) {
+        const question = state.entityDetails[questionId]
+        question.comments = comments
     }
 }
