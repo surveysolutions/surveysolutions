@@ -167,4 +167,7 @@
   <data name="Assignment" xml:space="preserve">
     <value>Assignment</value>
   </data>
+  <data name="ClientKeyTitle" xml:space="preserve">
+    <value>Key that was generated on device, but was changed due to the collision with existing interview on server</value>
+  </data>
 </root>

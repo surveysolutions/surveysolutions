@@ -1396,7 +1396,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
             }
 
-            this.ApplyInterviewKey(command.InterviewKey);
+            this.ApplyEvent(new InterviewKeyAssigned(command.InterviewKey));
         }
 
         protected void PutAnswers(InterviewTree changedInterviewTree, 
@@ -1435,14 +1435,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
 
                 changedInterviewTree.ActualizeTree();
-            }
-        }
-
-        protected void ApplyInterviewKey(InterviewKey key)
-        {
-            if (this.interviewKey == null && key != null)
-            {
-                this.ApplyEvent(new InterviewKeyAssigned(key));
             }
         }
 
@@ -1821,8 +1813,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 this.ApplyEvent(synchronizedEvent);
             }
+            if (command.InterviewKey != null)
+            {
+                this.ApplyEvent(new InterviewKeyAssigned(command.InterviewKey));
+            }
 
-            this.ApplyInterviewKey(command.InterviewKey);
             this.ApplyEvent(new InterviewReceivedBySupervisor());
         }
 

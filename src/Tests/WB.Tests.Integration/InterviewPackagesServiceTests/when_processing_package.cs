@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
@@ -21,6 +22,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
+using WB.Tests.Abc.Storage;
 using WB.Tests.Integration.PostgreSQLTests;
 using It = Machine.Specifications.It;
 
@@ -53,7 +55,8 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 interviewPackageStorage: packagesStorage,
                 brokenInterviewPackageStorage: Mock.Of<IPlainStorageAccessor<BrokenInterviewPackage>>(),
                 commandService: mockOfCommandService.Object,
-                uniqueKeyGenerator: Mock.Of<IInterviewUniqueKeyGenerator>());
+                uniqueKeyGenerator: Mock.Of<IInterviewUniqueKeyGenerator>(),
+                interviews: new TestInMemoryWriter<InterviewSummary>());
 
             expectedCommand = Create.Command.SynchronizeInterviewEventsCommand(
                 interviewId: Guid.Parse("11111111111111111111111111111111"),
