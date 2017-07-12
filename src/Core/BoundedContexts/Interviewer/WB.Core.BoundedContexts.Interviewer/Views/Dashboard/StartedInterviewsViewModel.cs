@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -10,42 +9,27 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
-    public class StartedInterviewsViewModel : ListViewModel<IDashboardItem>
+    public class StartedInterviewsViewModel : BaseInterviewsViewModel
     {
         public override GroupStatus InterviewStatus => GroupStatus.Started;
+        protected override string TabTitle => InterviewerUIResources.Dashboard_StartedLinkText;
+        protected override string TabDescription => InterviewerUIResources.Dashboard_StartedTabText;
 
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
-        private readonly IInterviewViewModelFactory viewModelFactory;
         private readonly IPrincipal principal;
 
         public event EventHandler<InterviewRemovedArgs> OnInterviewRemoved;
-        private IReadOnlyCollection<InterviewView> dbItems;
 
         public StartedInterviewsViewModel(
             IPlainStorage<InterviewView> interviewViewRepository,
             IInterviewViewModelFactory viewModelFactory,
-            IPrincipal principal)
+            IPrincipal principal) : base(viewModelFactory)
         {
             this.interviewViewRepository = interviewViewRepository;
-            this.viewModelFactory = viewModelFactory;
             this.principal = principal;
         }
 
-        public async void Load()
-        {
-            this.dbItems = this.GetDbItems();
-
-            this.ItemsCount = this.dbItems.Count;
-            this.UpdateTitle();
-
-            var uiItems = await Task.Run(() => this.GetUiItems());
-            this.UiItems.ReplaceWith(uiItems);
-        }
-
-        private void UpdateTitle() => 
-            this.Title = string.Format(InterviewerUIResources.Dashboard_StartedLinkText, this.ItemsCount);
-
-        private IReadOnlyCollection<InterviewView> GetDbItems()
+        protected override IReadOnlyCollection<InterviewView> GetDbItems()
         {
             var interviewerId = this.principal.CurrentUserIdentity.UserId;
 
@@ -55,22 +39,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                  interview.Status == SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus.Restarted));
         }
 
-        private IEnumerable<IDashboardItem> GetUiItems()
-        {
-            var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
-            subTitle.Title = InterviewerUIResources.Dashboard_StartedTabText;
-
-            yield return subTitle;
-
-            foreach (var interviewView in this.dbItems)
-            {
-                var interviewDashboardItem = this.viewModelFactory.GetNew<InterviewDashboardItemViewModel>();
-                interviewDashboardItem.Init(interviewView);
-                interviewDashboardItem.OnItemRemoved += this.InterviewDashboardItem_OnItemRemoved;
-
-                yield return interviewDashboardItem;
-            }
-        }
+        protected override void OnItemCreated(InterviewDashboardItemViewModel interviewDashboardItem)
+            => interviewDashboardItem.OnItemRemoved += this.InterviewDashboardItem_OnItemRemoved;
 
         private void InterviewDashboardItem_OnItemRemoved(object sender, EventArgs e)
         {
@@ -81,8 +51,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             this.UiItems.Remove(dashboardItem);
 
-            this.OnInterviewRemoved(sender,
-                new InterviewRemovedArgs(dashboardItem.AssignmentId, dashboardItem.InterviewId));
+            this.OnInterviewRemoved(sender, new InterviewRemovedArgs(dashboardItem.AssignmentId, dashboardItem.InterviewId));
         }
     }
 }
