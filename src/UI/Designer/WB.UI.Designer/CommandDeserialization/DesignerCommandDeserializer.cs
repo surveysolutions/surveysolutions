@@ -44,6 +44,7 @@ namespace WB.UI.Designer.CommandDeserialization
                     { "UpdateGpsCoordinatesQuestion", typeof (UpdateGpsCoordinatesQuestion) },
                     { "UpdateFilteredComboboxOptions", typeof (UpdateFilteredComboboxOptions) },
                     { "UpdateAreaQuestion", typeof (UpdateAreaQuestion) },
+                    { "UpdateAudioQuestion", typeof (UpdateAudioQuestion) },
                     
                     //Static text commands
                     { "AddStaticText", typeof (AddStaticText) },
