@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         public string ReceivedTime { get; private set; }
         public InterviewGpsCoordinatesView GpsLocation { get; private set; }
 
-        private int interviewsLeftByAssignmentCount => this.assignment.Quantity.Value - this.interviewsByAssignmentCount;
+        private int interviewsLeftByAssignmentCount => this.assignment.Quantity.GetValueOrDefault() - this.interviewsByAssignmentCount;
 
         public string Comment => InterviewerUIResources.DashboardItem_AssignmentCreatedComment.FormatString(this.interviewsByAssignmentCount);
 
@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 ? InterviewerUIResources.Dashboard_AssignmentCard_TitleCountdown.FormatString(interviewsLeftByAssignmentCount)
                 : InterviewerUIResources.Dashboard_AssignmentCard_TitleCountdown_Unlimited);
 
-        public bool AllowToCreateNewInterview => Math.Max(0, interviewsLeftByAssignmentCount) > 0;
+        public bool AllowToCreateNewInterview => !this.assignment.Quantity.HasValue || Math.Max(0, interviewsLeftByAssignmentCount) > 0;
 
         public bool HasGpsLocation => this.GpsLocation != null;
 
