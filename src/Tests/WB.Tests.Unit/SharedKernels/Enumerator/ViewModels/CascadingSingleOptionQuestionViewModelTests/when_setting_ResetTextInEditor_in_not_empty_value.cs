@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
@@ -41,15 +42,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 questionnaireRepository: questionnaireRepository);
 
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
-
-            cascadingModel.FilterText = "a";
         };
 
-        Because of = () =>
-            cascadingModel.ResetTextInEditor = "hello";
-
-        It should_not_set_selected_object = () =>
-            cascadingModel.SelectedObject.ShouldNotBeNull();
+        Because of = () => { 
+            cascadingModel.FilterText = "3";
+            Thread.Sleep(1000);
+        };
 
         It should_not_set_filter_text = () =>
             cascadingModel.FilterText.ShouldNotBeNull();

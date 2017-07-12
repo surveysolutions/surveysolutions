@@ -309,9 +309,6 @@
     <Compile Include="CustomBindings\GroupBackgroundColorBinding.cs" />
     <Compile Include="CustomBindings\ImageViewBitmapWithFallbackBinding.cs" />
     <Compile Include="CustomBindings\MaskedEditTextIsMaskedQuestionAnsweredBinding.cs" />
-    <Compile Include="CustomBindings\InstantAutoCompleteTextViewHidePopupOnDoneBinding.cs" />
-    <Compile Include="CustomBindings\InstantAutoCompleteTextViewResetTextBinding.cs" />
-    <Compile Include="CustomBindings\InstantAutoCompleteTextViewShowPopupOnFocusBinding.cs" />
     <Compile Include="CustomBindings\ProgressBarIndeterminateBinding.cs" />
     <Compile Include="CustomBindings\FrameLayoutCurrentScreenBinding.cs" />
     <Compile Include="CustomBindings\NumericValueBinding.cs" />
@@ -909,11 +906,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\interview_question__instructions.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\layout\interview_question_cascading_single_option.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

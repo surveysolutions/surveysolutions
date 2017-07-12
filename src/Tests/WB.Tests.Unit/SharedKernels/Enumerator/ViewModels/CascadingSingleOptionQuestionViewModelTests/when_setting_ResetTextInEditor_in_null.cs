@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
@@ -47,13 +48,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
 
         Because of = () =>
-            cascadingModel.ResetTextInEditor = null;
-
-        It should_not_set_selected_object = () =>
-            cascadingModel.SelectedObject.ShouldBeNull();
+        {
+            cascadingModel.FilterText = string.Empty;
+            Thread.Sleep(1000);
+        };
 
         It should_set_filter_text_in_null = () =>
-            cascadingModel.FilterText.ShouldBeEmpty();
+            cascadingModel.FilterText.ShouldEqual(string.Empty);
 
         It should_set_3_items_in_AutoCompleteSuggestions = () =>
             cascadingModel.AutoCompleteSuggestions.Count.ShouldEqual(3);

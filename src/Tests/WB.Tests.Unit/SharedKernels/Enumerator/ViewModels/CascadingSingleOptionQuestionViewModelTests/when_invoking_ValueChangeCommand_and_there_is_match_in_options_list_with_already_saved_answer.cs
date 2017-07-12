@@ -49,8 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.FilterText = "o";
         };
 
-        Because of = () =>
-            cascadingModel.ValueChangeCommand.Execute("title klo 3");
+        Because of = () => cascadingModel.SelectedObject = new CascadingComboboxItemViewModel {Value = 3};
 
         It should_not_mark_question_as_invalid = () =>
             ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Text_MaskError), Times.Never);

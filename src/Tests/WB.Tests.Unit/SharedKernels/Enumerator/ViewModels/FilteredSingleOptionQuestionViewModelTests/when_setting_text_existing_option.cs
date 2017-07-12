@@ -24,8 +24,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
     {
         Establish context = () =>
         {
-            Stub.InitMvxMainThreadDispatcher();
-
             var singleOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.GetAnswer() == Create.Entity.SingleOptionAnswer(3));
             var option = new CategoricalOption() {Value = 1, Title = "dfdf" + answerValue };
 
@@ -42,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             questionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
             var answerViewModel = new AnsweringViewModel(Mock.Of<ICommandService>(), Mock.Of<IUserInterfaceStateService>());
 
-            var filteredOptionsViewModel = Setup.FilteredOptionsViewModel();
+            var filteredOptionsViewModel = Abc.Setup.FilteredOptionsViewModel();
 
             viewModel = CreateFilteredSingleOptionQuestionViewModel(
                 questionStateViewModel: questionStateMock.Object,
@@ -50,7 +48,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                 principal: principal,
                 interviewRepository: interviewRepository,
                 filteredOptionsViewModel: filteredOptionsViewModel);
-            viewModel.DefaultText = string.Empty;
 
             var navigationState = Create.Other.NavigationState();
             viewModel.Init(interviewId, questionIdentity, navigationState);
