@@ -168,4 +168,7 @@
   <data name="Assignment" xml:space="preserve">
     <value>Задание</value>
   </data>
+  <data name="ClientKeyTitle" xml:space="preserve">
+    <value>Идентификатор сгенерированный на устройстве, но измененный из-за конфликта с существующим интервью на сервере</value>
+  </data>
 </root>

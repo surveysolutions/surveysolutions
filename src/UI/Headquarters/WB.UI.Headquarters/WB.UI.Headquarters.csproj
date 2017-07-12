@@ -1668,6 +1668,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M018_AddColumnAnswersToAssignments.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M009_AddAssignmentIdToInterview.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M010_Add_index_for_interviewSummary_assignmentid.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M011_AddOriginalHumanIdToInterviewSummary.cs" />
     <Compile Include="Migrations\Users\M004_RemoveOldMigrationSchemas.cs" />
     <Compile Include="Models\Account\FinishIntallationModel.cs" />
     <Compile Include="Models\Account\IPasswordRequired.cs" />

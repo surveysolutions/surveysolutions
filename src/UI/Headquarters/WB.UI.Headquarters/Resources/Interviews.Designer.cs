@@ -137,6 +137,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Key that was generated on device, but was changed due to the collision with existing interview on server.
+        /// </summary>
+        public static string ClientKeyTitle {
+            get {
+                return ResourceManager.GetString("ClientKeyTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you want to continue?.
         /// </summary>
         public static string ContinueConfirmMessage {

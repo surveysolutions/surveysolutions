@@ -8,5 +8,6 @@
         public bool ReceivedByInterviewer { get; set; }
         public bool IsNeedInterviewerAssign { get; set; }
         public string Key { get; set; }
+        public string ClientKey { get; set; }
     }
 }
