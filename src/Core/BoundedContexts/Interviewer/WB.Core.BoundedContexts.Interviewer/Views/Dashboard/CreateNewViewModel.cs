@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
-    public class CreateNewViewModel : ListViewModel<IDashboardItem>
+    public class CreateNewViewModel : ListViewModel
     {
         public override GroupStatus InterviewStatus => GroupStatus.Disabled;
 
