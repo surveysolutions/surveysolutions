@@ -1497,7 +1497,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionType.Audio, command.ResponsibleId, null);
 
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
-            IQuestion newQuestion = CreateQuestion(
+            AudioQuestion newQuestion = (AudioQuestion)CreateQuestion(
                 command.QuestionId,
                 QuestionType.Audio,
                 command.Scope,
@@ -1525,6 +1525,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 new List<ValidationCondition>(),
                 null,
                 false);
+            newQuestion.Quality = command.Quality;
 
             if (question != null)
             {

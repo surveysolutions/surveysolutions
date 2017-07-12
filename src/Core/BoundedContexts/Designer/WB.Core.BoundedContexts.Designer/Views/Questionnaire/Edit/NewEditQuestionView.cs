@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -59,5 +60,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public bool WereOptionsTruncated { get; set; }
         public int OptionsCount { get; set; }
         public bool HideIfDisabled { get; set; }
+        public int Quality { get; set; }
+        public List<QualityOption> QualityOptions { get; set; }
     }
 }

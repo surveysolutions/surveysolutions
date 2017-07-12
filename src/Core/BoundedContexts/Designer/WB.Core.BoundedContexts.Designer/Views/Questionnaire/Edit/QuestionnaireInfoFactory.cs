@@ -477,11 +477,22 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     var dateTimeQuestion = (DateTimeQuestion)question;
                     questionView.IsTimestamp = dateTimeQuestion.IsTimestamp;
                     return questionView;
+                case QuestionType.Audio:
+                    var audioQuestion = (AudioQuestion) question;
+                    questionView.Quality = (int) audioQuestion.Quality;
+                    questionView.QualityOptions = new List<QualityOption>()
+                    {
+                        new QualityOption {Title = Quality.Lowest.ToString(), Value = (int) Quality.Lowest},
+                        new QualityOption {Title = Quality.Low.ToString(), Value = (int) Quality.Low},
+                        new QualityOption {Title = Quality.Medium.ToString(), Value = (int) Quality.Medium},
+                        new QualityOption {Title = Quality.High.ToString(), Value = (int) Quality.High},
+                        new QualityOption {Title = Quality.Highest.ToString(), Value = (int) Quality.Highest}
+                    };
+                    return questionView;
                 case QuestionType.QRBarcode:
                 case QuestionType.Multimedia:
                 case QuestionType.GpsCoordinates:
                 case QuestionType.Area:
-                case QuestionType.Audio:
                     return questionView;
             }
             return null;
