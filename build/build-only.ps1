@@ -1,8 +1,8 @@
 param([string]$VersionPrefix,
 [INT]$BuildNumber,
 [string]$KeystorePassword,
-[string]$BuildConfiguration="Release"
-[switch] $forceStatic)
+[string]$BuildConfiguration = "Release",
+[Boolean] $forceStatic = $False)
 
 $ErrorActionPreference = "Stop"
 
