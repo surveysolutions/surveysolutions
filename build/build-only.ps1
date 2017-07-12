@@ -1,7 +1,8 @@
 param([string]$VersionPrefix,
 [INT]$BuildNumber,
 [string]$KeystorePassword,
-[string]$BuildConfiguration="Release")
+[string]$BuildConfiguration="Release"
+[switch] $forceStatic)
 
 $ErrorActionPreference = "Stop"
 
@@ -26,7 +27,7 @@ try {
                 -BuildConfiguration $BuildConfiguration
 	if ($buildSuccessful){ 
 		RunConfigTransform $ProjectDesigner $BuildConfiguration
-		BuildStaticContent "src\UI\Designer\WB.UI.Designer\questionnaire" $false | %{ if (-not $_) { 
+		BuildStaticContent "src\UI\Designer\WB.UI.Designer\questionnaire" $forceStatic | %{ if (-not $_) { 
 			Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
 			Write-Host "##teamcity[buildProblem description='Failed to build static content for Designer']"
 			Exit 
