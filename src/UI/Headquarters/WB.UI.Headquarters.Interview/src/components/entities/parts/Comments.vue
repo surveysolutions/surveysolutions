@@ -7,15 +7,15 @@
         </template>
 
         <div class="comment active" v-if="isShowingAddCommentDialog">
-            <form class="form-inline">
+            <div class="form-inline">
                 <label>Your comment</label>
                 <div class="form-group">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Tap to enter your comment" />
+                        <input type="text" class="form-control" v-on:keyup.enter="postComment" v-model="comment" placeholder="Tap to enter your comment" />
                     </div>
                 </div>
-                <button type="submit" class="btn btn-default  btn-gray">Post</button>
-            </form>
+                <button type="submit" class="btn btn-default btn-gray" v-on:click="postComment">Post</button>
+            </div>
         </div>
     </div>
 </template>
@@ -25,6 +25,11 @@
     export default {
         mixins: [entityPartial],
         name: "wb-remove-answer",
+        data() {
+            return {
+                comment: null,
+            }
+        },
         props: {
             isShowingAddCommentDialog: { type: Boolean, default: false },
         },
@@ -46,6 +51,16 @@
                     return "Headquarter comment"
                 }
                 return 'Comment';
+            },
+            postComment() {
+                let comment: string = this.$data.comment
+
+                if (!comment || !comment.trim()) 
+                    return
+
+                this.$store.dispatch("sendNewComment", { questionId: this.$me.id, comment: comment })
+
+                this.$data.comment = ''
             }
         }
     }
