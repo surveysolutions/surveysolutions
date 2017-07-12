@@ -60,6 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
                         }).ToList(),
                     InterviewId = x.InterviewId,
                     Key = x.Key,
+                    ClientKey = x.ClientKey,
                     LastEntryDate = x.UpdateDate.ToShortDateString(),
                     ResponsibleId = x.ResponsibleId,
                     ResponsibleName = x.ResponsibleName,
@@ -74,7 +75,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
                     CanReject = x.Status == InterviewStatus.Completed || x.Status == InterviewStatus.RejectedByHeadquarters,
                     IsNeedInterviewerAssign = !x.IsAssignedToInterviewer,
                     AssignmentId = x.AssignmentId,
-                    ReceivedByInterviewer = x.ReceivedByInterviewer,
+                    ReceivedByInterviewer = x.ReceivedByInterviewer
                 }).ToList();
             return new TeamInterviewsView
             {
@@ -91,7 +92,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
 
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
-                items = items.Where(x => x.Key.StartsWith(input.SearchBy) || x.AnswersToFeaturedQuestions.Any(a => a.Answer.ToLower().StartsWith(input.SearchBy.ToLower())));
+                items = items.Where(x => x.Key.StartsWith(input.SearchBy) || x.ClientKey.StartsWith(input.SearchBy) || x.AnswersToFeaturedQuestions.Any(a => a.Answer.ToLower().StartsWith(input.SearchBy.ToLower())));
             }
 
             if (input.Status.HasValue)

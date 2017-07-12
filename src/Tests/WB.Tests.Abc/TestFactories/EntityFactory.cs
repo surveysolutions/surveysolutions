@@ -8,6 +8,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Main.Core.Events;
 using Moq;
 using ReflectionMagic;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
@@ -1544,6 +1545,16 @@ namespace WB.Tests.Abc.TestFactories
                 ProcessingDate = processingDate ?? DateTime.Now,
                 IncomingDate = incomingDate ?? DateTime.Now,
                 ExceptionType = exceptionType?.ToString() ?? "Unexpected"
+            };
+        }
+
+        public InterviewPackage InterviewPackage(Guid? interviewId = null, AggregateRootEvent[] events = null)
+        {
+            var serializer = new JsonAllTypesSerializer();
+            return new InterviewPackage
+            {
+                InterviewId = interviewId ?? Guid.NewGuid(),
+                Events = events != null ? serializer.Serialize(events) : serializer.Serialize(new AggregateRootEvent[0])
             };
         }
 

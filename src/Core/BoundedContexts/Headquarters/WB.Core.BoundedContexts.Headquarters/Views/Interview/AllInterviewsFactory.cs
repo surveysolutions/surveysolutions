@@ -78,7 +78,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     AssignmentId = x.AssignmentId,
                     ReceivedByInterviewer = x.ReceivedByInterviewer,
                     TeamLeadName = x.TeamLeadName,
-                    Key = x.Key
+                    Key = x.Key,
+                    ClientKey = x.ClientKey
                 }).ToList()
             };
             return result;
@@ -189,7 +190,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
-                items = items.Where(x => x.Key.StartsWith(input.SearchBy) || x.AnswersToFeaturedQuestions.Any(a => a.Answer.StartsWith(input.SearchBy)));
+                items = items.Where(x => x.Key.StartsWith(input.SearchBy) || x.ClientKey.StartsWith(input.SearchBy) || x.AnswersToFeaturedQuestions.Any(a => a.Answer.StartsWith(input.SearchBy)));
             }
 
             if (input.Status.HasValue)
