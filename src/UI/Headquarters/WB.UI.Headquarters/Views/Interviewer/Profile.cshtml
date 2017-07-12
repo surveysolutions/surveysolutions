@@ -1,4 +1,5 @@
 ﻿@using Humanizer
+@using Main.Core.Entities.SubEntities
 @using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.BoundedContexts.Headquarters.Views.Device
 @using WB.Core.GenericSubdomains.Portable
@@ -104,7 +105,7 @@ else
                     }
                     
                     <li>
-                        @if (!User.IsInRole("Interviewer"))
+                        @if (!User.IsInRole(UserRoles.Interviewer.ToString()))
                         {
                              if (!Model.IsArchived)
                              {
