@@ -661,6 +661,7 @@
     <Content Include="Content\img\google-maps-markers\m5.png" />
     <Content Include="Content\img\loader.gif" />
     <Content Include="Content\img\loading.gif" />
+    <Content Include="webpack.config.js" />
     <EmbeddedResource Include="Content\img\no_image_found.jpg" />
     <Content Include="Content\img\sort_asc.png" />
     <Content Include="Content\img\sort_asc_disabled.png" />
