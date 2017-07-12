@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             x.Where(assigment =>
                 assigment.ResponsibleId == responsibleId
                 && !assigment.Archived
-                && (assigment.Quantity == null || assigment.InterviewSummaries.Count < assigment.Quantity))
+                && (assigment.Quantity == null || assigment.InterviewSummaries.Count(i => i.IsDeleted == false) < assigment.Quantity))
             .ToList());
         }
 
