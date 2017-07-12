@@ -123,6 +123,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             },
             new SelectOption
             {
+                Value = "Audio",
+                Text = "Audio"
+            },
+            new SelectOption
+            {
                 Value = "Area",
                 Text = "Area"
             }
