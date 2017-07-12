@@ -1,15 +1,13 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Moq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using QuestionState = WB.Core.SharedKernels.DataCollection.ValueObjects.Interview.QuestionState;
 
 
-namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExport.ExportedQuestionTests
+namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
 {
     [Subject(typeof(ExportQuestionService))]
     public class ExportedQuestionTestContext

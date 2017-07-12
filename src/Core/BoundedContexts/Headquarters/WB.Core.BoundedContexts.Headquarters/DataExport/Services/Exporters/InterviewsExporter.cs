@@ -56,7 +56,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             IProgress<int> progress,
             CancellationToken cancellationToken)
         {
-            
             this.CreateDataSchemaForInterviewsInTabular(questionnaireExportStructure, basePath);
             this.ExportInterviews(interviewIdsToExport, basePath, questionnaireExportStructure, progress, cancellationToken);
         }

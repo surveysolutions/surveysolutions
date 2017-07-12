@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Headquarters.SpssFormatExportHandlerTests
+namespace WB.Tests.Unit.DataExportTests.SpssFormatExportHandlerTests
 {
     internal class when_exporting_all_data : SpssFormatExportHandlerTestContext
     {
