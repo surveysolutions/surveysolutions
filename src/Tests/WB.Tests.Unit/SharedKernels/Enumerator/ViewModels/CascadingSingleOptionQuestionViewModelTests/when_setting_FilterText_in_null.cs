@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
@@ -43,8 +44,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
         };
 
-        Because of = () =>
+        private Because of = () =>
+        {
             cascadingModel.FilterText = string.Empty;
+            Thread.Sleep(1000);
+        };
 
         It should_set_null_filter_text = () =>
             cascadingModel.FilterText.ShouldBeEmpty();

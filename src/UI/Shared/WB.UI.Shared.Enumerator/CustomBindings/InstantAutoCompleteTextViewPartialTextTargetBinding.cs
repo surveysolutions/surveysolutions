@@ -8,32 +8,29 @@ using WB.UI.Shared.Enumerator.CustomControls;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
-    public class InstantAutoCompleteTextViewPartialTextTargetBinding
-        : MvxAndroidPropertyInfoTargetBinding<InstantAutoCompleteTextView>
+    public class InstantAutoCompleteTextViewPartialTextTargetBinding : BaseBinding<InstantAutoCompleteTextView, string>
     {
         private IDisposable _subscription;
 
-        public InstantAutoCompleteTextViewPartialTextTargetBinding(object target, PropertyInfo targetPropertyInfo)
-            : base(target, targetPropertyInfo)
+        public InstantAutoCompleteTextViewPartialTextTargetBinding(InstantAutoCompleteTextView androidControl) : base(androidControl)
         {
-            var autoComplete = this.View;
-            if (autoComplete == null)
-            {
-                MvxBindingTrace.Trace(MvxTraceLevel.Error,
-                    "Error - autoComplete is null in InstantAutoCompleteTextViewPartialTextTargetBinding");
-            }
+        }
+
+        protected override void SetValueToView(InstantAutoCompleteTextView control, string value)
+        {
+            control.PartialText = value;
         }
 
         private void AutoCompleteOnPartialTextChanged(object sender, EventArgs eventArgs)
         {
-            this.FireValueChanged(this.View.PartialText);
+            this.FireValueChanged(this.Target.PartialText);
         }
 
-        public override MvxBindingMode DefaultMode => MvxBindingMode.OneWayToSource;
+        public override MvxBindingMode DefaultMode => MvxBindingMode.TwoWay;
 
         public override void SubscribeToEvents()
         {
-            var autoComplete = this.View;
+            var autoComplete = this.Target;
             if (autoComplete == null)
                 return;
 

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
@@ -42,7 +43,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         };
 
         Because of = () =>
+        {
             cascadingModel.FilterText = "a";
+            Thread.Sleep(1000);
+        };
         
         It should_set_filter_text = () =>
             cascadingModel.FilterText.ShouldEqual("a");
