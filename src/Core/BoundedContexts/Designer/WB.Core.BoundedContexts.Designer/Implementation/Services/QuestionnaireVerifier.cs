@@ -196,7 +196,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             QuestionType.TextList,
             QuestionType.QRBarcode,
             QuestionType.Multimedia,
-            QuestionType.Area
+            QuestionType.Area,
+            QuestionType.Audio
         };
 
         private static readonly HashSet<QuestionType> QuestionTypesValidToBeRosterTitles = new HashSet<QuestionType>
