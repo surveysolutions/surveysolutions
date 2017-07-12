@@ -66,5 +66,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
 
             Assert.That(contentVersion, Is.EqualTo(18));
         }
+
+        [Test]
+        public void when_questionnaire_contains_audio_question_Should_return_version_21()
+        {
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+                Create.Question(questionType: QuestionType.Audio));
+
+            var service = this.CreateDesignerEngineVersionService();
+
+            // act 
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+
+            Assert.That(contentVersion, Is.EqualTo(21));
+        }
     }
 }
