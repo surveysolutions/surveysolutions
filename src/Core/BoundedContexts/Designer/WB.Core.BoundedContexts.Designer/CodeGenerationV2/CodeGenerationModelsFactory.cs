@@ -70,7 +70,6 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
 
                 codeGenerationModel.Levels.Add(levelModel);
             }
-
             
             foreach (var level in codeGenerationModel.Levels)
             {
@@ -242,16 +241,10 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                 }
             }
 
-
             foreach (var group in questionnaire.Find<Group>())
             {
                 var rosterScope = questionnaire.GetRosterScope(@group);
-                if (group.IsRoster)
-                {
-                    var scopeCoordinate = @group.RosterSizeSource == RosterSizeSourceType.FixedTitles ? @group.PublicKey : @group.RosterSizeQuestionId.Value;
-                    rosterScope = new RosterScope(rosterScope.Coordinates.Union(scopeCoordinate.ToEnumerable()));
-                }
-
+               
                 string className = levelClassNames[rosterScope];
                 string conditionExpression = this.macrosSubstitutionService.InlineMacros(group.ConditionExpression, questionnaire.Macros.Values);
                 string formattedId = questionnaire.GetVariable(group);
