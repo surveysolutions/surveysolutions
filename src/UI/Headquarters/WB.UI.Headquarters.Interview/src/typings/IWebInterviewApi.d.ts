@@ -111,6 +111,13 @@ declare interface IReadonlyPrefilledQuestion{
     type: string
 }
 
+declare interface IComment {
+    text : string
+    isOwnComment : boolean
+    userRole : number
+    commentTime : Date
+}
+
 declare interface IWebInterviewApi {
     getInterviewDetails(): IInterviewInfo
 
@@ -148,4 +155,6 @@ declare interface IWebInterviewApi {
     getLanguageInfo(): ILanguageInfo
     changeLanguage(language: string): void
     completeInterview(comment: string): void
+    sendNewComment(questionId: string, comment: string): void
+    getQuestionComments(questionId: string): IComment[]
 }

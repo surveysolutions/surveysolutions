@@ -489,7 +489,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 this.PutValidationMessages(result.Validity, callerInterview, identity);
                 this.PutInstructions(result, identity);
                 this.ApplyDisablement(result, identity);
-                this.PutComments(result, question, callerInterview);
+                result.Comments = this.GetComments(question, callerInterview);
 
                 return result;
             }
@@ -637,6 +637,16 @@ namespace WB.UI.Headquarters.API.WebInterview
             return completeInfo;
         }
 
+        public Comment[] GetQuestionComments(string questionId)
+        {
+            var identity = Identity.Parse(questionId);
+
+            var interview = this.GetCallerInterview();
+            InterviewTreeQuestion question = interview.GetQuestion(identity);
+
+            return GetComments(question, interview);
+        }
+
         private void PutValidationMessages(Validity validity, IStatefulInterview callerInterview, Identity identity)
         {
             validity.Messages = callerInterview.GetFailedValidationMessages(identity, Strings.Error)
@@ -661,9 +671,9 @@ namespace WB.UI.Headquarters.API.WebInterview
             result.HideInstructions = callerQuestionnaire.GetHideInstructions(id.Id);
         }
 
-        private void PutComments(GenericQuestion result, InterviewTreeQuestion question, IStatefulInterview statefulInterview)
+        private Comment[] GetComments(InterviewTreeQuestion question, IStatefulInterview statefulInterview)
         {
-            result.Comments = question.AnswerComments.Select(ac 
+            return question.AnswerComments.Select(ac 
                 => new Comment()
                 {
                     Text = ac.Comment,

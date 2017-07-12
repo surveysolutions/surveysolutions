@@ -81,6 +81,10 @@ export default {
     removeAnswer({ dispatch }, questionId: string) {
         apiCallerAndFetch(questionId, api => api.removeAnswer(questionId))
     },
+    sendNewComment({ dispatch }, { questionId, comment }) {
+        apiCaller(api => api.sendNewComment(questionId, comment))
+        dispatch("fetchQuestionComments", questionId)
+    },
 
     setAnswerAsNotSaved({ commit }, { id, message }) {
         commit("SET_ANSWER_NOT_SAVED", { id, message })
@@ -187,6 +191,11 @@ export default {
     fetchSamplePrefilled: debounce(async ({ commit }) => {
         const coverInfo = await apiCaller<ISamplePrefilledData>(api => api.getSamplePrefilled())
         commit("SET_COVER_INFO", coverInfo)
+    }, 200),
+
+    fetchQuestionComments: debounce(async ({ commit }, questionId) => {
+        const comments = await apiCaller<IComment[]>(api => api.getQuestionComments(questionId))
+        commit("SET_QUESTION_COMMENTS", { questionId, comments})
     }, 200),
 
     completeInterview({ dispatch }, comment: string) {
