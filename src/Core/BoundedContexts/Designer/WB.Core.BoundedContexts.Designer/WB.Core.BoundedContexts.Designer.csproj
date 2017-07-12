@@ -258,6 +258,7 @@
     <Compile Include="Commands\Questionnaire\Macros\UpdateMacro.cs" />
     <Compile Include="Commands\Questionnaire\CloneQuestionnaire.cs" />
     <Compile Include="Commands\Questionnaire\AddSharedPersonToQuestionnaire.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateAudioQuestion.cs" />
     <Compile Include="Commands\Questionnaire\Question\UpdateDateTimeQuestion.cs" />
     <Compile Include="Commands\Questionnaire\Question\UpdateGpsCoordinatesQuestion.cs" />
     <Compile Include="Commands\Questionnaire\Question\MigrateExpressionsToCSharp.cs" />
@@ -585,6 +586,7 @@
     <Compile Include="Views\Questionnaire\Edit\NewEditRosterView.cs" />
     <Compile Include="Views\Questionnaire\Edit\NewEditStaticTextView.cs" />
     <Compile Include="Views\Questionnaire\Edit\CategoricalOption.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QualityOption.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfoFactory.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\TranslationView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\AttachmentView.cs" />
