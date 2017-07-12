@@ -481,6 +481,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 case QuestionType.Multimedia:
                 case QuestionType.GpsCoordinates:
                 case QuestionType.Area:
+                case QuestionType.Audio:
                     return questionView;
             }
             return null;
