@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -9,12 +10,9 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.UI.Headquarters.API.PublicApi.Models;
-using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.Implementation.Services
@@ -52,7 +50,7 @@ namespace WB.UI.Headquarters.Implementation.Services
             this.authorizedUser = authorizedUser;
         }
 
-        public void CreateInterviewIfQuestionnaireIsOld(HqUser responsible, QuestionnaireIdentity questionnaireIdentity, int assignmentId, List<AssignmentIdentifyingDataItem> identifyingData)
+        public void CreateInterviewIfQuestionnaireIsOld(HqUser responsible, QuestionnaireIdentity questionnaireIdentity, int assignmentId, IList<IdentifyingAnswer> identifyingData)
         {
             if (this.IsSupportAssignments(questionnaireIdentity))
                 return;

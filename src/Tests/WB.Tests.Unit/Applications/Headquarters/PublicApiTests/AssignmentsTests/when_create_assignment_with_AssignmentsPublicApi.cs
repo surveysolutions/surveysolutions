@@ -15,6 +15,7 @@ using WB.UI.Headquarters.API.PublicApi.Models;
 using System.Collections.Generic;
 using Main.Core.Entities.Composite;
 using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTests
 {
@@ -131,49 +132,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             });
 
             this.assignmentsStorage.Verify(ass => ass.Store(It.IsAny<Assignment>(), null), Times.Once);
-        }
-
-        [Test]
-        public void should_convert_to_proper_preloadingDataFile()
-        {
-            var qid = QuestionnaireIdentity.Parse("f2250674-42e6-4756-b394-b86caa62225e$1");
-
-            this.SetupResponsibleUser(Create.Entity.HqUser());
-            this.SetupQuestionnaire(Create.Entity.QuestionnaireDocument(
-                children: new List<IComposite>
-                {
-                    Create.Entity.TextQuestion(Id.g1, preFilled: true, variable: "text1"),
-                    Create.Entity.TextQuestion(Id.g2, preFilled: true, variable: "text2")
-                }));
-
-            var assignment = Create.Entity.Assignment(1, qid);
-
-            this.mapper
-                .Setup(m => m.Map(It.IsAny<CreateAssignmentApiRequest>(), It.IsAny<Assignment>()))
-                .Returns(assignment);
-
-            this.preloadedDataVerifier
-                .Setup(v => v.VerifyAssignmentsSample(qid.QuestionnaireId, qid.Version, It.IsAny<PreloadedDataByFile>()))
-                .Returns(new VerificationStatus { Errors = new PreloadedDataVerificationError[0] });
-
-            this.controller.Create(new CreateAssignmentApiRequest
-            {
-                QuestionnaireId = qid.ToString(),
-                Responsible = "any",
-                IdentifyingData = new List<AssignmentIdentifyingDataItem>
-                {
-                    new AssignmentIdentifyingDataItem{ Answer = "1", Identity = Create.Entity.Identity(Id.g1) },
-                    new AssignmentIdentifyingDataItem{ Answer = "2", Variable = "text2" }
-                }
-            });
-
-            this.preloadedDataVerifier.Verify(ass => ass.VerifyAssignmentsSample(
-                It.IsAny<Guid>(), It.IsAny<long>(),
-                It.Is<PreloadedDataByFile>(pdf => pdf.Header.SequenceEqual(new[] { "text1", "text2" }))), Times.Once);
-
-            this.preloadedDataVerifier.Verify(ass => ass.VerifyAssignmentsSample(
-                It.IsAny<Guid>(), It.IsAny<long>(),
-                It.Is<PreloadedDataByFile>(pdf => pdf.Content[0].SequenceEqual(new[] { "1", "2" }))), Times.Once);
         }
     }
 }
