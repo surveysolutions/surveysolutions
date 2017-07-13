@@ -151,6 +151,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Start new interview.
+        /// </summary>
+        public static string CreateInterview {
+            get {
+                return ResourceManager.GetString("CreateInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Identifying Questions.
         /// </summary>
         public static string IdentifyingQuestions {

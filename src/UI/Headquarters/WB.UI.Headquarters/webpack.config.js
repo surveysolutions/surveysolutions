@@ -4,10 +4,6 @@ const baseAppPath = "./Dependencies/"
 const devMode = process.env.NODE_ENV != 'production';
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
-function resolve(dir) {
-    return path.join(__dirname, '..', dir)
-}
-
 module.exports = {
     entry: {
         interviewer: baseAppPath + "app/interviewer.js",
@@ -20,7 +16,7 @@ module.exports = {
     resolve: {
         modules: [
             path.join(__dirname, "node_modules"),
-            resolve("Dependencies/app")
+             path.join(__dirname, "Dependencies/app")
         ],
         extensions: ['.js', '.vue', '.json'],
         alias: {
@@ -28,13 +24,11 @@ module.exports = {
         }
     },
     externals: {
-        // require("jquery") is external and available
-        //  on the global var jQuery
         "jquery": "jQuery",
         "$": "jQuery",
     },
-    // devtool: devMode ? '#cheap-module-eval-source-map' : null,
-    devtool: '#source-map',
+
+    devtool: '#source-map',//  '#cheap-module-eval-source-map'
 
     module: {
         rules: [
@@ -50,11 +44,15 @@ module.exports = {
         ]
     },
     plugins: [
-        devMode ? null :new webpack.DefinePlugin({
+        new webpack.DefinePlugin({
             'process.env': {
-                NODE_ENV: '"production"'
+                NODE_ENV: devMode ? '"development"': '"production"'
             }
         }),
+        // new webpack.ProvidePlugin({
+        //   //  'Promise': 'es6-promise', // Thanks Aaron (https://gist.github.com/Couto/b29676dd1ab8714a818f#gistcomment-1584602)
+        //     fetch: 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch'
+        // }),
         //devMode ? null :
         // split vendor js into its own file
         new webpack.optimize.CommonsChunkPlugin({
@@ -70,12 +68,6 @@ module.exports = {
                 )
             }
         }),
-        // // extract webpack runtime and module manifest to its own file in order to
-        // // prevent vendor hash from being updated whenever app bundle is updated
-        // new webpack.optimize.CommonsChunkPlugin({
-        //     name: 'manifest',
-        //     chunks: ['vendor']
-        // }),
         new webpack.optimize.ModuleConcatenationPlugin(),
         devMode ? null : new webpack.optimize.UglifyJsPlugin({
             compress: {
