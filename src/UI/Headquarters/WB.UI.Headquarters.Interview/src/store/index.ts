@@ -16,6 +16,7 @@ const store = new Vuex.Store(safeStore({
         hasCoverPage: false,
         loadedEntitiesCount: 0,
         questionnaireTitle: "",
+        interviewKey: "",
         firstSectionId: "",
         entities: [], /* IInterviewEntity[] */
         entityDetails: { /* string: object */ },

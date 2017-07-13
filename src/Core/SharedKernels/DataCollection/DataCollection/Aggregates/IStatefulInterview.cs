@@ -173,5 +173,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IReadOnlyCollection<IInterviewTreeNode> GetAllSections();
         InterviewSynchronizationDto GetSynchronizationDto();
         bool IsReadOnlyQuestion(Identity identity);
+        InterviewKey GetInterviewKey();
     }
 }

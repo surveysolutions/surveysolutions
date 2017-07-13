@@ -764,5 +764,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             return Tree.GetQuestion(identity).IsReadonly;
         }
+
+        public InterviewKey GetInterviewKey()
+        {
+            return this.interviewKey;
+        }
     }
 }
