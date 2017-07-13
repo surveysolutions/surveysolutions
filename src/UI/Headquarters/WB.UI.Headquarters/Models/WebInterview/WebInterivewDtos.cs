@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.UI.Headquarters.Models.WebInterview
 {
@@ -14,8 +15,8 @@ namespace WB.UI.Headquarters.Models.WebInterview
     public class InterviewInfo
     {
         public string QuestionnaireTitle { get; set; }
-        public string HumanId { get; set; }
         public string FirstSectionId { get; set; }
+        public string InterviewKey { get; set; }
     }
 
     public class LanguageInfo
