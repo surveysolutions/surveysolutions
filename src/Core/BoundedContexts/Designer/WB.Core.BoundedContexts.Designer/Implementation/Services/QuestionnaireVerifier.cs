@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             Error(NoQuestionsExist, "WB0001", VerificationMessages.WB0001_NoQuestions),
 
-            Error<IGroup>(GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion, "WB0009", VerificationMessages.WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion),
+            Critical<IGroup>(GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion, "WB0009", VerificationMessages.WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion),
             Error<IGroup>(RosterSizeSourceQuestionTypeIsIncorrect, "WB0023", VerificationMessages.WB0023_RosterSizeSourceQuestionTypeIsIncorrect),
             Error<IGroup>(GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles, "WB0032", VerificationMessages.WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles),
             Error<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion, "WB0033", VerificationMessages.WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion),
@@ -147,6 +147,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Error<IGroup>(FirstChapterHasEnablingCondition, "WB0263", VerificationMessages.WB0263_FirstChapterHasEnablingCondition),
             ErrorForTranslation<IComposite>(this.IsNotSupportSubstitution, "WB0268", VerificationMessages.WB0268_DoesNotSupportSubstitution),
             Error<IQuestion>(QuestionTitleEmpty, "WB0269", VerificationMessages.WB0269_QuestionTitleIsEmpty),
+            Critical<IQuestion>(LinkedQuestionShouldHaveSource, "WB0270", VerificationMessages.WB0270_LinkedQuestionShouldHaveSource),
 
             Error_ManyGpsPrefilledQuestions_WB0006,
             ErrorsByCircularReferences,
@@ -924,6 +925,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity)));
         }
 
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Critical<TEntity>(
+            Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
+            where TEntity : class, IComposite
+        {
+            return questionnaire =>
+                questionnaire
+                    .Find<TEntity>(entity => hasError(entity, questionnaire))
+                    .Select(entity => QuestionnaireVerificationMessage.Critical(code, message, CreateReference(entity)));
+        }
+
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity, TReferencedEntity>(
             Func<TEntity, MultiLanguageQuestionnaireDocument, EntityVerificationResult<TReferencedEntity>> verifyEntity, string code, string message)
             where TEntity : class, IComposite
@@ -1296,6 +1307,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool QuestionTitleEmpty(IQuestion question)
             => string.IsNullOrWhiteSpace(question.QuestionText);
+
+        private static bool LinkedQuestionShouldHaveSource(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (question.LinkedToRosterId.HasValue)
+            {
+                return !questionnaire.Has<IGroup>(g => g.IsRoster && g.PublicKey == question.LinkedToRosterId);
+            }
+            if (question.LinkedToQuestionId.HasValue)
+            {
+                return !questionnaire.Has<IQuestion>(g => g.PublicKey == question.LinkedToQuestionId);
+            }
+
+            return false;
+        }
 
         private static bool GroupTitleIsTooLong(IGroup group)
             => group.Title?.Length > 500;

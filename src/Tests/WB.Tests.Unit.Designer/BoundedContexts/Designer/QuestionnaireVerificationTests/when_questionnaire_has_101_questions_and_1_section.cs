@@ -10,7 +10,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_questionnaire_has_101_questions_and_1_section : QuestionnaireVerifierTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp]
+        public void context () {
             questionnaire = Create.QuestionnaireDocument(children: new IComposite[]
             {
                 Create.Section(
@@ -24,8 +25,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         private void BecauseOf() =>
             messages = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
-        [NUnit.Framework.Test] public void should_return_warning_WB0206 () =>
-            messages.ShouldContainWarning("WB0206");
+        [NUnit.Framework.Test]
+        public void should_return_warning_WB0206 () => messages.ShouldContainWarning("WB0206");
 
         private static QuestionnaireDocument questionnaire;
         private static QuestionnaireVerifier verifier;
