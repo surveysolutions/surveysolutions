@@ -298,6 +298,7 @@
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="Converters\QuestionnairePublicityBackgroundConverter.cs" />
     <Compile Include="Implementation\Services\ViewModelNavigationService.cs" />
+    <Compile Include="Infrastructure\Internals\Log\XamarinInsightsLoggerProvider.cs" />
     <Compile Include="Infrastructure\Internals\Rest\RestServicePointManager.cs" />
     <Compile Include="Infrastructure\Internals\Security\TesterPrincipal.cs" />
     <Compile Include="Infrastructure\Internals\Settings\TesterSettings.cs" />
