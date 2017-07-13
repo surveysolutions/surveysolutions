@@ -451,7 +451,7 @@
       <DependentUpon>pdf.css</DependentUpon>
     </Content>
     <Content Include="questionnaire\content\i\designer-left-icons-2-3.png" />
-    <Content Include="questionnaire\content\i\icons2.png" />
+    <Content Include="questionnaire\content\i\icons3.png" />
     <Content Include="questionnaire\details\scripts\controllers\findReplace.js" />
     <Content Include="questionnaire\details\scripts\controllers\translations.js" />
     <Content Include="questionnaire\details\scripts\extensions\ace\mode-text-extended.js" />
