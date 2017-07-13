@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -25,19 +25,15 @@ namespace WB.Tests.Unit.Designer
             string generatedValidationsMethodName,
             string generatedConditionsMethodName)
         {
-            question.Id.ShouldEqual(id);
-            question.VariableName.ShouldEqual(variableName);
-            question.Condition.ShouldEqual(conditions);
-
-            //question.ValidationExpressions.FirstOrDefault().ValidationExpression.ShouldEqual(validations);
-
-            question.IdName.ShouldEqual(generatedIdName);
-            question.TypeName.ShouldEqual(generatedTypeName);
-            question.MemberName.ShouldEqual(generatedMemberName);
-            question.StateName.ShouldEqual(generatedStateName);
-            question.RosterScopeName.ShouldEqual(rosterScopeName);
-            //question.ValidationExpressions.FirstOrDefault().ValidationMethodName.ShouldEqual(generatedValidationsMethodName);
-            question.ConditionMethodName.ShouldEqual(generatedConditionsMethodName);
+            question.Id.Should().Be(id);
+            question.VariableName.Should().Be(variableName);
+            question.Condition.Should().Be(conditions);
+            question.IdName.Should().Be(generatedIdName);
+            question.TypeName.Should().Be(generatedTypeName);
+            question.MemberName.Should().Be(generatedMemberName);
+            question.StateName.Should().Be(generatedStateName);
+            question.RosterScopeName.Should().Be(rosterScopeName);
+            question.ConditionMethodName.Should().Be(generatedConditionsMethodName);
         }
 
         public static void ShouldContainEvent<TEvent>(this EventContext eventContext, Func<TEvent, bool> condition = null)
@@ -45,12 +41,12 @@ namespace WB.Tests.Unit.Designer
         {
             if (condition == null)
             {
-                eventContext.Events.ShouldContain(@event
+                eventContext.Events.Should().Contain(@event
                     => @event.Payload is TEvent);
             }
             else
             {
-                eventContext.Events.ShouldContain(@event
+                eventContext.Events.Should().Contain(@event
                     => @event.Payload is TEvent
                         && condition.Invoke((TEvent)@event.Payload));
             }
@@ -61,12 +57,12 @@ namespace WB.Tests.Unit.Designer
         {
             if (condition == null)
             {
-                eventContext.Events.ShouldNotContain(@event
+                eventContext.Events.Should().NotContain(@event
                     => @event.Payload is TEvent);
             }
             else
             {
-                eventContext.Events.ShouldNotContain(@event
+                eventContext.Events.Should().NotContain(@event
                     => @event.Payload is TEvent
                         && condition.Invoke((TEvent)@event.Payload));
             }
@@ -79,11 +75,11 @@ namespace WB.Tests.Unit.Designer
                 messages
                     .Where(m => m.MessageLevel == VerificationMessageLevel.Warning)
                     .Select(m => m.Code)
-                    .ShouldContain(code);
+                    .Should().Contain(code);
             }
             else
             {
-                messages.ShouldContain(m
+                messages.Should().Contain(m
                     => m.MessageLevel == VerificationMessageLevel.Warning
                     && m.Code == code
                     && m.Message == message);
@@ -94,12 +90,12 @@ namespace WB.Tests.Unit.Designer
             => messages
                 .Where(m => m.MessageLevel == VerificationMessageLevel.General)
                 .Select(m => m.Code)
-                .ShouldContain(code);
+                .Should().Contain(code);
 
         public static void ShouldContainCritical(
             this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)
         {
-            verificationMessages.ShouldContain(message
+            verificationMessages.Should().Contain(message
                 => message.MessageLevel == VerificationMessageLevel.Critical
                 && message.Code == code);
         }
@@ -112,7 +108,7 @@ namespace WB.Tests.Unit.Designer
                 .ToList();
 
             if (warnings.Any())
-                throw new SpecificationException(
+                throw new Exception(
                     $"Contains one or more warnings {code} but shouldn't:{Environment.NewLine}{FormatForAssertion(warnings)}");
         }
 
@@ -124,7 +120,7 @@ namespace WB.Tests.Unit.Designer
                 .ToList();
 
             if (errors.Any())
-                throw new SpecificationException(
+                throw new Exception(
                     $"Contains one or more errors {code} but shouldn't:{Environment.NewLine}{FormatForAssertion(errors)}");
         }
 
@@ -135,7 +131,7 @@ namespace WB.Tests.Unit.Designer
                 .ToList();
 
             if (messages.Any())
-                throw new SpecificationException(
+                throw new Exception(
                     $"Contains one or more message {code} but shouldn't:{Environment.NewLine}{FormatForAssertion(messages)}");
         }
 
