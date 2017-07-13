@@ -1,3 +1,5 @@
+// just a sample file
+
 import Vue from 'vue'
 //import vueResource from 'vue-resource'
 

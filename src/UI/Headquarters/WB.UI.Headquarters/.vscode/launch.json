@@ -7,10 +7,20 @@
     {
         "type": "node",
         "request": "launch",
-        "name": "Launch Program",
+        "name": "Debug build",
         "program": "${workspaceRoot}/node_modules/webpack/bin/webpack.js",
         "args": [
             "--color"
+        ]
+    },
+    {
+        "type": "node",
+        "request": "launch",
+        "name": "Watch",
+        "program": "${workspaceRoot}/node_modules/webpack/bin/webpack.js",
+        "args": [
+            "--color",
+            "--watch"
         ]
     }
     ]
