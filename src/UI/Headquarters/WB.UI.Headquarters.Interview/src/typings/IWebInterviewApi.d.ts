@@ -5,7 +5,7 @@ declare interface ILanguageInfo {
 
 declare interface IInterviewInfo {
     questionnaireTitle: string
-    humanId : string
+    interviewKey : string
     firstSectionId: string
 }
 

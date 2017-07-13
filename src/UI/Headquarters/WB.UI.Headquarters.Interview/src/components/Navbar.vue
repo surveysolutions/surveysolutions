@@ -11,7 +11,7 @@
                     <span class="icon-bar bottom-menu"></span>
                 </button>
                 <router-link class="navbar-brand rotate-brand" :to="toFirstSection" active-class="rotate-brand" v-if="$store.state.firstSectionId">
-                        <div class="brand-name">Web interview</div>
+                    <div class="brand-name">{{interviewKey}}</div>
                 </router-link>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -48,7 +48,7 @@
             this.$store.dispatch("loadInterview")
         },
         updated(){
-            document.title = `${this.questionnaireTitle} | Web Interview`
+            document.title = `${this.questionnaireTitle} | Web interview`
         },
         computed: {
             canChangeLanguage() {
@@ -62,6 +62,9 @@
             },
             toFirstSection(){
                 return { name: 'section', params: { sectionId: this.$store.state.firstSectionId } }
+            },
+            interviewKey() {
+                return this.$store.state.interviewKey || "Web interview";
             }
         },
         methods: {

@@ -37,10 +37,12 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         public InterviewInfo GetInterviewDetails()
         {
+            var statefulInterview = this.GetCallerInterview();
             return new InterviewInfo
             {
                 QuestionnaireTitle = this.GetCallerQuestionnaire().Title,
-                FirstSectionId = this.GetCallerQuestionnaire().GetFirstSectionId().FormatGuid()
+                FirstSectionId = this.GetCallerQuestionnaire().GetFirstSectionId().FormatGuid(),
+                InterviewKey = statefulInterview.GetInterviewKey().ToString()
             };
         }
 

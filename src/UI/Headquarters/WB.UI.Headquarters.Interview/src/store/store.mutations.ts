@@ -45,6 +45,7 @@ export default {
     SET_INTERVIEW_INFO(state, interviewInfo: IInterviewInfo) {
         state.questionnaireTitle = interviewInfo.questionnaireTitle
         state.firstSectionId = interviewInfo.firstSectionId
+        state.interviewKey = interviewInfo.interviewKey
     },
     SET_COVER_INFO(state, coverInfo: ICoverInfo) {
         state.coverInfo = coverInfo
