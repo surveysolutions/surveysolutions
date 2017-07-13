@@ -159,6 +159,11 @@
                     });
             };
 
+            $scope.setQuality = function (value) {
+                $scope.activeQuestion.quality = value;
+                markFormAsChanged();
+            }
+
             var hasQuestionEnablementConditions = function(question) {
                 return $scope.doesQuestionSupportEnablementConditions() &&
                     question.enablementCondition !== null &&
@@ -230,7 +235,7 @@
                 return false;
             };
 
-            var questionsWithOnlyInterviewerScope = ['GpsCoordinates', 'Audio', 'Area'];
+            var questionsWithOnlyInterviewerScope = ['Multimedia', 'Audio', 'Area', 'QRBarcode'];
 
             $scope.setQuestionType = function (type) {
                 $scope.activeQuestion.type = type;
@@ -394,15 +399,26 @@
                 markFormAsChanged();
             };
 
-            var onlyInterviewerQuestionTypes = ['TextList', 'QRBarcode', 'Multimedia', 'GpsCoordinates', 'MultyOption', 'Area', "Audio"]
+            var questionsWithHiddenAndInterviewerScope = [
+                'TextList', 'GpsCoordinates', 'MultyOption'
+            ];
 
             $scope.getQuestionScopes = function (currentQuestion) {
                 if (!currentQuestion)
                     return [];
+
                 var allScopes = currentQuestion.allQuestionScopeOptions;
+
+
+                if (_.contains(questionsWithOnlyInterviewerScope, currentQuestion.type)) {
+                    return allScopes.filter(function (o) {
+                        return o.value === 'Interviewer';
+                    });
+                }
+
                 if (!currentQuestion.isCascade &&
                     !currentQuestion.isLinked &&
-                    !_.contains(onlyInterviewerQuestionTypes, currentQuestion.type))
+                    !_.contains(questionsWithHiddenAndInterviewerScope, currentQuestion.type))
                 {
                     return allScopes;
                 }

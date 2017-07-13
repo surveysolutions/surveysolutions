@@ -10,7 +10,7 @@
 
             <ul class="dropdown-menu" role="menu">
                 <li role="presentation" ng-repeat="scope in activeQuestion.qualityOptions">
-                    <a role="menuitem" tabindex="-1" ng-click="activeQuestion.quality = scope.value">
+                    <a role="menuitem" tabindex="-1" ng-click="setQuality(scope.value)">
                         {{scope.title}}
                     </a>
                 </li>
