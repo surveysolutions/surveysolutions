@@ -87,6 +87,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 evnt.Payload.InterviewerAssignedDateTime,
                 null,
                 evnt.Payload.RejectedDateTime,
+                null,
                 null);
         }
 
@@ -104,7 +105,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 evnt.EventTimeStamp,
                 evnt.EventTimeStamp,
                 null,
-                evnt.Payload.AssignmentId);
+                evnt.Payload.AssignmentId,
+                null);
         }
 
         public void Handle(IPublishedEvent<InterviewOnClientCreated> evnt)
@@ -121,7 +123,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 evnt.EventTimeStamp,
                 evnt.EventTimeStamp,
                 null, 
-                evnt.Payload.AssignmentId);
+                evnt.Payload.AssignmentId,
+                null);
         }
 
         public void Handle(IPublishedEvent<InterviewFromPreloadedDataCreated> evnt)
@@ -138,11 +141,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 evnt.EventTimeStamp,
                 evnt.EventTimeStamp,
                 null,
-                evnt.Payload.AssignmentId);
+                evnt.Payload.AssignmentId,
+                null);
         }
 
 
-        private void AddOrUpdateInterviewToDashboard(Guid questionnaireId, long questionnaireVersion, Guid interviewId, Guid responsibleId, InterviewStatus status, string comments, IEnumerable<AnsweredQuestionSynchronizationDto> answeredQuestions, bool createdOnClient, bool canBeDeleted, DateTime? assignedDateTime, DateTime? startedDateTime, DateTime? rejectedDateTime, int? assignmentId)
+        private void AddOrUpdateInterviewToDashboard(Guid questionnaireId, long questionnaireVersion, Guid interviewId, Guid responsibleId, InterviewStatus status, string comments, IEnumerable<AnsweredQuestionSynchronizationDto> answeredQuestions, bool createdOnClient, bool canBeDeleted, DateTime? assignedDateTime, DateTime? startedDateTime, DateTime? rejectedDateTime, int? assignmentId, InterviewKey interviewKey)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
             var questionnaireDocumentView = this.questionnaireRepository.GetQuestionnaireDocument(questionnaireIdentity);
@@ -209,6 +213,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             interviewView.LocationQuestionId = prefilledGpsQuestionId;
             interviewView.Assignment = assignmentId;
+            interviewView.InterviewKey = interviewKey?.ToString();
 
             var existingPrefilledForInterview = this.prefilledQuestions.Where(x => x.InterviewId == interviewId).ToList();
             this.prefilledQuestions.Remove(existingPrefilledForInterview);
@@ -263,11 +268,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 evnt.Payload.InterviewData.Comments,
                 evnt.Payload.InterviewData.Answers,
                 evnt.Payload.InterviewData.CreatedOnClient,
-                canBeDeleted: false,
-                assignedDateTime: evnt.Payload.InterviewData.InterviewerAssignedDateTime,
-                startedDateTime: null,
-                rejectedDateTime: evnt.Payload.InterviewData.RejectDateTime, 
-                assignmentId: evnt.Payload.InterviewData.AssignmentId);
+                false,
+                evnt.Payload.InterviewData.InterviewerAssignedDateTime,
+                null,
+                evnt.Payload.InterviewData.RejectDateTime, 
+                evnt.Payload.InterviewData.AssignmentId,
+                evnt.Payload.InterviewData.InterviewKey);
         }
 
         public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
