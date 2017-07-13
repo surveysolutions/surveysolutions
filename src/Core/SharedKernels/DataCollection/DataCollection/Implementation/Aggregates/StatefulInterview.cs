@@ -137,11 +137,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.properties.InterviewerId = @event.InterviewData.UserId;
             this.SupervisorRejectComment = @event.InterviewData.Comments;
 
-            if (@event.InterviewData.InterviewKey != null)
-            {
-                this.Apply(new InterviewKeyAssigned(@event.InterviewData.InterviewKey));
-            }
-
+            this.interviewKey = @event.InterviewData.InterviewKey;
             this.sourceInterview = this.Tree.Clone();
         }
 
