@@ -259,6 +259,10 @@
                     $scope.activeQuestion.questionScope = 'Interviewer';
                 }
 
+                if (type === 'GpsCoordinates' && $scope.activeQuestion.questionScope === 'Supervisor') {
+                    $scope.activeQuestion.questionScope = 'Interviewer';
+                }
+
                 if (type === 'MultyOption' && $scope.activeQuestion.questionScope === 'Identifying') {
                     $scope.activeQuestion.questionScope = 'Interviewer';
                 }
@@ -399,16 +403,10 @@
                 markFormAsChanged();
             };
 
-            var questionsWithHiddenAndInterviewerScope = [
-                'TextList', 'GpsCoordinates', 'MultyOption'
-            ];
-
             $scope.getQuestionScopes = function (currentQuestion) {
                 if (!currentQuestion)
                     return [];
-
                 var allScopes = currentQuestion.allQuestionScopeOptions;
-
 
                 if (_.contains(questionsWithOnlyInterviewerScope, currentQuestion.type)) {
                     return allScopes.filter(function (o) {
@@ -416,12 +414,9 @@
                     });
                 }
 
-                if (!currentQuestion.isCascade &&
-                    !currentQuestion.isLinked &&
-                    !_.contains(questionsWithHiddenAndInterviewerScope, currentQuestion.type))
-                {
+                if (!currentQuestion.isCascade && !currentQuestion.isLinked &&
+                    $.inArray(currentQuestion.type, ['TextList', 'GpsCoordinates', 'MultyOption']) < 0)
                     return allScopes;
-                }
 
                 return allScopes.filter(function (o) {
                     if (currentQuestion.type === 'MultyOption')
@@ -429,7 +424,7 @@
 
                     if (currentQuestion.type === 'GpsCoordinates')
                         return o.value !== 'Supervisor';
-                    
+
                     return o.value !== 'Identifying' && o.value !== 'Supervisor';
                 });
             };
