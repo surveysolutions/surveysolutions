@@ -79,7 +79,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             this.fragmentStatePagerAdapter.InsertFragment(typeof(QuestionnairesFragment), this.ViewModel.CreateNew,
                 nameof(InterviewTabPanel.Title));
 
-            var itemsCountPropertyCountName = nameof(ListViewModel<IDashboardItem>.ItemsCount);
+            var itemsCountPropertyCountName = nameof(ListViewModel.ItemsCount);
 
             this.StartedInterviewsOnPropertyChanged(this.ViewModel.StartedInterviews,
                 new PropertyChangedEventArgs(itemsCountPropertyCountName));
@@ -93,17 +93,17 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         }
 
         private void CompletedInterviewsOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
-            => this.UpdateFragmentByViewModelPropertyChange<CompletedInterviewsFragment>((ListViewModel<IDashboardItem>)sender, propertyChangedEventArgs.PropertyName, 3);
+            => this.UpdateFragmentByViewModelPropertyChange<CompletedInterviewsFragment>((ListViewModel)sender, propertyChangedEventArgs.PropertyName, 3);
 
         private void RejectedInterviewsOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
-            => this.UpdateFragmentByViewModelPropertyChange<RejectedInterviewsFragment>((ListViewModel<IDashboardItem>)sender, propertyChangedEventArgs.PropertyName, 2);
+            => this.UpdateFragmentByViewModelPropertyChange<RejectedInterviewsFragment>((ListViewModel)sender, propertyChangedEventArgs.PropertyName, 2);
 
         private void StartedInterviewsOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
-            => this.UpdateFragmentByViewModelPropertyChange<StartedInterviewsFragment>((ListViewModel<IDashboardItem>)sender, propertyChangedEventArgs.PropertyName, 1);
+            => this.UpdateFragmentByViewModelPropertyChange<StartedInterviewsFragment>((ListViewModel)sender, propertyChangedEventArgs.PropertyName, 1);
         
-        private void UpdateFragmentByViewModelPropertyChange<TFragmentType>(ListViewModel<IDashboardItem> listViewModel, string propertyName, int position)
+        private void UpdateFragmentByViewModelPropertyChange<TFragmentType>(ListViewModel listViewModel, string propertyName, int position)
         {
-            if (propertyName != nameof(ListViewModel<IDashboardItem>.ItemsCount)) return;
+            if (propertyName != nameof(ListViewModel.ItemsCount)) return;
 
             if (!this.fragmentStatePagerAdapter.HasFragmentForViewModel(listViewModel) && listViewModel.ItemsCount > 0)
             {
