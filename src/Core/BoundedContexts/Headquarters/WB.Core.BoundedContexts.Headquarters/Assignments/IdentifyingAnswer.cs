@@ -7,11 +7,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
     public class IdentifyingAnswer
     {
-        public static IdentifyingAnswer Create(Assignment assignment, IQuestionnaire questionnaire, string answer, Identity questionId = null, string variableName = null)
+        public static IdentifyingAnswer Create(Assignment assignment, IQuestionnaire questionnaire, string answer,
+            Identity questionId = null, string variableName = null, bool transformAnswers = false)
         {
-            var result = new IdentifyingAnswer();
+            var result = new IdentifyingAnswer
+            {
+                Assignment = assignment
+            };
 
-            result.Assignment = assignment;
             result.Answer = result.AnswerAsString = answer;
 
             result.TryToFillQuestionId(questionnaire, questionId, variableName);
@@ -20,7 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             {
                 throw new ArgumentException($"Cannot identify question from provided data: questionId: {questionId}, variable: {variableName}");
             }
-
+            
             var questionType = questionnaire.GetQuestionType(result.Identity.Id);
             if (questionType == QuestionType.SingleOption)
             {
@@ -60,7 +63,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual Identity Identity { get; protected set; }
 
-        public virtual string Answer { get; protected set; }
+        public virtual string Answer { get; set; }
 
         public virtual string AnswerAsString { get; protected set; }
 
