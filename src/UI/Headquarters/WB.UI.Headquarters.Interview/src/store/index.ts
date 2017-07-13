@@ -13,7 +13,7 @@ const store = new Vuex.Store(safeStore({
     modules: { fetch, sidebar, connection },
     state: {
         lastActivityTimestamp: new Date(),
-        hasPrefilledQuestions: false,
+        hasCoverPage: false,
         loadedEntitiesCount: 0,
         questionnaireTitle: "",
         firstSectionId: "",
@@ -22,8 +22,9 @@ const store = new Vuex.Store(safeStore({
         breadcrumbs: {
             breadcrumbs: []
         },
-        samplePrefilledInfo: {
-            questions: []
+        coverInfo: {
+            entitiesWithComments: [],
+            identifyingQuestions: []
         }
     },
     actions,

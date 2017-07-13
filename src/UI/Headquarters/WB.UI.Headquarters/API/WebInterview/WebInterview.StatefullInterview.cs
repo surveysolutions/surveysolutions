@@ -69,20 +69,6 @@ namespace WB.UI.Headquarters.API.WebInterview
             return GetInterviewSimpleStatus().ToString();
         }
 
-        public SamplePrefilledData GetSamplePrefilled()
-        {
-            var interview = this.GetCallerInterview();
-            var interviewEntityWithTypes = this.GetCallerQuestionnaire()
-                .GetPrefilledQuestions()
-                .Select(x => this.GetIdentifyingQuestion(x, interview))
-                .ToList();
-
-            return new SamplePrefilledData
-            {
-                Questions = interviewEntityWithTypes
-            };
-        }
-
         private IdentifyingQuestion GetIdentifyingQuestion(Guid questionId, IStatefulInterview interview)
         {
             var result = new IdentifyingQuestion();
@@ -541,9 +527,13 @@ namespace WB.UI.Headquarters.API.WebInterview
             return this.autoMapper.Map<InterviewTreeQuestion, T>(question, opts => opts.AfterMap((treeQuestion, target) => afterMap?.Invoke(target)));
         }
 
-        public bool HasPrefilledQuestions()
+        public bool HasCoverPage()
         {
-            return this.GetCallerQuestionnaire().GetPrefilledQuestions().Any();
+            var interview = this.GetCallerInterview();
+
+            return this.GetCallerQuestionnaire().GetPrefilledQuestions().Any() 
+                || interview.GetAllCommentedEnabledQuestions().Any()
+                || !string.IsNullOrWhiteSpace(interview.SupervisorRejectComment);
         }
 
         public Sidebar GetSidebarChildSectionsOf(string[] parentIds)
@@ -645,6 +635,43 @@ namespace WB.UI.Headquarters.API.WebInterview
             InterviewTreeQuestion question = interview.GetQuestion(identity);
 
             return GetComments(question, interview);
+        }
+
+        public CoverInfo GetCoverInfo()
+        {
+            var interview = this.GetCallerInterview();
+            var commentedQuestionsCount = interview.CountCommentedQuestionsVisibledToInterviewer();
+            var commentedQuestions = interview.GetCommentedBySupervisorQuestionsVisibledToInterviewer().Take(30).ToArray();
+
+            var entitiesWithComments = commentedQuestions.Select(identity =>
+            {
+                var titleText = HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
+                var isPrefilled = interview.IsQuestionPrefilled(identity);
+                var parentId = interview.GetParentGroup(identity).ToString();
+                return new EntityWithComment
+                {
+                    Id = identity.ToString(),
+                    ParentId = parentId,
+                    Title = titleText,
+                    IsPrefilled = isPrefilled
+                };
+
+            }).ToArray();
+
+            var interviewEntityWithTypes = this.GetCallerQuestionnaire()
+                .GetPrefilledQuestions()
+                .Select(x => this.GetIdentifyingQuestion(x, interview))
+                .ToList();
+            
+
+            var completeInfo = new CoverInfo
+            {
+                EntitiesWithComments = entitiesWithComments,
+                IdentifyingQuestions = interviewEntityWithTypes,
+                CommentedQuestionsCount = commentedQuestionsCount,
+                SupervisorRejectComment = interview.SupervisorRejectComment
+            };
+            return completeInfo;
         }
 
         private void PutValidationMessages(Validity validity, IStatefulInterview callerInterview, Identity identity)

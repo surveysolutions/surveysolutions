@@ -266,7 +266,25 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public EntityWithError[] EntitiesWithError { get;set; }
     }
 
-    public class EntityWithError
+    public class EntityWithError : QuestionReference { }
+
+    public class CoverInfo
+    {
+        public CoverInfo()
+        {
+            this.IdentifyingQuestions = new List<IdentifyingQuestion>();
+            this.EntitiesWithComments = new EntityWithComment[0];
+        }
+
+        public List<IdentifyingQuestion> IdentifyingQuestions { get; set; }
+        public EntityWithComment[] EntitiesWithComments { get; set; }
+        public int CommentedQuestionsCount { get; set; }
+        public string SupervisorRejectComment { get; set; }
+    }
+
+    public class EntityWithComment : QuestionReference { }
+
+    public class QuestionReference
     {
         public string Id { get; set; }
         public string ParentId { get; set; }
