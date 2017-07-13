@@ -15,7 +15,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     internal class when_verifying_questionnaire_with_group_where_roster_size_source_is_question_that_does_not_have_roster_size_question :
         QuestionnaireVerifierTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp]
+        public void context () {
 
             rosterGroupId = Guid.Parse("13333333333333333333333333333333");
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(new Group()
@@ -41,7 +42,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages.Count().ShouldEqual(1);
 
         [NUnit.Framework.Test] public void should_return_first_error_with_code__WB0009 () =>
-            verificationMessages.ShouldContainError("WB0009");
+            verificationMessages.ShouldContainCritical("WB0009");
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

@@ -147,7 +147,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Error<IGroup>(FirstChapterHasEnablingCondition, "WB0263", VerificationMessages.WB0263_FirstChapterHasEnablingCondition),
             ErrorForTranslation<IComposite>(this.IsNotSupportSubstitution, "WB0268", VerificationMessages.WB0268_DoesNotSupportSubstitution),
             Error<IQuestion>(QuestionTitleEmpty, "WB0269", VerificationMessages.WB0269_QuestionTitleIsEmpty),
-            Critical<IQuestion>(LinkedQuestionShouldHaveSource, "WB0270", VerificationMessages.WB0270_LinkedQuestionShouldHaveSource),
 
             Error_ManyGpsPrefilledQuestions_WB0006,
             ErrorsByCircularReferences,
@@ -1308,20 +1307,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool QuestionTitleEmpty(IQuestion question)
             => string.IsNullOrWhiteSpace(question.QuestionText);
 
-        private static bool LinkedQuestionShouldHaveSource(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            if (question.LinkedToRosterId.HasValue)
-            {
-                return !questionnaire.Has<IGroup>(g => g.IsRoster && g.PublicKey == question.LinkedToRosterId);
-            }
-            if (question.LinkedToQuestionId.HasValue)
-            {
-                return !questionnaire.Has<IQuestion>(g => g.PublicKey == question.LinkedToQuestionId);
-            }
-
-            return false;
-        }
-
         private static bool GroupTitleIsTooLong(IGroup group)
             => group.Title?.Length > 500;
 
@@ -1708,7 +1693,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 var sourceRoster = questionnaire.Find<IGroup>(questionLinkedOnRoster.LinkedToRosterId.Value);
                 if (sourceRoster == null)
                 {
-                    yield return QuestionnaireVerificationMessage.Error("WB0053",
+                    yield return QuestionnaireVerificationMessage.Critical("WB0053",
                         VerificationMessages.WB0053_LinkedQuestionReferencesNotExistingRoster,
                         CreateReference(questionLinkedOnRoster));
                     continue;
@@ -1990,7 +1975,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 CreateReference(questionsWithSubstitution));
 
         private static QuestionnaireVerificationMessage LinkedQuestionReferencesNotExistingQuestion(IQuestion linkedQuestion)
-            => QuestionnaireVerificationMessage.Error("WB0011",
+            => QuestionnaireVerificationMessage.Critical("WB0011",
                 VerificationMessages.WB0011_LinkedQuestionReferencesNotExistingQuestion,
                 CreateReference(linkedQuestion));
 

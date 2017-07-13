@@ -1646,14 +1646,5 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0269_QuestionTitleIsEmpty", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Linked question should have defined source..
-        /// </summary>
-        internal static string WB0270_LinkedQuestionShouldHaveSource {
-            get {
-                return ResourceManager.GetString("WB0270_LinkedQuestionShouldHaveSource", resourceCulture);
-            }
-        }
     }
 }
