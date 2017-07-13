@@ -42,7 +42,7 @@ declare interface IValidity {
 }
 
 declare interface ISidebar{
-    hasPrefilledQuestions: boolean
+    hasCoverPage: boolean
     groups: ISidebarPanel[]
 }
 
@@ -102,9 +102,11 @@ declare interface ICompleteInfo {
     entitiesWithError: IEntityWithError[]
 }
 
-declare interface ISamplePrefilledData {
-    questions: IReadonlyPrefilledQuestion[]
+declare interface ICoverInfo {
+    entitiesWithComments: IEntityWithError[]
+    identifyingQuestions: IReadonlyPrefilledQuestion[]
 }
+
 declare interface IReadonlyPrefilledQuestion{
     answer: string,
     title: string,
@@ -122,9 +124,9 @@ declare interface IWebInterviewApi {
     getInterviewDetails(): IInterviewInfo
 
     getPrefilledEntities(): IPrefilledPageData
-    getSamplePrefilled(): ISamplePrefilledData
+    getCoverInfo(): ICoverInfo
 
-    hasPrefilledQuestions(): boolean
+    hasCoverPage(): boolean
     isEnabled(id: string): boolean
     getSectionEntities(sectionId: string): IInterviewEntityWithType[]
     getEntitiesDetails(ids: string[]): IInterviewEntity[]

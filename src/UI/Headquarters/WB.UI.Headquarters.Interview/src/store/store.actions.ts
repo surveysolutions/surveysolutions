@@ -14,8 +14,8 @@ export default {
     async loadInterview({ commit }) {
         const info = await apiCaller<IInterviewInfo>(api => api.getInterviewDetails())
         commit("SET_INTERVIEW_INFO", info)
-        const flag = await apiCaller(api => api.hasPrefilledQuestions())
-        commit("SET_HAS_PREFILLED_QUESTIONS", flag)
+        const flag = await apiCaller(api => api.hasCoverPage())
+        commit("SET_HAS_COVER_PAGE", flag)
 
     },
 
@@ -188,8 +188,8 @@ export default {
         commit("SET_INTERVIEW_STATUS", interviewState)
     }, 200),
 
-    fetchSamplePrefilled: debounce(async ({ commit }) => {
-        const coverInfo = await apiCaller<ISamplePrefilledData>(api => api.getSamplePrefilled())
+    fetchCoverInfo: debounce(async ({ commit }) => {
+        const coverInfo = await apiCaller<ICoverInfo>(api => api.getCoverInfo())
         commit("SET_COVER_INFO", coverInfo)
     }, 200),
 
