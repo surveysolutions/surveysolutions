@@ -7316,7 +7316,7 @@ input[type="number"]::-webkit-outer-spin-button {
 .icon {
   width: 20px;
   height: 20px;
-  background: url(i/icons2.png);
+  background: url(i/icons3.png);
   background-position-x: 0;
   overflow: hidden;
 }
@@ -7511,7 +7511,7 @@ input#edit-group-title {
   vertical-align: middle;
   width: 20px;
   height: 20px;
-  background-image: url(i/icons2.png);
+  background-image: url(i/icons3.png);
   background-position-x: 0;
   overflow: hidden;
 }
