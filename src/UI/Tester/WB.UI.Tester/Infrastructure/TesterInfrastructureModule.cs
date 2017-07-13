@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using Main.Core.Documents;
+﻿using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
@@ -59,6 +57,7 @@ namespace WB.UI.Tester.Infrastructure
             this.Unbind<IPlainStorage<OptionView>>();
             this.Bind<IPlainStorage<OptionView>>().To<InMemoryPlainStorage<OptionView>>().InSingletonScope();
 
+            this.Bind<ILoggerProvider>().To<XamarinInsightsLoggerProvider>();
             this.Bind<ILogger>().To<XamarinInsightsLogger>().InSingletonScope();
 
             this.Bind<IRestServiceSettings>().To<TesterSettings>();
