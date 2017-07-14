@@ -37,7 +37,7 @@ export default {
 
     methods: {
         reload(data) {
-            this.table.ajax.data = data;
+            this.table.ajax.data = this.addParamsToRequest(data || {});
             this.table.rows().deselect();
             this.table.ajax.reload();
         },
