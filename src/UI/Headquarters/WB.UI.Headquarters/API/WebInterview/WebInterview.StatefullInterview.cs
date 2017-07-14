@@ -473,6 +473,11 @@ namespace WB.UI.Headquarters.API.WebInterview
                     InterviewTreeQuestion barcodeQuestion = callerInterview.GetQuestion(identity);
                     result = this.autoMapper.Map<InterviewBarcodeQuestion>(barcodeQuestion);
                 }
+                else if (question.IsAudio)
+                {
+                    InterviewTreeQuestion audioQuestion = callerInterview.GetQuestion(identity);
+                    result = this.autoMapper.Map<InterviewAudioQuestion>(audioQuestion);
+                }
 
                 this.PutValidationMessages(result.Validity, callerInterview, identity);
                 this.PutInstructions(result, identity);
