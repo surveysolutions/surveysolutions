@@ -10,7 +10,6 @@ using MvvmCross.Droid.Support.V4;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.UI.Interviewer.Services;
 using WB.UI.Shared.Enumerator.Activities;
 using MvxFragmentStatePagerAdapter = WB.UI.Interviewer.CustomControls.MvxFragmentStatePagerAdapter;
