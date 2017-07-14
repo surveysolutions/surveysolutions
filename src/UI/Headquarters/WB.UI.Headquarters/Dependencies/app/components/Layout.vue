@@ -1,12 +1,14 @@
 <template>
     <div class="container-fluid">
-        <div class="row" v-if="hasFilter">
+        <div class="row">
             <slot name="filters" />
         </div>
-        <div :class="{'main-information' : hasFilter, 'information': !hasFilter}">
+        <div class="main-information">
             <div class="page-header clearfix">
-                <h1>{{title}}</h1>
-            </div>
+                        <h1>
+                            {{title}}
+                        </h1>
+                    </div>
             <slot />
         </div>
         <slot name="modals" />
@@ -15,9 +17,6 @@
 
 <script>
 export default {
-    props: ["title", "hasFilter"],
-    mounted() {
-        window.title = this.title
-    }
+    props: ["title"]
 }
 </script>

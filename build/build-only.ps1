@@ -43,7 +43,12 @@ try {
 			Write-Host "##teamcity[buildProblem description='Failed to build static content for HQ']"
 			Exit 
 		}}
-		
+
+		BuildWithWebpack "src\UI\Headquarters\WB.UI.Headquarters" | %{ if (-not $_) {
+			Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
+			Write-Host "##teamcity[buildProblem description='Failed to build static content for HQ']"
+			Exit 
+		}}		
 
 		RunConfigTransform $ProjectHeadquarters $BuildConfiguration	
 		
@@ -80,20 +85,20 @@ try {
 		
 		CopyCapi -Project $ProjectHeadquarters -source $PackageName -cleanUp $false | %{ if (-not $_) { Exit } }
 		
-		BuildWebPackage $ProjectHeadquarters $BuildConfiguration | %{ if (-not $_) { Exit } }
-		
-		BuildWebPackage $ProjectDesigner $BuildConfiguration | %{ if (-not $_) { Exit } }
-		
 		$artifactsFolder = (Get-Location).Path + "\Artifacts"
 		If (Test-Path "$artifactsFolder"){
 			Remove-Item "$artifactsFolder" -Force -Recurse
 		}
-		
-		BuildAndDeploySupportTool $SupportToolSolution $BuildConfiguration | %{ if (-not $_) { Exit } }
-		
+
 		$webpackStats = "src\UI\Headquarters\WB.UI.Headquarters\InterviewApp\stats.html"
 		MoveArtifacts $webpackStats -folder "BuildStats"
 		Remove-Item $webpackStats
+
+		BuildWebPackage $ProjectHeadquarters $BuildConfiguration | %{ if (-not $_) { Exit } }
+		BuildWebPackage $ProjectDesigner $BuildConfiguration | %{ if (-not $_) { Exit } }		
+		
+		BuildAndDeploySupportTool $SupportToolSolution $BuildConfiguration | %{ if (-not $_) { Exit } }		
+		
 		AddArtifacts $ProjectDesigner $BuildConfiguration -folder "Designer"
 		AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"	
 
