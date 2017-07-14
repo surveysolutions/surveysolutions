@@ -267,8 +267,7 @@ namespace WB.Tests.Abc.TestFactories
             Guid? responsibleSupervisorId = null,
             List<InterviewAnswer> answersToFeaturedQuestions = null,
             Guid? userId = null,
-            DateTime? answersTime = null,
-            InterviewKey key = null)
+            DateTime? answersTime = null)
         {
             return this.CreateInterview(
                 Guid.NewGuid(),
