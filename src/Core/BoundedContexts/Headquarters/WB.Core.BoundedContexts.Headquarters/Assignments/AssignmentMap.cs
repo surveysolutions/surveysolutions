@@ -95,7 +95,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             Property(x => x.AssignmentId);
             Property(x => x.IsDeleted);
             Property(x => x.TeamLeadId);
-
+            Property(x => x.Status);
             Property(x => x.QuestionnaireTitle);
             Property(x => x.QuestionnaireId);
             Property(x => x.QuestionnaireVersion);

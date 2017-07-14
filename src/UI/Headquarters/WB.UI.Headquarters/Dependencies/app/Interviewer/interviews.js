@@ -18,21 +18,21 @@ const router = new VueRouter({
         path: "/Started",
         component: InterviewsTable,
         props: {
-            status: 'Started'
+            statuses: ['InterviewerAssigned']
         },
          caseSensitive: false 
     },   {
         path: "/Rejected",
         component: InterviewsTable,
         props: {
-            status: 'Rejected'
+            statuses: ['RejectedBySupervisor', 'RejectedByHeadquarters'] 
         },
          caseSensitive: false 
     },   {
         path: "/Completed",
         component: InterviewsTable,
         props: {
-            status: 'Completed'
+            statuses: ['Completed']
         },
          caseSensitive: false 
     }

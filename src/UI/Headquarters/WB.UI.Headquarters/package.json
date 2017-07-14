@@ -5,7 +5,9 @@
   "main": "webpack.config.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "webpack --color --watch"
+    "watch": "webpack --color --watch",
+    "dev" : "webpack --color",
+    "production" : "webpack --production --color"
   },
   "author": "World Bank Group",
   "license": "ISC",

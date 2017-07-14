@@ -8,8 +8,7 @@
 
 <script>
 export default {
-
-    props: ["data", "status"],
+    props: ["questionnaireId", "statuses"],
     data() {
         return {
             tableOptions: {
@@ -34,6 +33,12 @@ export default {
         this.$refs.table.reload();
     },
 
+    watch: {
+        questionnaireId(oldv, newv) {
+            this.$refs.table.reload();
+        }
+    },
+
     methods: {
         contextMenuItems(selectedRow) 
         {
@@ -44,10 +49,10 @@ export default {
         },
 
         addFilteringParams(data) {
-            switch(this.status){
-                case 'Started':  data.status = 'InterviewerAssigned'; break;
-                case 'Rejected':  data.statuses = ['RejectedBySupervisor', 'RejectedByHeadquarters'] ; break;
-                case 'Completed':  data.status = 'Completed'; break;
+            data.statuses = this.statuses;
+
+            if(this.questionnaireId){
+                data.questionnaireId = this.questionnaireId.key;
             }
         },
         getTableColumns() {
