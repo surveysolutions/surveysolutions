@@ -321,6 +321,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     }
 
     [DebuggerDisplay("{ToString()}")]
+    public class AudioAnswer : AbstractAnswer
+    {
+        protected AudioAnswer() { }
+
+        private AudioAnswer(string fileName)
+        {
+            if (fileName == null) throw new ArgumentNullException(nameof(fileName));
+
+            this.FileName = fileName;
+        }
+
+        public string FileName { get; set; }
+
+        public static AudioAnswer FromString(string fileName) => fileName != null ? new AudioAnswer(fileName) : null;
+
+        public override string ToString() => FileName;
+
+        public override void ValidateAsPreloaded(InterviewQuestionInvariants questionInvariants)
+        {
+        }
+    }
+
+    [DebuggerDisplay("{ToString()}")]
     public class AreaAnswer : AbstractAnswer
     {
         protected AreaAnswer() { }

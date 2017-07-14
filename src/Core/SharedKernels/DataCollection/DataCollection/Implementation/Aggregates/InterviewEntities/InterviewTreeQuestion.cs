@@ -107,6 +107,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             if (cascadingParentQuestionId.HasValue)
                 this.AsCascading = new InterviewTreeCascadingQuestion(this, cascadingParentQuestionId.Value);
+
+            if (questionType == QuestionType.Audio)
+                this.AsAudio = new InterviewTreeAudioQuestion(answer);
         }
 
         public InterviewTreeDoubleQuestion AsDouble { get; private set; }
@@ -131,6 +134,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeLinkedToRosterQuestion AsLinked => this.IsSingleLinkedOption ? (InterviewTreeLinkedToRosterQuestion)this.AsSingleLinkedOption : this.AsMultiLinkedOption;
 
         public InterviewTreeCascadingQuestion AsCascading { get; private set; }
+
+        public InterviewTreeAudioQuestion AsAudio { get; private set; }
+
 
         public List<AnswerComment> AnswerComments { get; set; } = new List<AnswerComment>();
 
@@ -202,6 +208,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsLinkedToListQuestion => (this.IsMultiLinkedToList || this.IsSingleLinkedToList);
         public bool IsLinked => (this.IsMultiLinkedOption || this.IsSingleLinkedOption);
         public bool IsCascading => this.AsCascading != null;
+        public bool IsAudio => this.AsAudio != null;
 
         public bool IsAnswered()
         {
@@ -675,6 +682,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool EqualByAnswer(InterviewTreeGpsQuestion question) => question?.answer == this.answer;
 
         public InterviewTreeGpsQuestion Clone() => (InterviewTreeGpsQuestion) this.MemberwiseClone();
+
+        public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
+    }
+    
+    [DebuggerDisplay("{ToString()}")]
+    public class InterviewTreeAudioQuestion
+    {
+        private AudioAnswer answer;
+
+        public InterviewTreeAudioQuestion(object answer)
+        {
+            this.answer = AudioAnswer.FromString(answer as string);
+        }
+
+        public bool IsAnswered => this.answer != null;
+        public AudioAnswer GetAnswer() => this.answer;
+        public void SetAnswer(AudioAnswer answer) => this.answer = answer;
+        public void RemoveAnswer() => this.answer = null;
+
+        public bool EqualByAnswer(InterviewTreeAudioQuestion question) => question?.answer == this.answer;
+
+        public InterviewTreeAudioQuestion Clone() => (InterviewTreeAudioQuestion)this.MemberwiseClone();
 
         public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
     }
