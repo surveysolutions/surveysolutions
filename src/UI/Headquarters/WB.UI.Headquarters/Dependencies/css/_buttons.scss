@@ -125,6 +125,16 @@ a.disabled{
 		background-color: darken($gray_light, 10%);
 	}
 }
+.btn-default.btn-blue{
+	color: $white;
+	padding: 12px;
+	background-color: $blue;
+	border: none;
+	&:hover, &:focus{
+		border: none;
+		background-color: darken($blue, 10%);
+	}
+}
 .back-link{
     text-transform: uppercase;
     font: 12.5px/14px "TrebuchetMSBold";
