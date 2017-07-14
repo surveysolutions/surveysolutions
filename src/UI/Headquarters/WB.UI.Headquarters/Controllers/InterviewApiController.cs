@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Infrastructure.Native.Sanitizer;
 using WB.UI.Headquarters.API;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.Api;
 
 namespace WB.UI.Headquarters.Controllers
@@ -69,7 +70,8 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Interviewer")]
-        public IHttpActionResult GetInterviews([FromUri] InterviewsDataTableRequest request)
+        [CamelCase]
+        public InterviewsDataTableResponse GetInterviews([FromUri] InterviewsDataTableRequest request)
         {
             QuestionnaireIdentity questionnaireIdentity = null;
             if (!string.IsNullOrEmpty(request.QuestionnaireId))
@@ -92,7 +94,7 @@ namespace WB.UI.Headquarters.Controllers
 
             allInterviews.Items.ForEach(x => x.FeaturedQuestions.ForEach(y => y.Question = y.Question.RemoveHtmlTags()));
 
-            var response = new InterviewsDataTableResponse()
+            var response = new InterviewsDataTableResponse
             {
                 Draw = request.Draw + 1,
                 RecordsTotal = allInterviews.TotalCount,
@@ -100,10 +102,7 @@ namespace WB.UI.Headquarters.Controllers
                 Data = allInterviews.Items
             };
 
-            return Json(response, new JsonSerializerSettings()
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            });
+            return response;
         }
 
         [HttpPost]

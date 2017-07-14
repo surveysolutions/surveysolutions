@@ -7,7 +7,7 @@
                                        data-vv-as="questionnaire"
                                        :placeholder="$t('Common.Any')"
                                        control-id="questionnaireId"
-                                       
+                                       :ajaxParams="{ statuses: statuses.toString() }"
                                        :value="questionnaireId"
                                        v-on:selected="questionnaireSelected"
                                        :fetch-url="$config.interviewerHqEndpoint + '/QuestionnairesCombobox'"></Typeahead>
@@ -30,9 +30,16 @@ export default {
         }
     },
 
+    computed: {
+        statuses() {
+            // magic. leaving as is for now
+            return this.$route.matched[0].props.default.statuses
+        }
+    },
+
     methods: {
-        questionnaireSelected() {
-            console.log(arguments)
+        questionnaireSelected(newValue) {
+             this.questionnaireId = newValue;
         }
     }
 }

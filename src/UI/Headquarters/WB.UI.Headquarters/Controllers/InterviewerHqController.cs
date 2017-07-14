@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
@@ -14,8 +16,11 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.ComponentModels;
 
 namespace WB.UI.Headquarters.Controllers
@@ -110,28 +115,49 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Interviewer")]
-        public ActionResult QuestionnairesCombobox(string query = "", int pageSize = 10)
-        {            
+        public ActionResult QuestionnairesCombobox(string query = "", string statuses = null, int pageSize = 10)
+        {
+            IEnumerable<InterviewStatus> ParseStatuses()
+            {
+                foreach (var statusString in statuses.Split(','))
+                {
+                    if (Enum.TryParse(statusString, out InterviewStatus status))
+                    {
+                        yield return status;
+                    }
+                }
+            }
+
+            var interviewStatuses = ParseStatuses().ToArray();
+
             var queryResult = this.interviewSummaryReader.Query(_ =>
             {
-                return _
-                    .Where(summary => 
-                       summary.ResponsibleId == this.authorizedUser.Id
+                var filter = _
+                    .Where(summary =>
+                        !summary.IsDeleted
+                        && summary.ResponsibleId == this.authorizedUser.Id
                         && summary.QuestionnaireTitle.Contains(query)
-                    )
-                .Select(s => new 
+                    );
+
+                if (statuses != null)
                 {
-                    s.QuestionnaireTitle,
-                    s.QuestionnaireId,
-                    s.QuestionnaireVersion
-                })
-                .Distinct().Take(pageSize).ToList();
+                    filter = filter.Where(summary => interviewStatuses.Contains(summary.Status));
+                }
+                
+                return filter.Select(s => new
+                    {
+                        s.QuestionnaireTitle,
+                        s.QuestionnaireId,
+                        s.QuestionnaireVersion
+                    })
+                    .Distinct().Take(pageSize).ToList();
             });
 
-            var result = new ComboboxModel(queryResult.Select(s => new ComboboxOptionModel(s.QuestionnaireId.ToString(),
+            var result = new ComboboxModel(queryResult.Select(s => new ComboboxOptionModel(
+                new QuestionnaireIdentity(s.QuestionnaireId, s.QuestionnaireVersion).ToString(), 
                 $@"(ver. {s.QuestionnaireVersion.ToString()}) {s.QuestionnaireTitle}")).ToArray());
-
-            return Json(result, JsonRequestBehavior.AllowGet);
+            
+            return JsonCamelCase(result);
         }
 
         private string GenerateUrl(string action, string interviewId, string sectionId = null) => 
