@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Android.Content;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Droid.Platform;
@@ -12,7 +11,6 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Interviewer.ViewModel;
-using WB.UI.Shared.Enumerator.CustomServices.AreaEditor;
 
 namespace WB.UI.Interviewer.Implementations.Services
 {
