@@ -713,7 +713,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                     Text = ac.Comment,
                     IsOwnComment = ac.UserId == statefulInterview.CurrentResponsibleId,
                     UserRole = ac.UserRole,
-                    CommentTime = ac.CommentTime
+                    CommentTimeUtc = ac.CommentTime
                 })
                 .ToArray();
         }
