@@ -78,7 +78,11 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
     public class InterviewMultimediaQuestion : GenericQuestion
     {
-        public string UploadUrl { get; set; }
+        public string Answer { get; set; }
+    }
+
+    public class InterviewAudioQuestion : GenericQuestion
+    {
         public string Answer { get; set; }
     }
     
