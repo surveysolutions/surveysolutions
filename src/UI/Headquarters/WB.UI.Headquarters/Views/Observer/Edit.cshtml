@@ -1,8 +1,8 @@
 ﻿@using WB.Core.GenericSubdomains.Portable
 @model UserEditModel
 @{
-    ViewBag.Title = Pages.Profile_ObserverEditFormat.FormatString(Model.UserName).RemoveHtmlTags();
-    ViewBag.PageTitle = Pages.Profile_ObserverEditFormat.FormatString(Model.UserName);
+    ViewBag.Title = Pages.Profile_ObserverEditFormat.FormatString(Html.Encode(Model.UserName)).RemoveHtmlTags();
+    ViewBag.PageTitle = Pages.Profile_ObserverEditFormat.FormatString(Html.Encode(Model.UserName));
 
     Layout = "~/Views/Shared/Profile/_UserEditorLayout.cshtml";
 }
