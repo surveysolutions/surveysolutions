@@ -2,7 +2,7 @@
 @model UserEditModel
 @{
     ViewBag.ActivePage = MenuItem.Interviewers;
-    ViewBag.Title = Pages.Profile_InterviewerEditFormat.FormatString(Html.Encode(Model.UserName)).RemoveHtmlTags();
+    ViewBag.Title = Pages.Profile_InterviewerEditFormat.FormatString(Model.UserName).RemoveHtmlTags();
     ViewBag.PageTitle = Pages.Profile_InterviewerEditFormat.FormatString(Html.Encode(Model.UserName));
     Layout = "~/Views/Shared/Profile/_UserEditorLayout.cshtml";
 }
