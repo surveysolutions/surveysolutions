@@ -1,12 +1,12 @@
 <template>
     <div class="question" v-if="isEnabled" :class="questionClass" :id="hash">
         <button class="section-blocker" disabled="disabled" v-if="isFetchInProgress"></button>
-        <div class="dropdown aside-menu" v-if="!noComments">
+        <div class="dropdown aside-menu" v-if="showSideMenu">
             <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-link">
                 <span></span>
             </button>
             <ul class="dropdown-menu">
-                <li v-if="!isShowingAddCommentDialog"><a href="javascript:void(0)" @click="showAddComment">Write comment</a></li>
+                <li v-if="!isShowingAddCommentDialog"><a href="javascript:void(0)" @click="showAddComment">Add comment</a></li>
                 <li v-if="isShowingAddCommentDialog"><a href="javascript:void(0)" @click="hideAddComment">Hide comment</a></li>
             </ul>
         </div>
@@ -29,7 +29,7 @@
         props: ["question", 'questionCssClassName', 'noTitle', 'noInstructions', 'noValidation', 'noAnswer', 'noComments'],
         data() {
             return {
-                isShowingAddCommentDialog: false
+                isShowingAddCommentDialogFlag: undefined
             }
         },
         computed: {
@@ -65,14 +65,23 @@
                     answered: this.question.isAnswered && !this.noAnswer,
                     'has-error': !this.question.validity.isValid
                 }, this.questionCssClassName]
+            },
+            isShowingAddCommentDialog() {
+                if (this.isShowingAddCommentDialogFlag == undefined)
+                    return this.question.comments && this.question.comments.length > 0
+                else
+                    return this.isShowingAddCommentDialogFlag 
+            },
+            showSideMenu() {
+                return !this.noComments;
             }
         },
         methods : {
             showAddComment(){
-                this.isShowingAddCommentDialog = true;
+                this.isShowingAddCommentDialogFlag = true;
             },
             hideAddComment(){
-                this.isShowingAddCommentDialog = false;
+                this.isShowingAddCommentDialogFlag = false;
             }
         }
     }

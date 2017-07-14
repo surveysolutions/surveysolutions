@@ -14,7 +14,7 @@
                         <input type="text" class="form-control" v-on:keyup.enter="postComment" v-model="comment" placeholder="Tap to enter your comment" />
                     </div>
                 </div>
-                <button type="submit" class="btn btn-default btn-gray" v-on:click="postComment">Post</button>
+                <button type="submit" class="btn btn-default" :class="buttonClass" v-on:click="postComment">Post</button>
             </div>
         </div>
     </div>
@@ -48,19 +48,28 @@
                     return "Interviewer comment"
                 }
                 if (comment.userRole == 6/*'Headquarter'*/) {
-                    return "Headquarter comment"
+                    return "Headquarters comment"
                 }
                 return 'Comment';
             },
             postComment() {
-                let comment: string = this.$data.comment
+                const comment: string = this.$data.comment
 
                 if (!comment || !comment.trim()) 
                     return
 
-                this.$store.dispatch("sendNewComment", { questionId: this.$me.id, comment: comment })
+                this.$store.dispatch("sendNewComment", { questionId: this.$me.id, comment: comment.trim() })
 
                 this.$data.comment = ''
+            }
+        },
+        computed: {
+            buttonClass() {
+                const isActiveStyle = this.comment && this.comment.trim().length > 0
+                return [
+                    { 'btn-gray': !isActiveStyle },
+                    { 'btn-blue': isActiveStyle }
+                ]
             }
         }
     }
