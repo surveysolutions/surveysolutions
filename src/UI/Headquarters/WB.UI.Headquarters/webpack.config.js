@@ -35,12 +35,24 @@ module.exports = {
         rules: [
             {
                 test: /\.vue$/,
-                loader: 'vue-loader',
-            },
-            {
+                exclude: /(node_modules)/,
+                use: {
+                    loader: 'vue-loader',
+                    options: {
+                        loaders: {
+                            js: 'babel-loader?presets[]=env'
+                        }
+                    }
+                }
+            }, {
                 test: /\.js$/,
-                loader: 'babel-loader',
-                exclude: /node_modules/
+                exclude: /(node_modules)/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [["env", { "modules": false }]]
+                    }
+                }
             }
         ]
     },
@@ -69,19 +81,21 @@ module.exports = {
                 )
             }
         }),
+
         new webpack.optimize.ModuleConcatenationPlugin(),
+
         devMode ? null : new webpack.optimize.UglifyJsPlugin({
             compress: {
                 warnings: false
             },
             beautify: false, // Don't beautify output (uglier to read)
             comments: false // Eliminate comments
-        }),
-        devMode ? null :new BundleAnalyzerPlugin({
-            analyzerMode: 'static',
-            reportFilename: 'stats.html',
-            openAnalyzer: false,
-            statsOptions: { chunkModules: true, assets: true },
         })
+        // devMode ? null :new BundleAnalyzerPlugin({
+        //     analyzerMode: 'static',
+        //     reportFilename: 'stats.html',
+        //     openAnalyzer: false,
+        //     statsOptions: { chunkModules: true, assets: true },
+        // })
     ].filter(x => x != null)
 }
