@@ -1,3 +1,4 @@
+/// <binding />
 const webpack = require('webpack')
 const path = require('path')
 const baseAppPath = "./Dependencies/"
@@ -6,8 +7,8 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 
 module.exports = {
     entry: {
-        interviewer: baseAppPath + "app/interviewer.js",
-        assignments: baseAppPath + "app/assignments.js"
+        "interviewer_createNew": baseAppPath + "app/interviewer/createNew.js",
+        "interviewer_interviews": baseAppPath + "app/interviewer/interviews.js"
     },
     output: {
         path: __dirname,
@@ -16,7 +17,7 @@ module.exports = {
     resolve: {
         modules: [
             path.join(__dirname, "node_modules"),
-             path.join(__dirname, "Dependencies/app")
+            path.join(__dirname, "Dependencies/app")
         ],
         extensions: ['.js', '.vue', '.json'],
         alias: {
@@ -46,7 +47,7 @@ module.exports = {
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
-                NODE_ENV: devMode ? '"development"': '"production"'
+                NODE_ENV: devMode ? '"development"' : '"production"'
             }
         }),
         // new webpack.ProvidePlugin({
@@ -76,7 +77,7 @@ module.exports = {
             beautify: false, // Don't beautify output (uglier to read)
             comments: false // Eliminate comments
         }),
-        new BundleAnalyzerPlugin({
+        devMode ? null :new BundleAnalyzerPlugin({
             analyzerMode: 'static',
             reportFilename: 'stats.html',
             openAnalyzer: false,

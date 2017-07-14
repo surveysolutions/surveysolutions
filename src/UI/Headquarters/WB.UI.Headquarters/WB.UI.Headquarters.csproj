@@ -1448,6 +1448,7 @@
     <Content Include="Views\SurveySetup\InterviewVerificationProgress.cshtml" />
     <Content Include="Views\Shared\InterviewerMainMenu.cshtml" />
     <Content Include="Views\InterviewerHq\Index.cshtml" />
+    <Content Include="Views\InterviewerHq\Interviews.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
