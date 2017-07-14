@@ -37,7 +37,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 return summaries;
             });
 
-
             var totalCount = this.reader.Query(_ => ApplyFilter(input, _).Count());
 
             var result = new AllInterviewsView
@@ -196,6 +195,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             if (input.Status.HasValue)
             {
                 items = items.Where(x => x.Status == input.Status);
+            }
+
+            if (input.Statuses != null)
+            {
+                items = items.Where(x => input.Statuses.Contains(x.Status));
             }
 
             if (!string.IsNullOrWhiteSpace(input.TeamLeadName))

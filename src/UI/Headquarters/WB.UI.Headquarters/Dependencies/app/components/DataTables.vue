@@ -12,15 +12,19 @@ export default {
     props: {
         addParamsToRequest: {
             type: Function,
-            default: function (d) { return d; }
+            default(d) { return d; }
         },
         responseProcessor: {
             type: Function,
-            default: function (r) { return r; }
+            default(r) { return r; }
         },
         tableOptions: {
             type: Object,
-            default: function () { return {}; }
+            default() { return {}; }
+        },
+        contextMenuItems: {
+            type: Function,
+            default() { return []; }
         },
         authorizedUser: { type: Object, default() { return {} } }
     },
@@ -38,6 +42,13 @@ export default {
             this.table.ajax.reload();
         },
 
+        selectRowAndGetData(selectedItem) {
+            this.table.rows().deselect();
+            var rowIndex = selectedItem.parent().children().index(selectedItem);
+            this.table.row(rowIndex).select();
+            return this.table.rows({ selected: true }).data()[0];
+        },
+
         onTableInitComplete() {
             var self = this;
 
@@ -52,6 +63,22 @@ export default {
                     $(this).children("input[type='search']").delay(200).queue(function () { $(this).focus(); $(this).dequeue(); });
                 }
             });
+        },
+
+        initContextMenu() {
+            
+            var contextMenuOptions = {
+                selector: "#" + this.$el.attributes.id.value + " tbody tr",
+                autoHide: false,
+                build: ($trigger, e) => {
+                    var selectedRow = this.selectRowAndGetData($trigger);
+                    var items = this.contextMenuItems(selectedRow)
+                    return { items: items };
+                },
+                trigger: 'left'
+            };
+
+            $.contextMenu(contextMenuOptions);
         }
     },
 
@@ -72,12 +99,12 @@ export default {
             conditionalPaging: true
         }, this.tableOptions);
 
-        options.ajax.data = function (d) {
-            self.addParamsToRequest(d);
+        options.ajax.data = (d) => {
+            this.addParamsToRequest(d);
         };
 
-        options.ajax.complete = function (response) {
-            self.responseProcessor(response.responseJSON);
+        options.ajax.complete = (response) => {
+            this.responseProcessor(response.responseJSON);
         };
 
         this.table = $(this.$el).DataTable(options);
@@ -99,6 +126,8 @@ export default {
             }
         });
         this.$emit('DataTableRef', this.table);
+
+        this.initContextMenu();
     }
 
 }

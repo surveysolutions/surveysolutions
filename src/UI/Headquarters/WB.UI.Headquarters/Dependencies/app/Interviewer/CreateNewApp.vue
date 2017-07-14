@@ -1,11 +1,9 @@
 <template>
     <Layout :title="title">
-        <!-- <Filters slot="filters" >
-                    <FilterBlock :title="title">
-                        <div>Some template filter</div>
-                    </FilterBlock>
-                </Filters> -->
-        <AssignmentsTable :tableOptions="tableOptions" ref="table"></AssignmentsTable>
+        <DataTables  ref="table"
+            :tableOptions="tableOptions"
+            :contextMenuItems="contextMenuItems"
+            ></DataTables>
     </Layout>
 </template>
 
@@ -14,7 +12,7 @@
 export default {
 
     data() {
-        return {
+        return {            
             interviewCreationInProgress: false,
             title: this.$t("MainMenu.CreateNew"),
             tableOptions: {
@@ -43,34 +41,19 @@ export default {
 
     mounted() {
         this.$refs.table.reload();
-
-        var contextMenuOptions = {
-            selector: "#" + this.$refs.table.$el.attributes.id.value + " tbody tr",
-            autoHide: false,
-            build: ($trigger, e) => {
-                var selectedRow = this.selectRowAndGetData($trigger);
-                var items = [{
-                    name: this.$t("Assignments.CreateInterview"),
-                    callback: () => this.openInterview(selectedRow)
-                }]
-                return { items: items };
-            },
-            trigger: 'left'
-        };
-
-        $.contextMenu(contextMenuOptions);
     },
 
     methods: {
-        selectRowAndGetData(selectedItem) {
-            this.dataTable.rows().deselect();
-            var rowIndex = selectedItem.parent().children().index(selectedItem);
-            this.dataTable.row(rowIndex).select();
-            var selectedRows = this.dataTable.rows({ selected: true }).data()[0];
-            return selectedRows;
+        contextMenuItems(selectedRow) 
+        {
+            return [{
+                    name: this.$t("Assignments.CreateInterview"),
+                    callback: () => this.openInterview(selectedRow)
+            }];
         },
 
         openInterview(row) {
+            if(this.interviewCreationInProgress == true) return
             this.interviewCreationInProgress = true;
             $.post(this.$config.interviewerHqEndpoint + "/StartNewInterview/" + row.id, response => {
                 window.location = response;

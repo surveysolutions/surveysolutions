@@ -10,11 +10,10 @@
 
 <div id="vueApp" configuration="@JsonConvert.SerializeObject(
 new {
-    assignmentsEndpoint = Url.Content(@"~/api/Assignments"),
-    interviewerHqEndpoint = Url.Content(@"~/interviewerHq"),
+    allInterviews = Url.Content(@"~/api/InterviewApi/GetInterviews"),
+    interviewerHqEndpoint = Url.Content(@"~/InterviewerHq"),
     authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>(),
-    resource = new[] {MainMenu.ResourceManager, Assignments.ResourceManager}.Translations()
+    resource = new[] {MainMenu.ResourceManager, Assignments.ResourceManager, Pages.ResourceManager, Common.ResourceManager}.Translations()
 })"></div>
 
-
-@Scripts.Render(@"~/js/app/interviewer.createnew")
+@Scripts.Render(@"~/js/app/interviewer.interviews")
