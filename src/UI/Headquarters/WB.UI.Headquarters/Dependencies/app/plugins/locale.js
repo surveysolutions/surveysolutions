@@ -4,9 +4,9 @@ export default (Vue, options) => {
         get() {
             return (arg) => {
                 if (this.$config) {
-                    var resource = this.$config.resource;
+                    var resource = this.$config.resources;
 
-                    return this.$config.resource[arg] || arg;
+                    return this.$config.resources[arg] || arg;
                 }
                 return arg;
             }

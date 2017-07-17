@@ -970,6 +970,33 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Discard Interview.
+        /// </summary>
+        public static string InterviewerHq_DiscardInterview {
+            get {
+                return ResourceManager.GetString("InterviewerHq_DiscardInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Interview.
+        /// </summary>
+        public static string InterviewerHq_OpenInterview {
+            get {
+                return ResourceManager.GetString("InterviewerHq_OpenInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restart Interview.
+        /// </summary>
+        public static string InterviewerHq_RestartInterview {
+            get {
+                return ResourceManager.GetString("InterviewerHq_RestartInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interviewer is archived.
         /// </summary>
         public static string InterviewerIsArchived {
