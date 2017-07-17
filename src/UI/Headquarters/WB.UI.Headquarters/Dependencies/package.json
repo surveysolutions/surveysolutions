@@ -51,7 +51,7 @@
     "bower-force": "node_modules\\.bin\\bower install --force",
     "gulp": "node_modules\\.bin\\gulp",
     "production": "node_modules\\.bin\\gulp --production",
-    "preproduction": "node_modules\\.bin\\bower install"
+    "preproduction": "node_modules\\.bin\\bower install --force"
   },
   "dependencies": {
     "bower": "^1.8.0",
