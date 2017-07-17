@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
@@ -11,26 +12,26 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 {
     public class AudioFileStorage : IAudioFileStorage
     {
-        private readonly IPlainStorage<AudioFileMetadataView> imageViewStorage;
-        private readonly IPlainStorage<AudioFileView> fileViewStorage;
+        private readonly IPlainStorage<AudioFileMetadataView> audioFileMetadataViewStorage;
+        private readonly IPlainStorage<AudioFileView> audioFileViewStorage;
 
         public AudioFileStorage(
-            IPlainStorage<AudioFileMetadataView> imageViewStorage,
-            IPlainStorage<AudioFileView> fileViewStorage)
+            IPlainStorage<AudioFileMetadataView> audioFileMetadataViewStorage,
+            IPlainStorage<AudioFileView> audioFileViewStorage)
         {
-            this.imageViewStorage = imageViewStorage;
-            this.fileViewStorage = fileViewStorage;
+            this.audioFileMetadataViewStorage = audioFileMetadataViewStorage;
+            this.audioFileViewStorage = audioFileViewStorage;
         }
 
         public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
         {
             var imageView =
-                this.imageViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName)
+                this.audioFileMetadataViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName)
                     .SingleOrDefault();
 
             if (imageView == null) return null;
 
-            var fileView = this.fileViewStorage.GetById(imageView.FileId);
+            var fileView = this.audioFileViewStorage.GetById(imageView.FileId);
 
             return fileView?.Content;
         }
@@ -43,19 +44,19 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data)
         {
             var imageView =
-                this.imageViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName)
+                this.audioFileMetadataViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName)
                     .SingleOrDefault();
 
             if (imageView == null)
             {
                 string fileId = Guid.NewGuid().FormatGuid();
-                this.fileViewStorage.Store(new AudioFileView
+                this.audioFileViewStorage.Store(new AudioFileView
                 {
                     Id = fileId,
                     Content = data
                 });
 
-                this.imageViewStorage.Store(new AudioFileMetadataView
+                this.audioFileMetadataViewStorage.Store(new AudioFileMetadataView
                 {
                     Id = Guid.NewGuid().FormatGuid(),
                     InterviewId = interviewId,
@@ -65,7 +66,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             }
             else
             {
-                this.fileViewStorage.Store(new AudioFileView
+                this.audioFileViewStorage.Store(new AudioFileView
                 {
                     Id = imageView.FileId,
                     Content = data
@@ -75,12 +76,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
         public void RemoveInterviewBinaryData(Guid interviewId, string fileName)
         {
-            var imageView = this.imageViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName).SingleOrDefault();
+            var imageView = this.audioFileMetadataViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName).SingleOrDefault();
 
             if (imageView == null) return;
 
-            this.fileViewStorage.Remove(imageView.FileId);
-            this.imageViewStorage.Remove(imageView.Id);
+            this.audioFileViewStorage.Remove(imageView.FileId);
+            this.audioFileMetadataViewStorage.Remove(imageView.Id);
         }
     }
 }
