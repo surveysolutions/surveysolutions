@@ -140,6 +140,7 @@ gulp.task('bowerJs', wrapPipe(function (success, error) {
     return gulp.src('./bower.json')
         .pipe(mainBowerFiles().on('error', error))
         .pipe(filter)
+        .pipe(plugins.uglify().on('error', error))
       	.pipe(concat('libs.js').on('error', error))
         .pipe(gulp.dest(config.buildDir).on('error', error))
         .pipe(rename({ suffix: '.min' }).on('error', error))
