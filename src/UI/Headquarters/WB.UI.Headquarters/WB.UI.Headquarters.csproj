@@ -804,7 +804,9 @@
       <LastGenOutput>Assignments.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Assignments.ru.resx" />
+    <EmbeddedResource Include="Resources\Assignments.ru.resx">
+      <DependentUpon>Assignments.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\DataTables.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -813,13 +815,17 @@
     <EmbeddedResource Include="Resources\DataTables.ru.resx">
       <DependentUpon>DataTables.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DataTables.zh.resx" />
+    <EmbeddedResource Include="Resources\DataTables.zh.resx">
+      <DependentUpon>DataTables.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Details.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Details.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Details.zh.resx" />
+    <EmbeddedResource Include="Resources\Details.zh.resx">
+      <DependentUpon>Details.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\EnumNames.fr.resx">
       <DependentUpon>EnumNames.resx</DependentUpon>
     </EmbeddedResource>
@@ -862,7 +868,9 @@
     <EmbeddedResource Include="Resources\ImportQuestionnaire.ru.resx">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ImportQuestionnaire.zh.resx" />
+    <EmbeddedResource Include="Resources\ImportQuestionnaire.zh.resx">
+      <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Interviews.fr.resx">
       <DependentUpon>Interviews.resx</DependentUpon>
     </EmbeddedResource>
@@ -904,7 +912,9 @@
     <EmbeddedResource Include="Resources\LoginToDesigner.ru.resx">
       <DependentUpon>LoginToDesigner.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LoginToDesigner.zh.resx" />
+    <EmbeddedResource Include="Resources\LoginToDesigner.zh.resx">
+      <DependentUpon>LoginToDesigner.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\OutdatedBrowser.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>OutdatedBrowser.Designer.cs</LastGenOutput>
@@ -912,7 +922,9 @@
     <EmbeddedResource Include="Resources\OutdatedBrowser.ru.resx">
       <DependentUpon>OutdatedBrowser.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\OutdatedBrowser.zh.resx" />
+    <EmbeddedResource Include="Resources\OutdatedBrowser.zh.resx">
+      <DependentUpon>OutdatedBrowser.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Pages.fr.resx">
       <DependentUpon>Pages.resx</DependentUpon>
     </EmbeddedResource>
@@ -1009,7 +1021,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>Troubleshooting.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Troubleshooting.zh.resx" />
+    <EmbeddedResource Include="Resources\Troubleshooting.zh.resx">
+      <DependentUpon>Troubleshooting.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.fr.resx">
       <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
     </EmbeddedResource>
@@ -1031,7 +1045,9 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>WebInterview.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterview.zh.resx" />
+    <EmbeddedResource Include="Resources\WebInterview.zh.resx">
+      <DependentUpon>WebInterview.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\WebInterviewSetup.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1041,7 +1057,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>WebInterviewSetup.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterviewSetup.zh.resx" />
+    <EmbeddedResource Include="Resources\WebInterviewSetup.zh.resx">
+      <DependentUpon>WebInterviewSetup.resx</DependentUpon>
+    </EmbeddedResource>
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
@@ -1667,7 +1685,6 @@
     <Compile Include="Migrations\PlainStore\M001-100\M015_RenameCapacityToQuantityInAssignments.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M016_AddColumnRosterVectorToIdentifyingQuestion.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M017_AlterColumnRosterVectorToIdentifyingQuestionToNullable.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M019_AddAudioFileStorage.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M018_AddColumnAnswersToAssignments.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M009_AddAssignmentIdToInterview.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M010_Add_index_for_interviewSummary_assignmentid.cs" />
@@ -1681,6 +1698,7 @@
     <Compile Include="Migrations\Users\M001_AddUsersHqIdentityModel.cs" />
     <Compile Include="Migrations\Users\M002_MigrateUsersFromUserDocumentStore.cs" />
     <Compile Include="Migrations\Users\M003_AddDeviceAppVersionToProfile.cs" />
+    <Compile Include="Models\InterviewerHqModel.cs" />
     <Compile Include="Models\Reports\MapReportModel.cs" />
     <Compile Include="Models\Troubleshooting\DataIsMissingModel.cs" />
     <Compile Include="Models\VersionCheck\VersionCheckingInfo.cs" />

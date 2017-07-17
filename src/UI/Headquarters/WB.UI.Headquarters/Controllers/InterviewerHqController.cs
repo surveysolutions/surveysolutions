@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
 using System.Web.Mvc;
 using Newtonsoft.Json;
+using Resources;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
@@ -20,11 +22,17 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Models.ComponentModels;
+using WB.UI.Headquarters.Resources;
+using WB.UI.Headquarters.Utils;
+using CommonRes = Resources.Common;
 
 namespace WB.UI.Headquarters.Controllers
 {
+
     [LimitsFilter]
     [Authorize(Roles = "Interviewer")]
     public class InterviewerHqController : BaseController
@@ -38,7 +46,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IInterviewUniqueKeyGenerator keyGenerator;
 
         public InterviewerHqController(
-            ICommandService commandService, 
+            ICommandService commandService,
             ILogger logger,
             IAuthorizedUser authorizedUser,
             IWebInterviewConfigProvider configProvider,
@@ -61,21 +69,41 @@ namespace WB.UI.Headquarters.Controllers
             return View("Index");
         }
 
+        public ActionResult Started()
+        {
+            return View("Interviews", NewModel(MainMenu.Started, InterviewStatus.InterviewerAssigned));
+        }
+
         public ActionResult Rejected()
         {
-            return View("Interviews");
+            return View("Interviews", NewModel(MainMenu.Rejected, InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters));
         }
 
         public ActionResult Completed()
         {
-            return View("Interviews");
+            return View("Interviews", NewModel(MainMenu.Completed, InterviewStatus.Completed));
         }
 
-        public ActionResult Started()
+        private InterviewerHqModel NewModel(string title, params InterviewStatus[] statuses)
         {
-            return View("Interviews");
+            return new InterviewerHqModel
+            {
+                Title = title,
+                AllInterviews = Url.Content(@"~/api/InterviewApi/GetInterviews"),
+                InterviewerHqEndpoint = Url.Content(@"~/InterviewerHq"),
+                Statuses = statuses.Select(s => s.ToString()).ToArray(),
+                Resources = IntervewHqResources.Translations()
+            };
         }
-        
+
+        private static readonly ResourceManager[] IntervewHqResources =
+        {
+            MainMenu.ResourceManager,
+            Assignments.ResourceManager,
+            Pages.ResourceManager,
+            CommonRes.ResourceManager
+        };
+
         private string CreateInterview(Assignment assignment)
         {
             var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
@@ -114,6 +142,20 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
+        public ActionResult OpenInterview(Guid id)
+        {
+            return RedirectToAction("Cover", "WebInterview", new { id = id.FormatGuid() });
+        }
+
+        [HttpPost]
+        public ActionResult DiscardInterview(Guid id)
+        {
+            var deleteInterview = new DeleteInterviewCommand(id, this.authorizedUser.Id);
+            this.commandService.Execute(deleteInterview);
+            return this.Content("ok");
+        }
+
+        [HttpGet]
         [Authorize(Roles = "Interviewer")]
         public ActionResult QuestionnairesCombobox(string query = "", string statuses = null, int pageSize = 10)
         {
@@ -143,24 +185,24 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     filter = filter.Where(summary => interviewStatuses.Contains(summary.Status));
                 }
-                
+
                 return filter.Select(s => new
-                    {
-                        s.QuestionnaireTitle,
-                        s.QuestionnaireId,
-                        s.QuestionnaireVersion
-                    })
+                {
+                    s.QuestionnaireTitle,
+                    s.QuestionnaireId,
+                    s.QuestionnaireVersion
+                })
                     .Distinct().Take(pageSize).ToList();
             });
 
             var result = new ComboboxModel(queryResult.Select(s => new ComboboxOptionModel(
-                new QuestionnaireIdentity(s.QuestionnaireId, s.QuestionnaireVersion).ToString(), 
+                new QuestionnaireIdentity(s.QuestionnaireId, s.QuestionnaireVersion).ToString(),
                 $@"(ver. {s.QuestionnaireVersion.ToString()}) {s.QuestionnaireTitle}")).ToArray());
-            
+
             return JsonCamelCase(result);
         }
 
-        private string GenerateUrl(string action, string interviewId, string sectionId = null) => 
+        private string GenerateUrl(string action, string interviewId, string sectionId = null) =>
             $@"~/WebInterview/{interviewId}/{action}" + (string.IsNullOrWhiteSpace(sectionId) ? "" : $@"/{sectionId}");
     }
 }
