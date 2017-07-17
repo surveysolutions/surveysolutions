@@ -27,29 +27,36 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
         {
-            var imageView =
+            var metadataView =
                 this.fileMetadataViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName)
                     .SingleOrDefault();
 
-            if (imageView == null) return null;
+            if (metadataView == null) return null;
 
-            var fileView = this.fileViewStorage.GetById(imageView.FileId);
+            var fileView = this.fileViewStorage.GetById(metadataView.FileId);
 
             return fileView?.File;
         }
 
         public List<InterviewBinaryDataDescriptor> GetBinaryFilesForInterview(Guid interviewId)
         {
-            throw new NotImplementedException();
+            var metadataViews = this.fileMetadataViewStorage.Where(image => image.InterviewId == interviewId).ToList();
+            return metadataViews.Select(f =>
+                new InterviewBinaryDataDescriptor(
+                    f.InterviewId,
+                    f.FileName,
+                    () => this.fileViewStorage.GetById(f.FileId).File
+                )
+            ).ToList();
         }
 
         public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data)
         {
-            var imageView =
+            var metadataView =
                 this.fileMetadataViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName)
                     .SingleOrDefault();
 
-            if (imageView == null)
+            if (metadataView == null)
             {
                 string fileId = Guid.NewGuid().FormatGuid();
                 this.fileViewStorage.Store(new TFileView
@@ -70,7 +77,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             {
                 this.fileViewStorage.Store(new TFileView
                 {
-                    Id = imageView.FileId,
+                    Id = metadataView.FileId,
                     File = data
                 });
             }
@@ -78,12 +85,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public void RemoveInterviewBinaryData(Guid interviewId, string fileName)
         {
-            var imageView = this.fileMetadataViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName).SingleOrDefault();
+            var metadataView = this.fileMetadataViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName).SingleOrDefault();
 
-            if (imageView == null) return;
+            if (metadataView == null) return;
 
-            this.fileViewStorage.Remove(imageView.FileId);
-            this.fileMetadataViewStorage.Remove(imageView.Id);
+            this.fileViewStorage.Remove(metadataView.FileId);
+            this.fileMetadataViewStorage.Remove(metadataView.Id);
         }
     }
 }
