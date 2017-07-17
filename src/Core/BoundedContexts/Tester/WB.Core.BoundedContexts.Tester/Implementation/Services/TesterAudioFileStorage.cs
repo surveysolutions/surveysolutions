@@ -1,14 +1,15 @@
 ﻿using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
+
 namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 {
-    public class TesterImageFileStorage : TesterBaseFileStorage, IImageFileStorage
+    public class TesterAudioFileStorage : TesterBaseFileStorage, IAudioFileStorage, IPlainFileCleaner
     {
         protected override string DataDirectoryName => "InterviewData";
-        protected override string EntityDirectoryName => "TempInterviewData";
+        protected override string EntityDirectoryName => "TempAudioInterviewData";
 
-        public TesterImageFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath) 
+        public TesterAudioFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath) 
             : base(fileSystemAccessor, rootDirectoryPath)
         {
         }
