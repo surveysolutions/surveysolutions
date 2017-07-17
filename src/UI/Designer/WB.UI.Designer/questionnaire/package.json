@@ -37,8 +37,8 @@
     "bower": "node_modules\\.bin\\bower install",
     "bower-force": "node_modules\\.bin\\bower install --force",
     "gulp": "node_modules\\.bin\\gulp --production",
-    "production": "node_modules\\.bin\\gulp --production",
-    "preproduction": "node_modules\\.bin\\bower install"
+    "production": "gulp --production",
+    "preproduction": "bower install"
   },
   "author": "",
   "license": "ISC"
