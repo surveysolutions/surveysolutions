@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -11,7 +9,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class FilteredSingleOptionQuestionViewModel : BaseFilteredQuestionViewModel<FilteredComboboxItemViewModel>
+    public class FilteredSingleOptionQuestionViewModel : BaseFilteredQuestionViewModel
     {
         private readonly FilteredOptionsViewModel filteredOptionsViewModel;
 
@@ -35,32 +33,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
         }
 
-        protected override bool CanSendAnswerCommand(FilteredComboboxItemViewModel answer)
-            => this.interview.GetSingleOptionQuestion(this.Identity).GetAnswer()?.SelectedValue != answer.Value;
-
-        protected override AnswerQuestionCommand CreateAnswerCommand(FilteredComboboxItemViewModel answer)
-            => new AnswerSingleOptionQuestionCommand(
-                this.interviewId,
-                this.principal.CurrentUserIdentity.UserId,
-                this.Identity.Id,
-                this.Identity.RosterVector,
-                DateTime.UtcNow,
-                answer.Value);
-
-        private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs) => this.SetAnswer();
-
-        protected override FilteredComboboxItemViewModel ToViewModel(CategoricalOption option, string filter)
-            => new FilteredComboboxItemViewModel
-            {
-                Text = GetHighlightedText(option.Title, filter),
-                Value = option.Value
-            };
+        private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs) => this.SetAnswerAndUpdateFiler();
 
         protected override IEnumerable<CategoricalOption> GetSuggestions(string filter) 
             => this.filteredOptionsViewModel.GetOptions(filter);
 
         protected override CategoricalOption GetAnsweredOption(int answer)
             => this.interview.GetOptionForQuestionWithoutFilter(this.Identity, answer);
+        protected override CategoricalOption GetOptionByFilter(string filter)
+            => this.interview.GetOptionForQuestionWithFilter(this.Identity, filter);
 
         public override void Dispose()
         {

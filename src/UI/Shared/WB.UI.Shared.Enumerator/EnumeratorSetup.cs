@@ -146,13 +146,17 @@ namespace WB.UI.Shared.Enumerator
 
         private static void RegisterAutoCompleteTextViewBindings(IMvxTargetBindingFactoryRegistry registry)
         {
-            registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>(
-                nameof(InstantAutoCompleteTextView.PartialText),
+            registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>(nameof(InstantAutoCompleteTextView.PartialText),
                 (ctrl) => new InstantAutoCompleteTextViewPartialTextTargetBinding(ctrl));
-            registry.RegisterPropertyInfoBindingFactory(
-                typeof(InstantAutoCompleteTextViewSelectedObjectTargetBinding),
-                typeof(InstantAutoCompleteTextView),
-                nameof(InstantAutoCompleteTextView.SelectedObject));
+
+            registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>("OnPartialTextChanged",
+                (ctrl) => new InstantAutoCompleteTextViewOnPartialTextChangedBinding(ctrl));
+
+            registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>("OnItemSelected",
+                (ctrl) => new InstantAutoCompleteTextViewOnItemSelectedBinding(ctrl));
+
+            registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>("OnFocusOut",
+                (ctrl) => new InstantAutoCompleteTextViewOnFocusOutBinding(ctrl));
         }
 
         protected override IEnumerable<Assembly> AndroidViewAssemblies =>
