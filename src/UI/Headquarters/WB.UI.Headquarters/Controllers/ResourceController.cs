@@ -11,20 +11,20 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     public class ResourceController : BaseController
     {
-        private readonly IFileSystemInterviewFileStorage fileSystemFileRepository;
+        private readonly IImageQuestionFileStorage imageQuestionFileRepository;
 
         public ResourceController(ICommandService commandService, ILogger logger,
-            IFileSystemInterviewFileStorage fileSystemFileRepository)
+            IImageQuestionFileStorage imageQuestionFileRepository)
             : base(commandService, logger)
         {
-            this.fileSystemFileRepository = fileSystemFileRepository;
+            this.imageQuestionFileRepository = imageQuestionFileRepository;
         }
 
         public ActionResult InterviewFile(Guid interviewId, string fileName)
         {
             byte[] file = null; 
             if(fileName != null)
-                file = this.fileSystemFileRepository.GetInterviewBinaryData(interviewId, fileName);
+                file = this.imageQuestionFileRepository.GetInterviewBinaryData(interviewId, fileName);
 
             if (file == null || file.Length == 0)
                 return

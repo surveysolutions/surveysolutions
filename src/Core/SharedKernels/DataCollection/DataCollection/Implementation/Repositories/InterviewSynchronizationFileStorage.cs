@@ -11,13 +11,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
     // todo make it private
     public class InterviewSynchronizationFileStorage : IInterviewSynchronizationFileStorage
     {
-        private readonly IFileSystemInterviewFileStorage fileSystemInterviewFileStorage;
+        private readonly IImageQuestionFileStorage imageQuestionFileStorage;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string basePath;
 
-        public InterviewSynchronizationFileStorage(IFileSystemInterviewFileStorage fileSystemInterviewFileStorage, IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath, string syncDirectoryName)
+        public InterviewSynchronizationFileStorage(IImageQuestionFileStorage imageQuestionFileStorage, IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath, string syncDirectoryName)
         {
-            this.fileSystemInterviewFileStorage = fileSystemInterviewFileStorage;
+            this.imageQuestionFileStorage = imageQuestionFileStorage;
             this.fileSystemAccessor = fileSystemAccessor;
 
             this.basePath = this.fileSystemAccessor.CombinePath(rootDirectoryPath, syncDirectoryName);
@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             if (!fileSystemAccessor.IsDirectoryExists(interviewDirectoryPath))
                 fileSystemAccessor.CreateDirectory(interviewDirectoryPath);
 
-            var files = this.fileSystemInterviewFileStorage.GetBinaryFilesForInterview(interviewId);
+            var files = this.imageQuestionFileStorage.GetBinaryFilesForInterview(interviewId);
             foreach (var file in files)
             {
                 this.fileSystemAccessor.WriteAllBytes(this.GetPathToFile(interviewId, file.FileName), file.GetData());

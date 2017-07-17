@@ -1412,7 +1412,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_restore_interview_with_nested_rosters.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_roster_row_with_nested_roster_is_removed.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_unchecking_previously_checked_2nd_and_4th_options_in_multioption_question_used_as_roster_size_and_roster_level_of_question_and_rost___.cs" />
-    <Compile Include="SharedKernels\DataCollection\PlainInterviewFileStorageTests\PlainInterviewFileStorageTestContext.cs" />
+    <Compile Include="SharedKernels\DataCollection\PlainInterviewFileStorageTests\ImageQuestionFileStorageTestContext.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainInterviewFileStorageTests\when_deleting_all_files_stored_for_the_interview.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainInterviewFileStorageTests\when_deleting_all_interview_files_for_not_Existing_interview.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainInterviewFileStorageTests\when_deleting_not_existing_file_for_the_interview.cs" />

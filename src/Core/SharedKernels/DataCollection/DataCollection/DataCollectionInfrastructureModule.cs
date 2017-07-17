@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public void Load(IIocRegistry registry)
         {
-            registry.BindAsSingletonWithConstructorArgument<IFileSystemInterviewFileStorage, FileSystemFileSystemInterviewFileStorage>(
+            registry.BindAsSingletonWithConstructorArgument<IImageQuestionFileStorage, ImageQuestionFileStorage>(
                 "rootDirectoryPath", this.basePath);
 
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
