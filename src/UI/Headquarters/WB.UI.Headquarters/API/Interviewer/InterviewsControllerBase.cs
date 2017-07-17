@@ -12,14 +12,15 @@ using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.Synchronization.MetaInfo;
 using WB.UI.Headquarters.Code;
+
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 {
     public class InterviewsControllerBase : ApiController
     {
+        private readonly IFileSystemInterviewFileStorage fileSystemInterviewFileStorage;
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
         private readonly IAuthorizedUser authorizedUser;
         protected readonly IInterviewPackagesService interviewPackagesService;
@@ -29,6 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         protected readonly IInterviewInformationFactory interviewsFactory;
 
         public InterviewsControllerBase(
+            IFileSystemInterviewFileStorage fileSystemInterviewFileStorage,
             IPlainInterviewFileStorage plainInterviewFileStorage,
             IAuthorizedUser authorizedUser,
             IInterviewInformationFactory interviewsFactory,
@@ -37,6 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             IMetaInfoBuilder metaBuilder,
             IJsonAllTypesSerializer synchronizationSerializer)
         {
+            this.fileSystemInterviewFileStorage = fileSystemInterviewFileStorage;
             this.plainInterviewFileStorage = plainInterviewFileStorage;
             this.authorizedUser = authorizedUser;
             this.interviewsFactory = interviewsFactory;
@@ -74,6 +77,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         }
         
         public virtual void PostImage(PostFileRequest request)
+        {
+            this.fileSystemInterviewFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
+                Convert.FromBase64String(request.Data));
+        }
+
+        [HttpPost]
+        public virtual void PostAudio(PostFileRequest request)
         {
             this.plainInterviewFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
                 Convert.FromBase64String(request.Data));

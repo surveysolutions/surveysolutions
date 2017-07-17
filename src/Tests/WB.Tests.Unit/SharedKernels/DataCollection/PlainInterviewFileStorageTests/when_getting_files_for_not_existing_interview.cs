@@ -13,15 +13,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainInterviewFileStorageTe
     {
         Establish context = () =>
         {
-            plainFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
+            fileSystemFileSystemFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
         };
 
-        Because of = () => result = plainFileRepository.GetBinaryFilesForInterview(interviewId);
+        Because of = () => result = fileSystemFileSystemFileRepository.GetBinaryFilesForInterview(interviewId);
 
         It should_0_files_be_returned = () =>
             result.Count.ShouldEqual(0);
 
-        private static PlainInterviewFileStorage plainFileRepository;
+        private static FileSystemFileSystemInterviewFileStorage fileSystemFileSystemFileRepository;
 
         private static readonly Mock<IFileSystemAccessor> FileSystemAccessorMock = CreateIFileSystemAccessorMock();
 

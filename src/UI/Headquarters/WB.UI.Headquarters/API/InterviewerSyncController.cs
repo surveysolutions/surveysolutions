@@ -25,7 +25,7 @@ namespace WB.UI.Headquarters.API
     { 
         private readonly ISyncProtocolVersionProvider syncVersionProvider;
         private readonly IAuthorizedUser authorizedUser;
-        private readonly IPlainInterviewFileStorage plainFileRepository;
+        private readonly IFileSystemInterviewFileStorage fileSystemFileRepository;
         private readonly IFileSystemAccessor fileSystemAccessor; 
         private readonly ITabletInformationService tabletInformationService;
         private readonly IInterviewPackagesService incomingSyncPackagesQueue;
@@ -38,7 +38,7 @@ namespace WB.UI.Headquarters.API
         public InterviewerSyncController(ICommandService commandService,
             IAuthorizedUser authorizedUser,
             ILogger logger,
-            IPlainInterviewFileStorage plainFileRepository,
+            IFileSystemInterviewFileStorage fileSystemFileRepository,
             IFileSystemAccessor fileSystemAccessor,
             ISyncProtocolVersionProvider syncVersionProvider,
             ITabletInformationService tabletInformationService,
@@ -48,7 +48,7 @@ namespace WB.UI.Headquarters.API
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
-            this.plainFileRepository = plainFileRepository;
+            this.fileSystemFileRepository = fileSystemFileRepository;
             this.fileSystemAccessor = fileSystemAccessor;
             this.tabletInformationService = tabletInformationService;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
@@ -88,7 +88,7 @@ namespace WB.UI.Headquarters.API
         [ApiBasicAuth(new[] { UserRoles.Interviewer })]
         public HttpResponseMessage PostFile(PostFileRequest request)
         {
-            this.plainFileRepository.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data));
+            this.fileSystemFileRepository.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data));
             return this.Request.CreateResponse(HttpStatusCode.OK);
         }
 

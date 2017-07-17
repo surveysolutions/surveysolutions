@@ -339,7 +339,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 token: token));
         }
 
-#endregion
+        public Task UploadInterviewAudioAsync(Guid interviewId, string fileName, byte[] fileData, Action<decimal, long, long> onDownloadProgressChanged,
+            CancellationToken token)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+                url: string.Concat(this.interviewsController, "/", interviewId, "/audio"),
+                request: new PostFileRequest
+                {
+                    InterviewId = interviewId,
+                    FileName = fileName,
+                    Data = Convert.ToBase64String(fileData)
+                },
+                credentials: this.restCredentials,
+                token: token));
+        }
+
+        #endregion
         
 #region Attachments
         public Task<List<string>> GetAttachmentContentsAsync(QuestionnaireIdentity questionnaire, 
