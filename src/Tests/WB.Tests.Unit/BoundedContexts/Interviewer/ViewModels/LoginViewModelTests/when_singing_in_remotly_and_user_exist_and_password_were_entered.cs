@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
         Because of = () => viewModel.OnlineSignInCommand.Execute();
 
         It should_navigate_to_dashboard = () =>
-            ViewModelNavigationServiceMock.Verify(x => x.NavigateToDashboard(), Times.Once);
+            ViewModelNavigationServiceMock.Verify(x => x.NavigateToDashboard(null), Times.Once);
 
         It should_store_entered_password = () =>
            InterviewersPlainStorageMock.Verify(x => x.Store(Moq.It.Is<InterviewerIdentity>(i => i.PasswordHash == userPasswordHash)), Times.Once);
