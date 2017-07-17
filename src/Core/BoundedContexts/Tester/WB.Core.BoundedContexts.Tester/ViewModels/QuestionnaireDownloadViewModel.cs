@@ -104,8 +104,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                     this.viewModelNavigationService.NavigateToInterview(interviewId.FormatGuid(), navigationIdentity);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    logger.Warn("Cant reload questionnaire with data", e);
                     await userInteractionService.AlertAsync(TesterUIResources.ReloadInterviewErrorMessage);
                     var newInterviewId = await this.CreateInterview(questionnaireIdentity, progress);
                     this.viewModelNavigationService.NavigateToPrefilledQuestions(newInterviewId.FormatGuid());
