@@ -123,7 +123,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             categoricalQuestionOption = this.optionsStorage
                 .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
                             x.QuestionId == questionIdAsString &&
-                            x.Title == optionTitle &&
+                            x.Title.ToLower() == optionTitle.ToLower() &&
                             x.ParentValue == parentQuestionValue &&
                             (x.TranslationId == translationIdAsString || x.TranslationId == null))
                 .OrderBy(x => x.TranslationId == null)
