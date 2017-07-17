@@ -34,9 +34,6 @@
     "run-sequence": "^2.0.0"
   },
   "scripts": {
-    "bower": "node_modules\\.bin\\bower install",
-    "bower-force": "node_modules\\.bin\\bower install --force",
-    "gulp": "node_modules\\.bin\\gulp --production",
     "production": "gulp --production",
     "preproduction": "bower install"
   },
