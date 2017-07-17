@@ -88,6 +88,17 @@ function CleanBinAndObjFolders() {
     Write-Host "##teamcity[blockClosed name='Cleaning folders']"
 }
 
+function versionCheck() {
+    Write-Host "Node version:"
+    &node -v | Write-Host 
+
+    Write-Host "NPM version:"
+    &npm --version | Write-Host 
+
+    Write-Host "Yarn version:"
+    &yarn --version | Write-Host 
+}
+
 function RunBlock($blockName, $targetLocation, [ScriptBlock] $block) {
     Write-Host "##teamcity[blockOpened name='$blockName']"
     Write-Host "##teamcity[progressStart '$blockName']"
