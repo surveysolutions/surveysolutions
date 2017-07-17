@@ -15,8 +15,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ResourceControllerTests
         {
             controller =
                 CreateController(
-                    plainInterviewFileStorage:
-                        Mock.Of<IPlainInterviewFileStorage>(_ => _.GetInterviewBinaryData(interviewId, fileName) == fileContent));
+                    fileSystemInterviewFileStorage:
+                        Mock.Of<IFileSystemInterviewFileStorage>(_ => _.GetInterviewBinaryData(interviewId, fileName) == fileContent));
         };
 
         Because of = () =>

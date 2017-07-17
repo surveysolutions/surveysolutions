@@ -7,13 +7,13 @@ using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
 namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 {
-    public class TesterPlainInterviewFileStorage : IPlainInterviewFileStorage, IPlainFileCleaner
+    public class TesterFileSystemInterviewFileStorage : IFileSystemInterviewFileStorage, IPlainFileCleaner
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string basePath;
         private const string DataDirectoryName = "InterviewData";
 
-        public TesterPlainInterviewFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath)
+        public TesterFileSystemInterviewFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath)
         {
             this.fileSystemAccessor = fileSystemAccessor;
 

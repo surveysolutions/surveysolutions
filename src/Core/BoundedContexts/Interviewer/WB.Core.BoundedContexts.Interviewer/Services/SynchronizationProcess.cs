@@ -30,7 +30,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly IPlainStorage<AssignmentDocument, int> assignmentsStorage;
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly IInterviewerInterviewAccessor interviewFactory;
-        private readonly IPlainStorage<InterviewFileView> interviewFileViewStorage;
+        private readonly IPlainStorage<InterviewFileView> audioStorage;
+        private readonly IPlainStorage<InterviewFileView> imagesStorage;
         private readonly IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly ILogger logger;
@@ -56,7 +57,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             IInterviewerQuestionnaireAccessor questionnairesAccessor,
             IInterviewerInterviewAccessor interviewFactory,
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage,
-            IPlainStorage<InterviewFileView> interviewFileViewStorage,
+            IPlainStorage<InterviewFileView> imagesStorage,
             CompanyLogoSynchronizer logoSynchronizer,
             AttachmentsCleanupService cleanupService,
             IPasswordHasher passwordHasher,
@@ -74,7 +75,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.questionnairesAccessor = questionnairesAccessor;
             this.interviewFactory = interviewFactory;
             this.interviewMultimediaViewStorage = interviewMultimediaViewStorage;
-            this.interviewFileViewStorage = interviewFileViewStorage;
+            this.imagesStorage = imagesStorage;
             this.logoSynchronizer = logoSynchronizer;
             this.cleanupService = cleanupService;
             this.passwordHasher = passwordHasher;
@@ -635,6 +636,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     });
 
                     await this.UploadImagesByCompletedInterviewAsync(completedInterview.InterviewId, progress, cancellationToken);
+                    await this.UploadAudioByCompletedInterviewAsync(completedInterview.InterviewId, progress, cancellationToken);
 
                     if (interviewPackage != null)
                     {
@@ -673,7 +675,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             foreach (var imageView in imageViews)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                var fileView = this.interviewFileViewStorage.GetById(imageView.FileId);
+                var fileView = this.imagesStorage.GetById(imageView.FileId);
                 await this.synchronizationService.UploadInterviewImageAsync(
                     imageView.InterviewId,
                     imageView.FileName,
@@ -681,7 +683,27 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     (progressPercentage, bytesReceived, totalBytesToReceive) => { },
                     cancellationToken);
                 this.interviewMultimediaViewStorage.Remove(imageView.Id);
-                this.interviewFileViewStorage.Remove(fileView.Id);
+                this.imagesStorage.Remove(fileView.Id);
+            }
+        }
+
+        private async Task UploadAudioByCompletedInterviewAsync(Guid interviewId, IProgress<SyncProgressInfo> progress,
+            CancellationToken cancellationToken)
+        {
+            var audioFiles = this.interviewMultimediaViewStorage.Where(image => image.InterviewId == interviewId);
+
+            foreach (var audioFile in audioFiles)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                var fileView = this.audioStorage.GetById(audioFile.FileId);
+                await this.synchronizationService.UploadInterviewAudioAsync(
+                    audioFile.InterviewId,
+                    audioFile.FileName,
+                    fileView.File,
+                    (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                    cancellationToken);
+                this.interviewMultimediaViewStorage.Remove(audioFile.Id);
+                this.audioStorage.Remove(fileView.Id);
             }
         }
     }
