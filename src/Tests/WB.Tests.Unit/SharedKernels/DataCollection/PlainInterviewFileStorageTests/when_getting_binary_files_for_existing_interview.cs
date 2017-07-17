@@ -18,10 +18,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainInterviewFileStorageTe
             FileSystemAccessorMock.Setup(x => x.GetFileName(Moq.It.IsAny<string>())).Returns<string>(name => name);
             FileSystemAccessorMock.Setup(x => x.ReadAllBytes(file1)).Returns(data1);
 
-            imageQuestionFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
+            imageFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
         };
 
-        Because of = () => result = imageQuestionFileRepository.GetBinaryFilesForInterview(interviewId);
+        Because of = () => result = imageFileRepository.GetBinaryFilesForInterview(interviewId);
 
         It should_1_file_be_returned = () =>
             result.Count.ShouldEqual(1);
@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainInterviewFileStorageTe
         It should_data_of_returned_file_be_equal_to_data1 = () =>
             result[0].GetData().ShouldEqual(data1);
 
-        private static ImageQuestionFileStorage imageQuestionFileRepository;
+        private static ImageFileStorage imageFileRepository;
 
         private static readonly Mock<IFileSystemAccessor> FileSystemAccessorMock = CreateIFileSystemAccessorMock();
 

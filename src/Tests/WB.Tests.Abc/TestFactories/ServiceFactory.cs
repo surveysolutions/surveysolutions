@@ -470,9 +470,9 @@ namespace WB.Tests.Abc.TestFactories
                 brokenPackagesFactory ?? Mock.Of<IBrokenInterviewPackagesViewFactory>());
         }
 
-        public TesterImageQuestionFileStorage TesterPlainInterviewFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectory)
+        public TesterImageFileStorage TesterPlainInterviewFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectory)
         {
-            return new TesterImageQuestionFileStorage(fileSystemAccessor, rootDirectory);
+            return new TesterImageFileStorage(fileSystemAccessor, rootDirectory);
         }
 
         public IQuestionnaireDownloader QuestionnaireDownloader(

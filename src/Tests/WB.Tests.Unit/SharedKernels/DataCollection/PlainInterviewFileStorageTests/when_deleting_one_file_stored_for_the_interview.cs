@@ -14,17 +14,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainInterviewFileStorageTe
         {
             FileSystemAccessorMock.Setup(x => x.IsFileExists(Moq.It.IsAny<string>())).Returns(true);
 
-            imageQuestionFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
+            imageFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
 
-            imageQuestionFileRepository.StoreInterviewBinaryData(interviewId, fileName1, data1);
+            imageFileRepository.StoreInterviewBinaryData(interviewId, fileName1, data1);
         };
 
-        Because of = () => imageQuestionFileRepository.RemoveInterviewBinaryData(interviewId, fileName1);
+        Because of = () => imageFileRepository.RemoveInterviewBinaryData(interviewId, fileName1);
 
         It should_file_be_deleted_from_file_system = () =>
             FileSystemAccessorMock.Verify(x=>x.DeleteFile(Moq.It.Is<string>(name=>name.Contains(fileName1) && name.Contains(interviewId.FormatGuid()))));
 
-        private static ImageQuestionFileStorage imageQuestionFileRepository;
+        private static ImageFileStorage imageFileRepository;
 
         private static readonly Mock<IFileSystemAccessor> FileSystemAccessorMock = CreateIFileSystemAccessorMock();
 

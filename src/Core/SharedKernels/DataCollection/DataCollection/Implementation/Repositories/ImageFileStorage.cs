@@ -10,13 +10,13 @@ using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 {
     // TODO: Make it private
-    public class ImageQuestionFileStorage : IImageQuestionFileStorage
+    public class ImageFileStorage : IImageFileStorage
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string basePath;
         private const string DataDirectoryName = "InterviewData";
 
-        public ImageQuestionFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath)
+        public ImageFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath)
         {
             this.fileSystemAccessor = fileSystemAccessor;
 
