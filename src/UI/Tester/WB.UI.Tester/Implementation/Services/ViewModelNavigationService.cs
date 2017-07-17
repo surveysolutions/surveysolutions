@@ -28,7 +28,7 @@ namespace WB.UI.Tester.Implementation.Services
             IMvxAndroidCurrentTopActivity androidCurrentTopActivity,
             IPrincipal principal,
             IJsonAllTypesSerializer jsonSerializer)
-            : base(commandService, userInteractionService, userInterfaceStateService, principal)
+            : base(commandService, userInteractionService, userInterfaceStateService, principal, TODO)
         {
             this.androidCurrentTopActivity = androidCurrentTopActivity;
             this.jsonSerializer = jsonSerializer;

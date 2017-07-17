@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         protected void UpdateTitle() => this.Title = string.Format(this.TabTitle, this.ItemsCount);
 
-        public async void Load()
+        public async Task Load()
         {
             this.dbItems = this.GetDbItems();
 
