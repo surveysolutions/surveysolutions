@@ -6,9 +6,9 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 namespace WB.Core.BoundedContexts.Headquarters.Mappings
 {
     [PlainStorage]
-    public class DatabaseFileMap : ClassMapping<DatabaseFile>
+    public class AudioFileMap : ClassMapping<AudioFile>
     {
-        public DatabaseFileMap()
+        public AudioFileMap()
         {
             this.Id(x => x.Id, idMap =>
             {
