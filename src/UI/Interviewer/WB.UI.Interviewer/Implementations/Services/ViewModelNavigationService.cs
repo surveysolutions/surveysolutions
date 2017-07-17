@@ -1,4 +1,5 @@
 using Android.Content;
+using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Droid.Platform;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -18,6 +19,7 @@ namespace WB.UI.Interviewer.Implementations.Services
     {
         private readonly IMvxAndroidCurrentTopActivity androidCurrentTopActivity;
         private readonly IJsonAllTypesSerializer jsonSerializer;
+        private readonly IMvxNavigationService navigationService;
 
         public ViewModelNavigationService(
             ICommandService commandService,
@@ -25,16 +27,22 @@ namespace WB.UI.Interviewer.Implementations.Services
             IUserInterfaceStateService userInterfaceStateService,
             IMvxAndroidCurrentTopActivity androidCurrentTopActivity,
             IPrincipal principal,
-            IJsonAllTypesSerializer jsonSerializer)
+            IJsonAllTypesSerializer jsonSerializer,
+            IMvxNavigationService navigationService)
             : base(commandService, userInteractionService, userInterfaceStateService, principal)
         {
             this.androidCurrentTopActivity = androidCurrentTopActivity;
             this.jsonSerializer = jsonSerializer;
+            this.navigationService = navigationService;
         }
 
         public void NavigateTo<TViewModel>() where TViewModel : IMvxViewModel => this.NavigateTo<TViewModel>(null);
 
-        public void NavigateToDashboard() => this.NavigateTo<DashboardViewModel>();
+        public void NavigateToDashboard()
+        {
+            this.navigationService.Navigate<DashboardViewModel, DashboardArgs>(new DashboardArgs());
+        }
+
         public void NavigateToPrefilledQuestions(string interviewId) => this.NavigateTo<PrefilledQuestionsViewModel>(new { interviewId = interviewId });
 
         public void NavigateToInterview(string interviewId, NavigationIdentity navigationIdentity)
