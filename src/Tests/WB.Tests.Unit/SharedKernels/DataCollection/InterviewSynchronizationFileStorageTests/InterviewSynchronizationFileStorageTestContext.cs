@@ -10,9 +10,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewSynchronizationFil
     [Subject(typeof(InterviewSynchronizationFileStorage))]
     internal class InterviewSynchronizationFileStorageTestContext
     {
-        protected static InterviewSynchronizationFileStorage CreateFileSyncRepository(IImageQuestionFileStorage imageQuestionFileRepository = null, IFileSystemAccessor fileSystemAccessor = null)
+        protected static InterviewSynchronizationFileStorage CreateFileSyncRepository(IImageFileStorage imageFileRepository = null, IFileSystemAccessor fileSystemAccessor = null)
         {
-            return new InterviewSynchronizationFileStorage(imageQuestionFileRepository ?? Mock.Of<IImageQuestionFileStorage>(), fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), "", "InterviewData");
+            return new InterviewSynchronizationFileStorage(imageFileRepository ?? Mock.Of<IImageFileStorage>(), fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), "", "InterviewData");
         }
 
         protected static Mock<IFileSystemAccessor> CreateIFileSystemAccessorMock()

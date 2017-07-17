@@ -12,18 +12,18 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainInterviewFileStorageTe
     {
         Establish context = () =>
         {
-            imageQuestionFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
+            imageFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
 
             FileSystemAccessorMock.Setup(x => x.IsDirectoryExists(Moq.It.IsAny<string>())).Returns(true);
         };
 
-        Because of = () => imageQuestionFileRepository.RemoveAllBinaryDataForInterview(interviewId);
+        Because of = () => imageFileRepository.RemoveAllBinaryDataForInterview(interviewId);
 
 
         It should_interview_folder_be_deleted_from_file_system = () =>
           FileSystemAccessorMock.Verify(x => x.DeleteDirectory(Moq.It.Is<string>(name => name.Contains(interviewId.FormatGuid()))), Times.Once);
 
-        private static ImageQuestionFileStorage imageQuestionFileRepository;
+        private static ImageFileStorage imageFileRepository;
 
         private static readonly Mock<IFileSystemAccessor> FileSystemAccessorMock = CreateIFileSystemAccessorMock();
 
