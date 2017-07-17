@@ -14,7 +14,7 @@ function GetPathRelativeToCurrectLocation($FullPath) {
 #https://docs.microsoft.com/en-us/visualstudio/install/workload-and-component-ids
 ##############################
 function GetMsBuildFromVsWhere() {
-   $path = vswhere -latest -products * -requires Microsoft.Component.MSBuild -requires Component.Xamarin -property installationPath
+    $path = vswhere -latest -products * -requires Microsoft.Component.MSBuild -requires Component.Xamarin -property installationPath
     if ($path) {
         $path = join-path $path 'MSBuild\15.0\Bin\MSBuild.exe'
         if (test-path $path) {
@@ -88,122 +88,74 @@ function CleanBinAndObjFolders() {
     Write-Host "##teamcity[blockClosed name='Cleaning folders']"
 }
 
-function BuildWebInterviewApp($targetLocation) {
-    $action = 'Building WebInterview app'
-    
-    Write-Host "##teamcity[blockOpened name='$action']"
-    Write-Host "##teamcity[progressStart '$action']"
+function RunBlock($blockName, $targetLocation, [ScriptBlock] $block) {
+    Write-Host "##teamcity[blockOpened name='$blockName']"
+    Write-Host "##teamcity[progressStart '$blockName']"
 
     Write-Host "Pushing location to $targetLocation"
     Push-Location -Path $targetLocation
 
     try {
+        $result = & $block
+        return $result
+    }
+    finally {
+        Pop-Location
+
+        Write-Host "##teamcity[progressFinish '$blockName']"
+        Write-Host "##teamcity[blockClosed name='$blockName']"
+    }
+}
+
+##############################
+#.SYNOPSIS
+##Build static application
+#
+#.DESCRIPTION
+#Will build application with a combination of two commands call
+#
+#
+#.PARAMETER blockName
+#Name of application to build
+#
+#.PARAMETER targetLocation
+#Location of application
+#
+#.EXAMPLE
+#BuildStaticContent "Web Interview" "src/ui/hq/webinterview"
+#
+#.NOTES
+#`yarn` and `yarn production`
+#
+#this require for all static applications to have script with name `production`, so that production build can be made
+#
+# to execute pre build step - use script with name `preproduction`
+##############################
+function BuildStaticContent($blockName, $targetLocation) {
+    return RunBlock "Building static files: $blockName" $targetLocation -block {
         
+        Write-Host "Running yarn"
+
+        #install node js dependencies
         &yarn | Write-Host
+        
         $wasBuildSuccessfull = $LASTEXITCODE -eq 0
         if (-not $wasBuildSuccessfull) {
             Write-Host "##teamcity[message status='ERROR' text='Failed to run yarn']"
             return $wasBuildSuccessfull
         }
-        
-        &npm run build | Write-Host
-        
+
+        #will execute script gulpfile.js in target folder
+        &yarn run production | Write-Host
+
         $wasBuildSuccessfull = $LASTEXITCODE -eq 0
         if (-not $wasBuildSuccessfull) {
-            Write-Host "##teamcity[message status='ERROR' text='Failed to execute yarn build']"
+            Write-Host "##teamcity[message status='ERROR' text='Failed to run &yarn run production']"
             return $wasBuildSuccessfull
         }
+
+        return $true
     }
-    finally {
-        Pop-Location
-
-        $webpackStats = "src\UI\Headquarters\WB.UI.Headquarters\InterviewApp\stats.html"
-        MoveArtifacts $webpackStats -folder "BuildStats"
-        Remove-Item $webpackStats -Force
-
-        Write-Host "##teamcity[progressFinish '$action']"
-        Write-Host "##teamcity[blockClosed name='$action']"
-    }
-    return $wasBuildSuccessfull
-}
-
-function BuildStaticContent($targetLocation, $forceInstall) {
-    Write-Host "##teamcity[blockOpened name='Building static files']"
-    Write-Host "##teamcity[progressStart 'Building static files']"
-
-    Write-Host "Pushing location to $targetLocation"
-    Push-Location -Path $targetLocation
-    Write-Host "Running npm install"
-
-    #install node js dependencies
-    &yarn | Write-Host
-    $wasBuildSuccessfull = $LASTEXITCODE -eq 0
-    if (-not $wasBuildSuccessfull) {
-        Write-Host "##teamcity[message status='ERROR' text='Failed to run npm install']"
-        return $wasBuildSuccessfull
-    }
-	
-    #install bower packages
-    if ($forceInstall) {
-        &yarn bower -- --force | Write-Host # &bower install --force | Write-Host
-    }
-    else {
-        &yarn bower | Write-Host # &bower install | Write-Host
-    }
-    $wasBuildSuccessfull = $LASTEXITCODE -eq 0
-    if (-not $wasBuildSuccessfull) {
-        Write-Host "##teamcity[message status='ERROR' text='Failed to run bower install']"
-        return $wasBuildSuccessfull
-    }
-	
-    #will execute script gulpfile.js in target folder
-    &"node_modules\.bin\gulp" --production | Write-Host
-	
-    $wasBuildSuccessfull = $LASTEXITCODE -eq 0
-    if (-not $wasBuildSuccessfull) {
-        Write-Host "##teamcity[message status='ERROR' text='Failed to run gulp --production']"
-        return $wasBuildSuccessfull
-    }	
-	
-    Pop-Location
-
-    Write-Host "##teamcity[progressFinish 'Building static files']"
-    Write-Host "##teamcity[blockClosed name='Building static files']"
-	
-    return $wasBuildSuccessfull
-}
-
-function BuildWithWebpack($targetLocation, $forceInstall) {
-    Write-Host "##teamcity[blockOpened name='Building static files']"
-    Write-Host "##teamcity[progressStart 'Building static files']"
-
-    Write-Host "Pushing location to $targetLocation"
-    Push-Location -Path $targetLocation
-    Write-Host "Running npm install"
-
-    #install node js dependencies
-    &yarn | Write-Host
-    $wasBuildSuccessfull = $LASTEXITCODE -eq 0
-    if (-not $wasBuildSuccessfull) {
-        Write-Host "##teamcity[message status='ERROR' text='Failed to run npm install']"
-        return $wasBuildSuccessfull
-    }
-	
-    #will execute script gulpfile.js in target folder
-    &yarn run production | Write-Host
-	
-    $wasBuildSuccessfull = $LASTEXITCODE -eq 0
-    if (-not $wasBuildSuccessfull) {
-        Write-Host "##teamcity[message status='ERROR' text='Failed to run &yarn run production']"
-        return $wasBuildSuccessfull
-    }	
-	
-    Pop-Location
-
-    Write-Host "##teamcity[progressFinish 'Building static files']"
-    Write-Host "##teamcity[blockClosed name='Building static files']"
-	
-    return $wasBuildSuccessfull
 }
 
 function CheckPrerequisites() {
@@ -324,20 +276,20 @@ function BuildWebPackage($Project, $BuildConfiguration) {
 function CopyCapi($Project, $source, $cleanUp) {
     $file = get-childitem $Project
     $DestinationFolder = $file.directoryname + "\Externals"
-	
+
     Write-Host "##teamcity[message text='Prepare to copy apk with option cleanUp = $cleanUp']"
 
     if ($cleanUp) {
         if (Test-Path "$DestinationFolder") {
             Write-Host "##teamcity[message text='Clean up target folder $DestinationFolder']"
-		  
+  
             Remove-Item "$DestinationFolder" -Force -Recurse
         }
         New-Item -ItemType directory -Path "$DestinationFolder"
     }
-	
+
     Write-Host "##teamcity[message text='Copy apk with option clean from $source']"
-	
+
     Copy-Item "$source" "$DestinationFolder" -Recurse
 }
 
@@ -376,8 +328,8 @@ function UpdateProjectVersion([string]$BuildNumber, [string]$ver) {
 
 function CreateZip($sourceFolder, $zipfile) {
     If (Test-path $zipfile) {Remove-item $zipfile}
-	
-    Add-Type -assembly "system.io.compression.filesystem"	
+
+    Add-Type -assembly "system.io.compression.filesystem"
     [io.compression.zipfile]::CreateFromDirectory($sourceFolder, $zipfile)
 }
 
@@ -386,15 +338,15 @@ function BuildAndDeploySupportTool($SupportToolSolution, $BuildConfiguration) {
     BuildSolution `
         -Solution $SupportToolSolution `
         -BuildConfiguration $BuildConfiguration
-				
+
     $file = get-childitem $SupportToolSolution
-	
+
     $binDir = $file.directoryname + "\bin\"
     $sourceDir = $binDir + $BuildConfiguration
     $destZipFile = $binDir + "support.zip"
-	
+
     CreateZip $sourceDir $destZipFile
     MoveArtifacts $destZipFile "Tools"
-	
+
     Write-Host "##teamcity[blockClosed name='Building and deploying support console application']"
 }
