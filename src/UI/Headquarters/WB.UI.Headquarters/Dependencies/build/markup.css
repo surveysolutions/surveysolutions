@@ -6598,6 +6598,15 @@ a.disabled {
     border: none;
     background-color: #8c8f90; }
 
+.btn-default.btn-blue {
+  color: #fff;
+  padding: 12px;
+  background-color: #2a81cb;
+  border: none; }
+  .btn-default.btn-blue:hover, .btn-default.btn-blue:focus {
+    border: none;
+    background-color: #2166a1; }
+
 .back-link {
   text-transform: uppercase;
   font: 12.5px/14px "TrebuchetMSBold";
