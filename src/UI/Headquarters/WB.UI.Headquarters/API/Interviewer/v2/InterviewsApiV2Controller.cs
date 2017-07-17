@@ -101,5 +101,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         }
         [HttpPost]
         public override void PostImage(PostFileRequest request) => base.PostImage(request);
+        [HttpPost]
+        public override void PostAudio(PostFileRequest request) => base.PostAudio(request);
     }
 }

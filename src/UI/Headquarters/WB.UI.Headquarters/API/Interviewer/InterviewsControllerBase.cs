@@ -82,7 +82,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
                 Convert.FromBase64String(request.Data));
         }
 
-        [HttpPost]
         public virtual void PostAudio(PostFileRequest request)
         {
             this.audioFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
