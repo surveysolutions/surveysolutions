@@ -13,9 +13,11 @@
                                        :fetch-url="$config.interviewerHqEndpoint + '/QuestionnairesCombobox'"></Typeahead>
             </FilterBlock>
         </Filters>
-        <router-view
-            :questionnaireId="questionnaireId"
-        ></router-view>
+         <DataTables ref="table"
+            :tableOptions="tableOptions"
+            :addParamsToRequest="addFilteringParams"
+            :contextMenuItems="contextMenuItems"
+        ></DataTables>
     </Layout>
 
 </template>
@@ -25,22 +27,135 @@
 export default {
     data() {
         return {
+             tableOptions: {
+                rowId: "id",
+                deferLoading: 0,
+                columns: this.getTableColumns(),
+                ajax: {
+                    url: this.$config.allInterviews,
+                    type: "GET",
+                    contentType: 'application/json'
+                },
+                select: {
+                    style: 'multi',
+                    selector: 'td>.checkbox-filter'
+                },
+                sDom: 'f<"table-with-scroll"t>ip'
+            },
             questionnaireId: null,
-            title: "Change me"// this.$t('MainMenu.' + this.$router.props.status)
+            title: this.$config.title
         }
     },
 
     computed: {
         statuses() {
-            // magic. leaving as is for now
-            return this.$route.matched[0].props.default.statuses
+            return this.$config.statuses
         }
     },
 
     methods: {
         questionnaireSelected(newValue) {
              this.questionnaireId = newValue;
+             this.reload();
+        },
+
+        reload() {
+            this.$refs.table.reload();
+        },
+
+        contextMenuItems(selectedRow) 
+        {
+            const menu = [];
+
+            if(selectedRow.status != 'Completed') {
+                menu.push({
+                    name: this.$t("Pages.InterviewerHq_OpenInterview"),
+                    callback: () => this.openInterview(selectedRow)
+                });
+            }
+
+            if(selectedRow.canDelete){
+                menu.push({
+                    name: this.$t("Pages.InterviewerHq_DiscardInterview"),
+                    callback: () => this.discardInterview(selectedRow)
+                });
+            }
+
+            if(selectedRow.status == 'Completed') {
+                menu.push({
+                    name: this.$t("Pages.InterviewerHq_RestartInterview"),
+                    callback: () => this.restartInterview(selectedRow)
+                });
+            }
+
+            return menu;
+        },
+
+        openInterview(row) {
+            window.location = this.$config.interviewerHqEndpoint + "/OpenInterview/" + row.interviewId
+            console.log('openInterview', row.key, row.interviewId)
+        },
+
+        discardInterview(row) {
+            $.post(this.$config.interviewerHqEndpoint + "/DiscardInterview/" + row.interviewId, response => {
+                this.reload();
+            });
+        },
+
+        restartInterview(row) {
+            console.log('restartInterview', row.key, row.interviewId)
+        },
+
+        addFilteringParams(data) {
+            data.statuses = this.statuses;
+
+            if(this.questionnaireId){
+                data.questionnaireId = this.questionnaireId.key;
+            }
+        },
+
+        getTableColumns() {
+            const columns = [
+                {
+                    data: "key",
+                    name: "Key",
+                    title: this.$t("Common.InterviewKey"),
+                    orderable: true,
+                    searchable: true,
+                },{
+                    data: "assignmentId",
+                    name: "AssignmentIdKey",
+                    title: this.$t("Common.Assignment"),
+                    orderable: false,
+                    searchable: false,
+                }, {
+                    data: "featuredQuestions",
+                    title: this.$t("Assignments.IdentifyingQuestions"),
+                    class: "prefield-column first-identifying last-identifying sorting_disabled visible",
+                    orderable: false,
+                    searchable: false,
+                    render(data) {
+                        var questionsWithTitles = _.map(data, (question) => {
+                            return question.question + ": " + question.answer
+                        });
+                        return _.join(questionsWithTitles, ", ");
+                    },
+                    responsivePriority: 4
+                },
+                {
+                    data: "lastEntryDate",
+                    name: "UpdateDate",
+                    title: this.$t("Assignments.UpdatedAt"),
+                    searchable: false
+                }
+              ]
+
+            return columns
         }
+    },
+
+    mounted() {
+        this.reload();
     }
 }
 </script>
