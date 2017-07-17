@@ -2,7 +2,7 @@
 
     <Layout :title="title" hasFilter="true">
         <Filters slot="filters">
-            <FilterBlock :title="title">
+            <FilterBlock :title="$t('Pages.Template')">
                 <Typeahead data-vv-name="questionnaireId"
                                        data-vv-as="questionnaire"
                                        :placeholder="$t('Common.Any')"
@@ -18,6 +18,19 @@
             :addParamsToRequest="addFilteringParams"
             :contextMenuItems="contextMenuItems"
         ></DataTables>
+
+        <div slot="modals">
+            <Confirm ref="confirmation" id="restartModal">
+                {{ $t("Pages.InterviewerHq_RestartConfirm") }}
+                <FilterBlock>
+                    <div class="form-group ">
+                        <div class="field">
+                            <input class="form-control with-clear-btn" type="text">
+                        </div>
+                    </div>
+                </FilterBlock>
+            </Confirm>
+        </div>
     </Layout>
 
 </template>
@@ -27,7 +40,8 @@
 export default {
     data() {
         return {
-             tableOptions: {
+            restart_comment: null,
+            tableOptions: {
                 rowId: "id",
                 deferLoading: 0,
                 columns: this.getTableColumns(),
@@ -103,7 +117,11 @@ export default {
         },
 
         restartInterview(row) {
-            console.log('restartInterview', row.key, row.interviewId)
+            this.$refs.confirmation.promt(() => {
+                $.post(this.$config.interviewerHqEndpoint + "/RestartInterview/" + row.interviewId, { comment: this.restart_comment }, response => {
+                    window.location = this.$config.interviewerHqEndpoint + "/OpenInterview/" + row.interviewId;
+                })
+            });
         },
 
         addFilteringParams(data) {

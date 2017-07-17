@@ -34,7 +34,8 @@ namespace WB.UI.Headquarters.Filters
                 if (interviewSummary.IsDeleted)
                     throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
 
-                if (interviewSummary.Status != InterviewStatus.InterviewerAssigned)
+                if (interviewSummary.Status != InterviewStatus.InterviewerAssigned
+                    && interviewSummary.Status != InterviewStatus.Restarted)
                 {
                     throw new WebInterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, WebInterview.Error_NoActionsNeeded);
                 }

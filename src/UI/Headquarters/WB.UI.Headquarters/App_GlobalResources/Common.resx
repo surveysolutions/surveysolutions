@@ -249,4 +249,5 @@
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="Ok" xml:space="preserve"><value>Ok</value></data>
 </root>
