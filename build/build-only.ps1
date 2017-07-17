@@ -15,6 +15,7 @@ $ProjectHeadquarters = 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarter
 $MainSolution = 'src\WB.sln'
 $SupportToolSolution = 'src\Tools\support\support.sln'
 
+versionCheck
 
 $versionString = (GetVersionString 'src\core')
 UpdateProjectVersion $BuildNumber -ver $versionString
