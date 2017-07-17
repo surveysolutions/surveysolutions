@@ -34,11 +34,13 @@
     "jshint": "^2.9.1",
     "main-bower-files": "^2.13.1",
     "run-sequence": "^1.2.2"
-  },  
+  },
   "scripts": {
     "bower": "node_modules\\.bin\\bower install",
     "bower-force": "node_modules\\.bin\\bower install --force",
-    "gulp" : "node_modules\\.bin\\gulp --production"
+    "gulp": "node_modules\\.bin\\gulp --production",
+    "production": "node_modules\\.bin\\gulp --production",
+    "preproduction" : "node_modules\\.bin\\bower install --force"
   },
   "author": "",
   "license": "ISC"
