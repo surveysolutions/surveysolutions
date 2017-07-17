@@ -67,16 +67,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.AutoCompleteSuggestions.Count.ShouldEqual(3);
 
         It should_create_option_models_with_specified_Texts = () =>
-            cascadingModel.AutoCompleteSuggestions.Select(x => x.Text).ShouldContainOnly(OptionsIfParentAnswerIs2.Select(x => x.Title));
-
-        It should_create_option_models_with_specified_OriginalTexts = () =>
-            cascadingModel.AutoCompleteSuggestions.Select(x => x.OriginalText).ShouldContainOnly(OptionsIfParentAnswerIs2.Select(x => x.Title));
-
-        It should_create_option_models_with_specified_values = () =>
-            cascadingModel.AutoCompleteSuggestions.Select(x => Convert.ToInt32(x.Value)).ShouldContainOnly(OptionsIfParentAnswerIs2.Select(x => x.Value));
-
-        It should_create_option_models_with_specified_ParentValues = () =>
-            cascadingModel.AutoCompleteSuggestions.Select(x => Convert.ToInt32(x.ParentValue)).ShouldContainOnly(OptionsIfParentAnswerIs2.Select(x => x.ParentValue.Value));
+            cascadingModel.AutoCompleteSuggestions.ShouldContainOnly(OptionsIfParentAnswerIs2.Select(x => x.Title));
 
         private static readonly List<CategoricalOption> OptionsIfParentAnswerIs2 = Options.Where(x => x.ParentValue == 2).ToList();
 
