@@ -28,6 +28,7 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<IInterviewEventStreamOptimizer>().To<InterviewEventStreamOptimizer>();
             this.Bind<IQuestionnaireTranslator>().To<QuestionnaireTranslator>();
             this.Bind<IQuestionnaireStorage>().To<QuestionnaireStorage>().InSingletonScope();
+            this.Bind<IAudioFileStorage>().To<InterviewerAudioFileStorage>();
             this.Bind<IImageFileStorage>().To<InterviewerImageFileStorage>();
             this.Bind<IAnswerToStringConverter>().To<AnswerToStringConverter>();
             this.Bind<IAssignmentDocumentsStorage>().To<AssignmentDocumentsStorage>().InSingletonScope();

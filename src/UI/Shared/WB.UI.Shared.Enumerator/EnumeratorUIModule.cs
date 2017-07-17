@@ -58,7 +58,6 @@ namespace WB.UI.Shared.Enumerator
             this.Bind<IMedia>().ToMethod(context => CrossMedia.Current);
             this.Bind<IPermissions>().ToMethod(context => CrossPermissions.Current);
 
-            this.Bind<IAudioFileStorage>().To<AudioFileStorage>().InSingletonScope();
             this.Bind<IAttachmentContentStorage>().To<AttachmentContentStorage>().InSingletonScope();
             this.Bind<ITranslationStorage>().To<TranslationsStorage>();
             this.Bind<IPasswordHasher>().To<DevicePasswordHasher>().InSingletonScope();
