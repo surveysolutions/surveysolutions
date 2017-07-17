@@ -12,7 +12,7 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
                 .WithColumn("id").AsString().PrimaryKey()
                 .WithColumn("interviewid").AsGuid().NotNullable()
                 .WithColumn("filename").AsString().NotNullable()
-                .WithColumn("data").AsCustom("integer[]").NotNullable();
+                .WithColumn("data").AsBinary().NotNullable();
 
             this.Create.Index("audiofiles_interviewid")
                 .OnTable("audiofiles")
