@@ -51,8 +51,11 @@ namespace WB.UI.Tester.Activities
 
         private void ClearPlainInterviewStorage()
         {
-            var plainFileCleaner = Mvx.Resolve<IPlainFileCleaner>();
-            plainFileCleaner.Clear();
+            var imageFileStorage = Mvx.Resolve<IImageFileStorage>();
+            (imageFileStorage as IPlainFileCleaner)?.Clear();
+
+            var audioFileStorage = Mvx.Resolve<IAudioFileStorage>();
+            (audioFileStorage as IPlainFileCleaner)?.Clear();
         }
     }
 }
