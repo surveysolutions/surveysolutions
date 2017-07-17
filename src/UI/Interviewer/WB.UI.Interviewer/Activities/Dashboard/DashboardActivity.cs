@@ -73,8 +73,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             this.ViewModel.RejectedInterviews.PropertyChanged += this.RejectedInterviewsOnPropertyChanged;
             this.ViewModel.CompletedInterviews.PropertyChanged += this.CompletedInterviewsOnPropertyChanged;
 
-            this.ViewModel.TypeOfInterviews = this.ViewModel.CreateNew.InterviewStatus;
-
             this.fragmentStatePagerAdapter.InsertFragment(typeof(QuestionnairesFragment), this.ViewModel.CreateNew,
                 nameof(InterviewTabPanel.Title));
 
@@ -89,6 +87,22 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
             var tabLayout = this.FindViewById<TabLayout>(Resource.Id.tabs);
             tabLayout.SetupWithViewPager(this.viewPager);
+
+            OpenRequestedTab();
+        }
+
+        private void OpenRequestedTab()
+        {
+            for (int i = 0; i < fragmentStatePagerAdapter.Count; i++)
+            {
+                var fragment = (MvxFragment) fragmentStatePagerAdapter.GetItem(i);
+                InterviewTabPanel viewModel = (InterviewTabPanel) fragment.ViewModel;
+                if (viewModel.InterviewStatus == this.ViewModel.TypeOfInterviews)
+                {
+                    this.viewPager.SetCurrentItem(i, false);
+                    break;
+                }
+            }
         }
 
         private void CompletedInterviewsOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
@@ -125,10 +139,8 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         private void ViewPager_PageSelected(object sender, ViewPager.PageSelectedEventArgs e)
         {
             var currentFragment = (MvxFragment)this.fragmentStatePagerAdapter.GetItem(e.Position);
-
             this.ViewModel.TypeOfInterviews = ((InterviewTabPanel)currentFragment.ViewModel).InterviewStatus;
         }
-
 
         protected override void OnViewModelSet()
         {

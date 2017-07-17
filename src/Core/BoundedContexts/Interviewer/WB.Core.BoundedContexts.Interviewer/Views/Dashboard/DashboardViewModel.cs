@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.Properties;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -55,6 +56,29 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.CompletedInterviews.OnInterviewRemoved += this.OnInterviewRemoved;
 
             await this.RefreshDashboard();
+
+            this.TypeOfInterviews = this.CreateNew.InterviewStatus;
+            if (parameter.LastVisitedInterviewId.HasValue)
+            {
+                var lastVisitedInterviewId = parameter.LastVisitedInterviewId;
+
+                HighlightInterview(this.StartedInterviews, lastVisitedInterviewId);
+                HighlightInterview(this.RejectedInterviews, lastVisitedInterviewId);
+                HighlightInterview(this.CompletedInterviews, lastVisitedInterviewId);
+            }
+        }
+
+        private void HighlightInterview(BaseInterviewsViewModel target, Guid? lastVisitedInterviewId)
+        {
+            foreach (var interview in target.UiItems)
+            {
+                var dashboardItem = interview as InterviewDashboardItemViewModel;
+                if (dashboardItem?.InterviewId == lastVisitedInterviewId)
+                {
+                    this.TypeOfInterviews = target.InterviewStatus;
+                    target.HighLight(dashboardItem);
+                }
+            }
         }
 
         private IMvxCommand synchronizationCommand;
@@ -169,7 +193,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private void SignOut()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-
             this.viewModelNavigationService.SignOutAndNavigateToLogin();
         }
 
@@ -194,5 +217,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
     public class DashboardArgs
     {
+        public Guid? LastVisitedInterviewId { get; set; }
     }
 }
