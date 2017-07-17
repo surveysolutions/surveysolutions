@@ -9,12 +9,12 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
-    public class InterviewerImageQuestionFileStorage : IImageQuestionFileStorage
+    public class InterviewerImageFileStorage : IImageFileStorage
     {
         private readonly IPlainStorage<InterviewMultimediaView> imageViewStorage;
         private readonly IPlainStorage<InterviewFileView> fileViewStorage;
 
-        public InterviewerImageQuestionFileStorage(
+        public InterviewerImageFileStorage(
             IPlainStorage<InterviewMultimediaView> imageViewStorage,
             IPlainStorage<InterviewFileView> fileViewStorage)
         {

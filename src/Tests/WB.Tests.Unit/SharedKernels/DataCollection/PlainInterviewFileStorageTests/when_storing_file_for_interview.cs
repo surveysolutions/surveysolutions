@@ -12,15 +12,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainInterviewFileStorageTe
     {
         Establish context = () =>
         {
-            imageQuestionFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
+            imageFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
         };
 
-        Because of = () => imageQuestionFileRepository.StoreInterviewBinaryData(interviewId, fileName1, data1);
+        Because of = () => imageFileRepository.StoreInterviewBinaryData(interviewId, fileName1, data1);
 
         It should_file_be_stored_on_file_system_once = () =>
             FileSystemAccessorMock.Verify(x =>  x.WriteAllBytes(Moq.It.Is<string>(name => name.Contains(interviewId.FormatGuid())), data1), Times.Once);
 
-        private static ImageQuestionFileStorage imageQuestionFileRepository;
+        private static ImageFileStorage imageFileRepository;
 
         private static readonly Mock<IFileSystemAccessor> FileSystemAccessorMock = CreateIFileSystemAccessorMock();
 

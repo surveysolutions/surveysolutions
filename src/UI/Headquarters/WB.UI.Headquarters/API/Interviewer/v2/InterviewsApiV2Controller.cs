@@ -25,16 +25,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
     public class InterviewsApiV2Controller : InterviewsControllerBase
     {
         public InterviewsApiV2Controller(
-            IImageQuestionFileStorage imageQuestionFileStorage,
-            IPlainInterviewFileStorage plainInterviewFileStorage,
+            IImageFileStorage imageFileStorage,
+            IAudioFileStorage audioFileStorage,
             IAuthorizedUser authorizedUser,
             IInterviewInformationFactory interviewsFactory,
             IInterviewPackagesService incomingSyncPackagesQueue,
             ICommandService commandService,
             IMetaInfoBuilder metaBuilder,
             IJsonAllTypesSerializer synchronizationSerializer) : base(
-                imageQuestionFileStorage: imageQuestionFileStorage,
-                plainInterviewFileStorage: plainInterviewFileStorage,
+                imageFileStorage: imageFileStorage,
+                audioFileStorage: audioFileStorage,
                 authorizedUser: authorizedUser,
                 interviewsFactory: interviewsFactory,
                 interviewPackagesService: incomingSyncPackagesQueue,
