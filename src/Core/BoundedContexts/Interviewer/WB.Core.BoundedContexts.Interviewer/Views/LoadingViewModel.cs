@@ -114,8 +114,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private string progressDescription;
         public string ProgressDescription
         {
-            get { return this.progressDescription; }
-            set { this.RaiseAndSetIfChanged(ref this.progressDescription, value); }
+            get => this.progressDescription;
+            set => SetProperty(ref this.progressDescription, value);
         }
 
         private void Progress_ProgressChanged(object sender, EventReadingProgress e)
@@ -132,7 +132,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
         }
 
-        public IMvxCommand NavigateToDashboardCommand => new MvxCommand(this.viewModelNavigationService.NavigateToDashboard);
+        public IMvxCommand NavigateToDashboardCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToDashboard());
 
         public IMvxCommand SignOutCommand => new MvxCommand(this.viewModelNavigationService.SignOutAndNavigateToLogin);
     }

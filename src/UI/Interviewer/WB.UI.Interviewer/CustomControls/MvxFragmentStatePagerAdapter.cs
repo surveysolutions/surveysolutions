@@ -90,9 +90,6 @@ namespace WB.UI.Interviewer.CustomControls
 
         public void RemoveFragment(int position)
         {
-            if (this._fragments[position].CachedFragment != null)
-                this.DestroyItem(null, position, this._fragments[position].CachedFragment);
-
             this._fragments[position].ViewModel.PropertyChanged -= this.ViewModel_PropertyChanged;
             this._fragments.RemoveAt(position);
 

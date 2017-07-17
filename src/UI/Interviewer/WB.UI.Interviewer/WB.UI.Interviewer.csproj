@@ -358,6 +358,7 @@
     <Compile Include="Converters\SynchronizationStatusToTextColorConverter.cs" />
     <Compile Include="Converters\TextEditValidationStyleBackgroundConverter.cs" />
     <Compile Include="CustomBindings\ImageCompanyLogoBinding.cs" />
+    <Compile Include="CustomBindings\RecyclerViewScrollToPositionBinding.cs" />
     <Compile Include="CustomBindings\TextViewIsCurrentDashboardTabBinding.cs" />
     <Compile Include="CustomBindings\ViewDrawableTargetBinding.cs" />
     <Compile Include="CustomBindings\StatusToDasboardBackgroundConverter.cs" />
