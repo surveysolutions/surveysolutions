@@ -71,7 +71,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult Started()
         {
-            return View("Interviews", NewModel(MainMenu.Started, InterviewStatus.InterviewerAssigned));
+            return View("Interviews", NewModel(MainMenu.Started, InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted));
         }
 
         public ActionResult Rejected()
@@ -153,6 +153,16 @@ namespace WB.UI.Headquarters.Controllers
             var deleteInterview = new DeleteInterviewCommand(id, this.authorizedUser.Id);
             this.commandService.Execute(deleteInterview);
             return this.Content("ok");
+        }
+
+        [HttpPost]
+        public ActionResult RestartInterview(Guid id, string comment)
+        {
+            var restartCommand = new RestartInterviewCommand(id, this.authorizedUser.Id, comment, DateTime.UtcNow);
+
+            this.commandService.Execute(restartCommand);
+
+            return Content(Url.Content(GenerateUrl(@"Cover", id.FormatGuid())));
         }
 
         [HttpGet]

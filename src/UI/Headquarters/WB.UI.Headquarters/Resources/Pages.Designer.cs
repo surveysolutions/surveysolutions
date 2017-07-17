@@ -988,6 +988,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please provide a comment if needed to restart an interview.
+        /// </summary>
+        public static string InterviewerHq_RestartConfirm {
+            get {
+                return ResourceManager.GetString("InterviewerHq_RestartConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Restart Interview.
         /// </summary>
         public static string InterviewerHq_RestartInterview {

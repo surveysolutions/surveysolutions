@@ -124,7 +124,7 @@ namespace WB.UI.Headquarters.Controllers
             this.commandService.Execute(createInterviewCommand);
             return interviewId.FormatGuid();
         }
-        
+
         private ResumeWebInterview GetResumeModel(string id)
         {
             var interview = this.statefulInterviewRepository.Get(id);
