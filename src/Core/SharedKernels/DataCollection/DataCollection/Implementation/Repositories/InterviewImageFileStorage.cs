@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 {
     public class AudioFile : IView
     {
-        public virtual string Id => GetFileId(InterviewId, FileName);
+        public virtual string Id { get; set; } 
         public virtual Guid InterviewId { get; set; }
         public virtual string FileName { get; set; }
         public virtual byte[] Data { get; set; }
@@ -50,6 +50,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         {
             var file = new AudioFile()
             {
+                Id = AudioFile.GetFileId(interviewId, fileName),
                 InterviewId = interviewId,
                 FileName = fileName,
                 Data = data
