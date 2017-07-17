@@ -109,7 +109,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         protected virtual void CloseInterview()
         {
-            this.viewModelNavigationService.NavigateToDashboard();
+            this.viewModelNavigationService.NavigateToDashboard(this.interviewId);
 
             this.messenger.Publish(new InterviewCompletedMessage(this));
         }

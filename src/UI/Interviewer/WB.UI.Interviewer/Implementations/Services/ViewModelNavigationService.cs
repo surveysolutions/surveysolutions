@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using Android.Content;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
@@ -38,9 +40,12 @@ namespace WB.UI.Interviewer.Implementations.Services
 
         public void NavigateTo<TViewModel>() where TViewModel : IMvxViewModel => this.NavigateTo<TViewModel>(null);
 
-        public void NavigateToDashboard()
+        public async Task NavigateToDashboard(Guid? interviewId = null)
         {
-            this.navigationService.Navigate<DashboardViewModel, DashboardArgs>(new DashboardArgs());
+            await this.navigationService.Navigate<DashboardViewModel, DashboardArgs>(new DashboardArgs
+            {
+                LastVisitedInterviewId = interviewId
+            });
         }
 
         public void NavigateToPrefilledQuestions(string interviewId) => this.NavigateTo<PrefilledQuestionsViewModel>(new { interviewId = interviewId });
