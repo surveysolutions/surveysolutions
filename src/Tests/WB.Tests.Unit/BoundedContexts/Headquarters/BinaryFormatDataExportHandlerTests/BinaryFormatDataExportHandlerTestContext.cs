@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
     {
         protected static BinaryFormatDataExportHandler CreateBinaryFormatDataExportHandler(
             IFileSystemAccessor fileSystemAccessor=null,
-            IFileSystemInterviewFileStorage fileSystemFileRepository = null,
+            IImageQuestionFileStorage imageQuestionFileRepository = null,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor = null,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries = null,
             IProtectedArchiveUtils archiveUtils = null,
@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
         {
             return new BinaryFormatDataExportHandler(
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                fileSystemFileRepository ?? Mock.Of<IFileSystemInterviewFileStorage>(),
+                imageQuestionFileRepository ?? Mock.Of<IImageQuestionFileStorage>(),
                 filebasedExportedDataAccessor ?? Mock.Of<IFilebasedExportedDataAccessor>(),
                 new InterviewDataExportSettings(),
                 Mock.Of<ITransactionManager>(),

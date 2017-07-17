@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 {
     public class InterviewsControllerBase : ApiController
     {
-        private readonly IFileSystemInterviewFileStorage fileSystemInterviewFileStorage;
+        private readonly IImageQuestionFileStorage imageQuestionFileStorage;
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
         private readonly IAuthorizedUser authorizedUser;
         protected readonly IInterviewPackagesService interviewPackagesService;
@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         protected readonly IInterviewInformationFactory interviewsFactory;
 
         public InterviewsControllerBase(
-            IFileSystemInterviewFileStorage fileSystemInterviewFileStorage,
+            IImageQuestionFileStorage imageQuestionFileStorage,
             IPlainInterviewFileStorage plainInterviewFileStorage,
             IAuthorizedUser authorizedUser,
             IInterviewInformationFactory interviewsFactory,
@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             IMetaInfoBuilder metaBuilder,
             IJsonAllTypesSerializer synchronizationSerializer)
         {
-            this.fileSystemInterviewFileStorage = fileSystemInterviewFileStorage;
+            this.imageQuestionFileStorage = imageQuestionFileStorage;
             this.plainInterviewFileStorage = plainInterviewFileStorage;
             this.authorizedUser = authorizedUser;
             this.interviewsFactory = interviewsFactory;
@@ -78,7 +78,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         
         public virtual void PostImage(PostFileRequest request)
         {
-            this.fileSystemInterviewFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
+            this.imageQuestionFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
                 Convert.FromBase64String(request.Data));
         }
 

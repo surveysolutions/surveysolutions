@@ -299,7 +299,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IQuestionnaireTranslator>().To<QuestionnaireTranslator>();
             this.Bind<IQuestionnaireStorage>().To<QuestionnaireStorage>().InSingletonScope(); // has internal cache, so should be singleton
 
-            this.Bind<IFileSystemInterviewFileStorage>().To<FileSystemFileSystemInterviewFileStorage>()
+            this.Bind<IImageQuestionFileStorage>().To<ImageQuestionFileStorage>()
                 .InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.currentFolderPath);
 
             this.Bind<IInterviewSynchronizationFileStorage>().To<InterviewSynchronizationFileStorage>()

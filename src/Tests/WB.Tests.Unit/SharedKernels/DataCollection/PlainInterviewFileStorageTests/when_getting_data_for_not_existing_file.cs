@@ -7,19 +7,19 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainInterviewFileStorageTests
 {
-    internal class when_getting_data_for_not_existing_file : PlainInterviewFileStorageTestContext
+    internal class when_getting_data_for_not_existing_file : ImageQuestionFileStorageTestContext
     {
         Establish context = () =>
         {
-            fileSystemFileSystemFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
+            imageQuestionFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
         };
 
-        Because of = () => result = fileSystemFileSystemFileRepository.GetInterviewBinaryData(interviewId, fileName1);
+        Because of = () => result = imageQuestionFileRepository.GetInterviewBinaryData(interviewId, fileName1);
 
         It should_result_Be_equal_to_null = () =>
             result.ShouldBeNull();
 
-        private static FileSystemFileSystemInterviewFileStorage fileSystemFileSystemFileRepository;
+        private static ImageQuestionFileStorage imageQuestionFileRepository;
 
         private static readonly Mock<IFileSystemAccessor> FileSystemAccessorMock = CreateIFileSystemAccessorMock();
 
