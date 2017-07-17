@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 {
-    public class DatabaseFile : IView
+    public class AudioFile : IView
     {
         public virtual string Id => GetFileId(InterviewId, FileName);
         public virtual Guid InterviewId { get; set; }
@@ -18,18 +18,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         public static string GetFileId(Guid interviewId, string fileName) => $"{interviewId}#{fileName}";
     }
 
-    public class InterviewImageFileStorage : IImageFileStorage
+    public class AudioFileStorage : IAudioFileStorage
     {
-        private readonly IPlainStorageAccessor<DatabaseFile> filePlainStorageAccessor;
+        private readonly IPlainStorageAccessor<AudioFile> filePlainStorageAccessor;
 
-        public InterviewImageFileStorage(IPlainStorageAccessor<DatabaseFile> filePlainStorageAccessor)
+        public AudioFileStorage(IPlainStorageAccessor<AudioFile> filePlainStorageAccessor)
         {
             this.filePlainStorageAccessor = filePlainStorageAccessor;
         }
 
         public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
         {
-            var fileId = DatabaseFile.GetFileId(interviewId, fileName);
+            var fileId = AudioFile.GetFileId(interviewId, fileName);
             var databaseFile = filePlainStorageAccessor.GetById(fileId);
             return databaseFile?.Data;
         }
@@ -48,20 +48,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data)
         {
-            var file = new DatabaseFile()
+            var file = new AudioFile()
             {
                 InterviewId = interviewId,
                 FileName = fileName,
                 Data = data
             };
-            var fileId = DatabaseFile.GetFileId(interviewId, fileName);
+            var fileId = AudioFile.GetFileId(interviewId, fileName);
 
             filePlainStorageAccessor.Store(file, fileId);
         }
 
         public void RemoveInterviewBinaryData(Guid interviewId, string fileName)
         {
-            var fileId = DatabaseFile.GetFileId(interviewId, fileName);
+            var fileId = AudioFile.GetFileId(interviewId, fileName);
             filePlainStorageAccessor.Remove(fileId);
         }
     }
