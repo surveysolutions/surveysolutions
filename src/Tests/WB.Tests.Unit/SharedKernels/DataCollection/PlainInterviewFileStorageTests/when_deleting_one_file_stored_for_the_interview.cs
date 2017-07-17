@@ -8,23 +8,23 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainInterviewFileStorageTests
 {
-    internal class when_deleting_one_file_stored_for_the_interview : PlainInterviewFileStorageTestContext
+    internal class when_deleting_one_file_stored_for_the_interview : ImageQuestionFileStorageTestContext
     {
         Establish context = () =>
         {
             FileSystemAccessorMock.Setup(x => x.IsFileExists(Moq.It.IsAny<string>())).Returns(true);
 
-            fileSystemFileSystemFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
+            imageQuestionFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
 
-            fileSystemFileSystemFileRepository.StoreInterviewBinaryData(interviewId, fileName1, data1);
+            imageQuestionFileRepository.StoreInterviewBinaryData(interviewId, fileName1, data1);
         };
 
-        Because of = () => fileSystemFileSystemFileRepository.RemoveInterviewBinaryData(interviewId, fileName1);
+        Because of = () => imageQuestionFileRepository.RemoveInterviewBinaryData(interviewId, fileName1);
 
         It should_file_be_deleted_from_file_system = () =>
             FileSystemAccessorMock.Verify(x=>x.DeleteFile(Moq.It.Is<string>(name=>name.Contains(fileName1) && name.Contains(interviewId.FormatGuid()))));
 
-        private static FileSystemFileSystemInterviewFileStorage fileSystemFileSystemFileRepository;
+        private static ImageQuestionFileStorage imageQuestionFileRepository;
 
         private static readonly Mock<IFileSystemAccessor> FileSystemAccessorMock = CreateIFileSystemAccessorMock();
 

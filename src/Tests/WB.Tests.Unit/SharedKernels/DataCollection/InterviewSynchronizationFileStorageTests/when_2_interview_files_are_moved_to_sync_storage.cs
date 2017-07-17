@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewSynchronizationFil
                     new InterviewBinaryDataDescriptor(interviewId, "file1", () => data1),
                     new InterviewBinaryDataDescriptor(interviewId, "file2", () => data2)
                 });
-            interviewSynchronizationFileStorage = CreateFileSyncRepository(fileSystemFileRepository: plainFileRepositoryMock.Object,fileSystemAccessor: fileSystemAccessorMock.Object);
+            interviewSynchronizationFileStorage = CreateFileSyncRepository(imageQuestionFileRepository: plainFileRepositoryMock.Object,fileSystemAccessor: fileSystemAccessorMock.Object);
         };
 
         Because of = () => interviewSynchronizationFileStorage.MoveInterviewImagesToSyncFolder(interviewId);
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewSynchronizationFil
            fileSystemAccessorMock.Verify(x => x.WriteAllBytes(Moq.It.Is<string>(name => name.Contains(interviewId.FormatGuid())), data2), Times.Once);
 
         private static InterviewSynchronizationFileStorage interviewSynchronizationFileStorage;
-        private static Mock<IFileSystemInterviewFileStorage> plainFileRepositoryMock = new Mock<IFileSystemInterviewFileStorage>();
+        private static Mock<IImageQuestionFileStorage> plainFileRepositoryMock = new Mock<IImageQuestionFileStorage>();
          private static Mock<IFileSystemAccessor> fileSystemAccessorMock = CreateIFileSystemAccessorMock();
         private static Guid interviewId = Guid.NewGuid();
         private static byte[] data1 = new byte[] { 1 };

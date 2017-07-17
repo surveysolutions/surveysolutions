@@ -18,11 +18,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         public static string GetFileId(Guid interviewId, string fileName) => $"{interviewId}#{fileName}";
     }
 
-    public class DatabasePlainInterviewFileStorage : IFileSystemInterviewFileStorage
+    public class InterviewImageQuestionFileStorage : IImageQuestionFileStorage
     {
         private readonly IPlainStorageAccessor<DatabaseFile> filePlainStorageAccessor;
 
-        public DatabasePlainInterviewFileStorage(IPlainStorageAccessor<DatabaseFile> filePlainStorageAccessor)
+        public InterviewImageQuestionFileStorage(IPlainStorageAccessor<DatabaseFile> filePlainStorageAccessor)
         {
             this.filePlainStorageAccessor = filePlainStorageAccessor;
         }

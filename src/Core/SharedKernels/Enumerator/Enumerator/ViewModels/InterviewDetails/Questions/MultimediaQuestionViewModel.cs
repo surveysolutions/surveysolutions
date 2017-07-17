@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IPictureChooser pictureChooser;
         private readonly IUserInteractionService userInteractionService;
-        private readonly IFileSystemInterviewFileStorage fileSystemInterviewFileStorage;
+        private readonly IImageQuestionFileStorage imageQuestionFileStorage;
         private readonly ILiteEventRegistry eventRegistry;
         private Guid interviewId;
         private Identity questionIdentity;
@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public MultimediaQuestionViewModel(
             IPrincipal principal,
             IStatefulInterviewRepository interviewRepository,
-            IFileSystemInterviewFileStorage fileSystemInterviewFileStorage,
+            IImageQuestionFileStorage imageQuestionFileStorage,
             ILiteEventRegistry eventRegistry,
             IQuestionnaireStorage questionnaireStorage,
             IPictureChooser pictureChooser,
@@ -53,7 +53,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.userId = principal.CurrentUserIdentity.UserId;
             this.interviewRepository = interviewRepository;
-            this.fileSystemInterviewFileStorage = fileSystemInterviewFileStorage;
+            this.imageQuestionFileStorage = imageQuestionFileStorage;
             this.eventRegistry = eventRegistry;
             this.questionnaireStorage = questionnaireStorage;
             this.pictureChooser = pictureChooser;
@@ -98,7 +98,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var multimediaQuestion = interview.GetMultimediaQuestion(entityIdentity);
             if (multimediaQuestion.IsAnswered)
             {
-                this.Answer = this.fileSystemInterviewFileStorage.GetInterviewBinaryData(this.interviewId, multimediaQuestion.GetAnswer().FileName);
+                this.Answer = this.imageQuestionFileStorage.GetInterviewBinaryData(this.interviewId, multimediaQuestion.GetAnswer().FileName);
             }
 
             this.eventRegistry.Subscribe(this, interviewId);
@@ -144,13 +144,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         {
                             await this.Answering.SendAnswerQuestionCommandAsync(command);
                             this.Answer =
-                                this.fileSystemInterviewFileStorage.GetInterviewBinaryData(this.interviewId,
+                                this.imageQuestionFileStorage.GetInterviewBinaryData(this.interviewId,
                                     pictureFileName);
                             this.QuestionState.Validity.ExecutedWithoutExceptions();
                         }
                         catch (InterviewException ex)
                         {
-                            this.fileSystemInterviewFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
+                            this.imageQuestionFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
                             this.QuestionState.Validity.ProcessException(ex);
                         }
                     }
@@ -197,7 +197,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (this.questionIdentity.Equals(question.Id, question.RosterVector))
                 {
                     this.Answer = null;
-                    this.fileSystemInterviewFileStorage.RemoveInterviewBinaryData(this.interviewId, this.GetPictureFileName());
+                    this.imageQuestionFileStorage.RemoveInterviewBinaryData(this.interviewId, this.GetPictureFileName());
                 }
             }
         }
@@ -208,7 +208,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 pictureStream.CopyTo(ms);
                 byte[] pictureBytes = ms.ToArray();
-                this.fileSystemInterviewFileStorage.StoreInterviewBinaryData(this.interviewId, pictureFileName, pictureBytes);
+                this.imageQuestionFileStorage.StoreInterviewBinaryData(this.interviewId, pictureFileName, pictureBytes);
             }
         }
 

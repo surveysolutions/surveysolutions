@@ -8,22 +8,22 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainInterviewFileStorageTests
 {
-    internal class when_deleting_all_files_stored_for_the_interview : PlainInterviewFileStorageTestContext
+    internal class when_deleting_all_files_stored_for_the_interview : ImageQuestionFileStorageTestContext
     {
         Establish context = () =>
         {
-            fileSystemFileSystemFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
+            imageQuestionFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
 
             FileSystemAccessorMock.Setup(x => x.IsDirectoryExists(Moq.It.IsAny<string>())).Returns(true);
         };
 
-        Because of = () => fileSystemFileSystemFileRepository.RemoveAllBinaryDataForInterview(interviewId);
+        Because of = () => imageQuestionFileRepository.RemoveAllBinaryDataForInterview(interviewId);
 
 
         It should_interview_folder_be_deleted_from_file_system = () =>
           FileSystemAccessorMock.Verify(x => x.DeleteDirectory(Moq.It.Is<string>(name => name.Contains(interviewId.FormatGuid()))), Times.Once);
 
-        private static FileSystemFileSystemInterviewFileStorage fileSystemFileSystemFileRepository;
+        private static ImageQuestionFileStorage imageQuestionFileRepository;
 
         private static readonly Mock<IFileSystemAccessor> FileSystemAccessorMock = CreateIFileSystemAccessorMock();
 

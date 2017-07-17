@@ -8,19 +8,19 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainInterviewFileStorageTests
 {
-    internal class when_storing_file_for_interview : PlainInterviewFileStorageTestContext
+    internal class when_storing_file_for_interview : ImageQuestionFileStorageTestContext
     {
         Establish context = () =>
         {
-            fileSystemFileSystemFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
+            imageQuestionFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
         };
 
-        Because of = () => fileSystemFileSystemFileRepository.StoreInterviewBinaryData(interviewId, fileName1, data1);
+        Because of = () => imageQuestionFileRepository.StoreInterviewBinaryData(interviewId, fileName1, data1);
 
         It should_file_be_stored_on_file_system_once = () =>
             FileSystemAccessorMock.Verify(x =>  x.WriteAllBytes(Moq.It.Is<string>(name => name.Contains(interviewId.FormatGuid())), data1), Times.Once);
 
-        private static FileSystemFileSystemInterviewFileStorage fileSystemFileSystemFileRepository;
+        private static ImageQuestionFileStorage imageQuestionFileRepository;
 
         private static readonly Mock<IFileSystemAccessor> FileSystemAccessorMock = CreateIFileSystemAccessorMock();
 
