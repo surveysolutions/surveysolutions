@@ -18,10 +18,10 @@
     <PackageReference Include="Humanizer.Core.ru" Version="2.2.0" />
     <PackageReference Include="Humanizer.Core.vi" Version="2.2.0" />
     <PackageReference Include="Humanizer.Core.zh-CN" Version="2.2.0" />
-    <PackageReference Include="MvvmCross.Core" Version="5.0.5" />
-    <PackageReference Include="MvvmCross.Platform" Version="5.0.5" />
-    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="5.0.5" />
-    <PackageReference Include="MvvmCross.Plugin.PictureChooser" Version="5.0.5" />
+    <PackageReference Include="MvvmCross.Core" Version="5.0.6" />
+    <PackageReference Include="MvvmCross.Platform" Version="5.0.6" />
+    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="5.0.6" />
+    <PackageReference Include="MvvmCross.Plugin.PictureChooser" Version="5.0.6" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Portable.Ninject" Version="3.3.1" />
     <PackageReference Include="sqlite-net-pcl" Version="1.3.3" />

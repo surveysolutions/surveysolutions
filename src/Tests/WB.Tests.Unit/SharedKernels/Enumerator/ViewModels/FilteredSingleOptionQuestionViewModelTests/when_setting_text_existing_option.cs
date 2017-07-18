@@ -53,10 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             viewModel.Init(interviewId, questionIdentity, navigationState);
         };
 
-        Because of = () => {
-            viewModel.FilterText = answerValue;
-            Thread.Sleep(1000);
-        };
+        Because of = () => viewModel.FilterCommand.ExecuteAsync(answerValue).Await();
 
         It should_set_value = () =>
             viewModel.FilterText.ShouldEqual(answerValue);

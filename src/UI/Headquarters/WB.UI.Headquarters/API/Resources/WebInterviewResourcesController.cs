@@ -19,18 +19,18 @@ namespace WB.UI.Headquarters.API.Resources
     [System.Web.Http.AllowAnonymous]
     public class WebInterviewResourcesController : ApiController
     {
-        private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
+        private readonly IImageFileStorage imageFileStorage;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IImageProcessingService imageProcessingService;
         private readonly IPlainStorageAccessor<AttachmentContent> attachmentStorage;
 
         public WebInterviewResourcesController(
-            IPlainInterviewFileStorage plainInterviewFileStorage,
+            IImageFileStorage imageFileStorage,
             IStatefulInterviewRepository statefulInterviewRepository,
             IImageProcessingService imageProcessingService,
             IPlainStorageAccessor<AttachmentContent> attachmentStorage)
         {
-            this.plainInterviewFileStorage = plainInterviewFileStorage;
+            this.imageFileStorage = imageFileStorage;
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.imageProcessingService = imageProcessingService;
             this.attachmentStorage = attachmentStorage;
@@ -71,7 +71,7 @@ namespace WB.UI.Headquarters.API.Resources
                 return this.Request.CreateResponse(HttpStatusCode.NoContent);
             }
 
-            var file = this.plainInterviewFileStorage.GetInterviewBinaryData(interview.Id, filename);
+            var file = this.imageFileStorage.GetInterviewBinaryData(interview.Id, filename);
 
             if (file == null || file.Length == 0)
                 return this.Request.CreateResponse(HttpStatusCode.NoContent);

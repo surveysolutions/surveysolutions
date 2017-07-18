@@ -80,8 +80,8 @@ namespace WB.UI.Tester.Infrastructure
             this.Bind<IQuestionnaireAssemblyAccessor>().To<TesterQuestionnaireAssemblyAccessor>().InSingletonScope()
                 .WithConstructorArgument("assemblyStorageDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory(this.questionnaireAssembliesFolder));
 
-            this.Bind<IPlainInterviewFileStorage, IPlainFileCleaner>().To<TesterPlainInterviewFileStorage>().InSingletonScope()
-                .WithConstructorArgument("rootDirectoryPath", basePath);
+            this.Bind<IAudioFileStorage>().To<TesterAudioFileStorage>().InSingletonScope().WithConstructorArgument("rootDirectoryPath", basePath);
+            this.Bind<IImageFileStorage>().To<TesterImageFileStorage>().InSingletonScope().WithConstructorArgument("rootDirectoryPath", basePath);
             this.Bind<IQuestionnaireTranslator>().To<QuestionnaireTranslator>();
             this.Bind<IQuestionnaireStorage>().To<QuestionnaireStorage>().InSingletonScope();
         }

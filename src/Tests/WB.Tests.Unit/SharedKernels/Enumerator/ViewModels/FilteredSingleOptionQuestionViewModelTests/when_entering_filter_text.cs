@@ -57,19 +57,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             
         };
 
-        Because of = () => {
-            viewModel.FilterText = answerValue;
-            Thread.Sleep(1000);
-        };
+        Because of = () => viewModel.FilterCommand.ExecuteAsync(answerValue).Await();
 
         It should_update_suggestions_list = () =>
             viewModel.AutoCompleteSuggestions.Count.ShouldEqual(3);
 
         It should_suggestions_list_contains_only_items_after_filtering_text = () =>
         {
-            viewModel.AutoCompleteSuggestions.ShouldContain(i => i.Value == 1);
-            viewModel.AutoCompleteSuggestions.ShouldContain(i => i.Value == 2);
-            viewModel.AutoCompleteSuggestions.ShouldContain(i => i.Value == 4);
+            viewModel.AutoCompleteSuggestions.ShouldContain(i => i == "<b>a</b>bc");
+            viewModel.AutoCompleteSuggestions.ShouldContain(i => i == "b<b>a</b>c");
+            viewModel.AutoCompleteSuggestions.ShouldContain(i => i == "bb<b>a</b>");
         };
 
         static FilteredSingleOptionQuestionViewModel viewModel;

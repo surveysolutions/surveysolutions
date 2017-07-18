@@ -11,7 +11,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.Services
 {
-    [TestOf(typeof(TesterPlainInterviewFileStorage))]
+    [TestOf(typeof(TesterImageFileStorage))]
     [TestFixture]
     public class TesterPlainInterviewFileStorageTests
     {

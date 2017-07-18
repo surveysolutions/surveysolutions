@@ -13,7 +13,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
     internal class InterviewsApiV2ControllerTestsContext
     {
         public static InterviewsApiV2Controller CreateInterviewerInterviewsController(
-            IPlainInterviewFileStorage plainInterviewFileStorage = null,
+            IImageFileStorage imageFileStorage = null,
+            IAudioFileStorage audioFileStorage = null,
             IAuthorizedUser authorizedUser = null,
             IInterviewInformationFactory interviewsFactory = null,
             IInterviewPackagesService incomingSyncPackagesQueue = null,
@@ -23,7 +24,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
             SyncSettings synchronizationsettings = null)
         {
             return new InterviewsApiV2Controller(
-                plainInterviewFileStorage: plainInterviewFileStorage ?? Mock.Of<IPlainInterviewFileStorage>(),
+                imageFileStorage: imageFileStorage ?? Mock.Of<IImageFileStorage>(),
+                audioFileStorage: audioFileStorage ?? Mock.Of<IAudioFileStorage>(),
                 authorizedUser: authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 interviewsFactory: interviewsFactory ?? Mock.Of<IInterviewInformationFactory>(),
                 incomingSyncPackagesQueue: incomingSyncPackagesQueue ?? Mock.Of<IInterviewPackagesService>(),

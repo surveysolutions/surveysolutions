@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IViewModelNavigationService viewModelNavigationService;
-        private SynchronizationViewModel Synchronization;
+        private SynchronizationViewModel synchronization;
 
         private IReadOnlyCollection<QuestionnaireView> dbQuestionnaires;
         private IReadOnlyCollection<AssignmentDocument> dbAssignments;
@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public IMvxCommand SynchronizationCommand => synchronizationCommand ??
                                                      (synchronizationCommand = new MvxCommand(this.RunSynchronization,
-                                                         () => !this.Synchronization.IsSynchronizationInProgress));
+                                                         () => !this.synchronization.IsSynchronizationInProgress));
 
         public CreateNewViewModel(
             IPlainStorage<QuestionnaireView> questionnaireViewRepository,
@@ -45,9 +45,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.viewModelNavigationService = viewModelNavigationService;
         }
 
-        public async void Load(SynchronizationViewModel sync)
+        public async Task Load(SynchronizationViewModel sync)
         {
-            this.Synchronization = sync;
+            this.synchronization = sync;
             this.Title = InterviewerUIResources.Dashboard_AssignmentsTabTitle;
 
             this.dbQuestionnaires = this.questionnaireViewRepository.Where(questionnaire => questionnaire.Census);
@@ -67,8 +67,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 return;
             }
 
-            this.Synchronization.IsSynchronizationInProgress = true;
-            this.Synchronization.Synchronize();
+            this.synchronization.IsSynchronizationInProgress = true;
+            this.synchronization.Synchronize();
         }
 
         private IEnumerable<IDashboardItem> GetUiItems()

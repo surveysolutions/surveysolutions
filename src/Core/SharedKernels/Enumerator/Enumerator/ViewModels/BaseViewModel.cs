@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 

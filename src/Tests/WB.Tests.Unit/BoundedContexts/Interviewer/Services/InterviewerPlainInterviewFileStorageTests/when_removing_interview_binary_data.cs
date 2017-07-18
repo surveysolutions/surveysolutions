@@ -32,13 +32,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
                 FileId = imageFileId
             });
 
-            interviewerPlainInterviewFileStorage = CreateInterviewerPlainInterviewFileStorage(
+            interviewerImageFileStorage = CreateInterviewerPlainInterviewFileStorage(
                 fileViewStorage: fileViewStorage,
                 imageViewStorage: imageViewStorage);
         };
 
         Because of = () =>
-            interviewerPlainInterviewFileStorage.RemoveInterviewBinaryData(interviewId, imageFileName);
+            interviewerImageFileStorage.RemoveInterviewBinaryData(interviewId, imageFileName);
 
         It should_be_removed_multimedia_views_by_interview_id_and_file_name = () =>
             imageViewStorage.Where(x => x.InterviewId == interviewId && x.FileName == imageFileName).ShouldBeEmpty();
@@ -53,6 +53,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
         private static IPlainStorage<InterviewMultimediaView> imageViewStorage;
 
         private static IPlainStorage<InterviewFileView> fileViewStorage;
-        private static InterviewerPlainInterviewFileStorage interviewerPlainInterviewFileStorage;
+        private static InterviewerImageFileStorage interviewerImageFileStorage;
     }
 }

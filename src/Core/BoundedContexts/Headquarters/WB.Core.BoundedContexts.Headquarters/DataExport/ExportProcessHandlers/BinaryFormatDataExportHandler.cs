@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
     public class BinaryFormatDataExportHandler : IExportProcessHandler<DataExportProcessDetails>
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IPlainInterviewFileStorage plainFileRepository;
+        private readonly IImageFileStorage imageFileRepository;
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewDatas;
         private readonly ITransactionManager transactionManager;
@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         public BinaryFormatDataExportHandler(
             IFileSystemAccessor fileSystemAccessor, 
-            IPlainInterviewFileStorage plainFileRepository, 
+            IImageFileStorage imageFileRepository, 
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
             InterviewDataExportSettings interviewDataExportSettings, 
             ITransactionManager transactionManager, 
@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             IDataExportFileAccessor dataExportFileAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
-            this.plainFileRepository = plainFileRepository;
+            this.imageFileRepository = imageFileRepository;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
             this.transactionManager = transactionManager;
             this.interviewSummaries = interviewSummaries;
@@ -100,7 +100,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             {
                 dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
-                var interviewBinaryFiles = plainFileRepository.GetBinaryFilesForInterview(interviewId);
+                var interviewBinaryFiles = imageFileRepository.GetBinaryFilesForInterview(interviewId);
                 var filesFolderForInterview = this.fileSystemAccessor.CombinePath(folderForDataExport, interviewId.FormatGuid());
 
                 if (interviewBinaryFiles.Count > 0)
@@ -126,7 +126,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                                 var questionsWithAnswersOnMultimediaQuestion in
                                     questionsWithAnswersOnMultimediaQuestions)
                             {
-                                var fileContent = plainFileRepository.GetInterviewBinaryData(interviewId,
+                                var fileContent = imageFileRepository.GetInterviewBinaryData(interviewId,
                                     questionsWithAnswersOnMultimediaQuestion);
                                 this.fileSystemAccessor.WriteAllBytes(
                                     this.fileSystemAccessor.CombinePath(filesFolderForInterview,

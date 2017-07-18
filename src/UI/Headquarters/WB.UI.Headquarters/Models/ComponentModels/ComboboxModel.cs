@@ -1,4 +1,6 @@
-﻿namespace WB.UI.Headquarters.Models.ComponentModels
+﻿using System.ComponentModel;
+
+namespace WB.UI.Headquarters.Models.ComponentModels
 {
     public class ComboboxModel
     {
@@ -13,7 +15,7 @@
 
     public class ComboboxOptionModel
     {
-        public ComboboxOptionModel(string key, string value)
+        public ComboboxOptionModel(string key, [Localizable(false)] string value)
         {
             this.Key = key;
             this.Value = value;

@@ -42,11 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
         };
 
-        Because of = () =>
-        {
-            cascadingModel.FilterText = "a";
-            Thread.Sleep(1000);
-        };
+        Because of = () => cascadingModel.FilterCommand.ExecuteAsync("a").Await();
         
         It should_set_filter_text = () =>
             cascadingModel.FilterText.ShouldEqual("a");
@@ -58,13 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.AutoCompleteSuggestions.Count.ShouldEqual(1);
 
         It should_format_first_option_in_AutoCompleteSuggestions = () =>
-        {
-            var firstOption = cascadingModel.AutoCompleteSuggestions.ElementAt(0);
-            firstOption.Text.ShouldEqual("title <b>a</b>bc 1");
-            firstOption.Value.ShouldEqual(1);
-            firstOption.ParentValue.ShouldEqual(1);
-            firstOption.OriginalText.ShouldEqual("title abc 1");
-        };
+            cascadingModel.AutoCompleteSuggestions.ElementAt(0).ShouldEqual("title <b>a</b>bc 1");
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
     }

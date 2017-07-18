@@ -32,19 +32,19 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
                     File = imageFileBytes
                 });
 
-            interviewerPlainInterviewFileStorage = CreateInterviewerPlainInterviewFileStorage(
+            interviewerImageFileStorage = CreateInterviewerPlainInterviewFileStorage(
                 fileViewStorage: fileViewStorage,
                 imageViewStorage: imageViewStorage);
         };
 
         Because of = () =>
-            bytesResult = interviewerPlainInterviewFileStorage.GetInterviewBinaryData(interviewId, imageFileName);
+            bytesResult = interviewerImageFileStorage.GetInterviewBinaryData(interviewId, imageFileName);
 
         It should_remove_questionnaire_document_view_from_plain_storage = () =>
             bytesResult.ShouldAllBeEquivalentTo(imageFileBytes);
         
         static byte[] bytesResult;
-        static InterviewerPlainInterviewFileStorage interviewerPlainInterviewFileStorage;
+        static InterviewerImageFileStorage interviewerImageFileStorage;
         static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         static string imageFileName = "image.png";
         static string imageFileId = "1";

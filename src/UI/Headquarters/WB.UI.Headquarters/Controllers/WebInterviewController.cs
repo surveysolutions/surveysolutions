@@ -39,7 +39,7 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly ICommandService commandService;
         private readonly IWebInterviewConfigProvider configProvider;
-        private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
+        private readonly IImageFileStorage imageFileStorage;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IUserViewFactory usersRepository;
@@ -71,7 +71,7 @@ namespace WB.UI.Headquarters.Controllers
         public WebInterviewController(ICommandService commandService,
             IWebInterviewConfigProvider configProvider,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            IPlainInterviewFileStorage plainInterviewFileStorage,
+            IImageFileStorage imageFileStorage,
             IStatefulInterviewRepository statefulInterviewRepository,
             IWebInterviewConfigProvider webInterviewConfigProvider,
             IImageProcessingService imageProcessingService,
@@ -86,7 +86,7 @@ namespace WB.UI.Headquarters.Controllers
             this.commandService = commandService;
             this.configProvider = configProvider;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
-            this.plainInterviewFileStorage = plainInterviewFileStorage;
+            this.imageFileStorage = imageFileStorage;
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.imageProcessingService = imageProcessingService;
@@ -124,7 +124,7 @@ namespace WB.UI.Headquarters.Controllers
             this.commandService.Execute(createInterviewCommand);
             return interviewId.FormatGuid();
         }
-        
+
         private ResumeWebInterview GetResumeModel(string id)
         {
             var interview = this.statefulInterviewRepository.Get(id);
@@ -244,7 +244,7 @@ namespace WB.UI.Headquarters.Controllers
                     var filename = $@"{question.VariableName}{string.Join(@"-", questionIdentity.RosterVector.Select(rv => rv))}{DateTime.UtcNow.GetHashCode()}.jpg";
                     var responsibleId = interview.CurrentResponsibleId;
 
-                    this.plainInterviewFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray());
+                    this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray());
                     this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
                         responsibleId, questionIdentity.Id, questionIdentity.RosterVector, DateTime.UtcNow, filename));
                 }
