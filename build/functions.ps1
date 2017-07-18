@@ -148,7 +148,7 @@ function BuildStaticContent($blockName, $targetLocation) {
         Write-Host "Running yarn"
 
         #install node js dependencies
-        &npm install | Write-Host
+        &npm install --no-optional | Write-Host
         
         $wasBuildSuccessfull = $LASTEXITCODE -eq 0
         if (-not $wasBuildSuccessfull) {
