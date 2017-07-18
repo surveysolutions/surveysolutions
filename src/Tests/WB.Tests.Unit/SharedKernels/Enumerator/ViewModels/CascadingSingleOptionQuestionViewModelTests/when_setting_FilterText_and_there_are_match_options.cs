@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
         };
 
-        Because of = () => cascadingModel.FilterCommand.Execute("a");
+        Because of = () => cascadingModel.FilterCommand.ExecuteAsync("a").Await();
         
         It should_set_filter_text = () =>
             cascadingModel.FilterText.ShouldEqual("a");

@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
         };
 
-        Because of = () => cascadingModel.FilterCommand.Execute("ebw");
+        Because of = () => cascadingModel.FilterCommand.ExecuteAsync("ebw").Await();
 
         It should_set_filter_text = () =>
             cascadingModel.FilterText.ShouldEqual("ebw");

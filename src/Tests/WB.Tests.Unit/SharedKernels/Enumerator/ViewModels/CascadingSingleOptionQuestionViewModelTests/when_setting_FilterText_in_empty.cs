@@ -44,11 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
         };
 
-        Because of = () =>
-        {
-            cascadingModel.FilterCommand.Execute(string.Empty);
-            Thread.Sleep(500);
-        };
+        Because of = () => cascadingModel.FilterCommand.ExecuteAsync(string.Empty).Await();
 
         It should_set_empty_filter_text = () =>
             cascadingModel.FilterText.ShouldBeEmpty();

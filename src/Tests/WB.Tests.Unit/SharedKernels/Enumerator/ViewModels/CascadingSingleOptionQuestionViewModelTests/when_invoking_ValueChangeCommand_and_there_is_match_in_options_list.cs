@@ -52,11 +52,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.FilterCommand.Execute("o");
         };
 
-        Because of = () =>
-        {
-            cascadingModel.SaveAnswerBySelectedOptionCommand.Execute("3");
-            Thread.Sleep(500);
-        };
+        Because of = () => cascadingModel.SaveAnswerBySelectedOptionCommand.ExecuteAsync("3").Await();
 
         It should_send_answer_command = () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Once);
