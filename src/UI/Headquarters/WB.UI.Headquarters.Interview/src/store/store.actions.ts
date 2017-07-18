@@ -75,8 +75,8 @@ export default {
     answerMultimediaQuestion({ dispatch }, { id, file }) {
         apiCallerAndFetch(id, api => api.answerPictureQuestion(id, file))
     },
-    answerAudioQuestion({ dispatch }, { id, file }) {
-        apiCallerAndFetch(id, api => api.answerAudioQuestion(id, file))
+    answerAudioQuestion({ dispatch }, { id, file, length }) {
+        apiCallerAndFetch(id, api => api.answerAudioQuestion(id, file, length))
     },
     answerQRBarcodeQuestion({ dispatch }, { identity, text }) {
         apiCallerAndFetch(identity, api => api.answerQRBarcodeQuestion(identity, text))

@@ -1317,6 +1317,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvents(treeDifference, userId);
         }
 
+        public void AnswerAudioQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, string pictureFileName, TimeSpan length)
+        {
+            new InterviewPropertiesInvariants(this.properties)
+                .RequireAnswerCanBeChanged();
+
+            var questionIdentity = new Identity(questionId, rosterVector);
+
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
+                .RequirePictureAnswerAllowed();
+
+            var changedInterviewTree = this.Tree.Clone();
+
+            changedInterviewTree.GetQuestion(questionIdentity).AsAudio.SetAnswer(AudioAnswer.FromString(pictureFileName, length));
+
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
+            var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
+
+            this.ApplyEvents(treeDifference, userId);
+        }
+
+        
+
         public void RemoveAnswer(Guid questionId, RosterVector rosterVector, Guid userId, DateTime removeTime)
         {
             new InterviewPropertiesInvariants(this.properties)
