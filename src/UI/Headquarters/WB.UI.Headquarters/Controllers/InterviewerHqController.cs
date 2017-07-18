@@ -66,7 +66,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult CreateNew()
         {
-            return View("Index");
+            return View("Index", NewModel(MainMenu.CreateNew));
         }
 
         public ActionResult Started()

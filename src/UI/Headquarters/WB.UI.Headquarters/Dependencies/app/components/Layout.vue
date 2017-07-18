@@ -3,7 +3,7 @@
         <div class="row">
             <slot name="filters" />
         </div>
-        <div class="main-information">
+        <div :class="information">
             <div class="page-header clearfix">
                         <h1>
                             {{title}}
@@ -17,6 +17,19 @@
 
 <script>
 export default {
-    props: ["title"]
+    props: {
+        title: String,
+        hasFilter: {
+            type: Boolean,
+            default() { return false; }
+        }},
+    computed: {
+        information() {
+            return {
+                "main-information" : this.hasFilter,
+                "information" : !this.hasFilter
+            }
+        }
+    }
 }
 </script>
