@@ -157,7 +157,7 @@ function BuildStaticContent($blockName, $targetLocation) {
 
         if (Test-Path "bower.json") {
             Write-Host "Running bower install --force"
-            &bower install | Write-Host
+            &bower install --force | Write-Host
         }
 
         if (Test-Path "gulpfile.js") {
