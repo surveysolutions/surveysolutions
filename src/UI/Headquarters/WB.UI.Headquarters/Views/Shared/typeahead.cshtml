@@ -3,14 +3,19 @@
         <div class="btn-group btn-input clearfix">
             <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
                 <span data-bind="label" v-if="value === null" class="gray-text">{{placeholderText}}</span>
-                <span data-bind="label" v-else>{{value.value}}</span>
+                <span data-bind="label" v-else>
+                    <span v-if="value.role" :class="itemClass(value.role)">{{value.value}}</span>
+                    <span v-else>
+                        {{value.value}}
+                    </span>
+                </span>
             </button>
             <ul ref="dropdownMenu" class="dropdown-menu" role="menu">
                 <li>
                     <input type="text" ref="searchBox" :id="inputId" placeholder="Search" @@input="updateOptionsList" v-on:keyup.down="onSearchBoxDownKey" v-model="searchTerm" />
                 </li>
                 <li v-for="option in options" :key="option.key">
-                    <a href="javascript:void(0);" v-on:click="selectOption(option)" v-html="highlight(option.value, searchTerm)" v-on:keydown.up="onOptionUpKey"></a>
+                    <a href="javascript:void(0);" v-on:click="selectOption(option)" v-html="display(option, searchTerm)" v-on:keydown.up="onOptionUpKey"></a>
                 </li>
                 <li v-if="isLoading">
                     <a>Loading...</a>
@@ -73,6 +78,11 @@
                     event.stopPropagation();
                 }
             },
+            itemClass: function (role) {
+                if (role) {
+                    return role.toLowerCase();
+                }
+            },
             fetchOptions: function (filter) {
                 this.isLoading = true;
                 var requestParams = $.extend({ query: filter || "", cache: false }, this.ajaxParams);
@@ -96,17 +106,24 @@
             updateOptionsList: function(e) {
                 this.fetchOptions(e.target.value);
             },
-            highlight: function (title, searchTerm) {
-                var encodedTitle = _.escape(title);
+            display: function (option, searchTerm) {
+                var encodedTitle = _.escape(option.value);
                 if (searchTerm) {
                     var safeSearchTerm = _.escape(_.escapeRegExp(searchTerm));
 
                     var iQuery = new RegExp(safeSearchTerm, "ig");
-                    return encodedTitle.replace(iQuery, function(matchedTxt, a, b) {
+                    var result = encodedTitle.replace(iQuery, function (matchedTxt) {
                         return '<strong>' + matchedTxt + '</strong>';
                     });
+                    if (option.role) {
+                        result = "<span class='"+ option.role.toLowerCase() + "'>" + result + "</span>";
+                    }
+                    return result;
                 }
 
+                if (option.role) {
+                    encodedTitle = "<span class='" + option.role.toLowerCase() + "'>" + encodedTitle + "</span>";
+                }
                 return encodedTitle;
             }
         }

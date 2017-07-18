@@ -211,7 +211,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 {
                     InterviewerId = x.Profile.SupervisorId.HasValue ? x.Id : (Guid?)null,
                     SupervisorId = x.Profile.SupervisorId ?? x.Id,
-                    UserName = x.UserName
+                    UserName = x.UserName,
+                    Role = x.Profile.SupervisorId.HasValue ? UserRoles.Interviewer : UserRoles.Supervisor
                 });
             };
 
