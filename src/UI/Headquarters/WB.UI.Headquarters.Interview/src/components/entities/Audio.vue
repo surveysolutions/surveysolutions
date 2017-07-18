@@ -3,7 +3,6 @@
         <div class="question-unit">
             <div class="options-group">
                 <button type="button" class="btn btn-default btn-lg btn-action-questionnaire" v-if="!isRecording" v-on:click="requestAccessAndStartRecording">Tap to record audio</button>
-
                 <button type="button" class="btn btn-link" v-if="isRecording" v-on:click="stopRecording">Done</button>
             </div>
         </div>
@@ -50,7 +49,8 @@ export default {
 
                     self.$store.dispatch('answerAudioQuestion', {
                         id: self.id,
-                        file: blob
+                        file: blob,
+                        length: 10
                     })
                 }
             })

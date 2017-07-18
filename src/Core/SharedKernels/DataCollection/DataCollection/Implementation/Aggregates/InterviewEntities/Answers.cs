@@ -325,16 +325,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         protected AudioAnswer() { }
 
-        private AudioAnswer(string fileName)
+        private AudioAnswer(string fileName, TimeSpan length)
         {
             if (fileName == null) throw new ArgumentNullException(nameof(fileName));
+            if (length.Ticks == 0) throw new ArgumentNullException(nameof(length));
 
             this.FileName = fileName;
+            this.Length = length;
         }
 
         public string FileName { get; set; }
+        public TimeSpan Length { get; set; }
 
-        public static AudioAnswer FromString(string fileName) => fileName != null ? new AudioAnswer(fileName) : null;
+        public static AudioAnswer FromString(string fileName, TimeSpan length)
+        {
+            return fileName != null ? new AudioAnswer(fileName, length) : null;
+        }
 
         public override string ToString() => FileName;
 

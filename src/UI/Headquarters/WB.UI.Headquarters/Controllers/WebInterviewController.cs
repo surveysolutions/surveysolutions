@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -50,6 +51,8 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IImageProcessingService imageProcessingService;
         private readonly IConnectionLimiter connectionLimiter;
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
+        private readonly IAudioFileStorage audioFileStorage;
+
         private const string CapchaCompletedKey = "CaptchaCompletedKey";
 
         private bool CapchaVerificationNeededForInterview(string interviewId)
@@ -80,7 +83,8 @@ namespace WB.UI.Headquarters.Controllers
             ILogger logger, IUserViewFactory usersRepository,
             IInterviewUniqueKeyGenerator keyGenerator,
             ICaptchaProvider captchaProvider,
-            IPlainStorageAccessor<Assignment> assignments)
+            IPlainStorageAccessor<Assignment> assignments, 
+            IAudioFileStorage audioFileStorage)
             : base(commandService, logger)
         {
             this.commandService = commandService;
@@ -96,6 +100,7 @@ namespace WB.UI.Headquarters.Controllers
             this.keyGenerator = keyGenerator;
             this.captchaProvider = captchaProvider;
             this.assignments = assignments;
+            this.audioFileStorage = audioFileStorage;
         }
 
         private string CreateInterview(Assignment assignment)
@@ -189,12 +194,12 @@ namespace WB.UI.Headquarters.Controllers
 
         
         [HttpPost]
-        public async Task<ActionResult> Audio(string interviewId, string questionId, HttpPostedFileBase file)
+        public async Task<ActionResult> Audio(string interviewId, string questionId, HttpPostedFileBase file, long length)
         {
             IStatefulInterview interview = this.statefulInterviewRepository.Get(interviewId);
 
             var questionIdentity = Identity.Parse(questionId);
-            var question = interview.GetQuestion(questionIdentity);
+            InterviewTreeQuestion question = interview.GetQuestion(questionIdentity);
 
             if (!interview.AcceptsInterviewerAnswers() && question?.AsAudio != null)
             {
@@ -202,15 +207,23 @@ namespace WB.UI.Headquarters.Controllers
             }
             try
             {
+                
                 using (var ms = new MemoryStream())
                 {
                     await file.InputStream.CopyToAsync(ms);
 
                     byte[] bytes = ms.ToArray();
-                    
-                    //this.plainInterviewFileStorage.StoreInterviewBinaryData(interview.Id, filename, bytes);
-                    //this.commandService.Execute(new AnswerAudioQuestionCommand(interview.Id,
-                    //    responsibleId, questionIdentity.Id, questionIdentity.RosterVector, DateTime.UtcNow, filename));
+
+                    var fileName = $@"{question.VariableName}{questionIdentity.RosterVector}.wav";
+                    var responsibleId = interview.CurrentResponsibleId;
+                    var trackLength = new TimeSpan(length);
+                    audioFileStorage.StoreInterviewBinaryData(Guid.Parse(interviewId), fileName, bytes);
+
+                    var command = new AnswerAudioQuestionCommand(interview.Id,
+                        responsibleId, questionIdentity.Id, questionIdentity.RosterVector, 
+                        DateTime.UtcNow, fileName, trackLength);
+
+                    this.commandService.Execute(command);
                 }
             }
             catch (Exception e)

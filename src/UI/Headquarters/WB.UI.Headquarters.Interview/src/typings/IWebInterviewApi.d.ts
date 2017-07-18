@@ -150,7 +150,7 @@ declare interface IWebInterviewApi {
     answerLinkedToListMultiQuestion(questionIdentity: string, answer: number[]): void
     answerTextListQuestion(questionIdentity: string, rows: ITextListAnswerRow[]): void
     answerPictureQuestion(id: string, file: File): void
-    answerAudioQuestion(id: string, file: File): void
+    answerAudioQuestion(id: string, file: File, length: number): void
     answerGpsQuestion(identity, answer: IGpsAnswer)
     answerQRBarcodeQuestion(questionIdentity: string, text: string): void
 

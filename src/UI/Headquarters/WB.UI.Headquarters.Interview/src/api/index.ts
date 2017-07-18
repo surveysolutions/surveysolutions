@@ -72,11 +72,12 @@ const scriptIncludedPromise = new Promise<any>(resolve =>
             })
         }
 
-        interviewProxy.server.answerAudioQuestion = (id, file) => {
+        interviewProxy.server.answerAudioQuestion = (id, file, length) => {
             const fd = new FormData()
             fd.append("interviewId", queryString.interviewId)
             fd.append("questionId", id)
             fd.append("file", file)
+            fd.append("length", length)
             store.dispatch("uploadProgress", { id, now: 0, total: 100 })
 
             return $.ajax({
