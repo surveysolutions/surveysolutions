@@ -75,11 +75,11 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [Authorize]
         [CamelCase]
-        public ComboboxModel InterviewersCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
+        public ResponsibleComboboxModel InterviewersCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
         {
             var users = this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: this.authorizedUser.IsSupervisor ? this.authorizedUser.Id : (Guid?)null);
-            var options = users.Users.Select(x => new ComboboxOptionModel(x.UserId.FormatGuid(), x.UserName)).ToArray();
-            return new ComboboxModel(options, users.TotalCountByQuery);
+            var options = users.Users.Select(x => new ResponsibleComboboxOptionModel(x.UserId.FormatGuid(), x.UserName, x.Role)).ToArray();
+            return new ResponsibleComboboxModel(options, users.TotalCountByQuery);
         }
 
         [HttpGet]

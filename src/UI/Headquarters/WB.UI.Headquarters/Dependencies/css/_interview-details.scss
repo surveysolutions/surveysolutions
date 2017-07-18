@@ -204,10 +204,6 @@ label.inactive{
 			margin-bottom: 10px;
 		}
 	}
-
-	&.enumerators{
-		color: $pink;
-	}
 	&.instruction{
 		color: $blue;
 		p{
@@ -225,18 +221,43 @@ label.inactive{
 	p{
 		color: $gray_text;
 	}
+	h6{
+		margin-bottom: 5px;
+		color: rgb(128, 128, 128);
+	}
+	.publication-date{
+		color: rgb(203, 203, 203);
+	}
+	.enumerators, .enumerators p{
+		color: $pink;
+	}
 	.comment {
 		display: none;
 		&.active{
 			display: block;
 		}
 		.form-inline{
+			position: relative;
+			.form-group{
+				width: 100%;
+			}
+			.input-group{
+				width: 100%;
+			}
 			.form-control{
 				@extend %form;
-				width: 360px;
+				width: calc(100% + 12px);
 				height: 40px;
 				padding: 10px 12px;
 				z-index: 0;
+				margin-left: -12px;
+				color: $gray_text;
+				font-style: italic;
+			}
+			.btn-post-comment{
+				position: absolute;
+				top: 17px;
+				right: -65px;
 			}
 		}
 	}
@@ -387,6 +408,7 @@ label.inactive{
 }
 .question-editor{
 	.options-group{
+		position: relative;
 		padding: 10px;
 		border-radius: 7px;
 		margin-bottom: 0px;
@@ -673,6 +695,104 @@ label.inactive{
 				color: $gray_text;
 			}
 		} 
+	}
+}
+.lock{
+	display: none;
+	background: url("#{$assetsPath}/img/padlock-1dp.png") no-repeat;
+	background-size: 27px 27px;
+    @include image-2x("#{$assetsPath}/img/padlock-3dp.png", 27px, 27px);
+	position: absolute;
+	top: calc(50% -  13.5px);
+	left: -37px;
+	width: 27px;
+	height: 27px;
+}
+.readonly {
+	.lock{
+		display: block;
+	}
+	input[type="text"]:disabled,
+	label,
+	.field{
+		background: rgba(248, 248, 248, 0.8);
+		border-radius: 5px;
+	}
+}
+.audio-question{
+	&.answered{
+		.btn-action-questionnaire{
+			border-color: $gray_form;
+		}
+	}
+	.recording{
+		.btn-clear{
+			right: -45px;
+		}
+	}
+	.btn-action-questionnaire{
+		border-width: 2px;
+		background-image: url("../img/icon-mic-1x.png");
+		@include image-2x("#{$assetsPath}/img/icon-mic-2x.png", 21px, 31px);
+		background-size: 21px 31px;
+		background-repeat: no-repeat;
+		background-position: 10px 4px;
+		padding-left: 40px;
+		&:hover, &:focus, &:active{
+			border-color: $gray_form;
+		}
+	}
+	.block-with-data{
+		font-size: 14px;
+		line-height: 16px;
+		li:first-of-type{
+			font-weight: bold;
+		}
+	}
+	.record-data{
+		position: relative;
+		height: 40px;
+		width: 100%;
+		background-color: #fff; 
+		border-radius: 5px;
+		&>span{
+			float: left;
+			padding: 10px 12px;
+		}
+		.volume-signal{
+			width: 22px;
+			height: 22px;
+			margin: 9px 12px;
+			padding: 0;
+			display: table-cell;
+			text-align: center;
+			.red-dot{
+				border-radius: 100%;
+				background-color: $red;
+				display: inline-block;
+				margin: 0 auto;
+				vertical-align: middle;
+			}
+		}
+		.volume-message{
+			color: #cbcbcb;
+			font-size: 16px;
+			line-height: 20px;
+			
+		}
+		.recordign-time{
+			font-weight: bold;
+			font-size: 12px;
+			line-height: 20px;
+		}
+	}
+	.btn-recording-done{
+		font: 16px/22px "RobotoItalic";
+		text-transform: initial;
+		float: right;
+		letter-spacing: normal;
+		padding: 8px 12px;
+		color: $gray_text;
 	}
 }
 @media only screen and (max-width: 1525px){
@@ -1019,8 +1139,20 @@ label.inactive{
 			.humburger-foldback-button{
 			 	top: 20px;
 			}
-			.comment .form-inline .form-group{
-				margin-bottom: 15px;
+			.comment .form-inline {
+				.form-group{
+					margin-bottom: 0;
+					width: calc(100% - 65px);
+					.input-group{
+						width: 100%;
+					}
+				}
+				.form-control{
+					width: calc(100% + 12px);
+				}
+				.btn-post-comment{
+					position: static;
+				}
 			}
 			.question{
 				padding-left: 35px;
@@ -1030,9 +1162,6 @@ label.inactive{
 			}
 			.button-flag{
 				left: -20px;
-			}
-			.comments-block .comment .form-inline .form-control{
-				width: (285px-20px);
 			}
 			.yes-no-question .question-unit .options-group .radio .field > span{
 				width: 71%;
@@ -1054,6 +1183,23 @@ label.inactive{
 			padding-left: 50px;
 			a{
 				max-width: 265px;
+			}
+		}
+		.lock{
+			left: -17px;
+		}
+		.audio-question{
+			.recording{
+				.btn-clear{
+					right: 0px;
+				}
+			}
+			.record-data{
+				padding-right: 40px;
+			}
+			.volume-message, .btn-recording-done{
+				padding-left: 5px;
+				padding-right: 5px;
 			}
 		}
 	}
@@ -1100,4 +1246,13 @@ label.inactive{
 			}
 		}
 	}	
+}
+@media only screen and (max-width: 425px){
+	.web-interview{
+		.audio-question{
+			.volume-message{
+				font-size: 10px;
+			}
+		}
+	}
 }

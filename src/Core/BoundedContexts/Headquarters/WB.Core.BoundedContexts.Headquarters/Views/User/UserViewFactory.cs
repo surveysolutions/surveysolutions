@@ -133,7 +133,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 .Select(x => new UsersViewItem
                 {
                     UserId = x.Id,
-                    UserName = x.UserName
+                    UserName = x.UserName,
+                    Role = x.Profile.SupervisorId.HasValue ? UserRoles.Interviewer : UserRoles.Supervisor // I cannot read role directly, EF doesn't support it
                 });
 
             return new UsersView
