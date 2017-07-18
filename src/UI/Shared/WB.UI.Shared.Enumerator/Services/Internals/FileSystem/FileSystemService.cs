@@ -176,11 +176,11 @@ namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
                 foreach (var directory in dirList)
                 {
                     if(!Path.GetFullPath(directory).Equals(Path.GetFullPath(targetGlobalDir)))
-                        this.CopyFileOrDirectory(directory, destDir, overrideAll);
+                        this.CopyFileOrDirectory(directory, destDir, overrideAll, fileExtentionsFilter);
                 }
 
                 foreach (var file in this.GetFilesInDirectory(sourceDir, false))
-                    this.CopyFile(file, targetDir, overrideAll, fileExtentionsFilter);
+                    this.CopyFile(file, destDir, overrideAll, fileExtentionsFilter);
             }
             else
             {

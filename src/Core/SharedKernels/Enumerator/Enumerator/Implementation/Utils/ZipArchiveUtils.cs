@@ -15,23 +15,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Utils
         {
             this.fileSystemAccessor = fileSystemAccessor;
         }
-
         
-        public void ZipDirectoryToFile(string sourceDirectory, string archiveFilePath, string fileFilter = null)
+        public void ZipDirectoryToFile(string sourceDirectory, string archiveFilePath)
         {
             if (fileSystemAccessor.IsFileExists(archiveFilePath))
             {
                 throw new InvalidOperationException("zip file exists");
             }
 
-            ZipFile.CreateFromDirectory(sourceDirectory, archiveFilePath);
+            ZipFile.CreateFromDirectory(sourceDirectory, archiveFilePath, CompressionLevel.Optimal, false);
         }
 
-        public Task ZipDirectoryToFileAsync(string sourceDirectory, string archiveFilePath, string fileFilter = null)
+        public Task ZipDirectoryToFileAsync(string sourceDirectory, string archiveFilePath)
         {
-            return Task.Run(() => ZipDirectoryToFile(sourceDirectory, archiveFilePath, fileFilter));
+            return Task.Run(() => ZipDirectoryToFile(sourceDirectory, archiveFilePath));
         }
-        
 
         public void Unzip(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false)
         {
@@ -51,6 +49,5 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Utils
         {
             return Task.Run(() => Unzip(archivedFile, extractToFolder, ignoreRootDirectory));
         }
-        
     }
 }
