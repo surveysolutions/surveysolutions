@@ -31,14 +31,8 @@ If (Test-Path "$artifactsFolder") {
 
 New-Item $artifactsFolder -Type Directory -Force
 
-function EnusureGlobaNpmPackagesInstalled(){
-    Write-Host "Ensuring that global npm deps installed"
-    &npm install -g bower gulp webpack | Write-Host
-}
 
 try {
-    EnusureGlobaNpmPackagesInstalled
-
     $buildSuccessful = BuildSolution `
         -Solution $MainSolution `
         -BuildConfiguration $BuildConfiguration
