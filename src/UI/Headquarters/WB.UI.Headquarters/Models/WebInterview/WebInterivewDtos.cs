@@ -182,7 +182,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string Text { get; set; }
         public bool IsOwnComment { get; set; }
         public UserRoles UserRole { get; set; }
-        public DateTime CommentTime { get; set; }
+        public DateTime CommentTimeUtc { get; set; }
     }
 
     public abstract class InterviewEntity

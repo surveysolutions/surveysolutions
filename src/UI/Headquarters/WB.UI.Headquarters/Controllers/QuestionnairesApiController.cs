@@ -45,7 +45,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [CamelCase]
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [Authorize(Roles = "Administrator, Headquarter, Interviewer")]
         public DataTableResponse<QuestionnaireListItemModel> Questionnaires([FromBody] DataTableRequest request)
         {
             var input = new QuestionnaireBrowseInputModel

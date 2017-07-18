@@ -15,6 +15,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
 
         private IReadOnlyCollection<InterviewView> dbItems;
+        private int? highLightedItemIndex;
 
         protected abstract string TabTitle { get; }
         protected abstract string TabDescription { get; }
@@ -23,7 +24,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         protected void UpdateTitle() => this.Title = string.Format(this.TabTitle, this.ItemsCount);
 
-        public async void Load()
+        public int? HighLightedItemIndex
+        {
+            get => highLightedItemIndex;
+            set => SetProperty(ref highLightedItemIndex, value);
+        }
+
+        public async Task Load()
         {
             this.dbItems = this.GetDbItems();
 
@@ -49,6 +56,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 this.OnItemCreated(interviewDashboardItem);
 
                 yield return interviewDashboardItem;
+            }
+        }
+
+        public void HighLight(InterviewDashboardItemViewModel dashboardItem)
+        {
+            var index = this.UiItems.IndexOf(dashboardItem);
+            if (index > 0)
+            {
+                this.HighLightedItemIndex = index;
             }
         }
     }

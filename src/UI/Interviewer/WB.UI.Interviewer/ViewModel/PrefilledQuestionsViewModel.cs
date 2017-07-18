@@ -1,3 +1,4 @@
+using System;
 using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -34,9 +35,9 @@ namespace WB.UI.Interviewer.ViewModel
 
         public override IMvxCommand ReloadCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToPrefilledQuestions(this.interviewId));
 
-        public IMvxCommand NavigateToDashboardCommand => new MvxCommand(() =>
+        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
         {
-            this.viewModelNavigationService.NavigateToDashboard();
+            await this.viewModelNavigationService.NavigateToDashboard(Guid.Parse(this.interviewId));
             this.Dispose();
         });
 

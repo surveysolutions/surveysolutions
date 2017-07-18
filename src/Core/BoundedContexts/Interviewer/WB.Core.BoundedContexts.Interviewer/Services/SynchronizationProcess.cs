@@ -14,6 +14,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -30,7 +31,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly IPlainStorage<AssignmentDocument, int> assignmentsStorage;
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly IInterviewerInterviewAccessor interviewFactory;
-        private readonly IPlainStorage<InterviewFileView> interviewFileViewStorage;
+        private readonly IAudioFileStorage audioFileStorage;
+        private readonly IPlainStorage<InterviewFileView> imagesStorage;
         private readonly IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly ILogger logger;
@@ -56,14 +58,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             IInterviewerQuestionnaireAccessor questionnairesAccessor,
             IInterviewerInterviewAccessor interviewFactory,
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage,
-            IPlainStorage<InterviewFileView> interviewFileViewStorage,
+            IPlainStorage<InterviewFileView> imagesStorage,
             CompanyLogoSynchronizer logoSynchronizer,
             AttachmentsCleanupService cleanupService,
             IPasswordHasher passwordHasher,
             IAssignmentsSynchronizer assignmentsSynchronizer,
             IQuestionnaireDownloader questionnaireDownloader,
             IHttpStatistician httpStatistician,
-            IPlainStorage<AssignmentDocument, int> assignmentsStorage)
+            IPlainStorage<AssignmentDocument, int> assignmentsStorage,
+            IAudioFileStorage audioFileStorage)
         {
             this.synchronizationService = synchronizationService;
             this.interviewersPlainStorage = interviewersPlainStorage;
@@ -74,7 +77,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.questionnairesAccessor = questionnairesAccessor;
             this.interviewFactory = interviewFactory;
             this.interviewMultimediaViewStorage = interviewMultimediaViewStorage;
-            this.interviewFileViewStorage = interviewFileViewStorage;
+            this.imagesStorage = imagesStorage;
             this.logoSynchronizer = logoSynchronizer;
             this.cleanupService = cleanupService;
             this.passwordHasher = passwordHasher;
@@ -82,6 +85,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.questionnaireDownloader = questionnaireDownloader;
             this.httpStatistician = httpStatistician;
             this.assignmentsStorage = assignmentsStorage;
+            this.audioFileStorage = audioFileStorage;
         }
 
         public async Task SyncronizeAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
@@ -635,6 +639,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     });
 
                     await this.UploadImagesByCompletedInterviewAsync(completedInterview.InterviewId, progress, cancellationToken);
+                    await this.UploadAudioByCompletedInterviewAsync(completedInterview.InterviewId, progress, cancellationToken);
 
                     if (interviewPackage != null)
                     {
@@ -673,7 +678,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             foreach (var imageView in imageViews)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                var fileView = this.interviewFileViewStorage.GetById(imageView.FileId);
+                var fileView = this.imagesStorage.GetById(imageView.FileId);
                 await this.synchronizationService.UploadInterviewImageAsync(
                     imageView.InterviewId,
                     imageView.FileName,
@@ -681,7 +686,26 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     (progressPercentage, bytesReceived, totalBytesToReceive) => { },
                     cancellationToken);
                 this.interviewMultimediaViewStorage.Remove(imageView.Id);
-                this.interviewFileViewStorage.Remove(fileView.Id);
+                this.imagesStorage.Remove(fileView.Id);
+            }
+        }
+
+        private async Task UploadAudioByCompletedInterviewAsync(Guid interviewId, IProgress<SyncProgressInfo> progress,
+            CancellationToken cancellationToken)
+        {
+            var audioFiles = this.audioFileStorage.GetBinaryFilesForInterview(interviewId);
+
+            foreach (var audioFile in audioFiles)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                var fileData = audioFile.GetData();
+                await this.synchronizationService.UploadInterviewAudioAsync(
+                    audioFile.InterviewId,
+                    audioFile.FileName,
+                    fileData,
+                    (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                    cancellationToken);
+                this.audioFileStorage.RemoveInterviewBinaryData(audioFile.InterviewId, audioFile.FileName);
             }
         }
     }

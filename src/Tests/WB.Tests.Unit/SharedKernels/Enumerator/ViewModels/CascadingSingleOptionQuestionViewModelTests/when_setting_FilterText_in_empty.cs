@@ -15,9 +15,9 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
-    internal class when_setting_ResetTextInEditor_in_null : CascadingSingleOptionQuestionViewModelTestContext
+    internal class when_setting_FilterText_in_empty : CascadingSingleOptionQuestionViewModelTestContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             SetUp();
 
@@ -32,44 +32,31 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             interview.Setup(x => x.GetOptionForQuestionWithoutFilter(questionIdentity, 3, 1)).Returns(new CategoricalOption() { Title = "3", Value = 3, ParentValue = 1 });
             interview.Setup(x => x.GetTopFilteredOptionsForQuestion(Moq.It.IsAny<Identity>(), Moq.It.IsAny<int?>(), Moq.It.IsAny<string>(), Moq.It.IsAny<int>()))
                 .Returns((Identity identity, int? value, string filter, int count) => Options.Where(x => x.ParentValue == value && x.Title.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0).ToList());
-
+            
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview.Object);
 
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
-
+            
             cascadingModel = CreateCascadingSingleOptionQuestionViewModel(
                 interviewRepository: interviewRepository,
                 questionnaireRepository: questionnaireRepository);
 
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
-
-            cascadingModel.FilterText = "a";
         };
 
+        Because of = () => cascadingModel.FilterCommand.ExecuteAsync(string.Empty).Await();
 
-        Because of = () =>
-        {
-            cascadingModel.FilterText = string.Empty;
-            Thread.Sleep(1000);
-        };
+        It should_set_empty_filter_text = () =>
+            cascadingModel.FilterText.ShouldBeEmpty();
 
-        It should_set_filter_text_in_null = () =>
-            cascadingModel.FilterText.ShouldEqual(string.Empty);
+        It should_set_not_empty_list_in_AutoCompleteSuggestions = () =>
+            cascadingModel.AutoCompleteSuggestions.ShouldNotBeEmpty();
 
         It should_set_3_items_in_AutoCompleteSuggestions = () =>
             cascadingModel.AutoCompleteSuggestions.Count.ShouldEqual(3);
 
         It should_create_option_models_with_specified_Texts = () =>
-            cascadingModel.AutoCompleteSuggestions.Select(x => x.Text).ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.Title));
-
-        It should_create_option_models_with_specified_OriginalTexts = () =>
-            cascadingModel.AutoCompleteSuggestions.Select(x => x.OriginalText).ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.Title));
-
-        It should_create_option_models_with_specified_values = () =>
-            cascadingModel.AutoCompleteSuggestions.Select(x => Convert.ToInt32(x.Value)).ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.Value));
-
-        It should_create_option_models_with_specified_ParentValues = () =>
-            cascadingModel.AutoCompleteSuggestions.Select(x => Convert.ToInt32(x.ParentValue)).ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.ParentValue.Value));
+            cascadingModel.AutoCompleteSuggestions.ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.Title));
 
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;

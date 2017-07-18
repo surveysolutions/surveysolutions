@@ -7,13 +7,15 @@ using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
 namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 {
-    public class TesterPlainInterviewFileStorage : IPlainInterviewFileStorage, IPlainFileCleaner
+    public abstract class TesterBaseFileStorage : IInterviewFileStorage, IPlainFileCleaner
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string basePath;
-        private const string DataDirectoryName = "InterviewData";
 
-        public TesterPlainInterviewFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath)
+        protected abstract string DataDirectoryName { get; }
+        protected abstract string EntityDirectoryName { get; }
+
+        protected TesterBaseFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath)
         {
             this.fileSystemAccessor = fileSystemAccessor;
 
@@ -69,7 +71,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 
         private string GetPathToInterviewDirectory()
         {
-            return this.fileSystemAccessor.CombinePath(this.basePath, "TempInterviewData");
+            return this.fileSystemAccessor.CombinePath(this.basePath, EntityDirectoryName);
         }
 
         public void Clear()

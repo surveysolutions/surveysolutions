@@ -108,7 +108,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.IsSuccessfullyLoaded = true;
         }
 
-        public void NavigateToPreviousViewModel() => this.viewModelNavigationService.NavigateToDashboard();
+        public void NavigateToPreviousViewModel()
+        {
+            this.viewModelNavigationService.NavigateToDashboard(Guid.Parse(this.interviewId));
+        }
 
         public override void Dispose()
         {

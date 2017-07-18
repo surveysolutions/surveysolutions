@@ -117,7 +117,7 @@ declare interface IComment {
     text : string
     isOwnComment : boolean
     userRole : number
-    commentTime : Date
+    commentTimeUtc : Date
 }
 
 declare interface IWebInterviewApi {

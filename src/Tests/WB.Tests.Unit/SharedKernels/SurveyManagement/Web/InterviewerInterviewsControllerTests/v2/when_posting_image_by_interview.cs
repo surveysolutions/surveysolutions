@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
         private Establish context = () =>
         {
             controller = CreateInterviewerInterviewsController(
-                plainInterviewFileStorage: mockOflainInterviewFileStorage.Object);
+                imageFileStorage: mockOflainInterviewFileStorage.Object);
         };
 
         Because of = () => controller.PostImage(new PostFileRequest { InterviewId = interviewId, FileName =  imageFileName, Data = imageAsBase64String });
@@ -27,6 +27,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
         private static readonly string imageFileName = "image.png";
         private static readonly byte[] imageBytes = {1, 234, 21, 0, 54, 1, 66, 78};
         private static readonly string imageAsBase64String = Convert.ToBase64String(imageBytes);
-        private static readonly Mock<IPlainInterviewFileStorage> mockOflainInterviewFileStorage = new Mock<IPlainInterviewFileStorage>();
+        private static readonly Mock<IImageFileStorage> mockOflainInterviewFileStorage = new Mock<IImageFileStorage>();
     }
 }

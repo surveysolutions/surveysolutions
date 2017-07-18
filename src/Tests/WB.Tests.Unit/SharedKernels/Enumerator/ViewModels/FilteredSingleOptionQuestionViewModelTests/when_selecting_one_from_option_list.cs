@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Threading;
 using Machine.Specifications;
 using Moq;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
@@ -19,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
 {
     internal class when_selecting_one_from_option_list : FilteredSingleOptionQuestionViewModelTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             interviewId = "interviewId";
             userId = Guid.NewGuid();
@@ -28,7 +31,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
 
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireIdentity == questionnaireId
-                   && _.GetSingleOptionQuestion(questionIdentity) == singleOptionAnswer);
+                   && _.GetSingleOptionQuestion(questionIdentity) == singleOptionAnswer
+                   && _.GetOptionForQuestionWithFilter(questionIdentity, "html", null) == Create.Entity.CategoricalQuestionOption(4, "html", null));
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(_ => _.Get(interviewId) == interview);
 
@@ -52,8 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             viewModel.Init(interviewId, questionIdentity, navigationState);
         };
 
-        Because of = () =>
-            viewModel.SelectedObject = new FilteredComboboxItemViewModel() { Text = "html", Value = 4 };
+        Because of = () => viewModel.SaveAnswerBySelectedOptionCommand.ExecuteAsync("html").Await();
 
         It should_save_answer = () =>
             answeringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerSingleOptionQuestionCommand>(y=>y.SelectedValue == 4)), Times.Once);

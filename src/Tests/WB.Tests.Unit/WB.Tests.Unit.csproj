@@ -156,23 +156,23 @@
       <HintPath>..\..\..\packages\MvcMailer.4.5\lib\45\Mvc.Mailer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MvvmCross.Core, Version=5.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.Core.5.0.5\lib\net45\MvvmCross.Core.dll</HintPath>
+    <Reference Include="MvvmCross.Core, Version=5.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Core.5.0.6\lib\net45\MvvmCross.Core.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Platform, Version=5.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.Platform.5.0.5\lib\net45\MvvmCross.Platform.dll</HintPath>
+    <Reference Include="MvvmCross.Platform, Version=5.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Platform.5.0.6\lib\net45\MvvmCross.Platform.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Platform.Wpf, Version=5.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.Platform.5.0.5\lib\net45\MvvmCross.Platform.Wpf.dll</HintPath>
+    <Reference Include="MvvmCross.Platform.Wpf, Version=5.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Platform.5.0.6\lib\net45\MvvmCross.Platform.Wpf.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Plugins.Messenger, Version=5.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.Plugin.Messenger.5.0.5\lib\net45\MvvmCross.Plugins.Messenger.dll</HintPath>
+    <Reference Include="MvvmCross.Plugins.Messenger, Version=5.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Plugin.Messenger.5.0.6\lib\net45\MvvmCross.Plugins.Messenger.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Test.Core, Version=5.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.Tests.5.0.5\lib\portable45-net45+win8+wp8+wpa81\MvvmCross.Test.Core.dll</HintPath>
+    <Reference Include="MvvmCross.Test.Core, Version=5.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Tests.5.0.6\lib\portable45-net45+win8+wp8+wpa81\MvvmCross.Test.Core.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Wpf, Version=5.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.Core.5.0.5\lib\net45\MvvmCross.Wpf.dll</HintPath>
+    <Reference Include="MvvmCross.Wpf, Version=5.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Core.5.0.6\lib\net45\MvvmCross.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -455,8 +455,10 @@
     <Compile Include="Applications\Headquarters\ServicesTests\InterviewImportServiceTests\when_import_interview_with_nonprintable_symbols.cs" />
     <Compile Include="Applications\Shared\Web\Captcha\WebCachedCaptchaServiceTests.cs" />
     <Compile Include="Bootstrap\MessengerPluginBootstrap.cs" />
+    <Compile Include="BoundedContexts\Headquarters\Assignments\AssignmentsServiceTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\Assignments\AssignmentTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\Assignments\when_getting_assignments_for_web_interview.cs" />
+    <Compile Include="BoundedContexts\Headquarters\Assignments\when_getting_assignments_ready_for_web_interview.cs" />
     <Compile Include="BoundedContexts\Headquarters\InterviewPackagesServiceTests\InterviewPackagesServiceTestsContext.cs" />
     <Compile Include="BoundedContexts\Headquarters\InterviewPackagesServiceTests\when_sync_package_contains_interview_key_of_another_existing_interview.cs" />
     <Compile Include="BoundedContexts\Headquarters\InterviewPackagesServiceTests\when_sync_package_contains_interview_key_of_own_interview.cs" />
@@ -563,6 +565,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_multi_linked_to_List_question_and_answer_is_specified.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_applying_VariablesChanged_event_for_deleted_variable.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_featured_questions.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_null_interviewkey.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_and_int_question_triggers_roster_and_answer_on_roster_child_single_option_question_is_set.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_and_int_question_triggers_roster_and_answer_on_roster_child_text_question_is_set.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_hqapprove_completed_interview.cs" />
@@ -900,9 +903,9 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_setting_FilterText_after_handling_SingleOptionQuestionAnswered_for_parent_question.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_setting_FilterText_and_there_are_match_options.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_setting_FilterText_and_there_are_no_match_options.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_setting_FilterText_in_null.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_setting_ResetTextInEditor_in_not_empty_value.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_setting_ResetTextInEditor_in_null.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_setting_FilterText_in_empty.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_setting_FilterText_in_not_empty_value.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_setting_FilterText_to_empty_and_was_not_empty.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\DashboardViewModelTestContext.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_load_questionnaire_and_server_not_responding.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_load_questionnaire.cs" />
@@ -1411,7 +1414,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_restore_interview_with_nested_rosters.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_roster_row_with_nested_roster_is_removed.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_unchecking_previously_checked_2nd_and_4th_options_in_multioption_question_used_as_roster_size_and_roster_level_of_question_and_rost___.cs" />
-    <Compile Include="SharedKernels\DataCollection\PlainInterviewFileStorageTests\PlainInterviewFileStorageTestContext.cs" />
+    <Compile Include="SharedKernels\DataCollection\PlainInterviewFileStorageTests\ImageQuestionFileStorageTestContext.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainInterviewFileStorageTests\when_deleting_all_files_stored_for_the_interview.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainInterviewFileStorageTests\when_deleting_all_interview_files_for_not_Existing_interview.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainInterviewFileStorageTests\when_deleting_not_existing_file_for_the_interview.cs" />

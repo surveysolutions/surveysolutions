@@ -1,16 +1,24 @@
 ﻿using System.Linq;
 using System.Web.Http;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using NHibernate.Util;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Infrastructure.Native.Sanitizer;
+using WB.UI.Headquarters.API;
+using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Models.Api;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -45,7 +53,6 @@ namespace WB.UI.Headquarters.Controllers
                 Page = data.PageIndex,
                 PageSize = data.PageSize,
                 Orders = data.SortOrder,
-
                 QuestionnaireId = data.TemplateId,
                 QuestionnaireVersion = data.TemplateVersion,
                 TeamLeadName = data.ResponsibleName,
@@ -59,6 +66,43 @@ namespace WB.UI.Headquarters.Controllers
             allInterviews.Items.ForEach(x => x.FeaturedQuestions.ForEach(y => y.Question = y.Question.RemoveHtmlTags()));
 
             return allInterviews;
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Interviewer")]
+        [CamelCase]
+        public InterviewsDataTableResponse GetInterviews([FromUri] InterviewsDataTableRequest request)
+        {
+            QuestionnaireIdentity questionnaireIdentity = null;
+            if (!string.IsNullOrEmpty(request.QuestionnaireId))
+            {
+                QuestionnaireIdentity.TryParse(request.QuestionnaireId, out questionnaireIdentity);
+            }
+
+            var input = new AllInterviewsInputModel
+            {
+                Page = request.PageIndex,
+                PageSize = request.PageSize,
+                Orders = request.GetSortOrderRequestItems(),
+                QuestionnaireId = questionnaireIdentity?.QuestionnaireId,
+                QuestionnaireVersion = request.QuestionnaireVersion,
+                Statuses = request.Statuses,
+                SearchBy = request.SearchBy ?? request.Search.Value
+            };
+
+            var allInterviews = this.allInterviewsViewFactory.Load(input);
+
+            allInterviews.Items.ForEach(x => x.FeaturedQuestions.ForEach(y => y.Question = y.Question.RemoveHtmlTags()));
+
+            var response = new InterviewsDataTableResponse
+            {
+                Draw = request.Draw + 1,
+                RecordsTotal = allInterviews.TotalCount,
+                RecordsFiltered = allInterviews.TotalCount,
+                Data = allInterviews.Items
+            };
+
+            return response;
         }
 
         [HttpPost]
@@ -129,4 +173,17 @@ namespace WB.UI.Headquarters.Controllers
             return interviewSummaryForMapPointView;
         }
     }
+
+    public class InterviewsDataTableRequest : DataTableRequest
+    {
+        public string QuestionnaireId { get; set; }
+        public long? QuestionnaireVersion { get; set; }
+        public InterviewStatus[] Statuses { get; set; }
+        public string SearchBy { get; set; }
+    }
+
+    public class InterviewsDataTableResponse : DataTableResponse<AllInterviewsViewItem>
+    {
+    }
+
 }

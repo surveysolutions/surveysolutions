@@ -13,6 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public Guid? InterviewId { get; set; }
 
         public InterviewStatus? Status { get; set; }
+        public InterviewStatus[] Statuses { get; set; }
 
         public long? QuestionnaireVersion { get; set; }
 

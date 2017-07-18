@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
         Because of = () => viewModel.SignInCommand.Execute();
 
         It should_navigate_to_dashboard = () =>
-            ViewModelNavigationServiceMock.Verify(x => x.NavigateToDashboard(), Times.Once);
+            ViewModelNavigationServiceMock.Verify(x => x.NavigateToDashboard(null), Times.Once);
 
         static LoginViewModel viewModel;
         private static readonly string userName = "Vasya";

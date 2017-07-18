@@ -10,6 +10,7 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using MvvmCross.Binding.Attributes;
 using MvvmCross.Binding.Droid.Views;
+using MvvmCross.Core.ViewModels;
 
 namespace WB.UI.Shared.Enumerator.CustomControls
 {
@@ -20,8 +21,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             : this(context, attrs, new MvxFilteringAdapter(context))
         {
             // note - we shouldn't realy need both of these... but we do
-            ItemClick += OnItemClick;
-            ItemSelected += OnItemSelected;
+            this.ItemClick += OnItemClick;
+            this.ItemSelected += OnItemSelected;
         }
 
         public InstantAutoCompleteTextView(Context context, IAttributeSet attrs, MvxFilteringAdapter adapter)
@@ -29,9 +30,10 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         {
             var itemTemplateId = MvxAttributeHelpers.ReadListItemTemplateId(context, attrs);
             adapter.ItemTemplateId = itemTemplateId;
-            Adapter = adapter;
-            ItemClick += OnItemClick;
-            EditorAction += this.OnEditorAction;
+            this.Adapter = adapter;
+            this.ItemClick += this.OnItemClick;
+            this.EditorAction += this.OnEditorAction;
+            this.Click += OnEditTextClick;
         }
 
         protected InstantAutoCompleteTextView(IntPtr javaReference, JniHandleOwnership transfer)
@@ -43,9 +45,6 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         {
             if (e.ActionId != ImeAction.Done)
                 return;
-
-            this.SelectedObject = null;
-            this.PartialText = string.Empty;
 
             this.ClearFocus();
             this.DismissDropDown();
@@ -60,7 +59,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
         protected virtual void OnItemSelected(int position)
         {
-            this.SelectedObject = Adapter.GetRawItem(position);
+            this.SelectedObject = this.Adapter.GetRawItem(position);
             
             this.ClearFocus();
             this.HideKeyboard();
@@ -97,13 +96,13 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         [MvxSetToNullAfterBinding]
         public IEnumerable ItemsSource
         {
-            get => Adapter.ItemsSource;
+            get => this.Adapter.ItemsSource;
             set => this.Adapter.ItemsSource = value;
         }
 
         public int ItemTemplateId
         {
-            get => Adapter.ItemTemplateId;
+            get => this.Adapter.ItemTemplateId;
             set => this.Adapter.ItemTemplateId = value;
         }
 
@@ -121,17 +120,17 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             }
     }
 
-        private object _selectedObject;
+        private object selectedObject;
         public object SelectedObject
         {
-            get => _selectedObject;
+            get => this.selectedObject;
             private set
             {
-                if (_selectedObject == value)
+                if (this.selectedObject == value)
                     return;
 
-                _selectedObject = value;
-                FireChanged(SelectedObjectChanged);
+                this.selectedObject = value;
+                this.FireChanged(SelectedObjectChanged);
             }
         }
 
@@ -144,13 +143,14 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         {
             if (disposing)
             {
-                ItemClick -= this.OnItemClick;
-                ItemSelected -= this.OnItemSelected;
-                EditorAction -= this.OnEditorAction;
+                this.ItemClick -= this.OnItemClick;
+                this.ItemSelected -= this.OnItemSelected;
+                this.EditorAction -= this.OnEditorAction;
+                this.Click -= this.OnEditTextClick;
 
-                if (Adapter != null)
+                if (this.Adapter != null)
                 {
-                    Adapter.PartialTextChanged -= AdapterOnPartialTextChanged;
+                    this.Adapter.PartialTextChanged -= this.AdapterOnPartialTextChanged;
                 }
             }
             base.Dispose(disposing);
@@ -163,6 +163,9 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             base.OnFocusChanged(gainFocus, direction, previouslyFocusedRect);
             this.ShowDropDownIfFocused();
         }
+
+        private void OnEditTextClick(object sender, EventArgs e)
+            => this.ShowDropDownIfFocused();
 
         private void ShowDropDownIfFocused()
         {

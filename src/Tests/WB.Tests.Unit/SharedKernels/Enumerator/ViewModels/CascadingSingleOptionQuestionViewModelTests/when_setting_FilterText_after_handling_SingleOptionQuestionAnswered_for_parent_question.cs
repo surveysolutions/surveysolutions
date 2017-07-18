@@ -54,11 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.Handle(Create.Event.SingleOptionQuestionAnswered(parentIdentity.Id, parentIdentity.RosterVector, 2));
         };
 
-        Because of = () =>
-        {
-            cascadingModel.FilterText = "c";
-            Thread.Sleep(1000);
-        };
+        Because of = () => cascadingModel.FilterCommand.ExecuteAsync("c").Await();
 
         It should_set_not_empty_list_in_AutoCompleteSuggestions = () =>
             cascadingModel.AutoCompleteSuggestions.ShouldNotBeEmpty();
@@ -67,22 +63,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.AutoCompleteSuggestions.Count.ShouldEqual(2);
 
         It should_format_first_option_in_AutoCompleteSuggestions = () =>
-        {
-            var firstOption = cascadingModel.AutoCompleteSuggestions.ElementAt(0);
-            firstOption.Text.ShouldEqual("title <b>c</b>cc 5");
-            firstOption.Value.ShouldEqual(5);
-            firstOption.ParentValue.ShouldEqual(2);
-            firstOption.OriginalText.ShouldEqual("title ccc 5");
-        };
+            cascadingModel.AutoCompleteSuggestions.ElementAt(0).ShouldEqual("title <b>c</b>cc 5");
 
         It should_format_second_option_in_AutoCompleteSuggestions = () =>
-        {
-            var firstOption = cascadingModel.AutoCompleteSuggestions.ElementAt(1);
-            firstOption.Text.ShouldEqual("title b<b>c</b>w 6");
-            firstOption.Value.ShouldEqual(6);
-            firstOption.ParentValue.ShouldEqual(2);
-            firstOption.OriginalText.ShouldEqual("title bcw 6");
-        };
+            cascadingModel.AutoCompleteSuggestions.ElementAt(1).ShouldEqual("title b<b>c</b>w 6");
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
 

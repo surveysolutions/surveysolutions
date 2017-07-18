@@ -1,8 +1,20 @@
-﻿
+﻿@using Newtonsoft.Json
+@using WB.Core.BoundedContexts.Headquarters.Services
+@using WB.Core.GenericSubdomains.Portable.ServiceLocation
+@using WB.UI.Headquarters.Utils
+
 @{
-    ViewBag.Title = "View";
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewBag.Title = @"View";
+    Layout = @"~/Views/Shared/_MainLayout.cshtml";
 }
 
-<h2>View</h2>
+<div id="vueApp" configuration="@JsonConvert.SerializeObject(
+new {
+    assignmentsEndpoint = Url.Content(@"~/api/Assignments"),
+    interviewerHqEndpoint = Url.Content(@"~/interviewerHq"),
+    authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>(),
+    resource = new[] {MainMenu.ResourceManager, Assignments.ResourceManager}.Translations()
+})"></div>
 
+
+@Scripts.Render(@"~/js/app/interviewer.createnew")

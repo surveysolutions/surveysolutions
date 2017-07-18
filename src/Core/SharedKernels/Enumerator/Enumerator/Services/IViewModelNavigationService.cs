@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
@@ -7,7 +9,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
     {
         void NavigateTo<TViewModel>() where TViewModel : IMvxViewModel;
         void NavigateTo<TViewModel>(object parameters) where TViewModel : IMvxViewModel;
-        void NavigateToDashboard();
+        Task NavigateToDashboard(Guid? interviewId = null);
         void NavigateToSettings();
         void SignOutAndNavigateToLogin();
         void NavigateToLogin();
