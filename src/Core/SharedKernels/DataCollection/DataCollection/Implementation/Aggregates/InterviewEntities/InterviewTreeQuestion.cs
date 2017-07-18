@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             SubstitutionText title, 
             string variableName,
             QuestionType questionType, 
-            object answer, 
+            object answer, // always null here
             IEnumerable<RosterVector> linkedOptions, 
             Guid? cascadingParentQuestionId, 
             bool isYesNo,
@@ -109,7 +109,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 this.AsCascading = new InterviewTreeCascadingQuestion(this, cascadingParentQuestionId.Value);
 
             if (questionType == QuestionType.Audio)
-                this.AsAudio = new InterviewTreeAudioQuestion(answer);
+                this.AsAudio = new InterviewTreeAudioQuestion(answer, null);
         }
 
         public InterviewTreeDoubleQuestion AsDouble { get; private set; }
@@ -691,9 +691,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         private AudioAnswer answer;
 
-        public InterviewTreeAudioQuestion(object answer)
+        public InterviewTreeAudioQuestion(object answer, TimeSpan? length)
         {
-            this.answer = AudioAnswer.FromString(answer as string);
+            this.answer = AudioAnswer.FromString(answer as string, length);
         }
 
         public bool IsAnswered => this.answer != null;

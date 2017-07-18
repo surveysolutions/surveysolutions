@@ -207,7 +207,6 @@ namespace WB.UI.Headquarters.Controllers
             }
             try
             {
-                
                 using (var ms = new MemoryStream())
                 {
                     await file.InputStream.CopyToAsync(ms);

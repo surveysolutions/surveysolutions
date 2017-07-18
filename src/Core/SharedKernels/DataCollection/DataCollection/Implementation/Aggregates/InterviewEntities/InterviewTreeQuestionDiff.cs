@@ -53,6 +53,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 if (this.SourceNode.IsSingleLinkedToList) return !this.SourceNode.AsSingleLinkedToList.EqualByAnswer(this.ChangedNode.AsSingleLinkedToList);
                 if (this.SourceNode.IsMultiLinkedToList) return !this.SourceNode.AsMultiLinkedToList.EqualByAnswer(this.ChangedNode.AsMultiLinkedToList);
                 if (this.SourceNode.IsArea) return !this.SourceNode.AsArea.EqualByAnswer(this.ChangedNode.AsArea);
+                if (this.SourceNode.IsAudio) return !this.SourceNode.AsAudio.EqualByAnswer(this.ChangedNode.AsAudio);
 
                 return false;
             }

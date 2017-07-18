@@ -267,6 +267,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 @event.Length, @event.Coordinates, @event.DistanceToEditor)));
         }
 
+        public virtual void Apply(AudioQuestionAnswered @event)
+        {
+            var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
+
+            this.Tree.GetQuestion(questionIdentity).AsAudio.SetAnswer(AudioAnswer.FromString(@event.FileName, @event.Length));
+        }
+
         public virtual void Apply(TextListQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
@@ -2157,6 +2165,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     this.ApplyEvent(new AreaQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
                         changedQuestion.Identity.RosterVector, DateTime.UtcNow, answer.Geometry, answer.MapName, answer.AreaSize, answer.Length, 
                         answer.Coordinates, answer.DistanceToEditor));
+                }
+
+                if (changedQuestion.IsAudio)
+                {
+                    var audioAnswer = changedQuestion.AsAudio.GetAnswer();
+
+                    this.ApplyEvent(new AudioQuestionAnswered(responsibleId, changedQuestion.Identity.Id, 
+                       changedQuestion.Identity.RosterVector, DateTime.UtcNow, 
+                       audioAnswer.FileName, audioAnswer.Length));
                 }
             }
         }

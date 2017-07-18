@@ -337,9 +337,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public string FileName { get; set; }
         public TimeSpan Length { get; set; }
 
-        public static AudioAnswer FromString(string fileName, TimeSpan length)
+        public static AudioAnswer FromString(string fileName, TimeSpan? length)
         {
-            return fileName != null ? new AudioAnswer(fileName, length) : null;
+            return fileName != null ? new AudioAnswer(fileName, length.Value) : null;
         }
 
         public override string ToString() => FileName;
