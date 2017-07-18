@@ -148,7 +148,7 @@ function BuildStaticContent($blockName, $targetLocation) {
         Write-Host "Running yarn"
 
         #install node js dependencies
-        &yarn | Write-Host
+        &npm install | Write-Host
         
         $wasBuildSuccessfull = $LASTEXITCODE -eq 0
         if (-not $wasBuildSuccessfull) {
@@ -157,7 +157,7 @@ function BuildStaticContent($blockName, $targetLocation) {
         }
 
         #will execute script gulpfile.js in target folder
-        &yarn run production | Write-Host
+        &npm run production | Write-Host
 
         $wasBuildSuccessfull = $LASTEXITCODE -eq 0
         if (-not $wasBuildSuccessfull) {
