@@ -65,8 +65,10 @@ namespace WB.UI.Interviewer.Services
 
                 this.fileSystemAccessor.CopyFileOrDirectory(this.privateStorage, backupFolderPath, false,
                     new[] {".log", ".dll", ".back", ".info"});
-                
-                await this.archiver.ZipDirectoryToFileAsync(backupFolderPath, backupFilePath)
+
+                var backupFolderFilesPath = this.fileSystemAccessor.CombinePath(backupFolderPath, "files");
+
+                await this.archiver.ZipDirectoryToFileAsync(backupFolderFilesPath, backupFilePath)
                     .ConfigureAwait(false);
             }
             finally
