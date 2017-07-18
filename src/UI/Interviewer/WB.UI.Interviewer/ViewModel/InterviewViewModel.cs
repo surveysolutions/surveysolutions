@@ -54,7 +54,7 @@ namespace WB.UI.Interviewer.ViewModel
 
         public override void NavigateBack()
         {
-            if (this.HasEdiablePrefilledQuestions)
+            if (this.HasPrefilledQuestions && this.HasEdiablePrefilledQuestions)
             {
                 this.viewModelNavigationService.NavigateToPrefilledQuestions(this.interviewId);
             }
