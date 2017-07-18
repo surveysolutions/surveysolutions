@@ -56,11 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             viewModel.Init(interviewId, questionIdentity, navigationState);
         };
 
-        Because of = () =>
-        {
-            viewModel.SaveAnswerBySelectedOptionCommand.Execute("html");
-            Thread.Sleep(500);
-        };
+        Because of = () => viewModel.SaveAnswerBySelectedOptionCommand.ExecuteAsync("html").Await();
 
         It should_save_answer = () =>
             answeringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerSingleOptionQuestionCommand>(y=>y.SelectedValue == 4)), Times.Once);

@@ -77,10 +77,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set => this.RaiseAndSetIfChanged(ref this.autoCompleteSuggestions, value);
         }
 
-        public ICommand FilterCommand => new MvxAsyncCommand<string>(this.UpdateFilterAndSaveIfExactMatchWithAnyOptionAsync);
-        public ICommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
-        public ICommand SaveAnswerBySelectedOptionCommand => new MvxAsyncCommand<string>(this.SaveAnswerBySelectedOptionAsync);
-        public ICommand ShowErrorIfNoAnswerCommand => new MvxCommand(this.ShowErrorIfNoAnswer);
+        public IMvxAsyncCommand<string> FilterCommand => new MvxAsyncCommand<string>(this.UpdateFilterAndSaveIfExactMatchWithAnyOptionAsync);
+        public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
+        public IMvxAsyncCommand<string> SaveAnswerBySelectedOptionCommand => new MvxAsyncCommand<string>(this.SaveAnswerBySelectedOptionAsync);
+        public IMvxCommand ShowErrorIfNoAnswerCommand => new MvxCommand(this.ShowErrorIfNoAnswer);
 
         protected abstract IEnumerable<CategoricalOption> GetSuggestions(string filter);
         protected abstract CategoricalOption GetAnsweredOption(int answer);

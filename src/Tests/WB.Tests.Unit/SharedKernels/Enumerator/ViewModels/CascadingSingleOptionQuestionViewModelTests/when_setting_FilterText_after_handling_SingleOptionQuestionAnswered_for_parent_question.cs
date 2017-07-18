@@ -54,11 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.Handle(Create.Event.SingleOptionQuestionAnswered(parentIdentity.Id, parentIdentity.RosterVector, 2));
         };
 
-        Because of = () =>
-        {
-            cascadingModel.FilterCommand.Execute("c");
-            Thread.Sleep(500);
-        };
+        Because of = () => cascadingModel.FilterCommand.ExecuteAsync("c").Await();
 
         It should_set_not_empty_list_in_AutoCompleteSuggestions = () =>
             cascadingModel.AutoCompleteSuggestions.ShouldNotBeEmpty();
