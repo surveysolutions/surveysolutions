@@ -158,12 +158,12 @@ function BuildStaticContent($blockName, $targetLocation) {
 
         if (Test-Path "bower.json") {
             Write-Host "Running bower install --force"
-            &bower install --force | Write-Host
+            &node_modules\.bin\bower install --force | Write-Host
         }
 
         if (Test-Path "gulpfile.js") {
             Write-Host "Running gulp --production"
-            &gulp --production | Write-Host
+            &node_modules\.bin\gulp --production | Write-Host
         }
         else {
             Write-Host "Running npm run production"
