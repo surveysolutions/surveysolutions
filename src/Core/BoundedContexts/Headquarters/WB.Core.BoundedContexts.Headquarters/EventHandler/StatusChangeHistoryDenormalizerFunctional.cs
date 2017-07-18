@@ -44,7 +44,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewStatuses, QRBarcodeQuestionAnswered>,
         IUpdateHandler<InterviewStatuses, PictureQuestionAnswered>,
         IUpdateHandler<InterviewStatuses, UnapprovedByHeadquarters>,
-        IUpdateHandler<InterviewStatuses, AreaQuestionAnswered>
+        IUpdateHandler<InterviewStatuses, AreaQuestionAnswered>,
+        IUpdateHandler<InterviewStatuses, AudioQuestionAnswered>
     {
         private readonly IUserViewFactory users;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummares;
@@ -425,6 +426,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         }
 
         public InterviewStatuses Update(InterviewStatuses state, IPublishedEvent<AreaQuestionAnswered> @event)
+        {
+            return this.RecordFirstAnswerIfNeeded(@event.EventIdentifier, state, @event.EventSourceId, @event.Payload.UserId, @event.Payload.AnswerTimeUtc);
+        }
+
+        public InterviewStatuses Update(InterviewStatuses state, IPublishedEvent<AudioQuestionAnswered> @event)
         {
             return this.RecordFirstAnswerIfNeeded(@event.EventIdentifier, state, @event.EventSourceId, @event.Payload.UserId, @event.Payload.AnswerTimeUtc);
         }

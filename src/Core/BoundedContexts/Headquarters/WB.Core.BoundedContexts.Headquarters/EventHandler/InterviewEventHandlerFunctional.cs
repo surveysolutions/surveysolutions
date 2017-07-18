@@ -75,6 +75,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewData, VariablesEnabled>,
         IUpdateHandler<InterviewData, TranslationSwitched>,
         IUpdateHandler<InterviewData, AreaQuestionAnswered>,
+        IUpdateHandler<InterviewData, AudioQuestionAnswered>,
         IUpdateHandler<InterviewData, InterviewKeyAssigned>
     {
         private readonly IUserViewFactory users;
@@ -847,6 +848,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewData Update(InterviewData state, IPublishedEvent<InterviewKeyAssigned> @event)
         {
             state.InterviewKey = @event.Payload.Key.ToString();
+            return state;
+        }
+
+        public InterviewData Update(InterviewData state, IPublishedEvent<AudioQuestionAnswered> @event)
+        {
             return state;
         }
     }
