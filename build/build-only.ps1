@@ -1,7 +1,8 @@
 param([string]$VersionPrefix,
     [INT]$BuildNumber,
     [string]$KeystorePassword,
-    [string]$BuildConfiguration = "Release")
+    [string]$BuildConfiguration = "Release",
+    [switch] $cleanup)
 
 $ErrorActionPreference = "Stop"
 
@@ -17,9 +18,14 @@ $SupportToolSolution = 'src\Tools\support\support.sln'
 
 versionCheck
 
+if($cleanup.IsPresent) {
+    &npm cache clean --force
+}
+
 $versionString = (GetVersionString 'src\core')
 UpdateProjectVersion $BuildNumber -ver $versionString
 Write-Host "##teamcity[setParameter name='system.VersionString' value='$versionString']"
+
 try {
     $buildSuccessful = BuildSolution `
         -Solution $MainSolution `
@@ -43,15 +49,6 @@ try {
                 Exit 
             }}
 
-        BuildStaticContent "Web Interview" $ProjectWebInterview | % { if (-not $_) { 
-                Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
-                Write-Host "##teamcity[buildProblem description='Failed to build Web interview application']"
-                Exit
-            }
-            else {
-                Move-Item "..\WB.UI.Headquarters\InterviewApp\stats.html" "$artifactsFolder\WebInterview.stats.html" -ErrorAction SilentlyContinue
-            }}
-
         BuildStaticContent "Hq Deps" "src\UI\Headquarters\WB.UI.Headquarters\Dependencies" | % { if (-not $_) {
                 Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
                 Write-Host "##teamcity[buildProblem description='Failed to build static content for HQ']"
@@ -63,6 +60,15 @@ try {
                 Write-Host "##teamcity[buildProblem description='Failed to build static content for HQ']"
                 Exit 
             }}
+
+        BuildStaticContent "Web Interview" $ProjectWebInterview | % { if (-not $_) { 
+            Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
+            Write-Host "##teamcity[buildProblem description='Failed to build Web interview application']"
+            Exit
+        }
+        else {
+            Move-Item "..\WB.UI.Headquarters\InterviewApp\stats.html" "$artifactsFolder\WebInterview.stats.html" -ErrorAction SilentlyContinue
+        }}
 
         RunConfigTransform $ProjectHeadquarters $BuildConfiguration
 
