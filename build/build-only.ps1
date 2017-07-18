@@ -21,28 +21,31 @@ $versionString = (GetVersionString 'src\core')
 UpdateProjectVersion $BuildNumber -ver $versionString
 Write-Host "##teamcity[setParameter name='system.VersionString' value='$versionString']"
 
+$artifactsFolder = (Get-Location).Path + "\Artifacts"
+
+Write-Host "Artifacts Folder: $artifactsFolder"
+
+If (Test-Path "$artifactsFolder") {
+    Remove-Item "$artifactsFolder" -Force -Recurse
+}
+
+New-Item $artifactsFolder -Type Directory -Force
+
 try {
+
+    BuildStaticContent "Designer Questionnaire" "src\UI\Designer\WB.UI.Designer\questionnaire" | % { if (-not $_) { 
+            Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
+            Write-Host "##teamcity[buildProblem description='Failed to build static content for Designer']"
+            Exit 
+        }}
+
     $buildSuccessful = BuildSolution `
         -Solution $MainSolution `
         -BuildConfiguration $BuildConfiguration
     if ($buildSuccessful) { 
         RunConfigTransform $ProjectDesigner $BuildConfiguration
         
-        $artifactsFolder = (Get-Location).Path + "\Artifacts"
-
-        Write-Host "Artifacts Folder: $artifactsFolder"
-
-        If (Test-Path "$artifactsFolder") {
-            Remove-Item "$artifactsFolder" -Force -Recurse
-        }
-
-        New-Item $artifactsFolder -Type Directory -Force
-
-        BuildStaticContent "Designer Questionnaire" "src\UI\Designer\WB.UI.Designer\questionnaire" | % { if (-not $_) { 
-                Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
-                Write-Host "##teamcity[buildProblem description='Failed to build static content for Designer']"
-                Exit 
-            }}
+      
 
         BuildStaticContent "Hq Deps" "src\UI\Headquarters\WB.UI.Headquarters\Dependencies" | % { if (-not $_) {
                 Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
