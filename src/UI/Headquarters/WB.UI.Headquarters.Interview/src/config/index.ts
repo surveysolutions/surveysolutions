@@ -2,6 +2,7 @@ declare const INTERVIEW_APP_CONFIG: any
 
 export const virtualPath: string = INTERVIEW_APP_CONFIG.virtualPath
 export const imageUploadUri: string = INTERVIEW_APP_CONFIG.imageUploadUri
+export const audioUploadUri: string = INTERVIEW_APP_CONFIG.audioUploadUri
 export const imageGetBase: string = INTERVIEW_APP_CONFIG.imageGetBase
 export const signalrPath: string = INTERVIEW_APP_CONFIG.signalrPath
 export const signalrUrlOverride: string = INTERVIEW_APP_CONFIG.signalrUrlOverride

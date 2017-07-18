@@ -1,7 +1,8 @@
 // main entry point to signalr api hub
 
 import * as jQuery from "jquery"
-import { appVersion, imageUploadUri, signalrPath, signalrUrlOverride, supportedTransports } from "./../config"
+// tslint:disable-next-line:max-line-length
+import { appVersion, audioUploadUri, imageUploadUri, signalrPath, signalrUrlOverride, supportedTransports } from "./../config"
 const $ = (window as any).$ = (window as any).jQuery = jQuery
 import * as $script from "scriptjs"
 import "signalr"
@@ -53,6 +54,33 @@ const scriptIncludedPromise = new Promise<any>(resolve =>
 
             return $.ajax({
                 url: imageUploadUri,
+                xhr() {
+                    const xhr = $.ajaxSettings.xhr()
+                    xhr.upload.onprogress = (e) => {
+                        store.dispatch("uploadProgress", {
+                            id,
+                            now: e.loaded,
+                            total: e.total
+                        })
+                    }
+                    return xhr
+                },
+                data: fd,
+                processData: false,
+                contentType: false,
+                type: "POST"
+            })
+        }
+
+        interviewProxy.server.answerAudioQuestion = (id, file) => {
+            const fd = new FormData()
+            fd.append("interviewId", queryString.interviewId)
+            fd.append("questionId", id)
+            fd.append("file", file)
+            store.dispatch("uploadProgress", { id, now: 0, total: 100 })
+
+            return $.ajax({
+                url: audioUploadUri,
                 xhr() {
                     const xhr = $.ajaxSettings.xhr()
                     xhr.upload.onprogress = (e) => {
