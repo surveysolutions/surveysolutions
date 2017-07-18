@@ -63,6 +63,7 @@ function CleanFolders($Filter) {
     $folders = Get-ChildItem -Filter $Filter -Recurse -ErrorAction SilentlyContinue `
         | ? { $_.Attributes -match 'Directory' } `
         | ? { $_.FullName -notmatch '\\.hg\\' } `
+        | ? { $_.FullName -notmatch '\\node_modules\\' } `
         | % { GetPathRelativeToCurrectLocation $_.FullName }
 
     if ($folders -ne $null) {
