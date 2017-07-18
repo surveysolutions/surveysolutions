@@ -25,6 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         ILitePublishedEventHandler<AnswersRemoved>,
         ILitePublishedEventHandler<YesNoQuestionAnswered>,
         ILitePublishedEventHandler<AreaQuestionAnswered>,
+        ILitePublishedEventHandler<AudioQuestionAnswered>,
         IDisposable
     {
         private readonly ILiteEventRegistry registry;
@@ -117,6 +118,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Handle(IPublishedEvent<YesNoQuestionAnswered> @event) => this.RaiseEventIfNeeded(@event);
 
         public void Handle(IPublishedEvent<AreaQuestionAnswered> @event) => this.RaiseEventIfNeeded(@event);
+
+        public void Handle(IPublishedEvent<AudioQuestionAnswered> @event) => this.RaiseEventIfNeeded(@event);
 
         public void Handle(IPublishedEvent<AnswersRemoved> @event)
         {
