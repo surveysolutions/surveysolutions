@@ -1,8 +1,7 @@
 param([string]$VersionPrefix,
     [INT]$BuildNumber,
     [string]$KeystorePassword,
-    [string]$BuildConfiguration = "Release",
-    [switch] $cleanup)
+    [string]$BuildConfiguration = "Release")
 
 $ErrorActionPreference = "Stop"
 
@@ -17,10 +16,6 @@ $MainSolution = 'src\WB.sln'
 $SupportToolSolution = 'src\Tools\support\support.sln'
 
 versionCheck
-
-if($cleanup.IsPresent) {
-    &npm cache clean --force
-}
 
 $versionString = (GetVersionString 'src\core')
 UpdateProjectVersion $BuildNumber -ver $versionString

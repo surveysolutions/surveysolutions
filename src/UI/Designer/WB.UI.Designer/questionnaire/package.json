@@ -35,7 +35,7 @@
   },
   "scripts": {
     "production": "gulp --production",
-    "preproduction": "bower install --force"
+    "preproduction": "bower cache clean && bower install --force"
   },
   "author": "",
   "license": "ISC"
