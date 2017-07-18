@@ -31,22 +31,19 @@ If (Test-Path "$artifactsFolder") {
 
 New-Item $artifactsFolder -Type Directory -Force
 
+function EnusureGlobaNpmPackagesInstalled(){
+    &npm install -g bower gulp webpack | Write-Host
+}
+
 try {
+    EnusureGlobaNpmPackagesInstalled
 
     BuildStaticContent "Designer Questionnaire" "src\UI\Designer\WB.UI.Designer\questionnaire" | % { if (-not $_) { 
             Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
             Write-Host "##teamcity[buildProblem description='Failed to build static content for Designer']"
             Exit 
         }}
-
-    $buildSuccessful = BuildSolution `
-        -Solution $MainSolution `
-        -BuildConfiguration $BuildConfiguration
-    if ($buildSuccessful) { 
-        RunConfigTransform $ProjectDesigner $BuildConfiguration
         
-      
-
         BuildStaticContent "Hq Deps" "src\UI\Headquarters\WB.UI.Headquarters\Dependencies" | % { if (-not $_) {
                 Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
                 Write-Host "##teamcity[buildProblem description='Failed to build static content for HQ']"
@@ -67,6 +64,15 @@ try {
         else {
             Move-Item "..\WB.UI.Headquarters\InterviewApp\stats.html" "$artifactsFolder\WebInterview.stats.html" -ErrorAction SilentlyContinue
         }}
+
+    $buildSuccessful = BuildSolution `
+        -Solution $MainSolution `
+        -BuildConfiguration $BuildConfiguration
+    if ($buildSuccessful) { 
+        RunConfigTransform $ProjectDesigner $BuildConfiguration
+        
+      
+
 
         RunConfigTransform $ProjectHeadquarters $BuildConfiguration
 

@@ -144,7 +144,6 @@ function RunBlock($blockName, $targetLocation, [ScriptBlock] $block) {
 ##############################
 function BuildStaticContent($blockName, $targetLocation) {
     return RunBlock "Building static files: $blockName" $targetLocation -block {
-        
         Write-Host "Running npm install"
 
         #install node js dependencies
@@ -156,14 +155,25 @@ function BuildStaticContent($blockName, $targetLocation) {
             return $wasBuildSuccessfull
         }
 
-        Write-Host "Running npm run production"
-        #will execute script gulpfile.js in target folder
-        &npm run production | Write-Host
+        if (Test-Path "bower.json") {
+            Write-Host "Running bower install --force"
+            &bower install | Write-Host
+        }
 
-        $wasBuildSuccessfull = $LASTEXITCODE -eq 0
-        if (-not $wasBuildSuccessfull) {
-            Write-Host "##teamcity[message status='ERROR' text='Failed to run &npm run production']"
-            return $wasBuildSuccessfull
+        if (Test-Path "gulpfile.js") {
+            Write-Host "Running gulp --production"
+            &gulp --production | Write-Host
+        }
+        else {
+            Write-Host "Running npm run production"
+            #will execute script gulpfile.js in target folder
+            &npm run production | Write-Host
+
+            $wasBuildSuccessfull = $LASTEXITCODE -eq 0
+            if (-not $wasBuildSuccessfull) {
+                Write-Host "##teamcity[message status='ERROR' text='Failed to run &npm run production']"
+                return $wasBuildSuccessfull
+            }
         }
 
         return $true
