@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
         {
             var metadataView =
-                this.fileMetadataViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName)
+                this.fileMetadataViewStorage.Where(metadata => metadata.InterviewId == interviewId && metadata.FileName == fileName)
                     .SingleOrDefault();
 
             if (metadataView == null) return null;
@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public List<InterviewBinaryDataDescriptor> GetBinaryFilesForInterview(Guid interviewId)
         {
-            var metadataViews = this.fileMetadataViewStorage.Where(image => image.InterviewId == interviewId).ToList();
+            var metadataViews = this.fileMetadataViewStorage.Where(metadata => metadata.InterviewId == interviewId);
             return metadataViews.Select(f =>
                 new InterviewBinaryDataDescriptor(
                     f.InterviewId,
@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data)
         {
             var metadataView =
-                this.fileMetadataViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName)
+                this.fileMetadataViewStorage.Where(metadata => metadata.InterviewId == interviewId && metadata.FileName == fileName)
                     .SingleOrDefault();
 
             if (metadataView == null)
@@ -85,12 +85,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public void RemoveInterviewBinaryData(Guid interviewId, string fileName)
         {
-            var metadataView = this.fileMetadataViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName).SingleOrDefault();
+            var metadataView = GetMetadata(interviewId, fileName);
 
             if (metadataView == null) return;
 
             this.fileViewStorage.Remove(metadataView.FileId);
             this.fileMetadataViewStorage.Remove(metadataView.Id);
+        }
+
+        private TMetadataView GetMetadata(Guid interviewId, string fileName)
+        {
+            return this.fileMetadataViewStorage
+                .Where(metadata => metadata.InterviewId == interviewId && metadata.FileName == fileName)
+                .SingleOrDefault();
         }
     }
 }
