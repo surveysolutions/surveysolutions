@@ -187,6 +187,40 @@ namespace WB.UI.Headquarters.Controllers
             return Redirect(uri);
         }
 
+        
+        [HttpPost]
+        public async Task<ActionResult> Audio(string interviewId, string questionId, HttpPostedFileBase file)
+        {
+            IStatefulInterview interview = this.statefulInterviewRepository.Get(interviewId);
+
+            var questionIdentity = Identity.Parse(questionId);
+            var question = interview.GetQuestion(questionIdentity);
+
+            if (!interview.AcceptsInterviewerAnswers() && question?.AsAudio != null)
+            {
+                return this.Json("fail");
+            }
+            try
+            {
+                using (var ms = new MemoryStream())
+                {
+                    await file.InputStream.CopyToAsync(ms);
+
+                    byte[] bytes = ms.ToArray();
+                    
+                    //this.plainInterviewFileStorage.StoreInterviewBinaryData(interview.Id, filename, bytes);
+                    //this.commandService.Execute(new AnswerAudioQuestionCommand(interview.Id,
+                    //    responsibleId, questionIdentity.Id, questionIdentity.RosterVector, DateTime.UtcNow, filename));
+                }
+            }
+            catch (Exception e)
+            {
+                webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, questionId, e.Message);
+                throw;
+            }
+            return this.Json("ok");
+        }
+
         [HttpPost]
         public async Task<ActionResult> Image(string interviewId, string questionId, HttpPostedFileBase file)
         {
