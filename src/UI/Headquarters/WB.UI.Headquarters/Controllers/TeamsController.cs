@@ -1,6 +1,8 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Web.Http;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Responsible;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -83,11 +85,11 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
         [CamelCase]
-        public ComboboxModel ResponsiblesCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showLocked = DEFAULT_SHOW_LOCKED)
+        public ResponsibleComboboxModel ResponsiblesCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showLocked = DEFAULT_SHOW_LOCKED)
         {
             var users = this.userViewFactory.GetAllResponsibles(pageSize: pageSize, searchBy: query, showLocked: showLocked);
-            var options = users.Users.Select(x => new ComboboxOptionModel(x.ResponsibleId.FormatGuid(), x.UserName)).ToArray();
-            return new ComboboxModel(options, users.TotalCountByQuery);
+            var options = users.Users.Select(x => new ResponsibleComboboxOptionModel(x.ResponsibleId.FormatGuid(), x.UserName, x.Role)).ToArray();
+            return new ResponsibleComboboxModel(options, users.TotalCountByQuery);
         }
 
         [HttpGet]
@@ -99,5 +101,30 @@ namespace WB.UI.Headquarters.Controllers
             var options = users.Users.Select(x => new ComboboxOptionModel(x.UserId.FormatGuid(), x.UserName)).ToArray();
             return new ComboboxModel(options, users.TotalCountByQuery);
         }
+    }
+
+    public class ResponsibleComboboxModel
+    {
+        public ResponsibleComboboxModel(ResponsibleComboboxOptionModel[] options, int? total = null)
+        {
+            this.Options = options ?? new ResponsibleComboboxOptionModel[0];
+            this.Total = total ?? options.Length;
+        }
+        public ResponsibleComboboxOptionModel[] Options { get; private set; }
+        public int Total { get; private set; }
+    }
+
+    public class ResponsibleComboboxOptionModel
+    {
+        public ResponsibleComboboxOptionModel(string key, string value, UserRoles role)
+        {
+            this.Key = key;
+            this.Value = value;
+            this.Role = role;
+        }
+
+        public string Key { get; set; }
+        public string Value { get; set; }
+        public UserRoles Role { get; set; }
     }
 }
