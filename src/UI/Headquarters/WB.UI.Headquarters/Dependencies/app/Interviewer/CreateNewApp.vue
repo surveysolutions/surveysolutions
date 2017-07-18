@@ -1,6 +1,6 @@
 <template>
     <Layout :title="title">
-        <DataTables  ref="table"
+        <DataTables ref="table"
             :tableOptions="tableOptions"
             :contextMenuItems="contextMenuItems"
             ></DataTables>
@@ -12,9 +12,9 @@
 export default {
 
     data() {
-        return {            
+        return {
             interviewCreationInProgress: false,
-            title: this.$t("MainMenu.CreateNew"),
+            title: this.$config.title,
             tableOptions: {
                 rowId: "id",
                 deferLoading: 0,

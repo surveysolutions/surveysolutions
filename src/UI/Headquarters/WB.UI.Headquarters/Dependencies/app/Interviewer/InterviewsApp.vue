@@ -13,6 +13,7 @@
                                        :fetch-url="$config.interviewerHqEndpoint + '/QuestionnairesCombobox'"></Typeahead>
             </FilterBlock>
         </Filters>
+        
          <DataTables ref="table"
             :tableOptions="tableOptions"
             :addParamsToRequest="addFilteringParams"
