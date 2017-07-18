@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -39,10 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public List<Assignment> GetAssignmentsReadyForWebInterview(QuestionnaireIdentity questionnaireId)
         {
             var assignmentsReadyForWebInterview = this.assignmentsAccessor.Query(_ => _
-                .Where(x => x.QuestionnaireId.QuestionnaireId == questionnaireId.QuestionnaireId &&
-                    x.QuestionnaireId.Version == questionnaireId.Version &&
-                    x.Responsible.ReadonlyProfile.SupervisorId != null &&
-                    !x.Archived)
+                .Where(ReadyForWebInterviewAssignments(questionnaireId))
                 .OrderBy(x => x.Id)
                 .Fetch(x => x.IdentifyingData)
                 .ToList());
@@ -51,11 +49,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public int GetCountOfAssignmentsReadyForWebInterview(QuestionnaireIdentity questionnaireId)
         {
-            return this.assignmentsAccessor.Query(_ => _.Count(
+            return this.assignmentsAccessor.Query(_ => _.Count(ReadyForWebInterviewAssignments(questionnaireId)));
+        }
+
+        private static Expression<Func<Assignment, bool>> ReadyForWebInterviewAssignments(QuestionnaireIdentity questionnaireId)
+        {
+            Expression<Func<Assignment, bool>> readyForWebInterviewAssignments =
                 x => x.QuestionnaireId.QuestionnaireId == questionnaireId.QuestionnaireId &&
-                    x.QuestionnaireId.Version == questionnaireId.Version &&
-                    x.Responsible.ReadonlyProfile.SupervisorId != null &&
-                    !x.Archived));
+                     x.QuestionnaireId.Version == questionnaireId.Version &&
+                     x.Responsible.ReadonlyProfile.SupervisorId != null &&
+                     !x.Archived &&
+                     (x.Quantity == null || x.InterviewSummaries.Count(i => i.IsDeleted == false) < x.Quantity);
+            return readyForWebInterviewAssignments;
         }
 
         public AssignmentApiDocument MapAssignment(Assignment assignment)
