@@ -37,11 +37,11 @@ try {
 
         New-Item $artifactsFolder -Type Directory -Force
 
-        BuildStaticContent "Designer Questionnaire" "src\UI\Designer\WB.UI.Designer\questionnaire" | % { if (-not $_) { 
-                Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
-                Write-Host "##teamcity[buildProblem description='Failed to build static content for Designer']"
-                Exit 
-            }}
+        # BuildStaticContent "Designer Questionnaire" "src\UI\Designer\WB.UI.Designer\questionnaire" | % { if (-not $_) { 
+        #         Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
+        #         Write-Host "##teamcity[buildProblem description='Failed to build static content for Designer']"
+        #         Exit 
+        #     }}
 
         BuildStaticContent "Web Interview" $ProjectWebInterview | % { if (-not $_) { 
                 Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
@@ -52,11 +52,11 @@ try {
                 Move-Item "..\WB.UI.Headquarters\InterviewApp\stats.html" "$artifactsFolder\WebInterview.stats.html" -ErrorAction SilentlyContinue
             }}
 
-        BuildStaticContent "Hq Deps" "src\UI\Headquarters\WB.UI.Headquarters\Dependencies" | % { if (-not $_) {
-                Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
-                Write-Host "##teamcity[buildProblem description='Failed to build static content for HQ']"
-                Exit 
-            }}
+        # BuildStaticContent "Hq Deps" "src\UI\Headquarters\WB.UI.Headquarters\Dependencies" | % { if (-not $_) {
+        #         Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
+        #         Write-Host "##teamcity[buildProblem description='Failed to build static content for HQ']"
+        #         Exit 
+        #     }}
 
         BuildStaticContent "Hq UI" "src\UI\Headquarters\WB.UI.Headquarters" | % { if (-not $_) {
                 Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
