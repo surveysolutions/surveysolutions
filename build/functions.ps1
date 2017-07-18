@@ -145,23 +145,24 @@ function RunBlock($blockName, $targetLocation, [ScriptBlock] $block) {
 function BuildStaticContent($blockName, $targetLocation) {
     return RunBlock "Building static files: $blockName" $targetLocation -block {
         
-        Write-Host "Running yarn"
+        Write-Host "Running npm install"
 
         #install node js dependencies
         &npm install --no-optional | Write-Host
         
         $wasBuildSuccessfull = $LASTEXITCODE -eq 0
         if (-not $wasBuildSuccessfull) {
-            Write-Host "##teamcity[message status='ERROR' text='Failed to run yarn']"
+            Write-Host "##teamcity[message status='ERROR' text='Failed to run npm install']"
             return $wasBuildSuccessfull
         }
 
+        Write-Host "Running npm run production"
         #will execute script gulpfile.js in target folder
         &npm run production | Write-Host
 
         $wasBuildSuccessfull = $LASTEXITCODE -eq 0
         if (-not $wasBuildSuccessfull) {
-            Write-Host "##teamcity[message status='ERROR' text='Failed to run &yarn run production']"
+            Write-Host "##teamcity[message status='ERROR' text='Failed to run &npm run production']"
             return $wasBuildSuccessfull
         }
 
