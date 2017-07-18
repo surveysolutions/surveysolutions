@@ -18,7 +18,15 @@ $SupportToolSolution = 'src\Tools\support\support.sln'
 
 $versionString = (GetVersionString 'src\core')
 UpdateProjectVersion $BuildNumber -ver $versionString
+
+function EnsureGlobalNpmPackagesInstalled(){
+    Write-Host "Ensuring that global npm deps installed"
+    &npm install -g bower | Write-Host
+}
+
 try {
+    EnsureGlobalNpmPackagesInstalled
+
 	BuildSolution `
                 -Solution $MainSolution `
                 -BuildConfiguration $BuildConfiguration
