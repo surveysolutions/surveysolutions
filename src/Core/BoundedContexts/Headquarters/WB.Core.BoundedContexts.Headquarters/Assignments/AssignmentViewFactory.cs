@@ -161,6 +161,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 items = items.Where(x => x.Responsible.ReadonlyProfile.SupervisorId == input.SupervisorId || x.ResponsibleId == input.SupervisorId);
             }
 
+            if (input.OnlyWithInterviewsNeeded)
+            {
+                items = items.Where(x => !x.Quantity.HasValue || x.Quantity - x.InterviewSummaries.Count(ñ => !ñ.IsDeleted) > 0);
+            }
+
             return items;
         }
     }

@@ -1,7 +1,9 @@
-﻿using System.Web.Optimization;
+﻿using System.ComponentModel;
+using System.Web.Optimization;
 
 namespace WB.UI.Headquarters
 {
+    [Localizable(false)]
     public class BundleConfig
     {
         public static void RegisterBundles(BundleCollection bundles)
@@ -27,7 +29,22 @@ namespace WB.UI.Headquarters
                 "~/Dependencies/js/searchHighlight.js"
             ));
 
+            bundles.Add(new ScriptBundle("~/js/app/assignments").Include(
+                "~/Dependencies/build/vendor.bundle.js",
+                "~/Dependencies/build/assignments.bundle.js"
+            ));
 
+            bundles.Add(new ScriptBundle("~/js/app/interviewer.createnew")
+                .Include(
+                    @"~/Dependencies/build/vendor.bundle.js",
+                    @"~/Dependencies/build/interviewer_createNew.bundle.js"
+            ));
+
+            bundles.Add(new ScriptBundle("~/js/app/interviewer.interviews")
+                .Include(
+                    @"~/Dependencies/build/vendor.bundle.js",
+                    @"~/Dependencies/build/interviewer_interviews.bundle.js"
+                ));
             //libs.js:
             //vendor\jquery\dist\jquery.js
             //vendor\bootstrap - sass\assets\javascripts\bootstrap.js

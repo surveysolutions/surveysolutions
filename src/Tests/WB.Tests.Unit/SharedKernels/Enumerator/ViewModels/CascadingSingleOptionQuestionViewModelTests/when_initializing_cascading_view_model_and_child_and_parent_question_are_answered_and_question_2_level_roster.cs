@@ -60,13 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.AutoCompleteSuggestions.Count.ShouldEqual(1);
 
         It should_format_first_option_in_AutoCompleteSuggestions = () =>
-        {
-            var firstOption = cascadingModel.AutoCompleteSuggestions.ElementAt(0);
-            firstOption.Text.ShouldContain("title klo <b>3</b>");
-            firstOption.Value.ShouldEqual(answerOnChildQuestion);
-            firstOption.ParentValue.ShouldEqual(1);
-            firstOption.OriginalText.ShouldContain("title klo 3");
-        };
+            cascadingModel.AutoCompleteSuggestions.ElementAt(0).ShouldContain("title klo <b>3</b>");
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
         private static readonly Mock<IStatefulInterview> StatefulInterviewMock = new Mock<IStatefulInterview>();

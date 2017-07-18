@@ -117,7 +117,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             if (interview == null)
             {
-                this.viewModelNavigationService.NavigateToDashboard();
+                this.viewModelNavigationService.NavigateToDashboard(Guid.Parse(this.interviewId));
                 return;
             }
 
@@ -127,12 +127,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.HasNotEmptyNoteFromSupervior = !string.IsNullOrWhiteSpace(interview.GetLastSupervisorComment());
             this.HasCommentsFromSupervior = interview.CountCommentedQuestionsVisibledToInterviewer() > 0;
-            this.HasPrefilledQuestions = questionnaire
-                .GetPrefilledQuestions()
-                .Any(questionId => questionnaire.GetQuestionType(questionId) != QuestionType.GpsCoordinates);
 
-            this.HasEdiablePrefilledQuestions = questionnaire
-                .GetPrefilledQuestions()
+            var prefilledQuestions = questionnaire
+                .GetPrefilledQuestions();
+
+            this.HasPrefilledQuestions = prefilledQuestions
+                .Any(questionId => questionnaire.GetQuestionType(questionId) != QuestionType.GpsCoordinates);
+            this.HasEdiablePrefilledQuestions = prefilledQuestions
                 .All(questionId => interview.GetQuestion(new Identity(questionId, null))?.IsReadonly ?? true);
 
             this.QuestionnaireTitle = questionnaire.Title;

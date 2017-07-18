@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -12,7 +11,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class CascadingSingleOptionQuestionViewModel : BaseFilteredQuestionViewModel<CascadingComboboxItemViewModel>, 
+    public class CascadingSingleOptionQuestionViewModel : BaseFilteredQuestionViewModel, 
          ILiteEventHandler<SingleOptionQuestionAnswered>
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
@@ -52,21 +51,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer().SelectedValue;
             }
         }
-
-        protected override bool CanSendAnswerCommand(CascadingComboboxItemViewModel answer)
-            => this.interview.GetSingleOptionQuestion(this.Identity).GetAnswer()?.SelectedValue != answer.Value;
+        protected override CategoricalOption GetOptionByFilter(string filter)
+            => this.interview.GetOptionForQuestionWithFilter(this.Identity, filter, this.answerOnParentQuestion);
 
         protected override CategoricalOption GetAnsweredOption(int answer)
             => this.interview.GetOptionForQuestionWithoutFilter(this.Identity, answer, this.answerOnParentQuestion);
-
-        protected override CascadingComboboxItemViewModel ToViewModel(CategoricalOption option, string filter)
-            => new CascadingComboboxItemViewModel
-            {
-                Text = GetHighlightedText(option.Title, filter),
-                OriginalText = option.Title,
-                Value = option.Value,
-                ParentValue = option.ParentValue.Value
-            };
 
         protected override IEnumerable<CategoricalOption> GetSuggestions(string filter)
         {
@@ -80,34 +69,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 yield return categoricalOption;
         }
 
-        protected override AnswerQuestionCommand CreateAnswerCommand(CascadingComboboxItemViewModel answer)
-            => new AnswerSingleOptionQuestionCommand(
-                this.interviewId,
-                this.principal.CurrentUserIdentity.UserId,
-                this.Identity.Id,
-                this.Identity.RosterVector,
-                DateTime.UtcNow,
-                answer.Value);
-
-        protected override void SaveAnswer(CascadingComboboxItemViewModel categoricalOption)
+        protected override async Task SaveAnswerAsync(string optionText)
         {
             if (!this.answerOnParentQuestion.HasValue)
                 return;
 
-            base.SaveAnswer(categoricalOption);
+            await base.SaveAnswerAsync(optionText);
         }
 
-        public void Handle(SingleOptionQuestionAnswered @event)
+        public async void Handle(SingleOptionQuestionAnswered @event)
         {
-            if (this.parentQuestionIdentity.Equals(@event.QuestionId, @event.RosterVector))
-            {
-                var parentSingleOptionQuestion = this.interview.GetSingleOptionQuestion(this.parentQuestionIdentity);
-                if (parentSingleOptionQuestion.IsAnswered)
-                {
-                    this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer().SelectedValue;
-                    this.FilterText = string.Empty;
-                }              
-            }
+            if (!this.parentQuestionIdentity.Equals(@event.QuestionId, @event.RosterVector)) return;
+
+            var parentSingleOptionQuestion = this.interview.GetSingleOptionQuestion(this.parentQuestionIdentity);
+            if (!parentSingleOptionQuestion.IsAnswered) return;
+
+            this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer().SelectedValue;
+
+            await this.UpdateFilterAndSuggestionsAsync(string.Empty);
         }
     }
 }

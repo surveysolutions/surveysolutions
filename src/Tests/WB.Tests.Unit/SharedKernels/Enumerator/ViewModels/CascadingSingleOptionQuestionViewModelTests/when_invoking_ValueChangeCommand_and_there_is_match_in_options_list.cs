@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
@@ -48,13 +49,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
 
-            cascadingModel.FilterText = "o";
+            cascadingModel.FilterCommand.Execute("o");
         };
 
-        Because of = () => cascadingModel.SelectedObject = new CascadingComboboxItemViewModel() { Text = "3", Value = 3 };
-
-        It should_not_mark_question_as_invalid = () =>
-            ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Text_MaskError), Times.Never);
+        Because of = () => cascadingModel.SaveAnswerBySelectedOptionCommand.ExecuteAsync("3").Await();
 
         It should_send_answer_command = () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Once);

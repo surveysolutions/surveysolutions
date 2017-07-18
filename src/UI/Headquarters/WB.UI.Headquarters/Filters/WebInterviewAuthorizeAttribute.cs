@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -18,8 +19,10 @@ namespace WB.UI.Headquarters.Filters
         }
 
         private IWebInterviewConfigProvider webInterviewConfigProvider => ServiceLocator.Current.GetInstance<IWebInterviewConfigProvider>();
-        private IQueryableReadSideRepositoryReader<InterviewSummary> InterviewSummaryStorage =>
+        private IQueryableReadSideRepositoryReader<InterviewSummary> InterviewSummaryStorage => 
             ServiceLocator.Current.GetInstance<IQueryableReadSideRepositoryReader<InterviewSummary>>();
+
+        private IAuthorizedUser authorizedUser => ServiceLocator.Current.GetInstance<IAuthorizedUser>();
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -31,7 +34,8 @@ namespace WB.UI.Headquarters.Filters
                 if (interviewSummary.IsDeleted)
                     throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
 
-                if (interviewSummary.Status != InterviewStatus.InterviewerAssigned)
+                if (interviewSummary.Status != InterviewStatus.InterviewerAssigned
+                    && interviewSummary.Status != InterviewStatus.Restarted)
                 {
                     throw new WebInterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, WebInterview.Error_NoActionsNeeded);
                 }
@@ -39,6 +43,11 @@ namespace WB.UI.Headquarters.Filters
                 var webInterviewConfig = this.webInterviewConfigProvider.Get(new QuestionnaireIdentity(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion));
                 if (!webInterviewConfig.Started)
                 {
+                    if (authorizedUser.IsAuthenticated && authorizedUser.IsInterviewer)
+                    {
+                        return;
+                    }
+
                     throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
                 }
             }

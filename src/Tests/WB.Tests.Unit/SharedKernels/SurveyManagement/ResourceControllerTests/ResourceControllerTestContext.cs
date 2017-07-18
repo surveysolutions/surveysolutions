@@ -14,11 +14,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ResourceControllerTests
     {
         protected static ResourceController CreateController(ICommandService commandService = null,
             IAuthorizedUser globalInfoProvider = null,
-            ILogger logger = null, IPlainInterviewFileStorage plainInterviewFileStorage = null)
+            ILogger logger = null, IImageFileStorage imageFileStorage = null)
         {
             return new ResourceController(
                 commandService ?? Mock.Of<ICommandService>(),
-                logger ?? Mock.Of<ILogger>(), plainInterviewFileStorage ?? Mock.Of<IPlainInterviewFileStorage>());
+                logger ?? Mock.Of<ILogger>(), imageFileStorage ?? Mock.Of<IImageFileStorage>());
         }
     }
 }

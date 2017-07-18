@@ -1,0 +1,10 @@
+﻿@model WB.UI.Headquarters.Models.InterviewerHqModel
+
+@{
+    ViewBag.Title = Model.Title;
+    Layout = @"~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div id="vueApp" configuration="@Model.ToString()"></div>
+
+@Scripts.Render(@"~/js/app/interviewer.interviews")

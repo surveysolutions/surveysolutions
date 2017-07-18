@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
             questionnaireStorage.Setup(x => x.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()))
                 .Returns(questionnaireExportStructure);
 
-            plainInterviewFileStorageMock=new Mock<IPlainInterviewFileStorage>();
+            plainInterviewFileStorageMock=new Mock<IImageFileStorage>();
             plainInterviewFileStorageMock.Setup(x => x.GetBinaryFilesForInterview(interviewId))
                 .Returns(new[] {Create.Entity.InterviewBinaryDataDescriptor()}.ToList());
 
@@ -68,7 +68,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
                     interviewSummaries: interviewSummarytorage,
                     interviewDatas: interviewDataStorage,
                     questionnaireExportStructureStorage: questionnaireStorage.Object,
-                    plainFileRepository: plainInterviewFileStorageMock.Object,
+                    imageFileRepository: plainInterviewFileStorageMock.Object,
                     fileSystemAccessor: fileSystemAccessor.Object,
                     dataExportFileAccessor: dataExportFileAccessor);
         };
@@ -84,7 +84,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
         private static BinaryFormatDataExportHandler binaryFormatDataExportHandler;
         private static QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 1);
         private static Guid interviewId = Guid.NewGuid();
-        private static Mock<IPlainInterviewFileStorage> plainInterviewFileStorageMock;
+        private static Mock<IImageFileStorage> plainInterviewFileStorageMock;
         private static Mock<IFileSystemAccessor> fileSystemAccessor;
     }
 }

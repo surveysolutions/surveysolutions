@@ -437,7 +437,8 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IAssignmentsSynchronizer>(),
                 Mock.Of<IQuestionnaireDownloader>(),
                 httpStatistician ?? Mock.Of<IHttpStatistician>(),
-                Mock.Of<IPlainStorage<AssignmentDocument, int>>());
+                Mock.Of<IPlainStorage<AssignmentDocument, int>>(),
+                Mock.Of<IAudioFileStorage>());
         }
 
         public SynchronizationService SynchronizationService(IPrincipal principal = null,
@@ -470,9 +471,9 @@ namespace WB.Tests.Abc.TestFactories
                 brokenPackagesFactory ?? Mock.Of<IBrokenInterviewPackagesViewFactory>());
         }
 
-        public TesterPlainInterviewFileStorage TesterPlainInterviewFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectory)
+        public TesterImageFileStorage TesterPlainInterviewFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectory)
         {
-            return new TesterPlainInterviewFileStorage(fileSystemAccessor, rootDirectory);
+            return new TesterImageFileStorage(fileSystemAccessor, rootDirectory);
         }
 
         public IQuestionnaireDownloader QuestionnaireDownloader(

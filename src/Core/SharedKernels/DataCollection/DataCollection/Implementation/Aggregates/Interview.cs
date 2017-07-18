@@ -1396,7 +1396,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
             }
 
-            this.ApplyEvent(new InterviewKeyAssigned(command.InterviewKey));
+            if (command.InterviewKey != null && !command.InterviewKey.Equals(this.interviewKey))
+            {
+                this.ApplyEvent(new InterviewKeyAssigned(command.InterviewKey));
+            }
         }
 
         protected void PutAnswers(InterviewTree changedInterviewTree, 

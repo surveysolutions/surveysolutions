@@ -68,7 +68,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
             if (interview.IsDeleted)
                 throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WB.UI.Headquarters.Resources.WebInterview.Error_InterviewExpired);
 
-            if (interview.Status != InterviewStatus.InterviewerAssigned)
+            if (interview.Status != InterviewStatus.InterviewerAssigned && interview.Status != InterviewStatus.Restarted)
                 throw new WebInterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, WB.UI.Headquarters.Resources.WebInterview.Error_NoActionsNeeded);
 
             QuestionnaireIdentity questionnaireIdentity = interview.QuestionnaireIdentity;
