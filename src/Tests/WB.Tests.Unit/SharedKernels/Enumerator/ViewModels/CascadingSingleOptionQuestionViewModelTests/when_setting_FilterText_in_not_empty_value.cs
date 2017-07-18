@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
         };
 
-        Because of = () => cascadingModel.FilterCommand.Execute("3");
+        Because of = () => cascadingModel.FilterCommand.ExecuteAsync("3").Await();
 
         It should_not_set_filter_text = () =>
             cascadingModel.FilterText.ShouldNotBeNull();

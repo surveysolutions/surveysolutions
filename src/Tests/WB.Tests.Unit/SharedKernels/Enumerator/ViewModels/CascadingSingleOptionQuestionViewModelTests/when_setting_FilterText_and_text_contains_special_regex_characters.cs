@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
         };
 
-        Because of = () => exception = Catch.Only<ArgumentException>(() => { cascadingModel.FilterCommand.Execute(@"(+"); });
+        Because of = () => exception = Catch.Only<ArgumentException>(() => { cascadingModel.FilterCommand.ExecuteAsync(@"(+").Await(); });
 
         It should_not_throw_argument_exception = () => exception.ShouldBeNull();
 

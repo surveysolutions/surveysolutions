@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
         };
 
-        Because of = () => cascadingModel.SaveAnswerBySelectedOptionCommand.Execute("3");
+        Because of = () => cascadingModel.SaveAnswerBySelectedOptionCommand.ExecuteAsync("3").Await();
 
         It should_not_send_answer_command = () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Never);

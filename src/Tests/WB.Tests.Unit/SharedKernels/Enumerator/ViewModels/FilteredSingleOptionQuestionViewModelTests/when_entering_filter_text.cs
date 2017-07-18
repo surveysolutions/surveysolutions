@@ -57,11 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             
         };
 
-        Because of = () =>
-        {
-            viewModel.FilterCommand.Execute(answerValue);
-            Thread.Sleep(500);
-        };
+        Because of = () => viewModel.FilterCommand.ExecuteAsync(answerValue).Await();
 
         It should_update_suggestions_list = () =>
             viewModel.AutoCompleteSuggestions.Count.ShouldEqual(3);
