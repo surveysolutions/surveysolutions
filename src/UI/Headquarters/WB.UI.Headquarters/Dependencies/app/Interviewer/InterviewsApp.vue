@@ -1,39 +1,32 @@
 <template>
-
-    <Layout :title="title" hasFilter="true">
+    <Layout :title="title" :hasFilter="true">
         <Filters slot="filters">
             <FilterBlock :title="$t('Pages.Template')">
-                <Typeahead data-vv-name="questionnaireId"
-                                       data-vv-as="questionnaire"
-                                       :placeholder="$t('Common.Any')"
-                                       control-id="questionnaireId"
-                                       :ajaxParams="{ statuses: statuses.toString() }"
-                                       :value="questionnaireId"
-                                       v-on:selected="questionnaireSelected"
-                                       :fetch-url="$config.interviewerHqEndpoint + '/QuestionnairesCombobox'"></Typeahead>
+                <Typeahead data-vv-name="questionnaireId" 
+                    data-vv-as="questionnaire" 
+                    :placeholder="$t('Common.Any')" 
+                    control-id="questionnaireId" 
+                    :ajaxParams="{ statuses: statuses.toString() }" 
+                    :value="questionnaireId" 
+                    v-on:selected="questionnaireSelected" 
+                    :fetch-url="config.interviewerHqEndpoint + '/QuestionnairesCombobox'"></Typeahead>
             </FilterBlock>
         </Filters>
-        
-         <DataTables ref="table"
-            :tableOptions="tableOptions"
-            :addParamsToRequest="addFilteringParams"
-            :contextMenuItems="contextMenuItems"
-        ></DataTables>
-
-        <div slot="modals">
-            <Confirm ref="confirmation" id="restartModal">
-                {{ $t("Pages.InterviewerHq_RestartConfirm") }}
-                <FilterBlock>
-                    <div class="form-group ">
-                        <div class="field">
-                            <input class="form-control with-clear-btn" type="text">
-                        </div>
+    
+        <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addFilteringParams" :contextMenuItems="contextMenuItems"></DataTables>
+    
+        <Confirm ref="confirmation" id="restartModal" slot="modals">
+            {{ $t("Pages.InterviewerHq_RestartConfirm") }}
+            <FilterBlock>
+                <div class="form-group ">
+                    <div class="field">
+                        <input class="form-control with-clear-btn" type="text">
                     </div>
-                </FilterBlock>
-            </Confirm>
-        </div>
-    </Layout>
+                </div>
+            </FilterBlock>
+        </Confirm>
 
+    </Layout>
 </template>
 
 <script>
@@ -42,12 +35,29 @@ export default {
     data() {
         return {
             restart_comment: null,
-            tableOptions: {
+            questionnaireId: null
+        }
+    },
+
+    computed: {
+        statuses() {
+            return this.config.statuses
+        },
+        title() {
+            return this.config.title;
+        },
+
+        config() {
+            return this.$store.state.config;
+        },
+
+        tableOptions() {
+            return {
                 rowId: "id",
                 deferLoading: 0,
                 columns: this.getTableColumns(),
                 ajax: {
-                    url: this.$config.allInterviews,
+                    url: this.config.allInterviews,
                     type: "GET",
                     contentType: 'application/json'
                 },
@@ -56,71 +66,60 @@ export default {
                     selector: 'td>.checkbox-filter'
                 },
                 sDom: 'f<"table-with-scroll"t>ip'
-            },
-            questionnaireId: null,
-            title: this.$config.title
-        }
-    },
-
-    computed: {
-        statuses() {
-            return this.$config.statuses
+            }
         }
     },
 
     methods: {
         questionnaireSelected(newValue) {
-             this.questionnaireId = newValue;
-             this.reload();
+            this.questionnaireId = newValue;
+            this.reload();
         },
 
         reload() {
             this.$refs.table.reload();
         },
 
-        contextMenuItems(selectedRow) 
-        {
+        contextMenuItems({rowData, rowIndex}) {
             const menu = [];
+            const self = this;
 
-            if(selectedRow.status != 'Completed') {
+            if (rowData.status != 'Completed') {
                 menu.push({
                     name: this.$t("Pages.InterviewerHq_OpenInterview"),
-                    callback: () => this.openInterview(selectedRow)
+                    callback: () => this.$store.dispatch("openInterview", rowData.interviewId)
                 });
             }
 
-            if(selectedRow.canDelete){
+            if (rowData.canDelete) {
                 menu.push({
                     name: this.$t("Pages.InterviewerHq_DiscardInterview"),
-                    callback: () => this.discardInterview(selectedRow)
+                    callback: () => {
+                        self.$refs.table.disableRow(rowIndex)
+
+                        self.$store.dispatch("discardInterview", {
+                            interviewId: rowData.interviewId, 
+                            callback: self.reload
+                        })
+                    }
                 });
             }
 
-            if(selectedRow.status == 'Completed') {
+            if (rowData.status == 'Completed') {
                 menu.push({
                     name: this.$t("Pages.InterviewerHq_RestartInterview"),
-                    callback: () => this.restartInterview(selectedRow)
+                    callback: () => this.restartInterview(rowData.interviewId)
                 });
             }
 
             return menu;
         },
 
-        openInterview(row) {
-            window.location = this.$config.interviewerHqEndpoint + "/OpenInterview/" + row.interviewId
-            console.log('openInterview', row.key, row.interviewId)
-        },
-
-        discardInterview(row) {
-            $.post(this.$config.interviewerHqEndpoint + "/DiscardInterview/" + row.interviewId, response => {
-                this.reload();
-            });
-        },
-
-        restartInterview(row) {
+        restartInterview(context, interviewId) {
             this.$refs.confirmation.promt(() => {
-                $.post(this.$config.interviewerHqEndpoint + "/RestartInterview/" + row.interviewId, { comment: this.restart_comment }, response => {
-                    window.location = this.$config.interviewerHqEndpoint + "/OpenInterview/" + row.interviewId;
+                $.post(this.config.interviewerHqEndpoint + "/RestartInterview/" + interviewId, { comment: this.restart_comment }, response => {
+                    this.restart_comment = "";
+                    this.$store.dispatch("openInterview", row.interviewId);
                 })
             });
         },
@@ -128,7 +127,7 @@ export default {
         addFilteringParams(data) {
             data.statuses = this.statuses;
 
-            if(this.questionnaireId){
+            if (this.questionnaireId) {
                 data.questionnaireId = this.questionnaireId.key;
             }
         },
@@ -141,7 +140,7 @@ export default {
                     title: this.$t("Common.InterviewKey"),
                     orderable: true,
                     searchable: true,
-                },{
+                }, {
                     data: "assignmentId",
                     name: "AssignmentIdKey",
                     title: this.$t("Common.Assignment"),
@@ -167,7 +166,7 @@ export default {
                     title: this.$t("Assignments.UpdatedAt"),
                     searchable: false
                 }
-              ]
+            ]
 
             return columns
         }

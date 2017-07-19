@@ -1,27 +1,30 @@
 <template>
     <Layout :title="title">
-        <DataTables ref="table"
-            :tableOptions="tableOptions"
-            :contextMenuItems="contextMenuItems"
-            ></DataTables>
+        <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems"></DataTables>
     </Layout>
 </template>
 
 <script>
 
 export default {
-
-    data() {
-        return {
-            interviewCreationInProgress: false,
-            title: this.$config.title,
-            tableOptions: {
+    computed: {
+        title() {
+            return this.config.title
+        },
+        config() {
+            return this.$store.state.config
+        },
+        dataTable() {
+            return this.$refs.table.table
+        },
+        tableOptions(){ 
+            return {
                 rowId: "id",
                 deferLoading: 0,
                 order: [[4, 'desc']],
                 columns: this.getTableColumns(),
                 ajax: {
-                    url: this.$config.assignmentsEndpoint,
+                    url: this.config.assignmentsEndpoint,
                     type: "GET",
                     contentType: 'application/json'
                 },
@@ -31,11 +34,6 @@ export default {
                 },
                 sDom: 'f<"table-with-scroll"t>ip'
             }
-        };
-    },
-    computed: {
-        dataTable() {
-            return this.$refs.table.table
         }
     },
 
@@ -44,20 +42,11 @@ export default {
     },
 
     methods: {
-        contextMenuItems(selectedRow) 
-        {
+        contextMenuItems({ rowData }) {
             return [{
-                    name: this.$t("Assignments.CreateInterview"),
-                    callback: () => this.openInterview(selectedRow)
+                name: this.$t("Assignments.CreateInterview"),
+                callback: () =>  this.$store.dispatch("createInterview", row.id)
             }];
-        },
-
-        openInterview(row) {
-            if(this.interviewCreationInProgress == true) return
-            this.interviewCreationInProgress = true;
-            $.post(this.$config.interviewerHqEndpoint + "/StartNewInterview/" + row.id, response => {
-                window.location = response;
-            }).then(() => this.interviewCreationInProgress = false);
         },
 
         getTableColumns() {

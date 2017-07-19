@@ -10,6 +10,7 @@
 
 <div id="vueApp" configuration="@JsonConvert.SerializeObject(
 new {
+    title = @MainMenu.CreateNew,
     assignmentsEndpoint = Url.Content(@"~/api/Assignments"),
     interviewerHqEndpoint = Url.Content(@"~/interviewerHq"),
     authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>(),

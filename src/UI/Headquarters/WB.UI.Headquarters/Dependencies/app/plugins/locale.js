@@ -3,10 +3,14 @@ export default (Vue, options) => {
     Object.defineProperty(Vue.prototype, '$t', {
         get() {
             return (arg) => {
-                if (this.$config) {
-                    var resource = this.$config.resources;
+                if (this.$store) {
+                    const state = this.$store.state;
 
-                    return this.$config.resources[arg] || arg;
+                    if (state.config) {
+                        var resource = state.config.resources;
+
+                        return state.config.resources[arg] || arg;
+                    }
                 }
                 return arg;
             }
