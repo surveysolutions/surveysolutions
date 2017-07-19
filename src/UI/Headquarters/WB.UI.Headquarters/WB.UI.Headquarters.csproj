@@ -1686,6 +1686,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M016_AddColumnRosterVectorToIdentifyingQuestion.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M017_AlterColumnRosterVectorToIdentifyingQuestionToNullable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M018_AddColumnAnswersToAssignments.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M019_AddAudioFileStorage.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M009_AddAssignmentIdToInterview.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M010_Add_index_for_interviewSummary_assignmentid.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M011_AddOriginalHumanIdToInterviewSummary.cs" />
