@@ -101,6 +101,11 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Compression
                 return true;
             }
 
+            if (response.Content is StreamContent)
+            {
+                return true;
+            }
+
             return false;
         }
 
