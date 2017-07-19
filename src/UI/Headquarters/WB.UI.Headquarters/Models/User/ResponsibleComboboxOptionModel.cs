@@ -4,11 +4,11 @@ namespace WB.UI.Headquarters.Models.User
 {
     public class ResponsibleComboboxOptionModel
     {
-        public ResponsibleComboboxOptionModel(string key, string value, UserRoles role)
+        public ResponsibleComboboxOptionModel(string key, string value, string iconClass)
         {
             this.Key = key;
             this.Value = value;
-            this.IconClass = role.ToString().ToLower();
+            this.IconClass = iconClass;
         }
 
         public string Key { get; set; }

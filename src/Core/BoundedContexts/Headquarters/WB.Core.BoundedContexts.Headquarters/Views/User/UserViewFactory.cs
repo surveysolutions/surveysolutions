@@ -134,14 +134,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 {
                     UserId = x.Id,
                     UserName = x.UserName,
-                    Role = x.Profile.SupervisorId.HasValue ? UserRoles.Interviewer : UserRoles.Supervisor // I cannot read role directly, EF doesn't support it
+                    IconClass = UserRoles.Interviewer.ToString()
                 });
 
-            return new UsersView
+            var result = new UsersView
             {
                 TotalCountByQuery = query.Invoke(this.UserRepository.Users).Count(),
                 Users = filteredUsers.ToList()
             };
+
+            return result;
         }
 
         public InterviewersView GetInterviewers(int pageIndex, int pageSize, string orderBy, string searchBy, 
@@ -212,8 +214,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 {
                     InterviewerId = x.Profile.SupervisorId.HasValue ? x.Id : (Guid?)null,
                     SupervisorId = x.Profile.SupervisorId ?? x.Id,
-                    UserName = x.UserName,
-                    Role = x.Profile.SupervisorId.HasValue ? UserRoles.Interviewer : UserRoles.Supervisor
+                    UserName = x.UserName
                 });
             };
 
