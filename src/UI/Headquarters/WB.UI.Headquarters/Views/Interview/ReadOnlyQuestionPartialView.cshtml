@@ -76,6 +76,14 @@
                 </div>
         }
         break;
+    case QuestionType.Audio:
+        if (Model.IsAnswered)
+        {
+            <div>
+                <audio src=""></audio>
+            </div>
+        }
+        break;
     case QuestionType.GpsCoordinates:
         if (Model.Answer != null)
         {
