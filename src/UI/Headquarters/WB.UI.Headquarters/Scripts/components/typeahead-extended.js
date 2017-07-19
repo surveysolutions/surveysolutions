@@ -91,8 +91,9 @@
                 var linkContent = item.name;
                 if (_.isUndefined(item.loadMore)) {
                     linkContent = that.highlighter(text);
-                    if (item.iconClass) {
-                        linkContent = "<span class='" + item.iconClass + "'>" + linkContent + "</span>";
+                    var iconClass = item.iconClass || item.IconClass;
+                    if (iconClass) {
+                        linkContent = "<span class='" + iconClass + "'>" + linkContent + "</span>";
                     }
                 }
 
