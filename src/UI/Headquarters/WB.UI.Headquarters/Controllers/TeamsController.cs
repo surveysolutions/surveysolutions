@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Web.Http;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Responsible;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -11,6 +10,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.ComponentModels;
+using WB.UI.Headquarters.Models.User;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
@@ -101,30 +101,5 @@ namespace WB.UI.Headquarters.Controllers
             var options = users.Users.Select(x => new ComboboxOptionModel(x.UserId.FormatGuid(), x.UserName)).ToArray();
             return new ComboboxModel(options, users.TotalCountByQuery);
         }
-    }
-
-    public class ResponsibleComboboxModel
-    {
-        public ResponsibleComboboxModel(ResponsibleComboboxOptionModel[] options, int? total = null)
-        {
-            this.Options = options ?? new ResponsibleComboboxOptionModel[0];
-            this.Total = total ?? options.Length;
-        }
-        public ResponsibleComboboxOptionModel[] Options { get; private set; }
-        public int Total { get; private set; }
-    }
-
-    public class ResponsibleComboboxOptionModel
-    {
-        public ResponsibleComboboxOptionModel(string key, string value, UserRoles role)
-        {
-            this.Key = key;
-            this.Value = value;
-            this.Role = role;
-        }
-
-        public string Key { get; set; }
-        public string Value { get; set; }
-        public UserRoles Role { get; set; }
     }
 }
