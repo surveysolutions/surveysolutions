@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
         };
 
         Because of = () =>
-            interviewerImageFileStorage.StoreInterviewBinaryData(interviewId, imageFileName, imageFileBytes);
+            interviewerImageFileStorage.StoreInterviewBinaryData(interviewId, imageFileName, imageFileBytes, null);
 
         It should_store_specified_interview_mulimedia_view = () =>
             imageViewStorage.Verify(x=>x.Store(Moq.It.IsAny<InterviewMultimediaView>()), Times.Once);

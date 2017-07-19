@@ -51,14 +51,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                 )).ToList();
         }
 
-        public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data)
+        public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
         {
             var file = new AudioFile()
             {
                 Id = AudioFile.GetFileId(interviewId, fileName),
                 InterviewId = interviewId,
                 FileName = fileName,
-                Data = data
+                Data = data,
+                ContentType = contentType
             };
             var fileId = AudioFile.GetFileId(interviewId, fileName);
 

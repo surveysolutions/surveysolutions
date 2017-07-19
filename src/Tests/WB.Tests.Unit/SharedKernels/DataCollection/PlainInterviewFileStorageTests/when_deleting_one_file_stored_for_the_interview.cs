@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainInterviewFileStorageTe
 
             imageFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
 
-            imageFileRepository.StoreInterviewBinaryData(interviewId, fileName1, data1);
+            imageFileRepository.StoreInterviewBinaryData(interviewId, fileName1, data1, null);
         };
 
         Because of = () => imageFileRepository.RemoveInterviewBinaryData(interviewId, fileName1);
