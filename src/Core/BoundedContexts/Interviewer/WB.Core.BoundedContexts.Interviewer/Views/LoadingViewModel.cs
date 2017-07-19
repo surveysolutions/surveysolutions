@@ -103,7 +103,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 await this.interactionService.AlertAsync(exception.Message, InterviewerUIResources.FailedToLoadInterview);
                 this.logger.Error($"Failed to load interview {this.interviewId}", exception);
-                this.viewModelNavigationService.NavigateToDashboard();
+                await this.viewModelNavigationService.NavigateToDashboard();
             }
             finally
             {

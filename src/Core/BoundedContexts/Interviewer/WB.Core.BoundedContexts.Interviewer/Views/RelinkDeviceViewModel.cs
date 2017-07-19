@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 this.interviewersPlainStorage.Store(this.userIdentityToRelink);
                 this.principal.SignIn(this.userIdentityToRelink.Id, true);
-                this.viewModelNavigationService.NavigateToDashboard();
+                await this.viewModelNavigationService.NavigateToDashboard();
             }
             catch (SynchronizationException ex)
             {
