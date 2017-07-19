@@ -9,7 +9,6 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -91,8 +90,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 })
                 .ToList();
 
-            this.InterviewKey = interview.GetInterviewKey()?.ToString();
-            this.AssignmentId = interview.GetAssignmentId()?.ToString();
+            var interviewKey = interview.GetInterviewKey()?.ToString();
+            this.InterviewKey = string.IsNullOrEmpty(interviewKey) ? string.Empty : string.Format(UIResources.InterviewKey, interviewKey);
+            var assignmentId = interview.GetAssignmentId();
+            this.AssignmentId = !assignmentId.HasValue ? string.Empty : string.Format(UIResources.AssignmentN, assignmentId);
            
             this.HasPrefilledQuestions = this.PrefilledQuestions.Any();
 

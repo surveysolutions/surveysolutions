@@ -534,4 +534,12 @@
   <data name="MenuItem_Title_AreaCancelEdit" xml:space="preserve">
     <value>Очистить все</value>
   </data>
+  <data name="InterviewKey" xml:space="preserve">
+    <value>Номер: {0}</value>
+    <comment>Номер: {0}</comment>
+  </data>
+  <data name="AssignmentN" xml:space="preserve">
+    <value>Задача номер: {0}</value>
+    <comment>Задача номер: {0}</comment>
+  </data>
 </root>
