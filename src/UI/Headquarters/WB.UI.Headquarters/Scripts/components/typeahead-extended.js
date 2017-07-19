@@ -87,7 +87,16 @@
             items = $(items).map(function (i, item) {
                 var text = self.displayText(item);
                 i = $(that.options.item).data('value', item);
-                i.find('a').html(_.isUndefined(item.loadMore) ? that.highlighter(text) : item.name);
+
+                var linkContent = item.name;
+                if (_.isUndefined(item.loadMore)) {
+                    linkContent = that.highlighter(text);
+                    if (item.iconClass) {
+                        linkContent = "<span class='" + item.iconClass + "'>" + linkContent + "</span>";
+                    }
+                }
+
+                i.find('a').html(linkContent);
                 if (text == self.$element.val()) {
                     i.addClass('active');
                     self.$element.data('active', item);
