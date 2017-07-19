@@ -45,7 +45,7 @@ export default {
         contextMenuItems({ rowData }) {
             return [{
                 name: this.$t("Assignments.CreateInterview"),
-                callback: () =>  this.$store.dispatch("createInterview", row.id)
+                callback: () =>  this.$store.dispatch("createInterview", rowData.id)
             }];
         },
 
