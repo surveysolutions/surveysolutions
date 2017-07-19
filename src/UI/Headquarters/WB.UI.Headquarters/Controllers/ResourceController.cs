@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
-using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
