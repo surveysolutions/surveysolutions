@@ -4,7 +4,7 @@
             <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
                 <span data-bind="label" v-if="value === null" class="gray-text">{{placeholderText}}</span>
                 <span data-bind="label" v-else>
-                    <span v-if="value.role" :class="itemClass(value.role)">{{value.value}}</span>
+                    <span v-if="value.iconClass" :class="value.iconClass">{{value.value}}</span>
                     <span v-else>
                         {{value.value}}
                     </span>
@@ -115,14 +115,14 @@
                     var result = encodedTitle.replace(iQuery, function (matchedTxt) {
                         return '<strong>' + matchedTxt + '</strong>';
                     });
-                    if (option.role) {
-                        result = "<span class='"+ option.role.toLowerCase() + "'>" + result + "</span>";
+                    if (option.iconClass) {
+                        result = "<span class='" + option.iconClass + "'>" + result + "</span>";
                     }
                     return result;
                 }
 
-                if (option.role) {
-                    encodedTitle = "<span class='" + option.role.toLowerCase() + "'>" + encodedTitle + "</span>";
+                if (option.iconClass) {
+                    encodedTitle = "<span class='" + option.iconClass + "'>" + encodedTitle + "</span>";
                 }
                 return encodedTitle;
             }
