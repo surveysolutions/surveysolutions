@@ -246,11 +246,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public void Handle(IPublishedEvent<AreaQuestionAnswered> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
-            this.webInterviewNotificationService.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<AudioQuestionAnswered> evnt)
         {
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
         }
     }
 }
