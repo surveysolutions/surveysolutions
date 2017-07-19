@@ -6656,14 +6656,23 @@ a.disabled {
     border: none;
     background-color: #8c8f90; }
 
-.btn-default.btn-blue {
-  color: #fff;
+.btn-default.btn-post-comment {
+  -webkit-transition: all 0.2s linear 0s;
+  -moz-transition: all 0.2s linear 0s;
+  -ms-transition: all 0.2s linear 0s;
+  -o-transition: all 0.2s linear 0s;
+  transition: all 0.2s linear 0s;
   padding: 12px;
-  background-color: #2a81cb;
-  border: none; }
-  .btn-default.btn-blue:hover, .btn-default.btn-blue:focus {
-    border: none;
-    background-color: #2166a1; }
+  color: #dbdfe2;
+  border-color: #dbdfe2;
+  border-radius: 5px; }
+  .btn-default.btn-post-comment:hover, .btn-default.btn-post-comment:focus, .btn-default.btn-post-comment:active, .btn-default.btn-post-comment.comment-added {
+    color: #2a81cb;
+    border-color: #2a81cb;
+    background-color: transparent; }
+  .btn-default.btn-post-comment:active {
+    background-color: #dfeaf4;
+    box-shadow: none; }
 
 .back-link {
   text-transform: uppercase;
@@ -7002,27 +7011,30 @@ a.disabled {
   -o-transition: all 0.2s linear 0s;
   transition: all 0.2s linear 0s;
   width: 248px;
-  background: #000 url("../img/HQ-login-mobile-get-button-logo.png") no-repeat;
+  background: url("../img/HQ-login-mobile-get-button-logo.png") no-repeat;
   background-size: 55px;
   margin-bottom: 25px;
   text-decoration: none;
-  color: rgba(255, 255, 255, 0.9);
-  background-position: 15px 10px;
+  color: #3f3f3f;
+  background-position: 15px 13px;
   text-decoration: none;
   padding: 10px 27px 10px 85px;
   text-align: left;
   border-radius: 10px;
+  border: 2px solid #dbdfe2;
   display: block; }
   .get-interviewer-app:hover, .get-interviewer-app:focus {
     text-decoration: none;
-    color: rgba(255, 255, 255, 0.9);
-    box-shadow: inset 0 0 40px white; }
+    border-color: #a6a8a9;
+    color: #000; }
   .get-interviewer-app span {
-    display: block; }
+    display: block;
+    letter-spacing: 0.05em; }
     .get-interviewer-app span.version {
       text-transform: none;
+      font-style: italic;
       margin-top: 5px;
-      color: rgba(255, 255, 255, 0.5); }
+      color: #3f3f3f; }
 
 .navbar {
   min-width: 360px;
@@ -9828,6 +9840,8 @@ figcaption {
   -ms-transform: translate(-50%, -50%);
   -o-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%); }
+  .two-columns-form label {
+    font-weight: normal; }
   .two-columns-form .left-column {
     padding: 10px 40px 10px 0px;
     text-align: center; }
@@ -9856,8 +9870,8 @@ figcaption {
       font-size: 13px;
       line-height: 15px;
       font-family: inherit;
-      font-weight: normal;
-      padding-top: 6px; }
+      padding-top: 6px;
+      font-weight: normal; }
       .two-columns-form .log-in .form-group label span {
         color: #2a81cb;
         font-family: "ufonts_com_lucidaconsole"; }
@@ -9915,6 +9929,17 @@ figcaption {
   .login main {
     height: 100%; }
 
+.hq-apps-wrapper, .interviewer-app {
+  font-size: 14px;
+  line-height: 16px;
+  color: #6b6b6b; }
+
+.additional-info-block a {
+  color: #6b6b6b;
+  text-decoration: underline; }
+  .additional-info-block a:hover, .additional-info-block a:focus {
+    text-decoration: none; }
+
 @media (max-width: 800px) {
   .two-columns-form {
     margin-top: 30px;
@@ -9928,7 +9953,7 @@ figcaption {
     transform: translate(0, 0); } }
 
 @media (max-width: 880px) {
-  .log-in, main .two-columns-form .left-column p, .hq-apps-wrapper {
+  .log-in, main .two-columns-form .left-column p, .hq-apps-wrapper, .interviewer-app {
     text-align: left;
     max-width: 350px;
     margin: 0 auto; } }
@@ -9975,6 +10000,8 @@ main .flex-row {
   -ms-transform: translate(-50%, -50%);
   -o-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%); }
+  .two-columns-form label {
+    font-weight: normal; }
   .two-columns-form .left-column {
     padding: 10px 40px 10px 0px;
     text-align: center; }
@@ -10003,8 +10030,8 @@ main .flex-row {
       font-size: 13px;
       line-height: 15px;
       font-family: inherit;
-      font-weight: normal;
-      padding-top: 6px; }
+      padding-top: 6px;
+      font-weight: normal; }
       .two-columns-form .log-in .form-group label span {
         color: #2a81cb;
         font-family: "ufonts_com_lucidaconsole"; }
@@ -10062,6 +10089,17 @@ main .flex-row {
   .login main {
     height: 100%; }
 
+.hq-apps-wrapper, .interviewer-app {
+  font-size: 14px;
+  line-height: 16px;
+  color: #6b6b6b; }
+
+.additional-info-block a {
+  color: #6b6b6b;
+  text-decoration: underline; }
+  .additional-info-block a:hover, .additional-info-block a:focus {
+    text-decoration: none; }
+
 @media (max-width: 800px) {
   .two-columns-form {
     margin-top: 30px;
@@ -10075,7 +10113,7 @@ main .flex-row {
     transform: translate(0, 0); } }
 
 @media (max-width: 880px) {
-  .log-in, main .two-columns-form .left-column p, .hq-apps-wrapper {
+  .log-in, main .two-columns-form .left-column p, .hq-apps-wrapper, .interviewer-app {
     text-align: left;
     max-width: 350px;
     margin: 0 auto; } }
@@ -10150,23 +10188,11 @@ img#placeholder {
       background-size: 100% 100%; } }
 
 .interviewer-app {
-  margin: 45px 0 -30px;
   display: none;
   border-top: 3px solid #ececec;
-  padding-top: 30px;
-  text-align: center; }
-  .interviewer-app a {
-    margin-left: auto;
-    margin-right: auto; }
-    .interviewer-app a + a {
-      display: block;
-      color: #a6a8a9;
-      font-size: 12px;
-      line-height: 16px;
-      font-family: inherit;
-      text-decoration: underline; }
-    .interviewer-app a:hover {
-      text-decoration: none; }
+  padding-top: 30px; }
+  .interviewer-app label {
+    font-weight: normal; }
 
 @media (max-width: 880px) {
   img#placeholder, .no-logo .default-logo {
