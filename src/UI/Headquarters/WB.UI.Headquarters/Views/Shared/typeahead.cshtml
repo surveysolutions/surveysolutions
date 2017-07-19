@@ -4,10 +4,7 @@
             <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
                 <span data-bind="label" v-if="value === null" class="gray-text">{{placeholderText}}</span>
                 <span data-bind="label" v-else>
-                    <span v-if="value.iconClass" :class="value.iconClass">{{value.value}}</span>
-                    <span v-else>
-                        {{value.value}}
-                    </span>
+                    {{value.value}}
                 </span>
             </button>
             <ul ref="dropdownMenu" class="dropdown-menu" role="menu">

@@ -9,6 +9,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         public string UserName { get; set; }
 
-        public UserRoles Role { get; set; }
+        public string IconClass { get; set; }
     }
 }
