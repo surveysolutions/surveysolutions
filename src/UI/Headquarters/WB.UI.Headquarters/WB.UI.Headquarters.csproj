@@ -2020,6 +2020,14 @@
       </FilesForPackagingFromProject>
     </ItemGroup>
   </Target>
+  <Target Name="CollecHqInterviewer" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
+    <ItemGroup>
+      <CollecHqInterviewer_CustomFiles Include="Dependencies\build\**\*.js" />
+      <FilesForPackagingFromProject Include="%(CollecHqInterviewer_CustomFiles.Identity)">
+        <DestinationRelativePath>Dependencies\build\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
+      </FilesForPackagingFromProject>
+    </ItemGroup>
+  </Target>
   <Target Name="CollectWebInterviewAppFiles" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
     <ItemGroup>
       <CollectWebInterviewAppFiles_CustomFiles Include="InterviewApp\**\*" />
