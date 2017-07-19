@@ -1335,7 +1335,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
-                .RequirePictureAnswerAllowed();
+                .RequireAudioAnswerAllowed();
 
             var changedInterviewTree = this.Tree.Clone();
 

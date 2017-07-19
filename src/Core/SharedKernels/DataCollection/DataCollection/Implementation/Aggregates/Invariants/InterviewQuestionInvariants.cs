@@ -224,6 +224,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireQuestionExists(QuestionType.QRBarcode)
                 .RequireQuestionEnabled();
 
+        public void RequireAudioAnswerAllowed()
+            => this
+                .RequireQuestionExists(QuestionType.Audio)
+                .RequireQuestionEnabled();
+
         public void RequirePictureAnswerAllowed()
             => this
                 .RequireQuestionExists(QuestionType.Multimedia)

@@ -265,13 +265,11 @@ if (!window.AudioRecorder) {
             zeroGain.gain.value = 0.0;
             inputPoint.connect(zeroGain);
             zeroGain.connect(audioContext.destination);
-            console.log("******");
             analyserSettings.canvasWidth = config.analyserEl.width;
             analyserSettings.canvasHeight = config.analyserEl.height;
             analyserSettings.context = config.analyserEl.getContext('2d');
 
             updateAnalysers();
-            console.log("*******");
             self.start();
         };
 
@@ -316,7 +314,6 @@ if (!window.AudioRecorder) {
         }
 
         function updateAnalysers() {
-            console.log("*******");
             var freqByteData = new Uint8Array(analyserSettings.node.frequencyBinCount);
 
             var centerX = analyserSettings.canvasWidth / 2;
@@ -349,15 +346,12 @@ if (!window.AudioRecorder) {
         }
 
         self.start = function () {
-            console.log("***");
             if (!recorder)
                 return;
 
             recorder.clear();
-            console.log("****");
             self.startRecordingTime = new Date().getTime();
             recorder.record();
-            console.log("*****");
         };
 
         self.stop = function (doneEncoding) {
@@ -378,7 +372,6 @@ if (!window.AudioRecorder) {
 
         self.initAudio = function (configuration) {
             config = configuration;
-            console.log("*");
             if (!navigator.getUserMedia)
                 navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
             if (!navigator.cancelAnimationFrame)
@@ -387,7 +380,6 @@ if (!window.AudioRecorder) {
                 navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
 
             navigator.getUserMedia(settings, successCallback, config.errorCallback);
-            console.log("**");
         }
 
         return self;

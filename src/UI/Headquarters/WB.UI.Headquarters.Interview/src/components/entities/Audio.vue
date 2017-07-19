@@ -47,15 +47,10 @@ export default {
     },
     methods: {
         showModal(){
-            console.log("-");
             var modal = $(this.$el).find(".modal");
-            console.log("--");
             $(this.$el).find(".modal-backdrop").show()
-            console.log("---");
             modal.addClass('in');
-            console.log("----");
             modal.show();
-            console.log("-----");
         },
         closeModal() {
             var modal = $(this.$el).find(".modal");
