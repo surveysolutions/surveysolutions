@@ -85,7 +85,7 @@ namespace WB.Tests.Abc.TestFactories
             public readonly List<MvxViewModelRequest> Requests = new List<MvxViewModelRequest>();
             public readonly List<MvxPresentationHint> Hints = new List<MvxPresentationHint>();
 
-            public bool RequestMainThreadAction(Action action)
+            public bool RequestMainThreadAction(Action action, bool maskExceptions = true)
             {
                 action();
                 return true;
@@ -108,7 +108,7 @@ namespace WB.Tests.Abc.TestFactories
 
         private class FakeMvxMainThreadDispatcher : IMvxMainThreadDispatcher
         {
-            public bool RequestMainThreadAction(Action action)
+            public bool RequestMainThreadAction(Action action, bool maskExceptions = true)
             {
                 action.Invoke();
                 return true;
