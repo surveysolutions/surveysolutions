@@ -23,6 +23,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             {
                 dataMap.Lazy(true);
             });
+
+            this.Property(x => x.ContentType);
         }
     }
 }
