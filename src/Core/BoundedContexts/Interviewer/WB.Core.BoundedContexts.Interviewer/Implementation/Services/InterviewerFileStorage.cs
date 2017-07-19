@@ -28,8 +28,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
         {
             var metadataView =
-                this.fileMetadataViewStorage.Where(metadata => metadata.InterviewId == interviewId && metadata.FileName == fileName)
-                    .SingleOrDefault();
+                this.fileMetadataViewStorage.FirstOrDefault(metadata => metadata.InterviewId == interviewId && metadata.FileName == fileName);
 
             if (metadataView == null) return null;
 
@@ -53,8 +52,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
         {
             var metadataView =
-                this.fileMetadataViewStorage.Where(metadata => metadata.InterviewId == interviewId && metadata.FileName == fileName)
-                    .SingleOrDefault();
+                this.fileMetadataViewStorage.FirstOrDefault(metadata => metadata.InterviewId == interviewId && metadata.FileName == fileName);
 
             if (metadataView == null)
             {
@@ -96,8 +94,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private TMetadataView GetMetadata(Guid interviewId, string fileName)
         {
             return this.fileMetadataViewStorage
-                .Where(metadata => metadata.InterviewId == interviewId && metadata.FileName == fileName)
-                .SingleOrDefault();
+                .FirstOrDefault(metadata => metadata.InterviewId == interviewId && metadata.FileName == fileName);
         }
     }
 }

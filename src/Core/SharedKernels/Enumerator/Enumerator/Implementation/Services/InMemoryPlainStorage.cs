@@ -27,6 +27,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return this.inMemroyStorage.Values.AsQueryable().FirstOrDefault();
         }
 
+        public TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate)
+        {
+            return this.inMemroyStorage.Values.AsQueryable().FirstOrDefault(predicate);
+        }
+
         public IReadOnlyCollection<TEntity> LoadAll()
         {
             return this.inMemroyStorage.Values.ToReadOnlyCollection();

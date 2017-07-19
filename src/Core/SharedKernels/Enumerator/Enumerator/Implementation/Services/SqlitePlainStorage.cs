@@ -125,6 +125,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public TEntity FirstOrDefault() => this.RunInTransaction(table => table.FirstOrDefault());
 
+        public TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate)
+            => this.RunInTransaction(table => table.FirstOrDefault(predicate));
+
         public virtual IReadOnlyCollection<TEntity> LoadAll()
         {
             return this.RunInTransaction(table => table.Connection.Table<TEntity>().ToReadOnlyCollection());
