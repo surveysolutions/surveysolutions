@@ -1,31 +1,19 @@
 <template>
-    <div class="modal fade" :id="id" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
-                    <h3>{{ confirm_title }}</h3>
-                </div>
-                <div class="modal-body">
-                    <slot />
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" v-on:click="confirm" >{{$t("Common.Ok")}}</button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal">{{$t("Common.Cancel")}}</button>
-                </div>
-            </div>
-        </div>
-    </div>  
+    <ModalFrame :id="id" :title="confirm_title">
+        <slot />
+        <button slot="actions" type="button" class="btn btn-primary" v-on:click="confirm">{{$t("Common.Ok")}}</button>
+        <button slot="actions" type="button" class="btn btn-link" data-dismiss="modal">{{$t("Common.Cancel")}}</button>
+    </ModalFrame>
 </template>
 
 <script>
 export default {
     props: {
-            id : String,
-            title: {
-                type: String,
-                required: false
-            }
+        id: String,
+        title: {
+            type: String,
+            required: false
+        }
     },
 
     data() {

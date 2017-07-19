@@ -42,11 +42,18 @@ export default {
             this.table.ajax.reload();
         },
 
+        disableRow(rowIndex) {
+            $(this.table.row(rowIndex).node()).addClass("disabled")
+        },
+
         selectRowAndGetData(selectedItem) {
             this.table.rows().deselect();
             var rowIndex = selectedItem.parent().children().index(selectedItem);
             this.table.row(rowIndex).select();
-            return this.table.rows({ selected: true }).data()[0];
+            return {
+                rowData: this.table.rows({ selected: true }).data()[0],
+                rowIndex
+            }
         },
 
         onTableInitComplete() {
