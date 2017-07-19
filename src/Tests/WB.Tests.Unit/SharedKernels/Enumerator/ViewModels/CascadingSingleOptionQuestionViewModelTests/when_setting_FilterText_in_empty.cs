@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Machine.Specifications;
 using Moq;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -17,7 +20,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 {
     internal class when_setting_FilterText_in_empty : CascadingSingleOptionQuestionViewModelTestContext
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public async Task context()
         {
             SetUp();
 
@@ -42,21 +46,26 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 questionnaireRepository: questionnaireRepository);
 
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
-        };
+            await Becauseof();
+        }
 
-        Because of = () => cascadingModel.FilterCommand.ExecuteAsync(string.Empty).Await();
+        public Task Becauseof() => cascadingModel.FilterCommand.ExecuteAsync(string.Empty);
 
-        It should_set_empty_filter_text = () =>
-            cascadingModel.FilterText.ShouldBeEmpty();
+        [Test]
+        public void should_set_empty_filter_text() =>
+            cascadingModel.FilterText.Should().BeEmpty();
 
-        It should_set_not_empty_list_in_AutoCompleteSuggestions = () =>
-            cascadingModel.AutoCompleteSuggestions.ShouldNotBeEmpty();
+        [Test]
+        public void should_set_not_empty_list_in_AutoCompleteSuggestions() =>
+            cascadingModel.AutoCompleteSuggestions.Should().NotBeEmpty();
 
-        It should_set_3_items_in_AutoCompleteSuggestions = () =>
-            cascadingModel.AutoCompleteSuggestions.Count.ShouldEqual(3);
+        [Test]
+        public void should_set_3_items_in_AutoCompleteSuggestions() =>
+            cascadingModel.AutoCompleteSuggestions.Should().HaveCount(3);
 
-        It should_create_option_models_with_specified_Texts = () =>
-            cascadingModel.AutoCompleteSuggestions.ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.Title));
+        [Test]
+        public void should_create_option_models_with_specified_Texts() =>
+            cascadingModel.AutoCompleteSuggestions.Should().Contain(OptionsIfParentAnswerIs1.Select(x => x.Title));
 
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
