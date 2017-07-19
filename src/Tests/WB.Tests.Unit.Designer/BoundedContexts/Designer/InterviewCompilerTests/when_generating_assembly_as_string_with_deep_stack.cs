@@ -8,7 +8,6 @@ using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.InterviewCompilerTests
 {
-    [Ignore("KP-9526")]
     internal class when_generating_assembly_as_string_with_deep_stack : InterviewCompilerTestsContext
     {
         [Test]
