@@ -88,7 +88,7 @@ namespace WB.UI.Headquarters.API
         [ApiBasicAuth(new[] { UserRoles.Interviewer })]
         public HttpResponseMessage PostFile(PostFileRequest request)
         {
-            this.imageFileRepository.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data));
+            this.imageFileRepository.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data), null);
             return this.Request.CreateResponse(HttpStatusCode.OK);
         }
 

@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
                     () => this.fileSystemAccessor.ReadAllBytes(fileName))).ToList();
         }
 
-        public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data)
+        public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
         {
             var directoryPath = this.GetPathToInterviewDirectory();
 

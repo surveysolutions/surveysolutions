@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                             () => fileSystemAccessor.ReadAllBytes(fileName))).ToList();
         }
 
-        public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data)
+        public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
         {
             var directoryPath = this.GetPathToInterviewDirectory(interviewId);
             

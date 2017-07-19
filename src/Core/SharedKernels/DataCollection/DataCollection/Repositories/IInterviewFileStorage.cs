@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
     {
         byte[] GetInterviewBinaryData(Guid interviewId, string fileName);
         List<InterviewBinaryDataDescriptor> GetBinaryFilesForInterview(Guid interviewId);
-        void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data);
+        void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType);
         void RemoveInterviewBinaryData(Guid interviewId, string fileName);
     }
 }

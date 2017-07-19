@@ -79,13 +79,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         public virtual void PostImage(PostFileRequest request)
         {
             this.imageFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
-                Convert.FromBase64String(request.Data));
+                Convert.FromBase64String(request.Data), null);
         }
 
         public virtual void PostAudio(PostFileRequest request)
         {
             this.audioFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
-                Convert.FromBase64String(request.Data));
+                Convert.FromBase64String(request.Data), null);
         }
     }
 }
