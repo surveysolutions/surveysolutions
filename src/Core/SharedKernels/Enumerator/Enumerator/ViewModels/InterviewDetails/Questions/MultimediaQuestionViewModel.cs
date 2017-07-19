@@ -208,7 +208,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 pictureStream.CopyTo(ms);
                 byte[] pictureBytes = ms.ToArray();
-                this.imageFileStorage.StoreInterviewBinaryData(this.interviewId, pictureFileName, pictureBytes);
+                this.imageFileStorage.StoreInterviewBinaryData(this.interviewId, pictureFileName, pictureBytes, null);
             }
         }
 

@@ -216,7 +216,7 @@ namespace WB.UI.Headquarters.Controllers
                     var fileName = $@"{question.VariableName}{questionIdentity.RosterVector}{DateTime.UtcNow.GetHashCode()}.wav";
                     var responsibleId = interview.CurrentResponsibleId;
                     var trackLength = new TimeSpan(length);
-                    audioFileStorage.StoreInterviewBinaryData(Guid.Parse(interviewId), fileName, bytes);
+                    audioFileStorage.StoreInterviewBinaryData(Guid.Parse(interviewId), fileName, bytes, file.ContentType);
 
                     var command = new AnswerAudioQuestionCommand(interview.Id,
                         responsibleId, questionIdentity.Id, questionIdentity.RosterVector, 
@@ -256,7 +256,7 @@ namespace WB.UI.Headquarters.Controllers
                     var filename = $@"{question.VariableName}{string.Join(@"-", questionIdentity.RosterVector.Select(rv => rv))}{DateTime.UtcNow.GetHashCode()}.jpg";
                     var responsibleId = interview.CurrentResponsibleId;
 
-                    this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray());
+                    this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray(), null);
                     this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
                         responsibleId, questionIdentity.Id, questionIdentity.RosterVector, DateTime.UtcNow, filename));
                 }

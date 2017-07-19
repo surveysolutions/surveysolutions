@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             ).ToList();
         }
 
-        public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data)
+        public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
         {
             var metadataView =
                 this.fileMetadataViewStorage.Where(metadata => metadata.InterviewId == interviewId && metadata.FileName == fileName)
