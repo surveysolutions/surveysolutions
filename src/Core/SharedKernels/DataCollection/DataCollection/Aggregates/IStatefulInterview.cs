@@ -174,5 +174,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         InterviewSynchronizationDto GetSynchronizationDto();
         bool IsReadOnlyQuestion(Identity identity);
         InterviewKey GetInterviewKey();
+        int? GetAssignmentId();
     }
 }

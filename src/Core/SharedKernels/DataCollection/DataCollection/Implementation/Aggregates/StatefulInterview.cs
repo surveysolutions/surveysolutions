@@ -765,5 +765,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             return this.interviewKey;
         }
+
+        public int? GetAssignmentId()
+        {
+            return this.properties.AssignmentId;
+        }
     }
 }
