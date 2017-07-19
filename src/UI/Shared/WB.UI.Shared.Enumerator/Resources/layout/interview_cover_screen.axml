@@ -5,27 +5,16 @@
     <LinearLayout
         style="@style/Interview_QuestionWithDivider"
         local:MvxBind="HideKeyboardOnClick .">
-        <LinearLayout style="@style/Interview_QuestionWithDivider"
-            local:MvxBind="HideKeyboardOnClick .">
-      
-            <LinearLayout style="@style/Interview_Entity" android:orientation="vertical">
-                <LinearLayout style="@style/Interview_Question_Header">
-                <TextView
-                    style="@style/Interview_Cover_Screen_Header"
-                    local:MvxBind="Text QuestionnaireTitle;" />
-                </LinearLayout>
-            </LinearLayout >
-        </LinearLayout>
 
-      <TextView
-        style="@style/Interview_Cover_Screen_Header"
-        local:MvxBind="Text InterviewKey;" />
-      <TextView
-        style="@style/Interview_Cover_Screen_Header"
-        local:MvxBind="Text AssignmentId;" />
-      <TextView
-        style="@style/Interview_Cover_Screen_Header"
-        local:MvxBind="Text QuestionnaireTitle;" />
+        <TextView
+          style="@style/Interview_Cover_Main_First_Header"
+          local:MvxBind="Text InterviewKey;" />
+        <TextView
+          style="@style/Interview_Cover_Main_Second_Header"
+          local:MvxBind="Text AssignmentId;" />
+        <TextView
+          style="@style/Interview_Cover_Description_Header"
+          local:MvxBind="Text QuestionnaireTitle;" />
       
         <LinearLayout android:orientation="vertical" 
                       local:MvxBind="Visibility Visibility(SupervisorNote)"
