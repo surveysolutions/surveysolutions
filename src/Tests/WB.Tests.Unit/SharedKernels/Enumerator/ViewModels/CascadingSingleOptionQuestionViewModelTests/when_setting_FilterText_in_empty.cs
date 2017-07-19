@@ -20,8 +20,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 {
     internal class when_setting_FilterText_in_empty : CascadingSingleOptionQuestionViewModelTestContext
     {
-        [OneTimeSetUp]
-        public async Task context()
+        [Test]
+        public async Task Should_show_first_items_in_list()
         {
             SetUp();
 
@@ -41,35 +41,23 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
             
-            cascadingModel = CreateCascadingSingleOptionQuestionViewModel(
+            var cascadingModel = CreateCascadingSingleOptionQuestionViewModel(
                 interviewRepository: interviewRepository,
                 questionnaireRepository: questionnaireRepository);
 
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
-            await Becauseof();
-        }
 
-        public Task Becauseof() => cascadingModel.FilterCommand.ExecuteAsync(string.Empty);
+            // Act
+            await cascadingModel.FilterCommand.ExecuteAsync(string.Empty);
 
-        [Test]
-        public void should_set_empty_filter_text() =>
+            // Assert
             cascadingModel.FilterText.Should().BeEmpty();
-
-        [Test]
-        public void should_set_not_empty_list_in_AutoCompleteSuggestions() =>
             cascadingModel.AutoCompleteSuggestions.Should().NotBeEmpty();
-
-        [Test]
-        public void should_set_3_items_in_AutoCompleteSuggestions() =>
             cascadingModel.AutoCompleteSuggestions.Should().HaveCount(3);
 
-        [Test]
-        public void should_create_option_models_with_specified_Texts() =>
-            cascadingModel.AutoCompleteSuggestions.Should().Contain(OptionsIfParentAnswerIs1.Select(x => x.Title));
+            List<CategoricalOption> optionsIfParentAnswerIs1 = Options.Where(x => x.ParentValue == 1).ToList();
+            cascadingModel.AutoCompleteSuggestions.Should().Contain(optionsIfParentAnswerIs1.Select(x => x.Title));
+        }
 
-
-        private static CascadingSingleOptionQuestionViewModel cascadingModel;
-
-        private static readonly List<CategoricalOption> OptionsIfParentAnswerIs1 = Options.Where(x => x.ParentValue == 1).ToList();
     }
 }
