@@ -15,9 +15,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         public StatefulInterviewRepository(IEventSourcedAggregateRootRepository aggregateRootRepository)
         {
-            if (aggregateRootRepository == null) throw new ArgumentNullException(nameof(aggregateRootRepository));
-
-            this.aggregateRootRepository = aggregateRootRepository;
+            this.aggregateRootRepository = aggregateRootRepository ?? throw new ArgumentNullException(nameof(aggregateRootRepository));
         }
 
         public IStatefulInterview Get(string interviewId)
