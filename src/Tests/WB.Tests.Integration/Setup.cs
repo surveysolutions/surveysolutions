@@ -78,11 +78,6 @@ namespace WB.Tests.Integration
                     NavigationState = navigationState,
                 };
            
-            var dispatcherMock = new Mock<IMvxMainThreadDispatcher>();
-            dispatcherMock
-                .Setup(_ => _.RequestMainThreadAction(It.IsAny<Action>()))
-                .Callback<Action>(action => action.Invoke());
-
             Setup.InstanceToMockedServiceLocator<CoverStateViewModel>(Mock.Of<CoverStateViewModel>());
             Setup.InstanceToMockedServiceLocator<GroupStateViewModel>(Mock.Of<GroupStateViewModel>());
             Mock.Get(ServiceLocator.Current)
