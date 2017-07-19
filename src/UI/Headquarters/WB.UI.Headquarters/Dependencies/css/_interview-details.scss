@@ -732,7 +732,7 @@ label.inactive{
 	}
 	.btn-action-questionnaire{
 		border-width: 2px;
-		background-image: url("../img/icon-mic-1x.png");
+		background-image: url("{$assetsPath}/img/icon-mic-1x.png");
 		@include image-2x("#{$assetsPath}/img/icon-mic-2x.png", 21px, 31px);
 		background-size: 21px 31px;
 		background-repeat: no-repeat;
