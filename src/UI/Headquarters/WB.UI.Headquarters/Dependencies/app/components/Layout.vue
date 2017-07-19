@@ -12,7 +12,7 @@
             <slot />
         </div>
         <slot name="modals" />
-        <ModalFrame id="pendingProgress" ref="pending" title="Please wait" :canClose="false">
+        <ModalFrame id="pendingProgress" ref="pending" :title="$t('Common.Loading')" :canClose="false">
             <div class="progress progress-striped active" style="margin-bottom:0;">
                 <div class="progress-bar" style="width: 100%"></div>
             </div>

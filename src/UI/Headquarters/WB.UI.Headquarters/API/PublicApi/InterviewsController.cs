@@ -62,7 +62,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                 PageSize = this.CheckAndRestrictLimit(limit),
                 QuestionnaireId = templateId,
                 QuestionnaireVersion = templateVersion,
-                Status = status,
+                Statuses = status.HasValue ? new[] { status.Value } : null,
                 InterviewId = interviewId
             };
 
