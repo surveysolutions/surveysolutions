@@ -21,10 +21,10 @@
     <PackageReference Include="HtmlSanitizer" Version="3.4.156" />
     <PackageReference Include="Humanizer.Core" Version="2.2.0" />
     <PackageReference Include="Iesi.Collections" Version="4.0.1.4000" />
-    <PackageReference Include="ManagedEsent" Version="1.9.3.3" />
+    <PackageReference Include="ManagedEsent" Version="1.9.4" />
     <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
-    <PackageReference Include="Microsoft.Database.Collections.Generic" Version="1.9.3.2" />
-    <PackageReference Include="Microsoft.Database.Isam" Version="1.9.3.2" />
+    <PackageReference Include="Microsoft.Database.Collections.Generic" Version="1.9.4" />
+    <PackageReference Include="Microsoft.Database.Isam" Version="1.9.4" />
     <PackageReference Include="Microsoft.Web.Infrastructure" Version="1.0.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="NHibernate" Version="4.1.1.4000" />
