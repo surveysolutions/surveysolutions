@@ -1,22 +1,22 @@
 using System;
 using System.Linq;
-using System.Threading;
-using Machine.Specifications;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Moq;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
     internal class when_setting_FilterText_in_not_empty_value: CascadingSingleOptionQuestionViewModelTestContext
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public async Task context() 
         {
             SetUp();
 
@@ -42,15 +42,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 questionnaireRepository: questionnaireRepository);
 
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
-        };
+            await Becauseof();
+        }
 
-        Because of = () => cascadingModel.FilterCommand.ExecuteAsync("3").Await();
+        public Task Becauseof() => cascadingModel.FilterCommand.ExecuteAsync("3");
 
-        It should_not_set_filter_text = () =>
-            cascadingModel.FilterText.ShouldNotBeNull();
+        [Test]
+        public void should_not_set_filter_text() =>
+            cascadingModel.FilterText.Should().NotBeNull();
 
-        It should_set_empty_list_in_AutoCompleteSuggestions = () =>
-            cascadingModel.AutoCompleteSuggestions.ShouldNotBeEmpty();
+        [Test]
+        public void should_set_empty_list_in_AutoCompleteSuggestions() =>
+            cascadingModel.AutoCompleteSuggestions.Should().NotBeEmpty();
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
     }
