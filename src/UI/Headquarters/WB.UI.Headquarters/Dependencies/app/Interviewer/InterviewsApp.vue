@@ -108,18 +108,21 @@ export default {
             if (rowData.status == 'Completed') {
                 menu.push({
                     name: this.$t("Pages.InterviewerHq_RestartInterview"),
-                    callback: () => this.restartInterview(rowData.interviewId)
+                    callback: () => {
+                        self.$refs.table.disableRow(rowIndex)
+                        self.restartInterview(rowData.interviewId)
+                    }
                 });
             }
 
             return menu;
         },
 
-        restartInterview(context, interviewId) {
+        restartInterview(interviewId) {
             this.$refs.confirmation.promt(() => {
                 $.post(this.config.interviewerHqEndpoint + "/RestartInterview/" + interviewId, { comment: this.restart_comment }, response => {
                     this.restart_comment = "";
-                    this.$store.dispatch("openInterview", row.interviewId);
+                    this.$store.dispatch("openInterview", interviewId);
                 })
             });
         },

@@ -10,10 +10,12 @@ store.registerModule('interviews', {
             window.location = context.rootState.config.interviewerHqEndpoint + "/OpenInterview/" + interviewId
         },
 
-        discardInterview(context, {callback, interviewId }) {
-            $.post(context.rootState.config.interviewerHqEndpoint + "/DiscardInterview/" + interviewId, response => {
-                callback();
-            });
+        discardInterview(context, { callback, interviewId }) {
+            $.ajax({
+                url: context.rootState.config.interviewerHqEndpoint + "/DiscardInterview/" + interviewId,
+                type: 'DELETE',
+                success: callback
+            })
         }
     }
 })

@@ -143,7 +143,7 @@ namespace WB.UI.Headquarters.Controllers
             return RedirectToAction("Cover", "WebInterview", new { id = id.FormatGuid() });
         }
 
-        [HttpPost]
+        [HttpDelete]
         public ActionResult DiscardInterview(Guid id)
         {
             var deleteInterview = new DeleteInterviewCommand(id, this.authorizedUser.Id);
