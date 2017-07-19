@@ -220,7 +220,7 @@
 if (!window.AudioRecorder) {
     var AudioRecorder = function () {
         var self = {};
-        var audioRecorder = null;
+        var recorder = null;
         var rafID = null;
         var analyserSettings = {
             сontext: null,
@@ -229,7 +229,10 @@ if (!window.AudioRecorder) {
             canvasHeight: 0,
             animationFrameId: null
         };
+
         var config = {};
+
+        self.startRecordingTime = null;
 
         var settings = {
             audio: {
@@ -256,30 +259,32 @@ if (!window.AudioRecorder) {
             analyserSettings.node.fftSize = 2048;
             inputPoint.connect(analyserSettings.node);
 
-            audioRecorder = new Recorder(inputPoint);
+            recorder = new Recorder(inputPoint);
 
             var zeroGain = audioContext.createGain();
             zeroGain.gain.value = 0.0;
             inputPoint.connect(zeroGain);
             zeroGain.connect(audioContext.destination);
-
+            console.log("******");
             analyserSettings.canvasWidth = config.analyserEl.width;
             analyserSettings.canvasHeight = config.analyserEl.height;
             analyserSettings.context = config.analyserEl.getContext('2d');
 
             updateAnalysers();
-
+            console.log("*******");
             self.start();
         };
 
         function gotBuffers(buffers) {
-            drawBuffer(
-                config.wavedisplayEl.width,
-                config.wavedisplayEl.height,
-                config.wavedisplayEl.getContext('2d'),
-                buffers[0]);
+            if ((config.wavedisplayEl || null) != null) {
+                drawBuffer(
+                    config.wavedisplayEl.width,
+                    config.wavedisplayEl.height,
+                    config.wavedisplayEl.getContext('2d'),
+                    buffers[0]);
+            }
 
-            audioRecorder.exportWAV(doneEncoding);
+            recorder.exportWAV(doneEncoding);
         }
 
         function doneEncoding(blob) {
@@ -311,55 +316,69 @@ if (!window.AudioRecorder) {
         }
 
         function updateAnalysers() {
-            var SPACING = 3;
-            var BAR_WIDTH = 2;
-            var numBars = Math.round(analyserSettings.canvasWidth / SPACING);
+            console.log("*******");
             var freqByteData = new Uint8Array(analyserSettings.node.frequencyBinCount);
+
+            var centerX = analyserSettings.canvasWidth / 2;
+            var centerY = analyserSettings.canvasHeight / 2;
 
             analyserSettings.node.getByteFrequencyData(freqByteData);
 
             analyserSettings.context.clearRect(0, 0, analyserSettings.canvasWidth, analyserSettings.canvasHeight);
             analyserSettings.context.fillStyle = '#F6D565';
             analyserSettings.context.lineCap = 'round';
-            var multiplier = analyserSettings.node.frequencyBinCount / numBars;
+            var multiplier = analyserSettings.node.frequencyBinCount;
 
             // Draw rectangle for each frequency bin.
-            for (var i = 0; i < numBars; ++i) {
-                var magnitude = 0;
-                var offset = Math.floor(i * multiplier);
-                // gotta sum/average the block, or we miss narrow-bandwidth spikes
-                for (var j = 0; j < multiplier; j++)
-                    magnitude += freqByteData[offset + j];
-                magnitude = magnitude / multiplier;
-                var magnitude2 = freqByteData[i * multiplier];
-                analyserSettings.context.fillStyle = "#ccc";
-                analyserSettings.context.fillRect(i * SPACING, analyserSettings.canvasHeight, BAR_WIDTH, -magnitude);
-            }
+            var magnitude = 0;
+            for (var j = 0; j < multiplier; j++)
+                magnitude += freqByteData[j];
+            magnitude = Math.min(magnitude / multiplier, analyserSettings.canvasWidth / 2);
+
+            analyserSettings.context.beginPath();
+            analyserSettings.context.arc(centerX, centerY, 5, 0, 2 * Math.PI, false);
+            // analyserSettings.context.fillStyle = 'green';
+            // analyserSettings.context.fill();
+            analyserSettings.context.stroke();
+
+            analyserSettings.context.beginPath();
+            analyserSettings.context.arc(centerX, centerY, magnitude, 0, 2 * Math.PI, false);
+            analyserSettings.context.stroke();
 
             analyserSettings.animationFrameId = window.requestAnimationFrame(updateAnalysers);
         }
 
         self.start = function () {
-            if (!audioRecorder)
+            console.log("***");
+            if (!recorder)
                 return;
 
-            audioRecorder.clear();
-            audioRecorder.record();
+            recorder.clear();
+            console.log("****");
+            self.startRecordingTime = new Date().getTime();
+            recorder.record();
+            console.log("*****");
         };
 
         self.stop = function (doneEncoding) {
-             if (!audioRecorder)
+            if (!recorder)
                 return;
 
-            audioRecorder.stop();
-            audioRecorder.getBuffers(gotBuffers);
+            recorder.stop();
+            recorder.getBuffers(gotBuffers);
 
             cancelAnalyserUpdates();
         };
 
+        self.cancel = function () {
+            recorder.stop();
+            cancelAnalyserUpdates();
+            recorder.clear();
+        }
+
         self.initAudio = function (configuration) {
             config = configuration;
-            console.log(config);
+            console.log("*");
             if (!navigator.getUserMedia)
                 navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
             if (!navigator.cancelAnimationFrame)
@@ -368,6 +387,7 @@ if (!window.AudioRecorder) {
                 navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
 
             navigator.getUserMedia(settings, successCallback, config.errorCallback);
+            console.log("**");
         }
 
         return self;
