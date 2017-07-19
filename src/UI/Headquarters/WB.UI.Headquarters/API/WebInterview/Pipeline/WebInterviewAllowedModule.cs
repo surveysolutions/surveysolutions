@@ -1,6 +1,9 @@
 using System;
+using Main.Core.Entities.SubEntities;
 using Microsoft.Ajax.Utilities;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.SignalR.Hubs;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -29,6 +32,9 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 
         private ITransactionManager readTransactionManager
             => ServiceLocator.Current.GetInstance<ITransactionManagerProvider>().GetTransactionManager();
+
+        private HqUserManager userManager
+            => ServiceLocator.Current.GetInstance<HqUserManager>();
 
         protected override bool OnBeforeConnect(IHub hub)
         {
@@ -73,12 +79,22 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 
             QuestionnaireIdentity questionnaireIdentity = interview.QuestionnaireIdentity;
 
+            var userId = hub.Context.User.Identity.GetUserId();
+            var user = userManager.FindById(Guid.Parse(userId));
+            if (!user.IsInRole(UserRoles.Interviewer))
+            {
+                WebInterviewConfig webInterviewConfig = this.transactionManager.ExecuteInPlainTransaction(
+                    () => this.configProvider.Get(questionnaireIdentity));
 
-            WebInterviewConfig webInterviewConfig = this.transactionManager.ExecuteInPlainTransaction(
-                () => this.configProvider.Get(questionnaireIdentity));
-
-            if (!webInterviewConfig.Started)
-                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WB.UI.Headquarters.Resources.WebInterview.Error_InterviewExpired);
+                if (!webInterviewConfig.Started)
+                    throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
+                        WB.UI.Headquarters.Resources.WebInterview.Error_InterviewExpired);
+            }
+            else if (user.Id != interview.CurrentResponsibleId)
+            {
+                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
+                    WB.UI.Headquarters.Resources.WebInterview.Error_InterviewExpired);
+            }
         }
     }
 }
