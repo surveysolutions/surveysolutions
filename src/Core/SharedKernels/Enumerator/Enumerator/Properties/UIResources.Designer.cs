@@ -206,6 +206,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assignment #{0}.
+        /// </summary>
+        public static string AssignmentN {
+            get {
+                return ResourceManager.GetString("AssignmentN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
@@ -978,6 +987,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interviewer_TryOnlineLogin {
             get {
                 return ResourceManager.GetString("Interviewer_TryOnlineLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ID:{0}.
+        /// </summary>
+        public static string InterviewKey {
+            get {
+                return ResourceManager.GetString("InterviewKey", resourceCulture);
             }
         }
         
