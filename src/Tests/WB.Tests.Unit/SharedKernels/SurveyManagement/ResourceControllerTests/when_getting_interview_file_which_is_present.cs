@@ -1,35 +1,39 @@
 ﻿using System;
 using System.Web.Mvc;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.UI.Headquarters.Controllers;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ResourceControllerTests
 {
     internal class when_getting_interview_file_which_is_present : ResourceControllerTestContext
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void context()
         {
             controller =
                 CreateController(
                     imageFileStorage:
                         Mock.Of<IImageFileStorage>(_ => _.GetInterviewBinaryData(interviewId, fileName) == fileContent));
-        };
+            Becauseof();
+        }
 
-        Because of = () =>
+        public void Becauseof() =>
             actionResult = controller.InterviewFile(interviewId, fileName);
 
-        It should_return_file_content_result = () =>
-            actionResult.ShouldBeOfExactType<FileContentResult>();
+        [Test]
+        public void should_return_file_content_result() =>
+            actionResult.Should().BeOfType<FileContentResult>();
 
-        It should_return_file_name_equal_to_fileName = () =>
-            ((FileContentResult) actionResult).FileDownloadName.ShouldEqual(fileName);
+        [Test]
+        public void should_return_file_name_equal_to_fileName() =>
+            ((FileContentResult) actionResult).FileDownloadName.Should().Be(fileName);
 
-        It should_return_file_content_equal_to_fileContent = () =>
-            ((FileContentResult)actionResult).FileContents.ShouldEqual(fileContent);
+        [Test]
+        public void should_return_file_content_equal_to_fileContent() =>
+            ((FileContentResult)actionResult).FileContents.Should().Equal(fileContent);
 
         private static ResourceController controller;
         private static ActionResult actionResult;
