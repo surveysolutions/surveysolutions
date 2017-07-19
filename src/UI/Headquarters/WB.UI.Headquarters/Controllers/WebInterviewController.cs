@@ -256,7 +256,7 @@ namespace WB.UI.Headquarters.Controllers
                     var filename = $@"{question.VariableName}{string.Join(@"-", questionIdentity.RosterVector.Select(rv => rv))}{DateTime.UtcNow.GetHashCode()}.jpg";
                     var responsibleId = interview.CurrentResponsibleId;
 
-                    this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray(), null);
+                    this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray(), file.ContentType);
                     this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
                         responsibleId, questionIdentity.Id, questionIdentity.RosterVector, DateTime.UtcNow, filename));
                 }
