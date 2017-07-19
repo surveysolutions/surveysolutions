@@ -25,11 +25,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private IReadOnlyCollection<QuestionnaireView> dbQuestionnaires;
         private IReadOnlyCollection<AssignmentDocument> dbAssignments;
 
-        private IMvxCommand synchronizationCommand;
-
-        public IMvxCommand SynchronizationCommand => synchronizationCommand ??
-                                                     (synchronizationCommand = new MvxCommand(this.RunSynchronization,
-                                                         () => !this.synchronization.IsSynchronizationInProgress));
+        public IMvxCommand SynchronizationCommand => new MvxCommand(this.RunSynchronization, () => !this.synchronization.IsSynchronizationInProgress);
 
         public CreateNewViewModel(
             IPlainStorage<QuestionnaireView> questionnaireViewRepository,
