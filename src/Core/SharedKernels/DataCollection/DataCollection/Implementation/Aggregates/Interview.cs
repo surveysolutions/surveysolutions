@@ -118,18 +118,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.QuestionnaireIdentity = new QuestionnaireIdentity(@event.QuestionnaireId, @event.QuestionnaireVersion);
             this.UsesExpressionStorage = @event.UsesExpressionStorage;
+            this.properties.AssignmentId = @event.AssignmentId;
         }
 
         public virtual void Apply(InterviewOnClientCreated @event)
         {
             this.QuestionnaireIdentity = new QuestionnaireIdentity(@event.QuestionnaireId, @event.QuestionnaireVersion);
             this.UsesExpressionStorage = @event.UsesExpressionStorage;
+            this.properties.AssignmentId = @event.AssignmentId;
         }
 
         public virtual void Apply(InterviewFromPreloadedDataCreated @event)
         {
             this.QuestionnaireIdentity = new QuestionnaireIdentity(@event.QuestionnaireId, @event.QuestionnaireVersion);
             this.UsesExpressionStorage = @event.UsesExpressionStorage;
+            this.properties.AssignmentId = @event.AssignmentId;
         }
 
         public virtual void Apply(SynchronizationMetadataApplied @event)

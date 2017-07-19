@@ -48,6 +48,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.dynamicTextViewModelFactory = dynamicTextViewModelFactory;
         }
 
+        public string InterviewKey { get; set; }
+
+        public string AssignmentId { get; set; }
+
         public string QuestionnaireTitle { get; set; }
 
         public string SupervisorNote { get; set; }
@@ -86,6 +90,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     Answer = interview.GetAnswerAsString(Identity.Create(questionId, RosterVector.Empty), CultureInfo.CurrentCulture)
                 })
                 .ToList();
+
+            this.InterviewKey = interview.GetInterviewKey()?.ToString();
+            this.AssignmentId = interview.GetAssignmentId()?.ToString();
            
             this.HasPrefilledQuestions = this.PrefilledQuestions.Any();
 
