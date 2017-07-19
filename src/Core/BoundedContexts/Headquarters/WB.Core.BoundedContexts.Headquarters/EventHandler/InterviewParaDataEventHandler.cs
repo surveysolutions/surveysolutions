@@ -646,6 +646,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AudioQuestionAnswered> @event)
         {
+            this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, @event.Payload.AnswerTimeUtc,
+            this.CreateAnswerParameters(@event.Payload.QuestionId, $"{@event.Payload.FileName}, {@event.Payload.Length}", @event.Payload.RosterVector));
             return view;
         }
     }

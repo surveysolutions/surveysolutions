@@ -213,7 +213,7 @@ namespace WB.UI.Headquarters.Controllers
 
                     byte[] bytes = ms.ToArray();
 
-                    var fileName = $@"{question.VariableName}{questionIdentity.RosterVector}.wav";
+                    var fileName = $@"{question.VariableName}{questionIdentity.RosterVector}{DateTime.UtcNow.GetHashCode()}.wav";
                     var responsibleId = interview.CurrentResponsibleId;
                     var trackLength = new TimeSpan(length);
                     audioFileStorage.StoreInterviewBinaryData(Guid.Parse(interviewId), fileName, bytes);

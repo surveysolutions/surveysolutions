@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -853,7 +854,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewData Update(InterviewData state, IPublishedEvent<AudioQuestionAnswered> @event)
         {
-            return state;
+            return this.SaveAnswer(state, @event.Payload.RosterVector, @event.Payload.QuestionId,
+                AudioAnswer.FromString(@event.Payload.FileName, @event.Payload.Length),
+                true);
         }
     }
 }
