@@ -17,6 +17,16 @@
             </LinearLayout >
         </LinearLayout>
 
+      <TextView
+        style="@style/Interview_Cover_Screen_Header"
+        local:MvxBind="Text InterviewKey;" />
+      <TextView
+        style="@style/Interview_Cover_Screen_Header"
+        local:MvxBind="Text AssignmentId;" />
+      <TextView
+        style="@style/Interview_Cover_Screen_Header"
+        local:MvxBind="Text QuestionnaireTitle;" />
+      
         <LinearLayout android:orientation="vertical" 
                       local:MvxBind="Visibility Visibility(SupervisorNote)"
                       style="@style/Interview_Cover_Supervisor_Note">
