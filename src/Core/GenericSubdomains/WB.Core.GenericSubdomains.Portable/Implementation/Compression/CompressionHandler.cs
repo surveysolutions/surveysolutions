@@ -101,10 +101,16 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Compression
                 return true;
             }
 
+            if (response.Content is StreamContent)
+            {
+                return true;
+            }
+
             return false;
         }
 
         private readonly int contentSizeThreshold = 1024; // do not compress content less then 1 Kb
+        private readonly int contentMaxSizeThreshold = 100 * 1024 * 1024; // do not compress content more then 100 Mb
 
         private void CompressResponse(HttpRequestMessage request, HttpResponseMessage response)
         {
@@ -135,7 +141,9 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Compression
                 {
                     response.Content = new CompressedContent(response.Content, compressor);
                 }
-                else if (this.contentSizeThreshold > 0 && response.Content.Headers.ContentLength >= this.contentSizeThreshold)
+                else if (this.contentSizeThreshold > 0 
+                    && response.Content.Headers.ContentLength >= this.contentSizeThreshold
+                    && response.Content.Headers.ContentLength <= this.contentMaxSizeThreshold)
                 {
                     response.Content = new CompressedContent(response.Content, compressor);
                 }
