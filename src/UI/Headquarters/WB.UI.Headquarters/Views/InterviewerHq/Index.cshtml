@@ -14,8 +14,8 @@ new {
     assignmentsEndpoint = Url.Content(@"~/api/Assignments"),
     interviewerHqEndpoint = Url.Content(@"~/interviewerHq"),
     authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>(),
-    resources = new[] {MainMenu.ResourceManager, Assignments.ResourceManager}.Translations()
+    resources = new[] {MainMenu.ResourceManager, Assignments.ResourceManager, Common.ResourceManager}.Translations()
 })"></div>
 
-
-@Scripts.Render(@"~/js/app/interviewer.createnew")
+<script type="text/javascript" src="@Url.Content("~/Dependencies/build/vendor.bundle.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Dependencies/build/interviewer_createNew.bundle.js")"></script>

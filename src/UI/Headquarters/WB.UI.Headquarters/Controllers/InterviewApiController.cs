@@ -56,7 +56,7 @@ namespace WB.UI.Headquarters.Controllers
                 QuestionnaireId = data.TemplateId,
                 QuestionnaireVersion = data.TemplateVersion,
                 TeamLeadName = data.ResponsibleName,
-                Status = data.Status,
+                Statuses = data.Status.HasValue ? new [] {data.Status.Value} : null,
                 SearchBy = data.SearchBy,
                 AssignmentId = data.AssignmentId
             };
@@ -173,17 +173,4 @@ namespace WB.UI.Headquarters.Controllers
             return interviewSummaryForMapPointView;
         }
     }
-
-    public class InterviewsDataTableRequest : DataTableRequest
-    {
-        public string QuestionnaireId { get; set; }
-        public long? QuestionnaireVersion { get; set; }
-        public InterviewStatus[] Statuses { get; set; }
-        public string SearchBy { get; set; }
-    }
-
-    public class InterviewsDataTableResponse : DataTableResponse<AllInterviewsViewItem>
-    {
-    }
-
 }

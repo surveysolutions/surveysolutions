@@ -7,4 +7,5 @@
 
 <div id="vueApp" configuration="@Model.ToString()"></div>
 
-@Scripts.Render(@"~/js/app/interviewer.interviews")
+<script type="text/javascript" src="@Url.Content("~/Dependencies/build/vendor.bundle.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Dependencies/build/interviewer_interviews.bundle.js")"></script>

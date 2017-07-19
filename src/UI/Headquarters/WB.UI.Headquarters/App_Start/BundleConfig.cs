@@ -34,17 +34,6 @@ namespace WB.UI.Headquarters
                 "~/Dependencies/build/assignments.bundle.js"
             ));
 
-            bundles.Add(new ScriptBundle("~/js/app/interviewer.createnew")
-                .Include(
-                    @"~/Dependencies/build/vendor.bundle.js",
-                    @"~/Dependencies/build/interviewer_createNew.bundle.js"
-            ));
-
-            bundles.Add(new ScriptBundle("~/js/app/interviewer.interviews")
-                .Include(
-                    @"~/Dependencies/build/vendor.bundle.js",
-                    @"~/Dependencies/build/interviewer_interviews.bundle.js"
-                ));
             //libs.js:
             //vendor\jquery\dist\jquery.js
             //vendor\bootstrap - sass\assets\javascripts\bootstrap.js

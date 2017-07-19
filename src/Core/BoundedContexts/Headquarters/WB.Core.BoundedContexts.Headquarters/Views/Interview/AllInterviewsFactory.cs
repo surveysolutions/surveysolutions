@@ -191,12 +191,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             {
                 items = items.Where(x => x.Key.StartsWith(input.SearchBy) || x.ClientKey.StartsWith(input.SearchBy) || x.AnswersToFeaturedQuestions.Any(a => a.Answer.StartsWith(input.SearchBy)));
             }
-
-            if (input.Status.HasValue)
-            {
-                items = items.Where(x => x.Status == input.Status);
-            }
-
+            
             if (input.Statuses != null)
             {
                 items = items.Where(x => input.Statuses.Contains(x.Status));
