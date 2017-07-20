@@ -63,7 +63,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.properties.Status = @event.InterviewData.Status;
             this.properties.WasCompleted = @event.InterviewData.WasCompleted;
-            
+            this.properties.AssignmentId = @event.InterviewData.AssignmentId;
+
             foreach (var answerDto in @event.InterviewData.Answers.OrderBy(x => x.QuestionRosterVector.Length))
             {
                 var question = this.Tree.GetQuestion(Identity.Create(answerDto.Id, answerDto.QuestionRosterVector));
