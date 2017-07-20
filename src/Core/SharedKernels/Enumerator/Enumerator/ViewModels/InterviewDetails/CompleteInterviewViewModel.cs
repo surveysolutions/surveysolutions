@@ -23,6 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public InterviewStateViewModel InterviewState { get; set; }
         public DynamicTextViewModel Name { get; }
+        public string CompleteScreenTitle { get; set; }
 
         public CompleteInterviewViewModel(
             IViewModelNavigationService viewModelNavigationService,
@@ -52,6 +53,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.InterviewState.Init(interviewId, null);
             this.Name.InitAsStatic(UIResources.Interview_Complete_Screen_Title);
+
+            this.CompleteScreenTitle = UIResources.Interview_Complete_Screen_Description;
 
             var questionsCount = InterviewState.QuestionsCount;
             this.AnsweredCount = InterviewState.AnsweredQuestionsCount;

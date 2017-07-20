@@ -335,6 +335,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interview_Complete_Screen_Description" xml:space="preserve">
     <value>You are about to complete this interview</value>
   </data>
+  <data name="Interview_Complete_Screen_DescriptionWithInterviewKey" xml:space="preserve">
+    <value>You are about to complete this interview ID:{0}</value>
+  </data>
   <data name="Interview_Complete_Screen_Title" xml:space="preserve">
     <value>Complete</value>
   </data>
