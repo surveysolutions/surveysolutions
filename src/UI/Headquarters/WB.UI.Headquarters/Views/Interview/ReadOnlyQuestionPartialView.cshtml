@@ -80,8 +80,10 @@
         if (Model.IsAnswered)
         {
             <div>
-                <audio src=""></audio>
+                <audio controls preload="auto" src="@Url.Action("AudioRecord", "Resource", new {interviewId = ViewData["InterviewId"], fileName = Model.Answer})">
+                </audio>
             </div>
+            @Html.ActionLink(Common.Download, "AudioRecord", "Resource", new { interviewId = ViewData["InterviewId"], fileName = Model.Answer }, null)
         }
         break;
     case QuestionType.GpsCoordinates:
