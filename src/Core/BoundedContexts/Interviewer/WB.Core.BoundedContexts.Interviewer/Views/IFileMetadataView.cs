@@ -9,5 +9,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         Guid InterviewId { get; set; }
         string FileId { get; set; }
         string FileName { get; set; }
+        string ContentType { get; set; }
     }
 }

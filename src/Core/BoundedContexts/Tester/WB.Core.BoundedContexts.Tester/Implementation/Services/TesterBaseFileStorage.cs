@@ -40,9 +40,12 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             if (!this.fileSystemAccessor.IsDirectoryExists(directoryPath))
                 return new List<InterviewBinaryDataDescriptor>();
 
-            return this.fileSystemAccessor.GetFilesInDirectory(directoryPath).Select(fileName =>
-                new InterviewBinaryDataDescriptor(interviewId, this.fileSystemAccessor.GetFileName(fileName),
-                    () => this.fileSystemAccessor.ReadAllBytes(fileName))).ToList();
+            return this.fileSystemAccessor.GetFilesInDirectory(directoryPath).Select(filePath =>
+                new InterviewBinaryDataDescriptor(
+                    interviewId, 
+                    this.fileSystemAccessor.GetFileName(filePath),
+                    null,
+                    () => this.fileSystemAccessor.ReadAllBytes(filePath))).ToList();
         }
 
         public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)

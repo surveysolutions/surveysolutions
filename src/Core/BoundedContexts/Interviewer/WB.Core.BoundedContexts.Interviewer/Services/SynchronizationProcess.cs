@@ -702,6 +702,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 await this.synchronizationService.UploadInterviewAudioAsync(
                     audioFile.InterviewId,
                     audioFile.FileName,
+                    audioFile.ContentType,
                     fileData,
                     (progressPercentage, bytesReceived, totalBytesToReceive) => { },
                     cancellationToken);

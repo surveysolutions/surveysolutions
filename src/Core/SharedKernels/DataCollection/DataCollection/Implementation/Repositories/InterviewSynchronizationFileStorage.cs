@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                     fileSystemAccessor.GetFilesInDirectory(syncInterviewDirectory)
                         .Select(
                             fileName =>
-                                new InterviewBinaryDataDescriptor(interviewId, fileSystemAccessor.GetFileName(fileName),
+                                new InterviewBinaryDataDescriptor(interviewId, fileSystemAccessor.GetFileName(fileName), null,
                                     () => fileSystemAccessor.ReadAllBytes(fileName))));
             }
 

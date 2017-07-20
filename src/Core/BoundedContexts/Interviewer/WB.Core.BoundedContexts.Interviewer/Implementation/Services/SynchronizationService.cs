@@ -339,7 +339,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 token: token));
         }
 
-        public Task UploadInterviewAudioAsync(Guid interviewId, string fileName, byte[] fileData, Action<decimal, long, long> onDownloadProgressChanged,
+        public Task UploadInterviewAudioAsync(Guid interviewId, string fileName, string contentType, byte[] fileData, Action<decimal, long, long> onDownloadProgressChanged,
             CancellationToken token)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
@@ -348,6 +348,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 {
                     InterviewId = interviewId,
                     FileName = fileName,
+                    ContentType = contentType,
                     Data = Convert.ToBase64String(fileData)
                 },
                 credentials: this.restCredentials,

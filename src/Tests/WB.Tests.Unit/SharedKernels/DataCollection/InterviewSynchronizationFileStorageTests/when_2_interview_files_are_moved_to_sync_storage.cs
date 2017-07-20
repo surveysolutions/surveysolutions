@@ -18,8 +18,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewSynchronizationFil
             plainFileRepositoryMock.Setup(x => x.GetBinaryFilesForInterview(interviewId))
                 .Returns(new List<InterviewBinaryDataDescriptor>
                 {
-                    new InterviewBinaryDataDescriptor(interviewId, "file1", () => data1),
-                    new InterviewBinaryDataDescriptor(interviewId, "file2", () => data2)
+                    new InterviewBinaryDataDescriptor(interviewId, "file1", null, () => data1),
+                    new InterviewBinaryDataDescriptor(interviewId, "file2", null, () => data2)
                 });
             interviewSynchronizationFileStorage = CreateFileSyncRepository(imageFileRepository: plainFileRepositoryMock.Object,fileSystemAccessor: fileSystemAccessorMock.Object);
         };
