@@ -47,6 +47,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                 => new InterviewBinaryDataDescriptor(
                     interviewId, 
                     file.FileName,
+                    file.ContentType,
                     () => GetInterviewBinaryData(interviewId, file.FileName)
                 )).ToList();
         }
