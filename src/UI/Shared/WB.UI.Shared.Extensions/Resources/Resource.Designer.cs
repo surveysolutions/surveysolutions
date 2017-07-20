@@ -1198,44 +1198,44 @@ namespace WB.UI.Shared.Extensions
 		public partial class Color
 		{
 			
-			// aapt resource value: 0x7f0e0099
-			public static int abc_background_cache_hint_selector_material_dark = 2131624089;
-			
 			// aapt resource value: 0x7f0e009a
-			public static int abc_background_cache_hint_selector_material_light = 2131624090;
+			public static int abc_background_cache_hint_selector_material_dark = 2131624090;
 			
 			// aapt resource value: 0x7f0e009b
-			public static int abc_btn_colored_borderless_text_material = 2131624091;
+			public static int abc_background_cache_hint_selector_material_light = 2131624091;
 			
 			// aapt resource value: 0x7f0e009c
-			public static int abc_btn_colored_text_material = 2131624092;
+			public static int abc_btn_colored_borderless_text_material = 2131624092;
 			
 			// aapt resource value: 0x7f0e009d
-			public static int abc_color_highlight_material = 2131624093;
+			public static int abc_btn_colored_text_material = 2131624093;
 			
 			// aapt resource value: 0x7f0e009e
-			public static int abc_hint_foreground_material_dark = 2131624094;
+			public static int abc_color_highlight_material = 2131624094;
 			
 			// aapt resource value: 0x7f0e009f
-			public static int abc_hint_foreground_material_light = 2131624095;
+			public static int abc_hint_foreground_material_dark = 2131624095;
+			
+			// aapt resource value: 0x7f0e00a0
+			public static int abc_hint_foreground_material_light = 2131624096;
 			
 			// aapt resource value: 0x7f0e0001
 			public static int abc_input_method_navigation_guard = 2131623937;
 			
-			// aapt resource value: 0x7f0e00a0
-			public static int abc_primary_text_disable_only_material_dark = 2131624096;
-			
 			// aapt resource value: 0x7f0e00a1
-			public static int abc_primary_text_disable_only_material_light = 2131624097;
+			public static int abc_primary_text_disable_only_material_dark = 2131624097;
 			
 			// aapt resource value: 0x7f0e00a2
-			public static int abc_primary_text_material_dark = 2131624098;
+			public static int abc_primary_text_disable_only_material_light = 2131624098;
 			
 			// aapt resource value: 0x7f0e00a3
-			public static int abc_primary_text_material_light = 2131624099;
+			public static int abc_primary_text_material_dark = 2131624099;
 			
 			// aapt resource value: 0x7f0e00a4
-			public static int abc_search_url_text = 2131624100;
+			public static int abc_primary_text_material_light = 2131624100;
+			
+			// aapt resource value: 0x7f0e00a5
+			public static int abc_search_url_text = 2131624101;
 			
 			// aapt resource value: 0x7f0e0002
 			public static int abc_search_url_text_normal = 2131623938;
@@ -1246,32 +1246,32 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0e0004
 			public static int abc_search_url_text_selected = 2131623940;
 			
-			// aapt resource value: 0x7f0e00a5
-			public static int abc_secondary_text_material_dark = 2131624101;
-			
 			// aapt resource value: 0x7f0e00a6
-			public static int abc_secondary_text_material_light = 2131624102;
+			public static int abc_secondary_text_material_dark = 2131624102;
 			
 			// aapt resource value: 0x7f0e00a7
-			public static int abc_tint_btn_checkable = 2131624103;
+			public static int abc_secondary_text_material_light = 2131624103;
 			
 			// aapt resource value: 0x7f0e00a8
-			public static int abc_tint_default = 2131624104;
+			public static int abc_tint_btn_checkable = 2131624104;
 			
 			// aapt resource value: 0x7f0e00a9
-			public static int abc_tint_edittext = 2131624105;
+			public static int abc_tint_default = 2131624105;
 			
 			// aapt resource value: 0x7f0e00aa
-			public static int abc_tint_seek_thumb = 2131624106;
+			public static int abc_tint_edittext = 2131624106;
 			
 			// aapt resource value: 0x7f0e00ab
-			public static int abc_tint_spinner = 2131624107;
+			public static int abc_tint_seek_thumb = 2131624107;
 			
 			// aapt resource value: 0x7f0e00ac
-			public static int abc_tint_switch_thumb = 2131624108;
+			public static int abc_tint_spinner = 2131624108;
 			
 			// aapt resource value: 0x7f0e00ad
-			public static int abc_tint_switch_track = 2131624109;
+			public static int abc_tint_switch_thumb = 2131624109;
+			
+			// aapt resource value: 0x7f0e00ae
+			public static int abc_tint_switch_track = 2131624110;
 			
 			// aapt resource value: 0x7f0e0005
 			public static int accent_material_dark = 2131623941;
@@ -1294,8 +1294,8 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0e000a
 			public static int background_material_light = 2131623946;
 			
-			// aapt resource value: 0x7f0e00ae
-			public static int bread_crumb_transparency = 2131624110;
+			// aapt resource value: 0x7f0e00af
+			public static int bread_crumb_transparency = 2131624111;
 			
 			// aapt resource value: 0x7f0e000b
 			public static int bright_foreground_disabled_material_dark = 2131623947;
@@ -1384,6 +1384,9 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0e007e
 			public static int complete_screen_title_text = 2131624062;
 			
+			// aapt resource value: 0x7f0e0091
+			public static int cover_header_text = 2131624081;
+			
 			// aapt resource value: 0x7f0e008b
 			public static int cover_not_from_supervisor_color = 2131624075;
 			
@@ -1411,8 +1414,8 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0e003b
 			public static int design_bottom_navigation_shadow_color = 2131623995;
 			
-			// aapt resource value: 0x7f0e00af
-			public static int design_error = 2131624111;
+			// aapt resource value: 0x7f0e00b0
+			public static int design_error = 2131624112;
 			
 			// aapt resource value: 0x7f0e003c
 			public static int design_fab_shadow_end_color = 2131623996;
@@ -1444,8 +1447,8 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0e0045
 			public static int design_textinput_error_color_light = 2131624005;
 			
-			// aapt resource value: 0x7f0e00b0
-			public static int design_tint_password_toggle = 2131624112;
+			// aapt resource value: 0x7f0e00b1
+			public static int design_tint_password_toggle = 2131624113;
 			
 			// aapt resource value: 0x7f0e0013
 			public static int dim_foreground_disabled_material_dark = 2131623955;
@@ -1645,8 +1648,8 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0e0067
 			public static int question_input_button_unpressed = 2131624039;
 			
-			// aapt resource value: 0x7f0e00b1
-			public static int question_title_text = 2131624113;
+			// aapt resource value: 0x7f0e00b2
+			public static int question_title_text = 2131624114;
 			
 			// aapt resource value: 0x7f0e008e
 			public static int readonly_question_background = 2131624078;
@@ -1666,26 +1669,26 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0e0032
 			public static int ripple_material_light = 2131623986;
 			
-			// aapt resource value: 0x7f0e0093
-			public static int screen_button = 2131624083;
+			// aapt resource value: 0x7f0e0094
+			public static int screen_button = 2131624084;
+			
+			// aapt resource value: 0x7f0e0098
+			public static int screen_button_border = 2131624088;
 			
 			// aapt resource value: 0x7f0e0097
-			public static int screen_button_border = 2131624087;
-			
-			// aapt resource value: 0x7f0e0096
-			public static int screen_button_bordered = 2131624086;
-			
-			// aapt resource value: 0x7f0e0094
-			public static int screen_button_bordered_disabled = 2131624084;
+			public static int screen_button_bordered = 2131624087;
 			
 			// aapt resource value: 0x7f0e0095
-			public static int screen_button_bordered_pressed = 2131624085;
+			public static int screen_button_bordered_disabled = 2131624085;
 			
-			// aapt resource value: 0x7f0e0091
-			public static int screen_button_disabled = 2131624081;
+			// aapt resource value: 0x7f0e0096
+			public static int screen_button_bordered_pressed = 2131624086;
 			
 			// aapt resource value: 0x7f0e0092
-			public static int screen_button_pressed = 2131624082;
+			public static int screen_button_disabled = 2131624082;
+			
+			// aapt resource value: 0x7f0e0093
+			public static int screen_button_pressed = 2131624083;
 			
 			// aapt resource value: 0x7f0e0033
 			public static int secondary_text_default_material_dark = 2131623987;
@@ -1714,8 +1717,8 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0e0070
 			public static int sections_list_text_color = 2131624048;
 			
-			// aapt resource value: 0x7f0e00b2
-			public static int show_instructions = 2131624114;
+			// aapt resource value: 0x7f0e00b3
+			public static int show_instructions = 2131624115;
 			
 			// aapt resource value: 0x7f0e004c
 			public static int sideBarPrefilledQuestionText = 2131624012;
@@ -1726,11 +1729,11 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0e0038
 			public static int switch_thumb_disabled_material_light = 2131623992;
 			
-			// aapt resource value: 0x7f0e00b3
-			public static int switch_thumb_material_dark = 2131624115;
-			
 			// aapt resource value: 0x7f0e00b4
-			public static int switch_thumb_material_light = 2131624116;
+			public static int switch_thumb_material_dark = 2131624116;
+			
+			// aapt resource value: 0x7f0e00b5
+			public static int switch_thumb_material_light = 2131624117;
 			
 			// aapt resource value: 0x7f0e0039
 			public static int switch_thumb_normal_material_dark = 2131623993;
@@ -1738,8 +1741,8 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0e003a
 			public static int switch_thumb_normal_material_light = 2131623994;
 			
-			// aapt resource value: 0x7f0e0098
-			public static int text_color_light = 2131624088;
+			// aapt resource value: 0x7f0e0099
+			public static int text_color_light = 2131624089;
 			
 			static Color()
 			{
@@ -1763,11 +1766,11 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f090093
 			public static int Interview_BreadCrumbs_padding_top = 2131296403;
 			
-			// aapt resource value: 0x7f0900e2
-			public static int Interview_Comment_Caption_margin_bottom = 2131296482;
+			// aapt resource value: 0x7f0900e6
+			public static int Interview_Comment_Caption_margin_bottom = 2131296486;
 			
-			// aapt resource value: 0x7f0900e1
-			public static int Interview_Comment_Item_margin_top = 2131296481;
+			// aapt resource value: 0x7f0900e5
+			public static int Interview_Comment_Item_margin_top = 2131296485;
 			
 			// aapt resource value: 0x7f0900b5
 			public static int Interview_Comments_Details_margin_bottom = 2131296437;
@@ -1775,8 +1778,20 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0900b4
 			public static int Interview_Comments_Title_margin_bottom = 2131296436;
 			
-			// aapt resource value: 0x7f0900ff
-			public static int Interview_Confirmation_EditText_margin = 2131296511;
+			// aapt resource value: 0x7f090103
+			public static int Interview_Confirmation_EditText_margin = 2131296515;
+			
+			// aapt resource value: 0x7f0900d1
+			public static int Interview_Cover_Header_Description_padding_bottom = 2131296465;
+			
+			// aapt resource value: 0x7f0900d0
+			public static int Interview_Cover_Header_Description_padding_top = 2131296464;
+			
+			// aapt resource value: 0x7f0900cf
+			public static int Interview_Cover_Header_line_padding = 2131296463;
+			
+			// aapt resource value: 0x7f0900ce
+			public static int Interview_Cover_Header_padding_top = 2131296462;
 			
 			// aapt resource value: 0x7f0900c9
 			public static int Interview_Cover_Marker_Line_width = 2131296457;
@@ -1790,38 +1805,38 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f090092
 			public static int Interview_Entity_Divider_height = 2131296402;
 			
-			// aapt resource value: 0x7f0900d2
-			public static int Interview_Entity_Element_margin_horizontal = 2131296466;
+			// aapt resource value: 0x7f0900d6
+			public static int Interview_Entity_Element_margin_horizontal = 2131296470;
 			
-			// aapt resource value: 0x7f0900d5
-			public static int Interview_Entity_Element_margin_large_vertical = 2131296469;
+			// aapt resource value: 0x7f0900d9
+			public static int Interview_Entity_Element_margin_large_vertical = 2131296473;
 			
-			// aapt resource value: 0x7f0900e3
-			public static int Interview_Entity_Title_margin_top = 2131296483;
+			// aapt resource value: 0x7f0900e7
+			public static int Interview_Entity_Title_margin_top = 2131296487;
 			
 			// aapt resource value: 0x7f090091
 			public static int Interview_Entity_Title_margin_vertical = 2131296401;
 			
-			// aapt resource value: 0x7f0900ce
-			public static int Interview_Entity_margin_left = 2131296462;
-			
-			// aapt resource value: 0x7f0900cf
-			public static int Interview_Entity_margin_right = 2131296463;
-			
-			// aapt resource value: 0x7f0900d4
-			public static int Interview_Entity_margin_small_vertical = 2131296468;
+			// aapt resource value: 0x7f0900d2
+			public static int Interview_Entity_margin_left = 2131296466;
 			
 			// aapt resource value: 0x7f0900d3
-			public static int Interview_Entity_margin_vertical = 2131296467;
+			public static int Interview_Entity_margin_right = 2131296467;
 			
-			// aapt resource value: 0x7f0900d0
-			public static int Interview_Entity_margin_with_border_left = 2131296464;
+			// aapt resource value: 0x7f0900d8
+			public static int Interview_Entity_margin_small_vertical = 2131296472;
 			
-			// aapt resource value: 0x7f0900d1
-			public static int Interview_Entity_margin_with_border_right = 2131296465;
+			// aapt resource value: 0x7f0900d7
+			public static int Interview_Entity_margin_vertical = 2131296471;
 			
-			// aapt resource value: 0x7f0900fe
-			public static int Interview_Group_button_padding = 2131296510;
+			// aapt resource value: 0x7f0900d4
+			public static int Interview_Entity_margin_with_border_left = 2131296468;
+			
+			// aapt resource value: 0x7f0900d5
+			public static int Interview_Entity_margin_with_border_right = 2131296469;
+			
+			// aapt resource value: 0x7f090102
+			public static int Interview_Group_button_padding = 2131296514;
 			
 			// aapt resource value: 0x7f0900b2
 			public static int Interview_Group_margin_bottom = 2131296434;
@@ -1844,26 +1859,26 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0900c0
 			public static int Interview_Previous_Group_Navigation_Layout_margin_top = 2131296448;
 			
-			// aapt resource value: 0x7f0900fc
-			public static int Interview_Question_Answer_FilteredComboBox_padding = 2131296508;
+			// aapt resource value: 0x7f090100
+			public static int Interview_Question_Answer_FilteredComboBox_padding = 2131296512;
 			
-			// aapt resource value: 0x7f0900fd
-			public static int Interview_Question_Answer_FilteredComboBox_verticalOffset = 2131296509;
+			// aapt resource value: 0x7f090101
+			public static int Interview_Question_Answer_FilteredComboBox_verticalOffset = 2131296513;
 			
 			// aapt resource value: 0x7f0900a4
 			public static int Interview_Question_Answer_Input_background_corners_radius = 2131296420;
 			
-			// aapt resource value: 0x7f0900dd
-			public static int Interview_Question_Answer_Input_background_padding = 2131296477;
+			// aapt resource value: 0x7f0900e1
+			public static int Interview_Question_Answer_Input_background_padding = 2131296481;
 			
 			// aapt resource value: 0x7f0900a3
 			public static int Interview_Question_Answer_Input_background_stroke_width = 2131296419;
 			
-			// aapt resource value: 0x7f0900de
-			public static int Interview_Question_Answer_MediaBlock_margin_bottom = 2131296478;
+			// aapt resource value: 0x7f0900e2
+			public static int Interview_Question_Answer_MediaBlock_margin_bottom = 2131296482;
 			
-			// aapt resource value: 0x7f0900e0
-			public static int Interview_Question_Answer_Media_Caption_margin_top = 2131296480;
+			// aapt resource value: 0x7f0900e4
+			public static int Interview_Question_Answer_Media_Caption_margin_top = 2131296484;
 			
 			// aapt resource value: 0x7f0900a7
 			public static int Interview_Question_Answer_Media_Image_margin = 2131296423;
@@ -1874,8 +1889,8 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0900a5
 			public static int Interview_Question_Answer_Media_background_stroke_width = 2131296421;
 			
-			// aapt resource value: 0x7f0900df
-			public static int Interview_Question_Answer_Media_height = 2131296479;
+			// aapt resource value: 0x7f0900e3
+			public static int Interview_Question_Answer_Media_height = 2131296483;
 			
 			// aapt resource value: 0x7f0900a9
 			public static int Interview_Question_Answer_Option_margin_horizontal = 2131296425;
@@ -1892,23 +1907,23 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0900ac
 			public static int Interview_Question_Answer_Recorded_RemoveButton_background_padding_to_record = 2131296428;
 			
-			// aapt resource value: 0x7f0900dc
-			public static int Interview_Question_Answer_background_corners_radius = 2131296476;
+			// aapt resource value: 0x7f0900e0
+			public static int Interview_Question_Answer_background_corners_radius = 2131296480;
 			
-			// aapt resource value: 0x7f0900da
-			public static int Interview_Question_Answer_background_padding = 2131296474;
+			// aapt resource value: 0x7f0900de
+			public static int Interview_Question_Answer_background_padding = 2131296478;
 			
 			// aapt resource value: 0x7f0900a2
 			public static int Interview_Question_Answer_background_stroke_width = 2131296418;
 			
+			// aapt resource value: 0x7f0900df
+			public static int Interview_Question_Answer_half_background_padding = 2131296479;
+			
 			// aapt resource value: 0x7f0900db
-			public static int Interview_Question_Answer_half_background_padding = 2131296475;
+			public static int Interview_Question_Answer_margin_bottom = 2131296475;
 			
-			// aapt resource value: 0x7f0900d7
-			public static int Interview_Question_Answer_margin_bottom = 2131296471;
-			
-			// aapt resource value: 0x7f0900d6
-			public static int Interview_Question_Answer_margin_top = 2131296470;
+			// aapt resource value: 0x7f0900da
+			public static int Interview_Question_Answer_margin_top = 2131296474;
 			
 			// aapt resource value: 0x7f0900ae
 			public static int Interview_Question_Errors_Details_margin_top = 2131296430;
@@ -1916,8 +1931,8 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0900ad
 			public static int Interview_Question_Errors_Title_margin_top = 2131296429;
 			
-			// aapt resource value: 0x7f0900d8
-			public static int Interview_Question_Errors_margin_bottom = 2131296472;
+			// aapt resource value: 0x7f0900dc
+			public static int Interview_Question_Errors_margin_bottom = 2131296476;
 			
 			// aapt resource value: 0x7f0900bd
 			public static int Interview_Question_InputButton_DoublePadding = 2131296445;
@@ -1937,26 +1952,26 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0900bc
 			public static int Interview_Question_InputButton_padding_vertical = 2131296444;
 			
+			// aapt resource value: 0x7f0900fc
+			public static int Interview_Question_List_DeleteButton_height = 2131296508;
+			
+			// aapt resource value: 0x7f0900fb
+			public static int Interview_Question_List_DeleteButton_width = 2131296507;
+			
+			// aapt resource value: 0x7f0900fa
+			public static int Interview_Question_List_Editor_border = 2131296506;
+			
 			// aapt resource value: 0x7f0900f8
-			public static int Interview_Question_List_DeleteButton_height = 2131296504;
+			public static int Interview_Question_List_Editor_margin_left = 2131296504;
 			
 			// aapt resource value: 0x7f0900f7
-			public static int Interview_Question_List_DeleteButton_width = 2131296503;
+			public static int Interview_Question_List_Editor_margin_right = 2131296503;
 			
-			// aapt resource value: 0x7f0900f6
-			public static int Interview_Question_List_Editor_border = 2131296502;
+			// aapt resource value: 0x7f0900f9
+			public static int Interview_Question_List_Editor_padding = 2131296505;
 			
-			// aapt resource value: 0x7f0900f4
-			public static int Interview_Question_List_Editor_margin_left = 2131296500;
-			
-			// aapt resource value: 0x7f0900f3
-			public static int Interview_Question_List_Editor_margin_right = 2131296499;
-			
-			// aapt resource value: 0x7f0900f5
-			public static int Interview_Question_List_Editor_padding = 2131296501;
-			
-			// aapt resource value: 0x7f0900d9
-			public static int Interview_Question_Option_vertical_padding = 2131296473;
+			// aapt resource value: 0x7f0900dd
+			public static int Interview_Question_Option_vertical_padding = 2131296477;
 			
 			// aapt resource value: 0x7f0900af
 			public static int Interview_Question_Progress_Indicator_height = 2131296431;
@@ -1976,35 +1991,35 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0900b7
 			public static int Interview_Question_TextAnswer_margin_top = 2131296439;
 			
-			// aapt resource value: 0x7f0900fb
-			public static int Interview_Question_Text_DeleteButton_height = 2131296507;
+			// aapt resource value: 0x7f0900ff
+			public static int Interview_Question_Text_DeleteButton_height = 2131296511;
 			
-			// aapt resource value: 0x7f0900fa
-			public static int Interview_Question_Text_DeleteButton_width = 2131296506;
+			// aapt resource value: 0x7f0900fe
+			public static int Interview_Question_Text_DeleteButton_width = 2131296510;
 			
 			// aapt resource value: 0x7f0900b6
 			public static int Interview_Question_YesNo_paddingLeft = 2131296438;
 			
-			// aapt resource value: 0x7f090100
-			public static int Interview_Readonly_Question_Answer_layout_height = 2131296512;
-			
-			// aapt resource value: 0x7f090101
-			public static int Interview_Readonly_Question_Answer_margin_left = 2131296513;
-			
-			// aapt resource value: 0x7f090102
-			public static int Interview_Readonly_Question_Answer_padding = 2131296514;
-			
-			// aapt resource value: 0x7f090103
-			public static int Interview_Readonly_Question_Icon_margin_top = 2131296515;
-			
 			// aapt resource value: 0x7f090104
-			public static int Interview_Readonly_Question_Layout_margin_bottom = 2131296516;
+			public static int Interview_Readonly_Question_Answer_layout_height = 2131296516;
 			
-			// aapt resource value: 0x7f0900e4
-			public static int Interview_Readonly_Question_Layout_margin_left = 2131296484;
+			// aapt resource value: 0x7f090105
+			public static int Interview_Readonly_Question_Answer_margin_left = 2131296517;
 			
-			// aapt resource value: 0x7f0900e5
-			public static int Interview_Readonly_Question_Layout_margin_right = 2131296485;
+			// aapt resource value: 0x7f090106
+			public static int Interview_Readonly_Question_Answer_padding = 2131296518;
+			
+			// aapt resource value: 0x7f090107
+			public static int Interview_Readonly_Question_Icon_margin_top = 2131296519;
+			
+			// aapt resource value: 0x7f090108
+			public static int Interview_Readonly_Question_Layout_margin_bottom = 2131296520;
+			
+			// aapt resource value: 0x7f0900e8
+			public static int Interview_Readonly_Question_Layout_margin_left = 2131296488;
+			
+			// aapt resource value: 0x7f0900e9
+			public static int Interview_Readonly_Question_Layout_margin_right = 2131296489;
 			
 			// aapt resource value: 0x7f090099
 			public static int Interview_Sidebar_Body_margin_right = 2131296409;
@@ -2054,17 +2069,17 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f090095
 			public static int Interview_Sidebar_row_button_padding_right = 2131296405;
 			
-			// aapt resource value: 0x7f0900ee
-			public static int ListStyle_Divider_height = 2131296494;
-			
-			// aapt resource value: 0x7f0900f1
-			public static int PrefilledQuestions_QuestionnaireTitle_Holder_height = 2131296497;
-			
-			// aapt resource value: 0x7f0900f0
-			public static int PrefilledQuestions_QuestionnaireTitle_textsize = 2131296496;
-			
 			// aapt resource value: 0x7f0900f2
-			public static int PrefilledQuestions_StartButton_Holder_height = 2131296498;
+			public static int ListStyle_Divider_height = 2131296498;
+			
+			// aapt resource value: 0x7f0900f5
+			public static int PrefilledQuestions_QuestionnaireTitle_Holder_height = 2131296501;
+			
+			// aapt resource value: 0x7f0900f4
+			public static int PrefilledQuestions_QuestionnaireTitle_textsize = 2131296500;
+			
+			// aapt resource value: 0x7f0900f6
+			public static int PrefilledQuestions_StartButton_Holder_height = 2131296502;
 			
 			// aapt resource value: 0x7f0900b0
 			public static int Progress_Indicator_height = 2131296432;
@@ -2072,26 +2087,26 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0900b1
 			public static int Progress_Indicator_padding_top = 2131296433;
 			
-			// aapt resource value: 0x7f0900ec
-			public static int Theme_Button_min_height = 2131296492;
+			// aapt resource value: 0x7f0900f0
+			public static int Theme_Button_min_height = 2131296496;
+			
+			// aapt resource value: 0x7f0900f1
+			public static int Theme_Button_min_width = 2131296497;
 			
 			// aapt resource value: 0x7f0900ed
-			public static int Theme_Button_min_width = 2131296493;
+			public static int Theme_ProgressBar_height = 2131296493;
 			
-			// aapt resource value: 0x7f0900e9
-			public static int Theme_ProgressBar_height = 2131296489;
-			
-			// aapt resource value: 0x7f0900ea
-			public static int Theme_SeekBar_height = 2131296490;
-			
-			// aapt resource value: 0x7f0900eb
-			public static int Theme_SeekBar_padding = 2131296491;
+			// aapt resource value: 0x7f0900ee
+			public static int Theme_SeekBar_height = 2131296494;
 			
 			// aapt resource value: 0x7f0900ef
-			public static int Toolbar_margin_horizontal = 2131296495;
+			public static int Theme_SeekBar_padding = 2131296495;
 			
-			// aapt resource value: 0x7f0900f9
-			public static int Zero = 2131296505;
+			// aapt resource value: 0x7f0900f3
+			public static int Toolbar_margin_horizontal = 2131296499;
+			
+			// aapt resource value: 0x7f0900fd
+			public static int Zero = 2131296509;
 			
 			// aapt resource value: 0x7f090015
 			public static int abc_action_bar_content_inset_material = 2131296277;
@@ -2315,44 +2330,44 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f09000d
 			public static int abc_text_size_title_material_toolbar = 2131296269;
 			
-			// aapt resource value: 0x7f090111
-			public static int area_editor_cancel_margin_right = 2131296529;
-			
 			// aapt resource value: 0x7f090115
-			public static int area_editor_common_margin_left = 2131296533;
-			
-			// aapt resource value: 0x7f090114
-			public static int area_editor_common_margin_right = 2131296532;
-			
-			// aapt resource value: 0x7f090113
-			public static int area_editor_common_margin_top = 2131296531;
-			
-			// aapt resource value: 0x7f09011a
-			public static int area_editor_compass_margin_bottom = 2131296538;
-			
-			// aapt resource value: 0x7f090110
-			public static int area_editor_list_item_margin_top = 2131296528;
-			
-			// aapt resource value: 0x7f090116
-			public static int area_editor_lower_panel_margin_bottom = 2131296534;
-			
-			// aapt resource value: 0x7f090112
-			public static int area_editor_toolbar_margin_left = 2131296530;
-			
-			// aapt resource value: 0x7f090117
-			public static int area_editor_undo_margin_top = 2131296535;
+			public static int area_editor_cancel_margin_right = 2131296533;
 			
 			// aapt resource value: 0x7f090119
-			public static int area_editor_zoom_in_margin_bottom = 2131296537;
+			public static int area_editor_common_margin_left = 2131296537;
 			
 			// aapt resource value: 0x7f090118
-			public static int area_editor_zoom_out_margin_bottom = 2131296536;
+			public static int area_editor_common_margin_right = 2131296536;
 			
-			// aapt resource value: 0x7f09010f
-			public static int button_corners_radius = 2131296527;
+			// aapt resource value: 0x7f090117
+			public static int area_editor_common_margin_top = 2131296535;
 			
-			// aapt resource value: 0x7f0900e8
-			public static int button_shadow_margin = 2131296488;
+			// aapt resource value: 0x7f09011e
+			public static int area_editor_compass_margin_bottom = 2131296542;
+			
+			// aapt resource value: 0x7f090114
+			public static int area_editor_list_item_margin_top = 2131296532;
+			
+			// aapt resource value: 0x7f09011a
+			public static int area_editor_lower_panel_margin_bottom = 2131296538;
+			
+			// aapt resource value: 0x7f090116
+			public static int area_editor_toolbar_margin_left = 2131296534;
+			
+			// aapt resource value: 0x7f09011b
+			public static int area_editor_undo_margin_top = 2131296539;
+			
+			// aapt resource value: 0x7f09011d
+			public static int area_editor_zoom_in_margin_bottom = 2131296541;
+			
+			// aapt resource value: 0x7f09011c
+			public static int area_editor_zoom_out_margin_bottom = 2131296540;
+			
+			// aapt resource value: 0x7f090113
+			public static int button_corners_radius = 2131296531;
+			
+			// aapt resource value: 0x7f0900ec
+			public static int button_shadow_margin = 2131296492;
 			
 			// aapt resource value: 0x7f090073
 			public static int design_appbar_elevation = 2131296371;
@@ -2567,41 +2582,41 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f09006a
 			public static int notification_top_pad_large_text = 2131296362;
 			
-			// aapt resource value: 0x7f0900e7
-			public static int one = 2131296487;
-			
-			// aapt resource value: 0x7f090105
-			public static int textsize_10 = 2131296517;
-			
-			// aapt resource value: 0x7f090106
-			public static int textsize_12 = 2131296518;
-			
-			// aapt resource value: 0x7f090107
-			public static int textsize_14 = 2131296519;
-			
-			// aapt resource value: 0x7f090108
-			public static int textsize_16 = 2131296520;
+			// aapt resource value: 0x7f0900eb
+			public static int one = 2131296491;
 			
 			// aapt resource value: 0x7f090109
-			public static int textsize_18 = 2131296521;
+			public static int textsize_10 = 2131296521;
 			
 			// aapt resource value: 0x7f09010a
-			public static int textsize_20 = 2131296522;
+			public static int textsize_12 = 2131296522;
 			
 			// aapt resource value: 0x7f09010b
-			public static int textsize_22 = 2131296523;
+			public static int textsize_14 = 2131296523;
 			
 			// aapt resource value: 0x7f09010c
-			public static int textsize_24 = 2131296524;
+			public static int textsize_16 = 2131296524;
 			
 			// aapt resource value: 0x7f09010d
-			public static int textsize_28 = 2131296525;
+			public static int textsize_18 = 2131296525;
 			
 			// aapt resource value: 0x7f09010e
-			public static int textsize_30 = 2131296526;
+			public static int textsize_20 = 2131296526;
 			
-			// aapt resource value: 0x7f0900e6
-			public static int zero = 2131296486;
+			// aapt resource value: 0x7f09010f
+			public static int textsize_22 = 2131296527;
+			
+			// aapt resource value: 0x7f090110
+			public static int textsize_24 = 2131296528;
+			
+			// aapt resource value: 0x7f090111
+			public static int textsize_28 = 2131296529;
+			
+			// aapt resource value: 0x7f090112
+			public static int textsize_30 = 2131296530;
+			
+			// aapt resource value: 0x7f0900ea
+			public static int zero = 2131296490;
 			
 			static Dimension()
 			{
@@ -5362,32 +5377,32 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0c016c
 			public static int Animation_Design_BottomSheetDialog = 2131493228;
 			
-			// aapt resource value: 0x7f0c01fe
-			public static int AppTheme = 2131493374;
+			// aapt resource value: 0x7f0c0203
+			public static int AppTheme = 2131493379;
 			
-			// aapt resource value: 0x7f0c0212
-			public static int Area_CompassButton = 2131493394;
+			// aapt resource value: 0x7f0c0217
+			public static int Area_CompassButton = 2131493399;
 			
-			// aapt resource value: 0x7f0c0211
-			public static int Area_LocationButton = 2131493393;
-			
-			// aapt resource value: 0x7f0c020f
-			public static int Area_Screen_Button = 2131493391;
-			
-			// aapt resource value: 0x7f0c0210
-			public static int Area_Screen_Button_Bordered = 2131493392;
-			
-			// aapt resource value: 0x7f0c0215
-			public static int Area_UpdateMapsButton = 2131493397;
-			
-			// aapt resource value: 0x7f0c0213
-			public static int Area_ZoomMapInButton = 2131493395;
+			// aapt resource value: 0x7f0c0216
+			public static int Area_LocationButton = 2131493398;
 			
 			// aapt resource value: 0x7f0c0214
-			public static int Area_ZoomMapOutButton = 2131493396;
+			public static int Area_Screen_Button = 2131493396;
 			
-			// aapt resource value: 0x7f0c0207
-			public static int AutoCompleteTextViewTheme = 2131493383;
+			// aapt resource value: 0x7f0c0215
+			public static int Area_Screen_Button_Bordered = 2131493397;
+			
+			// aapt resource value: 0x7f0c021a
+			public static int Area_UpdateMapsButton = 2131493402;
+			
+			// aapt resource value: 0x7f0c0218
+			public static int Area_ZoomMapInButton = 2131493400;
+			
+			// aapt resource value: 0x7f0c0219
+			public static int Area_ZoomMapOutButton = 2131493401;
+			
+			// aapt resource value: 0x7f0c020c
+			public static int AutoCompleteTextViewTheme = 2131493388;
 			
 			// aapt resource value: 0x7f0c00ae
 			public static int Base_AlertDialog_AppCompat = 2131493038;
@@ -5851,38 +5866,38 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0c016e
 			public static int Base_Widget_Design_TabLayout = 2131493230;
 			
-			// aapt resource value: 0x7f0c0201
-			public static int BlueAppTheme = 2131493377;
+			// aapt resource value: 0x7f0c0206
+			public static int BlueAppTheme = 2131493382;
 			
-			// aapt resource value: 0x7f0c0203
-			public static int ButtonAppTheme = 2131493379;
+			// aapt resource value: 0x7f0c0208
+			public static int ButtonAppTheme = 2131493384;
 			
-			// aapt resource value: 0x7f0c0204
-			public static int CheckBoxTheme = 2131493380;
+			// aapt resource value: 0x7f0c0209
+			public static int CheckBoxTheme = 2131493385;
+			
+			// aapt resource value: 0x7f0c0207
+			public static int Divider_ListStyle = 2131493383;
+			
+			// aapt resource value: 0x7f0c01ff
+			public static int DrawerArrowStyle = 2131493375;
+			
+			// aapt resource value: 0x7f0c020f
+			public static int DropDownListViewStyleTheme = 2131493391;
+			
+			// aapt resource value: 0x7f0c020b
+			public static int EditTextTheme = 2131493387;
+			
+			// aapt resource value: 0x7f0c01e8
+			public static int FullWidthWrappingLayout = 2131493352;
+			
+			// aapt resource value: 0x7f0c0205
+			public static int GrayAppTheme = 2131493381;
 			
 			// aapt resource value: 0x7f0c0202
-			public static int Divider_ListStyle = 2131493378;
+			public static int ImageButtonTheme_Blue_Light = 2131493378;
 			
-			// aapt resource value: 0x7f0c01fa
-			public static int DrawerArrowStyle = 2131493370;
-			
-			// aapt resource value: 0x7f0c020a
-			public static int DropDownListViewStyleTheme = 2131493386;
-			
-			// aapt resource value: 0x7f0c0206
-			public static int EditTextTheme = 2131493382;
-			
-			// aapt resource value: 0x7f0c01e3
-			public static int FullWidthWrappingLayout = 2131493347;
-			
-			// aapt resource value: 0x7f0c0200
-			public static int GrayAppTheme = 2131493376;
-			
-			// aapt resource value: 0x7f0c01fd
-			public static int ImageButtonTheme_Blue_Light = 2131493373;
-			
-			// aapt resource value: 0x7f0c01e7
-			public static int InterviewToolbarTitle = 2131493351;
+			// aapt resource value: 0x7f0c01ec
+			public static int InterviewToolbarTitle = 2131493356;
 			
 			// aapt resource value: 0x7f0c01b5
 			public static int Interview_Attachment_Picture = 2131493301;
@@ -5935,11 +5950,26 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0c01d6
 			public static int Interview_Complete_Screen_Text = 2131493334;
 			
-			// aapt resource value: 0x7f0c020b
-			public static int Interview_Confirmation_Editor = 2131493387;
+			// aapt resource value: 0x7f0c0210
+			public static int Interview_Confirmation_Editor = 2131493392;
 			
-			// aapt resource value: 0x7f0c020c
-			public static int Interview_Confirmation_Layout = 2131493388;
+			// aapt resource value: 0x7f0c0211
+			public static int Interview_Confirmation_Layout = 2131493393;
+			
+			// aapt resource value: 0x7f0c01e7
+			public static int Interview_Cover_Description_Header = 2131493351;
+			
+			// aapt resource value: 0x7f0c01e3
+			public static int Interview_Cover_Header_Line = 2131493347;
+			
+			// aapt resource value: 0x7f0c01e5
+			public static int Interview_Cover_Main_First_Header = 2131493349;
+			
+			// aapt resource value: 0x7f0c01e4
+			public static int Interview_Cover_Main_Header = 2131493348;
+			
+			// aapt resource value: 0x7f0c01e6
+			public static int Interview_Cover_Main_Second_Header = 2131493350;
 			
 			// aapt resource value: 0x7f0c01cf
 			public static int Interview_Cover_Prefilled_Answers = 2131493327;
@@ -5995,8 +6025,8 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0c0188
 			public static int Interview_Group_Description = 2131493256;
 			
-			// aapt resource value: 0x7f0c01e9
-			public static int Interview_List = 2131493353;
+			// aapt resource value: 0x7f0c01ee
+			public static int Interview_List = 2131493358;
 			
 			// aapt resource value: 0x7f0c01c5
 			public static int Interview_Previous_Group_Navigation_Button = 2131493317;
@@ -6166,44 +6196,44 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0c0187
 			public static int Interview_Roster = 2131493255;
 			
-			// aapt resource value: 0x7f0c01ef
-			public static int Interview_Sidebar = 2131493359;
-			
-			// aapt resource value: 0x7f0c01f0
-			public static int Interview_Sidebar_Body = 2131493360;
-			
 			// aapt resource value: 0x7f0c01f4
-			public static int Interview_Sidebar_GroupRow = 2131493364;
-			
-			// aapt resource value: 0x7f0c01f1
-			public static int Interview_Sidebar_Header = 2131493361;
-			
-			// aapt resource value: 0x7f0c01f8
-			public static int Interview_Sidebar_PrefilledQuestion = 2131493368;
-			
-			// aapt resource value: 0x7f0c01eb
-			public static int Interview_Sidebar_PrefilledQuestions = 2131493355;
-			
-			// aapt resource value: 0x7f0c01ea
-			public static int Interview_Sidebar_PrefilledQuestions_Container = 2131493354;
-			
-			// aapt resource value: 0x7f0c01f2
-			public static int Interview_Sidebar_Sections = 2131493362;
+			public static int Interview_Sidebar = 2131493364;
 			
 			// aapt resource value: 0x7f0c01f5
-			public static int Interview_Sidebar_Sections_Group = 2131493365;
-			
-			// aapt resource value: 0x7f0c01f3
-			public static int Interview_Sidebar_Sections_Section = 2131493363;
-			
-			// aapt resource value: 0x7f0c01f7
-			public static int Interview_Sidebar_Sections_Section_Title = 2131493367;
-			
-			// aapt resource value: 0x7f0c01f6
-			public static int Interview_Sidebar_Sections_ToggleButton = 2131493366;
+			public static int Interview_Sidebar_Body = 2131493365;
 			
 			// aapt resource value: 0x7f0c01f9
-			public static int Interview_Sidebar_Title = 2131493369;
+			public static int Interview_Sidebar_GroupRow = 2131493369;
+			
+			// aapt resource value: 0x7f0c01f6
+			public static int Interview_Sidebar_Header = 2131493366;
+			
+			// aapt resource value: 0x7f0c01fd
+			public static int Interview_Sidebar_PrefilledQuestion = 2131493373;
+			
+			// aapt resource value: 0x7f0c01f0
+			public static int Interview_Sidebar_PrefilledQuestions = 2131493360;
+			
+			// aapt resource value: 0x7f0c01ef
+			public static int Interview_Sidebar_PrefilledQuestions_Container = 2131493359;
+			
+			// aapt resource value: 0x7f0c01f7
+			public static int Interview_Sidebar_Sections = 2131493367;
+			
+			// aapt resource value: 0x7f0c01fa
+			public static int Interview_Sidebar_Sections_Group = 2131493370;
+			
+			// aapt resource value: 0x7f0c01f8
+			public static int Interview_Sidebar_Sections_Section = 2131493368;
+			
+			// aapt resource value: 0x7f0c01fc
+			public static int Interview_Sidebar_Sections_Section_Title = 2131493372;
+			
+			// aapt resource value: 0x7f0c01fb
+			public static int Interview_Sidebar_Sections_ToggleButton = 2131493371;
+			
+			// aapt resource value: 0x7f0c01fe
+			public static int Interview_Sidebar_Title = 2131493374;
 			
 			// aapt resource value: 0x7f0c019c
 			public static int Interview_TextEditor = 2131493276;
@@ -6253,26 +6283,26 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0c002d
 			public static int Platform_Widget_AppCompat_Spinner = 2131492909;
 			
-			// aapt resource value: 0x7f0c01e6
-			public static int PrefilledQuestionsToolbarTitle = 2131493350;
+			// aapt resource value: 0x7f0c01eb
+			public static int PrefilledQuestionsToolbarTitle = 2131493355;
 			
-			// aapt resource value: 0x7f0c01ec
-			public static int PrefilledQuestions_List = 2131493356;
+			// aapt resource value: 0x7f0c01f1
+			public static int PrefilledQuestions_List = 2131493361;
 			
-			// aapt resource value: 0x7f0c01ed
-			public static int PrefilledQuestions_QuestionnaireTitle = 2131493357;
+			// aapt resource value: 0x7f0c01f2
+			public static int PrefilledQuestions_QuestionnaireTitle = 2131493362;
 			
-			// aapt resource value: 0x7f0c01ee
-			public static int PrefilledQuestions_StartButton = 2131493358;
+			// aapt resource value: 0x7f0c01f3
+			public static int PrefilledQuestions_StartButton = 2131493363;
 			
-			// aapt resource value: 0x7f0c01fb
-			public static int ProgressBarTheme_Blue_Light = 2131493371;
+			// aapt resource value: 0x7f0c0200
+			public static int ProgressBarTheme_Blue_Light = 2131493376;
 			
 			// aapt resource value: 0x7f0c01c3
 			public static int Progress_Indicator = 2131493315;
 			
-			// aapt resource value: 0x7f0c0205
-			public static int RadioButtonTheme = 2131493381;
+			// aapt resource value: 0x7f0c020a
+			public static int RadioButtonTheme = 2131493386;
 			
 			// aapt resource value: 0x7f0c003c
 			public static int RtlOverlay_DialogWindowTitle_AppCompat = 2131492924;
@@ -6316,23 +6346,23 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0c0049
 			public static int RtlUnderlay_Widget_AppCompat_ActionButton_Overflow = 2131492937;
 			
-			// aapt resource value: 0x7f0c01fc
-			public static int SeekBarTheme_Blue_Light = 2131493372;
-			
-			// aapt resource value: 0x7f0c0209
-			public static int SpinnerDropDownItemTheme = 2131493385;
-			
-			// aapt resource value: 0x7f0c0208
-			public static int SpinnerTheme = 2131493384;
-			
-			// aapt resource value: 0x7f0c01ff
-			public static int StyledDialog = 2131493375;
-			
-			// aapt resource value: 0x7f0c020d
-			public static int TabLayoutStyle = 2131493389;
+			// aapt resource value: 0x7f0c0201
+			public static int SeekBarTheme_Blue_Light = 2131493377;
 			
 			// aapt resource value: 0x7f0c020e
-			public static int TabTextAppearance = 2131493390;
+			public static int SpinnerDropDownItemTheme = 2131493390;
+			
+			// aapt resource value: 0x7f0c020d
+			public static int SpinnerTheme = 2131493389;
+			
+			// aapt resource value: 0x7f0c0204
+			public static int StyledDialog = 2131493380;
+			
+			// aapt resource value: 0x7f0c0212
+			public static int TabLayoutStyle = 2131493394;
+			
+			// aapt resource value: 0x7f0c0213
+			public static int TabTextAppearance = 2131493395;
 			
 			// aapt resource value: 0x7f0c00d9
 			public static int TextAppearance_AppCompat = 2131493081;
@@ -6679,14 +6709,14 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0c0008
 			public static int ThemeOverlay_MediaRouter_Light = 2131492872;
 			
-			// aapt resource value: 0x7f0c01e8
-			public static int ToolbarTitle = 2131493352;
+			// aapt resource value: 0x7f0c01ed
+			public static int ToolbarTitle = 2131493357;
 			
-			// aapt resource value: 0x7f0c01e4
-			public static int VerticalContentHeightWrappingLayout = 2131493348;
+			// aapt resource value: 0x7f0c01e9
+			public static int VerticalContentHeightWrappingLayout = 2131493353;
 			
-			// aapt resource value: 0x7f0c01e5
-			public static int VerticalFullWidthWrappingLayout = 2131493349;
+			// aapt resource value: 0x7f0c01ea
+			public static int VerticalFullWidthWrappingLayout = 2131493354;
 			
 			// aapt resource value: 0x7f0c0122
 			public static int Widget_AppCompat_ActionBar = 2131493154;
