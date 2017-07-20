@@ -53,7 +53,7 @@ namespace WB.Tests.Unit
         [DebuggerStepThrough]
         public static void ShouldContainEvents<TEvent>(this EventContext eventContext, int count)
         {
-            eventContext.Events.OfType<TEvent>().Should().HaveCount(count);
+            eventContext.Events.Where(e => e.Payload is TEvent).Should().HaveCount(count);
         }
 
         [DebuggerStepThrough]
