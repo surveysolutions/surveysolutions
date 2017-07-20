@@ -257,5 +257,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         List<Guid> GetExpressionsPlayOrder();
         bool HasAnyCascadingOptionsForSelectedParentOption(Guid cascadingQuestionId, Guid parenQuestionId, int selectedParentValue);
+        AudioQuality GetAudioQuality(Guid questionId);
     }
 }
