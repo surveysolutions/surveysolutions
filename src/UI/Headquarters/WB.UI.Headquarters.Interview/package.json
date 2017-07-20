@@ -10,8 +10,7 @@
     "build": "node build/build.js",
     "design": "cross-env DEV_MODE=design node build/dev-server.js",
     "lint": "eslint --ext .js,.vue src test/unit/specs",
-    "clean": "rimraf node_modules\\ && yarn",
-    "production" : "node build/build.js"
+    "clean": "rimraf node_modules\\ && yarn"
   },
   "dependencies": {
     "autonumeric": "=1.9.46",
