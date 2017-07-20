@@ -207,7 +207,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             {
                 Id = interviewQuestion.Identity,
                 ParentId = interviewQuestion.Parent.Identity,
-                Title = interviewQuestion.Title.Text,
+                Title = interviewQuestion.Title.BrowserReadyText,
                 IsAnswered = interviewQuestion.IsAnswered(),
                 IsValid = interviewQuestion.IsValid,
                 AnswerString = GetAnswerAsString(interviewQuestion, questionnaire), 
