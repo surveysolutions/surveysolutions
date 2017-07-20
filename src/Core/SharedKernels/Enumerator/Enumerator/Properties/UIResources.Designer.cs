@@ -541,6 +541,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You are about to complete this interview ID:{0}.
+        /// </summary>
+        public static string Interview_Complete_Screen_DescriptionWithInterviewKey {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Screen_DescriptionWithInterviewKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Complete.
         /// </summary>
         public static string Interview_Complete_Screen_Title {
