@@ -269,6 +269,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activities\ActivityExtensions.cs" />
+    <Compile Include="Activities\AudioDialogFragment.cs" />
     <Compile Include="Activities\BaseActivity.cs" />
     <Compile Include="Activities\BaseFragment.cs" />
     <Compile Include="Activities\CompleteInterviewFragment.cs" />
@@ -342,7 +343,10 @@
     <Compile Include="CustomControls\NumericEditText.cs" />
     <Compile Include="CustomServices\AndroidNetworkService.cs" />
     <Compile Include="CustomServices\AreaEditor\DummyAreaEditService.cs" />
+    <Compile Include="CustomServices\AudioDialog.cs" />
+    <Compile Include="CustomServices\AudioService.cs" />
     <Compile Include="CustomServices\ExternalAppLauncher.cs" />
+    <Compile Include="CustomServices\PermissionsService.cs" />
     <Compile Include="CustomServices\UserInteractionService.cs" />
     <Compile Include="CustomServices\UserInterfaceStateService.cs" />
     <Compile Include="CustomServices\VibrationService.cs" />
@@ -1127,6 +1131,10 @@
     <AndroidResource Include="Resources\layout\interview_question_readonly.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_question_audio.axml" />
+    <AndroidResource Include="Resources\layout\interview_question_audio_dialog.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
@@ -1256,6 +1264,18 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\transparent_input_button.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\transparent_input_button_disabled.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\transparent_input_button_pressed.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\transparent_input_button_unpressed.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

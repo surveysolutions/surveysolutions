@@ -883,6 +883,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tap to record audio.
+        /// </summary>
+        public static string Interview_Questions_Audio_SaveAnswer {
+            get {
+                return ResourceManager.GetString("Interview_Questions_Audio_SaveAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tap to record GPS.
         /// </summary>
         public static string Interview_Questions_Gps_SaveAnswer {
@@ -946,11 +955,29 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Audio recording.
+        /// </summary>
+        public static string Interviewer_AudioRecording {
+            get {
+                return ResourceManager.GetString("Interviewer_AudioRecording", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Diagnostics.
         /// </summary>
         public static string Interviewer_Diagnostics {
             get {
                 return ResourceManager.GetString("Interviewer_Diagnostics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Done.
+        /// </summary>
+        public static string Interviewer_Done {
+            get {
+                return ResourceManager.GetString("Interviewer_Done", resourceCulture);
             }
         }
         
@@ -1077,6 +1104,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string MissingPermissions_Camera {
             get {
                 return ResourceManager.GetString("MissingPermissions_Camera", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application needs to have a permission to use microphone in order to answer this question. Retry answering question and allow access. If you don&apos;t see permissions popup than go to Settings and allow application to use microphone..
+        /// </summary>
+        public static string MissingPermissions_Microphone {
+            get {
+                return ResourceManager.GetString("MissingPermissions_Microphone", resourceCulture);
             }
         }
         

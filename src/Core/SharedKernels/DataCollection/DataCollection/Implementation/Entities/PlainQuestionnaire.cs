@@ -1577,5 +1577,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             var options = this.GetOptionsForQuestion(cascadingQuestionId, selectedParentValue, string.Empty);
             return options.Any();
         }
+
+        public AudioQuality GetAudioQuality(Guid questionId)
+        {
+            return AudioQuality.Default;
+        }
     }
 }
