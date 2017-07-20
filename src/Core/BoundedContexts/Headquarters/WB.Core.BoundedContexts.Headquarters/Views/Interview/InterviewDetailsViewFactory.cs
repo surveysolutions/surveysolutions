@@ -300,6 +300,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             if (interviewQuestion.IsArea)
                 return interviewQuestion.AsArea.GetAnswer().Value;
 
+            if (interviewQuestion.IsAudio)
+                return interviewQuestion.AsAudio.GetAnswer().FileName;
+
             return null;
         }
 
