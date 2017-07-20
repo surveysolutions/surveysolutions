@@ -38,7 +38,11 @@ namespace WB.UI.Shared.Enumerator
             this.Bind<IUserInterfaceStateService>().To<UserInterfaceStateService>();
 
             this.Bind<IExternalAppLauncher>().To<ExternalAppLauncher>();
+            this.Bind<IPermissionsService>().To<PermissionsService>();
             this.Bind<IVirbationService>().To<VibrationService>();
+            this.Bind<IAudioService>().To<AudioService>().InSingletonScope().WithConstructorArgument("pathToAudioDirectory",
+                AndroidPathUtils.GetPathToSubfolderInLocalDirectory("audio"));
+            this.Bind<IAudioDialog>().To<AudioDialog>().InSingletonScope();
 
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocatorAdapter(this.Kernel));
             this.Bind<IServiceLocator>().ToConstant(ServiceLocator.Current);

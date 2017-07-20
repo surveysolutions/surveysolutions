@@ -538,10 +538,6 @@
     </AndroidResource>
     <AndroidResource Include="Resources\color\textedit_border_color_selector.xml" />
     <AndroidResource Include="Resources\color\textedit_color_selector.xml" />
-    <AndroidResource Include="Resources\Drawable\transparent_input_button.xml" />
-    <AndroidResource Include="Resources\Drawable\transparent_input_button_disabled.xml" />
-    <AndroidResource Include="Resources\Drawable\transparent_input_button_pressed.xml" />
-    <AndroidResource Include="Resources\Drawable\transparent_input_button_unpressed.xml" />
     <AndroidResource Include="Resources\Drawable\dashboard_sync_icon.png" />
     <AndroidResource Include="Resources\Drawable\dashboard_sync_icon_small.png" />
     <AndroidResource Include="Resources\Drawable\dashboard_item_layout_border.xml" />

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:local="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:paddingBottom="10dp"
+  android:paddingTop="28dp"
+  android:paddingLeft="30dp"
+  android:paddingRight="10dp"
+  android:orientation="vertical">
+  <TableLayout
+    style="@style/FullWidthWrappingLayout"
+    android:stretchColumns="0">
+    <TableRow>
+      <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="Roboto Light"
+          android:textSize="@dimen/textsize_24"
+          local:MvxBind="Text Localization('Interviewer_AudioRecording');"/>
+        <TextView
+          style="@style/Interview_Question_Title_Base"
+          local:MvxBind="Text Title;"/>
+
+      </LinearLayout>
+      <ImageButton style="@style/Interview_Question_RemoveAnswer"
+                   android:layout_marginRight="16dp"
+                   android:duplicateParentState="true"
+                   local:MvxBind="Click CancelCommand;" />
+    </TableRow>
+    <TableRow android:minHeight="130dp">
+
+    </TableRow>
+  </TableLayout>
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:fontFamily="Roboto Light"
+      android:textSize="@dimen/textsize_24"
+      local:MvxBind="Text Duration;"/>
+    
+      <Button style="@style/Link_Button"
+              local:MvxBind="Click CancelCommand; Text Localization('Interviewer_RelinkDevice_Cancel');" />
+      <Button
+        style="@style/Done_Button"
+        local:MvxBind="Click DoneCommand; Text Localization('Interviewer_Done');" />  
+  </LinearLayout>
+</LinearLayout>
