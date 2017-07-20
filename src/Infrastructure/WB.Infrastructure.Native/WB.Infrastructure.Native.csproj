@@ -32,7 +32,7 @@
     <PackageReference Include="Ninject.MVC5" Version="3.2.1.0" />
     <PackageReference Include="Ninject.Web.Common" Version="3.2.3.0" />
     <PackageReference Include="Ninject.Web.Common.WebHost" Version="3.2.3.0" />
-    <PackageReference Include="NLog" Version="4.3.11" />
+    <PackageReference Include="NLog" Version="4.4.11" />
     <PackageReference Include="Npgsql" Version="3.1.10" />
     <PackageReference Include="System.Collections" Version="4.3.0" />
     <PackageReference Include="System.Diagnostics.Debug" Version="4.3.0" />
