@@ -137,7 +137,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeAudioQuestion AsAudio { get; private set; }
 
-
         public List<AnswerComment> AnswerComments { get; set; } = new List<AnswerComment>();
 
         public SubstitutionText Title { get; private set; }
@@ -228,6 +227,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsSingleLinkedToList) return this.AsSingleLinkedToList.IsAnswered;
             if (this.IsMultiLinkedToList) return this.AsMultiLinkedToList.IsAnswered;
             if (this.IsArea) return this.AsArea.IsAnswered;
+            if (this.IsAudio) return this.AsAudio.IsAnswered;
 
             return false;
         }
@@ -555,6 +555,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsMultimedia) clonedQuestion.AsMultimedia = this.AsMultimedia.Clone();
             if (this.IsQRBarcode) clonedQuestion.AsQRBarcode = this.AsQRBarcode.Clone();
             if (this.IsArea) clonedQuestion.AsArea = this.AsArea.Clone();
+            if (this.IsAudio) clonedQuestion.AsAudio = this.AsAudio.Clone();
             if (this.IsSingleFixedOption) clonedQuestion.AsSingleFixedOption = this.AsSingleFixedOption.Clone();
             if (this.IsText) clonedQuestion.AsText = this.AsText.Clone();
             if (this.IsTextList) clonedQuestion.AsTextList = this.AsTextList.Clone();
