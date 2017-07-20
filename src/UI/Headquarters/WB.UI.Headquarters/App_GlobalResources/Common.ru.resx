@@ -252,4 +252,7 @@
     <value>Ок</value>
     <comment>Ок</comment>
   </data>
+  <data name="Download" xml:space="preserve">
+    <value>Скачать</value>
+  </data>
 </root>
