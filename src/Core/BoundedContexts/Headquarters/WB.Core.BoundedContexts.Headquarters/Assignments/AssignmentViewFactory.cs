@@ -163,7 +163,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
             if (input.OnlyWithInterviewsNeeded)
             {
-                items = items.Where(x => !x.Quantity.HasValue || x.Quantity - x.InterviewSummaries.Count(ñ => !ñ.IsDeleted) > 0);
+                items = items.Where(x => !x.Quantity.HasValue || x.Quantity - x.InterviewSummaries.Count(c => !c.IsDeleted) > 0);
             }
 
             return items;
