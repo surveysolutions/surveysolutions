@@ -44,7 +44,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             return fileSystemAccessor.GetFilesInDirectory(directoryPath)
                 .Select(
                     fileName =>
-                        new InterviewBinaryDataDescriptor(interviewId, fileSystemAccessor.GetFileName(fileName),
+                        new InterviewBinaryDataDescriptor(
+                            interviewId, 
+                            fileSystemAccessor.GetFileName(fileName),
+                            null,
                             () => fileSystemAccessor.ReadAllBytes(fileName))).ToList();
         }
 

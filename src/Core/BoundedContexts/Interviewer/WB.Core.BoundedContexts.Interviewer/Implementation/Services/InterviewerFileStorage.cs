@@ -40,11 +40,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public List<InterviewBinaryDataDescriptor> GetBinaryFilesForInterview(Guid interviewId)
         {
             var metadataViews = this.fileMetadataViewStorage.Where(metadata => metadata.InterviewId == interviewId);
-            return metadataViews.Select(f =>
+            return metadataViews.Select(m =>
                 new InterviewBinaryDataDescriptor(
-                    f.InterviewId,
-                    f.FileName,
-                    () => this.fileViewStorage.GetById(f.FileId).File
+                    m.InterviewId,
+                    m.FileName,
+                    m.ContentType,
+                    () => this.fileViewStorage.GetById(m.FileId).File
                 )
             ).ToList();
         }
@@ -68,7 +69,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     Id = Guid.NewGuid().FormatGuid(),
                     InterviewId = interviewId,
                     FileId = fileId,
-                    FileName = fileName
+                    FileName = fileName,
+                    ContentType = contentType
                 });
             }
             else
