@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -19,9 +19,9 @@ namespace WB.Tests.Unit
         [DebuggerStepThrough]
         public static void ShouldMatchMethodInfo(this MetodInfo left, MetodInfo right)
         {
-            left.Name.ShouldEqual(right.Name);
-            left.ReturnType.ShouldEqual(right.ReturnType);
-            left.ParamsType.ShouldContainOnly(right.ParamsType);
+            left.Name.Should().Be(right.Name);
+            left.ReturnType.Should().Be(right.ReturnType);
+            left.ParamsType.Should().BeEquivalentTo(right.ParamsType);
         }
 
         [DebuggerStepThrough]
@@ -39,25 +39,21 @@ namespace WB.Tests.Unit
             string generatedValidationsMethodName,
             string generatedConditionsMethodName)
         {
-            question.Id.ShouldEqual(id);
-            question.VariableName.ShouldEqual(variableName);
-            question.Condition.ShouldEqual(conditions);
-
-            //question.ValidationExpressions.FirstOrDefault().ValidationExpression.ShouldEqual(validations);
-
-            question.IdName.ShouldEqual(generatedIdName);
-            question.TypeName.ShouldEqual(generatedTypeName);
-            question.MemberName.ShouldEqual(generatedMemberName);
-            question.StateName.ShouldEqual(generatedStateName);
-            question.RosterScopeName.ShouldEqual(rosterScopeName);
-            //question.ValidationExpressions.FirstOrDefault().ValidationMethodName.ShouldEqual(generatedValidationsMethodName);
-            question.ConditionMethodName.ShouldEqual(generatedConditionsMethodName);
+            question.Id.Should().Be(id);
+            question.VariableName.Should().Be(variableName);
+            question.Condition.Should().Be(conditions);
+            question.IdName.Should().Be(generatedIdName);
+            question.TypeName.Should().Be(generatedTypeName);
+            question.MemberName.Should().Be(generatedMemberName);
+            question.StateName.Should().Be(generatedStateName);
+            question.RosterScopeName.Should().Be(rosterScopeName);
+            question.ConditionMethodName.Should().Be(generatedConditionsMethodName);
         }
 
         [DebuggerStepThrough]
         public static void ShouldContainEvents<TEvent>(this EventContext eventContext, int count)
         {
-            eventContext.Events.Count(e => e.Payload is TEvent).ShouldEqual(count);
+            eventContext.Events.OfType<TEvent>().Should().HaveCount(count);
         }
 
         [DebuggerStepThrough]
@@ -67,7 +63,7 @@ namespace WB.Tests.Unit
             eventContext
                 .Events
                 .Select(@event => @event.Payload.GetType())
-                .ShouldContain(typeof(TEvent));
+                .Should().Contain(typeof(TEvent));
 
             if (condition != null)
             {
@@ -75,7 +71,7 @@ namespace WB.Tests.Unit
                     .Events
                     .Where(@event => @event.Payload is TEvent)
                     .Select(@event => (TEvent) @event.Payload)
-                    .ShouldContain(payload => condition.Invoke(payload));
+                    .Should().Contain(payload => condition.Invoke(payload));
             }
         }
 
@@ -85,12 +81,12 @@ namespace WB.Tests.Unit
         {
             if (condition == null)
             {
-                eventContext.Events.ShouldNotContain(@event
+                eventContext.Events.Should().NotContain(@event
                     => @event.Payload is TEvent);
             }
             else
             {
-                eventContext.Events.ShouldNotContain(@event
+                eventContext.Events.Should().NotContain(@event
                     => @event.Payload is TEvent
                         && condition.Invoke((TEvent)@event.Payload));
             }
@@ -99,14 +95,14 @@ namespace WB.Tests.Unit
         [DebuggerStepThrough]
         public static void ShouldContainGroup(this QuestionnaireDocument questionnaireDocument, Expression<Func<IGroup, bool>> condition)
         {
-            questionnaireDocument.GetAllGroups().ShouldContain(condition);
+            questionnaireDocument.GetAllGroups().Cast<IGroup>().Should().Contain(condition);
         }
 
         [DebuggerStepThrough]
         public static void ShouldContainWarning(
             this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)
         {
-            verificationMessages.ShouldContain(message
+            verificationMessages.Should().Contain(message
                 => message.MessageLevel == VerificationMessageLevel.Warning
                 && message.Code == code);
         }
@@ -115,7 +111,7 @@ namespace WB.Tests.Unit
         public static void ShouldNotContainMessage(
             this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)
         {
-            verificationMessages.ShouldNotContain(message
+            verificationMessages.Should().NotContain(message
                 => message.Code == code);
         }
     }
