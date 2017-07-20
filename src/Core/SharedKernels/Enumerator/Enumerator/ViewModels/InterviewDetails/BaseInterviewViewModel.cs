@@ -11,6 +11,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -137,6 +138,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 .All(questionId => interview.GetQuestion(new Identity(questionId, null))?.IsReadonly ?? true);
 
             this.QuestionnaireTitle = questionnaire.Title;
+
+            var interviewKey = interview.GetInterviewKey()?.ToString();
+            this.InterviewKey = string.IsNullOrEmpty(interviewKey) ? null : String.Format(UIResources.InterviewKey, interviewKey);
         
             this.availableLanguages = questionnaire.GetTranslationLanguages();
             this.currentLanguage = interview.Language;
@@ -264,6 +268,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public BreadCrumbsViewModel BreadCrumbs { get; set; }
         public SideBarSectionsViewModel Sections { get; set; }
         public string QuestionnaireTitle { get; set; }
+        public string InterviewKey { get; set; }
 
         public bool HasPrefilledQuestions { get; set; }
         public bool HasEdiablePrefilledQuestions { get; set; }

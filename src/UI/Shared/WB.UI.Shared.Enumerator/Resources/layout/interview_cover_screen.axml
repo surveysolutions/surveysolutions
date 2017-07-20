@@ -8,10 +8,10 @@
 
         <TextView
           style="@style/Interview_Cover_Main_First_Header"
-          local:MvxBind="Text InterviewKey;" />
+          local:MvxBind="Text InterviewKey; Visible InterviewKey;" />
         <TextView
           style="@style/Interview_Cover_Main_Second_Header"
-          local:MvxBind="Text AssignmentId;" />
+          local:MvxBind="Text AssignmentId; Visible AssignmentId;" />
         <TextView
           style="@style/Interview_Cover_Description_Header"
           local:MvxBind="Text QuestionnaireTitle;" />

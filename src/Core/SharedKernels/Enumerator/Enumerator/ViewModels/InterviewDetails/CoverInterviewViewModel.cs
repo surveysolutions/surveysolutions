@@ -91,9 +91,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 .ToList();
 
             var interviewKey = interview.GetInterviewKey()?.ToString();
-            this.InterviewKey = string.IsNullOrEmpty(interviewKey) ? string.Empty : string.Format(UIResources.InterviewKey, interviewKey);
+            this.InterviewKey = string.IsNullOrEmpty(interviewKey) ? null : string.Format(UIResources.InterviewKey, interviewKey);
             var assignmentId = interview.GetAssignmentId();
-            this.AssignmentId = !assignmentId.HasValue ? string.Empty : string.Format(UIResources.AssignmentN, assignmentId);
+            this.AssignmentId = !assignmentId.HasValue ? null : string.Format(UIResources.AssignmentN, assignmentId);
            
             this.HasPrefilledQuestions = this.PrefilledQuestions.Any();
 
