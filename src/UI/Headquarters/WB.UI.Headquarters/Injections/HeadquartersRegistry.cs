@@ -38,6 +38,8 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
+using WB.UI.Headquarters.API.WebInterview;
+using WB.UI.Headquarters.API.WebInterview.Services;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Services;
@@ -188,6 +190,7 @@ namespace WB.UI.Headquarters.Injections
             this.Bind<ICommandDeserializer>().To<SurveyManagementCommandDeserializer>();
             this.Bind<IRevalidateInterviewsAdministrationService>().To<RevalidateInterviewsAdministrationService>().InSingletonScope();
             this.Bind<IInterviewerVersionReader>().To<InterviewerVersionReader>().InSingletonScope();
+            this.Bind<IWebInterviewAllowService>().To<WebInterviewAllowService>();
         }
     }
 }

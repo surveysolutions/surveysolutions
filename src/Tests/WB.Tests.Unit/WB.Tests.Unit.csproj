@@ -461,6 +461,7 @@
     <Compile Include="Applications\Headquarters\ServicesTests\InterviewImportServiceTests\when_import_interview_with_nonprintable_symbols.cs" />
     <Compile Include="Applications\Shared\Web\Captcha\WebCachedCaptchaServiceTests.cs" />
     <Compile Include="Bootstrap\MessengerPluginBootstrap.cs" />
+    <Compile Include="BoundedContexts\Headquarters\Assignments\AssignmentsApiControllerTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\Assignments\AssignmentsServiceTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\Assignments\AssignmentTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\Assignments\when_getting_assignments_for_web_interview.cs" />
@@ -478,6 +479,7 @@
     <Compile Include="BoundedContexts\Headquarters\Views\Interview\TeamInterviewsFactoryTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\WebInterview\MappingTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\WebInterview\SampleWebInterviewServiceTests.cs" />
+    <Compile Include="BoundedContexts\Headquarters\WebInterview\WebInterviewAllowServiceTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\AnswerToStringConverterTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\CompanyLogoSynchronizerTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\SynchronizationProcessTests\AssignmentTests\AssignmentDocumentStorageTests.cs" />
