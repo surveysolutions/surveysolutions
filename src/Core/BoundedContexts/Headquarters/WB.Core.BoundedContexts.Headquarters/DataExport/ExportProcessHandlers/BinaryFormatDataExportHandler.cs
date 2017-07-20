@@ -12,7 +12,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -24,6 +23,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IImageFileStorage imageFileRepository;
+        private readonly IAudioFileStorage audioFileStorage;
+        
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewDatas;
         private readonly ITransactionManager transactionManager;
@@ -32,6 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IDataExportFileAccessor dataExportFileAccessor;
         private readonly IDataExportProcessesService dataExportProcessesService;
+        private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
 
         private const string temporaryTabularExportFolder = "TemporaryBinaryExport";
         private readonly string pathToExportedData;
@@ -46,7 +48,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             IReadSideKeyValueStorage<InterviewData> interviewDatas, 
             IDataExportProcessesService dataExportProcessesService, 
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
-            IDataExportFileAccessor dataExportFileAccessor)
+            IDataExportFileAccessor dataExportFileAccessor,
+            IAudioFileStorage audioFileStorage,
+            IPlainTransactionManagerProvider plainTransactionManagerProvider)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.imageFileRepository = imageFileRepository;
@@ -57,6 +61,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.dataExportProcessesService = dataExportProcessesService;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.dataExportFileAccessor = dataExportFileAccessor;
+            this.audioFileStorage = audioFileStorage;
+            this.plainTransactionManagerProvider = plainTransactionManagerProvider;
 
             this.pathToExportedData = fileSystemAccessor.CombinePath(interviewDataExportSettings.DirectoryPath, temporaryTabularExportFolder);
 
@@ -93,6 +99,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 questionnaire.HeaderToLevelMap.Values.SelectMany(
                     x => x.HeaderItems.Values.Where(h => h.QuestionType == QuestionType.Multimedia)).Select(x=>x.PublicKey).ToArray();
 
+            var audioQuestionIds =
+                questionnaire.HeaderToLevelMap.Values.SelectMany(
+                    x => x.HeaderItems.Values.Where(h => h.QuestionType == QuestionType.Audio)).Select(x => x.PublicKey).ToArray(); 
+
             dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
             long totalInterviewsProcessed = 0;
@@ -100,41 +110,61 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             {
                 dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
-                var interviewBinaryFiles = imageFileRepository.GetBinaryFilesForInterview(interviewId);
                 var filesFolderForInterview = this.fileSystemAccessor.CombinePath(folderForDataExport, interviewId.FormatGuid());
 
-                if (interviewBinaryFiles.Count > 0)
+                var interviewDetails = this.transactionManager.ExecuteInQueryTransaction(() => interviewDatas.GetById(interviewId));
+                if (interviewDetails != null && !interviewDetails.IsDeleted)
                 {
-                    var interviewDetails =
-                        this.transactionManager.ExecuteInQueryTransaction(() => interviewDatas.GetById(interviewId));
-                    if (interviewDetails != null && !interviewDetails.IsDeleted)
+                    var questionsWithAnswersOnMultimediaQuestions = interviewDetails.Levels.Values.SelectMany(
+                        level =>
+                            level.QuestionsSearchCache.Values.Where(
+                                question =>
+                                    question.IsAnswered() && !question.IsDisabled() &&
+                                    multimediaQuestionIds.Any(
+                                        multimediaQuestionId => question.Id == multimediaQuestionId))
+                                .Select(q => q.Answer.ToString())).ToArray();
+                        
+                    if (questionsWithAnswersOnMultimediaQuestions.Any())
                     {
-                        var questionsWithAnswersOnMultimediaQuestions = interviewDetails.Levels.Values.SelectMany(
-                            level =>
-                                level.QuestionsSearchCache.Values.Where(
-                                    question =>
-                                        question.IsAnswered() && !question.IsDisabled() &&
-                                        multimediaQuestionIds.Any(
-                                            multimediaQuestionId => question.Id == multimediaQuestionId))
-                                    .Select(q => q.Answer.ToString())).ToArray();
-
-                        if (questionsWithAnswersOnMultimediaQuestions.Any())
-                        {
+                        if(!this.fileSystemAccessor.IsDirectoryExists(filesFolderForInterview))
                             this.fileSystemAccessor.CreateDirectory(filesFolderForInterview);
 
-                            foreach (
-                                var questionsWithAnswersOnMultimediaQuestion in
-                                    questionsWithAnswersOnMultimediaQuestions)
-                            {
-                                var fileContent = imageFileRepository.GetInterviewBinaryData(interviewId,
-                                    questionsWithAnswersOnMultimediaQuestion);
-                                this.fileSystemAccessor.WriteAllBytes(
-                                    this.fileSystemAccessor.CombinePath(filesFolderForInterview,
-                                        questionsWithAnswersOnMultimediaQuestion), fileContent);
-                            }
+                        foreach (var questionsWithAnswersOnMultimediaQuestion in questionsWithAnswersOnMultimediaQuestions)
+                        {
+                            var fileContent = imageFileRepository.GetInterviewBinaryData(interviewId,
+                                questionsWithAnswersOnMultimediaQuestion);
+                            this.fileSystemAccessor.WriteAllBytes(
+                                this.fileSystemAccessor.CombinePath(filesFolderForInterview,questionsWithAnswersOnMultimediaQuestion),
+                                fileContent);
+                        }
+                    }
+
+                    var questionsWithAnswersOnAudioQuestions = interviewDetails.Levels.Values.SelectMany(
+                        level =>
+                            level.QuestionsSearchCache.Values.Where(
+                                    question =>
+                                        question.IsAnswered() && !question.IsDisabled() &&
+                                        audioQuestionIds.Any(
+                                            audioQuestionId => question.Id == audioQuestionId))
+                                .Select(q => q.Answer.ToString())).ToArray();
+
+                    if (questionsWithAnswersOnAudioQuestions.Any())
+                    {
+                        if (!this.fileSystemAccessor.IsDirectoryExists(filesFolderForInterview))
+                            this.fileSystemAccessor.CreateDirectory(filesFolderForInterview);
+
+                        foreach (var questionsWithAnswersOnAudioQuestion in questionsWithAnswersOnAudioQuestions)
+                        {
+                            var fileContent = this.plainTransactionManagerProvider.GetPlainTransactionManager().ExecuteInQueryTransaction(
+                                () => audioFileStorage.GetInterviewBinaryData(interviewId, questionsWithAnswersOnAudioQuestion));
+
+                            this.fileSystemAccessor.WriteAllBytes(
+                                this.fileSystemAccessor.CombinePath(filesFolderForInterview, questionsWithAnswersOnAudioQuestion),
+                                fileContent);
                         }
                     }
                 }
+
                 totalInterviewsProcessed++;
                 this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.NaturalId,
                     totalInterviewsProcessed.PercentOf(interviewIdsToExport.Count));
