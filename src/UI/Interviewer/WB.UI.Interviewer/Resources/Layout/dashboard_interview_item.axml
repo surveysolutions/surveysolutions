@@ -19,7 +19,7 @@
       android:id="@+id/card_status"
       style="@style/Dashboard_Card_Status"
       android:orientation="horizontal"
-      android:background="@drawable/dashboard_interview_status_new"
+      app:MvxBind="BackgroundStyle StatusToDasboardBackground(Status);"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintLeft_toLeftOf="parent" />
