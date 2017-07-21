@@ -2301,12 +2301,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 return;
             }
-
-            if (validationExpression.Count > 0)
-            {
-                throw new QuestionnaireException(ExceptionMessages.CascadingCantHaveValidationExpression);
-            }
-
+            
             if (!string.IsNullOrWhiteSpace(enablementCondition))
             {
                 throw new QuestionnaireException(ExceptionMessages.CascadingCantHaveConditionExpression);

@@ -505,8 +505,9 @@
             var questionTypesDoesNotSupportValidations = ["Multimedia", "Audio", "Area"];
             
             $scope.doesQuestionSupportValidations = function () {
-                return $scope.activeQuestion && !_.contains(questionTypesDoesNotSupportValidations, $scope.activeQuestion.type)
-                    && !($scope.activeQuestion.isCascade && $scope.activeQuestion.cascadeFromQuestionId);
+                return $scope.activeQuestion &&
+                    !_.contains(questionTypesDoesNotSupportValidations, $scope.activeQuestion.type);
+
             };
 
             $scope.doesQuestionSupportOptionsFilters = function () {
