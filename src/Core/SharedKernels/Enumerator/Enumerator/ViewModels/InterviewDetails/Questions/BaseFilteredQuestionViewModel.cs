@@ -100,7 +100,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.InstructionViewModel.Init(interviewId, entityIdentity);
 
             this.Initialize(interviewId, entityIdentity, navigationState);
-            this.SetAnswerAndUpdateFiler();
+            this.SetAnswerAndUpdateFilter().Wait();
 
             this.eventRegistry.Subscribe(this, interviewId);
         }
@@ -169,7 +169,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task UpdateFilterAndSaveIfExactMatchWithAnyOptionAsync(string filter)
         {
-            await this.UpdateFilterAndSuggestionsAsync(filter).ConfigureAwait(false);
+            await this.UpdateFilterAndSuggestionsAsync(filter);
 
             if (string.IsNullOrEmpty(filter) && this.answer != null)
                 await this.RemoveAnswerAsync();
@@ -195,7 +195,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     new RemoveAnswerCommand(this.interviewId,
                         this.principal.CurrentUserIdentity.UserId,
                         this.Identity,
-                        DateTime.UtcNow)).ConfigureAwait(false);
+                        DateTime.UtcNow));
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
@@ -205,7 +205,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        protected async void SetAnswerAndUpdateFiler()
+        protected async Task SetAnswerAndUpdateFilter()
         {
             var singleOptionQuestion = this.interview.GetSingleOptionQuestion(this.Identity);
 
@@ -221,7 +221,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (!@event.Questions.Contains(this.Identity)) return;
 
-            this.InvokeOnMainThread(this.SetAnswerAndUpdateFiler);
+            this.InvokeOnMainThread(async () => await this.SetAnswerAndUpdateFilter());
         }
 
         private string RemoveHighlighting(string optionText) => optionText.Replace("</b>", "").Replace("<b>", "");

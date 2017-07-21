@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
         }
 
-        private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs) => this.SetAnswerAndUpdateFiler();
+        private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs) => this.SetAnswerAndUpdateFilter();
 
         protected override IEnumerable<CategoricalOption> GetSuggestions(string filter) 
             => this.filteredOptionsViewModel.GetOptions(filter);
