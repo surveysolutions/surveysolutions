@@ -22,6 +22,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInf
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Infrastructure.Native.Sanitizer;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
@@ -395,12 +396,14 @@ namespace WB.UI.Designer.Controllers
 
         public FileResult ExportOptions()
         {
+            var title = this.questionWithOptionsViewModel.QuestionTitle.RemoveHtmlTags();
+            var questionTitle = title.Length > 50
+                ? title.Substring(0, 50)
+                : title;
+            var fileDownloadName = $"Options-in-question-{questionTitle}.txt";
             return
                 File(SaveOptionsToStream(this.questionWithOptionsViewModel.SourceOptions), "text/csv",
-                    string.Format("Options-in-question-{0}.txt",
-                        this.questionWithOptionsViewModel.QuestionTitle.Length > 50
-                            ? this.questionWithOptionsViewModel.QuestionTitle.Substring(0, 50)
-                            : this.questionWithOptionsViewModel.QuestionTitle));
+                    fileDownloadName);
         }
 
         public class EditOptionsViewModel
