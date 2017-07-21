@@ -14,7 +14,7 @@
                         <input type="text" class="form-control" v-on:keyup.enter="postComment" v-model="comment" placeholder="Tap to enter your comment" />
                     </div>
                 </div>
-                <button type="submit" class="btn btn-default" :class="buttonClass" v-on:click="postComment">Post</button>
+                <button type="button" class="btn btn-default btn-post-comment" :class="buttonClass" @click="postComment($event)">Post</button>
             </div>
         </div>
     </div>
@@ -52,24 +52,24 @@
                 }
                 return 'Comment';
             },
-            postComment() {
-                const comment: string = this.$data.comment
+            postComment(evnt) {
+                const com: string = this.comment
 
-                if (!comment || !comment.trim()) 
+                if (!com || !com.trim())
                     return
 
-                this.$store.dispatch("sendNewComment", { questionId: this.$me.id, comment: comment.trim() })
+                this.$store.dispatch("sendNewComment", { questionId: this.$me.id, comment: com.trim() })
 
-                this.$data.comment = ''
+                this.comment = ''
+                if(evnt && evnt.target) {
+                    evnt.target.blur()
+                }
             }
         },
         computed: {
             buttonClass() {
-                const isActiveStyle = this.comment && this.comment.trim().length > 0
-                return [
-                    { 'btn-gray': !isActiveStyle },
-                    { 'btn-blue': isActiveStyle }
-                ]
+                const isActive = this.comment && this.comment.trim().length > 0
+                return isActive ? 'comment-added' : null
             }
         }
     }

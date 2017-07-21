@@ -254,6 +254,41 @@ body > .ui-pnotify{
         }
     }
 }
+.audio-question{
+    .modal{
+        .modal-dialog{
+            max-width: 450px;
+        }
+        .modal-header{
+            margin-bottom: 10px;
+            h5{
+                padding: 0;
+                line-height: 18px;
+            }
+            .modal-title {
+                margin-bottom: 5px;
+            }
+        }
+        .modal-body{
+            canvas{
+                display: block;
+                margin: 0 auto;
+            }
+        }
+        .modal-footer{
+            padding-bottom: 0;
+            .recordign-time{
+                float: left;
+                font: 24px/36px "RobotoLight";
+            }
+            button{
+                float: right;
+                padding: 10px;
+                margin: 0 10px 0 0;
+            }
+        }
+    }
+}
 @media (max-width: $screen-xs-min){
     .ui-pnotify{
         width: 300px !important;
