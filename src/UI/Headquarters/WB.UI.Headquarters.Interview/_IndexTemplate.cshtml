@@ -31,7 +31,7 @@
             "googleApiKey": '@(WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapApiKey)',
             "hqLink" : @Html.Raw(this.User.Identity.IsAuthenticated && this.User.IsInRole("Interviewer")
                                     ? "'" + Url.Content(@"~/InterviewerHq/Started") + "'"
-                                    : null)
+                                    : "null")
         }
     </script>
 <div id="app"></div>
