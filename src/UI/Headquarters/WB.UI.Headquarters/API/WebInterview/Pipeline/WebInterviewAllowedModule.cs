@@ -1,6 +1,5 @@
 using System;
 using Microsoft.Ajax.Utilities;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -45,9 +44,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 
         private void CheckWebInterviewAccessPermissions(IHub hub)
         {
-            var userId = hub.Context.User.Identity.GetUserId();
-            
-            webInterviewAllowService.CheckWebInterviewAccessPermissions(hub.Context.QueryString.Get(@"interviewId"), Guid.Parse(userId));
+            webInterviewAllowService.CheckWebInterviewAccessPermissions(hub.Context.QueryString.Get(@"interviewId"));
         }
     }
 }
