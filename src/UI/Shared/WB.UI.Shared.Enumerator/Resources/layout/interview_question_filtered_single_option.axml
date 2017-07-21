@@ -17,7 +17,8 @@
                      OnPartialTextChanged FilterCommand;
                      OnItemSelected SaveAnswerBySelectedOptionCommand;
                      OnFocusOut ShowErrorIfNoAnswerCommand;
-                     Watermark Localization('FilteredComboboxQuestion_Hint');" />
+                     Watermark Localization('FilteredComboboxQuestion_Hint');
+                     Tag Format('Answer_{0}', Identity)" />
     <include layout="@layout/interview_question__remove_button_input" />
   </LinearLayout>
 </LinearLayout>
