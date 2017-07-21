@@ -4,11 +4,17 @@
     style="@style/Interview_Question_Instruction"
     local:MvxBind="Visible Instruction">
   <TextView style="@style/Interview_Question_Instruction_ShowInstruction"
-            local:MvxBind="Text Localization('Interview_Instruction_ShowInstruction'); Click ShowInstructions; Visible IsInstructionsHidden"/>
+            local:MvxBind="Text Localization('Interview_Instruction_ShowInstruction'); 
+                           Click ShowInstructions; 
+                           Visible IsInstructionsHidden;
+                           Tag Format('Show_Instruction_{0}', Identity)"/>
   <TextView
       style="@style/Interview_Question_Instruction_Title"
-      local:MvxBind="Text Localization('Interview_Instruction_Title'); Visible Not(IsInstructionsHidden)" />
+      local:MvxBind="Text Localization('Interview_Instruction_Title'); 
+                     Visible Not(IsInstructionsHidden);
+                     Tag Format('Instruction_Title_{0}', Identity)" />
   <TextView
       style="@style/Interview_Question_Instruction_Details"
-      local:MvxBind="Text Instruction; Visible Not(IsInstructionsHidden)" />
+      local:MvxBind="Text Instruction; Visible Not(IsInstructionsHidden);
+                     Tag Format('Instruction_{0}', Identity)" />
 </LinearLayout>

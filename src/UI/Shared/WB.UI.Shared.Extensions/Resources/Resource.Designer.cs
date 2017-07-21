@@ -4054,8 +4054,8 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0a0010
 			public static int MvxBindingTagUnique = 2131361808;
 			
-			// aapt resource value: 0x7f0a00d2
-			public static int RelativeLayout1 = 2131362002;
+			// aapt resource value: 0x7f0a00d1
+			public static int RelativeLayout1 = 2131362001;
 			
 			// aapt resource value: 0x7f0a00bd
 			public static int action0 = 2131361981;
@@ -4279,8 +4279,8 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0a0041
 			public static int @fixed = 2131361857;
 			
-			// aapt resource value: 0x7f0a00d5
-			public static int flashButton = 2131362005;
+			// aapt resource value: 0x7f0a00d4
+			public static int flashButton = 2131362004;
 			
 			// aapt resource value: 0x7f0a0005
 			public static int home = 2131361797;
@@ -4336,20 +4336,20 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0a0089
 			public static int main_layout = 2131361929;
 			
-			// aapt resource value: 0x7f0a00da
-			public static int map_editor_exit = 2131362010;
+			// aapt resource value: 0x7f0a00d9
+			public static int map_editor_exit = 2131362009;
 			
 			// aapt resource value: 0x7f0a008e
 			public static int mapsList = 2131361934;
 			
-			// aapt resource value: 0x7f0a00d8
-			public static int masked = 2131362008;
+			// aapt resource value: 0x7f0a00d7
+			public static int masked = 2131362007;
 			
 			// aapt resource value: 0x7f0a00c0
 			public static int media_actions = 2131361984;
 			
-			// aapt resource value: 0x7f0a00d9
-			public static int menu = 2131362009;
+			// aapt resource value: 0x7f0a00d8
+			public static int menu = 2131362008;
 			
 			// aapt resource value: 0x7f0a0024
 			public static int middle = 2131361828;
@@ -4456,8 +4456,8 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0a00c2
 			public static int notification_main_column_container = 2131361986;
 			
-			// aapt resource value: 0x7f0a00d4
-			public static int overlayImage = 2131362004;
+			// aapt resource value: 0x7f0a00d3
+			public static int overlayImage = 2131362003;
 			
 			// aapt resource value: 0x7f0a0039
 			public static int parallax = 2131361849;
@@ -4471,17 +4471,14 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0a0088
 			public static int prefilledQuestions_questionnaireTitle_holder = 2131361928;
 			
-			// aapt resource value: 0x7f0a00d3
-			public static int preview_view = 2131362003;
+			// aapt resource value: 0x7f0a00d2
+			public static int preview_view = 2131362002;
 			
 			// aapt resource value: 0x7f0a0006
 			public static int progress_circular = 2131361798;
 			
 			// aapt resource value: 0x7f0a0007
 			public static int progress_horizontal = 2131361799;
-			
-			// aapt resource value: 0x7f0a00d1
-			public static int questionnaireEntitiesList = 2131362001;
 			
 			// aapt resource value: 0x7f0a0061
 			public static int radio = 2131361889;
@@ -4663,8 +4660,8 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0a000e
 			public static int view_offset_helper = 2131361806;
 			
-			// aapt resource value: 0x7f0a00d7
-			public static int visible = 2131362007;
+			// aapt resource value: 0x7f0a00d6
+			public static int visible = 2131362006;
 			
 			// aapt resource value: 0x7f0a00b2
 			public static int volume_item_container = 2131361970;
@@ -4675,8 +4672,8 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0a0021
 			public static int wrap_content = 2131361825;
 			
-			// aapt resource value: 0x7f0a00d6
-			public static int zoomButton = 2131362006;
+			// aapt resource value: 0x7f0a00d5
+			public static int zoomButton = 2131362005;
 			
 			static Id()
 			{
