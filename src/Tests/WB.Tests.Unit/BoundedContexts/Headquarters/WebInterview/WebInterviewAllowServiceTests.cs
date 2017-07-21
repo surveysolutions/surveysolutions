@@ -52,6 +52,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
                 webInterviewConfigProvider);
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            Thread.CurrentPrincipal = null;
+        }
+
         private void Act()
         {
             webInterviewAllowService.CheckWebInterviewAccessPermissions(interviewId.ToString());
@@ -92,10 +98,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         }
 
         [TestCase(InterviewStatus.InterviewerAssigned, ExpectedResult = true)]
-        [TestCase(InterviewStatus.Restarted, ExpectedResult = true)]
+        [TestCase(InterviewStatus.Restarted, ExpectedResult = false)]
         [TestCase(InterviewStatus.Completed, ExpectedResult = false)]
         [TestCase(InterviewStatus.ApprovedByHeadquarters, ExpectedResult = false)]
         [TestCase(InterviewStatus.RejectedByHeadquarters, ExpectedResult = false)]
+        [TestCase(InterviewStatus.RejectedBySupervisor, ExpectedResult = false)]
         public bool should_only_allow_interviews_in_state(InterviewStatus interviewStatus)
         {
             ArrangeTest(interviewStatus: interviewStatus, webInterviewEnabled: true);
@@ -125,6 +132,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         {
             ArrangeTest(webInterviewEnabled: true);
 
+            Act();
+        }
+
+        [Test]
+        public void should_allow_for_interviewer_when_interview_is_rejected()
+        {
+            ArrangeTest(UserRoles.Interviewer, InterviewStatus.RejectedBySupervisor,
+                webInterviewEnabled: false, interviewerId: Id.g1, responsibleId: Id.g1);
             Act();
         }
 
@@ -161,6 +176,5 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
 
             Assert.Throws<WebInterviewAccessException>(Act);
         }
-        
     }
 }

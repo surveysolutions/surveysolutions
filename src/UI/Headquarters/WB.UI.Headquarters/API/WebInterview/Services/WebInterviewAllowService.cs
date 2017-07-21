@@ -1,7 +1,6 @@
-using System;
+using System.Collections.Generic;
 using System.Threading;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
@@ -19,6 +18,17 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
+        private static readonly List<InterviewStatus> AllowedInterviewStatuses = new List<InterviewStatus>
+        {
+            InterviewStatus.InterviewerAssigned,
+            InterviewStatus.Restarted,
+            InterviewStatus.RejectedBySupervisor
+        };
+
+        private static readonly List<InterviewStatus> AnonymousUserAllowedStatuses = new List<InterviewStatus>
+        {
+            InterviewStatus.InterviewerAssigned
+        };
 
         public WebInterviewAllowService(
             ITransactionManagerProvider transactionManagerProvider,
@@ -44,11 +54,11 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             if (interview.IsDeleted)
                 throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, Headquarters.Resources.WebInterview.Error_InterviewExpired);
 
-            if (interview.Status != InterviewStatus.InterviewerAssigned && interview.Status != InterviewStatus.Restarted)
+            if (!AllowedInterviewStatuses.Contains(interview.Status))
                 throw new WebInterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, Headquarters.Resources.WebInterview.Error_NoActionsNeeded);
 
             var currentPrincipalIdentity = Thread.CurrentPrincipal;
-            var userId = currentPrincipalIdentity.Identity.GetUserId();
+            var userId = currentPrincipalIdentity?.Identity?.GetUserId();
             if (!string.IsNullOrEmpty(userId))
             {
                 if (currentPrincipalIdentity.IsInRole(UserRoles.Interviewer.ToString()) &&
@@ -65,7 +75,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     .ExecuteInPlainTransaction(
                         () => webInterviewConfigProvider.Get(questionnaireIdentity));
 
-            if (!webInterviewConfig.Started)
+            if (!webInterviewConfig.Started || !AnonymousUserAllowedStatuses.Contains(interview.Status))
             {
                 throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
                 Headquarters.Resources.WebInterview.Error_InterviewExpired);
