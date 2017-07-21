@@ -110,5 +110,28 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.Interview
             Assert.That(foundEntries.TotalCount, Is.EqualTo(1));
             Assert.That(foundEntries.Items.Single().InterviewId, Is.EqualTo(interviewIdWithAssignment));
         }
+
+        [Test]
+        public void Should_find_interviews_by_responsibleId()
+        {
+            Guid interviewIdWithAssignment = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            Guid interviewIdWithoutAssignment = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+
+            var summaryThatHasAssignmentId = Create.Entity.InterviewSummary(interviewIdWithAssignment, assignmentId: 5, responsibleId: Id.g1);
+            var summaryWithoutAssignment = Create.Entity.InterviewSummary(interviewIdWithoutAssignment, assignmentId: null, responsibleId: Id.g2);
+
+            var assignments = new TestInMemoryWriter<InterviewSummary>();
+            assignments.Store(summaryThatHasAssignmentId, interviewIdWithAssignment.FormatGuid());
+            assignments.Store(summaryWithoutAssignment, interviewIdWithoutAssignment.FormatGuid());
+
+            var factory = Create.Service.AllInterviewsFactory(assignments);
+
+            // Act
+            var foundEntries = factory.Load(new AllInterviewsInputModel { ResponsibleId = Id.g1});
+
+            // Assert
+            Assert.That(foundEntries.TotalCount, Is.EqualTo(1));
+            Assert.That(foundEntries.Items.Single().InterviewId, Is.EqualTo(interviewIdWithAssignment));
+        }
     }
 }
