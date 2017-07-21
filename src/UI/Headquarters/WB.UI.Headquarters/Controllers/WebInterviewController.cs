@@ -408,11 +408,16 @@ namespace WB.UI.Headquarters.Controllers
             return Redirect(returnUrl);
         }
 
-        [WebInterviewAuthorize]
         public ActionResult Complete(string id)
         {
             var interview = this.statefulInterviewRepository.Get(id);
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
+
+            if (!webInterviewConfig.Started && User.IsInRole(UserRoles.Interviewer.ToString()))
+            {
+                return RedirectToAction("Completed", "InterviewerHq");
+            }
+            
             if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))
             {
                 var returnUrl = GenerateUrl(@"Complete", id);
