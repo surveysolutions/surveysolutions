@@ -6,9 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
@@ -371,6 +371,12 @@ namespace WB.UI.Headquarters.Controllers
             if (interview == null || !interview.IsCompleted) return this.HttpNotFound();
 
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
+
+            if (!webInterviewConfig.Started && User.IsInRole(UserRoles.Interviewer.ToString()))
+            {
+                return RedirectToAction("Completed", "InterviewerHq");
+            }
+
             if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))
             {
                 var returnUrl = GenerateUrl(@"Finish", id);
@@ -385,6 +391,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             var interview = this.statefulInterviewRepository.Get(id);
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
+
             if (webInterviewConfig.UseCaptcha)
             {
                 var model = this.GetResumeModel(id);
