@@ -329,6 +329,7 @@
     <Compile Include="CustomBindings\ViewGroupStatusBarColorByInterviewStatusBinding.cs" />
     <Compile Include="CustomBindings\ViewHideKeyboardOnClickBinding.cs" />
     <Compile Include="CustomBindings\ViewPaddingLeftBinding.cs" />
+    <Compile Include="CustomBindings\ViewTagBinding.cs" />
     <Compile Include="CustomBindings\ViewTransparentBinding.cs" />
     <Compile Include="CustomControls\DynamicImageView.cs" />
     <Compile Include="CustomControls\DatePickerDialogFragment.cs" />

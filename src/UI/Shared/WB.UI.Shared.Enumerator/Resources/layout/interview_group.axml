@@ -16,6 +16,7 @@
                 Html SpannableGroupTitle(GroupTitle.PlainText, RosterInstanceTitle);
                 ButtonGroupStyle GroupState; 
                 Enabled Enablement.Enabled;
+                Tag Format('Group_{0}', Identity)
               "/>
     </LinearLayout>
     <TextView style="@style/Interview_Group_Description"
