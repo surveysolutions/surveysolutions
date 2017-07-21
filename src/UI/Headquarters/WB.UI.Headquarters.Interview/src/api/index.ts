@@ -2,7 +2,7 @@
 
 import * as jQuery from "jquery"
 // tslint:disable-next-line:max-line-length
-import { appVersion, audioUploadUri, imageUploadUri, signalrPath, signalrUrlOverride, supportedTransports } from "./../config"
+import { appVersion, audioUploadUri, imageUploadUri, signalrPath, signalrUrlOverride, supportedTransports } from "src/config"
 const $ = (window as any).$ = (window as any).jQuery = jQuery
 import * as $script from "scriptjs"
 import "signalr"
