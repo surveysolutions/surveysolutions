@@ -17,6 +17,10 @@
     @Html.Partial("assignmentslist")
 
     <script type="text/javascript">
+
+        var locale = window.navigator.userLanguage || window.navigator.language;
+        moment.locale(locale);
+
         var assignmentsEndpoint = "@Url.Content("~/api/Assignments")";
         var $profileUrl = '@Url.Action("Profile", "Interviewer")';
         var $interviewsUrl = "@(Model.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ"))";
