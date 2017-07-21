@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
@@ -10,29 +12,25 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.WebInterview.Services;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Headquarters.Code;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
 {
+    [TestFixture]
+    [TestOf(typeof(WebInterviewAllowService))]
     public class WebInterviewAllowServiceTests
     {
         private InterviewSummary interview;
         private WebInterviewAllowService webInterviewAllowService;
         private Guid interviewId;
-        private Guid? interviewerId;
 
         private ITransactionManagerProvider transactionManagerProvider;
         private Mock<IQueryableReadSideRepositoryReader<InterviewSummary>> interviewSummaryRepoMock;
         private IWebInterviewConfigProvider webInterviewConfigProvider;
         private IPlainTransactionManagerProvider plainTransactionManagerProvider;
-        private HqUserManager hqUserManager;
         private WebInterviewConfig webInterviewConfig;
-        private Mock<IUserStore<HqUser, Guid>> mockOfUserManager;
 
         [SetUp]
         public void Setup()
@@ -48,20 +46,15 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             webInterviewConfig = new WebInterviewConfig();
             webInterviewConfigProvider = Mock.Of<IWebInterviewConfigProvider>(tmp => tmp.Get(It.IsAny<QuestionnaireIdentity>()) == webInterviewConfig);
 
-            this.mockOfUserManager = new Mock<IUserStore<HqUser, Guid>>();
-
-            hqUserManager = Create.Storage.HqUserManager(userStore: mockOfUserManager.Object);
-
             webInterviewAllowService = new WebInterviewAllowService(transactionManagerProvider, 
                 plainTransactionManagerProvider,
                 interviewSummaryRepoMock.Object, 
-                webInterviewConfigProvider, 
-                hqUserManager);
+                webInterviewConfigProvider);
         }
 
         private void Act()
         {
-            webInterviewAllowService.CheckWebInterviewAccessPermissions(interviewId.ToString(), interviewerId);
+            webInterviewAllowService.CheckWebInterviewAccessPermissions(interviewId.ToString());
         }
 
         private void ArrangeTest(
@@ -73,11 +66,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         {
             if (interviewerId.HasValue && userRole.HasValue)
             {
-                mockOfUserManager.Setup(_ => _.FindByIdAsync(It.IsAny<Guid>()))
-                    .Returns(Task.FromResult(Create.Entity.HqUser(userId: interviewerId, role: userRole.Value)));
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, interviewerId.ToString()),
+                    new Claim(ClaimTypes.Role, userRole.ToString())
+                };
+
+                Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(claims));
             }
-            
-            hqUserManager = Create.Storage.HqUserManager(userStore: mockOfUserManager.Object);
 
             if (interviewStatus.HasValue)
             {                
@@ -87,7 +83,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
                 
                 if (interviewerId.HasValue)
                 {
-                    this.interviewerId = interviewerId.Value;
                 }
 
                 interviewSummaryRepoMock
