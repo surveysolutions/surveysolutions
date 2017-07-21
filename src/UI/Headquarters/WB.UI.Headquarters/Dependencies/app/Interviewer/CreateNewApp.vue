@@ -17,7 +17,7 @@ export default {
         dataTable() {
             return this.$refs.table.table
         },
-        tableOptions(){ 
+        tableOptions() { 
             return {
                 rowId: "id",
                 deferLoading: 0,
@@ -50,6 +50,8 @@ export default {
         },
 
         getTableColumns() {
+            const self = this;
+
             const columns = [
                 {
                     data: "id",
@@ -64,7 +66,11 @@ export default {
                     orderable: false,
                     searchable: false,
                     render(data, type, row) {
-                        return row.quantity - row.interviewsCount;
+                        const quantity = row.quantity - row.interviewsCount;
+                        if(quantity <= 0){
+                            return '<span>' + self.$t("Assignments.Unlimited") + '</span>'
+                        }
+                        return quantity
                     },
                     defaultContent: '<span>' + this.$t("Assignments.Unlimited") + '</span>'
                 }, {
