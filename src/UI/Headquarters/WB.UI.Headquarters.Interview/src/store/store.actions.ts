@@ -86,7 +86,6 @@ export default {
     },
     sendNewComment({ dispatch }, { questionId, comment }) {
         apiCaller(api => api.sendNewComment(questionId, comment))
-        dispatch("fetchQuestionComments", questionId)
     },
 
     setAnswerAsNotSaved({ commit }, { id, message }) {
@@ -145,6 +144,12 @@ export default {
         })
 
         dispatch("refreshSectionState", null)
+    },
+    // called by server side. refresh
+    refreshComment({ state, dispatch }, questionId: string) {
+        if (state.entityDetails[questionId]) { // do not fetch entity comments that is no in the visible list
+            dispatch("fetchQuestionComments", questionId)
+        }
     },
 
     refreshSectionState: debounce(({ dispatch }) => {
