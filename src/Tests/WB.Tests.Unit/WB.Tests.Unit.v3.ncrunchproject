@@ -2,6 +2,7 @@
   <Settings>
     <HiddenComponentWarnings>
       <Value>NUnitTestsWithSameName</Value>
+      <Value>AssemblyReferenceToBuildOutputDirectory</Value>
     </HiddenComponentWarnings>
     <PreviouslyBuiltSuccessfully>True</PreviouslyBuiltSuccessfully>
   </Settings>

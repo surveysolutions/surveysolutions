@@ -14,6 +14,13 @@ namespace WB.UI.Shared.Enumerator.Activities
             this.EnsureBindingContextIsSet(savedInstanceState);
             return this.BindingInflate(Resource.Layout.interview_question_audio_dialog, container, false);
         }
-        
+
+        public override void OnResume()
+        {
+            this.Dialog.Window.SetLayout(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent);
+            this.Dialog.Window.SetBackgroundDrawable(null);
+
+            base.OnResume();
+        }
     }
 }
