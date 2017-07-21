@@ -28,7 +28,10 @@
             "verboseLogging": <%= htmlWebpackPlugin.options.verboseLogging %>,
             "assetsPath": '@Url.Content("~/InterviewApp")/',
             "appVersion": '@(ServiceLocator.Current.GetInstance<WB.Core.Infrastructure.Versions.IProductVersion>())',
-            "googleApiKey": '@(WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapApiKey)'
+            "googleApiKey": '@(WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapApiKey)',
+            "hqLink" : @Html.Raw(this.User.Identity.IsAuthenticated && this.User.IsInRole("Interviewer")
+                                    ? "'" + Url.Content(@"~/InterviewerHq/Started") + "'"
+                                    : null)
         }
     </script>
 <div id="app"></div>
