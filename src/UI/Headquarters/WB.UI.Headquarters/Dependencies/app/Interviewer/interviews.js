@@ -7,6 +7,7 @@ import store from "store"
 store.registerModule('interviews', {
     actions: {
         openInterview(context, interviewId) {
+            context.dispatch("showProgress", true);
             window.location = context.rootState.config.interviewerHqEndpoint + "/OpenInterview/" + interviewId
         },
 

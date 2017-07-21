@@ -11,13 +11,13 @@ store.registerModule('createNew', {
             dispatch("showProgress", true);
 
             $.post(rootState.config.interviewerHqEndpoint + "/StartNewInterview/" + assignmentId, response => {
+                dispatch("showProgress", true);
                 window.location = response;
             }).then(() => dispatch("showProgress", false));
 
         },
 
         discardInterview(context, interviewId) {
-            
             $.post(context.rootState.config.interviewerHqEndpoint + "/DiscardInterview/" + interviewId, response => {
                 this.reload();
             });
@@ -26,6 +26,7 @@ store.registerModule('createNew', {
         restartInterview(context, interviewId) {
             this.$refs.confirmation.promt(() => {
                 $.post(context.rootState.config.interviewerHqEndpoint + "/RestartInterview/" + interviewId, { comment: this.restart_comment }, response => {
+                    dispatch("showProgress", true);
                     window.location = context.rootState.config.interviewerHqEndpoint + "/OpenInterview/" + interviewId;
                 })
             });
