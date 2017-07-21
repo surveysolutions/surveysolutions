@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using Humanizer;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.Api;
+using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
@@ -39,30 +43,45 @@ namespace WB.UI.Headquarters.Controllers
         [CamelCase]
         public async Task<DataTableResponse<QuestionnaireToBeImported>> QuestionnairesList([FromBody] DataTableRequest request)
         {
-            var list = await this.restService.GetAsync<PagedQuestionnaireCommunicationPackage>(
-                url: $@"{this.apiPrefix}/{this.apiVersion}/questionnaires",
-                credentials: this.designerUserCredentials.Get(),
-                queryString: new
-                {
-                    PageIndex = request.PageIndex,
-                    PageSize = request.PageSize,
-                    SortOrder = request.GetSortOrder(),
-                    Filter = request.Search.Value
-                });
-
-            return new DataTableResponse<QuestionnaireToBeImported>
+            try
             {
-                Draw = request.Draw + 1,
-                RecordsTotal = list.TotalCount,
-                RecordsFiltered = list.TotalCount,
-                Data = list.Items.Select(x => new QuestionnaireToBeImported
+                var list = await this.restService.GetAsync<PagedQuestionnaireCommunicationPackage>(
+                    url: $@"{this.apiPrefix}/{this.apiVersion}/questionnaires",
+                    credentials: this.designerUserCredentials.Get(),
+                    queryString: new
+                    {
+                        PageIndex = request.PageIndex,
+                        PageSize = request.PageSize,
+                        SortOrder = request.GetSortOrder(),
+                        Filter = request.Search.Value
+                    });
+
+                return new DataTableResponse<QuestionnaireToBeImported>
                 {
-                    Id = x.Id,
-                    Title = x.Title,
-                    LastModified = HumanizeLastUpdateDate(x.LastModifiedDate),
-                    CreatedBy = x.OwnerName ?? ""
-                })
-            };
+                    Draw = request.Draw + 1,
+                    RecordsTotal = list.TotalCount,
+                    RecordsFiltered = list.TotalCount,
+                    Data = list.Items.Select(x => new QuestionnaireToBeImported
+                    {
+                        Id = x.Id,
+                        Title = x.Title,
+                        LastModified = HumanizeLastUpdateDate(x.LastModifiedDate),
+                        CreatedBy = x.OwnerName ?? ""
+                    })
+                };
+            }
+            catch (RestException e)
+            {
+                switch (e.StatusCode)
+                {
+                    case HttpStatusCode.Unauthorized:
+                    case HttpStatusCode.Forbidden:
+                        this.designerUserCredentials.Set(null);
+                        break;
+                }
+            }
+
+            throw new HttpResponseException(HttpStatusCode.Unauthorized);
         }
 
         private string HumanizeLastUpdateDate(DateTime? date)
