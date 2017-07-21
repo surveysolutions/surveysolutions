@@ -3,7 +3,8 @@ const webpack = require('webpack')
 const path = require('path')
 const baseAppPath = "./Dependencies/"
 const devMode = process.env.NODE_ENV != 'production';
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+
+console.log("Building HQ UI js in " + (devMode ? "DEVELOPMENT" : "PRODUCTION") + " mode.")
 
 module.exports = {
     entry: {
@@ -36,37 +37,15 @@ module.exports = {
             {
                 test: /\.vue$/,
                 exclude: /(node_modules)/,
-                use: {
-                    loader: 'vue-loader',
-                    options: {
-                        loaders: {
-                            js: 'babel-loader?presets[]=env'
-                        }
-                    }
-                }
+                use: { loader: 'vue-loader', options: { loaders: { js: 'babel-loader?presets[]=env' } } }
             }, {
                 test: /\.js$/,
                 exclude: /(node_modules)/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: [["env", { "modules": false }]]
-                    }
-                }
+                use: { loader: 'babel-loader', options: { presets: [["env", { "modules": false }]] } }
             }
         ]
     },
     plugins: [
-        new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV: devMode ? '"development"' : '"production"'
-            }
-        }),
-        // new webpack.ProvidePlugin({
-        //   //  'Promise': 'es6-promise', // Thanks Aaron (https://gist.github.com/Couto/b29676dd1ab8714a818f#gistcomment-1584602)
-        //     fetch: 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch'
-        // }),
-        //devMode ? null :
         // split vendor js into its own file
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
@@ -84,18 +63,15 @@ module.exports = {
 
         new webpack.optimize.ModuleConcatenationPlugin(),
 
-        devMode ? null : new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false
-            },
-            beautify: false, // Don't beautify output (uglier to read)
-            comments: false // Eliminate comments
-        })
-        // devMode ? null :new BundleAnalyzerPlugin({
-        //     analyzerMode: 'static',
-        //     reportFilename: 'stats.html',
-        //     openAnalyzer: false,
-        //     statsOptions: { chunkModules: true, assets: true },
-        // })
+        devMode ? null : function () {
+            const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+            
+            return new BundleAnalyzerPlugin({
+                analyzerMode: 'static',
+                reportFilename: 'Dependencies/build/stats.html',
+                openAnalyzer: false,
+                statsOptions: { chunkModules: true, assets: true },
+            });
+        }()
     ].filter(x => x != null)
 }

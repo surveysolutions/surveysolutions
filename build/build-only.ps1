@@ -54,14 +54,15 @@ try {
                 Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
                 Write-Host "##teamcity[buildProblem description='Failed to build static content for HQ']"
                 Exit 
-            }}
+        } else {
+            Move-Item "..\WB.UI.Headquarters\Dependencies\build\stats.html" "$artifactsFolder\Hq.UI.stats.html" -ErrorAction SilentlyContinue
+        }}
 
         BuildStaticContent "Web Interview" $ProjectWebInterview | % { if (-not $_) { 
             Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
             Write-Host "##teamcity[buildProblem description='Failed to build Web interview application']"
             Exit
-        }
-        else {
+        } else {
             Move-Item "..\WB.UI.Headquarters\InterviewApp\stats.html" "$artifactsFolder\WebInterview.stats.html" -ErrorAction SilentlyContinue
         }}
 
