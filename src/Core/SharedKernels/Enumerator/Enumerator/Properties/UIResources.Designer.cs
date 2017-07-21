@@ -215,6 +215,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} of audio recording.
+        /// </summary>
+        public static string AudioQuestion_DurationFormat {
+            get {
+                return ResourceManager.GetString("AudioQuestion_DurationFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {

@@ -68,6 +68,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         InterviewTreeAreaQuestion GetAreaQuestion(Identity identity);
 
+        InterviewTreeAudioQuestion GetAudioQuestion(Identity identity);
+
         InterviewTreeQuestion GetQuestion(Identity identity);
 
         InterviewTreeStaticText GetStaticText(Identity identity);

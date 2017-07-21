@@ -234,11 +234,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireQuestionExists(QuestionType.Multimedia)
                 .RequireQuestionEnabled();
 
-        public void RequireAudioAnswerAllowed()
-            => this
-                .RequireQuestionExists(QuestionType.Audio)
-                .RequireQuestionEnabled();
-
         public void RequireAreaAnswerAllowed()
             => this
                 .RequireQuestionExists(QuestionType.Area)

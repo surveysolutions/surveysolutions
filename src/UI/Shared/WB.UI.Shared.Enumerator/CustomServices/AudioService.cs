@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Android.Media;
+using Android.Webkit;
 using Plugin.Permissions.Abstractions;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -11,6 +12,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 {
     public class AudioService : IAudioService
     {
+        private const string AudioExtension = "audio.3gpp";
         private MediaRecorder recorder;
         private DateTime startedDate;
         
@@ -20,7 +22,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         public AudioService(string pathToAudioDirectory, IFileSystemAccessor fileSystemAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
-            this.pathToAudioFile = this.fileSystemAccessor.CombinePath(pathToAudioDirectory, "audio.3gpp");
+            this.pathToAudioFile = this.fileSystemAccessor.CombinePath(pathToAudioDirectory, AudioExtension);
         }
 
         public void Start(int bitRate)
@@ -50,6 +52,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 : null;
 
         public TimeSpan GetDuration() => DateTime.Now - this.startedDate;
+        public string GetMimeType() => MimeTypeMap.Singleton.GetMimeTypeFromExtension(AudioExtension);
 
         public void Dispose() => this.recorder?.Release();
     }

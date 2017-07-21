@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 
 namespace WB.Core.SharedKernels.Enumerator.Services
 {
@@ -7,6 +6,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services
     {
         void ShowAndStartRecording(string title, int bitRate);
         event EventHandler OnCanelRecording;
-        event EventHandler<Stream> OnRecorded;
+        event EventHandler<AudioRecordEventArgs> OnRecorded;
     }
 }

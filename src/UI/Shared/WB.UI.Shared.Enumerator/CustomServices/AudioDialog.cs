@@ -1,8 +1,6 @@
 using System;
-using System.IO;
 using System.Threading;
 using Android.Media.Audiofx;
-using Android.Views;
 using MvvmCross.Platform.Droid.Platform;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -44,7 +42,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         }
         
         public event EventHandler OnCanelRecording;
-        public event EventHandler<Stream> OnRecorded;
+        public event EventHandler<AudioRecordEventArgs> OnRecorded;
 
         public void ShowAndStartRecording(string title, int bitRate)
         {
@@ -84,7 +82,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private void ViewModel_OnDone(object sender, EventArgs e)
         {
             this.HideAndStopRecording();
-            this.OnRecorded?.Invoke(sender, this.audioService.GetLastRecord());
+            this.OnRecorded?.Invoke(sender,
+                new AudioRecordEventArgs(this.audioService.GetLastRecord(), this.audioService.GetDuration(),
+                    this.audioService.GetMimeType()));
         }
         private void ViewModel_OnCancel(object sender, EventArgs e)
         {
@@ -107,7 +107,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private void OnEvery100Milisecond(object state)
         {
             var duration = this.audioService.GetDuration();
-            this.dialog.ViewModel.Duration = $"{duration.Minutes:00}:{duration.Seconds:00}:{duration.Milliseconds:000}";
+            this.dialog.ViewModel.Duration = $"{duration.Minutes:00}:{duration.Seconds:00}:{duration.Milliseconds/100:0}";
         }
 
         private void VisualizerCapturer_OnWaveCaptured(object sender, float intensity)

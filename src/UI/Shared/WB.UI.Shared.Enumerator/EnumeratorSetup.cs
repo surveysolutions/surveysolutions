@@ -107,6 +107,9 @@ namespace WB.UI.Shared.Enumerator
             registry.AddOrOverwrite("MediaButtonStyleBackground", new MediaQuestionButtonBackgroundConverter());
             registry.AddOrOverwrite("SectionStyleBackground", new SectionStyleBackgroundConverter());
             registry.AddOrOverwrite("VisibleOrInvisible", new VisibleOrInvisibleValueConverter());
+            registry.AddOrOverwrite("AudioIntensityToShape", new AudioIntensityToShapeConverter());
+            registry.AddOrOverwrite("AudioIntensityToDot", new AudioIntensityToDotConverter());
+            registry.AddOrOverwrite("AudioIntensityToSize", new AudioIntensityToSizeConverter());
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
@@ -138,6 +141,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<EditText>("TextChanged", (editText) => new EditTextChangedBinding(editText));
             registry.RegisterCustomBindingFactory<FrameLayout>("CurrentScreen", (frameLayout) => new FrameLayoutCurrentScreenBinding(frameLayout));
             registry.RegisterCustomBindingFactory<ImageView>("BitmapWithFallback", (img) => new ImageViewBitmapWithFallbackBinding(img));
+            registry.RegisterCustomBindingFactory<View>("SizeInDp", (view) => new SizeInDpBinding(view));
             registry.RegisterCustomBindingFactory<View>("Tag", (img) => new ViewTagBinding(img));
             MvxAppCompatSetupHelper.FillTargetFactories(registry);
 

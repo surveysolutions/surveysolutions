@@ -554,4 +554,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="AssignmentN" xml:space="preserve">
     <value>Assignment #{0}</value>
   </data>
+  <data name="AudioQuestion_DurationFormat" xml:space="preserve">
+    <value>{0} of audio recording</value>
+  </data>
 </root>

@@ -4,6 +4,12 @@
   xmlns:local="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
+  android:paddingRight="@dimen/Interview_Entity_margin_right"
+  android:paddingLeft="@dimen/Interview_Entity_margin_left">
+<LinearLayout
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:background="@android:color/white"
   android:paddingBottom="10dp"
   android:paddingTop="28dp"
   android:paddingLeft="30dp"
@@ -11,6 +17,9 @@
   android:orientation="vertical">
   <TableLayout
     style="@style/FullWidthWrappingLayout"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1" 
     android:stretchColumns="0">
     <TableRow>
       <LinearLayout
@@ -33,8 +42,26 @@
                    android:duplicateParentState="true"
                    local:MvxBind="Click CancelCommand;" />
     </TableRow>
-    <TableRow android:minHeight="130dp">
-
+    <TableRow>
+      <RelativeLayout
+        android:layout_span="2"
+        android:layout_width="match_parent"
+        android:layout_height="150dp">
+        <View 
+          android:layout_centerHorizontal="true"
+          android:layout_centerVertical="true"
+          android:layout_width="5dp"
+          android:layout_height="5dp"
+          local:MvxBind="BackgroundStyle AudioIntensityToDot(Intensity)"/>  
+      
+        <View 
+          android:layout_centerHorizontal="true"
+          android:layout_centerVertical="true"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          local:MvxBind="SizeInDp AudioIntensityToSize(Intensity); BackgroundStyle AudioIntensityToShape(Intensity)" />  
+      </RelativeLayout>
+        
     </TableRow>
   </TableLayout>
   <LinearLayout
@@ -54,4 +81,5 @@
         style="@style/Done_Button"
         local:MvxBind="Click DoneCommand; Text Localization('Interviewer_Done');" />  
   </LinearLayout>
+</LinearLayout>
 </LinearLayout>

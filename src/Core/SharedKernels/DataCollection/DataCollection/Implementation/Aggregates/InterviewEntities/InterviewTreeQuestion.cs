@@ -537,6 +537,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.AsMultiLinkedToList?.RemoveAnswer();
             this.AsSingleLinkedToList?.RemoveAnswer();
             this.AsArea?.RemoveAnswer();
+            this.AsAudio?.RemoveAnswer();
         }
 
         public bool IsOnTheSameOrDeeperLevel(Identity questionIdentity)
