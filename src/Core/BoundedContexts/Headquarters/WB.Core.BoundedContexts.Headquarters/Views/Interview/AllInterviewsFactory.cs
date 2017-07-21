@@ -202,6 +202,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 items = items.Where(x => x.TeamLeadName == input.TeamLeadName);
             }
 
+            if (input.ResponsibleId.HasValue)
+            {
+                items = items.Where(x => x.ResponsibleId == input.ResponsibleId.Value);
+            }
+
             if (input.QuestionnaireId.HasValue)
             {
                 items = items.Where(x => x.QuestionnaireId == input.QuestionnaireId);
