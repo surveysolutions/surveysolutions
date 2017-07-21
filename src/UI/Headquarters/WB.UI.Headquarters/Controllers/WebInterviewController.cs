@@ -34,7 +34,6 @@ using WebInterview = WB.UI.Headquarters.Resources.WebInterview;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [WebInterviewFeatureEnabled]
     [BrowsersRestriction]
     public class WebInterviewController : BaseController
     {
