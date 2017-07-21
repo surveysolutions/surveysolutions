@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:local="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -7,23 +8,22 @@
   <LinearLayout style="@style/Interview_Question_Answer"
                 local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
 
-    <TableLayout style="@style/FullWidthWrappingLayout"
-                 android:stretchColumns="0">
-      <TableRow local:MvxBind="Visible QuestionState.IsAnswered">
-        <TextView style="@style/Interview_Question_RecordedAnswer"
-                  android:text="Hello" />
-        <include layout="@layout/interview_question__remove_button_recorded" />
-      </TableRow>
-      <TableRow>
-        <FrameLayout android:layout_height="wrap_content"
-                     android:layout_width="wrap_content">
-          <Button style="@style/Interview_Question_InputButton"
-                  local:MvxBind="
+    <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
+      <TableLayout android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:stretchColumns="0">
+        <TableRow>
+          <TextView style="@style/Interview_Question_RecordedAnswer"
+                    local:MvxBind="Text Answer; Visible QuestionState.IsAnswered" />
+          <include layout="@layout/interview_question__remove_button_recorded" />
+        </TableRow>
+      </TableLayout>
+      <Button style="@style/Interview_Question_InputButton"
+              local:MvxBind="HideKeyboardOnClick .; 
                           Click RecordAudioCommand; 
                           Text Localization('Interview_Questions_Audio_SaveAnswer');
                           BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
-        </FrameLayout>
-      </TableRow>
-    </TableLayout>
+    </LinearLayout>
+
   </LinearLayout>
 </LinearLayout>
