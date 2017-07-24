@@ -12,7 +12,6 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private AudioDialogFragment dialog;
 
         private Timer durationTimer;
-        private Timer amplitudeTimer;
 
         private readonly IMvxAndroidCurrentTopActivity topActivity;
         private readonly IInterviewViewModelFactory viewModelFactory;
