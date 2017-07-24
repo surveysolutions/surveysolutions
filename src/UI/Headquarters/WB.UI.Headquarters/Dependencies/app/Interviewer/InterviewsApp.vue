@@ -2,20 +2,13 @@
     <Layout :title="title" :hasFilter="true">
         <Filters slot="filters">
             <FilterBlock :title="$t('Pages.Template')">
-                <Typeahead data-vv-name="questionnaireId" 
-                    data-vv-as="questionnaire" 
-                    :placeholder="$t('Common.Any')" 
-                    control-id="questionnaireId" 
-                    :ajaxParams="{ statuses: statuses.toString() }" 
-                    :value="questionnaireId" 
-                    v-on:selected="questionnaireSelected" 
-                    :fetch-url="config.interviewerHqEndpoint + '/QuestionnairesCombobox'"></Typeahead>
+                <Typeahead data-vv-name="questionnaireId" data-vv-as="questionnaire" :placeholder="$t('Common.Any')" control-id="questionnaireId" :ajaxParams="{ statuses: statuses.toString() }" :value="questionnaireId" v-on:selected="questionnaireSelected" :fetch-url="config.interviewerHqEndpoint + '/QuestionnairesCombobox'"></Typeahead>
             </FilterBlock>
         </Filters>
     
         <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addFilteringParams" :contextMenuItems="contextMenuItems"></DataTables>
     
-        <Confirm ref="confirmation" id="restartModal" slot="modals">
+        <Confirm ref="confirmRestart" id="restartModal" slot="modals">
             {{ $t("Pages.InterviewerHq_RestartConfirm") }}
             <FilterBlock>
                 <div class="form-group ">
@@ -25,7 +18,11 @@
                 </div>
             </FilterBlock>
         </Confirm>
-
+    
+        <Confirm ref="confirmDiscard" id="discardConfirm" slot="modals">
+            {{ $t("Pages.InterviewerHq_DiscardConfirm") }}
+        </Confirm>
+    
     </Layout>
 </template>
 
@@ -80,34 +77,29 @@ export default {
             this.$refs.table.reload();
         },
 
-        contextMenuItems({rowData, rowIndex}) {
+        contextMenuItems({ rowData, rowIndex }) {
             const menu = [];
             const self = this;
 
             if (rowData.status != 'Completed') {
                 menu.push({
-                    name: this.$t("Pages.InterviewerHq_OpenInterview"),
-                    callback: () => this.$store.dispatch("openInterview", rowData.interviewId)
+                    name: self.$t("Pages.InterviewerHq_OpenInterview"),
+                    callback: () => self.$store.dispatch("openInterview", rowData.interviewId)
                 });
             }
 
             if (rowData.canDelete) {
                 menu.push({
-                    name: this.$t("Pages.InterviewerHq_DiscardInterview"),
-                    callback: () => {
-                        self.$refs.table.disableRow(rowIndex)
-
-                        self.$store.dispatch("discardInterview", {
-                            interviewId: rowData.interviewId, 
-                            callback: self.reload
-                        })
+                    name: self.$t("Pages.InterviewerHq_DiscardInterview"),
+                    callback () {
+                        self.discardInterview(rowData.interviewId, rowIndex)
                     }
                 });
             }
 
             if (rowData.status == 'Completed') {
                 menu.push({
-                    name: this.$t("Pages.InterviewerHq_RestartInterview"),
+                    name: self.$t("Pages.InterviewerHq_RestartInterview"),
                     callback: () => {
                         self.$refs.table.disableRow(rowIndex)
                         self.restartInterview(rowData.interviewId)
@@ -118,11 +110,24 @@ export default {
             return menu;
         },
 
+        discardInterview(interviewId, rowIndex) {
+            const self = this;
+            this.$refs.confirmDiscard.promt(() => {
+                self.$refs.table.disableRow(rowIndex)
+                self.$store.dispatch("discardInterview", {
+                    interviewId,
+                    callback: self.reload
+                });
+            });
+        },
+
         restartInterview(interviewId) {
-            this.$refs.confirmation.promt(() => {
-                $.post(this.config.interviewerHqEndpoint + "/RestartInterview/" + interviewId, { comment: this.restart_comment }, response => {
-                    this.restart_comment = "";
-                    this.$store.dispatch("openInterview", interviewId);
+            const self = this
+
+            self.$refs.confirmRestart.promt(() => {
+                $.post(this.config.interviewerHqEndpoint + "/RestartInterview/" + interviewId, { comment: self.restart_comment }, response => {
+                    self.restart_comment = "";
+                    self.$store.dispatch("openInterview", interviewId);
                 })
             });
         },

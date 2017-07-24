@@ -970,6 +970,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are You sure that You want to discard interview data?.
+        /// </summary>
+        public static string InterviewerHq_DiscardConfirm {
+            get {
+                return ResourceManager.GetString("InterviewerHq_DiscardConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Discard Interview.
         /// </summary>
         public static string InterviewerHq_DiscardInterview {
