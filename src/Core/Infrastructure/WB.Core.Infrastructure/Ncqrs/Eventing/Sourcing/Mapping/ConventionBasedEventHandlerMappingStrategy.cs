@@ -33,7 +33,7 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
     public class ConventionBasedEventHandlerMappingStrategy : IEventHandlerMappingStrategy
     {
         public Type EventBaseType { get; set; }
-        private readonly Regex MethodNamePattern = new Regex("^(on|On|ON)+|Apply$", RegexOptions.CultureInvariant);
+        private static readonly Regex MethodNamePattern = new Regex("^(on|On|ON)+|Apply$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
         private static ConcurrentDictionary<MethodInfo, ParameterInfo[]> _parametersCache = new ConcurrentDictionary<MethodInfo, ParameterInfo[]>();
 
@@ -62,7 +62,7 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
             var targetType = target.GetType();
             var handlers = new List<ISourcedEventHandler>();
 
-            var methodsToMatch = targetType.GetTypeInfo().GetMethods();
+            var methodsToMatch = targetType.GetTypeInfo().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance);
 
             var matchedMethods = from method in methodsToMatch
                                  let parameters = GetParameters(method)
@@ -94,7 +94,7 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
         public bool CanHandleEvent(object target, Type committedEvent)
         {
             var targetType = target.GetType();
-            var methodsToMatch = targetType.GetTypeInfo().GetMethods();
+            var methodsToMatch = targetType.GetTypeInfo().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance);
 
             foreach (var method in methodsToMatch)
             {
