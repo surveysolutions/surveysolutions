@@ -47,7 +47,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             HqUserManager userManager,
             ILogger logger,
             IQuestionnaireStorage questionnaireStorage,
-            IInterviewCreatorFromAssignment interviewCreatorFromAssignment, 
+            IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
             IInterviewImportService importService) : base(logger)
         {
             this.assignmentViewFactory = assignmentViewFactory;
