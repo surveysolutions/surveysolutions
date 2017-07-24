@@ -561,4 +561,7 @@
     <value>Задача номер: {0}</value>
     <comment>Задача номер: {0}</comment>
   </data>
+  <data name="AudioQuestion_DurationFormat" xml:space="preserve">
+    <value>{0} аудио записи</value>
+  </data>
 </root>
