@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Questionnaire.Documents.Question;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 
@@ -239,11 +240,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             result.AllQuestionScopeOptions = AllQuestionScopeOptions;
             result.QualityOptions = new List<QualityOption>()
             {
-                new QualityOption {Title = Quality.Lowest.ToString(), Value = (int) Quality.Lowest},
-                new QualityOption {Title = Quality.Low.ToString(), Value = (int) Quality.Low},
-                new QualityOption {Title = Quality.Medium.ToString(), Value = (int) Quality.Medium},
-                new QualityOption {Title = Quality.High.ToString(), Value = (int) Quality.High},
-                new QualityOption {Title = Quality.Highest.ToString(), Value = (int) Quality.Highest}
+                new QualityOption {Title = AudioQuality.Low.ToString(), Value = (int) AudioQuality.Low},
+                new QualityOption {Title = AudioQuality.Default.ToString(), Value = (int) AudioQuality.Default},
+                new QualityOption {Title = AudioQuality.Best.ToString(), Value = (int) AudioQuality.Best},
             };
 
             this.ReplaceGuidsInValidationAndConditionRules(result, questionnaire, questionnaireId);
