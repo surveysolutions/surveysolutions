@@ -13,6 +13,7 @@ using WB.UI.Headquarters.API.PublicApi.Models;
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
@@ -79,6 +80,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 .Setup(m => m.Map(It.IsAny<CreateAssignmentApiRequest>(), It.IsAny<Assignment>()))
                 .Returns(assignment);
 
+            this.interviewImportService
+                .Setup(x => x.VerifyAssignment(It.IsAny<List<InterviewAnswer>[]>(), It.IsAny<IQuestionnaire>()))
+                .Returns(AssignmentVerificationResult.Error("error"));
+
             try
             {
                 this.controller.Create(new CreateAssignmentApiRequest
@@ -112,7 +117,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
 
             this.interviewImportService
                 .Setup(x => x.VerifyAssignment(It.IsAny<List<InterviewAnswer>[]>(), It.IsAny<IQuestionnaire>()))
-                .Returns((true, null));
+                .Returns(AssignmentVerificationResult.Ok());
 
             this.controller.Create(new CreateAssignmentApiRequest
             {
