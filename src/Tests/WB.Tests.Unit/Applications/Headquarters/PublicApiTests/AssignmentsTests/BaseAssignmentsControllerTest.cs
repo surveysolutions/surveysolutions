@@ -1,3 +1,4 @@
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -5,14 +6,19 @@ using AutoMapper;
 using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 using WB.Tests.Abc.TestFactories;
 using WB.UI.Headquarters.API.PublicApi;
@@ -31,23 +37,22 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         protected Mock<IPreloadedDataVerifier> preloadedDataVerifier;
         protected Mock<IQuestionnaireStorage> questionnaireStorage;
         protected Mock<ILogger> logger;
-        protected Mock<IInterviewImportService> interviewImportService;
 
         [SetUp]
         public virtual void Setup()
         {
             this.PrepareMocks();
 
-            
             this.controller = new AssignmentsController(
                 this.assignmentViewFactory.Object,
                 this.assignmentsStorage.Object,
+                this.preloadedDataVerifier.Object,
                 this.mapper.Object,
                 this.userManager.Object,
                 this.logger.Object,
                 this.questionnaireStorage.Object,
                 Mock.Of<IInterviewCreatorFromAssignment>(),
-                interviewImportService.Object);
+                new NewtonInterviewAnswerJsonSerializer());
 
             this.controller.Request = new HttpRequestMessage();
             this.controller.Configuration = new HttpConfiguration();
@@ -62,14 +67,13 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             this.preloadedDataVerifier = new Mock<IPreloadedDataVerifier>();
             this.questionnaireStorage = new Mock<IQuestionnaireStorage>();
             this.logger = new Mock<ILogger>();
-            this.interviewImportService = new Mock<IInterviewImportService>();
         }
 
         protected void SetupResponsibleUser(HqUser user)
         {
             this.userManager.Setup(um => um.FindByNameAsync(It.IsAny<string>())).Returns(Task.FromResult(user));
         }
-
+        
         protected void SetupAssignment(Assignment assignment)
         {
             this.assignmentsStorage.Setup(ass => ass.GetById(It.IsAny<int>())).Returns(assignment);
