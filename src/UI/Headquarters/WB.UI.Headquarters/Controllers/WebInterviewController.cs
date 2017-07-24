@@ -6,7 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using ImageResizer.ExtensionMethods;
 using Main.Core.Entities.SubEntities;
+using NAudio.Wave;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
@@ -193,7 +195,7 @@ namespace WB.UI.Headquarters.Controllers
 
         
         [HttpPost]
-        public async Task<ActionResult> Audio(string interviewId, string questionId, HttpPostedFileBase file, long length)
+        public async Task<ActionResult> Audio(string interviewId, string questionId, HttpPostedFileBase file)
         {
             IStatefulInterview interview = this.statefulInterviewRepository.Get(interviewId);
 
@@ -212,9 +214,12 @@ namespace WB.UI.Headquarters.Controllers
 
                     byte[] bytes = ms.ToArray();
 
+                    ms.Position = 0;
+                    var wavFile = new WaveFileReader(ms);
+
                     var fileName = $@"{question.VariableName}{questionIdentity.RosterVector}{DateTime.UtcNow.GetHashCode()}.wav";
                     var responsibleId = interview.CurrentResponsibleId;
-                    var trackLength = new TimeSpan(length);
+                    var trackLength = wavFile.TotalTime;
                     audioFileStorage.StoreInterviewBinaryData(Guid.Parse(interviewId), fileName, bytes, file.ContentType);
 
                     var command = new AnswerAudioQuestionCommand(interview.Id,

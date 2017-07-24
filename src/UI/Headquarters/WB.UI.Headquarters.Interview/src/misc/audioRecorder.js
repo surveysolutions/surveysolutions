@@ -293,8 +293,6 @@ if (!window.AudioRecorder) {
             analyserSettings.node.getByteFrequencyData(freqByteData);
 
             analyserSettings.context.clearRect(0, 0, analyserSettings.canvasWidth, analyserSettings.canvasHeight);
-            analyserSettings.context.fillStyle = '#F6D565';
-            analyserSettings.context.lineCap = 'round';
             var multiplier = analyserSettings.node.frequencyBinCount;
 
             // Draw rectangle for each frequency bin.
@@ -302,11 +300,23 @@ if (!window.AudioRecorder) {
             for (var j = 0; j < multiplier; j++)
                 magnitude += freqByteData[j];
             magnitude = Math.min(magnitude / multiplier, analyserSettings.canvasWidth / 2);
+            magnitude = Math.max(magnitude, 6);
+
+            var color = "";
+            if (magnitude < 10){
+                color = "#cbcbcb";
+            }else if (magnitude > 42){
+                color = "#ed2c39";
+            }else{
+                color = "#2a81cb";
+            }
+            analyserSettings.context.strokeStyle = color;
+            analyserSettings.context.fillStyle = color;
+            analyserSettings.context.lineWidth = 2;
 
             analyserSettings.context.beginPath();
-            analyserSettings.context.arc(centerX, centerY, 5, 0, 2 * Math.PI, false);
-            // analyserSettings.context.fillStyle = 'green';
-            // analyserSettings.context.fill();
+            analyserSettings.context.arc(centerX, centerY, 4, 0, 2 * Math.PI, false);
+            analyserSettings.context.fill();
             analyserSettings.context.stroke();
 
             analyserSettings.context.beginPath();
