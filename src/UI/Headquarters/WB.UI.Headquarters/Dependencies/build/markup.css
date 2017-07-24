@@ -8838,6 +8838,31 @@ body > .ui-pnotify {
     padding: 10px;
     color: #a6a8a9; }
 
+.audio-question .modal .modal-dialog {
+  max-width: 450px; }
+
+.audio-question .modal .modal-header {
+  margin-bottom: 10px; }
+  .audio-question .modal .modal-header h5, .audio-question .modal .modal-header .preset-filters-container a, .preset-filters-container .audio-question .modal .modal-header a, .audio-question .modal .modal-header .preset-filters-container .export-queue, .preset-filters-container .audio-question .modal .modal-header .export-queue {
+    padding: 0;
+    line-height: 18px; }
+  .audio-question .modal .modal-header .modal-title {
+    margin-bottom: 5px; }
+
+.audio-question .modal .modal-body canvas {
+  display: block;
+  margin: 0 auto; }
+
+.audio-question .modal .modal-footer {
+  padding-bottom: 0; }
+  .audio-question .modal .modal-footer .recordign-time {
+    float: left;
+    font: 24px/36px "RobotoLight"; }
+  .audio-question .modal .modal-footer button {
+    float: right;
+    padding: 10px;
+    margin: 0 10px 0 0; }
+
 @media (max-width: 481px) {
   .ui-pnotify {
     width: 300px !important; }
