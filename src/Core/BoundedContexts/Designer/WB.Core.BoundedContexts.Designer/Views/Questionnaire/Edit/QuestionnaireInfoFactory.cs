@@ -237,6 +237,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             result.SourceOfSingleQuestions = this.GetSourcesOfSingleQuestionBriefs(questionnaire, questionId);
             result.QuestionTypeOptions = QuestionTypeOptions;
             result.AllQuestionScopeOptions = AllQuestionScopeOptions;
+            result.QualityOptions = new List<QualityOption>()
+            {
+                new QualityOption {Title = Quality.Lowest.ToString(), Value = (int) Quality.Lowest},
+                new QualityOption {Title = Quality.Low.ToString(), Value = (int) Quality.Low},
+                new QualityOption {Title = Quality.Medium.ToString(), Value = (int) Quality.Medium},
+                new QualityOption {Title = Quality.High.ToString(), Value = (int) Quality.High},
+                new QualityOption {Title = Quality.Highest.ToString(), Value = (int) Quality.Highest}
+            };
 
             this.ReplaceGuidsInValidationAndConditionRules(result, questionnaire, questionnaireId);
 
@@ -480,14 +488,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 case QuestionType.Audio:
                     var audioQuestion = (AudioQuestion) question;
                     questionView.Quality = (int) audioQuestion.Quality;
-                    questionView.QualityOptions = new List<QualityOption>()
-                    {
-                        new QualityOption {Title = Quality.Lowest.ToString(), Value = (int) Quality.Lowest},
-                        new QualityOption {Title = Quality.Low.ToString(), Value = (int) Quality.Low},
-                        new QualityOption {Title = Quality.Medium.ToString(), Value = (int) Quality.Medium},
-                        new QualityOption {Title = Quality.High.ToString(), Value = (int) Quality.High},
-                        new QualityOption {Title = Quality.Highest.ToString(), Value = (int) Quality.Highest}
-                    };
                     return questionView;
                 case QuestionType.QRBarcode:
                 case QuestionType.Multimedia:

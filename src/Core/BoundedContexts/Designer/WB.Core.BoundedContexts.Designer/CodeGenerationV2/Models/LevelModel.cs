@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -8,6 +9,12 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
 {
     public class LevelModel
     {
+        private static readonly List<QuestionType> ExcludedQuestionTypes = new List<QuestionType>
+        {
+            QuestionType.Area,
+            QuestionType.Audio
+        };
+
         public LevelModel(string variable, RosterScope rosterScope, string className)
         {
             Variable = variable;
@@ -75,11 +82,8 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
         private void CreateQuestionsForCurrentAndParentLevels(ReadOnlyQuestionnaireDocument questionnaire,
             IQuestionTypeToCSharpTypeMapper questionTypeMapper)
         {
-            foreach (var question in questionnaire.Find<IQuestion>())
+            foreach (var question in questionnaire.Find<IQuestion>().Where(x => !ExcludedQuestionTypes.Contains(x.QuestionType)))
             {
-                if (question.QuestionType == QuestionType.Area)
-                    continue;
-
                 var rosterScope = questionnaire.GetRosterScope(question);
                 if (!rosterScope.IsSameOrParentScopeFor(this.RosterScope)) continue;
 
