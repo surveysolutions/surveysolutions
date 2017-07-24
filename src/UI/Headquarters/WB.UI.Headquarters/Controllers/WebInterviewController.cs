@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using ImageResizer.ExtensionMethods;
+using CSCore.Codecs.AAC;
+using CSCore;
+using CSCore.Codecs.WAV;
 using Main.Core.Entities.SubEntities;
-using NAudio.Wave;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
@@ -192,7 +194,6 @@ namespace WB.UI.Headquarters.Controllers
 
             return Redirect(uri);
         }
-
         
         [HttpPost]
         public async Task<ActionResult> Audio(string interviewId, string questionId, HttpPostedFileBase file)
@@ -215,18 +216,53 @@ namespace WB.UI.Headquarters.Controllers
                     byte[] bytes = ms.ToArray();
 
                     ms.Position = 0;
-                    var wavFile = new WaveFileReader(ms);
 
-                    var fileName = $@"{question.VariableName}{questionIdentity.RosterVector}{DateTime.UtcNow.GetHashCode()}.wav";
-                    var responsibleId = interview.CurrentResponsibleId;
-                    var trackLength = wavFile.TotalTime;
-                    audioFileStorage.StoreInterviewBinaryData(Guid.Parse(interviewId), fileName, bytes, file.ContentType);
+                    using (var wavFile = new WaveFileReader(ms))
+                    {
+                        var hash = SHA1.Create().ComputeHash(bytes);
+                        var hashStr = string.Join("", hash.Take(4).Select(b => b.ToString("x2")).ToArray());
+                        
+                        var fileName = $@"{question.VariableName}{questionIdentity.RosterVector}_{hashStr}.m4a";
 
-                    var command = new AnswerAudioQuestionCommand(interview.Id,
-                        responsibleId, questionIdentity.Id, questionIdentity.RosterVector, 
-                        DateTime.UtcNow, fileName, trackLength);
+                        var responsibleId = interview.CurrentResponsibleId;
+                        var trackLength = wavFile.GetLength();
 
-                    this.commandService.Execute(command);
+                        var tempFile = Path.GetTempFileName();
+
+                        try
+                        {
+                            using (var encoder = AacEncoder.CreateAACEncoder(wavFile.WaveFormat, tempFile, 64 * 1024 /* 64 Kb bitrate*/))
+                            {
+                                const int step = 8 * 1024; // just an 8Kb buffer
+                                
+                                byte[] buffer = new byte[step];
+
+                                long total = 0;
+
+                                while (total < bytes.LongLength)
+                                {
+                                    int writeLength = (int)Math.Min(bytes.LongLength - total, step);
+                                    Array.Copy(bytes, total, buffer, 0, writeLength);
+                                    encoder.Write(buffer, 0, writeLength);
+                                    total += writeLength;
+                                }
+                            }
+
+                            bytes = System.IO.File.ReadAllBytes(tempFile);
+
+                            audioFileStorage.StoreInterviewBinaryData(Guid.Parse(interviewId), fileName, bytes, @"audio/m4a");
+                        }
+                        finally
+                        {
+                            System.IO.File.Delete(tempFile);
+                        }
+
+                        var command = new AnswerAudioQuestionCommand(interview.Id,
+                            responsibleId, questionIdentity.Id, questionIdentity.RosterVector,
+                            DateTime.UtcNow, fileName, trackLength);
+
+                        this.commandService.Execute(command);
+                    }
                 }
             }
             catch (Exception e)
