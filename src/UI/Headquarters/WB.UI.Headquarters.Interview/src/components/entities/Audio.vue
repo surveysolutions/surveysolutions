@@ -5,8 +5,7 @@
                 <button type="button" class="btn btn-default btn-lg btn-action-questionnaire" v-if="!isRecording && !$me.isAnswered" v-on:click="startRecording">Tap to record audio</button>
                 <div class="field answered" v-if="$me.isAnswered">
                     <ul class="block-with-data list-unstyled">
-                        <li>10 minutes of audio recording</li>
-                        <li>Recorded at: 09:42 AM</li>
+                        <li>{{humanizedLength}} ({{formattedLength}}) of audio recording</li>
                     </ul>
                     <wb-remove-answer @answerRemoved="answerRemoved" />
                 </div>
@@ -45,6 +44,7 @@
 <script lang="ts">
 import { entityDetails } from "components/mixins"
 import * as $ from 'jquery'
+import * as moment from "moment"
 const AudioRecorder = new ((window as any).AudioRecorder)
 
 export default {
@@ -60,7 +60,23 @@ export default {
             formattedTimer: "00:00:00"
         }
     },
+    computed: {
+            formattedLength() {
+                if (this.$me.isAnswered){
+                    var d = moment.utc(this.$me.answer);
+                    return d.format("mm:ss");
+                }
+                return ''
+            },
+            humanizedLength() {
+                if (this.$me.isAnswered){
+                    return moment.duration(this.$me.answer, 'milliseconds').humanize();
+                }
+                return ''
+            }
+        },
     methods: {
+
         answerRemoved() {
         },
         showModal() {
@@ -84,14 +100,12 @@ export default {
             AudioRecorder.cancel()
         },
         terminateRecording() {
-            this.endRecordingTime = null
             this.isRecording = false
             this.closeModal()
             clearInterval(this.stopwatchInterval)
             this.formattedTimer = "00:00:00"
         },
         startRecording() {
-            this.endRecordingTime = null
             this.showModal()
             const self = this
             AudioRecorder.initAudio({
@@ -100,7 +114,7 @@ export default {
                     this.isRecording = true;
                     self.startRecordingTime = self.currentTime()
                     clearInterval(self.stopwatchInterval)
-                    self.stopwatchInterval = setInterval(self.updateTimer, 50)
+                    self.stopwatchInterval = setInterval(self.updateTimer, 31)
                 },
                 errorCallback: (e) => {
                     self.markAnswerAsNotSavedWithMessage("Audio initialization failed")
@@ -109,8 +123,7 @@ export default {
                 doneCallback: (blob) => {
                     self.$store.dispatch('answerAudioQuestion', {
                         id: self.id,
-                        file: blob,
-                        length: self.endRecordingTime - self.startRecordingTime
+                        file: blob
                     })
                 }
             })
@@ -119,23 +132,8 @@ export default {
             return new Date().getTime();
         },
         updateTimer() {
-            var diff = (this.currentTime() - this.startRecordingTime);
-
-            var mins = Math.floor(diff / (1000 * 60));
-            diff -= mins * (1000 * 60);
-
-            var seconds = Math.floor(diff / (1000));
-            diff -= seconds * (1000);
-
-            var mseconds = Math.floor(diff / (10));
-
-            this.formattedTimer = `${this.pad0(mins, 2)}:${this.pad0(seconds, 2)}:${this.pad0(mseconds, 2)}`;
-        },
-        pad0(value, count) {
-            var result = value.toString();
-            for (; result.length < count; --count)
-                result = '0' + result;
-            return result;
+            var diff = moment.utc(this.currentTime() - this.startRecordingTime);
+            this.formattedTimer = diff.format("mm:ss:SS");
         }
     }
 }
