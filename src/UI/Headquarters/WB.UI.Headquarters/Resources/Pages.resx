@@ -1019,7 +1019,10 @@
   <data name="InterviewerHq_RestartInterview" xml:space="preserve">
     <value>Restart Interview</value>
   </data>
-  <data name="InterviewerHq_RestartConfirm">
+  <data name="InterviewerHq_RestartConfirm" xml:space="preserve">
     <value>Please provide a comment if needed to restart an interview</value>
+  </data>
+  <data name="InterviewerHq_DiscardConfirm" xml:space="preserve">
+    <value>Are You sure that You want to discard interview data?</value>
   </data>
 </root>
