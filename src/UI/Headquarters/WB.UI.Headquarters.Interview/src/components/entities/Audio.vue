@@ -2,17 +2,16 @@
     <wb-question :question="$me" questionCssClassName=" audio-question">
         <div class="question-unit">
             <div class="options-group">
-                <button type="button" class="btn btn-default btn-lg btn-action-questionnaire" v-if="!isRecording" v-on:click="startRecording">Tap to record audio</button>
+                <button type="button" class="btn btn-default btn-lg btn-action-questionnaire" v-if="!isRecording && !$me.isAnswered" v-on:click="startRecording">Tap to record audio</button>
                 <div class="field answered" v-if="$me.isAnswered">
                     <ul class="block-with-data list-unstyled">
                         <li>10 minutes of audio recording</li>
                         <li>Recorded at: 09:42 AM</li>
-                        <li>Noise level: 76db</li>
                     </ul>
                     <wb-remove-answer @answerRemoved="answerRemoved" />
                 </div>
-                <div class="action-btn-holder time-question">
-                    <button type="button" class="btn btn-default btn-lg btn-action-questionnaire">Record new</button>
+                <div v-if="$me.isAnswered" class="action-btn-holder time-question">
+                    <button v-if="!isRecording" v-on:click="startRecording" type="button" class="btn btn-default btn-lg btn-action-questionnaire">Record new</button>
                 </div>
             </div>
         </div>
@@ -30,7 +29,7 @@
                         <canvas class="analyser" width="100" height="100"></canvas>
                     </div>
                     <div class="modal-footer">
-                        <div class="recordign-time">{{recordingTime}}</div>
+                        <div class="recordign-time">{{formattedTimer}}</div>
                         <button type="button" v-on:click="stopRecording" class="btn btn-primary" v-if="isRecording">Done</button>
                         <button type="button" v-on:click="cancelRecording" class="btn btn-link " data-dismiss="modal">Cancel</button>
                     </div>
@@ -55,14 +54,10 @@ export default {
         return {
             isRecording: false,
             startDate: null,
-            startRecordingTime: null
-        }
-    },
-    computed: {
-        recordingTime(){
-            if (!this.isRecording)
-                return "00:00:00";
-            return "00:00:01";
+            startRecordingTime: null,
+            endRecordingTime: null,
+            stopwatchInterval: null,
+            formattedTimer: "00:00:00"
         }
     },
     methods: {
@@ -81,22 +76,31 @@ export default {
             modal.hide()
         },
         stopRecording() {
-            this.isRecording = false;
-            this.closeModal();
-            AudioRecorder.stop();
+            this.terminateRecording();
+            AudioRecorder.stop()
         },
         cancelRecording() {
-            this.isRecording = false;
-            AudioRecorder.cancel();
-            this.closeModal();
+            this.terminateRecording();
+            AudioRecorder.cancel()
+        },
+        terminateRecording() {
+            this.endRecordingTime = null
+            this.isRecording = false
+            this.closeModal()
+            clearInterval(this.stopwatchInterval)
+            this.formattedTimer = "00:00:00"
         },
         startRecording() {
-            this.showModal();
+            this.endRecordingTime = null
+            this.showModal()
             const self = this
             AudioRecorder.initAudio({
                 analyserEl: $(this.$el).find(".analyser")[0],
                 startRecordingCallback: () => {
-                    self.startRecordingTime = new Date().getTime();
+                    this.isRecording = true;
+                    self.startRecordingTime = self.currentTime()
+                    clearInterval(self.stopwatchInterval)
+                    self.stopwatchInterval = setInterval(self.updateTimer, 50)
                 },
                 errorCallback: (e) => {
                     self.markAnswerAsNotSavedWithMessage("Audio initialization failed")
@@ -106,18 +110,33 @@ export default {
                     self.$store.dispatch('answerAudioQuestion', {
                         id: self.id,
                         file: blob,
-                        length: new Date().getTime() - self.startRecordingTime
+                        length: self.endRecordingTime - self.startRecordingTime
                     })
                 }
             })
-
-            //AudioRecorder.start()
-            this.isRecording = true;
         },
-        mounted() {
-
+        currentTime() {
+            return new Date().getTime();
         },
+        updateTimer() {
+            var diff = (this.currentTime() - this.startRecordingTime);
 
+            var mins = Math.floor(diff / (1000 * 60));
+            diff -= mins * (1000 * 60);
+
+            var seconds = Math.floor(diff / (1000));
+            diff -= seconds * (1000);
+
+            var mseconds = Math.floor(diff / (10));
+
+            this.formattedTimer = `${this.pad0(mins, 2)}:${this.pad0(seconds, 2)}:${this.pad0(mseconds, 2)}`;
+        },
+        pad0(value, count) {
+            var result = value.toString();
+            for (; result.length < count; --count)
+                result = '0' + result;
+            return result;
+        }
     }
 }
 </script>
