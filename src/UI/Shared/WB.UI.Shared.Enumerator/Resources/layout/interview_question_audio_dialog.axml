@@ -52,14 +52,14 @@
           android:layout_centerVertical="true"
           android:layout_width="5dp"
           android:layout_height="5dp"
-          local:MvxBind="BackgroundStyle AudioIntensityToDot(Intensity)"/>  
+          local:MvxBind="BackgroundStyle AudioMagnitudeTypeToDot(MagnitudeType)"/>  
       
         <View 
           android:layout_centerHorizontal="true"
           android:layout_centerVertical="true"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          local:MvxBind="SizeInDp AudioIntensityToSize(Intensity); BackgroundStyle AudioIntensityToShape(Intensity)" />  
+          local:MvxBind="SizeByMagnitude Magnitude; BackgroundStyle AudioMagnitudeTypeToShape(MagnitudeType)" />  
       </RelativeLayout>
         
     </TableRow>

@@ -1,6 +1,5 @@
 using System;
 using System.Threading;
-using Android.Media.Audiofx;
 using MvvmCross.Platform.Droid.Platform;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -10,23 +9,10 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 {
     public class AudioDialog : IAudioDialog
     {
-        private class VisualizerCapturer : Java.Lang.Object, Visualizer.IOnDataCaptureListener
-        {
-            public event EventHandler<float> OnWaveCaptured;
-            public void OnFftDataCapture(Visualizer visualizer, byte[] fft, int samplingRate)
-            {
-            }
-
-            public void OnWaveFormDataCapture(Visualizer visualizer, byte[] waveform, int samplingRate) 
-                => this.OnWaveCaptured?.Invoke(this, (waveform[0] + 128f) / 256);
-        }
-
         private AudioDialogFragment dialog;
 
-        private Visualizer audioOutput;
-        private VisualizerCapturer visualizerCapturer;
-
         private Timer durationTimer;
+        private Timer amplitudeTimer;
 
         private readonly IMvxAndroidCurrentTopActivity topActivity;
         private readonly IInterviewViewModelFactory viewModelFactory;
@@ -42,7 +28,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         }
         
         public event EventHandler OnCanelRecording;
-        public event EventHandler<AudioRecordEventArgs> OnRecorded;
+        public event EventHandler OnRecorded;
 
         public void ShowAndStartRecording(string title, int bitRate)
         {
@@ -50,12 +36,11 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 this.InitializeDialog();
             
             this.audioService.Start(bitRate);
-
-            this.audioOutput.SetEnabled(true);
-            this.durationTimer = new Timer(this.OnEvery100Milisecond, null, 0, 100);
+            
+            this.durationTimer = new Timer(this.OnEvery31Milisecond, null, 0, 31);
             
             this.dialog.ViewModel.Title = title;
-            this.dialog.ViewModel.Intensity = 0;
+            this.dialog.ViewModel.Magnitude = 0;
             this.dialog.ViewModel.Duration = string.Empty;
 
             this.dialog.Show(this.topActivity.Activity.FragmentManager, nameof(AudioDialogFragment));
@@ -71,20 +56,13 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             
             this.dialog.ViewModel.OnCancel += ViewModel_OnCancel;
             this.dialog.ViewModel.OnDone += ViewModel_OnDone;
-
-            this.visualizerCapturer = new VisualizerCapturer();
-            this.visualizerCapturer.OnWaveCaptured += this.VisualizerCapturer_OnWaveCaptured;
-
-            this.audioOutput = new Visualizer(0); // get output audio stream
-            this.audioOutput.SetDataCaptureListener(this.visualizerCapturer, Visualizer.MaxCaptureRate, true, false);
         }
 
         private void ViewModel_OnDone(object sender, EventArgs e)
         {
             this.HideAndStopRecording();
-            this.OnRecorded?.Invoke(sender,
-                new AudioRecordEventArgs(this.audioService.GetLastRecord(), this.audioService.GetDuration(),
-                    this.audioService.GetMimeType()));
+
+            this.OnRecorded?.Invoke(sender, EventArgs.Empty);
         }
         private void ViewModel_OnCancel(object sender, EventArgs e)
         {
@@ -98,19 +76,16 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
             this.durationTimer.Dispose();
             this.durationTimer = null;
-
-            this.audioOutput.SetEnabled(false);
             
             this.dialog.Dismiss();
         }
 
-        private void OnEvery100Milisecond(object state)
+        private void OnEvery31Milisecond(object state)
         {
             var duration = this.audioService.GetDuration();
-            this.dialog.ViewModel.Duration = $"{duration.Minutes:00}:{duration.Seconds:00}:{duration.Milliseconds/100:0}";
+            this.dialog.ViewModel.Duration = $"{duration.Minutes:00}:{duration.Seconds:00}:{duration.Milliseconds/10:00}";
+            this.dialog.ViewModel.Magnitude = this.audioService.GetMagnitude();
+            this.dialog.ViewModel.MagnitudeType = this.audioService.GetMagnitudeType();
         }
-
-        private void VisualizerCapturer_OnWaveCaptured(object sender, float intensity)
-            => this.dialog.ViewModel.Intensity = intensity;
     }
 }

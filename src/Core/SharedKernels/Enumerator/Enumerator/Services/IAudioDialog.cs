@@ -6,6 +6,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services
     {
         void ShowAndStartRecording(string title, int bitRate);
         event EventHandler OnCanelRecording;
-        event EventHandler<AudioRecordEventArgs> OnRecorded;
+        event EventHandler OnRecorded;
     }
 }

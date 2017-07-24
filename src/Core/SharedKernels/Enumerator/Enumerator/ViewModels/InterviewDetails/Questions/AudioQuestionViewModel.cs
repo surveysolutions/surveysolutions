@@ -8,6 +8,7 @@ using Humanizer.Localisation;
 using MvvmCross.Core.ViewModels;
 using Plugin.Permissions.Abstractions;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -36,12 +37,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Identity questionIdentity;
         private Guid interviewId;
         private string variableName;
-        private int bitRate;
+        private int kbPerSec;
 
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IPermissionsService permissions;
         private readonly IAudioDialog audioDialog;
         private readonly IAudioFileStorage audioFileStorage;
+        private readonly IAudioService audioService;
+        private readonly IFileSystemAccessor fileSystemAccessor;
         public AnsweringViewModel Answering { get; private set; }
 
         public AudioQuestionViewModel(
@@ -54,7 +57,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             ILiteEventRegistry liteEventRegistry,
             IPermissionsService permissions,
             IAudioDialog audioDialog,
-            IAudioFileStorage audioFileStorage)
+            IAudioFileStorage audioFileStorage,
+            IAudioService audioService)
         {
             this.principal = principal;
             this.interviewRepository = interviewRepository;
@@ -68,6 +72,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.permissions = permissions;
             this.audioDialog = audioDialog;
             this.audioFileStorage = audioFileStorage;
+            this.audioService = audioService;
         }
 
         public IQuestionStateViewModel QuestionState => this.questionState;
@@ -99,7 +104,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewId = interview.Id;
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             this.variableName = questionnaire.GetQuestionVariableName(entityIdentity.Id);
-            this.bitRate = (int)questionnaire.GetAudioQuality(entityIdentity.Id);
+            this.kbPerSec = (int)questionnaire.GetAudioQuality(entityIdentity.Id);
 
             var answerModel = interview.GetAudioQuestion(entityIdentity);
             if (answerModel.IsAnswered)
@@ -108,8 +113,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.liteEventRegistry.Subscribe(this, interviewId);
         }
 
-        private async Task SendAnswerAsync(Stream audioStream, TimeSpan duration, string contentType)
+        private async Task SendAnswerAsync()
         {
+            var audioDuration = this.audioService.GetDuration();
+
             var command = new AnswerAudioQuestionCommand(
                 interviewId: this.interviewId,
                 userId: this.principal.CurrentUserIdentity.UserId,
@@ -117,15 +124,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 rosterVector: this.questionIdentity.RosterVector,
                 answerTime: DateTime.UtcNow,
                 fileName: this.GetAudioFileName(),
-                length: duration);
+                length: audioDuration);
 
             try
             {
 
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
 
-                this.StoreAudioToPlainStorage(audioStream, contentType);
-                this.SetAnswer(duration);
+                this.StoreAudioToPlainStorage();
+                this.SetAnswer(audioDuration);
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
@@ -147,7 +154,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.permissions.AssureHasPermission(Permission.Storage).ConfigureAwait(false);
 
                 this.audioDialog.OnRecorded += AudioDialog_OnRecorded;
-                this.audioDialog.ShowAndStartRecording(this.QuestionState.Header.Title.HtmlText, this.bitRate);
+                this.audioDialog.ShowAndStartRecording(this.QuestionState.Header.Title.HtmlText, this.kbPerSec);
             }
             catch (MissingPermissionsException e)
             {
@@ -168,10 +175,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private async void AudioDialog_OnRecorded(object sender, AudioRecordEventArgs e)
+        private async void AudioDialog_OnRecorded(object sender, EventArgs e)
         {
             this.audioDialog.OnRecorded -= AudioDialog_OnRecorded;
-            await this.SendAnswerAsync(e.Source, e.Duration, e.ContentType);
+            await this.SendAnswerAsync();
         }
 
         private async Task RemoveAnswerAsync()
@@ -200,17 +207,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.audioFileStorage.RemoveInterviewBinaryData(this.interviewId, this.GetAudioFileName());
         }
 
-        private void StoreAudioToPlainStorage(Stream audioStream, string contentType)
+        private void StoreAudioToPlainStorage()
         {
+            var audioStream = this.audioService.GetLastRecord();
+
             using (var audioMemoryStream = new MemoryStream())
             {
                 audioStream.CopyTo(audioMemoryStream);
                 this.audioFileStorage.StoreInterviewBinaryData(this.interviewId, this.GetAudioFileName(),
-                    audioMemoryStream.ToArray(), contentType);
+                    audioMemoryStream.ToArray(), this.audioService.GetMimeType());
             }
         }
 
-        private string GetAudioFileName() => $"{this.variableName}{string.Join("-", this.questionIdentity.RosterVector)}.3gpp";
+        private string GetAudioFileName() => $"{this.variableName}{string.Join("-", this.questionIdentity.RosterVector)}.{this.audioService.GetAudioType()}";
 
         public void Dispose()
         {
