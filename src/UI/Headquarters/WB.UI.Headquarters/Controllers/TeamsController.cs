@@ -77,7 +77,10 @@ namespace WB.UI.Headquarters.Controllers
         [CamelCase]
         public ResponsibleComboboxModel InterviewersCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
         {
-            var users = this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: this.authorizedUser.IsSupervisor ? this.authorizedUser.Id : (Guid?)null);
+            UsersView users = this.authorizedUser.IsSupervisor ? 
+                this.teamViewFactory.GetAsigneeInterviewersBySupervisor(pageSize: pageSize, searchBy: query, supervisorId: this.authorizedUser.Id) : 
+                this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: (Guid?)null);
+
             var options = users.Users.Select(x => new ResponsibleComboboxOptionModel(x.UserId.FormatGuid(), x.UserName, x.IconClass)).ToArray();
             return new ResponsibleComboboxModel(options, users.TotalCountByQuery);
         }
