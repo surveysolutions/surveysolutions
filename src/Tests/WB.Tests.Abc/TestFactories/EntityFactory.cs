@@ -591,7 +591,10 @@ namespace WB.Tests.Abc.TestFactories
 
         public MultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null,
             string validationExpression = null, bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null, Guid? linkedToRosterId = null,
-            bool isYesNo = false, bool hideIfDisabled = false, string optionsFilterExpression = null, Answer[] textAnswers = null, string variable = "mo_question",
+            bool isYesNo = false, bool hideIfDisabled = false, string optionsFilterExpression = null, 
+            Answer[] textAnswers = null, 
+            string variable = "mo_question",
+            string linkedFilterExpression = null,
             params int[] answers)
             => new MultyOptionsQuestion("Question MO")
             {
@@ -605,6 +608,7 @@ namespace WB.Tests.Abc.TestFactories
                 QuestionType = QuestionType.MultyOption,
                 LinkedToQuestionId = linkedToQuestionId,
                 LinkedToRosterId = linkedToRosterId,
+                LinkedFilterExpression = linkedFilterExpression,
                 YesNoView = isYesNo,
                 Answers = textAnswers?.ToList() ?? answers.Select(a => Create.Entity.Answer(a.ToString(), a)).ToList(),
                 Properties = new QuestionProperties(false, false)
