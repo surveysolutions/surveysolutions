@@ -365,7 +365,7 @@
             $scope.deleteVariable = function (item) {
                 var itemIdToDelete = item.itemId || $state.params.itemId;
 
-                var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(item.name || "Untitled variable"));
+                var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(item.variableData.name || "Untitled variable"));
 
                 modalInstance.result.then(function (confirmResult) {
                     if (confirmResult === 'ok') {
