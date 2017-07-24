@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Input;
 using MvvmCross.Core.ViewModels;
+using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
@@ -26,11 +27,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             set => this.RaiseAndSetIfChanged(ref this.duration, value);
         }
 
-        private float intensity;
-        public float Intensity
+        private int magnitude;
+        public int Magnitude
         {
-            get => this.intensity;
-            set => this.RaiseAndSetIfChanged(ref this.intensity, value);
+            get => this.magnitude;
+            set => this.RaiseAndSetIfChanged(ref this.magnitude, value);
+        }
+
+        private MagnitudeType magnitudeType;
+        public MagnitudeType MagnitudeType
+        {
+            get => this.magnitudeType;
+            set => this.RaiseAndSetIfChanged(ref this.magnitudeType, value);
         }
 
         private void Cancel() => this.OnCancel?.Invoke(this, EventArgs.Empty);
