@@ -226,7 +226,7 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             var result = importService.VerifyAssignment(answers.GroupedByLevels(), questionnaire);
 
-            if (!result.status)
+            if (!result.Status)
             {
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, new CreateAssignmentResult
                 {
@@ -235,7 +235,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                     {
                         Errors = new List<PanelImportVerificationError>
                         {
-                            new PanelImportVerificationError("PL0011", result.errorMessage)
+                            new PanelImportVerificationError("PL0011", result.ErrorMessage)
                         }
                     }
                 }));
