@@ -29,7 +29,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
             IReadSideKeyValueStorage<InterviewData> interviewDatas = null,
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage = null,
             IDataExportProcessesService dataExportProcessesService = null,
-            IDataExportFileAccessor dataExportFileAccessor = null)
+            IDataExportFileAccessor dataExportFileAccessor = null,
+            IAudioFileStorage audioFileStorage = null,
+            IPlainTransactionManagerProvider plainTransactionManagerProvider = null)
         {
             return new BinaryFormatDataExportHandler(
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
@@ -43,7 +45,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
                 questionnaireExportStructureStorage: questionnaireExportStructureStorage ?? Mock.Of<IQuestionnaireExportStructureStorage>(),
                 dataExportFileAccessor: dataExportFileAccessor ?? Mock.Of<IDataExportFileAccessor>(),
                 audioFileStorage:audioFileRepository ?? Mock.Of<IAudioFileStorage>(),
-                plainTransactionManagerProvider: Mock.Of<IPlainTransactionManagerProvider>());
+                plainTransactionManagerProvider: plainTransactionManagerProvider ?? Mock.Of<IPlainTransactionManagerProvider>());
         }
 
         public static IDataExportFileAccessor CrerateDataExportFileAccessor(IFileSystemAccessor fileSystemAccessor = null,
