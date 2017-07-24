@@ -60,7 +60,7 @@ export default {
     },
     computed: {
         recordingTime(){
-            if (!isRecording)
+            if (!this.isRecording)
                 return "00:00:00";
             return "00:00:01";
         }
