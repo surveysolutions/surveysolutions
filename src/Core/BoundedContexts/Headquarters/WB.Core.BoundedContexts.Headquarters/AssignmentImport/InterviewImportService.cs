@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -101,8 +102,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             void VerifyAssignmentAction(AssignmentImportData assignmentRecord)
             {
                 var result = VerifyAssignment(assignmentRecord.PreloadedData.Answers.GroupedByLevels(), questionnaire);
-                if (!result.status)
-                    throw new InterviewException(result.errorMessage);
+                if (!result.Status)
+                    throw new InterviewException(result.ErrorMessage);
             }
 
             if (this.Status.VerificationState.Errors.Any())
@@ -118,7 +119,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             AssignmentImportData[] assignmentImportData = this.interviewImportDataParsingService.GetAssignmentsData(interviewImportProcessId, questionnaireIdentity, AssignmentImportType.Panel);
             RunImportProcess(assignmentImportData, questionnaireIdentity, VerifyAssignmentAction);
         }
-        public (bool status, string errorMessage) VerifyAssignment(List<InterviewAnswer>[] answersGroupedByLevels, IQuestionnaire questionnaire)
+        public AssignmentVerificationResult VerifyAssignment(List<InterviewAnswer>[] answersGroupedByLevels, IQuestionnaire questionnaire)
         {
             try
             {
@@ -133,22 +134,23 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 {
                     foreach (InterviewAnswer answer in answersInLevel)
                     {
-                        answer.Answer.ValidateAsPreloaded(new InterviewQuestionInvariants(answer.Identity, questionnaire,
-                            tree));
-
                         var interviewTreeQuestion = tree.GetQuestion(answer.Identity);
+                        if (interviewTreeQuestion == null)
+                            continue;
 
-                        interviewTreeQuestion?.SetAnswer(answer.Answer);
+                        interviewTreeQuestion.SetAnswer(answer.Answer);
+
+                        interviewTreeQuestion.RunImportInvariantsOrThrow(new InterviewQuestionInvariants(answer.Identity, questionnaire, tree));
                     }
                     tree.ActualizeTree();
                 }
             }
             catch (Exception e)
             {
-                return (false, e.Message);
+                return AssignmentVerificationResult.Error(e.Message);
             }
 
-            return (true, null);
+            return AssignmentVerificationResult.Ok();
         }
 
         public void ImportAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, Guid? responsibleId, Guid headquartersId, AssignmentImportType mode)

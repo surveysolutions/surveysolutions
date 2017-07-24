@@ -1456,13 +1456,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 foreach (InterviewAnswer answer in answersInLevel)
                 {
-                    answer.Answer.ValidateAsPreloaded(new InterviewQuestionInvariants(answer.Identity, questionnaire, this.tree));
                     var interviewTreeQuestion = changedInterviewTree.GetQuestion(answer.Identity);
                     // answers were not parsed correctly
                     if (interviewTreeQuestion == null)
                         continue;
 
                     interviewTreeQuestion.SetAnswer(answer.Answer);
+
+                    interviewTreeQuestion.RunImportInvariantsOrThrow(new InterviewQuestionInvariants(answer.Identity, questionnaire, this.tree));
 
                     if (commandAssignmentId.HasValue && questionnaire.IsPrefilled(answer.Identity.Id))
                     {
