@@ -555,6 +555,7 @@
     <Compile Include="Infrastructure\LiteEventBusTests\when_publishing_event_declared_in_base_handler_types.cs" />
     <Compile Include="Infrastructure\Native\JsonAllTypesSerializerTests.cs" />
     <Compile Include="Infrastructure\Native\EntitySerializerTests.cs" />
+    <Compile Include="Infrastructure\Ncqrs\Eventing\ConventionBasedEventHandlerMappingStrategyTests.cs" />
     <Compile Include="Infrastructure\PlainPostgresTransactionManagerTests.cs" />
     <Compile Include="Infrastructure\ZipArchiveUtilsTests.cs" />
     <Compile Include="SharedKernels\DataCollection\IdentityTests.cs" />
