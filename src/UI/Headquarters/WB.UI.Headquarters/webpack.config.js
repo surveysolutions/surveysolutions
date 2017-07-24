@@ -37,11 +37,11 @@ module.exports = {
             {
                 test: /\.vue$/,
                 exclude: /(node_modules)/,
-                use: { loader: 'vue-loader', options: { loaders: { js: 'babel-loader?presets[]=env' } } }
+                use: { loader: 'vue-loader', options: { loaders: { js: 'babel-loader?presets[]=es2015' } } }
             }, {
                 test: /\.js$/,
                 exclude: /(node_modules)/,
-                use: { loader: 'babel-loader', options: { presets: [["env", { "modules": false }]] } }
+                use: { loader: 'babel-loader', options: { presets: [["es2015", { "modules": false }]] } }
             }
         ]
     },
