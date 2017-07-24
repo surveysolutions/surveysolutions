@@ -232,8 +232,6 @@ if (!window.AudioRecorder) {
 
         var config = {};
 
-        self.startRecordingTime = null;
-
         var settings = {
             audio: {
                 "mandatory": {
@@ -274,38 +272,11 @@ if (!window.AudioRecorder) {
         };
 
         function gotBuffers(buffers) {
-            if ((config.wavedisplayEl || null) != null) {
-                drawBuffer(
-                    config.wavedisplayEl.width,
-                    config.wavedisplayEl.height,
-                    config.wavedisplayEl.getContext('2d'),
-                    buffers[0]);
-            }
-
             recorder.exportWAV(doneEncoding);
         }
 
         function doneEncoding(blob) {
             config.doneCallback(blob);
-        }
-
-        function drawBuffer(width, height, context, data) {
-            var step = Math.ceil(data.length / width);
-            var amp = height / 2;
-            context.fillStyle = "silver";
-            context.clearRect(0, 0, width, height);
-            for (var i = 0; i < width; i++) {
-                var min = 1.0;
-                var max = -1.0;
-                for (j = 0; j < step; j++) {
-                    var datum = data[(i * step) + j];
-                    if (datum < min)
-                        min = datum;
-                    if (datum > max)
-                        max = datum;
-                }
-                context.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
-            }
         }
 
         function cancelAnalyserUpdates() {
@@ -350,8 +321,8 @@ if (!window.AudioRecorder) {
                 return;
 
             recorder.clear();
-            self.startRecordingTime = new Date().getTime();
             recorder.record();
+            config.startRecordingCallback();
         };
 
         self.stop = function (doneEncoding) {
