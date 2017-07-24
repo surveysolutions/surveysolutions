@@ -1,4 +1,4 @@
-﻿namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects
+﻿namespace WB.Core.SharedKernels.Questionnaire.Documents.Question
 {
     // In kBit per second
     public enum AudioQuality

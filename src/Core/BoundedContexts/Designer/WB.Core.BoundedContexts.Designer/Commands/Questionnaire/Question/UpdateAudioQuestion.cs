@@ -2,6 +2,7 @@
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.SharedKernels.Questionnaire.Documents.Question;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 {
@@ -12,7 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             Guid responsibleId,
             CommonQuestionParameters commonQuestionParameters,
             QuestionScope scope,
-            Quality quality)
+            AudioQuality quality)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, 
                 commonQuestionParameters: commonQuestionParameters)
@@ -21,7 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             this.Quality = quality;
         }
 
-        public Quality Quality { get; set; }
+        public AudioQuality Quality { get; set; }
         public QuestionScope Scope { get; set; }
     }
 }
