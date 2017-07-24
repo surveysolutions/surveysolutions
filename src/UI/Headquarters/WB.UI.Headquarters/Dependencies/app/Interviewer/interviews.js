@@ -14,8 +14,8 @@ store.registerModule('interviews', {
         discardInterview(context, { callback, interviewId }) {
             $.ajax({
                 url: context.rootState.config.interviewerHqEndpoint + "/DiscardInterview/" + interviewId,
-                type: 'DELETE',
-                success: callback
+                type: 'DELETE',                
+                done: callback
             })
         }
     }
