@@ -238,16 +238,23 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             result.SourceOfSingleQuestions = this.GetSourcesOfSingleQuestionBriefs(questionnaire, questionId);
             result.QuestionTypeOptions = QuestionTypeOptions;
             result.AllQuestionScopeOptions = AllQuestionScopeOptions;
-            result.QualityOptions = new List<QualityOption>()
+
+            result.QualityOptions = new List<QualityOption>
             {
-                new QualityOption {Title = AudioQuality.Low.ToString(), Value = (int) AudioQuality.Low},
-                new QualityOption {Title = AudioQuality.Default.ToString(), Value = (int) AudioQuality.Default},
-                new QualityOption {Title = AudioQuality.Best.ToString(), Value = (int) AudioQuality.Best},
+                BuildAutioQualityOption(AudioQuality.Low),
+                BuildAutioQualityOption(AudioQuality.Default),
+                BuildAutioQualityOption(AudioQuality.Best)
             };
 
             this.ReplaceGuidsInValidationAndConditionRules(result, questionnaire, questionnaireId);
 
             return result;
+        }
+
+        private static QualityOption BuildAutioQualityOption(AudioQuality audioQuality)
+        {
+            string qualityFormat = "{0} ({1} kBit/s)";
+            return new QualityOption {Title = string.Format(qualityFormat, audioQuality, (int) audioQuality), Value = (int) audioQuality};
         }
 
 
