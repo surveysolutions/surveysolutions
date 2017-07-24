@@ -45,7 +45,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                         children: new IComposite[]
                         {
                             Create.Entity.MultipleOptionsQuestion(kidsId,
-                                linkedToRosterId: roster1Id,
+                                linkedToRosterId: roster1Id, 
                                 variable: "select_children",
                                 linkedFilterExpression: "age < 5"),
                             Create.Entity.ListRoster(
@@ -59,13 +59,13 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var result = new InvokeResults();
 
                 var interview = SetupInterview(questionnaireDocument);
-
+                
                 interview.AnswerTextListQuestion(userId, rosterSizeQuestionId, RosterVector.Empty, DateTime.Now, new Tuple<decimal, string>[]
                 {
-                    new Tuple<decimal, string>(1, "Mother"),
-                    new Tuple<decimal, string>(2, "Father"),
-                    new Tuple<decimal, string>(3, "Son"),
-                    new Tuple<decimal, string>(4, "Daughter"),
+                    new Tuple<decimal, string>(1, "Mother"), 
+                    new Tuple<decimal, string>(2, "Father"), 
+                    new Tuple<decimal, string>(3, "Son"), 
+                    new Tuple<decimal, string>(4, "Daughter"), 
                 });
                 interview.AnswerNumericIntegerQuestion(userId, ageId, Create.RosterVector(1), DateTime.Now, 30);
                 interview.AnswerNumericIntegerQuestion(userId, ageId, Create.RosterVector(2), DateTime.Now, 40);
@@ -75,7 +75,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 interview.AnswerNumericIntegerQuestion(userId, ageId, Create.RosterVector(2), DateTime.Now, 1);
                 interview.AnswerNumericIntegerQuestion(userId, ageId, Create.RosterVector(3), DateTime.Now, 1);
                 interview.AnswerNumericIntegerQuestion(userId, ageId, Create.RosterVector(4), DateTime.Now, 2);
-
+                
 
                 using (var eventContext = new EventContext())
                 {
