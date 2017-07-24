@@ -481,8 +481,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (startingSearchPointIdentity == null)
                 return allEntities;
 
-            var rosterVectorLength = startingSearchPointIdentity.RosterVector.Length;
-            var entities = allEntities.Where(x => x.RosterVector.Take(rosterVectorLength).SequenceEqual(startingSearchPointIdentity.RosterVector));
+            var rosterVectorLength = startingSearchPointIdentity.Id == entityIdToSearch
+                ? startingSearchPointIdentity.RosterVector.Length - 1
+                : startingSearchPointIdentity.RosterVector.Length;
+
+            var rosterVector = startingSearchPointIdentity.RosterVector.Take(rosterVectorLength);
+            IEnumerable<Identity> entities = allEntities.Where(x => x.RosterVector.Take(rosterVectorLength).SequenceEqual(rosterVector));
             return entities;
         }
 
