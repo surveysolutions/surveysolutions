@@ -1581,7 +1581,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public AudioQuality GetAudioQuality(Guid questionId)
         {
-            return AudioQuality.Default;
+            var question = this.GetQuestion(questionId);
+            var audioQuestion = question as AudioQuestion;
+            if (audioQuestion == null)
+            {
+                 throw new QuestionnaireException($"Question {questionId} has type {question.QuestionType}");
+            }
+
+            return audioQuestion.Quality != AudioQuality.Undefined ? audioQuestion.Quality : AudioQuality.Default;
         }
     }
 }
