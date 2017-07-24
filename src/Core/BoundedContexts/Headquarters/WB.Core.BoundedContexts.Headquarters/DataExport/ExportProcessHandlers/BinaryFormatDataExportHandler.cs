@@ -97,11 +97,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
        
             var multimediaQuestionIds =
                 questionnaire.HeaderToLevelMap.Values.SelectMany(
-                    x => x.HeaderItems.Values.Where(h => h.QuestionType == QuestionType.Multimedia)).Select(x=>x.PublicKey).ToArray();
+                    x => x.HeaderItems.Values.Where(h => h.QuestionType == QuestionType.Multimedia)).Select(x=>x.PublicKey).ToHashSet();
 
             var audioQuestionIds =
                 questionnaire.HeaderToLevelMap.Values.SelectMany(
-                    x => x.HeaderItems.Values.Where(h => h.QuestionType == QuestionType.Audio)).Select(x => x.PublicKey).ToArray(); 
+                    x => x.HeaderItems.Values.Where(h => h.QuestionType == QuestionType.Audio)).Select(x => x.PublicKey).ToHashSet(); 
 
             dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
@@ -120,8 +120,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                             level.QuestionsSearchCache.Values.Where(
                                 question =>
                                     question.IsAnswered() && !question.IsDisabled() &&
-                                    multimediaQuestionIds.Any(
-                                        multimediaQuestionId => question.Id == multimediaQuestionId))
+                                    multimediaQuestionIds.Contains(question.Id))
                                 .Select(q => q.Answer.ToString())).ToArray();
                         
                     if (questionsWithAnswersOnMultimediaQuestions.Any())
@@ -144,8 +143,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                             level.QuestionsSearchCache.Values.Where(
                                     question =>
                                         question.IsAnswered() && !question.IsDisabled() &&
-                                        audioQuestionIds.Any(
-                                            audioQuestionId => question.Id == audioQuestionId))
+                                        audioQuestionIds.Contains(question.Id))
                                 .Select(q => q.Answer.ToString())).ToArray();
 
                     if (questionsWithAnswersOnAudioQuestions.Any())
@@ -155,7 +153,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
                         foreach (var questionsWithAnswersOnAudioQuestion in questionsWithAnswersOnAudioQuestions)
                         {
-                            var fileContent = this.plainTransactionManagerProvider.GetPlainTransactionManager().ExecuteInQueryTransaction(
+                            var manager = this.plainTransactionManagerProvider.GetPlainTransactionManager();
+                            var fileContent = manager.ExecuteInQueryTransaction(
                                 () => audioFileStorage.GetInterviewBinaryData(interviewId, questionsWithAnswersOnAudioQuestion));
 
                             this.fileSystemAccessor.WriteAllBytes(
