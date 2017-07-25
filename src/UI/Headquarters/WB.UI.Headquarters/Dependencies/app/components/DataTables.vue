@@ -79,6 +79,9 @@ export default {
                 autoHide: false,
                 build: ($trigger, e) => {
                     var selectedRow = this.selectRowAndGetData($trigger);
+                    
+                    if(selectedRow.rowData == null) return false;
+
                     var items = this.contextMenuItems(selectedRow)
                     return { items: items };
                 },
@@ -125,7 +128,7 @@ export default {
         this.table.on('click', 'tbody td', function () {
             var cell = self.table.cell(this);
 
-            if (cell.index().column > 0) {
+            if (cell.index() != null && cell.index().column > 0) {
                 var rowId = self.table.row(this).id();
                 var columns = self.table.settings().init().columns;
 
