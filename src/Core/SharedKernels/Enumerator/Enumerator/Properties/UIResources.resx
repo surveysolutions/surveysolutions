@@ -339,7 +339,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>You are about to complete this interview</value>
   </data>
   <data name="Interview_Complete_Screen_DescriptionWithInterviewKey" xml:space="preserve">
-    <value>You are about to complete this interview ID:{0}</value>
+    <value>You are about to complete interview {0}</value>
   </data>
   <data name="Interview_Complete_Screen_Title" xml:space="preserve">
     <value>Complete</value>
@@ -549,7 +549,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Clear all</value>
   </data>
   <data name="InterviewKey" xml:space="preserve">
-    <value>ID:{0}</value>
+    <value>Interview Key: {0}</value>
   </data>
   <data name="AssignmentN" xml:space="preserve">
     <value>Assignment #{0}</value>
