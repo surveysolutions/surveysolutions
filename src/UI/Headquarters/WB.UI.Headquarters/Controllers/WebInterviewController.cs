@@ -3,13 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using CSCore.Codecs.AAC;
-using CSCore;
-using CSCore.Codecs.WAV;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -55,6 +51,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IConnectionLimiter connectionLimiter;
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
         private readonly IAudioFileStorage audioFileStorage;
+        private readonly IAudioProcessingService audioProcessingService;
 
         private const string CapchaCompletedKey = "CaptchaCompletedKey";
 
@@ -87,7 +84,8 @@ namespace WB.UI.Headquarters.Controllers
             IInterviewUniqueKeyGenerator keyGenerator,
             ICaptchaProvider captchaProvider,
             IPlainStorageAccessor<Assignment> assignments, 
-            IAudioFileStorage audioFileStorage)
+            IAudioFileStorage audioFileStorage,
+            IAudioProcessingService audioProcessingService)
             : base(commandService, logger)
         {
             this.commandService = commandService;
@@ -104,6 +102,7 @@ namespace WB.UI.Headquarters.Controllers
             this.captchaProvider = captchaProvider;
             this.assignments = assignments;
             this.audioFileStorage = audioFileStorage;
+            this.audioProcessingService = audioProcessingService;
         }
 
         private string CreateInterview(Assignment assignment)
@@ -194,7 +193,9 @@ namespace WB.UI.Headquarters.Controllers
 
             return Redirect(uri);
         }
-        
+
+      
+
         [HttpPost]
         public async Task<ActionResult> Audio(string interviewId, string questionId, HttpPostedFileBase file)
         {
@@ -215,54 +216,17 @@ namespace WB.UI.Headquarters.Controllers
 
                     byte[] bytes = ms.ToArray();
 
-                    ms.Position = 0;
+                    var audioInfo = await this.audioProcessingService.CompressAudioFileAsync(bytes);
 
-                    using (var wavFile = new WaveFileReader(ms))
-                    {
-                        var hash = SHA1.Create().ComputeHash(bytes);
-                        var hashStr = string.Join("", hash.Take(4).Select(b => b.ToString("x2")).ToArray());
-                        
-                        var fileName = $@"{question.VariableName}{questionIdentity.RosterVector}_{hashStr}.m4a";
+                    var fileName = $@"{question.VariableName}{questionIdentity.RosterVector}_{audioInfo.Hash}.m4a";
 
-                        var responsibleId = interview.CurrentResponsibleId;
-                        var trackLength = wavFile.GetLength();
+                    audioFileStorage.StoreInterviewBinaryData(Guid.Parse(interviewId), fileName, audioInfo.Binary, audioInfo.MimeType);
 
-                        var tempFile = Path.GetTempFileName();
+                    var command = new AnswerAudioQuestionCommand(interview.Id,
+                        interview.CurrentResponsibleId, questionIdentity.Id, questionIdentity.RosterVector,
+                        DateTime.UtcNow, fileName, audioInfo.Duration);
 
-                        try
-                        {
-                            using (var encoder = AacEncoder.CreateAACEncoder(wavFile.WaveFormat, tempFile, 64 * 1024 /* 64 Kb bitrate*/))
-                            {
-                                const int step = 8 * 1024; // just an 8Kb buffer
-                                
-                                byte[] buffer = new byte[step];
-
-                                long total = 0;
-
-                                while (total < bytes.LongLength)
-                                {
-                                    int writeLength = (int)Math.Min(bytes.LongLength - total, step);
-                                    Array.Copy(bytes, total, buffer, 0, writeLength);
-                                    encoder.Write(buffer, 0, writeLength);
-                                    total += writeLength;
-                                }
-                            }
-
-                            bytes = System.IO.File.ReadAllBytes(tempFile);
-
-                            audioFileStorage.StoreInterviewBinaryData(Guid.Parse(interviewId), fileName, bytes, @"audio/m4a");
-                        }
-                        finally
-                        {
-                            System.IO.File.Delete(tempFile);
-                        }
-
-                        var command = new AnswerAudioQuestionCommand(interview.Id,
-                            responsibleId, questionIdentity.Id, questionIdentity.RosterVector,
-                            DateTime.UtcNow, fileName, trackLength);
-
-                        this.commandService.Execute(command);
-                    }
+                    this.commandService.Execute(command);
                 }
             }
             catch (Exception e)
