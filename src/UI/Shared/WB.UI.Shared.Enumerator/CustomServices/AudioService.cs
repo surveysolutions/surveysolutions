@@ -9,6 +9,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 {
     public class AudioService : IAudioService
     {
+        private const double MaxReportableAmp = 32767f;
+        private const double MaxReportableDb = 90.3087f;
         private readonly string audioFileName = $"audio.{AudioFileExtension}";
         private const string AudioFileExtension = "m4a";
         private MediaRecorder recorder;
@@ -23,10 +25,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.pathToAudioFile = this.fileSystemAccessor.CombinePath(pathToAudioDirectory, audioFileName);
         }
 
-        public void Start(int kbPerSec)
+        public void Start()
         {
-            var bitRate = kbPerSec * 1000;
-
             if (this.fileSystemAccessor.IsFileExists(this.pathToAudioFile))
                 this.fileSystemAccessor.ReadFile(this.pathToAudioFile);
 
@@ -36,7 +36,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.recorder.SetAudioSource(AudioSource.Mic);
             this.recorder.SetOutputFormat(OutputFormat.Mpeg4);
             this.recorder.SetAudioEncoder(AudioEncoder.Aac);
-            this.recorder.SetAudioEncodingBitRate(bitRate);
+            this.recorder.SetAudioEncodingBitRate(64000);
             this.recorder.SetOutputFile(this.pathToAudioFile);
             this.recorder.Prepare();
             this.recorder.Start();
@@ -55,33 +55,24 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         public string GetMimeType() => MimeTypeMap.Singleton.GetMimeTypeFromExtension(audioFileName);
         public string GetAudioType() => AudioFileExtension;
 
-        public int GetMagnitude()
+        private double prevNoiseLevel;
+        public double GetNoiseLevel()
         {
-            /* 
-             * Update the microphone state DB is the relative loudness decibels formula K=20*lg(vo/vi)
-             * vo current amplitude value 
-             * vi benchmark value of 600
-             */
+            double maxAmplitude = this.recorder.MaxAmplitude;
+            if (maxAmplitude == 0) return prevNoiseLevel;
 
-            int vo = this.recorder?.MaxAmplitude ?? 0;
-            int vi = 600;
-            int ratio = vo / vi;
+            this.prevNoiseLevel = MaxReportableDb + (20 * Math.Log10(maxAmplitude / MaxReportableAmp));
 
-            int db = 0;
-            if (ratio > 1)
-                db = (int)(20 * Math.Log10(ratio));
-
-            return db;
+            return prevNoiseLevel;
         }
 
-        public MagnitudeType GetMagnitudeType()
+        public NoiseType GetNoiseType()
         {
-            var magnitude = this.GetMagnitude();
-            if(magnitude < 4)
-                return MagnitudeType.Low;
-            if(magnitude > 20)
-                return MagnitudeType.High;
-            return MagnitudeType.Normal;
+            if(this.prevNoiseLevel < 45)
+                return NoiseType.Low;
+            if(this.prevNoiseLevel > 80)
+                return NoiseType.High;
+            return NoiseType.Normal;
         }
 
         public void Dispose() => this.recorder?.Release();

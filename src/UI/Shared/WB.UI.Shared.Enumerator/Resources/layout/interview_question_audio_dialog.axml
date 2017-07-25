@@ -50,16 +50,16 @@
         <View 
           android:layout_centerHorizontal="true"
           android:layout_centerVertical="true"
-          android:layout_width="5dp"
-          android:layout_height="5dp"
-          local:MvxBind="BackgroundStyle AudioMagnitudeTypeToDot(MagnitudeType)"/>  
+          android:layout_width="7dp"
+          android:layout_height="7dp"
+          local:MvxBind="BackgroundStyle AudioNoiseLevelTypeToDot(NoiseType)"/>  
       
         <View 
           android:layout_centerHorizontal="true"
           android:layout_centerVertical="true"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          local:MvxBind="SizeByMagnitude Magnitude; BackgroundStyle AudioMagnitudeTypeToShape(MagnitudeType)" />  
+          android:layout_width="16dp"
+          android:layout_height="16dp"
+          local:MvxBind="SizeByNoiseLevel NoiseLevel; BackgroundStyle AudioNoiseLevelTypeToShape(NoiseType)" />  
       </RelativeLayout>
         
     </TableRow>

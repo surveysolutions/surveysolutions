@@ -285,7 +285,7 @@
     <Compile Include="Bootstrap\MessengerPluginBootstrap.cs" />
     <Compile Include="Bootstrap\NetworkPluginBootstrap.cs" />
     <Compile Include="Bootstrap\ResourceLoaderPluginBootstrap.cs" />
-    <Compile Include="Converters\AudioMagnitudeTypeToShapeConverter.cs" />
+    <Compile Include="Converters\AudioNoiseTypeToShapeConverter.cs" />
     <Compile Include="Converters\InMemoryImageValueWithDefaultConverter.cs" />
     <Compile Include="Converters\IsStringNotEmptyConverter.cs" />
     <Compile Include="Converters\GroupStateToColorConverter.cs" />
@@ -309,7 +309,7 @@
     <Compile Include="CustomBindings\InstantAutoCompleteTextViewOnPartialTextChangedBinding.cs" />
     <Compile Include="CustomBindings\InstantAutoCompleteTextViewOnItemSelectedBinding.cs" />
     <Compile Include="CustomBindings\InstantAutoCompleteTextViewPartialTextTargetBinding.cs" />
-    <Compile Include="CustomBindings\AudioSizeByMagnitudeBinding.cs" />
+    <Compile Include="CustomBindings\AudioSizeByNoiseLevelBinding.cs" />
     <Compile Include="CustomBindings\ToParentGroupButtonBinding.cs" />
     <Compile Include="CustomBindings\GroupBackgroundColorBinding.cs" />
     <Compile Include="CustomBindings\ImageViewBitmapWithFallbackBinding.cs" />
