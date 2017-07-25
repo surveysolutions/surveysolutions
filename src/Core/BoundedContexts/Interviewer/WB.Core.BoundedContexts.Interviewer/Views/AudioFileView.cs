@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class AudioFileView : IFileView, IPlainStorageEntity
     {
-        [PrimaryKey, AutoIncrement]
+        [PrimaryKey]
         public string Id { get; set; }
         public byte[] File { get; set; }
     }
