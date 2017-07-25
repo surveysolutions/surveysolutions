@@ -83,7 +83,6 @@ namespace WB.UI.Headquarters.Services
         {
             Thread.CurrentThread.Name = "Audio compression queue";
             var sw = new Stopwatch();
-            var sha1 = SHA1.Create();
             var hashBuilder = new StringBuilder();
 
             foreach (var job in audioCompressionQueue.GetConsumingEnumerable())
@@ -92,9 +91,8 @@ namespace WB.UI.Headquarters.Services
                 {
                     sw.Restart();
                     var result = CompressData(job.bytes);
-                    sha1.Clear();
 
-                    var hashBytes = sha1.ComputeHash(result.Binary);
+                    var hashBytes = SHA1.Create().ComputeHash(result.Binary);
                     hashBuilder.Clear();
 
                     foreach (var @byte in hashBytes.Take(4))
