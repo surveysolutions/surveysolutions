@@ -112,23 +112,30 @@ export default {
 
         discardInterview(interviewId, rowIndex) {
             const self = this;
-            this.$refs.confirmDiscard.promt(() => {
-                self.$refs.table.disableRow(rowIndex)
-                self.$store.dispatch("discardInterview", {
-                    interviewId,
-                    callback: self.reload
-                });
+            this.$refs.confirmDiscard.promt(ok => {
+                if(ok){
+                    self.$refs.table.disableRow(rowIndex)
+                    self.$store.dispatch("discardInterview", {
+                        interviewId,
+                        callback: self.reload
+                    });
+                }
             });
         },
 
         restartInterview(interviewId) {
             const self = this
 
-            self.$refs.confirmRestart.promt(() => {
-                $.post(this.config.interviewerHqEndpoint + "/RestartInterview/" + interviewId, { comment: self.restart_comment }, response => {
-                    self.restart_comment = "";
-                    self.$store.dispatch("openInterview", interviewId);
-                })
+            self.$refs.confirmRestart.promt(ok => {
+                if(ok) {
+                    $.post(this.config.interviewerHqEndpoint + "/RestartInterview/" + interviewId, { comment: self.restart_comment }, response => {
+                        self.restart_comment = "";
+                        self.$store.dispatch("openInterview", interviewId);
+                    })
+                }
+                else {
+                     self.$refs.table.reload()
+                }
             });
         },
 
