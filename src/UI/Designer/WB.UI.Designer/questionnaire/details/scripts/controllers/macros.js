@@ -109,6 +109,12 @@
                     enableLiveAutocompletion: true
                 });
 
+                $scope.aceEditorUpdateMode(editor);
+
+                $rootScope.$on('variablesChanged', function () {
+                    $scope.aceEditorUpdateMode(editor);
+                });
+
                 renderer.setShowGutter(false);
                 renderer.setPadding(0);
 
@@ -138,6 +144,39 @@
 
                 setTimeout(update, 100);
             };
+
+            $scope.getVariablesNames = function () {
+                return _($rootScope.variableNames);
+            }
+
+            $scope.aceEditorUpdateMode = function (editor) {
+                if (editor) {
+                    var CSharpExtendableMode = window.ace.require("ace/mode/csharp-extended").Mode;
+                    editor.getSession().setMode(new CSharpExtendableMode(function () {
+                        return _.pluck($rootScope.variableNames, "name");
+                    }));
+
+                    var variablesCompletor =
+                    {
+                        getCompletions: function (editor, session, pos, prefix, callback) {
+                            var i = 0;
+                            callback(null,
+                                $scope.getVariablesNames()
+                                .sortBy('name')
+                                .reverse()
+                                .map(function (variable) {
+                                    return { name: variable.name, value: variable.name, score: i++, meta: variable.type }
+                                }));
+                        },
+
+                        identifierRegexps: [/[@a-zA-Z_0-9\$\-\u00A2-\uFFFF]/]
+                    };
+
+                    var lang_tool = ace.require("ace/ext/language_tools");
+                    lang_tool.setCompleters([variablesCompletor]);
+                }
+            }
+
 
             $scope.foldback = function () {
                 $scope.isFolded = false;
