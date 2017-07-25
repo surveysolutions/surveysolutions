@@ -8,8 +8,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
 {
     internal class when_deserializing_command_of_type__UpdateQuestion__with_title : CommandDeserializerTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             commandType = "UpdateTextQuestion";
 
             title = @"<b width='7'>MA</b><font color='red'>IN</font><img /><script>alert('hello world!')</script><script/>";
@@ -25,21 +24,22 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
             }}", questionnaireId, questionId, title);
 
             deserializer = CreateCommandDeserializer();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             result = deserializer.Deserialize(commandType, command);
 
-        It should_return_NewUpdateGroupCommand = () =>
+        [NUnit.Framework.Test] public void should_return_NewUpdateGroupCommand () =>
             result.ShouldBeOfExactType<UpdateTextQuestion>();
 
-        It should_return_same_title_in_NewUpdateGroupCommand = () =>
+        [NUnit.Framework.Test] public void should_return_same_title_in_NewUpdateGroupCommand () =>
             ((UpdateTextQuestion)result).Title.ShouldEqual(sanitizedTitle);
 
-        It should_return_same_questionnaire_id_in_NewUpdateGroupCommand = () =>
+        [NUnit.Framework.Test] public void should_return_same_questionnaire_id_in_NewUpdateGroupCommand () =>
             ((UpdateTextQuestion)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));
 
-        It should_return_same_group_id_in_NewUpdateGroupCommand = () =>
+        [NUnit.Framework.Test] public void should_return_same_group_id_in_NewUpdateGroupCommand () =>
             ((UpdateTextQuestion)result).QuestionId.ShouldEqual(Guid.Parse(questionId));
 
         private static ICommand result;

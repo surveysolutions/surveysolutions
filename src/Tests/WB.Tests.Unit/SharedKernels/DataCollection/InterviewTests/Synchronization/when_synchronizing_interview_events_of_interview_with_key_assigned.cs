@@ -24,15 +24,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
             interview.Apply(new InterviewerAssigned(userId, userId, DateTime.Now));
             interview.Apply(new InterviewKeyAssigned(Create.Entity.InterviewKey(6)));
 
+            var newKey = Create.Entity.InterviewKey(8);
             var command = Create.Command.SynchronizeInterviewEventsCommand(
-                interviewKey: Create.Entity.InterviewKey(8),
+                interviewKey: newKey,
                 questionnaireId: questionnaireId,
                 questionnaireVersion: 1);
 
             this.eventContext = new EventContext();
             interview.SynchronizeInterviewEvents(command);
 
-            this.eventContext.ShouldNotContainEvent<InterviewKeyAssigned>();
+            this.eventContext.ShouldContainEvent<InterviewKeyAssigned>(x => x.Key == newKey);
         }
 
         [TearDown]

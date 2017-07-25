@@ -1,0 +1,167 @@
+﻿@using WB.Core.BoundedContexts.Headquarters.AssignmentImport
+@model WB.UI.Headquarters.Models.PreloadedDataInterviewProgressModel
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewBag.Title = BatchUpload.InterviewsImport_ImportingProgressPageTitle;
+}
+
+@section scripts
+{
+    @Scripts.Render("~/js/responsibles-selector")
+    <script type="text/javascript">
+        var InterviewCreationProgressModel = function(ajax) {
+            var $importInterviewsStatusUrl =
+                '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewsApi", action = "GetImportInterviewsStatus"})';
+
+            var self = this;
+
+            self.questionnaireId = '@Model.QuestionnaireId';
+            self.questionnaireVersion = @Model.Version;
+            self.interviewImportProcessId = '@Model.Status.InterviewImportProcessId';
+            self.questionnaireTitle = '@Model.QuestionnaireTitle';
+
+            self.status = {
+                verifiedCount: ko.observable(@Model.Status.ProcessedCount),
+                totalCount: ko.observable(@Model.Status.TotalCount),
+                failedVerifications: ko.observable(@Model.Status.State.Errors.Count),
+                elapsedTime: ko.observable('@Model.Status.ElapsedTime'),
+                estimatedTime: ko.observable("@Model.Status.EstimatedTime"),
+                hasErrors: ko.observable(false),
+                isInProgress: ko.observable(true),
+                stage: ko.observable("@AssignmentImportStage.FileVerification.ToString()"),
+            };
+
+            self.isStatusLoaded = ko.observable(false);
+
+            var countOfRequestsToStopImport = 0;
+
+            var shouldStopRequestUpdates = function(data) {
+                if (_.isNull(data.interviewImportProcessId))
+                    countOfRequestsToStopImport++;
+                else if (data.totalCount === 0)
+                    countOfRequestsToStopImport++;
+                else if (data.isInProgress === false)
+                    countOfRequestsToStopImport++;
+                else if (data.interviewImportProcessId !== self.interviewImportProcessId)
+                    countOfRequestsToStopImport++;
+                else {
+                    countOfRequestsToStopImport = 0;
+                }
+
+                // this will prevent requests being sent if tab was left open
+                // and if takes some time to start preloading
+                return countOfRequestsToStopImport >= 10;
+            }
+
+            self.updateStatusByInterviewsImport = function() {
+                ajax.sendRequest($importInterviewsStatusUrl,
+                    'get',
+                    {},
+                    true,
+                    function(data) {
+                        self.status.isInProgress(data.isInProgress);
+                        self.status.verifiedCount(data.createdInterviewsCount);
+                        self.status.totalCount(data.totalInterviewsCount);
+                        self.status.failedVerifications(data.interviewsWithError);
+
+                        self.status.elapsedTime(data.elapsedTime);
+                        self.status.estimatedTime(data.estimatedTime);
+                        self.status.hasErrors(data.hasErrors);
+                        self.status.stage(data.stage);
+                        self.isStatusLoaded(true);
+
+                        if (shouldStopRequestUpdates(data) === false) {
+                            _.delay(self.updateStatusByInterviewsImport, 3000);
+                        }
+
+
+                        if (self.status.isInProgress() === false)
+                        {
+                            var verificationFinishedUrl =
+                                '@Url.Action("InterviewImportVerificationCompleted", "SurveySetup")' + "/" + data.interviewImportProcessId;
+
+                            window.location.href = verificationFinishedUrl;
+                        }
+                    });
+            };
+            self.updateStatusByInterviewsImport();
+        };
+
+        $(function() {
+            var model = new InterviewCreationProgressModel(new Ajax(new Notifier()));
+            ko.applyBindings(model);
+
+            window.model = model;
+        });
+    </script>
+}
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="page-header">
+                <ol class="breadcrumb">
+                    <li>@Html.ActionLink(MainMenu.SurveySetup, "Index", "SurveySetup")</li>
+                    <li>@Html.ActionLink(BatchUpload.BreadCrumbs_CreatingMultipleInterviews, "BatchUpload", "SurveySetup", new { id = Model.QuestionnaireId, version = Model.Version }, new { })</li>
+                </ol>
+                <h1>@BatchUpload.CreatingMultipleAssignments</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-7">
+                <h3>
+                    @string.Format(BatchUpload.Import_VerificationOfAssignments_ForQuestionnaire, Html.QuestionnaireName(Model.QuestionnaireTitle, Model.Version))
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-7 col-xs-12 action-block">
+                <div class="import-progress" data-bind="if: status.stage() === '@AssignmentImportStage.AssignmentDataVerification.ToString()'">
+                    <p class="success-text">
+                        @BatchUpload.Import_VerificationOfDataFile_Succeeded
+                    </p>
+                </div>
+                <div class="import-progress" >
+                    <p data-bind="if: status.stage()=='@AssignmentImportStage.AssignmentDataVerification.ToString()'">
+                        @BatchUpload.Import_VerificationOfAssignmentData
+                        <span data-bind="if: status.isInProgress">
+                            (@Html.Raw(string.Format(BatchUpload.Import_VerificationOfDataFile_Progress, "<span data-bind='text: status.verifiedCount'></span>", "<span data-bind='text: status.totalCount'></span>")))
+                        </span>
+                    </p>
+                    <p  data-bind="if: status.stage()=='@AssignmentImportStage.FileVerification.ToString()'">
+                        @BatchUpload.Import_VerificationOfDataFile
+                        <span data-bind="if: status.isInProgress">
+                            (@Html.Raw(string.Format(BatchUpload.Import_VerificationOfDataFile_Progress, "<span data-bind='text: status.verifiedCount'></span>", "<span data-bind='text: status.totalCount'></span>")))
+                        </span>
+                    </p>
+                    <p class="success-text" data-bind="if: status.verifiedCount() > 0 && status.stage()=='@AssignmentImportStage.AssignmentDataVerification.ToString()'">
+                        <!-- ko if: (status.verifiedCount() - status.failedVerifications()) == 1 -->
+                        @BatchUpload.Import_Verification_1_AssignmentVerified
+                        <!-- /ko -->
+                        <!-- ko if: (status.verifiedCount() - status.failedVerifications()) > 1 -->
+                        @Html.Raw(string.Format(BatchUpload.Import_Verification_AssignmentsVerified, "<span data-bind='text: (status.verifiedCount() - status.failedVerifications())'></span>"))
+                        <!-- /ko -->
+                    </p>
+                    <p class="default-text" data-bind="ifnot: status.hasErrors">@BatchUpload.ImportInterviews_NoneFailed</p>
+                    <p class="error-text" data-bind="if: status.hasErrors">
+                        <!-- ko if: status.failedVerifications() == 1 -->
+                        @BatchUpload.Import_Verification_1_Error
+                        <!-- /ko -->
+                        <!-- ko if: status.failedVerifications() > 1 -->
+                        @Html.Raw(string.Format(BatchUpload.Import_Verification_Errors, "<span data-bind='text: status.failedVerifications'></span>"))
+                        <!-- /ko -->
+                    </p>
+                </div>
+                <div class="cancelable-progress" data-bind="if: status.isInProgress()">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-success" data-bind="style: { width: (100 * status.verifiedCount()/status.totalCount()) + '%' }, attr: {'aria-valuemax': status.totalCount, 'aria-valuenow': status.verifiedCount}" role="progressbar" aria-valuenow="@Model.Status.ProcessedCount" aria-valuemin="0" aria-valuemax="@Model.Status.TotalCount">
+                            <span class="sr-only"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="action-buttons" data-bind="ifnot: status.isInProgress">
+                    @Html.ActionLink(BatchUpload.BackToImport, "BatchUpload", "SurveySetup", new {id = Model.QuestionnaireId, version = Model.Version}, new {@class = "back-link"})
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

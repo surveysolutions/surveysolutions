@@ -20,9 +20,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             prefilledQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-            answersToFeaturedQuestions = new Dictionary<Guid, AbstractAnswer>();
+            answersToFeaturedQuestions = new List<InterviewAnswer>();
             prefilledQuestionAnswer = "answer";
-            answersToFeaturedQuestions.Add(prefilledQuestionId, TextAnswer.FromString(prefilledQuestionAnswer));
+            answersToFeaturedQuestions.Add(Create.Entity.InterviewAnswer(Create.Identity(prefilledQuestionId), TextAnswer.FromString(prefilledQuestionAnswer)));
             answersTime = new DateTime(2013, 09, 01);
 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             eventContext = new EventContext();
 
-            command = Create.Command.CreateInterviewCommand(questionnaireId, 1, supervisorId,
+            command = Create.Command.CreateInterview(questionnaireId, 1, supervisorId,
                 answersToFeaturedQuestions, answersTime: answersTime, userId: userId);
             interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
         };
@@ -59,12 +59,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static EventContext eventContext;
         private static Guid userId;
         private static Guid questionnaireId;
-        private static Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions;
+        private static List<InterviewAnswer> answersToFeaturedQuestions;
         private static DateTime answersTime;
         private static Guid supervisorId;
         private static Guid prefilledQuestionId;
         private static string prefilledQuestionAnswer;
         private static Interview interview;
-        private static CreateInterviewCommand command;
+        private static CreateInterview command;
     }
 }

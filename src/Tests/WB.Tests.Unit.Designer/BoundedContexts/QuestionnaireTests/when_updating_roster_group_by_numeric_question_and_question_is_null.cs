@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_updating_roster_group_by_numeric_question_and_question_is_null : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
@@ -19,19 +18,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddNumericQuestion(rosterSizeQuestionId, chapterId, responsibleId, isInteger:true);
 
             questionnaire.AddGroup(parentGroupId, responsibleId: responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(
                 () =>
                     questionnaire.UpdateGroup(groupId: groupId, responsibleId: responsibleId, title: "title", variableName: null,
                         description: null, condition: null, hideIfDisabled: false, rosterSizeQuestionId: null, isRoster: true,
                         rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: rosterTitleQuestionId));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containing__roster_question_empty__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containing__roster_question_empty__ () =>
               new[] { "roster", "question", "empty" }.ShouldEachConformTo(
                      keyword => exception.Message.ToLower().TrimEnd('.').Contains(keyword));
 

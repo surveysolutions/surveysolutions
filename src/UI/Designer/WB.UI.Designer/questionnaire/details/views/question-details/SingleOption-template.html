@@ -24,8 +24,8 @@
                 </div>
             </div>
             <p>
-                <button class="btn btn-link pull-right" ng-click="showOptionsInTextarea()">Show strings</button>
                 <button class="btn btn-link" ng-hide="activeQuestion.optionsCount >= MAX_OPTIONS_COUNT" ng-click="addOption()">Add Option</button>
+                <button class="btn btn-link pull-right" ng-click="showOptionsInTextarea()">Show strings</button>
             </p>
         </div>
         <div ng-if="!activeQuestion.useListAsOptionsEditor">

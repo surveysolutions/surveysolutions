@@ -8,14 +8,13 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
     internal class when_verifying_questionnaire_that_has_translations_with_duplicated_names : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = Create.QuestionnaireDocumentWithOneChapter(translations: new[]
             {
                 Create.Translation(name: "duplicated name"),
@@ -32,11 +31,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             questionnaireTranslator = Setup.QuestionnaireTranslator(questionnaire, null, translatedQuestionnaire);
 
             verifier = CreateQuestionnaireVerifier(questionnaireTranslator: questionnaireTranslator);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => verificationMessages = verifier.Verify(Create.QuestionnaireView(questionnaire));
+        private void BecauseOf() => verificationMessages = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
-        It should_return_WB0258_error = () =>
+        [NUnit.Framework.Test] public void should_return_WB0258_error () =>
             verificationMessages.ShouldContainError("WB0258");
 
 

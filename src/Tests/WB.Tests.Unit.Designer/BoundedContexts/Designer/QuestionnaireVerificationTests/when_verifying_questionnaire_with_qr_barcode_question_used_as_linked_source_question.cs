@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_qr_barcode_question_used_as_linked_source_question : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument(
                 Create.NumericIntegerQuestion(
                     rosterSizeQuestionId,
@@ -48,28 +47,29 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 });
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_1_message = () =>
+        [NUnit.Framework.Test] public void should_return_1_message () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_message_with_code__WB0012 = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_code__WB0012 () =>
             verificationMessages.Single().Code.ShouldEqual("WB0012");
 
-        It should_return_message_with_2_references = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_2_references () =>
             verificationMessages.Single().References.Count().ShouldEqual(2);
 
-        It should_return_message_reference_with_type_Question = () =>
+        [NUnit.Framework.Test] public void should_return_message_reference_with_type_Question () =>
             verificationMessages.Single()
                 .References.ShouldEachConformTo(reference => reference.Type == QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_message_reference_with_id_of_multiQuestionLinkedToQRBarcodeQuestionId = () =>
+        [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_multiQuestionLinkedToQRBarcodeQuestionId () =>
             verificationMessages.Single().References.ElementAt(0).Id.ShouldEqual(multiQuestionLinkedToQRBarcodeQuestionId);
 
-        It should_return_message_reference_with_id_of_qrBarcodeQuestionId = () =>
+        [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_qrBarcodeQuestionId () =>
             verificationMessages.Single().References.ElementAt(1).Id.ShouldEqual(qrBarcodeQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

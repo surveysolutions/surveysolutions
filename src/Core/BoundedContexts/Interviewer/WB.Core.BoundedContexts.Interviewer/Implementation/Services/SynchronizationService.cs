@@ -133,11 +133,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 string url = string.Concat(interviewerApiUrl, "compatibility/", this.interviewerSettings.GetDeviceId(), "/",
                     this.syncProtocolVersionProvider.GetProtocolVersion());
 
-                var respose = await this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync(
-                    url: url,
-                    credentials: credentials ?? this.restCredentials, token: token)).ConfigureAwait(false);
+                var response = await this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<string>(
+                    url: url, credentials: credentials ?? this.restCredentials, token: token)).ConfigureAwait(false);
 
-                string response = await respose.Content.ReadAsStringAsync().ConfigureAwait(false);
                 if (response == null || response.Trim('"') != "449634775")
                 {
                     throw new SynchronizationException(SynchronizationExceptionType.InvalidUrl, InterviewerUIResources.InvalidEndpoint);
@@ -341,7 +339,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 token: token));
         }
 
-#endregion
+        public Task UploadInterviewAudioAsync(Guid interviewId, string fileName, string contentType, byte[] fileData, Action<decimal, long, long> onDownloadProgressChanged,
+            CancellationToken token)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+                url: string.Concat(this.interviewsController, "/", interviewId, "/audio"),
+                request: new PostFileRequest
+                {
+                    InterviewId = interviewId,
+                    FileName = fileName,
+                    ContentType = contentType,
+                    Data = Convert.ToBase64String(fileData)
+                },
+                credentials: this.restCredentials,
+                token: token));
+        }
+
+        #endregion
         
 #region Attachments
         public Task<List<string>> GetAttachmentContentsAsync(QuestionnaireIdentity questionnaire, 

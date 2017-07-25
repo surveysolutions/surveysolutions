@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateFilteredCombobox
 {
     internal class when_updating_filtered_combobox_options_and_1_option_has_16_digits : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddSingleOptionQuestion(
@@ -21,13 +20,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateFilteredCombobox
                 variableName: "var",
                 isFilteredCombobox: true
             );
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateFilteredComboboxOptions(questionId: questionId, responsibleId: responsibleId, options: options));
 
-        It should_not_fail = () =>
+        [NUnit.Framework.Test] public void should_not_fail () =>
             exception.ShouldEqual(null);
 
         private static Questionnaire questionnaire;

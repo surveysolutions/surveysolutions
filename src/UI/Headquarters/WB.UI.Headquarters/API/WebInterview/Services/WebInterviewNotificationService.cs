@@ -241,5 +241,19 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 this.RefreshEntities(interviewId, identitiesToRefresh);
             }
         }
+
+        public void RefreshComment(Guid interviewId, Identity question)
+        {
+            var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
+
+            if (interview == null)
+            {
+                return;
+            }
+
+            var clientQuestionIdentity = this.GetClientGroupIdentity(question, interview);
+
+            this.webInterviewHubContext.Clients.Group(clientQuestionIdentity).refreshComment(question.ToString());
+        }
     }
 }

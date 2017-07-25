@@ -1,9 +1,16 @@
-﻿using Ncqrs;
+﻿using System.Runtime.CompilerServices;
+using Ncqrs;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Modularity;
+
+
+[assembly: InternalsVisibleTo("WB.Tests.Unit")]
+[assembly: InternalsVisibleTo("WB.Tests.Integration")]
+[assembly: InternalsVisibleTo("PerformanceTest")]
+[assembly: InternalsVisibleTo("WB.Tests.Abc")]
 
 namespace WB.Core.Infrastructure
 {

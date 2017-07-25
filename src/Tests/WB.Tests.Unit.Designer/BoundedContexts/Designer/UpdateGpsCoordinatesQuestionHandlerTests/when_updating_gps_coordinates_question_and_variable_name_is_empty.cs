@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
 {
     internal class when_updating_gps_coordinates_question_and_variable_name_is_empty : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddQRBarcodeQuestion(
@@ -25,9 +24,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
                 instructions: "old instructions",
                 enablementCondition: "old condition",
                 responsibleId: responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 exception = Catch.Exception(() =>
                 questionnaire.UpdateGpsCoordinatesQuestion(
@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
                     responsibleId: responsibleId,
                     validationConditions: new List<ValidationCondition>()))));
 
-        It should_not_throw_exception = () => exception.ShouldBeNull();
+        [NUnit.Framework.Test] public void should_not_throw_exception () => exception.ShouldBeNull();
 
 
         private static Questionnaire questionnaire;

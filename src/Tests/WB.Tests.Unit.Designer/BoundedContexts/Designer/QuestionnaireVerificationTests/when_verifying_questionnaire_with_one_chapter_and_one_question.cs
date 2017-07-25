@@ -9,19 +9,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_one_chapter_and_one_question : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 Create.TextQuestion(variable: "var", text: "test")
             );
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_no_errors = () =>
+        [NUnit.Framework.Test] public void should_return_no_errors () =>
             verificationMessages.ShouldBeEmpty();
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

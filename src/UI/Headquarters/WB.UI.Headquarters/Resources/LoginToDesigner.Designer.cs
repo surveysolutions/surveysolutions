@@ -115,7 +115,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unabile to import new questionnaire:.
+        ///   Looks up a localized string similar to Unable to import new questionnaire:.
         /// </summary>
         public static string UnableToImportNewQuestionnaire {
             get {

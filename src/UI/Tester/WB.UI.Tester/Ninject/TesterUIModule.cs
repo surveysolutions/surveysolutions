@@ -2,7 +2,7 @@
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Infrastructure.Shared.Enumerator.Internals.MapService;
+using WB.UI.Shared.Enumerator.Services.Internals.MapService;
 using WB.UI.Tester.Implementation.Services;
 
 namespace WB.UI.Tester.Ninject

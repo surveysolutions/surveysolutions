@@ -31,6 +31,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             public string CommentCaption  { get; set; }
 
             public bool IsCurrentUserComment { get; set; }
+
+            public Identity Identity { get; set; }
         }
 
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -58,11 +60,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
-
-            this.interviewId = interviewId;
-            this.questionIdentity = entityIdentity;
+            this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
+            this.questionIdentity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
 
             this.interview = this.interviewRepository.Get(interviewId);
             this.UpdateCommentsFromInterview();
@@ -90,7 +89,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 Comment = comment.Comment,
                 IsCurrentUserComment = isCurrentUserComment,
-                CommentCaption = commentCaption
+                CommentCaption = commentCaption,
+                Identity = this.questionIdentity
             };
         }
 

@@ -5,12 +5,17 @@ using System.Linq;
 using Main.Core.Events;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 {
@@ -23,6 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
         private readonly ICommandService commandService;
         private readonly IInterviewUniqueKeyGenerator uniqueKeyGenerator;
         private readonly SyncSettings syncSettings;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
 
         public InterviewPackagesService(
             IPlainStorageAccessor<InterviewPackage> interviewPackageStorage,
@@ -31,7 +37,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             IJsonAllTypesSerializer serializer,
             ICommandService commandService,
             IInterviewUniqueKeyGenerator uniqueKeyGenerator,
-            SyncSettings syncSettings)
+            SyncSettings syncSettings,
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviews)
         {
             this.interviewPackageStorage = interviewPackageStorage;
             this.brokenInterviewPackageStorage = brokenInterviewPackageStorage;
@@ -40,6 +47,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             this.commandService = commandService;
             this.uniqueKeyGenerator = uniqueKeyGenerator;
             this.syncSettings = syncSettings;
+            this.interviews = interviews;
         }
 
         [Obsolete("Since v 5.8")]
@@ -161,6 +169,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 this.logger.Debug($"Interview events by {interview.InterviewId} deserialized. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
 
+                bool shouldChangeInterviewKey = CheckIfInterviewKeyNeedsToBeChanged(interview.InterviewId, serializedEvents);
+
                 this.commandService.Execute(new SynchronizeInterviewEventsCommand(
                     interviewId: interview.InterviewId,
                     userId: interview.ResponsibleId,
@@ -168,7 +178,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     questionnaireVersion: interview.QuestionnaireVersion,
                     interviewStatus: interview.InterviewStatus,
                     createdOnClient: interview.IsCensusInterview,
-                    interviewKey: interview.IsCensusInterview ? this.uniqueKeyGenerator.Get() : null,
+                    interviewKey: shouldChangeInterviewKey ? this.uniqueKeyGenerator.Get() : null,
                     synchronizedEvents: serializedEvents), this.syncSettings.Origin);
             }
             catch (Exception exception)
@@ -198,6 +208,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 innerwatch.Restart();
             }
             innerwatch.Stop();
+        }
+
+        private bool CheckIfInterviewKeyNeedsToBeChanged(Guid interviewId, IEvent[] interviewEvents)
+        {
+            InterviewKeyAssigned interviewKeyEvent = interviewEvents.OfType<InterviewKeyAssigned>().LastOrDefault();
+            if (interviewKeyEvent != null)
+            {
+                var stringKey = interviewKeyEvent.Key.ToString();
+                var existingInterview = this.interviews.Query(_ => _.FirstOrDefault(x => x.Key == stringKey));
+
+                if (existingInterview != null && existingInterview.InterviewId != interviewId)
+                {
+                    return  true;
+                }
+
+                return false;
+            }
+
+            return true;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
 {
     internal class when_pasting_question_into_group : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             responsibleId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             groupToPasteInId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             sourceQuestionaireId = Guid.Parse("DCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
@@ -38,19 +37,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
                 parentId: groupToPasteInId);
 
             command.SourceDocument = doc;
-        };
+            BecauseOf();
+        }
 
-        Because of = () => 
+        private void BecauseOf() => 
             questionnaire.PasteInto(command);
 
-        It should_exists_question = () =>
+        [NUnit.Framework.Test] public void should_exists_question () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(targetId).ShouldNotBeNull();
 
-        It should_exists_question_with_QuestionId_specified = () =>
+        [NUnit.Framework.Test] public void should_exists_question_with_QuestionId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(targetId)
                 .PublicKey.ShouldEqual(targetId);
 
-        It should_exists_question_with_stataExportCaption_specified = () =>
+        [NUnit.Framework.Test] public void should_exists_question_with_stataExportCaption_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(targetId)
                 .StataExportCaption.ShouldEqual(stataExportCaption);
 

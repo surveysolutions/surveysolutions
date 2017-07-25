@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_cascading_question_references_parent_that_is_depper_that_it : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             parentSingleOptionQuestionId = Guid.Parse("9E96D4AB-DF91-4FC9-9585-23FA270B25D7");
             childCascadedComboboxId = Guid.Parse("C6CC807A-3E81-406C-A110-1044AE3FD89B");
 
@@ -61,13 +60,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     }
                 });
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => verificationErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+        private void BecauseOf() => verificationErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_WB0084_verification_error = () => verificationErrors.First().Code.ShouldEqual("WB0085");
+        [NUnit.Framework.Test] public void should_return_WB0084_verification_error () => verificationErrors.First().Code.ShouldEqual("WB0085");
 
-        It should_return_error_with_reference_to_wrong_question = () =>
+        [NUnit.Framework.Test] public void should_return_error_with_reference_to_wrong_question () =>
             verificationErrors.First().References.First().Id.ShouldEqual(childCascadedComboboxId);
 
         static QuestionnaireDocument questionnaire;

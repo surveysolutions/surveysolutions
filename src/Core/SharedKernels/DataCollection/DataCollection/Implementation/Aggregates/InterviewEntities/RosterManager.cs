@@ -14,10 +14,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         protected InterviewTree interviewTree;
         protected readonly IQuestionnaire questionnaire;
         protected Guid rosterId;
-        private readonly ISubstitionTextFactory textFactory;
+        private readonly ISubstitutionTextFactory textFactory;
 
         protected RosterManager(InterviewTree interviewTree, IQuestionnaire questionnaire, Guid rosterId,
-            ISubstitionTextFactory textFactory)
+            ISubstitutionTextFactory textFactory)
         {
             this.interviewTree = interviewTree;
             this.questionnaire = questionnaire;
@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return rosterSizeQuestion;
         }
 
-        protected SubstitionText GetGroupTitle(Identity rosterIdentity)
+        protected SubstitutionText GetGroupTitle(Identity rosterIdentity)
         {
             var title = this.questionnaire.GetGroupTitle(this.rosterId);
             return this.textFactory.CreateText(rosterIdentity, title, this.questionnaire);
@@ -53,7 +53,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         private readonly FixedRosterTitle[] rosterTitles;
 
-        public FixedRosterManager(InterviewTree interviewTree, IQuestionnaire questionnaire, Guid rosterId, ISubstitionTextFactory textFactory)
+        public FixedRosterManager(InterviewTree interviewTree, IQuestionnaire questionnaire, Guid rosterId, ISubstitutionTextFactory textFactory)
             : base(interviewTree, questionnaire, rosterId, textFactory)
         {
             rosterTitles = questionnaire.GetFixedRosterTitles(rosterId);
@@ -82,7 +82,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private readonly Guid rosterSizeQuestionId;
         private Guid? rosterTitleQuestionId;
 
-        public NumericRosterManager(InterviewTree interviewTree, IQuestionnaire questionnaire, Guid rosterId, ISubstitionTextFactory textFactory)
+        public NumericRosterManager(InterviewTree interviewTree, IQuestionnaire questionnaire, Guid rosterId, ISubstitutionTextFactory textFactory)
             : base(interviewTree, questionnaire, rosterId, textFactory)
         {
             rosterSizeQuestionId = questionnaire.GetRosterSizeQuestion(rosterId);
@@ -94,7 +94,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var rosterSizeQuestion = this.GetRosterSizeQuestion(parentIdentity, this.rosterSizeQuestionId)?.AsInteger;
             var integerAnswer = rosterSizeQuestion?.IsAnswered ?? false? rosterSizeQuestion.GetAnswer().Value : 0;
             return Enumerable.Range(0, integerAnswer)
-                .Select(index => new RosterIdentity(rosterId, parentIdentity.RosterVector, index, index).ToIdentity())
+                .Select(index => 
+                    new Identity(rosterId, parentIdentity.RosterVector.ExtendWithOneCoordinate(index)))
                 .ToList();
         }
 
@@ -129,7 +130,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class ListRosterManager : RosterManager
     {
         private readonly Guid rosterSizeQuestionId;
-        public ListRosterManager(InterviewTree interviewTree, IQuestionnaire questionnaire, Guid rosterId, ISubstitionTextFactory textFactory)
+        public ListRosterManager(InterviewTree interviewTree, IQuestionnaire questionnaire, Guid rosterId, ISubstitutionTextFactory textFactory)
             : base(interviewTree, questionnaire, rosterId, textFactory)
         {
             rosterSizeQuestionId = questionnaire.GetRosterSizeQuestion(rosterId);
@@ -164,7 +165,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         private readonly Guid rosterSizeQuestionId;
         private readonly bool shouldQuestionRecordAnswersOrder;
-        public MultiRosterManager(InterviewTree interviewTree, IQuestionnaire questionnaire, Guid rosterId, ISubstitionTextFactory textFactory)
+        public MultiRosterManager(InterviewTree interviewTree, IQuestionnaire questionnaire, Guid rosterId, ISubstitutionTextFactory textFactory)
             : base(interviewTree, questionnaire, rosterId, textFactory)
         {
             rosterSizeQuestionId = questionnaire.GetRosterSizeQuestion(rosterId);
@@ -222,7 +223,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private readonly Guid rosterSizeQuestionId;
         private readonly bool shouldQuestionRecordAnswersOrder;
 
-        public YesNoRosterManager(InterviewTree interviewTree, IQuestionnaire questionnaire, Guid rosterId, ISubstitionTextFactory textFactory) : base(interviewTree, questionnaire, rosterId, textFactory)
+        public YesNoRosterManager(InterviewTree interviewTree, IQuestionnaire questionnaire, Guid rosterId, ISubstitutionTextFactory textFactory) : base(interviewTree, questionnaire, rosterId, textFactory)
         {
             rosterSizeQuestionId = questionnaire.GetRosterSizeQuestion(rosterId);
             shouldQuestionRecordAnswersOrder = questionnaire.ShouldQuestionRecordAnswersOrder(rosterSizeQuestionId);

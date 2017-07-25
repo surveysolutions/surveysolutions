@@ -434,3 +434,46 @@ input::-ms-clear {
     max-height: 350px;
     overflow-y: auto;
 }
+
+.interviewer {
+    font-size: 14px;
+    line-height: 16px;
+    font-weight: normal;
+    color: #3f3f3f;
+}
+
+.interviewer:hover, .interviewer:focus, .interviewer:active {
+    color: #2a81cb;
+    text-decoration: none;
+}
+
+.interviewer:before {
+    display: inline-block;
+    content: "";
+    position: relative;
+    top: 2px;
+    margin-right: 3px;
+    width: 11px;
+    height: 14px;
+    background: transparent url("../Dependencies/img/icon-tablet.png") no-repeat;
+    opacity: 0.3;
+    filter: alpha(opacity=30);
+    background-size: 11px 14px;
+}
+
+.supervisor {
+    color: #3f3f3f !important;
+    font-weight: normal;
+}
+
+.supervisor:before {
+    display: inline-block;
+    content: "";
+    position: relative;
+    top: 2px;
+    margin-right: 3px;
+    width: 11px;
+    height: 14px;
+    background: transparent url("../Dependencies/img/icon-supervisor.png") no-repeat;
+    background-size: 11px 14px;
+}

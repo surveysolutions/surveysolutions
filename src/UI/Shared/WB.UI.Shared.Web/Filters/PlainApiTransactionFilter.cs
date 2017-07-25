@@ -1,6 +1,6 @@
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
-using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 

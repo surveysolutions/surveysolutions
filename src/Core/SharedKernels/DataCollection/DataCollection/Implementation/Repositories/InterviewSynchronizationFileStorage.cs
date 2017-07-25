@@ -8,15 +8,16 @@ using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 {
-    internal class InterviewSynchronizationFileStorage : IInterviewSynchronizationFileStorage
+    // todo make it private
+    public class InterviewSynchronizationFileStorage : IInterviewSynchronizationFileStorage
     {
-        private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
+        private readonly IImageFileStorage imageFileStorage;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string basePath;
 
-        public InterviewSynchronizationFileStorage(IPlainInterviewFileStorage plainInterviewFileStorage, IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath, string syncDirectoryName)
+        public InterviewSynchronizationFileStorage(IImageFileStorage imageFileStorage, IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath, string syncDirectoryName)
         {
-            this.plainInterviewFileStorage = plainInterviewFileStorage;
+            this.imageFileStorage = imageFileStorage;
             this.fileSystemAccessor = fileSystemAccessor;
 
             this.basePath = this.fileSystemAccessor.CombinePath(rootDirectoryPath, syncDirectoryName);
@@ -32,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             if (!fileSystemAccessor.IsDirectoryExists(interviewDirectoryPath))
                 fileSystemAccessor.CreateDirectory(interviewDirectoryPath);
 
-            var files = this.plainInterviewFileStorage.GetBinaryFilesForInterview(interviewId);
+            var files = this.imageFileStorage.GetBinaryFilesForInterview(interviewId);
             foreach (var file in files)
             {
                 this.fileSystemAccessor.WriteAllBytes(this.GetPathToFile(interviewId, file.FileName), file.GetData());
@@ -53,7 +54,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                     fileSystemAccessor.GetFilesInDirectory(syncInterviewDirectory)
                         .Select(
                             fileName =>
-                                new InterviewBinaryDataDescriptor(interviewId, fileSystemAccessor.GetFileName(fileName),
+                                new InterviewBinaryDataDescriptor(interviewId, fileSystemAccessor.GetFileName(fileName), null,
                                     () => fileSystemAccessor.ReadAllBytes(fileName))));
             }
 

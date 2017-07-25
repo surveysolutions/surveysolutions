@@ -12,15 +12,16 @@ using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.Synchronization.MetaInfo;
 using WB.UI.Headquarters.Code;
+
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 {
     public class InterviewsControllerBase : ApiController
     {
-        private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
+        private readonly IImageFileStorage imageFileStorage;
+        private readonly IAudioFileStorage audioFileStorage;
         private readonly IAuthorizedUser authorizedUser;
         protected readonly IInterviewPackagesService interviewPackagesService;
         protected readonly ICommandService commandService;
@@ -29,7 +30,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         protected readonly IInterviewInformationFactory interviewsFactory;
 
         public InterviewsControllerBase(
-            IPlainInterviewFileStorage plainInterviewFileStorage,
+            IImageFileStorage imageFileStorage,
+            IAudioFileStorage audioFileStorage,
             IAuthorizedUser authorizedUser,
             IInterviewInformationFactory interviewsFactory,
             IInterviewPackagesService interviewPackagesService,
@@ -37,7 +39,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             IMetaInfoBuilder metaBuilder,
             IJsonAllTypesSerializer synchronizationSerializer)
         {
-            this.plainInterviewFileStorage = plainInterviewFileStorage;
+            this.imageFileStorage = imageFileStorage;
+            this.audioFileStorage = audioFileStorage;
             this.authorizedUser = authorizedUser;
             this.interviewsFactory = interviewsFactory;
             this.interviewPackagesService = interviewPackagesService;
@@ -75,8 +78,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         
         public virtual void PostImage(PostFileRequest request)
         {
-            this.plainInterviewFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
-                Convert.FromBase64String(request.Data));
+            this.imageFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
+                Convert.FromBase64String(request.Data), null);
+        }
+
+        public virtual void PostAudio(PostFileRequest request)
+        {
+            this.audioFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
+                Convert.FromBase64String(request.Data), request.ContentType);
         }
     }
 }

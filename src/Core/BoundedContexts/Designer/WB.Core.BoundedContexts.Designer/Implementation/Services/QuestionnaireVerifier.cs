@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             Error(NoQuestionsExist, "WB0001", VerificationMessages.WB0001_NoQuestions),
 
-            Error<IGroup>(GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion, "WB0009", VerificationMessages.WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion),
+            Critical<IGroup>(GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion, "WB0009", VerificationMessages.WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion),
             Error<IGroup>(RosterSizeSourceQuestionTypeIsIncorrect, "WB0023", VerificationMessages.WB0023_RosterSizeSourceQuestionTypeIsIncorrect),
             Error<IGroup>(GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles, "WB0032", VerificationMessages.WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles),
             Error<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion, "WB0033", VerificationMessages.WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion),
@@ -196,7 +196,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             QuestionType.TextList,
             QuestionType.QRBarcode,
             QuestionType.Multimedia,
-            QuestionType.Area
+            QuestionType.Area,
+            QuestionType.Audio
         };
 
         private static readonly HashSet<QuestionType> QuestionTypesValidToBeRosterTitles = new HashSet<QuestionType>
@@ -921,6 +922,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 questionnaire
                     .Find<TEntity>(entity => hasError(entity, questionnaire))
                     .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity)));
+        }
+
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Critical<TEntity>(
+            Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
+            where TEntity : class, IComposite
+        {
+            return questionnaire =>
+                questionnaire
+                    .Find<TEntity>(entity => hasError(entity, questionnaire))
+                    .Select(entity => QuestionnaireVerificationMessage.Critical(code, message, CreateReference(entity)));
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity, TReferencedEntity>(
@@ -1682,7 +1693,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 var sourceRoster = questionnaire.Find<IGroup>(questionLinkedOnRoster.LinkedToRosterId.Value);
                 if (sourceRoster == null)
                 {
-                    yield return QuestionnaireVerificationMessage.Error("WB0053",
+                    yield return QuestionnaireVerificationMessage.Critical("WB0053",
                         VerificationMessages.WB0053_LinkedQuestionReferencesNotExistingRoster,
                         CreateReference(questionLinkedOnRoster));
                     continue;
@@ -1964,7 +1975,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 CreateReference(questionsWithSubstitution));
 
         private static QuestionnaireVerificationMessage LinkedQuestionReferencesNotExistingQuestion(IQuestion linkedQuestion)
-            => QuestionnaireVerificationMessage.Error("WB0011",
+            => QuestionnaireVerificationMessage.Critical("WB0011",
                 VerificationMessages.WB0011_LinkedQuestionReferencesNotExistingQuestion,
                 CreateReference(linkedQuestion));
 

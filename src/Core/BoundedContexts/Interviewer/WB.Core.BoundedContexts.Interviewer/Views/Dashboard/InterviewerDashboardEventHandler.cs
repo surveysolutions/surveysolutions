@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -13,7 +12,6 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Questionnaire.Documents;
@@ -21,6 +19,7 @@ using WB.Core.SharedKernels.Questionnaire.Documents;
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public class InterviewerDashboardEventHandler : BaseDenormalizer,
+                                         ILitePublishedEventHandler<InterviewCreated>,
                                          ILitePublishedEventHandler<SynchronizationMetadataApplied>,
                                          ILitePublishedEventHandler<InterviewSynchronized>,
                                          ILitePublishedEventHandler<InterviewStatusChanged>,
@@ -47,7 +46,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                                          ILitePublishedEventHandler<TranslationSwitched>,
                                          ILitePublishedEventHandler<MultipleOptionsLinkedQuestionAnswered>,
                                          ILitePublishedEventHandler<SingleOptionLinkedQuestionAnswered>,
-                                         ILitePublishedEventHandler<AreaQuestionAnswered>
+                                         ILitePublishedEventHandler<AreaQuestionAnswered>,
+                                         ILitePublishedEventHandler<InterviewKeyAssigned>
     {
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPlainStorage<PrefilledQuestionView> prefilledQuestions;
@@ -85,9 +85,27 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 evnt.Payload.InterviewerAssignedDateTime,
                 null,
                 evnt.Payload.RejectedDateTime,
+                null,
                 null);
         }
 
+        public void Handle(IPublishedEvent<InterviewCreated> evnt)
+        {
+            this.AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId,
+                evnt.Payload.QuestionnaireVersion,
+                evnt.EventSourceId,
+                evnt.Payload.UserId,
+                InterviewStatus.InterviewerAssigned,
+                null,
+                new AnsweredQuestionSynchronizationDto[0],
+                true,
+                true,
+                evnt.EventTimeStamp,
+                evnt.EventTimeStamp,
+                null,
+                evnt.Payload.AssignmentId,
+                null);
+        }
 
         public void Handle(IPublishedEvent<InterviewOnClientCreated> evnt)
         {
@@ -103,7 +121,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 evnt.EventTimeStamp,
                 evnt.EventTimeStamp,
                 null, 
-                evnt.Payload.AssignmentId);
+                evnt.Payload.AssignmentId,
+                null);
         }
 
         public void Handle(IPublishedEvent<InterviewFromPreloadedDataCreated> evnt)
@@ -120,11 +139,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 evnt.EventTimeStamp,
                 evnt.EventTimeStamp,
                 null,
-                evnt.Payload.AssignmentId);
+                evnt.Payload.AssignmentId,
+                null);
         }
 
 
-        private void AddOrUpdateInterviewToDashboard(Guid questionnaireId, long questionnaireVersion, Guid interviewId, Guid responsibleId, InterviewStatus status, string comments, IEnumerable<AnsweredQuestionSynchronizationDto> answeredQuestions, bool createdOnClient, bool canBeDeleted, DateTime? assignedDateTime, DateTime? startedDateTime, DateTime? rejectedDateTime, int? assignmentId)
+        private void AddOrUpdateInterviewToDashboard(Guid questionnaireId, long questionnaireVersion, Guid interviewId, Guid responsibleId, InterviewStatus status, string comments, IEnumerable<AnsweredQuestionSynchronizationDto> answeredQuestions, bool createdOnClient, bool canBeDeleted, DateTime? assignedDateTime, DateTime? startedDateTime, DateTime? rejectedDateTime, int? assignmentId, InterviewKey interviewKey)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
             var questionnaireDocumentView = this.questionnaireRepository.GetQuestionnaireDocument(questionnaireIdentity);
@@ -140,8 +160,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 ResponsibleId = responsibleId,
                 QuestionnaireId = questionnaireIdentity.ToString(),
                 Census = createdOnClient,
-                QuestionnaireTitle = questionnaireDocumentView.Title
-            };
+                QuestionnaireTitle = questionnaireDocumentView.Title,
+                Status = status,
+                StartedDateTime = startedDateTime,
+                InterviewerAssignedDateTime = assignedDateTime,
+                RejectedDateTime = rejectedDateTime,
+                CanBeDeleted = canBeDeleted,
+                Assignment = assignmentId,
+                LastInterviewerOrSupervisorComment = comments
+        };
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, interviewView.Language);
 
@@ -182,19 +209,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 }
             }
 
-            interviewView.Status = status;
+            interviewView.LocationQuestionId = prefilledGpsQuestionId;
+            interviewView.Assignment = assignmentId;
+            interviewView.InterviewKey = interviewKey?.ToString();
 
             var existingPrefilledForInterview = this.prefilledQuestions.Where(x => x.InterviewId == interviewId).ToList();
             this.prefilledQuestions.Remove(existingPrefilledForInterview);
             this.prefilledQuestions.Store(prefilledQuestionsList);
-
-            interviewView.StartedDateTime = startedDateTime;
-            interviewView.InterviewerAssignedDateTime = assignedDateTime;
-            interviewView.RejectedDateTime = rejectedDateTime;
-            interviewView.CanBeDeleted = canBeDeleted;
-            interviewView.Assignment = assignmentId;
-            interviewView.LastInterviewerOrSupervisorComment = comments;
-            interviewView.LocationQuestionId = prefilledGpsQuestionId;
 
             if (gpsCoordinates != null)
             {
@@ -245,11 +266,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 evnt.Payload.InterviewData.Comments,
                 evnt.Payload.InterviewData.Answers,
                 evnt.Payload.InterviewData.CreatedOnClient,
-                canBeDeleted: false,
-                assignedDateTime: evnt.Payload.InterviewData.InterviewerAssignedDateTime,
-                startedDateTime: null,
-                rejectedDateTime: evnt.Payload.InterviewData.RejectDateTime, 
-                assignmentId: null);
+                false,
+                evnt.Payload.InterviewData.InterviewerAssignedDateTime,
+                null,
+                evnt.Payload.InterviewData.RejectDateTime, 
+                evnt.Payload.InterviewData.AssignmentId,
+                evnt.Payload.InterviewData.InterviewKey);
         }
 
         public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
@@ -455,6 +477,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, new Area(evnt.Payload.Geometry, evnt.Payload.MapName, 
                 evnt.Payload.AreaSize, evnt.Payload.Length, evnt.Payload.Coordinates, evnt.Payload.DistanceToEditor), evnt.Payload.AnswerTimeUtc);
+        }
+
+        public void Handle(IPublishedEvent<InterviewKeyAssigned> @event)
+        {
+            InterviewView interviewView = this.interviewViewRepository.GetById(@event.EventSourceId.FormatGuid());
+            if (interviewView == null)
+                return;
+
+            interviewView.InterviewKey = @event.Payload.Key.ToString();
+            this.interviewViewRepository.Store(interviewView);
         }
     }
 }

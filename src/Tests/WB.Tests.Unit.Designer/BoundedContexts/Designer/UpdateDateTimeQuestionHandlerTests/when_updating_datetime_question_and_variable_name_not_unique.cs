@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
 {
     internal class when_updating_datetime_question_and_variable_name_not_unique : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
 
@@ -28,14 +27,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
                     variableName: "old_variable_name",
                     instructions: "old instructions",
                     enablementCondition: "old condition");
-        };
+            BecauseOf();
+        }
 
-        Because of = () => exception = Catch.Exception(() => questionnaire.UpdateDateTimeQuestion(command));
+        private void BecauseOf() => exception = Catch.Exception(() => questionnaire.UpdateDateTimeQuestion(command));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__variable__should__unique__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__variable__should__unique__ () =>
             new[] { "variable", "should", "unique" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 

@@ -1,0 +1,20 @@
+﻿@{
+    var page = ViewBag.ActivePage ?? MenuItem.Logon;
+}
+<ul class="nav navbar-nav" role="menu">
+    @Html.MainMenuItem(@"CreateNew", @"InterviewerHq", MainMenu.CreateNew, MenuItem.Teams)
+    @Html.MainMenuItem(@"Started", @"InterviewerHq", MainMenu.Started, MenuItem.Teams)
+    @Html.MainMenuItem(@"Rejected", @"InterviewerHq", MainMenu.Rejected, MenuItem.Teams)
+    @Html.MainMenuItem(@"Completed", @"InterviewerHq", MainMenu.Completed, MenuItem.Teams)
+</ul>
+<ul class="nav navbar-nav navbar-right" role="menu">
+    @Html.Partial("QueueIndicator")
+    <li class="dropdown">
+        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="@User.Identity.Name">@User.Identity.Name<span class="caret"></span></a>
+        <ul class="dropdown-menu">
+            <li>@Html.ActionLink(@Pages.Profile_InterviewerProfile, "Profile", "Interviewer")</li>
+            <li>@Html.ActionLink(Common.Logoff, "LogOff", "Account", new {area = string.Empty}, null)</li>
+        </ul>
+    </li>
+    @Html.Partial("LimitsIndicator")
+</ul>

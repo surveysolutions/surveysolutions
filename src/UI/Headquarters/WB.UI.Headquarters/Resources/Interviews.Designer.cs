@@ -137,6 +137,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Key that was generated on device, but was changed due to the collision with existing interview on server.
+        /// </summary>
+        public static string ClientKeyTitle {
+            get {
+                return ResourceManager.GetString("ClientKeyTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you want to continue?.
         /// </summary>
         public static string ContinueConfirmMessage {
@@ -161,33 +170,6 @@ namespace WB.UI.Headquarters.Resources {
         public static string DeleteConfirmMessageHQ {
             get {
                 return ResourceManager.GetString("DeleteConfirmMessageHQ", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error during import of interview with identifying questions {0}. Resposible supervisor is missing.
-        /// </summary>
-        public static string ImportInterviews_FailedToImportInterview_NoSupervisor {
-            get {
-                return ResourceManager.GetString("ImportInterviews_FailedToImportInterview_NoSupervisor", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error during import of interview with identifying questions {0}. InterviewerId {1}, QuestionnaireId {2}, Exception: {3}.
-        /// </summary>
-        public static string ImportInterviews_GenericError {
-            get {
-                return ResourceManager.GetString("ImportInterviews_GenericError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Datafile is incorrect.
-        /// </summary>
-        public static string ImportInterviews_IncorrectDatafile {
-            get {
-                return ResourceManager.GetString("ImportInterviews_IncorrectDatafile", resourceCulture);
             }
         }
         

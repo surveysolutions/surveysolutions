@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/Profile/_UserEditorLayout.cshtml";
 
     ViewBag.Title = Pages.Profile_ApiUserEditFormat.FormatString(Model.UserName).RemoveHtmlTags();
-    ViewBag.PageTitle = Pages.Profile_ApiUserEditFormat.FormatString(Model.UserName);
+    ViewBag.PageTitle = Pages.Profile_ApiUserEditFormat.FormatString(Html.Encode(Model.UserName));
 }
 @section Breadcrumbs
 {

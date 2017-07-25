@@ -14,6 +14,8 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
 {
+    extern alias datacollection;
+
     public class when_cancelling_export_process_and_questionnaire_does_not_exists : ExportControllerTestsContext
     {
         Establish context = () =>
@@ -35,6 +37,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
         private static ExportController controller;
         private static IHttpActionResult result;
 
-        private static readonly QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1);
+        private static readonly datacollection::WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionnaireIdentity questionnaireIdentity = new datacollection::WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1);
     }
 }

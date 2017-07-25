@@ -28,6 +28,8 @@ namespace Main.Core.Entities.SubEntities
 
         Multimedia = 11,
 
-        Area = 12
+        Area = 12,
+
+        Audio = 13
     }
 }

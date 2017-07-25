@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
-using Nito.AsyncEx.Synchronous;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
@@ -61,7 +58,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             viewModel.Options.Last().Selected = false;
         };
 
-        Because of = () => viewModel.ToggleAnswerAsync(viewModel.Options.Last()).WaitAndUnwrapException();
+        Because of = () => viewModel.ToggleAnswerAsync(viewModel.Options.Last()).Wait();
 
         It should_undo_checked_property_change = () => viewModel.Options.Last().YesSelected.ShouldBeFalse();
 

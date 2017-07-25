@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -10,24 +10,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_that_has_size_more_then_5MB : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument(
                 new TextQuestion(new string('q', 5 * 1024 * 1024))
                 {
                     StataExportCaption = "var0"
                 }); 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => 
+        private void BecauseOf() => 
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         
-        It should_return_message_with_code__WB0098 = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_code__WB0098 () =>
             verificationMessages.ShouldContainError("WB0098");
 
-        It should_return_WB0098_error_with_appropriate_message = () =>
+        [NUnit.Framework.Test] public void should_return_WB0098_error_with_appropriate_message () =>
             verificationMessages.Single(m => m.Code == "WB0098").Message.ShouldNotBeEmpty();
         
 

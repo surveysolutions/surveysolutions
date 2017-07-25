@@ -1,6 +1,7 @@
 using MvvmCross.Plugins.Messenger;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -31,6 +32,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public override void Init(string interviewId, NavigationState navigationState)
         {
             base.Init(interviewId, navigationState);
+
+            var interview = this.interviewRepository.Get(interviewId);
+            var interviewKey = interview.GetInterviewKey()?.ToString();
+            this.CompleteScreenTitle = string.IsNullOrEmpty(interviewKey)
+                ? UIResources.Interview_Complete_Screen_Description
+                : string.Format(UIResources.Interview_Complete_Screen_DescriptionWithInterviewKey, interviewKey);
+
 
             var statefulInterview = this.interviewRepository.Get(interviewId);
             this.CompleteComment = statefulInterview.InterviewerCompleteComment;

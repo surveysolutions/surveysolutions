@@ -8,26 +8,26 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Translations
 {
     internal class when_cloning_questionnaire_with_translation : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: responsibleId);
 
             sourceQuestionnaire = Create.QuestionnaireDocument();
             sourceQuestionnaire.Translations.Add(Create.Translation(translationId: translationId, name: name));
-        };
+            BecauseOf();
+        }
 
 
-        Because of = () => 
+        private void BecauseOf() => 
             questionnaire.CloneQuestionnaire("Title", false, responsibleId, clonedQuestionnaireId, sourceQuestionnaire);
 
 
-        It should_raise_QuestionnaireCloned_event_with_1_attachment = () =>
+        [NUnit.Framework.Test] public void should_raise_QuestionnaireCloned_event_with_1_attachment () =>
             questionnaire.QuestionnaireDocument.Translations.Count.ShouldEqual(1);
 
-        It should_set_new_TranslationId_in_raised_event = () =>
+        [NUnit.Framework.Test] public void should_set_new_TranslationId_in_raised_event () =>
             questionnaire.QuestionnaireDocument.Translations.First().Id.ShouldNotEqual(translationId);
 
-        It should_set_original_Name_in_raised_event = () =>
+        [NUnit.Framework.Test] public void should_set_original_Name_in_raised_event () =>
             questionnaire.QuestionnaireDocument.Translations.First().Name.ShouldEqual(name);
 
 

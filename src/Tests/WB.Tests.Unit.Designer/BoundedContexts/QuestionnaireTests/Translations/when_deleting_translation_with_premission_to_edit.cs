@@ -9,19 +9,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Translations
 {
     internal class when_deleting_translation_with_premission_to_edit : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: ownerId);
             questionnaire.AddSharedPerson(sharedPersonId, "email@email.com", ShareType.Edit, ownerId);
             questionnaire.AddOrUpdateTranslation(Create.Command.AddOrUpdateTranslation(questionnaireId, translationId, "", ownerId));
 
             deleteTranslation = Create.Command.DeleteTranslation(questionnaireId, translationId, sharedPersonId);
-        };
+            BecauseOf();
+        }
 
 
-        Because of = () => questionnaire.DeleteTranslation(deleteTranslation);
+        private void BecauseOf() => questionnaire.DeleteTranslation(deleteTranslation);
 
-        It should_doesnt_contain_Translation_with_EntityId_specified = () =>
+        [NUnit.Framework.Test] public void should_doesnt_contain_Translation_with_EntityId_specified () =>
             questionnaire.QuestionnaireDocument.Translations.ShouldNotContain(t => t.Id == translationId);
 
 

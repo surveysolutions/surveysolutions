@@ -6,13 +6,13 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Routing;
 using Machine.Specifications;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.UI.Designer.Api.Attributes;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.Tests.Unit.Designer.Applications.AttributesTests
 {

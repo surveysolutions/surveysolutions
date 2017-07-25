@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
 {
     internal class when_creating_executor_template_model_for_questionnaire_with_multimedia_question : CodeGeneratorTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument(
                 new IComposite[]
                 {
@@ -43,15 +42,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
                 });
 
             expressionStateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             templateModel = expressionStateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, Create.CodeGenerationSettings());
 
-        It should_generate_model_for_multimedia_question = () =>
+        [NUnit.Framework.Test] public void should_generate_model_for_multimedia_question () =>
             GetQuestion(multimediaId).ShouldNotBeNull();
 
-        It should_generate_model_for_multimedia_question_with_specified_values = () =>
+        [NUnit.Framework.Test] public void should_generate_model_for_multimedia_question_with_specified_values () =>
             GetQuestion(multimediaId).ShouldContainValues(
                 id: multimediaId,
                 variableName: "multimedia",
@@ -67,7 +67,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
                 generatedConditionsMethodName: "IsEnabled__multimedia");
 
 
-        It should_generate_model_for_text_question = () =>
+        [NUnit.Framework.Test] public void should_generate_model_for_text_question () =>
             GetQuestion(textId).ShouldNotBeNull();
 
         private static QuestionTemplateModel GetQuestion(Guid id)

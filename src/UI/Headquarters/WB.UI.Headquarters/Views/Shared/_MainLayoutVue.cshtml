@@ -1,5 +1,5 @@
-﻿@using Microsoft.Practices.ServiceLocation
-@using WB.Core.BoundedContexts.Headquarters.Services
+﻿@using WB.Core.BoundedContexts.Headquarters.Services
+@using WB.Core.GenericSubdomains.Portable.ServiceLocation
 @using WB.Core.Infrastructure.Versions
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @using WB.UI.Headquarters.Services
@@ -70,12 +70,14 @@
                 else if (authorizedUser.IsSupervisor)
                 {
                     @Html.Partial("SupervisorMainMenu")
+                } else if (authorizedUser.IsInterviewer)
+                {
+                    @Html.Partial("InterviewerMainMenu")
                 }
                 else
                 {
                     @Html.Partial("ObserverMainMenu")
-                }
-            </div><!-- /.navbar-collapse -->
+                }</div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
 </header>

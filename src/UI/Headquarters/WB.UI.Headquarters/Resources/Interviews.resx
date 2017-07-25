@@ -164,16 +164,10 @@
     <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be unapproved.&lt;/h3&gt;
 &lt;b&gt;Note!&lt;/b&gt; You can unapprove interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt;.</value>
   </data>
-  <data name="ImportInterviews_FailedToImportInterview_NoSupervisor" xml:space="preserve">
-    <value>Error during import of interview with identifying questions {0}. Resposible supervisor is missing</value>
-  </data>
-  <data name="ImportInterviews_GenericError" xml:space="preserve">
-    <value>Error during import of interview with identifying questions {0}. InterviewerId {1}, QuestionnaireId {2}, Exception: {3}</value>
-  </data>
-  <data name="ImportInterviews_IncorrectDatafile" xml:space="preserve">
-    <value>Datafile is incorrect</value>
-  </data>
   <data name="Assignment" xml:space="preserve">
     <value>Assignment</value>
+  </data>
+  <data name="ClientKeyTitle" xml:space="preserve">
+    <value>Key that was generated on device, but was changed due to the collision with existing interview on server</value>
   </data>
 </root>

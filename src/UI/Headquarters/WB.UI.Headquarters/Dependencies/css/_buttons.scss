@@ -115,16 +115,35 @@ a.disabled{
 		}
 	}
 }
-.btn-default.btn-gray{
-	color: $white;
-	padding: 12px;
-	background-color: $gray_light;
-	border: none;
-	&:hover, &:focus{
+.btn-default{
+	&.btn-gray{
+		color: $white;
+		padding: 12px;
+		background-color: $gray_light;
 		border: none;
-		background-color: darken($gray_light, 10%);
+		&:hover, &:focus{
+			border: none;
+			background-color: darken($gray_light, 10%);
+		}
+	}
+	&.btn-post-comment{
+		@include transition(all, 0.2s);
+		padding: 12px;
+		color: $gray_form;
+		border-color: $gray_form;
+		border-radius: 5px;
+		&:hover, &:focus, &:active, &.comment-added{
+			color: $blue;
+			border-color: $blue;
+			background-color: transparent;
+		}
+		&:active{
+			background-color: #dfeaf4;
+			box-shadow: none;
+		}
 	}
 }
+
 .back-link{
     text-transform: uppercase;
     font: 12.5px/14px "TrebuchetMSBold";
@@ -340,29 +359,32 @@ a.disabled{
 .get-interviewer-app{
 	@include transition(all, 0.2s);
     width: 248px;
-    background: #000  url("#{$assetsPath}/img/HQ-login-mobile-get-button-logo.png") no-repeat;
+    background:  url("#{$assetsPath}/img/HQ-login-mobile-get-button-logo.png") no-repeat;
     background-size: 55px;
     margin-bottom: 25px;
     @extend %uppercase-font;
     text-decoration: none;
-    color: rgba(255,255,255, 0.9);
-    background-position: 15px 10px;
+    color: $gray_text;
+    background-position: 15px 13px;
     text-decoration: none;
     padding: 10px 27px 10px 85px;
     text-align: left;
     border-radius: 10px;
+	border: 2px solid $gray_form;
     display: block;
     &:hover, &:focus{
         text-decoration: none;
-        color: rgba(255,255,255, 0.9);
-		box-shadow: inset 0 0 40px rgb(255, 255, 255);
+		border-color: $gray_light;
+		color: #000;
     }   
     span{
         display: block;
+		letter-spacing: 0.05em;
         &.version{
             text-transform: none;
+			font-style: italic;
             margin-top: 5px;
-            color: rgba(255,255,255, 0.5);
+            color: $gray_text;
         }
     }
 }

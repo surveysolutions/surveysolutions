@@ -8,14 +8,13 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTests
 {
     internal class when_storing_translation_with_4_lines_duplicated_3_times : TranslationsServiceTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var testType = typeof(when_storing_translations_from_excel_file);
             var readResourceFile = testType.Namespace + ".testTranslationsWithDuplicates.xlsx";
             var manifestResourceStream = testType.Assembly.GetManifestResourceStream(readResourceFile);
@@ -36,12 +35,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             questionnaires.SetReturnsDefault(questionnaire);
 
             service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
+            BecauseOf();
 
-        };
+        }
 
-        Because of = () => service.Store(questionnaireId, translationId, fileStream);
+        private void BecauseOf() => service.Store(questionnaireId, translationId, fileStream);
 
-        It should_store_4_entities = () =>
+        [NUnit.Framework.Test] public void should_store_4_entities () =>
             plainStorageAccessor.Query(_ => _.Count()).ShouldEqual(4);
 
         private static TranslationsService service;

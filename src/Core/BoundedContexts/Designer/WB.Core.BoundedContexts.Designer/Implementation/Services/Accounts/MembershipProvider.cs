@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration.Provider;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Web;
 using System.Web.Security;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.GenericSubdomains.Portable;
-using WB.UI.Shared.Web.MembershipProvider.Accounts;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WebMatrix.WebData;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts

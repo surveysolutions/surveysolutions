@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_question_with_variable_name_equal_to_roster_service_variables : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument(
                 new TextQuestion()
             {
@@ -45,21 +44,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 QuestionText = "hello Id"
             });
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_5_error = () =>
+        [NUnit.Framework.Test] public void should_return_5_error () =>
             verificationMessages.Count().ShouldEqual(5);
 
-        It should_return_all_errors_with_code__WB0058 = () =>
+        [NUnit.Framework.Test] public void should_return_all_errors_with_code__WB0058 () =>
             verificationMessages.ShouldEachConformTo(e=>e.Code=="WB0058");
 
-        It should_return_all_errors_with_1_references = () =>
+        [NUnit.Framework.Test] public void should_return_all_errors_with_1_references () =>
             verificationMessages.ShouldEachConformTo(e=>e.References.Count==1);
 
-        It should_return_all_errors_reference_with_type_Question = () =>
+        [NUnit.Framework.Test] public void should_return_all_errors_reference_with_type_Question () =>
             verificationMessages.ShouldEachConformTo(e=>e.References.First().Type==QuestionnaireVerificationReferenceType.Question);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

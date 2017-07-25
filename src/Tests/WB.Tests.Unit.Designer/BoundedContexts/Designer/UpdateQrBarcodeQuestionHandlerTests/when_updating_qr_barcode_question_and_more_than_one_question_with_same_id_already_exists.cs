@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
@@ -15,8 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
 {
     internal class when_updating_qr_barcode_question_and_more_than_one_question_with_same_id_already_exists : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             var answers = new List<Answer>() { new Answer() { AnswerCode = 1, AnswerText = "1" }, new Answer() { AnswerCode = 2, AnswerText = "2" } };
@@ -30,10 +29,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
 
             questionnaire = Create.Questionnaire();
             questionnaire.Initialize(Guid.NewGuid(), questionnaireDoc, null);
-            
-        };
+            BecauseOf();
 
-        Because of = () =>
+        }
+
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateQRBarcodeQuestion(
                     new UpdateQRBarcodeQuestion(
@@ -51,10 +51,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
                         scope: QuestionScope.Interviewer,
                         validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>())));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__more__question__exist__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__more__question__exist__ () =>
              new[] { "more", "question", "exist" }.ShouldEachConformTo(
                     keyword => exception.Message.ToLower().Contains(keyword));
 

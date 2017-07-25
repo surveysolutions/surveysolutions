@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_long_fixed_roster_and_31_child_questions : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var childQuestions = new List<IComposite>();
             for (int i = 1; i <= 31; i++)
             {
@@ -36,21 +35,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             });
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_contain_error_WB0068 = () =>
+        [NUnit.Framework.Test] public void should_return_contain_error_WB0068 () =>
             verificationMessages.ShouldContainError("WB0068");
 
-        It should_return_message_with_level_general = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_level_general () =>
             verificationMessages.GetError("WB0068").MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
-        It should_return_message_with_specified_text = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_specified_text () =>
             verificationMessages.GetError("WB0068").Message.ShouldEqual("Roster cannot have more than 30 child elements");
 
-        It should_return_message_with_reference_on_roster = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_reference_on_roster () =>
             verificationMessages.GetError("WB0068").References.Single().Id.ShouldEqual(rosterId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

@@ -135,6 +135,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 if (conditionalEntity != null)
                     this.FillDependencies(dependencies, entity.PublicKey, conditionalEntity.ConditionExpression, allMacroses, variableNamesByEntitiyIds);
 
+                var validatableEntity = entity as IValidatable;
+                if (validatableEntity != null)
+                {
+                    foreach (var validationCondition in validatableEntity.ValidationConditions)
+                    {
+                        this.FillDependencies(dependencies, entity.PublicKey, validationCondition.Expression, allMacroses, variableNamesByEntitiyIds);
+                    }
+                }
                 var question = entity as IQuestion;
                 if (question != null)
                 {

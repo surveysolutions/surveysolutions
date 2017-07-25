@@ -1,10 +1,10 @@
 ﻿using System;
 using Main.Core.Documents;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -284,11 +284,6 @@ namespace WB.Tests.Abc.TestFactories
                 {
                     NavigationState = navigationState,
                 };
-
-            var dispatcherMock = new Mock<IMvxMainThreadDispatcher>();
-            dispatcherMock
-                .Setup(_ => _.RequestMainThreadAction(It.IsAny<Action>()))
-                .Callback<Action>(action => action.Invoke());
 
             Setup.InstanceToMockedServiceLocator(Mock.Of<CoverStateViewModel>());
             Setup.InstanceToMockedServiceLocator(Mock.Of<GroupStateViewModel>());

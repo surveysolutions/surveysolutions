@@ -25,14 +25,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
     public class InterviewsApiV2Controller : InterviewsControllerBase
     {
         public InterviewsApiV2Controller(
-            IPlainInterviewFileStorage plainInterviewFileStorage,
+            IImageFileStorage imageFileStorage,
+            IAudioFileStorage audioFileStorage,
             IAuthorizedUser authorizedUser,
             IInterviewInformationFactory interviewsFactory,
             IInterviewPackagesService incomingSyncPackagesQueue,
             ICommandService commandService,
             IMetaInfoBuilder metaBuilder,
             IJsonAllTypesSerializer synchronizationSerializer) : base(
-                plainInterviewFileStorage: plainInterviewFileStorage,
+                imageFileStorage: imageFileStorage,
+                audioFileStorage: audioFileStorage,
                 authorizedUser: authorizedUser,
                 interviewsFactory: interviewsFactory,
                 interviewPackagesService: incomingSyncPackagesQueue,
@@ -99,5 +101,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         }
         [HttpPost]
         public override void PostImage(PostFileRequest request) => base.PostImage(request);
+        [HttpPost]
+        public override void PostAudio(PostFileRequest request) => base.PostAudio(request);
     }
 }

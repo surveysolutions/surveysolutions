@@ -5,7 +5,7 @@ declare interface ILanguageInfo {
 
 declare interface IInterviewInfo {
     questionnaireTitle: string
-    humanId : string
+    interviewKey : string
     firstSectionId: string
 }
 
@@ -42,7 +42,7 @@ declare interface IValidity {
 }
 
 declare interface ISidebar{
-    hasPrefilledQuestions: boolean
+    hasCoverPage: boolean
     groups: ISidebarPanel[]
 }
 
@@ -102,22 +102,31 @@ declare interface ICompleteInfo {
     entitiesWithError: IEntityWithError[]
 }
 
-declare interface ISamplePrefilledData {
-    questions: IReadonlyPrefilledQuestion[]
+declare interface ICoverInfo {
+    entitiesWithComments: IEntityWithError[]
+    identifyingQuestions: IReadonlyPrefilledQuestion[]
 }
+
 declare interface IReadonlyPrefilledQuestion{
     answer: string,
     title: string,
     type: string
 }
 
+declare interface IComment {
+    text : string
+    isOwnComment : boolean
+    userRole : number
+    commentTimeUtc : Date
+}
+
 declare interface IWebInterviewApi {
     getInterviewDetails(): IInterviewInfo
 
     getPrefilledEntities(): IPrefilledPageData
-    getSamplePrefilled(): ISamplePrefilledData
+    getCoverInfo(): ICoverInfo
 
-    hasPrefilledQuestions(): boolean
+    hasCoverPage(): boolean
     isEnabled(id: string): boolean
     getSectionEntities(sectionId: string): IInterviewEntityWithType[]
     getEntitiesDetails(ids: string[]): IInterviewEntity[]
@@ -141,6 +150,7 @@ declare interface IWebInterviewApi {
     answerLinkedToListMultiQuestion(questionIdentity: string, answer: number[]): void
     answerTextListQuestion(questionIdentity: string, rows: ITextListAnswerRow[]): void
     answerPictureQuestion(id: string, file: File): void
+    answerAudioQuestion(id: string, file: File): void
     answerGpsQuestion(identity, answer: IGpsAnswer)
     answerQRBarcodeQuestion(questionIdentity: string, text: string): void
 
@@ -148,4 +158,6 @@ declare interface IWebInterviewApi {
     getLanguageInfo(): ILanguageInfo
     changeLanguage(language: string): void
     completeInterview(comment: string): void
+    sendNewComment(questionId: string, comment: string): void
+    getQuestionComments(questionId: string): IComment[]
 }

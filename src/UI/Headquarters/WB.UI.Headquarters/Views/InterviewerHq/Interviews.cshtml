@@ -1,0 +1,13 @@
+﻿@model WB.UI.Headquarters.Models.InterviewerHqModel
+
+@{
+    ViewBag.ActivePage = Model.Title;
+    ViewBag.Title = Html.ActivePage();
+
+    Layout = @"~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div id="vueApp" configuration="@Model.ToString()"></div>
+
+@Html.StaticScipt("~/Dependencies/build/vendor.bundle.js")
+@Html.StaticScipt("~/Dependencies/build/interviewer_interviews.bundle.js")

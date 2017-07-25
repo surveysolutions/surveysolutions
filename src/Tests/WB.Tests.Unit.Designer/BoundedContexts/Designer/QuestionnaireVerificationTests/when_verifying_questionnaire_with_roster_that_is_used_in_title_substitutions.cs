@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_roster_that_is_used_in_title_substitutions : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
                 Create.Question(questionId: questionId, title: $"substitution to %{rosterVariableName}%"),
@@ -20,30 +19,31 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             });
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_1_message = () =>
+        [NUnit.Framework.Test] public void should_return_1_message () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_message_with_code__WB0019 = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_code__WB0019 () =>
             verificationMessages.Single().Code.ShouldEqual("WB0019");
 
-        It should_return_message_with_2_references = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_2_references () =>
             verificationMessages.Single().References.Count.ShouldEqual(2);
 
-        It should_return_message_reference_with_type_Question = () =>
+        [NUnit.Framework.Test] public void should_return_message_reference_with_type_Question () =>
             verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_message_reference_with_type_Roster = () =>
+        [NUnit.Framework.Test] public void should_return_message_reference_with_type_Roster () =>
             verificationMessages.Single().References.Second().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
 
-        It should_return_message_reference_with_id_of_question = () =>
+        [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_question () =>
             verificationMessages.Single().References.First().Id.ShouldEqual(questionId);
 
-        It should_return_message_reference_with_id_of_roster = () =>
+        [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_roster () =>
             verificationMessages.Single().References.Second().Id.ShouldEqual(rosterId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

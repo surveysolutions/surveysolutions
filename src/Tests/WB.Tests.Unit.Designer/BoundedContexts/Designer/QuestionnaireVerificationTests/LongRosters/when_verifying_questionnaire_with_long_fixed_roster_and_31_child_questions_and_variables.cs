@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_long_fixed_roster_and_31_child_questions_and_variables : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var childQuestions = new List<IComposite>();
             for (int i = 1; i <= Constants.MaxAmountOfItemsInLongRoster; i++)
             {
@@ -37,12 +36,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             });
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_not_contain_error_WB0068 = () =>
+        [NUnit.Framework.Test] public void should_not_contain_error_WB0068 () =>
             verificationMessages.ShouldNotContain("WB0068");
 
 

@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_questionnaire_has_10_text_questions_and_5_numeric_questions_with_no_validation_conditions : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.TextQuestion(),
@@ -32,12 +31,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             });
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             messages = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
-        It should_return_warning_WB0208 = () =>
+        [NUnit.Framework.Test] public void should_return_warning_WB0208 () =>
             messages.ShouldContainWarning("WB0208");
 
         private static QuestionnaireDocument questionnaire;

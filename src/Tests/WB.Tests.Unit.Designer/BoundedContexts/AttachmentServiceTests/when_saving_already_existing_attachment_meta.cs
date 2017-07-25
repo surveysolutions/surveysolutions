@@ -4,30 +4,30 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.Infrastructure.PlainStorage;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
 {
     internal class when_saving_already_existing_attachment_meta : AttachmentServiceTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             attachmentMetaStorage.Setup(x => x.GetById(attachmentId)).Returns(expectedAttachmentMeta);
 
             attachmentService = Create.AttachmentService(attachmentMetaStorage: attachmentMetaStorage.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             attachmentService.SaveMeta(attachmentId, questionnaireId, attachmentContentId, fileName);
 
-        It should_save_meta_storage = () =>
+        [NUnit.Framework.Test] public void should_save_meta_storage () =>
             attachmentMetaStorage.Verify(x => x.Store(expectedAttachmentMeta, attachmentId), Times.Once);
 
-        It should_meta_have_updated_properties = () =>
+        [NUnit.Framework.Test] public void should_meta_have_updated_properties () 
         {
             expectedAttachmentMeta.ContentId.ShouldEqual(attachmentContentId);
             expectedAttachmentMeta.FileName.ShouldEqual(fileName);
-        };
+        }
 
         private static AttachmentService attachmentService;
         

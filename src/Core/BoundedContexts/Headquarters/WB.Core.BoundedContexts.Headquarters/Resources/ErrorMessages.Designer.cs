@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The user name or password provided is incorrect..
+        ///   Looks up a localized string similar to Incorrect user name or password..
         /// </summary>
         public static string IncorrectUserNameOrPassword {
             get {
@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please fill in captcha.
+        ///   Looks up a localized string similar to Please fill in the captcha field.
         /// </summary>
         public static string PleaseFillCaptcha {
             get {
@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Requested questionnaire &quot;{0}&quot; has errors. Please verify the questionnaire on Designer..
+        ///   Looks up a localized string similar to The questionnaire &quot;{0}&quot; has compilation errors. Please correct them in Designer..
         /// </summary>
         public static string Questionnaire_verification_failed {
             get {
@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Timeout when connecting to &apos;Designer&apos; website. Please, check your internet connection..
+        ///   Looks up a localized string similar to Timeout when attempting to connect to Designer. Please check your internet connection..
         /// </summary>
         public static string RequestTimeout {
             get {
@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Internal server error occurred. Please contact with customer support of Survey Solutions..
+        ///   Looks up a localized string similar to Internal server error occurred. Please contact the Survey Solutions customer support team at support@mysurvey.solutions..
         /// </summary>
         public static string ServerError {
             get {
@@ -106,7 +106,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Server is unavailable.  Please make sure that the &apos;Designer&apos; website is available and it&apos;s not in the maintenance mode.
+        ///   Looks up a localized string similar to Designer unavailable.  Please make sure that Designer is not in the maintenance mode.
         /// </summary>
         public static string ServiceUnavailable {
             get {
@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have no access to this site. Contact your administrator..
+        ///   Looks up a localized string similar to You do not have permission to access this site. Contact your administrator..
         /// </summary>
         public static string SiteAccessNotAllowed {
             get {
@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Requested questionnaire &quot;{0}&quot; cannot be found. Please refresh the list of questionnaires..
+        ///   Looks up a localized string similar to The questionnaire &quot;{0}&quot; cannot be found. Please refresh the list of questionnaires..
         /// </summary>
         public static string TemplateNotFound {
             get {

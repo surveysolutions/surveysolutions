@@ -9,15 +9,14 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
     class when_verifying_questionnaire_that_has_lookup_tables_with_same_name_as_roster : QuestionnaireVerifierTestsContext
     {
 
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = Create.QuestionnaireDocument(Guid.NewGuid(), 
                 Create.TextQuestion(questionId: questionId, variable: "variable"),
                 Create.Roster(variable: "var", rosterId: rosterId, rosterType: RosterSizeSourceType.FixedTitles));
@@ -28,30 +27,31 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .Returns(lookupTableContent);
 
             verifier = CreateQuestionnaireVerifier(lookupTableService: lookupTableServiceMock.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_WB0026_error = () =>
+        [NUnit.Framework.Test] public void should_return_WB0026_error () =>
            verificationMessages.ShouldContainCritical("WB0026");
 
-        It should_return_message_with_Critical_level = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_Critical_level () =>
             verificationMessages.GetCritical("WB0026").MessageLevel.ShouldEqual(VerificationMessageLevel.Critical);
 
-        It should_return_message_with_1_reference = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_1_reference () =>
             verificationMessages.GetCritical("WB0026").References.Count().ShouldEqual(2);
 
-        It should_return_first_message_reference_with_type_Question = () =>
+        [NUnit.Framework.Test] public void should_return_first_message_reference_with_type_Question () =>
             verificationMessages.GetCritical("WB0026").References.ElementAt(0).Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
 
-        It should_return_second_message_reference_with_type_LookupTable = () =>
+        [NUnit.Framework.Test] public void should_return_second_message_reference_with_type_LookupTable () =>
             verificationMessages.GetCritical("WB0026").References.ElementAt(1).Type.ShouldEqual(QuestionnaireVerificationReferenceType.LookupTable);
 
-        It should_return_first_message_reference_with_id_of_question = () =>
+        [NUnit.Framework.Test] public void should_return_first_message_reference_with_id_of_question () =>
             verificationMessages.GetCritical("WB0026").References.ElementAt(0).Id.ShouldEqual(rosterId);
 
-        It should_return_second_message_reference_with_id_of_table = () =>
+        [NUnit.Framework.Test] public void should_return_second_message_reference_with_id_of_table () =>
             verificationMessages.GetCritical("WB0026").References.ElementAt(1).Id.ShouldEqual(table1Id);
 
         private static QuestionnaireVerifier verifier;

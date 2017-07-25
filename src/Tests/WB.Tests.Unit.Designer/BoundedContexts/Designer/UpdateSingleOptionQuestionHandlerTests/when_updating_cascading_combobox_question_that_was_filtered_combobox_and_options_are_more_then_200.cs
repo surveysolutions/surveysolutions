@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
 {
     internal class when_updating_cascading_combobox_question_that_was_filtered_combobox_and_options_are_more_then_200 : QuestionnaireTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             int incrementer = 0;
             oldOptions = new Option[210].Select(
                 answer =>
@@ -50,9 +49,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
             );
 
             questionnaire.UpdateFilteredComboboxOptions(filteredQuestionId, responsibleId, oldOptions);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             questionnaire.UpdateSingleOptionQuestion(
                 questionId: filteredQuestionId,
                 title: "title",
@@ -72,7 +72,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
 
 
    
-        It should_raise_QuestionChanged_event_with_answer_option_that_was_presiously_saved = () =>
+        [NUnit.Framework.Test] public void should_raise_QuestionChanged_event_with_answer_option_that_was_presiously_saved () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(filteredQuestionId)
                 .Answers.Count().ShouldEqual(oldOptions.Count());
 

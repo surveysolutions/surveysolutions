@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
@@ -21,18 +20,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                     Create.Entity.FixedRoster(rosterId: rosterGroupId,
                         obsoleteFixedTitles: new[] {"1"}, title: "Roster Group"));
 
-            preloadedDataService = CreatePreloadedDataService(questionnaireDocument);
+            importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
         };
 
         Because of =
            () =>
                result =
-                   preloadedDataService.GetParentDataFile(questionnaireDocument.Title, new[] { CreatePreloadedDataByFile(null, null, "Roster Group"), CreatePreloadedDataByFile(null, null, questionnaireDocument.Title) });
+                   importDataParsingService.GetParentDataFile(questionnaireDocument.Title, new[] { CreatePreloadedDataByFile(null, null, "Roster Group"), CreatePreloadedDataByFile(null, null, questionnaireDocument.Title) });
 
         It should_result_be_null = () =>
            result.ShouldBeNull();
 
-        private static PreloadedDataService preloadedDataService;
+        private static ImportDataParsingService importDataParsingService;
         private static QuestionnaireDocument questionnaireDocument;
         private static PreloadedDataByFile result;
         private static Guid rosterGroupId = Guid.NewGuid();

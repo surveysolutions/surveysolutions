@@ -1,4 +1,6 @@
-﻿using Android.Views;
+﻿using System;
+using System.Windows.Input;
+using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using MvvmCross.Binding;
@@ -9,9 +11,9 @@ using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
-    public class EditTextFocusValueChangedBinding : BaseBinding<EditText, IMvxCommand>
+    public class EditTextFocusValueChangedBinding : BaseBinding<EditText, ICommand>
     {
-        private IMvxCommand command;
+        private ICommand command;
 
         private string oldEditTextValue;
 
@@ -65,14 +67,20 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (this.command == null)
                 return;
 
-            if (!this.command.CanExecute())
+            if (this.command is IMvxCommand typedCommand && !typedCommand.CanExecute())
+            {
                 return;
+            }
+            if (this.command is IMvxCommand<string> typedGenericCommand && !typedGenericCommand.CanExecute(this.Target.Text))
+            {
+                return;
+            }
 
             this.command.Execute(this.Target.Text);
             this.oldEditTextValue = this.Target.Text;
         }
 
-        protected override void SetValueToView(EditText control, IMvxCommand value)
+        protected override void SetValueToView(EditText control, ICommand value)
         {
             if (this.Target == null)
                 return;
@@ -80,10 +88,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             this.command = value;
         }
 
-        public override MvxBindingMode DefaultMode
-        {
-            get { return MvxBindingMode.TwoWay; }
-        }
+        public override MvxBindingMode DefaultMode => MvxBindingMode.TwoWay;
 
         protected override void Dispose(bool isDisposing)
         {

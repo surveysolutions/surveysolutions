@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,7 +19,6 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
-using WB.Core.SharedKernels.Enumerator.Views;
 using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
@@ -213,9 +211,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public IMvxCommand SignOutCommand => new MvxCommand(this.SignOut);
 
-        private IMvxAsyncCommand loadQuestionnaireCommand;
+        private System.Windows.Input.ICommand loadQuestionnaireCommand;
 
-        public IMvxAsyncCommand LoadQuestionnaireCommand => this.loadQuestionnaireCommand ?? (this.loadQuestionnaireCommand
+        public System.Windows.Input.ICommand LoadQuestionnaireCommand => this.loadQuestionnaireCommand ?? (this.loadQuestionnaireCommand
             = new MvxAsyncCommand<QuestionnaireListItem>(this.LoadQuestionnaireAsync, _ => !this.IsInProgress));
 
         private IMvxAsyncCommand refreshQuestionnairesCommand;

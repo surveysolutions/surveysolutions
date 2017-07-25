@@ -225,6 +225,9 @@
                     case "Text":
                     case "Area":
                         break;
+                    case "Audio":
+                        command.quality = question.quality;
+                        break;
                     case "TextList":
                         command.maxAnswerCount = question.maxAnswerCount;
                         break;

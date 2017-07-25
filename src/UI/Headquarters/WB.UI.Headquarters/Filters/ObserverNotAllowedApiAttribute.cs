@@ -1,8 +1,8 @@
 ﻿using System.Net.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Filters

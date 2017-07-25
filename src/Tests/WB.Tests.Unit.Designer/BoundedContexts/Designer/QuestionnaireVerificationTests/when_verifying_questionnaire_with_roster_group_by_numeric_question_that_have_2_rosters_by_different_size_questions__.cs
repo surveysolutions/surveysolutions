@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_roster_group_by_numeric_question_that_have_2_rosters_by_different_size_question_and_1__the_same_title_question : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument(
                 new NumericQuestion("roster size question 1")
             {
@@ -46,27 +45,29 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 RosterTitleQuestionId = rosterTitleQuestionId
             });
             verifier = CreateQuestionnaireVerifier();
-        };
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_2_messages = () =>
+        [NUnit.Framework.Test] public void should_return_2_messages () =>
              verificationMessages.Count().ShouldEqual(2);
 
-        It should_return_2_errors_with_code__WB0035__ = () =>
+        [NUnit.Framework.Test] public void should_return_2_errors_with_code__WB0035__ () =>
             verificationMessages.ShouldEachConformTo(error => error.Code == "WB0035");
 
-        It should_return_2_errors_with_1_references = () =>
+        [NUnit.Framework.Test] public void should_return_2_errors_with_1_references () =>
             verificationMessages.ShouldEachConformTo(error => error.References.Count() == 1);
 
-        It should_return_message_reference_with_type_Roster = () =>
+        [NUnit.Framework.Test] public void should_return_message_reference_with_type_Roster () =>
             verificationMessages.ShouldEachConformTo(error => error.References.First().Type == QuestionnaireVerificationReferenceType.Roster);
 
-        It should_return_message_reference_with_id_of_rosterGroup1Id = () =>
+        [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_rosterGroup1Id () =>
             verificationMessages.ElementAt(0).References.First().Id.ShouldEqual(rosterGroup1Id);
 
-        It should_return_message_reference_with_id_of_rosterGroup2Id = () =>
+        [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_rosterGroup2Id () =>
             verificationMessages.ElementAt(1).References.First().Id.ShouldEqual(rosterGroup2Id);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

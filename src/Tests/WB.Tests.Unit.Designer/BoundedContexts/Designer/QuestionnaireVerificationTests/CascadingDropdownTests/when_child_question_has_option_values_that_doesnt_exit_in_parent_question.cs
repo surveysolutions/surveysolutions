@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_child_question_has_option_values_that_doesnt_exit_in_parent_question : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             parentSingleOptionQuestionId = Guid.Parse("9E96D4AB-DF91-4FC9-9585-23FA270B25D7");
             childCascadedComboboxId = Guid.Parse("C6CC807A-3E81-406C-A110-1044AE3FD89B");
 
@@ -40,19 +39,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     }
                 );
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => verificationErrors = Enumerable.ToList<QuestionnaireVerificationMessage>(verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)));
+        private void BecauseOf() => verificationErrors = Enumerable.ToList<QuestionnaireVerificationMessage>(verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)));
 
-        It should_output_WB0084_verification_error = () => verificationErrors.First().Code.ShouldEqual("WB0084");
+        [NUnit.Framework.Test] public void should_output_WB0084_verification_error () => verificationErrors.First().Code.ShouldEqual("WB0084");
 
-        It should_reference_parent_question = () => 
+        [NUnit.Framework.Test] public void should_reference_parent_question () => 
             verificationErrors.First().References.ShouldContain(@ref => @ref.ItemId == parentSingleOptionQuestionId.FormatGuid());
 
-        It should_reference_question = () =>
+        [NUnit.Framework.Test] public void should_reference_question () =>
             verificationErrors.First().References.ShouldContain(@ref => @ref.ItemId == childCascadedComboboxId.FormatGuid());
 
-        It should_return_error_with_referece_to_question = () => 
+        [NUnit.Framework.Test] public void should_return_error_with_referece_to_question () => 
             verificationErrors.First().References.ShouldEachConformTo(x => x.Type == QuestionnaireVerificationReferenceType.Question);
 
         static Guid parentSingleOptionQuestionId;

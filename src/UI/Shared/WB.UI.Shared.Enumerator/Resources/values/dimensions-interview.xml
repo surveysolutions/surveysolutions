@@ -94,5 +94,10 @@
   
   <dimen name="Interview_Question_Readonly_padding">1dp</dimen>
   <dimen name="Interview_Question_Readonly_active_width">4dp</dimen>
+  
+  <dimen name="Interview_Cover_Header_padding_top">51dp</dimen>
+  <dimen name="Interview_Cover_Header_line_padding">9dp</dimen>
+  <dimen name="Interview_Cover_Header_Description_padding_top">17dp</dimen>
+  <dimen name="Interview_Cover_Header_Description_padding_bottom">38dp</dimen>
 
 </resources>

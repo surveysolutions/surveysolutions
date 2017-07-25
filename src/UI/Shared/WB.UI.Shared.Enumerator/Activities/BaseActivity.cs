@@ -1,18 +1,16 @@
-using Android.App;
-using Android.Content;
 using Android.OS;
+using MvvmCross.Core.ViewModels;
 using MvvmCross.Droid.Platform;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Platform;
 using Plugin.CurrentActivity;
 using Plugin.Permissions;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Shared.Enumerator.Utils;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
-    public abstract class BaseActivity<TViewModel> : MvxAppCompatActivity<TViewModel> where TViewModel : BaseViewModel
+    public abstract class BaseActivity<TViewModel> : MvxAppCompatActivity<TViewModel> where TViewModel : class, IMvxViewModel
     {
         protected abstract int ViewResourceId { get; }
 

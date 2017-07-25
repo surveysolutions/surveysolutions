@@ -8,14 +8,13 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests.Categorical
 {
     internal class when_verifying_questionnaire_with_group_that_has_enablement_condition_referencing_to_categirocal_multi_not_linked_question : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument(
                 Create.MultyOptionsQuestion(
                     categoricalQuestionId,
@@ -37,12 +36,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 => processor.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>()) == new[] { categoricalQuestionId.ToString() });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             resultErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_have_no_errors = () =>
+        [NUnit.Framework.Test] public void should_have_no_errors () =>
            resultErrors.ShouldBeEmpty();
 
         private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;

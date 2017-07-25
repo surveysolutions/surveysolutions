@@ -9,17 +9,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Translations
 {
     internal class when_adding_or_updating_translation_with_premission_to_edit : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: ownerId);
             addOrUpdateTranslation = Create.Command.AddOrUpdateTranslation(questionnaireId, translationId, "", sharedPersonId);
             questionnaire.AddSharedPerson(sharedPersonId, "email@email.com", ShareType.Edit, ownerId);
-        };
+            BecauseOf();
+        }
 
 
-        Because of = () => questionnaire.AddOrUpdateTranslation(addOrUpdateTranslation);
+        private void BecauseOf() => questionnaire.AddOrUpdateTranslation(addOrUpdateTranslation);
 
-        It should_contains_Translation_with_EntityId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_Translation_with_EntityId_specified () =>
             questionnaire.QuestionnaireDocument.Translations.ShouldContain(t => t.Id == translationId);
 
         private static AddOrUpdateTranslation addOrUpdateTranslation;

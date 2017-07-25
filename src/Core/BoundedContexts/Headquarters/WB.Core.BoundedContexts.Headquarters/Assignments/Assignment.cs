@@ -15,8 +15,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.CreatedAtUtc = DateTime.UtcNow;
             this.UpdatedAtUtc = DateTime.UtcNow;
 
-            Answers = new List<InterviewAnswer>();
-            IdentifyingData = new List<IdentifyingAnswer>();
+            this.Answers = new List<InterviewAnswer>();
+            this.IdentifyingData = new List<IdentifyingAnswer>();
+            this.InterviewSummaries = new HashSet<InterviewSummary>();
         }
 
         public Assignment(QuestionnaireIdentity questionnaireId, Guid responsibleId, int? quantity) : this()
@@ -49,6 +50,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual IList<InterviewAnswer> Answers { get; protected set; }
 
+        /// <summary>
+        /// Will also include deleted interviews
+        /// </summary>
         public virtual ISet<InterviewSummary> InterviewSummaries { get; protected set; }
 
         public virtual int? InterviewsNeeded
@@ -60,6 +64,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                     : null;
             }
         }
+
+        public virtual bool IsCompleted => this.InterviewsNeeded <= 0;
 
         public virtual void Archive()
         {

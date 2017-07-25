@@ -646,8 +646,9 @@ your next synchronization</value>
     <value>You can create new interviews using assignments</value>
   </data>
   <data name="Dashboard_Assignment_CardTitle" xml:space="preserve">
-    <value>№ {0}</value>
-    <comment>{0} - Assignment id</comment>
+    <value>№ {0}: {1}</value>
+    <comment>{0} - Assignment id
+    {1} - number of interviews to be created</comment>
   </data>
   <data name="Dashboard_AssignmentCard_TitleCountdown" xml:space="preserve">
     <value>{0} interview(s)</value>
@@ -657,8 +658,8 @@ your next synchronization</value>
     <value>Unlimited</value>
   </data>
   <data name="Dashboard_InterviewCard_Title" xml:space="preserve">
-    <value>№ {0}</value>
-    <comment>{0} - Assignment id</comment>
+    <value>№ {0}, interview {1}</value>
+    <comment>{0} - Assignment id, {1} - interview key</comment>
   </data>
   <data name="Dashboard_ShowLocation" xml:space="preserve">
     <value>Show location</value>

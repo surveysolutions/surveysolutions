@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
 {
     internal class when_searching_texts_using_regex : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var responsibleId = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
             questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
                 groupId: chapterId);
@@ -22,11 +21,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 entityId: staticTextId,
                 text: "static text 5 title with",
                 parentId: chapterId));
-        };
+            BecauseOf();
+        }
 
-        Because of = () => matches = questionnaire.FindAllTexts("\\d", false, false, true);
+        private void BecauseOf() => matches = questionnaire.FindAllTexts("\\d", false, false, true);
 
-        It should_find_text_using_regex = () => matches.ShouldContain(x => x.Id == staticTextId);
+        [NUnit.Framework.Test] public void should_find_text_using_regex () => matches.ShouldContain(x => x.Id == staticTextId);
 
         static Questionnaire questionnaire;
 

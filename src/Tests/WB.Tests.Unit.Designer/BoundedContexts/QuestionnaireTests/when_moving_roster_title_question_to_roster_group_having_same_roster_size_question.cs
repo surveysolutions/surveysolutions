@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -8,8 +8,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_moving_roster_title_question_to_group_that_have_the_same_roster_size_question_as_in_roster_title_question_group : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             rosterGroupWithRosterTitleQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -37,21 +36,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             AddGroup(questionnaire: questionnaire, groupId: targetGroupId, parentGroupId: chapterId, condition: null,
                 responsibleId: responsibleId, isRoster: true, rosterSizeQuestionId: rosterSizeQuestionId);
-        };
+            BecauseOf();
+        }
 
-        Because of =
-            () => questionnaire.MoveQuestion(questionId: rosterTitleQuestionId, responsibleId: responsibleId, targetIndex: 0,
+        private void BecauseOf() => questionnaire.MoveQuestion(questionId: rosterTitleQuestionId, responsibleId: responsibleId, targetIndex: 0,
                 targetGroupId: targetGroupId);
 
 
-        It should_contains_question = () =>
+        [NUnit.Framework.Test] public void should_contains_question () =>
            questionnaire.QuestionnaireDocument.Find<IQuestion>(rosterTitleQuestionId);
 
-        It should_contains_question_with_PublicKey_equal_to_roster_title_question_id = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_PublicKey_equal_to_roster_title_question_id () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(rosterTitleQuestionId)
                 .PublicKey.ShouldEqual(rosterTitleQuestionId);
 
-        It should_contains_question_with_GroupKey_equal_to_new_group_id_for_roster_title_question = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_GroupKey_equal_to_new_group_id_for_roster_title_question () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(rosterTitleQuestionId)
                 .GetParent().PublicKey.ShouldEqual(targetGroupId);
 

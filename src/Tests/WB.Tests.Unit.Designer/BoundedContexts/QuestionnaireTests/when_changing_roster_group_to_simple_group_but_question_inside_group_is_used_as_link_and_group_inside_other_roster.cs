@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -8,8 +8,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_changing_roster_group_to_simple_group_but_question_inside_group_is_used_as_link_and_group_inside_other_roster : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             var rosterFixedTitles = new[] { new FixedRosterTitleItem("1", "1"), new FixedRosterTitleItem("2", "2") };
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
@@ -28,15 +27,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 responsibleId,
                 options: new Option[0],
                 linkedToQuestionId : questionUsedAsLinkId);
-        };
+            BecauseOf();
+        }
 
-        Because of =() =>
+        private void BecauseOf() =>
             questionnaire.UpdateGroup(groupToUpdateId, responsibleId, "title", null, null, "", "", false, false, RosterSizeSourceType.Question, null, null);
 
-        private It should_contains_group_with_groupToUpdateId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_group_with_groupToUpdateId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupToUpdateId).ShouldNotBeNull();
 
-        It should_contains_group_with_IsRoster_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_group_with_IsRoster_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupToUpdateId).IsRoster.ShouldBeFalse();
 
         private static Questionnaire questionnaire;

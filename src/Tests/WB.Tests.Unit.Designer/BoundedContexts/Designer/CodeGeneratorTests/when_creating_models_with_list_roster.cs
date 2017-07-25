@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
 {
     internal class when_creating_models_with_list_roster : CodeGeneratorTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             AssemblyContext.SetupServiceLocator();
 
             questionnaire = Create.QuestionnaireDocument(questionnaireId, children: new[]
@@ -27,18 +26,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             });
 
             templateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             model = templateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, Create.CodeGenerationSettings());
 
-        It should_create_model_with_1_roster = () =>
+        [NUnit.Framework.Test] public void should_create_model_with_1_roster () =>
             model.AllRosters.Count.ShouldEqual(1);
 
-        It should_create_questionnaire_level_with_1_question = () =>
+        [NUnit.Framework.Test] public void should_create_questionnaire_level_with_1_question () =>
             model.QuestionnaireLevelModel.Rosters.Count.ShouldEqual(1);
 
-        It should_create_fixed_roster_model = () =>
+        [NUnit.Framework.Test] public void should_create_fixed_roster_model () 
         {
             RosterTemplateModel roster = model.AllRosters.Single(x => x.Id == Id.gA);
             roster.Conditions.ShouldEqual("roster condition");
@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             roster.Groups.Count.ShouldEqual(0);
             roster.Rosters.Count.ShouldEqual(0);
             roster.RosterScope.Count.ShouldEqual(1);
-        };
+        }
 
         private static QuestionnaireExpressionStateModelFactory templateModelFactory;
         private static QuestionnaireExpressionStateModel model;

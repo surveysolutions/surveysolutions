@@ -2,9 +2,10 @@
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
@@ -25,42 +26,41 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 
             var preloadedDataService = Create.Service.PreloadedDataService(questionnaire);
 
-            preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataService);
+            importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataService);
         };
 
         Because of =
-            () => result = preloadedDataVerifier.VerifyPanel(questionnaireId, 1, new[] { preloadedDataByFile });
+            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { preloadedDataByFile }, status);
 
         It should_result_has_1_errors = () =>
-            result.Errors.Count().ShouldEqual(1);
+            status.VerificationState.Errors.Count().ShouldEqual(1);
 
         It should_return_single_PL0031_error = () =>
-            result.Errors.First().Code.ShouldEqual("PL0031");
+            status.VerificationState.Errors.First().Code.ShouldEqual("PL0031");
 
         It should_return_error_with_two_references = () =>
-            result.Errors.First().References.Count().ShouldEqual(2);
+            status.VerificationState.Errors.First().References.Count().ShouldEqual(2);
 
         It should_return_error_with_first_reference_of_type_Column = () =>
-            result.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
+            status.VerificationState.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
 
         It should_return_error_with_first_reference_null_pointing = () =>
-           result.Errors.First().References.First().PositionX.ShouldBeNull();
+            status.VerificationState.Errors.First().References.First().PositionX.ShouldBeNull();
 
         It should_return_error_with_first_reference_pointing_on_second_column = () =>
-         result.Errors.First().References.First().PositionY.ShouldEqual(1);
+            status.VerificationState.Errors.First().References.First().PositionY.ShouldEqual(1);
 
         It should_return_error_with_second_reference_of_type_Column = () =>
-           result.Errors.First().References.Last().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
+            status.VerificationState.Errors.First().References.Last().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
 
         It should_return_error_with_second_reference_null_pointing = () =>
-           result.Errors.First().References.Last().PositionX.ShouldBeNull();
+            status.VerificationState.Errors.First().References.Last().PositionX.ShouldBeNull();
 
         It should_return_error_with_second_reference_pointing_on_second_column = () =>
-         result.Errors.First().References.Last().PositionY.ShouldEqual(2);
+            status.VerificationState.Errors.First().References.Last().PositionY.ShouldEqual(2);
 
 
-        private static PreloadedDataVerifier preloadedDataVerifier;
-        private static VerificationStatus result;
+        private static ImportDataVerifier importDataVerifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private static Guid numericQuestionId;

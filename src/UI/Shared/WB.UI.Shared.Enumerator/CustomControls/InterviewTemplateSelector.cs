@@ -36,7 +36,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (DateTimeQuestionViewModel), Resource.Layout.interview_question_datetime},
             {typeof (TimestampQuestionViewModel), Resource.Layout.interview_question_timestamp},
             {typeof (FilteredSingleOptionQuestionViewModel), Resource.Layout.interview_question_filtered_single_option },
-            {typeof (CascadingSingleOptionQuestionViewModel), Resource.Layout.interview_question_cascading_single_option },
+            {typeof (CascadingSingleOptionQuestionViewModel), Resource.Layout.interview_question_filtered_single_option },
             {typeof (QRBarcodeQuestionViewModel), Resource.Layout.interview_question_qrbarcode},
             {typeof (YesNoQuestionViewModel), Resource.Layout.interview_question_yesno},
             {typeof (GroupViewModel), Resource.Layout.interview_group},
@@ -54,7 +54,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (YesNoQuestionOptionViewModel), Resource.Layout.interview_question_yesno_item},
             {typeof (VariableViewModel), Resource.Layout.interview_variable},
             {typeof (ReadOnlyQuestionViewModel), Resource.Layout.interview_question_readonly},
-            {typeof (AreaQuestionViewModel), Resource.Layout.interview_question_area}
+            {typeof (AreaQuestionViewModel), Resource.Layout.interview_question_area},
+            {typeof (AudioQuestionViewModel), Resource.Layout.interview_question_audio}
         };
 
         public int GetItemViewType(object forItemObject)

@@ -124,10 +124,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 }
             };
 
-            var command = Create.Command.CreateInterviewOnClientCommand(interview.Id, answersToIdentifyingQuestions: answersToIdentifyingQuestions, assignmentId: 1);
+            var command = Create.Command.CreateInterview(interview.Id, answersToIdentifyingQuestions: answersToIdentifyingQuestions, assignmentId: 1);
 
             //act
-            interview.CreateInterviewOnClient(command);
+            interview.CreateInterview(command);
 
             //assert
             Assert.That(interview.GetAnswerAsString(questionIdentity), Is.EqualTo(stringAnswer));
@@ -154,10 +154,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                     Answer = TextAnswer.FromString("value")
                 }
             };
-            var command = Create.Command.CreateInterviewOnClientCommand(interview.Id, assignmentId: 1, answersToIdentifyingQuestions: answersToIdentifyingQuestions);
+            var command = Create.Command.CreateInterview(interview.Id, assignmentId: 1, answersToIdentifyingQuestions: answersToIdentifyingQuestions);
 
             //act
-            interview.CreateInterviewOnClient(command);
+            interview.CreateInterview(command);
 
             //assert
             Assert.That(interview.GetAnswerAsString(questionTextIdentity), Is.EqualTo("value"));
@@ -180,13 +180,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                     Answer = TextAnswer.FromString("value")
                 }
             };
-            var command = Create.Command.CreateInterviewOnClientCommand(interview.Id, assignmentId: 1, answersToIdentifyingQuestions: answersToIdentifyingQuestions);
+            var command = Create.Command.CreateInterview(interview.Id, assignmentId: 1, answersToIdentifyingQuestions: answersToIdentifyingQuestions);
 
             // act
-            interview.CreateInterviewOnClient(command);
+            interview.CreateInterview(command);
 
             // assert
-            eventContext.ShouldContainEvent<InterviewOnClientCreated>();
+            eventContext.ShouldContainEvent<InterviewCreated>();
             eventContext.ShouldContainEvent<TextQuestionAnswered>(e => e.QuestionId == questionId);
             eventContext.ShouldContainEvent<QuestionsMarkedAsReadonly>(e => e.Questions.Single(i => i.Id == questionId) != null);
         }

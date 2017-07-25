@@ -1,5 +1,7 @@
+using System;
 using System.Threading.Tasks;
 using Android.Content;
+using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Droid.Platform;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -12,7 +14,6 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Interviewer.ViewModel;
-using WB.UI.Shared.Enumerator.CustomServices.AreaEditor;
 
 namespace WB.UI.Interviewer.Implementations.Services
 {
@@ -20,6 +21,7 @@ namespace WB.UI.Interviewer.Implementations.Services
     {
         private readonly IMvxAndroidCurrentTopActivity androidCurrentTopActivity;
         private readonly IJsonAllTypesSerializer jsonSerializer;
+        private readonly IMvxNavigationService navigationService;
 
         public ViewModelNavigationService(
             ICommandService commandService,
@@ -27,16 +29,25 @@ namespace WB.UI.Interviewer.Implementations.Services
             IUserInterfaceStateService userInterfaceStateService,
             IMvxAndroidCurrentTopActivity androidCurrentTopActivity,
             IPrincipal principal,
-            IJsonAllTypesSerializer jsonSerializer)
+            IJsonAllTypesSerializer jsonSerializer,
+            IMvxNavigationService navigationService)
             : base(commandService, userInteractionService, userInterfaceStateService, principal)
         {
             this.androidCurrentTopActivity = androidCurrentTopActivity;
             this.jsonSerializer = jsonSerializer;
+            this.navigationService = navigationService;
         }
 
         public void NavigateTo<TViewModel>() where TViewModel : IMvxViewModel => this.NavigateTo<TViewModel>(null);
 
-        public void NavigateToDashboard() => this.NavigateTo<DashboardViewModel>();
+        public async Task NavigateToDashboard(Guid? interviewId = null)
+        {
+            await this.navigationService.Navigate<DashboardViewModel, DashboardArgs>(new DashboardArgs
+            {
+                LastVisitedInterviewId = interviewId
+            });
+        }
+
         public void NavigateToPrefilledQuestions(string interviewId) => this.NavigateTo<PrefilledQuestionsViewModel>(new { interviewId = interviewId });
 
         public void NavigateToInterview(string interviewId, NavigationIdentity navigationIdentity)

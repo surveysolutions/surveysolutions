@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Limit of interviews that are allowed to be created is reached. Establised limit for this survey is {0}. Contact Survey Solutions team in case you need to create more interviews..
+        ///   Looks up a localized string similar to More interviews have been created than the allowed limit. Establised limit for this survey is {0}. Contact Survey Solutions team in case you need to create more interviews..
         /// </summary>
         public static string LimitIsReachedErrorMessageFormat {
             get {

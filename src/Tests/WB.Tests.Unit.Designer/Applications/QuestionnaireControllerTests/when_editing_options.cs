@@ -7,14 +7,13 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.UI.Designer.Controllers;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 {
     internal class when_editing_options : QuestionnaireControllerTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             controller = CreateQuestionnaireController();
             SetControllerContextWithSession(controller, "options", new QuestionnaireController.EditOptionsViewModel());
 
@@ -22,23 +21,25 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 
             stream.Position = 0;
             postedFile = Mock.Of<HttpPostedFileBase>(pf => pf.InputStream == stream && pf.FileName == "data.csv");
-        };
+            BecauseOf();
+        }
 
-        Because of = () => view = controller.EditOptions(postedFile);
+        private void BecauseOf() => view = controller.EditOptions(postedFile);
 
-        It should_return_list_with_1_option = () =>
+        [NUnit.Framework.Test] public void should_return_list_with_1_option () =>
             ((IEnumerable<Option>)view.Model).Count().ShouldEqual(1);
 
-        It should_return_first_option_with_value_equals_1 = () =>
+        [NUnit.Framework.Test] public void should_return_first_option_with_value_equals_1 () =>
             ((IEnumerable<Option>)view.Model).First().Value.ShouldEqual("1");
 
-        It should_return_first_option_with_title_equals_Street_1 = () =>
+        [NUnit.Framework.Test] public void should_return_first_option_with_title_equals_Street_1 () =>
             ((IEnumerable<Option>)view.Model).First().Title.ShouldEqual("Street 1");
 
-        Cleanup cleanup = () =>
+        [NUnit.Framework.OneTimeTearDown]
+        public void cleanup()
         {
             stream.Dispose();
-        };
+        }
 
         private static QuestionnaireController controller;
         private static HttpPostedFileBase postedFile;

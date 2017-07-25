@@ -1,17 +1,16 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.Infrastructure.PlainStorage;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewFactoryTests
 {
     internal class when_loading_view : QuestionnaireInfoViewFactoryContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var repositoryMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
 
             repositoryMock
@@ -19,18 +18,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
                 .Returns(CreateQuestionnaireDocument(questionnaireId, questionnaireTitle));
 
             factory = CreateQuestionnaireInfoViewFactory(repository: repositoryMock.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             view = factory.Load(questionnaireId, userId);
 
-        It should_find_questionnaire = () =>
+        [NUnit.Framework.Test] public void should_find_questionnaire () =>
             view.ShouldNotBeNull();
 
-        It should_questionnaire_id_be_equal_questionnaireId = () =>
+        [NUnit.Framework.Test] public void should_questionnaire_id_be_equal_questionnaireId () =>
             view.QuestionnaireId.ShouldEqual(questionnaireId);
 
-        It should_questionnaire_title_be_equal_questionnaireTitle = () =>
+        [NUnit.Framework.Test] public void should_questionnaire_title_be_equal_questionnaireTitle () =>
             view.Title.ShouldEqual(questionnaireTitle);
 
         private static QuestionnaireInfoView view;

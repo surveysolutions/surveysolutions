@@ -9,28 +9,16 @@
       style="@style/Interview_Question_Answer_FilteredComboBox"
       android:completionThreshold="1"
       android:inputType="textVisiblePassword"
+      android:imeOptions="actionDone"
       android:layout_weight="1"
       local:MvxItemTemplate="@layout/interview_question_filtered_single_option_item"
-      local:MvxBind="FocusValueChanged ValueChangeCommand; 
-                         Text DefaultText;
-                         ItemsSource AutoCompleteSuggestions; 
-                         PartialText FilterText; 
-                         ResetText ResetTextInEditor;
-                         SelectedObject SelectedObject; 
-                         ShowPopupOnFocus .;
-                         HidePopupOnDone .;
-                         Watermark Localization('FilteredComboboxQuestion_Hint');" />
-    <LinearLayout local:MvxBind="Click RemoveAnswerCommand; Visible IsStringNotEmpty(FilterText);"
-                  style="@style/Interview_Question_Answer_Input_RemoveAnswerWrapper">
-      <ImageButton style="@style/Interview_Question_RemoveAnswer"
-                   android:layout_gravity="right"
-                   android:layout_weight="0" android:duplicateParentState="true"
-                   local:MvxBind="Click RemoveAnswerCommand; 
-                                      HideKeyboardOnClick .; " />
-    </LinearLayout>
-
-
+      local:MvxBind="ItemsSource AutoCompleteSuggestions;
+                     PartialText FilterText; 
+                     OnPartialTextChanged FilterCommand;
+                     OnItemSelected SaveAnswerBySelectedOptionCommand;
+                     OnFocusOut ShowErrorIfNoAnswerCommand;
+                     Watermark Localization('FilteredComboboxQuestion_Hint');
+                     Tag Format('Answer_{0}', Identity)" />
+    <include layout="@layout/interview_question__remove_button_input" />
   </LinearLayout>
-
-
 </LinearLayout>

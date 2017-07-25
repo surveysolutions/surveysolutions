@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.UI.Headquarters.Models.WebInterview
 {
@@ -13,8 +15,8 @@ namespace WB.UI.Headquarters.Models.WebInterview
     public class InterviewInfo
     {
         public string QuestionnaireTitle { get; set; }
-        public string HumanId { get; set; }
         public string FirstSectionId { get; set; }
+        public string InterviewKey { get; set; }
     }
 
     public class LanguageInfo
@@ -76,8 +78,12 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
     public class InterviewMultimediaQuestion : GenericQuestion
     {
-        public string UploadUrl { get; set; }
         public string Answer { get; set; }
+    }
+
+    public class InterviewAudioQuestion : GenericQuestion
+    {
+        public long? Answer { get; set; }
     }
     
     public class InterviewDateQuestion : GenericQuestion
@@ -162,12 +168,21 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public bool HideInstructions { get; set; }
         public bool IsAnswered { get; set; }
         public Validity Validity { get; set; } = new Validity();
+        public Comment[] Comments { get; set; }
     }
 
     public class Validity
     {
         public bool IsValid { get; set; }
         public string[] Messages { get; set; }
+    }
+
+    public class Comment
+    {
+        public string Text { get; set; }
+        public bool IsOwnComment { get; set; }
+        public UserRoles UserRole { get; set; }
+        public DateTime CommentTimeUtc { get; set; }
     }
 
     public abstract class InterviewEntity
@@ -256,7 +271,25 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public EntityWithError[] EntitiesWithError { get;set; }
     }
 
-    public class EntityWithError
+    public class EntityWithError : QuestionReference { }
+
+    public class CoverInfo
+    {
+        public CoverInfo()
+        {
+            this.IdentifyingQuestions = new List<IdentifyingQuestion>();
+            this.EntitiesWithComments = new EntityWithComment[0];
+        }
+
+        public List<IdentifyingQuestion> IdentifyingQuestions { get; set; }
+        public EntityWithComment[] EntitiesWithComments { get; set; }
+        public int CommentedQuestionsCount { get; set; }
+        public string SupervisorRejectComment { get; set; }
+    }
+
+    public class EntityWithComment : QuestionReference { }
+
+    public class QuestionReference
     {
         public string Id { get; set; }
         public string ParentId { get; set; }

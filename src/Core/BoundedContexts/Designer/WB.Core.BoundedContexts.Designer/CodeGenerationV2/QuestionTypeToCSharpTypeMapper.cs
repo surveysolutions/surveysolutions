@@ -17,6 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                 case QuestionType.QRBarcode:
                 case QuestionType.Text:
                 case QuestionType.Area:
+                case QuestionType.Audio:
                     return "string";
                 case QuestionType.Numeric:
                     return ((question as NumericQuestion)?.IsInteger ?? false) ? "int?" : "double?";

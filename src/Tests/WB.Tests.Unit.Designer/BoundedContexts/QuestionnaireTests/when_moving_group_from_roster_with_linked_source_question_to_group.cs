@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_moving_group_from_roster_with_linked_source_question_to_group : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId, isRoster: true);
@@ -26,23 +25,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 options: new Option[0],
                 linkedToQuestionId: linkedSourceQuestionId
             );
-        };
+            BecauseOf();
+        }
 
-        Because of = () => exception = Catch.Exception(() => questionnaire.MoveGroup(groupId: rosterId, targetGroupId: chapterId, responsibleId: responsibleId, targetIndex:0));
+        private void BecauseOf() => exception = Catch.Exception(() => questionnaire.MoveGroup(groupId: rosterId, targetGroupId: chapterId, responsibleId: responsibleId, targetIndex:0));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__contains__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__contains__ () =>
             exception.Message.ToLower().ShouldContain("contains");
 
-        It should_throw_exception_with_message_containting__linked__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__linked__ () =>
             exception.Message.ToLower().ShouldContain("linked");
 
-        It should_throw_exception_with_message_containting__source__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__source__ () =>
             exception.Message.ToLower().ShouldContain("source");
 
-        It should_throw_exception_with_message_containting__question__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__question__ () =>
             exception.Message.ToLower().ShouldContain("question");
 
         private static Questionnaire questionnaire;

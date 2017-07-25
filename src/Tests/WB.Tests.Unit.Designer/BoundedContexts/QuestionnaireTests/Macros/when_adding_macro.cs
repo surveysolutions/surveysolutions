@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
@@ -7,17 +7,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Macros
 {
     internal class when_adding_macro : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: responsibleId);
 
             addMacro = Create.Command.AddMacro(questionnaireId, macroId, responsibleId);
-        };
+            BecauseOf();
+        }
 
 
-        Because of = () => questionnaire.AddMacro(addMacro);
+        private void BecauseOf() => questionnaire.AddMacro(addMacro);
 
-        It should_contains_Macro_with_EntityId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_Macro_with_EntityId_specified () =>
             questionnaire.QuestionnaireDocument.Macros.ShouldContain(t => t.Key == macroId);
 
         private static AddMacro addMacro;

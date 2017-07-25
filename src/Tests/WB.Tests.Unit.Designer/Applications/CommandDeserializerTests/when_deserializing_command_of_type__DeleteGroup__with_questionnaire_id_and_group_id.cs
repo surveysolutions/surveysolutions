@@ -8,8 +8,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
 {
     internal class when_deserializing_command_of_type__DeleteGroup__with_questionnaire_id_and_group_id : CommandDeserializerTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             type = "DeleteGroup";
 
             questionnaireId = "11111111-1111-1111-1111-111111111111";
@@ -21,18 +20,19 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
             }}", questionnaireId, groupId);
 
             deserializer = CreateCommandDeserializer();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             result = deserializer.Deserialize(type, command);
 
-        It should_return_NewDeleteGroupCommand = () =>
+        [NUnit.Framework.Test] public void should_return_NewDeleteGroupCommand () =>
             result.ShouldBeOfExactType<DeleteGroup>();
 
-        It should_return_same_questionnaire_id_in_NewDeleteGroupCommand = () =>
+        [NUnit.Framework.Test] public void should_return_same_questionnaire_id_in_NewDeleteGroupCommand () =>
             ((DeleteGroup)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));
 
-        It should_return_same_group_id_in_NewDeleteGroupCommand = () =>
+        [NUnit.Framework.Test] public void should_return_same_group_id_in_NewDeleteGroupCommand () =>
             ((DeleteGroup)result).GroupId.ShouldEqual(Guid.Parse(groupId));
 
         private static ICommand result;
