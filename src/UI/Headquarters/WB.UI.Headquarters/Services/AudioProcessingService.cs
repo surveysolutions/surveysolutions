@@ -46,7 +46,7 @@ namespace WB.UI.Headquarters.Services
                 using (var ms = new MemoryStream(audio))
                 using (var wavFile = new WaveFileReader(ms))
                 using (var encoder = MediaFoundationEncoder.CreateAACEncoder(wavFile.WaveFormat, tempFile,
-                    (int)AudioQuality.Default * 1024 /* 64 Kb bitrate*/))
+                    (int)AudioQuality.DefaultBitRate * 1024 /* 64 Kb bitrate*/))
                 {
                     byte[] buffer = new byte[EncoderBufferSize];
 
