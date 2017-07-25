@@ -29,6 +29,7 @@ using WB.UI.Headquarters.Models.ComponentModels;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Utils;
 using CommonRes = Resources.Common;
+using ASP;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -66,25 +67,25 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult CreateNew()
         {
-            return View("Index", NewModel(MainMenu.CreateNew));
+            return View("Index", NewModel(MenuItem.CreateNew));
         }
 
         public ActionResult Started()
         {
-            return View("Interviews", NewModel(MainMenu.Started, InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted));
+            return View("Interviews", NewModel(MenuItem.Started, InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted));
         }
 
         public ActionResult Rejected()
         {
-            return View("Interviews", NewModel(MainMenu.Rejected, InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters));
+            return View("Interviews", NewModel(MenuItem.Rejected, InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters));
         }
 
         public ActionResult Completed()
         {
-            return View("Interviews", NewModel(MainMenu.Completed, InterviewStatus.Completed));
+            return View("Interviews", NewModel(MenuItem.Completed, InterviewStatus.Completed));
         }
 
-        private InterviewerHqModel NewModel(string title, params InterviewStatus[] statuses)
+        private InterviewerHqModel NewModel(MenuItem title, params InterviewStatus[] statuses)
         {
             return new InterviewerHqModel
             {

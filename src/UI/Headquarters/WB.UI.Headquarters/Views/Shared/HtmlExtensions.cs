@@ -93,6 +93,10 @@ namespace ASP
                 case MenuItem.Logon: return "Logon";
                 case MenuItem.Devices: return "Devices";
                 case MenuItem.SyncLog: return "SyncLog";
+                case MenuItem.CreateNew: return MainMenu.CreateNew;
+                case MenuItem.Started: return MainMenu.Started;
+                case MenuItem.Rejected: return MainMenu.Rejected;
+                case MenuItem.Completed: return MainMenu.Completed;
                 default: return String.Empty;
             }
         }
