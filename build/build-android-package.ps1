@@ -187,7 +187,7 @@ if (Test-Path $OutFileName) {
 	Remove-Item $OutFileName -Force
 }
 if([string]::IsNullOrWhiteSpace($VersionName)){
-	$VersionName = (GetVersionString $CapiProject)
+	$VersionName = (GetVersionString 'src\core')
 }
 
 if($ExcludeExtra)
