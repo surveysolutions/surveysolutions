@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -100,7 +101,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.InstructionViewModel.Init(interviewId, entityIdentity);
 
             this.Initialize(interviewId, entityIdentity, navigationState);
-            this.SetAnswerAndUpdateFilter().Wait();
+            Task.Run(this.SetAnswerAndUpdateFilter).WaitAndUnwrapException();
 
             this.eventRegistry.Subscribe(this, interviewId);
         }
