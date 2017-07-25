@@ -81,6 +81,7 @@ namespace WB.UI.Headquarters.Injections
 
             this.Kernel.Bind<IVersionCheckService>().To<VersionCheckService>().InSingletonScope();
             this.Kernel.Bind<IHttpStatistician>().To<HttpStatistician>().InSingletonScope();
+            this.Kernel.Bind<IAudioProcessingService>().To<AudioProcessingService>().InSingletonScope();
         }
 
         protected virtual void RegisterEventHandlers()

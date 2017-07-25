@@ -1933,6 +1933,8 @@
       <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="ServiceLocationModule.cs" />
+    <Compile Include="Services\AudioProcessingService.cs" />
+    <Compile Include="Services\IAudioProcessingService.cs" />
     <Compile Include="Services\IImageProcessingService.cs" />
     <Compile Include="Services\IInterviewCreatorFromAssignment.cs" />
     <Compile Include="Services\ImageProcessingService.cs" />
