@@ -13,7 +13,6 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.Questionnaire.Documents.Question;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 
@@ -238,7 +237,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             result.SourceOfSingleQuestions = this.GetSourcesOfSingleQuestionBriefs(questionnaire, questionId);
             result.QuestionTypeOptions = QuestionTypeOptions;
             result.AllQuestionScopeOptions = AllQuestionScopeOptions;
-
+            
             this.ReplaceGuidsInValidationAndConditionRules(result, questionnaire, questionnaireId);
 
             return result;

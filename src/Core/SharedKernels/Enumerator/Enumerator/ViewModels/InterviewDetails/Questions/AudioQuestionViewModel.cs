@@ -38,7 +38,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Identity questionIdentity;
         private Guid interviewId;
         private string variableName;
-        private int kbPerSec;
 
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IPermissionsService permissions;
@@ -105,7 +104,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewId = interview.Id;
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             this.variableName = questionnaire.GetQuestionVariableName(entityIdentity.Id);
-            this.kbPerSec = AudioQuality.DefaultBitRate;
 
             var answerModel = interview.GetAudioQuestion(entityIdentity);
             if (answerModel.IsAnswered)
@@ -155,7 +153,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.permissions.AssureHasPermission(Permission.Storage).ConfigureAwait(false);
 
                 this.audioDialog.OnRecorded += AudioDialog_OnRecorded;
-                this.audioDialog.ShowAndStartRecording(this.QuestionState.Header.Title.HtmlText, this.kbPerSec);
+                this.audioDialog.ShowAndStartRecording(this.QuestionState.Header.Title.HtmlText);
             }
             catch (MissingPermissionsException e)
             {
