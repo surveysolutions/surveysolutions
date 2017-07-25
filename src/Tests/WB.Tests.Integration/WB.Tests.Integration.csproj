@@ -474,6 +474,7 @@
     <Compile Include="InterviewTests\OptionsFilter\when_filtering_options_for_single_question_in_fixed_roster.cs" />
     <Compile Include="InterviewTests\Rosters\when_adding_roster_instance_that_affects_variable.cs" />
     <Compile Include="InterviewTests\Rosters\when_adding_roster_instance_that_affects_variable_used_in_condition.cs" />
+    <Compile Include="InterviewTests\Rosters\when_answering_question_with_validation_refering_nested_rosters_from_the_same_level.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_yesno_question_that_trigger_nested_rosters.cs" />
     <Compile Include="InterviewTests\Rosters\when_3_level_nested_rosters_are_triggered_by_same_yesno_question_and_answer_is_has_1_option.cs" />
     <Compile Include="InterviewTests\Rosters\when_3_level_nested_rosters_are_triggered_by_same_yesno_question_and_answer_is_has_2_option.cs" />
