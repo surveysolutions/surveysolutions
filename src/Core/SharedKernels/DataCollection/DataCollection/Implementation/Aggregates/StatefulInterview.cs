@@ -629,7 +629,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public bool AcceptsInterviewerAnswers()
         {
-            return !IsDeleted && Status == InterviewStatus.InterviewerAssigned;
+            return !IsDeleted && (Status == InterviewStatus.InterviewerAssigned || Status == InterviewStatus.Restarted || Status == InterviewStatus.RejectedBySupervisor);
         }
 
         public IReadOnlyCollection<IInterviewTreeNode> GetAllSections()
