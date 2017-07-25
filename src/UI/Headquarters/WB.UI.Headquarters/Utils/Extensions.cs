@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using System.Resources;
 using System.Web.Http.Filters;
 using System.Web.Mvc;
@@ -40,10 +41,16 @@ namespace WB.UI.Headquarters.Utils
 
             foreach (var resource in resources)
             {
-                foreach (DictionaryEntry entry in resource.GetResourceSet(CultureInfo.CurrentUICulture, true, true))
+                IEnumerable<string> keys = resource
+                    .GetResourceSet(CultureInfo.InvariantCulture, true, true)
+                    .Cast<DictionaryEntry>()
+                    .Select(entry => entry.Key)
+                    .Cast<string>();
+
+                foreach (var key in keys)
                 {
                     var lastDot = resource.BaseName.LastIndexOf(".", StringComparison.Ordinal);
-                    result.Add(resource.BaseName.Substring(lastDot > 0 ? lastDot + 1 : 0) + "." + entry.Key, entry.Value.ToString());
+                    result.Add(resource.BaseName.Substring(lastDot > 0 ? lastDot + 1 : 0) + "." + key, resource.GetString(key, CultureInfo.CurrentUICulture));
                 }
             }
 
