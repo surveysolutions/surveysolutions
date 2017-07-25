@@ -2,7 +2,7 @@
     <ModalFrame :id="id" :title="confirm_title">
         <slot />
         <button slot="actions" type="button" class="btn btn-primary" v-on:click="confirm">{{$t("Common.Ok")}}</button>
-        <button slot="actions" type="button" class="btn btn-link" data-dismiss="modal">{{$t("Common.Cancel")}}</button>
+        <button slot="actions" type="button" class="btn btn-link" v-on:click="cancel">{{$t("Common.Cancel")}}</button>
     </ModalFrame>
 </template>
 
@@ -29,8 +29,12 @@ export default {
     },
 
     methods: {
+        cancel() {
+            this.callback(false)
+            $(this.$el).modal('hide');
+        },
         confirm() {
-            this.callback()
+            this.callback(true)
             $(this.$el).modal('hide');
         },
         promt(callback) {
