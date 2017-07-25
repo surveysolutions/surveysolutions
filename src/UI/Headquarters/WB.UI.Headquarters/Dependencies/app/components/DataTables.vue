@@ -50,8 +50,12 @@ export default {
             this.table.rows().deselect();
             var rowIndex = selectedItem.parent().children().index(selectedItem);
             this.table.row(rowIndex).select();
+            const rowData = this.table.rows({ selected: true }).data()[0];
+
+            this.table.rows().deselect();
+
             return {
-                rowData: this.table.rows({ selected: true }).data()[0],
+                rowData,
                 rowIndex
             }
         },
