@@ -12,6 +12,8 @@ using WB.Core.SharedKernels.Questionnaire.Documents.Question;
 using System.Diagnostics;
 using System.Threading;
 using System.Text;
+using Elmah;
+using System.Web;
 
 namespace WB.UI.Headquarters.Services
 {
@@ -33,42 +35,49 @@ namespace WB.UI.Headquarters.Services
             audioCompressionQueue.Add((tcs, bytes));
             audioFilesInQueue.Inc();
             return tcs.Task;
-        }        
+        }
 
         private AudioFileInformation CompressData(byte[] audio)
         {
             var tempFile = Path.GetTempFileName();
+            var audioResult = new AudioFileInformation();
 
             try
             {
-                TimeSpan duration;
-
                 using (var ms = new MemoryStream(audio))
                 using (var wavFile = new WaveFileReader(ms))
-                using (var encoder = MediaFoundationEncoder.CreateAACEncoder(wavFile.WaveFormat, tempFile,
-                    (int)AudioQuality.DefaultBitRate * 1024 /* 64 Kb bitrate*/))
                 {
-                    byte[] buffer = new byte[EncoderBufferSize];
+                    audioResult.Duration = wavFile.GetLength();
 
-                    long total = 0;
-                    int read = 0;
-                    wavFile.Position = 0;
-
-                    while ((read = wavFile.Read(buffer, 0, EncoderBufferSize)) > 0)
+                    using (var encoder = MediaFoundationEncoder.CreateAACEncoder(wavFile.WaveFormat, tempFile,
+                        (int)AudioQuality.DefaultBitRate * 1024 /* 64 Kb bitrate*/))
                     {
-                        encoder.Write(buffer, 0, read);
-                        total += read;
+                        byte[] buffer = new byte[EncoderBufferSize];
+
+                        long total = 0;
+                        int read = 0;
+                        wavFile.Position = 0;
+
+                        while ((read = wavFile.Read(buffer, 0, EncoderBufferSize)) > 0)
+                        {
+                            encoder.Write(buffer, 0, read);
+                            total += read;
+                        }                        
                     }
-
-                    duration = wavFile.GetLength();
                 }
+                audioResult.Binary = File.ReadAllBytes(tempFile);
+                audioResult.MimeType = MimeType;
 
-                return new AudioFileInformation
-                {
-                    Binary = File.ReadAllBytes(tempFile),
-                    Duration = duration,
-                    MimeType = MimeType
-                };
+                return audioResult;
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.GetDefault(HttpContext.Current).Log(new Error(ex, HttpContext.Current));
+
+                audioResult.MimeType = "audio/wav";
+                audioResult.Binary = audio;
+
+                return audioResult;
             }
             finally
             {
