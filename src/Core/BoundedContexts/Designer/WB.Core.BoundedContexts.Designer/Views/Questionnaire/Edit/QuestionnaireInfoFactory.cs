@@ -239,24 +239,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             result.QuestionTypeOptions = QuestionTypeOptions;
             result.AllQuestionScopeOptions = AllQuestionScopeOptions;
 
-            result.QualityOptions = new List<QualityOption>
-            {
-                BuildAutioQualityOption(AudioQuality.Low),
-                BuildAutioQualityOption(AudioQuality.Default),
-                BuildAutioQualityOption(AudioQuality.Best)
-            };
-
             this.ReplaceGuidsInValidationAndConditionRules(result, questionnaire, questionnaireId);
 
             return result;
         }
-
-        private static QualityOption BuildAutioQualityOption(AudioQuality audioQuality)
-        {
-            string qualityFormat = "{0} ({1} kBit/s)";
-            return new QualityOption {Title = string.Format(qualityFormat, audioQuality, (int) audioQuality), Value = (int) audioQuality};
-        }
-
 
         public NewEditStaticTextView GetStaticTextEditView(string questionnaireId, Guid staticTextId)
         {
@@ -492,9 +478,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     questionView.IsTimestamp = dateTimeQuestion.IsTimestamp;
                     return questionView;
                 case QuestionType.Audio:
-                    var audioQuestion = (AudioQuestion) question;
-                    questionView.Quality = (int) audioQuestion.Quality;
-                    return questionView;
                 case QuestionType.QRBarcode:
                 case QuestionType.Multimedia:
                 case QuestionType.GpsCoordinates:

@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.Questionnaire.Documents.Question;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
@@ -104,7 +105,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewId = interview.Id;
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             this.variableName = questionnaire.GetQuestionVariableName(entityIdentity.Id);
-            this.kbPerSec = (int)questionnaire.GetAudioQuality(entityIdentity.Id);
+            this.kbPerSec = AudioQuality.DefaultBitRate;
 
             var answerModel = interview.GetAudioQuestion(entityIdentity);
             if (answerModel.IsAnswered)

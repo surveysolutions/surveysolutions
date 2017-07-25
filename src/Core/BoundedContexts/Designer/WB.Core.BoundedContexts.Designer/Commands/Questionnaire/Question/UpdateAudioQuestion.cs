@@ -12,17 +12,14 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             Guid questionId,
             Guid responsibleId,
             CommonQuestionParameters commonQuestionParameters,
-            QuestionScope scope,
-            AudioQuality quality)
+            QuestionScope scope)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, 
                 commonQuestionParameters: commonQuestionParameters)
         {
             this.Scope = scope;
-            this.Quality = quality;
         }
 
-        public AudioQuality Quality { get; set; }
         public QuestionScope Scope { get; set; }
     }
 }

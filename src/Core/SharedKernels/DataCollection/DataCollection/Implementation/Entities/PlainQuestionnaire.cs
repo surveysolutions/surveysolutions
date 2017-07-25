@@ -1578,17 +1578,5 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             var options = this.GetOptionsForQuestion(cascadingQuestionId, selectedParentValue, string.Empty);
             return options.Any();
         }
-
-        public AudioQuality GetAudioQuality(Guid questionId)
-        {
-            var question = this.GetQuestion(questionId);
-            var audioQuestion = question as AudioQuestion;
-            if (audioQuestion == null)
-            {
-                 throw new QuestionnaireException($"Question {questionId} has type {question.QuestionType}");
-            }
-
-            return audioQuestion.Quality != AudioQuality.Undefined ? audioQuestion.Quality : AudioQuality.Default;
-        }
     }
 }
