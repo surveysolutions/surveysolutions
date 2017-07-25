@@ -1525,7 +1525,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 new List<ValidationCondition>(),
                 null,
                 false);
-            newQuestion.Quality = command.Quality;
 
             if (question != null)
             {

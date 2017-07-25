@@ -75,16 +75,7 @@
                 $scope.activeQuestion.isFilteredCombobox = question.isFilteredCombobox;
                 $scope.activeQuestion.optionsFilterExpression = question.optionsFilterExpression;
                 $scope.activeQuestion.quality = question.quality;
-                var optionsDictionary = {};
-                _.each(question.qualityOptions,
-                    function(q) {
-                        optionsDictionary[q.value] = q.title;
-                    });
-
-                $scope.activeQuestion.qualityOptions = optionsDictionary;
-
                 $scope.activeQuestion.validationConditions = question.validationConditions;
-
                 $scope.activeQuestion.isTimestamp = question.isTimestamp;
 
                 var options = question.options || [];
