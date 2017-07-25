@@ -54,7 +54,7 @@ namespace WB.UI.Headquarters.API
             }
 
             var isInterviewer = this.authorizedUser.IsInterviewer;
-
+                       
             var input = new AssignmentsInputModel
             {
                 Page = request.PageIndex,
@@ -75,6 +75,8 @@ namespace WB.UI.Headquarters.API
             if (isInterviewer)
             {
                 input.OnlyWithInterviewsNeeded = true;
+                input.SearchByFields = AssignmentsInputModel.SearchTypes.Id 
+                    | AssignmentsInputModel.SearchTypes.IdentifyingQuestions;
             }
 
             var result = this.assignmentViewFactory.Load(input);
