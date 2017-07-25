@@ -18,7 +18,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Questionnaire.Documents;
-using WB.Core.SharedKernels.Questionnaire.Documents.Question;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
