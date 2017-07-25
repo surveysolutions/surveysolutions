@@ -5,6 +5,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
     public class AssignmentsInputModel : ListViewModelBase
     {
+        public SearchTypes SearchByFields { get; set; } = SearchTypes.Id | SearchTypes.ResponsibleId | SearchTypes.IdentifyingQuestions;
+
         public string SearchBy { get; set; }
         public Guid? QuestionnaireId { get; set; }
         public long? QuestionnaireVersion { get; set; }
@@ -14,5 +16,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public bool OnlyWithInterviewsNeeded { get; set; } = false;
         public int? Limit { get; set; }
         public int? Offset { get; set; }
+
+        [Flags]
+        public enum SearchTypes
+        {
+            Id, ResponsibleId, IdentifyingQuestions
+        }
     }
 }

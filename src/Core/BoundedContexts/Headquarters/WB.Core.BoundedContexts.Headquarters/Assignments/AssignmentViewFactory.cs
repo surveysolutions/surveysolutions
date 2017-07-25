@@ -131,9 +131,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
                 var lowerSearchBy = input.SearchBy.ToLower();
 
-                Expression<Func<Assignment, bool>> textSearchExpression =
-                    x => x.Responsible.Name.ToLower().Contains(lowerSearchBy) || x.IdentifyingData.Any(a => a.AnswerAsString.ToLower().Contains(lowerSearchBy));
-                if (int.TryParse(input.SearchBy, out id))
+                Expression<Func<Assignment, bool>> textSearchExpression = x => false;
+                
+                if (input.SearchByFields.HasFlag(AssignmentsInputModel.SearchTypes.IdentifyingQuestions))
+                {
+                    textSearchExpression = textSearchExpression
+                        .OrCondition(x => x.IdentifyingData.Any(a => a.AnswerAsString.ToLower().Contains(lowerSearchBy)));
+                }
+
+                if (input.SearchByFields.HasFlag(AssignmentsInputModel.SearchTypes.ResponsibleId))
+                {
+                    textSearchExpression = textSearchExpression.OrCondition(x => x.Responsible.Name.ToLower().Contains(lowerSearchBy));
+                }
+            
+                if (input.SearchByFields.HasFlag(AssignmentsInputModel.SearchTypes.Id) && int.TryParse(input.SearchBy, out id))
                 {
                     textSearchExpression = textSearchExpression.OrCondition(x => x.Id == id);
                 }
