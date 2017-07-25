@@ -2,6 +2,7 @@
 @using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.GenericSubdomains.Portable.ServiceLocation
 @using WB.UI.Headquarters.Utils
+@using ASP
 
 @{
     ViewBag.Title = MainMenu.CreateNew;
@@ -18,5 +19,5 @@ new {
     resources = new[] {MainMenu.ResourceManager, Assignments.ResourceManager, Common.ResourceManager, Pages.ResourceManager}.Translations()
 })"></div>
 
-<script type="text/javascript" src="@Url.Content("~/Dependencies/build/vendor.bundle.js")"></script>
-<script type="text/javascript" src="@Url.Content("~/Dependencies/build/interviewer_createNew.bundle.js")"></script>
+@Html.StaticScipt("~/Dependencies/build/vendor.bundle.js")
+@Html.StaticScipt("~/Dependencies/build/interviewer_createNew.bundle.js")

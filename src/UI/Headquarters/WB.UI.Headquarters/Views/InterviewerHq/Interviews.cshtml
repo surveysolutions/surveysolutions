@@ -9,5 +9,5 @@
 
 <div id="vueApp" configuration="@Model.ToString()"></div>
 
-<script type="text/javascript" src="@Url.Content("~/Dependencies/build/vendor.bundle.js")"></script>
-<script type="text/javascript" src="@Url.Content("~/Dependencies/build/interviewer_interviews.bundle.js")"></script>
+@Html.StaticScipt("~/Dependencies/build/vendor.bundle.js")
+@Html.StaticScipt("~/Dependencies/build/interviewer_interviews.bundle.js")
