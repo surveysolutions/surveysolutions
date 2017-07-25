@@ -327,7 +327,7 @@
     <value>Вы на финальной стадии работы с интервью</value>
   </data>
   <data name="Interview_Complete_Screen_DescriptionWithInterviewKey" xml:space="preserve">
-    <value>Вы на финальной стадии работы с интервью id:{0}</value>
+    <value>Вы на финальной стадии работы с интервью {0}</value>
   </data>
   <data name="Interview_Complete_Screen_Title" xml:space="preserve">
     <value>Окончание</value>
@@ -554,7 +554,7 @@
     <comment>Приложению необходимо разрешение на использование микрофона для ответа на данный вопрос</comment>
   </data>
   <data name="InterviewKey" xml:space="preserve">
-    <value>Номер: {0}</value>
+    <value>Идентификатор: {0}</value>
     <comment>Номер: {0}</comment>
   </data>
   <data name="AssignmentN" xml:space="preserve">
