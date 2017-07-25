@@ -36,6 +36,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                                          ILitePublishedEventHandler<YesNoQuestionAnswered>,
                                          ILitePublishedEventHandler<TextListQuestionAnswered>,
                                          ILitePublishedEventHandler<PictureQuestionAnswered>,
+                                         ILitePublishedEventHandler<AudioQuestionAnswered>,
 
                                          ILitePublishedEventHandler<AnswersRemoved>,
 
@@ -487,6 +488,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             interviewView.InterviewKey = @event.Payload.Key.ToString();
             this.interviewViewRepository.Store(interviewView);
+        }
+
+        public void Handle(IPublishedEvent<AudioQuestionAnswered> evnt)
+        {
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Length, evnt.Payload.AnswerTimeUtc);
         }
     }
 }
