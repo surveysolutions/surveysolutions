@@ -56,7 +56,7 @@ export default {
                 {
                     data: "id",
                     name: "Id",
-                    title: "Id",
+                    title: this.$t("Common.Assignment"),
                     responsivePriority: 2
                 }, {
                     data: "quantity",
