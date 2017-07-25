@@ -74,7 +74,6 @@
                 $scope.activeQuestion.yesNoView = question.yesNoView;
                 $scope.activeQuestion.isFilteredCombobox = question.isFilteredCombobox;
                 $scope.activeQuestion.optionsFilterExpression = question.optionsFilterExpression;
-                $scope.activeQuestion.quality = question.quality;
                 $scope.activeQuestion.validationConditions = question.validationConditions;
                 $scope.activeQuestion.isTimestamp = question.isTimestamp;
 
@@ -155,11 +154,6 @@
                         utilityService.setFocusIn(focusId);
                     });
             };
-
-            $scope.setQuality = function (value) {
-                $scope.activeQuestion.quality = value;
-                markFormAsChanged();
-            }
 
             var hasQuestionEnablementConditions = function(question) {
                 return $scope.doesQuestionSupportEnablementConditions() &&
