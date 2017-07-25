@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -8,30 +8,30 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_moving_group_under_roster : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddGroup(groupId, title: "group to move", parentGroupId: chapterId, responsibleId: responsibleId);
             questionnaire.AddGroup(parentRosterId, chapterId, responsibleId: responsibleId, isRoster: true);
-            
-        };
+            BecauseOf();
 
-        Because of = () => questionnaire.MoveGroup(groupId, parentRosterId, targetIndex, responsibleId);
+        }
+
+        private void BecauseOf() => questionnaire.MoveGroup(groupId, parentRosterId, targetIndex, responsibleId);
 
 
-        It should_contains_group = () =>
+        [NUnit.Framework.Test] public void should_contains_group () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).ShouldNotBeNull();
 
-        It should_contains_group_with_GroupId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_group_with_GroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
                 .PublicKey.ShouldEqual(groupId);
 
-        It should_contains_group_with_ParentGroupId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_group_with_ParentGroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
                 .GetParent().PublicKey.ShouldEqual(parentRosterId);
 
-        It should_contains_group_with_TargetIndex_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_group_with_TargetIndex_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
                 .GetParent().Children[targetIndex].PublicKey.ShouldEqual(groupId);
 

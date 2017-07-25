@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateStaticTextHandle
 {
     internal class when_updating_static_text_and_all_parameters_specified : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddStaticTextAndMoveIfNeeded(new AddStaticText(questionnaire.Id, entityId, "static text", responsibleId, chapterId));
@@ -29,35 +28,36 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateStaticTextHandle
                 hideIfDisabled: true,
                 validationConditions: new List<ValidationCondition>() { new ValidationCondition(validationCondition, validationMessage) }
                 );
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>            
+        private void BecauseOf() =>            
                 questionnaire.UpdateStaticText(command);
 
 
 
-        It should_contains_statictext = () =>
+        [NUnit.Framework.Test] public void should_contains_statictext () =>
             questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ShouldNotBeNull();
 
-        It should_contains_statictext_with_EntityId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_statictext_with_EntityId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).PublicKey.ShouldEqual(entityId);
 
-        It should_contains_statictext_with_Text_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_statictext_with_Text_specified () =>
             questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).Text.ShouldEqual(text);
 
-        It should_contains_statictext_with_enablement_condition_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_statictext_with_enablement_condition_specified () =>
             questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ConditionExpression.ShouldEqual(enablementCondition);
 
-        private It should_contains_statictext_with_hide_if_disabled_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_statictext_with_hide_if_disabled_specified () =>
             questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).HideIfDisabled.ShouldBeTrue();
 
-        private It should_contains_statictext_with_validation_condition_count_equals_1 = () =>
+        [NUnit.Framework.Test] public void should_contains_statictext_with_validation_condition_count_equals_1 () =>
             questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ValidationConditions.Count.ShouldEqual(1);
 
-        private It should_contains_statictext_with_validation_condition_expression_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_statictext_with_validation_condition_expression_specified () =>
             questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ValidationConditions.Single().Expression.ShouldEqual(validationCondition);
 
-        private It should_contains_statictext_with_validation_condition_message_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_statictext_with_validation_condition_message_specified () =>
             questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ValidationConditions.Single().Message.ShouldEqual(validationMessage);
 
         private static UpdateStaticText command;

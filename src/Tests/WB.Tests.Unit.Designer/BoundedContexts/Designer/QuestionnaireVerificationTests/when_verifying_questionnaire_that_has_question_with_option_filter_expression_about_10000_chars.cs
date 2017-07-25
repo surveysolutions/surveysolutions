@@ -6,14 +6,13 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
     internal class when_verifying_questionnaire_that_has_question_with_option_filter_expression_about_10000_chars : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument(new[]
             {
                 Create.Group(groupId: groupId, children: new IComposite[]
@@ -24,21 +23,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             });
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_WB0028_message = () =>
+        [NUnit.Framework.Test] public void should_return_WB0028_message () =>
             verificationMessages.ShouldContainError("WB0028");
 
-        It should_return_message_with_one_references = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_one_references () =>
             verificationMessages.GetError("WB0028").References.Count().ShouldEqual(1);
 
-        It should_return_message_with_one_references_with_question_type = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_one_references_with_question_type () =>
             verificationMessages.GetError("WB0028").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_message_with_one_references_with_id_equals_questionId = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_one_references_with_id_equals_questionId () =>
             verificationMessages.GetError("WB0028").References.First().Id.ShouldEqual(questionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

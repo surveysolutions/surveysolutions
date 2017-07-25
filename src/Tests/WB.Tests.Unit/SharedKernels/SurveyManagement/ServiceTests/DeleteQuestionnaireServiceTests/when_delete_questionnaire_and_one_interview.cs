@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
-using Nito.AsyncEx.Synchronous;
 using NSubstitute;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Commands;

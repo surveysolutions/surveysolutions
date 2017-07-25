@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
@@ -22,6 +19,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
@@ -29,16 +27,16 @@ using WB.UI.Headquarters.Models.WebInterview;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Captcha;
 using WebInterview = WB.UI.Headquarters.Resources.WebInterview;
+using Microsoft.AspNet.Identity;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [WebInterviewFeatureEnabled]
     [BrowsersRestriction]
-    public class WebInterviewController : BaseController
+    public partial class WebInterviewController : BaseController
     {
         private readonly ICommandService commandService;
         private readonly IWebInterviewConfigProvider configProvider;
-        private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
+        private readonly IImageFileStorage imageFileStorage;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IUserViewFactory usersRepository;
@@ -49,6 +47,9 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IImageProcessingService imageProcessingService;
         private readonly IConnectionLimiter connectionLimiter;
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
+        private readonly IAudioFileStorage audioFileStorage;
+        private readonly IAudioProcessingService audioProcessingService;
+
         private const string CapchaCompletedKey = "CaptchaCompletedKey";
 
         private bool CapchaVerificationNeededForInterview(string interviewId)
@@ -70,7 +71,7 @@ namespace WB.UI.Headquarters.Controllers
         public WebInterviewController(ICommandService commandService,
             IWebInterviewConfigProvider configProvider,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            IPlainInterviewFileStorage plainInterviewFileStorage,
+            IImageFileStorage imageFileStorage,
             IStatefulInterviewRepository statefulInterviewRepository,
             IWebInterviewConfigProvider webInterviewConfigProvider,
             IImageProcessingService imageProcessingService,
@@ -79,14 +80,15 @@ namespace WB.UI.Headquarters.Controllers
             ILogger logger, IUserViewFactory usersRepository,
             IInterviewUniqueKeyGenerator keyGenerator,
             ICaptchaProvider captchaProvider,
-            IPlainStorageAccessor<Assignment> assignments,
-            IQuestionnaireStorage questionnaireStorage)
+            IPlainStorageAccessor<Assignment> assignments, 
+            IAudioFileStorage audioFileStorage,
+            IAudioProcessingService audioProcessingService)
             : base(commandService, logger)
         {
             this.commandService = commandService;
             this.configProvider = configProvider;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
-            this.plainInterviewFileStorage = plainInterviewFileStorage;
+            this.imageFileStorage = imageFileStorage;
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.imageProcessingService = imageProcessingService;
@@ -96,6 +98,193 @@ namespace WB.UI.Headquarters.Controllers
             this.keyGenerator = keyGenerator;
             this.captchaProvider = captchaProvider;
             this.assignments = assignments;
+            this.audioFileStorage = audioFileStorage;
+            this.audioProcessingService = audioProcessingService;
+        }
+        
+        [WebInterviewAuthorize]
+        public ActionResult Section(string id, string sectionId)
+        {
+            var interview = this.statefulInterviewRepository.Get(id);
+
+            var targetSectionIsEnabled = interview.IsEnabled(Identity.Parse(sectionId));
+            if (!targetSectionIsEnabled)
+            {
+                return this.RedirectToFirstSection(id, interview);
+            }
+
+            var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
+            if (webInterviewConfig.UseCaptcha && !this.IsAuthorizedUser(interview.CurrentResponsibleId) && this.CapchaVerificationNeededForInterview(id))
+            {
+                var returnUrl = GenerateUrl(@"Section", id, sectionId);
+                return this.RedirectToAction("Resume", routeValues: new { id, returnUrl });
+            }
+
+            return this.View("Index");
+        }
+
+        public string GenerateUrl(string action, string interviewId, string sectionId = null)
+        {
+            return $@"~/WebInterview/{interviewId}/{action}" + (string.IsNullOrWhiteSpace(sectionId) ? "" : $@"/{sectionId}");
+        }
+
+        public ActionResult Start(int id)
+        {
+            var assignment = this.assignments.GetById(id);
+            if (assignment == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            if (assignment.Archived || assignment.IsCompleted)
+            {
+                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+            }
+
+            var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
+            if (!webInterviewConfig.Started)
+                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+
+            var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig);
+            model.ServerUnderLoad = !this.connectionLimiter.CanConnect();
+            return this.View(model);
+        }
+
+        [HttpPost]
+        [ActionName("Start")]
+        [ValidateAntiForgeryToken]
+        public ActionResult StartPost(int id)
+        {
+            var assignment = this.assignments.GetById(id);
+            var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
+            if (!webInterviewConfig.Started)
+                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+
+            if (!this.connectionLimiter.CanConnect())
+            {
+                var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig);
+                model.ServerUnderLoad = true;
+                return this.View(model);
+            }
+
+            if (webInterviewConfig.UseCaptcha)
+            {
+                if (!this.captchaProvider.IsCaptchaValid(this))
+                {
+                    var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig);
+                    this.ModelState.AddModelError("InvalidCaptcha", WebInterview.PleaseFillCaptcha);
+                    return this.View(model);
+                }
+            }
+
+            var interviewId = this.CreateInterview(assignment);
+
+            RememberCapchaFilled(interviewId);
+
+            return this.Redirect(GenerateUrl("Cover", interviewId));
+        }
+
+        [WebInterviewAuthorize]
+        public ActionResult Cover(string id)
+        {
+            var interview = this.statefulInterviewRepository.Get(id);
+            var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
+            if (webInterviewConfig.UseCaptcha && !this.IsAuthorizedUser(interview.CurrentResponsibleId) && this.CapchaVerificationNeededForInterview(id))
+            {
+                var returnUrl = GenerateUrl(nameof(Cover), id);
+                return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returnUrl });
+            }
+
+            return View("Index");
+        }
+
+        public ActionResult Finish(string id)
+        {
+            var interview = this.statefulInterviewRepository.Get(id);
+            if (interview == null || !interview.IsCompleted) return this.HttpNotFound();
+            
+            if (this.IsAuthorizedUser(interview.CurrentResponsibleId))
+            {
+                return RedirectToAction("Completed", "InterviewerHq");
+            }
+
+            var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
+
+            if (webInterviewConfig.UseCaptcha && !this.IsAuthorizedUser(interview.CurrentResponsibleId) && this.CapchaVerificationNeededForInterview(id))
+            {
+                var returnUrl = GenerateUrl(@"Finish", id);
+                return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returnUrl });
+            }
+
+            return View(this.GetFinishModel(interview));
+        }
+
+        [WebInterviewAuthorize]
+        public ActionResult Resume(string id, string returnUrl)
+        {
+            var interview = this.statefulInterviewRepository.Get(id);
+            var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
+
+            if (webInterviewConfig.UseCaptcha && !this.IsAuthorizedUser(interview.CurrentResponsibleId))
+            {
+                var model = this.GetResumeModel(id);
+                return this.View("Resume", model);
+            }
+
+            RememberCapchaFilled(id);
+
+            if (returnUrl == null)
+            {
+                return Redirect(GenerateUrl(@"Cover", id));
+            }
+
+            return Redirect(returnUrl);
+        }
+
+        public ActionResult Complete(string id)
+        {
+            var interview = this.statefulInterviewRepository.Get(id);
+            var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
+
+            if (this.IsAuthorizedUser(interview.CurrentResponsibleId))
+            {
+                return RedirectToAction("Completed", "InterviewerHq");
+            }
+
+            if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))
+            {
+                var returnUrl = GenerateUrl(@"Complete", id);
+                return this.RedirectToAction("Resume", routeValues: new { id, returnUrl });
+            }
+
+            return View("Index");
+        }
+
+        [HttpPost]
+        [ActionName("Resume")]
+        [WebInterviewAuthorize]
+        public ActionResult ResumePost(string id, string returnUrl)
+        {
+            if (!this.captchaProvider.IsCaptchaValid(this))
+            {
+                var model = this.GetResumeModel(id);
+                this.ModelState.AddModelError("InvalidCaptcha", WebInterview.PleaseFillCaptcha);
+                return this.View(model);
+            }
+
+            RememberCapchaFilled(id);
+
+            if (returnUrl == null)
+            {
+                return Redirect(GenerateUrl(@"Cover", id));
+            }
+
+            return this.Redirect(returnUrl);
+        }
+
+        public ActionResult OutdatedBrowser()
+        {
+            return View();
         }
 
         private string CreateInterview(Assignment assignment)
@@ -110,17 +299,21 @@ namespace WB.UI.Headquarters.Controllers
 
             var interviewId = Guid.NewGuid();
 
-            var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
-                interviewer.PublicKey, assignment.QuestionnaireId, DateTime.UtcNow,
+            var createInterviewCommand = new CreateInterview(
+                interviewId,
+                interviewer.PublicKey,
+                assignment.QuestionnaireId,
+                assignment.Answers.ToList(),
+                DateTime.UtcNow,
                 interviewer.Supervisor.Id,
-                this.keyGenerator.Get(), 
-                assignment.Id, 
-                assignment.Answers.ToList());
+                interviewer.PublicKey,
+                this.keyGenerator.Get(),
+                assignment.Id);
 
-            this.commandService.Execute(createInterviewOnClientCommand);
+            this.commandService.Execute(createInterviewCommand);
             return interviewId.FormatGuid();
         }
-        
+
         private ResumeWebInterview GetResumeModel(string id)
         {
             var interview = this.statefulInterviewRepository.Get(id);
@@ -183,213 +376,22 @@ namespace WB.UI.Headquarters.Controllers
             return Redirect(uri);
         }
 
-        [HttpPost]
-        public async Task<ActionResult> Image(string interviewId, string questionId, HttpPostedFileBase file)
+        private bool IsAuthorizedUser(Guid responsibleId)
         {
-            IStatefulInterview interview = this.statefulInterviewRepository.Get(interviewId);
+            if (User.Identity.IsAuthenticated)
+            {
+                var isInterviewer = this.User.IsInRole(UserRoles.Interviewer.ToString());
 
-            var questionIdentity = Identity.Parse(questionId);
-            var question = interview.GetQuestion(questionIdentity);
-            
-            if (!interview.AcceptsInterviewerAnswers() && question?.AsMultimedia != null)
-            {
-                return this.Json("fail");
-            }
-            try
-            {
-                using (var ms = new MemoryStream())
+                if (isInterviewer)
                 {
-                    await file.InputStream.CopyToAsync(ms);
-
-                    this.imageProcessingService.ValidateImage(ms.ToArray());
-
-                    var filename = $@"{question.VariableName}{string.Join(@"-", questionIdentity.RosterVector.Select(rv => rv))}{DateTime.UtcNow.GetHashCode()}.jpg";
-                    var responsibleId = interview.CurrentResponsibleId;
-
-                    this.plainInterviewFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray());
-                    this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
-                        responsibleId, questionIdentity.Id, questionIdentity.RosterVector, DateTime.UtcNow, filename));
-                }
-            }
-            catch (Exception e)
-            {
-                webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, questionId, e.Message);
-                throw;
-            }
-            return this.Json("ok");
-        }
-
-        [WebInterviewAuthorize]
-        public ActionResult Section(string id, string sectionId)
-        {
-            var interview = this.statefulInterviewRepository.Get(id);
-
-            var targetSectionIsEnabled = interview.IsEnabled(Identity.Parse(sectionId));
-            if (!targetSectionIsEnabled)
-            {
-                return this.RedirectToFirstSection(id, interview);
-            }
-
-            var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
-            if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))
-            {
-                var returnUrl = GenerateUrl(@"Section", id, sectionId);
-                return this.RedirectToAction("Resume", routeValues: new { id, returnUrl });
-            }
-
-            return this.View("Index");
-        }
-
-        public string GenerateUrl(string action, string interviewId, string sectionId = null)
-        {
-            return $@"~/WebInterview/{interviewId}/{action}" + (string.IsNullOrWhiteSpace(sectionId) ? "" : $@"/{sectionId}");
-        }
-
-        public ActionResult Start(int id)
-        {
-            var assignment = this.assignments.GetById(id);
-            if (assignment == null)
-            {
-                return this.HttpNotFound();
-            }
-
-            if (assignment.Archived || assignment.InterviewSummaries.Count >= assignment.Quantity)
-            {
-                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
-            }
-
-            var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
-            if (!webInterviewConfig.Started)
-                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
-
-            var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig);
-            model.ServerUnderLoad = !this.connectionLimiter.CanConnect();
-            return this.View(model);
-        }
-
-        [HttpPost]
-        [ActionName("Start")]
-        [ValidateAntiForgeryToken]
-        public ActionResult StartPost(int id)
-        {
-            var assignment = this.assignments.GetById(id);
-            var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
-            if (!webInterviewConfig.Started)
-                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
-
-            if (!this.connectionLimiter.CanConnect())
-            {
-                var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig);
-                model.ServerUnderLoad = true;
-                return this.View(model);
-            }
-
-            if (webInterviewConfig.UseCaptcha)
-            {
-                if (!this.captchaProvider.IsCaptchaValid(this))
-                {
-                    var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig);
-                    this.ModelState.AddModelError("InvalidCaptcha", WebInterview.PleaseFillCaptcha);
-                    return this.View(model);
+                    if (Guid.TryParse(this.User.Identity.GetUserId(), out Guid userid))
+                    {
+                        return responsibleId == userid;
+                    }
                 }
             }
 
-            var interviewId = this.CreateInterview(assignment);
-
-            RememberCapchaFilled(interviewId);
-
-            return this.Redirect(GenerateUrl("Cover", interviewId));
-        }
-
-        [WebInterviewAuthorize]
-        public ActionResult Cover(string id)
-        {
-            var interview = this.statefulInterviewRepository.Get(id);
-            var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
-            if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))
-            {
-                var returnUrl = GenerateUrl(nameof(Cover), id);
-                return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returnUrl });
-            }
-
-            return View("Index");
-        }
-
-        public ActionResult Finish(string id)
-        {
-            var interview = this.statefulInterviewRepository.Get(id);
-            if (interview == null || !interview.IsCompleted) return this.HttpNotFound();
-
-            var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
-            if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))
-            {
-                var returnUrl = GenerateUrl(@"Finish", id);
-                return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returnUrl });
-            }
-
-            return View(this.GetFinishModel(interview));
-        }
-
-        [WebInterviewAuthorize]
-        public ActionResult Resume(string id, string returnUrl)
-        {
-            var interview = this.statefulInterviewRepository.Get(id);
-            var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
-            if (webInterviewConfig.UseCaptcha)
-            {
-                var model = this.GetResumeModel(id);
-                return this.View("Resume", model);
-            }
-
-            RememberCapchaFilled(id);
-
-            if (returnUrl == null)
-            {
-                return Redirect(GenerateUrl(@"Cover", id));
-            }
-
-            return Redirect(returnUrl);
-        }
-
-        [WebInterviewAuthorize]
-        public ActionResult Complete(string id)
-        {
-            var interview = this.statefulInterviewRepository.Get(id);
-            var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
-            if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))
-            {
-                var returnUrl = GenerateUrl(@"Complete", id);
-                return this.RedirectToAction("Resume", routeValues: new { id, returnUrl });
-            }
-
-            return View("Index");
-        }
-
-        [HttpPost]
-        [ActionName("Resume")]
-        [WebInterviewAuthorize]
-        public ActionResult ResumePost(string id, string returnUrl)
-        {
-            if (!this.captchaProvider.IsCaptchaValid(this))
-            {
-                var model = this.GetResumeModel(id);
-                this.ModelState.AddModelError("InvalidCaptcha", WebInterview.PleaseFillCaptcha);
-                return this.View(model);
-            }
-
-            RememberCapchaFilled(id);
-
-            if (returnUrl == null)
-            {
-                return Redirect(GenerateUrl(@"Cover", id));
-            }
-
-            return this.Redirect(returnUrl);
-        }
-
-        public ActionResult OutdatedBrowser()
-        {
-            return View();
+            return false;
         }
 
         protected override void OnException(ExceptionContext filterContext)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Machine.Specifications;
@@ -11,14 +11,13 @@ using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTests
 {
     internal class when_getting_translation_file_for_questionnaire_with_combobox_and_cascading_question : TranslationsServiceTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var storedTranslations = new List<TranslationInstance>
             {
                 Create.TranslationInstance(type: TranslationType.OptionTitle,
@@ -48,27 +47,28 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             questionnaires.SetReturnsDefault(questionnaire);
 
             service = Create.TranslationsService(translationsStorage, questionnaires.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() 
         {
             var excelFile = service.GetAsExcelFile(questionnaireId, translationId);
             var excelWorkbook = new ExcelPackage(new MemoryStream(excelFile.ContentAsExcelFile)).Workbook;
             comboboxCells = excelWorkbook.Worksheets["@@_combobox"].Cells;
             cascadingCells = excelWorkbook.Worksheets["@@_cascading"].Cells;
-        };
+        }
 
-        It should_export_translation_on__Translations_combobox__sheet_in_2_row = () =>
+        [NUnit.Framework.Test] public void should_export_translation_on__Translations_combobox__sheet_in_2_row () 
         {
             comboboxCells[2, 4].GetValue<string>().ShouldEqual("Option");
             comboboxCells[2, 5].GetValue<string>().ShouldEqual("Опция");
-        };
+        }
 
-        It should_export_translation_on__Translations_cascading__sheet_in_2_row = () =>
+        [NUnit.Framework.Test] public void should_export_translation_on__Translations_cascading__sheet_in_2_row () 
         {
             cascadingCells[2, 4].GetValue<string>().ShouldEqual("Cascading Option");
             cascadingCells[2, 5].GetValue<string>().ShouldEqual("Каскадная Опция");
-        };
+        }
 
         static TranslationsService service;
         static ExcelRange comboboxCells;

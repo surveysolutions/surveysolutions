@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateNumericQuestionH
 {
     internal class when_updating_numeric_question_with_title_which_contains_roster_title_as_substitution_reference : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             questionId = Guid.Parse("11111111111111111111111111111111");
@@ -26,9 +25,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateNumericQuestionH
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(Create.Command.AddDefaultTypeQuestion(questionnaire.Id, questionId, "title", responsibleId, chapterId));
             
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => exception = 
+        private void BecauseOf() => exception = 
             Catch.Exception(() =>
             questionnaire.UpdateNumericQuestion(
                     new UpdateNumericQuestion(questionnaire.Id,
@@ -42,16 +42,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateNumericQuestionH
                     false, QuestionScope.Interviewer, false, false, null,
                     validationConditions: new List<ValidationCondition>())));
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown]
+        public void stuff ()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__unknown__and__substitution__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__unknown__and__substitution__ () =>
             new[] { "unknown", "substitution" }.ShouldEachConformTo(
            keyword => exception.Message.ToLower().Contains(keyword));
 

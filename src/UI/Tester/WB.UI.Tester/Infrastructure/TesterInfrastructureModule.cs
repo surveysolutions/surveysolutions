@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using Main.Core.Documents;
+﻿using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
@@ -16,7 +14,6 @@ using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Infrastructure.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Tester.Infrastructure.Internals;
 using WB.UI.Tester.Infrastructure.Internals.Log;
@@ -26,8 +23,9 @@ using WB.UI.Tester.Infrastructure.Internals.Settings;
 using WB.UI.Tester.Infrastructure.Internals.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.UI.Shared.Enumerator.Services;
+using WB.UI.Shared.Enumerator.Services.Internals;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
-using WB.Infrastructure.Shared.Enumerator.Internals;
 
 namespace WB.UI.Tester.Infrastructure
 {
@@ -59,12 +57,14 @@ namespace WB.UI.Tester.Infrastructure
             this.Unbind<IPlainStorage<OptionView>>();
             this.Bind<IPlainStorage<OptionView>>().To<InMemoryPlainStorage<OptionView>>().InSingletonScope();
 
+            this.Bind<ILoggerProvider>().To<XamarinInsightsLoggerProvider>();
             this.Bind<ILogger>().To<XamarinInsightsLogger>().InSingletonScope();
 
             this.Bind<IRestServiceSettings>().To<TesterSettings>();
             this.Bind<INetworkService>().To<AndroidNetworkService>();
             this.Bind<IEnumeratorSettings>().To<TesterSettings>();
             this.Bind<IRestServicePointManager>().To<RestServicePointManager>();
+            this.Bind<IHttpClientFactory>().To<ModernHttpClientFactory>();
             this.Bind<IRestService>().To<RestService>();
 
             this.Bind<ISerializer>().ToMethod((ctx) => new PortableJsonSerializer());
@@ -80,8 +80,8 @@ namespace WB.UI.Tester.Infrastructure
             this.Bind<IQuestionnaireAssemblyAccessor>().To<TesterQuestionnaireAssemblyAccessor>().InSingletonScope()
                 .WithConstructorArgument("assemblyStorageDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory(this.questionnaireAssembliesFolder));
 
-            this.Bind<IPlainInterviewFileStorage, IPlainFileCleaner>().To<TesterPlainInterviewFileStorage>().InSingletonScope()
-                .WithConstructorArgument("rootDirectoryPath", basePath);
+            this.Bind<IAudioFileStorage>().To<TesterAudioFileStorage>().InSingletonScope().WithConstructorArgument("rootDirectoryPath", basePath);
+            this.Bind<IImageFileStorage>().To<TesterImageFileStorage>().InSingletonScope().WithConstructorArgument("rootDirectoryPath", basePath);
             this.Bind<IQuestionnaireTranslator>().To<QuestionnaireTranslator>();
             this.Bind<IQuestionnaireStorage>().To<QuestionnaireStorage>().InSingletonScope();
         }

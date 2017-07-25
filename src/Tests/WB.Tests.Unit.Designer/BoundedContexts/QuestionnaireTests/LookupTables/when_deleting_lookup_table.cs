@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
@@ -7,18 +7,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.LookupTables
 {
     internal class when_deleting_lookup_table : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: responsibleId);
             questionnaire.AddLookupTable(Create.Command.AddLookupTable(questionnaireId, lookupTableId, responsibleId));
 
             deleteLookupTable = Create.Command.DeleteLookupTable(questionnaireId, lookupTableId, responsibleId);
-        };
+            BecauseOf();
+        }
 
 
-        Because of = () => questionnaire.DeleteLookupTable(deleteLookupTable);
+        private void BecauseOf() => questionnaire.DeleteLookupTable(deleteLookupTable);
 
-        It should_doesnt_contain_LookupTable_with_EntityId_specified = () =>
+        [NUnit.Framework.Test] public void should_doesnt_contain_LookupTable_with_EntityId_specified () =>
             questionnaire.QuestionnaireDocument.LookupTables.ShouldNotContain(t => t.Key == lookupTableId);
 
 

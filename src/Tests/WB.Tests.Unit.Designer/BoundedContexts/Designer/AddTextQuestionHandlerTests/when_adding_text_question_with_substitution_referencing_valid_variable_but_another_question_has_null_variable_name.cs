@@ -10,16 +10,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
 {
     internal class when_adding_text_question_with_substitution_referencing_valid_variable_but_another_question_has_null_variable_name : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
 
             questionnaire.AddNumericQuestion(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), chapterId ,responsibleId, variableName : "valid_varname");
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(questionnaire.Id, Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"), chapterId, "title" , responsibleId ));
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.AddTextQuestion(
                     questionId: questionId,
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
                     mask: null,
                     responsibleId: responsibleId));
 
-        It should_not_fail = () =>
+        [NUnit.Framework.Test] public void should_not_fail () =>
             exception.ShouldBeNull();
 
         private static Exception exception;

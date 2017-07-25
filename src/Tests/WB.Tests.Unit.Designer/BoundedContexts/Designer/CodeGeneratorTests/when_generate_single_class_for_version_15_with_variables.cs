@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
 {
     internal class when_generate_single_class_for_version_16_with_variables : CodeGeneratorTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire =
                 Create.QuestionnaireDocument(children: new[]
                     {
@@ -18,15 +17,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
                     });
 
             generator = Create.CodeGenerator();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             generatedClassContent = generator.Generate(questionnaire, version).Values.First();
 
-        It should_generate_class_with_V9_namespaces_included = () =>
+        [NUnit.Framework.Test] public void should_generate_class_with_V9_namespaces_included () =>
             generatedClassContent.ShouldContain("WB.Core.SharedKernels.DataCollection.V10");
 
-        It should_generate_class_with_AbstractConditionalLevelInstanceV9 = () =>
+        [NUnit.Framework.Test] public void should_generate_class_with_AbstractConditionalLevelInstanceV9 () =>
             generatedClassContent.ShouldContain("AbstractConditionalLevelInstanceV10");
 
         private static int version = 16;

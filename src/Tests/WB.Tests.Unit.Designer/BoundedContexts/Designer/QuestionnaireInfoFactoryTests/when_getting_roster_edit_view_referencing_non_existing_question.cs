@@ -9,14 +9,13 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
 {
     internal class when_getting_roster_edit_view_referencing_non_existing_question : QuestionnaireInfoFactoryTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
             questionnaireView = Create.QuestionnaireDocumentWithOneChapter(questionnaireId: docId, chapterId: g1Id, children: new IComposite[]
             {
@@ -27,18 +26,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                 .Returns(questionnaireView);
 
             factory = CreateQuestionnaireInfoFactory(questionDetailsReaderMock.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             result = factory.GetRosterEditView(questionnaireId, rosterId);
 
-        It should_return_not_null_view = () =>
+        [NUnit.Framework.Test] public void should_return_not_null_view () =>
             result.ShouldNotBeNull();
 
-        It should_return_roster_with_ItemId_equals_groupId = () =>
+        [NUnit.Framework.Test] public void should_return_roster_with_ItemId_equals_groupId () =>
             result.ItemId.ShouldEqual(rosterId.FormatGuid());
         
-        It should_return_roster_with_RosterSizeSourceType_equals_g3_RosterSizeSourceType = () =>
+        [NUnit.Framework.Test] public void should_return_roster_with_RosterSizeSourceType_equals_g3_RosterSizeSourceType () =>
             result.Type.ShouldEqual(RosterType.Numeric);
         
 

@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
 {
     internal class when_updating_text_question_and_title_contains_substitution_to_variable_from_roster : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddNumericQuestion(rosterSizeQuestionId,
@@ -36,9 +35,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
                 rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
             
             questionnaire.AddVariableAndMoveIfNeeded(Create.Command.AddVariable(questionnaire.Id, variableFromRosterId, rosterId, responsibleId, substitutionVariableName));
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateTextQuestion(
                     new UpdateTextQuestion(
@@ -49,10 +49,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
                         null,scope,
                         isPreFilled,new List<ValidationCondition>())));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__title__contains_illegal__substitution__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__title__contains_illegal__substitution__ () =>
             new[] { "text", "contains", "illegal", "substitution", "variables" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 

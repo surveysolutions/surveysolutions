@@ -1,29 +1,29 @@
 using System;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
 {
     internal class when_deleting_attachment_and_content_is_shared : AttachmentServiceTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             attachmentContentStorage.Store(Create.AttachmentContent(), contentHash);
 
             attachmentMetaStorage.Store(Create.AttachmentMeta(attachmentId, contentHash, questionnaireId: questionnaireId), attachmentId);
             attachmentMetaStorage.Store(Create.AttachmentMeta(otherAttachmentId, contentHash, otherQuestionnaireId), otherAttachmentId);
 
             attachmentService = Create.AttachmentService(attachmentContentStorage: attachmentContentStorage, attachmentMetaStorage: attachmentMetaStorage);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             attachmentService.DeleteAllByQuestionnaireId(questionnaireId);
 
-        It should_delete_attachment_meta = () =>
+        [NUnit.Framework.Test] public void should_delete_attachment_meta () =>
             attachmentMetaStorage.GetById(attachmentId).ShouldBeNull();
 
-        It should_not_delete_attachment_content = () =>
+        [NUnit.Framework.Test] public void should_not_delete_attachment_content () =>
             attachmentContentStorage.GetById(contentHash).ShouldNotBeNull();
 
         private static AttachmentService attachmentService;

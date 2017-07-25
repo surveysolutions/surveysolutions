@@ -1,44 +1,44 @@
-﻿using System;
+using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CreateQuestionnaireCommandTests
 {
     [Subject(typeof (Questionnaire))]
     internal class when_creating_new_questionnaire
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireId = Guid.NewGuid();
             questionnaireTitle = "questionnaire title";
             createdBy = Guid.NewGuid();
             isPublic = true;
             questionnaire = Create.Questionnaire();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => questionnaire.CreateQuestionnaire(questionnaireId, questionnaireTitle, createdBy, isPublic);
+        private void BecauseOf() => questionnaire.CreateQuestionnaire(questionnaireId, questionnaireTitle, createdBy, isPublic);
 
-        It should_contains_questionnaire_with_given_id = () =>
+        [NUnit.Framework.Test] public void should_contains_questionnaire_with_given_id () =>
             questionnaire.QuestionnaireDocument.PublicKey.ShouldEqual(questionnaireId);
 
-        It should_contains_questionnaire_with_given_Title = () =>
+        [NUnit.Framework.Test] public void should_contains_questionnaire_with_given_Title () =>
             questionnaire.QuestionnaireDocument.Title.ShouldEqual(questionnaireTitle);
 
-        It should_contains_questionnaire_with_given_IsPublic_flag = () =>
+        [NUnit.Framework.Test] public void should_contains_questionnaire_with_given_IsPublic_flag () =>
             questionnaire.QuestionnaireDocument.IsPublic.ShouldEqual(isPublic);
 
-        It should_contains_questionnaire_with_given_CreatedBy = () =>
+        [NUnit.Framework.Test] public void should_contains_questionnaire_with_given_CreatedBy () =>
             questionnaire.QuestionnaireDocument.CreatedBy.ShouldEqual(createdBy);
 
-        It should_raise_new_group_added_event = () =>
+        [NUnit.Framework.Test] public void should_raise_new_group_added_event () 
         {
             var group = (IGroup)questionnaire.QuestionnaireDocument.Children.Single();
             group.GetParent().ShouldEqual(questionnaire.QuestionnaireDocument);
             group.Title.ShouldEqual("New Section");
-        };
+        }
 
 
         static Questionnaire questionnaire;

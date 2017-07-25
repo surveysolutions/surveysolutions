@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
 {
     internal class when_creating_models_with_filtered_linked_question : CodeGeneratorTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             AssemblyContext.SetupServiceLocator();
 
             questionnaire = Create.QuestionnaireDocument(questionnaireId, children: new[]
@@ -25,15 +24,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             });
 
             templateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             model = templateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, Create.CodeGenerationSettings());
 
-        It should_create_roster_model_with_1_LinkedQuestionFilterExpressions = () =>
+        [NUnit.Framework.Test] public void should_create_roster_model_with_1_LinkedQuestionFilterExpressions () =>
             model.AllRosters[0].LinkedQuestionFilterExpressions.Count.ShouldEqual(1);
 
-        It should_LinkedQuestionFilterExpressions_where_LinkedQuestionId_equals_to_gB = () =>
+        [NUnit.Framework.Test] public void should_LinkedQuestionFilterExpressions_where_LinkedQuestionId_equals_to_gB () =>
             model.AllRosters[0].LinkedQuestionFilterExpressions[0].LinkedQuestionId.ShouldEqual(Id.gB);
 
         private static QuestionnaireExpressionStateModelFactory templateModelFactory;

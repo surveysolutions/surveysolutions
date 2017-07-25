@@ -6,14 +6,13 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTests
 {
     internal class when_deleting_lookup_tables_by_questionnaire
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             LookupTableContentStorageMock
                 .Setup(x => x.Store(Moq.It.IsAny<LookupTableContent>(), Moq.It.IsAny<string>()))
                 .Callback((LookupTableContent content, string id) => { lookupTableContent = content; });
@@ -37,13 +36,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTest
 
             lookupTableService = Create.LookupTableService(lookupTableContentStorage: LookupTableContentStorageMock.Object, documentStorage: qStore.Object);
             lookupTableService.SaveLookupTableContent(questionnaireId, lookupTableId, fileContent);
+            BecauseOf();
 
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
                 lookupTableService.DeleteAllByQuestionnaireId(questionnaireId);
 
-        It should_ = () =>
+        [NUnit.Framework.Test] public void should_ () =>
             LookupTableContentStorageMock.Verify(x => x.Remove(Moq.It.IsAny<string>()),Times.Once);
         
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");

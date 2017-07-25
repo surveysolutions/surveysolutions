@@ -9,7 +9,6 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -47,6 +46,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.entitiesListViewModelFactory = entitiesListViewModelFactory;
             this.dynamicTextViewModelFactory = dynamicTextViewModelFactory;
         }
+
+        public string InterviewKey { get; set; }
+
+        public string AssignmentId { get; set; }
 
         public string QuestionnaireTitle { get; set; }
 
@@ -86,6 +89,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     Answer = interview.GetAnswerAsString(Identity.Create(questionId, RosterVector.Empty), CultureInfo.CurrentCulture)
                 })
                 .ToList();
+
+            var interviewKey = interview.GetInterviewKey()?.ToString();
+            this.InterviewKey = string.IsNullOrEmpty(interviewKey) ? null : string.Format(UIResources.InterviewKey, interviewKey);
+            var assignmentId = interview.GetAssignmentId();
+            this.AssignmentId = !assignmentId.HasValue ? null : string.Format(UIResources.AssignmentN, assignmentId);
            
             this.HasPrefilledQuestions = this.PrefilledQuestions.Any();
 

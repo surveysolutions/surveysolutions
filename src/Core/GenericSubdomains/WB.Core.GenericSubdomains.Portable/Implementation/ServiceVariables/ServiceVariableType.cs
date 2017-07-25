@@ -2,6 +2,7 @@
 {
     public enum ServiceVariableType
     {
-        InterviewRandom = 0
+        InterviewRandom = 0,
+        InterviewKey = 10
     }
 }

@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Questionnaire.Documents.Question;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 
@@ -120,6 +121,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             {
                 Value = "Multimedia",
                 Text = "Picture"
+            },
+            new SelectOption
+            {
+                Value = "Audio",
+                Text = "Audio"
             },
             new SelectOption
             {
@@ -237,7 +243,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
             return result;
         }
-
 
         public NewEditStaticTextView GetStaticTextEditView(string questionnaireId, Guid staticTextId)
         {
@@ -472,6 +477,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     var dateTimeQuestion = (DateTimeQuestion)question;
                     questionView.IsTimestamp = dateTimeQuestion.IsTimestamp;
                     return questionView;
+                case QuestionType.Audio:
                 case QuestionType.QRBarcode:
                 case QuestionType.Multimedia:
                 case QuestionType.GpsCoordinates:

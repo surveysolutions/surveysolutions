@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -8,20 +8,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_adding_roster_group_by_question_and_roster_size_question_is_empty : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.AddGroupAndMoveIfNeeded(groupId, responsibleId, "title",null, null, null, null, false, null, isRoster: true,
                   rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containing__roster_question_empty__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containing__roster_question_empty__ () =>
               new[] { "roster", "question", "empty" }.ShouldEachConformTo(
                      keyword => exception.Message.ToLower().TrimEnd('.').Contains(keyword));
 

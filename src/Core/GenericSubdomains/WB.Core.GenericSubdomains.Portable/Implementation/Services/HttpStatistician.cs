@@ -1,8 +1,8 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Net.Http.Headers;
-using Flurl.Http;
 using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
@@ -49,25 +49,6 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         private long GetHeadersEstimatedSize(HttpHeaders headers)
         {
             return headers?.Sum(h => h.Key.Length + h.Value.Sum(hv => hv.Length) + 3 /* ': \n' */ ) ?? 0;
-        }
-    }
-
-    public static class HttpStatisticianHelper
-    {
-        public static IFlurlClient CollectHttpStats(this IFlurlClient client, IHttpStatistician statistician)
-        {
-            client.Settings.AfterCall = call =>
-            {
-                try
-                {
-                    statistician.CollectHttpCallStatistics(call);
-                }
-                catch (Exception)
-                {
-                    // om nom nom - ignore everything. Just work.
-                }
-            };
-            return client;
         }
     }
 }

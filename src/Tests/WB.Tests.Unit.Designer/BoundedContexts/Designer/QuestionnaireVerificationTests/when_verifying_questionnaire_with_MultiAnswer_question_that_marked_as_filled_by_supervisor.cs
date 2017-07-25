@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_TextList_question_that_marked_as_filled_by_supervisor : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             supervisorTextListquestionId = Guid.Parse("10000000000000000000000000000000");
             textQuestionId = Guid.Parse("20000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument(
@@ -28,27 +27,28 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 ));
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_1_message = () =>
+        [NUnit.Framework.Test] public void should_return_1_message () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_message_with_code__WB0040 = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_code__WB0040 () =>
             verificationMessages.Single().Code.ShouldEqual("WB0040");
 
-        It should_return_message_with_level_general = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_level_general () =>
             verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
-        It should_return_message_with_1_references = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_1_references () =>
             verificationMessages.Single().References.Count().ShouldEqual(1);
 
-        It should_return_message_reference_with_type_Question = () =>
+        [NUnit.Framework.Test] public void should_return_message_reference_with_type_Question () =>
             verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_message_reference_with_id_of_supervisorTextListquestionId = () =>
+        [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_supervisorTextListquestionId () =>
             verificationMessages.Single().References.First().Id.ShouldEqual(supervisorTextListquestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

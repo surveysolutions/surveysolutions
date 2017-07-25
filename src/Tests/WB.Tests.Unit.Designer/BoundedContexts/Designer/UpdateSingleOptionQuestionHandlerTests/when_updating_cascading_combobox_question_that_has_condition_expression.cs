@@ -9,15 +9,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
 {
     internal class when_updating_cascading_combobox_question_that_has_condition_expression : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddSingleOptionQuestion(parentQuestionId, chapterId, responsibleId, variableName: "cascade_parent");
             questionnaire.AddSingleOptionQuestion(cascadingId, chapterId, responsibleId, variableName: "cascade_child");
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
            exception = Catch.Exception(() => questionnaire.UpdateSingleOptionQuestion(
                 questionId: cascadingId,
                 title: "title",
@@ -35,10 +35,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                 cascadeFromQuestionId: parentQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
                 linkedFilterExpression: null, properties: Create.QuestionProperties()));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__answer_title_cannot_be_empty__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__answer_title_cannot_be_empty__ () =>
             new[] { "cascading questions can't have enabling condition" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
@@ -48,10 +48,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
         private static Guid parentQuestionId = Guid.Parse("22222222222222222222222222222222");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-
-        private static Answer[] oldAnswers = new Answer[]
-        {
-            new Answer { AnswerText = "option1", AnswerValue = "1", ParentValue = "1"}, new Answer { AnswerText = "option2", AnswerValue = "2", ParentValue = "2" }
-        };
     }
 }

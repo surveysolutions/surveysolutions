@@ -9,14 +9,13 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
 {
     internal class when_getting_fixed_roster_edit_view_and_fixed_roster_inside_list_one : QuestionnaireInfoFactoryTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
             questionnaireView = Create.QuestionnaireDocumentWithOneChapter(children: new List<IComposite>
             {
@@ -32,33 +31,34 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                 .Returns(questionnaireView);
 
             factory = CreateQuestionnaireInfoFactory(questionDetailsReaderMock.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             result = factory.GetRosterEditView(questionnaireId, g3Id);
 
-        It should_return_empty_grouped_list_of_multi_questions = () =>
+        [NUnit.Framework.Test] public void should_return_empty_grouped_list_of_multi_questions () =>
             result.NotLinkedMultiOptionQuestions.Count.ShouldEqual(0);
 
-        It should_return_empty_grouped_list_of_integer_questions = () =>
+        [NUnit.Framework.Test] public void should_return_empty_grouped_list_of_integer_questions () =>
             result.NumericIntegerQuestions.Count.ShouldEqual(0);
 
-        It should_return_empty_grouped_list_of_title_questions = () =>
+        [NUnit.Framework.Test] public void should_return_empty_grouped_list_of_title_questions () =>
             result.NumericIntegerTitles.Count.ShouldEqual(0);
        
-        It should_return_grouped_list_of_integer_questions_with_one_pair = () =>
+        [NUnit.Framework.Test] public void should_return_grouped_list_of_integer_questions_with_one_pair () =>
             result.TextListsQuestions.Count.ShouldEqual(4);
 
-        It should_return_list_questions_at_3_with_id_equals_q1Id = () =>
+        [NUnit.Framework.Test] public void should_return_list_questions_at_3_with_id_equals_q1Id () =>
             result.TextListsQuestions.ElementAt(3).Id.ShouldEqual(q1Id.FormatGuid());
 
-        It should_return_list_questions_at_3_with_q1_title = () =>
+        [NUnit.Framework.Test] public void should_return_list_questions_at_3_with_q1_title () =>
             result.TextListsQuestions.ElementAt(3).Title.ShouldEqual(GetQuestion(q1Id).QuestionText);
 
-        It should_return_list_questions_at_1_with_id_equals_q2Id = () =>
+        [NUnit.Framework.Test] public void should_return_list_questions_at_1_with_id_equals_q2Id () =>
             result.TextListsQuestions.ElementAt(1).Id.ShouldEqual(q2Id.FormatGuid());
 
-        It should_return_list_questions_at_1_with_q2_title = () =>
+        [NUnit.Framework.Test] public void should_return_list_questions_at_1_with_q2_title () =>
             result.TextListsQuestions.ElementAt(1).Title.ShouldEqual(GetQuestion(q2Id).QuestionText);
 
         private static IGroup GetGroup(Guid groupId)

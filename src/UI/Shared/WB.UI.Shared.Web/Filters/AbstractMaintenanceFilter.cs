@@ -1,6 +1,6 @@
 using System.Web.Mvc;
 using System.Web.Routing;
-using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.UI.Shared.Web.Filters

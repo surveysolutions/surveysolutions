@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateCascadingCombobo
 {
     internal class when_updating_cascading_combobox_options_and_1_option_dont_have_a_value : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
 
@@ -37,16 +36,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateCascadingCombobo
                 isFilteredCombobox: false,
                 cascadeFromQuestionId: parentQuestionId
             );
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateCascadingComboboxOptions(questionId: questionId, responsibleId: responsibleId, options: options));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__value_required__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__value_required__ () =>
              new[] { "value", "required" }.ShouldEachConformTo(
                     keyword => exception.Message.ToLower().Contains(keyword));
 

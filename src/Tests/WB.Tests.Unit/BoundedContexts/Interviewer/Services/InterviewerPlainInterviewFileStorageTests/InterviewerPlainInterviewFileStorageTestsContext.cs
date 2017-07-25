@@ -7,11 +7,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
 {
     internal class InterviewerPlainInterviewFileStorageTestsContext
     {
-        public static InterviewerPlainInterviewFileStorage CreateInterviewerPlainInterviewFileStorage(
+        public static InterviewerImageFileStorage CreateInterviewerPlainInterviewFileStorage(
             IPlainStorage<InterviewMultimediaView> imageViewStorage = null,
             IPlainStorage<InterviewFileView> fileViewStorage = null)
         {
-            return new InterviewerPlainInterviewFileStorage(
+            return new InterviewerImageFileStorage(
                 imageViewStorage: imageViewStorage ?? Mock.Of<IPlainStorage<InterviewMultimediaView>>(),
                 fileViewStorage: fileViewStorage ?? Mock.Of<IPlainStorage<InterviewFileView>>());
         }

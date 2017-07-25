@@ -11,29 +11,29 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_group_title_that_references_not_existing_substitutions : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = Create.QuestionnaireDocument(children: new IComposite[]
             {
                 Create.Group(groupId: groupId, title: "hello %unknown%"),
             });
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_error_with_code_WB0017 = () =>
+        [NUnit.Framework.Test] public void should_return_error_with_code_WB0017 () =>
             verificationMessages.GetError("WB0017").ShouldNotBeNull();
 
-        It should_return_error_WB0017_with_1_reference = () =>
+        [NUnit.Framework.Test] public void should_return_error_WB0017_with_1_reference () =>
             verificationMessages.GetError("WB0017").References.Count.ShouldEqual(1);
 
-        It should_return_error_WB0017_with_reference_with_type_Group = () =>
+        [NUnit.Framework.Test] public void should_return_error_WB0017_with_reference_with_type_Group () =>
             verificationMessages.GetError("WB0017").References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
 
-        It should_return_error_WB0017_with_reference_with_group_id = () =>
+        [NUnit.Framework.Test] public void should_return_error_WB0017_with_reference_with_group_id () =>
             verificationMessages.GetError("WB0017").References.Single().Id.ShouldEqual(groupId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

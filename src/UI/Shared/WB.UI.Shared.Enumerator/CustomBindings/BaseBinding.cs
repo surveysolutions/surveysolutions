@@ -9,15 +9,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         protected BaseBinding(TControl androidControl)
             : base(androidControl) {}
 
-        protected new TControl Target
-        {
-            get { return base.Target as TControl; }
-        }
+        protected new TControl Target => base.Target as TControl;
 
-        public override Type TargetType
-        {
-            get { return typeof(TValue); }
-        }
+        public override Type TargetType => typeof(TValue);
 
         protected override void SetValueImpl(object target, object value)
         {

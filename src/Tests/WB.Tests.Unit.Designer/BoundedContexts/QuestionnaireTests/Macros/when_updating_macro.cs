@@ -8,27 +8,27 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Macros
 {
     internal class when_updating_macro : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: responsibleId);
             questionnaire.AddMacro(Create.Command.AddMacro(questionnaireId, macroId, responsibleId));
 
             updateMacro = Create.Command.UpdateMacro(questionnaireId, macroId, name, content, description, responsibleId);
-        };
+            BecauseOf();
+        }
 
 
-        Because of = () => questionnaire.UpdateMacro(updateMacro);
+        private void BecauseOf() => questionnaire.UpdateMacro(updateMacro);
 
-        It should_contains_Macro_with_EntityId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_Macro_with_EntityId_specified () =>
             questionnaire.QuestionnaireDocument.Macros.ShouldContain(t => t.Key == macroId);
 
-        It should_contains_Macro_with_Name_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_Macro_with_Name_specified () =>
             questionnaire.QuestionnaireDocument.Macros.Single(t => t.Key == macroId).Value.Name.ShouldEqual(name);
 
-        It should_contains_Macro_with_Content_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_Macro_with_Content_specified () =>
             questionnaire.QuestionnaireDocument.Macros.Single(t => t.Key == macroId).Value.Content.ShouldEqual(content);
 
-        It should_contains_Macro_with_Description_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_Macro_with_Description_specified () =>
             questionnaire.QuestionnaireDocument.Macros.Single(t => t.Key == macroId).Value.Description.ShouldEqual(description);
 
         private static UpdateMacro updateMacro;

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
@@ -55,7 +54,7 @@ namespace WB.Core.Infrastructure.EventHandlers
 
             var newState = (TEntity) this
                 .GetType()
-                .GetMethod("Update", new[] { typeof(TEntity), eventType })
+                .GetTypeInfo().GetMethod("Update", new[] { typeof(TEntity), eventType })
                 .Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
 
             if (newState != null)
@@ -77,7 +76,7 @@ namespace WB.Core.Infrastructure.EventHandlers
         {
             var handlerMethodNames = new string[] { "Create", "Update", "Delete" };
 
-            var handlers = this.GetType().GetMethods().Where(m => handlerMethodNames.Contains(m.Name)).ToList();
+            var handlers = this.GetType().GetTypeInfo().GetMethods().Where(m => handlerMethodNames.Contains(m.Name)).ToList();
 
             handlers.ForEach((handler) => this.RegisterOldFashionHandler(oldEventBus, handler));
         }
@@ -114,7 +113,7 @@ namespace WB.Core.Infrastructure.EventHandlers
         private bool Handles(IUncommittedEvent evt)
         {
             Type genericUpgrader = typeof(IUpdateHandler<,>);
-            return genericUpgrader.MakeGenericType(typeof(TEntity), evt.Payload.GetType()).IsAssignableFrom(this.GetType());
+            return genericUpgrader.MakeGenericType(typeof(TEntity), evt.Payload.GetType()).GetTypeInfo().IsAssignableFrom(this.GetType());
         }
 
         public string Name => this.GetType().Name;

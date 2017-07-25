@@ -1,300 +1,60 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WB.Infrastructure.Native</RootNamespace>
-    <AssemblyName>WB.Infrastructure.Native</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
+    <TargetFramework>net462</TargetFramework>
+    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AngleSharp, Version=0.9.9.0, Culture=neutral, PublicKeyToken=e83494dcdc6d31ea, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\AngleSharp.0.9.9\lib\net45\AngleSharp.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="DotNetZip, Version=1.10.1.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DotNetZip.1.10.1\lib\net20\DotNetZip.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Esent.Collections">
-      <HintPath>..\..\..\packages\Microsoft.Database.Collections.Generic.1.9.3.2\lib\net40\Esent.Collections.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Esent.Interop, Version=1.9.3.3, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\ManagedEsent.1.9.3.3\lib\net40\Esent.Interop.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Esent.Isam">
-      <HintPath>..\..\..\packages\Microsoft.Database.Isam.1.9.3.2\lib\net40\Esent.Isam.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="FluentMigrator, Version=1.6.2.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\FluentMigrator.1.6.2\lib\40\FluentMigrator.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="FluentMigrator.Runner">
-      <HintPath>..\..\..\packages\FluentMigrator.Tools.1.6.2\tools\AnyCPU\40\FluentMigrator.Runner.dll</HintPath>
-    </Reference>
-    <Reference Include="HtmlSanitizer, Version=3.0.0.0, Culture=neutral, PublicKeyToken=61c49a1a9e79cc28, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\HtmlSanitizer.3.4.156\lib\net45\HtmlSanitizer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Humanizer, Version=2.0.1.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Humanizer.Core.2.0.1\lib\dotnet\Humanizer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation">
-      <HintPath>..\..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Web.Infrastructure">
-      <HintPath>..\..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="NHibernate, Version=4.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NHibernate.4.1.1.4000\lib\net40\NHibernate.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
-    </Reference>
-    <Reference Include="Ninject.Web.Common, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Ninject.Web.Common.3.2.3.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Ninject.Web.Mvc">
-      <HintPath>..\..\..\packages\Ninject.MVC5.3.2.1.0\lib\net45-full\Ninject.Web.Mvc.dll</HintPath>
-    </Reference>
-    <Reference Include="Nito.AsyncEx, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Nito.AsyncEx.4.0.1\lib\net45\Nito.AsyncEx.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Nito.AsyncEx.Concurrent, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Nito.AsyncEx.4.0.1\lib\net45\Nito.AsyncEx.Concurrent.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Nito.AsyncEx.Enlightenment, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Nito.AsyncEx.4.0.1\lib\net45\Nito.AsyncEx.Enlightenment.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NLog.4.3.11\lib\net45\NLog.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Npgsql, Version=3.1.10.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Npgsql.3.1.10\lib\net451\Npgsql.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
+    <ProjectReference Include="..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj" />
+    <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj" />
+    <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj" />
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AngleSharp" Version="0.9.9" />
+    <PackageReference Include="DotNetZip" Version="1.10.1" />
+    <PackageReference Include="FluentMigrator" Version="1.6.2" />
+    <PackageReference Include="FluentMigrator.Runner" Version="1.6.2" />
+    <PackageReference Include="FluentMigrator.Tools" Version="1.6.2" />
+    <PackageReference Include="HtmlSanitizer" Version="3.4.156" />
+    <PackageReference Include="Humanizer.Core" Version="2.2.0" />
+    <PackageReference Include="Iesi.Collections" Version="4.0.1.4000" />
+    <PackageReference Include="ManagedEsent" Version="1.9.4" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
+    <PackageReference Include="Microsoft.Database.Collections.Generic" Version="1.9.4" />
+    <PackageReference Include="Microsoft.Database.Isam" Version="1.9.4" />
+    <PackageReference Include="Microsoft.Web.Infrastructure" Version="1.0.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="NHibernate" Version="4.1.1.4000" />
+    <PackageReference Include="Ninject" Version="3.2.2.0" />
+    <PackageReference Include="Ninject.MVC5" Version="3.2.1.0" />
+    <PackageReference Include="Ninject.Web.Common" Version="3.2.3.0" />
+    <PackageReference Include="Ninject.Web.Common.WebHost" Version="3.2.3.0" />
+    <PackageReference Include="NLog" Version="4.4.11" />
+    <PackageReference Include="Npgsql" Version="3.1.10" />
+    <PackageReference Include="System.Collections" Version="4.3.0" />
+    <PackageReference Include="System.Diagnostics.Debug" Version="4.3.0" />
+    <PackageReference Include="System.Globalization" Version="4.3.0" />
+    <PackageReference Include="System.Linq" Version="4.3.0" />
+    <PackageReference Include="System.Net.Http" Version="4.3.2" />
+    <PackageReference Include="System.Reflection" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
+    <PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
+    <PackageReference Include="System.Runtime" Version="4.3.0" />
+    <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
+    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.0" />
+    <PackageReference Include="WebActivatorEx" Version="2.1.0" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
     <Reference Include="System.Data.Services.Client" />
-    <Reference Include="System.Net" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Net.Http.WebRequest" />
-    <Reference Include="System.Reflection, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\System.Reflection.4.1.0\lib\net462\System.Reflection.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Runtime.Caching" />
-    <Reference Include="System.Runtime.Extensions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\System.Runtime.Extensions.4.3.0\lib\net462\System.Runtime.Extensions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\WebActivatorEx.2.1.0\lib\net40\WebActivatorEx.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Fetching\EagerFetch.cs" />
-    <Compile Include="Fetching\FetchRequest.cs" />
-    <Compile Include="Fetching\IFetchingProvider.cs" />
-    <Compile Include="Fetching\IFetchRequest.cs" />
-    <Compile Include="Fetching\NhFetchingProvider.cs" />
-    <Compile Include="InitializationException.cs" />
-    <Compile Include="Files\FileInfrastructureModule.cs" />
-    <Compile Include="Files\Implementation\FileSystem\FileSystemIOAccessor.cs" />
-    <Compile Include="Files\Implementation\FileSystem\ZipArchiveUtils.cs" />
-    <Compile Include="Ioc\ServiceLocatorLoggerProvider.cs" />
-    <Compile Include="LegacyAssemblySettings.cs" />
-    <Compile Include="Logging\NLogLogger.cs" />
-    <Compile Include="Logging\NLogLoggerProvider.cs" />
-    <Compile Include="Logging\NLogLoggingModule.cs" />
-    <Compile Include="Sanitizer\StringExtensions.cs" />
-    <Compile Include="Storage\EntitySerializer.cs" />
-    <Compile Include="Storage\EventSourcedAggregateRootRepositoryWithWebCache.cs" />
-    <Compile Include="Storage\INativeReadSideStorage.cs" />
-    <Compile Include="Storage\JsonAllTypesSerializer.cs" />
-    <Compile Include="Storage\Esent\Implementation\EsentCachedReadSideStorage.cs" />
-    <Compile Include="Storage\EventSerializerSettings.cs" />
-    <Compile Include="Storage\MainCoreAssemblyRedirectSerializationBaseBinder.cs" />
-    <Compile Include="Storage\NewtonInterviewAnswerJsonSerializer.cs" />
-    <Compile Include="Storage\NewtonJsonSerializer.cs" />
-    <Compile Include="Storage\NewToOldAssemblyRedirectSerializationBinder.cs" />
-    <Compile Include="Storage\OldToNewAssemblyRedirectSerializationBinder.cs" />
-    <Compile Include="Storage\Postgre\DbMigrations\DbMigrationsRunner.cs" />
-    <Compile Include="Storage\Postgre\DbMigrations\InSchemaPostgresProcessor.cs" />
-    <Compile Include="Storage\Postgre\DbMigrations\InSchemaPostgresProcessorFactory.cs" />
-    <Compile Include="Storage\Postgre\DbUpgradeSettings.cs" />
-    <Compile Include="Storage\Postgre\Implementation\IPlainPostgresTransactionManager.cs" />
-    <Compile Include="Storage\Postgre\Implementation\Migrations\M000_Init.cs" />
-    <Compile Include="Storage\Postgre\Implementation\Migrations\M001_AddEventSequenceIndex.cs" />
-    <Compile Include="Storage\Postgre\Implementation\NoTransactionPlainPostgresTransactionManager.cs" />
-    <Compile Include="Storage\Postgre\Implementation\PlainTransactionManagerProvider.cs" />
-    <Compile Include="Storage\Postgre\Implementation\PostgresKeyValueStorageWithCache.cs" />
-    <Compile Include="Storage\Postgre\Implementation\RebuildReadSidePlainPostgresTransactionManagerWithSessions.cs" />
-    <Compile Include="Storage\Postgre\Implementation\SessionHandle.cs" />
-    <Compile Include="Subsystem.cs" />
-    <Compile Include="Threading\AsyncHelper.cs" />
-    <Compile Include="Threading\IsolatedThreadExtensions.cs" />
-    <Compile Include="Storage\Postgre\Implementation\PostgresEventStore.cs" />
-    <Compile Include="Storage\Postgre\Implementation\RebuildReadSideCqrsPostgresTransactionManagerWithSessions.cs" />
-    <Compile Include="Storage\Postgre\NhExtensions\PostgreSQL91Dialect.cs" />
-    <Compile Include="Storage\Postgre\NhExtensions\NpgsqlDriverExtended.cs" />
-    <Compile Include="Storage\Postgre\NhExtensions\NpgsqlExtendedSqlType.cs" />
-    <Compile Include="Storage\Postgre\PostgresModuleWithCache.cs" />
-    <Compile Include="Storage\Postgre\PostgresWriteSideModule.cs" />
-    <Compile Include="Storage\ReadSideCacheSettings.cs" />
-    <Compile Include="Threading\ThreadMarkerManager.cs" />
-    <Compile Include="Storage\Memory\Implementation\MemoryCachedReadSideStorage.cs" />
-    <Compile Include="Storage\NinjectExtensions.cs" />
-    <Compile Include="Storage\Postgre\Implementation\DatabaseManagement.cs" />
-    <Compile Include="Storage\Postgre\Implementation\ICqrsPostgresTransactionManager.cs" />
-    <Compile Include="Storage\Postgre\Implementation\ISessionProvider.cs" />
-    <Compile Include="Storage\Postgre\Implementation\PlainPostgresTransactionManager.cs" />
-    <Compile Include="Storage\Postgre\Implementation\PostgresKeyValueStorage.cs" />
-    <Compile Include="Storage\Postgre\Implementation\PostgresPlainKeyValueStorage.cs" />
-    <Compile Include="Storage\Postgre\Implementation\PostgresPlainStorageRepository.cs" />
-    <Compile Include="Storage\Postgre\Implementation\PostgresReadSideKeyValueStorage.cs" />
-    <Compile Include="Storage\Postgre\Implementation\NoTransactionCqrsPostgresTransactionManager.cs" />
-    <Compile Include="Storage\Postgre\Implementation\RebuildReadSideCqrsPostgresTransactionManagerWithoutSessions.cs" />
-    <Compile Include="Storage\Postgre\Implementation\PostgresReadSideBootstraper.cs" />
-    <Compile Include="Storage\Postgre\Implementation\CqrsPostgresTransactionManager.cs" />
-    <Compile Include="Storage\Postgre\Implementation\PostgreReadSideStorage.cs" />
-    <Compile Include="Storage\Postgre\Implementation\TransactionManagerProvider.cs" />
-    <Compile Include="Storage\Postgre\PostgreConnectionSettings.cs" />
-    <Compile Include="Storage\Postgre\PostgresReadSideModule.cs" />
-    <Compile Include="Storage\Postgre\PostgresPlainStorageModule.cs" />
-    <Compile Include="Storage\Postgre\PostgresPlainStorageSettings.cs" />
-    <Compile Include="Storage\Postgre\PostgresKeyValueModule.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\QueryableExtensions.cs" />
-    <Compile Include="Utils\WhereClouseHelper.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
-      <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
-      <Name>WB.Core.GenericSubdomains.Portable</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
-      <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
-      <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
-      <Project>{89b14b50-5305-45e2-9835-7a05bd0b97a9}</Project>
-      <Name>WB.Core.SharedKernels.DataCollection</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
-      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
-      <Name>WB.Core.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
-      <Project>{d6616c1d-7c3a-4576-b82b-098721cd4417}</Project>
-      <Name>WB.Core.SharedKernels.Questionnaire</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
-  </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

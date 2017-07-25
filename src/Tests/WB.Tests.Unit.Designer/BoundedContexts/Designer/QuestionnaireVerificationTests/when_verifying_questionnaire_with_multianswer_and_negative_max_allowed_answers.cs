@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     class when_verifying_questionnaire_with_multianswer_invalid_max_allowed_answers : QuestionnaireVerifierTestsContext
     {
 
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             multyOptionsQuestionId = Guid.Parse("10000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument(Create.MultyOptionsQuestion(
                 multyOptionsQuestionId,
@@ -25,15 +24,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             ));
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => 
+        private void BecauseOf() => 
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_1_message = () => 
+        [NUnit.Framework.Test] public void should_return_1_message () => 
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_message_with_code__WB0021__ = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_code__WB0021__ () =>
             verificationMessages.Single().Code.ShouldEqual("WB0021");
 
         private static QuestionnaireVerifier verifier;

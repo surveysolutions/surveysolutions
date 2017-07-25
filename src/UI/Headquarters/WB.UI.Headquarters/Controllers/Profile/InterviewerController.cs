@@ -87,11 +87,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor, Interviewer")]
         [ActionName("Profile")]
-        public async Task<ActionResult> InterviewerProfile(Guid id)
+        public async Task<ActionResult> InterviewerProfile(Guid? id)
         {
-            var interviewer = await this.userManager.FindByIdAsync(id);
+            var userId = id ?? this.authorizedUser.Id;
+            var interviewer = await this.userManager.FindByIdAsync(userId);
             if (interviewer == null || !interviewer.IsInRole(UserRoles.Interviewer)) return this.HttpNotFound();
 
             var supervisor = await this.userManager.FindByIdAsync(interviewer.Profile.SupervisorId.Value);
@@ -99,12 +100,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (interviewer == null) throw new HttpException(404, string.Empty);
 
             var completedInterviewCount = this.interviewRepository.Query(interviews => interviews.Count(
-                interview => interview.ResponsibleId == id && interview.Status == InterviewStatus.Completed && !interview.IsDeleted));
+                interview => interview.ResponsibleId == userId && interview.Status == InterviewStatus.Completed && !interview.IsDeleted));
 
             var approvedByHqCount = this.interviewRepository.Query(interviews => interviews.Count(
-                interview => interview.ResponsibleId == id && interview.Status == InterviewStatus.ApprovedByHeadquarters && !interview.IsDeleted));
+                interview => interview.ResponsibleId == userId && interview.Status == InterviewStatus.ApprovedByHeadquarters && !interview.IsDeleted));
 
-            var lastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastSuccessByInterviewerId(id);
+            var lastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastSuccessByInterviewerId(userId);
             var hasUpdateForInterviewerApp = false;
             DateTime? deviceAssignmentDate = null;
 
@@ -130,13 +131,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 HasUpdateForInterviewerApp = hasUpdateForInterviewerApp,
                 WaitingInterviewsForApprovalCount = completedInterviewCount,
                 ApprovedInterviewsByHqCount = approvedByHqCount,
-                TotalSuccessSynchronizationCount = this.deviceSyncInfoRepository.GetSuccessSynchronizationsCount(id),
-                TotalFailedSynchronizationCount = this.deviceSyncInfoRepository.GetFailedSynchronizationsCount(id),
+                TotalSuccessSynchronizationCount = this.deviceSyncInfoRepository.GetSuccessSynchronizationsCount(userId),
+                TotalFailedSynchronizationCount = this.deviceSyncInfoRepository.GetFailedSynchronizationsCount(userId),
                 LastSuccessDeviceInfo = lastSuccessDeviceInfo,
-                LastSyncronizationDate = this.deviceSyncInfoRepository.GetLastSyncronizationDate(id),
-                LastFailedDeviceInfo = this.deviceSyncInfoRepository.GetLastFailedByInterviewerId(id),
-                AverageSyncSpeedBytesPerSecond = this.deviceSyncInfoRepository.GetAverageSynchronizationSpeedInBytesPerSeconds(id),
-                SynchronizationActivity = this.deviceSyncInfoRepository.GetSynchronizationActivity(id, interviewer.Profile.DeviceId),
+                LastSyncronizationDate = this.deviceSyncInfoRepository.GetLastSyncronizationDate(userId),
+                LastFailedDeviceInfo = this.deviceSyncInfoRepository.GetLastFailedByInterviewerId(userId),
+                AverageSyncSpeedBytesPerSecond = this.deviceSyncInfoRepository.GetAverageSynchronizationSpeedInBytesPerSeconds(userId),
+                SynchronizationActivity = this.deviceSyncInfoRepository.GetSynchronizationActivity(userId, interviewer.Profile.DeviceId),
                 DeviceAssignmentDate = deviceAssignmentDate
             };
             return this.View(interviewerProfileModel);

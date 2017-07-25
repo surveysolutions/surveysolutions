@@ -26,10 +26,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public partial class Interview : AggregateRootMappedByConvention
     {
-        public Interview() { }
+        public Interview(IInterviewTreeBuilder treeBuilder)
+        {
+            this.treeBuilder = treeBuilder;
+        }
 
         private InterviewTree tree;
-        protected InterviewTree Tree => this.tree ?? (this.tree = this.BuildInterviewTree(this.GetQuestionnaireOrThrow()));
+        protected InterviewTree Tree => this.tree ?? (this.tree = this.treeBuilder.BuildInterviewTree(this.EventSourceId, this.GetQuestionnaireOrThrow()));
 
         protected readonly InterviewEntities.InterviewProperties properties = new InterviewEntities.InterviewProperties();
 
@@ -60,10 +63,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 return this.expressionProcessorStatePrototype;
             }
 
-            set
-            {
-                expressionProcessorStatePrototype = value;
-            }
+            set => expressionProcessorStatePrototype = value;
         }
 
         protected IInterviewExpressionStorage GetExpressionStorage()
@@ -80,17 +80,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private readonly IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider;
 
-        private readonly ISubstitionTextFactory substitionTextFactory;
+        private readonly ISubstitutionTextFactory substitutionTextFactory;
+
+        private readonly IInterviewTreeBuilder treeBuilder;
 
         protected InterviewKey interviewKey;
 
         public Interview(IQuestionnaireStorage questionnaireRepository,
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider,
-            ISubstitionTextFactory substitionTextFactory)
+            ISubstitutionTextFactory substitutionTextFactory, 
+            IInterviewTreeBuilder treeBuilder)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.expressionProcessorStatePrototypeProvider = expressionProcessorStatePrototypeProvider;
-            this.substitionTextFactory = substitionTextFactory;
+            this.substitutionTextFactory = substitutionTextFactory;
+            this.treeBuilder = treeBuilder;
         }
 
         #region Apply (state restore) methods
@@ -114,18 +118,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.QuestionnaireIdentity = new QuestionnaireIdentity(@event.QuestionnaireId, @event.QuestionnaireVersion);
             this.UsesExpressionStorage = @event.UsesExpressionStorage;
+            this.properties.AssignmentId = @event.AssignmentId;
         }
 
         public virtual void Apply(InterviewOnClientCreated @event)
         {
             this.QuestionnaireIdentity = new QuestionnaireIdentity(@event.QuestionnaireId, @event.QuestionnaireVersion);
             this.UsesExpressionStorage = @event.UsesExpressionStorage;
+            this.properties.AssignmentId = @event.AssignmentId;
         }
 
         public virtual void Apply(InterviewFromPreloadedDataCreated @event)
         {
             this.QuestionnaireIdentity = new QuestionnaireIdentity(@event.QuestionnaireId, @event.QuestionnaireVersion);
             this.UsesExpressionStorage = @event.UsesExpressionStorage;
+            this.properties.AssignmentId = @event.AssignmentId;
         }
 
         public virtual void Apply(SynchronizationMetadataApplied @event)
@@ -261,6 +268,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.Tree.GetQuestion(questionIdentity).AsArea.SetAnswer(AreaAnswer.FromArea(new Area(@event.Geometry, @event.MapName, @event.AreaSize,
                 @event.Length, @event.Coordinates, @event.DistanceToEditor)));
+        }
+
+        public virtual void Apply(AudioQuestionAnswered @event)
+        {
+            var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
+
+            this.Tree.GetQuestion(questionIdentity).AsAudio.SetAnswer(AudioAnswer.FromString(@event.FileName, @event.Length));
         }
 
         public virtual void Apply(TextListQuestionAnswered @event)
@@ -1313,6 +1328,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvents(treeDifference, userId);
         }
 
+        public void AnswerAudioQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, string pictureFileName, TimeSpan length)
+        {
+            new InterviewPropertiesInvariants(this.properties)
+                .RequireAnswerCanBeChanged();
+
+            var questionIdentity = new Identity(questionId, rosterVector);
+
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
+                .RequireAudioAnswerAllowed();
+
+            var changedInterviewTree = this.Tree.Clone();
+
+            changedInterviewTree.GetQuestion(questionIdentity).AsAudio.SetAnswer(AudioAnswer.FromString(pictureFileName, length));
+
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
+            var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
+
+            this.ApplyEvents(treeDifference, userId);
+        }
+
         public void RemoveAnswer(Guid questionId, RosterVector rosterVector, Guid userId, DateTime removeTime)
         {
             new InterviewPropertiesInvariants(this.properties)
@@ -1362,9 +1399,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #region Other handlers
 
-        public void CreateInterviewWithPreloadedData(CreateInterviewWithPreloadedData command)
+        public void CreateInterview(CreateInterview command)
         {
-            this.QuestionnaireIdentity = new QuestionnaireIdentity(command.QuestionnaireId, command.Version);
+            this.QuestionnaireIdentity = command.QuestionnaireId;
             InterviewTree changedInterviewTree = this.Tree.Clone();
 
             this.PutAnswers(changedInterviewTree, command.Answers, command.AssignmentId);
@@ -1374,7 +1411,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IReadOnlyCollection<InterviewTreeNodeDiff> treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             //apply events
-            this.ApplyEvent(new InterviewFromPreloadedDataCreated(
+            this.ApplyEvent(new InterviewCreated(
                 command.UserId,
                 this.QuestionnaireIdentity.QuestionnaireId, 
                 this.QuestionnaireIdentity.Version, 
@@ -1392,7 +1429,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
             }
 
-            this.ApplyInterviewKey(command.InterviewKey);
+            if (command.InterviewKey != null && !command.InterviewKey.Equals(this.interviewKey))
+            {
+                this.ApplyEvent(new InterviewKeyAssigned(command.InterviewKey));
+            }
         }
 
         protected void PutAnswers(InterviewTree changedInterviewTree, 
@@ -1400,6 +1440,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             int? commandAssignmentId)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
             List<InterviewAnswer>[] answersGroupedByLevels = answers
                 .GroupBy(x => x.Identity.RosterVector.Length)
                 .Select(x => new { Depth = x.Key, Answers = x.ToList() })
@@ -1407,17 +1448,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Select(x => x.Answers)
                 .ToArray();
 
+            var noAnswersOnQuestionnaireLevel = answersGroupedByLevels.All(x => x.FirstOrDefault()?.Identity.RosterVector.Length != 0);
+            if (noAnswersOnQuestionnaireLevel)
+                changedInterviewTree.ActualizeTree();
+
             foreach (var answersInLevel in answersGroupedByLevels)
             {
-                this.ValidatePreloadValues(changedInterviewTree, questionnaire, answersInLevel);
-
                 foreach (InterviewAnswer answer in answersInLevel)
                 {
                     var interviewTreeQuestion = changedInterviewTree.GetQuestion(answer.Identity);
                     // answers were not parsed correctly
                     if (interviewTreeQuestion == null)
                         continue;
+
                     interviewTreeQuestion.SetAnswer(answer.Answer);
+
+                    interviewTreeQuestion.RunImportInvariantsOrThrow(new InterviewQuestionInvariants(answer.Identity, questionnaire, this.tree));
 
                     if (commandAssignmentId.HasValue && questionnaire.IsPrefilled(answer.Identity.Id))
                     {
@@ -1426,48 +1472,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
 
                 changedInterviewTree.ActualizeTree();
-            }
-        }
-
-        public void CreateInterview(CreateInterviewCommand command)
-        {
-            var userId = command.UserId;
-
-            this.QuestionnaireIdentity = new QuestionnaireIdentity(command.QuestionnaireId, command.QuestionnaireVersion);
-
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-
-            InterviewTree changedInterviewTree = this.Tree.Clone();
-
-            Dictionary<Identity, AbstractAnswer> prefilledQuestionsWithAnswers = command.AnswersToFeaturedQuestions.ToDictionary(x => new Identity(x.Key, RosterVector.Empty), x => x.Value);
-
-            this.ValidatePrefilledAnswers(this.Tree, questionnaire, prefilledQuestionsWithAnswers, RosterVector.Empty);
-            foreach (KeyValuePair<Identity, AbstractAnswer> answer in prefilledQuestionsWithAnswers)
-            {
-                changedInterviewTree.GetQuestion(answer.Key).SetAnswer(answer.Value);
-            }
-
-            changedInterviewTree.ActualizeTree();
-
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
-            IReadOnlyCollection<InterviewTreeNodeDiff> treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
-
-            //apply events
-            this.ApplyEvent(new InterviewCreated(userId, command.QuestionnaireId, questionnaire.Version, null, questionnaire.IsUsingExpressionStorage()));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
-
-            this.ApplyEvents(treeDifference, userId);
-
-            this.ApplyEvent(new SupervisorAssigned(userId, command.SupervisorId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
-            this.ApplyInterviewKey(command.InterviewKey);
-        }
-
-        protected void ApplyInterviewKey(InterviewKey key)
-        {
-            if (this.interviewKey == null && key != null)
-            {
-                this.ApplyEvent(new InterviewKeyAssigned(key));
             }
         }
 
@@ -1846,8 +1850,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 this.ApplyEvent(synchronizedEvent);
             }
+            if (command.InterviewKey != null)
+            {
+                this.ApplyEvent(new InterviewKeyAssigned(command.InterviewKey));
+            }
 
-            this.ApplyInterviewKey(command.InterviewKey);
             this.ApplyEvent(new InterviewReceivedBySupervisor());
         }
 
@@ -1893,67 +1900,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #region Tree
 
-        protected InterviewTree BuildInterviewTree(IQuestionnaire questionnaire)
-        {
-            var tree = new InterviewTree(this.EventSourceId, questionnaire, this.substitionTextFactory);
-            var sections = this.BuildInterviewTreeSections(tree, questionnaire, this.substitionTextFactory).ToArray();
-
-            tree.SetSections(sections);
-            return tree;
-        }
-
-        private IEnumerable<InterviewTreeSection> BuildInterviewTreeSections(InterviewTree tree, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory)
-        {
-            var sectionIds = questionnaire.GetAllSections();
-
-            foreach (var sectionId in sectionIds)
-            {
-                var sectionIdentity = new Identity(sectionId, RosterVector.Empty);
-                var section = this.BuildInterviewTreeSection(tree, sectionIdentity, questionnaire, textFactory);
-
-                yield return section;
-            }
-        }
-
-        private InterviewTreeSection BuildInterviewTreeSection(InterviewTree tree, Identity sectionIdentity, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory)
-        {
-            var section = InterviewTree.CreateSection(tree, questionnaire, textFactory, sectionIdentity);
-
-            section.AddChildren(this.BuildInterviewTreeGroupChildren(tree, sectionIdentity, questionnaire, textFactory).ToList());
-
-            return section;
-        }
-
-        private InterviewTreeSubSection BuildInterviewTreeSubSection(InterviewTree tree, Identity groupIdentity, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory)
-        {
-            var subSection = InterviewTree.CreateSubSection(tree, questionnaire, textFactory, groupIdentity);
-
-            subSection.AddChildren(this.BuildInterviewTreeGroupChildren(tree, groupIdentity, questionnaire, textFactory).ToList());
-
-            return subSection;
-        }
-
-        private IEnumerable<IInterviewTreeNode> BuildInterviewTreeGroupChildren(InterviewTree tree, Identity groupIdentity, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory)
-        {
-            var childIds = questionnaire.GetChildEntityIds(groupIdentity.Id);
-
-            foreach (var childId in childIds)
-            {
-                Identity entityIdentity = new Identity(childId, groupIdentity.RosterVector);
-
-                if (questionnaire.IsRosterGroup(childId)) continue;
-
-                if (questionnaire.HasGroup(childId))
-                    yield return this.BuildInterviewTreeSubSection(tree, entityIdentity, questionnaire, textFactory);
-                else if (questionnaire.HasQuestion(childId))
-                    yield return InterviewTree.CreateQuestion(tree, questionnaire, textFactory, entityIdentity);
-                else if (questionnaire.IsStaticText(childId))
-                    yield return InterviewTree.CreateStaticText(tree, questionnaire, textFactory, entityIdentity);
-                else if (questionnaire.IsVariable(childId))
-                    yield return InterviewTree.CreateVariable(entityIdentity);
-
-            }
-        }
 
         #endregion
 
@@ -2222,6 +2168,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         changedQuestion.Identity.RosterVector, DateTime.UtcNow, answer.Geometry, answer.MapName, answer.AreaSize, answer.Length, 
                         answer.Coordinates, answer.DistanceToEditor));
                 }
+
+                if (changedQuestion.IsAudio)
+                {
+                    var audioAnswer = changedQuestion.AsAudio.GetAnswer();
+
+                    this.ApplyEvent(new AudioQuestionAnswered(responsibleId, changedQuestion.Identity.Id, 
+                       changedQuestion.Identity.RosterVector, DateTime.UtcNow, 
+                       audioAnswer.FileName, audioAnswer.Length));
+                }
             }
         }
 
@@ -2263,149 +2218,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #endregion
 
-        private void ValidatePreloadValues(InterviewTree tree, IQuestionnaire questionnaire, List<InterviewAnswer> answersToFeaturedQuestions)
-        {
-            foreach (var answerToFeaturedQuestion in answersToFeaturedQuestions)
-            {
-                Guid questionId = answerToFeaturedQuestion.Identity.Id;
-                AbstractAnswer answer = answerToFeaturedQuestion.Answer;
-
-                var questionIdentity = answerToFeaturedQuestion.Identity;
-
-                QuestionType questionType = questionnaire.GetQuestionType(questionId);
-
-                var questionInvariants = new InterviewQuestionInvariants(questionIdentity, questionnaire, tree);
-
-                switch (questionType)
-                {
-                    case QuestionType.Text:
-                        questionInvariants.RequireTextPreloadValueAllowed();
-                        break;
-
-                    case QuestionType.Numeric:
-                        if (questionnaire.IsQuestionInteger(questionId))
-                            questionInvariants.RequireNumericIntegerPreloadValueAllowed(((NumericIntegerAnswer)answer).Value);
-                        else
-                            questionInvariants.RequireNumericRealPreloadValueAllowed();
-                        break;
-
-                    case QuestionType.DateTime:
-                        questionInvariants.RequireDateTimePreloadValueAllowed();
-                        break;
-
-                    case QuestionType.SingleOption:
-                        questionInvariants.RequireFixedSingleOptionPreloadValueAllowed(((CategoricalFixedSingleOptionAnswer)answer).SelectedValue);
-                        break;
-
-                    case QuestionType.MultyOption:
-                        if (questionnaire.IsQuestionYesNo(questionId))
-                            questionInvariants.RequireYesNoPreloadValueAllowed((YesNoAnswer)answer);
-                        else
-                            questionInvariants.RequireFixedMultipleOptionsPreloadValueAllowed(((CategoricalFixedMultiOptionAnswer)answer).CheckedValues);
-                        break;
-
-                    case QuestionType.QRBarcode:
-                        questionInvariants.RequireQRBarcodePreloadValueAllowed();
-                        break;
-
-                    case QuestionType.GpsCoordinates:
-                        questionInvariants.RequireGpsCoordinatesPreloadValueAllowed();
-                        break;
-
-                    case QuestionType.TextList:
-                        questionInvariants.RequireTextListPreloadValueAllowed(((TextListAnswer)answer).ToTupleArray());
-                        break;
-
-                    default:
-                        throw new InterviewException(
-                            $"Question {questionId} has type {questionType} which is not supported as initial identifying question. InterviewId: {this.EventSourceId}");
-                }
-            }
-        }
-
-        protected void ValidatePrefilledAnswers(InterviewTree tree, IQuestionnaire questionnaire, IReadOnlyDictionary<Identity, AbstractAnswer> answersToFeaturedQuestions, RosterVector rosterVector = null)
-        {
-            var currentRosterVector = rosterVector ?? (decimal[])RosterVector.Empty;
-            foreach (var answerToFeaturedQuestion in answersToFeaturedQuestions)
-            {
-                Guid questionId = answerToFeaturedQuestion.Key.Id;
-                AbstractAnswer answer = answerToFeaturedQuestion.Value;
-
-                var questionIdentity = new Identity(questionId, currentRosterVector);
-
-                QuestionType questionType = questionnaire.GetQuestionType(questionId);
-
-                var questionInvariants = new InterviewQuestionInvariants(questionIdentity, questionnaire, tree);
-
-                switch (questionType)
-                {
-                    case QuestionType.Text:
-                        questionInvariants.RequireTextAnswerAllowed();
-                        break;
-
-                    case QuestionType.Numeric:
-                        if (questionnaire.IsQuestionInteger(questionId))
-                            questionInvariants.RequireNumericIntegerAnswerAllowed(((NumericIntegerAnswer)answer).Value);
-                        else
-                            questionInvariants.RequireNumericRealAnswerAllowed(((NumericRealAnswer)answer).Value);
-                        break;
-
-                    case QuestionType.DateTime:
-                        questionInvariants.RequireDateTimeAnswerAllowed();
-                        break;
-
-                    case QuestionType.SingleOption:
-                        questionInvariants.RequireFixedSingleOptionAnswerAllowed(((CategoricalFixedSingleOptionAnswer)answer).SelectedValue, this.QuestionnaireIdentity);
-                        break;
-
-                    case QuestionType.MultyOption:
-                        if (questionnaire.IsQuestionYesNo(questionId))
-                            questionInvariants.RequireYesNoAnswerAllowed((YesNoAnswer)answer);
-                        else
-                            questionInvariants.RequireFixedMultipleOptionsAnswerAllowed(((CategoricalFixedMultiOptionAnswer)answer).CheckedValues);
-                        break;
-
-                    case QuestionType.QRBarcode:
-                        questionInvariants.RequireQRBarcodeAnswerAllowed();
-                        break;
-
-                    case QuestionType.GpsCoordinates:
-                        questionInvariants.RequireGpsCoordinatesAnswerAllowed();
-                        break;
-
-                    case QuestionType.TextList:
-                        questionInvariants.RequireTextListAnswerAllowed(((TextListAnswer)answer).ToTupleArray());
-                        break;
-
-                    default:
-                        throw new InterviewException(
-                            $"Question {questionId} has type {questionType} which is not supported as initial identifying question. InterviewId: {this.EventSourceId}");
-                }
-            }
-        }
-
         private static AnswerComment ToAnswerComment(CommentSynchronizationDto answerComment,
             AnsweredQuestionSynchronizationDto answerDto)
             => new AnswerComment(answerComment.UserId, answerComment.UserRole, answerComment.Date, answerComment.Text,
                 Identity.Create(answerDto.Id, answerDto.QuestionRosterVector));
-
-        protected decimal[] CalculateStartRosterVectorForAnswersOfLinkedToQuestion(
-            Guid linkedToEntityId, Identity linkedQuestion, IQuestionnaire questionnaire)
-        {
-            Guid[] linkSourceRosterVector = questionnaire.GetRosterSizeSourcesForEntity(linkedToEntityId);
-            Guid[] linkedQuestionRosterSources = questionnaire.GetRosterSizeSourcesForEntity(linkedQuestion.Id);
-
-            int commonRosterSourcesPartLength = Enumerable
-                .Zip(linkSourceRosterVector, linkedQuestionRosterSources, (a, b) => a == b)
-                .TakeWhile(areEqual => areEqual)
-                .Count();
-
-            int linkedQuestionRosterLevel = linkedQuestion.RosterVector.Length;
-
-            int targetRosterLevel = Math.Min(commonRosterSourcesPartLength, Math.Min(linkSourceRosterVector.Length - 1, linkedQuestionRosterLevel));
-
-            return linkedQuestion.RosterVector.Shrink(targetRosterLevel);
-        }
 
         public InterviewTreeMultiLinkedToRosterQuestion GetLinkedMultiOptionQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsMultiLinkedOption;
         public InterviewTreeSingleLinkedToRosterQuestion GetLinkedSingleOptionQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsSingleLinkedOption;
@@ -2683,11 +2499,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 InterviewTreeQuestion question = node as InterviewTreeQuestion;
                 if (question != null)
                 {
-                    SubstitionText title = this.substitionTextFactory.CreateText(question.Identity,
+                    SubstitutionText title = this.substitutionTextFactory.CreateText(question.Identity,
                         questionnaire.GetQuestionTitle(question.Identity.Id), questionnaire);
 
-                    SubstitionText[] validationMessages = questionnaire.GetValidationMessages(question.Identity.Id)
-                        .Select(x => this.substitionTextFactory.CreateText(question.Identity, x, questionnaire))
+                    SubstitutionText[] validationMessages = questionnaire.GetValidationMessages(question.Identity.Id)
+                        .Select(x => this.substitutionTextFactory.CreateText(question.Identity, x, questionnaire))
                         .ToArray();
 
                     question.SetTitle(title);
@@ -2698,7 +2514,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 InterviewTreeGroup groupOrRoster = node as InterviewTreeGroup;
                 if (groupOrRoster != null)
                 {
-                    SubstitionText title = this.substitionTextFactory.CreateText(groupOrRoster.Identity,
+                    SubstitutionText title = this.substitutionTextFactory.CreateText(groupOrRoster.Identity,
                         questionnaire.GetGroupTitle(groupOrRoster.Identity.Id), questionnaire);
 
                     groupOrRoster.SetTitle(title);
@@ -2708,11 +2524,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 InterviewTreeStaticText staticText = node as InterviewTreeStaticText;
                 if (staticText != null)
                 {
-                    SubstitionText title = this.substitionTextFactory.CreateText(staticText.Identity,
+                    SubstitutionText title = this.substitutionTextFactory.CreateText(staticText.Identity,
                        questionnaire.GetStaticText(staticText.Identity.Id), questionnaire);
 
-                    SubstitionText[] validationMessages = questionnaire.GetValidationMessages(staticText.Identity.Id)
-                        .Select(x => this.substitionTextFactory.CreateText(staticText.Identity, x, questionnaire))
+                    SubstitutionText[] validationMessages = questionnaire.GetValidationMessages(staticText.Identity.Id)
+                        .Select(x => this.substitutionTextFactory.CreateText(staticText.Identity, x, questionnaire))
                         .ToArray();
 
                     staticText.SetTitle(title);

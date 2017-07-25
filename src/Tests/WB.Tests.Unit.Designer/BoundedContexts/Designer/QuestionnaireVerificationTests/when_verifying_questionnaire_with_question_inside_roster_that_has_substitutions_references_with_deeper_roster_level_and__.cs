@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_question_inside_roster_that_has_substitutions_references_with_deeper_roster_level_and_rosters_have_different_roster_size_questions : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var rosterGroupId1 = Guid.Parse("AAAAAAAAAAAAAAAA1111111111111111");
             var rosterGroupId2 = Guid.Parse("AAAAAAAAAAAAAAAA2222222222222222");
             var rosterSizeQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
@@ -59,30 +58,31 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             });
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_1_message = () =>
+        [NUnit.Framework.Test] public void should_return_1_message () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_message_with_code__WB0019 = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_code__WB0019 () =>
             verificationMessages.Single().Code.ShouldEqual("WB0019");
 
-        It should_return_message_with_two_references = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_two_references () =>
             verificationMessages.Single().References.Count().ShouldEqual(2);
 
-        It should_return_first_message_reference_with_type_Question = () =>
+        [NUnit.Framework.Test] public void should_return_first_message_reference_with_type_Question () =>
             verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_first_message_reference_with_id_of_underDeeperPropagationLevelQuestionId = () =>
+        [NUnit.Framework.Test] public void should_return_first_message_reference_with_id_of_underDeeperPropagationLevelQuestionId () =>
             verificationMessages.Single().References.First().Id.ShouldEqual(questionWithSubstitutionsId);
 
-        It should_return_last_message_reference_with_type_Question = () =>
+        [NUnit.Framework.Test] public void should_return_last_message_reference_with_type_Question () =>
             verificationMessages.Single().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_last_message_reference_with_id_of_underDeeperPropagationLevelQuestionVariableName = () =>
+        [NUnit.Framework.Test] public void should_return_last_message_reference_with_id_of_underDeeperPropagationLevelQuestionVariableName () =>
             verificationMessages.Single().References.Last().Id.ShouldEqual(underDeeperRosterLevelQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

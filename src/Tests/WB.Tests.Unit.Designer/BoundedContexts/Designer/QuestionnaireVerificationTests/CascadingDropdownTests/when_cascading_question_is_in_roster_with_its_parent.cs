@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_cascading_question_is_in_roster_with_its_parent: QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             parentSingleOptionQuestionId = Guid.Parse("9E96D4AB-DF91-4FC9-9585-23FA270B25D7");
             childCascadedComboboxId = Guid.Parse("C6CC807A-3E81-406C-A110-1044AE3FD89B");
 
@@ -61,11 +60,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 );
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => verificationErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+        private void BecauseOf() => verificationErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_not_return_WB0084_verification_error = () => verificationErrors.ShouldNotContainError("WB0084");
+        [NUnit.Framework.Test] public void should_not_return_WB0084_verification_error () => verificationErrors.ShouldNotContainError("WB0084");
 
         static QuestionnaireDocument questionnaire;
         static Guid childCascadedComboboxId;

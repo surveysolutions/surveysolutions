@@ -69,22 +69,6 @@ namespace WB.UI.Shared.Enumerator.Activities
             }
         }
 
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-
-            if (IsFinishing)
-            {
-                var messenger = Mvx.Resolve<IMvxMessenger>();
-                messenger.Unsubscribe<SectionChangeMessage>(this.sectionChangeSubscriptionToken);
-                messenger.Unsubscribe<InterviewCompletedMessage>(this.interviewCompleteActivityToken);
-
-                this.ViewModel.Sections.Dispose();
-
-                this.Dispose();
-            }
-        }
-
         private void OnSectionChange(SectionChangeMessage msg) =>
             Mvx.Resolve<IMvxMainThreadDispatcher>().RequestMainThreadAction(() =>
             {

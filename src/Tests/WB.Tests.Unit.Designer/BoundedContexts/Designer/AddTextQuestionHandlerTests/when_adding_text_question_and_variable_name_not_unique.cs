@@ -9,15 +9,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
 {
     internal class when_adding_text_question_and_variable_name_not_unique : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddTextQuestion(Guid.NewGuid(), chapterId, responsibleId, variableName:notUniqueVariableName);
-            
-        };
+            BecauseOf();
 
-        Because of = () =>
+        }
+
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.AddTextQuestion(
                     questionId: questionId,
@@ -34,10 +34,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
                      mask: null,
                     responsibleId: responsibleId));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__variable__should__unique__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__variable__should__unique__ () =>
             new[] { "variable", "should", "unique" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 

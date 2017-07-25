@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultimediaQuesti
 {
     internal class when_updating_multimedia_question_and_all_parameters_is_specified : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddTextQuestion(
@@ -22,9 +21,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultimediaQuesti
                 enablementCondition : "old condition",
                 responsibleId : responsibleId
             );
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
                 questionnaire.UpdateMultimediaQuestion(questionId: questionId, title: "title",
                     variableName: "multimedia_question",
                     variableLabel: variableName, enablementCondition: condition, hideIfDisabled: hideIfDisabled, instructions: instructions,
@@ -32,27 +32,27 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultimediaQuesti
 
 
 
-        It should_contains_question_with_QuestionId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_QuestionId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .PublicKey.ShouldEqual(questionId);
 
-        It should_contains_question_with_variable_name_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_variable_name_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .VariableLabel.ShouldEqual(variableName);
 
-        It should_contains_question_with_title_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_title_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .QuestionText.ShouldEqual(title);
 
-        It should_contains_question_with_condition_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_condition_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .ConditionExpression.ShouldEqual(condition);
 
-        It should_contains_question_with_hideIfDisabled_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_hideIfDisabled_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .HideIfDisabled.ShouldEqual(hideIfDisabled);
 
-        It should_contains_question_with_instructions_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_instructions_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .Instructions.ShouldEqual(instructions);
 

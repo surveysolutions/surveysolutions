@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_moving_group_from_roster_with_roster_title_question_to_group : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddGroup(groupId, chapterId, responsibleId: responsibleId);
@@ -24,25 +23,26 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             questionnaire.UpdateGroup(rosterId, responsibleId, "test_title", "", rosterSizeQuestionId, "", null, false, true,
                 RosterSizeSourceType.Question, null, rosterTitleQuestionId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.MoveGroup(groupFromRosterId, groupId, 0, responsibleId));
         
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__roster__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__roster__ () =>
             exception.Message.ToLower().ShouldContain("roster");
 
-        It should_throw_exception_with_message_containting__title__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__title__ () =>
             exception.Message.ToLower().ShouldContain("title");
 
-        It should_throw_exception_with_message_containting__question__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__question__ () =>
             exception.Message.ToLower().ShouldContain("question");
 
-        It should_throw_exception_with_message_containting__in__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__in__ () =>
             exception.Message.ToLower().ShouldContain("in");
 
         private static Questionnaire questionnaire;

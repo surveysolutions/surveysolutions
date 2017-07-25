@@ -248,4 +248,11 @@
     <value>Назначить</value>
     <comment>Назначить</comment>
   </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Ок</value>
+    <comment>Ок</comment>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Скачать</value>
+  </data>
 </root>

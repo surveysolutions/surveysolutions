@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
+using Main.Core.Events;
+using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -22,6 +24,14 @@ namespace WB.Tests.Abc.TestFactories
 
         public AnswersDeclaredInvalid AnswersDeclaredInvalid(Identity[] questions)
             => new AnswersDeclaredInvalid(questions);
+
+
+        public AggregateRootEvent AggregateRootEvent(WB.Core.Infrastructure.EventBus.IEvent evnt)
+        {
+            var rnd = new Random();
+            return new AggregateRootEvent(new CommittedEvent(Guid.NewGuid(), "origin", Guid.NewGuid(), Guid.NewGuid(),
+                rnd.Next(1, 10000000), DateTime.UtcNow, rnd.Next(1, 1000000), evnt));
+        }
 
         public AnswersDeclaredInvalid AnswersDeclaredInvalid(IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedConditions)
             => new AnswersDeclaredInvalid(failedConditions);
@@ -227,7 +237,7 @@ namespace WB.Tests.Abc.TestFactories
                 new ChangedRosterInstanceTitleDto(
                     new RosterInstance(
                         rosterId ?? Guid.NewGuid(),
-                        outerRosterVector ?? rosterVector?.WithoutLast().ToArray() ?? RosterVector.Empty,
+                        outerRosterVector ?? rosterVector?.Shrink() ?? RosterVector.Empty,
                         instanceId ?? rosterVector?.Last() ?? 0.0m),
                     rosterTitle ?? "title")
             });
@@ -358,5 +368,9 @@ namespace WB.Tests.Abc.TestFactories
         public QuestionsMarkedAsReadonly QuestionsMarkedAsReadonly(params Identity[] questions)
             => new QuestionsMarkedAsReadonly(questions);
 
+        public InterviewKeyAssigned InterviewKeyAssigned(InterviewKey existingInterviewKey = null)
+        {
+            return new InterviewKeyAssigned(existingInterviewKey ?? new InterviewKey(111));
+        }
     }
 }

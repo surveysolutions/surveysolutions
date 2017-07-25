@@ -2,33 +2,33 @@ using System;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Resources;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTests
 {
     internal class when_saving_lookup_table_with_very_big_decimal_rowcode_that_can_be_converted_to_long
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             fileContent =
                 $"rowcode{_}min{_}max{_end}" +
                 $"9223372036854775808{_}1{_}10{_end}"+
                 $"10{_}50{_}100{_end}";
 
             lookupTableService = Create.LookupTableService();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 lookupTableService.SaveLookupTableContent(questionnaireId, lookupTableId, fileContent));
 
-        It should_throw_exception = () =>
+        [NUnit.Framework.Test] public void should_throw_exception () =>
             exception.ShouldNotBeNull();
 
-        It should_throw_ArgumentException = () =>
+        [NUnit.Framework.Test] public void should_throw_ArgumentException () =>
             exception.ShouldBeOfExactType<ArgumentException>();
 
-        It should_throw_ArgumentException_with_correct_message = () =>
+        [NUnit.Framework.Test] public void should_throw_ArgumentException_with_correct_message () =>
             ((ArgumentException)exception).Message.ShouldEqual(string.Format(ExceptionMessages.LookupTables_rowcode_value_cannot_be_parsed, "9223372036854775808", "rowcode", 1));
 
         private static Exception exception;

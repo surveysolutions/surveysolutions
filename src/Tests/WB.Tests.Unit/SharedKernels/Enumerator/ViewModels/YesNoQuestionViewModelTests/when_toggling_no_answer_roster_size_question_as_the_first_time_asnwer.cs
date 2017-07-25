@@ -4,14 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
-using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
@@ -66,7 +64,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             viewModel.Options.First().Selected = false;
         };
 
-        Because of = () => viewModel.ToggleAnswerAsync(viewModel.Options.First()).WaitAndUnwrapException();
+        Because of = () => viewModel.ToggleAnswerAsync(viewModel.Options.First()).Wait();
 
         It should_send_answering_command = () =>
             answeringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerQuestionCommand>()), Times.Once);

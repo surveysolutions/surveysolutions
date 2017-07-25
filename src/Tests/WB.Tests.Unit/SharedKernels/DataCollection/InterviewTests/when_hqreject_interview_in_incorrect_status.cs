@@ -1,6 +1,5 @@
 ﻿using System;
 using Machine.Specifications;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;

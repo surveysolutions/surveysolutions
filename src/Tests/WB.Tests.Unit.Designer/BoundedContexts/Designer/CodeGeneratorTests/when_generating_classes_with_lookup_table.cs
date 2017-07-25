@@ -7,14 +7,13 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
 {
     internal class when_generating_classes_with_lookup_table : CodeGeneratorTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             AssemblyContext.SetupServiceLocator();
 
             var lookupTableContent = Create.LookupTableContent(new[] { "min", "max" },
@@ -53,27 +52,28 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             questionnaire.LookupTables.Add(lookupId, Create.LookupTable("price"));
 
             generator = Create.CodeGenerator();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             generatedClassContent = generator.Generate(questionnaire, version);
 
-        It should_generate_class_for_lookup_tables_with_correct_key = () =>
+        [NUnit.Framework.Test] public void should_generate_class_for_lookup_tables_with_correct_key () =>
             generatedClassContent.Keys.ShouldContain(lookupTableClassName);
 
-        It should_generate_class_for_lookup_tables = () =>
+        [NUnit.Framework.Test] public void should_generate_class_for_lookup_tables () =>
             generatedClassContent[lookupTableClassName].ShouldContain("public static class LookupTables");
 
-        It should_generate_class_for_Price = () =>
+        [NUnit.Framework.Test] public void should_generate_class_for_Price () =>
             generatedClassContent[lookupTableClassName].ShouldContain("public class @Lookup__Price");
 
-        It should_generate_class_constructor_for_Price = () =>
+        [NUnit.Framework.Test] public void should_generate_class_constructor_for_Price () =>
             generatedClassContent[lookupTableClassName].ShouldContain("public @Lookup__Price(decimal rowcode, double? min,double? max)");
 
-        It should_generate_lookup_table_price = () =>
+        [NUnit.Framework.Test] public void should_generate_lookup_table_price () =>
             generatedClassContent[lookupTableClassName].ShouldContain("public static Dictionary<decimal, @Lookup__Price> price");
 
-        It should_generate_lookup_table_field_price = () =>
+        [NUnit.Framework.Test] public void should_generate_lookup_table_field_price () =>
             generatedClassContent[lookupTableClassName].ShouldContain("private static readonly Dictionary<decimal, @Lookup__Price> @__price = @Lookup__Price_Generator.GetTable();");
 
 

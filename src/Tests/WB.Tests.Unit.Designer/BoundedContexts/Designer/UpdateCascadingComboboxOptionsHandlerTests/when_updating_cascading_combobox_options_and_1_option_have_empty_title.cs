@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateCascadingCombobo
 {
     internal class when_updating_cascading_combobox_options_and_1_option_have_empty_title : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddSingleOptionQuestion(
@@ -35,16 +34,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateCascadingCombobo
                 variableName: "q2",
                 isFilteredCombobox: false,
                 cascadeFromQuestionId: parentQuestionId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateCascadingComboboxOptions(questionId: questionId, responsibleId: responsibleId, options: options));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__title_empty__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__title_empty__ () =>
              new[] { "title", "empty" }.ShouldEachConformTo(
                     keyword => exception.Message.ToLower().Contains(keyword));
 

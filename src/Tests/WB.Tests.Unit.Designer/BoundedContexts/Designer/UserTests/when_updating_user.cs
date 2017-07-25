@@ -5,30 +5,30 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UserTests
 {
     internal class when_updating_user : UserTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             userName = "user name";
             userEmail = "user@e.mail";
             comment = "some comment";
             passwordQuestion = "secret question";
 
             user = CreateUser();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             user.Update(userName: userName, comment: comment, email: userEmail, passwordQuestion: passwordQuestion, isLockedOut: false,
                 isConfirmed: false, canImportOnHq: false);
 
-        It should_set_UserName_equal_to_userName = () =>
+        [NUnit.Framework.Test] public void should_set_UserName_equal_to_userName () =>
                 user.UserName.ShouldEqual(userName);
 
-        It should_set_Email_equal_to_userEmail = () =>
+        [NUnit.Framework.Test] public void should_set_Email_equal_to_userEmail () =>
                 user.Email.ShouldEqual(userEmail);
 
-        It should_set_Comment_equal_to_comment = () =>
+        [NUnit.Framework.Test] public void should_set_Comment_equal_to_comment () =>
                 user.Comment.ShouldEqual(comment);
         
-        It should_set_PasswordQuestion_equal_to_passwordQuestion = () =>
+        [NUnit.Framework.Test] public void should_set_PasswordQuestion_equal_to_passwordQuestion () =>
                 user.PasswordQuestion.ShouldEqual(passwordQuestion);
 
         private static User user;

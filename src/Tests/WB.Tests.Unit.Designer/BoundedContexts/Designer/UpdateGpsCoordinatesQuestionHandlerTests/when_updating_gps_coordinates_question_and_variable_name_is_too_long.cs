@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
 {
     internal class when_updating_gps_coordinates_question_and_variable_name_is_too_long : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddQRBarcodeQuestion(
@@ -26,9 +25,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
                 instructions: "old instructions",
                 enablementCondition: "old condition",
                 responsibleId: responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateGpsCoordinatesQuestion(
                 new UpdateGpsCoordinatesQuestion(
@@ -48,10 +48,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
                     responsibleId: responsibleId,
                     validationConditions: new List<ValidationCondition>())));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__long__variable__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__long__variable__ () =>
             new[] { "long", "name" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_categorical_question_has_more_than_30_options : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             List<Answer> answers = new List<Answer>(31);
             for (int i = 0; i <= 30; i++)
             {
@@ -25,13 +24,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 answers: answers.ToArray()));
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
+        private void BecauseOf() => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
-        It should_contain_WB0210_warning = () => errors.ShouldContainWarning("WB0210");
+        [NUnit.Framework.Test] public void should_contain_WB0210_warning () => errors.ShouldContainWarning("WB0210");
 
-        It should_referece_to_question_with_warning = () =>
+        [NUnit.Framework.Test] public void should_referece_to_question_with_warning () =>
             errors.GetWarning("WB0210").References.ShouldContainOnly(Create.VerificationReference(id: questionId));
 
         static QuestionnaireDocument questionnaire;

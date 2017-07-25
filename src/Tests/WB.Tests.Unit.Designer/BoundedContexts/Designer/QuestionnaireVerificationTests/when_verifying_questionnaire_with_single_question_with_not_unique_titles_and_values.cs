@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_single_question_with_not_unique_titles_and_values : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             singleQuestionId = Guid.Parse("10000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument(
                 Create.SingleOptionQuestion(
@@ -28,33 +27,34 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             ));
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_2_messages = () =>
+        [NUnit.Framework.Test] public void should_return_2_messages () =>
             verificationMessages.Count().ShouldEqual(2);
 
-        It should_return_message_with_code__WB0022 = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_code__WB0022 () =>
             verificationMessages.Select(x => x.Code).ShouldContainOnly("WB0072", "WB0073");
 
-        It should_return_first_error_with_1_references = () =>
+        [NUnit.Framework.Test] public void should_return_first_error_with_1_references () =>
             verificationMessages.First().References.Count().ShouldEqual(1);
 
-        It should_return_second_error_with_1_references = () =>
+        [NUnit.Framework.Test] public void should_return_second_error_with_1_references () =>
             verificationMessages.Last().References.Count().ShouldEqual(1);
 
-        It should_return_first_message_reference_with_type_Question = () =>
+        [NUnit.Framework.Test] public void should_return_first_message_reference_with_type_Question () =>
             verificationMessages.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_second_message_reference_with_type_Question = () =>
+        [NUnit.Framework.Test] public void should_return_second_message_reference_with_type_Question () =>
             verificationMessages.Last().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_first_message_reference_with_id_equals_singleQuestionId = () =>
+        [NUnit.Framework.Test] public void should_return_first_message_reference_with_id_equals_singleQuestionId () =>
             verificationMessages.First().References.First().Id.ShouldEqual(singleQuestionId);
 
-        It should_return_second_message_reference_with_id_equals_singleQuestionId = () =>
+        [NUnit.Framework.Test] public void should_return_second_message_reference_with_id_equals_singleQuestionId () =>
             verificationMessages.Last().References.First().Id.ShouldEqual(singleQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

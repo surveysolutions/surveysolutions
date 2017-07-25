@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Configuration;
+using System.Data.Entity;
 using Npgsql;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.UI.Headquarters.Migrations.PlainStore;
+using WB.UI.Headquarters.Migrations.Users;
 
 namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 {
@@ -45,6 +48,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
             }
 
             DatabaseManagement.InitDatabase(connectionStringBuilder.ConnectionString, schemaName);
+            DatabaseManagement.InitDatabase(connectionStringBuilder.ConnectionString, "users");
 
             switch (dbType)
             {

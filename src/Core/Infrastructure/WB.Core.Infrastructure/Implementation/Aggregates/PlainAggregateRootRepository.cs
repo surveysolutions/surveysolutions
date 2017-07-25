@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 
 namespace WB.Core.Infrastructure.Implementation.Aggregates
@@ -22,7 +22,7 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 
             object specificRepository = GetSpecificRepositoryOrThrow(aggregateRootType, specificRepositoryType);
 
-            MethodInfo methodInfo = specificRepositoryType.GetMethod(nameof(IPlainAggregateRootRepository<IPlainAggregateRoot>.Get));
+            MethodInfo methodInfo = specificRepositoryType.GetTypeInfo().GetMethod(nameof(IPlainAggregateRootRepository<IPlainAggregateRoot>.Get));
 
             return methodInfo.Invoke(specificRepository, new object[] { aggregateId }) as IPlainAggregateRoot;
         }
@@ -35,7 +35,7 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 
             object specificRepository = GetSpecificRepositoryOrThrow(aggregateRootType, specificRepositoryType);
 
-            MethodInfo methodInfo = specificRepositoryType.GetMethod(nameof(IPlainAggregateRootRepository<IPlainAggregateRoot>.Save));
+            MethodInfo methodInfo = specificRepositoryType.GetTypeInfo().GetMethod(nameof(IPlainAggregateRootRepository<IPlainAggregateRoot>.Save));
 
             methodInfo.Invoke(specificRepository, new object[] { aggregateRoot });
         }

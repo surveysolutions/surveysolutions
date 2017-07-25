@@ -75,7 +75,7 @@
         } else {
             self.errors.showAllMessages();
             return false;
-        };
+        }
     };
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.NewAssignment, Supervisor.VM.BasePage);

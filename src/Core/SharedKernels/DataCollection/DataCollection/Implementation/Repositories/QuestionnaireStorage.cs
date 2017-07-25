@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 {
-    internal class QuestionnaireStorage : IQuestionnaireStorage
+    public class QuestionnaireStorage : IQuestionnaireStorage
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> repository;
         private readonly ITranslationStorage translationStorage;

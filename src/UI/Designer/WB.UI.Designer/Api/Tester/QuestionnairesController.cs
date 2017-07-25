@@ -13,7 +13,6 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.UI.Designer.Api.Attributes;
-using QuestionnaireListItem = WB.Core.SharedKernels.SurveySolutions.Api.Designer.QuestionnaireListItem;
 
 namespace WB.UI.Designer.Api.Tester
 {
@@ -94,7 +93,7 @@ namespace WB.UI.Designer.Api.Tester
             var questionnaire = questionnaireView.Source.Clone();
             questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(questionnaireView.Source.AsReadOnly());
             questionnaire.Macros = null;
-            questionnaire.IsUsingExpressionStorage = true;
+            questionnaire.IsUsingExpressionStorage = versionToCompileAssembly > 19;
 
             return new Questionnaire
             {
@@ -115,7 +114,7 @@ namespace WB.UI.Designer.Api.Tester
 
             var questionnaireViews = this.viewFactory.GetUserQuestionnaires(userId, isAdmin, pageIndex, pageSize);
 
-            var questionnaires = questionnaireViews.Select(questionnaire => new QuestionnaireListItem
+            var questionnaires = questionnaireViews.Select(questionnaire => new TesterQuestionnaireListItem
             {
                 Id = questionnaire.QuestionnaireId,
                 Title = questionnaire.Title,

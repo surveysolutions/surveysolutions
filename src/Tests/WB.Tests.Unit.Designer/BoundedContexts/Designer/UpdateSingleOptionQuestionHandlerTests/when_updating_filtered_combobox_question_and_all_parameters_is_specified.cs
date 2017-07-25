@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
 {
     internal class when_updating_filtered_combobox_question_and_all_parameters_is_specified : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddSingleOptionQuestion(
@@ -32,9 +31,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                 linkedToQuestionId: null,
                 isFilteredCombobox: false,
                 cascadeFromQuestionId: null);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             questionnaire.UpdateSingleOptionQuestion(
                 questionId: questionId,
                 title: title,
@@ -61,62 +61,62 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                 linkedFilterExpression: null, properties: Create.QuestionProperties());
 
 
-        It should_contains_question = () =>
+        [NUnit.Framework.Test] public void should_contains_question () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId).ShouldNotBeNull();
 
-        It should_contains_question_with_QuestionId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_QuestionId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .PublicKey.ShouldEqual(questionId);
 
-        It should_contains_question_with_variable_name_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_variable_name_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .StataExportCaption.ShouldEqual(variableName);
 
-        It should_contains_question_with_title_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_title_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .QuestionText.ShouldEqual(title);
 
-        It should_contains_question_with_condition_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_condition_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .ConditionExpression.ShouldEqual(enablementCondition);
 
-        It should_contains_question_with_hideIfDisabled_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_hideIfDisabled_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .HideIfDisabled.ShouldEqual(hideIfDisabled);
 
-        It should_contains_question_with_instructions_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_instructions_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .Instructions.ShouldEqual(instructions);
 
-        It should_contains_question_with_featured_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_featured_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .Featured.ShouldEqual(isPreFilled);
 
-        It should_contains_question_with_scope_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_scope_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .QuestionScope.ShouldEqual(scope);
 
-        It should_contains_question_with_validationExpression_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_validationExpression_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .ValidationConditions.First().Expression.ShouldEqual(validationExpression);
 
-        It should_contains_question_with_validationMessage_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_validationMessage_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .ValidationConditions.First().Message.ShouldEqual(validationMessage);
 
-        It should_contains_question_with_isFilteredCombobox_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_isFilteredCombobox_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .IsFilteredCombobox.ShouldEqual(isFilteredCombobox);
 
-        It should_raise_NewQuestionAdded_event_with_same_options_count_as_specified = () =>
+        [NUnit.Framework.Test] public void should_raise_NewQuestionAdded_event_with_same_options_count_as_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .Answers.Count.ShouldEqual(old_options.Length);
 
-        It should_raise_NewQuestionAdded_event_with_same_option_titles_as_specified = () =>
+        [NUnit.Framework.Test] public void should_raise_NewQuestionAdded_event_with_same_option_titles_as_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .Answers.Select(x => x.AnswerText).ShouldContainOnly(old_options.Select(x => x.Title));
 
-        It should_raise_NewQuestionAdded_event_with_same_option_values_as_specified = () =>
+        [NUnit.Framework.Test] public void should_raise_NewQuestionAdded_event_with_same_option_values_as_specified () =>
            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                .Answers.Select(x => x.AnswerValue).ShouldContainOnly(old_options.Select(x => x.Value));
 

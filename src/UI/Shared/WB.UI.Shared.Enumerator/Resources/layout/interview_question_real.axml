@@ -10,7 +10,8 @@
                                           MaxDigitsAfterDecimal CountOfDecimalPlaces; 
                                           Value Answer; 
                                           FocusValueChanged ValueChangeCommand; 
-                                          Watermark Localization('RealQuestion_Hint');" />
+                                          Watermark Localization('RealQuestion_Hint');
+                                          Tag Format('Answer_{0}', Identity)" />
 
     <include layout="@layout/interview_question__remove_button_input" />
   </LinearLayout>

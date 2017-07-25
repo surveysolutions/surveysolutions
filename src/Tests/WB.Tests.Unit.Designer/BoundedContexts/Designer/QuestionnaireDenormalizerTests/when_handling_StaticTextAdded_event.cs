@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -7,14 +7,13 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.SharedKernels.QuestionnaireEntities;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 {
     internal class when_handling_StaticTextAdded_event : QuestionnaireDenormalizerTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
 
             questionnaireView = CreateQuestionnaireDocument(new[]
             {
@@ -22,24 +21,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             }, creatorId);
 
             questionnaire = CreateQuestionnaireDenormalizer(questionnaire: questionnaireView);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             questionnaire.AddStaticTextAndMoveIfNeeded(new AddStaticText(questionnaireView.PublicKey, entityId, text, creatorId, parentId));
 
-        It should__static_text_be_in_questionnaire_document_view = ()=>
+        [NUnit.Framework.Test] public void should__static_text_be_in_questionnaire_document_view () =>
             GetExpectedStaticText().ShouldNotBeNull();
 
-        It should_PublicKey_be_equal_to_entityId = () =>
+        [NUnit.Framework.Test] public void should_PublicKey_be_equal_to_entityId () =>
            GetExpectedStaticText().PublicKey.ShouldEqual(entityId);
 
-        It should_parent_group_exists_in_questionnaire = () =>
+        [NUnit.Framework.Test] public void should_parent_group_exists_in_questionnaire () =>
            questionnaireView.Find<IGroup>(parentId).ShouldNotBeNull();
 
-        It should_parent_group_contains_static_text = () =>
+        [NUnit.Framework.Test] public void should_parent_group_contains_static_text () =>
            questionnaireView.Find<IGroup>(parentId).Children[0].PublicKey.ShouldEqual(entityId);
 
-        It should_text_be_equal_specified_text = () =>
+        [NUnit.Framework.Test] public void should_text_be_equal_specified_text () =>
             GetExpectedStaticText().Text.ShouldEqual(text);
 
         private static IStaticText GetExpectedStaticText()

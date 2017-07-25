@@ -206,6 +206,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assignment #{0}.
+        /// </summary>
+        public static string AssignmentN {
+            get {
+                return ResourceManager.GetString("AssignmentN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} of audio recording.
+        /// </summary>
+        public static string AudioQuestion_DurationFormat {
+            get {
+                return ResourceManager.GetString("AudioQuestion_DurationFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
@@ -528,6 +546,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interview_Complete_Screen_Description {
             get {
                 return ResourceManager.GetString("Interview_Complete_Screen_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are about to complete interview {0}.
+        /// </summary>
+        public static string Interview_Complete_Screen_DescriptionWithInterviewKey {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Screen_DescriptionWithInterviewKey", resourceCulture);
             }
         }
         
@@ -865,6 +892,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tap to record audio.
+        /// </summary>
+        public static string Interview_Questions_Audio_SaveAnswer {
+            get {
+                return ResourceManager.GetString("Interview_Questions_Audio_SaveAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tap to record GPS.
         /// </summary>
         public static string Interview_Questions_Gps_SaveAnswer {
@@ -928,11 +964,29 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Audio recording.
+        /// </summary>
+        public static string Interviewer_AudioRecording {
+            get {
+                return ResourceManager.GetString("Interviewer_AudioRecording", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Diagnostics.
         /// </summary>
         public static string Interviewer_Diagnostics {
             get {
                 return ResourceManager.GetString("Interviewer_Diagnostics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Done.
+        /// </summary>
+        public static string Interviewer_Done {
+            get {
+                return ResourceManager.GetString("Interviewer_Done", resourceCulture);
             }
         }
         
@@ -978,6 +1032,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interviewer_TryOnlineLogin {
             get {
                 return ResourceManager.GetString("Interviewer_TryOnlineLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview Key: {0}.
+        /// </summary>
+        public static string InterviewKey {
+            get {
+                return ResourceManager.GetString("InterviewKey", resourceCulture);
             }
         }
         
@@ -1050,6 +1113,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string MissingPermissions_Camera {
             get {
                 return ResourceManager.GetString("MissingPermissions_Camera", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application needs to have a permission to use microphone in order to answer this question. Retry answering question and allow access. If you don&apos;t see permissions popup than go to Settings and allow application to use microphone..
+        /// </summary>
+        public static string MissingPermissions_Microphone {
+            get {
+                return ResourceManager.GetString("MissingPermissions_Microphone", resourceCulture);
             }
         }
         

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
-
     [DebuggerDisplay("{ToString()}")]
     public class CheckedYesNoAnswerOption
     {
@@ -20,6 +20,15 @@ namespace WB.Core.SharedKernels.DataCollection
         public bool No => !Yes;
 
         public override string ToString() => $"{this.Value} -> {(this.Yes ? "Yes" : "No")}";
+
+        public static CheckedYesNoAnswerOption Parse(string s)
+        {
+            string[] stringParts = s.Split(new[] {"->"}, StringSplitOptions.RemoveEmptyEntries);
+
+            return new CheckedYesNoAnswerOption(
+                int.Parse(stringParts[0], CultureInfo.InvariantCulture),
+                stringParts[1].Trim().ToLower() == "yes");
+        }
     }
 
     // new type with interger arrays for ExpressionStorage

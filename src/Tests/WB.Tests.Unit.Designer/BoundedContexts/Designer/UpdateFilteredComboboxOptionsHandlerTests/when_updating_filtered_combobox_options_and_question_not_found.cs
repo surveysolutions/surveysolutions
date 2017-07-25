@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateFilteredCombobox
 {
     internal class when_updating_filtered_combobox_options_and_question_not_found : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddQRBarcodeQuestion(
@@ -21,17 +20,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateFilteredCombobox
                 title: "text",
                 variableName: "var"
             );
-            
-        };
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateFilteredComboboxOptions(questionId: questionId, responsibleId: responsibleId, options: options));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__filtered_combobox_cant_be_found__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__filtered_combobox_cant_be_found__ () =>
             new[] { "combo box", "can't be found" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 

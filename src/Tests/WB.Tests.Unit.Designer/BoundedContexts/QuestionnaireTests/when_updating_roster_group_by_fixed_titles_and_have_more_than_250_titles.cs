@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_updating_roster_group_by_fixed_titles_and_have_more_than_250_titles : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             var chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -27,29 +26,30 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             
             questionnaire.AddGroup(parentGroupId, responsibleId: responsibleId);
             questionnaire.AddGroup(groupId, parentGroupId, responsibleId: responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(
                 () =>
                     questionnaire.UpdateGroup(groupId: groupId, responsibleId: responsibleId, title: "title", variableName: null,
                         description: null, condition: null, hideIfDisabled: false, rosterSizeQuestionId: null, isRoster: true,
                         rosterSizeSource: rosterSizeSourceType, rosterFixedTitles: rosterFixedTitles, rosterTitleQuestionId: null));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
 
-        It should_throw_exception_with_message_containting__fixed__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__fixed__ () =>
             exception.Message.ToLower().ShouldContain("fixed");
 
-        It should_throw_exception_with_message_containting__titles__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__titles__ () =>
             exception.Message.ToLower().ShouldContain("titles");
 
-        It should_throw_exception_with_message_containting__more__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__more__ () =>
             exception.Message.ToLower().ShouldContain("more");
 
-        It should_throw_exception_with_message_containting__250__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__250__ () =>
             exception.Message.ToLower().ShouldContain("250");
 
         private static Questionnaire questionnaire;

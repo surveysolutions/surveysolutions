@@ -136,7 +136,7 @@
     <value>Questionnaire</value>
   </data>
   <data name="UnableToImportNewQuestionnaire" xml:space="preserve">
-    <value>Unabile to import new questionnaire:</value>
+    <value>Unable to import new questionnaire:</value>
   </data>
   <data name="UserDesignerCredentials" xml:space="preserve">
     <value>Please sign in with credentials you normally use to access your questionnaires at the Designer site and in the Tester app</value>

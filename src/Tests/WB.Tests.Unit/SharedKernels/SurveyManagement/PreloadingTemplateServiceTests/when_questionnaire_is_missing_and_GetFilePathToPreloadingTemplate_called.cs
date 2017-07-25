@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using It = Machine.Specifications.It;
@@ -18,15 +18,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadingTemplateService
         {
             var exportFileNameService = Mock.Of<IExportFileNameService>(x =>
                 x.GetFileNameForBatchUploadByQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == "template.zip");
-            preloadingTemplateService = CreatePreloadingTemplateService(exportFileNameService: exportFileNameService);
+            assignmentImportTemplateGenerator = CreatePreloadingTemplateService(exportFileNameService: exportFileNameService);
         };
 
-        Because of = () => result = preloadingTemplateService.GetFilePathToPreloadingTemplate(Guid.NewGuid(), 1);
+        Because of = () => result = assignmentImportTemplateGenerator.GetFilePathToPreloadingTemplate(Guid.NewGuid(), 1);
 
         It should_return_be_null = () =>
            result.ShouldBeNull();
 
-        private static PreloadingTemplateService preloadingTemplateService;
+        private static AssignmentImportTemplateGenerator assignmentImportTemplateGenerator;
         private static string result;
     }
 }

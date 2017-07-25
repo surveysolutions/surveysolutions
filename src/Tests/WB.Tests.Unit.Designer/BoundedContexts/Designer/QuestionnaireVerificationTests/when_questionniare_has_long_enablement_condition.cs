@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_questionniare_has_long_enablement_condition : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             groupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
@@ -24,16 +23,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 );
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
+        private void BecauseOf() => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
-        It should_produce_WB0205_warning = () => errors.Count(x => x.Code == "WB0209").ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_produce_WB0205_warning () => errors.Count(x => x.Code == "WB0209").ShouldEqual(2);
 
-        It should_reference_wrong_question = () => 
+        [NUnit.Framework.Test] public void should_reference_wrong_question () => 
             errors.Where(x => x.Code == "WB0209").First().References.ShouldContain(Create.VerificationReference(id: groupId, type: QuestionnaireVerificationReferenceType.Group));
 
-        It should_reference_wrong_group = () =>
+        [NUnit.Framework.Test] public void should_reference_wrong_group () =>
             errors.Where(x => x.Code == "WB0209").Second().References.ShouldContain(Create.VerificationReference(id: questionId));
 
         static Guid questionId;

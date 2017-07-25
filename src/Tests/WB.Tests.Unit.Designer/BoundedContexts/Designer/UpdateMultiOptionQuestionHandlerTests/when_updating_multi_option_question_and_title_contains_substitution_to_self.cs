@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
 {
     internal class when_updating_multi_option_question_and_title_contains_substitution_to_self : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddQRBarcodeQuestion(questionId,
@@ -23,9 +22,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                         variableName: "old_variable_name",
                         instructions: "old instructions",
                         enablementCondition: "old condition");
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
                 questionnaire.UpdateMultiOptionQuestion(
                     questionId: questionId,
                     title: titleWithSubstitutionToSelf,
@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                     validationConditions: new System.Collections.Generic.List<ValidationCondition>(),
                 linkedFilterExpression: null, properties: Create.QuestionProperties());
 
-        It should_update_question_text = () =>
+        [NUnit.Framework.Test] public void should_update_question_text () =>
             questionnaire.QuestionnaireDocument.GetQuestion<MultyOptionsQuestion>(questionId)
                 .QuestionText.ShouldEqual(titleWithSubstitutionToSelf);
 

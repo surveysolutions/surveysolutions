@@ -12,7 +12,10 @@
     margin-top: 0;
     margin-bottom: 0;
     @include translate(-50%,-50%);
-  
+    label{
+        font-weight: normal;
+    }
+
     .left-column{
         padding: 10px 40px 10px 0px;
         text-align: center;
@@ -45,8 +48,8 @@
             margin-bottom: 10px;
             label{
                 @include font(13px, 15px);
-                font-weight: normal;
                 padding-top: 6px;
+                font-weight: normal;                
                 span{
                     color: $blue;
                     font-family: "ufonts_com_lucidaconsole";
@@ -113,6 +116,20 @@
     height: 100%;
     main{
         height: 100%;
+    }
+}
+.hq-apps-wrapper{
+    font-size: 14px;
+    line-height: 16px;
+    color: $gray-highlight-font;
+}
+.additional-info-block{
+    a{
+        color: $gray-highlight-font;
+        text-decoration: underline;
+        &:hover, &:focus{
+            text-decoration: none;
+        }
     }
 }
 @media (max-width: 800px){

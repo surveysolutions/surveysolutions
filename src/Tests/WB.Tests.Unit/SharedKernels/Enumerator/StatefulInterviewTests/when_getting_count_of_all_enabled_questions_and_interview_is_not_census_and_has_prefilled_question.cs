@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Main.Core.Entities.Composite;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Tests.Abc;
 
@@ -21,15 +19,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var suervisorId = Guid.Parse("44444444444444444444444444444444");
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                children: new IComposite[]
-                {
-                    Create.Entity.TextQuestion(questionId, variable: "q1"),
-                    Create.Entity.TextQuestion(prefilledQuestionId, variable: "q2", preFilled: true)
-                });
+                Create.Entity.TextQuestion(questionId, variable: "q1"), 
+                Create.Entity.TextQuestion(prefilledQuestionId, variable: "q2", preFilled: true));
 
             var statefulInterview = Setup.StatefulInterview(questionnaire, false);
-            statefulInterview.CreateInterview(new CreateInterviewCommand(statefulInterview.EventSourceId, responsibleId, questionnaire.PublicKey, 
-                new Dictionary<Guid, AbstractAnswer>(), DateTime.UtcNow, suervisorId, 1, null));
+            statefulInterview.CreateInterview(Create.Command.CreateInterview(
+                statefulInterview.EventSourceId, responsibleId, questionnaire.PublicKey, 1,
+                new List<InterviewAnswer>(), DateTime.UtcNow, suervisorId, null, Create.Entity.InterviewKey(), null));
+
             statefulInterview.AnswerTextQuestion(responsibleId, prefilledQuestionId, RosterVector.Empty, DateTime.UtcNow, "prefilled text");
             statefulInterview.AnswerTextQuestion(responsibleId, questionId, RosterVector.Empty, DateTime.UtcNow, "regular text");
             //act

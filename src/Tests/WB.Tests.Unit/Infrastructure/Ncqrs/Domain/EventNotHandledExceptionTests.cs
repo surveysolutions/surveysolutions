@@ -1,6 +1,5 @@
 ﻿using System;
 using FluentAssertions;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Domain;
 using NUnit.Framework;

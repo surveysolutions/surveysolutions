@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 
@@ -80,7 +81,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
                                     new PreloadedFileMetaData(file.Key, file.Value,
                                         this.permittedFileExtensions.Contains(
                                             this.fileSystemAccessor.GetFileExtension(file.Key))))
-                            .ToArray(), PreloadedContentType.Assignments);
+                            .ToArray(), AssignmentImportType.Assignments);
                 }
                 return null;
             }
@@ -88,7 +89,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             var csvFile = csvFilesInDirectory[0];
             var csvFileName = this.fileSystemAccessor.GetFileName(csvFile);
             return new PreloadedContentMetaData(id, csvFileName,
-                new[] { new PreloadedFileMetaData(csvFileName, this.fileSystemAccessor.GetFileSize(csvFile), true) }, PreloadedContentType.Assignments);
+                new[] { new PreloadedFileMetaData(csvFileName, this.fileSystemAccessor.GetFileSize(csvFile), true) }, AssignmentImportType.Assignments);
         }
 
         public PreloadedContentMetaData GetPreloadedDataMetaInformationForPanelData(string id)
@@ -103,7 +104,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
                         this.fileSystemAccessor.GetFileName(zipFilesInDirectory[0]),
                         this.archiveUtils.GetArchivedFileNamesAndSize(zipFilesInDirectory[0])
                             .Select(file => new PreloadedFileMetaData(file.Key, file.Value, this.permittedFileExtensions.Contains(this.fileSystemAccessor.GetFileExtension(file.Key))))
-                            .ToArray(), PreloadedContentType.Panel);
+                            .ToArray(), AssignmentImportType.Panel);
                 }
                 catch (Exception e)
                 {

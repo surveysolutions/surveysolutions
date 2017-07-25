@@ -1,8 +1,8 @@
-﻿using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Services;
+﻿using WB.Core.GenericSubdomains.Portable.Services;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.UI.Designer.Exceptions
 {

@@ -132,5 +132,12 @@ namespace WB.UI.Headquarters.API.WebInterview
             var command = new CompleteInterviewCommand(this.GetCallerInterview().Id, this.commandResponsibleId, completeInterviewRequest.Comment, DateTime.UtcNow);
             this.commandService.Execute(command);
         }
+
+        public void SendNewComment(string questionIdentity, string comment)
+        {
+            var identity = Identity.Parse(questionIdentity);
+            var command = new CommentAnswerCommand(this.GetCallerInterview().Id, this.commandResponsibleId, identity.Id, identity.RosterVector, DateTime.UtcNow, comment);
+            this.commandService.Execute(command);
+        }
     }
 }

@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 
@@ -16,10 +17,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class InterviewTreeQuestion : InterviewTreeLeafNode, ISubstitutable, IInterviewTreeValidateable
     {
         public InterviewTreeQuestion(Identity identity, 
-            SubstitionText title, 
+            SubstitutionText title, 
             string variableName,
             QuestionType questionType, 
-            object answer, 
+            object answer, // always null here
             IEnumerable<RosterVector> linkedOptions, 
             Guid? cascadingParentQuestionId, 
             bool isYesNo,
@@ -28,14 +29,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             bool isTimestampQuestion = false, 
             Guid? linkedSourceId = null, 
             Identity commonParentRosterIdForLinkedQuestion = null, 
-            SubstitionText[] validationMessages = null,
+            SubstitutionText[] validationMessages = null,
             bool isInterviewerQuestion = true,
             bool isPrefilled = false,
             bool isSupervisors = false,
             bool isHidden = false)
             : base(identity)
         {
-            this.ValidationMessages = validationMessages ?? new SubstitionText[0];
+            this.ValidationMessages = validationMessages ?? new SubstitutionText[0];
             this.Title = title;
             this.VariableName = variableName;
             this.IsInterviewer = isInterviewerQuestion;
@@ -107,6 +108,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             if (cascadingParentQuestionId.HasValue)
                 this.AsCascading = new InterviewTreeCascadingQuestion(this, cascadingParentQuestionId.Value);
+
+            if (questionType == QuestionType.Audio)
+                this.AsAudio = new InterviewTreeAudioQuestion(answer, null);
         }
 
         public InterviewTreeDoubleQuestion AsDouble { get; private set; }
@@ -132,11 +136,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeCascadingQuestion AsCascading { get; private set; }
 
+        public InterviewTreeAudioQuestion AsAudio { get; private set; }
+
         public List<AnswerComment> AnswerComments { get; set; } = new List<AnswerComment>();
 
-        public SubstitionText Title { get; private set; }
+        public SubstitutionText Title { get; private set; }
 
-        public SubstitionText[] ValidationMessages { get; private set; }
+        public SubstitutionText[] ValidationMessages { get; private set; }
         
         public string VariableName { get; }
         public bool IsInterviewer { get; private set; }
@@ -146,15 +152,49 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsReadonly { get; private set; }
         public bool IsValid => !this.FailedValidations?.Any() ?? this.isValidWithoutFailedValidations;
 
+        public void RunImportInvariantsOrThrow(InterviewQuestionInvariants questionInvariants)
+        {
+            if (this.IsText)
+                this.AsText.RunImportInvariants(questionInvariants);
+
+            if (this.IsInteger)
+                this.AsInteger.RunImportInvariants(questionInvariants);
+
+            if (this.IsDouble)
+                this.AsDouble.RunImportInvariants(questionInvariants);
+
+            if (this.IsDateTime)
+                this.AsDateTime.RunImportInvariants(questionInvariants);
+
+            if (this.IsSingleFixedOption)
+                this.AsSingleFixedOption.RunImportInvariants(questionInvariants);
+
+            if (this.IsMultiFixedOption)
+                this.AsMultiFixedOption.RunImportInvariants(questionInvariants);
+
+            if (this.IsTextList)
+                this.AsTextList.RunImportInvariants(questionInvariants);
+
+            if (this.IsGps)
+                this.AsGps.RunImportInvariants(questionInvariants);
+
+            if (this.IsQRBarcode)
+                this.AsQRBarcode.RunImportInvariants(questionInvariants);
+
+            if (this.IsYesNo)
+                this.AsYesNo.RunImportInvariants(questionInvariants);
+        }
+
+
         public IReadOnlyList<FailedValidationCondition> FailedValidations { get; private set; }
 
-        public void SetTitle(SubstitionText title) 
+        public void SetTitle(SubstitutionText title) 
         {
             this.Title = title;
             this.Title.SetTree(this.Tree);
         }
 
-        public void SetValidationMessages(SubstitionText[] validationMessages)
+        public void SetValidationMessages(SubstitutionText[] validationMessages)
         {
             if (validationMessages == null) throw new ArgumentNullException(nameof(validationMessages));
             this.ValidationMessages = validationMessages;
@@ -202,6 +242,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsLinkedToListQuestion => (this.IsMultiLinkedToList || this.IsSingleLinkedToList);
         public bool IsLinked => (this.IsMultiLinkedOption || this.IsSingleLinkedOption);
         public bool IsCascading => this.AsCascading != null;
+        public bool IsAudio => this.AsAudio != null;
 
         public bool IsAnswered()
         {
@@ -221,6 +262,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsSingleLinkedToList) return this.AsSingleLinkedToList.IsAnswered;
             if (this.IsMultiLinkedToList) return this.AsMultiLinkedToList.IsAnswered;
             if (this.IsArea) return this.AsArea.IsAnswered;
+            if (this.IsAudio) return this.AsAudio.IsAnswered;
 
             return false;
         }
@@ -530,6 +572,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.AsMultiLinkedToList?.RemoveAnswer();
             this.AsSingleLinkedToList?.RemoveAnswer();
             this.AsArea?.RemoveAnswer();
+            this.AsAudio?.RemoveAnswer();
         }
 
         public bool IsOnTheSameOrDeeperLevel(Identity questionIdentity)
@@ -548,6 +591,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsMultimedia) clonedQuestion.AsMultimedia = this.AsMultimedia.Clone();
             if (this.IsQRBarcode) clonedQuestion.AsQRBarcode = this.AsQRBarcode.Clone();
             if (this.IsArea) clonedQuestion.AsArea = this.AsArea.Clone();
+            if (this.IsAudio) clonedQuestion.AsAudio = this.AsAudio.Clone();
             if (this.IsSingleFixedOption) clonedQuestion.AsSingleFixedOption = this.AsSingleFixedOption.Clone();
             if (this.IsText) clonedQuestion.AsText = this.AsText.Clone();
             if (this.IsTextList) clonedQuestion.AsTextList = this.AsTextList.Clone();
@@ -655,6 +699,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeDateTimeQuestion Clone() => (InterviewTreeDateTimeQuestion) this.MemberwiseClone();
 
         public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
+
+        public void RunImportInvariants(InterviewQuestionInvariants questionInvariants)
+        {
+            questionInvariants.RequireDateTimePreloadValueAllowed();
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -675,6 +724,33 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool EqualByAnswer(InterviewTreeGpsQuestion question) => question?.answer == this.answer;
 
         public InterviewTreeGpsQuestion Clone() => (InterviewTreeGpsQuestion) this.MemberwiseClone();
+
+        public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
+
+        public void RunImportInvariants(InterviewQuestionInvariants questionInvariants)
+        {
+            questionInvariants.RequireGpsCoordinatesPreloadValueAllowed(answer.Value);
+        }
+    }
+    
+    [DebuggerDisplay("{ToString()}")]
+    public class InterviewTreeAudioQuestion
+    {
+        private AudioAnswer answer;
+
+        public InterviewTreeAudioQuestion(object answer, TimeSpan? length)
+        {
+            this.answer = AudioAnswer.FromString(answer as string, length);
+        }
+
+        public bool IsAnswered => this.answer != null;
+        public AudioAnswer GetAnswer() => this.answer;
+        public void SetAnswer(AudioAnswer answer) => this.answer = answer;
+        public void RemoveAnswer() => this.answer = null;
+
+        public bool EqualByAnswer(InterviewTreeAudioQuestion question) => question?.answer == this.answer;
+
+        public InterviewTreeAudioQuestion Clone() => (InterviewTreeAudioQuestion)this.MemberwiseClone();
 
         public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
     }
@@ -745,6 +821,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeIntegerQuestion Clone() => (InterviewTreeIntegerQuestion)this.MemberwiseClone();
 
         public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
+
+        public void RunImportInvariants(InterviewQuestionInvariants questionInvariants)
+        {
+            questionInvariants.RequireNumericIntegerPreloadValueAllowed(answer.Value);
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -767,6 +848,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeDoubleQuestion Clone() => (InterviewTreeDoubleQuestion)this.MemberwiseClone();
 
         public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
+
+        public void RunImportInvariants(InterviewQuestionInvariants questionInvariants)
+        {
+            questionInvariants.RequireNumericRealPreloadValueAllowed();
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -788,6 +874,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeQRBarcodeQuestion Clone() => (InterviewTreeQRBarcodeQuestion)this.MemberwiseClone();
 
         public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
+
+        public void RunImportInvariants(InterviewQuestionInvariants questionInvariants)
+        {
+            questionInvariants.RequireQRBarcodePreloadValueAllowed();
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -810,6 +901,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeTextQuestion Clone() => (InterviewTreeTextQuestion)this.MemberwiseClone();
 
         public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
+
+        public void RunImportInvariants(InterviewQuestionInvariants questionInvariants)
+        {
+            questionInvariants.RequireTextPreloadValueAllowed();
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -842,6 +938,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeYesNoQuestion Clone() => (InterviewTreeYesNoQuestion) this.MemberwiseClone();
 
         public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
+
+        public void RunImportInvariants(InterviewQuestionInvariants questionInvariants)
+        {
+            questionInvariants.RequireYesNoPreloadValueAllowed(answer);
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -882,6 +983,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeTextListQuestion Clone() => (InterviewTreeTextListQuestion) this.MemberwiseClone();
 
         public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
+
+        public void RunImportInvariants(InterviewQuestionInvariants questionInvariants)
+        {
+            questionInvariants.RequireTextListPreloadValueAllowed(answer.ToTupleArray());
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -908,6 +1014,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeSingleOptionQuestion Clone() => (InterviewTreeSingleOptionQuestion) this.MemberwiseClone();
 
         public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
+
+        public void RunImportInvariants(InterviewQuestionInvariants questionInvariants)
+        {
+            questionInvariants.RequireFixedSingleOptionPreloadValueAllowed(answer.SelectedValue);
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -939,6 +1050,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeMultiOptionQuestion Clone() => (InterviewTreeMultiOptionQuestion) this.MemberwiseClone();
 
         public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
+
+        public void RunImportInvariants(InterviewQuestionInvariants questionInvariants)
+        {
+            questionInvariants.RequireFixedMultipleOptionsPreloadValueAllowed(answer.CheckedValues);
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]

@@ -8,14 +8,13 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Designer.Api;
 using WB.UI.Shared.Web.CommandDeserialization;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
 {
     internal class when_posting_updated_attachment : CommandApiControllerTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var updateAttachmentCommand = Create.Command.AddOrUpdateAttachment(questionnaireId, attachmentId, attachmentContentId, responsibleId, name);
 
             attachmentServiceMock.Setup(x => x.CreateAttachmentContentId(fileBytes)).Returns(attachmentContentId);
@@ -32,20 +31,21 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
                 commandDeserializer: commandDeserializerMock.Object,
                 attachmentService: attachmentServiceMock.Object,
                 commandService: mockOfCommandService.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             controller.UpdateAttachment(new CommandController.AttachmentModel { File = new HttpFile { Buffer = fileBytes, FileName = fileName , MediaType = contentType }, Command = serializedUpdateAttachmentCommand });
 
-        It should_save_attachment_content_with_specified_params = () =>
+        [NUnit.Framework.Test] public void should_save_attachment_content_with_specified_params () =>
             attachmentServiceMock.Verify(
                 x => x.SaveContent(attachmentContentId, contentType, fileBytes), Times.Once);
 
-        It should_save_attachment_meta_with_specified_params = () =>
+        [NUnit.Framework.Test] public void should_save_attachment_meta_with_specified_params () =>
             attachmentServiceMock.Verify(
                 x => x.SaveMeta(attachmentId, questionnaireId, attachmentContentId, fileName), Times.Once);
 
-        It should_execute_AddOrUpdateAttachment_command = () =>
+        [NUnit.Framework.Test] public void should_execute_AddOrUpdateAttachment_command () =>
             mockOfCommandService.Verify(
                 x => x.Execute(Moq.It.IsAny<AddOrUpdateAttachment>(), Moq.It.IsAny<string>()), Times.Once);
 

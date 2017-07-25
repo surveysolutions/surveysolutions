@@ -44,14 +44,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
         };
 
-        Because of = () =>
-            cascadingModel.SelectedObject = null;
+        Because of = () => cascadingModel.ShowErrorIfNoAnswerCommand.Execute(null);
 
         It should_not_send_answer_command = () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Never);
 
-        It should_set_not_null_SelectedObject = () =>
-            cascadingModel.SelectedObject.ShouldBeNull();
+        It should_show_validation_message = () =>
+            QuestionStateMock.Verify(x=>x.Validity.MarkAnswerAsNotSavedWithMessage(Moq.It.IsAny<string>()), Times.Once);
         
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
     }

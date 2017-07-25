@@ -18,5 +18,9 @@
         style="@style/Interview_Question_Comments_InterviewerDetails_Editor"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        local:MvxBind="Text InterviewerComment; Visible IsCommentInEditMode; FocusValueChanged InterviewerCommentChangeCommand; SetFocus IsCommentInEditMode" />
+        local:MvxBind="Text InterviewerComment; 
+                       Visible IsCommentInEditMode; 
+                       FocusValueChanged InterviewerCommentChangeCommand; 
+                       SetFocus IsCommentInEditMode;
+                       Tag Format('Comment_Input_{0}', Identity)" />
 </LinearLayout>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
 {
     internal class when_updating_gps_coordinates_question_and_all_parameters_is_specified : QuestionnaireTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddQRBarcodeQuestion(
@@ -25,9 +24,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
                 instructions: "old instructions",
                 enablementCondition: "old condition",
                 responsibleId: responsibleId);
-        };
+            BecauseOf();
+        }
 
-        private Because of = () =>
+        private void BecauseOf() =>
             questionnaire.UpdateGpsCoordinatesQuestion(
                 new UpdateGpsCoordinatesQuestion(
                     questionnaire.Id,
@@ -49,35 +49,35 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
                     responsibleId: responsibleId,
                     validationConditions: new List<ValidationCondition>()));
 
-        It should_contains_question_with_QuestionId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_QuestionId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .PublicKey.ShouldEqual(questionId);
 
-        It should_contains_question_with_variable_name_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_variable_name_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .StataExportCaption.ShouldEqual(variableName);
 
-        It should_contains_question_with_variable_label_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_variable_label_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .VariableLabel.ShouldEqual(variableLabel);
 
-        It should_contains_question_with_title_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_title_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .QuestionText.ShouldEqual(title);
 
-        It should_contains_question_with_condition_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_condition_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .ConditionExpression.ShouldEqual(enablementCondition);
 
-        It should_contains_question_with_hideIfDisabled_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_hideIfDisabled_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .HideIfDisabled.ShouldEqual(hideIfDisabled);
 
-        It should_contains_question_with_instructions_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_instructions_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .Instructions.ShouldEqual(instructions);
 
-        It should_contains_question_with_scope_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_scope_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .QuestionScope.ShouldEqual(scope);
 

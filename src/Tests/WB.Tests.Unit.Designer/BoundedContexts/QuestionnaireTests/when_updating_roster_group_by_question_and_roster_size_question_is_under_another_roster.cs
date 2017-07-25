@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -8,8 +8,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_updating_roster_group_by_question_and_roster_size_question_is_under_another_roster : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             var chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             var anotherRosterId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
@@ -22,21 +21,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             
             questionnaire.AddNumericQuestion(rosterSizeQuestionId, isInteger : true, parentId: anotherRosterId , responsibleId:responsibleId);
             questionnaire.AddGroup(groupId, anotherRosterId, responsibleId: responsibleId);
-        };
+            BecauseOf();
+        }
 
 
-        Because of = () =>
+        private void BecauseOf() =>
                 questionnaire.UpdateGroup(groupId, responsibleId, "title",null, rosterSizeQuestionId, null, null, hideIfDisabled: false, isRoster: true,
                     rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
-        It should_raise_GroupBecameARoster_event = () =>
+        [NUnit.Framework.Test] public void should_raise_GroupBecameARoster_event () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId);
 
-        It should_raise_GroupBecameARoster_event_with_GroupId_specified = () =>
+        [NUnit.Framework.Test] public void should_raise_GroupBecameARoster_event_with_GroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
                 .PublicKey.ShouldEqual(groupId);
 
-        It should_raise_RosterChanged_event_with_GroupId_specified = () =>
+        [NUnit.Framework.Test] public void should_raise_RosterChanged_event_with_GroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
                 .IsRoster.ShouldBeTrue();
 

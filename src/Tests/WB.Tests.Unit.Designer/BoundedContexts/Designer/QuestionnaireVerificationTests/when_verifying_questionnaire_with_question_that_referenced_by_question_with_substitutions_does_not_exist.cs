@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_question_that_referenced_by_question_with_substitutions_does_not_exist : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionWithNotExistingSubstitutionsId = Guid.Parse("10000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument(new SingleQuestion()
             {
@@ -24,27 +23,28 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             });
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_1_message = () =>
+        [NUnit.Framework.Test] public void should_return_1_message () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_message_with_code__WB0017 = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_code__WB0017 () =>
             verificationMessages.Single().Code.ShouldEqual("WB0017");
 
-        It should_return_message_with_level_general = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_level_general () =>
             verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
-        It should_return_message_with_1_references = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_1_references () =>
             verificationMessages.Single().References.Count().ShouldEqual(1);
 
-        It should_return_message_reference_with_type_Question = () =>
+        [NUnit.Framework.Test] public void should_return_message_reference_with_type_Question () =>
             verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_message_reference_with_id_of_questionWithNotExistingSubstitutionsId = () =>
+        [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_questionWithNotExistingSubstitutionsId () =>
             verificationMessages.Single().References.First().Id.ShouldEqual(questionWithNotExistingSubstitutionsId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

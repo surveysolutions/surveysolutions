@@ -7,13 +7,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
 {
     public class InterviewDataExportView : IReadSideRepositoryEntity
     {
-        private InterviewDataExportView(InterviewDataExportLevelView[] levels)
+        public InterviewDataExportView(Guid interviewId,InterviewDataExportLevelView[] levels)
         {
-            this.Levels = levels;
-        }
-
-        public InterviewDataExportView(Guid interviewId, InterviewDataExportLevelView[] levels)
-        {
+            //this.InterviewKey = interviewKey;
             this.InterviewId = interviewId;
             this.Levels = levels;
         }

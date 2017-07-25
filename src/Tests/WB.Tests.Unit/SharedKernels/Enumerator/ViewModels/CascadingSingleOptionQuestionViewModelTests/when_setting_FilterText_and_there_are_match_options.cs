@@ -1,24 +1,22 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Moq;
-using Nito.AsyncEx.Synchronous;
-using WB.Core.Infrastructure.PlainStorage;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
     internal class when_setting_FilterText_and_there_are_match_options : CascadingSingleOptionQuestionViewModelTestContext
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public async Task context()
         {
             SetUp();
 
@@ -43,28 +41,26 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 questionnaireRepository: questionnaireRepository);
 
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
-        };
+            await Becauseof();
+        }
 
-        Because of = () =>
-            cascadingModel.FilterText = "a";
-        
-        It should_set_filter_text = () =>
-            cascadingModel.FilterText.ShouldEqual("a");
+        public Task Becauseof() => cascadingModel.FilterCommand.ExecuteAsync("a");
 
-        It should_set_not_empty_list_in_AutoCompleteSuggestions = () =>
-            cascadingModel.AutoCompleteSuggestions.ShouldNotBeEmpty();
+        [Test]
+        public void should_set_filter_text() =>
+            cascadingModel.FilterText.Should().Be("a");
 
-        It should_set_1_options_in_AutoCompleteSuggestions = () =>
-            cascadingModel.AutoCompleteSuggestions.Count.ShouldEqual(1);
+        [Test]
+        public void should_set_not_empty_list_in_AutoCompleteSuggestions() =>
+            cascadingModel.AutoCompleteSuggestions.Should().NotBeEmpty();
 
-        It should_format_first_option_in_AutoCompleteSuggestions = () =>
-        {
-            var firstOption = cascadingModel.AutoCompleteSuggestions.ElementAt(0);
-            firstOption.Text.ShouldEqual("title <b>a</b>bc 1");
-            firstOption.Value.ShouldEqual(1);
-            firstOption.ParentValue.ShouldEqual(1);
-            firstOption.OriginalText.ShouldEqual("title abc 1");
-        };
+        [Test]
+        public void should_set_1_options_in_AutoCompleteSuggestions() =>
+            cascadingModel.AutoCompleteSuggestions.Should().HaveCount(1);
+
+        [Test]
+        public void should_format_first_option_in_AutoCompleteSuggestions() =>
+            cascadingModel.AutoCompleteSuggestions.Should().HaveElementAt(0, "title <b>a</b>bc 1");
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
     }

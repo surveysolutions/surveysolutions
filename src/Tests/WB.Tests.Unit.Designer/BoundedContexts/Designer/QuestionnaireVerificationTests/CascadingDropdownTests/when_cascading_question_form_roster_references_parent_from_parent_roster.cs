@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_cascading_question_from_roster_references_parent_from_parent_roster : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = Create.QuestionnaireDocument(
                 children: Create.Roster(
                     variable: "roster1",
@@ -44,12 +43,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     })
                 );
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => 
+        private void BecauseOf() => 
             verificationErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_not_return_verification_errors = () => 
+        [NUnit.Framework.Test] public void should_not_return_verification_errors () => 
             verificationErrors.Count().ShouldEqual(0);
 
         static QuestionnaireDocument questionnaire;

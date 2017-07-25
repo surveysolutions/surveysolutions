@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
 {
     internal class when_creating_executor_template_model_for_questionnaire_with_linked_to_list_questions : CodeGeneratorTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
             {
                 Create.TextListQuestion(listQuestionId)   ,
@@ -20,22 +19,23 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             });
 
             expressionStateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             templateModel = expressionStateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, Create.CodeGenerationSettings());
 
-        It should_generate_model_for_single_linked_to_list_question_with_type__nullable_decimal = () =>
+        [NUnit.Framework.Test] public void should_generate_model_for_single_linked_to_list_question_with_type__nullable_decimal () 
         {
             var singleLinkedToList = GetQuestion(singleLinkedToListId);
             singleLinkedToList.TypeName.ShouldEqual("decimal?");
-        };
+        }
 
-        It should_generate_model_for_multi_linked_to_list_question_with_type__decimal = () =>
+        [NUnit.Framework.Test] public void should_generate_model_for_multi_linked_to_list_question_with_type__decimal () 
         {
             var multiLiskedToList = GetQuestion(multiLiskedToListId);
             multiLiskedToList.TypeName.ShouldEqual("decimal[]");
-        };
+        }
 
         private static QuestionTemplateModel GetQuestion(Guid id)
         {

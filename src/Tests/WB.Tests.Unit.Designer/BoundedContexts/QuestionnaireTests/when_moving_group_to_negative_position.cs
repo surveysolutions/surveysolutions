@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -8,8 +8,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_moving_group_to_negative_position : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             groupId = Guid.Parse("21111111111111111111111111111111");
@@ -18,26 +17,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddGroup(groupId, chapterId, responsibleId: responsibleId);
 
-            eventContext = new EventContext();
-        };
 
-        Because of = () => exception = Catch.Exception(() => questionnaire.MoveGroup(chapterId, chapterId, -1, responsibleId));
+            BecauseOf();
+        }
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
+        private void BecauseOf() => exception = Catch.Exception(() => questionnaire.MoveGroup(chapterId, chapterId, -1, responsibleId));
 
-        It should_throw_QuestionnaireException = () =>
+
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__move____group____position____acceptable__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__move____group____position____acceptable__ () =>
           new[] { "move", "section", "position", "acceptable" }.ShouldEachConformTo(
           keyword => exception.Message.ToLower().Contains(keyword));
 
 
-        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid chapterId;
         private static Guid groupId;

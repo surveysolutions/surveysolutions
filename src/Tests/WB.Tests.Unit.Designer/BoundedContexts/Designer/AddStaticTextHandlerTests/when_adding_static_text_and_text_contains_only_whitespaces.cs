@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
@@ -10,21 +10,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddStaticTextHandlerTe
 {
     internal class when_adding_static_text_and_text_contains_only_whitespaces : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId: responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.AddStaticTextAndMoveIfNeeded(
                     new AddStaticText(questionnaire.Id, entityId, "  ", responsibleId, chapterId)));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__empty__text__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__empty__text__ () =>
              new[] { "empty", "text" }.ShouldEachConformTo(
                     keyword => exception.Message.ToLower().Contains(keyword));
 

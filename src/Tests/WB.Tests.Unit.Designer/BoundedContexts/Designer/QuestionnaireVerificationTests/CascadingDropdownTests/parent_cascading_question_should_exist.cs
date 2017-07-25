@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_parent_cascading_question_missing_from_questionnaire : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionId = Guid.NewGuid();
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(new SingleQuestion
             {
@@ -29,16 +28,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             });
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => verificationErrors = Enumerable.ToList<QuestionnaireVerificationMessage>(verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)));
+        private void BecauseOf() => verificationErrors = Enumerable.ToList<QuestionnaireVerificationMessage>(verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)));
 
-        It should_return_WB0086_verification_error = () => verificationErrors.First().Code.ShouldEqual("WB0086");
+        [NUnit.Framework.Test] public void should_return_WB0086_verification_error () => verificationErrors.First().Code.ShouldEqual("WB0086");
 
-        It should_return_reference_to_question = () => 
+        [NUnit.Framework.Test] public void should_return_reference_to_question () => 
             verificationErrors.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_reference_with_id_of_question = () =>
+        [NUnit.Framework.Test] public void should_return_reference_with_id_of_question () =>
             verificationErrors.First().References.First().Id.ShouldEqual(questionId);
 
         static QuestionnaireDocument questionnaire;

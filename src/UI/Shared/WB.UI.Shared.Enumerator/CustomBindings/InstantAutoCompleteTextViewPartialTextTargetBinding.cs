@@ -1,54 +1,19 @@
-﻿using System;
-using System.Reflection;
-using MvvmCross.Binding;
-using MvvmCross.Binding.Droid.Target;
-using MvvmCross.Platform.Droid.WeakSubscription;
-using MvvmCross.Platform.Platform;
+﻿using MvvmCross.Binding;
 using WB.UI.Shared.Enumerator.CustomControls;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
-    public class InstantAutoCompleteTextViewPartialTextTargetBinding
-        : MvxAndroidPropertyInfoTargetBinding<InstantAutoCompleteTextView>
+    public class InstantAutoCompleteTextViewPartialTextTargetBinding : BaseBinding<InstantAutoCompleteTextView, string>
     {
-        private IDisposable _subscription;
-
-        public InstantAutoCompleteTextViewPartialTextTargetBinding(object target, PropertyInfo targetPropertyInfo)
-            : base(target, targetPropertyInfo)
+        public InstantAutoCompleteTextViewPartialTextTargetBinding(InstantAutoCompleteTextView androidControl) : base(androidControl)
         {
-            var autoComplete = this.View;
-            if (autoComplete == null)
-            {
-                MvxBindingTrace.Trace(MvxTraceLevel.Error,
-                    "Error - autoComplete is null in InstantAutoCompleteTextViewPartialTextTargetBinding");
-            }
         }
 
-        private void AutoCompleteOnPartialTextChanged(object sender, EventArgs eventArgs)
+        protected override void SetValueToView(InstantAutoCompleteTextView control, string value)
         {
-            this.FireValueChanged(this.View.PartialText);
+            control.PartialText = value;
         }
 
-        public override MvxBindingMode DefaultMode => MvxBindingMode.OneWayToSource;
-
-        public override void SubscribeToEvents()
-        {
-            var autoComplete = this.View;
-            if (autoComplete == null)
-                return;
-
-            this._subscription = autoComplete.WeakSubscribe(
-                nameof(autoComplete.PartialTextChanged),
-                AutoCompleteOnPartialTextChanged);
-        }
-
-        protected override void Dispose(bool isDisposing)
-        {
-            if (isDisposing)
-            {
-                this._subscription?.Dispose();
-            }
-            base.Dispose(isDisposing);
-        }
+        public override MvxBindingMode DefaultMode => MvxBindingMode.TwoWay;
     }
 }

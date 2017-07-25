@@ -9,25 +9,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.LookupTables
 {
     internal class when_updating_lookup_table_without_premission_to_edit : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: ownerId);
             questionnaire.AddLookupTable(Create.Command.AddLookupTable(questionnaireId, lookupTableId, ownerId));
             questionnaire.AddSharedPerson(sharedPersonId, "email@email.com", ShareType.View, ownerId);
 
             updateLookupTable = Create.Command.UpdateLookupTable(questionnaireId, lookupTableId, sharedPersonId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() => questionnaire.UpdateLookupTable(updateLookupTable));
 
-        It should_throw_exception = () =>
+        [NUnit.Framework.Test] public void should_throw_exception () =>
             exception.ShouldNotBeNull();
 
-        It should_throw_questionnaire_exception = () =>
+        [NUnit.Framework.Test] public void should_throw_questionnaire_exception () =>
             exception.ShouldBeOfExactType(typeof(QuestionnaireException));
 
-        It should_throw_exception_with_type_DoesNotHavePermissionsForEdit = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_type_DoesNotHavePermissionsForEdit () =>
             ((QuestionnaireException)exception).ErrorType.ShouldEqual(DomainExceptionType.DoesNotHavePermissionsForEdit);
 
         private static Exception exception;

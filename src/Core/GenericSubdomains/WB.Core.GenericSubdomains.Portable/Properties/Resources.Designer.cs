@@ -23,7 +23,7 @@ namespace WB.Core.GenericSubdomains.Portable.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -37,7 +37,7 @@ namespace WB.Core.GenericSubdomains.Portable.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.GenericSubdomains.Portable.Properties.Resources", typeof(Resources).GetTypeInfo().Assembly);
@@ -52,7 +52,7 @@ namespace WB.Core.GenericSubdomains.Portable.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -64,43 +64,16 @@ namespace WB.Core.GenericSubdomains.Portable.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Check server settings .
         /// </summary>
-        internal static string CheckServerSettings {
+        public static string CheckServerSettings {
             get {
                 return ResourceManager.GetString("CheckServerSettings", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No connection.
-        /// </summary>
-        internal static string NoConnection {
-            get {
-                return ResourceManager.GetString("NoConnection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Network is unavailable.
-        /// </summary>
-        internal static string NoNetwork {
-            get {
-                return ResourceManager.GetString("NoNetwork", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Timeout.
-        /// </summary>
-        internal static string Timeout {
-            get {
-                return ResourceManager.GetString("Timeout", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Need to update the application.
         /// </summary>
-        internal static string UpdateRequired {
+        public static string UpdateRequired {
             get {
                 return ResourceManager.GetString("UpdateRequired", resourceCulture);
             }

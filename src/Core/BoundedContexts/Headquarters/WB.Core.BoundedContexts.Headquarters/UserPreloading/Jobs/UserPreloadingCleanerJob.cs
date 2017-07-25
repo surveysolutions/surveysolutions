@@ -1,7 +1,7 @@
 ﻿using System;
-using Microsoft.Practices.ServiceLocation;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs

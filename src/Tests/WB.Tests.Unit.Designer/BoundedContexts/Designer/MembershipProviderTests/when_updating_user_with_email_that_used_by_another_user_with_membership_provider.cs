@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
-using It = Machine.Specifications.It;
+
 using MembershipProvider = WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.MembershipProvider;
 using it = Moq.It;
 
@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MembershipProviderTest
 {
     internal class when_updating_user_with_email_that_used_by_another_user_with_membership_provider : MembershipProviderTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             validatedUserEmail = "some@e.mail";
             Guid userIdWithExistingEmail = Guid.Parse("11111111111111111111111111111111");
 
@@ -37,18 +36,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MembershipProviderTest
             membershipProvider = CreateMembershipProvider();
 
             membershipUser = Mock.Of<DesignerMembershipUser>(x => x.Email == validatedUserEmail && (Guid)x.ProviderUserKey == userIdWithExistingEmail);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => exception =
+        private void BecauseOf() => exception =
             Catch.Exception(() => membershipProvider.UpdateUser(membershipUser));
 
-        It should_throw_exception_with_message_containting__e_mail__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__e_mail__ () =>
             exception.Message.ToLower().ShouldContain("e-mail");
 
-        It should_throw_exception_with_message_containting_validated_user_email = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting_validated_user_email () =>
             exception.Message.ShouldContain(validatedUserEmail);
 
-        It should_throw_exception_with_message_containting__exists__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__exists__ () =>
             exception.Message.ToLower().ShouldContain("exists");
 
         private static DesignerMembershipUser membershipUser;

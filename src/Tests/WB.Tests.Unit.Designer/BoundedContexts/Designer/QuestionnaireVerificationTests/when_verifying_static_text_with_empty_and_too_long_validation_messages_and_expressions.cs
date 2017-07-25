@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_static_text_with_empty_and_too_long_validation_messages_and_expressions : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.NumericIntegerQuestion(),
@@ -26,21 +25,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             });
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
-        It should_return_messages_with_codes__WB0104___WB0105___WB0106__ = () =>
+        [NUnit.Framework.Test] public void should_return_messages_with_codes__WB0104___WB0105___WB0106__ () =>
             verificationMessages.Select(message => message.Code).ShouldContain("WB0104", "WB0105", "WB0106");
 
-        It should_return_validation_condition_index_in_message_WB0106 = () =>
+        [NUnit.Framework.Test] public void should_return_validation_condition_index_in_message_WB0106 () =>
             verificationMessages.Single(message => message.Code == "WB0106").Message.ShouldContain("#2");
 
-        It should_return_validation_condition_index_in_message_WB0104 = () =>
+        [NUnit.Framework.Test] public void should_return_validation_condition_index_in_message_WB0104 () =>
             verificationMessages.Single(message => message.Code == "WB0104").Message.ShouldContain("#4");
 
-        It should_return_validation_condition_index_in_message_WB0105 = () =>
+        [NUnit.Framework.Test] public void should_return_validation_condition_index_in_message_WB0105 () =>
             verificationMessages.Single(message => message.Code == "WB0105").Message.ShouldContain("#5");
 
         private static QuestionnaireDocument questionnaire;
