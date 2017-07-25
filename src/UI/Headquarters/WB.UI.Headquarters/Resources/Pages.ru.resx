@@ -1008,6 +1008,15 @@
     <comment>Интервьювер заархерирован</comment>
   </data>
   <data name="InterviewerHq_DiscardConfirm" xml:space="preserve">
-    <value>Вы уверены в том,что хотите удалить интервью полностью?</value>
+    <value>Вы уверены в том,что хотите удалить интервью?</value>
+  </data>
+  <data name="InterviewerHq_DiscardInterview" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="InterviewerHq_OpenInterview" xml:space="preserve">
+    <value>Открыть</value>
+  </data>
+  <data name="InterviewerHq_RestartConfirm" xml:space="preserve">
+    <value>Комментарий</value>
   </data>
 </root>
