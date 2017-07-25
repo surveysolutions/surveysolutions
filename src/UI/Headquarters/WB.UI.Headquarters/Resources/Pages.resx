@@ -1011,10 +1011,10 @@
     <value>Interviewer is archived</value>
   </data>
   <data name="InterviewerHq_DiscardInterview" xml:space="preserve">
-    <value>Discard Interview</value>
+    <value>Discard</value>
   </data>
   <data name="InterviewerHq_OpenInterview" xml:space="preserve">
-    <value>Open Interview</value>
+    <value>Open</value>
   </data>
   <data name="InterviewerHq_RestartInterview" xml:space="preserve">
     <value>Restart Interview</value>
