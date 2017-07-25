@@ -13,7 +13,7 @@
             <FilterBlock>
                 <div class="form-group ">
                     <div class="field">
-                        <input class="form-control with-clear-btn" type="text">
+                        <input class="form-control with-clear-btn" type="text" v-model="restart_comment"/>
                     </div>
                 </div>
             </FilterBlock>
