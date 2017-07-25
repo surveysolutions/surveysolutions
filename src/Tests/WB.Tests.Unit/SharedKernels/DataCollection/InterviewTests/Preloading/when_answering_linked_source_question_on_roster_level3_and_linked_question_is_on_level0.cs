@@ -2,6 +2,8 @@
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
@@ -12,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Preloading
 {
     internal class when_creating_interview_with_preloaded_data_with_nested_rosters : StatefulInterviewTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
@@ -32,18 +34,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Preloading
             });
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaireDocument, shouldBeInitialized: false);
-        };
 
-        Because of = () =>
-            interview.CreateInterviewWithPreloadedData(Create.Command.CreateInterviewWithPreloadedData(new []
+            PreloadedLevelDto[] preloadedLevelDtos = new[]
             {
                 Create.Entity.PreloadedLevelDto(Create.Entity.RosterVector(0, 2, 3),
                     new PreloadedAnswer(textQuestionId, Create.Entity.TextQuestionAnswer("ccc"))),
                 Create.Entity.PreloadedLevelDto(Create.Entity.RosterVector(0, 2, 4),
                     new PreloadedAnswer(textQuestionId, Create.Entity.TextQuestionAnswer("ddd"))),
-                 Create.Entity.PreloadedLevelDto(Create.Entity.RosterVector(0, 2),
+                Create.Entity.PreloadedLevelDto(Create.Entity.RosterVector(0, 2),
                     new PreloadedAnswer(listRosterSizeQuestionId, Create.Entity.ListAnswer(3, 4))),
-                Create.Entity.PreloadedLevelDto(Create.Entity.RosterVector(0), 
+                Create.Entity.PreloadedLevelDto(Create.Entity.RosterVector(0),
                     new PreloadedAnswer(multiRosterSizeQuestionId, Create.Entity.MultiOptionAnswer(1, 2))),
                 Create.Entity.PreloadedLevelDto(Create.Entity.RosterVector(0, 1),
                     new PreloadedAnswer(listRosterSizeQuestionId, Create.Entity.ListAnswer(5, 9))),
@@ -53,7 +53,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Preloading
                     new PreloadedAnswer(textQuestionId, Create.Entity.TextQuestionAnswer("bbb"))),
                 Create.Entity.PreloadedLevelDto(RosterVector.Empty, new PreloadedAnswer(numericRosterSizeQuestionId,
                     Create.Entity.NumericIntegerAnswer(1))),
-            }));
+            };
+
+            command = Create.Command.CreateInterview(Guid.NewGuid(),
+                Guid.NewGuid(), Guid.NewGuid(), 1, new PreloadedDataDto(preloadedLevelDtos).Answers, DateTime.Now, Guid.NewGuid());
+        };
+
+        Because of = () =>
+            interview.CreateInterview(command);
 
         It should_set_answers_for_text_question_on_the_3rd_level = () =>
         {
@@ -80,5 +87,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Preloading
         static readonly Guid multiRosterSizeQuestionId = Guid.Parse("55555555555555555555555555555555");
         static readonly Guid listRosterSizeQuestionId = Guid.Parse("66666666666666666666666666666666");
         static readonly Guid textQuestionId = Guid.Parse("77777777777777777777777777777777");
+
+        static CreateInterview command;
     }
 }

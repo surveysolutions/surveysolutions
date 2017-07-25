@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -8,14 +8,13 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
     internal class when_questionnaire_has_less_then_50_percent_questions_with_variable_labels : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 Create.GpsCoordinateQuestion(questionId: questionId1, variable:"q1"),
@@ -26,13 +25,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
+        private void BecauseOf() => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
-        It should_return_WB0253_warning = () => errors.ShouldContainWarning("WB0253", "Too few variable labels are defined. Add variable labels to improve the usability of exported data and to provide input into metadata for Data Documentation Initiative (DDI) format.");
+        [NUnit.Framework.Test] public void should_return_WB0253_warning () => errors.ShouldContainWarning("WB0253", "Too few variable labels are defined. Add variable labels to improve the usability of exported data and to provide input into metadata for Data Documentation Initiative (DDI) format.");
 
-        It should_not_return_WB0253_warning_for_prefilled_question = () => errors.GetWarnings("WB0253").Count().ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_not_return_WB0253_warning_for_prefilled_question () => errors.GetWarnings("WB0253").Count().ShouldEqual(1);
 
         static QuestionnaireDocument questionnaire;
         static QuestionnaireVerifier verifier;

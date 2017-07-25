@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_moving_group_from_roster_with_roster_title_question_to_roster_that_has_different_roster_size_question_than_source_group : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddNumericQuestion(
@@ -35,17 +34,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             questionnaire.UpdateGroup(sourceRosterId, responsibleId, "rosterTitle", "", rosterSizeQuestion1Id, "", null, false, true,
                 RosterSizeSourceType.Question, null, rosterTitleQuestionId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.MoveGroup(groupFromRosterId, targetGroupId, 0, responsibleId));
         
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__group____could_not_be_moved____roster_size_question____not_the_same__ =
-            () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__group____could_not_be_moved____roster_size_question____not_the_same__ () =>
                 new[] { "group", "could not be moved", "roster size question", "not the same" }.ShouldEachConformTo(
                     keyword => exception.Message.ToLower().Contains(keyword));
 

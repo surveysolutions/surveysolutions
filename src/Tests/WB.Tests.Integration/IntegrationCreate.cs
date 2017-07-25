@@ -6,7 +6,6 @@ using Humanizer;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
@@ -23,6 +22,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus.Implementation;
@@ -115,10 +115,17 @@ namespace WB.Tests.Integration
         {
             var interview = new Interview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
-                Create.Service.SubstitionTextFactory());
+                Create.Service.SubstitutionTextFactory(),
+                Create.Service.InterviewTreeBuilder());
 
-            interview.CreateInterview(new CreateInterviewCommand(interview.EventSourceId, new Guid("F111F111F111F111F111F111F111F111"), questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"), 
-                new Dictionary<Guid, AbstractAnswer>(), new DateTime(2012, 12, 20), new Guid("D222D222D222D222D222D222D222D222"), 1, null));
+            interview.CreateInterview(Create.Command.CreateInterview(
+                interviewId: interview.EventSourceId, 
+                userId: new Guid("F111F111F111F111F111F111F111F111"),
+                questionnaireId: questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
+                version: 1,
+                answers:new List<InterviewAnswer>(),
+                answersTime: new DateTime(2012, 12, 20),
+                supervisorId: new Guid("D222D222D222D222D222D222D222D222")));
 
             return interview;
         }
@@ -131,9 +138,10 @@ namespace WB.Tests.Integration
         {
             var interview = new StatefulInterview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
-                Create.Service.SubstitionTextFactory());
+                Create.Service.SubstitutionTextFactory(),
+                Create.Service.InterviewTreeBuilder());
           
-            interview.CreateInterviewWithPreloadedData(new CreateInterviewWithPreloadedData(
+            interview.CreateInterview(Create.Command.CreateInterview(
                 interviewId: Guid.NewGuid(),
                 userId: Guid.NewGuid(),
                 questionnaireId: questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
@@ -142,8 +150,7 @@ namespace WB.Tests.Integration
                 answersTime: new DateTime(2012, 12, 20),
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),
-                interviewKey: Create.Entity.InterviewKey(),
-                assignmentId: null));
+                interviewKey: Create.Entity.InterviewKey()));
 
             return interview;
         }
@@ -166,17 +173,26 @@ namespace WB.Tests.Integration
         public static StatefulInterview StatefulInterview(QuestionnaireIdentity questionnaireIdentity,
             IQuestionnaireStorage questionnaireRepository = null, 
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null,
-            Dictionary<Guid, AbstractAnswer> answersOnPrefilledQuestions = null)
+            List<InterviewAnswer> answersOnPrefilledQuestions = null)
         {
             var interview = new StatefulInterview(
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ?? Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
-                Create.Service.SubstitionTextFactory());
+                Create.Service.SubstitutionTextFactory(),
+                Create.Service.InterviewTreeBuilder());
 
-            interview.CreateInterview(new CreateInterviewCommand(interview.EventSourceId, new Guid("F111F111F111F111F111F111F111F111"), questionnaireIdentity?.QuestionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"), 
-                answersOnPrefilledQuestions ?? new Dictionary<Guid, AbstractAnswer>(), new DateTime(2012, 12, 20), new Guid("D222D222D222D222D222D222D222D222"), questionnaireIdentity?.Version ?? 1, null));
+            interview.CreateInterview(Create.Command.CreateInterview(
+                interviewId: interview.EventSourceId,
+                userId: new Guid("F111F111F111F111F111F111F111F111"),
+                questionnaireId: questionnaireIdentity?.QuestionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
+                version: questionnaireIdentity?.Version ?? 1,
+                answers: answersOnPrefilledQuestions ?? new List<InterviewAnswer>(),
+                answersTime: new DateTime(2012, 12, 20),
+                supervisorId: Guid.NewGuid(),
+                interviewerId: Guid.NewGuid(),
+                interviewKey: Create.Entity.InterviewKey()));
 
-            return interview;
+          return interview;
         }
 
         public static CommittedEvent CommittedEvent(string origin = null, 

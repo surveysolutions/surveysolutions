@@ -18,7 +18,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             base.OnCreate(bundle);
 
-            var listOfInterviewQuestionsAndGroups = this.FindViewById<MvxRecyclerView>(Resource.Id.questionnaireEntitiesList);
+            var listOfInterviewQuestionsAndGroups = this.FindViewById<MvxRecyclerView>(Resource.Id.interviewEntitiesList);
             var layoutManager = new LinearLayoutManager(this);
             
             listOfInterviewQuestionsAndGroups.SetLayoutManager(layoutManager);

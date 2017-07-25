@@ -18,4 +18,14 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading
             Answer = a.Value
         })).ToList();
     }
+
+    public static class InterviewAnswerExtensions
+    {
+        public static List<InterviewAnswer>[] GroupedByLevels(this List<InterviewAnswer> answers) => answers
+            .GroupBy(x => x.Identity.RosterVector.Length)
+            .Select(x => new { Depth = x.Key, Answers = x.ToList() })
+            .OrderBy(x => x.Depth)
+            .Select(x => x.Answers)
+            .ToArray();
+    }
 }

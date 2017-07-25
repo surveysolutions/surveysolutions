@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_cascading_question_has_condition_or_validation_expression : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             parentSingleOptionQuestionId = Guid.Parse("11111111111111111111111111111111");
             childCascadedComboboxId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             secondChildId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -57,27 +56,28 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     }
                 });
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => verificationErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+        private void BecauseOf() => verificationErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
 
-        It should_result_contains_WB0091_error = () =>
+        [NUnit.Framework.Test] public void should_result_contains_WB0091_error () =>
             getWB0091Error().ShouldNotBeNull();
 
-        It should_WB0091_error_contains_single_reference = () =>
+        [NUnit.Framework.Test] public void should_WB0091_error_contains_single_reference () =>
             getWB0091Error().References.Count().ShouldEqual(1);
 
-        It should_WB0091_error_contains_reference_to_specified_child_cascading_question_id = () =>
+        [NUnit.Framework.Test] public void should_WB0091_error_contains_reference_to_specified_child_cascading_question_id () =>
             getWB0091Error().References.Single().Id.ShouldEqual(childCascadedComboboxId);
 
-        It should_result_contains_WB0092_error = () =>
+        [NUnit.Framework.Test] public void should_result_contains_WB0092_error () =>
             getWB0092Error().ShouldNotBeNull();
 
-        It should_WB0092_error_contains_single_reference = () =>
+        [NUnit.Framework.Test] public void should_WB0092_error_contains_single_reference () =>
             getWB0092Error().References.Count().ShouldEqual(1);
 
-        It should_WB0092_error_contains_reference_to_specified_child_cascading_question_id = () =>
+        [NUnit.Framework.Test] public void should_WB0092_error_contains_reference_to_specified_child_cascading_question_id () =>
             getWB0092Error().References.Single().Id.ShouldEqual(secondChildId);
 
         private static QuestionnaireVerificationMessage getWB0091Error()

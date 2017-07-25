@@ -8,17 +8,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Translations
 {
     internal class when_deleting_translation : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: responsibleId);
             questionnaire.AddOrUpdateTranslation(Create.Command.AddOrUpdateTranslation(questionnaireId, translationId, "", responsibleId));
 
             deleteTranslation = Create.Command.DeleteTranslation(questionnaireId, translationId, responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => questionnaire.DeleteTranslation(deleteTranslation);
+        private void BecauseOf() => questionnaire.DeleteTranslation(deleteTranslation);
 
-        It should_doesnt_contain_Translation_with_EntityId_specified = () =>
+        [NUnit.Framework.Test] public void should_doesnt_contain_Translation_with_EntityId_specified () =>
             questionnaire.QuestionnaireDocument.Translations.ShouldNotContain(t => t.Id == translationId);
 
         private static DeleteTranslation deleteTranslation;

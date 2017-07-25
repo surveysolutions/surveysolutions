@@ -7,7 +7,7 @@
               android:orientation="vertical">
   <LinearLayout style="@style/Dashboard_NewTab_NoInterviewsPanel"
                 android:paddingTop="@dimen/Dashboard_Tab_Frame_paddingTop"
-                local:MvxBind="Visible Not(GreaterThan(UiItems.Count, 0));">
+                local:MvxBind="Visible Not(GreaterThan(ItemsCount, 0));">
     <TextView style="@style/Dashboard_NewTab_NoInterviewsTitle"
               local:MvxBind="Text Localization('Dashboard_NoInterviewsTitle')" />
 

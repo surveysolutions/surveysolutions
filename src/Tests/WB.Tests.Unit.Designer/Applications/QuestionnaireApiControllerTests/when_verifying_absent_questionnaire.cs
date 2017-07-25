@@ -7,18 +7,18 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
 {
     internal class when_verifying_absent_questionnaire : QuestionnaireApiControllerTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             controller = CreateQuestionnaireController();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() => controller.Verify(questionnaireId));
 
-        It should_throw_exception = () =>
+        [NUnit.Framework.Test] public void should_throw_exception () =>
             exception.ShouldNotBeNull();
 
-        It should_throw_HttpResponseException_exception = () =>
+        [NUnit.Framework.Test] public void should_throw_HttpResponseException_exception () =>
             exception.ShouldBeOfExactType(typeof(HttpResponseException));
 
         private static QuestionnaireController controller;

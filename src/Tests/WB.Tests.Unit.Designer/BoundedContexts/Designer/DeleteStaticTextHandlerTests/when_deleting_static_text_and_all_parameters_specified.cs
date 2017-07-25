@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -10,18 +10,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DeleteStaticTextHandle
 {
     internal class when_deleting_static_text_and_all_parameters_specified : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddStaticTextAndMoveIfNeeded(new AddStaticText(questionnaire.Id, entityId, "title", responsibleId, chapterId));
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>            
+        private void BecauseOf() =>            
                 questionnaire.DeleteStaticText(entityId: entityId, responsibleId: responsibleId);
 
 
-        It should_dont_contains_StaticText = () =>
+        [NUnit.Framework.Test] public void should_dont_contains_StaticText () =>
             questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ShouldBeNull();
 
         

@@ -78,7 +78,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
 
         [Test]
         public void should_map_IdentifyingAnswer_QuestionId() =>
-            Assert.That(this.AssignmentDetails.IdentifyingData[0].Identity, Is.EqualTo(this.Assignment.IdentifyingData[0].Identity));
+            Assert.That(this.AssignmentDetails.IdentifyingData[0].Identity, Is.EqualTo(this.Assignment.IdentifyingData[0].Identity.ToString()));
 
         [Test]
         public void should_map_IdentifyingAnswer_Variable_name_from_questionnaire() =>

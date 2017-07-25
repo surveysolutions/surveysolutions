@@ -1,5 +1,5 @@
-using System;
-using Flurl.Http;
+using WB.Core.GenericSubdomains.Portable.Implementation;
+
 
 namespace WB.Core.GenericSubdomains.Portable.Services
 {
@@ -7,6 +7,6 @@ namespace WB.Core.GenericSubdomains.Portable.Services
     {
         void Reset();
         HttpStats GetStats();
-        void CollectHttpCallStatistics(HttpCall call);
+        void CollectHttpCallStatistics(HttpCall httpCall);
     }
 }

@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using WB.Infrastructure.Shared.Enumerator;
+using WB.UI.Shared.Enumerator.Services;
 
 namespace WB.UI.Interviewer.Infrastructure
 {
@@ -28,7 +28,8 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<IInterviewEventStreamOptimizer>().To<InterviewEventStreamOptimizer>();
             this.Bind<IQuestionnaireTranslator>().To<QuestionnaireTranslator>();
             this.Bind<IQuestionnaireStorage>().To<QuestionnaireStorage>().InSingletonScope();
-            this.Bind<IPlainInterviewFileStorage>().To<InterviewerPlainInterviewFileStorage>();
+            this.Bind<IAudioFileStorage>().To<InterviewerAudioFileStorage>();
+            this.Bind<IImageFileStorage>().To<InterviewerImageFileStorage>();
             this.Bind<IAnswerToStringConverter>().To<AnswerToStringConverter>();
             this.Bind<IAssignmentDocumentsStorage>().To<AssignmentDocumentsStorage>().InSingletonScope();
 

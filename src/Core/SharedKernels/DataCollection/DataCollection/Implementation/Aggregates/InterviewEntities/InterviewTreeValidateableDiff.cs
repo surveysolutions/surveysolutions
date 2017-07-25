@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public interface IInterviewTreeValidateable
     {
         bool IsValid { get; }
-        SubstitionText[] ValidationMessages { get; }
+        SubstitutionText[] ValidationMessages { get; }
         IReadOnlyList<FailedValidationCondition> FailedValidations { get; }
 
         void MarkInvalid(IEnumerable<FailedValidationCondition> failedValidations);

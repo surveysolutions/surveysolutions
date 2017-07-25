@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -15,7 +15,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants
 {
-    internal class InterviewQuestionInvariants
+    public class InterviewQuestionInvariants
     {
         private IQuestionOptionsRepository QuestionOptionsRepository => ServiceLocator.Current.GetInstance<IQuestionOptionsRepository>();
 
@@ -205,9 +205,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireNotEmptyTexts(answers)
                 .RequireMaxAnswersCountLimit(answers);
 
-        public void RequireGpsCoordinatesPreloadValueAllowed()
+        public void RequireGpsCoordinatesPreloadValueAllowed(GeoPosition answer)
             => this
-                .RequireQuestionDeclared(QuestionType.GpsCoordinates);
+                .RequireQuestionDeclared(QuestionType.GpsCoordinates)
+                .RequireGpsCoordinatesBeInRange(answer);
 
         public void RequireGpsCoordinatesAnswerAllowed()
             => this
@@ -221,6 +222,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         public void RequireQRBarcodeAnswerAllowed()
             => this
                 .RequireQuestionExists(QuestionType.QRBarcode)
+                .RequireQuestionEnabled();
+
+        public void RequireAudioAnswerAllowed()
+            => this
+                .RequireQuestionExists(QuestionType.Audio)
                 .RequireQuestionEnabled();
 
         public void RequirePictureAnswerAllowed()
@@ -315,6 +321,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
             return this;
         }
+
+        private InterviewQuestionInvariants RequireGpsCoordinatesBeInRange(GeoPosition answer)
+        {
+            if (answer.Latitude < -90 || answer.Latitude > 90)
+                throw new AnswerNotAcceptedException(
+                    $"For question {this.FormatQuestionForException()} was provided answer with Latitude {answer.Latitude} should be in range (-90, 90) . {this.InfoForException}");
+
+            if (answer.Longitude < -180 || answer.Longitude > 180)
+                throw new AnswerNotAcceptedException(
+                    $"For question {this.FormatQuestionForException()} was provided answer with Longitude {answer.Longitude} should be in range (-180, 180) . {this.InfoForException}");
+
+            return this;
+        }
+
+        
 
         private InterviewQuestionInvariants RequireOptionsExist(IReadOnlyCollection<int> values)
         {
@@ -515,9 +536,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             => this.Questionnaire.HasQuestion(this.QuestionId)
                 ? this.Questionnaire.GetQuestionVariableName(this.QuestionId) ?? "<<NO VARIABLE>>"
                 : "<<MISSING>>";
-
-        private static string JoinUsingCommas(IEnumerable<QuestionType> values)
-            => JoinUsingCommas(values.Select(value => value.ToString()));
 
         private static string JoinUsingCommas(IEnumerable<decimal> values)
             => JoinUsingCommas(values.Select(value => value.ToString(CultureInfo.InvariantCulture)));

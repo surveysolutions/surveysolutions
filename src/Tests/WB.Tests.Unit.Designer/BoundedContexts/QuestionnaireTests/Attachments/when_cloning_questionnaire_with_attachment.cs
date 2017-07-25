@@ -8,28 +8,28 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
 {
     internal class when_cloning_questionnaire_with_attachment : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: responsibleId);
 
             sourceQuestionnaire = Create.QuestionnaireDocument();
             sourceQuestionnaire.Attachments.Add(Create.Attachment(attachmentId: attachmentId, name: name, contentId: contentId));
-        };
+            BecauseOf();
+        }
 
 
-        Because of = () => 
+        private void BecauseOf() => 
             questionnaire.CloneQuestionnaire("Title", false, responsibleId, clonedQuestionnaireId, sourceQuestionnaire);
 
-        It should_contains_questionnaire_with_1_attachment = () =>
+        [NUnit.Framework.Test] public void should_contains_questionnaire_with_1_attachment () =>
             questionnaire.QuestionnaireDocument.Attachments.Count.ShouldEqual(1);
 
-        It should_set_new_AttachmentId = () =>
+        [NUnit.Framework.Test] public void should_set_new_AttachmentId () =>
             questionnaire.QuestionnaireDocument.Attachments.First().AttachmentId.ShouldNotEqual(attachmentId);
 
-        It should_set_original_Name = () =>
+        [NUnit.Framework.Test] public void should_set_original_Name () =>
             questionnaire.QuestionnaireDocument.Attachments.First().Name.ShouldEqual(name);
 
-        It should_set_Content_Id = () =>
+        [NUnit.Framework.Test] public void should_set_Content_Id () =>
             questionnaire.QuestionnaireDocument.Attachments.First().ContentId.ShouldEqual(contentId);
 
         private static Questionnaire questionnaire;

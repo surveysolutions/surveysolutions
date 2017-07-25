@@ -3,6 +3,7 @@
     source = require("vinyl-source-stream");
 
 var gulp = require('gulp'),
+    streamify = require('gulp-streamify'),
     plugins = require('gulp-load-plugins')(),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
@@ -81,8 +82,10 @@ gulp.task('vueify', wrapPipe(function (success, error) {
             return b
                 .transform(babelify, { presets: ['es2015'] })
                 .transform(vueify)
+                
             .bundle().on('error', error)
             .pipe(source(entry).on('error', error))
+            .pipe(streamify(uglify()))
             .pipe(gulp.dest(config.buildDir).on('error', error));
         });
 
@@ -97,6 +100,7 @@ gulp.task('vue-libs', wrapPipe(function (success, error) {
         .pipe(mainBowerFiles().on('error', error))
         .pipe(filter)
         .pipe(concat('vue-libs.js').on('error', error))
+        .pipe(plugins.uglify().on('error', error))
         .pipe(gulp.dest(config.buildDir).on('error', error));
 }));
 
@@ -136,6 +140,7 @@ gulp.task('bowerJs', wrapPipe(function (success, error) {
     return gulp.src('./bower.json')
         .pipe(mainBowerFiles().on('error', error))
         .pipe(filter)
+        .pipe(plugins.uglify().on('error', error))
       	.pipe(concat('libs.js').on('error', error))
         .pipe(gulp.dest(config.buildDir).on('error', error))
         .pipe(rename({ suffix: '.min' }).on('error', error))

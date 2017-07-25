@@ -25,10 +25,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var prefilledQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             var prefilledQuestion1Id = Guid.Parse("ACDC1CCCCCCCCCCCCCCCCCCCCCCCCCCC");
             
-            answersToFeaturedQuestions = new Dictionary<Guid, AbstractAnswer>
+            var answersToFeaturedQuestions = new List<InterviewAnswer>
             {
-                {prefilledQuestionId, TextAnswer.FromString("answer")},
-                {prefilledQuestion1Id, TextAnswer.FromString("answer 1")}
+                Create.Entity.InterviewAnswer(Create.Identity(prefilledQuestionId), TextAnswer.FromString("answer")),
+                Create.Entity.InterviewAnswer(Create.Identity(prefilledQuestion1Id), TextAnswer.FromString("answer 1"))
             };
 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var interviewExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(_ =>
                 _.GetExpressionState(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == expressionState);
 
-            command = Create.Command.CreateInterviewCommand(questionnaireId, questionnaireVersion, responsibleSupervisorId,
+            command = Create.Command.CreateInterview(questionnaireId, questionnaireVersion, responsibleSupervisorId,
                 answersToFeaturedQuestions, userId);
             interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository,
                 expressionProcessorStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
@@ -65,8 +65,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid userId;
         private static Guid responsibleSupervisorId;
         private static Interview interview;
-        private static Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions;
         private static ILatestInterviewExpressionState expressionState;
-        private static CreateInterviewCommand command;
+        private static CreateInterview command;
     }
 }

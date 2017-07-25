@@ -11,14 +11,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
 {
     internal class when_adding_text_question_with_self_referencing_valiation_expression : QuestionnaireTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
-        };
+            BecauseOf();
+        }
 
 
-        Because of = () =>
+        private void BecauseOf() =>
             questionnaire.AddTextQuestion(
                 questionId: questionId,
                 parentId: chapterId,
@@ -34,11 +34,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
                 mask: null,
                 responsibleId: responsibleId);
 
-        It should_contains_TextQuestion_with_QuestionId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_TextQuestion_with_QuestionId_specified () =>
             questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
                 .PublicKey.ShouldEqual(questionId);
 
-        It should_contains_TextQuestion_with_validationExpression_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_TextQuestion_with_validationExpression_specified () =>
             questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
                 .ValidationConditions.First().Expression.ShouldEqual(validationExpression);
 

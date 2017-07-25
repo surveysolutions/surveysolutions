@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
-using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;

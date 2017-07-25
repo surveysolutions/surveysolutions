@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNet.SignalR.Hubs;
-using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 

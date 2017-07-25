@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -10,37 +10,37 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_questionnaire_contains_2_gps_prefilled_questions : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = Create.QuestionnaireDocument(
                 children: new[]{Create.GpsCoordinateQuestion(questionId: gpsQuestion1, variable:"gps1", isPrefilled:true),
                 Create.GpsCoordinateQuestion(questionId: gpsQuestion2, variable: "gps2", isPrefilled:true)}
                 );
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_1_message = () =>
+        [NUnit.Framework.Test] public void should_return_1_message () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_message_with_code_WB0006 = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_code_WB0006 () =>
             verificationMessages.First().Code.ShouldEqual("WB0006");
 
-        It should_return_message_with_two_references = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_two_references () =>
             verificationMessages.First().References.Count().ShouldEqual(2);
 
-        It should_return_message_with_first_reference_with_Question_type = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_first_reference_with_Question_type () =>
             verificationMessages.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_message_with_first_reference_with_id_equals_gpsQuestion1 = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_first_reference_with_id_equals_gpsQuestion1 () =>
             verificationMessages.First().References.First().Id.ShouldEqual(gpsQuestion1);
 
-        It should_return_message_with_second_reference_with_Question_type = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_second_reference_with_Question_type () =>
         verificationMessages.First().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_message_with_second_reference_with_id_equals_gpsQuestion2 = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_second_reference_with_id_equals_gpsQuestion2 () =>
             verificationMessages.First().References.Last().Id.ShouldEqual(gpsQuestion2);
 
         static QuestionnaireDocument questionnaire;

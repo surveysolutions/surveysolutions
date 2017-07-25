@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
 {
     internal class when_updating_datetime_question_and_it_does_not_exists_in_questionnaire : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddQRBarcodeQuestion(questionId,
@@ -25,14 +24,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
                         variableName: "old_variable_name",
                         instructions: "old instructions",
                         enablementCondition: "old condition");
-        };
+            BecauseOf();
+        }
 
-        Because of = () => exception = Catch.Exception(() => questionnaire.UpdateDateTimeQuestion(command));
+        private void BecauseOf() => exception = Catch.Exception(() => questionnaire.UpdateDateTimeQuestion(command));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__question__cant__found__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__question__cant__found__ () =>
             new[] { "question", "can't", "found" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 

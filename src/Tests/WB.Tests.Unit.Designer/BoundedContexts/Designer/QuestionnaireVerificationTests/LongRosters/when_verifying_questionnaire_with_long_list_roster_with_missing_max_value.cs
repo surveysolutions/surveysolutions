@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_long_list_roster_with_missing_max_value : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = Create.QuestionnaireDocument(children: new IComposite[]
             {
                 Create.Chapter(children: new IComposite[]
@@ -24,18 +23,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             });
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_contain_error_WB0093 = () =>
+        [NUnit.Framework.Test] public void should_return_contain_error_WB0093 () =>
             verificationMessages.ShouldContainError("WB0093");
 
-        It should_return_message_with_level_general = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_level_general () =>
             verificationMessages.GetError("WB0093").MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
-        It should_return_message_with_reference_on_question = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_reference_on_question () =>
             verificationMessages.GetError("WB0093").References.Single().Id.ShouldEqual(questionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

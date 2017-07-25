@@ -28,6 +28,7 @@ namespace WB.UI.Headquarters
                 constraints: new { id = new GuidRouteConstraint() });
 
             routes.MapRoute(@"WebInterview.ImageAnswering", @"WebInterview/image", new { controller = @"WebInterview", action = @"Image" });
+            routes.MapRoute(@"WebInterview.AudioAnswering", @"WebInterview/audio", new { controller = @"WebInterview", action = @"Audio" });
 
             routes.MapRoute(@"Default", @"{controller}/{action}/{id}",
                 new { controller = @"Account", action = @"Index", id = UrlParameter.Optional });

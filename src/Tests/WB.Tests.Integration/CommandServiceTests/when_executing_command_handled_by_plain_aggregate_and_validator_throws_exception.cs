@@ -1,7 +1,7 @@
 using System;
 using Machine.Specifications;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;

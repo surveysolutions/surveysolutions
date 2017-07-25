@@ -7,8 +7,8 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.Questionnaire.Documents.Question;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
@@ -26,12 +27,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
     {
         public ISubstitutionService SubstitutionService
         {
-            get
-            {
-                return this.substitutionService ??
-                    (this.substitutionService = ServiceLocator.Current.GetInstance<ISubstitutionService>());
-            }
-            set { this.substitutionService = value; }
+            get => this.substitutionService ??
+                   (this.substitutionService = ServiceLocator.Current.GetInstance<ISubstitutionService>());
+            set => this.substitutionService = value;
         }
 
         private ISubstitutionService substitutionService;
@@ -49,7 +47,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private Dictionary<Guid, IVariable> variablesCache = null;
         private Dictionary<Guid, IStaticText> staticTextsCache = null;
         private Dictionary<Guid, IQuestion> questionsCache = null;
-        private Dictionary<string, IGroup> groupsCache = null;
+        private Dictionary<Guid, IGroup> groupsCache = null;
         private Dictionary<Guid, IComposite> entitiesCache = null;
         private ReadOnlyCollection<Guid> sectionsCache = null;
         private Dictionary<string, HashSet<Guid>> substitutionReferencedQuestionsCache = null;
@@ -147,14 +145,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
         }
 
-        private Dictionary<string, IGroup> GroupCache
+        private Dictionary<Guid, IGroup> GroupCache
         {
             get
             {
                 return this.groupsCache ?? (
                     this.groupsCache = this.innerDocument.Find<IGroup>(_ => true)
                         .ToDictionary(
-                            group => group.PublicKey.FormatGuid(),
+                            group => group.PublicKey,
                             group => group));
             }
         }
@@ -1484,7 +1482,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return group;
         }
 
-        private IGroup GetGroup(Guid groupId) => GetGroup(this.GroupCache, groupId.FormatGuid());
+        private IGroup GetGroup(Guid groupId) => GetGroup(this.GroupCache, groupId);
 
         private IStaticText GetStaticTextOrThrow(Guid staticTextId)
         {
@@ -1544,7 +1542,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private static IComposite GetEntity(Dictionary<Guid, IComposite> entities, Guid entityId) => entities.GetOrNull(entityId);
 
-        private static IGroup GetGroup(Dictionary<string, IGroup> groups, string groupId) => groups.GetOrNull(groupId);
+        private static IGroup GetGroup(Dictionary<Guid, IGroup> groups, Guid groupId) => groups.GetOrNull(groupId);
 
         private static IQuestion GetQuestionByStataCaption(Dictionary<Guid, IQuestion> questions, string identifier)
         {

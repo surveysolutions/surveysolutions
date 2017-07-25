@@ -124,6 +124,8 @@ namespace WB.UI.Headquarters
                 c => c.Action<InterviewsApiV2Controller>(x => x.Post(Param.Any<InterviewPackageApiView>())));
             config.TypedRoute("api/interviewer/v2/interviews/{id:guid}/image",
                 c => c.Action<InterviewsApiV2Controller>(x => x.PostImage(Param.Any<PostFileRequest>())));
+            config.TypedRoute("api/interviewer/v2/interviews/{id:guid}/audio",
+                c => c.Action<InterviewsApiV2Controller>(x => x.PostAudio(Param.Any<PostFileRequest>())));
             config.TypedRoute("api/interviewer/v2/attachments/{id}",
                 c => c.Action<AttachmentsApiV2Controller>(x => x.GetAttachmentContent(Param.Any<string>())));
             config.TypedRoute("api/interviewer/v2/assignments", 

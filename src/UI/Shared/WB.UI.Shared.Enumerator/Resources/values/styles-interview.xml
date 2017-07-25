@@ -189,4 +189,33 @@
     <item name="android:textStyle">bold</item>
     <item name="android:letterSpacing">0.1</item>
   </style>
+
+  <style name="Interview_Cover_Header_Line"  parent="VerticalFullWidthWrappingLayout">
+    <item name="android:paddingLeft">@dimen/Interview_Entity_margin_with_border_left</item>
+    <item name="android:paddingRight">@dimen/Interview_Entity_margin_with_border_right</item>
+    <item name="android:textColor">@color/cover_header_text</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+  </style>
+  
+  <style name="Interview_Cover_Main_Header"  parent="Interview_Cover_Header_Line">
+    <item name="android:textSize">@dimen/textsize_20</item>
+  </style>
+  
+  <style name="Interview_Cover_Main_First_Header"  parent="Interview_Cover_Main_Header">
+    <item name="android:paddingTop">@dimen/Interview_Cover_Header_padding_top</item>
+    <item name="android:paddingBottom">@dimen/Interview_Cover_Header_line_padding</item>
+    <item name="android:textAllCaps">true</item>
+  </style>
+
+  <style name="Interview_Cover_Main_Second_Header"  parent="Interview_Cover_Main_Header">
+    <item name="android:paddingBottom">@dimen/Interview_Cover_Header_line_padding</item>
+  </style>
+
+  <style name="Interview_Cover_Description_Header"  parent="Interview_Cover_Header_Line">
+    <item name="android:paddingTop">@dimen/Interview_BreadCrumbs_padding_top</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:paddingTop">@dimen/Interview_Cover_Header_Description_padding_top</item>
+    <item name="android:paddingBottom">@dimen/Interview_Cover_Header_Description_padding_bottom</item>
+  </style>
 </resources>

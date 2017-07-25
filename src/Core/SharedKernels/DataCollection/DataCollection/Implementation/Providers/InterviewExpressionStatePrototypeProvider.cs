@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -14,7 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 {
-    internal class InterviewExpressionStatePrototypeProvider : IInterviewExpressionStatePrototypeProvider
+    public class InterviewExpressionStatePrototypeProvider : IInterviewExpressionStatePrototypeProvider
     {
         private static ILogger Logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<InterviewExpressionStatePrototypeProvider>();
 
@@ -115,7 +115,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                     SingleOrDefault(x => !(x.IsAbstract || x.IsGenericTypeDefinition || x.IsInterface) && x.ImplementedInterfaces.Contains(typeof(IInterviewExpressionStorage)) && x.IsPublic);
 
                 if (interviewExpressionStateTypeInfo == null)
-                    throw new Exception("Type implementing IInterviewExpressionState was not found");
+                    throw new Exception($"Type implementing {nameof(IInterviewExpressionState)} was not found");
 
                 Type interviewExpressionStateType = interviewExpressionStateTypeInfo.AsType();
                 try
@@ -125,7 +125,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                 }
                 catch (Exception e)
                 {
-                    Logger.Error("Error on activating interview expression state. Cannot cast to created object to IInterviewExpressionState", e);
+                    Logger.Error($"Error on activating interview expression state. Cannot cast to created object to {nameof(IInterviewExpressionState)}", e);
                     return null;
                 }
             }

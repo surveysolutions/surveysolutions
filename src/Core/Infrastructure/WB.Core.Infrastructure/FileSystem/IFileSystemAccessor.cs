@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Reflection;
 
 namespace WB.Core.Infrastructure.FileSystem
 {
@@ -36,7 +35,7 @@ namespace WB.Core.Infrastructure.FileSystem
         byte[] ReadAllBytes(string pathToFile);
         string ReadAllText(string pathToFile);
 
-        void CopyFileOrDirectory(string sourceDir, string targetDir, bool overrideAll);
+        void CopyFileOrDirectory(string sourceDir, string targetDir, bool overrideAll = false, string[] fileExtentionsFilter = null);
 
         void MarkFileAsReadonly(string pathToFile);
 

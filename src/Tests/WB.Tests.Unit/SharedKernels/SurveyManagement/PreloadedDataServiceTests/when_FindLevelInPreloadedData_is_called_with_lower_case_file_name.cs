@@ -7,7 +7,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Tests.Abc;
 
@@ -22,13 +22,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                     Create.Entity.FixedRoster(rosterId: rosterGroupId,
                         obsoleteFixedTitles: new[] {"1"}, title: "Roster Group", variable: "roster"));
 
-            preloadedDataService = CreatePreloadedDataService(questionnaireDocument);
+            importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
         };
 
         Because of =
            () =>
                result =
-                   preloadedDataService.FindLevelInPreloadedData("roster");
+                   importDataParsingService.FindLevelInPreloadedData("roster");
 
         It should_return_not_null_result = () =>
            result.ShouldNotBeNull();
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
         It should_result_levelId_be_equal_to_rosterGroupId = () =>
           result.LevelScopeVector.SequenceEqual(new[] { rosterGroupId });
 
-        private static PreloadedDataService preloadedDataService;
+        private static ImportDataParsingService importDataParsingService;
         private static QuestionnaireDocument questionnaireDocument;
         private static HeaderStructureForLevel result;
         private static Guid rosterGroupId = Guid.NewGuid();

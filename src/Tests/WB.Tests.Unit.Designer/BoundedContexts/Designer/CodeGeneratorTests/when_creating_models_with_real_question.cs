@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
 {
     internal class when_creating_models_with_real_question : CodeGeneratorTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             AssemblyContext.SetupServiceLocator();
 
             questionnaire = Create.QuestionnaireDocument(questionnaireId, children: new[]
@@ -23,21 +22,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             });
 
             templateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             model = templateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, Create.CodeGenerationSettings());
 
-        It should_create_model_with_1_question = () =>
+        [NUnit.Framework.Test] public void should_create_model_with_1_question () =>
             model.AllQuestions.Count.ShouldEqual(1);
 
-        It should_create_questionnaire_level_with_1_question = () =>
+        [NUnit.Framework.Test] public void should_create_questionnaire_level_with_1_question () =>
             model.QuestionnaireLevelModel.Questions.Count.ShouldEqual(1);
 
-        It should_reference_same_question_model_in_AllQuestions_and_questionnaire_level = () =>
+        [NUnit.Framework.Test] public void should_reference_same_question_model_in_AllQuestions_and_questionnaire_level () =>
             model.QuestionnaireLevelModel.Questions.First().ShouldEqual(model.AllQuestions.First());
 
-        It should_create_real_question_model = () =>
+        [NUnit.Framework.Test] public void should_create_real_question_model () 
         {
             QuestionTemplateModel question = model.AllQuestions.Single(x => x.Id == Id.gB);
             question.VariableName.ShouldEqual("real");
@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             question.TypeName.ShouldEqual("double?");
             question.RosterScopeName.ShouldEqual(CodeGenerator.QuestionnaireScope);
             question.ParentScopeTypeName.ShouldEqual(CodeGenerator.QuestionnaireTypeName);
-        };
+        }
 
         private static QuestionnaireExpressionStateModelFactory templateModelFactory;
         private static QuestionnaireExpressionStateModel model;

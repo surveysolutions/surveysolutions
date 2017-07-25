@@ -1,7 +1,7 @@
 ﻿@model ManageAccountModel
 @{
     ViewBag.Title = Strings.HQ_Views_Manage_Title;
-    ViewBag.PageTitle = string.Format(Pages.AccountManage_Title, Model.UserName);
+    ViewBag.PageTitle = string.Format(Pages.AccountManage_Title, Html.Encode(Model.UserName));
     ViewBag.PageSubTitle = Pages.AccountManage_EditPublicInformation;
     Layout = "~/Views/Shared/Profile/_UserEditorLayout.cshtml";
 }

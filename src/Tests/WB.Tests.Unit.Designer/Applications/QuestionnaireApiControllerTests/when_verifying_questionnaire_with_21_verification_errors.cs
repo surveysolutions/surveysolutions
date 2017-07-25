@@ -14,14 +14,13 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Api;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Models;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
 {
     internal class when_verifying_questionnaire_with_21_verification_errors : QuestionnaireApiControllerTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireDocument = CreateQuestionnaireDocument(
                 new Group()
                 {
@@ -43,12 +42,13 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
                 questionnaireViewFactory: questionnaireViewFactory, 
                 questionnaireVerifier: verifierMock.Object,
                 verificationErrorsMapper: new VerificationErrorsMapper());
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             result = controller.Verify(questionnaireId);
 
-        It should_returned_errors_contains_specified_errors_count = () =>
+        [NUnit.Framework.Test] public void should_returned_errors_contains_specified_errors_count () =>
             result.Errors.Sum(error => error.Errors.SelectMany(e => e.References).Count()).ShouldEqual(QuestionnaireController.MaxVerificationErrors);
 
         private static QuestionnaireDocument questionnaireDocument;

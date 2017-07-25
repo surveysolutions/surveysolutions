@@ -11,7 +11,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class EditTextDateBinding : MvxAndroidTargetBinding
     {
-        private IMvxCommand Command;
+        private IMvxAsyncCommand<DateTime> command;
 
         protected new EditText Target => (EditText)base.Target;
 
@@ -20,7 +20,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             this.Target.Click += this.InputClick;
         }
 
-        public override Type TargetType => typeof(IMvxCommand);
+        public override Type TargetType => typeof(IMvxAsyncCommand<DateTime>);
 
         private void InputClick(object sender, EventArgs args)
         {
@@ -38,7 +38,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         {
             if (this.Target != null)
             {
-                this.Command?.Execute(e.Date);
+                this.command?.Execute(e.Date);
             }
         }
 
@@ -56,7 +56,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void SetValueImpl(object target, object value)
         {
-            this.Command = (IMvxCommand)value;
+            this.command = (IMvxAsyncCommand<DateTime>)value;
         }
     }
 }

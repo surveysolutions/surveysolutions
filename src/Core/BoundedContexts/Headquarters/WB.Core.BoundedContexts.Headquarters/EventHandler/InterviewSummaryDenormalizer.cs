@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -41,7 +42,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, InterviewKeyAssigned>,
         IUpdateHandler<InterviewSummary, InterviewReceivedByInterviewer>,
         IUpdateHandler<InterviewSummary, InterviewReceivedBySupervisor>,
-        IUpdateHandler<InterviewSummary, AreaQuestionAnswered>
+        IUpdateHandler<InterviewSummary, AreaQuestionAnswered>,
+        IUpdateHandler<InterviewSummary, AudioQuestionAnswered>
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IUserViewFactory users;
@@ -297,6 +299,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
+                if (interview.ClientKey == null)
+                {
+                    interview.ClientKey = @event.Payload.Key.ToString();
+                }
+
                 interview.Key = @event.Payload.Key.ToString();
             });
         }
@@ -373,6 +380,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var area = new Area(@event.Payload.Geometry, @event.Payload.MapName, @event.Payload.AreaSize, @event.Payload.Length, 
                 @event.Payload.Coordinates, @event.Payload.DistanceToEditor);
             return this.AnswerQuestion(state, @event.Payload.QuestionId, area, @event.EventTimeStamp);
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AudioQuestionAnswered> @event)
+        {
+            var audioAnswer = AudioAnswer.FromString(@event.Payload.FileName, @event.Payload.Length);
+            return this.AnswerQuestion(state, @event.Payload.QuestionId, audioAnswer, @event.EventTimeStamp);
         }
     }
 }

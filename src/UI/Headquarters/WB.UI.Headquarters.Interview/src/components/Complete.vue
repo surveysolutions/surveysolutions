@@ -32,7 +32,7 @@
                 <h4 class="gray-uppercase">{{doesShowErrorsCommentWithCount ? 'First ' + completeInfo.entitiesWithError.length + ' entities with errors:' : 'Questions with errors:'}}</h4>
                 <ul class="list-unstyled marked-questions">
                     <li v-for="entity in completeInfo.entitiesWithError">
-                        <a href="#" @click="navigateTo(entity)">{{ entity.title }}</a>
+                        <a href="javascript:void(0);" @click="navigateTo(entity)">{{ entity.title }}</a>
                     </li>
                 </ul>
             </div>
@@ -50,7 +50,7 @@
         </div>
         <div class="wrapper-info">
             <div class="container-info">
-                <a href="#" class="btn btn-lg" v-bind:class="{ 'btn-success': isAllAnswered, 'btn-primary' : hasUnansweredQuestions, 'btn-danger' : hasInvalidQuestions }" @click="completeInterview">Complete</a>
+                <a href="javascript:void(0);" class="btn btn-lg" v-bind:class="{ 'btn-success': isAllAnswered, 'btn-primary' : hasUnansweredQuestions, 'btn-danger' : hasInvalidQuestions }" @click="completeInterview">Complete</a>
             </div>
         </div>
     </div>

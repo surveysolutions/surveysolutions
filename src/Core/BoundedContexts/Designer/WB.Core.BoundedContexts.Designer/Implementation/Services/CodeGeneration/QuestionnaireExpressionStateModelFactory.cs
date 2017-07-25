@@ -816,6 +816,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 case QuestionType.Multimedia:
                     return "string";
 
+                case QuestionType.Area:
+                    return "string";
+
                 default:
                     throw new ArgumentException("Unknown question type.");
             }

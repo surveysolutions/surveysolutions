@@ -13,17 +13,19 @@ const store = new Vuex.Store(safeStore({
     modules: { fetch, sidebar, connection },
     state: {
         lastActivityTimestamp: new Date(),
-        hasPrefilledQuestions: false,
+        hasCoverPage: false,
         loadedEntitiesCount: 0,
         questionnaireTitle: "",
+        interviewKey: "",
         firstSectionId: "",
         entities: [], /* IInterviewEntity[] */
         entityDetails: { /* string: object */ },
         breadcrumbs: {
             breadcrumbs: []
         },
-        samplePrefilledInfo: {
-            questions: []
+        coverInfo: {
+            entitiesWithComments: [],
+            identifyingQuestions: []
         }
     },
     actions,

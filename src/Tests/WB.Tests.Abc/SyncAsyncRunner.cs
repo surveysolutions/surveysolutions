@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Nito.AsyncEx.Synchronous;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Tests.Abc

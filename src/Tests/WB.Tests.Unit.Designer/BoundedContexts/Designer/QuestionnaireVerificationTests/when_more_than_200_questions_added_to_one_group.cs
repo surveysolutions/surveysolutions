@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -10,18 +10,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_more_than_200_questions_added_to_one_group : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             IComposite[] questions = Enumerable.Range(0, 201).Select(index => Create.Question(variable: "numeric" + index)).ToArray();
             questionnaire = Create.QuestionnaireDocumentWithOneChapter(children: questions);
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
+        private void BecauseOf() => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
-        It should_return_warning = () => errors.Where(x => x.MessageLevel == VerificationMessageLevel.Warning).ShouldNotBeEmpty();
+        [NUnit.Framework.Test] public void should_return_warning () => errors.Where(x => x.MessageLevel == VerificationMessageLevel.Warning).ShouldNotBeEmpty();
 
-        It should_return_WB0201_warning = () => errors.Where(x => x.MessageLevel == VerificationMessageLevel.Warning)
+        [NUnit.Framework.Test] public void should_return_WB0201_warning () => errors.Where(x => x.MessageLevel == VerificationMessageLevel.Warning)
                                                       .Select(x => x.Code)
                                                       .ShouldContain("WB0201");
 

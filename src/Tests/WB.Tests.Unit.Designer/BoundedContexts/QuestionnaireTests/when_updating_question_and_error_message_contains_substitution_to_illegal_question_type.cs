@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -12,24 +12,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_updating_question_and_error_message_contains_substitution_to_illegal_question_type : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddGpsQuestion(textQuestionId, chapterId, responsibleId, variableName: textQuestionVariable);
             
             questionnaire.AddTextQuestion(questionWithSubstitutionId, chapterId, responsibleId);
 
-            eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
-        Because of = () => exception =
+        private void BecauseOf() => exception =
             Catch.Exception(() => questionnaire.UpdateNumericQuestion(
                 new UpdateNumericQuestion(
                     questionnaire.Id,
@@ -47,11 +41,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     }
                     })));
 
-        It should_exception_has_specified_message = () =>
+        [NUnit.Framework.Test] public void should_exception_has_specified_message () =>
             new[] { "substitution", "to", "illegal", "type", textQuestionVariable }.ShouldEachConformTo(x =>
                 ((QuestionnaireException) exception).Message.Contains(x));
 
-        private static EventContext eventContext;
+
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

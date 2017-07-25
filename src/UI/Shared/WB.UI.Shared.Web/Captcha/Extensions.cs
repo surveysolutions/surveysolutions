@@ -1,7 +1,7 @@
 using System;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Extensions;
 

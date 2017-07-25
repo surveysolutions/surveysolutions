@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -8,27 +8,27 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_moving_group_with_roster_to_roster : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddGroup(groupId, chapterId, responsibleId: responsibleId);
             questionnaire.AddGroup(roster1Id, groupId, responsibleId: responsibleId, isRoster: true);
             questionnaire.AddGroup(roster2Id, chapterId, responsibleId: responsibleId, isRoster: true);
-        };
+            BecauseOf();
+        }
 
 
-        Because of = () =>
+        private void BecauseOf() =>
             questionnaire.MoveGroup(groupId, roster2Id, 0, responsibleId);
 
-        It should_contains_group = () =>
+        [NUnit.Framework.Test] public void should_contains_group () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).ShouldNotBeNull();
 
-        It should_contains_group_with_GroupId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_group_with_GroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
            .PublicKey.ShouldEqual(groupId);
 
-        It should_contains_group_with_roster2Id_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_group_with_roster2Id_specified () =>
            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
             .GetParent().PublicKey.ShouldEqual(roster2Id);
 

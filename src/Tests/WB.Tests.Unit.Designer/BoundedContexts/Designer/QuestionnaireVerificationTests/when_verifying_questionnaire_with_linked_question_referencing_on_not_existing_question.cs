@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_linked_question_referencing_on_not_existing_question : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             linkedQuestionId = Guid.Parse("10000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument(
                 Create.SingleQuestion(
@@ -27,24 +26,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     }
                 ));
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_1_message = () =>
+        [NUnit.Framework.Test] public void should_return_1_message () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_message_with_code__WB0011__ = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_code__WB0011__ () =>
             verificationMessages.Single().Code.ShouldEqual("WB0011");
 
-        It should_return_message_with_one_references = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_one_references () =>
             verificationMessages.Single().References.Count().ShouldEqual(1);
 
-        It should_return_message_reference_with_type_Question = () =>
+        [NUnit.Framework.Test] public void should_return_message_reference_with_type_Question () =>
             verificationMessages.Single().References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_message_reference_with_id_of_linkedQuestionId = () =>
+        [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_linkedQuestionId () =>
             verificationMessages.Single().References.Single().Id.ShouldEqual(linkedQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

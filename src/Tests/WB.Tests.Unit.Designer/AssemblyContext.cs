@@ -1,19 +1,21 @@
 ﻿using System.Globalization;
 using System.Threading;
 using Machine.Specifications;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
+using WB.Tests.Unit.Designer;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.Tests.Unit.Designer
 {
-    public class AssemblyContext : IAssemblyContext
+    public class AssemblyContext 
     {
         public void OnAssemblyStart()
         {
@@ -42,5 +44,14 @@ namespace WB.Tests.Unit.Designer
             Setup.InstanceToMockedServiceLocator<ILogger>(Mock.Of<ILogger>());
             Setup.InstanceToMockedServiceLocator<IClock>(Mock.Of<IClock>());
         }
+    }
+}
+[SetUpFixture]
+public class NunitAssemblyContext
+{
+    [OneTimeSetUp]
+    public void OnAssemblyStart()
+    {
+        AssemblyContext.SetupServiceLocator();
     }
 }

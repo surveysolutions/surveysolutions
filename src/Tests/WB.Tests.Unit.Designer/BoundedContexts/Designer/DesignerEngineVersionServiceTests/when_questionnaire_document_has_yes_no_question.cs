@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
 {
     internal class when_questionnaire_document_has_yes_no_question
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = Create.QuestionnaireDocument(questionnaireId,
                 Create.Group(groupId: groupId, children: new[]
                 {
@@ -24,12 +23,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
                 );
 
             designerEngineVersionService = Create.DesignerEngineVersionService();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             version = designerEngineVersionService.GetQuestionnaireContentVersion(questionnaire);
 
-        It should_return_16_version = () =>
+        [NUnit.Framework.Test] public void should_return_16_version () =>
             version.ShouldEqual(16);
 
         private static int version;

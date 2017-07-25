@@ -3,14 +3,13 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.UI.Designer.Api;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
 {
     internal class when_getting_singleoption_question_info_with_25_options : QuestionnaireApiControllerTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var singleoption = CreateSingleoptionFilteredCombobox(questionId, optionsCount: 25, isFilteredCombobox: false);
 
             questionnaireInfoViewFactoryMock = new Mock<IQuestionnaireInfoFactory>();
@@ -18,15 +17,16 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
                 .Setup(x => x.GetQuestionEditView(questionnaireId, questionId))
                 .Returns(singleoption);
             controller = CreateQuestionnaireController(questionnaireInfoFactory: questionnaireInfoViewFactoryMock.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             result = controller.EditQuestion(questionnaireId, questionId);
 
-        It should_return_edit_question_details = () =>
+        [NUnit.Framework.Test] public void should_return_edit_question_details () =>
             result.ShouldNotBeNull();
 
-        It should_return_edit_question_details_with_25_options = () =>
+        [NUnit.Framework.Test] public void should_return_edit_question_details_with_25_options () =>
             result.Options.Length.ShouldEqual(25);
 
         private static QuestionnaireController controller;

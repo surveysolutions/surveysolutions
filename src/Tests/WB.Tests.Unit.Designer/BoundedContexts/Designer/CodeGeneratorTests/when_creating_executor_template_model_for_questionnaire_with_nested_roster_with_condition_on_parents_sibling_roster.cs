@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
 {
     internal class when_creating_executor_template_model_for_questionnaire_with_nested_roster_with_condition_on_parents_sibling_roster : CodeGeneratorTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var numericNestedRosterId = Guid.NewGuid();
             questionnaire = CreateQuestionnaireDocument(
                 new IComposite[]
@@ -48,24 +47,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
                 });
 
             expressionStateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             templateModel = expressionStateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, Create.CodeGenerationSettings());
 
-        It should_variable_r2n1_be_accesible_for_nested_roster = () =>
+        [NUnit.Framework.Test] public void should_variable_r2n1_be_accesible_for_nested_roster () =>
             GetRosterScopeByRosterId(r1r1).AllParentsQuestionsToTop.Count(x => x.VariableName == "r2n1").ShouldEqual(1);
 
-        It should_variable_r1n1_be_accesible_for_nested_roster = () =>
+        [NUnit.Framework.Test] public void should_variable_r1n1_be_accesible_for_nested_roster () =>
            GetRosterScopeByRosterId(r1r1).AllParentsQuestionsToTop.Count(x => x.VariableName == "r1n1").ShouldEqual(1);
 
-        It should_variable_r1n1_be_accesible_for_sibling_roster = () =>
+        [NUnit.Framework.Test] public void should_variable_r1n1_be_accesible_for_sibling_roster () =>
            GetRosterScopeByRosterId(r2Id).Questions.Count(x => x.VariableName == "r1n1").ShouldEqual(1);
 
-        It should_variable_r2n1_be_accesible_for_nested_nested_roster = () =>
+        [NUnit.Framework.Test] public void should_variable_r2n1_be_accesible_for_nested_nested_roster () =>
            GetRosterScopeByRosterId(r1r1r1).AllParentsQuestionsToTop.Count(x => x.VariableName == "r2n1").ShouldEqual(1);
 
-        It should_variable_r1n1_be_accesible_for_nested_nested_roster = () =>
+        [NUnit.Framework.Test] public void should_variable_r1n1_be_accesible_for_nested_nested_roster () =>
            GetRosterScopeByRosterId(r1r1r1).AllParentsQuestionsToTop.Count(x => x.VariableName == "r1n1").ShouldEqual(1);
 
         private static RosterScopeTemplateModel GetRosterScopeByRosterId(Guid id)

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
-using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.UI.Headquarters.API.PublicApi.Models
 {
@@ -16,7 +16,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
     public class AssignmentIdentifyingDataItem
     {
-        public Identity Identity { get; set; }
+        public string Identity { get; set; }
         public string Variable { get; set; }
         public string Answer { get; set; }
     }
@@ -124,7 +124,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
     public class CreateAssignmentResult
     {
         public AssignmentDetails Assignment { get; set; }
-        public VerificationStatus VerificationStatus { get; set; }
+        public ImportDataVerificationState VerificationStatus { get; set; }
     }
 
     public class CreateAssignmentApiRequest

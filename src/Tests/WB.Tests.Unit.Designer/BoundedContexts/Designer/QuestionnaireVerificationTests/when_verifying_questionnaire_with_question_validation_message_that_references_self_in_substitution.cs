@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_question_validation_message_that_references_self_in_substitution : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = Create.QuestionnaireDocument(children: new IComposite[]
             {
                 Create.Question(
@@ -23,12 +22,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             });
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_not_return_message_with_code_WB0016 = () =>
+        [NUnit.Framework.Test] public void should_not_return_message_with_code_WB0016 () =>
             verificationMessages.GetMessage("WB0016").ShouldEqual(null);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

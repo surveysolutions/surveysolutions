@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
@@ -9,14 +9,13 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Api.Headquarters;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
 {
     internal class when_getting_Questionaire_and_questionnaire_is_valid : ImportControllerTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             request = Create.DownloadQuestionnaireRequest(questionnaireId);
 
             var membershipUserService = Mock.Of<IMembershipUserService>(
@@ -50,26 +49,27 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
                 expressionProcessorGenerator: expressionProcessorGenerator,
                 serializer: serializer,
                 zipUtils: stringCompressorMock);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             questionnaireCommunicationPackage = importController.Questionnaire(request);
 
-        It should_return_not_null_responce = () =>
+        [NUnit.Framework.Test] public void should_return_not_null_responce () =>
             questionnaireCommunicationPackage.ShouldNotBeNull();
 
-        It should_return_generated_assembly = () =>
+        [NUnit.Framework.Test] public void should_return_generated_assembly () =>
             questionnaireCommunicationPackage.QuestionnaireAssembly.ShouldEqual(generatedAssembly);
 
-        It should_return_compressed_serialized_questionnaire = () =>
+        [NUnit.Framework.Test] public void should_return_compressed_serialized_questionnaire () =>
             questionnaireCommunicationPackage.Questionnaire.ShouldEqual(compressedSerializedQuestionnaire);
 
-        /*It should_serialize_questionnaire_with_empty_Macros_SharedPersons_and_LookupTables = () =>
+        /*[NUnit.Framework.Test] public void should_serialize_questionnaire_with_empty_Macros_SharedPersons_and_LookupTables () =>
         {
             questionniareToSerialize.Macros.ShouldBeNull();
             questionniareToSerialize.SharedPersons.ShouldBeNull();
             questionniareToSerialize.LookupTables.ShouldBeNull();
-        };*/
+        }*/
 
         //private static QuestionnaireDocument questionniareToSerialize;
         private static ImportV2Controller importController;

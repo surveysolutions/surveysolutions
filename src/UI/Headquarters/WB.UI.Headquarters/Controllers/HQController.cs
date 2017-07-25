@@ -29,16 +29,15 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
         private readonly IAuthorizedUser authorizedUser;
-        
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
         private readonly IQuestionnaireStorage questionnaireStorage;
 
-        public HQController(ICommandService commandService, 
-            IAuthorizedUser authorizedUser, 
+        public HQController(ICommandService commandService,
+            IAuthorizedUser authorizedUser,
             ILogger logger,
             IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, 
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IQuestionnaireVersionProvider questionnaireVersionProvider,
             IQuestionnaireStorage questionnaireStorage)
             : base(commandService, logger)

@@ -380,4 +380,19 @@
   <data name="Interviewer_Diagnostics" xml:space="preserve">
     <value>Діагностіка</value>
   </data>
+  <data name="Interviewer_Done" xml:space="preserve">
+    <value>Зберегти</value>
+    <comment>Зберегти</comment>
+  </data>
+  <data name="Interviewer_AudioRecording" xml:space="preserve">
+    <value>аудіо запис</value>
+    <comment>аудіо запис</comment>
+  </data>
+  <data name="Interview_Questions_Audio_SaveAnswer" xml:space="preserve">
+    <value>Записати звук</value>
+    <comment>Записати звук</comment>
+  </data>
+  <data name="AudioQuestion_DurationFormat" xml:space="preserve">
+    <value>{0} аудіо запису</value>
+  </data>
 </root>

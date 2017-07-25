@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Web.Http;
 using Machine.Specifications;
@@ -9,23 +9,23 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
 {
     internal class when_getting_Questionaire_and_questionnaire_view_is_absent : ImportControllerTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             request = Create.DownloadQuestionnaireRequest(Guid.NewGuid());
             importController = CreateImportController();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Only<HttpResponseException>(() =>
                 importController.Questionnaire(request));
 
-        It should_throw_HttpResponseException = () =>
+        [NUnit.Framework.Test] public void should_throw_HttpResponseException () =>
             exception.ShouldNotBeNull();
 
-        It should_throw_HttpResponseException_with_StatusCode_NotFound = () =>
+        [NUnit.Framework.Test] public void should_throw_HttpResponseException_with_StatusCode_NotFound () =>
             exception.Response.StatusCode.ShouldEqual(HttpStatusCode.NotFound);
 
-        It should_throw_HttpResponseException_with_explanation_in_ReasonPhrase = () =>
+        [NUnit.Framework.Test] public void should_throw_HttpResponseException_with_explanation_in_ReasonPhrase () =>
             exception.Response.ReasonPhrase.ToLower().ToSeparateWords().ShouldContain("questionnaire", "cannot", "found", "shared");
 
         private static ImportV2Controller importController;

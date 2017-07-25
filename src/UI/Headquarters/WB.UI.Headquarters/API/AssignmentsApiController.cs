@@ -44,7 +44,7 @@ namespace WB.UI.Headquarters.API
         
         [Route("")]
         [HttpGet]
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor, Interviewer")]
         public IHttpActionResult Get([FromUri]AssignmentsDataTableRequest request)
         {
             QuestionnaireIdentity questionnaireIdentity = null;
@@ -53,6 +53,8 @@ namespace WB.UI.Headquarters.API
                 QuestionnaireIdentity.TryParse(request.QuestionnaireId, out questionnaireIdentity);
             }
 
+            var isInterviewer = this.authorizedUser.IsInterviewer;
+                       
             var input = new AssignmentsInputModel
             {
                 Page = request.PageIndex,
@@ -61,13 +63,20 @@ namespace WB.UI.Headquarters.API
                 SearchBy = request.Search.Value,
                 QuestionnaireId = questionnaireIdentity?.QuestionnaireId,
                 QuestionnaireVersion = questionnaireIdentity?.Version,
-                ResponsibleId = request.ResponsibleId,
-                ShowArchive = request.ShowArchive
+                ResponsibleId = isInterviewer ? this.authorizedUser.Id :request.ResponsibleId,
+                ShowArchive = !isInterviewer && request.ShowArchive
             };
 
             if (this.authorizedUser.IsSupervisor)
             {
                 input.SupervisorId = this.authorizedUser.Id;
+            }
+
+            if (isInterviewer)
+            {
+                input.OnlyWithInterviewsNeeded = true;
+                input.SearchByFields = AssignmentsInputModel.SearchTypes.Id 
+                    | AssignmentsInputModel.SearchTypes.IdentifyingQuestions;
             }
 
             var result = this.assignmentViewFactory.Load(input);
@@ -164,7 +173,7 @@ namespace WB.UI.Headquarters.API
             var answers = new List<InterviewAnswer>();
             var identifyingAnswers = new List<IdentifyingAnswer>();
 
-            foreach (var answer in untypedQuestionAnswers.Select(CommandTransformator.ParseQuestionAnswer))
+            foreach (var answer in untypedQuestionAnswers.Select(x => CommandTransformator.ParseQuestionAnswer(x, questionnaire)))
             {
                 identifyingAnswers.Add(IdentifyingAnswer.Create(assignment, questionnaire, answer.Value.ToString(), Identity.Create(answer.Key, null)));
                 answers.Add(new InterviewAnswer

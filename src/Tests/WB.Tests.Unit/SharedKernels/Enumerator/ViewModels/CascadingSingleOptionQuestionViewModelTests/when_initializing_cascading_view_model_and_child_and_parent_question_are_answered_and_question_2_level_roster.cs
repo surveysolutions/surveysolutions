@@ -39,17 +39,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 questionnaireRepository: questionnaireRepository);
         };
 
-        Because of = () =>
-            cascadingModel.Init(interviewId, questionIdentity, navigationState);
+        Because of = () => cascadingModel.Init(interviewId, questionIdentity, navigationState);
 
         It should_get_answer_for_parent_question_once = () =>
             StatefulInterviewMock.Verify(x => x.GetSingleOptionQuestion(parentIdentity), Times.Once);
-
-        It should_set_not_null_selected_object = () => 
-            cascadingModel.SelectedObject.ShouldNotBeNull();
-
-        It should_set_selected_object = () => 
-            cascadingModel.SelectedObject.Value.ShouldEqual(answerOnChildQuestion);
 
         It should_get_answer_for_question_once = () =>
             StatefulInterviewMock.Verify(x => x.GetSingleOptionQuestion(questionIdentity), Times.Once);
@@ -61,19 +54,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             EventRegistry.Verify(x => x.Subscribe(cascadingModel, Moq.It.IsAny<string>()), Times.Once);
         
         It should_set_filter_text = () =>
-            cascadingModel.FilterText.ShouldEqual(cascadingModel.SelectedObject.OriginalText);
+            cascadingModel.FilterText.ShouldEqual("3");
 
         It should_set_1_item_list_in_AutoCompleteSuggestions = () =>
             cascadingModel.AutoCompleteSuggestions.Count.ShouldEqual(1);
 
         It should_format_first_option_in_AutoCompleteSuggestions = () =>
-        {
-            var firstOption = cascadingModel.AutoCompleteSuggestions.ElementAt(0);
-            firstOption.Text.ShouldContain("title klo <b>3</b>");
-            firstOption.Value.ShouldEqual(answerOnChildQuestion);
-            firstOption.ParentValue.ShouldEqual(1);
-            firstOption.OriginalText.ShouldContain("title klo 3");
-        };
+            cascadingModel.AutoCompleteSuggestions.ElementAt(0).ShouldContain("title klo <b>3</b>");
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
         private static readonly Mock<IStatefulInterview> StatefulInterviewMock = new Mock<IStatefulInterview>();

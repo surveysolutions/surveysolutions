@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 
@@ -9,18 +9,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DeleteVariableHandlerT
 {
     internal class when_deleting_variable_and_all_parameters_specified : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddVariable(entityId : entityId, parentId : chapterId ,responsibleId:responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>            
+        private void BecauseOf() =>            
                 questionnaire.DeleteVariable(entityId: entityId, responsibleId: responsibleId);
 
 
-        It should_dont_contains_Variable = () =>
+        [NUnit.Framework.Test] public void should_dont_contains_Variable () =>
             questionnaire.QuestionnaireDocument.Find<Variable>(entityId).ShouldBeNull();
 
         

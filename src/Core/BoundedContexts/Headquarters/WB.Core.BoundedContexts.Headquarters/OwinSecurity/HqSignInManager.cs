@@ -7,12 +7,12 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using System.Threading;
 using System.Web;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             if (user == null || !await this.UserManager.CheckPasswordAsync(user, password))
                 return SignInStatus.Failure;
 
-            if (user.IsInRole(UserRoles.Interviewer) || user.IsLockedByHeadquaters || user.IsLockedBySupervisor || user.IsArchived)
+            if (user.IsLockedByHeadquaters || user.IsLockedBySupervisor || user.IsArchived)
                 return SignInStatus.LockedOut;
 
             await this.SignInAsync(user, isPersistent, false);
@@ -134,7 +134,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             if (user == null || !await this.UserManager.CheckPasswordAsync(user, password))
                 return SignInStatus.Failure;
 
-            if (!user.IsInRole(UserRoles.Interviewer) || user.IsLockedByHeadquaters || user.IsLockedBySupervisor || user.IsArchived)
+            if (user.IsLockedByHeadquaters || user.IsLockedBySupervisor || user.IsArchived)
                 return SignInStatus.LockedOut;
             
             var identity = await this.UserManager.CreateIdentityAsync(user, "Interviewer");

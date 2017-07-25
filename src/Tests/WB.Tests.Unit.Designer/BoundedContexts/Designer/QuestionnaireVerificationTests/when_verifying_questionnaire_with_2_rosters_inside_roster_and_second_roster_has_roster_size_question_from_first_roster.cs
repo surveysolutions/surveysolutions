@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_2_rosters_inside_roster_and_second_roster_has_roster_size_question_from_first_roster : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             Guid rosterSizeQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             Guid rosterSizeQuestionForChildRoster1Id = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
@@ -62,33 +61,34 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             });
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_1_message = () =>
+        [NUnit.Framework.Test] public void should_return_1_message () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_message_with_code__WB0054__ = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_code__WB0054__ () =>
             verificationMessages.Single().Code.ShouldEqual("WB0054");
 
-        It should_return_message_with_level_general = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_level_general () =>
             verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
-        It should_return_message_with_2_references = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_2_references () =>
             verificationMessages.Single().References.Count().ShouldEqual(2);
 
-        It should_return_first_message_reference_with_type_Roster = () =>
+        [NUnit.Framework.Test] public void should_return_first_message_reference_with_type_Roster () =>
             verificationMessages.Single().References.ElementAt(0).Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
 
-        It should_return_first_message_reference_with_id_of_rosterId = () =>
+        [NUnit.Framework.Test] public void should_return_first_message_reference_with_id_of_rosterId () =>
             verificationMessages.Single().References.ElementAt(0).Id.ShouldEqual(groupWithInvalidRosterSizeQuestionId);
 
-        It should_return_second_message_reference_with_type_question = () =>
+        [NUnit.Framework.Test] public void should_return_second_message_reference_with_type_question () =>
             verificationMessages.Single().References.ElementAt(1).Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_second_message_reference_with_id_of_rosterSizeQuestionWithInvalidRosterLevelId = () =>
+        [NUnit.Framework.Test] public void should_return_second_message_reference_with_id_of_rosterSizeQuestionWithInvalidRosterLevelId () =>
             verificationMessages.Single().References.ElementAt(1).Id.ShouldEqual(rosterSizeQuestionWithInvalidRosterLevelId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

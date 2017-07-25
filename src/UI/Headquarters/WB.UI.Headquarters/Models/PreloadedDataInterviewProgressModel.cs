@@ -1,12 +1,11 @@
 ﻿using System;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
-using WB.UI.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 
 namespace WB.UI.Headquarters.Models
 {
     public class PreloadedDataInterviewProgressModel
     {
-        public InterviewImportStatus Status { get; set; }
+        public AssignmentImportStatus Status { get; set; }
 
         public Guid QuestionnaireId { get; set; }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
@@ -10,33 +10,33 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddVariableHandlerTest
 {
     internal class when_adding_variable_to_chapter : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
                 questionnaire.AddVariableAndMoveIfNeeded(
                     new AddVariable(questionnaire.Id, entityId, new VariableData(variableType, variableName, variableExpression, description), responsibleId, chapterId, index));
 
 
-        It should_contains_Variable_with_EntityId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_Variable_with_EntityId_specified () =>
             questionnaire.QuestionnaireDocument.Find<Variable>(entityId).PublicKey.ShouldEqual(entityId);
 
-        It should_contains_Variable_with_ParentId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_Variable_with_ParentId_specified () =>
             questionnaire.QuestionnaireDocument.Find<Variable>(entityId).GetParent().PublicKey.ShouldEqual(chapterId);
 
-        It should_contains_Variable_with_name_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_Variable_with_name_specified () =>
             questionnaire.QuestionnaireDocument.Find<Variable>(entityId).Name.ShouldEqual(variableName);
 
-        It should_contains_Variable_with_expression_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_Variable_with_expression_specified () =>
             questionnaire.QuestionnaireDocument.Find<Variable>(entityId).Expression.ShouldEqual(variableExpression);
 
-        It should_contains_Variable_with_type_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_Variable_with_type_specified () =>
             questionnaire.QuestionnaireDocument.Find<Variable>(entityId).Type.ShouldEqual(variableType);
 
-        It should_change_variable_description = () =>
+        [NUnit.Framework.Test] public void should_change_variable_description () =>
           questionnaire.QuestionnaireDocument.Find<Variable>(entityId).Label.ShouldEqual(description);
 
         private static Questionnaire questionnaire;

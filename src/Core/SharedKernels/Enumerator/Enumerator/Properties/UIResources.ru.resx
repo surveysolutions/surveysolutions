@@ -326,6 +326,9 @@
   <data name="Interview_Complete_Screen_Description" xml:space="preserve">
     <value>Вы на финальной стадии работы с интервью</value>
   </data>
+  <data name="Interview_Complete_Screen_DescriptionWithInterviewKey" xml:space="preserve">
+    <value>Вы на финальной стадии работы с интервью {0}</value>
+  </data>
   <data name="Interview_Complete_Screen_Title" xml:space="preserve">
     <value>Окончание</value>
   </data>
@@ -533,5 +536,32 @@
   </data>
   <data name="MenuItem_Title_AreaCancelEdit" xml:space="preserve">
     <value>Очистить все</value>
+  </data>
+  <data name="Interviewer_Done" xml:space="preserve">
+    <value>Сохранить</value>
+    <comment>Сохранить</comment>
+  </data>
+  <data name="Interviewer_AudioRecording" xml:space="preserve">
+    <value>Аудио запись</value>
+    <comment>Аудио запись</comment>
+  </data>
+  <data name="Interview_Questions_Audio_SaveAnswer" xml:space="preserve">
+    <value>Записать звук</value>
+    <comment>Записать звук</comment>
+  </data>
+  <data name="MissingPermissions_Microphone" xml:space="preserve">
+    <value>Додатку необхідний дозвіл на використання мікрофона для відповіді на дане питання</value>
+    <comment>Приложению необходимо разрешение на использование микрофона для ответа на данный вопрос</comment>
+  </data>
+  <data name="InterviewKey" xml:space="preserve">
+    <value>Идентификатор: {0}</value>
+    <comment>Номер: {0}</comment>
+  </data>
+  <data name="AssignmentN" xml:space="preserve">
+    <value>Задача номер: {0}</value>
+    <comment>Задача номер: {0}</comment>
+  </data>
+  <data name="AudioQuestion_DurationFormat" xml:space="preserve">
+    <value>{0} аудио записи</value>
   </data>
 </root>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -19,8 +19,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         static QuestionnaireDocument questionnaire;
         static readonly Guid rosterGroupId = Guid.Parse("10000000000000000000000000000000");
 
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument(
                 new Group
                 {
@@ -129,21 +128,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_1_message = () =>
+        [NUnit.Framework.Test] public void should_return_1_message () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_message_reference_with_id_of_rosterGroupId = () =>
+        [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_rosterGroupId () =>
             verificationMessages.Single().References.First().Id.ShouldEqual(rosterGroupId);
 
-        It should_return_message_reference_with_type_Group = () =>
+        [NUnit.Framework.Test] public void should_return_message_reference_with_type_Group () =>
             verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
 
-        It should_return_first_error_with_code__WB0055 = () =>
+        [NUnit.Framework.Test] public void should_return_first_error_with_code__WB0055 () =>
             verificationMessages.Single().Code.ShouldEqual("WB0101");
     }
 }

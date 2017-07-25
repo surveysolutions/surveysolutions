@@ -4,7 +4,6 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
@@ -20,6 +19,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -73,7 +73,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, DeleteLookupTable>,
         ICommandPostProcessor<Questionnaire, ReplaceTextsCommand>,
         ICommandPostProcessor<Questionnaire, RevertVersionQuestionnaire>,
-        ICommandPostProcessor<Questionnaire, UpdateAreaQuestion>
+        ICommandPostProcessor<Questionnaire, UpdateAreaQuestion>,
+        ICommandPostProcessor<Questionnaire, UpdateAudioQuestion>
     {
         private IPlainStorageAccessor<User> accountStorage
             => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<User>>();
@@ -526,6 +527,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, UpdateMultiOptionQuestion command) => this.AddQuestionChanges(aggregate, command);
         public void Process(Questionnaire aggregate, UpdateSingleOptionQuestion command)=> this.AddQuestionChanges(aggregate, command);
         public void Process(Questionnaire aggregate, UpdateAreaQuestion command) => this.AddQuestionChanges(aggregate, command);
+        public void Process(Questionnaire aggregate, UpdateAudioQuestion command) => this.AddQuestionChanges(aggregate, command);
 
         private void AddQuestionChanges(Questionnaire aggregate, AbstractUpdateQuestionCommand command)
         {

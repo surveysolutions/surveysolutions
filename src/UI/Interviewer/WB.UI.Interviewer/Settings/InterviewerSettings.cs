@@ -12,7 +12,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Infrastructure.Shared.Enumerator;
+using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Utils;
 using Environment = System.Environment;
 

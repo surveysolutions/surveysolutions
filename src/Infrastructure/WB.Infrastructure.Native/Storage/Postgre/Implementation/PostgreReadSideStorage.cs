@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using Microsoft.Practices.ServiceLocation;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Engine;
@@ -15,6 +14,7 @@ using Ninject;
 using Npgsql;
 using NpgsqlTypes;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;

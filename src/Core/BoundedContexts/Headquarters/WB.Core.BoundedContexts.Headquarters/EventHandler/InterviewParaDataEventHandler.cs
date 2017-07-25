@@ -59,7 +59,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewHistoryView, UnapprovedByHeadquarters>,
         IUpdateHandler<InterviewHistoryView, InterviewReceivedByInterviewer>,
         IUpdateHandler<InterviewHistoryView, InterviewReceivedBySupervisor>,
-        IUpdateHandler<InterviewHistoryView, AreaQuestionAnswered>
+        IUpdateHandler<InterviewHistoryView, AreaQuestionAnswered>,
+        IUpdateHandler<InterviewHistoryView, AudioQuestionAnswered>
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IUserViewFactory userReader;
@@ -640,6 +641,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 @event.Payload.Coordinates, @event.Payload.DistanceToEditor)),
             @event.Payload.RosterVector));
 
+            return view;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AudioQuestionAnswered> @event)
+        {
+            this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, @event.Payload.AnswerTimeUtc,
+            this.CreateAnswerParameters(@event.Payload.QuestionId, $"{@event.Payload.FileName}, {@event.Payload.Length}", @event.Payload.RosterVector));
             return view;
         }
     }

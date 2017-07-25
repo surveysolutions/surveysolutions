@@ -47,7 +47,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
         }
 
         public InterviewSynchronizationDto BuildFrom(InterviewData interview,
-            Guid userId, InterviewStatus status, string comments, DateTime? rejectedDateTime, DateTime? interviewerAssignedDateTime)
+            Guid userId, 
+            InterviewStatus status, 
+            string comments, 
+            DateTime? rejectedDateTime, 
+            DateTime? interviewerAssignedDateTime)
         {
             var answeredQuestions = new List<AnsweredQuestionSynchronizationDto>();
             var disabledGroups = new HashSet<InterviewItemId>();
@@ -165,7 +169,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             Dictionary<InterviewItemId, object> variableValues = this.CreateVariableValues(interview);
             HashSet<InterviewItemId> disabledVariables = CreateDisabledVariables(interview);
 
-            return new InterviewSynchronizationDto(interview.InterviewId,
+            var result = new InterviewSynchronizationDto(interview.InterviewId,
                 status, 
                 comments,
                 rejectedDateTime,
@@ -190,6 +194,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                 disabledVariables,
                 interview.WasCompleted,
                 interview.CreatedOnClient);
+            result.InterviewKey = string.IsNullOrEmpty(interview.InterviewKey) ? null : InterviewKey.Parse(interview.InterviewKey);
+            result.AssignmentId = interview.AssignmentId;
+            return result;
         }
 
         private static HashSet<InterviewItemId> CreateDisabledVariables(InterviewData interview)

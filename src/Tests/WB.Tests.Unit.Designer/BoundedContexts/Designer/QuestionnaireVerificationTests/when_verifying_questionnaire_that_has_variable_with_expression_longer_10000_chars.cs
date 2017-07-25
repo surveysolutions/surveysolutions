@@ -9,14 +9,13 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.SharedKernels.QuestionnaireEntities;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
     internal class when_verifying_questionnaire_that_has_variable_with_expression_longer_10000_chars : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument(new []
             {
                 Create.Group(groupId: groupId, children: new IComposite[]
@@ -36,21 +35,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .Returns(new GenerationResult() { Success = true, Diagnostics = new List<GenerationDiagnostic>() });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessorGenerator: questionnireExpressionProcessorGeneratorMock.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_WB0005_message = () =>
+        [NUnit.Framework.Test] public void should_return_WB0005_message () =>
             verificationMessages.ShouldContainError("WB0005");
 
-        It should_return_message_with_one_references = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_one_references () =>
             verificationMessages.GetError("WB0005").References.Count().ShouldEqual(1);
 
-        It should_return_message_with_one_references_with_variable_type = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_one_references_with_variable_type () =>
             verificationMessages.GetError("WB0005").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Variable);
 
-        It should_return_message_with_one_references_with_id_equals_questionId = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_one_references_with_id_equals_questionId () =>
             verificationMessages.GetError("WB0005").References.First().Id.ShouldEqual(varId);
         
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

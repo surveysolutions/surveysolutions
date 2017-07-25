@@ -8,18 +8,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_deleting_question_and_question_is_referenced_itself_in_enablement_condition : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup( chapterId, responsibleId: responsibleId);
             questionnaire.AddTextQuestion(questionId : questionToBeDeleted, parentId : chapterId,responsibleId:responsibleId, variableName:"q", enablementCondition:"q != null");
-        };
+            BecauseOf();
+        }
 
 
-        Because of = () => 
+        private void BecauseOf() => 
             questionnaire.DeleteQuestion(questionToBeDeleted, responsibleId);
 
-        It should_doesnt_contain_question = () =>
+        [NUnit.Framework.Test] public void should_doesnt_contain_question () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionToBeDeleted).ShouldBeNull();
 
 

@@ -1,5 +1,5 @@
 using System.Web.Mvc;
-using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using ActionFilterAttribute = System.Web.Mvc.ActionFilterAttribute;

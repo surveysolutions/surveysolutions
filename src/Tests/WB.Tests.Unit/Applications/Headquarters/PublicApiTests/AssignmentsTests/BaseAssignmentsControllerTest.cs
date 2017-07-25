@@ -6,6 +6,7 @@ using AutoMapper;
 using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -18,6 +19,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 using WB.Tests.Abc.TestFactories;
 using WB.UI.Headquarters.API.PublicApi;
@@ -33,9 +35,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         protected Mock<IAssignmentViewFactory> assignmentViewFactory;
         protected Mock<IMapper> mapper;
         protected Mock<TestHqUserManager> userManager;
-        protected Mock<IPreloadedDataVerifier> preloadedDataVerifier;
         protected Mock<IQuestionnaireStorage> questionnaireStorage;
         protected Mock<ILogger> logger;
+        protected Mock<IInterviewImportService> interviewImportService;
 
         [SetUp]
         public virtual void Setup()
@@ -45,12 +47,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             this.controller = new AssignmentsController(
                 this.assignmentViewFactory.Object,
                 this.assignmentsStorage.Object,
-                this.preloadedDataVerifier.Object,
                 this.mapper.Object,
                 this.userManager.Object,
                 this.logger.Object,
                 this.questionnaireStorage.Object,
-                Mock.Of<IInterviewCreatorFromAssignment>());
+                Mock.Of<IInterviewCreatorFromAssignment>(),
+                this.interviewImportService.Object);
 
             this.controller.Request = new HttpRequestMessage();
             this.controller.Configuration = new HttpConfiguration();
@@ -62,7 +64,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             this.assignmentViewFactory = new Mock<IAssignmentViewFactory>();
             this.mapper = new Mock<IMapper>();
             this.userManager = new Mock<TestHqUserManager>();
-            this.preloadedDataVerifier = new Mock<IPreloadedDataVerifier>();
+            this.interviewImportService = new Mock<IInterviewImportService>();
             this.questionnaireStorage = new Mock<IQuestionnaireStorage>();
             this.logger = new Mock<ILogger>();
         }

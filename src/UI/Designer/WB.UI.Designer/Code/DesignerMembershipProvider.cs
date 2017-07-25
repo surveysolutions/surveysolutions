@@ -3,8 +3,6 @@ using WB.Core.BoundedContexts.Designer.Services.Accounts;
 
 namespace WB.UI.Designer
 {
-    using WB.UI.Shared.Web.MembershipProvider.Accounts;
-
     /// <summary>
     ///     The designer membership provider.
     /// </summary>

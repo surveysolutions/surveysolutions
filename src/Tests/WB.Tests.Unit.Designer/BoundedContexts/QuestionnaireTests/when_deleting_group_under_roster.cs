@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -8,18 +8,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_deleting_group_under_roster : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId, isRoster: true);
            
             questionnaire.AddGroup(groupInsideRosterId,  rosterId, responsibleId: responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => questionnaire.DeleteGroup(groupInsideRosterId, responsibleId);
+        private void BecauseOf() => questionnaire.DeleteGroup(groupInsideRosterId, responsibleId);
 
-        It should_doesnt_contain_group = () =>
+        [NUnit.Framework.Test] public void should_doesnt_contain_group () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupInsideRosterId).ShouldBeNull();
 
         

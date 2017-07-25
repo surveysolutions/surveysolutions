@@ -1,6 +1,6 @@
-using Microsoft.Practices.ServiceLocation;
 using Ninject.Modules;
-using NinjectAdapter;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Infrastructure.Native.Ioc;
 
 namespace WB.UI.Headquarters
 {
@@ -8,7 +8,7 @@ namespace WB.UI.Headquarters
     {
         public override void Load()
         {
-            ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.Kernel));
+            ServiceLocator.SetLocatorProvider(() => new NativeNinjectServiceLocatorAdapter(this.Kernel));
 
             this.Kernel.Bind<IServiceLocator>().ToConstant(ServiceLocator.Current);
         }

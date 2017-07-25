@@ -6,14 +6,13 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Designer.Api;
 using WB.UI.Shared.Web.CommandDeserialization;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
 {
     internal class when_posting_updated_attachment_without_file : CommandApiControllerTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var updateAttachmentCommand = Create.Command.AddOrUpdateAttachment(questionnaireId, attachmentId, null, responsibleId, name, oldAttachmentId);
 
             attachmentServiceMock.Setup(x => x.GetAttachmentContentId(oldAttachmentId)).Returns(attachmentContentId);
@@ -28,21 +27,22 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
                 commandDeserializer: commandDeserializerMock.Object,
                 attachmentService: attachmentServiceMock.Object,
                 commandService: mockOfCommandService.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             controller.UpdateAttachment(new CommandController.AttachmentModel { Command = serializedUpdateAttachmentCommand, FileName = fileName});
 
-        It should_get_content_id_by_attachmentId = () =>
+        [NUnit.Framework.Test] public void should_get_content_id_by_attachmentId () =>
             attachmentServiceMock.Verify(x=>x.GetAttachmentContentId(oldAttachmentId), Times.Once);
 
-        It should_not_save_content = () =>
+        [NUnit.Framework.Test] public void should_not_save_content () =>
             attachmentServiceMock.Verify(x => x.SaveContent(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<byte[]>()), Times.Never);
 
-        It should_save_attachment_meta = () =>
+        [NUnit.Framework.Test] public void should_save_attachment_meta () =>
             attachmentServiceMock.Verify(x => x.SaveMeta(attachmentId, questionnaireId, attachmentContentId, fileName), Times.Once);
 
-        It should_execute_AddOrUpdateAttachment_command = () =>
+        [NUnit.Framework.Test] public void should_execute_AddOrUpdateAttachment_command () =>
             mockOfCommandService.Verify(x => x.Execute(Moq.It.IsAny<AddOrUpdateAttachment>(), Moq.It.IsAny<string>()), Times.Once);
 
         private static CommandController controller;

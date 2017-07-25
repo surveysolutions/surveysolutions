@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
 {
     internal class when_updating_datetime_question_and_variable_name_is_empty : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddQRBarcodeQuestion(questionId,
@@ -24,11 +23,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
                         variableName: "old_variable_name",
                         instructions: "old instructions",
                         enablementCondition: "old condition");
-        };
+            BecauseOf();
+        }
 
-        Because of = () => exception = Catch.Exception(() => questionnaire.UpdateDateTimeQuestion(command));
+        private void BecauseOf() => exception = Catch.Exception(() => questionnaire.UpdateDateTimeQuestion(command));
 
-        It should_not_throw_exception = () => exception.ShouldBeNull();
+        [NUnit.Framework.Test] public void should_not_throw_exception () => exception.ShouldBeNull();
 
         private static Questionnaire questionnaire;
         private static Exception exception;

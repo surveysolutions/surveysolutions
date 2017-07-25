@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -9,15 +9,14 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
     internal class when_questionnaire_has_question_and_static_text_validated_by_future_question :
         QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var futureVerifiction = "q2==\"test\"";
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
@@ -29,28 +28,29 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 Create.Question(questionId: futureQuestionId, questionType: QuestionType.Text, variable: "q2"));
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
+        private void BecauseOf() => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
-        It should_return_WB0250_warning = () => errors.ShouldContainWarning("WB0250", "Validation condition #1 refers to a future question. Consider reversing the order.");
+        [NUnit.Framework.Test] public void should_return_WB0250_warning () => errors.ShouldContainWarning("WB0250", "Validation condition #1 refers to a future question. Consider reversing the order.");
 
-        It should_return_warning_for_static_text = () =>
+        [NUnit.Framework.Test] public void should_return_warning_for_static_text () =>
             FindWarningForEntityWithId(errors, "WB0250", staticextId).References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.StaticText);
 
-        It should_return_warning_for_static_text_with_reference_on_future_question = () =>
+        [NUnit.Framework.Test] public void should_return_warning_for_static_text_with_reference_on_future_question () =>
             FindWarningForEntityWithId(errors, "WB0250", staticextId).References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_warning_for_static_text_with_reference_on_future_question_id = () =>
+        [NUnit.Framework.Test] public void should_return_warning_for_static_text_with_reference_on_future_question_id () =>
             FindWarningForEntityWithId(errors, "WB0250", staticextId).References.Last().Id.ShouldEqual(futureQuestionId);
 
-        It should_return_warning_for_question = () =>
+        [NUnit.Framework.Test] public void should_return_warning_for_question () =>
             FindWarningForEntityWithId(errors, "WB0250", questionId).References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_warning_for_question_with_reference_on_future_question = () =>
+        [NUnit.Framework.Test] public void should_return_warning_for_question_with_reference_on_future_question () =>
             FindWarningForEntityWithId(errors, "WB0250", questionId).References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_warning_for_question_with_reference_on_future_question_id = () =>
+        [NUnit.Framework.Test] public void should_return_warning_for_question_with_reference_on_future_question_id () =>
             FindWarningForEntityWithId(errors, "WB0250", questionId).References.Last().Id.ShouldEqual(futureQuestionId);
 
         static QuestionnaireDocument questionnaire;

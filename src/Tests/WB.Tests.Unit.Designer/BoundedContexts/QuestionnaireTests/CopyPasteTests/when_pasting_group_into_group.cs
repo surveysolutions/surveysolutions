@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
 {
     internal class when_pasting_group_into_group : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             responsibleId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             groupToPasteInId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             sourceQuestionaireId = Guid.Parse("DCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
@@ -36,15 +35,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
                 parentId: groupToPasteInId);
 
             command.SourceDocument = doc;
-        };
+            BecauseOf();
+        }
 
-        Because of = () => 
+        private void BecauseOf() => 
             questionnaire.PasteInto(command);
 
-        It should_clone_group = () =>
+        [NUnit.Framework.Test] public void should_clone_group () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).ShouldNotBeNull();
 
-        It should_clone_group_with_QuestionId_specified = () =>
+        [NUnit.Framework.Test] public void should_clone_group_with_QuestionId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(targetId)
                 .PublicKey.ShouldEqual(targetId);
         
