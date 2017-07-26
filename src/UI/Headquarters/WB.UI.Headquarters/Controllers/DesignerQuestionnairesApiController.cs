@@ -77,11 +77,18 @@ namespace WB.UI.Headquarters.Controllers
                     case HttpStatusCode.Unauthorized:
                     case HttpStatusCode.Forbidden:
                         this.designerUserCredentials.Set(null);
-                        break;
+                        throw new HttpResponseException(HttpStatusCode.Unauthorized);
                 }
+
+                Logger.Warn("General Rest Exception on Designer communication", e);
+                throw;
+            }
+            catch (Exception exc)
+            {
+                Logger.Warn("Exception on Designer communication", exc);
+                throw;
             }
 
-            throw new HttpResponseException(HttpStatusCode.Unauthorized);
         }
 
         private string HumanizeLastUpdateDate(DateTime? date)
