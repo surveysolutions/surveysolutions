@@ -4,11 +4,10 @@ using Moq;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactoryTests
 {
-    internal class ChartStatisticsViewFactoryTestsContext
+    public class ChartStatisticsViewFactoryTestsContext
     {
         protected static ChartStatisticsViewFactory CreateChartStatisticsViewFactory(StatisticsGroupedByDateAndTemplate statistics = null)
             => new ChartStatisticsViewFactory(
