@@ -52,7 +52,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 : null;
 
         public TimeSpan GetDuration() => DateTime.Now - this.startedDate;
-        public string GetMimeType() => MimeTypeMap.Singleton.GetMimeTypeFromExtension(audioFileName);
+        public string GetMimeType() => MimeTypeMap.Singleton.GetMimeTypeFromExtension(AudioFileExtension);
         public string GetAudioType() => AudioFileExtension;
         
         public double GetNoiseLevel() 
