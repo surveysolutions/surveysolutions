@@ -129,7 +129,18 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             {
                 this.fragmentStatePagerAdapter.RemoveFragmentByViewModel(listViewModel);
             }
-            var fragment = (MvxFragment)this.fragmentStatePagerAdapter.GetItem(viewPager.CurrentItem);
+
+
+            var viewPagerCurrentItem = viewPager.CurrentItem;
+            if (viewPagerCurrentItem > 0)
+            {
+                UpdateTypeOfInterviewsViewModelProperty(viewPagerCurrentItem);
+            }
+        }
+
+        private void UpdateTypeOfInterviewsViewModelProperty(int tabPosition)
+        {
+            var fragment = (MvxFragment)this.fragmentStatePagerAdapter.GetItem(tabPosition);
             var viewModel = (ListViewModel)fragment.ViewModel;
             this.ViewModel.TypeOfInterviews = viewModel.InterviewStatus;
         }
@@ -142,9 +153,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
         private void ViewPager_PageSelected(object sender, ViewPager.PageSelectedEventArgs e)
         {
-            var currentFragment = (MvxFragment)this.fragmentStatePagerAdapter.GetItem(e.Position);
-            this.ViewModel.TypeOfInterviews = ((InterviewTabPanel)currentFragment.ViewModel).InterviewStatus;
-            Mvx.Trace($"ViewPager_PageSelected. this.ViewModel.TypeOfInterviews={this.ViewModel.TypeOfInterviews}");
+            UpdateTypeOfInterviewsViewModelProperty(e.Position);
         }
 
         protected override void OnViewModelSet()
