@@ -2,19 +2,10 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:local="http://schemas.android.com/apk/res-auto"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
   android:paddingRight="@dimen/Interview_Entity_margin_right"
-  android:paddingLeft="@dimen/Interview_Entity_margin_left">
-<LinearLayout
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:background="@android:color/white"
-  android:paddingBottom="10dp"
-  android:paddingTop="28dp"
-  android:paddingLeft="30dp"
-  android:paddingRight="10dp"
-  android:orientation="vertical">
+  android:paddingLeft="@dimen/Interview_Entity_margin_left"
+  style="@style/FullWidthWrappingLayout">
+<LinearLayout style="@style/Audio_Dialog_Holder">
   <TableLayout
     style="@style/FullWidthWrappingLayout"
     android:layout_width="match_parent"
@@ -22,15 +13,11 @@
     android:layout_weight="1" 
     android:stretchColumns="0">
     <TableRow>
-      <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+      <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
         <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:fontFamily="Roboto Light"
-          android:textSize="@dimen/textsize_24"
+          style="@style/Text_Roboto_24"
           local:MvxBind="Text Localization('Interviewer_AudioRecording');"/>
         <TextView
           style="@style/Interview_Question_Title_Base"
@@ -38,7 +25,7 @@
 
       </LinearLayout>
       <ImageButton style="@style/Interview_Question_RemoveAnswer"
-                   android:layout_marginRight="16dp"
+                   android:layout_marginRight="@dimen/Interview_Audio_Dialog_Remove_Button_Margin_Left"
                    android:duplicateParentState="true"
                    local:MvxBind="Click CancelCommand;" />
     </TableRow>
@@ -46,40 +33,37 @@
       <RelativeLayout
         android:layout_span="2"
         android:layout_width="match_parent"
-        android:layout_height="150dp">
+        android:layout_height="@dimen/Interview_Audio_Dialog_Visualizer_Max_Width">
         <View 
           android:layout_centerHorizontal="true"
           android:layout_centerVertical="true"
-          android:layout_width="7dp"
-          android:layout_height="7dp"
-          local:MvxBind="BackgroundStyle AudioNoiseLevelTypeToDot(NoiseType)"/>  
+          android:layout_width="@dimen/Interview_Audio_Dialog_Visualizer_Dot_Width"
+          android:layout_height="@dimen/Interview_Audio_Dialog_Visualizer_Dot_Width"
+          local:MvxBind="BackgroundStyle AudioNoiseTypeToDot(NoiseType)"/>  
       
         <View 
           android:layout_centerHorizontal="true"
           android:layout_centerVertical="true"
-          android:layout_width="16dp"
-          android:layout_height="16dp"
-          local:MvxBind="SizeByNoiseLevel NoiseLevel; BackgroundStyle AudioNoiseLevelTypeToShape(NoiseType)" />  
+          android:layout_width="@dimen/Interview_Audio_Dialog_Visualizer_Min_Width"
+          android:layout_height="@dimen/Interview_Audio_Dialog_Visualizer_Min_Width"
+          local:MvxBind="SizeByNoiseLevel NoiseLevel; BackgroundStyle AudioNoiseTypeToShape(NoiseType)" />  
       </RelativeLayout>
         
     </TableRow>
   </TableLayout>
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+  <LinearLayout style="@style/FullWidthWrappingLayout">
     <TextView
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_weight="1"
-      android:fontFamily="Roboto Light"
-      android:textSize="@dimen/textsize_24"
+      style="@style/Text_Roboto_24"
       local:MvxBind="Text Duration;"/>
-    
-      <Button style="@style/Link_Button"
-              local:MvxBind="Click CancelCommand; Text Localization('Interviewer_RelinkDevice_Cancel');" />
-      <Button
-        style="@style/Done_Button"
-        local:MvxBind="Click DoneCommand; Text Localization('Interviewer_Done');" />  
+
+    <Button style="@style/Link_Button"
+            local:MvxBind="Click CancelCommand; Text Localization('Interviewer_RelinkDevice_Cancel');" />
+    <Button
+      style="@style/Done_Button"
+      local:MvxBind="Click DoneCommand; Text Localization('Interviewer_Done');" />
   </LinearLayout>
 </LinearLayout>
 </LinearLayout>
