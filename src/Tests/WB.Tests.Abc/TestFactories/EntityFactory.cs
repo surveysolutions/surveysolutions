@@ -1093,8 +1093,13 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewTreeTextQuestion InterviewTreeTextQuestion(string answer)
             => new InterviewTreeTextQuestion(answer);
 
-        public TextListQuestion TextListQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            int? maxAnswerCount = null, string variable = null, bool hideIfDisabled = false)
+        public TextListQuestion TextListQuestion(Guid? questionId = null, 
+            string enablementCondition = null, 
+            string validationExpression = null,
+            int? maxAnswerCount = null, 
+            string variable = null, 
+            bool hideIfDisabled = false,
+            string questionText = null)
             => new TextListQuestion("Question TL")
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
@@ -1103,7 +1108,8 @@ namespace WB.Tests.Abc.TestFactories
                 ValidationExpression = validationExpression,
                 MaxAnswerCount = maxAnswerCount,
                 QuestionType = QuestionType.TextList,
-                StataExportCaption = variable
+                StataExportCaption = variable,
+                QuestionText = questionText
             };
 
         public TextQuestion TextQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
