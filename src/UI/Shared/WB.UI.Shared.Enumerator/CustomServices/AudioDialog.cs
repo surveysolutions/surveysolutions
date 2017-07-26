@@ -12,6 +12,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private AudioDialogFragment dialog;
 
         private Timer durationTimer;
+        private Timer noiseTimer;
 
         private readonly IMvxAndroidCurrentTopActivity topActivity;
         private readonly IInterviewViewModelFactory viewModelFactory;
@@ -29,17 +30,18 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         public event EventHandler OnCanelRecording;
         public event EventHandler OnRecorded;
 
-        public void ShowAndStartRecording(string title, int bitRate)
+        public void ShowAndStartRecording(string title)
         {
             if (this.dialog == null)
                 this.InitializeDialog();
             
-            this.audioService.Start(bitRate);
+            this.audioService.Start();
             
             this.durationTimer = new Timer(this.OnEvery31Milisecond, null, 0, 31);
+            this.noiseTimer = new Timer(this.OnEvery100Millisecond, null, 0, 100);
             
             this.dialog.ViewModel.Title = title;
-            this.dialog.ViewModel.Magnitude = 0;
+            this.dialog.ViewModel.NoiseLevel = 0;
             this.dialog.ViewModel.Duration = string.Empty;
 
             this.dialog.Show(this.topActivity.Activity.FragmentManager, nameof(AudioDialogFragment));
@@ -75,6 +77,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
             this.durationTimer.Dispose();
             this.durationTimer = null;
+
+            this.noiseTimer.Dispose();
+            this.noiseTimer = null;
             
             this.dialog.Dismiss();
         }
@@ -83,8 +88,12 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         {
             var duration = this.audioService.GetDuration();
             this.dialog.ViewModel.Duration = $"{duration.Minutes:00}:{duration.Seconds:00}:{duration.Milliseconds/10:00}";
-            this.dialog.ViewModel.Magnitude = this.audioService.GetMagnitude();
-            this.dialog.ViewModel.MagnitudeType = this.audioService.GetMagnitudeType();
+        }
+
+        private void OnEvery100Millisecond(object state)
+        {
+            this.dialog.ViewModel.NoiseLevel = this.audioService.GetNoiseLevel();
+            this.dialog.ViewModel.NoiseType = this.audioService.GetNoiseType();
         }
     }
 }

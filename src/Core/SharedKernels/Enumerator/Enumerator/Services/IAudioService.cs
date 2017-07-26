@@ -5,13 +5,13 @@ namespace WB.Core.SharedKernels.Enumerator.Services
 {
     public interface IAudioService : IDisposable
     {
-        void Start(int kbPerSec);
+        void Start();
         void Stop();
         Stream GetLastRecord();
         TimeSpan GetDuration();
         string GetMimeType();
         string GetAudioType();
-        int GetMagnitude();
-        MagnitudeType GetMagnitudeType();
+        double GetNoiseLevel();
+        NoiseType GetNoiseType();
     }
 }

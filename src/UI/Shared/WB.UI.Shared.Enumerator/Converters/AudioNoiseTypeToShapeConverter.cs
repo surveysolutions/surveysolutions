@@ -5,15 +5,15 @@ using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.UI.Shared.Enumerator.Converters
 {
-    public class AudioMagnitudeTypeToShapeConverter : MvxValueConverter<MagnitudeType, int>
+    public class AudioNoiseTypeToShapeConverter : MvxValueConverter<NoiseType, int>
     {
-        protected override int Convert(MagnitudeType value, Type targetType, object parameter, CultureInfo culture)
+        protected override int Convert(NoiseType value, Type targetType, object parameter, CultureInfo culture)
         {
             switch (value)
             {
-                case MagnitudeType.Low:
+                case NoiseType.Low:
                     return Resource.Drawable.audio_curcle_gray;
-                case MagnitudeType.High:
+                case NoiseType.High:
                     return Resource.Drawable.audio_curcle_red;
                 default:
                     return Resource.Drawable.audio_curcle_blue;
@@ -21,15 +21,15 @@ namespace WB.UI.Shared.Enumerator.Converters
         }
     }
 
-    public class AudioMagnitudeTypeToDotConverter : MvxValueConverter<MagnitudeType, int>
+    public class AudioNoiseTypeToDotConverter : MvxValueConverter<NoiseType, int>
     {
-        protected override int Convert(MagnitudeType value, Type targetType, object parameter, CultureInfo culture)
+        protected override int Convert(NoiseType value, Type targetType, object parameter, CultureInfo culture)
         {
             switch (value)
             {
-                case MagnitudeType.Low:
+                case NoiseType.Low:
                     return Resource.Drawable.audio_dot_gray;
-                case MagnitudeType.High:
+                case NoiseType.High:
                     return Resource.Drawable.audio_dot_red;
                 default:
                     return Resource.Drawable.audio_dot_blue;

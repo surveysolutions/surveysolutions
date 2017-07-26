@@ -27,18 +27,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             set => this.RaiseAndSetIfChanged(ref this.duration, value);
         }
 
-        private int magnitude;
-        public int Magnitude
+        private double noiseLevel;
+        public double NoiseLevel
         {
-            get => this.magnitude;
-            set => this.RaiseAndSetIfChanged(ref this.magnitude, value);
+            get => this.noiseLevel;
+            set => this.RaiseAndSetIfChanged(ref this.noiseLevel, value);
         }
 
-        private MagnitudeType magnitudeType;
-        public MagnitudeType MagnitudeType
+        private NoiseType noiseType;
+        public NoiseType NoiseType
         {
-            get => this.magnitudeType;
-            set => this.RaiseAndSetIfChanged(ref this.magnitudeType, value);
+            get => this.noiseType;
+            set => this.RaiseAndSetIfChanged(ref this.noiseType, value);
         }
 
         private void Cancel() => this.OnCancel?.Invoke(this, EventArgs.Empty);
