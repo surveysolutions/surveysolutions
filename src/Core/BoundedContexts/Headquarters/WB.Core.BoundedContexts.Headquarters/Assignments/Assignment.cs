@@ -50,6 +50,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual IList<InterviewAnswer> Answers { get; protected set; }
 
+        public virtual QuestionnaireLiteViewItem Questionnaire { get; set; }
+
         /// <summary>
         /// Will also include deleted interviews
         /// </summary>
@@ -102,5 +104,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.Archived = false;
             this.UpdatedAtUtc = DateTime.UtcNow;
         }
+    }
+
+    public class QuestionnaireLiteViewItem
+    {
+        public virtual string Title { get; set; }
+        public virtual Guid QuestionnaireId { get; set; }
     }
 }

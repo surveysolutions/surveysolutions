@@ -13,6 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public Guid? ResponsibleId { get; set; }
         public Guid? SupervisorId { get; set; }
         public bool ShowArchive { get; set; }
+        public bool ShowQuestionnaireTitle { get; set; } = false;
         public bool OnlyWithInterviewsNeeded { get; set; } = false;
         public int? Limit { get; set; }
         public int? Offset { get; set; }
@@ -20,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         [Flags]
         public enum SearchTypes
         {
-            Id, ResponsibleId, IdentifyingQuestions
+            Id, ResponsibleId, IdentifyingQuestions, QuestionnaireTitle
         }
     }
 }
