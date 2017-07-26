@@ -107,8 +107,8 @@ namespace WB.UI.Shared.Enumerator
             registry.AddOrOverwrite("MediaButtonStyleBackground", new MediaQuestionButtonBackgroundConverter());
             registry.AddOrOverwrite("SectionStyleBackground", new SectionStyleBackgroundConverter());
             registry.AddOrOverwrite("VisibleOrInvisible", new VisibleOrInvisibleValueConverter());
-            registry.AddOrOverwrite("AudioMagnitudeTypeToShape", new AudioNoiseTypeToShapeConverter());
-            registry.AddOrOverwrite("AudioMagnitudeTypeToDot", new AudioNoiseTypeToDotConverter());
+            registry.AddOrOverwrite("AudioNoiseTypeToShape", new AudioNoiseTypeToShapeConverter());
+            registry.AddOrOverwrite("AudioNoiseTypeToDot", new AudioNoiseTypeToDotConverter());
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
@@ -140,7 +140,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<EditText>("TextChanged", (editText) => new EditTextChangedBinding(editText));
             registry.RegisterCustomBindingFactory<FrameLayout>("CurrentScreen", (frameLayout) => new FrameLayoutCurrentScreenBinding(frameLayout));
             registry.RegisterCustomBindingFactory<ImageView>("BitmapWithFallback", (img) => new ImageViewBitmapWithFallbackBinding(img));
-            registry.RegisterCustomBindingFactory<View>("SizeByMagnitude", (view) => new AudioSizeByNoiseLevelBinding(view));
+            registry.RegisterCustomBindingFactory<View>("SizeByNoiseLevel", (view) => new AudioSizeByNoiseLevelBinding(view));
             registry.RegisterCustomBindingFactory<View>("Tag", (img) => new ViewTagBinding(img));
             MvxAppCompatSetupHelper.FillTargetFactories(registry);
 
