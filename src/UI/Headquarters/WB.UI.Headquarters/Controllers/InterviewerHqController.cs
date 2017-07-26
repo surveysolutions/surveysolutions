@@ -30,6 +30,7 @@ using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Utils;
 using CommonRes = Resources.Common;
 using ASP;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -87,9 +88,10 @@ namespace WB.UI.Headquarters.Controllers
 
         private InterviewerHqModel NewModel(MenuItem title, params InterviewStatus[] statuses)
         {
+            ViewBag.ActivePage = title;
             return new InterviewerHqModel
             {
-                Title = title,
+                Title = title.ToUiString(),
                 AllInterviews = Url.Content(@"~/api/InterviewApi/GetInterviews"),
                 InterviewerHqEndpoint = Url.Content(@"~/InterviewerHq"),
                 Statuses = statuses.Select(s => s.ToString()).ToArray(),

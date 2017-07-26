@@ -162,6 +162,9 @@
   <data name="Search" xml:space="preserve">
     <value>Поиск:</value>
   </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>Поиск...</value>
+  </data>
   <data name="ZeroRecords" xml:space="preserve">
     <value>Записи отсутствуют</value>
   </data>
