@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Tasks;
@@ -11,7 +9,6 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -121,7 +118,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (string.IsNullOrEmpty(this.FilterText)) return;
 
-            var selectedOption = this.interview.GetOptionForQuestionWithFilter(this.Identity, this.FilterText);
+            var selectedOption = this.GetOptionByFilter(this.FilterText);
 
             if (selectedOption != null) return;
 
@@ -176,7 +173,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.RemoveAnswerAsync();
             else
             {
-                var selectedOption = this.interview.GetOptionForQuestionWithFilter(this.Identity, filter);
+                var selectedOption = this.GetOptionByFilter(filter);
                 if (selectedOption != null) await this.SaveAnswerAsync(filter);
             }
             
