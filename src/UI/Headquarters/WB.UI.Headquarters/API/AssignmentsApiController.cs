@@ -76,7 +76,9 @@ namespace WB.UI.Headquarters.API
             {
                 input.OnlyWithInterviewsNeeded = true;
                 input.SearchByFields = AssignmentsInputModel.SearchTypes.Id 
-                    | AssignmentsInputModel.SearchTypes.IdentifyingQuestions;
+                    | AssignmentsInputModel.SearchTypes.IdentifyingQuestions
+                    | AssignmentsInputModel.SearchTypes.QuestionnaireTitle;
+                input.ShowQuestionnaireTitle = true;
             }
 
             var result = this.assignmentViewFactory.Load(input);

@@ -80,6 +80,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 mto.Update(false);
                 mto.Insert(false);
             });
+
+            ManyToOne(x => x.Questionnaire, mto =>
+            {
+                mto.Column("questionnaireid");
+               
+                mto.Cascade(Cascade.None);
+                mto.Update(false);
+                mto.Insert(false);
+            });
+        }
+    }
+
+    [PlainStorage]
+    public class QuestionnaireLiteViewItemMap : ClassMapping<QuestionnaireLiteViewItem>
+    {
+        public QuestionnaireLiteViewItemMap()
+        {
+            this.Table("questionnairebrowseitems");
+            Id(x => x.QuestionnaireId);
+            Property(x => x.Title);
         }
     }
 

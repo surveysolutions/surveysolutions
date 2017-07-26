@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
     {
         private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        
+
         public AssignmentViewFactory(IPlainStorageAccessor<Assignment> assignmentsStorage,
             IQuestionnaireStorage questionnaireStorage)
         {
@@ -44,12 +44,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                     .ToList();
 
                 var neededItems = _.Where(x => ids.Contains(x.Id));
-                var list = this.DefineOrderBy(neededItems, input)
-                                .Fetch(x =>x.IdentifyingData)
-                                .Fetch(x => x.InterviewSummaries)
-                                .Fetch(x => x.Responsible)
-                                // .ThenFetch(x => x.RoleIds) throws Null reference exception, but should be here :( https://stackoverflow.com/q/21243592/72174
-                                .ToList();
+
+                var fetchReqests = this.DefineOrderBy(neededItems, input)
+                    .Fetch(x => x.IdentifyingData)
+                    .Fetch(x => x.InterviewSummaries)
+                    .Fetch(x => x.Responsible);
+                // .ThenFetch(x => x.RoleIds) throws Null reference exception, but should be here :( https://stackoverflow.com/q/21243592/72174
+
+                List<Assignment> list;
+
+                if (input.ShowQuestionnaireTitle)
+                {
+                    list = fetchReqests.Fetch(x => x.Questionnaire).ToList();
+                }
+                else
+                {
+                    list = fetchReqests.ToList();
+                }
 
                 return list;
             });
@@ -58,19 +69,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             {
                 Page = input.Page,
                 PageSize = input.PageSize,
-                Items = assignments.Select(x => new AssignmentRow
+                Items = assignments.Select(x =>
                 {
-                    QuestionnaireId = x.QuestionnaireId,
-                    CreatedAtUtc = x.CreatedAtUtc,
-                    ResponsibleId = x.ResponsibleId,
-                    UpdatedAtUtc = x.UpdatedAtUtc,
-                    Quantity = x.Quantity,
-                    InterviewsCount = x.InterviewSummaries.Count(s => !s.IsDeleted),
-                    Id = x.Id,
-                    Archived = x.Archived,
-                    Responsible = x.Responsible.Name,
-                    ResponsibleRole = x.Responsible.RoleIds.First().ToUserRole().ToString(),
-                    IdentifyingQuestions = this.GetIdentifyingColumnText(x)
+                    var row = new AssignmentRow
+                    {
+                        QuestionnaireId = x.QuestionnaireId,
+                        CreatedAtUtc = x.CreatedAtUtc,
+                        ResponsibleId = x.ResponsibleId,
+                        UpdatedAtUtc = x.UpdatedAtUtc,
+                        Quantity = x.Quantity,
+                        InterviewsCount = x.InterviewSummaries.Count(s => !s.IsDeleted),
+                        Id = x.Id,
+                        Archived = x.Archived,
+                        Responsible = x.Responsible.Name,
+                        ResponsibleRole = x.Responsible.RoleIds.First().ToUserRole().ToString(),
+                        IdentifyingQuestions = this.GetIdentifyingColumnText(x)
+                    };
+
+                    if (input.ShowQuestionnaireTitle)
+                    {
+                        row.QuestionnaireTitle = x.Questionnaire.Title;
+                    }
+
+                    return row;
                 }).ToList(),
             };
 
@@ -86,7 +107,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
             if (questionnaire == null) return new List<AssignmentIdentifyingQuestionRow>();
 
-            List<AssignmentIdentifyingQuestionRow> identifyingColumnText = 
+            List<AssignmentIdentifyingQuestionRow> identifyingColumnText =
                 assignment.IdentifyingData.Select(x => new AssignmentIdentifyingQuestionRow(questionnaire.GetQuestionTitle(x.Identity.Id).RemoveHtmlTags(), x.AnswerAsString))
                 .ToList();
             return identifyingColumnText;
@@ -125,6 +146,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         private IQueryable<Assignment> ApplyFilter(AssignmentsInputModel input, IQueryable<Assignment> assignments)
         {
             var items = assignments.Where(x => x.Archived == input.ShowArchive);
+
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
                 int id = 0;
@@ -132,7 +154,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 var lowerSearchBy = input.SearchBy.ToLower();
 
                 Expression<Func<Assignment, bool>> textSearchExpression = x => false;
-                
+
                 if (input.SearchByFields.HasFlag(AssignmentsInputModel.SearchTypes.IdentifyingQuestions))
                 {
                     textSearchExpression = textSearchExpression
@@ -143,7 +165,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 {
                     textSearchExpression = textSearchExpression.OrCondition(x => x.Responsible.Name.ToLower().Contains(lowerSearchBy));
                 }
-            
+
+                if (input.SearchByFields.HasFlag(AssignmentsInputModel.SearchTypes.ResponsibleId))
+                {
+                    textSearchExpression = textSearchExpression.OrCondition(x => x.Questionnaire.Title.ToLower().Contains(lowerSearchBy));
+                }
+
                 if (input.SearchByFields.HasFlag(AssignmentsInputModel.SearchTypes.Id) && int.TryParse(input.SearchBy, out id))
                 {
                     textSearchExpression = textSearchExpression.OrCondition(x => x.Id == id);
