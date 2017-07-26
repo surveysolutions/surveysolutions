@@ -54,23 +54,15 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         public TimeSpan GetDuration() => DateTime.Now - this.startedDate;
         public string GetMimeType() => MimeTypeMap.Singleton.GetMimeTypeFromExtension(audioFileName);
         public string GetAudioType() => AudioFileExtension;
+        
+        public double GetNoiseLevel() 
+            => MaxReportableDb + 20 * Math.Log10(this.recorder.MaxAmplitude / MaxReportableAmp);
 
-        private double prevNoiseLevel;
-        public double GetNoiseLevel()
+        public NoiseType GetNoiseType(double noiseLevel)
         {
-            double maxAmplitude = this.recorder.MaxAmplitude;
-            if (maxAmplitude == 0) return prevNoiseLevel;
-
-            this.prevNoiseLevel = MaxReportableDb + (20 * Math.Log10(maxAmplitude / MaxReportableAmp));
-
-            return prevNoiseLevel;
-        }
-
-        public NoiseType GetNoiseType()
-        {
-            if(this.prevNoiseLevel < 45)
+            if(noiseLevel < 45)
                 return NoiseType.Low;
-            if(this.prevNoiseLevel > 80)
+            if(noiseLevel > 80)
                 return NoiseType.High;
             return NoiseType.Normal;
         }
