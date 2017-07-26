@@ -113,6 +113,7 @@
                 series: [
                     { label: 'Supervisor assigned' },
                     { label: 'Interviewer assigned' },
+                    { label: 'Restarted' },
                     { label: 'Completed' },
                     { label: 'Rejected by Supervisor' },
                     { label: 'Approved by Supervisor' },

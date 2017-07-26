@@ -45,5 +45,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         /// Name of supervisor (which is a team lead), needed for team-based reports.
         /// </summary>
         public string TeamLeadName { get; set; }
+
+        public int RestartedCount { get; set; }
     }
 }

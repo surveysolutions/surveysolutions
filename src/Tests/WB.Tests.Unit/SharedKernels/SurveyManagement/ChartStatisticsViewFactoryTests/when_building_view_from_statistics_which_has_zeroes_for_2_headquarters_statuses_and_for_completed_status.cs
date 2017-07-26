@@ -1,18 +1,17 @@
 using System;
 using System.Collections.Generic;
 using Machine.Specifications;
-using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactoryTests
 {
     internal class when_building_view_from_statistics_which_has_zeroes_for_2_headquarters_statuses_and_for_completed_status : ChartStatisticsViewFactoryTestsContext
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void Establish ()
         {
             var statistics = CreateStatisticsGroupedByDateAndTemplate(new Dictionary<DateTime, QuestionnaireStatisticsForChart>
             {
@@ -23,6 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
                         interviewerAssigned: 1,
                         rejectedBySupervisor: 1,
                         approvedBySupervisor: 1,
+                        restarted: 2,
                         completed: 0,
                         approvedByHeadquarters: 0,
                         rejectedByHeadquarters: 0)
@@ -34,6 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
                         interviewerAssigned: 1,
                         rejectedBySupervisor: 1,
                         approvedBySupervisor: 1,
+                        restarted: 5,
                         completed: 0,
                         approvedByHeadquarters: 0,
                         rejectedByHeadquarters: 0)
@@ -45,6 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
                         interviewerAssigned: 1,
                         rejectedBySupervisor: 1,
                         approvedBySupervisor: 1,
+                        restarted: 7,
                         completed: 0,
                         approvedByHeadquarters: 0,
                         rejectedByHeadquarters: 0)
@@ -61,13 +63,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
             };
 
             chartStatisticsViewFactory = CreateChartStatisticsViewFactory(statistics: statistics);
-        };
 
-        Because of = () =>
+            Because();
+        }
+
+        public void Because() =>
             view = chartStatisticsViewFactory.Load(input);
 
-        It should_return_5_lines_the_same_as_statuses_count = () =>
-            view.Lines.Length.ShouldEqual(5);
+        [Test]
+        public void should_return_6_lines_the_same_as_statuses_count() => view.Lines.Length.ShouldEqual(6);
 
         private static ChartStatisticsViewFactory chartStatisticsViewFactory;
         private static ChartStatisticsInputModel input;
