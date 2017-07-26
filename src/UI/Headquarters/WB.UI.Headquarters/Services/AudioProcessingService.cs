@@ -8,7 +8,6 @@ using CSCore;
 using CSCore.Codecs.WAV;
 using CSCore.MediaFoundation;
 using Prometheus;
-using WB.Core.SharedKernels.Questionnaire.Documents.Question;
 using System.Diagnostics;
 using System.Threading;
 using System.Text;
@@ -50,7 +49,7 @@ namespace WB.UI.Headquarters.Services
                     audioResult.Duration = wavFile.GetLength();
 
                     using (var encoder = MediaFoundationEncoder.CreateAACEncoder(wavFile.WaveFormat, tempFile,
-                        (int)AudioQuality.DefaultBitRate * 1024 /* 64 Kb bitrate*/))
+                        64 * 1024 /* 64 Kb bitrate*/))
                     {
                         byte[] buffer = new byte[EncoderBufferSize];
 
