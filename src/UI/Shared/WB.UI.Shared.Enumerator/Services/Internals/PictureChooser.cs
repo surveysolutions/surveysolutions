@@ -24,8 +24,9 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             await this.media.Initialize().ConfigureAwait(false);
             var storeCameraMediaOptions = new StoreCameraMediaOptions
             {
-                CompressionQuality = 50,
-                PhotoSize = PhotoSize.Full
+                CompressionQuality = 70,
+                PhotoSize = PhotoSize.MaxWidthHeight,
+                MaxWidthHeight = 1920
             };
             var photo = await this.media.TakePhotoAsync(storeCameraMediaOptions).ConfigureAwait(false);
             return photo?.GetStream();
