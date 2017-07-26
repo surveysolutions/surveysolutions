@@ -4,7 +4,6 @@ using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Utils;
@@ -49,6 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                         TeamLeadName = input.TeamLeadName ?? string.Empty,
                         SupervisorAssignedCount =       CountInStatus(interviews, questionnaire, InterviewStatus.SupervisorAssigned)?.InterviewsCount ?? 0,
                         InterviewerAssignedCount =      CountInStatus(interviews, questionnaire, InterviewStatus.InterviewerAssigned)?.InterviewsCount ?? 0,
+                        RestartedCount =                CountInStatus(interviews, questionnaire, InterviewStatus.Restarted)?.InterviewsCount ?? 0,
                         CompletedCount =                CountInStatus(interviews, questionnaire, InterviewStatus.Completed)?.InterviewsCount ?? 0,
                         ApprovedBySupervisorCount =     CountInStatus(interviews, questionnaire, InterviewStatus.ApprovedBySupervisor)?.InterviewsCount ?? 0,
                         RejectedBySupervisorCount =     CountInStatus(interviews, questionnaire, InterviewStatus.RejectedBySupervisor)?.InterviewsCount ?? 0,
@@ -67,6 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                                {
                                    SupervisorAssignedCount = doc.SupervisorAssignedCount,
                                    InterviewerAssignedCount = doc.InterviewerAssignedCount,
+                                   RestartedCount = doc.RestartedCount,
                                    CompletedCount = doc.CompletedCount,
                                    ApprovedBySupervisorCount = doc.ApprovedBySupervisorCount,
                                    RejectedBySupervisorCount = doc.RejectedBySupervisorCount,

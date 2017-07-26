@@ -14,6 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             this.SupervisorAssignedCount = statisticsToDublicate.SupervisorAssignedCount;
             this.InterviewerAssignedCount = statisticsToDublicate.InterviewerAssignedCount;
             this.CompletedCount = statisticsToDublicate.CompletedCount;
+            this.RestartedCount = statisticsToDublicate.RestartedCount;
             this.ApprovedBySupervisorCount = statisticsToDublicate.ApprovedBySupervisorCount;
             this.RejectedBySupervisorCount = statisticsToDublicate.RejectedBySupervisorCount;
             this.ApprovedByHeadquartersCount = statisticsToDublicate.ApprovedByHeadquartersCount;
@@ -30,5 +31,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public int ApprovedByHeadquartersCount { get; set; }
         public int RejectedByHeadquartersCount { get; set; }
         public int OtherStatusesCount { get; set; }
+        public int RestartedCount { get; set; }
     }
 }
