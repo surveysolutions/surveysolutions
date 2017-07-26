@@ -93,7 +93,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private void OnEvery100Millisecond(object state)
         {
             this.dialog.ViewModel.NoiseLevel = this.audioService.GetNoiseLevel();
-            this.dialog.ViewModel.NoiseType = this.audioService.GetNoiseType();
+            this.dialog.ViewModel.NoiseType = this.audioService.GetNoiseType(this.dialog.ViewModel.NoiseLevel);
         }
     }
 }
