@@ -17,17 +17,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
 
         protected static QuestionnaireStatisticsForChart CreateQuestionnaireStatisticsForChartWithSameCountForAllStatuses(int count)
         {
-            return CreateQuestionnaireStatisticsForChart(count, count, count, count, count, count, count);
+            return CreateQuestionnaireStatisticsForChart(count, count, count, count, count, count, count, count);
         }
 
         protected static QuestionnaireStatisticsForChart CreateQuestionnaireStatisticsForChart(
-            int supervisorAssigned, int interviewerAssigned, int completed,
+            int supervisorAssigned, int interviewerAssigned, int restarted, int completed,
             int rejectedBySupervisor, int approvedBySupervisor, int rejectedByHeadquarters, int approvedByHeadquarters)
         {
             return new QuestionnaireStatisticsForChart
             {
                 ApprovedByHeadquartersCount = approvedByHeadquarters,
                 ApprovedBySupervisorCount = approvedBySupervisor,
+                RestartedCount = restarted,
                 CompletedCount = completed,
                 InterviewerAssignedCount = interviewerAssigned,
                 RejectedByHeadquartersCount = rejectedByHeadquarters,

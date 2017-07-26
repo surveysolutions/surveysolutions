@@ -6,7 +6,6 @@ using System.Reflection;
 using WB.Core.BoundedContexts.Headquarters.Views.Survey;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
     public static class StatusHelper
@@ -15,7 +14,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             InterviewStatus.Created,
             InterviewStatus.ReadyForInterview,
-            InterviewStatus.Restarted,
             InterviewStatus.SentToCapi,
             InterviewStatus.Restored,
             InterviewStatus.Deleted
