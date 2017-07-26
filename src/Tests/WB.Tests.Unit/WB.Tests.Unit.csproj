@@ -716,6 +716,8 @@
     <Compile Include="SharedKernels\SurveyManagement\PreloadingTemplateServiceTests\when_questionnaire_has_5_prefilled_questions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_date_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireNameValidatorTests\when_validating_ImportFromDesigner_command_and_other_deleted_questionnaire_with_such_title_exists.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\Factories\QuestionnaireLabelFactoryTests.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\MetadataExportServiceTests\when_question_title_contains_html.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\when_hq_filtering_by_archived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\ApiBasicAuthNunitBasedSpecification.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorizing_interviewer_in_SHA1_compatibility_mode.cs" />
