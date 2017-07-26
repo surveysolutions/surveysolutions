@@ -7,6 +7,7 @@ using Android.Support.V4.View;
 using Android.Support.V7.Widget;
 using Android.Views;
 using MvvmCross.Droid.Support.V4;
+using MvvmCross.Platform;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
@@ -128,6 +129,9 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             {
                 this.fragmentStatePagerAdapter.RemoveFragmentByViewModel(listViewModel);
             }
+            var fragment = (MvxFragment)this.fragmentStatePagerAdapter.GetItem(viewPager.CurrentItem);
+            var viewModel = (ListViewModel)fragment.ViewModel;
+            this.ViewModel.TypeOfInterviews = viewModel.InterviewStatus;
         }
 
         protected override void OnStart()
@@ -140,6 +144,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             var currentFragment = (MvxFragment)this.fragmentStatePagerAdapter.GetItem(e.Position);
             this.ViewModel.TypeOfInterviews = ((InterviewTabPanel)currentFragment.ViewModel).InterviewStatus;
+            Mvx.Trace($"ViewPager_PageSelected. this.ViewModel.TypeOfInterviews={this.ViewModel.TypeOfInterviews}");
         }
 
         protected override void OnViewModelSet()
