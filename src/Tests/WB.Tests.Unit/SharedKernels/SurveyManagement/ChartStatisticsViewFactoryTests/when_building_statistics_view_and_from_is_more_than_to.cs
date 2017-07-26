@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Linq;
 using Machine.Specifications;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactoryTests
 {
-    internal class when_building_statistics_view_and_from_is_more_than_to : ChartStatisticsViewFactoryTestsContext
+    public class when_building_statistics_view_and_from_is_more_than_to : ChartStatisticsViewFactoryTestsContext
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void Establish ()
         {
             input = new ChartStatisticsInputModel
             {
@@ -19,11 +19,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
             };
 
             chartStatisticsViewFactory = CreateChartStatisticsViewFactory();
-        };
+            Because();
+        }
 
-        Because of = () => view = chartStatisticsViewFactory.Load(input);
+        public void Because () => view = chartStatisticsViewFactory.Load(input);
 
-        It should_return_empty_result = () =>
+        [Test]
+        public void should_return_empty_result() =>
             view.Lines.ShouldBeEmpty();
 
         private static ChartStatisticsViewFactory chartStatisticsViewFactory;
