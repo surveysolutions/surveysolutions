@@ -12,6 +12,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         string GetMimeType();
         string GetAudioType();
         double GetNoiseLevel();
-        NoiseType GetNoiseType();
+        NoiseType GetNoiseType(double noiseLevel);
     }
 }

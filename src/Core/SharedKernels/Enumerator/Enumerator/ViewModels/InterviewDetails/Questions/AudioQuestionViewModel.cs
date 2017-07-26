@@ -43,7 +43,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IAudioDialog audioDialog;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioService audioService;
-        private readonly IFileSystemAccessor fileSystemAccessor;
         public AnsweringViewModel Answering { get; private set; }
 
         public AudioQuestionViewModel(
@@ -67,7 +66,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
             this.liteEventRegistry = liteEventRegistry;
-            this.permissions = permissions;
             this.permissions = permissions;
             this.audioDialog = audioDialog;
             this.audioFileStorage = audioFileStorage;
@@ -126,10 +124,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             try
             {
+                this.StoreAudioToPlainStorage();
 
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
-
-                this.StoreAudioToPlainStorage();
+                
                 this.SetAnswer(audioDuration);
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
@@ -154,22 +152,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.audioDialog.OnRecorded += AudioDialog_OnRecorded;
                 this.audioDialog.ShowAndStartRecording(this.QuestionState.Header.Title.HtmlText);
             }
+            catch (MissingPermissionsException e) when (e.Permission == Permission.Microphone)
+            {
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
+                    .MissingPermissions_Microphone);
+            }
+            catch (MissingPermissionsException e) when (e.Permission == Permission.Storage)
+            {
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
+                    .MissingPermissions_Storage);
+            }
             catch (MissingPermissionsException e)
             {
-                switch (e.Permission)
-                {
-                    case Permission.Microphone:
-                        this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
-                            .MissingPermissions_Microphone);
-                        break;
-                    case Permission.Storage:
-                        this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
-                            .MissingPermissions_Storage);
-                        break;
-                    default:
-                        this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(e.Message);
-                        break;
-                }
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(e.Message);
             }
         }
 
