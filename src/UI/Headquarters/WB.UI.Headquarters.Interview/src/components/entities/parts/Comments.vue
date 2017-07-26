@@ -10,8 +10,8 @@
             <div class="form-inline">
                 <label>Your comment</label>
                 <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control" v-on:keyup.enter="postComment" v-model="comment" placeholder="Tap to enter your comment" />
+                    <div class="input-group field">
+                        <input type="text" class="field-to-fill" v-on:keyup.enter="postComment" v-model="comment" placeholder="Tap to enter your comment" />
                     </div>
                 </div>
                 <button type="button" class="btn btn-default btn-post-comment" :class="buttonClass" @click="postComment($event)">Post</button>
