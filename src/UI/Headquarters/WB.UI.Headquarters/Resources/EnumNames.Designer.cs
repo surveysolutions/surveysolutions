@@ -97,6 +97,33 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Completed.
+        /// </summary>
+        public static string MenuItem_Completed {
+            get {
+                return ResourceManager.GetString("MenuItem_Completed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rejected.
+        /// </summary>
+        public static string MenuItem_Rejected {
+            get {
+                return ResourceManager.GetString("MenuItem_Rejected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Started.
+        /// </summary>
+        public static string MenuItem_Started {
+            get {
+                return ResourceManager.GetString("MenuItem_Started", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Administrator.
         /// </summary>
         public static string UserRoles_Administrator {
@@ -115,7 +142,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Headquarters.
+        ///   Looks up a localized string similar to Headquarter.
         /// </summary>
         public static string UserRoles_Headquarter {
             get {
