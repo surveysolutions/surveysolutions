@@ -2,7 +2,7 @@
     <wb-question :question="$me" questionCssClassName=" audio-question">
         <div class="question-unit">
             <div class="options-group">
-                <button type="button" class="btn btn-default btn-lg btn-action-questionnaire" v-if="!isRecording && !$me.isAnswered" v-on:click="startRecording">Tap to record audio</button>
+                <button type="button" class="btn btn-default btn-lg btn-action-questionnaire" v-if="!isRecording && !$me.isAnswered" v-on:click="startRecording">Click to record audio</button>
                 <div class="field answered" v-if="$me.isAnswered">
                     <ul class="block-with-data list-unstyled">
                         <li>{{humanizedLength}} ({{formattedLength}}) of audio recording</li>
@@ -21,7 +21,7 @@
                         <button type="button" v-on:click="cancelRecording" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true"></span>
                         </button>
-                        <h4 class="modal-title">Modal title</h4>
+                        <h4 class="modal-title">Audio recording</h4>
                         <h5 v-dateTimeFormatting v-html="$me.title"></h5>
                     </div>
                     <div class="modal-body">
