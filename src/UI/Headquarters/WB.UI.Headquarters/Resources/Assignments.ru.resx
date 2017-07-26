@@ -185,4 +185,8 @@
     <value>Начать новое интервью</value>
     <comment>Начать новое интервью</comment>
   </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Опросник</value>
+    <comment>Опросник</comment>
+  </data>
 </root>

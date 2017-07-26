@@ -57,7 +57,8 @@ export default {
                     data: "id",
                     name: "Id",
                     title: this.$t("Common.Assignment"),
-                    responsivePriority: 2
+                    responsivePriority: 2,
+                    width: "5%"
                 }, {
                     data: "quantity",
                     name: "Quantity",
@@ -65,6 +66,7 @@ export default {
                     title: this.$t("Assignments.InterviewsNeeded"),
                     orderable: false,
                     searchable: false,
+                    width: "11%",
                     render(data, type, row) {
                         const quantity = row.quantity - row.interviewsCount;
                         if(quantity <= 0){
@@ -73,6 +75,15 @@ export default {
                         return quantity
                     },
                     defaultContent: '<span>' + this.$t("Assignments.Unlimited") + '</span>'
+                }, {
+                    data: "questionnaireTitle",
+                    name: "Questionnaire.QuestionnaireTitle",
+                    title: this.$t("Assignments.Questionnaire"),
+                    orderable: true,
+                    searchable: true,
+                    render(data, type, row) {
+                        return "(ver. " + row.questionnaireId.version + ") " + row.questionnaireTitle 
+                    }
                 }, {
                     data: "identifyingQuestions",
                     title: this.$t("Assignments.IdentifyingQuestions"),
