@@ -34,6 +34,7 @@ namespace WB.Tests.Integration.AssignmentsDeletionServiceTests
                     typeof(ProfileMap),
                     typeof(ReadonlyUserMap),
                     typeof(AssignmentMap),
+                    typeof(QuestionnaireLiteViewItemMap),
                     typeof(Core.BoundedContexts.Headquarters.Assignments.InterviewSummaryMap)
                 }, true, "plainstore");
             plainPostgresTransactionManager = new PlainPostgresTransactionManager(sessionFactory);
