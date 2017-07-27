@@ -15,6 +15,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private const string AudioFileExtension = "m4a";
         private MediaRecorder recorder;
         private DateTime startedDate;
+        private bool isRecording;
         
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string pathToAudioFile;
@@ -27,6 +28,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         public void Start()
         {
+            if (this.isRecording) return;
+            this.isRecording = true;
+
             if (this.fileSystemAccessor.IsFileExists(this.pathToAudioFile))
                 this.fileSystemAccessor.ReadFile(this.pathToAudioFile);
 
@@ -40,11 +44,17 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.recorder.SetOutputFile(this.pathToAudioFile);
             this.recorder.Prepare();
             this.recorder.Start();
-
+            
             this.startedDate = DateTime.Now;
         }
 
-        public void Stop() => this.recorder?.Stop();
+        public void Stop()
+        {
+            this.recorder?.Stop();
+            this.isRecording = false;
+        }
+
+        public bool IsRecording() => this.isRecording;
 
         public Stream GetLastRecord()
             => this.fileSystemAccessor.IsFileExists(this.pathToAudioFile)
