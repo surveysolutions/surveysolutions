@@ -83,8 +83,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
             ManyToOne(x => x.Questionnaire, mto =>
             {
-                mto.Column("questionnaireid");
-               
+                // TODO: Replace with proper NH relationship
+                // basically map to questionnairebrowseitems id column that is basically QuestionnaireIdent
+                mto.Formula("concat(replace(questionnaireid::text, '-', ''), '$', questionnaireversion)");
                 mto.Cascade(Cascade.None);
                 mto.Update(false);
                 mto.Insert(false);
@@ -98,7 +99,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public QuestionnaireLiteViewItemMap()
         {
             this.Table("questionnairebrowseitems");
-            Id(x => x.QuestionnaireId);
+
+            Id(x => x.Id);
             Property(x => x.Title);
         }
     }

@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public virtual DateTime UpdatedAtUtc { get; protected set; }
 
         public virtual QuestionnaireIdentity QuestionnaireId { get; set; }
-
+        
         public virtual IList<IdentifyingAnswer> IdentifyingData { get; protected set; }
 
         public virtual IList<InterviewAnswer> Answers { get; protected set; }
@@ -109,6 +109,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
     public class QuestionnaireLiteViewItem
     {
         public virtual string Title { get; set; }
-        public virtual Guid QuestionnaireId { get; set; }
+        public virtual string Id { get; set; }
     }
 }
