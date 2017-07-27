@@ -928,7 +928,7 @@
     <comment>{0} - Questionnaire name, {1} - Questionnaire version</comment>
   </data>
   <data name="ConfirmationNeededTitle" xml:space="preserve">
-    <value>Требуется подверждение</value>
+    <value>Требуется подтверждение</value>
   </data>
   <data name="HQ_LockWarning" xml:space="preserve">
     <value>Заблокированный хедквотер (галочка отмечена) не сможет войти на сайт и совершить какие-либо действия</value>
@@ -1018,5 +1018,9 @@
   </data>
   <data name="InterviewerHq_RestartConfirm" xml:space="preserve">
     <value>Комментарий</value>
+  </data>
+  <data name="InterviewerHq_RestartInterview" xml:space="preserve">
+    <value>Переоткрыть</value>
+    <comment>Переоткрыть</comment>
   </data>
 </root>
