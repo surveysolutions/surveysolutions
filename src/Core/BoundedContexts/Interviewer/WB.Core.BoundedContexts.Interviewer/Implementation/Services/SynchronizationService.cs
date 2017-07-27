@@ -149,27 +149,27 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             }
         }
 
-        public async Task SendDeviceInfoAsync(DeviceInfoApiView info, CancellationToken? token = null)
+        public Task SendDeviceInfoAsync(DeviceInfoApiView info, CancellationToken? token = null)
         {
-            await this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: $"{this.devicesController}/info",
                 request: info,
                 credentials: this.restCredentials,
                 token: token));
         }
 
-        public async Task SendSyncStatisticsAsync(SyncStatisticsApiView statistics, CancellationToken token, RestCredentials credentials)
+        public Task SendSyncStatisticsAsync(SyncStatisticsApiView statistics, CancellationToken token, RestCredentials credentials)
         {
-            await this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: $"{this.devicesController}/statistics",
                 request: statistics,
                 credentials: this.restCredentials,
                 token: token));
         }
 
-        public async Task SendUnexpectedExceptionAsync(UnexpectedExceptionApiView exception, CancellationToken token)
+        public Task SendUnexpectedExceptionAsync(UnexpectedExceptionApiView exception, CancellationToken token)
         {
-            await this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: $"{this.devicesController}/exception",
                 request: exception,
                 credentials: this.restCredentials,
@@ -177,11 +177,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         }
 
         [Obsolete("Since v5.10")]
-        private async Task OldCanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        private Task OldCanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
-            await this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync(
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync(
                 url: string.Concat(this.devicesController, "/current/" + this.interviewerSettings.GetDeviceId(), "/", this.syncProtocolVersionProvider.GetProtocolVersion()),
-                credentials: credentials ?? this.restCredentials, token: token)).ConfigureAwait(false);
+                credentials: credentials ?? this.restCredentials, token: token));
         }
 
         public Task LinkCurrentInterviewerToDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null)
@@ -262,18 +262,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 credentials: this.restCredentials, token: cancellationToken));
         }
 
-        public async Task LogQuestionnaireAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire)
+        public Task LogQuestionnaireAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire)
         {
-            await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.PostAsync(
+            return this.TryGetRestResponseOrThrowAsync(async () => await this.restService.PostAsync(
                 url: string.Concat(this.questionnairesController, "/", questionnaire.QuestionnaireId, "/", questionnaire.Version, "/logstate"),
-                credentials: this.restCredentials)).ConfigureAwait(false);
+                credentials: this.restCredentials));
         }
 
-        public async Task LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire)
+        public Task LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire)
         {
-            await this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: string.Concat(this.questionnairesController, "/", questionnaire.QuestionnaireId, "/", questionnaire.Version, "/assembly/logstate"),
-                credentials: this.restCredentials)).ConfigureAwait(false);
+                credentials: this.restCredentials));
         }
 
 #endregion
@@ -424,14 +424,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     credentials: this.restCredentials, token: token).ConfigureAwait(false));
         }
 
-        public async Task SendBackupAsync(string filePath, CancellationToken token)
+        public Task SendBackupAsync(string filePath, CancellationToken token)
         {
             var backupHeaders = new Dictionary<string, string>()
             {
                 { "DeviceId", this.interviewerSettings.GetDeviceId() },
             };
 
-            await this.TryGetRestResponseOrThrowAsync(async () =>
+            return this.TryGetRestResponseOrThrowAsync(async () =>
             {
                 using (var fileStream = this.fileSystemAccessor.ReadFile(filePath))
                 {
@@ -442,7 +442,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                         credentials: this.restCredentials,
                         token: token).ConfigureAwait(false);
                 }
-            }).ConfigureAwait(false);
+            });
         }
 
 #endregion

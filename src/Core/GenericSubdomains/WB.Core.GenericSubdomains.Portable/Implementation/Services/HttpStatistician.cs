@@ -37,7 +37,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         public void CollectHttpCallStatistics(HttpCall call)
         {
             var request = (call.Request.Content?.Headers?.ContentLength ?? 0) + GetHeadersEstimatedSize(call.Request?.Headers);
-            var response = (call.Response.Content?.Headers?.ContentLength ?? 0) + GetHeadersEstimatedSize(call.Response?.Headers);
+            var response = (call.Response?.Content?.Headers?.ContentLength ?? 0) + GetHeadersEstimatedSize(call.Response?.Headers);
 
             if (call.Duration.HasValue)
             {
