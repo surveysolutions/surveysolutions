@@ -85,7 +85,7 @@ namespace WB.UI.Headquarters.Controllers
                 PageSize = request.PageSize,
                 Orders = request.GetSortOrderRequestItems(),
                 QuestionnaireId = questionnaireIdentity?.QuestionnaireId,
-                QuestionnaireVersion = request.QuestionnaireVersion,
+                QuestionnaireVersion = questionnaireIdentity?.Version,
                 Statuses = request.Statuses,
                 SearchBy = request.SearchBy ?? request.Search.Value,
                 ResponsibleId = this.authorizedUser.Id
