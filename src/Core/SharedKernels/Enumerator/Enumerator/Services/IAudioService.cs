@@ -7,6 +7,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
     {
         void Start();
         void Stop();
+        bool IsRecording();
         Stream GetLastRecord();
         TimeSpan GetDuration();
         string GetMimeType();
