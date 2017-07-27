@@ -153,4 +153,7 @@
   <data name="MenuItem_Started" xml:space="preserve">
     <value>Начатые</value>
   </data>
+  <data name="MenuItem_Profile" xml:space="preserve">
+    <value>Профиль</value>
+  </data>
 </root>
