@@ -2050,6 +2050,14 @@
       </FilesForPackagingFromProject>
     </ItemGroup>
   </Target>
+    <Target Name="CollectVendorFileFonts" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
+    <ItemGroup>
+      <CollectVendorFileFonts_CustomFiles Include="Dependencies\vendor\bootstrap-sass\assets\fonts\bootstrap\*" />
+      <FilesForPackagingFromProject Include="%(CollectVendorFileFonts_CustomFiles.Identity)">
+        <DestinationRelativePath>Dependencies\vendor\bootstrap-sass\assets\fonts\bootstrap\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
+      </FilesForPackagingFromProject>
+    </ItemGroup>
+  </Target>
   <Target Name="CollectFilesFromBin_x64" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
     <Message Text="Copying sqlite x64" Importance="high" />
     <ItemGroup>
