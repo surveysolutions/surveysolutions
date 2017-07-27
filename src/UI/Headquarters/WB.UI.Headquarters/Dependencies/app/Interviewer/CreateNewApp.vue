@@ -77,7 +77,7 @@ export default {
                     defaultContent: '<span>' + this.$t("Assignments.Unlimited") + '</span>'
                 }, {
                     data: "questionnaireTitle",
-                    name: "Questionnaire.QuestionnaireTitle",
+                    name: "QuestionnaireTitle",
                     title: this.$t("Assignments.Questionnaire"),
                     orderable: true,
                     searchable: true,
