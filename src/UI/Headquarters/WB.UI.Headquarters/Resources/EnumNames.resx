@@ -156,4 +156,7 @@
   <data name="MenuItem_Started" xml:space="preserve">
     <value>Started</value>
   </data>
+  <data name="MenuItem_Profile" xml:space="preserve">
+    <value>Profile</value>
+  </data>
 </root>
