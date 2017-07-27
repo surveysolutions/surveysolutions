@@ -66,6 +66,12 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var model = await this.GetImportModel(id);
+
+            if (this.designerUserCredentials.Get() == null)
+            {
+                return this.RedirectToAction("LoginToDesigner");
+            }
+
             return View(model);
         }
 
@@ -85,6 +91,12 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var model = await this.GetImportModel(id);
+
+            if (this.designerUserCredentials.Get() == null)
+            {
+                return this.RedirectToAction("LoginToDesigner");
+            }
+
             model.ErrorMessage = result.ImportError;
             return this.View(model);
         }
@@ -109,6 +121,8 @@ namespace WB.UI.Headquarters.Controllers
                         model.ErrorMessage = string.Format(ImportQuestionnaire.QuestionnaireCannotBeFound);
                         break;
                     case HttpStatusCode.Forbidden:
+                    case HttpStatusCode.Unauthorized:
+                        this.designerUserCredentials.Set(null);
                         model.ErrorMessage = e.Message;
                         break;
                     default:
@@ -169,12 +183,9 @@ namespace WB.UI.Headquarters.Controllers
                 this.Error(string.Format(
                         QuestionnaireImport.LoginToDesignerError,
                         GlobalHelper.GenerateUrl("Import", "Template", new { area = string.Empty })));
-
             }
 
             return this.View(model);
         }
-
-
     }
 }
