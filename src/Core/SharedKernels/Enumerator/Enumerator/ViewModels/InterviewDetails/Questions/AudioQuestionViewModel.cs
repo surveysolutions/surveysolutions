@@ -151,6 +151,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.permissions.AssureHasPermission(Permission.Storage).ConfigureAwait(false);
 
                 this.audioDialog.OnRecorded += AudioDialog_OnRecorded;
+                this.audioDialog.OnCanelRecording += AudioDialog_OnCancel;
                 this.audioDialog.ShowAndStartRecording(this.QuestionState.Header.Title.HtmlText);
             }
             catch (MissingPermissionsException e) when (e.Permission == Permission.Microphone)
@@ -169,10 +170,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private async void AudioDialog_OnRecorded(object sender, EventArgs e)
+        private void AudioDialog_OnCancel(object sender, EventArgs e)
         {
             this.audioDialog.OnRecorded -= AudioDialog_OnRecorded;
-            await this.SendAnswerAsync();
+        }
+
+        private void AudioDialog_OnRecorded(object sender, EventArgs e)
+        {
+            this.audioDialog.OnRecorded -= AudioDialog_OnRecorded;
+
+            Task.Run(async() => await this.SendAnswerAsync()).ConfigureAwait(false);
         }
 
         private async Task RemoveAnswerAsync()
