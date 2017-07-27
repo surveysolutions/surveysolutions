@@ -106,6 +106,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Profile.
+        /// </summary>
+        public static string MenuItem_Profile {
+            get {
+                return ResourceManager.GetString("MenuItem_Profile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rejected.
         /// </summary>
         public static string MenuItem_Rejected {
