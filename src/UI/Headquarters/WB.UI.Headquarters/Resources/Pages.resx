@@ -1017,7 +1017,7 @@
     <value>Open</value>
   </data>
   <data name="InterviewerHq_RestartInterview" xml:space="preserve">
-    <value>Restart Interview</value>
+    <value>Restart</value>
   </data>
   <data name="InterviewerHq_RestartConfirm" xml:space="preserve">
     <value>Please provide a comment if needed to restart an interview</value>

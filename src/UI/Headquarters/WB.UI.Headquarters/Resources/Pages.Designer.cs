@@ -979,7 +979,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Discard Interview.
+        ///   Looks up a localized string similar to Discard.
         /// </summary>
         public static string InterviewerHq_DiscardInterview {
             get {
@@ -988,7 +988,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open Interview.
+        ///   Looks up a localized string similar to Open.
         /// </summary>
         public static string InterviewerHq_OpenInterview {
             get {
@@ -1006,7 +1006,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Restart Interview.
+        ///   Looks up a localized string similar to Restart.
         /// </summary>
         public static string InterviewerHq_RestartInterview {
             get {
