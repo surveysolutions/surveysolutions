@@ -125,22 +125,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             {
                 return OrderByInterviewsCount(query, orderBy);
             }
+
+            if (orderBy.Field.Contains("QuestionnaireTitle"))
+            {
+                return OrderByQuestionnaire(query, orderBy);
+            }
+
             return query.OrderUsingSortExpression(model.Order).AsQueryable();
         }
 
+        private static readonly Expression<Func<Assignment, int>> OrderByQuery = x => x.InterviewSummaries.Count(s => s.IsDeleted == false);
         private static IQueryable<Assignment> OrderByInterviewsCount(IQueryable<Assignment> query, OrderRequestItem orderBy)
         {
-            Expression<Func<Assignment, int>> orderByQuery = x => x.InterviewSummaries.Count(s => s.IsDeleted == false);
+            return orderBy.Direction == OrderDirection.Asc 
+                ? query.OrderBy(OrderByQuery) 
+                : query.OrderByDescending(OrderByQuery);
+        }
 
-            if (orderBy.Direction == OrderDirection.Asc)
-            {
-                var defineOrderBy = query.OrderBy(orderByQuery);
-                return defineOrderBy;
-            }
-            else
-            {
-                return query.OrderByDescending(orderByQuery);
-            }
+        static readonly Expression<Func<Assignment, string>> OrderByQuestionnaireTitle = x => x.Questionnaire.Title;
+        private static IQueryable<Assignment> OrderByQuestionnaire(IQueryable<Assignment> query, OrderRequestItem orderBy)
+        {
+            return orderBy.Direction == OrderDirection.Asc 
+                ? query.OrderBy(OrderByQuestionnaireTitle) 
+                : query.OrderByDescending(OrderByQuestionnaireTitle);
         }
 
         private IQueryable<Assignment> ApplyFilter(AssignmentsInputModel input, IQueryable<Assignment> assignments)
