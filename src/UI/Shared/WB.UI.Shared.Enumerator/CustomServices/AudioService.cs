@@ -40,7 +40,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.recorder.SetAudioSource(AudioSource.Mic);
             this.recorder.SetOutputFormat(OutputFormat.Mpeg4);
             this.recorder.SetAudioEncoder(AudioEncoder.Aac);
-            this.recorder.SetAudioEncodingBitRate(64000);
+            this.recorder.SetAudioEncodingBitRate(44100);
             this.recorder.SetOutputFile(this.pathToAudioFile);
             this.recorder.Prepare();
             this.recorder.Start();
