@@ -165,16 +165,12 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 }
                 else
                 {
-                    // https://github.com/tmenier/Flurl/issues/163
-                    var exceptionInnerException = ex.Call?.Exception?.InnerException;
-                    if (exceptionInnerException != null)
+                    var innerException = ex.InnerException;
+                    if (innerException != null && innerException.GetType().FullName == "Java.Net.ConnectException")
                     {
-                        var exceptionTypeName = exceptionInnerException.GetType().Name;
-                        var releaseException = exceptionTypeName.Contains("IOException") && exceptionInnerException.Message.Contains("Unacceptable certificate");
-                        if (exceptionTypeName.Contains("SSLHandshakeException") || releaseException)
-                        {
-                            throw new RestException(exceptionInnerException.Message, type: RestExceptionType.UnacceptableCertificate, innerException: exceptionInnerException);
-                        }
+                        throw new RestException(message: innerException.Message, 
+                            innerException: innerException,
+                            type: RestExceptionType.HostUnreachable);
                     }
                 }
 
