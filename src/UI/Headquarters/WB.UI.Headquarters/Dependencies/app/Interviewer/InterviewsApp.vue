@@ -51,6 +51,7 @@ export default {
         tableOptions() {
             return {
                 rowId: "id",
+                order: [[3, 'desc']],
                 deferLoading: 0,
                 columns: this.getTableColumns(),
                 ajax: {
