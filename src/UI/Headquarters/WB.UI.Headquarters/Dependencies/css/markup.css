@@ -10613,7 +10613,8 @@ img#placeholder {
       max-width: 100%;
       margin-bottom: 0; }
       .start-web-interview .two-columns-form .left-column .additional-info-block a {
-        color: inherit; }
+        color: inherit; 
+		text-decoration: none;}
 
 div.no-cookies {
   display: none;
