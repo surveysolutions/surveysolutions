@@ -1023,4 +1023,13 @@
     <value>Переоткрыть</value>
     <comment>Переоткрыть</comment>
   </data>
+  <data name="CautionTitle" xml:space="preserve">
+    <value>Внимание:</value>
+  </data>
+  <data name="ExcludeEsriTitle" xml:space="preserve">
+    <value> Отключить поддержку карт ESRI</value>
+  </data>
+  <data name="GetEsriExtraDescription" xml:space="preserve">
+    <value>Она нужна только если вы пользуетесь функциональностью ESRI GIS. Включение этой фунции значительно увеличит размер приложения и время загрузки.</value>
+  </data>
 </root>
