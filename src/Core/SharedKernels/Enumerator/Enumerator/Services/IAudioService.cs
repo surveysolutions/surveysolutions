@@ -3,11 +3,18 @@ using System.IO;
 
 namespace WB.Core.SharedKernels.Enumerator.Services
 {
+    public enum AudioExceptionType
+    {
+        Unhandled,
+        Io
+    }
+
     public class AudioException : Exception
     {
-        public AudioException(string message, Exception innerException) : base(message, innerException)
+        public AudioExceptionType Type { get; }
+        public AudioException(AudioExceptionType type, string message, Exception innerException) : base(message, innerException)
         {
-            
+            this.Type = type;
         }
     }
 
