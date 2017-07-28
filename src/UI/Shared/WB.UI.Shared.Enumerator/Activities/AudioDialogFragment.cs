@@ -18,7 +18,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         public override void OnResume()
         {
             this.Dialog.Window.SetLayout(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent);
-            this.Dialog.Window.SetBackgroundDrawable(null);
+            this.Dialog.Window.SetBackgroundDrawableResource(Android.Resource.Color.Transparent);
 
             base.OnResume();
         }

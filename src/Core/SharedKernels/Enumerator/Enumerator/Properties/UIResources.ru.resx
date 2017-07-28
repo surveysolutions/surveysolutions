@@ -564,4 +564,8 @@
   <data name="AudioQuestion_DurationFormat" xml:space="preserve">
     <value>{0} аудио записи</value>
   </data>
+  <data name="Interview_Questions_Audio_RecordNew" xml:space="preserve">
+    <value>Перезаписать</value>
+    <comment>Перезаписать</comment>
+  </data>
 </root>

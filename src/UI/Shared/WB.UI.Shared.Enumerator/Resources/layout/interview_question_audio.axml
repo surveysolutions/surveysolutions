@@ -11,17 +11,18 @@
     <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
       <TableLayout android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:stretchColumns="0">
+                   android:stretchColumns="0"
+                   local:MvxBind="Visible QuestionState.IsAnswered">
         <TableRow>
           <TextView style="@style/Interview_Question_RecordedAnswer"
-                    local:MvxBind="Text Answer; Visible QuestionState.IsAnswered" />
+                    local:MvxBind="Text Answer;" />
           <include layout="@layout/interview_question__remove_button_recorded" />
         </TableRow>
       </TableLayout>
       <Button style="@style/Interview_Question_InputButton"
               local:MvxBind="HideKeyboardOnClick .; 
                           Click RecordAudioCommand; 
-                          Text Localization('Interview_Questions_Audio_SaveAnswer');
+                          Text If(QuestionState.IsAnswered, Localization('Interview_Questions_Audio_RecordNew'), Localization('Interview_Questions_Audio_SaveAnswer'));
                           BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
     </LinearLayout>
 

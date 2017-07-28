@@ -21,7 +21,7 @@
           local:MvxBind="Text Localization('Interviewer_AudioRecording');"/>
         <TextView
           style="@style/Interview_Question_Title_Base"
-          local:MvxBind="Text Title;"/>
+          local:MvxBind="Html Title;"/>
 
       </LinearLayout>
       <ImageButton style="@style/Interview_Question_RemoveAnswer"

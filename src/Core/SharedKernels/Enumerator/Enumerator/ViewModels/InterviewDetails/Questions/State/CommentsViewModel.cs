@@ -55,7 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private string interviewId;
-        public Identity Identity;
+        public Identity Identity { get; private set; }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
