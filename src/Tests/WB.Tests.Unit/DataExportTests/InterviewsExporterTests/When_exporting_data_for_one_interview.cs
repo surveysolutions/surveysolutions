@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
                         answers: new [] { "8" })
                 });
             //act
-            exporter.Export(questionnaireExportStructure, new List<Guid>{ interviewId }, "path", new Microsoft.Progress<int>(), CancellationToken.None);
+            exporter.Export(questionnaireExportStructure, new List<Guid>{ interviewId }, "path", new Progress<int>(), CancellationToken.None);
 
             //assert
             Assert.That(dataInCsvFile.Count, Is.EqualTo(2));
