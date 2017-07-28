@@ -47,6 +47,12 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.dialog.Show(this.topActivity.Activity.FragmentManager, nameof(AudioDialogFragment));
         }
 
+        public void StopRecordingAndSaveResult()
+        {
+            if (this.audioService.IsRecording())
+                this.ViewModel_OnDone(this, EventArgs.Empty);
+        }
+
         private void InitializeDialog()
         {
             this.dialog = new AudioDialogFragment
@@ -81,12 +87,13 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.noiseTimer.Dispose();
             this.noiseTimer = null;
             
-            this.dialog.Dismiss();
+            
+            this.dialog.DismissAllowingStateLoss();
         }
 
         private void OnEvery31Milisecond(object state)
         {
-            var duration = this.audioService.GetDuration();
+            var duration = this.audioService.GetLastRecordDuration();
             this.dialog.ViewModel.Duration = $"{duration.Minutes:00}:{duration.Seconds:00}:{duration.Milliseconds/10:00}";
         }
 
