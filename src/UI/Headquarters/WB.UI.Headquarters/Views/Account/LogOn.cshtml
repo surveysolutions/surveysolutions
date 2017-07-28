@@ -72,7 +72,7 @@
                                     </div>
                                 }
                                 <div class="form-group">
-                                    @Html.TextBoxFor(m => m.UserName, new {@class = "form-control", autocomplete = "off", placeholder = Pages.Login})
+                                    @Html.TextBoxFor(m => m.UserName, new {@class = "form-control", @autofocus = @"autofocus", autocomplete = "off", placeholder = Pages.Login})
                                 </div>
                                 <div class="form-group">
                                     @Html.PasswordFor(m => m.Password, new {@class = "form-control", autocomplete = "off", placeholder = Pages.Password})
