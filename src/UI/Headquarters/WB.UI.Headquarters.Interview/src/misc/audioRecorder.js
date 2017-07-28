@@ -244,8 +244,11 @@ if (!window.AudioRecorder) {
             },
         };
 
+        var audioContext;
+
         var successCallback = function (stream) {
-            var audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
             var inputPoint = audioContext.createGain();
 
             // Create an AudioNode from the stream.
@@ -282,6 +285,7 @@ if (!window.AudioRecorder) {
         function cancelAnalyserUpdates() {
             window.cancelAnimationFrame(analyserSettings.animationFrameId);
             analyserSettings.animationFrameId = null;
+            if(audioContext) audioContext.close();
         }
 
         function updateAnalysers() {
