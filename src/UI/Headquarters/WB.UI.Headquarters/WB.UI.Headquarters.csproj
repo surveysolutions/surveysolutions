@@ -368,8 +368,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\WebActivatorEx.2.1.0\lib\net40\WebActivatorEx.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\..\..\packages\WebActivatorEx.2.2.0\lib\net40\WebActivatorEx.dll</HintPath>
     </Reference>
     <Reference Include="WebGrease">
       <HintPath>..\..\..\..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
@@ -2050,7 +2049,7 @@
       </FilesForPackagingFromProject>
     </ItemGroup>
   </Target>
-    <Target Name="CollectVendorFileFonts" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
+  <Target Name="CollectVendorFileFonts" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
     <ItemGroup>
       <CollectVendorFileFonts_CustomFiles Include="Dependencies\vendor\bootstrap-sass\assets\fonts\bootstrap\*" />
       <FilesForPackagingFromProject Include="%(CollectVendorFileFonts_CustomFiles.Identity)">
