@@ -1,8 +1,13 @@
 ﻿using System;
 using Android.Media;
 using Android.Webkit;
+using Java.IO;
+using Java.Lang;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Services;
+using Exception = System.Exception;
+using Math = System.Math;
 using Stream = System.IO.Stream;
 
 namespace WB.UI.Shared.Enumerator.CustomServices
@@ -15,7 +20,6 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private const string AudioFileExtension = "m4a";
         private MediaRecorder recorder;
         private DateTime startedDate;
-        private bool isRecording;
         
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string pathToAudioFile;
@@ -28,33 +32,47 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         public void Start()
         {
-            if (this.isRecording) return;
-            this.isRecording = true;
+            if (this.recorder != null) return;
+
+            this.recorder = new MediaRecorder();
 
             if (this.fileSystemAccessor.IsFileExists(this.pathToAudioFile))
-                this.fileSystemAccessor.ReadFile(this.pathToAudioFile);
-
-            if (this.recorder == null)
-                this.recorder = new MediaRecorder();
+                this.fileSystemAccessor.DeleteFile(this.pathToAudioFile);
             
             this.recorder.SetAudioSource(AudioSource.Mic);
             this.recorder.SetOutputFormat(OutputFormat.Mpeg4);
             this.recorder.SetAudioEncoder(AudioEncoder.Aac);
-            this.recorder.SetAudioEncodingBitRate(44100);
+            this.recorder.SetAudioChannels(1);
+            this.recorder.SetAudioSamplingRate(44100);
+            this.recorder.SetAudioEncodingBitRate(64000);
             this.recorder.SetOutputFile(this.pathToAudioFile);
-            this.recorder.Prepare();
-            this.recorder.Start();
-            
+
+            try
+            {
+                this.recorder.Prepare();
+                this.recorder.Start();
+            }
+            catch (Exception ex) when (ex.GetSelfOrInnerAs<IOException>() != null)
+            {
+                this.ReleaseAudioRecorder();
+                throw new AudioException("Could not write audio file", ex);
+            }
+            catch (Exception ex) when (ex.GetSelfOrInnerAs<IllegalStateException>() != null)
+            {
+                this.ReleaseAudioRecorder();
+                throw new AudioException("Unexpected exception during start audio recording", ex);
+            }
+
             this.startedDate = DateTime.Now;
         }
 
         public void Stop()
         {
             this.recorder?.Stop();
-            this.isRecording = false;
+            this.ReleaseAudioRecorder();
         }
 
-        public bool IsRecording() => this.isRecording;
+        public bool IsRecording() => this.recorder != null;
 
         public Stream GetLastRecord()
             => this.fileSystemAccessor.IsFileExists(this.pathToAudioFile)
@@ -77,6 +95,12 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             return NoiseType.Normal;
         }
 
-        public void Dispose() => this.recorder?.Release();
+        private void ReleaseAudioRecorder()
+        {
+            this.recorder?.Release();
+            this.recorder = null;
+        }
+
+        public void Dispose() => this.ReleaseAudioRecorder();
     }
 }
