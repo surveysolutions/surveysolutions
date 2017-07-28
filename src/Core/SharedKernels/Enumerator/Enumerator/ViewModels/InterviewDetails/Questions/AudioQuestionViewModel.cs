@@ -45,12 +45,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public AnsweringViewModel Answering { get; private set; }
 
         public AudioQuestionViewModel(
-            IPrincipal principal, 
+            IPrincipal principal,
             IStatefulInterviewRepository interviewRepository,
             IQuestionnaireStorage questionnaireStorage,
-            QuestionStateViewModel<AudioQuestionAnswered> questionStateViewModel, 
+            QuestionStateViewModel<AudioQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering,
-            QuestionInstructionViewModel instructionViewModel, 
+            QuestionInstructionViewModel instructionViewModel,
             ILiteEventRegistry liteEventRegistry,
             IPermissionsService permissions,
             IAudioDialog audioDialog,
@@ -126,7 +126,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.StoreAudioToPlainStorage();
 
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
-                
+
                 this.SetAnswer(audioDuration);
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
@@ -143,7 +143,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task RecordAudioAsync()
         {
-            if(this.audioService.IsRecording()) return;
+            if (this.audioService.IsRecording()) return;
 
             try
             {
@@ -174,16 +174,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private void AudioDialog_OnCancel(object sender, EventArgs e)
+        private void AudioDialog_OnCancel(object sender, EventArgs e) => this.UnhandleDialog();
+
+        private async void AudioDialog_OnRecorded(object sender, EventArgs e)
         {
-            this.audioDialog.OnRecorded -= AudioDialog_OnRecorded;
+            this.UnhandleDialog();
+
+            await this.SendAnswerAsync();
         }
 
-        private void AudioDialog_OnRecorded(object sender, EventArgs e)
+        private void UnhandleDialog()
         {
-            this.audioDialog.OnRecorded -= AudioDialog_OnRecorded;
-
-            Task.Run(async() => await this.SendAnswerAsync()).ConfigureAwait(false);
+            this.audioDialog.OnRecorded -= this.AudioDialog_OnRecorded;
+            this.audioDialog.OnCanelRecording -= this.AudioDialog_OnCancel;
         }
 
         private async Task RemoveAnswerAsync()
