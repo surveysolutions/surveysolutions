@@ -428,6 +428,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsSingleLinkedToList) { this.AsSingleLinkedToList.SetAnswer(CategoricalFixedSingleOptionAnswer.FromInt(Convert.ToInt32(answer))); return; }
             if (this.IsMultiLinkedToList) { this.AsMultiLinkedToList.SetAnswer(CategoricalFixedMultiOptionAnswer.FromDecimalArray(answer as decimal[])); return; }
             if (this.IsArea) { this.AsArea.SetAnswer(AreaAnswer.FromArea((Area)answer)); return; }
+            if (this.IsAudio) { this.AsAudio.SetAnswer((AudioAnswer)answer); return; }
         }
 
         public string GetAnswerAsString(CultureInfo cultureInfo = null)

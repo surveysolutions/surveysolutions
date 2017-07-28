@@ -3,6 +3,14 @@ using System.IO;
 
 namespace WB.Core.SharedKernels.Enumerator.Services
 {
+    public class AudioException : Exception
+    {
+        public AudioException(string message, Exception innerException) : base(message, innerException)
+        {
+            
+        }
+    }
+
     public interface IAudioService : IDisposable
     {
         void Start();

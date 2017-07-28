@@ -892,6 +892,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Record new.
+        /// </summary>
+        public static string Interview_Questions_Audio_RecordNew {
+            get {
+                return ResourceManager.GetString("Interview_Questions_Audio_RecordNew", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tap to record audio.
         /// </summary>
         public static string Interview_Questions_Audio_SaveAnswer {
@@ -1108,7 +1117,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application needs to have a permission to use camera in order to answer this question. Retry answering question and allow access. If you don&apos;t see permissions popup than go to Settings and allow application to use camera..
+        ///   Looks up a localized string similar to Application needs to have a permission to use camera in order to answer this question. Retry answering question and allow access. If you don&apos;t see permissions popup then go to Settings and allow application to use camera..
         /// </summary>
         public static string MissingPermissions_Camera {
             get {
@@ -1117,7 +1126,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application needs to have a permission to use microphone in order to answer this question. Retry answering question and allow access. If you don&apos;t see permissions popup than go to Settings and allow application to use microphone..
+        ///   Looks up a localized string similar to Application needs to have a permission to use microphone in order to answer this question. Retry answering question and allow access. If you don&apos;t see permissions popup then go to Settings and allow application to use microphone..
         /// </summary>
         public static string MissingPermissions_Microphone {
             get {
@@ -1126,7 +1135,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application needs to have a permission to use storage in order to answer this question. Retry answering question and allow access. If you don&apos;t see permissions popup than go to Settings and allow application to use storage..
+        ///   Looks up a localized string similar to Application needs to have a permission to use storage in order to answer this question. Retry answering question and allow access. If you don&apos;t see permissions popup then go to Settings and allow application to use storage..
         /// </summary>
         public static string MissingPermissions_Storage {
             get {

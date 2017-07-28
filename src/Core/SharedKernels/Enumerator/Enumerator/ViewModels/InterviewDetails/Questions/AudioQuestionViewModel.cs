@@ -150,7 +150,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.permissions.AssureHasPermission(Permission.Microphone).ConfigureAwait(false);
                 await this.permissions.AssureHasPermission(Permission.Storage).ConfigureAwait(false);
 
-                this.audioDialog.OnRecorded += AudioDialog_OnRecorded;
+                this.audioDialog.OnRecorded += this.AudioDialog_OnRecorded;
                 this.audioDialog.OnCanelRecording += AudioDialog_OnCancel;
                 this.audioDialog.ShowAndStartRecording(this.QuestionState.Header.Title.HtmlText);
             }
@@ -165,6 +165,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     .MissingPermissions_Storage);
             }
             catch (MissingPermissionsException e)
+            {
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(e.Message);
+            }
+            catch (AudioException e)
             {
                 this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(e.Message);
             }
