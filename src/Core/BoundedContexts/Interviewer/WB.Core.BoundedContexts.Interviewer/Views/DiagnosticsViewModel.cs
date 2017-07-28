@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public IMvxCommand ShareDeviceTechnicalInformationCommand => new MvxCommand(this.ShareDeviceTechnicalInformation);
 
-        public IMvxCommand NavigateToDashboardCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateTo<DashboardViewModel>());
+        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToDashboard());
 
         public IMvxCommand SignOutCommand
             => new MvxCommand(this.viewModelNavigationService.SignOutAndNavigateToLogin);
