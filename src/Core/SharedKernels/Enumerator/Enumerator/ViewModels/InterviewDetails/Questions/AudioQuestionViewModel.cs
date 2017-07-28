@@ -168,9 +168,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(e.Message);
             }
-            catch (AudioException e)
+            catch (AudioException e) when (e.Type == AudioExceptionType.Io)
             {
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(e.Message);
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Audio_Io_Exception_Message);
+            }
+            catch (AudioException e) when (e.Type == AudioExceptionType.Unhandled)
+            {
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Audio_Unhandled_Exception_Message);
             }
         }
 

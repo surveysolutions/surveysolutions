@@ -55,12 +55,12 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             catch (Exception ex) when (ex.GetSelfOrInnerAs<IOException>() != null)
             {
                 this.ReleaseAudioRecorder();
-                throw new AudioException("Could not write audio file", ex);
+                throw new AudioException(AudioExceptionType.Io, "Could not write audio file", ex);
             }
             catch (Exception ex) when (ex.GetSelfOrInnerAs<IllegalStateException>() != null)
             {
                 this.ReleaseAudioRecorder();
-                throw new AudioException("Unexpected exception during start audio recording", ex);
+                throw new AudioException(AudioExceptionType.Unhandled, "Unexpected exception during start audio recording", ex);
             }
 
             this.startedDate = DateTime.Now;

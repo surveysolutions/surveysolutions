@@ -560,4 +560,10 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="AudioQuestion_DurationFormat" xml:space="preserve">
     <value>{0} of audio recording</value>
   </data>
+  <data name="Audio_Io_Exception_Message" xml:space="preserve">
+    <value>Could not write audio file. Ensure that device has a free space on an internal storage</value>
+  </data>
+  <data name="Audio_Unhandled_Exception_Message" xml:space="preserve">
+    <value>Unexpected exception during start audio recording</value>
+  </data>
 </root>
