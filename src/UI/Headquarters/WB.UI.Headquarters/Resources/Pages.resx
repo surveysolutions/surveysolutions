@@ -1025,4 +1025,13 @@
   <data name="InterviewerHq_DiscardConfirm" xml:space="preserve">
     <value>Are You sure that You want to discard interview data?</value>
   </data>
+  <data name="CautionTitle" xml:space="preserve">
+    <value>Caution:</value>
+  </data>
+  <data name="ExcludeEsriTitle" xml:space="preserve">
+    <value>Exclude ESRI Map support</value>
+  </data>
+  <data name="GetEsriExtraDescription" xml:space="preserve">
+    <value>ESRI Map support is an experimental feature. Use it only if you need the advanced ESRI GIS functionality. Including this functionality will significantly increase application size and download time. </value>
+  </data>
 </root>
