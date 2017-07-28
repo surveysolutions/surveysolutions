@@ -80,7 +80,7 @@
         if (Model.IsAnswered)
         {
             <div>
-                <audio controls preload="auto" src="@Url.Action("AudioRecord", "Resource", new {interviewId = ViewData["InterviewId"], fileName = Model.Answer})">
+                <audio controls preload="auto" style="width:300px" src="@Url.Action("AudioRecord", "Resource", new {interviewId = ViewData["InterviewId"], fileName = Model.Answer})">
                 </audio>
             </div>
             @Html.ActionLink(Common.Download, "AudioRecord", "Resource", new { interviewId = ViewData["InterviewId"], fileName = Model.Answer }, null)
