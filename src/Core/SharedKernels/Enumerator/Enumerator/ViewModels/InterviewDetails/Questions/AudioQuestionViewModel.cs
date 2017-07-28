@@ -110,7 +110,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task SendAnswerAsync()
         {
-            var audioDuration = this.audioService.GetDuration();
+            var audioDuration = this.audioService.GetLastRecordDuration();
 
             var command = new AnswerAudioQuestionCommand(
                 interviewId: this.interviewId,
