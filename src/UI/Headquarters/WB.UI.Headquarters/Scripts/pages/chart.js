@@ -140,7 +140,7 @@
                     showSwatches: true,
                     location: 'n',
                     rendererOptions: {
-                        numberColumns: 7
+                        numberColumns: 8
                     }
                 },
                 grid: {
