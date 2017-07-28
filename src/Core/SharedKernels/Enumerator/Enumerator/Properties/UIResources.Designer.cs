@@ -215,6 +215,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not write audio file. Ensure that device has a free space on an internal storage.
+        /// </summary>
+        public static string Audio_Io_Exception_Message {
+            get {
+                return ResourceManager.GetString("Audio_Io_Exception_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unexpected exception during start audio recording.
+        /// </summary>
+        public static string Audio_Unhandled_Exception_Message {
+            get {
+                return ResourceManager.GetString("Audio_Unhandled_Exception_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} of audio recording.
         /// </summary>
         public static string AudioQuestion_DurationFormat {
