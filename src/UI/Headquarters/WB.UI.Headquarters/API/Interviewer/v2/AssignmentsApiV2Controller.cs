@@ -59,7 +59,7 @@ namespace WB.UI.Headquarters.API.Interviewer.v2
                 assignmentApiViews.Add(new AssignmentApiView
                 {
                     Id = assignment.Id,
-                    Quantity = assignment.InterviewsNeeded,
+                    Quantity = assignment.InterviewsNeeded + assignment.InterviewsProvided,
                     QuestionnaireId = assignment.QuestionnaireId
                 });
             }

@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
@@ -56,6 +57,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         /// Will also include deleted interviews
         /// </summary>
         public virtual ISet<InterviewSummary> InterviewSummaries { get; protected set; }
+
+        public virtual int InterviewsProvided =>
+            InterviewSummaries.Count(i => i.Status == InterviewStatus.InterviewerAssigned ||
+                                          i.Status == InterviewStatus.RejectedBySupervisor);
 
         public virtual int? InterviewsNeeded
         {
