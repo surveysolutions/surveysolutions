@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Android.Media;
 using Android.Webkit;
 using Java.IO;
@@ -19,8 +20,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private readonly string audioFileName = $"audio.{AudioFileExtension}";
         private const string AudioFileExtension = "m4a";
         private MediaRecorder recorder;
-        private DateTime startedDate;
-        
+        private Stopwatch duration = new Stopwatch();
+
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string pathToAudioFile;
 
@@ -51,6 +52,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             {
                 this.recorder.Prepare();
                 this.recorder.Start();
+                this.duration.Restart();
             }
             catch (Exception ex) when (ex.GetSelfOrInnerAs<IOException>() != null)
             {
@@ -62,13 +64,14 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 this.ReleaseAudioRecorder();
                 throw new AudioException(AudioExceptionType.Unhandled, "Unexpected exception during start audio recording", ex);
             }
-
-            this.startedDate = DateTime.Now;
         }
 
         public void Stop()
         {
-            this.recorder?.Stop();
+            if (!this.IsRecording()) return;
+
+            this.recorder.Stop();
+            this.duration.Stop();
             this.ReleaseAudioRecorder();
         }
 
@@ -79,12 +82,16 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 ? this.fileSystemAccessor.ReadFile(this.pathToAudioFile)
                 : null;
 
-        public TimeSpan GetDuration() => DateTime.Now - this.startedDate;
+        public TimeSpan GetLastRecordDuration() => this.duration.Elapsed;
+
         public string GetMimeType() => MimeTypeMap.Singleton.GetMimeTypeFromExtension(AudioFileExtension);
         public string GetAudioType() => AudioFileExtension;
-        
-        public double GetNoiseLevel() 
-            => MaxReportableDb + 20 * Math.Log10(this.recorder.MaxAmplitude / MaxReportableAmp);
+
+        public double GetNoiseLevel()
+        {
+            if (!this.IsRecording()) return 0;
+            return MaxReportableDb + 20 * Math.Log10(this.recorder.MaxAmplitude / MaxReportableAmp);
+        }
 
         public NoiseType GetNoiseType(double noiseLevel)
         {
