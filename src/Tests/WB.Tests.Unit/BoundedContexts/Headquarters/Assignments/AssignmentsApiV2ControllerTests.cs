@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
-using NHibernate.Util;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                     Create.Entity.InterviewSummary(status: InterviewStatus.Completed),
 
                     Create.Entity.InterviewSummary(status: InterviewStatus.InterviewerAssigned),
-                    Create.Entity.InterviewSummary(status: InterviewStatus.InterviewerAssigned),
+                    Create.Entity.InterviewSummary(status: InterviewStatus.InterviewerAssigned, isDeleted: true),
 
                     Create.Entity.InterviewSummary(status: InterviewStatus.RejectedByHeadquarters),
                     Create.Entity.InterviewSummary(status: InterviewStatus.RejectedBySupervisor)
@@ -43,8 +43,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var assignments = await controller.GetAssignmentsAsync(new CancellationToken());
 
-            Assert.That(assignments.First(), Has.Property(nameof(AssignmentApiView.Quantity))
-                .EqualTo(10 /* assignment.Quantity */ - 6 /* interviewSummary.Count */ + 3 /* interviews sent to device */));
+            Assert.That(assignments.Single(), Has.Property(nameof(AssignmentApiView.Quantity))
+                .EqualTo(10 /* assignment.Quantity */ - 5 /* interviewSummary.Count */ + 2 /* interviews sent to device */));
         }
 
         [Test]
@@ -52,11 +52,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         {
             var assignmentEntity = Create.Entity.Assignment(quantity: 10, interviewSummary: new HashSet<InterviewSummary>
             {
+                Create.Entity.InterviewSummary(status: InterviewStatus.Completed, isDeleted: true),
                 Create.Entity.InterviewSummary(status: InterviewStatus.Completed),
                 Create.Entity.InterviewSummary(status: InterviewStatus.Completed),
 
                 Create.Entity.InterviewSummary(status: InterviewStatus.InterviewerAssigned),
-                Create.Entity.InterviewSummary(status: InterviewStatus.InterviewerAssigned),
+                Create.Entity.InterviewSummary(status: InterviewStatus.InterviewerAssigned, isDeleted: true),
 
                 Create.Entity.InterviewSummary(status: InterviewStatus.RejectedByHeadquarters),
                 Create.Entity.InterviewSummary(status: InterviewStatus.RejectedBySupervisor)
@@ -67,7 +68,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var assignment = assignmentServiceImpl.MapAssignment(assignmentEntity);
             
             Assert.That(assignment, Has.Property(nameof(AssignmentApiView.Quantity))
-                .EqualTo(10 /* assignment.Quantity */ - 6 /* interviewSummary.Count */ + 3 /* interviews sent to device */));
+                .EqualTo(10 /* assignment.Quantity */ - 5 /* interviewSummary.Count */ + 2 /* interviews sent to device */));
         }
     }
 }
