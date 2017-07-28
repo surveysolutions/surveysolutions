@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var viewFactory = new Mock<IAssignmentViewFactory>();
             viewFactory.Setup(vf => vf.Load(It.IsAny<AssignmentsInputModel>()))
                 .Returns(new AssignmentsWithoutIdentifingData());
-            
+
             var controller = new AssignmentsApiController(
                 viewFactory.Object,
                 Mock.Of<IAuthorizedUser>(au => au.IsInterviewer == true && au.Id == Id.gA),
@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Length = 10,
                 ResponsibleId = Id.g1
             });
-            
+
             viewFactory.Verify(vf => vf.Load(It.Is<AssignmentsInputModel>(v => v.ResponsibleId == Id.gA)), Times.Once);
         }
     }
