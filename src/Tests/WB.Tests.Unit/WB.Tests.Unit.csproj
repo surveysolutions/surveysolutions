@@ -462,6 +462,7 @@
     <Compile Include="Applications\Shared\Web\Captcha\WebCachedCaptchaServiceTests.cs" />
     <Compile Include="Bootstrap\MessengerPluginBootstrap.cs" />
     <Compile Include="BoundedContexts\Headquarters\Assignments\AssignmentsApiControllerTests.cs" />
+    <Compile Include="BoundedContexts\Headquarters\Assignments\AssignmentsApiV2ControllerTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\Assignments\AssignmentsServiceTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\Assignments\AssignmentTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\Assignments\when_getting_assignments_for_web_interview.cs" />
