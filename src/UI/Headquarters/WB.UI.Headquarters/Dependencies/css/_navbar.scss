@@ -185,6 +185,10 @@
 .navbar-inverse .navbar-text{
 	color: $white;
 }
+.language{
+	background: url("#{$assetsPath}/img/language.png") 0 15px no-repeat;
+	padding-left: 40px;
+}
 @media (max-width: $screen-md-min) {
 	.navbar {
 		.container, .container-fluid {
@@ -518,6 +522,9 @@
 		bottom: 6px;
 		position: relative;
 		@include rotate(-225deg);
+	}
+	.language{
+		background-position-y: 5px;
 	}
 }
 @media (max-width: $screen-xs-min) {

@@ -7183,6 +7183,10 @@ a.disabled {
 .navbar-inverse .navbar-text {
   color: #fff; }
 
+.language {
+  background: url("../img/language.png") 0 15px no-repeat;
+  padding-left: 40px; }
+
 @media (max-width: 1210px) {
   .navbar .container, .navbar .container-fluid {
     padding: 0 20px 0 35px; }
@@ -7451,7 +7455,10 @@ a.disabled {
     -webkit-transform: rotate(-225deg);
     -ms-transform: rotate(-225deg);
     -o-transform: rotate(-225deg);
-    transform: rotate(-225deg); } }
+    transform: rotate(-225deg); }
+
+  .language {
+    background-position-y: 5px; } }
 @media (max-width: 481px) {
   .navbar .navbar-header .active-page {
     max-width: 30%; } }
