@@ -88,6 +88,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Forbidden.
+        /// </summary>
+        public static string Error_Forbidden {
+            get {
+                return ResourceManager.GetString("Error_Forbidden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The link has expired.
         /// </summary>
         public static string Error_InterviewExpired {
