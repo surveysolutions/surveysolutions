@@ -136,6 +136,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 this.audioRecorderInfoLisener = null;
             }
 
+            this.recorder?.Reset();
             this.recorder?.Release();
             this.recorder = null;
         }
