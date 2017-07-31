@@ -6118,6 +6118,23 @@ a.disabled {
   .btn-default.btn-gray:hover, .btn-default.btn-gray:focus {
     border: none;
     background-color: #8c8f90; }
+.btn-default.btn-post-comment {
+  -webkit-transition: all 0.2s linear 0s;
+  -moz-transition: all 0.2s linear 0s;
+  -ms-transition: all 0.2s linear 0s;
+  -o-transition: all 0.2s linear 0s;
+  transition: all 0.2s linear 0s;
+  padding: 12px;
+  color: #dbdfe2;
+  border-color: #dbdfe2;
+  border-radius: 5px; }
+  .btn-default.btn-post-comment:hover, .btn-default.btn-post-comment:focus, .btn-default.btn-post-comment:active, .btn-default.btn-post-comment.comment-added {
+    color: #2a81cb;
+    border-color: #2a81cb;
+    background-color: transparent; }
+  .btn-default.btn-post-comment:active {
+    background-color: #dfeaf4;
+    box-shadow: none; }
 
 .back-link {
   text-transform: uppercase;
@@ -6456,27 +6473,30 @@ a.disabled {
   -o-transition: all 0.2s linear 0s;
   transition: all 0.2s linear 0s;
   width: 248px;
-  background: #000 url("../img/HQ-login-mobile-get-button-logo.png") no-repeat;
+  background: url("../img/HQ-login-mobile-get-button-logo.png") no-repeat;
   background-size: 55px;
   margin-bottom: 25px;
   text-decoration: none;
-  color: rgba(255, 255, 255, 0.9);
-  background-position: 15px 10px;
+  color: #3f3f3f;
+  background-position: 15px 13px;
   text-decoration: none;
   padding: 10px 27px 10px 85px;
   text-align: left;
   border-radius: 10px;
+  border: 2px solid #dbdfe2;
   display: block; }
   .get-interviewer-app:hover, .get-interviewer-app:focus {
     text-decoration: none;
-    color: rgba(255, 255, 255, 0.9);
-    box-shadow: inset 0 0 40px white; }
+    border-color: #a6a8a9;
+    color: #000; }
   .get-interviewer-app span {
-    display: block; }
+    display: block;
+    letter-spacing: 0.05em; }
     .get-interviewer-app span.version {
       text-transform: none;
+      font-style: italic;
       margin-top: 5px;
-      color: rgba(255, 255, 255, 0.5); }
+      color: #3f3f3f; }
 
 .navbar {
   min-width: 360px;
@@ -6642,6 +6662,10 @@ a.disabled {
 
 .navbar-inverse .navbar-text {
   color: #fff; }
+
+.language {
+  background: url("../img/language.png") 0 15px no-repeat;
+  padding-left: 40px; }
 
 @media (max-width: 1210px) {
   .navbar .container, .navbar .container-fluid {
@@ -6911,7 +6935,10 @@ a.disabled {
     -webkit-transform: rotate(-225deg);
     -ms-transform: rotate(-225deg);
     -o-transform: rotate(-225deg);
-    transform: rotate(-225deg); } }
+    transform: rotate(-225deg); }
+
+  .language {
+    background-position-y: 5px; } }
 @media (max-width: 481px) {
   .navbar .navbar-header .active-page {
     max-width: 30%; } }
@@ -8297,8 +8324,6 @@ body > .ui-pnotify {
     font-size: 16px;
     line-height: 18px;
     margin-right: 10px; }
-  .modal .interviewer {
-    margin-left: 10px; }
 
 .modal-dialog {
   display: inline-block;
@@ -8408,6 +8433,28 @@ body > .ui-pnotify {
     display: inline-block;
     padding: 10px;
     color: #a6a8a9; }
+
+.audio-question .modal .modal-dialog {
+  max-width: 450px; }
+.audio-question .modal .modal-header {
+  margin-bottom: 10px; }
+  .audio-question .modal .modal-header h5, .audio-question .modal .modal-header .preset-filters-container a, .preset-filters-container .audio-question .modal .modal-header a, .audio-question .modal .modal-header .preset-filters-container .export-queue, .preset-filters-container .audio-question .modal .modal-header .export-queue {
+    padding: 0;
+    line-height: 18px; }
+  .audio-question .modal .modal-header .modal-title {
+    margin-bottom: 5px; }
+.audio-question .modal .modal-body canvas {
+  display: block;
+  margin: 0 auto; }
+.audio-question .modal .modal-footer {
+  padding-bottom: 0; }
+  .audio-question .modal .modal-footer .recordign-time {
+    float: left;
+    font: 24px/36px "RobotoLight"; }
+  .audio-question .modal .modal-footer button {
+    float: right;
+    padding: 10px;
+    margin: 0 10px 0 0; }
 
 @media (max-width: 481px) {
   .ui-pnotify {
@@ -9553,7 +9600,7 @@ figcaption {
   color: #3f3f3f; }
 
 .pink-text {
-  color: #ed45aa; }
+  color: #e3008b; }
 
 .light-blue-text {
   color: #5fd3c6; }
@@ -9694,8 +9741,6 @@ label.inactive {
     font-style: italic; }
     .information-block p p:last-of-type {
       margin-bottom: 10px; }
-  .information-block.enumerators {
-    color: #ed45aa; }
   .information-block.instruction {
     color: #2a81cb; }
     .information-block.instruction p {
@@ -9707,16 +9752,35 @@ label.inactive {
 
 .comments-block p {
   color: #3f3f3f; }
+.comments-block h6 {
+  margin-bottom: 5px;
+  color: gray; }
+.comments-block .publication-date {
+  color: #cbcbcb; }
+.comments-block .enumerators, .comments-block .enumerators p {
+  color: #e3008b; }
 .comments-block .comment {
   display: none; }
   .comments-block .comment.active {
     display: block; }
-  .comments-block .comment .form-inline .form-control {
-    width: 360px;
-    height: 40px;
-    padding: 10px 12px;
-    z-index: 0;
-    color: #a6a8a9; }
+  .comments-block .comment .form-inline {
+    position: relative; }
+    .comments-block .comment .form-inline .form-group {
+      width: 100%; }
+    .comments-block .comment .form-inline .input-group {
+      width: 100%; }
+    .comments-block .comment .form-inline .form-control {
+      width: calc(100% + 12px);
+      height: 40px;
+      padding: 10px 12px;
+      z-index: 0;
+      margin-left: -12px;
+      color: #3f3f3f;
+      font-style: italic; }
+    .comments-block .comment .form-inline .btn-post-comment {
+      position: absolute;
+      top: 17px;
+      right: -65px; }
 
 .action-container, .wrapper-info {
   padding: 20px 30px 20px 80px; }
@@ -9834,6 +9898,7 @@ label.inactive {
     border-color: #dbdfe2; }
 
 .question-editor .options-group {
+  position: relative;
   padding: 10px;
   border-radius: 7px;
   margin-bottom: 0px;
@@ -10046,6 +10111,90 @@ label.inactive {
     font-weight: bold; }
     .container-info dl dd a {
       color: #3f3f3f; }
+
+.lock {
+  display: none;
+  background: url("../img/padlock-1dp.png") no-repeat;
+  background-size: 27px 27px;
+  position: absolute;
+  top: calc(50% -  13.5px);
+  left: -37px;
+  width: 27px;
+  height: 27px; }
+  @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
+    .lock {
+      /* on retina, use image that's scaled by 2 */
+      background-image: url("../img/padlock-3dp.png");
+      background-size: 27px 27px; } }
+
+.readonly .lock {
+  display: block; }
+.readonly input[type="text"]:disabled,
+.readonly label,
+.readonly .field {
+  background: rgba(248, 248, 248, 0.8);
+  border-radius: 5px; }
+
+.audio-question.answered .btn-action-questionnaire {
+  border-color: #dbdfe2; }
+.audio-question .recording .btn-clear {
+  right: -45px; }
+.audio-question .btn-action-questionnaire {
+  border-width: 2px;
+  background-image: url("../img/icon-mic-1x.png");
+  background-size: 21px 31px;
+  background-repeat: no-repeat;
+  background-position: 10px 4px;
+  padding-left: 40px; }
+  @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
+    .audio-question .btn-action-questionnaire {
+      /* on retina, use image that's scaled by 2 */
+      background-image: url("../img/icon-mic-2x.png");
+      background-size: 21px 31px; } }
+  .audio-question .btn-action-questionnaire:hover, .audio-question .btn-action-questionnaire:focus, .audio-question .btn-action-questionnaire:active {
+    border-color: #dbdfe2; }
+.audio-question .block-with-data {
+  font-size: 14px;
+  line-height: 16px; }
+  .audio-question .block-with-data li:first-of-type {
+    font-weight: bold; }
+.audio-question .record-data {
+  position: relative;
+  height: 40px;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 5px; }
+  .audio-question .record-data > span {
+    float: left;
+    padding: 10px 12px; }
+  .audio-question .record-data .volume-signal {
+    width: 22px;
+    height: 22px;
+    margin: 9px 12px;
+    padding: 0;
+    display: table-cell;
+    text-align: center; }
+    .audio-question .record-data .volume-signal .red-dot {
+      border-radius: 100%;
+      background-color: #ed2c39;
+      display: inline-block;
+      margin: 0 auto;
+      vertical-align: middle; }
+  .audio-question .record-data .volume-message {
+    color: #cbcbcb;
+    font-size: 16px;
+    line-height: 20px; }
+  .audio-question .record-data .recordign-time {
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 20px; }
+.audio-question .btn-recording-done {
+  font: 16px/22px "RobotoItalic";
+  text-transform: initial;
+  float: right;
+  letter-spacing: normal;
+  padding: 8px 12px;
+  color: #3f3f3f; }
 
 @media only screen and (max-width: 1525px) {
   .web-interview-for-supervisor .filters {
@@ -10378,15 +10527,20 @@ label.inactive {
   .web-interview .questionnaire .humburger-foldback-button {
     top: 20px; }
   .web-interview .questionnaire .comment .form-inline .form-group {
-    margin-bottom: 15px; }
+    margin-bottom: 0;
+    width: calc(100% - 65px); }
+    .web-interview .questionnaire .comment .form-inline .form-group .input-group {
+      width: 100%; }
+  .web-interview .questionnaire .comment .form-inline .form-control {
+    width: calc(100% + 12px); }
+  .web-interview .questionnaire .comment .form-inline .btn-post-comment {
+    position: static; }
   .web-interview .questionnaire .question {
     padding-left: 35px; }
   .web-interview .questionnaire .unit-title {
     padding-left: 45px; }
   .web-interview .questionnaire .button-flag, .web-interview .questionnaire .flag:before {
     left: -20px; }
-  .web-interview .questionnaire .comments-block .comment .form-inline .form-control {
-    width: 265px; }
   .web-interview .questionnaire .yes-no-question .question-unit .options-group .radio .field > span {
     width: 71%; }
   .web-interview .questionnaire .gps-question.answered .map, .web-interview .questionnaire .gps-question.has-error .map {
@@ -10400,7 +10554,16 @@ label.inactive {
   .web-interview .action-container, .web-interview .wrapper-info {
     padding-left: 50px; }
     .web-interview .action-container a, .web-interview .wrapper-info a {
-      max-width: 265px; } }
+      max-width: 265px; }
+  .web-interview .lock {
+    left: -17px; }
+  .web-interview .audio-question .recording .btn-clear {
+    right: 0px; }
+  .web-interview .audio-question .record-data {
+    padding-right: 40px; }
+  .web-interview .audio-question .volume-message, .web-interview .audio-question .btn-recording-done {
+    padding-left: 5px;
+    padding-right: 5px; } }
 @media (max-width: 481px) {
   .web-interview .action-container, .web-interview .wrapper-info, .web-interview .wrapper-info {
     padding-left: 25px; }
@@ -10427,6 +10590,9 @@ label.inactive {
     .web-interview.web-interview-for-supervisor .questionnaire .unit-title .breadcrumb {
       min-height: auto;
       padding-left: 0; } }
+@media only screen and (max-width: 425px) {
+  .web-interview .audio-question .volume-message {
+    font-size: 10px; } }
 .wrapper-info {
   border-bottom: 2px solid #dbdfe2; }
   .wrapper-info .container-info {

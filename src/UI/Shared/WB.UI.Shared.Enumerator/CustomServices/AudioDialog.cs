@@ -9,10 +9,14 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 {
     public class AudioDialog : IAudioDialog
     {
+        private int recordLimitInMS = 3 * 60 * 1000;
+
         private AudioDialogFragment dialog;
 
         private Timer durationTimer;
         private Timer noiseTimer;
+
+        private Timer recordLimitTimer;
 
         private readonly IMvxAndroidCurrentTopActivity topActivity;
         private readonly IInterviewViewModelFactory viewModelFactory;
@@ -36,7 +40,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 this.InitializeDialog();
             
             this.audioService.Start();
-            
+            this.recordLimitTimer = new Timer(this.StopRecordingAndSaveResultByTimer, null, recordLimitInMS, Timeout.Infinite);
+
             this.durationTimer = new Timer(this.OnEvery31Milisecond, null, 0, 31);
             this.noiseTimer = new Timer(this.OnEvery100Millisecond, null, 0, 100);
             
@@ -45,6 +50,17 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.dialog.ViewModel.Duration = string.Empty;
 
             this.dialog.Show(this.topActivity.Activity.FragmentManager, nameof(AudioDialogFragment));
+        }
+
+        private void StopRecordingAndSaveResultByTimer(object state = null)
+        {
+            this.StopRecordingAndSaveResult();
+        }
+
+        public void StopRecordingAndSaveResult()
+        {
+            if (this.audioService.IsRecording())
+                this.ViewModel_OnDone(this, EventArgs.Empty);
         }
 
         private void InitializeDialog()
@@ -80,13 +96,16 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
             this.noiseTimer.Dispose();
             this.noiseTimer = null;
-            
-            this.dialog.Dismiss();
+
+            this.recordLimitTimer.Dispose();
+            this.recordLimitTimer = null;
+
+            this.dialog.DismissAllowingStateLoss();
         }
 
         private void OnEvery31Milisecond(object state)
         {
-            var duration = this.audioService.GetDuration();
+            var duration = this.audioService.GetLastRecordDuration();
             this.dialog.ViewModel.Duration = $"{duration.Minutes:00}:{duration.Seconds:00}:{duration.Milliseconds/10:00}";
         }
 
