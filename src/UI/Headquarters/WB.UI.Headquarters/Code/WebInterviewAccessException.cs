@@ -15,7 +15,8 @@ namespace WB.UI.Headquarters.Code
     public enum InterviewAccessExceptionReason
     {
         InterviewNotFound = 1,
-        InterviewExpired,
-        NoActionsNeeded
+        InterviewExpired = 2,
+        NoActionsNeeded = 3,
+        UserNotAuthorised = 4
     }
 }
