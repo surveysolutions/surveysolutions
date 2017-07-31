@@ -62,10 +62,15 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             var userId = currentPrincipalIdentity?.Identity?.GetUserId();
             if (!string.IsNullOrEmpty(userId))
             {
-                if (currentPrincipalIdentity.IsInRole(UserRoles.Interviewer.ToString()) &&
-                    interview.ResponsibleId.ToString() == userId)
+                if (currentPrincipalIdentity.IsInRole(UserRoles.Interviewer.ToString()))
                 {
-                    return;
+                    if(interview.ResponsibleId.ToString() == userId)
+                        return;
+                    else
+                    {
+                        throw new WebInterviewAccessException(InterviewAccessExceptionReason.Forbidden,
+                            Headquarters.Resources.WebInterview.Error_Forbidden);
+                    }
                 }
             }
 
