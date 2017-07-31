@@ -57,6 +57,8 @@ export default {
             startRecordingTime: null,
             endRecordingTime: null,
             stopwatchInterval: null,
+            maxDuration: 3 * 60 * 1000,
+            maxDurationInterval: null,
             formattedTimer: "00:00:00"
         }
     },
@@ -103,6 +105,7 @@ export default {
             this.isRecording = false
             this.closeModal()
             clearInterval(this.stopwatchInterval)
+            clearInterval(this.maxDurationInterval)
             this.formattedTimer = "00:00:00"
         },
         startRecording() {
@@ -114,7 +117,9 @@ export default {
                     this.isRecording = true;
                     self.startRecordingTime = self.currentTime()
                     clearInterval(self.stopwatchInterval)
+                    clearInterval(self.maxDurationInterval)
                     self.stopwatchInterval = setInterval(self.updateTimer, 31)
+                    self.maxDurationInterval = setInterval(self.stopRecording, self.maxDuration)
                 },
                 errorCallback: (e) => {
                     self.markAnswerAsNotSavedWithMessage("Audio initialization failed")
