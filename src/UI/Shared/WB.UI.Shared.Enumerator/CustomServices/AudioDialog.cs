@@ -94,6 +94,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.noiseTimer = null;
 
             this.dialog.DismissAllowingStateLoss();
+            this.dialog.FragmentManager.PopBackStackImmediate();
+
             this.dialog = null;
         }
 
