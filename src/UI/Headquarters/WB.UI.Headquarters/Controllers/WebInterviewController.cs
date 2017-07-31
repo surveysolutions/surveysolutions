@@ -438,6 +438,14 @@ namespace WB.UI.Headquarters.Controllers
                     return;
                 }
 
+                if (interviewAccessException.Reason == InterviewAccessExceptionReason.Forbidden)
+                {
+                    filterContext.ExceptionHandled = true;
+                    filterContext.HttpContext.Response.Clear();
+                    filterContext.HttpContext.Response.StatusCode = 403;
+                    return;
+                }
+
                 this.HandleInterviewAccessError(filterContext, interviewAccessException.Message);
                 return;
             }
