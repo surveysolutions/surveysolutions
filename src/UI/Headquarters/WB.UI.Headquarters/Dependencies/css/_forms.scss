@@ -564,7 +564,7 @@ ul.dropdown-menu li, ul.dropdown-menu li *{
 		}
     } 
 }
-@media (max-width: 780px){
+@media only screen and (max-width: 780px){
 	.profile{
 		.block-filter{
 			.form-group{
