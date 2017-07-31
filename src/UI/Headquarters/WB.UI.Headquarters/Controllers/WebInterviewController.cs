@@ -430,6 +430,14 @@ namespace WB.UI.Headquarters.Controllers
             var interviewAccessException = filterContext.Exception as WebInterviewAccessException;
             if (interviewAccessException != null)
             {
+                if (interviewAccessException.Reason == InterviewAccessExceptionReason.UserNotAuthorised)
+                {
+                    filterContext.ExceptionHandled = true;
+                    filterContext.HttpContext.Response.Clear();
+                    filterContext.HttpContext.Response.StatusCode = 401;
+                    return;
+                }
+
                 this.HandleInterviewAccessError(filterContext, interviewAccessException.Message);
                 return;
             }
