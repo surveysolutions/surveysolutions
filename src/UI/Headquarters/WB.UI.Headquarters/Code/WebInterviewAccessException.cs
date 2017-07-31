@@ -17,6 +17,7 @@ namespace WB.UI.Headquarters.Code
         InterviewNotFound = 1,
         InterviewExpired = 2,
         NoActionsNeeded = 3,
-        UserNotAuthorised = 4
+        UserNotAuthorised = 4,
+        Forbidden = 5
     }
 }
