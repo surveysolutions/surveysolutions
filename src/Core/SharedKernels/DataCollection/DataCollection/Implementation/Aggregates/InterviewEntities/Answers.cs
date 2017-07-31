@@ -5,6 +5,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Portable;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers
@@ -283,6 +284,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public override string ToString() => FileName;
+
+        public AudioAnswerForConditions ToAudioAnswerForContions()
+        {
+            return new AudioAnswerForConditions
+            {
+                FileName = this.FileName,
+                Length = this.Length
+            };
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]

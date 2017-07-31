@@ -11,8 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
     {
         private static readonly List<QuestionType> ExcludedQuestionTypes = new List<QuestionType>
         {
-            QuestionType.Area,
-            QuestionType.Audio
+            QuestionType.Area
         };
 
         public LevelModel(string variable, RosterScope rosterScope, string className)
