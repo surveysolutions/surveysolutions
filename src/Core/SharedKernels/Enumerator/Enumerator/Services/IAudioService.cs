@@ -29,5 +29,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         string GetAudioType();
         double GetNoiseLevel();
         NoiseType GetNoiseType(double noiseLevel);
+        event EventHandler OnMaxDurationReached;
     }
 }
