@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         void Stop();
         bool IsRecording();
         Stream GetLastRecord();
-        TimeSpan GetDuration();
+        TimeSpan GetLastRecordDuration();
         string GetMimeType();
         string GetAudioType();
         double GetNoiseLevel();

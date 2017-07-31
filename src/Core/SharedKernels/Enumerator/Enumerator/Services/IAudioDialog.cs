@@ -7,5 +7,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         void ShowAndStartRecording(string title);
         event EventHandler OnCanelRecording;
         event EventHandler OnRecorded;
+        void StopRecordingAndSaveResult();
     }
 }
