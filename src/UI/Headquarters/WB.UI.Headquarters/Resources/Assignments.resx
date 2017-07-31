@@ -176,7 +176,7 @@
     <value>Fill all or some of the identifying fields</value>
   </data>
   <data name="CreateAssignment_QuantityInstruction" xml:space="preserve">
-    <value>Specify maximum number of interviews to be generated for that assignment (Quantity)</value>
+    <value>Specify maximum number of interviews to be generated for that assignment (Quantity). Permitted values: -1 is for Unlimited assignment, 0 is for Empty assignment, numbers for assigment size</value>
   </data>
   <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
     <value>Select responsible (Supervisor or Interviewer) for this assignment</value>
