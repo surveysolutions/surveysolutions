@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using WB.Core.SharedKernels.DataCollection.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
 {
@@ -20,6 +21,8 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
         public bool IsAnswered(RosterVector answer) => answer != null;
 
         public bool IsAnswered(YesNoAndAnswersMissings answer) => !(answer.Yes.Length == 0 && answer.No.Length == 0);
+
+        public bool IsAnswered(AudioAnswerForConditions answer) => !string.IsNullOrEmpty(answer?.FileName) && answer.Length.Ticks > 0;
 
         /// @name  Date and time management functions
         /// @{
