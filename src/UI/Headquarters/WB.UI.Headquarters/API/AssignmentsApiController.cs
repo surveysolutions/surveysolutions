@@ -166,7 +166,9 @@ namespace WB.UI.Headquarters.API
 
             var questionnaireIdentity = new QuestionnaireIdentity(request.QuestionnaireId, request.QuestionnaireVersion);
 
-            var assignment = new Assignment(questionnaireIdentity, request.ResponsibleId, request.Quantity);
+            var quantity = request.Quantity == null ? 1 : request.Quantity;
+
+            var assignment = new Assignment(questionnaireIdentity, request.ResponsibleId, quantity);
 
             var untypedQuestionAnswers = JsonConvert.DeserializeObject<List<UntypedQuestionAnswer>>(request.AnswersToFeaturedQuestions);
 
