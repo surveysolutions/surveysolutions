@@ -15,21 +15,38 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 {
     public class AudioService : IAudioService
     {
+        private class AudioRecorderInfoLisener : Java.Lang.Object, MediaRecorder.IOnInfoListener
+        {
+            public event EventHandler OnMaxDurationReached;
+            public void OnInfo(MediaRecorder mr, MediaRecorderInfo what, int extra)
+            {
+                if(what == MediaRecorderInfo.MaxDurationReached)
+                    this.OnMaxDurationReached?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        private const int MaxDuration = 3 * 60 * 1000;
         private const double MaxReportableAmp = 32767f;
         private const double MaxReportableDb = 90.3087f;
         private readonly string audioFileName = $"audio.{AudioFileExtension}";
         private const string AudioFileExtension = "m4a";
-        private MediaRecorder recorder;
-        private Stopwatch duration = new Stopwatch();
+        
+        private readonly Stopwatch duration = new Stopwatch();
 
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string pathToAudioFile;
+
+        private MediaRecorder recorder;
+        private AudioRecorderInfoLisener audioRecorderInfoLisener;
+
 
         public AudioService(string pathToAudioDirectory, IFileSystemAccessor fileSystemAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.pathToAudioFile = this.fileSystemAccessor.CombinePath(pathToAudioDirectory, audioFileName);
         }
+
+        public event EventHandler OnMaxDurationReached;
 
         public void Start()
         {
@@ -47,6 +64,11 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.recorder.SetAudioSamplingRate(44100);
             this.recorder.SetAudioEncodingBitRate(64000);
             this.recorder.SetOutputFile(this.pathToAudioFile);
+            this.recorder.SetMaxDuration(MaxDuration);
+
+            this.audioRecorderInfoLisener = new AudioRecorderInfoLisener();
+            this.audioRecorderInfoLisener.OnMaxDurationReached += this.AudioRecorderInfoLisener_OnMaxDurationReached;
+            this.recorder.SetOnInfoListener(audioRecorderInfoLisener);
 
             try
             {
@@ -65,6 +87,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 throw new AudioException(AudioExceptionType.Unhandled, "Unexpected exception during start audio recording", ex);
             }
         }
+
+        private void AudioRecorderInfoLisener_OnMaxDurationReached(object sender, EventArgs e) 
+            => this.OnMaxDurationReached?.Invoke(this, EventArgs.Empty);
 
         public void Stop()
         {
@@ -104,6 +129,13 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         private void ReleaseAudioRecorder()
         {
+            if (this.audioRecorderInfoLisener != null)
+            {
+                this.audioRecorderInfoLisener.OnMaxDurationReached -= this.AudioRecorderInfoLisener_OnMaxDurationReached;
+                this.audioRecorderInfoLisener.Dispose();
+                this.audioRecorderInfoLisener = null;
+            }
+
             this.recorder?.Release();
             this.recorder = null;
         }
