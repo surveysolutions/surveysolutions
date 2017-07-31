@@ -247,4 +247,7 @@
   <data name="Error_CookiesTurnedOff" xml:space="preserve">
     <value>Cookies are not enabled in your browser. Please enable cookies in your browser preferences to continue</value>
   </data>
+  <data name="Error_UserNotAuthorised" xml:space="preserve">
+    <value>User is not authorized</value>
+  </data>
 </root>
