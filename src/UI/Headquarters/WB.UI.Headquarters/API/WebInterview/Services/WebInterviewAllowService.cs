@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -75,10 +76,17 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     .ExecuteInPlainTransaction(
                         () => webInterviewConfigProvider.Get(questionnaireIdentity));
 
+            //interview is not public available and responsible is not logged in
+            if (!webInterviewConfig.Started && interview.Status == InterviewStatus.InterviewerAssigned)
+            {
+                throw new WebInterviewAccessException(InterviewAccessExceptionReason.UserNotAuthorised,
+                    Headquarters.Resources.WebInterview.Error_UserNotAuthorised);
+            }
+
             if (!webInterviewConfig.Started || !AnonymousUserAllowedStatuses.Contains(interview.Status))
             {
                 throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
-                Headquarters.Resources.WebInterview.Error_InterviewExpired);
+                    Headquarters.Resources.WebInterview.Error_InterviewExpired);
             }
         }
     }
