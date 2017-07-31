@@ -114,7 +114,7 @@
 		}
 	}
 }
-@media (max-width: 400px){
+@media only screen and (max-width: 400px){
 	.action-block .action-buttons .btn:last-of-type{
 		margin-right: 5px;
 	}

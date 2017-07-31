@@ -42,7 +42,7 @@
 			position: relative;
 
 			&.active>a{
-				@include transition;
+				@include transition();
 				font-family: "RobotoBold";
 				span{
 					font-family: "RobotoLight";
@@ -340,7 +340,7 @@
 		}
 	}
 }
-@media screen and (max-width: $screen-md-min) {
+@media (max-width: $screen-md-min) {
 	.wide-navbar{
 		.navbar-header {
 			float: none;

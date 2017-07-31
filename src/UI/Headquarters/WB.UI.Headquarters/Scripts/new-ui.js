@@ -34,13 +34,32 @@ $(function() {
     $("main").removeClass("hold-transition");
     $("footer").removeClass("hold-transition");
 
+    $(window).on('resize',
+        function() {
+            if ($(window).width() > 880) {
+                if ($(".navbar-collapse.collapse.in").length > 0) {
+                    $("main").addClass("display-block");
+                }
+            } else {
+                $("main").removeClass("display-block");
+            }
+        });
+
     $(".navbar-toggle").click(function() {
         $(".navbar-collapse").fadeToggle();
         $(".navbar-collapse").animate({ height: '100%' }, 0);
         $(".top-menu").toggleClass("top-animate");
         $(".mid-menu").toggleClass("mid-animate");
         $(".bottom-menu").toggleClass("bottom-animate");
-        $("main").toggleClass("hidden");
+        if ($(window).width() < 880) {
+            if ($(".navbar-collapse.collapse.in").length > 0) {
+                $("main").removeClass("display-block");
+                $("main").removeClass("hidden");
+            } else {
+
+                $("main").addClass("hidden");
+            }
+        }
     });
 
     $('form').preventDoubleSubmission();
