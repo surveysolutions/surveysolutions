@@ -89,7 +89,7 @@
         }
     }
 }
-@media (max-width: 600px){
+@media only screen and (max-width: 600px){
     .interviews-information .number-information{
         width: 50%;
     }
@@ -445,7 +445,7 @@
         }
     }
 }
-@media (max-width: 670px){
+@media only screen and (max-width: 670px){
     .graphic-wrapper{
         margin: 30px 0;
         .graphic{
