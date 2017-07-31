@@ -9,14 +9,10 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 {
     public class AudioDialog : IAudioDialog
     {
-        private int recordLimitInMS = 3 * 60 * 1000;
-
         private AudioDialogFragment dialog;
 
         private Timer durationTimer;
         private Timer noiseTimer;
-
-        private Timer recordLimitTimer;
 
         private readonly IMvxAndroidCurrentTopActivity topActivity;
         private readonly IInterviewViewModelFactory viewModelFactory;
@@ -37,10 +33,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         public void ShowAndStartRecording(string title)
         {
             if (this.dialog == null)
-                this.InitializeDialog();
+                this.InitializeDialogAndAudioService();
             
             this.audioService.Start();
-            this.recordLimitTimer = new Timer(this.StopRecordingAndSaveResultByTimer, null, recordLimitInMS, Timeout.Infinite);
 
             this.durationTimer = new Timer(this.OnEvery31Milisecond, null, 0, 31);
             this.noiseTimer = new Timer(this.OnEvery100Millisecond, null, 0, 100);
@@ -52,18 +47,13 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.dialog.Show(this.topActivity.Activity.FragmentManager, nameof(AudioDialogFragment));
         }
 
-        private void StopRecordingAndSaveResultByTimer(object state = null)
-        {
-            this.StopRecordingAndSaveResult();
-        }
-
         public void StopRecordingAndSaveResult()
         {
             if (this.audioService.IsRecording())
                 this.ViewModel_OnDone(this, EventArgs.Empty);
         }
 
-        private void InitializeDialog()
+        private void InitializeDialogAndAudioService()
         {
             this.dialog = new AudioDialogFragment
             {
@@ -73,7 +63,12 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             
             this.dialog.ViewModel.OnCancel += ViewModel_OnCancel;
             this.dialog.ViewModel.OnDone += ViewModel_OnDone;
+
+            this.audioService.OnMaxDurationReached += AudioService_OnMaxDurationReached;
         }
+
+        private void AudioService_OnMaxDurationReached(object sender, EventArgs e)
+            => this.StopRecordingAndSaveResult();
 
         private void ViewModel_OnDone(object sender, EventArgs e)
         {
@@ -90,6 +85,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private void HideAndStopRecording()
         {
             this.audioService.Stop();
+            this.audioService.OnMaxDurationReached -= this.AudioService_OnMaxDurationReached;
 
             this.durationTimer.Dispose();
             this.durationTimer = null;
@@ -97,10 +93,10 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.noiseTimer.Dispose();
             this.noiseTimer = null;
 
-            this.recordLimitTimer.Dispose();
-            this.recordLimitTimer = null;
-
             this.dialog.DismissAllowingStateLoss();
+            this.dialog.FragmentManager.PopBackStackImmediate();
+
+            this.dialog = null;
         }
 
         private void OnEvery31Milisecond(object state)

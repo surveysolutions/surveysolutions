@@ -481,7 +481,7 @@
         top: -40px;
     }
 }
-@media (max-width: 1450px){
+@media only screen and (max-width: 1450px){
     .table-ordered{
         thead{
             tr th{
