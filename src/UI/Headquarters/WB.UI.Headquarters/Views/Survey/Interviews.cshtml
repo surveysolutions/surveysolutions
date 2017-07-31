@@ -71,6 +71,17 @@
                     </div>
 
                     <div class="block-filter">
+                        <h5>@Common.Status</h5>
+                        <select data-bind="value: SelectedStatus" class="selectpicker">
+                            <option value="">@Common.Any</option>
+                            @foreach (var item in Model.Statuses)
+                            {
+                                <option value="@item.Status">@item.StatusName</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="block-filter">
                         <h5>@Pages.Survey_ResponsibleTitle</h5>
                         <p class="list-group-item-text">
                             <div class="input-group">
@@ -83,16 +94,6 @@
                         </p>
                     </div>
 
-                    <div class="block-filter">
-                        <h5>@Common.Status</h5>
-                        <select data-bind="value: SelectedStatus" class="selectpicker">
-                            <option value="">@Common.Any</option>
-                            @foreach (var item in Model.Statuses)
-                            {
-                                <option value="@item.Status">@item.StatusName</option>
-                            }
-                        </select>
-                    </div>
                     <div class="block-filter">
                         <h5>@Interviews.Assignment</h5>
                         <p class="list-group-item-text">

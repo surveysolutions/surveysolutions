@@ -21,7 +21,7 @@
             <div class="collapse navbar-collapse" id="navbar">
                 <p class="navbar-text">{{questionnaireTitle}}</p>
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown">
+                    <li class="dropdown language">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" v-bind:title="currentLanguage">{{currentLanguage}}<span class="caret" v-if="canChangeLanguage"></span></a>
                         <ul class="dropdown-menu" v-if="canChangeLanguage">
                             <li v-if="currentLanguage != $store.state.originalLanguageName">

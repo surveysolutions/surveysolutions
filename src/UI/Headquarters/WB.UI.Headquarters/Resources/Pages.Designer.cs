@@ -277,6 +277,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Caution:.
+        /// </summary>
+        public static string CautionTitle {
+            get {
+                return ResourceManager.GetString("CautionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         public static string CloseLabel {
@@ -403,6 +412,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exclude ESRI Map support.
+        /// </summary>
+        public static string ExcludeEsriTitle {
+            get {
+                return ResourceManager.GetString("ExcludeEsriTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filters.
         /// </summary>
         public static string FilterTitle {
@@ -417,6 +435,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Forbidden_Title {
             get {
                 return ResourceManager.GetString("Forbidden_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ESRI Map support is an experimental feature. Use it only if you need the advanced ESRI GIS functionality. Including this functionality will significantly increase application size and download time. .
+        /// </summary>
+        public static string GetEsriExtraDescription {
+            get {
+                return ResourceManager.GetString("GetEsriExtraDescription", resourceCulture);
             }
         }
         
