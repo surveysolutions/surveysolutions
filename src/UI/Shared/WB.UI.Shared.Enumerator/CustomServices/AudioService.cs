@@ -88,7 +88,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             }
         }
 
-        private void AudioRecorderInfoLisener_OnMaxDurationReached(object sender, EventArgs e) 
+        private void AudioRecorderInfoLisener_OnMaxDurationReached(object sender, EventArgs e)
             => this.OnMaxDurationReached?.Invoke(this, EventArgs.Empty);
 
         public void Stop()
@@ -115,7 +115,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         public double GetNoiseLevel()
         {
             if (!this.IsRecording()) return 0;
-            return MaxReportableDb + 20 * Math.Log10(this.recorder.MaxAmplitude / MaxReportableAmp);
+            return MaxReportableDb + 20 * Math.Log10(this.GetMaxAmplitude() / MaxReportableAmp);
         }
 
         public NoiseType GetNoiseType(double noiseLevel)
@@ -125,6 +125,37 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             if(noiseLevel > 80)
                 return NoiseType.High;
             return NoiseType.Normal;
+        }
+
+        private int GetMaxAmplitude()
+        {
+            var maxAmplitude = 0;
+            try
+            {
+                maxAmplitude = this.recorder.MaxAmplitude;
+            }
+            catch (RuntimeException)
+            {
+                /*still don't understand when this exception can be*/
+                /* developer.android.com */
+                /* int getMaxAmplitude () - Returns the maximum absolute amplitude that was sampled since the last call to this method. Call this only after the setAudioSource(). */
+                /* Returns the maximum absolute amplitude measured since the last call, or 0 when called for the first time */
+                /* Throws IllegalStateException if it is called before the audio source has been set. */
+
+                /* android.googlesource.com */
+                /* 
+                static int android_media_MediaRecorder_native_getMaxAmplitude(JNIEnv *env, jobject thiz)
+                {
+                   ALOGV("getMaxAmplitude");
+                   sp<MediaRecorder> mr = getMediaRecorder(env, thiz);
+                   int result = 0;
+                   process_media_recorder_call(env, mr->getMaxAmplitude(&result), "java/lang/RuntimeException", "getMaxAmplitude failed.");
+                   return result;
+                }
+                */
+            }
+
+            return maxAmplitude;
         }
 
         private void ReleaseAudioRecorder()
