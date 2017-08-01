@@ -6339,7 +6339,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
 .table-wrapper .dataTables_filter {
   top: -40px; }
 
-@media (max-width: 1450px) {
+@media only screen and (max-width: 1450px) {
   .table-ordered thead tr th:after {
     border-top: 8px solid #dbdfe2; }
   .table-ordered thead tr th.sorting_desc:after {
@@ -7307,7 +7307,7 @@ a.disabled {
     -ms-transform: rotate(-225deg);
     -o-transform: rotate(-225deg);
     transform: rotate(-225deg); } }
-@media screen and (max-width: 1210px) {
+@media (max-width: 1210px) {
   .wide-navbar .navbar-header {
     float: none; }
   .wide-navbar .navbar-left, .wide-navbar .navbar-right {
@@ -8055,7 +8055,7 @@ ul.dropdown-menu li, ul.dropdown-menu li * {
 @media (max-width: 1210px) {
   .profile .separate-line {
     margin-left: -10px !important; } }
-@media (max-width: 780px) {
+@media only screen and (max-width: 780px) {
   .profile .block-filter .form-group .field {
     float: none;
     margin-right: 0; }
@@ -8647,7 +8647,7 @@ span.image-zoom-box {
 .filters .help-block {
   margin-top: 10px; }
 
-@media (max-width: 1300px) {
+@media only screen and (max-width: 1300px) {
   .foldback-button {
     display: block; }
 
@@ -8849,11 +8849,11 @@ body > .ui-pnotify {
     transform: translate(-50%, -50%);
     margin: 0; }
 
-@media screen and (max-width: 680px) {
+@media only screen and (max-width: 680px) {
   .modal-dialog {
     width: calc(100% - 40px) !important;
     margin: 20px; } }
-@media screen and (min-width: 880px) {
+@media only screen and (min-width: 880px) {
   .modal:before {
     display: inline-block;
     vertical-align: middle;
@@ -9604,6 +9604,9 @@ figcaption {
   font-size: 14px;
   line-height: 16px; }
 
+main.hidden.display-block {
+  display: block !important; }
+
 .questionnaire-statistics {
   margin-bottom: 30px; }
   .questionnaire-statistics ul {
@@ -9724,7 +9727,7 @@ figcaption {
       margin-right: 0;
       margin-left: 40px; }
 
-@media (max-width: 1450px) {
+@media only screen and (max-width: 1450px) {
   .import-wrapper .dataTables_wrapper .dataTables_filter {
     top: -15px; }
   .import-wrapper .search {
@@ -9887,7 +9890,7 @@ figcaption {
   .additional-info-block a:hover, .additional-info-block a:focus {
     text-decoration: none; }
 
-@media (max-width: 800px) {
+@media only screen and (max-width: 800px) {
   .two-columns-form {
     margin-top: 30px;
     width: auto;
@@ -10099,7 +10102,7 @@ img#placeholder {
     width: 60%; }
   .action-block .btn + .back-link {
     margin-left: 10px; } }
-@media (max-width: 400px) {
+@media only screen and (max-width: 400px) {
   .action-block .action-buttons .btn:last-of-type {
     margin-right: 5px; } }
 .export-types {
@@ -10260,7 +10263,7 @@ img#placeholder {
   padding: 50px 30px 0;
   margin-left: 207px; }
 
-@media (max-width: 1300px) {
+@media only screen and (max-width: 1300px) {
   .fullscreen-hidden-filters .export-types {
     margin-left: 0;
     padding-left: 12px; } }
@@ -10501,7 +10504,7 @@ body.no-cookies div.no-cookies {
     background-color: #2fc507;
     margin-right: 5px; }
 
-@media (max-width: 1300px) {
+@media only screen and (max-width: 1300px) {
   .fullscreen-hidden-filters .main-information {
     margin-left: 0;
     padding-left: 12px; }
@@ -10551,7 +10554,7 @@ body.no-cookies div.no-cookies {
   .map-report .main-information {
     margin-left: 252px; }
 
-@media (max-width: 1300px) {
+@media only screen and (max-width: 1300px) {
   .map-report .fullscreen-hidden-filters .main-information {
     margin-left: 0;
     padding-left: 12px; } }
@@ -10747,7 +10750,7 @@ a {
     display: none; }
   .enumerators .screen-small-resolution {
     padding: 0; } }
-@media (max-width: 600px) {
+@media only screen and (max-width: 600px) {
   .interviews-information .number-information {
     width: 50%; } }
 .graphic-wrapper {
@@ -11193,7 +11196,7 @@ a {
       background-image: linear-gradient(to bottom, rgba(42, 129, 203, 0.9) 0%, rgba(42, 129, 203, 0.9) 100%);
       background-repeat: repeat-x;
       filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#E62A81CB', endColorstr='#E62A81CB', GradientType=0); } }
-@media (max-width: 670px) {
+@media only screen and (max-width: 670px) {
   .graphic-wrapper {
     margin: 30px 0; }
     .graphic-wrapper .graphic {

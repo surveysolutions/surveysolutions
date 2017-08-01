@@ -11,7 +11,7 @@
     self.submitSuccess = false;
     self.questionnaire = ko.observable();
     self.responsible = ko.observable().extend({ required: true });
-    self.quantity = ko.observable(1).extend({ digit: true }).extend({ min: 1 });
+    self.quantity = ko.observable(1).extend({ digit: true }).extend({ min: -1 });
     self.questions = ko.observableArray();
     self.isSupervisorsLoading = ko.observable(false);
     self.supervisors = function (query, sync, pageSize) {

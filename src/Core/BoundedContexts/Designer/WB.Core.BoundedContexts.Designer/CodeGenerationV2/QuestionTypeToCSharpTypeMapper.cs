@@ -3,6 +3,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Portable;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
@@ -17,7 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                 case QuestionType.QRBarcode:
                 case QuestionType.Text:
                 case QuestionType.Area:
-                case QuestionType.Audio:
+                
                     return "string";
                 case QuestionType.Numeric:
                     return ((question as NumericQuestion)?.IsInteger ?? false) ? "int?" : "double?";
@@ -52,6 +53,9 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
 
                 case QuestionType.GpsCoordinates:
                     return typeof(GeoLocation).Name;
+
+                case QuestionType.Audio:
+                    return typeof(AudioAnswerForConditions).Name;
 
                 default:
                     throw new ArgumentException("Unknown question type.");
