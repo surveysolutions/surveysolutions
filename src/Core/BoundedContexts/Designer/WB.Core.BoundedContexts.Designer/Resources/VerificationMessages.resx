@@ -645,4 +645,7 @@
   <data name="WB0269_QuestionTitleIsEmpty" xml:space="preserve">
     <value>Question cannot have empty text.</value>
   </data>
+  <data name="WB0270_SectionContainsTooManyQuestions" xml:space="preserve">
+    <value>Section should not contain more than {0} questions.</value>
+  </data>
 </root>

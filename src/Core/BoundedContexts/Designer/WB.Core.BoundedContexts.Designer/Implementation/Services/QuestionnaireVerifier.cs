@@ -147,6 +147,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Error<IGroup>(FirstChapterHasEnablingCondition, "WB0263", VerificationMessages.WB0263_FirstChapterHasEnablingCondition),
             ErrorForTranslation<IComposite>(this.IsNotSupportSubstitution, "WB0268", VerificationMessages.WB0268_DoesNotSupportSubstitution),
             Error<IQuestion>(QuestionTitleEmpty, "WB0269", VerificationMessages.WB0269_QuestionTitleIsEmpty),
+            Error<IGroup>(SectionHasMoreThanAllowedQuestions, "WB0270", string.Format(VerificationMessages.WB0270_SectionContainsTooManyQuestions, 400)),
 
             Error_ManyGpsPrefilledQuestions_WB0006,
             ErrorsByCircularReferences,
@@ -168,6 +169,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private const int MaxRosterPropagationLimit = 10000;
         private const int MaxTotalRosterPropagationLimit = 80000;
+        private const int MaxQuestionsCountInSection = 400;
 
         private static readonly QuestionType[] RestrictedVariableLengthQuestionTypes =
             new QuestionType[]
@@ -1306,6 +1308,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool QuestionTitleEmpty(IQuestion question)
             => string.IsNullOrWhiteSpace(question.QuestionText);
+
+        private static bool SectionHasMoreThanAllowedQuestions(IGroup group)
+            => group.Children.OfType<IQuestion>().Count() > MaxQuestionsCountInSection;
 
         private static bool GroupTitleIsTooLong(IGroup group)
             => group.Title?.Length > 500;
