@@ -745,6 +745,16 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                                                 row[columnIndex]),
                                             levelData.FileName));
                                 break;
+                            case ValueParsingResult.UnsupportedAudioQuestion:
+                                yield return
+                                    new PanelImportVerificationError("PL0039",
+                                        PreloadingVerificationMessages.PL0039_UnsupportedAudioQuestion,
+                                        new PreloadedDataVerificationReference(columnIndex, rowIndex,
+                                            PreloadedDataVerificationReferenceType.Cell,
+                                            string.Format("{0}:{1}", levelData.Header[columnIndex],
+                                                row[columnIndex]),
+                                            levelData.FileName));
+                                break;
                             case ValueParsingResult.GeneralErrorOccured:
                             default:
                                 yield return

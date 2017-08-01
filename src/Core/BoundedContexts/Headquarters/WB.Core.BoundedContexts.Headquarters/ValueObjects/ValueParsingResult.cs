@@ -17,6 +17,7 @@
         GeneralErrorOccured = 10,
         UnsupportedMultimediaQuestion = 11,
         CommaIsUnsupportedInAnswer = 12 ,
-        UnsupportedAreaQuestion = 13
+        UnsupportedAreaQuestion = 13,
+        UnsupportedAudioQuestion = 14
     }
 }
