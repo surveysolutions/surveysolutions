@@ -52,6 +52,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
            
             if (question.IsMultimedia) return question.AsMultimedia.GetAnswer().FileName.To<T>();//string
             if (question.IsQRBarcode) return question.AsQRBarcode.GetAnswer().DecodedText.To<T>();//string
+
+            if (question.IsAudio) return question.AsAudio.GetAnswer().ToAudioAnswerForContions().To<T>(); //AudioAnswerForConditions
+
             return default(T);
         }
 

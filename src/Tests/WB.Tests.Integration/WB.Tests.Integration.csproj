@@ -327,6 +327,7 @@
     <Compile Include="HeadquartersTeamsAndStatusesReportTests\when_two_responsibles_and_each_status_has_one_interview.cs" />
     <Compile Include="InterviewPackagesServiceTests\when_processing_package_failed.cs" />
     <Compile Include="InterviewPackagesServiceTests\when_processing_package.cs" />
+    <Compile Include="InterviewTests\AudioQuestion\AudioQuestionTests.cs" />
     <Compile Include="InterviewTests\BackwardCompatibility\when_loading_generated_assembly_for_empty_questionnaire_using_minimal_engine_version.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_creating_interview_with_cascading_questions_in_fixed_roster_and_parent_has_condition.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_reanswering_categorical_parent_cascading_for_the_second_time_with_previous_answer.cs" />

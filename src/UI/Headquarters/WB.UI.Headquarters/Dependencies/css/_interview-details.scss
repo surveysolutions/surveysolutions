@@ -1130,6 +1130,43 @@ label.inactive{
 	    }
 	}
 }
+@media only screen and (max-width: 940px){
+	.audio-question{
+		.recording{
+			.btn-clear{
+				right: 0px;
+			}
+		}
+		.record-data{
+			padding-right: 40px;
+		}
+		.volume-message, .btn-recording-done{
+			padding-left: 5px;
+			padding-right: 5px;
+		}
+	}
+	.web-interview{
+
+		.questionnaire {
+
+			.comment .form-inline {
+				.form-group{
+					margin-bottom: 0;
+					width: calc(100% - 65px);
+					.input-group{
+						width: 100%;
+					}
+				}
+				.form-control{
+					width: calc(100% + 12px);
+				}
+				.btn-post-comment{
+					position: static;
+				}
+			}
+		}
+	}
+}
 @media only screen and (max-width: 615px){
 	.web-interview{
 		.content .questionnaire-content div h2{
@@ -1187,20 +1224,6 @@ label.inactive{
 		}
 		.lock{
 			left: -17px;
-		}
-		.audio-question{
-			.recording{
-				.btn-clear{
-					right: 0px;
-				}
-			}
-			.record-data{
-				padding-right: 40px;
-			}
-			.volume-message, .btn-recording-done{
-				padding-left: 5px;
-				padding-right: 5px;
-			}
 		}
 	}
 }

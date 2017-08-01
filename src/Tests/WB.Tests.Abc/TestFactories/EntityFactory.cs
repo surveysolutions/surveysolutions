@@ -1777,5 +1777,16 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new ExportQuestionService();
         }
+
+        public AudioQuestion AudioQuestion(Guid qId, string variable)
+        {
+            return new AudioQuestion
+            {
+                PublicKey = qId,
+                StataExportCaption = variable,
+                QuestionScope = QuestionScope.Interviewer,
+                QuestionType = QuestionType.Audio
+            };
+        }
     }
 }
