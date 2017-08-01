@@ -75,14 +75,15 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         private void HideAndStopRecording()
         {
-            this.audioService.Stop();
-            this.audioService.OnMaxDurationReached -= this.AudioService_OnMaxDurationReached;
-
+            //unsubscribe first before stopping service
             this.durationTimer.Dispose();
             this.durationTimer = null;
 
             this.noiseTimer.Dispose();
             this.noiseTimer = null;
+
+            this.audioService.Stop();
+            this.audioService.OnMaxDurationReached -= this.AudioService_OnMaxDurationReached;
 
             this.dialog.Dismiss();
             this.dialog.Dispose();
