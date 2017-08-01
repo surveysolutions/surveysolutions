@@ -229,4 +229,7 @@
   <data name="PL0038_UnsupportedAreaQuestion" xml:space="preserve">
     <value>Area question cannot be preloaded.</value>
   </data>
+  <data name="PL0039_UnsupportedAudioQuestion" xml:space="preserve">
+    <value>Audio question cannot be preloaded.</value>
+  </data>
 </root>
