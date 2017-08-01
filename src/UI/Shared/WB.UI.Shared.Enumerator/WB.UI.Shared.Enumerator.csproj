@@ -376,7 +376,6 @@
     <Compile Include="Services\Ninject\NinjectModuleAdapter.cs" />
     <Compile Include="Services\PermissionsExtensions.cs" />
     <Compile Include="Utils\AndroidInformationUtils.cs" />
-    <Compile Include="Utils\DialogHelper.cs" />
     <Compile Include="Utils\StringExtensions.cs" />
     <Compile Include="ValueCombiners\BaseValueCombiner.cs" />
     <Compile Include="ValueCombiners\LayoutBackgroundStyleValueCombiner.cs" />
