@@ -1,6 +1,7 @@
 ﻿using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -10,7 +11,11 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator
 {
@@ -23,7 +28,8 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<ISideBarSectionViewModelsFactory, SideBarSectionViewModelFactory>();
             registry.Bind<IDynamicTextViewModelFactory, DynamicTextViewModelFactory>();
             registry.Bind<ISubstitutionTextFactory, SubstitutionTextFactory>();
-            registry.Bind<ISubstitutionService, SubstitutionService>(); //.InScope(ctx => BaseInterviewViewModel.CurrentInterviewScope); TODO: Might affect performance
+            //todo ank: Might affect performance
+            registry.Bind<ISubstitutionService, SubstitutionService>(); //.InScope(ctx => BaseInterviewViewModel.CurrentInterviewScope); 
             registry.Bind<IVariableToUIStringService, VariableToUIStringService>();
             registry.Bind<IOptionsRepository, OptionsRepository>();
             registry.Bind<IQuestionOptionsRepository, QuestionOptionsRepository>();
@@ -33,6 +39,11 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.BindAsSingleton<IFriendlyErrorMessageService, FriendlyErrorMessageService>();
             registry.Bind<IAsyncRunner, AsyncRunner>();
             registry.Bind<ICompositeCollectionInflationService, CompositeCollectionInflationService>();
+
+            registry.Bind<NavigationState>();
+            registry.Bind<AnswerNotifier>();
+
+            RegisterViewModels(registry);
 
             CommandRegistry
                 .Setup<StatefulInterview>()
@@ -77,6 +88,81 @@ namespace WB.Core.SharedKernels.Enumerator
                 .Handles<SetFlagToAnswerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.SetFlagToAnswer(command.UserId, command.QuestionId, command.RosterVector))
                
                 .Handles<SwitchTranslation>(command => command.InterviewId, aggregate => aggregate.SwitchTranslation);
+        }
+
+        private static void RegisterViewModels(IIocRegistry registry)
+        {
+            registry.Bind<GroupNavigationViewModel>();
+            registry.Bind<StartInterviewViewModel>();
+
+            registry.Bind<AnsweringViewModel>();
+            registry.Bind<AudioDialogViewModel>();
+            registry.Bind<VibrationViewModel>();
+            registry.Bind<AnsweringViewModel>();
+            registry.Bind<AudioDialogViewModel>();
+            registry.Bind<BreadCrumbItemViewModel>();
+            registry.Bind<BreadCrumbsViewModel>();
+            registry.Bind<CompleteInterviewViewModel>();
+            registry.Bind<CoverInterviewViewModel>();
+            registry.Bind<DynamicTextViewModel>();
+            registry.Bind<EntityWithErrorsViewModel>();
+            registry.Bind<EnumerationStageViewModel>();
+            registry.Bind<ReadOnlyQuestionViewModel>();
+            registry.Bind<SideBarCompleteSectionViewModel>();
+            registry.Bind<SideBarCoverSectionViewModel>();
+            registry.Bind<SideBarSectionViewModel>();
+            registry.Bind<SideBarSectionsViewModel>();
+            registry.Bind<StaticTextStateViewModel>();
+            registry.Bind<StaticTextViewModel>();
+            registry.Bind<VariableViewModel>();
+            registry.Bind<CoverStateViewModel>();
+            registry.Bind<GroupStateViewModel>();
+            registry.Bind<GroupViewModel>();
+            registry.Bind<InterviewStateViewModel>();
+            registry.Bind<RosterViewModel>();
+
+            // questions
+            registry.Bind<AreaQuestionViewModel>();
+            registry.Bind<AudioQuestionViewModel>();
+            registry.Bind<CascadingSingleOptionQuestionViewModel>();
+            registry.Bind<DateTimeQuestionViewModel>();
+            registry.Bind<FilteredSingleOptionQuestionViewModel>();
+            registry.Bind<GpsCoordinatesQuestionViewModel>();
+            registry.Bind<MultimediaQuestionViewModel>();
+            registry.Bind<MultiOptionLinkedQuestionOptionViewModel>();
+            registry.Bind<MultiOptionLinkedToListQuestionQuestionViewModel>();
+            registry.Bind<MultiOptionLinkedToRosterQuestionQuestionViewModel>();
+            registry.Bind<MultiOptionQuestionOptionViewModel>();
+            registry.Bind<MultiOptionLinkedToRosterQuestionViewModel>();
+            registry.Bind<MultiOptionQuestionViewModel>();
+            registry.Bind<QRBarcodeQuestionViewModel>();
+            registry.Bind<RealQuestionViewModel>();
+            registry.Bind<IntegerQuestionViewModel>();
+            registry.Bind<SingleOptionLinkedQuestionOptionViewModel>();
+            registry.Bind<SingleOptionLinkedQuestionViewModel>();
+            registry.Bind<SingleOptionLinkedToListQuestionViewModel>();
+            registry.Bind<SingleOptionLinkedQuestionOptionViewModel>();
+            registry.Bind<SingleOptionQuestionViewModel>();
+            registry.Bind<SingleOptionRosterLinkedQuestionViewModel>();
+            registry.Bind<TextListAddNewItemViewModel>();
+            registry.Bind<TextListQuestionViewModel>();
+            registry.Bind<TextQuestionViewModel>();
+            registry.Bind<TimestampQuestionViewModel>();
+            registry.Bind<YesNoQuestionOptionViewModel>();
+            registry.Bind<YesNoQuestionViewModel>();
+
+            // question state
+            registry.Bind<AnswersRemovedNotifier>();
+            registry.Bind<AttachmentViewModel>();
+            registry.Bind<CommentsViewModel>();
+            registry.Bind<EnablementViewModel>();
+            registry.Bind<ErrorMessagesViewModel>();
+            registry.Bind<FilteredOptionsViewModel>();
+            registry.Bind<QuestionHeaderViewModel>();
+            registry.Bind<QuestionInstructionViewModel>();
+            registry.Bind<ValidityViewModel>();
+            //registry.Bind<QuestionStateViewModel<>>(); todo
+            
         }
     }
 }

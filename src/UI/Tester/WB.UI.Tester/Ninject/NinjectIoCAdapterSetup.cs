@@ -8,6 +8,7 @@ using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Autofac;
 using WB.UI.Shared.Enumerator.Ninject;
@@ -33,6 +34,8 @@ namespace WB.UI.Tester.Ninject
             builder.RegisterModule(new EnumeratorUIModule().AsAutofac());
             builder.RegisterModule(new TesterUIModule().AsAutofac());
             builder.RegisterModule(new EnumeratorSharedKernelModule().AsAutofac());
+
+            builder.RegisterGeneric(typeof(QuestionStateViewModel<>));
 
             var container = builder.Build();
 

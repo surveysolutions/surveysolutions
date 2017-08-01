@@ -5,6 +5,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Shared.Enumerator.Services.Internals.MapService;
 using WB.UI.Tester.Implementation.Services;
+using WB.UI.Tester.Infrastructure.Internals.Settings;
 
 namespace WB.UI.Tester.Ninject
 {
@@ -17,9 +18,7 @@ namespace WB.UI.Tester.Ninject
             registry.Bind<IMapService, MapService>();
             registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
 
-            registry.Bind<LoginViewModel>();
-            registry.Bind<DashboardViewModel>();
-            registry.Bind<QuestionnaireDownloadViewModel>();
+            registry.Bind<TesterSettings>();
 
 #if EXCLUDEEXTENSIONS
             registry.Bind<IAreaEditService, WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyAreaEditService>();
