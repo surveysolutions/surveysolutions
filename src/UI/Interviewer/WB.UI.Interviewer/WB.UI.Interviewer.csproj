@@ -326,8 +326,6 @@
     <Compile Include="Activities\PrefsActivity.cs" />
     <Compile Include="Activities\RelinkDeviceActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
-    <Compile Include="AndroidDataCollectionSharedKernelModule.cs" />
-    <Compile Include="AndroidSharedModule.cs" />
     <Compile Include="Bootstrap\DownloadCachePluginBootstrap.cs" />
     <Compile Include="Bootstrap\FilePluginBootstrap.cs" />
     <Compile Include="Bootstrap\JsonPluginBootstrap.cs" />
@@ -356,10 +354,8 @@
     <Compile Include="Implementations\Services\TabletDiagnosticService.cs" />
     <Compile Include="Infrastructure\InterviewerInfrastructureModule.cs" />
     <Compile Include="Infrastructure\InterviewerQuestionnaireAssemblyFileAccessor.cs" />
-    <Compile Include="Infrastructure\InterviewerStorageModule.cs" />
     <Compile Include="Infrastructure\Logging\NLogLogger.cs" />
     <Compile Include="Infrastructure\Logging\NLogLoggerProvider.cs" />
-    <Compile Include="Ninject\AndroidModelModule.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Implementations\Services\ViewModelNavigationService.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
