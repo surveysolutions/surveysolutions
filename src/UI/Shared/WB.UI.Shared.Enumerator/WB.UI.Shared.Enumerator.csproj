@@ -269,7 +269,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activities\ActivityExtensions.cs" />
-    <Compile Include="Activities\AudioDialogFragment.cs" />
     <Compile Include="Activities\BaseActivity.cs" />
     <Compile Include="Activities\BaseFragment.cs" />
     <Compile Include="Activities\CompleteInterviewFragment.cs" />
@@ -377,6 +376,7 @@
     <Compile Include="Services\Ninject\NinjectModuleAdapter.cs" />
     <Compile Include="Services\PermissionsExtensions.cs" />
     <Compile Include="Utils\AndroidInformationUtils.cs" />
+    <Compile Include="Utils\DialogHelper.cs" />
     <Compile Include="Utils\StringExtensions.cs" />
     <Compile Include="ValueCombiners\BaseValueCombiner.cs" />
     <Compile Include="ValueCombiners\LayoutBackgroundStyleValueCombiner.cs" />
