@@ -1646,5 +1646,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0269_QuestionTitleIsEmpty", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Section should not contain more than {0} questions..
+        /// </summary>
+        internal static string WB0270_SectionContainsTooManyQuestions {
+            get {
+                return ResourceManager.GetString("WB0270_SectionContainsTooManyQuestions", resourceCulture);
+            }
+        }
     }
 }
