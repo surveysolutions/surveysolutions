@@ -430,6 +430,31 @@ namespace WB.UI.Headquarters.Controllers
             var interviewAccessException = filterContext.Exception as WebInterviewAccessException;
             if (interviewAccessException != null)
             {
+                if (interviewAccessException.Reason == InterviewAccessExceptionReason.UserNotAuthorised)
+                {
+                    filterContext.ExceptionHandled = true;
+                    filterContext.HttpContext.Response.Clear();
+                    filterContext.HttpContext.Response.StatusCode = 401;
+                    filterContext.Result = new ContentResult
+                    {
+                        Content = "User is Not Authorised"
+                    };
+
+                    return;
+                }
+
+                if (interviewAccessException.Reason == InterviewAccessExceptionReason.Forbidden)
+                {
+                    filterContext.ExceptionHandled = true;
+                    filterContext.HttpContext.Response.Clear();
+                    filterContext.HttpContext.Response.StatusCode = 403;
+                    filterContext.Result = new ContentResult
+                    {
+                        Content = "Forbidden"
+                    };
+                    return;
+                }
+
                 this.HandleInterviewAccessError(filterContext, interviewAccessException.Message);
                 return;
             }

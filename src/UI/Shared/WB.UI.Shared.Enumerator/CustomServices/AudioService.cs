@@ -15,21 +15,38 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 {
     public class AudioService : IAudioService
     {
+        private class AudioRecorderInfoLisener : Java.Lang.Object, MediaRecorder.IOnInfoListener
+        {
+            public event EventHandler OnMaxDurationReached;
+            public void OnInfo(MediaRecorder mr, MediaRecorderInfo what, int extra)
+            {
+                if(what == MediaRecorderInfo.MaxDurationReached)
+                    this.OnMaxDurationReached?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        private const int MaxDuration = 3 * 60 * 1000;
         private const double MaxReportableAmp = 32767f;
         private const double MaxReportableDb = 90.3087f;
         private readonly string audioFileName = $"audio.{AudioFileExtension}";
         private const string AudioFileExtension = "m4a";
-        private MediaRecorder recorder;
-        private Stopwatch duration = new Stopwatch();
+        
+        private readonly Stopwatch duration = new Stopwatch();
 
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string pathToAudioFile;
+
+        private MediaRecorder recorder;
+        private AudioRecorderInfoLisener audioRecorderInfoLisener;
+
 
         public AudioService(string pathToAudioDirectory, IFileSystemAccessor fileSystemAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.pathToAudioFile = this.fileSystemAccessor.CombinePath(pathToAudioDirectory, audioFileName);
         }
+
+        public event EventHandler OnMaxDurationReached;
 
         public void Start()
         {
@@ -47,6 +64,11 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.recorder.SetAudioSamplingRate(44100);
             this.recorder.SetAudioEncodingBitRate(64000);
             this.recorder.SetOutputFile(this.pathToAudioFile);
+            this.recorder.SetMaxDuration(MaxDuration);
+
+            this.audioRecorderInfoLisener = new AudioRecorderInfoLisener();
+            this.audioRecorderInfoLisener.OnMaxDurationReached += this.AudioRecorderInfoLisener_OnMaxDurationReached;
+            this.recorder.SetOnInfoListener(audioRecorderInfoLisener);
 
             try
             {
@@ -65,6 +87,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 throw new AudioException(AudioExceptionType.Unhandled, "Unexpected exception during start audio recording", ex);
             }
         }
+
+        private void AudioRecorderInfoLisener_OnMaxDurationReached(object sender, EventArgs e)
+            => this.OnMaxDurationReached?.Invoke(this, EventArgs.Empty);
 
         public void Stop()
         {
@@ -90,7 +115,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         public double GetNoiseLevel()
         {
             if (!this.IsRecording()) return 0;
-            return MaxReportableDb + 20 * Math.Log10(this.recorder.MaxAmplitude / MaxReportableAmp);
+            return MaxReportableDb + 20 * Math.Log10(this.GetMaxAmplitude() / MaxReportableAmp);
         }
 
         public NoiseType GetNoiseType(double noiseLevel)
@@ -102,8 +127,47 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             return NoiseType.Normal;
         }
 
+        private int GetMaxAmplitude()
+        {
+            var maxAmplitude = 0;
+            try
+            {
+                maxAmplitude = this.recorder.MaxAmplitude;
+            }
+            catch (RuntimeException)
+            {
+                /*still don't understand when this exception can be*/
+                /* developer.android.com */
+                /* int getMaxAmplitude () - Returns the maximum absolute amplitude that was sampled since the last call to this method. Call this only after the setAudioSource(). */
+                /* Returns the maximum absolute amplitude measured since the last call, or 0 when called for the first time */
+                /* Throws IllegalStateException if it is called before the audio source has been set. */
+
+                /* android.googlesource.com */
+                /* 
+                static int android_media_MediaRecorder_native_getMaxAmplitude(JNIEnv *env, jobject thiz)
+                {
+                   ALOGV("getMaxAmplitude");
+                   sp<MediaRecorder> mr = getMediaRecorder(env, thiz);
+                   int result = 0;
+                   process_media_recorder_call(env, mr->getMaxAmplitude(&result), "java/lang/RuntimeException", "getMaxAmplitude failed.");
+                   return result;
+                }
+                */
+            }
+
+            return maxAmplitude;
+        }
+
         private void ReleaseAudioRecorder()
         {
+            if (this.audioRecorderInfoLisener != null)
+            {
+                this.audioRecorderInfoLisener.OnMaxDurationReached -= this.AudioRecorderInfoLisener_OnMaxDurationReached;
+                this.audioRecorderInfoLisener.Dispose();
+                this.audioRecorderInfoLisener = null;
+            }
+
+            this.recorder?.Reset();
             this.recorder?.Release();
             this.recorder = null;
         }

@@ -1,25 +1,30 @@
+using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public abstract class BaseInterviewsViewModel : ListViewModel
     {
         private readonly IInterviewViewModelFactory viewModelFactory;
+        private readonly IPlainStorage<InterviewView> interviewViewRepository;
 
-        protected BaseInterviewsViewModel(IInterviewViewModelFactory viewModelFactory)
+        protected BaseInterviewsViewModel(IInterviewViewModelFactory viewModelFactory, 
+            IPlainStorage<InterviewView> interviewViewRepository)
         {
             this.viewModelFactory = viewModelFactory;
+            this.interviewViewRepository = interviewViewRepository;
         }
-
-        private IReadOnlyCollection<InterviewView> dbItems;
+        
         private int? highLightedItemIndex;
 
         protected abstract string TabTitle { get; }
         protected abstract string TabDescription { get; }
-        protected abstract IReadOnlyCollection<InterviewView> GetDbItems();
+        protected abstract Expression<Func<InterviewView, bool>> GetDbQuery();
         protected virtual void OnItemCreated(InterviewDashboardItemViewModel interviewDashboardItem) { }
 
         protected void UpdateTitle() => this.Title = string.Format(this.TabTitle, this.ItemsCount);
@@ -30,11 +35,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             set => SetProperty(ref highLightedItemIndex, value);
         }
 
+        private IReadOnlyCollection<InterviewView> GetDbItems()
+            => this.interviewViewRepository.Where(this.GetDbQuery());
+
+        private int GetDbItemsCount()
+            => this.interviewViewRepository.Count(this.GetDbQuery());
+
         public async Task Load()
         {
-            this.dbItems = this.GetDbItems();
-
-            this.ItemsCount = this.dbItems.Count;
+            this.ItemsCount = this.GetDbItemsCount();
             this.UpdateTitle();
 
             var uiItems = await Task.Run(() => this.GetUiItems());
@@ -47,7 +56,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             subTitle.Title = this.TabDescription;
 
             yield return subTitle;
-
+            
             foreach (var interviewView in this.GetDbItems())
             {
                 var interviewDashboardItem = this.viewModelFactory.GetNew<InterviewDashboardItemViewModel>();

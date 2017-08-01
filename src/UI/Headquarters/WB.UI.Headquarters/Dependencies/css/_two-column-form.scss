@@ -132,7 +132,7 @@
         }
     }
 }
-@media (max-width: 800px){
+@media only screen and (max-width: 800px){
     .two-columns-form{
         margin-top: 30px;
         width: auto;
