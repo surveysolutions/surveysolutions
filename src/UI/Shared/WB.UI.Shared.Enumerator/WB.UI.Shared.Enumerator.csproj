@@ -42,6 +42,9 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=4.6.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Autofac.4.6.1\lib\netstandard1.1\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="Java.Interop" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="ModernHttpClient, Version=2.4.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -263,6 +266,7 @@
     <Compile Include="Activities\MenuLocalizationHelper.cs" />
     <Compile Include="Activities\BasePrefilledQuestionsActivity.cs" />
     <Compile Include="Activities\SingleInterviewActivity.cs" />
+    <Compile Include="Autofac\ModuleExtensions.cs" />
     <Compile Include="Bootstrap\DownloadCachePluginBootstrap.cs" />
     <Compile Include="Bootstrap\FilePluginBootstrap.cs" />
     <Compile Include="Bootstrap\JsonPluginBootstrap.cs" />
@@ -349,16 +353,15 @@
     <Compile Include="Services\Internals\MapService\MapDescription.cs" />
     <Compile Include="Services\Internals\MapService\MapService.cs" />
     <Compile Include="Services\Internals\ModernHttpClientFactory.cs" />
-    <Compile Include="Services\Internals\NinjectServiceLocatorAdapter.cs" />
+    <Compile Include="Services\Internals\AutofacServiceLocatorAdapter.cs" />
     <Compile Include="Services\Internals\PictureChooser.cs" />
     <Compile Include="Services\Internals\PortableInterviewAnswerJsonSerializer.cs" />
     <Compile Include="Services\Internals\PortableJsonAllTypesSerializer.cs" />
     <Compile Include="Services\Internals\PortableJsonSerializer.cs" />
     <Compile Include="Services\Internals\PortableOldToNewAssemblyRedirectSerializationBinder.cs" />
     <Compile Include="Services\Internals\QRBarcodeScanService.cs" />
-    <Compile Include="Services\Ninject\KernelExtensions.cs" />
     <Compile Include="Services\Ninject\ModuleExtensions.cs" />
-    <Compile Include="Services\Ninject\NinjectModuleAdapter.cs" />
+    <Compile Include="Autofac\AutofacModuleAdapter.cs" />
     <Compile Include="Services\PermissionsExtensions.cs" />
     <Compile Include="Utils\AndroidInformationUtils.cs" />
     <Compile Include="Utils\StringExtensions.cs" />

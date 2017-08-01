@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using Ninject.Modules;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+﻿using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -14,35 +12,27 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
-[assembly: InternalsVisibleTo("WB.Tests.Unit")]
-[assembly: InternalsVisibleTo("WB.Tests.Integration")]
-[assembly: InternalsVisibleTo("PerformanceTest")]
-[assembly: InternalsVisibleTo("WB.Tests.Abc")]
-
 namespace WB.Core.SharedKernels.Enumerator
 {
-    public class EnumeratorSharedKernelModule : NinjectModule
+    public class EnumeratorSharedKernelModule : Infrastructure.Modularity.IModule
     {
-        public override void Load()
+        public void Load(Infrastructure.Modularity.IIocRegistry registry)
         {
-            this.Bind<IInterviewViewModelFactory>().To<InterviewViewModelFactory>().InSingletonScope();
-            this.Bind<IEntitiesListViewModelFactory>().To<EntitiesListViewModelFactory>().InSingletonScope();
-            this.Bind<ISideBarSectionViewModelsFactory>().To<SideBarSectionViewModelFactory>();
-            this.Bind<IDynamicTextViewModelFactory>().To<DynamicTextViewModelFactory>();
-
-            this.Bind<ISubstitutionTextFactory>().To<SubstitutionTextFactory>();
-            this.Bind<ISubstitutionService>().To<SubstitutionService>().InScope(ctx => BaseInterviewViewModel.CurrentInterviewScope);
-            this.Bind<IVariableToUIStringService>().To<VariableToUIStringService>();
-            this.Bind<IOptionsRepository>().To<OptionsRepository>();
-            this.Bind<IQuestionOptionsRepository>().To<QuestionOptionsRepository>();
-            this.Bind<IInterviewTreeBuilder>().To<InterviewTreeBuilder>();
-            this.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>().InSingletonScope();
-            this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
-
-            this.Bind<IFriendlyErrorMessageService>().To<FriendlyErrorMessageService>().InSingletonScope();
-            this.Bind<IAsyncRunner>().To<AsyncRunner>();
-
-            this.Bind<ICompositeCollectionInflationService>().To<CompositeCollectionInflationService>();
+            registry.BindAsSingleton<IInterviewViewModelFactory, InterviewViewModelFactory>();
+            registry.BindAsSingleton<IEntitiesListViewModelFactory, EntitiesListViewModelFactory>();
+            registry.Bind<ISideBarSectionViewModelsFactory, SideBarSectionViewModelFactory>();
+            registry.Bind<IDynamicTextViewModelFactory, DynamicTextViewModelFactory>();
+            registry.Bind<ISubstitutionTextFactory, SubstitutionTextFactory>();
+            registry.Bind<ISubstitutionService, SubstitutionService>(); //.InScope(ctx => BaseInterviewViewModel.CurrentInterviewScope); TODO: Might affect performance
+            registry.Bind<IVariableToUIStringService, VariableToUIStringService>();
+            registry.Bind<IOptionsRepository, OptionsRepository>();
+            registry.Bind<IQuestionOptionsRepository, QuestionOptionsRepository>();
+            registry.Bind<IInterviewTreeBuilder, InterviewTreeBuilder>();
+            registry.BindAsSingleton<IInterviewExpressionStateUpgrader, InterviewExpressionStateUpgrader>();
+            registry.Bind<IInterviewExpressionStatePrototypeProvider, InterviewExpressionStatePrototypeProvider>();
+            registry.BindAsSingleton<IFriendlyErrorMessageService, FriendlyErrorMessageService>();
+            registry.Bind<IAsyncRunner, AsyncRunner>();
+            registry.Bind<ICompositeCollectionInflationService, CompositeCollectionInflationService>();
 
             CommandRegistry
                 .Setup<StatefulInterview>()
