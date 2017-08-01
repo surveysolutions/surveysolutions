@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+using System;
+using System.Linq.Expressions;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -12,26 +13,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public override GroupStatus InterviewStatus => GroupStatus.StartedInvalid;
         protected override string TabTitle => InterviewerUIResources.Dashboard_RejectedLinkText;
         protected override string TabDescription => InterviewerUIResources.Dashboard_RejectedTabText;
-
-        private readonly IPlainStorage<InterviewView> interviewViewRepository;
-        private readonly IPrincipal principal;
-
-        public RejectedInterviewsViewModel(
-            IPlainStorage<InterviewView> interviewViewRepository,
-            IInterviewViewModelFactory viewModelFactory,
-            IPrincipal principal) : base(viewModelFactory)
-        {
-            this.interviewViewRepository = interviewViewRepository;
-            this.principal = principal;
-        }
-
-        protected override IReadOnlyCollection<InterviewView> GetDbItems()
+        protected override Expression<Func<InterviewView, bool>> GetDbQuery()
         {
             var interviewerId = this.principal.CurrentUserIdentity.UserId;
 
-            return this.interviewViewRepository.Where(interview =>
-                interview.ResponsibleId == interviewerId &&
-                interview.Status == SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus.RejectedBySupervisor);
+            return interview => interview.ResponsibleId == interviewerId &&
+                                interview.Status == SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus.RejectedBySupervisor;
+        }
+        
+        private readonly IPrincipal principal;
+
+        public RejectedInterviewsViewModel(IPlainStorage<InterviewView> interviewViewRepository, 
+            IInterviewViewModelFactory viewModelFactory, 
+            IPrincipal principal) : base(viewModelFactory, interviewViewRepository)
+        {
+            this.principal = principal;
         }
     }
 }
