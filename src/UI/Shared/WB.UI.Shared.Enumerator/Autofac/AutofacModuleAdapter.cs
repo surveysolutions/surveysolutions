@@ -47,7 +47,7 @@ namespace WB.UI.Shared.Enumerator.Services.Ninject
 
         void IIocRegistry.BindToRegisteredInterface<TInterface, TRegisteredInterface>()
         {
-            containerBuilder.RegisterType<TRegisteredInterface>().As<TInterface>();
+            containerBuilder.Register<TInterface>(c => c.Resolve<TRegisteredInterface>());
         }
 
         public void BindToMethod<T>(Func<T> func)

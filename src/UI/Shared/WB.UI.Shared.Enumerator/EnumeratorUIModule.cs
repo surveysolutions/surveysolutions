@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Utils;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
@@ -64,6 +65,9 @@ namespace WB.UI.Shared.Enumerator
             registry.BindToMethod<IMedia>(() => CrossMedia.Current);
             registry.BindToMethod<IPermissions>(() => CrossPermissions.Current);
             //
+
+            registry.Bind<InterviewEntitiesListFragment>();
+            registry.Bind<CompleteInterviewFragment>();
         }
     }
 }
