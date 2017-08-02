@@ -22,7 +22,7 @@ using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Internals.MapService;
 
-namespace WB.UI.Interviewer.Ninject
+namespace WB.UI.Interviewer.ServiceLocation
 {
     public class InterviewerUIModule : IModule
     {

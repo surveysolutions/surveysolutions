@@ -340,7 +340,7 @@
     <Compile Include="CustomServices\UserInterfaceStateService.cs" />
     <Compile Include="CustomServices\VibrationService.cs" />
     <Compile Include="EnumeratorUIModule.cs" />
-    <Compile Include="Ninject\NinjectMvxIoCProvider.cs" />
+    <Compile Include="Autofac\MvxIoCProvider.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EnumeratorSetup.cs" />
