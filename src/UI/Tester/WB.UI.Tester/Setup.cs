@@ -35,6 +35,7 @@ namespace WB.UI.Tester
 
         protected override IMvxIoCProvider CreateIocProvider()
         {
+
             return NinjectIoCAdapterSetup.CreateIocProvider();
         }
 

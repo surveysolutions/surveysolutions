@@ -1,25 +1,29 @@
-﻿using Ninject.Modules;
-using WB.Core.BoundedContexts.Tester.Implementation.Services;
+﻿using WB.Core.BoundedContexts.Tester.Implementation.Services;
+using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Shared.Enumerator.Services.Internals.MapService;
 using WB.UI.Tester.Implementation.Services;
+using WB.UI.Tester.Infrastructure.Internals.Settings;
 
 namespace WB.UI.Tester.Ninject
 {
-    public class TesterUIModule : NinjectModule
+    public class TesterUIModule : IModule
     {
-        public override void Load()
+        public void Load(IIocRegistry registry)
         {
-            this.Bind<IViewModelNavigationService>().To<ViewModelNavigationService>();
+            registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
+            registry.Bind<IMapSynchronizer, TesterMapSynchronizer>();
+            registry.Bind<IMapService, MapService>();
+            registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
 
-            this.Bind<IMapSynchronizer>().To<TesterMapSynchronizer>();
-            this.Bind<IMapService>().To<MapService>();
+            registry.Bind<TesterSettings>();
 
 #if EXCLUDEEXTENSIONS
-            this.Bind<IAreaEditService>().To<WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyAreaEditService>();
+            registry.Bind<IAreaEditService, WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyAreaEditService>();
 #else
-            this.Bind<IAreaEditService>().To<WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService>();
+            registry.Bind<IAreaEditService, WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService>();
 #endif
         }
     }

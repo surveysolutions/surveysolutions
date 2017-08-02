@@ -1,5 +1,4 @@
 using Ncqrs.Eventing.Storage;
-using Ninject.Modules;
 using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
 using Plugin.Media;
@@ -12,6 +11,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator;
@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Utils;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
@@ -28,44 +29,45 @@ using WB.UI.Shared.Enumerator.Services.Internals.FileSystem;
 
 namespace WB.UI.Shared.Enumerator
 {
-    public class EnumeratorUIModule : NinjectModule
+    public class EnumeratorUIModule : IModule
     {
-        public override void Load()
+        public void Load(IIocRegistry registry)
         {
             SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
 
-            this.Bind<IUserInteractionService>().To<UserInteractionService>();
-            this.Bind<IUserInterfaceStateService>().To<UserInterfaceStateService>();
+            registry.Bind<IUserInteractionService, UserInteractionService>();
+            registry.Bind<IUserInterfaceStateService, UserInterfaceStateService>();
+            registry.Bind<IExternalAppLauncher, ExternalAppLauncher>();
+            registry.Bind<IPermissionsService, PermissionsService>();
+            registry.Bind<IVirbationService, VibrationService>();
 
-            this.Bind<IExternalAppLauncher>().To<ExternalAppLauncher>();
-            this.Bind<IPermissionsService>().To<PermissionsService>();
-            this.Bind<IVirbationService>().To<VibrationService>();
-            this.Bind<IAudioService>().To<AudioService>().InSingletonScope().WithConstructorArgument("pathToAudioDirectory",
-                AndroidPathUtils.GetPathToSubfolderInLocalDirectory("audio"));
-            this.Bind<IAudioDialog>().To<AudioDialog>().InSingletonScope();
+            registry.BindAsSingletonWithConstructorArgument<IAudioService, AudioService>("pathToAudioDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("audio"));
+            registry.BindAsSingleton<IAudioDialog, AudioDialog>();
+            registry.BindToMethod<IServiceLocator>(() => ServiceLocator.Current);
+            registry.BindToConstant<IEventTypeResolver>(() => new EventTypeResolver(
+                typeof(DataCollectionSharedKernelAssemblyMarker).Assembly,
+                typeof(EnumeratorSharedKernelModule).Assembly));
 
-            ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocatorAdapter(this.Kernel));
-            this.Bind<IServiceLocator>().ToConstant(ServiceLocator.Current);
+            
+            registry.Bind<IEnumeratorArchiveUtils, ZipArchiveUtils>();
+            registry.BindAsSingleton<IFileSystemAccessor, FileSystemService>();
+            registry.Bind<IQRBarcodeScanService, QRBarcodeScanService>();
+            registry.Bind<IPictureChooser, PictureChooser>();
+            registry.BindAsSingleton<IGpsLocationService, GpsLocationService>();
+            
+            registry.BindAsSingleton<IAttachmentContentStorage, AttachmentContentStorage>();
+            registry.Bind<ITranslationStorage, TranslationsStorage>();
+            registry.BindAsSingleton<IPasswordHasher, DevicePasswordHasher>();
+            registry.BindAsSingleton<IHttpStatistician, HttpStatistician>();
 
-            this.Bind<IEventTypeResolver>().ToConstant(
-                new EventTypeResolver(
-                    typeof(DataCollectionSharedKernelAssemblyMarker).Assembly,
-                    typeof(EnumeratorSharedKernelModule).Assembly));
 
-            this.Bind<IEnumeratorArchiveUtils>().To<ZipArchiveUtils>();
+            registry.BindToMethod<IGeolocator>(() => CrossGeolocator.Current);
+            registry.BindToMethod<IMedia>(() => CrossMedia.Current);
+            registry.BindToMethod<IPermissions>(() => CrossPermissions.Current);
+            //
 
-            this.Bind<IFileSystemAccessor>().To<FileSystemService>().InSingletonScope();
-            this.Bind<IQRBarcodeScanService>().To<QRBarcodeScanService>();
-            this.Bind<IPictureChooser>().To<PictureChooser>();
-            this.Bind<IGpsLocationService>().To<GpsLocationService>().InSingletonScope();
-            this.Bind<IGeolocator>().ToMethod(context => CrossGeolocator.Current);
-            this.Bind<IMedia>().ToMethod(context => CrossMedia.Current);
-            this.Bind<IPermissions>().ToMethod(context => CrossPermissions.Current);
-
-            this.Bind<IAttachmentContentStorage>().To<AttachmentContentStorage>().InSingletonScope();
-            this.Bind<ITranslationStorage>().To<TranslationsStorage>();
-            this.Bind<IPasswordHasher>().To<DevicePasswordHasher>().InSingletonScope();
-            this.Bind<IHttpStatistician>().To<HttpStatistician>().InSingletonScope();
+            registry.Bind<InterviewEntitiesListFragment>();
+            registry.Bind<CompleteInterviewFragment>();
         }
     }
 }
