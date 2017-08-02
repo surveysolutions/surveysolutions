@@ -359,6 +359,7 @@
     <Compile Include="App.cs" />
     <Compile Include="Implementations\Services\ViewModelNavigationService.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
+    <Compile Include="Ninject\InterviewerLoggingModule.cs" />
     <Compile Include="Ninject\InterviewerUIModule.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Services\BackupRestoreService.cs" />

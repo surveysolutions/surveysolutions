@@ -161,7 +161,7 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<QuestionHeaderViewModel>();
             registry.Bind<QuestionInstructionViewModel>();
             registry.Bind<ValidityViewModel>();
-            //registry.Bind<QuestionStateViewModel<>>(); todo
+            registry.BindGeneric(typeof(QuestionStateViewModel<>));
             
         }
     }

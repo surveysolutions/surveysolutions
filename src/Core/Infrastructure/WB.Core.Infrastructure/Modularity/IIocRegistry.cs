@@ -13,5 +13,6 @@ namespace WB.Core.Infrastructure.Modularity
         void BindToMethod<T>(Func<T> func);
         void BindToConstant<T>(Func<T> func);
         void BindAsSingleton(Type @interface, Type implementation);
+        void BindGeneric(Type implementation);
     }
 }

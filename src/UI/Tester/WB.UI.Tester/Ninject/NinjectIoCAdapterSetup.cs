@@ -35,8 +35,6 @@ namespace WB.UI.Tester.Ninject
             builder.RegisterModule(new TesterUIModule().AsAutofac());
             builder.RegisterModule(new EnumeratorSharedKernelModule().AsAutofac());
 
-            builder.RegisterGeneric(typeof(QuestionStateViewModel<>));
-
             var container = builder.Build();
 
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));

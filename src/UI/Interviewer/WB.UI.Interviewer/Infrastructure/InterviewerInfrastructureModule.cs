@@ -31,9 +31,8 @@ namespace WB.UI.Interviewer.Infrastructure
     {
         public void Load(IIocRegistry registry)
         {
-            //this.Kernel.Load<InterviewerStorageModule>(); TODO: move to outer scope
-
-            registry.BindAsSingleton<IPrincipal, InterviewerPrincipal>();
+            registry.BindToRegisteredInterface<IPrincipal, IInterviewerPrincipal>();
+            registry.BindAsSingleton<IInterviewerPrincipal, InterviewerPrincipal>();
             registry.Bind<IStringCompressor, JsonCompressor>();
 
             var pathToLocalDirectory = AndroidPathUtils.GetPathToInternalDirectory();
@@ -54,13 +53,6 @@ namespace WB.UI.Interviewer.Infrastructure
                 "privateStorage", pathToLocalDirectory);
 
             registry.Bind<ILoggerProvider, NLogLoggerProvider>();
-            //registry.BindToMethod<ILogger>(() => // TODO: move to outer scope
-            //{
-            //    if (context.Request.Target != null)
-            //        return new NLogLogger(context.Request.Target.Member.DeclaringType);
-
-            //    return new NLogLogger("UNKNOWN");
-            //});
 
             registry.BindAsSingletonWithConstructorArgument<IQuestionnaireAssemblyAccessor, InterviewerQuestionnaireAssemblyAccessor>(
                 "pathToAssembliesDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies"));
@@ -80,8 +72,8 @@ namespace WB.UI.Interviewer.Infrastructure
             registry.Bind<IAnswerToStringConverter, AnswerToStringConverter>();
             registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
 
-            registry.BindAsSingleton<IInterviewerEventStorage, SqliteMultiFilesEventStorage>(); // TODO check if we will have 2 event stores
-            registry.BindAsSingleton<IEventStore, SqliteMultiFilesEventStorage>(); // TODO check if we will have 2 event stores
+            registry.BindAsSingleton<IInterviewerEventStorage, SqliteMultiFilesEventStorage>();
+            registry.BindToRegisteredInterface<IEventStore, IInterviewerEventStorage>();
 
             registry.BindToConstant(() => new SqliteSettings
             {
