@@ -5,7 +5,6 @@ using Android.Support.V7.App;
 using Android.Views;
 using MvvmCross.Binding.Droid.BindingContext;
 using MvvmCross.Droid.Shared.Fragments;
-using MvvmCross.Platform;
 using MvvmCross.Platform.Core;
 using MvvmCross.Platform.Droid.Platform;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -17,19 +16,22 @@ namespace WB.UI.Shared.Enumerator.CustomServices
     {
         private Dialog modalDialog;
         private AudioDialogViewModel viewModel;
-        private MvxAndroidBindingContext context;
+        private MvxAndroidBindingContext modalDialogBindingContext;
         private Timer durationTimer;
         private Timer noiseTimer;
 
         private readonly IInterviewViewModelFactory viewModelFactory;
         private readonly IAudioService audioService;
+        private readonly IMvxAndroidCurrentTopActivity topActivity;
 
         public AudioDialog(
             IInterviewViewModelFactory viewModelFactory, 
-            IAudioService audioService)
+            IAudioService audioService,
+            IMvxAndroidCurrentTopActivity topActivity)
         {
             this.viewModelFactory = viewModelFactory;
             this.audioService = audioService;
+            this.topActivity = topActivity;
         }
         
         public event EventHandler OnCanelRecording;
@@ -40,7 +42,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             if (this.modalDialog != null)
                 throw new Exception("Audio dialog already showed");
 
-            this.modalDialog = this.ShowDialog();
+            this.ShowDialog(title);
 
             this.audioService.OnMaxDurationReached += AudioService_OnMaxDurationReached;
             this.audioService.Start();
@@ -49,34 +51,29 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.noiseTimer = new Timer(this.OnEvery100Millisecond, null, 0, 100);
         }
         
-        private Dialog ShowDialog()
+        private void ShowDialog(string title)
         {
-
             this.viewModel = this.viewModelFactory.GetNew<AudioDialogViewModel>();
+            this.viewModel.Title = title;
             this.viewModel.OnCancel += ViewModel_OnCancel;
             this.viewModel.OnDone += ViewModel_OnDone;
 
-            return this.ShowDialog(Resource.Layout.interview_question_audio_dialog);
-        }
+            var parentActivity = this.topActivity.Activity;
 
-        public Dialog ShowDialog(int resourceId)
-        {
-            var parentActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
-            
             //keep ref to context not to be collected by GC
-            this.context = new MvxAndroidBindingContext(parentActivity, new MvxSimpleLayoutInflaterHolder(parentActivity.LayoutInflater), viewModel);
-            var view = context.BindingInflate(resourceId, null, false);
+            this.modalDialogBindingContext = new MvxAndroidBindingContext(parentActivity,
+                new MvxSimpleLayoutInflaterHolder(parentActivity.LayoutInflater), viewModel);
 
-            var dialog = new AppCompatDialog(parentActivity);
-            dialog.Window.RequestFeature(WindowFeatures.NoTitle);
-            dialog.SetCancelable(false);
-            dialog.SetContentView(view);
+            var view = this.modalDialogBindingContext.BindingInflate(Resource.Layout.interview_question_audio_dialog, null, false);
 
-            dialog.Show();
-            dialog.Window.SetLayout(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent);
-            dialog.Window.SetBackgroundDrawableResource(Android.Resource.Color.Transparent);
+            this.modalDialog = new AppCompatDialog(parentActivity);
+            this.modalDialog.Window.RequestFeature(WindowFeatures.NoTitle);
+            this.modalDialog.SetCancelable(false);
+            this.modalDialog.SetContentView(view);
 
-            return dialog;
+            this.modalDialog.Show();
+            this.modalDialog.Window.SetLayout(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent);
+            this.modalDialog.Window.SetBackgroundDrawableResource(Android.Resource.Color.Transparent);
         }
 
         public void StopRecordingAndSaveResult()
