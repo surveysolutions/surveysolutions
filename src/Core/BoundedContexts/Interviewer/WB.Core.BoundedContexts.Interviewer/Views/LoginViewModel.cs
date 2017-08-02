@@ -5,8 +5,10 @@ using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -106,6 +108,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.IsUserValid = true;
             this.UserName = currentInterviewer.Name;
             this.ErrorMessage = InterviewerUIResources.Login_WrongPassword;
+
+            ServiceLocator.Current.GetInstance<InterviewerDashboardEventHandler>(); // Needed to create instance of it
         }
 
         public byte[] CustomLogo { get; private set; }

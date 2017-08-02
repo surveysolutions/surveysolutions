@@ -34,6 +34,11 @@ namespace WB.UI.Shared.Enumerator.Services.Ninject
             containerBuilder.RegisterType<TImplementation>();
         }
 
+        public void BindGeneric(Type implemenation)
+        {
+            containerBuilder.RegisterGeneric(implemenation);
+        }
+
         void IIocRegistry.BindAsSingleton<TInterface, TImplementation>()
         {
             containerBuilder.RegisterType<TImplementation>().As<TInterface>().SingleInstance();
