@@ -11,7 +11,7 @@
                 <label>Your comment</label>
                 <div class="form-group">
                     <div class="input-group field">
-                        <input type="text" class="field-to-fill" v-on:keyup.enter="postComment" v-model="comment" placeholder="Tap to enter your comment" />
+                        <input type="text" class="field-to-fill" v-on:keyup.enter="postComment" v-model="comment" placeholder="Enter your comment" />
                     </div>
                 </div>
                 <button type="button" class="btn btn-default btn-post-comment" :class="buttonClass" @click="postComment($event)">Post</button>
