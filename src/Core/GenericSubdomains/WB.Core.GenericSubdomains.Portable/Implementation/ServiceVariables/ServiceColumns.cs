@@ -4,7 +4,7 @@
     {
         //Id of the row
         public const string Id = "Id";
-        public const string Key = "interview_key";
+        public const string Key = "interview__key";
 
         //prefix to identify parent record
         public const string ParentId = "ParentId";
