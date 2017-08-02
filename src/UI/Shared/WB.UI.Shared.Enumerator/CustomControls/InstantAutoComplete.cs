@@ -10,7 +10,6 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using MvvmCross.Binding.Attributes;
 using MvvmCross.Binding.Droid.Views;
-using MvvmCross.Core.ViewModels;
 
 namespace WB.UI.Shared.Enumerator.CustomControls
 {
@@ -59,7 +58,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
         protected virtual void OnItemSelected(int position)
         {
-            this.SelectedObject = this.Adapter.GetRawItem(position);
+            lock (this.Adapter)
+                this.SelectedObject = this.Adapter.GetRawItem(position);
             
             this.ClearFocus();
             this.HideKeyboard();
@@ -97,7 +97,11 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         public IEnumerable ItemsSource
         {
             get => this.Adapter.ItemsSource;
-            set => this.Adapter.ItemsSource = value;
+            set
+            {
+                lock (this.Adapter)
+                    this.Adapter.ItemsSource = value;
+            }
         }
 
         public int ItemTemplateId
@@ -113,10 +117,13 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {
                 if (this.Adapter.PartialText == value) return;
 
-                var adapter = base.Adapter;
-                base.Adapter = null;
-                this.SetText(value, true);
-                base.Adapter = adapter;
+                lock (this.Adapter)
+                {
+                    var adapter = base.Adapter;
+                    base.Adapter = null;
+                    this.SetText(value, true);
+                    base.Adapter = adapter;
+                }
             }
     }
 
