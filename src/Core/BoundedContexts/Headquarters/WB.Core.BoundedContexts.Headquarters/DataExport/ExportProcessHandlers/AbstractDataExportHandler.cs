@@ -67,6 +67,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             var filesToArchive = this.fileSystemAccessor.GetFilesInDirectory(folderForDataExport);
 
             dataExportFileAccessor.RecreateExportArchive(filesToArchive, this.GetArchiveNameForData(dataExportProcessDetails.Questionnaire, dataExportProcessDetails.InterviewStatus));
+
+            this.ClearFolder(folderForDataExport);
         }
 
         protected abstract DataExportFormat Format { get; }
