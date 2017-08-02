@@ -53,6 +53,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
             if (question is AreaQuestion)
                 return ParseFailed(ValueParsingResult.UnsupportedAreaQuestion, out parsedValue, out parsedSingleColumnAnswer);
 
+            if (question is AudioQuestion)
+                return ParseFailed(ValueParsingResult.UnsupportedAudioQuestion, out parsedValue, out parsedSingleColumnAnswer);
+
             if (answer.Contains(',') && this.QuestionTypesCommaFirbidden.Contains(question.QuestionType))
                 return ParseFailed(ValueParsingResult.CommaIsUnsupportedInAnswer, out parsedValue, out parsedSingleColumnAnswer);
 

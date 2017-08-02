@@ -191,7 +191,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 answers: new List<InterviewAnswer>(), 
                 answersTime: DateTime.UtcNow,
                 supervisorId: Guid.NewGuid(),
-                interviewerId: null,
+                interviewerId: Guid.NewGuid(),
                 interviewKey: null,
                 assignmentId: null));
 
