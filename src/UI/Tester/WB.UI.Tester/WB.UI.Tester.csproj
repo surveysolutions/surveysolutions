@@ -293,8 +293,8 @@
     <Compile Include="Infrastructure\Internals\Storage\TesterQuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="Infrastructure\TesterInfrastructureModule.cs" />
-    <Compile Include="Ninject\TesterUIModule.cs" />
-    <Compile Include="Ninject\NinjectIoCAdapterSetup.cs" />
+    <Compile Include="ServiceLocation\TesterUIModule.cs" />
+    <Compile Include="ServiceLocation\IoCAdapterSetup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Setup.cs" />

@@ -28,13 +28,12 @@ using WB.UI.Interviewer.Activities.Dashboard;
 using WB.UI.Interviewer.Converters;
 using WB.UI.Interviewer.CustomBindings;
 using WB.UI.Interviewer.Infrastructure;
-using WB.UI.Interviewer.Ninject;
+using WB.UI.Interviewer.ServiceLocation;
 using WB.UI.Interviewer.Settings;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Autofac;
-using WB.UI.Shared.Enumerator.Ninject;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using Xamarin;
@@ -129,7 +128,7 @@ namespace WB.UI.Interviewer
         
         protected override IMvxIoCProvider CreateIocProvider()
         {
-            return new NinjectMvxIoCProvider(this.CreateAndInitializeIoc());
+            return new MvxIoCProvider(this.CreateAndInitializeIoc());
         }
 
         private IContainer CreateAndInitializeIoc()

@@ -1,5 +1,4 @@
 ﻿using WB.Core.BoundedContexts.Tester.Implementation.Services;
-using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -7,7 +6,7 @@ using WB.UI.Shared.Enumerator.Services.Internals.MapService;
 using WB.UI.Tester.Implementation.Services;
 using WB.UI.Tester.Infrastructure.Internals.Settings;
 
-namespace WB.UI.Tester.Ninject
+namespace WB.UI.Tester.ServiceLocation
 {
     public class TesterUIModule : IModule
     {
