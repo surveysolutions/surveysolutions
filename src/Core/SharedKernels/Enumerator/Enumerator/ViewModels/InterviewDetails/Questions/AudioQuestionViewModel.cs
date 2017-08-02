@@ -231,7 +231,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private string GetAudioFileName() => $"{this.variableName}_{this.questionIdentity.RosterVector}-{Guid.NewGuid().GetHashCode()}.{this.audioService.GetAudioType()}";
+        private string GetAudioFileName() => $"{this.variableName}_{this.questionIdentity.RosterVector}_{Guid.NewGuid().GetHashCode()}.{this.audioService.GetAudioType()}";
 
         public void Dispose()
         {
