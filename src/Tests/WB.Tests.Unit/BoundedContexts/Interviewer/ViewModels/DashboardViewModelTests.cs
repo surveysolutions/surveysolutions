@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             IInterviewerPrincipal principal = null,
             SynchronizationViewModel synchronization = null,
             IMvxMessenger messenger = null,
-            ICommandService commandService = null)
+            IPlainStorage<InterviewView> interviewsRepository = null)
         {
             return new DashboardViewModel(
                     viewModelNavigationService: viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
@@ -59,7 +59,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     createNewViewModel: DashboardQuestionnairesViewModel(),
                     startedInterviewsViewModel: DashboardStartedInterviewsViewModel(),
                     completedInterviewsViewModel: DashboardCompletedInterviewsViewModel(),
-                    rejectedInterviewsViewModel: DashboardRejectedInterviewsViewModel());
+                    rejectedInterviewsViewModel: DashboardRejectedInterviewsViewModel(), 
+                    interviewsRepository: interviewsRepository ?? Substitute.For<IPlainStorage<InterviewView>>());
         }
 
         private static CreateNewViewModel DashboardQuestionnairesViewModel()

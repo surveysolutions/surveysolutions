@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.viewModelNavigationService = viewModelNavigationService;
         }
 
-        public async Task Load(SynchronizationViewModel sync)
+        public void Load(SynchronizationViewModel sync)
         {
             this.synchronization = sync;
             this.Title = InterviewerUIResources.Dashboard_AssignmentsTabTitle;
@@ -51,8 +51,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             this.ItemsCount = censusQuestionnairesCount + assignmentsCount;
 
-            var uiItems = await Task.Run(() => this.GetUiItems());
-            this.UiItems.ReplaceWith(uiItems);
+            this.UpdateUiItems();
         }
 
         private void RunSynchronization()
@@ -67,7 +66,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.synchronization.Synchronize();
         }
 
-        private IEnumerable<IDashboardItem> GetUiItems()
+        protected override IEnumerable<IDashboardItem> GetUiItems()
         {
             var dbQuestionnaires = this.questionnaireViewRepository.Where(questionnaire => questionnaire.Census);
             var dbAssignments = this.assignmentsRepository.LoadAll();
