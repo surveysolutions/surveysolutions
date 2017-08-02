@@ -1,11 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Autofac;
 using Autofac.Core;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Interviewer.Infrastructure.Logging;
 
-namespace WB.UI.Interviewer.Ninject
+namespace WB.UI.Interviewer.ServiceLocation
 {
     public class InterviewerLoggingModule : Module
     {

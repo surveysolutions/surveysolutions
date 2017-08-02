@@ -34,12 +34,12 @@ using Autofac.Core.Registration;
 using MvvmCross.Platform.Core;
 using MvvmCross.Platform.IoC;
 
-namespace WB.UI.Shared.Enumerator.Ninject
+namespace WB.UI.Shared.Enumerator.Autofac
 {
     /// <summary>
     /// Inversion of control provider for the MvvmCross framework backed by Autofac.
     /// </summary>
-    public class NinjectMvxIoCProvider : MvxSingleton<IMvxIoCProvider>, IMvxIoCProvider
+    public class MvxIoCProvider : MvxSingleton<IMvxIoCProvider>, IMvxIoCProvider
     {
         readonly IContainer _container;
 
@@ -52,7 +52,7 @@ namespace WB.UI.Shared.Enumerator.Ninject
         /// <exception cref="System.ArgumentNullException">
         /// Thrown if <paramref name="container"/> is <see langword="null"/>.
         /// </exception>
-        public NinjectMvxIoCProvider(IContainer container)
+        public MvxIoCProvider(IContainer container)
         {
             if (container == null)
                 throw new ArgumentNullException("container");

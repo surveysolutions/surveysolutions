@@ -8,17 +8,15 @@ using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Autofac;
-using WB.UI.Shared.Enumerator.Ninject;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Tester.Infrastructure;
 
-namespace WB.UI.Tester.Ninject
+namespace WB.UI.Tester.ServiceLocation
 {
-    public class NinjectIoCAdapterSetup
+    public class IoCAdapterSetup
     {
         public static IMvxIoCProvider CreateIocProvider()
         {
@@ -38,7 +36,7 @@ namespace WB.UI.Tester.Ninject
             var container = builder.Build();
 
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
-            return new NinjectMvxIoCProvider(container);
+            return new MvxIoCProvider(container);
         }
     }
 }
