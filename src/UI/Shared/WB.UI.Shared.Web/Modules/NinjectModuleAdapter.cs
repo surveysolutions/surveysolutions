@@ -57,7 +57,12 @@ namespace WB.UI.Shared.Web.Modules
 
         public void BindAsSingleton(Type @interface, Type implementation)
         {
-            throw new NotImplementedException();
+            this.Kernel.Bind(@interface).To(implementation).InSingletonScope();
+        }
+
+        public void BindGeneric(Type implementation)
+        {
+            this.Kernel.Bind(implementation);
         }
     }
 }

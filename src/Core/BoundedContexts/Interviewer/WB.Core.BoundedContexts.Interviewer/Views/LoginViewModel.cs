@@ -108,8 +108,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.IsUserValid = true;
             this.UserName = currentInterviewer.Name;
             this.ErrorMessage = InterviewerUIResources.Login_WrongPassword;
-
-            ServiceLocator.Current.GetInstance<InterviewerDashboardEventHandler>(); // Needed to create instance of it
         }
 
         public byte[] CustomLogo { get; private set; }
