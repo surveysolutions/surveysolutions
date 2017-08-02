@@ -1,19 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Android.App;
 using Android.Content.PM;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using MvvmCross.Droid.Views;
 using MvvmCross.Platform;
-using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
-using WB.Core.SharedKernels.Questionnaire.Translations;
 using System.Diagnostics;
 
 namespace WB.UI.Interviewer.Activities
@@ -31,6 +24,8 @@ namespace WB.UI.Interviewer.Activities
             logger.Warn($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
 
             this.BackwardCompatibility();
+
+            Mvx.Resolve<InterviewerDashboardEventHandler>(); // In order to start listening for interview events
             Mvx.Resolve<IViewModelNavigationService>().NavigateToLogin();
         }
 
