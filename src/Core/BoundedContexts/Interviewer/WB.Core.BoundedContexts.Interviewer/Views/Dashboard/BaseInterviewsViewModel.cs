@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -21,6 +20,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
         
         private int? highLightedItemIndex;
+        private Guid? lastVisitedInterviewId;
 
         protected abstract string TabTitle { get; }
         protected abstract string TabDescription { get; }
@@ -41,22 +41,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private int GetDbItemsCount()
             => this.interviewViewRepository.Count(this.GetDbQuery());
 
-        public async Task Load()
+        public void Load(Guid? lastVisitedInterviewId)
         {
+            this.lastVisitedInterviewId = lastVisitedInterviewId;
+
             this.ItemsCount = this.GetDbItemsCount();
             this.UpdateTitle();
 
-            var uiItems = await Task.Run(() => this.GetUiItems());
-            this.UiItems.ReplaceWith(uiItems);
+            this.UpdateUiItems();
         }
 
-        protected virtual IEnumerable<IDashboardItem> GetUiItems()
+        protected override IEnumerable<IDashboardItem> GetUiItems()
         {
             var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
             subTitle.Title = this.TabDescription;
 
             yield return subTitle;
-            
+
+            var interviewIndex = 1;
             foreach (var interviewView in this.GetDbItems())
             {
                 var interviewDashboardItem = this.viewModelFactory.GetNew<InterviewDashboardItemViewModel>();
@@ -64,16 +66,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
                 this.OnItemCreated(interviewDashboardItem);
 
-                yield return interviewDashboardItem;
-            }
-        }
+                if (interviewDashboardItem.InterviewId == lastVisitedInterviewId)
+                    this.HighLightedItemIndex = interviewIndex;
 
-        public void HighLight(InterviewDashboardItemViewModel dashboardItem)
-        {
-            var index = this.UiItems.IndexOf(dashboardItem);
-            if (index > 0)
-            {
-                this.HighLightedItemIndex = index;
+                interviewIndex++;
+
+                yield return interviewDashboardItem;
             }
         }
     }
