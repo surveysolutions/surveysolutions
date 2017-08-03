@@ -2285,12 +2285,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.VarialbeNameNotUnique, "Variable name or roster ID should be unique in questionnaire's scope");
             }
             
-            var keywords = this.variableNameValidator.GetAllReservedKeywords();
-
-            foreach (var keyword in keywords.Where(keyword => stataCaption.ToLower() == keyword)) {
+            if(this.variableNameValidator.IsReservedKeyword(stataCaption))
+            { 
                 throw new QuestionnaireException(
                     DomainExceptionType.VariableNameShouldNotMatchWithKeywords,
-                    keyword + " is a keyword. Variable name or roster ID shouldn't match with keywords");
+                    stataCaption + " is a keyword. Variable name or roster ID shouldn't match with keywords");
             }
         }
 
