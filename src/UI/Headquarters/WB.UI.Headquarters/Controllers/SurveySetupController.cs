@@ -410,9 +410,10 @@ namespace WB.UI.Headquarters.Controllers
 
             var questionnaireIdentity = new QuestionnaireIdentity(model.QuestionnaireId, model.Version);
             this.interviewImportService.Status.QuestionnaireId = questionnaireIdentity;
+
+            QuestionnaireBrowseItem questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
             if (!this.ModelState.IsValid)
             {
-                var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
                 model.QuestionnaireTitle = questionnaireInfo.Title;
                 return this.View(model);
             }
@@ -429,7 +430,8 @@ namespace WB.UI.Headquarters.Controllers
                         questionnaireIdentity: questionnaireIdentity, 
                         interviewImportProcessId: model.Id,
                         headquartersId: headquartersId,
-                        mode: model.AssignmentImportType);
+                        mode: model.AssignmentImportType,
+                        allowAssignments: questionnaireInfo.AllowAssignments);
                 }
                 finally
                 {
