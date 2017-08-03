@@ -733,7 +733,13 @@ namespace WB.Tests.Abc.TestFactories
             => Create.Entity.PlainQuestionnaire(document: questionnaireDocument);
 
         public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document = null, long version = 19)
-            => new PlainQuestionnaire(document, version);
+            => Create.Entity.PlainQuestionnaire(document, version, null);
+
+        public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document, long version, Translation translation = null)
+        {
+            document.IsUsingExpressionStorage = true;
+            return new PlainQuestionnaire(document, version, translation);
+        }
 
         public QRBarcodeQuestion QRBarcodeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer, bool preFilled = false,

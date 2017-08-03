@@ -42,14 +42,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 
             var questionnaire = (questionnaireDocument == null
                 ? null
-                : new PlainQuestionnaire(questionnaireDocument, 1, null));
+                : Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null));
             
 
             var questionnaireExportStructure = (questionnaireDocument == null
                 ? null
                 : new ExportViewFactory(Mock.Of<IFileSystemAccessor>(), 
                                         new ExportQuestionService(),
-                                        Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1, null) && 
+                                        Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null) && 
                                                                             x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument),
                                         new RosterStructureService())
                                        .CreateQuestionnaireExportStructure(new QuestionnaireIdentity()));

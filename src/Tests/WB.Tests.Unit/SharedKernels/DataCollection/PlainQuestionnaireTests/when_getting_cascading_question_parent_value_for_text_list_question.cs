@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
                 Create.Entity.TextListQuestion(questionId)
             });
 
-            plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, 0);
+            plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 0);
         };
 
         Because of = () =>

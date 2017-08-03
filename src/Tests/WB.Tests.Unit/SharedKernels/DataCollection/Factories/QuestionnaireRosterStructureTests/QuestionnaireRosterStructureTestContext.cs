@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Tests.Abc;
 using Group = Main.Core.Entities.SubEntities.Group;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.Factories.QuestionnaireRosterStructureTests
@@ -33,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.Factories.QuestionnaireRost
         protected static Mock<IQuestionnaireStorage> CreateQuestionnaireStorageMock(QuestionnaireDocument document, long version = 1, Translation translation = null)
         {
             var result = new Mock<IQuestionnaireStorage>();
-            var questionnaire = new PlainQuestionnaire(document, version, translation);
+            var questionnaire = Create.Entity.PlainQuestionnaire(document, version, translation);
             result.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()))
                 .Returns(questionnaire);
             return result;
