@@ -13,7 +13,7 @@
         </div>
     </wb-question>
 </template>
-<script lang="ts">
+<script lang="js">
     import { entityDetails } from "components/mixins"
     import * as $ from "jquery"
 
@@ -23,7 +23,7 @@
         methods: {
             answerQRBarcodeQuestion(evnt) {
                 const target = $(evnt.target)
-                const answer: string = target.val()
+                const answer = target.val()
 
                 if(this.handleEmptyAnswer(answer)) {
                     return

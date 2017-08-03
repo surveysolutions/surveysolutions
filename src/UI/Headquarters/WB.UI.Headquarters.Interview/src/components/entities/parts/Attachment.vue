@@ -9,7 +9,7 @@
         </div>
     </div>
 </template>
-<script lang="ts">
+<script lang="js">
     import { imageGetBase } from "src/config"
 
     export default {

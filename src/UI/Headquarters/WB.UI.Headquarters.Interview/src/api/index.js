@@ -1,23 +1,24 @@
 // main entry point to signalr api hub
 
 import * as jQuery from "jquery"
+global.$ = global.jQuery = require('jquery');
 // tslint:disable-next-line:max-line-length
 import { appVersion, audioUploadUri, imageUploadUri, signalrPath, signalrUrlOverride, supportedTransports } from "src/config"
-const $ = (window as any).$ = (window as any).jQuery = jQuery
+
 import * as $script from "scriptjs"
 import "signalr"
 import store from "../store"
 
 // wraps jQuery promises into awaitable ES 2016 Promise
 const wrap = (jqueryPromise) => {
-    return new Promise<any>((res, rej) =>
+    return new Promise((res, rej) =>
         jqueryPromise
             .done(data => res(data))
             .fail(error => rej(error))
     )
 }
 
-const scriptIncludedPromise = new Promise<any>(resolve =>
+const scriptIncludedPromise = new Promise(resolve =>
     $script(signalrPath, () => {
         // $.connection.hub.logging = true
         const interviewProxy = $.connection.interview
@@ -43,7 +44,7 @@ const scriptIncludedPromise = new Promise<any>(resolve =>
             store.dispatch("refreshSectionState")           // fetching breadcrumbs/sidebar/buttons
         }
 
-        interviewProxy.client.markAnswerAsNotSaved = (id: string, message: string) => {
+        interviewProxy.client.markAnswerAsNotSaved = (id, message) => {
             store.dispatch("fetchProgress", -1)
             store.dispatch("fetch", { id, done: true })
             store.dispatch("setAnswerAsNotSaved", { id, message })
@@ -146,12 +147,10 @@ export async function getInstance() {
 }
 
 async function getInterviewHub() {
-    return (await getInstance()).server as IWebInterviewApi
+    return (await getInstance()).server
 }
 
-type IServerHubCallback<T> = (n: IWebInterviewApi) => T
-
-export async function apiCallerAndFetch<T>(id: string, action: IServerHubCallback<T>) {
+export async function apiCallerAndFetch(id, action) {
     if (id) {
         store.dispatch("fetch", { id })
     }
@@ -173,7 +172,7 @@ export async function apiCallerAndFetch<T>(id: string, action: IServerHubCallbac
     }
 }
 
-export async function apiCaller<T>(action: IServerHubCallback<T>) {
+export async function apiCaller(action) {
     const hub = await getInterviewHub()
 
     store.dispatch("fetchProgress", 1)
@@ -187,6 +186,6 @@ export async function apiCaller<T>(action: IServerHubCallback<T>) {
     }
 }
 
-export function apiStop(): void {
+export function apiStop() {
     $.connection.hub.stop()
 }

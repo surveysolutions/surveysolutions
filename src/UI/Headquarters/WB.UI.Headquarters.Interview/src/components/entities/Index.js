@@ -1,8 +1,8 @@
 // tslint:disable-next-line:ordered-imports
 import * as jQuery from "jquery"
-const $ = (window as any).$ = (window as any).jQuery = jQuery
-import "bootstrap-sass/assets/javascripts/bootstrap/dropdown"
 
+global.jQuery = require('jquery');
+require("bootstrap-sass/assets/javascripts/bootstrap/dropdown");
 import "jquery-mask-plugin"
 
 import Vue from "vue"

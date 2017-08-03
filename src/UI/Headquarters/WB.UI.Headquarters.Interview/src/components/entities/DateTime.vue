@@ -23,7 +23,7 @@
         </div>
     </wb-question>
 </template>
-<script lang="ts">
+<script lang="js">
     import { entityDetails } from "components/mixins"
     import 'vue-flatpickr/theme/flatpickr.min.css'
     import * as format from "date-fns/format"
@@ -60,7 +60,7 @@
             }
         },
         methods: {
-            answerDate(answer: string) {
+            answerDate(answer) {
                 if (!this.$me.isTimestamp) {
                     if (!isSame(this.$me.answer, answer)) {
                         const dateAnswer = parseUTC(answer)

@@ -3,7 +3,7 @@
         <span></span>
     </div>
 </template>
-<script lang="ts">
+<script lang="js">
     export default {
         name: "wb-humburger",
         methods: {

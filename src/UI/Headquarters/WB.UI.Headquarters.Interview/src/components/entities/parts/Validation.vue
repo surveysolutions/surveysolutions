@@ -7,7 +7,7 @@
         </template>
     </div>
 </template>
-<script lang="ts">
+<script lang="js">
     import { entityPartial } from "components/mixins"
 
     export default {

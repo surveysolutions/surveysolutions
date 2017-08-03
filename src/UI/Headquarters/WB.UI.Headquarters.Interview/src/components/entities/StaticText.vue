@@ -10,7 +10,7 @@
         </div>
     </div>
 </template>
-<script lang="ts">
+<script lang="js">
     import { entityDetails } from "components/mixins"
     import { getLocationHash } from "src/store/store.fetch"
 

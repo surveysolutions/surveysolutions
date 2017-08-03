@@ -40,7 +40,7 @@
         <!-- /.container-fluid -->
     </nav>
 </template>
-<script lang="ts">
+<script lang="js">
     import * as $ from "jquery"
     import modal from "modal"
        import { hqLink } from "src/config"

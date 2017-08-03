@@ -15,7 +15,7 @@ export default {
     RESET_LOADED_ENTITIES_COUNT(state) {
         state.loadedEntitiesCount = 0
     },
-    SET_SECTION_DATA(state, sectionData: IInterviewEntityWithType[]) {
+    SET_SECTION_DATA(state, sectionData) {
         state.entities = sectionData
     },
     CLEAR_ENTITIES(state, {ids}) {
@@ -42,12 +42,12 @@ export default {
         Vue.set(state, "currentLanguage", languageInfo.currentLanguage)
         Vue.set(state, "languages", languageInfo.languages)
     },
-    SET_INTERVIEW_INFO(state, interviewInfo: IInterviewInfo) {
+    SET_INTERVIEW_INFO(state, interviewInfo) {
         state.questionnaireTitle = interviewInfo.questionnaireTitle
         state.firstSectionId = interviewInfo.firstSectionId
         state.interviewKey = interviewInfo.interviewKey
     },
-    SET_COVER_INFO(state, coverInfo: ICoverInfo) {
+    SET_COVER_INFO(state, coverInfo) {
         state.coverInfo = coverInfo
     },
     SET_COMPLETE_INFO(state, completeInfo) {

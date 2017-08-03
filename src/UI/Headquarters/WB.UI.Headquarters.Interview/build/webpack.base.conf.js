@@ -10,16 +10,17 @@ function resolve(dir) {
 }
 
 module.exports = {
-    entry: {
-        app: './src/main.ts'
-    },
+    entry:
+        ["babel-polyfill",
+         './src/main.js' ]
+    ,
     output: {
         path: config.assetsRoot,
         filename: '[name].js',
         publicPath: config.assetsPublicPath
     },
     resolve: {
-        extensions: ['.js', '.ts', '.tsx', '.vue', '.json'],
+        extensions: ['.js', '.vue', '.json'],
         modules: [
             resolve('src'),
             resolve('node_modules')
@@ -33,21 +34,9 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.(ts|tsx)$/,
-                loader: 'tslint-loader',
-                enforce: "pre",
-                options: {
-                    appendTsSuffixTo: [/\.vue$/]
-                }
-            },
-            {
-                test: /\.(ts|tsx)$/,
-                loader: 'ts-loader',
-                include: projectRoot,
-                exclude: /node_modules/,
-                options: {
-                    appendTsSuffixTo: [/\.vue$/]
-                }
+                test: /\.js$/,
+                exclude: /(node_modules)/,
+                use: { loader: 'babel-loader' }
             },
             {
                 test: /\.vue$/,
@@ -57,7 +46,7 @@ module.exports = {
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
                 loader: 'url-loader',
-                options:{
+                options: {
                     publicPath: config.assetsRelativePath,
                     limit: 10000,
                     name: utils.assetsPath('img/[name].[ext]')
@@ -66,7 +55,7 @@ module.exports = {
             {
                 test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
                 loader: 'url-loader',
-                options:{
+                options: {
                     publicPath: config.assetsRelativePath,
                     limit: 10000,
                     name: utils.assetsPath('fonts/[name].[ext]')

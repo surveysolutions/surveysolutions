@@ -4,11 +4,6 @@ import { Store } from "vuex"
 import { apiStop } from "../api"
 import modal from "../modal"
 
-declare interface IConnectionState {
-    isReconnecting: boolean,
-    isDisconnected: boolean
-}
-
 const connectionStore = {
     state: {
         isReconnecting: false,
@@ -20,10 +15,10 @@ const connectionStore = {
                 preventDuplicates: true
             })
         },
-        tryingToReconnect({commit}, isReconnecting: boolean) {
+        tryingToReconnect({commit}, isReconnecting) {
             commit("IS_RECONNECTING", isReconnecting)
         },
-        disconnected({state, commit}: Store<IConnectionState>) {
+        disconnected({state, commit}) {
             if (state.isReconnecting && !state.isDisconnected) {
                 commit("IS_DISCONNECTED", true)
                 apiStop()
@@ -47,10 +42,10 @@ const connectionStore = {
         }
     },
     mutations: {
-        IS_RECONNECTING(state: IConnectionState, isReconnecting: boolean) {
+        IS_RECONNECTING(state, isReconnecting) {
             state.isReconnecting = isReconnecting
         },
-        IS_DISCONNECTED(state: IConnectionState, isDisconnected: boolean) {
+        IS_DISCONNECTED(state, isDisconnected) {
             state.isDisconnected = isDisconnected
         }
     }

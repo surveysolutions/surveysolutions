@@ -3,7 +3,7 @@
         <h1 class="tape"><span>Unsupported question type</span></h1>
     </wb-question>
 </template>
-<script lang="ts">
+<script lang="js">
     import { entityDetails } from "components/mixins"
 
     export default {

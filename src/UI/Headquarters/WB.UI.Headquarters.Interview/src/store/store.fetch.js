@@ -1,8 +1,4 @@
 import Vue from "vue"
-import Vuex from "vuex"
-
-import { safeStore } from "../errors"
-import router from "./../router"
 
 const fetch = {
     state: {
@@ -35,7 +31,7 @@ const fetch = {
             }
 
             const query = "#" + getLocationHash(state.scroll.id)
-            const el = document.querySelector(query) as any
+            const el = document.querySelector(query)
 
             if (el != null) {
                 window.scrollTo({ top: el.offsetTop, behavior: "smooth" })
@@ -75,8 +71,11 @@ const fetch = {
     }
 }
 
-export function getLocationHash(questionid): string {
+function getLocationHash(questionid) {
     return "loc_" + questionid
 }
 
-export default fetch
+export {
+     fetch,
+     getLocationHash
+}

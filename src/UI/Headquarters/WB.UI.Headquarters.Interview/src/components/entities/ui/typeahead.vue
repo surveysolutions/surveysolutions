@@ -20,7 +20,7 @@
         </ul>
     </div>
 </template>
-<script lang="ts">
+<script lang="js">
 
     import * as $ from "jquery"
 
@@ -68,16 +68,16 @@
             updateOptionsList(e) {
                 this.loadOptions(e.target.value)
             },
-            async loadOptions(filter: string) {
+            async loadOptions(filter) {
                 this.isLoading = true
                 const options = await apiCaller(api => api.getTopFilteredOptionsForQuestion(this.questionId, filter, 30))
                 this.isLoading = false
                 this.options = options || []
             },
-            selectOption(value: string) {
+            selectOption(value) {
                 this.$emit('input', value)
             },
-            highlight(title: string, searchTerm: string) {
+            highlight(title, searchTerm) {
                 const encodedTitle = escape(title)
                 if (searchTerm) {
                     const safeSearchTerm = escape(escapeRegExp(searchTerm))
