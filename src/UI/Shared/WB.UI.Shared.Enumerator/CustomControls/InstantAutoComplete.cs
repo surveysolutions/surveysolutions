@@ -56,7 +56,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         private void OnItemClick(object sender, AdapterView.ItemClickEventArgs itemClickEventArgs)
             => this.OnItemSelected(itemClickEventArgs.Position);
 
-        private void OnItemSelected(object sender, AdapterView.ItemSelectedEventArgs itemSelectedEventArgs) 
+        private void OnItemSelected(object sender, AdapterView.ItemSelectedEventArgs itemSelectedEventArgs)
             => this.OnItemSelected(itemSelectedEventArgs.Position);
 
         protected virtual void OnItemSelected(int position)
