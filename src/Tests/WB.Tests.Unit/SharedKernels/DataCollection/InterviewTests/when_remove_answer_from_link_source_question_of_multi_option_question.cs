@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     Create.Entity.MultyOptionsQuestion(id: linkedQuestionId, linkedToQuestionId: sourceOfLinkQuestionId)
                 });
 
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, new PlainQuestionnaire(questionnaire, 1));
+            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, Create.Entity.PlainQuestionnaire(questionnaire, 1));
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
             interview.AnswerTextQuestion(userId, sourceOfLinkQuestionId, new decimal[] { 0 },

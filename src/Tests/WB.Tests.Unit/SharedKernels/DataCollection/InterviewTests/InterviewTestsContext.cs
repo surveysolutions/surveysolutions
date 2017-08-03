@@ -74,7 +74,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] children)
         {
-            var result = new QuestionnaireDocument()
+            var result = new QuestionnaireDocument
             {
                 Children = new IComposite[]
                 {

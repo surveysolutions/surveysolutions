@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 {
@@ -44,7 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         };
 
         Because of = () =>
-            nestedRosters = new PlainQuestionnaire(questionnaireDocument, 1).GetRosterGroupsByRosterSizeQuestion(rosterSizeQuestionId);
+            nestedRosters = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1).GetRosterGroupsByRosterSizeQuestion(rosterSizeQuestionId);
 
         It should_nestedRosters_has_2_elements = () =>
             nestedRosters.Count().ShouldEqual(2);

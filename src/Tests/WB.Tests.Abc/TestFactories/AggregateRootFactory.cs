@@ -32,7 +32,7 @@ namespace WB.Tests.Abc.TestFactories
             questionnaireDocument.IsUsingExpressionStorage = true;
 
             var questionnaireDefaultRepository = Mock.Of<IQuestionnaireStorage>(repository =>
-                repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1, null) &&
+                repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null) &&
                 repository.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument);
 
             var textFactoryMock = new Mock<ISubstitutionTextFactory> {DefaultValue = DefaultValue.Mock};
