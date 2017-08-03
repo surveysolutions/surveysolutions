@@ -35,7 +35,7 @@ namespace WB.UI.Headquarters.Controllers
 
                     var audioInfo = await this.audioProcessingService.CompressAudioFileAsync(bytes);
 
-                    var fileName = $@"{question.VariableName}{questionIdentity.RosterVector}_{audioInfo.Hash}.m4a";
+                    var fileName = $@"{question.VariableName}__{questionIdentity.RosterVector}.m4a";
 
                     audioFileStorage.StoreInterviewBinaryData(Guid.Parse(interviewId), fileName, audioInfo.Binary, audioInfo.MimeType);
 

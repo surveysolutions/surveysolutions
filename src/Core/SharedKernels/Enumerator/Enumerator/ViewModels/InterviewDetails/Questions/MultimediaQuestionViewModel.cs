@@ -212,7 +212,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private string GetPictureFileName() => $"{this.variableName}{string.Join("-", this.questionIdentity.RosterVector)}.jpg";
+        private string GetPictureFileName() => $"{this.variableName}__{this.questionIdentity.RosterVector}.jpg";
 
         public void Dispose()
         {
