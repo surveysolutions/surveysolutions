@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_updating_roster_group_by_question_and_roster_size_question_is_numeric_question : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             var chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -21,33 +20,34 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddNumericQuestion( rosterSizeQuestionId, isInteger : true, parentId: chapterId, responsibleId:responsibleId);
             questionnaire.AddGroup(groupId, responsibleId: responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             questionnaire.UpdateGroup(groupId, responsibleId, "title",null, rosterSizeQuestionId, null, null, hideIfDisabled: false, isRoster: true,
                 rosterSizeSource: rosterSizeSourceType, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
 
 
-        It should_contains_group = () =>
+        [NUnit.Framework.Test] public void should_contains_group () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).ShouldNotBeNull();
 
-        It should_contains_group_with_GroupId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_group_with_GroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
                 .PublicKey.ShouldEqual(groupId);
 
-        It should_contains_group_with_RosterSizeSourceType_equal_to_specified_rosterSizeSourceType = () =>
+        [NUnit.Framework.Test] public void should_contains_group_with_RosterSizeSourceType_equal_to_specified_rosterSizeSourceType () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
                 .RosterSizeSource.ShouldEqual(rosterSizeSourceType);
 
-        It should_contains_group_with_RosterSizeQuestionId_equal_to_specified_question_id = () =>
+        [NUnit.Framework.Test] public void should_contains_group_with_RosterSizeQuestionId_equal_to_specified_question_id () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
                 .RosterSizeQuestionId.ShouldEqual(rosterSizeQuestionId);
 
-        It should_contains_group_with_FixedRosterTitles_count_should_equal_0 = () =>
+        [NUnit.Framework.Test] public void should_contains_group_with_FixedRosterTitles_count_should_equal_0 () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).FixedRosterTitles.Count().ShouldEqual(0);
 
-        It should_contains_group_with_RosterTitleQuestionId_equal_to_null = () =>
+        [NUnit.Framework.Test] public void should_contains_group_with_RosterTitleQuestionId_equal_to_null () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).RosterTitleQuestionId.ShouldBeNull();
 
         private static Questionnaire questionnaire;

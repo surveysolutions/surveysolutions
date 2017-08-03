@@ -123,6 +123,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             },
             new SelectOption
             {
+                Value = "Audio",
+                Text = "Audio"
+            },
+            new SelectOption
+            {
                 Value = "Area",
                 Text = "Area"
             }
@@ -232,12 +237,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             result.SourceOfSingleQuestions = this.GetSourcesOfSingleQuestionBriefs(questionnaire, questionId);
             result.QuestionTypeOptions = QuestionTypeOptions;
             result.AllQuestionScopeOptions = AllQuestionScopeOptions;
-
+            
             this.ReplaceGuidsInValidationAndConditionRules(result, questionnaire, questionnaireId);
 
             return result;
         }
-
 
         public NewEditStaticTextView GetStaticTextEditView(string questionnaireId, Guid staticTextId)
         {
@@ -472,6 +476,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     var dateTimeQuestion = (DateTimeQuestion)question;
                     questionView.IsTimestamp = dateTimeQuestion.IsTimestamp;
                     return questionView;
+                case QuestionType.Audio:
                 case QuestionType.QRBarcode:
                 case QuestionType.Multimedia:
                 case QuestionType.GpsCoordinates:

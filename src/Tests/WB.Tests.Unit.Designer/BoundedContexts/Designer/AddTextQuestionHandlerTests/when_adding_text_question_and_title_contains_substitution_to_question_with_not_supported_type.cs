@@ -10,14 +10,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
 {
     internal class when_adding_text_question_and_title_contains_substitution_to_question_with_not_supported_type : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddGpsQuestion(Guid.NewGuid(), chapterId, responsibleId, variableName : substitutionVariableName);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.AddTextQuestion(
                     questionId: questionId,
@@ -34,10 +34,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
                      mask: null,
                     responsibleId: responsibleId));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__title___constains__substitution__with__illegal__type__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__title___constains__substitution__with__illegal__type__ () =>
             new[] { "text", "contains", "substitution", "illegal", "type" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 

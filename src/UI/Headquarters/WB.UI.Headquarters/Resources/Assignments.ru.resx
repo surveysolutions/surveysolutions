@@ -181,4 +181,12 @@
   <data name="InterviewsNeeded" xml:space="preserve">
     <value>Необходимо интервью</value>
   </data>
+  <data name="CreateInterview" xml:space="preserve">
+    <value>Начать новое интервью</value>
+    <comment>Начать новое интервью</comment>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Опросник</value>
+    <comment>Опросник</comment>
+  </data>
 </root>

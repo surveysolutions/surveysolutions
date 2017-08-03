@@ -5,16 +5,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UserTests
 {
     internal class when_updating_locked_user_and_specifying_is_locked_false : UserTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             user = CreateUser();
             user.IsLockedOut = true;
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             user.Update(userName: "username", comment: null, email: null, passwordQuestion: null, isLockedOut: false, isConfirmed: false, canImportOnHq: false);
 
-        It should_set_IsLockedOut_to_false = () =>
+        [NUnit.Framework.Test] public void should_set_IsLockedOut_to_false () =>
             user.IsLockedOut.ShouldEqual(false);
 
         private static User user;

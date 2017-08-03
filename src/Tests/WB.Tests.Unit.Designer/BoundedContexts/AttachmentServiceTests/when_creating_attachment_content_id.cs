@@ -5,15 +5,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
 {
     internal class when_creating_attachment_content_id : AttachmentServiceTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             attachmentService = Create.AttachmentService();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             expectedAttachmentContentId = attachmentService.CreateAttachmentContentId(fileBytes);
 
-        It should_return_sha1_hash_of_file_bytes = () => expectedAttachmentContentId.ShouldEqual("7037807198C22A7D2B0807371D763779A84FDFCF");
+        [NUnit.Framework.Test] public void should_return_sha1_hash_of_file_bytes () => expectedAttachmentContentId.ShouldEqual("7037807198C22A7D2B0807371D763779A84FDFCF");
 
         private static string expectedAttachmentContentId;
         private static readonly byte[] fileBytes = { 1, 2, 3};

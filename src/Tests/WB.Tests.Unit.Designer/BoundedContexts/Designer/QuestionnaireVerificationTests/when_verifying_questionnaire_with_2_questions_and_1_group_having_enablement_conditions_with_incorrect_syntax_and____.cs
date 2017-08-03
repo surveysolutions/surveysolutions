@@ -6,15 +6,14 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
     internal class when_verifying_questionnaire_with_2_questions_and_1_group_having_enablement_conditions_with_incorrect_syntax_and_1_question_and_1_group_having_correct_syntax :
             QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             const string InvalidExpression = "[hehe] &=+< 5";
             const string ValidExpression = "var1 > 0";
 
@@ -48,43 +47,44 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 );
 
             verifier = CreateQuestionnaireVerifier(expressionProcessorGenerator: CreateExpressionProcessorGenerator());
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToArray();
 
-        It should_return_3_messages = () =>
+        [NUnit.Framework.Test] public void should_return_3_messages () =>
             verificationMessages.Count().ShouldEqual(3);
 
-        It should_return_messages_each_with_code__WB0003__ = () =>
+        [NUnit.Framework.Test] public void should_return_messages_each_with_code__WB0003__ () =>
             verificationMessages.ShouldEachConformTo(error
                 => error.Code == "WB0003");
 
-        It should_return_messages_each_having_single_reference = () =>
+        [NUnit.Framework.Test] public void should_return_messages_each_having_single_reference () =>
             verificationMessages.ShouldEachConformTo(error
                 => error.References.Count() == 1);
 
-        It should_return_message_referencing_first_incorrect_question = () =>
+        [NUnit.Framework.Test] public void should_return_message_referencing_first_incorrect_question () =>
             verificationMessages.ShouldContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Question
                     && error.References.Single().Id == firstIncorrectQuestionId);
 
-        It should_return_message_referencing_second_incorrect_question = () =>
+        [NUnit.Framework.Test] public void should_return_message_referencing_second_incorrect_question () =>
             verificationMessages.ShouldContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Question
                     && error.References.Single().Id == secondIncorrectQuestionId);
 
-        It should_return_message_referencing_incorrect_group = () =>
+        [NUnit.Framework.Test] public void should_return_message_referencing_incorrect_group () =>
             verificationMessages.ShouldContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Group
                     && error.References.Single().Id == incorrectGroupId);
 
-        It should_not_return_error_referencing_correct_question = () =>
+        [NUnit.Framework.Test] public void should_not_return_error_referencing_correct_question () =>
             verificationMessages.ShouldNotContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Question
                     && error.References.Single().Id == correctQuestionId);
 
-        It should_not_return_error_referencing_correct_group = () =>
+        [NUnit.Framework.Test] public void should_not_return_error_referencing_correct_group () =>
             verificationMessages.ShouldNotContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Group
                     && error.References.Single().Id == correctGroupId);

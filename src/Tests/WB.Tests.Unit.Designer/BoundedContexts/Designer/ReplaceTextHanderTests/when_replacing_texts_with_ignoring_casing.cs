@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
 {
     internal class when_replacing_texts_with_ignore_casing : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             responsibleId = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
             questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
                 groupId: chapterId);
@@ -30,11 +29,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 });
 
             command = Create.Command.ReplaceTextsCommand(searchFor.ToLower(), replaceWith, userId: responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => questionnaire.ReplaceTexts(command);
+        private void BecauseOf() => questionnaire.ReplaceTexts(command);
 
-        It should_replace_text_in_title_ignoring_casing = () => 
+        [NUnit.Framework.Test] public void should_replace_text_in_title_ignoring_casing () => 
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId).GetTitle().ShouldEqual($"question title with {replaceWith}");
 
         static readonly Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

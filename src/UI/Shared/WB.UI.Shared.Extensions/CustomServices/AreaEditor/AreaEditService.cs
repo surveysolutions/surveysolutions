@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Esri.ArcGISRuntime;
 using Plugin.Permissions.Abstractions;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Infrastructure.Shared.Enumerator;
+using WB.UI.Shared.Enumerator.Services;
 using AreaEditResult = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.AreaEditResult;
 
 namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor

@@ -101,4 +101,6 @@
   <color name="readonly_question_background">#FAFAFA</color>
   <color name="readonly_question_inner_shape">#FFFFFF</color>
   <color name="readonly_question_outer_shape">#D0D0D0</color>
+  
+  <color name="cover_header_text">#000000</color>
 </resources>

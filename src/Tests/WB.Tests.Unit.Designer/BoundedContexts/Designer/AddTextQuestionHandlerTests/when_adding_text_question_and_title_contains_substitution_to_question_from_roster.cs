@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
 {
     internal class when_adding_text_question_and_title_contains_substitution_to_question_from_roster : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId: responsibleId);
 
@@ -21,9 +20,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
                 rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles:null);
 
             questionnaire.AddNumericQuestion(questionFromRosterId, rosterId, responsibleId, isInteger : true, variableName : substitutionVariableName);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.AddTextQuestion(
                     questionId: questionId,
@@ -40,10 +40,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
                     mask: null,
                     responsibleId: responsibleId));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__title__contains_illegal__substitution__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__title__contains_illegal__substitution__ () =>
             new[] { "text", "contains", "illegal", "substitution" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 

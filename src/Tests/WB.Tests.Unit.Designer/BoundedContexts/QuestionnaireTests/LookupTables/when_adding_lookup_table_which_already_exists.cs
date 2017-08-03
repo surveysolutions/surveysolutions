@@ -8,8 +8,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.LookupTables
 {
     internal class when_adding_lookup_table_which_already_exists : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: responsibleId);
 
             questionnaire.AddLookupTable(Create.Command.AddLookupTable(questionnaireId, lookupTableId, responsibleId));
@@ -17,21 +16,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.LookupTables
             addLookupTable = Create.Command.AddLookupTable(questionnaireId, lookupTableId, responsibleId);
 
             eventContext = new EventContext();
-        };
-
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
-
-        Because of = () =>
+            BecauseOf();
+        }
+        
+        private void BecauseOf() =>
             exception = Catch.Exception(() => questionnaire.AddLookupTable(addLookupTable));
 
-        It should_throw_questionnaire_exception = () =>
+        [NUnit.Framework.Test] public void should_throw_questionnaire_exception () =>
             exception.ShouldBeOfExactType(typeof(QuestionnaireException));
 
-        It should_throw_exception_with_type_LookupTableAlreadyExist = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_type_LookupTableAlreadyExist () =>
             ((QuestionnaireException)exception).ErrorType.ShouldEqual(DomainExceptionType.LookupTableAlreadyExist);
 
         private static Exception exception;

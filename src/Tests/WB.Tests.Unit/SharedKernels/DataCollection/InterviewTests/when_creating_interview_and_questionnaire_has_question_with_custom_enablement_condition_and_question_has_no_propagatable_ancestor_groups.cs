@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -10,7 +9,6 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
 using It = Machine.Specifications.It;
@@ -25,20 +23,19 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             questionnaireId = Guid.Parse("22220000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            answersToFeaturedQuestions = new Dictionary<Guid, AbstractAnswer>();
+            var answersToFeaturedQuestions = new List<InterviewAnswer>();
             answersTime = new DateTime(2013, 09, 01);
 
             questionId = Guid.Parse("22220000111111111111111111111111");
 
             var questionaire = Mock.Of<IQuestionnaire>(_
-                => /*_.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new [] { questionId }
-                &&*/ _.GetRostersFromTopToSpecifiedQuestion(questionId) == new Guid[] {});
+                => _.GetRostersFromTopToSpecifiedQuestion(questionId) == new Guid[] {});
 
             var questionnaireRepository = Stub<IQuestionnaireStorage>.Returning(questionaire);
 
             eventContext = new EventContext();
 
-            command = Create.Command.CreateInterviewCommand(questionnaireId, 1, supervisorId,
+            command = Create.Command.CreateInterview(questionnaireId, 1, supervisorId,
                 answersToFeaturedQuestions, answersTime: answersTime, userId: userId);
             interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
         };
@@ -67,10 +64,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid questionId;
         private static Guid userId;
         private static Guid questionnaireId;
-        private static Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions;
         private static DateTime answersTime;
         private static Guid supervisorId;
         private static Interview interview;
-        private static CreateInterviewCommand command;
+        private static CreateInterview command;
     }
 }

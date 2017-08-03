@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_cascading_question_has_15001_options : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             parentSingleOptionQuestionId = Guid.Parse("9E96D4AB-DF91-4FC9-9585-23FA270B25D7");
             childCascadedComboboxId = Guid.Parse("C6CC807A-3E81-406C-A110-1044AE3FD89B");
 
@@ -51,19 +50,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 childSingleOptionQuestion);
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => verificationErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+        private void BecauseOf() => verificationErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_WB0088_error = () => verificationErrors.First().Code.ShouldEqual("WB0088");
+        [NUnit.Framework.Test] public void should_return_WB0088_error () => verificationErrors.First().Code.ShouldEqual("WB0088");
 
-        It should_return_error_with_level_general = () =>
+        [NUnit.Framework.Test] public void should_return_error_with_level_general () =>
             verificationErrors.First().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
-        It should_return_error_with_reference_to_question = () =>
+        [NUnit.Framework.Test] public void should_return_error_with_reference_to_question () =>
             verificationErrors.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_error_with_referece_to_question_with_error = () => 
+        [NUnit.Framework.Test] public void should_return_error_with_referece_to_question_with_error () => 
             verificationErrors.First().References.First().Id.ShouldEqual(childCascadedComboboxId);
 
         static QuestionnaireDocument questionnaire;

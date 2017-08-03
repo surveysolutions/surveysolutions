@@ -28,7 +28,7 @@ namespace WB.Tests.Abc
     // Geniuos way to override singleton.
     public class MxvMainThreadStub : MvxSingleton<IMvxMainThreadDispatcher>, IMvxMainThreadDispatcher
     {
-        public bool RequestMainThreadAction(Action action)
+        public bool RequestMainThreadAction(Action action, bool maskExceptions = true)
         {
             action();
             return true;
@@ -44,13 +44,7 @@ namespace WB.Tests.Abc
 
         public static IMvxMainThreadDispatcher MvxMainThreadDispatcher()
         {
-            var dispatcherMock = new Mock<IMvxMainThreadDispatcher>();
-
-            dispatcherMock
-                .Setup(_ => _.RequestMainThreadAction(It.IsAny<Action>()))
-                .Callback<Action>(action => action.Invoke());
-
-            return dispatcherMock.Object;
+            return mainThreadStub.Value;
         }
 
         private static readonly Lazy<MxvMainThreadStub> mainThreadStub = new Lazy<MxvMainThreadStub>(() => new MxvMainThreadStub());

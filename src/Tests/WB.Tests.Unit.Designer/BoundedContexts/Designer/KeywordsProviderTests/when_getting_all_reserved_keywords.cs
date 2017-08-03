@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -8,8 +8,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.KeywordsProviderTests
 {
     internal class when_getting_all_reserved_keywords : KeywordsProviderTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var substitutionService = CreateSubstitutionService();
             keywordsProvider = CreateKeywordsProvider(substitutionService);
 
@@ -21,16 +20,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.KeywordsProviderTests
                 .Union(ServiceColumns.SystemVariables.Select(x => x.VariableExportColumnName))
                 .Select(x => x.ToLower())
                 .ToArray();
+            BecauseOf();
 
-        };
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             result = keywordsProvider.GetAllReservedKeywords();
 
-        It should_contain_fixed_number = () =>
+        [NUnit.Framework.Test] public void should_contain_fixed_number () =>
             result.Count().ShouldEqual(reservedKeywords.Count());
 
-        It should_contain_only_predefined_keywords = () =>
+        [NUnit.Framework.Test] public void should_contain_only_predefined_keywords () =>
             result.ShouldContainOnly(reservedKeywords);
 
         private static readonly string[] CSharpKeyWords = new[]

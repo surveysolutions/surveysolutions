@@ -64,7 +64,7 @@ namespace Ncqrs.Eventing.Sourcing
 
         public virtual void InitializeFromSnapshot(Snapshot snapshot)
         {
-            _eventSourceId = snapshot.EventSourceId;
+            EventSourceId = snapshot.EventSourceId;
             _initialVersion = _currentVersion = snapshot.Version;
         }
 
@@ -76,7 +76,7 @@ namespace Ncqrs.Eventing.Sourcing
             if (this._initialVersion != this.Version)
                 throw new InvalidOperationException("Cannot apply history when instance has uncommitted changes.");
 
-            this._eventSourceId = eventSourceId;
+            EventSourceId = eventSourceId;
 
             foreach (var historicalEvent in history)
             {

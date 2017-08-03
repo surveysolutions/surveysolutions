@@ -13,7 +13,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
-using WB.UI.Shared.Web.Extensions;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
@@ -133,7 +132,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool OmittedOptions(ICategoricalQuestion question)
         {
             int[] existingOptions = (question.Answers ?? Enumerable.Empty<Answer>())
-                .Select(option => option.AnswerValue.ToIntOrNull())
+                .Select(option => option.AnswerValue.ParseIntOrNull())
                 .Where(value => value.HasValue)
                 .Select(value => value.Value)
                 .OrderBy(x => x)

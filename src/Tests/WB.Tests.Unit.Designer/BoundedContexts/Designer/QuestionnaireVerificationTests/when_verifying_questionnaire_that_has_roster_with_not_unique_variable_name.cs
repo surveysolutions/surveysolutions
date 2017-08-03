@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_that_has_roster_with_not_unique_variable_name : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
                 Create.FixedRoster(rosterId: rosterId1,
@@ -31,30 +30,31 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             });
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_WB0026_error = () =>
+        [NUnit.Framework.Test] public void should_return_WB0026_error () =>
            verificationMessages.ShouldContainCritical("WB0026");
 
-        It should_return_message_with_level_critical = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_level_critical () =>
             verificationMessages.GetCritical("WB0026").MessageLevel.ShouldEqual(VerificationMessageLevel.Critical);
 
-        It should_return_message_with_two_references = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_two_references () =>
             verificationMessages.GetCritical("WB0026").References.Count().ShouldEqual(2);
 
-        It should_return_message_with_first_references_with_Group_type = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_first_references_with_Group_type () =>
             verificationMessages.GetCritical("WB0026").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
 
-        It should_return_message_with_first_references_with_id_equals_rosterId1 = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_first_references_with_id_equals_rosterId1 () =>
             verificationMessages.GetCritical("WB0026").References.First().Id.ShouldEqual(rosterId1);
 
-        It should_return_message_with_second_references_with_Group_type = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_second_references_with_Group_type () =>
             verificationMessages.GetCritical("WB0026").References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
 
-        It should_return_message_with_second_references_with_id_equals_rosterId2 = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_second_references_with_id_equals_rosterId2 () =>
             verificationMessages.GetCritical("WB0026").References.Last().Id.ShouldEqual(rosterId2);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

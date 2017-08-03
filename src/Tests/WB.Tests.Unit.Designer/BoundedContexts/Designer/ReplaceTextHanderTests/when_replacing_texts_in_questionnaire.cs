@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -15,8 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
 {
     internal class when_replacing_texts_in_questionnaire : QuestionnaireTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             responsibleId = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
             questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
                 groupId: chapterId);
@@ -87,59 +86,60 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 null));
 
             command = Create.Command.ReplaceTextsCommand(searchFor, replaceWith, matchCase: true, userId: responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => questionnaire.ReplaceTexts(command);
+        private void BecauseOf() => questionnaire.ReplaceTexts(command);
 
-        It should_replace_title_of_static_text = () => 
+        [NUnit.Framework.Test] public void should_replace_title_of_static_text () => 
             questionnaire.QuestionnaireDocument.Find<StaticText>(staticTextId).GetTitle().ShouldEqual($"static text title with {replaceWith}");
 
-        It should_replace_enablement_condition_of_static_text = () => 
+        [NUnit.Framework.Test] public void should_replace_enablement_condition_of_static_text () => 
             questionnaire.QuestionnaireDocument.Find<StaticText>(staticTextId).ConditionExpression.ShouldEqual($"static text enablement {replaceWith}");
 
-        It should_replace_validation_condition_of_static_text = () =>
+        [NUnit.Framework.Test] public void should_replace_validation_condition_of_static_text () =>
             questionnaire.QuestionnaireDocument.Find<StaticText>(staticTextId).ValidationConditions.First().Expression.ShouldEqual($"st validation exp {replaceWith}");
 
-        It should_replace_validation_message_of_static_text = () =>
+        [NUnit.Framework.Test] public void should_replace_validation_message_of_static_text () =>
             questionnaire.QuestionnaireDocument.Find<StaticText>(staticTextId).ValidationConditions.First().Message.ShouldEqual($"st validation msg {replaceWith}");
 
-        It should_replace_title_of_question = () => 
+        [NUnit.Framework.Test] public void should_replace_title_of_question () => 
             questionnaire.QuestionnaireDocument.Find<IComposite>(questionId).GetTitle().ShouldEqual($"question title with {replaceWith}");
 
-        It should_replace_enablement_condition_of_question = () => 
+        [NUnit.Framework.Test] public void should_replace_enablement_condition_of_question () => 
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId).ConditionExpression.ShouldEqual($"question enablement {replaceWith}");
 
-        It should_replace_validation_condition_of_question = () =>
+        [NUnit.Framework.Test] public void should_replace_validation_condition_of_question () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId).ValidationConditions.First().Expression.ShouldEqual($"q validation exp {replaceWith}");
 
-        It should_replace_validation_message_of_question = () =>
+        [NUnit.Framework.Test] public void should_replace_validation_message_of_question () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId).ValidationConditions.First().Message.ShouldEqual($"q validation msg {replaceWith}");
 
-        It should_replace_title_of_group = () => 
+        [NUnit.Framework.Test] public void should_replace_title_of_group () => 
             questionnaire.QuestionnaireDocument.Find<IComposite>(groupId).GetTitle().ShouldEqual($"group title with {replaceWith}");
 
-        It should_replace_enablement_condition_of_group = () => 
+        [NUnit.Framework.Test] public void should_replace_enablement_condition_of_group () => 
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).ConditionExpression.ShouldEqual($"group enablement {replaceWith}");
 
-        It should_replace_content_of_macro = () =>
+        [NUnit.Framework.Test] public void should_replace_content_of_macro () =>
             questionnaire.QuestionnaireDocument.Macros[macroId].Content.ShouldEqual($"macro content {replaceWith}");
 
-        It should_repalce_variable_expressions = () => 
+        [NUnit.Framework.Test] public void should_repalce_variable_expressions () => 
             questionnaire.QuestionnaireDocument.Find<IVariable>(variableId).Expression.ShouldEqual($"var expression {replaceWith}");
 
-        It should_repalce_variable_lablel = () =>
+        [NUnit.Framework.Test] public void should_repalce_variable_lablel () =>
         questionnaire.QuestionnaireDocument.Find<IVariable>(variableId).Label.ShouldEqual($"label {replaceWith}");
 
-        It should_replace_variable_names = () => 
+        [NUnit.Framework.Test] public void should_replace_variable_names () => 
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId1).StataExportCaption.ShouldEqual($"var_{replaceWith}");
 
-        It should_replace_option_text = () => 
+        [NUnit.Framework.Test] public void should_replace_option_text () => 
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId1).Answers.First().AnswerText.ShouldEqual($"answer with {replaceWith}");
 
-        It should_record_number_of_affected_entities = () => 
+        [NUnit.Framework.Test] public void should_record_number_of_affected_entities () => 
             questionnaire.GetLastReplacedEntriesCount().ShouldEqual(7);
 
-        It should_replace_text_in_attachment_name = () => 
+        [NUnit.Framework.Test] public void should_replace_text_in_attachment_name () => 
             questionnaire.QuestionnaireDocument.Find<IStaticText>(staticTextWithAttachmentId).AttachmentName.ShouldEqual($"attachment {replaceWith}");
 
         static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

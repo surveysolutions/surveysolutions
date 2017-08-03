@@ -1,7 +1,5 @@
 ﻿@using System.Runtime.Serialization.Formatters
-@using System.Web.Optimization
 @using Newtonsoft.Json
-@using WB.UI.Headquarters.API
 
 @model WB.Core.BoundedContexts.Headquarters.Views.TakeNew.TakeNewAssignmentView
 
@@ -220,8 +218,7 @@
             <label class="col-sm-2 control-label"><strong>@Assignments.Quantity</strong></label>
             <div class="col-sm-2">
                 <div class="input-group">
-                    <input class="form-control" type="text" data-bind="numericformatter: quantity, value: quantity" maxlength="9" autocomplete="off"
-                           placeholder="@Assignments.Unlimited"/>
+                    <input class="form-control" type="text" data-bind="numericformatter: quantity, value: quantity" maxlength="9" autocomplete="off"/>
                     <div class="input-group-btn" data-bind="click: function(){ quantity(undefined); }">
                         <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                         </div>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:local="http://schemas.android.com/apk/res-auto"
+  android:paddingRight="@dimen/Interview_Entity_margin_right"
+  android:paddingLeft="@dimen/Interview_Entity_margin_left"
+  style="@style/FullWidthWrappingLayout">
+<LinearLayout style="@style/Audio_Dialog_Holder">
+  <TableLayout
+    style="@style/FullWidthWrappingLayout"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1" 
+    android:stretchColumns="0">
+    <TableRow>
+      <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          style="@style/Text_Roboto_24"
+          local:MvxBind="Text Localization('Interviewer_AudioRecording');"/>
+        <TextView
+          style="@style/Interview_Question_Title_Base"
+          local:MvxBind="Html Title;"/>
+
+      </LinearLayout>
+      <ImageButton style="@style/Interview_Question_RemoveAnswer"
+                   android:layout_marginRight="@dimen/Interview_Audio_Dialog_Remove_Button_Margin_Left"
+                   android:duplicateParentState="true"
+                   local:MvxBind="Click CancelCommand;" />
+    </TableRow>
+    <TableRow>
+      <RelativeLayout
+        android:layout_span="2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/Interview_Audio_Dialog_Visualizer_Max_Width">
+        <View 
+          android:layout_centerHorizontal="true"
+          android:layout_centerVertical="true"
+          android:layout_width="@dimen/Interview_Audio_Dialog_Visualizer_Dot_Width"
+          android:layout_height="@dimen/Interview_Audio_Dialog_Visualizer_Dot_Width"
+          local:MvxBind="BackgroundStyle AudioNoiseTypeToDot(NoiseType)"/>  
+      
+        <View 
+          android:layout_centerHorizontal="true"
+          android:layout_centerVertical="true"
+          android:layout_width="@dimen/Interview_Audio_Dialog_Visualizer_Min_Width"
+          android:layout_height="@dimen/Interview_Audio_Dialog_Visualizer_Min_Width"
+          local:MvxBind="SizeByNoiseLevel NoiseLevel; BackgroundStyle AudioNoiseTypeToShape(NoiseType)" />  
+      </RelativeLayout>
+        
+    </TableRow>
+  </TableLayout>
+  <LinearLayout style="@style/FullWidthWrappingLayout">
+    <TextView
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      style="@style/Text_Roboto_24"
+      local:MvxBind="Text Duration;"/>
+
+    <Button style="@style/Link_Button"
+            local:MvxBind="Click CancelCommand; Text Localization('Interviewer_RelinkDevice_Cancel');" />
+    <Button
+      style="@style/Done_Button"
+      local:MvxBind="Click DoneCommand; Text Localization('Interviewer_Done');" />
+  </LinearLayout>
+</LinearLayout>
+</LinearLayout>

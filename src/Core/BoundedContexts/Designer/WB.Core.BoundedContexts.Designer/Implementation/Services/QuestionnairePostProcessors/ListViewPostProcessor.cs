@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using CsQuery.ExtensionMethods.Internal;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
@@ -21,9 +18,9 @@ using WB.Core.BoundedContexts.Designer.Views;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.UI.Shared.Web.MembershipProvider.Accounts;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors
 {
@@ -74,7 +71,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, UpdateCascadingComboboxOptions>,
         ICommandPostProcessor<Questionnaire, UpdateFilteredComboboxOptions>,
         ICommandPostProcessor<Questionnaire, RevertVersionQuestionnaire>,
-        ICommandPostProcessor<Questionnaire, UpdateAreaQuestion>
+        ICommandPostProcessor<Questionnaire, UpdateAreaQuestion>,
+        ICommandPostProcessor<Questionnaire, UpdateAudioQuestion>
     {
         private IPlainStorageAccessor<User> accountStorage
             => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<User>>();
@@ -302,5 +300,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         public void Process(Questionnaire aggregate, RevertVersionQuestionnaire command)
             => this.Update(command.QuestionnaireId.FormatGuid(), aggregate.QuestionnaireDocument.Title, aggregate.QuestionnaireDocument.IsPublic);
+
+        public void Process(Questionnaire aggregate, UpdateAudioQuestion command) => this.Update(command.QuestionnaireId.FormatGuid());
     }
 }

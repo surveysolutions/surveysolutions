@@ -1,16 +1,15 @@
 ﻿using System;
 using Machine.Specifications;
-using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactoryTests
 {
-    internal class when_statistics_filter_could_not_find_questionnaire : ChartStatisticsViewFactoryTestsContext
+    public class when_statistics_filter_could_not_find_questionnaire : ChartStatisticsViewFactoryTestsContext
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void Establish()
         {
             var questionnaireId = Guid.Empty;
             var questionnaireVersion = 1;
@@ -27,11 +26,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
                 From = baseDate.AddDays(-2),
                 To = baseDate
             };
-        };
+            Because();
+        }
 
-        Because of = () => view = chartStatisticsViewFactory.Load(input);
+        public void Because() => view = chartStatisticsViewFactory.Load(input);
 
-        It should_have_0_lines = () => view.Lines.Length.ShouldEqual(0);
+        [Test]
+        public void should_have_0_lines() => view.Lines.Length.ShouldEqual(0);
 
         private static ChartStatisticsViewFactory chartStatisticsViewFactory;
         private static ChartStatisticsInputModel input;

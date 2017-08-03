@@ -16,6 +16,7 @@ Vue.use(Vuex)
 import * as poly from "smoothscroll-polyfill"
 poly.polyfill()
 
+import "./misc/audioRecorder.js"
 import "./misc/htmlPoly.js"
 
 import "./components"

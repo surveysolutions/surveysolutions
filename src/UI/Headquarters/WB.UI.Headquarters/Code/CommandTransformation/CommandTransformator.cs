@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
 using Newtonsoft.Json.Linq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.UI.Headquarters.Code.CommandTransformation
 {
@@ -24,9 +25,10 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
 
         public ICommand TransformCommnadIfNeeded(ICommand command, Guid? responsibleId = null)
         {
-            TypeSwitch.Do(
-                command,
-                TypeSwitch.Case<CreateInterviewControllerCommand>(cmd => { command = this.GetCreateInterviewCommand(cmd); }));
+            if (command is CreateInterviewControllerCommand)
+            {
+                command = this.GetCreateInterviewCommand((CreateInterviewControllerCommand) command);
+            }
 
             var interviewCommand = command as InterviewCommand;
             if (interviewCommand != null)
@@ -61,26 +63,33 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
             return command;
         }
 
-        private CreateInterviewCommand GetCreateInterviewCommand(CreateInterviewControllerCommand command)
+        private CreateInterview GetCreateInterviewCommand(CreateInterviewControllerCommand command)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(command.QuestionnaireId, command.QuestionnaireVersion);
             var questionnaire = questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
 
             var answers = command.AnswersToFeaturedQuestions
                 .Select(x => ParseQuestionAnswer(x, questionnaire))
-                .ToDictionary(a => a.Key, a => a.Value);
+                .Select(x => new InterviewAnswer
+                {
+                    Identity = new Identity(x.Key, null),
+                    Answer = x.Value
+                })
+                .ToList();
 
             Guid interviewId = Guid.NewGuid();
             var interviewKey = ServiceLocator.Current.GetInstance<IInterviewUniqueKeyGenerator>().Get();
 
-            var resultCommand = new CreateInterviewCommand(interviewId,
-                                                           authorizedUser.Id,
-                                                           command.QuestionnaireId,
-                                                           answers,
-                                                           DateTime.UtcNow,
-                                                           command.SupervisorId, 
-                                                           command.QuestionnaireVersion,
-                                                           interviewKey);
+            var resultCommand = new CreateInterview(interviewId,
+                authorizedUser.Id,
+                new QuestionnaireIdentity(command.QuestionnaireId, command.QuestionnaireVersion),
+                answers,
+                DateTime.UtcNow,
+                command.SupervisorId,
+                null,
+                interviewKey,
+                null);
+
             return resultCommand;
         }
 

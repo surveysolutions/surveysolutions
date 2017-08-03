@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -8,8 +8,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_moving_group_with_roster_size_question_from_top_level_to_parent_roster : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
 
@@ -21,15 +20,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             questionnaire.AddGroup(nestedRosterId, parentRosterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
                 rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
-        };
+            BecauseOf();
+        }
 
 
-        Because of = () => questionnaire.MoveGroup(groupToMoveId, parentRosterId, 0, responsibleId);
+        private void BecauseOf() => questionnaire.MoveGroup(groupToMoveId, parentRosterId, 0, responsibleId);
 
-        It should_contains_group = () =>
+        [NUnit.Framework.Test] public void should_contains_group () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupToMoveId);
 
-        It should_contains_group_with_parentRosterId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_group_with_parentRosterId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupToMoveId).GetParent().PublicKey.ShouldEqual(parentRosterId);
 
         private static Questionnaire questionnaire;

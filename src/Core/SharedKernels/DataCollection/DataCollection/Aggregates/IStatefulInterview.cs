@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Globalization;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -28,7 +27,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool HasErrors { get; }
         bool IsCompleted { get; }
+
+        [Obsolete("Replaced with HasEditableIdentifyingQuestions")]
         bool CreatedOnClient { get; }
+
+        bool HasEditableIdentifyingQuestions { get; }
 
         InterviewTreeGroup GetGroup(Identity identity);
         InterviewTreeRoster GetRoster(Identity identity);
@@ -64,6 +67,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         InterviewTreeSingleOptionLinkedToListQuestion GetSingleOptionLinkedToListQuestion(Identity identity);
 
         InterviewTreeAreaQuestion GetAreaQuestion(Identity identity);
+
+        InterviewTreeAudioQuestion GetAudioQuestion(Identity identity);
 
         InterviewTreeQuestion GetQuestion(Identity identity);
 
@@ -170,5 +175,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IReadOnlyCollection<IInterviewTreeNode> GetAllSections();
         InterviewSynchronizationDto GetSynchronizationDto();
         bool IsReadOnlyQuestion(Identity identity);
+        InterviewKey GetInterviewKey();
+        int? GetAssignmentId();
     }
 }

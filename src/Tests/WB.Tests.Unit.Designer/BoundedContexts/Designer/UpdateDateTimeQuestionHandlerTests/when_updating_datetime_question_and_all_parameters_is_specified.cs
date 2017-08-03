@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
 {
     internal class when_updating_datetime_question_and_all_parameters_is_specified : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddQRBarcodeQuestion(
@@ -25,12 +24,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
                     variableName: "old_variable_name",
                     instructions: "old instructions",
                     enablementCondition: "old condition");
-        };
+            BecauseOf();
+        }
 
-        Because of = () => questionnaire.UpdateDateTimeQuestion(command);
+        private void BecauseOf() => questionnaire.UpdateDateTimeQuestion(command);
 
 
-        It should_raise_QuestionChanged_event_with_specified_properties = () =>
+        [NUnit.Framework.Test] public void should_raise_QuestionChanged_event_with_specified_properties () 
         {
             var question = questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId);
 
@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
             question.ValidationConditions.First().Expression.ShouldEqual(validationExpression);
             question.ValidationConditions.First().Message.ShouldEqual(validationMessage);
             question.IsTimestamp.ShouldEqual(isTimestamp);
-        };
+        }
 
         private static Questionnaire questionnaire;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");

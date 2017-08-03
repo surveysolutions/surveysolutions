@@ -159,6 +159,9 @@
   <data name="Completed" xml:space="preserve">
     <value>Completed</value>
   </data>
+  <data name="Restarted" xml:space="preserve">
+    <value>Restarted</value>
+  </data>
   <data name="RejectedByHQ" xml:space="preserve">
     <value>Rejected by HQ</value>
   </data>

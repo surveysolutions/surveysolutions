@@ -132,7 +132,7 @@ namespace WB.UI.Designer.Code
                         Type = group.IsRoster ? QuestionnaireVerificationReferenceType.Roster : reference.Type,
                         Variable = group.IsRoster ? group.VariableName : null,
                         Title = group.Title,
-                        ChapterId = Monads.Maybe(() => parent.PublicKey.FormatGuid())
+                        ChapterId = parent?.PublicKey.FormatGuid()
                     };
                 }
                 else if (reference.Type == QuestionnaireVerificationReferenceType.StaticText)
@@ -144,7 +144,7 @@ namespace WB.UI.Designer.Code
                         ItemId = reference.Id.FormatGuid(),
                         Type = reference.Type,
                         Title = string.IsNullOrEmpty(staticText.Text) ? "static text" : staticText.Text,
-                        ChapterId = Monads.Maybe(() => parent.PublicKey.FormatGuid()),
+                        ChapterId = parent?.PublicKey.FormatGuid(),
                         IndexOfEntityInProperty = reference.IndexOfEntityInProperty
                     };
                 }
@@ -156,7 +156,7 @@ namespace WB.UI.Designer.Code
                         ItemId = reference.Id.FormatGuid(),
                         Type = reference.Type,
                         Variable = variable.Name,
-                        ChapterId = Monads.Maybe(() => parent.PublicKey.FormatGuid())
+                        ChapterId = parent?.PublicKey.FormatGuid()
                     };
                 }
                 else
@@ -170,7 +170,7 @@ namespace WB.UI.Designer.Code
                         Variable = question.StataExportCaption,
                         QuestionType = "icon-" + question.QuestionType.ToString().ToLower(),
                         Title = question.QuestionText,
-                        ChapterId = Monads.Maybe(() => parent.PublicKey.FormatGuid()),
+                        ChapterId = parent?.PublicKey.FormatGuid(),
                         IndexOfEntityInProperty = reference.IndexOfEntityInProperty
                     };
                 }

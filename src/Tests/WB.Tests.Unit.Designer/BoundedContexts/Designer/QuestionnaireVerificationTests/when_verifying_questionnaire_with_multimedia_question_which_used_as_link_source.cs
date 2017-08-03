@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_multimedia_question_which_used_as_link_source : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument(
                 Create.FixedRoster(variable: "varRoster",
                     fixedTitles: new[] {"1", "2"},
@@ -32,30 +31,31 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 ));
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_1_message = () =>
+        [NUnit.Framework.Test] public void should_return_1_message () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_message_with_code__WB0012 = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_code__WB0012 () =>
             verificationMessages.Single().Code.ShouldEqual("WB0012");
 
-        It should_return_message_with_2_references = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_2_references () =>
             verificationMessages.Single().References.Count().ShouldEqual(2);
 
-        It should_return_first_message_reference_with_type_Question = () =>
+        [NUnit.Framework.Test] public void should_return_first_message_reference_with_type_Question () =>
             verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_first_message_reference_with_id_of_questionWhichUsesMultimediaAsLinkSource = () =>
+        [NUnit.Framework.Test] public void should_return_first_message_reference_with_id_of_questionWhichUsesMultimediaAsLinkSource () =>
             verificationMessages.Single().References.First().Id.ShouldEqual(questionWhichUsesMultimediaAsLinkSource);
 
-        It should_return_second_message_reference_with_type_Question = () =>
+        [NUnit.Framework.Test] public void should_return_second_message_reference_with_type_Question () =>
             verificationMessages.Single().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_second_message_reference_with_id_of_multimediaQuestionId = () =>
+        [NUnit.Framework.Test] public void should_return_second_message_reference_with_id_of_multimediaQuestionId () =>
             verificationMessages.Single().References.Last().Id.ShouldEqual(multimediaQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

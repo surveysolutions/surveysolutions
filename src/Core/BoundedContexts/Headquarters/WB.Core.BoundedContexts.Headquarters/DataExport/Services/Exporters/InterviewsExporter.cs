@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
@@ -57,7 +56,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             IProgress<int> progress,
             CancellationToken cancellationToken)
         {
-            
             this.CreateDataSchemaForInterviewsInTabular(questionnaireExportStructure, basePath);
             this.ExportInterviews(interviewIdsToExport, basePath, questionnaireExportStructure, progress, cancellationToken);
         }
@@ -234,7 +232,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
         private string CreateFormatDataFileName(string fileName)
         {
-            return String.Format("{0}.{1}", fileName, dataFileExtension);
+            return $"{fileName}.{dataFileExtension}";
         }
     }
 }

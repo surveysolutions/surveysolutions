@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_long_fixed_roster_and_it_is_nested_intro_other_roster : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var titles = new List<FixedRosterTitle>();
             for (int i = 1; i <= 80; i++)
             {
@@ -34,18 +33,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             });
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_contain_error_WB0081 = () =>
+        [NUnit.Framework.Test] public void should_return_contain_error_WB0081 () =>
             verificationMessages.ShouldContainError("WB0081");
 
-        It should_return_message_with_level_general = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_level_general () =>
             verificationMessages.GetError("WB0081").MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
-        It should_return_message_with_reference_on_roster = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_reference_on_roster () =>
             verificationMessages.GetError("WB0081").References.Single().Id.ShouldEqual(rosterId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

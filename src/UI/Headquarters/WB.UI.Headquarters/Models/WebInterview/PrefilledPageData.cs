@@ -11,16 +11,6 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public bool IsReadonly { get; set; }
     }
 
-    public class SamplePrefilledData
-    {
-        public SamplePrefilledData()
-        {
-            this.Questions = new List<IdentifyingQuestion>();
-        }
-
-        public List<IdentifyingQuestion> Questions { get; set; }
-    }
-
     public class PrefilledPageData
     {
         public InterviewEntityWithType[] Entities { get; set; }

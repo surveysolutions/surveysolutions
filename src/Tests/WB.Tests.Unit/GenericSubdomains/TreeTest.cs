@@ -86,7 +86,7 @@ namespace WB.Tests.Unit.GenericSubdomains
 
             section2.AddChild(roster);
 
-            var interviewTree = Create.Entity.InterviewTree(Guid.NewGuid(), section1, section2);
+            var interviewTree = Create.Entity.InterviewTree(Guid.NewGuid(), sections: new[] {section1, section2});
 
             var address1 = interviewTree.GetNodeCoordinatesInEnumeratorOrder(Create.Entity.Identity(Id.gA));
             var address2 = interviewTree.GetNodeCoordinatesInEnumeratorOrder(Create.Entity.Identity(Id.gB, new[] { 12 }));

@@ -64,6 +64,11 @@
         "dist/pnotify.mobile.js",
         "dist/pnotify.nonblock.js"
       ]
+    },
+    "moment": {
+      "main": [
+        "min/moment-with-locales.min.js"
+      ]
     }
   }
 }

@@ -6,22 +6,6 @@ namespace WB.Core.GenericSubdomains.Portable
 {
     public static class StringExtensions
     {
-        public static string Replace(this string source, string oldString,
-                           string newString, StringComparison comparison)
-        {
-            int index = source.IndexOf(oldString, comparison);
-
-            while (index > -1)
-            {
-                source = source.Remove(index, oldString.Length);
-                source = source.Insert(index, newString);
-
-                index = source.IndexOf(oldString, index + newString.Length, comparison);
-            }
-
-            return source;
-        }
-
         public static bool IsNullOrEmpty(this string input)
         {
             return string.IsNullOrEmpty(input);
@@ -108,19 +92,6 @@ namespace WB.Core.GenericSubdomains.Portable
             return string.Concat("<", source, ">");
         }
 
-        public static byte[] GetBytes(string str)
-        {
-            byte[] bytes = new byte[str.Length * sizeof(char)];
-            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
-            return bytes;
-        }
-        public static string GetString(byte[] bytes)
-        {
-            char[] chars = new char[bytes.Length / sizeof(char)];
-            System.Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
-            return new string(chars);
-        }
-
         public static T Parse<T>(this string text) where T : struct
         {
             if (string.IsNullOrEmpty(text))
@@ -177,31 +148,9 @@ namespace WB.Core.GenericSubdomains.Portable
             return decimal.TryParse(source, out iSource);
         }
 
-        public static string NullIfEmptyOrWhiteSpace(this string src)
-        {
-            return string.IsNullOrWhiteSpace(src) ? null : src;
-        }
-
-        public static string GetDomainName(this string url)
-        {
-            if(string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException("url");
-            Uri uri;
-
-            if(!Uri.TryCreate(url, UriKind.Absolute,  out uri))
-                throw new ArgumentException("invalid url string");
-
-            return uri.ToString().Replace(uri.PathAndQuery, "");
-        }
-
         public static string FormatString(this string source, params object[] args)
         {
             return string.Format(source, args);
-        }
-
-        public static bool IsValidWebAddress(this string source)
-        {
-            Uri parsedUrl;
-            return Uri.TryCreate(source, UriKind.Absolute, out parsedUrl) && (parsedUrl.Scheme == "http" || parsedUrl.Scheme == "https");
         }
 
         public static string PrefixEachLine(this string lines, string prefix)

@@ -392,5 +392,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("PL0038_UnsupportedAreaQuestion", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audio question cannot be preloaded..
+        /// </summary>
+        public static string PL0039_UnsupportedAudioQuestion {
+            get {
+                return ResourceManager.GetString("PL0039_UnsupportedAudioQuestion", resourceCulture);
+            }
+        }
     }
 }

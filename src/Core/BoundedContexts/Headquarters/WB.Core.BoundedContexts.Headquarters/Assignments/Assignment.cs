@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
@@ -15,8 +16,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.CreatedAtUtc = DateTime.UtcNow;
             this.UpdatedAtUtc = DateTime.UtcNow;
 
-            Answers = new List<InterviewAnswer>();
-            IdentifyingData = new List<IdentifyingAnswer>();
+            this.Answers = new List<InterviewAnswer>();
+            this.IdentifyingData = new List<IdentifyingAnswer>();
+            this.InterviewSummaries = new HashSet<InterviewSummary>();
         }
 
         public Assignment(QuestionnaireIdentity questionnaireId, Guid responsibleId, int? quantity) : this()
@@ -44,12 +46,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public virtual DateTime UpdatedAtUtc { get; protected set; }
 
         public virtual QuestionnaireIdentity QuestionnaireId { get; set; }
-
+        
         public virtual IList<IdentifyingAnswer> IdentifyingData { get; protected set; }
 
         public virtual IList<InterviewAnswer> Answers { get; protected set; }
 
+        public virtual QuestionnaireLiteViewItem Questionnaire { get; set; }
+
+        /// <summary>
+        /// Will also include deleted interviews
+        /// </summary>
         public virtual ISet<InterviewSummary> InterviewSummaries { get; protected set; }
+
+        public virtual int InterviewsProvided =>
+            InterviewSummaries.Count(i => i.IsDeleted == false && (i.Status == InterviewStatus.InterviewerAssigned ||
+                                          i.Status == InterviewStatus.RejectedBySupervisor));
 
         public virtual int? InterviewsNeeded
         {
@@ -60,6 +71,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                     : null;
             }
         }
+
+        public virtual bool IsCompleted => this.InterviewsNeeded <= 0;
 
         public virtual void Archive()
         {
@@ -96,5 +109,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.Archived = false;
             this.UpdatedAtUtc = DateTime.UtcNow;
         }
+    }
+
+    public class QuestionnaireLiteViewItem
+    {
+        public virtual string Title { get; set; }
+        public virtual string Id { get; set; }
     }
 }

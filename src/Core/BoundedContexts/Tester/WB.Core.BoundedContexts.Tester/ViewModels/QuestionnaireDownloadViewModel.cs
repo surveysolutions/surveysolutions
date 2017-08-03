@@ -104,8 +104,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                     this.viewModelNavigationService.NavigateToInterview(interviewId.FormatGuid(), navigationIdentity);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    logger.Warn("Cant reload questionnaire with data", e);
                     await userInteractionService.AlertAsync(TesterUIResources.ReloadInterviewErrorMessage);
                     var newInterviewId = await this.CreateInterview(questionnaireIdentity, progress);
                     this.viewModelNavigationService.NavigateToPrefilledQuestions(newInterviewId.FormatGuid());
@@ -183,15 +184,16 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             var interviewId = Guid.NewGuid();
 
-            await this.commandService.ExecuteAsync(new CreateInterviewOnClientCommand(
+            await this.commandService.ExecuteAsync(new CreateInterview(
                 interviewId: interviewId,
                 userId: this.principal.CurrentUserIdentity.UserId,
-                questionnaireIdentity: questionnaireIdentity,
+                questionnaireId: questionnaireIdentity,
+                answers: new List<InterviewAnswer>(), 
                 answersTime: DateTime.UtcNow,
                 supervisorId: Guid.NewGuid(),
+                interviewerId: Guid.NewGuid(),
                 interviewKey: null,
-                assignmentId: null, 
-                answersToIdentifyingQuestions: new List<InterviewAnswer>()));
+                assignmentId: null));
 
             return interviewId;
         }

@@ -13,7 +13,8 @@
                      local:MvxBind="UseGroupSeparator UseFormatting;
                                           Value Answer; 
                                           FocusValueChanged ValueChangeCommand; 
-                                          Watermark Localization('IntegerQuestion_Hint');" />
+                                          Watermark Localization('IntegerQuestion_Hint');
+                                          Tag Format('Answer_{0}', Identity)" />
     <include layout="@layout/interview_question__remove_button_input" />
 
   </LinearLayout>

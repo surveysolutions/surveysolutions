@@ -8,14 +8,20 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Main.Core.Events;
 using Moq;
 using ReflectionMagic;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Troubleshooting.Views;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
@@ -32,6 +38,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -42,6 +49,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -296,7 +304,7 @@ namespace WB.Tests.Abc.TestFactories
             => new InterviewTreeIntegerQuestion(answer);
 
         public InterviewBinaryDataDescriptor InterviewBinaryDataDescriptor()
-            => new InterviewBinaryDataDescriptor(Guid.NewGuid(), "test.jpeg", () => new byte[0]);
+            => new InterviewBinaryDataDescriptor(Guid.NewGuid(), "test.jpeg", null, () => new byte[0]);
 
         public InterviewComment InterviewComment(string comment = null)
             => new InterviewComment { Comment = comment };
@@ -355,12 +363,22 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewDataExportLevelView InterviewDataExportLevelView(Guid interviewId, params InterviewDataExportRecord[] records)
             => new InterviewDataExportLevelView(new ValueVector<Guid>(), "test", records);
 
-        public InterviewDataExportRecord InterviewDataExportRecord(Guid interviewId, params ExportQuestionService[] questions)
-            => new InterviewDataExportRecord("test", new string[0], new string[0], new string[0])
-            {
-                Answers = questions.Select(x => string.Join("\n", x)).ToArray(),
-                LevelName = ""
-            };
+        public InterviewDataExportRecord InterviewDataExportRecord(
+            Guid interviewId,
+            string levelName = "",
+            string[] referenceValues = null,
+            string[] parentLevelIds = null,
+            string[] systemVariableValues = null,
+            string[] answers = null)
+            => new InterviewDataExportRecord(interviewId.FormatGuid(), 
+               referenceValues?? new string[0],
+               parentLevelIds ?? new string[0],
+               systemVariableValues ?? new string[0])
+               { 
+                   Answers = answers ?? new string[0],
+                   LevelName = levelName,
+                   InterviewId = interviewId
+               };
 
         public InterviewDataExportView InterviewDataExportView(
             Guid? interviewId = null,
@@ -482,8 +500,11 @@ namespace WB.Tests.Abc.TestFactories
             List<Identity> validStaticTexts = null,
             List<KeyValuePair<Identity, List<FailedValidationCondition>>> invalidStaticTexts = null,
             Dictionary<InterviewItemId, object> variables = null,
-            HashSet<InterviewItemId> disabledVariables = null)
-            => new InterviewSynchronizationDto(
+            HashSet<InterviewItemId> disabledVariables = null,
+            InterviewKey interviewKey = null,
+            int? assignmentId = null)
+        {
+            return new InterviewSynchronizationDto(
                 interviewId ?? Guid.NewGuid(),
                 status,
                 "",
@@ -503,11 +524,17 @@ namespace WB.Tests.Abc.TestFactories
                 validStaticTexts ?? new List<Identity>(),
                 invalidStaticTexts ?? new List<KeyValuePair<Identity, List<FailedValidationCondition>>>(),
                 rosterGroupInstances ?? new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(),
-                failedValidationConditions?.ToList() ?? new List<KeyValuePair<Identity, IList<FailedValidationCondition>>>(),
+                failedValidationConditions?.ToList() ??
+                new List<KeyValuePair<Identity, IList<FailedValidationCondition>>>(),
                 new Dictionary<InterviewItemId, RosterVector[]>(),
                 variables ?? new Dictionary<InterviewItemId, object>(),
                 disabledVariables ?? new HashSet<InterviewItemId>(),
-                wasCompleted ?? false);
+                wasCompleted ?? false)
+            {
+                InterviewKey = interviewKey,
+                AssignmentId = assignmentId
+            };
+        }
 
         public InterviewView InterviewView(Guid? prefilledQuestionId = null, Guid? interviewId = null, string questionnaireId = null, InterviewStatus? status = null)
         {
@@ -818,6 +845,7 @@ namespace WB.Tests.Abc.TestFactories
         public QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, Guid? id = null, params IComposite[] children)
             => new QuestionnaireDocument
             {
+                Title = "Questionnaire",
                 PublicKey = id ?? Guid.NewGuid(),
                 Children = new List<IComposite>
                 {
@@ -1065,8 +1093,13 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewTreeTextQuestion InterviewTreeTextQuestion(string answer)
             => new InterviewTreeTextQuestion(answer);
 
-        public TextListQuestion TextListQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            int? maxAnswerCount = null, string variable = null, bool hideIfDisabled = false)
+        public TextListQuestion TextListQuestion(Guid? questionId = null, 
+            string enablementCondition = null, 
+            string validationExpression = null,
+            int? maxAnswerCount = null, 
+            string variable = null, 
+            bool hideIfDisabled = false,
+            string questionText = null)
             => new TextListQuestion("Question TL")
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
@@ -1075,7 +1108,8 @@ namespace WB.Tests.Abc.TestFactories
                 ValidationExpression = validationExpression,
                 MaxAnswerCount = maxAnswerCount,
                 QuestionType = QuestionType.TextList,
-                StataExportCaption = variable
+                StataExportCaption = variable,
+                QuestionText = questionText
             };
 
         public TextQuestion TextQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
@@ -1346,12 +1380,13 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public InterviewTreeRoster InterviewTreeRoster(Identity rosterIdentity, bool isDisabled = false, string rosterTitle = null,
-            RosterType rosterType = RosterType.Fixed, Guid? rosterSizeQuestion = null,
+            RosterType rosterType = RosterType.Fixed, Guid? rosterSizeQuestion = null, Identity rosterTitleQuestionIdentity = null,
             params IInterviewTreeNode[] children)
         {
-            var titleWithSubstitutions = Create.Entity.SubstitionText(rosterIdentity, "Title");
+            var titleWithSubstitutions = Create.Entity.SubstitutionText(rosterIdentity, "Title");
             var roster =  new InterviewTreeRoster(rosterIdentity, titleWithSubstitutions, rosterType: rosterType,
                 rosterSizeQuestion: rosterSizeQuestion,
+                rosterTitleQuestionIdentity: rosterTitleQuestionIdentity,
                 childrenReferences: Enumerable.Empty<QuestionnaireItemReference>()) {RosterTitle = rosterTitle};
             roster.SetChildren(children.ToList());
             return roster;
@@ -1360,7 +1395,7 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewTreeSubSection InterviewTreeSubSection(Identity groupIdentity, bool isDisabled = false, 
             params IInterviewTreeNode[] children)
         {
-            var titleWithSubstitutions = Create.Entity.SubstitionText(groupIdentity, "Title");
+            var titleWithSubstitutions = Create.Entity.SubstitutionText(groupIdentity, "Title");
             var subSection = new InterviewTreeSubSection(groupIdentity, titleWithSubstitutions, Enumerable.Empty<QuestionnaireItemReference>());
             subSection.AddChildren(children);
             if (isDisabled) subSection.Disable();
@@ -1371,7 +1406,7 @@ namespace WB.Tests.Abc.TestFactories
         {
             sectionIdentity = sectionIdentity ?? Create.Entity.Identity(Guid.NewGuid());
 
-            var titleWithSubstitutions = Create.Entity.SubstitionText(sectionIdentity, "Title");
+            var titleWithSubstitutions = Create.Entity.SubstitutionText(sectionIdentity, "Title");
             var section = new InterviewTreeSection(sectionIdentity, titleWithSubstitutions, Enumerable.Empty<QuestionnaireItemReference>());
             section.AddChildren(children);
             if (isDisabled)
@@ -1382,7 +1417,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewTreeStaticText InterviewTreeStaticText(Identity staticTextIdentity, bool isDisabled = false)
         {
-            var titleWithSubstitutions = Create.Entity.SubstitionText(staticTextIdentity, "Title");
+            var titleWithSubstitutions = Create.Entity.SubstitutionText(staticTextIdentity, "Title");
             var staticText = new InterviewTreeStaticText(staticTextIdentity, titleWithSubstitutions);
             if (isDisabled) staticText.Disable();
             return staticText;
@@ -1408,7 +1443,7 @@ namespace WB.Tests.Abc.TestFactories
             string variableName = "var", QuestionType questionType = QuestionType.Text, object answer = null, IEnumerable<RosterVector> linkedOptions = null,
             Guid? cascadingParentQuestionId = null, bool isYesNo = false, bool isDecimal = false, Guid? linkedSourceId = null, Guid[] questionsUsingForSubstitution = null)
         {
-            var titleWithSubstitutions = Create.Entity.SubstitionText(questionIdentity, title);
+            var titleWithSubstitutions = Create.Entity.SubstitutionText(questionIdentity, title);
             var question = new InterviewTreeQuestion(questionIdentity, titleWithSubstitutions, variableName, questionType, answer, linkedOptions, 
                 cascadingParentQuestionId, isYesNo,  isDecimal, false, false, linkedSourceId);
 
@@ -1416,18 +1451,20 @@ namespace WB.Tests.Abc.TestFactories
             return question;
         }
 
-        public SubstitionText SubstitionText(Identity identity, 
+        public SubstitutionText SubstitutionText(Identity identity, 
             string title,
             SubstitutionVariables variables = null)
         {
-            return new SubstitionText(identity, title, variables ?? new SubstitutionVariables(), Mock.Of<ISubstitutionService>(), Mock.Of<IVariableToUIStringService>());
+            return new SubstitutionText(identity, title, variables ?? new SubstitutionVariables(), Mock.Of<ISubstitutionService>(), Mock.Of<IVariableToUIStringService>());
         }
 
-        public InterviewTree InterviewTree(Guid? interviewId = null, params InterviewTreeSection[] sections)
+        public InterviewTree InterviewTree(Guid? interviewId = null, IQuestionnaire questionnaire = null,
+            params InterviewTreeSection[] sections)
         {
             var tree = new InterviewTree(
                 interviewId ?? Guid.NewGuid(),
-                Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument()), Create.Service.SubstitionTextFactory());
+                questionnaire ?? Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument()),
+                Create.Service.SubstitutionTextFactory());
 
             tree.SetSections(sections);
 
@@ -1538,6 +1575,16 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
+        public InterviewPackage InterviewPackage(Guid? interviewId = null, AggregateRootEvent[] events = null)
+        {
+            var serializer = new JsonAllTypesSerializer();
+            return new InterviewPackage
+            {
+                InterviewId = interviewId ?? Guid.NewGuid(),
+                Events = events != null ? serializer.Serialize(events) : serializer.Serialize(new AggregateRootEvent[0])
+            };
+        }
+
         public InterviewSyncLogSummary InterviewSyncLogSummary(
             DateTime? firstDownloadInterviewDate = null,
             DateTime? lastDownloadInterviewDate = null,
@@ -1633,7 +1680,9 @@ namespace WB.Tests.Abc.TestFactories
                 readonlyUser.AsDynamic().Name = responsibleName;
             }
 
-            asDynamic.InterviewSummaries = interviewSummary;
+            if(interviewSummary != null)
+                asDynamic.InterviewSummaries = interviewSummary;
+            asDynamic.Answers = null;
 
             return result;
         }
@@ -1693,6 +1742,51 @@ namespace WB.Tests.Abc.TestFactories
             }
 
             public AssignmentDocument Build() => this._entity;
+        }
+
+        public InterviewAnswer InterviewAnswer(Identity identity, AbstractAnswer answer)
+        {
+            return new InterviewAnswer
+            {
+                Identity = identity,
+                Answer = answer
+            };
+        }
+
+        public AssignmentImportStatus AssignmentImportStatus()
+        {
+            return new AssignmentImportStatus();
+        }
+
+        public QuestionnaireExportStructure QuestionnaireExportStructure(QuestionnaireDocument questionnaire)
+        {
+            var fileSystemAccessor = new Mock<IFileSystemAccessor>();
+            fileSystemAccessor
+                .Setup(x => x.MakeStataCompatibleFileName(It.IsAny<string>()))
+                .Returns((string f) => f);
+
+            var exportViewFactory = new ExportViewFactory(
+                fileSystemAccessor.Object,
+                Mock.Of<IExportQuestionService>(),
+                Mock.Of<IQuestionnaireStorage>(),
+                new RosterStructureService());
+            return exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, new QuestionnaireIdentity(Guid.NewGuid(), 1));
+        }
+
+        public ExportQuestionService ExportQuestionService()
+        {
+            return new ExportQuestionService();
+        }
+
+        public AudioQuestion AudioQuestion(Guid qId, string variable)
+        {
+            return new AudioQuestion
+            {
+                PublicKey = qId,
+                StataExportCaption = variable,
+                QuestionScope = QuestionScope.Interviewer,
+                QuestionType = QuestionType.Audio
+            };
         }
     }
 }

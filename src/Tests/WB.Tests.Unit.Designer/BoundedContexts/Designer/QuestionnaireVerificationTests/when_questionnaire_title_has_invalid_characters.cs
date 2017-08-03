@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -9,18 +9,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_questionnaire_title_has_invalid_characters : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument();
             questionnaire.Title = "this is title [variable]";
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+        private void BecauseOf() => verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_WB0097_message = () => verificationMessages.ShouldContain(x => x.Code == "WB0097");
+        [NUnit.Framework.Test] public void should_return_WB0097_message () => verificationMessages.ShouldContain(x => x.Code == "WB0097");
 
-        It should_return_WB0097_message_with_appropriate_message = () =>
+        [NUnit.Framework.Test] public void should_return_WB0097_message_with_appropriate_message () =>
             verificationMessages.ShouldContain(x => x.Message == VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters);
 
         static QuestionnaireDocument questionnaire;

@@ -7,18 +7,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Macros
 {
     internal class when_deleting_macro : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: responsibleId);
             questionnaire.AddMacro(Create.Command.AddMacro(questionnaireId, macroId, responsibleId));
 
             deleteMacro = Create.Command.DeleteMacro(questionnaireId, macroId, responsibleId);
-        };
+            BecauseOf();
+        }
 
 
-        Because of = () => questionnaire.DeleteMacro(deleteMacro);
+        private void BecauseOf() => questionnaire.DeleteMacro(deleteMacro);
 
-        It should_doesnt_contain_Macro_with_EntityId_specified = () =>
+        [NUnit.Framework.Test] public void should_doesnt_contain_Macro_with_EntityId_specified () =>
             questionnaire.QuestionnaireDocument.Macros.ShouldNotContain(t => t.Key == macroId);
 
 

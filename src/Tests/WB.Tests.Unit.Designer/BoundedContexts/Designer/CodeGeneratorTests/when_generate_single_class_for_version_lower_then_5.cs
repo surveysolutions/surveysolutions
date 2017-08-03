@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -8,16 +8,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
 {
     internal class when_generate_single_class_for_version_lower_then_5 : CodeGeneratorTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = Create.QuestionnaireDocument();
             generator = Create.CodeGenerator();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() => generator.Generate(questionnaire,version));
 
-        It should_throw_VersionNotFoundException = () =>
+        [NUnit.Framework.Test] public void should_throw_VersionNotFoundException () =>
             exception.ShouldBeOfExactType<VersionNotFoundException>();
         
         private static int version = 4;

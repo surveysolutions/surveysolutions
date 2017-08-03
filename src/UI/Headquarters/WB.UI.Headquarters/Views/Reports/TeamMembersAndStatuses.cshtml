@@ -41,6 +41,11 @@
                     }, {
                         className: "type-numeric",
                         render: function (data, type, row) {
+                            return model.getLinkToInterviews(data, row, '@InterviewStatus.Restarted', model.Url.query['templateId'], model.Url.query['templateVersion']);
+                        }
+                    }, {
+                        className: "type-numeric",
+                        render: function (data, type, row) {
                             return model.getLinkToInterviews(data, row, '@InterviewStatus.Completed', model.Url.query['templateId'], model.Url.query['templateVersion']);
                         }
                     }, {
@@ -120,6 +125,7 @@
                                 <th data-name="Responsible" data-data="responsible">@Pages.TeamMember</th>
                                 <th data-name="SupervisorAssignedCount" data-data="supervisorAssignedCount">@Reports.SupervisorAssigned</th>
                                 <th data-name="InterviewerAssignedCount" data-data="interviewerAssignedCount">@Reports.InterviewerAssigned</th>
+                                <th data-name="RestartedCount" data-data="restartedCount">@Reports.Restarted</th>
                                 <th data-name="CompletedCount" data-data="completedCount">@Reports.Completed</th>
                                 <th data-name="RejectedBySupervisorCount" data-data="rejectedBySupervisorCount">@Reports.RejectedBySupervisor</th>
                                 <th data-name="ApprovedBySupervisorCount" data-data="approvedBySupervisorCount">@Reports.ApprovedBySupervisor</th>

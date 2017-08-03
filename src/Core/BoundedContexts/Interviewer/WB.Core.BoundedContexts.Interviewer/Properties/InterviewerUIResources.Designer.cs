@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to № {0}.
+        ///   Looks up a localized string similar to № {0}: {1}.
         /// </summary>
         public static string Dashboard_Assignment_CardTitle {
             get {
@@ -181,7 +181,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to № {0}.
+        ///   Looks up a localized string similar to № {0}, interview {1}.
         /// </summary>
         public static string Dashboard_InterviewCard_Title {
             get {

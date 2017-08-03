@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Text.RegularExpressions;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -9,29 +10,39 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
     {
         private const string SubstitutionVariableDelimiter = "%";
         private static readonly string AllowedSubstitutionVariableNameRegexp = String.Format(@"(?<={0})(\w+(?={0}))", SubstitutionVariableDelimiter);
-        private static readonly Regex AllowedSubstitutionVariableNameRx = new Regex(AllowedSubstitutionVariableNameRegexp);
+        private static readonly Regex AllowedSubstitutionVariableNameRx = new Regex(AllowedSubstitutionVariableNameRegexp, RegexOptions.Compiled);
+        private readonly ConcurrentDictionary<string, string[]> cache = new ConcurrentDictionary<string, string[]>();
+        private readonly string rosterTitle;
+
+        public SubstitutionService()
+        {
+            rosterTitle = string.Format("{0}{1}{0}", SubstitutionVariableDelimiter, RosterTitleSubstitutionReference);
+        }
 
         public string[] GetAllSubstitutionVariableNames(string source)
         {
             if (String.IsNullOrWhiteSpace(source))
-                return new string[0];
+                return Array.Empty<string>();
 
-            var allOccurenses = AllowedSubstitutionVariableNameRx.Matches(source).OfType<Match>().Select(m => m.Value).Distinct();
-            return allOccurenses.ToArray();
+            return cache.GetOrAdd(source, s =>
+            {
+                var allOccurenses = AllowedSubstitutionVariableNameRx.Matches(s)
+                    .OfType<Match>().Select(m => m.Value).Distinct();
+                
+                return allOccurenses.ToArray();
+            });
         }
 
         public string ReplaceSubstitutionVariable(string text, string variable, string replaceTo)
         {
-            return text.Replace(String.Format("{1}{0}{1}", variable, SubstitutionVariableDelimiter), replaceTo);
+            return text.Replace($"{SubstitutionVariableDelimiter}{variable}{SubstitutionVariableDelimiter}", replaceTo);
         }
 
         public string RosterTitleSubstitutionReference => "rostertitle";
 
         public bool ContainsRosterTitle(string input)
         {
-            if (string.IsNullOrEmpty(input)) return false;
-
-            return input.Contains(string.Format("{0}{1}{0}", SubstitutionVariableDelimiter, RosterTitleSubstitutionReference));
+            return !string.IsNullOrEmpty(input) && input.Contains(this.rosterTitle);
         }
 
         public string GenerateRosterName(string groupTitle, string rosterInstanceTitle)

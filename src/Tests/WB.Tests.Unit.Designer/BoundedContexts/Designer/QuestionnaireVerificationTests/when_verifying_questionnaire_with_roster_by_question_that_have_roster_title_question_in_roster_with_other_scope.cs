@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_roster_by_question_that_have_roster_title_question_in_roster_with_other_scope : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 new NumericQuestion("rosterSizeQuestion1")
                 {
@@ -60,24 +59,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 );
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_1_message = () =>
+        [NUnit.Framework.Test] public void should_return_1_message () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_message_with_code__WB0035__ = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_code__WB0035__ () =>
             verificationMessages.Single().Code.ShouldEqual("WB0035");
 
-        It should_return_message_with_1_references = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_1_references () =>
             verificationMessages.Single().References.Count().ShouldEqual(1);
 
-        It should_return_message_reference_with_type_Roster = () =>
+        [NUnit.Framework.Test] public void should_return_message_reference_with_type_Roster () =>
             verificationMessages.Single().References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
 
-        It should_return_message_reference_with_id_of_roster2Id = () =>
+        [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_roster2Id () =>
             verificationMessages.Single().References.First().Id.ShouldEqual(roster2Id);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

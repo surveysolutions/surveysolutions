@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -8,8 +8,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_deleting_question_and_question_is_referenced_as_roster_title_question_in_roster_triggered_by_multy_option_question : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             var chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             rosterSizeQuestionId = Guid.Parse("11111111111111111111111111111111");
@@ -38,13 +37,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 rosterTitleQuestionId,
                 rosterId,
                 responsibleId);
-        };
+            BecauseOf();
+        }
 
 
-        Because of = () =>
+        private void BecauseOf() =>
                 questionnaire.DeleteQuestion(rosterTitleQuestionId, responsibleId);
 
-        It should_doesnt_contain_question = () =>
+        [NUnit.Framework.Test] public void should_doesnt_contain_question () =>
           questionnaire.QuestionnaireDocument.Find<IQuestion>(rosterTitleQuestionId).ShouldBeNull();
 
         private static string rosterTitle;

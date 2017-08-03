@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
 {
     internal class when_updating_question_with_empty_cascading_options : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             rootGroupId = Guid.Parse("00000000000000000000000000000000");
             actorId = Guid.Parse("11111111111111111111111111111111");
             questionnaire = CreateQuestionnaireWithOneGroup(actorId, groupId: rootGroupId);
@@ -45,9 +44,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
                     new Option{Title = "one",Value = "1",Id = Guid.NewGuid()},
                     new Option{Title = "two",Value = "2",Id = Guid.NewGuid()}
                 });
-        };
+            BecauseOf();
+        }
 
-        Because of = () => questionnaire.UpdateSingleOptionQuestion(
+        private void BecauseOf() => questionnaire.UpdateSingleOptionQuestion(
             updatedQuestionId,
             "title",
             "var",
@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
                 linkedFilterExpression: null, properties: Create.QuestionProperties());
 
 
-        It should_contains_question_with_empty_answers = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_empty_answers () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(updatedQuestionId).Answers.Count().ShouldEqual(2);
 
 

@@ -207,7 +207,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             {
                 Id = interviewQuestion.Identity,
                 ParentId = interviewQuestion.Parent.Identity,
-                Title = interviewQuestion.Title.Text,
+                Title = interviewQuestion.Title.BrowserReadyText,
                 IsAnswered = interviewQuestion.IsAnswered(),
                 IsValid = interviewQuestion.IsValid,
                 AnswerString = GetAnswerAsString(interviewQuestion, questionnaire), 
@@ -299,6 +299,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             if (interviewQuestion.IsArea)
                 return interviewQuestion.AsArea.GetAnswer().Value;
+
+            if (interviewQuestion.IsAudio)
+                return interviewQuestion.AsAudio.GetAnswer().FileName;
 
             return null;
         }
@@ -489,7 +492,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             };
         }
 
-        private static ValidationView ToValidationView(SubstitionText[] validationMessages,
+        private static ValidationView ToValidationView(SubstitutionText[] validationMessages,
             FailedValidationCondition validationCondition, int failedValidationIndex)
             => new ValidationView
             {

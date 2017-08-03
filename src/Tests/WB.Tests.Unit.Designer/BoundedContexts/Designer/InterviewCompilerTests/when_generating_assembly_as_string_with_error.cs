@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.InterviewCompilerTests
     internal class when_generating_assembly_as_string_with_error : InterviewCompilerTestsContext
     {
 
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             compiler = CreateRoslynCompiler();
             referencedPortableAssemblies = CreateReferencesForCompiler();
 
@@ -21,19 +20,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.InterviewCompilerTests
             classes.Add(fileName, testClassToCompilePartTwo);
 
             generatedClasses = classes;
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             emitResult = compiler.TryGenerateAssemblyAsStringAndEmitResult(id, generatedClasses, referencedPortableAssemblies, out resultAssembly);
 
 
-        It should_faled = () =>
+        [NUnit.Framework.Test] public void should_faled () =>
             emitResult.Success.ShouldEqual(false);
 
-        It should_diagnostics_count_equal_1 = () =>
+        [NUnit.Framework.Test] public void should_diagnostics_count_equal_1 () =>
             emitResult.Diagnostics.Count().ShouldEqual(1);
 
-        It should_diagnostics_FilePath_equals_fileName = () =>
+        [NUnit.Framework.Test] public void should_diagnostics_FilePath_equals_fileName () =>
             emitResult.Diagnostics.First().Location.SourceTree.FilePath.ShouldEqual(fileName);
 
         private static IDynamicCompiler compiler;

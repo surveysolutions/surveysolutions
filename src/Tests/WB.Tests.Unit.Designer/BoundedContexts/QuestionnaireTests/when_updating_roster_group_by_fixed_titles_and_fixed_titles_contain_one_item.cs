@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_updating_roster_group_by_fixed_titles_and_fixed_titles_contain_one_item : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             var chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -24,19 +23,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddTextQuestion(Guid.NewGuid(),
                  chapterId,responsibleId);
             questionnaire.AddGroup(parentGroupId, responsibleId: responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(
                 () =>
                     questionnaire.UpdateGroup(groupId: groupId, responsibleId: responsibleId, title: "title", variableName: null,
                         description: null, condition: null, hideIfDisabled: false, rosterSizeQuestionId: null, isRoster: true,
                         rosterSizeSource: rosterSizeSourceType, rosterFixedTitles: new FixedRosterTitleItem[] { new FixedRosterTitleItem("1", "title 1") }, rosterTitleQuestionId: null));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message () =>
             new[] { "list", "contain", "two"}.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
         
         private static Questionnaire questionnaire;

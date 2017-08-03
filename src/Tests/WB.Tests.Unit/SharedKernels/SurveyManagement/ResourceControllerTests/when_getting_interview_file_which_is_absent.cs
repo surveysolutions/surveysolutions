@@ -1,28 +1,30 @@
 ﻿using System;
 using System.Web.Mvc;
-using Machine.Specifications;
-using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using FluentAssertions;
+using NUnit.Framework;
 using WB.UI.Headquarters.Controllers;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ResourceControllerTests
 {
     internal class when_getting_interview_file_which_is_absent : ResourceControllerTestContext
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void context()
         {
-            controller =
-                CreateController();
-        };
+            controller = CreateController();
+            Becauseof();
+        }
 
-        Because of = () =>
+        public void Becauseof() =>
             actionResult = controller.InterviewFile(interviewId, fileName);
 
-        It should_return_file_stream_result = () =>
-            actionResult.ShouldBeOfExactType<FileStreamResult>();
+        [Test]
+        public void should_return_file_stream_result() =>
+            actionResult.Should().BeOfType<FileStreamResult>();
 
-        It should_return_file_name_equal_to_no_image_found = () =>
-            ((FileStreamResult)actionResult).FileDownloadName.ShouldEqual("no_image_found.jpg");
+        [Test]
+        public void should_return_file_name_equal_to_no_image_found() =>
+            ((FileStreamResult)actionResult).FileDownloadName.Should().Be("no_image_found.jpg");
 
         private static ResourceController controller;
         private static ActionResult actionResult;

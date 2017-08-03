@@ -928,7 +928,7 @@
     <comment>{0} - Questionnaire name, {1} - Questionnaire version</comment>
   </data>
   <data name="ConfirmationNeededTitle" xml:space="preserve">
-    <value>Требуется подверждение</value>
+    <value>Требуется подтверждение</value>
   </data>
   <data name="HQ_LockWarning" xml:space="preserve">
     <value>Заблокированный хедквотер (галочка отмечена) не сможет войти на сайт и совершить какие-либо действия</value>
@@ -1006,5 +1006,30 @@
   <data name="InterviewerIsArchived" xml:space="preserve">
     <value>Интервьювер заархерирован</value>
     <comment>Интервьювер заархерирован</comment>
+  </data>
+  <data name="InterviewerHq_DiscardConfirm" xml:space="preserve">
+    <value>Вы уверены в том,что хотите удалить интервью?</value>
+  </data>
+  <data name="InterviewerHq_DiscardInterview" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="InterviewerHq_OpenInterview" xml:space="preserve">
+    <value>Открыть</value>
+  </data>
+  <data name="InterviewerHq_RestartConfirm" xml:space="preserve">
+    <value>Комментарий</value>
+  </data>
+  <data name="InterviewerHq_RestartInterview" xml:space="preserve">
+    <value>Переоткрыть</value>
+    <comment>Переоткрыть</comment>
+  </data>
+  <data name="CautionTitle" xml:space="preserve">
+    <value>Внимание:</value>
+  </data>
+  <data name="ExcludeEsriTitle" xml:space="preserve">
+    <value> Отключить поддержку карт ESRI</value>
+  </data>
+  <data name="GetEsriExtraDescription" xml:space="preserve">
+    <value>Она нужна только если вы пользуетесь функциональностью ESRI GIS. Включение этой фунции значительно увеличит размер приложения и время загрузки.</value>
   </data>
 </root>

@@ -1,2 +1,2 @@
-cd src\UI\Headquarters\WB.UI.Headquarters.Interview\src
-start npm run dev
+cd src\UI\Headquarters\WB.UI.Headquarters.Interview
+start yarn run build

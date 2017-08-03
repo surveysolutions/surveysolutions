@@ -8,8 +8,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
 {
     internal class when_deserializing_command_of_type__UpdateGroup__with_questionnaire_id_and_group_id_and_title_and_propogation_kind_and_description_and_condition : CommandDeserializerTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             type = "UpdateGroup";
 
             title = @"<b width='7'>MA<font color='red'>IN</font></b><img /><script> alert('hello world!')</script><script/>";
@@ -27,24 +26,25 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
             }}";
 
             deserializer = CreateCommandDeserializer();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             result = deserializer.Deserialize(type, command);
 
-        It should_return_NewUpdateGroupCommand = () =>
+        [NUnit.Framework.Test] public void should_return_NewUpdateGroupCommand () =>
             result.ShouldBeOfExactType<UpdateGroup>();
 
-        It should_return_same_title_in_NewUpdateGroupCommand = () =>
+        [NUnit.Framework.Test] public void should_return_same_title_in_NewUpdateGroupCommand () =>
             ((UpdateGroup)result).Title.ShouldEqual(sanitizedTitle);
 
-        It should_return_same_questionnaire_id_in_NewUpdateGroupCommand = () =>
+        [NUnit.Framework.Test] public void should_return_same_questionnaire_id_in_NewUpdateGroupCommand () =>
             ((UpdateGroup)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));
 
-        It should_return_same_group_id_in_NewUpdateGroupCommand = () =>
+        [NUnit.Framework.Test] public void should_return_same_group_id_in_NewUpdateGroupCommand () =>
             ((UpdateGroup)result).GroupId.ShouldEqual(Guid.Parse(groupId));
 
-        It should_return_same_condition_in_NewUpdateGroupCommand = () =>
+        [NUnit.Framework.Test] public void should_return_same_condition_in_NewUpdateGroupCommand () =>
             ((UpdateGroup)result).Condition.ShouldEqual(condition);
 
         private static ICommand result;

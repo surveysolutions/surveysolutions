@@ -43,4 +43,9 @@
 
   <dimen name="Interview_Readonly_Question_Layout_margin_left">36dp</dimen>
   <dimen name="Interview_Readonly_Question_Layout_margin_right">90dp</dimen>
+
+  <dimen name="Interview_Audio_Dialog_Remove_Button_Margin_Left">16dp</dimen>
+  <dimen name="Interview_Audio_Dialog_Visualizer_Min_Width">16dp</dimen>
+  <dimen name="Interview_Audio_Dialog_Visualizer_Max_Width">150dp</dimen>
+  <dimen name="Interview_Audio_Dialog_Visualizer_Dot_Width">7dp</dimen>
 </resources>

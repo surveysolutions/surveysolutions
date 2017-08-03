@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -10,28 +10,28 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_moving_roster_to_roster : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddGroup(roster1Id, chapterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.FixedTitles,
                 rosterSizeQuestionId: null, rosterFixedTitles: new[] { new FixedRosterTitleItem("1", "test"), new FixedRosterTitleItem("2", "test 2") });
             
             questionnaire.AddGroup(roster2Id, chapterId, responsibleId: responsibleId, isRoster:true);
-        };
+            BecauseOf();
+        }
 
 
-        Because of = () =>
+        private void BecauseOf() =>
                 questionnaire.MoveGroup(roster1Id, roster2Id, 0, responsibleId);
 
-        private It should_raise_QuestionnaireItemMoved_event = () =>
+        [NUnit.Framework.Test] public void should_raise_QuestionnaireItemMoved_event () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(roster1Id).ShouldNotBeNull();
 
-        It should_raise_QuestionnaireItemMoved_event_with_GroupId_specified = () =>
+        [NUnit.Framework.Test] public void should_raise_QuestionnaireItemMoved_event_with_GroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(roster1Id)
            .PublicKey.ShouldEqual(roster1Id);
 
-        It should_raise_QuestionnaireItemMoved_event_with_roster2Id_specified = () =>
+        [NUnit.Framework.Test] public void should_raise_QuestionnaireItemMoved_event_with_roster2Id_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(roster1Id)
             .GetParent().PublicKey.ShouldEqual(roster2Id);
 

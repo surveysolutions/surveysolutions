@@ -1,8 +1,8 @@
 ﻿<ProjectConfiguration>
   <Settings>
     <HiddenComponentWarnings>
-      <Value>AbnormalReferenceResolution</Value>
       <Value>NUnitTestsWithSameName</Value>
+      <Value>AssemblyReferenceToBuildOutputDirectory</Value>
     </HiddenComponentWarnings>
     <PreviouslyBuiltSuccessfully>True</PreviouslyBuiltSuccessfully>
   </Settings>

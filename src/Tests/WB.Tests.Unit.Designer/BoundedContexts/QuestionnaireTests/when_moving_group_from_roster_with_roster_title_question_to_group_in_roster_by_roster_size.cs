@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -7,8 +7,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_moving_group_from_roster_with_roster_title_question_to_group_in_roster_by_roster_size_question : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddNumericQuestion(
@@ -31,19 +30,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 FixedRosterTitles = null,
                 RosterTitleQuestionId = rosterTitleQuestionId
             });*/
-        };
+            BecauseOf();
+        }
 
-        Because of = () => questionnaire.MoveGroup(groupFromSourceRosterId, groupFromTargetRosterId, 0, responsibleId);
+        private void BecauseOf() => questionnaire.MoveGroup(groupFromSourceRosterId, groupFromTargetRosterId, 0, responsibleId);
 
 
-        It should_contains_group = () =>
+        [NUnit.Framework.Test] public void should_contains_group () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupFromSourceRosterId).ShouldNotBeNull();
 
-        It should_contains_group_with_GroupId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_group_with_GroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupFromSourceRosterId)
                 .PublicKey.ShouldEqual(groupFromSourceRosterId);
 
-        It should_contains_group_with_ParentGroupId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_group_with_ParentGroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupFromSourceRosterId)
                 .GetParent().PublicKey.ShouldEqual(groupFromTargetRosterId);
 

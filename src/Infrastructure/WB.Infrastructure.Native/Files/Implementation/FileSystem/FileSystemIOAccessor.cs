@@ -114,7 +114,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             return fileNameWithReplaceInvalidChars.Substring(0, Math.Min(fileNameWithReplaceInvalidChars.Length, 128));
         }
 
-        public void CopyFileOrDirectory(string sourceDir, string targetDir, bool overrideAll = false)
+        public void CopyFileOrDirectory(string sourceDir, string targetDir, bool overrideAll = false, string[] fileExtentionsFilter = null)
         {
             var attr = File.GetAttributes(sourceDir);
             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
@@ -126,14 +126,15 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                 this.CreateDirectory(destDir);
 
                 foreach (var file in this.GetFilesInDirectory(sourceDir))
-                    File.Copy(file, this.CombinePath(destDir, this.GetFileName(file)), overrideAll);
+                    this.CopyFile(file, targetDir, overrideAll, fileExtentionsFilter);
+                
 
                 foreach (var directory in this.GetDirectoriesInDirectory(sourceDir))
                     this.CopyFileOrDirectory(directory, this.CombinePath(destDir, sourceDirectoryName), overrideAll);
             }
             else
             {
-                this.CopyFile(sourceDir, targetDir);
+                this.CopyFile(sourceDir, targetDir, overrideAll, fileExtentionsFilter);
             }
         }
 
@@ -166,11 +167,18 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             }
         }
 
-        private void CopyFile(string sourcePath, string backupFolderPath, bool overrideAll = false)
+        private void CopyFile(string sourcePath, string backupFolderPath, bool overrideAll, string[] fileExtentionsFilter)
         {
             var sourceFileName = this.GetFileName(sourcePath);
             if (sourceFileName == null)
                 return;
+
+            if (fileExtentionsFilter != null)
+            {
+                if (!fileExtentionsFilter.Contains(GetFileExtension(sourcePath), StringComparer.InvariantCultureIgnoreCase))
+                    return;
+            }
+
             File.Copy(sourcePath, this.CombinePath(backupFolderPath, sourceFileName), overrideAll);
         }
 

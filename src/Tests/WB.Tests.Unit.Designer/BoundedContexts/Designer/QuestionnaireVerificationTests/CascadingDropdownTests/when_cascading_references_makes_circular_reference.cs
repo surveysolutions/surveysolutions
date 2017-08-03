@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_cascading_references_makes_circular_reference : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             parentSingleOptionQuestionId = Guid.Parse("9E96D4AB-DF91-4FC9-9585-23FA270B25D7");
             childCascadedComboboxId = Guid.Parse("C6CC807A-3E81-406C-A110-1044AE3FD89B");
             grandChildCascadingQuestion = Guid.Parse("90331351-B36E-4272-81BB-013369E27458"); 
@@ -56,17 +55,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 }
                 );
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => verificationErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+        private void BecauseOf() => verificationErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_WB0087_error = () => verificationErrors.First().Code.ShouldEqual("WB0087");
+        [NUnit.Framework.Test] public void should_return_WB0087_error () => verificationErrors.First().Code.ShouldEqual("WB0087");
 
-        It should_return_references_to_cycled_entities = () => 
+        [NUnit.Framework.Test] public void should_return_references_to_cycled_entities () => 
             verificationErrors.SelectMany(x => x.References).ShouldEachConformTo(x =>
                 new[]{parentSingleOptionQuestionId, childCascadedComboboxId, grandChildCascadingQuestion}.Contains(x.Id));
 
-        It should_return_errors_with_references_to_questions = () => 
+        [NUnit.Framework.Test] public void should_return_errors_with_references_to_questions () => 
             verificationErrors.SelectMany(x => x.References)
                               .ShouldEachConformTo(x => x.Type == QuestionnaireVerificationReferenceType.Question);
 

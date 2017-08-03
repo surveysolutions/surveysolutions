@@ -1,12 +1,13 @@
 ﻿@using Humanizer
-@using Microsoft.Practices.ServiceLocation
+@using Main.Core.Entities.SubEntities
 @using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.BoundedContexts.Headquarters.Views.Device
 @using WB.Core.GenericSubdomains.Portable
+@using WB.Core.GenericSubdomains.Portable.ServiceLocation
 @model WB.UI.Headquarters.Models.InterviewerProfileModel
 
 @{
-    ViewBag.ActivePage = MenuItem.Interviewers;
+    ViewBag.ActivePage = MenuItem.Profile;
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = string.Format(Pages.InterviewerProfile_TitleFormat, Model.LoginName);
     var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
@@ -88,9 +89,12 @@ else
         <div class="row">
             @Html.Partial("_alerts")
             <div class="page-header">
-                <ol class="breadcrumb">
-                    <li><a href="@Url.Action("Index", "Interviewers")">@Pages.InterviewerProfile_Interviewers</a></li>
-                </ol>
+                @if (!authorizedUser.IsInterviewer)
+                {
+                    <ol class="breadcrumb">
+                        <li><a href="@Url.Action("Index", "Interviewers")">@Pages.InterviewerProfile_Interviewers</a></li>
+                    </ol>
+                }
                 <h1>
                     @string.Format(Pages.InterviewerProfile_AssignedToFormat, Model.LoginName, Model.SupervisorName)
                 </h1>
@@ -102,19 +106,22 @@ else
                         <li>@string.Format(Pages.InterviewerProfile_FullNameFormat, Model.FullName)</li>
                         <li>@string.Format(Pages.InterviewerProfile_PhoneFormat, Model.Phone)</li>
                     }
-                    
-                    <li>
-                        @if (!Model.IsArchived)
-                        {
-                            <a href="@Url.Action("Edit", new {Id = Model.Id})">@Pages.InterviewerProfile_Info</a>
-                        }
-                        else
-                        {
-                            @Pages.InterviewerIsArchived
 
-                            if (authorizedUser.IsAdministrator)
+                    <li>
+                        @if (!User.IsInRole(UserRoles.Interviewer.ToString()))
+                        {
+                            if (!Model.IsArchived)
                             {
-                                <text>(<a href="@Url.Action("UnArchive", new {Id = Model.Id})">@Pages.Unarchive</a>)</text>
+                                <a href="@Url.Action("Edit", new {Id = Model.Id})">@Pages.InterviewerProfile_Info</a>
+                            }
+                            else
+                            {
+                                @Pages.InterviewerIsArchived
+
+                                if (authorizedUser.IsAdministrator)
+                                {
+                                    <text>(<a href="@Url.Action("UnArchive", new {Id = Model.Id})">@Pages.Unarchive</a>)</text>
+                                }
                             }
                         }
                     </li>

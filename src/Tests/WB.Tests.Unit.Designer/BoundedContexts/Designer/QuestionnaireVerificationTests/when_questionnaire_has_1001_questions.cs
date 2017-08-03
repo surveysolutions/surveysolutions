@@ -10,18 +10,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_questionnaire_has_1001_questions : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = Create.QuestionnaireDocumentWithOneChapter(
                 children: Enumerable.Range(1, 1001).Select(_ => Create.TextQuestion()).ToArray<IComposite>());
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             messages = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
-        It should_return_warning_WB0205 = () =>
+        [NUnit.Framework.Test] public void should_return_warning_WB0205 () =>
             messages.ShouldContainWarning("WB0205");
 
         private static QuestionnaireDocument questionnaire;

@@ -1,10 +1,6 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Machine.Specifications;
 
 using Moq;
-using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
@@ -45,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
         Because of = () => viewModel.SignInCommand.Execute();
 
         It should_not_navigate_to_dashboard = () =>
-            ViewModelNavigationServiceMock.Verify(x => x.NavigateToDashboard(), Times.Never);
+            ViewModelNavigationServiceMock.Verify(x => x.NavigateToDashboard(null), Times.Never);
 
         It should_not_show_online_login_button = () =>
             viewModel.IsOnlineLoginButtonVisible.ShouldBeFalse();

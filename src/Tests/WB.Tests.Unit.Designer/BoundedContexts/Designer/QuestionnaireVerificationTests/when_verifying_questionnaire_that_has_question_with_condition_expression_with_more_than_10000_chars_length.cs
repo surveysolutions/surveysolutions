@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -8,14 +8,13 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
     internal class when_verifying_questionnaire_that_has_question_with_condition_expression_with_more_than_10000_chars_length : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
                 Create.Group(groupId: groupId, children: new[]
@@ -36,27 +35,28 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verifier = CreateQuestionnaireVerifier(expressionProcessorGenerator: questionnireExpressionProcessorGeneratorMock.Object);
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_1_message = () =>
+        [NUnit.Framework.Test] public void should_return_1_message () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_message_with_code__WB0094 = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_code__WB0094 () =>
             verificationMessages.First().Code.ShouldEqual("WB0094");
 
-        It should_return_message_with_one_references = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_one_references () =>
             verificationMessages.First().References.Count().ShouldEqual(1);
 
-        It should_return_message_with_one_references_with_question_type = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_one_references_with_question_type () =>
             verificationMessages.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_message_with_one_references_with_id_equals_questionId = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_one_references_with_id_equals_questionId () =>
             verificationMessages.First().References.First().Id.ShouldEqual(questionId);
 
-        It should_not_call_GenerateProcessorStateAssembly = () =>
+        [NUnit.Framework.Test] public void should_not_call_GenerateProcessorStateAssembly () =>
             questionnireExpressionProcessorGeneratorMock.Verify(x => x.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<int>(), out generationResult), Times.Never);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

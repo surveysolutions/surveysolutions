@@ -536,4 +536,31 @@ Specify usernames for supervisors or enumerators to make batch assignments.</val
   <data name="AssignmentsAreNotCreated" xml:space="preserve">
     <value>No assignments were created</value>
   </data>
+  <data name="Import_VerificationOfAssignmentData" xml:space="preserve">
+    <value>Verification of assignment data</value>
+  </data>
+  <data name="Import_VerificationOfAssignments_ForQuestionnaire" xml:space="preserve">
+    <value>Verification of assignments for questionnaire {0}</value>
+  </data>
+  <data name="Import_VerificationOfDataFile" xml:space="preserve">
+    <value>Verification of data file</value>
+  </data>
+  <data name="Import_VerificationOfDataFile_Progress" xml:space="preserve">
+    <value>step {0} of {1}</value>
+  </data>
+  <data name="Import_VerificationOfDataFile_Succeeded" xml:space="preserve">
+    <value>Verification of data file succeeded</value>
+  </data>
+  <data name="Import_Verification_1_AssignmentVerified" xml:space="preserve">
+    <value>1 assignment verified successfully</value>
+  </data>
+  <data name="Import_Verification_1_Error" xml:space="preserve">
+    <value>1 error</value>
+  </data>
+  <data name="Import_Verification_AssignmentsVerified" xml:space="preserve">
+    <value>{0} assignments verified successfully</value>
+  </data>
+  <data name="Import_Verification_Errors" xml:space="preserve">
+    <value>{0} errors</value>
+  </data>
 </root>
