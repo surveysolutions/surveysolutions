@@ -1,11 +1,13 @@
 import Vue from "vue"
 import Vuex from "vuex"
 
+Vue.use(Vuex)
+
 import { safeStore } from "../errors"
 
 import actions from "./store.actions"
 import connection from "./store.connection"
-import fetch from "./store.fetch"
+import { fetch } from "./store.fetch.js"
 import mutations from "./store.mutations"
 import sidebar from "./store.sidebar"
 

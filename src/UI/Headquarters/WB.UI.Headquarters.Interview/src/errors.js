@@ -23,7 +23,7 @@ function wrap(name, method, section) {
     // tslint:disable-next-line:only-arrow-functions - we need arguments param here, it cannot be used in arrow function
     return function() {
         try {
-            if (verboseMode && !(window as any).NODEBUG) {
+            if (verboseMode && !(window ).NODEBUG) {
                 const argument = arguments[1] == null ? null : JSON.parse(JSON.stringify(arguments[1]))
 
                 console.debug("call", section, name, argument) // , new Error().stack)
@@ -68,7 +68,7 @@ export function safeStore(storeConfig, fieldToSafe = ["actions", "mutations"]) {
         }
     }
 
-    storeConfig.actions.UNHANDLED_ERROR = (ctx, error: Error) => {
+    storeConfig.actions.UNHANDLED_ERROR = (ctx, error) => {
         toastErr(error, error.message)
     }
 

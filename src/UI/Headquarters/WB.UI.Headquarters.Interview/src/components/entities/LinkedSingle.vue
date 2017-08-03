@@ -16,7 +16,7 @@
         </div>
     </wb-question>
 </template>
-<script lang="ts">
+<script lang="js">
     import { entityDetails } from "components/mixins"
     import * as find from "lodash/find"
     import * as isEqual from "lodash/isequal"

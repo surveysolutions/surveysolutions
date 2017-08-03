@@ -13,7 +13,7 @@
         </footer>
     </div>
 </template>
-<script lang="ts">
+<script lang="js">
     export default {
         name: 'wb-layout',
         computed: {

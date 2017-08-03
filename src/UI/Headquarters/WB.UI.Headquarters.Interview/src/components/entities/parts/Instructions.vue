@@ -7,7 +7,7 @@
         <button v-else type="button" class="btn btn-link" @click="show">Show instruction</button>
     </div>
 </template>
-<script lang="ts">
+<script lang="js">
     import { mapGetters } from "vuex"
     import { entityPartial } from "components/mixins"
 

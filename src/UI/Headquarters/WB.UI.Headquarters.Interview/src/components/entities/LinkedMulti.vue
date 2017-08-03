@@ -15,7 +15,7 @@
         </div>
     </wb-question>
 </template>
-<script lang="ts">
+<script lang="js">
     import { entityDetails } from "components/mixins"
 
     import * as map from "lodash/map"

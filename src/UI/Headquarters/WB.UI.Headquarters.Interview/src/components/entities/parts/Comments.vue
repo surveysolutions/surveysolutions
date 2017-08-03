@@ -19,7 +19,7 @@
         </div>
     </div>
 </template>
-<script lang="ts">
+<script lang="js">
     import { entityPartial } from "components/mixins"
 
     export default {
@@ -53,7 +53,7 @@
                 return 'Comment';
             },
             postComment(evnt) {
-                const com: string = this.comment
+                const com = this.comment
 
                 if (!com || !com.trim())
                     return

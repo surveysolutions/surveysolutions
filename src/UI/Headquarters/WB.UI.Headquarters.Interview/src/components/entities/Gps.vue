@@ -18,21 +18,16 @@
         </div>
     </wb-question>
 </template>
-<script lang="ts">
+<script lang="js">
     import { entityDetails } from "components/mixins"
     import { googleApiKey } from "src/config"
 
-    class GpsAnswer implements IGpsAnswer {
-        latitude: number
-        longitude: number
-        accuracy: number
-        altitude: number
-        timestamp: number
-        constructor(latitude: number,
-            longitude: number,
-            accuracy: number,
-            altitude: number,
-            timestamp: number) {
+    class GpsAnswer {
+        constructor(latitude,
+            longitude,
+            accuracy,
+            altitude,
+            timestamp) {
             this.latitude = latitude
             this.longitude = longitude
             this.accuracy = accuracy

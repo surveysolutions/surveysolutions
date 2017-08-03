@@ -8,7 +8,7 @@
         </div>
     </aside>
 </template>
-<script lang="ts">
+<script lang="js">
     import SidebarPanel from "./SidebarPanel"
     import Vue from "vue"
 

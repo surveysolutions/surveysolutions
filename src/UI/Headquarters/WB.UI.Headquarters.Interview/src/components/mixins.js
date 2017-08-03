@@ -18,7 +18,7 @@ export const entityPartial = {
     props: ["id"]
 }
 
-export function detailsMixin(fetchMethod: string, defaults) {
+export function detailsMixin(fetchMethod, defaults) {
     return {
         computed: {
             $me() {

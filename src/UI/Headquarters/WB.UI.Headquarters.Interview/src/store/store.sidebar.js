@@ -6,11 +6,6 @@ import { apiCaller } from "../api"
 import { safeStore } from "../errors"
 import { batchedAction } from "../helpers"
 
-declare interface ISidebarState {
-    panels: ISidebarPanel[],
-    sidebarHidden: boolean
-}
-
 export default safeStore({
     state: {
         panels: {
@@ -23,7 +18,7 @@ export default safeStore({
     actions: {
 
         fetchSidebar: batchedAction(async ({ commit }, ids) => {
-            const sideBar = await apiCaller<ISidebar>(api => api.getSidebarChildSectionsOf(ids))
+            const sideBar = await apiCaller(api => api.getSidebarChildSectionsOf(ids))
             commit("SET_SIDEBAR_STATE", sideBar)
         }, null, null),
 
@@ -34,31 +29,31 @@ export default safeStore({
                 dispatch("fetchSidebar", panel.id)
             }
         },
-        toggleSidebarPanel({ commit, state }, newState = null): void {
+        toggleSidebarPanel({ commit, state }, newState = null) {
             commit("SET_SIDEBAR_HIDDEN", newState == null ? !state.sidebarHidden : newState)
         }
     },
 
     mutations: {
-        SET_SIDEBAR_STATE(state: ISidebarState, sideBar: ISidebar) {
+        SET_SIDEBAR_STATE(state, sideBar) {
             const byParentId = groupBy(sideBar.groups, "parentId")
             forEach(byParentId, (panels, id) => {
                 Vue.set(state.panels, id, panels)
             })
         },
-        SET_SIDEBAR_TOGGLE(state: ISidebarState, { panel, collapsed }) {
+        SET_SIDEBAR_TOGGLE(state, { panel, collapsed }) {
             panel.collapsed = collapsed
         },
-        SET_SIDEBAR_HIDDEN(state, sidebarHidden: boolean) {
+        SET_SIDEBAR_HIDDEN(state, sidebarHidden) {
             state.sidebarHidden = sidebarHidden
         }
     },
 
     getters: {
-        hasSidebarData(state: ISidebarState, getters) {
+        hasSidebarData(state, getters) {
             return getters.rootSections.length > 0
         },
-        rootSections(state: ISidebarState) {
+        rootSections(state) {
             /* tslint:disable:no-string-literal */
             if (state.panels["null"]) {
                 return state.panels["null"]

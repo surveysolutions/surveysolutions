@@ -3,7 +3,7 @@
         <div>Loading, please wait</div>
     </div>
 </template>
-<script lang="ts">
+<script lang="js">
     import * as delay from "lodash/delay"
 
     export default {
@@ -15,7 +15,7 @@
             }
         },
         watch: {
-            isLoading(to: Boolean, from: Boolean) {
+            isLoading(to, from) {
                 if (from === false) {
                     this.timerId = delay(() => this.visible = to, this.delay)
                 } else {
@@ -27,7 +27,7 @@
                     this.visible = this.to
                 }
             },
-            '$store.state.connection.isDisconnected' (to: Boolean, from: Boolean) {
+            '$store.state.connection.isDisconnected' (to, from) {
                 if (to) {
                     this.visible = false
                 }

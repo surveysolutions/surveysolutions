@@ -1,7 +1,7 @@
 function modal(action) {
     require.ensure(["bootbox", "bootstrap-sass/assets/javascripts/bootstrap/modal"], r => {
         const jQuery = require("jquery")
-        const $ = (window as any).$ = (window as any).jQuery = jQuery
+       // const $ = (window).$ = (window).jQuery = jQuery
         require("bootstrap-sass/assets/javascripts/bootstrap/modal")
         action(require("bootbox"))
     }, "libs")

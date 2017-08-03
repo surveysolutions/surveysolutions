@@ -21,7 +21,7 @@
         <wb-progress :visible="isFetchInProgress" :valuenow="valuenow" :valuemax="valuemax" />
     </div>
 </template>
-<script lang="ts">
+<script lang="js">
     import { getLocationHash } from "src/store/store.fetch"
 
     export default {
