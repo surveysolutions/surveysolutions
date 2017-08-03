@@ -157,9 +157,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                             var fileContent = manager.ExecuteInQueryTransaction(
                                 () => audioFileStorage.GetInterviewBinaryData(interviewId, questionsWithAnswersOnAudioQuestion));
 
-                            this.fileSystemAccessor.WriteAllBytes(
-                                this.fileSystemAccessor.CombinePath(filesFolderForInterview, questionsWithAnswersOnAudioQuestion),
-                                fileContent);
+                            if (fileContent != null)
+                            {
+                                var pathToFile = this.fileSystemAccessor.CombinePath(filesFolderForInterview, questionsWithAnswersOnAudioQuestion);
+                                this.fileSystemAccessor.WriteAllBytes(pathToFile, fileContent);
+                            }
                         }
                     }
                 }
