@@ -16,11 +16,12 @@ namespace WB.UI.Shared.Enumerator.CustomControls
     [Register("WB.UI.Shared.Enumerator.CustomControls.InstantAutoCompleteTextView")]
     public class InstantAutoCompleteTextView: AppCompatAutoCompleteTextView
     {
-        private readonly object adapterLock = new object();
-
         public InstantAutoCompleteTextView(Context context, IAttributeSet attrs)
             : this(context, attrs, new MvxFilteringAdapter(context))
         {
+            // note - we shouldn't realy need both of these... but we do
+            this.ItemClick += OnItemClick;
+            this.ItemSelected += OnItemSelected;
         }
 
         public InstantAutoCompleteTextView(Context context, IAttributeSet attrs, MvxFilteringAdapter adapter)
@@ -29,11 +30,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             var itemTemplateId = MvxAttributeHelpers.ReadListItemTemplateId(context, attrs);
             adapter.ItemTemplateId = itemTemplateId;
             this.Adapter = adapter;
-
-            // note - we shouldn't realy need both of these... but we do (ask Roma)
             this.ItemClick += this.OnItemClick;
-            this.ItemSelected += OnItemSelected;
-
             this.EditorAction += this.OnEditorAction;
             this.Click += OnEditTextClick;
         }
@@ -61,7 +58,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
         protected virtual void OnItemSelected(int position)
         {
-            lock (adapterLock)
+            lock (this.Adapter)
                 this.SelectedObject = this.Adapter.GetRawItem(position);
             
             this.ClearFocus();
@@ -102,7 +99,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             get => this.Adapter.ItemsSource;
             set
             {
-                lock (adapterLock)
+                lock (this.Adapter)
                     this.Adapter.ItemsSource = value;
             }
         }
@@ -120,7 +117,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {
                 if (this.Adapter.PartialText == value) return;
 
-                lock (adapterLock)
+                lock (this.Adapter)
                 {
                     var adapter = base.Adapter;
                     base.Adapter = null;
