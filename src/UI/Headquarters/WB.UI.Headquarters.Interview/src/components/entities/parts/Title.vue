@@ -1,7 +1,7 @@
 <template>
     <h5 v-dateTimeFormatting v-html="$me.title"></h5>
 </template>
-<script lang="ts">
+<script lang="js">
     import { entityPartial } from "components/mixins"
 
     export default {

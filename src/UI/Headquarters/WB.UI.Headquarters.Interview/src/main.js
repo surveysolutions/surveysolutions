@@ -1,17 +1,13 @@
-import "es6-promise/auto"
+require("babel-polyfill");
+global.jQuery = require('jquery');
 
 import { assetsPath } from "./config"
-declare const process: any
-declare let __webpack_public_path__: any
 
 if (process.env.NODE_ENV === "production") {
     __webpack_public_path__ = assetsPath
 }
 
 import Vue from "vue"
-import Vuex from "vuex"
-
-Vue.use(Vuex)
 
 import * as poly from "smoothscroll-polyfill"
 poly.polyfill()
@@ -24,7 +20,7 @@ import "./components/entities"
 import "./components/entities/parts"
 import "./directives"
 
-import "./errors.ts"
+import "./errors"
 import router from "./router"
 import store from "./store"
 

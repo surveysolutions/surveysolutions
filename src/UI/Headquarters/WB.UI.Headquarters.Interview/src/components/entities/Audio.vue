@@ -41,11 +41,11 @@
         <!-- /.modal -->
     </wb-question>
 </template>
-<script lang="ts">
+<script lang="js">
 import { entityDetails } from "components/mixins"
 import * as $ from 'jquery'
 import * as moment from "moment"
-const AudioRecorder = new ((window as any).AudioRecorder)
+const AudioRecorder = new window.AudioRecorder
 
 export default {
     name: 'Audio',

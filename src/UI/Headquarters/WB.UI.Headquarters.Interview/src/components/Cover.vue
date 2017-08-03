@@ -56,7 +56,7 @@
     </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import * as isEmpty from "lodash/isempty"
 
 export default {
@@ -93,7 +93,7 @@ export default {
         fetch() {
             this.$store.dispatch("fetchCoverInfo")
         },
-        getGpsUrl(question: IReadonlyPrefilledQuestion) {
+        getGpsUrl(question) {
             return `http://maps.google.com/maps?q=${question.answer}`
         },
         navigateTo(commentedQuestion) {

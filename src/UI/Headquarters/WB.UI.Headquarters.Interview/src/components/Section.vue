@@ -6,7 +6,7 @@
     </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
     import * as debounce from "lodash/debounce"
     import SectionProgress from "./SectionLoadProgress"
 

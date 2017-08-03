@@ -14,7 +14,7 @@
         </div>
     </wb-question>
 </template>
-<script lang="ts">
+<script lang="js">
     import { entityDetails } from "components/mixins"
     import * as $ from 'jquery'
 
@@ -77,7 +77,7 @@
 
                         const reader = new FileReader()
                         reader.onload = (e) => {
-                            const imageUri = (e.target as any).result
+                            const imageUri = (e.target ).result
                             self.uploadingImage = imageUri
                         }
 

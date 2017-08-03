@@ -1,9 +1,6 @@
 import startup from "startup"
-
 import app from "interviewer/CreateNewApp"
-
 import store from "store"
-
 
 store.registerModule('createNew', {
     actions: {

@@ -3,7 +3,7 @@
         <a class="btn btn-lg" :class="css" @click="navigate"><span>{{ $me.title}}</span></a>
     </div>
 </template>
-<script lang="ts">
+<script lang="js">
     import { entityDetails } from "components/mixins"
     import { GroupStatus, ButtonType } from "components/entities"
 

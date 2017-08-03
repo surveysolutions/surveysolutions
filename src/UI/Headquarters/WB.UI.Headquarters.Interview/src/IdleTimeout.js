@@ -3,11 +3,10 @@ import modal from "./modal"
 import store from "./store"
 
 class IdleTimeouter {
-    private shown: boolean
     constructor() {
         this.shown = false
     }
-    public show() {
+     show() {
         if (!this.shown) {
             this.shown = true
             store.dispatch("stop")
@@ -30,10 +29,10 @@ class IdleTimeouter {
         }
     }
 
-    public start() {
+     start() {
         setInterval(() => {
             if (!this.shown) {
-                const minutesAfterLastAction = diffInMinutes(new Date(), (store.state as any).lastActivityTimestamp)
+                const minutesAfterLastAction = diffInMinutes(new Date(), (store.state ).lastActivityTimestamp)
 
                 if (Math.abs(minutesAfterLastAction) > 15) {
                     this.show()

@@ -30,6 +30,12 @@ var webpackConfig = merge(baseWebpackConfig, {
         new webpack.DefinePlugin({
             'process.env': env
         }),
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery',
+            "window.jQuery": 'jquery',
+            "window.$": 'jquery'
+        }),
         new webpack.optimize.UglifyJsPlugin({
             compress: {
                 warnings: false
@@ -56,6 +62,7 @@ var webpackConfig = merge(baseWebpackConfig, {
             // necessary to consistently work with multiple chunks via CommonsChunkPlugin
             chunksSortMode: 'dependency'
         }),
+       // new (require('inline-chunk-manifest-html-webpack-plugin'))(),
         new ScriptExtHtmlWebpackPlugin({
             defaultAttribute: 'defer'
         }),
@@ -106,7 +113,7 @@ if (config.bundleAnalyzerReport) {
         analyzerMode: 'static',
         reportFilename: 'stats.html',
         openAnalyzer: false,
-        statsOptions: { chunkModules: true, assets: true },
+        statsOptions: { chunkModules: true, assets: true , reasons: true},
     }))
 }
 

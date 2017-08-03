@@ -5,7 +5,7 @@
         </div>
     </div>
 </template>
-<script lang="ts">
+<script lang="js">
     import * as delay from "lodash/delay"
     export default {
         name: "wb-progress",
@@ -16,7 +16,7 @@
             delay: { type: Number, default: 150 } // 100 ms default delay
         },
         watch: {
-            visible(to: Boolean, from: Boolean) {
+            visible(to, from) {
                 if (from === false) {
                     this.timerId = delay(() => this.isVisible = to, this.delay)
                 } else {

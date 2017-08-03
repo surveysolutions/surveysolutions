@@ -12,7 +12,7 @@ export default {
     },
 
     async loadInterview({ commit }) {
-        const info = await apiCaller<IInterviewInfo>(api => api.getInterviewDetails())
+        const info = await apiCaller(api => api.getInterviewDetails())
         commit("SET_INTERVIEW_INFO", info)
         const flag = await apiCaller(api => api.hasCoverPage())
         commit("SET_HAS_COVER_PAGE", flag)
@@ -20,7 +20,7 @@ export default {
     },
 
     async getLanguageInfo({ commit }) {
-        const languageInfo = await apiCaller<ILanguageInfo>(api => api.getLanguageInfo())
+        const languageInfo = await apiCaller(api => api.getLanguageInfo())
         commit("SET_LANGUAGE_INFO", languageInfo)
     },
 
@@ -81,7 +81,7 @@ export default {
     answerQRBarcodeQuestion({ dispatch }, { identity, text }) {
         apiCallerAndFetch(identity, api => api.answerQRBarcodeQuestion(identity, text))
     },
-    removeAnswer({ dispatch }, questionId: string) {
+    removeAnswer({ dispatch }, questionId) {
         apiCallerAndFetch(questionId, api => api.removeAnswer(questionId))
     },
     sendNewComment({ dispatch }, { questionId, comment }) {
@@ -97,12 +97,12 @@ export default {
     },
 
     fetchSectionEntities: debounce(async ({ commit }) => {
-        const routeParams = (router.currentRoute.params as any)
+        const routeParams = (router.currentRoute.params )
         const id = routeParams.sectionId
         const isPrefilledSection = id === undefined
 
         if (isPrefilledSection) {
-            const prefilledPageData: IPrefilledPageData = await apiCaller(api => api.getPrefilledEntities())
+            const prefilledPageData = await apiCaller(api => api.getPrefilledEntities())
             if (!prefilledPageData.hasAnyQuestions) {
                 const loc = {
                     name: "section",
@@ -117,7 +117,7 @@ export default {
                 commit("SET_SECTION_DATA", prefilledPageData.entities)
             }
         } else {
-            const section: IInterviewEntityWithType[] = await apiCaller(api => api.getSectionEntities(id))
+            const section = await apiCaller(api => api.getSectionEntities(id))
             commit("SET_SECTION_DATA", section)
         }
     }, 200),
@@ -128,11 +128,11 @@ export default {
     },
     // called by server side. navigate to finish page
     finishInterview({ state, dispatch }) {
-        const routeParams = (router.currentRoute.params as any)
+        const routeParams = (router.currentRoute.params )
         location.replace(router.resolve({ name: "finish", params: { interviewId: routeParams.interviewId } }).href)
     },
     // called by server side. refresh
-    refreshEntities({ state, dispatch }, questions: string[]) {
+    refreshEntities({ state, dispatch }, questions) {
         let needSectionUpdate = false
 
         questions.forEach(id => {
@@ -146,7 +146,7 @@ export default {
         dispatch("refreshSectionState", null)
     },
     // called by server side. refresh
-    refreshComment({ state, dispatch }, questionId: string) {
+    refreshComment({ state, dispatch }, questionId) {
         if (state.entityDetails[questionId]) { // do not fetch entity comments that is no in the visible list
             dispatch("fetchQuestionComments", questionId)
         }
@@ -161,7 +161,7 @@ export default {
     }, 200),
 
     fetchSectionEnabledStatus: debounce(async ({ state }) => {
-        const routeParams = (router.currentRoute.params as any)
+        const routeParams = (router.currentRoute.params )
         const currentSectionId = routeParams.sectionId
         const isPrefilledSection = currentSectionId === undefined
 
@@ -197,16 +197,16 @@ export default {
     }, 200),
 
     fetchCoverInfo: debounce(async ({ commit }) => {
-        const coverInfo = await apiCaller<ICoverInfo>(api => api.getCoverInfo())
+        const coverInfo = await apiCaller(api => api.getCoverInfo())
         commit("SET_COVER_INFO", coverInfo)
     }, 200),
 
     fetchQuestionComments: debounce(async ({ commit }, questionId) => {
-        const comments = await apiCaller<IComment[]>(api => api.getQuestionComments(questionId))
+        const comments = await apiCaller(api => api.getQuestionComments(questionId))
         commit("SET_QUESTION_COMMENTS", { questionId, comments})
     }, 200),
 
-    completeInterview({ dispatch }, comment: string) {
+    completeInterview({ dispatch }, comment) {
         apiCaller(api => api.completeInterview(comment))
     },
 
@@ -217,7 +217,7 @@ export default {
     changeLanguage({ commit }, language) {
         apiCaller(api => api.changeLanguage(language))
     },
-    stop(): void {
+    stop() {
         apiStop()
     }
 }
