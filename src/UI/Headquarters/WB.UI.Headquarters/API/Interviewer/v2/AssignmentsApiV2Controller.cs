@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,7 +19,7 @@ namespace WB.UI.Headquarters.API.Interviewer.v2
         private readonly IAssignmentsService assignmentsService;
 
         public AssignmentsApiV2Controller(IAuthorizedUser authorizedUser,
-            IAssignmentsService assignmentsService, IAssignmentViewFactory assignmentViewFactory)
+            IAssignmentsService assignmentsService)
         {
             this.authorizedUser = authorizedUser;
             this.assignmentsService = assignmentsService;
@@ -59,7 +58,7 @@ namespace WB.UI.Headquarters.API.Interviewer.v2
                 assignmentApiViews.Add(new AssignmentApiView
                 {
                     Id = assignment.Id,
-                    Quantity = assignment.InterviewsNeeded,
+                    Quantity = assignment.InterviewsNeeded + assignment.InterviewsProvided,
                     QuestionnaireId = assignment.QuestionnaireId
                 });
             }

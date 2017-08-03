@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -14,14 +14,13 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfFactoryTests
 {
     public class when_load_and_shared_persons_contains_requested_user : PdfFactoryTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var accountDocument = Create.AccountDocument(userName);
             var questionnaireDocument = Create.QuestionnaireDocument();
 
@@ -45,12 +44,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfFactoryTests
                 questionnaireStorage: questionnaireRepository, 
                 questionnaireChangeHistoryStorage: questionnaireChangeHistoryStorage,
                 questionnaireListViewItemStorage: questionnaireListItemStorage);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             view = factory.Load(questionnaireId.FormatGuid(), userId, userName);
 
-        It should_shared_persons_be_empty = () =>
+        [NUnit.Framework.Test] public void should_shared_persons_be_empty () =>
             view.SharedPersons.ShouldBeEmpty();
 
         private static PdfQuestionnaireModel view;

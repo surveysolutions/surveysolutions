@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_moving_roster_in_paralell_roster_scope_but_roster_size_question_is_left: QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var rosterSizeQuestionId = Guid.Parse("31111111111111111111111111111111");
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
 
@@ -23,16 +22,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             questionnaire.AddGroup( groupId, parallelRosterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
                 rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.MoveGroup(groupId, anotherRosterId, 0, responsibleId));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__question_placed_deeper_then_roster = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__question_placed_deeper_then_roster () =>
             new[] { "roster", "question", "deeper" }.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
 
         private static Questionnaire questionnaire;

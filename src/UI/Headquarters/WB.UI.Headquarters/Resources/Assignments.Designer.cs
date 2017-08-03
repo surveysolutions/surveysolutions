@@ -124,7 +124,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specify maximum number of interviews to be generated for that assignment (Quantity).
+        ///   Looks up a localized string similar to Specify maximum number of interviews to be generated for that assignment (Quantity). Permitted values: -1 is for Unlimited assignment, 0 is for Empty assignment, numbers for assignment size..
         /// </summary>
         public static string CreateAssignment_QuantityInstruction {
             get {
@@ -147,6 +147,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string CreatedAt {
             get {
                 return ResourceManager.GetString("CreatedAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start new interview.
+        /// </summary>
+        public static string CreateInterview {
+            get {
+                return ResourceManager.GetString("CreateInterview", resourceCulture);
             }
         }
         
@@ -201,6 +210,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string QuantityExplanation {
             get {
                 return ResourceManager.GetString("QuantityExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire.
+        /// </summary>
+        public static string Questionnaire {
+            get {
+                return ResourceManager.GetString("Questionnaire", resourceCulture);
             }
         }
         

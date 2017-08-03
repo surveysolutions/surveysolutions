@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_roster_by_question_that_have_roster_title_as_multimedia_question : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 new NumericQuestion("rosterSizeQuestion1")
                 {
@@ -43,30 +42,31 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 });
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_1_message = () =>
+        [NUnit.Framework.Test] public void should_return_1_message () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_message_with_code__WB0035__ = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_code__WB0035__ () =>
             verificationMessages.Single().Code.ShouldEqual("WB0083");
 
-        It should_return_message_with_2_references = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_2_references () =>
             verificationMessages.Single().References.Count().ShouldEqual(2);
 
-        It should_return_first_message_reference_with_type_Roster = () =>
+        [NUnit.Framework.Test] public void should_return_first_message_reference_with_type_Roster () =>
             verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
 
-        It should_return_first_message_reference_with_id_rosterId = () =>
+        [NUnit.Framework.Test] public void should_return_first_message_reference_with_id_rosterId () =>
            verificationMessages.Single().References.First().Id.ShouldEqual(rosterId);
 
-        It should_return_second_message_reference_with_type_group = () =>
+        [NUnit.Framework.Test] public void should_return_second_message_reference_with_type_group () =>
            ShouldExtensionMethods.ShouldEqual(verificationMessages.Single().References.Second().Type, QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_second_message_reference_with_id_rosterTitleMultimediaQuestionId = () =>
+        [NUnit.Framework.Test] public void should_return_second_message_reference_with_id_rosterTitleMultimediaQuestionId () =>
            ShouldExtensionMethods.ShouldEqual(verificationMessages.Single().References.Second().Id, rosterTitleMultimediaQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

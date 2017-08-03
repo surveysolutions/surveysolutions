@@ -130,7 +130,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         public QuantityByResponsibleReportView QuantityByInterviewers(QuantityByInterviewersReportModel data)
         {
-
             var input = new QuantityByInterviewersReportInputModel
             {
                SupervisorId = data.SupervisorId ?? this.authorizedUser.Id,

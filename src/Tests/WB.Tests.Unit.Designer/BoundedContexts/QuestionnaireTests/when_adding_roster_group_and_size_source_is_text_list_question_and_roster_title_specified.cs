@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_adding_roster_group_and_size_source_is_text_list_question_and_roster_title_specified : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             var chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -28,18 +27,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 responsibleId);
 
             questionnaire.AddGroup(parentGroupId, responsibleId: responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.AddGroupAndMoveIfNeeded(
                     groupId: groupId, responsibleId: responsibleId, title: "title", variableName: null, rosterSizeQuestionId: rosterSizeQuestionId, description: null,
                     condition: null, hideIfDisabled: false, parentGroupId: parentGroupId, isRoster: true, rosterSizeSource: rosterSizeSourceType, rosterFixedTitles: null, rosterTitleQuestionId: rosterTitleQuestionId));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
         
-        It should_throw_exception_with_message = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message () =>
             new[] { "list", "cannot", "have", "roster", "title", "question" }.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
         
         private static Questionnaire questionnaire;

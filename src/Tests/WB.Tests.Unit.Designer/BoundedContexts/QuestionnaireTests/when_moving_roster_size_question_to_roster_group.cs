@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_moving_roster_size_question_to_roster_group : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             rosterGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -34,20 +33,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             
             AddGroup(questionnaire: questionnaire, groupId: rosterGroupId, parentGroupId: targetRosterGroupId, condition: null,
                 responsibleId: responsibleId, rosterSizeQuestionId: rosterSizeQuestionId, isRoster: true);
-        };
+            BecauseOf();
+        }
 
 
-        Because of = () =>
+        private void BecauseOf() =>
             questionnaire.MoveQuestion(rosterSizeQuestionId, chapterId, targetIndex: 0, responsibleId: responsibleId);
 
-        It should_contains_question = () =>
+        [NUnit.Framework.Test] public void should_contains_question () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(rosterSizeQuestionId).ShouldNotBeNull();
 
-        It should_contains_question_with_GroupId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_GroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(rosterSizeQuestionId)
            .PublicKey.ShouldEqual(rosterSizeQuestionId);
 
-        It should_contains_question_with_chapterId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_chapterId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(rosterSizeQuestionId)
             .GetParent().PublicKey.ShouldEqual(chapterId);
 

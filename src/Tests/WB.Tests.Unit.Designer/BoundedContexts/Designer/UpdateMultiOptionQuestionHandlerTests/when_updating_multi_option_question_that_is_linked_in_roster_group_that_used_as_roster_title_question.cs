@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
 {
     internal class when_updating_multi_option_question_that_is_linked_in_roster_group_that_used_as_roster_title_question : QuestionnaireTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddGroup(anotherRosterId, responsibleId: responsibleId, isRoster: true);
@@ -26,10 +25,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
 
             questionnaire.UpdateGroup(anotherRosterId, responsibleId, "rosterTitle", "", rosterSizeQuestionId, "", null, false, true,
                 RosterSizeSourceType.Question, null, rosterTitleQuestionId);
-            
-        };
+            BecauseOf();
 
-        Because of = () =>
+        }
+
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateMultiOptionQuestion(
                 questionId: rosterTitleQuestionId,
@@ -48,10 +48,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                 yesNoView: yesNoView, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
                 linkedFilterExpression: null, properties: Create.QuestionProperties()));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__categorical_could_not_be_roster_title_question__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__categorical_could_not_be_roster_title_question__ () =>
            new[] { "linked categorical multi-select question could not be used as a roster title question in sub-section(s)" }.ShouldEachConformTo(
                keyword => exception.Message.ToLower().Contains(keyword));
 

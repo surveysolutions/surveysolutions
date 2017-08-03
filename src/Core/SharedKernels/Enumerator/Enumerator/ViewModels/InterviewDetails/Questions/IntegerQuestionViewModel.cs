@@ -157,7 +157,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (answerModel.IsAnswered)
             {
                 this.Answer = answerModel.GetAnswer().Value;
-                this.previousAnswer = Monads.Maybe(() => this.Answer);
+                this.previousAnswer = this.Answer;
             }
             this.isRosterSizeQuestion = questionnaire.ShouldQuestionSpecifyRosterSize(entityIdentity.Id);
             var isRosterSizeOfLongRoster = questionnaire.IsQuestionIsRosterSizeForLongRoster(entityIdentity.Id);

@@ -8,8 +8,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
 {
     internal class when_deserializing_command_of_type__DeleteQuestion__with_questionnaire_id_and_question_id : CommandDeserializerTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             type = "DeleteQuestion";
 
             questionnaireId = "11111111-1111-1111-1111-111111111111";
@@ -21,18 +20,19 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
             }}", questionnaireId, questionId);
 
             deserializer = CreateCommandDeserializer();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             result = deserializer.Deserialize(type, command);
 
-        It should_return_NewDeleteQuestionCommand = () =>
+        [NUnit.Framework.Test] public void should_return_NewDeleteQuestionCommand () =>
             result.ShouldBeOfExactType<DeleteQuestion>();
 
-        It should_return_same_questionnaire_id_in_NewDeleteQuestionCommand = () =>
+        [NUnit.Framework.Test] public void should_return_same_questionnaire_id_in_NewDeleteQuestionCommand () =>
             ((DeleteQuestion)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));
 
-        It should_return_same_question_id_in_NewDeleteQuestionCommand = () =>
+        [NUnit.Framework.Test] public void should_return_same_question_id_in_NewDeleteQuestionCommand () =>
             ((DeleteQuestion)result).QuestionId.ShouldEqual(Guid.Parse(questionId));
 
         private static ICommand result;

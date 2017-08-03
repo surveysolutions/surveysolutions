@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
@@ -31,19 +32,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(Moq.It.IsAny<PreloadedDataByFile>(), "_responsible")).Returns(-1);
             preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(Moq.It.IsAny<PreloadedDataByFile>(), "_quantity")).Returns(-1);
 
-            preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object);
+            importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object);
         };
 
         Because of =
             () =>
                 result =
-                    preloadedDataVerifier.VerifyAssignmentsSample(questionnaireId, 1, preloadedDataByFile);
+                    importDataVerifier.VerifyAssignmentsSample(questionnaireId, 1, preloadedDataByFile);
 
         It should_result_has_no_errors = () =>
            result.Errors.ShouldBeEmpty();
 
-        private static PreloadedDataVerifier preloadedDataVerifier;
-        private static VerificationStatus result;
+        private static ImportDataVerifier importDataVerifier;
+        private static ImportDataVerificationState result;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private const string QuestionnaireCsvFileName = "questionnaire.csv";

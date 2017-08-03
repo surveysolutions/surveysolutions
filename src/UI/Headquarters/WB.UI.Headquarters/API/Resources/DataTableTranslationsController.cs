@@ -23,6 +23,7 @@ namespace WB.UI.Headquarters.API.Resources
                 sLoadingRecords = "<div>" + DataTables.LoadingRecords + "</div>",
                 sProcessing = "<div>" + DataTables.Processing + "</div>",
                 sSearch = DataTables.Search,
+                searchPlaceholder = DataTables.SearchPlaceholder,
                 sZeroRecords = DataTables.ZeroRecords,
                 oPaginate = new
                 {

@@ -147,4 +147,16 @@
   <data name="UserRoles_ApiUser" xml:space="preserve">
     <value>ApiUser</value>
   </data>
+  <data name="MenuItem_Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="MenuItem_Rejected" xml:space="preserve">
+    <value>Rejected</value>
+  </data>
+  <data name="MenuItem_Started" xml:space="preserve">
+    <value>Started</value>
+  </data>
+  <data name="MenuItem_Profile" xml:space="preserve">
+    <value>Profile</value>
+  </data>
 </root>

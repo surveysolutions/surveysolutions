@@ -113,6 +113,7 @@
                 series: [
                     { label: 'Supervisor assigned' },
                     { label: 'Interviewer assigned' },
+                    { label: 'Restarted' },
                     { label: 'Completed' },
                     { label: 'Rejected by Supervisor' },
                     { label: 'Approved by Supervisor' },
@@ -139,7 +140,7 @@
                     showSwatches: true,
                     location: 'n',
                     rendererOptions: {
-                        numberColumns: 7
+                        numberColumns: 8
                     }
                 },
                 grid: {

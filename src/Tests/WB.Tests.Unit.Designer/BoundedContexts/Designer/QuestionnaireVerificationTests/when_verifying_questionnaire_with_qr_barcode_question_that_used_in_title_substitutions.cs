@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_qr_barcode_question_that_used_in_title_substitutions : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument(
                 Create.TextQuestion(
                     questionWithSubstitutionToQRBarcodeId,
@@ -25,12 +24,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 ));
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_messages_be_empty = () => verificationMessages.ShouldBeEmpty();
+        [NUnit.Framework.Test] public void should_messages_be_empty () => verificationMessages.ShouldBeEmpty();
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

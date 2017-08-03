@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_question_inside_roster_with_title_which_contains_roster_title_as_substitution_reference : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionId = Guid.Parse("10000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument(
                 Create.FixedRoster(variable: "a",
@@ -37,12 +36,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 );
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_0_error = () =>
+        [NUnit.Framework.Test] public void should_return_0_error () =>
             verificationMessages.Count().ShouldEqual(0);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

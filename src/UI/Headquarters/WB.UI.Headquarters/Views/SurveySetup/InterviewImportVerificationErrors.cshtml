@@ -1,5 +1,6 @@
-﻿@using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData
-@model WB.Core.BoundedContexts.Headquarters.Views.PreloadedData.PreloadedDataVerificationErrorsView
+﻿@using WB.Core.BoundedContexts.Headquarters.AssignmentImport
+@using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData
+@model WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser.ImportDataParsingErrorsView
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = BatchUpload.VerifySampleData;
@@ -33,13 +34,13 @@
                     <p>@BatchUpload.AssignmentsAreNotCreated</p>
                 </div>
                 <h3 class="error-text">
-                    @if (Model.Errors.Length == 1)
+                    @if (Model.Errors.Length + Model.ImportErrors.Length == 1)
                     {
                         @:@BatchUpload.SingleErrorFound
                     }
                     else
                     {
-                        @:@string.Format(BatchUpload.MultipleErrorsWereFound, Model.Errors.Length)
+                        @:@string.Format(BatchUpload.MultipleErrorsWereFound, Model.Errors.Length + Model.ImportErrors.Length)
                     }
                 </h3>
                 @foreach (var error in Model.Errors)
@@ -72,6 +73,12 @@
                                 @if (reference.PositionY.HasValue){<span>@BatchUpload.Row: @(reference.PositionY + 1)</span>})
                             </p>
                         }
+                    </div>
+                }
+                @foreach (InterviewImportError error in Model.ImportErrors)
+                {
+                    <div class="error-block">
+                        <h5 class="error-text">@error.ErrorMessage</h5>
                     </div>
                 }
                 <div class="action-buttons">

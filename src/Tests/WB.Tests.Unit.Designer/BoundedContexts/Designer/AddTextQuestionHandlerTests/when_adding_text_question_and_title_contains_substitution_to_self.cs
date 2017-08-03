@@ -11,13 +11,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
 {
     internal class when_adding_text_question_and_title_contains_substitution_to_self : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId: responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
                 questionnaire.AddTextQuestion(
                     questionId: questionId,
                     parentId: chapterId,
@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
                     mask: null,
                     responsibleId: responsibleId);
 
-        It should_update_question_text = () =>
+        [NUnit.Framework.Test] public void should_update_question_text () =>
             questionnaire.QuestionnaireDocument.GetQuestion<TextQuestion>(questionId)
                 .QuestionText.ShouldEqual(titleWithSubstitutionToSelf);
         

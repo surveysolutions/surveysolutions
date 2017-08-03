@@ -28,6 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage
             int takeCount, int skip = 0) where TResult : class;
 
         TEntity FirstOrDefault();
+        TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate);
         IReadOnlyCollection<TEntity> LoadAll();
         int Count(Expression<Func<TEntity, bool>> predicate);
         int Count();

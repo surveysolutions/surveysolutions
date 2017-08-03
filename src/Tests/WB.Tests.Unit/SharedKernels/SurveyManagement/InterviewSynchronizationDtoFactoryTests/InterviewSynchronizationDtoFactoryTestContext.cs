@@ -6,6 +6,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -18,6 +19,7 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationDtoFactoryTests
 {
+    [TestOf(typeof(InterviewSynchronizationDtoFactory))]
     internal class InterviewSynchronizationDtoFactoryTestContext
     {
         protected static InterviewSynchronizationDtoFactory CreateInterviewSynchronizationDtoFactory(QuestionnaireDocument document)

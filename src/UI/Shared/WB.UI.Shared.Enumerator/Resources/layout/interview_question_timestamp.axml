@@ -14,7 +14,7 @@
                      android:stretchColumns="0">
           <TableRow>
             <TextView style="@style/Interview_Question_RecordedAnswer"
-                      local:MvxBind="Text Answer; Visible QuestionState.IsAnswered" />
+                      local:MvxBind="Text Answer; Visible QuestionState.IsAnswered; Tag Format('Answer_{0}', Identity)" />
             <include layout="@layout/interview_question__remove_button_recorded" />
           </TableRow>
         </TableLayout>
@@ -22,7 +22,8 @@
           local:MvxBind="HideKeyboardOnClick .; 
                           Click SaveAnswerCommand; 
                           Text Localization('Interview_Questions_Timestamp_SaveAnswer'); 
-                          BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
+                          BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));
+                          Tag Format('btnAnswer_{0}', Identity)" />
       </LinearLayout>
 
     </LinearLayout>

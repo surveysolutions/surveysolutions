@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -9,21 +9,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MoveVariableHandlerTes
 {
     internal class when_moving_variable_and_entity_does_not_exists : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddVariable(entityId, parentId : chapterId, responsibleId:responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.MoveStaticText(entityId: notExistingEntityId, responsibleId: responsibleId, targetEntityId: chapterId, targetIndex: 0));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__item_cant_found__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__item_cant_found__ () =>
              new[] { "item", "can't", "found" }.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
 
         

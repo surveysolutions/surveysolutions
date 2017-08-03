@@ -9,23 +9,23 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Translations
 {
     internal class when_adding_or_updating_translation_without_premission_to_edit : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: ownerId);
             questionnaire.AddSharedPerson(sharedPersonId, "email@email.com", ShareType.View, ownerId);
             addOrUpdateTranslation = Create.Command.AddOrUpdateTranslation(questionnaireId, translationId, "", sharedPersonId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() => questionnaire.AddOrUpdateTranslation(addOrUpdateTranslation));
 
-        It should_throw_exception = () =>
+        [NUnit.Framework.Test] public void should_throw_exception () =>
             exception.ShouldNotBeNull();
 
-        It should_throw_questionnaire_exception = () =>
+        [NUnit.Framework.Test] public void should_throw_questionnaire_exception () =>
             exception.ShouldBeOfExactType(typeof(QuestionnaireException));
 
-        It should_throw_exception_with_type_DoesNotHavePermissionsForEdit = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_type_DoesNotHavePermissionsForEdit () =>
             ((QuestionnaireException)exception).ErrorType.ShouldEqual(DomainExceptionType.DoesNotHavePermissionsForEdit);
 
         private static Exception exception;

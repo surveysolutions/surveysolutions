@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
 {
     internal class when_updating_single_option_question_with_not_null_linkedQuestion_and_with_options : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(parentGroupId, responsibleId: responsibleId);
             questionnaire.AddGroup(rosterId, parentGroupId, responsibleId: responsibleId, isRoster: true);
@@ -32,9 +31,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                     instructions: "old instructions",
                     enablementCondition: "old condition");
             questionnaire.AddGroup( groupFromRosterId,  rosterId, responsibleId: responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateSingleOptionQuestion(
                     questionId: questionId,
@@ -50,14 +50,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                     options: options,
                     linkedToEntityId: linkedToQuestionId,
                     isFilteredCombobox: isFilteredCombobox,
-                    cascadeFromQuestionId: ñascadeFromQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
+                    cascadeFromQuestionId: cascadeFromQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
                 linkedFilterExpression: null, properties: Create.QuestionProperties()));
 
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__roster_pre_filled_ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__roster_pre_filled_ () =>
             new[] { "categorical question cannot be with answers and linked to another question in the same time" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
@@ -78,6 +78,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
         private static Guid linkedToQuestionId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static bool isFilteredCombobox = false;
-        private static Guid? ñascadeFromQuestionId = (Guid?)null;
+        private static Guid? cascadeFromQuestionId = (Guid?)null;
     }
 }

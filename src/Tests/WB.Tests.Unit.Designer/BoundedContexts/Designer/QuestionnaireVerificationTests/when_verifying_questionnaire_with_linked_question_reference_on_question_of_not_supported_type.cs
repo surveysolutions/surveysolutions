@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_linked_question_reference_on_question_of_not_supported_type : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             linkedQuestionId = Guid.Parse("10000000000000000000000000000000");
             notSupportedForLinkingQuestionId = Guid.Parse("13333333333333333333333333333333");
             questionnaire = CreateQuestionnaireDocument(
@@ -37,33 +36,34 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     }
                 ));
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_1_message = () =>
+        [NUnit.Framework.Test] public void should_return_1_message () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_message_with_code__WB0012__ = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_code__WB0012__ () =>
             verificationMessages.Single().Code.ShouldEqual("WB0012");
 
-        It should_return_message_with_level_general = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_level_general () =>
             verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
-        It should_return_message_with_two_references = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_two_references () =>
             verificationMessages.Single().References.Count().ShouldEqual(2);
 
-        It should_return_first_message_reference_with_type_Question = () =>
+        [NUnit.Framework.Test] public void should_return_first_message_reference_with_type_Question () =>
             verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_first_message_reference_with_id_of_linkedQuestionId = () =>
+        [NUnit.Framework.Test] public void should_return_first_message_reference_with_id_of_linkedQuestionId () =>
             verificationMessages.Single().References.First().Id.ShouldEqual(linkedQuestionId);
 
-        It should_return_last_message_reference_with_type_Question = () =>
+        [NUnit.Framework.Test] public void should_return_last_message_reference_with_type_Question () =>
            verificationMessages.Single().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_last_message_reference_with_id_of_notSupportedForLinkingQuestionId = () =>
+        [NUnit.Framework.Test] public void should_return_last_message_reference_with_id_of_notSupportedForLinkingQuestionId () =>
             verificationMessages.Single().References.Last().Id.ShouldEqual(notSupportedForLinkingQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

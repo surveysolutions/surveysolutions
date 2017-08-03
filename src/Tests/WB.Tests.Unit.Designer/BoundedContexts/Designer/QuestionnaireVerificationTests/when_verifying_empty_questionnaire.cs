@@ -9,23 +9,23 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_empty_questionnaire : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument();
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_1_message = () =>
+        [NUnit.Framework.Test] public void should_return_1_message () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_message_with_code__WB0001__ = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_code__WB0001__ () =>
             verificationMessages.Single().Code.ShouldEqual("WB0001");
 
-        It should_return_message_with_empty_references = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_empty_references () =>
             verificationMessages.Single().References.ShouldBeEmpty();
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

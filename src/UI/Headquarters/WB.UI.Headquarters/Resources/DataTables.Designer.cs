@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to : activate to sort column ascending.
+        ///   Looks up a localized string similar to : activate to sort column in ascending order.
         /// </summary>
         public static string Aria_SortAscending {
             get {
@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to : activate to sort column descending.
+        ///   Looks up a localized string similar to : activate to sort column in descending order.
         /// </summary>
         public static string Aria_SortDescending {
             get {
@@ -201,6 +201,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Search {
             get {
                 return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search....
+        /// </summary>
+        public static string SearchPlaceholder {
+            get {
+                return ResourceManager.GetString("SearchPlaceholder", resourceCulture);
             }
         }
         

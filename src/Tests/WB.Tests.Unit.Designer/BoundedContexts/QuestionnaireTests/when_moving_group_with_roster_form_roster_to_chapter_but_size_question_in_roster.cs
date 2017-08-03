@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_moving_group_with_roster_form_roster_to_chapter_but_size_question_in_roster : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddGroup(groupId,  chapterId, responsibleId: responsibleId);
@@ -20,16 +19,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             questionnaire.AddGroup( roster2Id, roster1Id, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
                 rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.MoveGroup(roster2Id, groupId, 0, responsibleId));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__question_placed_deeper_then_roster = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__question_placed_deeper_then_roster () =>
             new[] { "roster", "question", "deeper" }.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
 
         private static Questionnaire questionnaire;

@@ -10,13 +10,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
 {
     internal class when_adding_text_question_and_title_contains_substitution_to_invalid_question : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.AddTextQuestion(
                     questionId: questionId,
@@ -33,10 +33,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
                      mask: null,
                     responsibleId: responsibleId));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__title___not_existing_variable_name__as__substitution__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__title___not_existing_variable_name__as__substitution__ () =>
             new[] { "text", "contains", "unknown", "substitution" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 

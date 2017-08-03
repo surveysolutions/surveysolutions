@@ -7,14 +7,13 @@ using System.Web.Http.Routing;
 using Machine.Specifications;
 using Moq;
 using WB.UI.Designer.Api.Attributes;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.Applications.AttributesTests
 {
     internal class when_api_basic_auth_attribute_handles_on_authorization_with_no_passed_value : AttributesTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var context = new Mock<HttpConfiguration>();
             
             var requestMessage = new HttpRequestMessage();
@@ -26,12 +25,13 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
             filterContext = new HttpActionContext(controllerContext, actionDescriptor.Object);
 
             attribute = CreateApiBasicAuthAttribute();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             attribute.OnAuthorization(filterContext);
 
-        It should_return_unauthorized_status_code = () =>
+        [NUnit.Framework.Test] public void should_return_unauthorized_status_code () =>
             filterContext.Response.StatusCode.ShouldEqual(HttpStatusCode.Unauthorized);
 
         private static ApiBasicAuthAttribute attribute;

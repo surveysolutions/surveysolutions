@@ -7,8 +7,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTest
 {
     internal class when_saving_lookup_table_without_5001_rows
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             fileContent = $"no{_}rowcode{_}column{_end}";
             for (int i = 0; i < 5001; i++)
             {
@@ -16,19 +15,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTest
             }
 
             lookupTableService = Create.LookupTableService();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 lookupTableService.SaveLookupTableContent(questionnaireId, lookupTableId, fileContent));
 
-        It should_throw_exception = () =>
+        [NUnit.Framework.Test] public void should_throw_exception () =>
             exception.ShouldNotBeNull();
 
-        It should_throw_ArgumentException = () =>
+        [NUnit.Framework.Test] public void should_throw_ArgumentException () =>
             exception.ShouldBeOfExactType<ArgumentException>();
 
-        It should_throw_ArgumentException1 = () =>
+        [NUnit.Framework.Test] public void should_throw_ArgumentException1 () =>
             ((ArgumentException)exception).Message.ShouldEqual(string.Format(ExceptionMessages.LookupTables_too_many_rows, 5000));
 
         private static Exception exception;

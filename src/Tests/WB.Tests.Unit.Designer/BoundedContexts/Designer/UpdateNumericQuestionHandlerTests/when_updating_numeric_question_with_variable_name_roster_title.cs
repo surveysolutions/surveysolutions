@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateNumericQuestionH
 {
     internal class when_updating_numeric_question_with_variable_name_roster_title : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             questionId = Guid.Parse("11111111111111111111111111111111");
@@ -25,9 +24,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateNumericQuestionH
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(Create.Command.AddDefaultTypeQuestion(questionnaire.Id, questionId, "title", responsibleId, chapterId));
             
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() => 
                 questionnaire.UpdateNumericQuestion(
                     new UpdateNumericQuestion(questionnaire.Id,
@@ -40,16 +40,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateNumericQuestionH
                     false, QuestionScope.Interviewer,false,false,null,
                     validationConditions: new List<ValidationCondition>())));
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
-
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__variable____rosterTitle____keyword__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__variable____rosterTitle____keyword__ () =>
        new[] { "variable", rosterTitle, "keyword" }.ShouldEachConformTo(
            keyword => exception.Message.ToLower().Contains(keyword));
 

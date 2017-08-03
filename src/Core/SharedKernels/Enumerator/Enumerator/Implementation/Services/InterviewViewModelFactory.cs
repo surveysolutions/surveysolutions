@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
-using MvvmCross.Platform;
-using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -47,6 +44,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             LinkedToListQuestionMultiOptionQuestionModel = 184,
             LinkedToListQuestionSingleOptionQuestionModel = 185,
+
+            AudioQuestionModel = 186,
 
             AreaQuestionModel = 190,
 
@@ -88,7 +87,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 { InterviewEntityType.TimestampQuestionModel, Load<TimestampQuestionViewModel>},
                 { InterviewEntityType.VariableModel, Load<VariableViewModel>},
                 { InterviewEntityType.ReadOnlyQuestion, Load<ReadOnlyQuestionViewModel>},
-                { InterviewEntityType.AreaQuestionModel, Load<AreaQuestionViewModel> }
+                { InterviewEntityType.AreaQuestionModel, Load<AreaQuestionViewModel> },
+                { InterviewEntityType.AudioQuestionModel, Load<AudioQuestionViewModel> },
             };
 
         private static T Load<T>() where T : class => ServiceLocator.Current.GetInstance<T>();
@@ -170,8 +170,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     case QuestionType.SingleOption:
                         if (questionnaire.IsQuestionLinked(entityId))
                         {
-                            return  questionnaire.IsLinkedToListQuestion(entityId)
-                                ? InterviewEntityType.LinkedToListQuestionSingleOptionQuestionModel 
+                            return questionnaire.IsLinkedToListQuestion(entityId)
+                                ? InterviewEntityType.LinkedToListQuestionSingleOptionQuestionModel
                                 : InterviewEntityType.LinkedSingleOptionQuestionModel;
                         }
 
@@ -221,6 +221,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         return InterviewEntityType.MultimediaQuestionModel;
                     case QuestionType.Area:
                         return InterviewEntityType.AreaQuestionModel;
+                    case QuestionType.Audio:
+                        return InterviewEntityType.AudioQuestionModel;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }

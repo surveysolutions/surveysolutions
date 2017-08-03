@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_questionnaire_contains_21_rosters : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = Create.QuestionnaireDocument(Guid.NewGuid(), children: new IComposite[]
             {
                 Create.Roster(variable:"r1"),
@@ -39,18 +38,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 Create.NumericIntegerQuestion(Guid.NewGuid(), variable: "numeric")
             });
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
-        It should_return_1_WB0200_message = () =>
+        [NUnit.Framework.Test] public void should_return_1_WB0200_message () =>
             verificationMessages.Count(x => x.Code == "WB0200").ShouldEqual(1);
 
-        It should_return_message_with_Warning_level = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_Warning_level () =>
             verificationMessages.First(x => x.Code == "WB0200").MessageLevel.ShouldEqual(VerificationMessageLevel.Warning);
 
-        It should_return_message_with_no_references = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_no_references () =>
             verificationMessages.First(x => x.Code == "WB0200").References.Count().ShouldEqual(0);
 
         static QuestionnaireDocument questionnaire;

@@ -34,8 +34,8 @@
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>0</WarningLevel>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
@@ -43,9 +43,8 @@
       <HintPath>..\..\..\packages\AppDomainToolkit.1.0.4.3\lib\net\AppDomainToolkit.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Castle.Core.4.0.0\lib\net45\Castle.Core.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Castle.Core, Version=4.1.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Castle.Core.4.1.1\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
@@ -59,21 +58,18 @@
       <HintPath>..\..\..\packages\EntityFramework6.Npgsql.3.1.1\lib\net45\EntityFramework6.Npgsql.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FluentAssertions, Version=4.3.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\FluentAssertions.4.3.0\lib\net45\FluentAssertions.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="FluentAssertions, Version=4.19.3.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\FluentAssertions.4.19.3\lib\net45\FluentAssertions.dll</HintPath>
     </Reference>
-    <Reference Include="FluentAssertions.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\FluentAssertions.4.3.0\lib\net45\FluentAssertions.Core.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="FluentAssertions.Core, Version=4.19.3.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\FluentAssertions.4.19.3\lib\net45\FluentAssertions.Core.dll</HintPath>
     </Reference>
     <Reference Include="FluentMigrator, Version=1.6.2.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\FluentMigrator.1.6.2\lib\40\FluentMigrator.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Humanizer, Version=2.0.1.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Humanizer.Core.2.0.1\lib\dotnet\Humanizer.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Humanizer, Version=2.2.0.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Humanizer.Core.2.2.0\lib\netstandard1.0\Humanizer.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
@@ -87,65 +83,42 @@
       <HintPath>..\..\..\packages\Machine.Specifications.Should.0.11.0\lib\net45\Machine.Specifications.Should.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.Common.2.1.0\lib\netstandard1.3\Microsoft.CodeAnalysis.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <Reference Include="Microsoft.CodeAnalysis, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.Common.2.3.1\lib\netstandard1.3\Microsoft.CodeAnalysis.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.CSharp.2.1.0\lib\netstandard1.3\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.CSharp.2.3.1\lib\netstandard1.3\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp.Scripting, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.CSharp.Scripting.2.1.0\lib\netstandard1.3\Microsoft.CodeAnalysis.CSharp.Scripting.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp.Scripting, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.CSharp.Scripting.2.3.1\lib\netstandard1.3\Microsoft.CodeAnalysis.CSharp.Scripting.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.Scripting, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.Scripting.Common.2.1.0\lib\netstandard1.3\Microsoft.CodeAnalysis.Scripting.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.CodeAnalysis.Scripting, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.Scripting.Common.2.3.1\lib\netstandard1.3\Microsoft.CodeAnalysis.Scripting.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Moq, Version=4.7.99.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Moq.4.7.99\lib\net45\Moq.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="MvvmCross.Core, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Core.5.1.0\lib\net45\MvvmCross.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="MvvmCross.Platform, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Platform.5.1.0\lib\net45\MvvmCross.Platform.dll</HintPath>
     </Reference>
-    <Reference Include="Moq, Version=4.7.10.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Moq.4.7.10\lib\net45\Moq.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="MvvmCross.Platform.Wpf, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Platform.5.1.0\lib\net45\MvvmCross.Platform.Wpf.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Core, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.Core.4.4.0\lib\net45\MvvmCross.Core.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="MvvmCross.Plugins.Messenger, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Plugin.Messenger.5.1.0\lib\net45\MvvmCross.Plugins.Messenger.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Platform, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.Platform.4.4.0\lib\net45\MvvmCross.Platform.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="MvvmCross.Wpf, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Core.5.1.0\lib\net45\MvvmCross.Wpf.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Platform.Wpf, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.Platform.4.4.0\lib\net45\MvvmCross.Platform.Wpf.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="MvvmCross.Plugins.Messenger, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.Plugin.Messenger.4.4.0\lib\net45\MvvmCross.Plugins.Messenger.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="MvvmCross.Wpf, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.Core.4.4.0\lib\net45\MvvmCross.Wpf.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate, Version=4.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\NHibernate.4.1.1.4000\lib\net40\NHibernate.dll</HintPath>
@@ -153,18 +126,6 @@
     </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
-    </Reference>
-    <Reference Include="Nito.AsyncEx, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Nito.AsyncEx.4.0.1\lib\net45\Nito.AsyncEx.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Nito.AsyncEx.Concurrent, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Nito.AsyncEx.4.0.1\lib\net45\Nito.AsyncEx.Concurrent.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Nito.AsyncEx.Enlightenment, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Nito.AsyncEx.4.0.1\lib\net45\Nito.AsyncEx.Enlightenment.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Npgsql, Version=3.1.10.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Npgsql.3.1.10\lib\net451\Npgsql.dll</HintPath>
@@ -174,19 +135,19 @@
       <HintPath>..\..\..\packages\NUnit.3.6.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="SQLite-net, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\sqlite-net-pcl.1.2.1\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLite-net.dll</HintPath>
+      <HintPath>..\..\..\packages\sqlite-net-pcl.1.3.3\lib\netstandard1.1\SQLite-net.dll</HintPath>
     </Reference>
     <Reference Include="SQLitePCLRaw.batteries_green, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a84b7dcfb1391f7f, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\SQLitePCLRaw.bundle_green.1.1.0\lib\net45\SQLitePCLRaw.batteries_green.dll</HintPath>
+      <HintPath>..\..\..\packages\SQLitePCLRaw.bundle_green.1.1.7\lib\net45\SQLitePCLRaw.batteries_green.dll</HintPath>
     </Reference>
     <Reference Include="SQLitePCLRaw.batteries_v2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8226ea5df37bcae9, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\SQLitePCLRaw.bundle_green.1.1.0\lib\net45\SQLitePCLRaw.batteries_v2.dll</HintPath>
+      <HintPath>..\..\..\packages\SQLitePCLRaw.bundle_green.1.1.7\lib\net45\SQLitePCLRaw.batteries_v2.dll</HintPath>
     </Reference>
     <Reference Include="SQLitePCLRaw.core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1488e028ca7ab535, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\SQLitePCLRaw.core.1.1.0\lib\net45\SQLitePCLRaw.core.dll</HintPath>
+      <HintPath>..\..\..\packages\SQLitePCLRaw.core.1.1.7\lib\net45\SQLitePCLRaw.core.dll</HintPath>
     </Reference>
     <Reference Include="SQLitePCLRaw.provider.e_sqlite3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9c301db686d0bd12, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\SQLitePCLRaw.provider.e_sqlite3.net45.1.1.0\lib\net45\SQLitePCLRaw.provider.e_sqlite3.dll</HintPath>
+      <HintPath>..\..\..\packages\SQLitePCLRaw.provider.e_sqlite3.net45.1.1.7\lib\net45\SQLitePCLRaw.provider.e_sqlite3.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -213,6 +174,12 @@
       <HintPath>..\..\..\packages\System.Diagnostics.StackTrace.4.3.0\lib\net46\System.Diagnostics.StackTrace.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Diagnostics.Tracing, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Diagnostics.Tracing.4.3.0\lib\net462\System.Diagnostics.Tracing.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Globalization.Calendars, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Globalization.Calendars.4.3.0\lib\net46\System.Globalization.Calendars.dll</HintPath>
+    </Reference>
     <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
       <Private>True</Private>
@@ -220,6 +187,10 @@
     <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
     </Reference>
     <Reference Include="System.IO.FileSystem, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
@@ -230,20 +201,17 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="System.Net.Http, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Net.Http.4.3.2\lib\net46\System.Net.Http.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Net.Sockets, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Net.Sockets.4.3.0\lib\net46\System.Net.Sockets.dll</HintPath>
+    </Reference>
     <Reference Include="System.Numerics" />
     <Reference Include="System.Reflection, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\System.Reflection.4.3.0\lib\net462\System.Reflection.dll</HintPath>
@@ -252,6 +220,9 @@
     <Reference Include="System.Reflection.Metadata, Version=1.4.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\System.Reflection.Metadata.1.4.2\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reflection.TypeExtensions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Reflection.TypeExtensions.4.1.0\lib\net462\System.Reflection.TypeExtensions.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
@@ -264,6 +235,9 @@
     <Reference Include="System.Runtime.InteropServices, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\System.Runtime.InteropServices.4.3.0\lib\net462\System.Runtime.InteropServices.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Runtime.Serialization" />
@@ -291,9 +265,8 @@
       <HintPath>..\..\..\packages\System.Threading.Thread.4.3.0\lib\net46\System.Threading.Thread.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.ValueTuple, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\System.ValueTuple.4.3.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="System.ValueTuple, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.ValueTuple.4.3.1\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
@@ -354,6 +327,7 @@
     <Compile Include="HeadquartersTeamsAndStatusesReportTests\when_two_responsibles_and_each_status_has_one_interview.cs" />
     <Compile Include="InterviewPackagesServiceTests\when_processing_package_failed.cs" />
     <Compile Include="InterviewPackagesServiceTests\when_processing_package.cs" />
+    <Compile Include="InterviewTests\AudioQuestion\AudioQuestionTests.cs" />
     <Compile Include="InterviewTests\BackwardCompatibility\when_loading_generated_assembly_for_empty_questionnaire_using_minimal_engine_version.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_creating_interview_with_cascading_questions_in_fixed_roster_and_parent_has_condition.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_reanswering_categorical_parent_cascading_for_the_second_time_with_previous_answer.cs" />
@@ -618,10 +592,6 @@
       <Project>{d6616c1d-7c3a-4576-b82b-098721cd4417}</Project>
       <Name>WB.Core.SharedKernels.Questionnaire</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
-      <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
-      <Name>WB.Core.SharedKernel.Structures</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
       <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>
       <Name>WB.Infrastructure.Native</Name>
@@ -655,19 +625,17 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
+  <Import Project="..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.7\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets" Condition="Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.7\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
-    <Error Condition="!Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.0\build\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.0\build\SQLitePCLRaw.lib.e_sqlite3.linux.targets'))" />
-    <Error Condition="!Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.0\build\SQLitePCLRaw.lib.e_sqlite3.osx.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.0\build\SQLitePCLRaw.lib.e_sqlite3.osx.targets'))" />
-    <Error Condition="!Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.0\build\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.0\build\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets'))" />
+    <Error Condition="!Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.7\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.7\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets'))" />
+    <Error Condition="!Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.7\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.7\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets'))" />
+    <Error Condition="!Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.7\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.7\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets'))" />
   </Target>
-  <Import Project="..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
-  <Import Project="..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.0\build\SQLitePCLRaw.lib.e_sqlite3.linux.targets" Condition="Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.0\build\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" />
-  <Import Project="..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.0\build\SQLitePCLRaw.lib.e_sqlite3.osx.targets" Condition="Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.0\build\SQLitePCLRaw.lib.e_sqlite3.osx.targets')" />
-  <Import Project="..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.0\build\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets" Condition="Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.0\build\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets')" />
+  <Import Project="..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.7\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets" Condition="Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.7\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets')" />
+  <Import Project="..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.7\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets" Condition="Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.7\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

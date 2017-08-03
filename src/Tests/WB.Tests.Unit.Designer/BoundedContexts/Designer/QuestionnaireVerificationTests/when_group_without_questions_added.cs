@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_group_without_questions_added : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             groupId = Guid.NewGuid();
             questionnaire = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
@@ -20,13 +19,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 Create.Group(groupId: groupId)
             });
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
+        private void BecauseOf() => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
-        It should_return_warning = () => errors.Where(x => x.MessageLevel == VerificationMessageLevel.Warning).ShouldNotBeEmpty();
+        [NUnit.Framework.Test] public void should_return_warning () => errors.Where(x => x.MessageLevel == VerificationMessageLevel.Warning).ShouldNotBeEmpty();
 
-        It should_return_WB0202_warning_with_reference_to_empty_group = () =>
+        [NUnit.Framework.Test] public void should_return_WB0202_warning_with_reference_to_empty_group () 
         {
             var warning = errors
                 .Where(x => x.MessageLevel == VerificationMessageLevel.Warning)
@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
             warning.ShouldNotBeNull();
             warning.References.First().Id.ShouldEqual(groupId);
-        };
+        }
 
 
         static QuestionnaireDocument questionnaire;

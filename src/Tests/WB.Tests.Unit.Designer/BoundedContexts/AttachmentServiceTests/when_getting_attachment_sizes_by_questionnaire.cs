@@ -9,24 +9,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
 {
     internal class when_getting_attachment_sizes_by_questionnaire : AttachmentServiceTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             allAttachments.ForEach(attachment => attachmentMetaStorage.Store(attachment, attachment.AttachmentId));
             allContents.ForEach(content=>attachmentContentStorage.Store(content, content.ContentId));
 
             attachmentService = Create.AttachmentService(attachmentMetaStorage: attachmentMetaStorage, attachmentContentStorage: attachmentContentStorage);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             expectedAttachmentSizes = attachmentService.GetAttachmentSizesByQuestionnaire(questionnaireId);
 
-        It should_return_3_specified_attachment_sizes = () =>
+        [NUnit.Framework.Test] public void should_return_3_specified_attachment_sizes () 
         {
             expectedAttachmentSizes.Count.ShouldEqual(3);
             expectedAttachmentSizes[0].Size.ShouldEqual(100);
             expectedAttachmentSizes[1].Size.ShouldEqual(100);
             expectedAttachmentSizes[2].Size.ShouldEqual(50);
-        };
+        }
         
         private static AttachmentService attachmentService;
         private static List<AttachmentSize> expectedAttachmentSizes;

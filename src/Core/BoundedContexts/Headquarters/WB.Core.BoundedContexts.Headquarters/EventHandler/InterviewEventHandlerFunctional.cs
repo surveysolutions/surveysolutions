@@ -8,17 +8,15 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Questionnaire.Documents;
@@ -77,7 +75,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewData, VariablesDisabled>,
         IUpdateHandler<InterviewData, VariablesEnabled>,
         IUpdateHandler<InterviewData, TranslationSwitched>,
-        IUpdateHandler<InterviewData, AreaQuestionAnswered>
+        IUpdateHandler<InterviewData, AreaQuestionAnswered>,
+        IUpdateHandler<InterviewData, AudioQuestionAnswered>,
+        IUpdateHandler<InterviewData, InterviewKeyAssigned>
     {
         private readonly IUserViewFactory users;
         private readonly IQuestionnaireStorage questionnaireStorage;
@@ -336,28 +336,24 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             return this.CreateViewWithSequence(@event.Payload.UserId, @event.EventSourceId,
                 @event.EventTimeStamp, @event.Payload.QuestionnaireId,
-                @event.Payload.QuestionnaireVersion,
-                @event.EventSequence, false);
+                @event.Payload.QuestionnaireVersion, false, @event.Payload.AssignmentId);
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<InterviewFromPreloadedDataCreated> @event)
         {
             return this.CreateViewWithSequence(@event.Payload.UserId, @event.EventSourceId,
                 @event.EventTimeStamp, @event.Payload.QuestionnaireId,
-                @event.Payload.QuestionnaireVersion,
-                @event.EventSequence, false);
+                @event.Payload.QuestionnaireVersion, false, @event.Payload.AssignmentId);
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<InterviewOnClientCreated> @event)
         {
             return this.CreateViewWithSequence(@event.Payload.UserId, @event.EventSourceId,
                  @event.EventTimeStamp, @event.Payload.QuestionnaireId,
-                 @event.Payload.QuestionnaireVersion,
-                 @event.EventSequence, true);
+                 @event.Payload.QuestionnaireVersion, true, @event.Payload.AssignmentId);
         }
 
-        private InterviewData CreateViewWithSequence(Guid userId, Guid eventSourceId, DateTime eventTimeStamp,
-            Guid questionnaireId, long questionnaireVersion, long eventSequence, bool createdOnClient)
+        private InterviewData CreateViewWithSequence(Guid userId, Guid eventSourceId, DateTime eventTimeStamp, Guid questionnaireId, long questionnaireVersion, bool createdOnClient, int? assignmentId)
         {
             var responsible = this.users.GetUser(new UserViewInputModel(userId));
 
@@ -369,7 +365,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 QuestionnaireVersion = questionnaireVersion,
                 ResponsibleId = userId, // Creator is responsible
                 ResponsibleRole = responsible?.Roles.FirstOrDefault() ?? 0,
-                CreatedOnClient = createdOnClient
+                CreatedOnClient = createdOnClient,
+                AssignmentId = assignmentId
             };
             var emptyVector = new decimal[0];
             interview.Levels.Add(CreateLevelIdFromPropagationVector(emptyVector), new InterviewLevel(new ValueVector<Guid>(), null, emptyVector));
@@ -846,6 +843,19 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return this.SaveAnswer(state, @event.Payload.RosterVector, @event.Payload.QuestionId,
                 new Area(@event.Payload.Geometry, @event.Payload.MapName, @event.Payload.AreaSize, @event.Payload.Length, 
                 @event.Payload.Coordinates, @event.Payload.DistanceToEditor), 
+                true);
+        }
+
+        public InterviewData Update(InterviewData state, IPublishedEvent<InterviewKeyAssigned> @event)
+        {
+            state.InterviewKey = @event.Payload.Key.ToString();
+            return state;
+        }
+
+        public InterviewData Update(InterviewData state, IPublishedEvent<AudioQuestionAnswered> @event)
+        {
+            return this.SaveAnswer(state, @event.Payload.RosterVector, @event.Payload.QuestionId,
+                AudioAnswer.FromString(@event.Payload.FileName, @event.Payload.Length),
                 true);
         }
     }

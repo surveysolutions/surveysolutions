@@ -1,3 +1,4 @@
+using System;
 using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -16,7 +17,6 @@ namespace WB.UI.Interviewer.ViewModel
 {
     public class InterviewViewModel : BaseInterviewViewModel
     {
-        readonly IStatefulInterviewRepository interviewRepository;
         readonly IViewModelNavigationService viewModelNavigationService;
 
         public InterviewViewModel(
@@ -40,14 +40,13 @@ namespace WB.UI.Interviewer.ViewModel
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
                 interviewViewModelFactory, commandService, jsonSerializer, vibrationViewModel, enumeratorSettings)
         {
-            this.interviewRepository = interviewRepository;
             this.viewModelNavigationService = viewModelNavigationService;
         }
 
         public override IMvxCommand ReloadCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToInterview(this.interviewId, this.navigationState.CurrentNavigationIdentity));
 
-        public IMvxCommand NavigateToDashboardCommand => new MvxCommand(() => {
-            this.viewModelNavigationService.NavigateToDashboard();
+        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => {
+            await this.viewModelNavigationService.NavigateToDashboard(Guid.Parse(this.interviewId));
             this.Dispose();
         });
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(this.viewModelNavigationService.NavigateTo<DiagnosticsViewModel>);
@@ -55,14 +54,13 @@ namespace WB.UI.Interviewer.ViewModel
 
         public override void NavigateBack()
         {
-            var interview = this.interviewRepository.Get(this.interviewId);
-            if (this.HasPrefilledQuestions && interview.CreatedOnClient)
+            if (this.HasPrefilledQuestions && this.HasEdiablePrefilledQuestions)
             {
                 this.viewModelNavigationService.NavigateToPrefilledQuestions(this.interviewId);
             }
             else
             {
-                this.viewModelNavigationService.NavigateToDashboard();
+                this.viewModelNavigationService.NavigateToDashboard(Guid.Parse(this.interviewId));
             }
         }
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Resources;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 
 namespace WB.UI.Headquarters.Models
 {
@@ -25,7 +25,7 @@ namespace WB.UI.Headquarters.Models
     {
         public string Id { get; set; }
 
-        public PreloadedContentType PreloadedContentType { get; set; }
+        public AssignmentImportType AssignmentImportType { get; set; }
 
         public Guid QuestionnaireId { get; set; }
 

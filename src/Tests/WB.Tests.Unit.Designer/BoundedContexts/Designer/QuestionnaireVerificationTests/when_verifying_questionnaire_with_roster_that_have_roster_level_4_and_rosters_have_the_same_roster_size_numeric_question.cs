@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_roster_that_have_roster_level_4_and_rosters_have_the_same_roster_size_numeric_question : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var rosterSizeQuestionId = Guid.Parse("20000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
@@ -50,15 +49,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             });
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_first_error_with_code__WB0261 = () =>
+        [NUnit.Framework.Test] public void should_return_first_error_with_code__WB0261 () =>
             verificationMessages.ShouldContainError("WB0261");
 
-        It should_return_first_error_with_code__WB0262 = () =>
+        [NUnit.Framework.Test] public void should_return_first_error_with_code__WB0262 () =>
             verificationMessages.ShouldContainError("WB0262");
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

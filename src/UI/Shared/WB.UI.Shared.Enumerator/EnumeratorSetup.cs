@@ -107,6 +107,8 @@ namespace WB.UI.Shared.Enumerator
             registry.AddOrOverwrite("MediaButtonStyleBackground", new MediaQuestionButtonBackgroundConverter());
             registry.AddOrOverwrite("SectionStyleBackground", new SectionStyleBackgroundConverter());
             registry.AddOrOverwrite("VisibleOrInvisible", new VisibleOrInvisibleValueConverter());
+            registry.AddOrOverwrite("AudioNoiseTypeToShape", new AudioNoiseTypeToShapeConverter());
+            registry.AddOrOverwrite("AudioNoiseTypeToDot", new AudioNoiseTypeToDotConverter());
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
@@ -138,6 +140,8 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<EditText>("TextChanged", (editText) => new EditTextChangedBinding(editText));
             registry.RegisterCustomBindingFactory<FrameLayout>("CurrentScreen", (frameLayout) => new FrameLayoutCurrentScreenBinding(frameLayout));
             registry.RegisterCustomBindingFactory<ImageView>("BitmapWithFallback", (img) => new ImageViewBitmapWithFallbackBinding(img));
+            registry.RegisterCustomBindingFactory<View>("SizeByNoiseLevel", (view) => new AudioSizeByNoiseLevelBinding(view));
+            registry.RegisterCustomBindingFactory<View>("Tag", (img) => new ViewTagBinding(img));
             MvxAppCompatSetupHelper.FillTargetFactories(registry);
 
             RegisterAutoCompleteTextViewBindings(registry);
@@ -146,21 +150,17 @@ namespace WB.UI.Shared.Enumerator
 
         private static void RegisterAutoCompleteTextViewBindings(IMvxTargetBindingFactoryRegistry registry)
         {
-            registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>("HidePopupOnDone",
-                view => new InstantAutoCompleteTextViewHidePopupOnDoneBinding(view));
-            registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>("ResetText",
-                view => new InstantAutoCompleteTextViewResetTextBinding(view));
-            registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>("ShowPopupOnFocus",
-                view => new InstantAutoCompleteTextViewShowPopupOnFocusBinding(view));
+            registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>(nameof(InstantAutoCompleteTextView.PartialText),
+                (ctrl) => new InstantAutoCompleteTextViewPartialTextTargetBinding(ctrl));
 
-            registry.RegisterPropertyInfoBindingFactory(
-                typeof(InstantAutoCompleteTextViewPartialTextTargetBinding),
-                typeof(InstantAutoCompleteTextView),
-                nameof(InstantAutoCompleteTextView.PartialText));
-            registry.RegisterPropertyInfoBindingFactory(
-                typeof(InstantAutoCompleteTextViewSelectedObjectTargetBinding),
-                typeof(InstantAutoCompleteTextView),
-                nameof(InstantAutoCompleteTextView.SelectedObject));
+            registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>("OnPartialTextChanged",
+                (ctrl) => new InstantAutoCompleteTextViewOnPartialTextChangedBinding(ctrl));
+
+            registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>("OnItemSelected",
+                (ctrl) => new InstantAutoCompleteTextViewOnItemSelectedBinding(ctrl));
+
+            registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>("OnFocusOut",
+                (ctrl) => new InstantAutoCompleteTextViewOnFocusOutBinding(ctrl));
         }
 
         protected override IEnumerable<Assembly> AndroidViewAssemblies =>

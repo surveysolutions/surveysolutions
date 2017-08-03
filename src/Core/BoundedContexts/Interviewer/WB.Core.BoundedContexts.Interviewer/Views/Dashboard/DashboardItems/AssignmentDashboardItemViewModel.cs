@@ -1,189 +1,104 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 {
-    public class AssignmentDashboardItemViewModel : MvxNotifyPropertyChanged, IDashboardItem
+    public class AssignmentDashboardItemViewModel : ExpandableQuestionsDashboardItemViewModel
     {
         private readonly IExternalAppLauncher externalAppLauncher;
+        private readonly IInterviewFromAssignmentCreatorService interviewFromAssignmentCreator;
 
-        public AssignmentDashboardItemViewModel(IExternalAppLauncher externalAppLauncher)
+        public AssignmentDashboardItemViewModel(IExternalAppLauncher externalAppLauncher,
+            IInterviewFromAssignmentCreatorService interviewFromAssignmentCreator)
         {
             this.externalAppLauncher = externalAppLauncher;
+            this.interviewFromAssignmentCreator = interviewFromAssignmentCreator;
         }
+        
+        private AssignmentDocument assignment;
+        private int interviewsByAssignmentCount;
 
-        private QuestionnaireIdentity questionnaireIdentity;
-
-        public void Bind(AssignmentDocument assignmentDocument)
+        public void Init(AssignmentDocument assignmentDocument, int interviewsCount)
         {
-            this.raiseEvents = false;
+            this.interviewsByAssignmentCount = interviewsCount;
             this.assignment = assignmentDocument;
-            this.isExpanded = false;
-            this.questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
-            this.detailedIdentifyingData = GetPrefilledQuestions(assignment.IdentifyingAnswers);
-            this.identifyingData = new List<PrefilledQuestion>(detailedIdentifyingData.Take(3));
-            this.PrefilledQuestions = new MvxObservableCollection<PrefilledQuestion>(identifyingData);
-            this.GpsLocation = this.GetAssignmentLocation(assignment);
+
+            var questionnaire = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
+            this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title,
+                this.assignment.Title, questionnaire.Version);
+
             this.ReceivedDate = assignment.ReceivedDateUtc.ToLocalTime().ToString("MMM d");
             this.ReceivedTime = assignment.ReceivedDateUtc.ToLocalTime().ToString("HH:mm");
 
-            BindTitle();
-            this.raiseEvents = true;
+            if (assignmentDocument.LocationQuestionId.HasValue && assignmentDocument.LocationLatitude.HasValue && assignmentDocument.LocationLongitude.HasValue)
+                this.GpsLocation = new InterviewGpsCoordinatesView
+                {
+                    Latitude = assignmentDocument.LocationLatitude.Value,
+                    Longitude = assignmentDocument.LocationLongitude.Value
+                };
+
+            this.DetailedIdentifyingData = assignment.IdentifyingAnswers.Select(ToIdentifyingQuestion).ToList();
+            this.IdentifyingData = this.DetailedIdentifyingData.Take(3).ToList();
+
+            this.UpdateTitle();
+
+            this.HasExpandedView = this.DetailedIdentifyingData.Count > 0;
+            this.IsExpanded = false;
         }
         
-        public void Init(AssignmentDocument assignmentDocument, DashboardViewModel dashboardViewModel, IAssignmentItemService itemService, int interviewsCount)
-        {
-            this.itemService = itemService;
-            this.interviewsByAssignmentCount = interviewsCount;
-            Bind(assignmentDocument);
-            dashboardViewModel.InterviewsCountChanged += (sender, args) => this.Refresh();
-        }
-
-        private void Refresh()
-        {
-            this.interviewsByAssignmentCount = this.itemService.GetInterviewsCount(this.assignment.Id);
-            BindTitle();
-        }
-
-        private void BindTitle()
-        {
-            var newTitle = string.Format(InterviewerUIResources.Dashboard_Assignment_CardTitle, this.assignment.Id) + ": ";
-            var allowToCreate = true;
-
-            if (this.assignment.Quantity.HasValue)
-            {
-                var interviewsLeftByAssignmentCount = Math.Max(0, this.assignment.Quantity.Value - interviewsByAssignmentCount);
-                allowToCreate = interviewsLeftByAssignmentCount > 0;
-                newTitle += InterviewerUIResources.Dashboard_AssignmentCard_TitleCountdown.FormatString(interviewsLeftByAssignmentCount);
-            }
-            else
-            {
-                newTitle += InterviewerUIResources.Dashboard_AssignmentCard_TitleCountdown_Unlimited;
-            }
-
-            var commentary = string.Format(InterviewerUIResources.DashboardItem_AssignmentCreatedComment, interviewsByAssignmentCount);
-
-            this.AllowToCreateNewInterview = allowToCreate;
-            this.Title = newTitle;
-            this.Comment = commentary;
-        }
-
-        public string ReceivedTime { get; set; }
         public int AssignmentId => this.assignment.Id;
 
+        public string QuestionnaireName { get; private set; }
         public string ReceivedDate { get; private set; }
-
-        private AssignmentDocument assignment;
-        private string title;
-        private string comment;
-
-        public string QuestionnaireName => string.Format(InterviewerUIResources.DashboardItem_Title, this.assignment.Title, this.questionnaireIdentity.Version);
-
-        public string Comment
-        {
-            get => this.comment;
-            private set => RaiseAndSetIfChanged(ref this.comment, value);
-        }
-
-        public MvxObservableCollection<PrefilledQuestion> PrefilledQuestions { get; private set; }
-        
-
-        public string Title
-        {
-            get => this.title;
-            private set => RaiseAndSetIfChanged(ref this.title, value);
-        }
-
-        private bool isExpanded = false;
-        public bool IsExpanded
-        {
-            get => this.isExpanded;
-            set
-            {
-                var preValue = this.isExpanded;
-                RaiseAndSetIfChanged(ref this.isExpanded, value, onChange: UpdatePrefilledQuestions);
-            }
-        }
-
-        private void UpdatePrefilledQuestions(bool isexpanded)
-        {
-            this.PrefilledQuestions.SwitchTo(isexpanded ? this.detailedIdentifyingData : this.identifyingData);
-        }
-
-        public bool AllowToCreateNewInterview
-        {
-            get => this.allowToCreateNewInterview;
-            private set => RaiseAndSetIfChanged(ref this.allowToCreateNewInterview, value);
-        }
-
+        public string ReceivedTime { get; private set; }
         public InterviewGpsCoordinatesView GpsLocation { get; private set; }
+
+        private int interviewsLeftByAssignmentCount => this.assignment.Quantity.GetValueOrDefault() - this.interviewsByAssignmentCount;
+
+        public string Comment => InterviewerUIResources.DashboardItem_AssignmentCreatedComment.FormatString(this.interviewsByAssignmentCount);
+
+        public string Title => InterviewerUIResources.Dashboard_Assignment_CardTitle.FormatString(this.assignment.Id,
+            this.assignment.Quantity.HasValue
+                ? InterviewerUIResources.Dashboard_AssignmentCard_TitleCountdown.FormatString(interviewsLeftByAssignmentCount)
+                : InterviewerUIResources.Dashboard_AssignmentCard_TitleCountdown_Unlimited);
+
+        public bool AllowToCreateNewInterview => !this.assignment.Quantity.HasValue || Math.Max(0, interviewsLeftByAssignmentCount) > 0;
+
         public bool HasGpsLocation => this.GpsLocation != null;
 
-        private bool allowToCreateNewInterview;
-        private int interviewsByAssignmentCount;
-        private IAssignmentItemService itemService;
-
-        public IMvxCommand ToggleExpanded => new MvxCommand(() => this.IsExpanded = !this.IsExpanded);
-
         public IMvxAsyncCommand CreateNewInterviewCommand => new MvxAsyncCommand(
-            () => this.itemService.CreateInterviewAsync(assignment),
-            () => AllowToCreateNewInterview);
+            () => this.interviewFromAssignmentCreator.CreateInterviewAsync(assignment.Id),
+            () => this.AllowToCreateNewInterview);
 
-        private List<PrefilledQuestion> GetPrefilledQuestions(IEnumerable<AssignmentDocument.AssignmentAnswer> identifyingAnswers)
-        {
-            return identifyingAnswers.Select(fi => new PrefilledQuestion
+        public IMvxCommand NavigateToGpsLocationCommand => new MvxCommand(
+            () => this.externalAppLauncher.LaunchMapsWithTargetLocation(this.GpsLocation.Latitude, this.GpsLocation.Longitude),
+            () => this.HasGpsLocation);
+        
+        private PrefilledQuestion ToIdentifyingQuestion(AssignmentDocument.AssignmentAnswer identifyingAnswer)
+            => new PrefilledQuestion
             {
-                Answer = fi.AnswerAsString,
-                Question = fi.Question
-            }).ToList();
-        }
+                Answer = identifyingAnswer.AnswerAsString,
+                Question = identifyingAnswer.Question
+            };
 
-        private InterviewGpsCoordinatesView GetAssignmentLocation(AssignmentDocument assignmentDocument)
+        private void UpdateTitle()
         {
-            if (assignmentDocument.LocationQuestionId.HasValue && assignmentDocument.LocationLatitude.HasValue && assignmentDocument.LocationLongitude.HasValue)
-            {
-                return new InterviewGpsCoordinatesView
-                {
-                    Latitude = assignmentDocument.LocationLatitude ?? 0,
-                    Longitude = assignmentDocument.LocationLongitude ?? 0
-                };
-            }
-
-            return null;
+            this.RaisePropertyChanged(() => this.AllowToCreateNewInterview);
+            this.RaisePropertyChanged(() => this.Title);
+            this.RaisePropertyChanged(() => this.Comment);
         }
 
-        public IMvxCommand NavigateToGpsLocationCommand
+        public void DecreaseInterviewsCount()
         {
-            get { return new MvxCommand(this.NavigateToGpsLocation, () => this.HasGpsLocation); }
+            this.interviewsByAssignmentCount--;
+
+            this.UpdateTitle();
         }
-
-        public bool HasExpandedView => this.detailedIdentifyingData.Count > 0;
-
-        private void NavigateToGpsLocation()
-        {
-            this.externalAppLauncher.LaunchMapsWithTargetLocation(this.GpsLocation.Latitude, this.GpsLocation.Longitude);
-        }
-
-        // it's much more performant, as original extension call new Action<...> on every call
-        private void RaiseAndSetIfChanged<TReturn>(ref TReturn backingField, TReturn newValue, [CallerMemberName] string propertyName = "", Action<TReturn> onChange = null)
-        {
-            if (EqualityComparer<TReturn>.Default.Equals(backingField, newValue)) return;
-
-            backingField = newValue;
-            onChange?.Invoke(backingField);
-            if(this.raiseEvents)
-            this.RaisePropertyChanged(propertyName);
-        }
-
-        private bool raiseEvents = true;
-        private List<PrefilledQuestion> identifyingData;
-        private List<PrefilledQuestion> detailedIdentifyingData;
     }
 }

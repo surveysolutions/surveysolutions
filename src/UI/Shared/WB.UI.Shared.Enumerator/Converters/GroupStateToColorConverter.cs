@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Globalization;
-using Microsoft.Practices.ServiceLocation;
 using MvvmCross.Platform.Converters;
 using MvvmCross.Platform.Droid.Platform;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.UI.Shared.Enumerator.Converters

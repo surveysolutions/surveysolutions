@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -9,15 +9,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
 {
     internal class when_adding_text_question_inside_group : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId: responsibleId);
             questionnaire.AddTextQuestion(questionAId, chapterId, responsibleId: responsibleId);
             questionnaire.AddTextQuestion(questionBId, chapterId, responsibleId: responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             questionnaire.AddTextQuestion(
                 questionId: questionId,
                 parentId: chapterId,
@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
                 index: index);
 
 
-        It should_contains_Question_with_QuestionId_specified_on_second_place = () =>
+        [NUnit.Framework.Test] public void should_contains_Question_with_QuestionId_specified_on_second_place () =>
             questionnaire.QuestionnaireDocument.Find<Group>(chapterId).Children[1]
                 .PublicKey.ShouldEqual(questionId);
 

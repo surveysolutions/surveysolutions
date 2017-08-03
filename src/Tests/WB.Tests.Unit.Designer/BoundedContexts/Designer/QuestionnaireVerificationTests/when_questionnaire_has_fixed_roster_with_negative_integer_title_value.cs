@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_questionnaire_has_fixed_roster_with_negative_integer_title_value : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.TextQuestion(),
@@ -20,12 +19,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             });
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             messages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_have_0_error = () =>
+        [NUnit.Framework.Test] public void should_have_0_error () =>
             messages.Count().ShouldEqual(0);
       
         private static QuestionnaireDocument questionnaire;

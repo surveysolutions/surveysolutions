@@ -67,12 +67,12 @@
                 lookupTable.file = file;
                 lookupTable.fileName = lookupTable.file.name;
 
-                lookupTable.oldItemId = lookupTable.itemId;
-                lookupTable.itemId = utilityService.guid();
-
                 lookupTable.form.$setDirty();
             }
             $scope.saveLookupTable = function (lookupTable) {
+                lookupTable.oldItemId = lookupTable.itemId;
+                lookupTable.itemId = utilityService.guid();
+
                 commandService.updateLookupTable($state.params.questionnaireId, lookupTable).then(function () {
                     dataBind(lookupTable.checkpoint, lookupTable);
                     lookupTable.hasUploadedFile = !_.isEmpty(lookupTable.fileName);

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
-using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 
@@ -290,7 +290,7 @@ namespace WB.Core.Infrastructure.CommandBus
             if (validatorInstance == null)
                 throw new CommandRegistryException($"Unable to get instance of validator {validatorType.Name} for command {commandType.Name} and aggregate {aggregateType.Name}.");
 
-            MethodInfo validatingMethod = validatorType.GetMethod("Validate", new[] { aggregateType, commandType });
+            MethodInfo validatingMethod = validatorType.GetTypeInfo().GetMethod("Validate", new[] { aggregateType, commandType });
 
             if (validatingMethod == null)
                 throw new CommandRegistryException($"Unable to resolve validating method of validator {validatorType.Name} for command {commandType.Name} and aggregate {aggregateType.Name}.");
@@ -315,7 +315,7 @@ namespace WB.Core.Infrastructure.CommandBus
             if (postProcessorInstance == null)
                 throw new CommandRegistryException($"Unable to get instance of post processor {processorType.Name} for command {commandType.Name} and aggregate {aggregateType.Name}.");
 
-            MethodInfo processMethod = processorType.GetMethod("Process", new[] { aggregateType, commandType });
+            MethodInfo processMethod = processorType.GetTypeInfo().GetMethod("Process", new[] { aggregateType, commandType });
 
             if (processMethod == null)
                 throw new CommandRegistryException($"Unable to resolve process method of post processor {processorType.Name} for command {commandType.Name} and aggregate {aggregateType.Name}.");

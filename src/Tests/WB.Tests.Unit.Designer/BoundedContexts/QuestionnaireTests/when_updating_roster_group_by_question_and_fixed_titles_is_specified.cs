@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_updating_roster_group_by_question_and_fixed_titles_is_specified : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -22,9 +21,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddGroup(groupId, chapterId, responsibleId: responsibleId);
             questionnaire.AddMultiOptionQuestion(rosterSizeQuestionId,chapterId, responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception =
                 Catch.Exception(
                     () =>
@@ -33,10 +33,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                             isRoster: true, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: rosterFixedTitles,
                             rosterTitleQuestionId: null));
         
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message () =>
             new[] { "roster", "fixed", "items", "list", "should", "be", "empty" }.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
 
         private static Exception exception;

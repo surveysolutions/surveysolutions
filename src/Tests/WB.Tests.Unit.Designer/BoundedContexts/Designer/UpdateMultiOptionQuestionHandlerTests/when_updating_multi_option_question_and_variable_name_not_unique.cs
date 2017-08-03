@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
 {
     internal class when_updating_multi_option_question_and_variable_name_not_unique : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddNumericQuestion(Guid.NewGuid(), chapterId, responsibleId, variableName: notUniqueVariableName);
@@ -24,9 +23,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                 variableName: "old_variable_name",
                 instructions: "old instructions",
                 enablementCondition: "old condition");
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateMultiOptionQuestion(
                     questionId: questionId,
@@ -45,10 +45,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                     yesNoView: yesNoView, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
                 linkedFilterExpression: null, properties: Create.QuestionProperties()));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__variable__should__unique__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__variable__should__unique__ () =>
             new[] { "variable", "should", "unique" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 

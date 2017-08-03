@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
@@ -6,7 +6,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
-using It = Machine.Specifications.It;
+
 using it = Moq.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MembershipProviderTests
@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MembershipProviderTest
 
     internal class when_creating_user_and_account_with_membership_provider : MembershipProviderTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             validatedUserId = Guid.Parse("11111111111111111111111111111111");
 
             customParametersWithUserId = new Dictionary<string, object>();
@@ -36,12 +35,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MembershipProviderTest
             Setup.InstanceToMockedServiceLocator<IPasswordStrategy>(passwordStrategy);
 
             membershipProvider = CreateMembershipProvider();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             membershipProvider.CreateUserAndAccount(string.Empty, string.Empty, false, customParametersWithUserId);
 
-        It should_pass_specified_provided_user_key_to_account_repository = () =>
+        [NUnit.Framework.Test] public void should_pass_specified_provided_user_key_to_account_repository () =>
             accountRepositoryMock.Verify(
                 x => x.Create(
                     it.Is<Guid>(userId => userId == validatedUserId),

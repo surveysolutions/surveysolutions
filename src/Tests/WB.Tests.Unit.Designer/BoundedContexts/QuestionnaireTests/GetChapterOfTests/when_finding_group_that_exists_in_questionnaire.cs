@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.GetChapterOf
     [Subject(typeof(Questionnaire))]
     internal class when_finding_group_that_exists_in_questionnaire
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             targetGroupId = Guid.NewGuid();
             chapterId = Guid.NewGuid();
             questionnaire = Create.QuestionnaireDocumentWithOneChapter(
@@ -27,11 +26,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.GetChapterOf
                 },
                 new Group("group") { PublicKey = Guid.NewGuid() }
             );
-        };
+            BecauseOf();
+        }
 
-        Because of = () => foundGroup = questionnaire.GetChapterOfItemById(targetGroupId);
+        private void BecauseOf() => foundGroup = questionnaire.GetChapterOfItemById(targetGroupId);
 
-        It should_find_needed_group = () => foundGroup.PublicKey.ShouldEqual(chapterId);
+        [NUnit.Framework.Test] public void should_find_needed_group () => foundGroup.PublicKey.ShouldEqual(chapterId);
 
         private static QuestionnaireDocument questionnaire;
         private static Guid targetGroupId;

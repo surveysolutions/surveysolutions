@@ -62,15 +62,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             if (start != stop)
                 selectedRange.Add(stop, range.ContainsKey(stop) ? range[stop] : stopValueToFill);
 
-            IEnumerable<IEnumerable<Tuple<DateTime, int>>> rangeLines = new[]
+            IEnumerable<IEnumerable<(DateTime date, int count)>> rangeLines = new[]
             {
-                selectedRange.Select(x => Tuple.Create(x.Key, x.Value.SupervisorAssignedCount)),
-                selectedRange.Select(x => Tuple.Create(x.Key, x.Value.InterviewerAssignedCount)),
-                selectedRange.Select(x => Tuple.Create(x.Key, x.Value.CompletedCount)),
-                selectedRange.Select(x => Tuple.Create(x.Key, x.Value.RejectedBySupervisorCount)),
-                selectedRange.Select(x => Tuple.Create(x.Key, x.Value.ApprovedBySupervisorCount)),
-                selectedRange.Select(x => Tuple.Create(x.Key, x.Value.RejectedByHeadquartersCount)),
-                selectedRange.Select(x => Tuple.Create(x.Key, x.Value.ApprovedByHeadquartersCount)),
+                selectedRange.Select(x => (x.Key, x.Value.SupervisorAssignedCount)),
+                selectedRange.Select(x => (x.Key, x.Value.InterviewerAssignedCount)),
+                selectedRange.Select(x => (x.Key, x.Value.RestartedCount)),
+                selectedRange.Select(x => (x.Key, x.Value.CompletedCount)),
+                selectedRange.Select(x => (x.Key, x.Value.RejectedBySupervisorCount)),
+                selectedRange.Select(x => (x.Key, x.Value.ApprovedBySupervisorCount)),
+                selectedRange.Select(x => (x.Key, x.Value.RejectedByHeadquartersCount)),
+                selectedRange.Select(x => (x.Key, x.Value.ApprovedByHeadquartersCount)),
             };
 
             rangeLines = RemoveEmptyEndingLines(rangeLines);
@@ -86,19 +87,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             };
         }
 
-        private static IEnumerable<IEnumerable<Tuple<DateTime, int>>> RemoveEmptyEndingLines(
-            IEnumerable<IEnumerable<Tuple<DateTime, int>>> rangeLines)
+        private static IEnumerable<IEnumerable<(DateTime date, int count)>> RemoveEmptyEndingLines(
+            IEnumerable<IEnumerable<(DateTime date, int count)>> rangeLines)
         {
             return rangeLines
                 .Reverse()
-                .SkipWhile(line => line.All(point => point.Item2 == 0))
+                .SkipWhile(line => line.All(point => point.count == 0))
                 .Reverse();
         }
 
-        private static object[][] ToChartLine(IEnumerable<Tuple<DateTime, int>> rangeLine)
+        private static object[][] ToChartLine(IEnumerable<(DateTime date, int count)> rangeLine)
         {
             return rangeLine
-                .Select(x => new object[] { FormatDate(x.Item1), x.Item2 })
+                .Select(x => new object[] { FormatDate(x.date), x.count })
                 .ToArray();
         }
 

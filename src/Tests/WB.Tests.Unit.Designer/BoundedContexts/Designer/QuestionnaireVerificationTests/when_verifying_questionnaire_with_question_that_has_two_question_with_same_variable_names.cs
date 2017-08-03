@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -15,8 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     class when_verifying_questionnaire_with_question_that_has_two_question_with_same_variable_names : QuestionnaireVerifierTestsContext
     {
 
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(new Group("Chapter")
             {
                 Children = new List<IComposite>()
@@ -35,24 +34,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             });
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_WB0026_error = () =>
+        [NUnit.Framework.Test] public void should_return_WB0026_error () =>
             verificationMessages.ShouldContainCritical("WB0026");
 
-        It should_return_message_with_level_critical = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_level_critical () =>
             verificationMessages.GetCritical("WB0026").MessageLevel.ShouldEqual(VerificationMessageLevel.Critical);
 
-        It should_return_message_with_1_reference = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_1_reference () =>
             verificationMessages.GetCritical("WB0026").References.Count().ShouldEqual(2);
 
-        It should_return_message_reference_with_type_Question = () =>
+        [NUnit.Framework.Test] public void should_return_message_reference_with_type_Question () =>
             verificationMessages.GetCritical("WB0026").References.ShouldEachConformTo(reference => reference.Type == QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_message_reference_with_first_and_second_question_Id = () =>
+        [NUnit.Framework.Test] public void should_return_message_reference_with_first_and_second_question_Id () =>
             verificationMessages.GetCritical("WB0026").References.Select(x => x.Id).ShouldContainOnly(firstQuestionId, secondQuestionId);
 
         private static QuestionnaireVerifier verifier;

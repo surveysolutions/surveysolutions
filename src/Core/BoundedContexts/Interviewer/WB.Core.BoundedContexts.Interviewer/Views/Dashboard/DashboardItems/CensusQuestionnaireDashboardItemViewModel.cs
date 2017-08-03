@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Plugins.Messenger;
@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -54,10 +55,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         public string Comment { get; set; }
 
 
-        public IMvxCommand CreateNewInterviewCommand
-        {
-            get { return new MvxCommand(async () => await this.CreateNewInterviewAsync()); }
-        }
+        public IMvxCommand CreateNewInterviewCommand => new MvxAsyncCommand(this.CreateNewInterviewAsync);
 
         public bool HasExpandedView => false;
         
@@ -69,17 +67,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             var interviewId = Guid.NewGuid();
             var interviewerIdentity = this.principal.CurrentUserIdentity;
 
-            var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
-                interviewerIdentity.UserId, this.questionnaireIdentity, DateTime.UtcNow,
+            var createInterviewCommand = new CreateInterview(interviewId,
+                interviewerIdentity.UserId, this.questionnaireIdentity, new List<InterviewAnswer>(), DateTime.UtcNow,
                 interviewerIdentity.SupervisorId,
-                null, null, null);
-            await this.commandService.ExecuteAsync(createInterviewOnClientCommand);
+                interviewerIdentity.UserId, null, null);
+            await this.commandService.ExecuteAsync(createInterviewCommand);
             this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
         }
 
-        private void RaiseStartingLongOperation()
-        {
-            messenger.Publish(new StartingLongOperationMessage(this));
-        }
+        private void RaiseStartingLongOperation() => this.messenger.Publish(new StartingLongOperationMessage(this));
     }
 }

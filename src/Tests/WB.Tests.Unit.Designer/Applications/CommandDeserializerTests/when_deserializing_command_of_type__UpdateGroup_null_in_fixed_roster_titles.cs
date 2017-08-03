@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
 {
     internal class when_deserializing_command_of_type__UpdateGroup_null_in_fixed_roster_titles : CommandDeserializerTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             type = "UpdateGroup";
 
             title = @"<b width='7'>MA<font color='red'>IN</font></b><img /><script> alert('hello world!')</script><script/>";
@@ -29,24 +28,25 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
             }}", questionnaireId, groupId, title, propagationKind, rosterFixedTitles);
 
             deserializer = CreateCommandDeserializer();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             result = deserializer.Deserialize(type, command);
 
-        It should_return_NewUpdateGroupCommand = () =>
+        [NUnit.Framework.Test] public void should_return_NewUpdateGroupCommand () =>
             result.ShouldBeOfExactType<UpdateGroup>();
 
-        It should_return_same_title_in_NewUpdateGroupCommand = () =>
+        [NUnit.Framework.Test] public void should_return_same_title_in_NewUpdateGroupCommand () =>
             ((UpdateGroup)result).Title.ShouldEqual(sanitizedTitle);
 
-        It should_return_same_questionnaire_id_in_NewUpdateGroupCommand = () =>
+        [NUnit.Framework.Test] public void should_return_same_questionnaire_id_in_NewUpdateGroupCommand () =>
             ((UpdateGroup)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));
 
-        It should_return_same_group_id_in_NewUpdateGroupCommand = () =>
+        [NUnit.Framework.Test] public void should_return_same_group_id_in_NewUpdateGroupCommand () =>
             ((UpdateGroup)result).GroupId.ShouldEqual(Guid.Parse(groupId));
 
-        It should_return_0_fixed_roster_titles = () =>
+        [NUnit.Framework.Test] public void should_return_0_fixed_roster_titles () =>
             ((UpdateGroup)result).FixedRosterTitles.Count().ShouldEqual(0);
 
         private static ICommand result;

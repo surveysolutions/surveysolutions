@@ -1,12 +1,12 @@
 ﻿using System;
 using Main.Core.Documents;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -78,11 +78,6 @@ namespace WB.Tests.Integration
                     NavigationState = navigationState,
                 };
            
-            var dispatcherMock = new Mock<IMvxMainThreadDispatcher>();
-            dispatcherMock
-                .Setup(_ => _.RequestMainThreadAction(It.IsAny<Action>()))
-                .Callback<Action>(action => action.Invoke());
-
             Setup.InstanceToMockedServiceLocator<CoverStateViewModel>(Mock.Of<CoverStateViewModel>());
             Setup.InstanceToMockedServiceLocator<GroupStateViewModel>(Mock.Of<GroupStateViewModel>());
             Mock.Get(ServiceLocator.Current)

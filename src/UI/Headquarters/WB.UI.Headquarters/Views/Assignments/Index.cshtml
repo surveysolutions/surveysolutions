@@ -1,6 +1,6 @@
 ﻿@using Main.Core.Entities.SubEntities
-@using Microsoft.Practices.ServiceLocation
 @using WB.Core.BoundedContexts.Headquarters.Services
+@using WB.Core.GenericSubdomains.Portable.ServiceLocation
 @model WB.UI.Headquarters.Controllers.AssignmentsFilters
 
 @{
@@ -17,9 +17,19 @@
     @Html.Partial("assignmentslist")
 
     <script type="text/javascript">
+
+        var locale = window.navigator.userLanguage || window.navigator.language;
+        moment.locale(locale);
+
         var assignmentsEndpoint = "@Url.Content("~/api/Assignments")";
         var $profileUrl = '@Url.Action("Profile", "Interviewer")';
         var $interviewsUrl = "@(Model.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ"))";
+        var compiled =
+            _.template(
+                '<input class="checkbox-filter" type="checkbox" value="<%= id %>"' +
+                ' id="<%= checkboxId %>"><label for="<%= checkboxId %>">' +
+                '<span class="tick"></span></label>');
+
         var tableOptions = {
             rowId: "id",
             deferLoading: 0,
@@ -33,10 +43,6 @@
                             className: 'checkbox-cell',
                             render: function(data, type, row) {
                                 var checkboxId = 'check-' + row.id;
-                                var compiled =
-                                    _.template(
-                                        '<input class="checkbox-filter" type="checkbox" value="<%= id %>" id="<%= checkboxId %>"><label for="<%= checkboxId %>"><span class="tick"></span></label>');
-
                                 return compiled({ 'id': row.id, 'checkboxId': checkboxId });
                             },
                             responsivePriority: 1

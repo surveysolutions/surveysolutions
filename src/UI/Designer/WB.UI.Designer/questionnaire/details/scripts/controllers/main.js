@@ -205,7 +205,8 @@ angular.module('designerApp')
                 Text: 'icon-text',
                 SingleOption: 'icon-singleoption',
                 Multimedia: 'icon-photo',
-                Area: 'icon-area'
+                Area: 'icon-area',
+                Audio: 'icon-audio'
             };
 
             $scope.items = [];

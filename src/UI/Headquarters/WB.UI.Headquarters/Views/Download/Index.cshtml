@@ -1,7 +1,6 @@
-﻿@using Microsoft.Practices.ServiceLocation
+﻿@using WB.Core.GenericSubdomains.Portable.ServiceLocation
 @using WB.Core.Infrastructure.Versions
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
-@using WB.UI.Shared.Web.Captcha
 @using WB.UI.Shared.Web.Extensions
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.LogOnModel
 @{
@@ -41,18 +40,19 @@
                         <div class="hq-apps-wrapper">
                             <h2>@Pages.DownloadPage_Welcome</h2>
                             <div class="form-actions">
-                                <p>@Pages.GetLatestAppDescription </p>
-                                <a href="@Url.HttpRouteUrl("DefaultApiWithAction", new {action = "GetLatestVersion", controller = "InterviewerSync"})" class="get-interviewer-app">
+                                <a href="@Url.HttpRouteUrl("DefaultApiWithAction", new {action = "GetLatestVersion", controller = "InterviewerSync"})" class="get-interviewer-app" id="dowload">
                                     <span>@Pages.GetLatestApp</span>
                                     <span class="version">@Pages.DownloadPage_Version @(ServiceLocator.Current.GetInstance<IProductVersion>())</span>
                                 </a>
+                                <p><b class="error-text">Caution:</b>
+                                    @Pages.GetEsriExtraDescription
+                                </p>
                             </div>
-                            <div class="form-actions">
-                                <p>@Pages.GetLatestAppExtendedDescription</p>
-                                <a href="@Url.HttpRouteUrl("DefaultApiWithAction", new {action = "GetLatestExtendedVersion", controller = "InterviewerSync"})" class="get-interviewer-app">
-                                    <span>@Pages.GetLatestApp</span>
-                                    <span class="version">@Pages.DownloadPage_Version @(ServiceLocator.Current.GetInstance<IProductVersion>())</span>
-                                </a>
+                            <div class="form-group">
+                                <input class="checkbox-filter" id="all-answer-options" type="checkbox" checked="" onclick="changeTarget(this)">
+                                <label for="all-answer-options">
+                                    <span class="tick"></span>@Pages.ExcludeEsriTitle
+                                </label>
                             </div>
                             <div class="additional-info-block">
                                 <a href="http://docs.mysurvey.solutions/interviewer-installation" target="_blank">@Pages.DownloadPage_Instructions</a>
@@ -85,5 +85,19 @@
         </div>
     </div>
 </footer>
+    
+<script type="text/javascript">
+    function changeTarget(chkbox)
+    {
+        var link = document.getElementById('dowload');  // changed where this is done!
+        if( chkbox.checked )
+        {
+            link.href="@Url.HttpRouteUrl("DefaultApiWithAction", new { action = "GetLatestVersion", controller = "InterviewerSync" })"; 
+        } else {
+            link.href="@Url.HttpRouteUrl("DefaultApiWithAction", new { action = "GetLatestExtendedVersion", controller = "InterviewerSync" })";     
+        }
+    }
+</script>
+
 </body>
 </html>

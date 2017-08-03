@@ -3,9 +3,9 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.UI.Designer.Api
 {

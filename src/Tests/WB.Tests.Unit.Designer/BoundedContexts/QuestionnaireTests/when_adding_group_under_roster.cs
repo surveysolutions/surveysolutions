@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -9,33 +9,33 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_adding_group_under_roster : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddGroup(parentRosterId, chapterId, responsibleId: responsibleId, isRoster: true);
-            
-        };
+            BecauseOf();
 
-        Because of = () => questionnaire.AddGroupAndMoveIfNeeded(groupId: groupId, responsibleId: responsibleId, title: title, variableName: null, rosterSizeQuestionId: null, description: description,
+        }
+
+        private void BecauseOf() => questionnaire.AddGroupAndMoveIfNeeded(groupId: groupId, responsibleId: responsibleId, title: title, variableName: null, rosterSizeQuestionId: null, description: description,
                     condition: condition, hideIfDisabled: hideIfDisabled, parentGroupId: parentRosterId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, index: index);
 
-        It should_create_group_with_GroupId_specified = () =>
+        [NUnit.Framework.Test] public void should_create_group_with_GroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).ShouldNotBeNull();
 
-        It should_create_group_ConditionExpression_specified = () =>
+        [NUnit.Framework.Test] public void should_create_group_ConditionExpression_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
                 .ConditionExpression.ShouldEqual(condition);
 
-        It should_create_group_with_HideIfDisabled_specified = () =>
+        [NUnit.Framework.Test] public void should_create_group_with_HideIfDisabled_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
                 .HideIfDisabled.ShouldEqual(hideIfDisabled);
 
-        It should_create_group_with_Title_specified = () =>
+        [NUnit.Framework.Test] public void should_create_group_with_Title_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
                 .Title.ShouldEqual(title);
 
-        It should_create_group_with_Description_specified = () =>
+        [NUnit.Framework.Test] public void should_create_group_with_Description_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
                 .Description.ShouldEqual(description);
 

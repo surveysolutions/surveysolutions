@@ -9,17 +9,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
 {
     internal class when_adding_or_updating_attachment_with_premission_to_edit : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: ownerId);
             addOrUpdateAttachment = Create.Command.AddOrUpdateAttachment(questionnaireId, attachmentId, "", sharedPersonId, "");
             questionnaire.AddSharedPerson(sharedPersonId, "email@email.com", ShareType.Edit, ownerId);
-        };
+            BecauseOf();
+        }
 
 
-        Because of = () => questionnaire.AddOrUpdateAttachment(addOrUpdateAttachment);
+        private void BecauseOf() => questionnaire.AddOrUpdateAttachment(addOrUpdateAttachment);
 
-        It should_contains_attachment_with_EntityId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_attachment_with_EntityId_specified () =>
             questionnaire.QuestionnaireDocument.Attachments.Single(a => a.AttachmentId == attachmentId).AttachmentId.ShouldEqual(attachmentId);
 
 

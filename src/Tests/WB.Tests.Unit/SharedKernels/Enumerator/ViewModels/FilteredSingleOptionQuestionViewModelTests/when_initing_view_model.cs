@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             questionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
             answeringViewModelMock = new Mock<AnsweringViewModel>() { DefaultValue = DefaultValue.Mock };
             
-            var filteredOptionsViewModel = Setup.FilteredOptionsViewModel();
+            var filteredOptionsViewModel = Abc.Setup.FilteredOptionsViewModel();
 
             viewModel = CreateFilteredSingleOptionQuestionViewModel(
                 questionStateViewModel: questionStateMock.Object,
@@ -54,11 +54,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
         Because of = () =>
             viewModel.Init(interviewId, questionIdentity, navigationState);
 
-        It should_set_nonnull_answer = () =>
-            viewModel.SelectedObject.ShouldNotBeNull();
-
-        It should_set_to_answer_backend_value = () =>
-            viewModel.SelectedObject.Value.ShouldEqual(3);
+        It should_set_to_filter_text_specified_value = () =>
+            viewModel.FilterText.ShouldEqual("3");
 
         private static FilteredSingleOptionQuestionViewModel viewModel;
         private static NavigationState navigationState;

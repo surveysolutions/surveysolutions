@@ -10,14 +10,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_updating_group_with_invalid_variable_name : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddGroup(rosterId, chapterId, variableName: "valid", responsibleId: responsibleId, isRoster:true);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() => questionnaire.UpdateGroup(
                 groupId: rosterId,
                 responsibleId: responsibleId,
@@ -32,10 +32,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 rosterFixedTitles: new[] { new FixedRosterTitleItem("1", "1"), new FixedRosterTitleItem("2", "2") },
                 rosterTitleQuestionId: null));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting_message_about_csharp_keywords = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting_message_about_csharp_keywords () =>
             exception.Message.ToLower().ShouldContain("variable name or roster id shouldn't match with keywords");
 
         private static Exception exception;

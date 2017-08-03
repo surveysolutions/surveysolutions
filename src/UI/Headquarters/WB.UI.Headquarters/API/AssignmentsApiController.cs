@@ -44,7 +44,7 @@ namespace WB.UI.Headquarters.API
         
         [Route("")]
         [HttpGet]
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor, Interviewer")]
         public IHttpActionResult Get([FromUri]AssignmentsDataTableRequest request)
         {
             QuestionnaireIdentity questionnaireIdentity = null;
@@ -53,6 +53,8 @@ namespace WB.UI.Headquarters.API
                 QuestionnaireIdentity.TryParse(request.QuestionnaireId, out questionnaireIdentity);
             }
 
+            var isInterviewer = this.authorizedUser.IsInterviewer;
+                       
             var input = new AssignmentsInputModel
             {
                 Page = request.PageIndex,
@@ -61,13 +63,22 @@ namespace WB.UI.Headquarters.API
                 SearchBy = request.Search.Value,
                 QuestionnaireId = questionnaireIdentity?.QuestionnaireId,
                 QuestionnaireVersion = questionnaireIdentity?.Version,
-                ResponsibleId = request.ResponsibleId,
-                ShowArchive = request.ShowArchive
+                ResponsibleId = isInterviewer ? this.authorizedUser.Id :request.ResponsibleId,
+                ShowArchive = !isInterviewer && request.ShowArchive
             };
 
             if (this.authorizedUser.IsSupervisor)
             {
                 input.SupervisorId = this.authorizedUser.Id;
+            }
+
+            if (isInterviewer)
+            {
+                input.OnlyWithInterviewsNeeded = true;
+                input.SearchByFields = AssignmentsInputModel.SearchTypes.Id 
+                    | AssignmentsInputModel.SearchTypes.IdentifyingQuestions
+                    | AssignmentsInputModel.SearchTypes.QuestionnaireTitle;
+                input.ShowQuestionnaireTitle = true;
             }
 
             var result = this.assignmentViewFactory.Load(input);
@@ -155,7 +166,22 @@ namespace WB.UI.Headquarters.API
 
             var questionnaireIdentity = new QuestionnaireIdentity(request.QuestionnaireId, request.QuestionnaireVersion);
 
-            var assignment = new Assignment(questionnaireIdentity, request.ResponsibleId, request.Quantity);
+            int? quantity;
+
+            switch (request.Quantity)
+            {
+                case null:
+                    quantity = 1;
+                    break;
+                case -1:
+                    quantity = null;
+                    break;
+                default:
+                    quantity = request.Quantity;
+                    break;
+            }
+
+            var assignment = new Assignment(questionnaireIdentity, request.ResponsibleId, quantity);
 
             var untypedQuestionAnswers = JsonConvert.DeserializeObject<List<UntypedQuestionAnswer>>(request.AnswersToFeaturedQuestions);
 

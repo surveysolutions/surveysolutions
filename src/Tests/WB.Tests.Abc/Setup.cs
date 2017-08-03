@@ -4,7 +4,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -15,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
@@ -240,7 +240,7 @@ namespace WB.Tests.Abc
             };
 
             Mock<FilteredOptionsViewModel> filteredOptionsViewModel = new Mock<FilteredOptionsViewModel>();
-            filteredOptionsViewModel.Setup(x => x.GetOptions(It.IsAny<string>())).Returns(options);
+            filteredOptionsViewModel.Setup(x => x.GetOptions(It.IsAny<string>())).Returns<string>(filter=>options.FindAll(x=>x.Title.Contains(filter)));
             filteredOptionsViewModel.Setup(x => x.Init(It.IsAny<string>(), It.IsAny<Identity>(), It.IsAny<int>()));
 
             return filteredOptionsViewModel.Object;

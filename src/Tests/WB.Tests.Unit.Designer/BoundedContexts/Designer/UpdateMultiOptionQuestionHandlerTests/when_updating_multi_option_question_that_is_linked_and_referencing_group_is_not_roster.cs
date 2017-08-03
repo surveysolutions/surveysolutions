@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
 {
     internal class when_updating_multi_option_question_that_is_linked_and_referencing_group_is_not_roster : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(linkedToGroupId, responsibleId: responsibleId);
             questionnaire.AddQRBarcodeQuestion(questionId,
@@ -20,9 +19,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                         variableName: "old_variable_name",
                         instructions: "old instructions",
                         enablementCondition: "old condition");
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateMultiOptionQuestion(
                     questionId: questionId,
@@ -42,10 +42,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                 linkedFilterExpression: null, properties: Create.QuestionProperties()));
 
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__linked_question_doesnot_exist__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__linked_question_doesnot_exist__ () =>
             new[] { "group that you are linked to is not a roster" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 

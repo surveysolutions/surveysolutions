@@ -45,9 +45,10 @@ export default {
     SET_INTERVIEW_INFO(state, interviewInfo: IInterviewInfo) {
         state.questionnaireTitle = interviewInfo.questionnaireTitle
         state.firstSectionId = interviewInfo.firstSectionId
+        state.interviewKey = interviewInfo.interviewKey
     },
-    SET_COVER_INFO(state, coverInfo: ISamplePrefilledData) {
-        state.samplePrefilledInfo = coverInfo
+    SET_COVER_INFO(state, coverInfo: ICoverInfo) {
+        state.coverInfo = coverInfo
     },
     SET_COMPLETE_INFO(state, completeInfo) {
         Vue.set(state, "completeInfo", completeInfo)
@@ -55,7 +56,11 @@ export default {
     SET_INTERVIEW_STATUS(state, interviewState) {
         Vue.set(state, "interviewState", interviewState)
     },
-    SET_HAS_PREFILLED_QUESTIONS(state, hasPrefilledQuestions) {
-        state.hasPrefilledQuestions = hasPrefilledQuestions
+    SET_HAS_COVER_PAGE(state, hasCoverPage) {
+        state.hasCoverPage = hasCoverPage
+    },
+    SET_QUESTION_COMMENTS(state, { questionId, comments }) {
+        const question = state.entityDetails[questionId]
+        question.comments = comments
     }
 }

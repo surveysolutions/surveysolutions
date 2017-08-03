@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_updating_question_and_error_messagr_contains_substitution_to_variable_from_roster : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddGroup(rosterId, responsibleId: responsibleId, isRoster:true);
@@ -22,18 +21,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddVariableAndMoveIfNeeded(new AddVariable(questionnaire.Id,  variableId, new VariableData(VariableType.String, variableName, "", null), responsibleId, parentId: rosterId ));
 
             questionnaire.AddTextQuestion(questionWithSubstitutionId, chapterId, responsibleId);
-            
 
-            eventContext = new EventContext();
-        };
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
+            BecauseOf();
+        }
 
-        Because of = () => exception =
+    
+
+        private void BecauseOf() => exception =
             Catch.Exception(() => questionnaire.UpdateTextQuestion(
                 new UpdateTextQuestion(
                     questionnaire.Id,
@@ -50,11 +45,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     scope: QuestionScope.Interviewer,
                     mask: null)));
 
-        It should_exception_has_specified_message = () =>
+        [NUnit.Framework.Test] public void should_exception_has_specified_message () =>
             new[] { "illegal", "substitution", "to", variableName }.ShouldEachConformTo(x =>
                 ((QuestionnaireException) exception).Message.Contains(x));
 
-        private static EventContext eventContext;
+
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

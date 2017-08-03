@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.PrefilledQuestionsView
             loggerMock.Verify(ns => ns.Error(Moq.It.IsAny<string>(), null), Times.Once());
 
         It should_navigate_to_dashboard = () =>
-            navigationServiceMock.Verify(ns => ns.NavigateToDashboard(), Times.Once());
+            navigationServiceMock.Verify(ns => ns.NavigateToDashboard(null), Times.Once());
 
 
         private static string notExistedInterviewId = "same id";

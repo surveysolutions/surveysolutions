@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -9,6 +10,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.ComponentModels;
+using WB.UI.Headquarters.Models.User;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
@@ -73,21 +75,24 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [Authorize]
         [CamelCase]
-        public ComboboxModel InterviewersCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
+        public ResponsibleComboboxModel InterviewersCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
         {
-            var users = this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: this.authorizedUser.IsSupervisor ? this.authorizedUser.Id : (Guid?)null);
-            var options = users.Users.Select(x => new ComboboxOptionModel(x.UserId.FormatGuid(), x.UserName)).ToArray();
-            return new ComboboxModel(options, users.TotalCountByQuery);
+            UsersView users = this.authorizedUser.IsSupervisor ? 
+                this.teamViewFactory.GetAsigneeInterviewersBySupervisor(pageSize: pageSize, searchBy: query, supervisorId: this.authorizedUser.Id) : 
+                this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: (Guid?)null);
+
+            var options = users.Users.Select(x => new ResponsibleComboboxOptionModel(x.UserId.FormatGuid(), x.UserName, x.IconClass)).ToArray();
+            return new ResponsibleComboboxModel(options, users.TotalCountByQuery);
         }
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
         [CamelCase]
-        public ComboboxModel ResponsiblesCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showLocked = DEFAULT_SHOW_LOCKED)
+        public ResponsibleComboboxModel ResponsiblesCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showLocked = DEFAULT_SHOW_LOCKED)
         {
             var users = this.userViewFactory.GetAllResponsibles(pageSize: pageSize, searchBy: query, showLocked: showLocked);
-            var options = users.Users.Select(x => new ComboboxOptionModel(x.ResponsibleId.FormatGuid(), x.UserName)).ToArray();
-            return new ComboboxModel(options, users.TotalCountByQuery);
+            var options = users.Users.Select(x => new ResponsibleComboboxOptionModel(x.ResponsibleId.FormatGuid(), x.UserName, x.IconClass)).ToArray();
+            return new ResponsibleComboboxModel(options, users.TotalCountByQuery);
         }
 
         [HttpGet]

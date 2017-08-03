@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using Android.Content;
+using Android.Graphics;
 using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Util;
+using Android.Views;
+using Android.Views.InputMethods;
 using Android.Widget;
 using MvvmCross.Binding.Attributes;
-using MvvmCross.Binding.Droid.ResourceHelpers;
 using MvvmCross.Binding.Droid.Views;
 
 namespace WB.UI.Shared.Enumerator.CustomControls
@@ -14,22 +16,26 @@ namespace WB.UI.Shared.Enumerator.CustomControls
     [Register("WB.UI.Shared.Enumerator.CustomControls.InstantAutoCompleteTextView")]
     public class InstantAutoCompleteTextView: AppCompatAutoCompleteTextView
     {
+        private readonly object adapterLock = new object();
+
         public InstantAutoCompleteTextView(Context context, IAttributeSet attrs)
             : this(context, attrs, new MvxFilteringAdapter(context))
         {
-            // note - we shouldn't realy need both of these... but we do
-            ItemClick += OnItemClick;
-            ItemSelected += OnItemSelected;
         }
 
-        public InstantAutoCompleteTextView(Context context, IAttributeSet attrs,
-            MvxFilteringAdapter adapter)
+        public InstantAutoCompleteTextView(Context context, IAttributeSet attrs, MvxFilteringAdapter adapter)
             : base(context, attrs)
         {
             var itemTemplateId = MvxAttributeHelpers.ReadListItemTemplateId(context, attrs);
             adapter.ItemTemplateId = itemTemplateId;
-            Adapter = adapter;
-            ItemClick += OnItemClick;
+            this.Adapter = adapter;
+
+            // note - we shouldn't realy need both of these... but we do (ask Roma)
+            this.ItemClick += this.OnItemClick;
+            this.ItemSelected += OnItemSelected;
+
+            this.EditorAction += this.OnEditorAction;
+            this.Click += OnEditTextClick;
         }
 
         protected InstantAutoCompleteTextView(IntPtr javaReference, JniHandleOwnership transfer)
@@ -37,31 +43,34 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         {
         }
 
-        private void OnItemClick(object sender, AdapterView.ItemClickEventArgs itemClickEventArgs)
+        private void OnEditorAction(object sender, EditorActionEventArgs e)
         {
-            OnItemClick(itemClickEventArgs.Position);
+            if (e.ActionId != ImeAction.Done)
+                return;
+
+            this.ClearFocus();
+            this.DismissDropDown();
+            this.HideKeyboard();
         }
+
+        private void OnItemClick(object sender, AdapterView.ItemClickEventArgs itemClickEventArgs)
+            => this.OnItemSelected(itemClickEventArgs.Position);
 
         private void OnItemSelected(object sender, AdapterView.ItemSelectedEventArgs itemSelectedEventArgs)
-        {
-            OnItemSelected(itemSelectedEventArgs.Position);
-        }
-
-        protected virtual void OnItemClick(int position)
-        {
-            var selectedObject = Adapter.GetRawItem(position);
-            SelectedObject = selectedObject;
-        }
+            => this.OnItemSelected(itemSelectedEventArgs.Position);
 
         protected virtual void OnItemSelected(int position)
         {
-            var selectedObject = Adapter.GetRawItem(position);
-            SelectedObject = selectedObject;
+            lock (adapterLock)
+                this.SelectedObject = this.Adapter.GetRawItem(position);
+            
+            this.ClearFocus();
+            this.HideKeyboard();
         }
 
         public new MvxFilteringAdapter Adapter
         {
-            get { return base.Adapter as MvxFilteringAdapter; }
+            get => base.Adapter as MvxFilteringAdapter;
             set
             {
                 var existing = this.Adapter;
@@ -84,65 +93,109 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             }
         }
 
-        private void AdapterOnPartialTextChanged(object sender, EventArgs eventArgs)
-        {
-            FireChanged(PartialTextChanged);
-        }
+        private void AdapterOnPartialTextChanged(object sender, EventArgs eventArgs) 
+            => this.FireChanged(PartialTextChanged);
 
         [MvxSetToNullAfterBinding]
         public IEnumerable ItemsSource
         {
-            get { return Adapter.ItemsSource; }
-            set { Adapter.ItemsSource = value; }
+            get => this.Adapter.ItemsSource;
+            set
+            {
+                lock (adapterLock)
+                    this.Adapter.ItemsSource = value;
+            }
         }
 
         public int ItemTemplateId
         {
-            get { return Adapter.ItemTemplateId; }
-            set { Adapter.ItemTemplateId = value; }
+            get => this.Adapter.ItemTemplateId;
+            set => this.Adapter.ItemTemplateId = value;
         }
 
-        public string PartialText => Adapter.PartialText;
+        public string PartialText
+        {
+            get => this.Adapter.PartialText;
+            set
+            {
+                if (this.Adapter.PartialText == value) return;
 
-        private object _selectedObject;
+                lock (adapterLock)
+                {
+                    var adapter = base.Adapter;
+                    base.Adapter = null;
+                    this.SetText(value, true);
+                    base.Adapter = adapter;
+                }
+            }
+    }
 
+        private object selectedObject;
         public object SelectedObject
         {
-            get { return _selectedObject; }
+            get => this.selectedObject;
             private set
             {
-                if (_selectedObject == value)
+                if (this.selectedObject == value)
                     return;
 
-                _selectedObject = value;
-                FireChanged(SelectedObjectChanged);
+                this.selectedObject = value;
+                this.FireChanged(SelectedObjectChanged);
             }
         }
 
         public event EventHandler SelectedObjectChanged;
-
         public event EventHandler PartialTextChanged;
 
-        private void FireChanged(EventHandler eventHandler)
-        {
-            eventHandler?.Invoke(this, EventArgs.Empty);
-        }
+        private void FireChanged(EventHandler eventHandler) => eventHandler?.Invoke(this, EventArgs.Empty);
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                ItemClick -= OnItemClick;
-                ItemSelected -= OnItemSelected;
+                this.ItemClick -= this.OnItemClick;
+                this.ItemSelected -= this.OnItemSelected;
+                this.EditorAction -= this.OnEditorAction;
+                this.Click -= this.OnEditTextClick;
 
-                if (Adapter != null)
+                if (this.Adapter != null)
                 {
-                    Adapter.PartialTextChanged -= AdapterOnPartialTextChanged;
+                    this.Adapter.PartialTextChanged -= this.AdapterOnPartialTextChanged;
                 }
             }
             base.Dispose(disposing);
         }
 
         public override bool EnoughToFilter() => true;
+        
+        protected override void OnFocusChanged(bool gainFocus, FocusSearchDirection direction, Rect previouslyFocusedRect)
+        {
+            base.OnFocusChanged(gainFocus, direction, previouslyFocusedRect);
+            this.ShowDropDownIfFocused();
+        }
+
+        private void OnEditTextClick(object sender, EventArgs e)
+            => this.ShowDropDownIfFocused();
+
+        private void ShowDropDownIfFocused()
+        {
+            if (this.EnoughToFilter() && this.IsFocused && this.WindowVisibility == ViewStates.Visible)
+            {
+                this.ShowDropDown();
+            }
+        }
+
+        protected override void OnAttachedToWindow()
+        {
+            base.OnAttachedToWindow();
+
+            this.ShowDropDownIfFocused();
+        }
+
+        private void HideKeyboard()
+        {
+            var ims = (InputMethodManager)this.Context.GetSystemService(Context.InputMethodService);
+            ims.HideSoftInputFromWindow(this.WindowToken, 0);
+        }
     }
 }

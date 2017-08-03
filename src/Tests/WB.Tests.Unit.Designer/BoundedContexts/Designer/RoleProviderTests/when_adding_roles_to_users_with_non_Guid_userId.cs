@@ -1,39 +1,28 @@
-﻿using System;
 using System.Configuration.Provider;
-using System.Web.Mvc;
-using Machine.Specifications;
 using Moq;
-using WB.UI.Shared.Web.MembershipProvider.Roles;
-using It = Machine.Specifications.It;
+using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.RoleProviderTests
 {
-
     internal class when_adding_roles_to_users_with_non_Guid_userId : RoleProviderTestsContext
     {
-        Establish context = () =>
+        [Test]
+        public void should_throw_provider_exception()
         {
+            string nonGuidAccountId = "not guid user id";
+            string roleName = SimpleRoleEnum.User.ToString();
+
             var roleRepository = Mock.Of<IRoleRepository>(x => x.Exists(null, roleName) == true);
-            var dependencyResolver = Mock.Of<IDependencyResolver>(x => x.GetService(typeof(IRoleRepository)) == roleRepository);
-            DependencyResolver.SetResolver(dependencyResolver);
-            roleProvider = CreateRoleProvider();
-        };
+            Setup.InstanceToMockedServiceLocator<IRoleRepository>(roleRepository);
+            RoleProvider roleProvider = CreateRoleProvider();
+            
+            // Act
+            var exception = Assert.Throws<ProviderException>(() => roleProvider.AddUsersToRoles(new[] {nonGuidAccountId}, new[] {roleName}));
 
-        Because of = () =>
-            exception = Catch.Exception(() => roleProvider.AddUsersToRoles(new[] { nonGuidAccountId }, new[] { roleName }));
-
-        It should_throw_ProviderException = () =>
-            exception.ShouldBeOfExactType<ProviderException>();
-
-        It should_throw_exception_with_message_containing__parse__ = () =>
-            exception.Message.ToLower().ShouldContain("parse");
-
-        It should_throw_exception_with_message_containing_not_guid_user_id = () =>
-            exception.Message.ShouldContain(nonGuidAccountId);    
-
-        private static RoleProvider roleProvider;
-        private static string nonGuidAccountId = "not guid user id";
-        private static string roleName = SimpleRoleEnum.User.ToString();
-        private static Exception exception;
+            // Assert
+            Assert.That(exception.Message, Does.Contain("parse"));
+            Assert.That(exception.Message, Does.Contain(nonGuidAccountId));
+        }
     }
 }

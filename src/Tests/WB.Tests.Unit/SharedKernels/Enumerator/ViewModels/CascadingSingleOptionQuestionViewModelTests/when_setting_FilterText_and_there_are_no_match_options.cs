@@ -1,7 +1,10 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Machine.Specifications;
 using Moq;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -13,9 +16,11 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
+    [TestFixture]
     internal class when_setting_FilterText_and_there_are_no_match_options : CascadingSingleOptionQuestionViewModelTestContext
     {
-        Establish context = () =>
+        [Test]
+        public async Task should_set_suggestion_list_to_empty()
         {
             SetUp();
 
@@ -31,27 +36,22 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             interview.Setup(x => x.GetTopFilteredOptionsForQuestion(Moq.It.IsAny<Identity>(), Moq.It.IsAny<int?>(), Moq.It.IsAny<string>(), Moq.It.IsAny<int>()))
                 .Returns((Identity identity, int? value, string filter, int count) => Options.Where(x => x.ParentValue == value && x.Title.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0).ToList());
 
-
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview.Object);
 
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
 
-            cascadingModel = CreateCascadingSingleOptionQuestionViewModel(
+            var cascadingModel = CreateCascadingSingleOptionQuestionViewModel(
                 interviewRepository: interviewRepository,
                 questionnaireRepository: questionnaireRepository);
 
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
-        };
 
-        Because of = () =>
-            cascadingModel.FilterText = "ebw";
+            // Act
+            await cascadingModel.FilterCommand.ExecuteAsync("ebw");
 
-        It should_set_filter_text = () =>
-            cascadingModel.FilterText.ShouldEqual("ebw");
-
-        It should_set_empty_list_in_AutoCompleteSuggestions = () =>
-            cascadingModel.AutoCompleteSuggestions.ShouldBeEmpty();
-
-        private static CascadingSingleOptionQuestionViewModel cascadingModel;
+            // Assert
+            cascadingModel.FilterText.Should().Be("ebw");
+            cascadingModel.AutoCompleteSuggestions.Should().BeEmpty();
+        }
     }
 }

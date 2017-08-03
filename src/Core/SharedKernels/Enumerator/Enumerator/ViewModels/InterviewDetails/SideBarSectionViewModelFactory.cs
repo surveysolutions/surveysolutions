@@ -1,4 +1,4 @@
-﻿using Microsoft.Practices.ServiceLocation;
+﻿using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 

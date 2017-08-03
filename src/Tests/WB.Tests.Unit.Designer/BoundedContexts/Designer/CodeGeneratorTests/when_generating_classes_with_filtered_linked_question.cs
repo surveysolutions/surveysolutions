@@ -1,18 +1,17 @@
-﻿using System;
+using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
 {
     internal class when_generating_classes_with_filtered_linked_question : CodeGeneratorTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             AssemblyContext.SetupServiceLocator();
             var assetsTitles = new[]
             {
@@ -31,12 +30,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             });
 
             generator = Create.CodeGenerator();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             generatedClassContent = generator.Generate(questionnaire, version).Values.First();
 
-        It should_generate_class_with_V7_namespace_included = () =>
+        [NUnit.Framework.Test] public void should_generate_class_with_V7_namespace_included () =>
              generatedClassContent.ShouldContain("WB.Core.SharedKernels.DataCollection.V7");
 
         private static int version = 16;

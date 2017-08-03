@@ -295,6 +295,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     return "picture";
                 case QuestionType.Area:
                     return "area";
+                case QuestionType.Audio:
+                    return "audio";
                 default:
                     return string.Empty;
             }

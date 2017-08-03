@@ -1,931 +1,134 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3017EC6D-AE4A-4C19-A653-352999592A7E}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WB.Core.BoundedContexts.Headquarters</RootNamespace>
-    <AssemblyName>WB.Core.BoundedContexts.Headquarters</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <TargetFramework>net462</TargetFramework>
+    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <TreatSpecificWarningsAsErrors />
+    <WarningLevel>3</WarningLevel>
+    <NoWarn>1701;1702;1705;618</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Common.Logging.3.3.1\lib\net40\Common.Logging.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Common.Logging.Core, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Common.Logging.Core.3.3.1\lib\net40\Common.Logging.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\CsvHelper.2.15.0.0\lib\net45\CsvHelper.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Dapper, Version=1.50.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Dapper.1.50.2\lib\net451\Dapper.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ddidotnet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj" />
+    <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj" />
+    <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj" />
+    <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Common.Logging" Version="3.3.1" />
+    <PackageReference Include="Common.Logging.Core" Version="3.3.1" />
+    <PackageReference Include="CsvHelper" Version="2.16.3" />
+    <PackageReference Include="Dapper" Version="1.50.2" />
+    <PackageReference Include="EntityFramework" Version="6.1.3" />
+    <PackageReference Include="Iesi.Collections" Version="4.0.1.4000" />
+    <PackageReference Include="Iteedee.ApkReader" Version="1.0.1" />
+    <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.1" />
+    <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework" Version="2.2.1" />
+    <PackageReference Include="Microsoft.AspNet.Identity.Owin" Version="2.2.1" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
+    <PackageReference Include="Microsoft.Owin" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Owin.Host.SystemWeb" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Owin.Security" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Owin.Security.Cookies" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Owin.Security.OAuth" Version="3.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="NHibernate" Version="4.1.1.4000" />
+    <PackageReference Include="Ninject" Version="3.2.2.0" />
+    <PackageReference Include="Owin" Version="1.0" />
+    <PackageReference Include="Quartz" Version="2.5.0" />
+    <PackageReference Include="System.IO.Compression" Version="4.3.0" />
+    <PackageReference Include="System.IO.Compression.ZipFile" Version="4.3.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.3.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="ddidotnet">
       <HintPath>..\..\..\..\..\libs\ddidotnet.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib.Portable">
-      <HintPath>..\..\..\..\..\packages\SharpZipLib.Portable.0.86.0.0003\lib\portable-net45+netcore45+wp8+win8+wpa81+MonoTouch+MonoAndroid+Xamarin.iOS10\ICSharpCode.SharpZipLib.Portable.dll</HintPath>
-    </Reference>
-    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Ionic.Zip, Version=1.9.8.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\DotNetZip.1.9.8\lib\net20\Ionic.Zip.dll</HintPath>
-    </Reference>
-    <Reference Include="Iteedee.ApkReader, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Iteedee.ApkReader.1.0.1\lib\Iteedee.ApkReader.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Owin, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.Owin.3.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Security, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.Owin.Security.3.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.Owin.Security.Cookies.3.1.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.Owin.Security.OAuth.3.1.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="NHibernate, Version=4.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\NHibernate.4.1.1.4000\lib\net40\NHibernate.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
-    </Reference>
-    <Reference Include="Ninject.Web.Common, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\Ninject.Web.Common.3.2.3.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Quartz, Version=2.5.0.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Quartz.2.5.0\lib\net40\Quartz.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="StatData, Version=1.3.5714.25241, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StatData">
       <HintPath>..\..\..\..\..\libs\StatData.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Net" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Runtime.Caching" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aggregates\ReadonlyUser.cs" />
-    <Compile Include="Aggregates\Tablet.cs" />
-    <Compile Include="Assignments\Assignment.cs" />
-    <Compile Include="Assignments\AssignmentIdentifyingQuestionRow.cs" />
-    <Compile Include="Assignments\AssignmentMap.cs" />
-    <Compile Include="Assignments\AssignmentRow.cs" />
-    <Compile Include="Assignments\AssignmentsInputModel.cs" />
-    <Compile Include="Assignments\AssignmentsService.cs" />
-    <Compile Include="Assignments\AssignmentsWithoutIdentifingData.cs" />
-    <Compile Include="Assignments\AssignmentViewFactory.cs" />
-    <Compile Include="Assignments\AssignmetnsDeletionService.cs" />
-    <Compile Include="Assignments\IAssignmentsService.cs" />
-    <Compile Include="Assignments\IAssignmentViewFactory.cs" />
-    <Compile Include="Assignments\IAssignmetnsDeletionService.cs" />
-    <Compile Include="Assignments\IdentifyingAnswer.cs" />
-    <Compile Include="Assignments\RosterVectorTypeConvertor.cs" />
-    <Compile Include="ClientIdentifier.cs" />
-    <Compile Include="Commands\CloneQuestionnaire.cs" />
-    <Compile Include="Commands\DeleteQuestionnaire.cs" />
-    <Compile Include="Commands\DisableQuestionnaire.cs" />
-    <Compile Include="Commands\ImportFromDesigner.cs" />
-    <Compile Include="Commands\QuestionnaireCommand.cs" />
-    <Compile Include="Commands\RegisterPlainQuestionnaire.cs" />
-    <Compile Include="Commands\RegisterTabletCommand.cs" />
-    <Compile Include="DataExport\Accessors\FilebasedExportedDataAccessor.cs" />
-    <Compile Include="DataExport\Accessors\IFilebasedExportedDataAccessor.cs" />
-    <Compile Include="DataExport\Accessors\IParaDataAccessor.cs" />
-    <Compile Include="DataExport\Accessors\ITabFileReader.cs" />
-    <Compile Include="DataExport\Accessors\ITabFileReaderFactory.cs" />
-    <Compile Include="DataExport\Accessors\TabFileReader.cs" />
-    <Compile Include="DataExport\Accessors\TabFileReaderFactory.cs" />
-    <Compile Include="DataExport\Accessors\TabularParaDataAccessor.cs" />
-    <Compile Include="DataExport\DataExportDetails\AbstractDataExportProcessDetails.cs" />
-    <Compile Include="DataExport\DataExportDetails\DataExportProcessDetailsExtensions.cs" />
-    <Compile Include="DataExport\Denormalizers\InterviewsExportDenormalizer.cs" />
-    <Compile Include="DataExport\ExportProcessHandlers\TabBasedFormatExportHandler.cs" />
-    <Compile Include="DataExport\ExportSettings.cs" />
-    <Compile Include="DataExport\Denormalizers\ExportViewFactory.cs" />
-    <Compile Include="DataExport\Dtos\DataExportStatus.cs" />
-    <Compile Include="DataExport\Dtos\DataExportFormat.cs" />
-    <Compile Include="DataExport\Dtos\DataExportType.cs" />
-    <Compile Include="DataExport\Dtos\LastPublishedEventPositionForHandler.cs" />
-    <Compile Include="DataExport\ExportProcessHandlers\AbstractDataExportHandler.cs" />
-    <Compile Include="DataExport\ExportProcessHandlers\BinaryFormatDataExportHandler.cs" />
-    <Compile Include="DataExport\ExportProcessHandlers\SpssFormatExportHandler.cs" />
-    <Compile Include="DataExport\ExportProcessHandlers\StataFormatExportHandler.cs" />
-    <Compile Include="DataExport\ExportProcessHandlers\TabularFormatDataExportHandler.cs" />
-    <Compile Include="DataExport\ExportProcessHandlers\TabularFormatParaDataExportProcessHandler.cs" />
-    <Compile Include="DataExport\Factories\CsvWriter.cs" />
-    <Compile Include="DataExport\Factories\DatasetWriterFactory.cs" />
-    <Compile Include="DataExport\Factories\ICsvWriter.cs" />
-    <Compile Include="DataExport\Factories\IDatasetWriterFactory.cs" />
-    <Compile Include="DataExport\Ddi\IMetadataWriter.cs" />
-    <Compile Include="DataExport\Ddi\IMetaDescriptionFactory.cs" />
-    <Compile Include="DataExport\Factories\IQuestionnaireLabelFactory.cs" />
-    <Compile Include="DataExport\Ddi\Impl\MetadataWriter.cs" />
-    <Compile Include="DataExport\Ddi\Impl\MetaDescriptionFactory.cs" />
-    <Compile Include="DataExport\Factories\QuestionnaireLabelFactory.cs" />
-    <Compile Include="DataExport\Jobs\ExportJob.cs" />
-    <Compile Include="DataExport\Jobs\ExportJobScheduler.cs" />
-    <Compile Include="DataExport\Mapping\LastPublishedEventPositionForHandlerMap.cs" />
-    <Compile Include="DataExport\ExportProcessHandlers\IExportProcessHandler.cs" />
-    <Compile Include="DataExport\DataExportDetails\DataExportProcessDetails.cs" />
-    <Compile Include="DataExport\DataExportDetails\IDataExportProcessDetails.cs" />
-    <Compile Include="DataExport\DataExportDetails\ParaDataExportProcessDetails.cs" />
-    <Compile Include="DataExport\Services\DataExportFileAccessor.cs" />
-    <Compile Include="DataExport\Services\Exporters\CommentsExporter.cs" />
-    <Compile Include="DataExport\Services\CsvWriterService.cs" />
-    <Compile Include="DataExport\Services\DataExporter.cs" />
-    <Compile Include="DataExport\Services\DataExportProcessesService.cs" />
-    <Compile Include="DataExport\Services\Exporters\InterviewExportredDataRowReader.cs" />
-    <Compile Include="DataExport\Services\Exporters\InterviewsExporter.cs" />
-    <Compile Include="DataExport\Services\IDataExporter.cs" />
-    <Compile Include="DataExport\Services\IDataExportFileAccessor.cs" />
-    <Compile Include="DataExport\Services\IDataExportProcessesService.cs" />
-    <Compile Include="DataExport\Services\IEnvironmentContentService.cs" />
-    <Compile Include="DataExport\Services\Exporters\InterviewActionsExporter.cs" />
-    <Compile Include="DataExport\Services\InterviewExportConstants.cs" />
-    <Compile Include="DataExport\Services\ITabularDataToExternalStatPackageExportService.cs" />
-    <Compile Include="DataExport\Services\ReadSideToTabularFormatExportService.cs" />
-    <Compile Include="DataExport\Services\StataEnvironmentContentService.cs" />
-    <Compile Include="DataExport\Services\TabularDataToExternalStatPackageExportService.cs" />
-    <Compile Include="DataExport\Views\DataExportView.cs" />
-    <Compile Include="DataExport\Views\DataExportStatusView.cs" />
-    <Compile Include="DataExport\Views\DataExportStatusReader.cs" />
-    <Compile Include="DataExport\Views\IDataExportStatusReader.cs" />
-    <Compile Include="DataExport\Views\Labels\LabeledVariable.cs" />
-    <Compile Include="DataExport\Views\Labels\QuestionnaireLevelLabels.cs" />
-    <Compile Include="DataExport\Views\Labels\VariableValueLabel.cs" />
-    <Compile Include="DataExport\Views\RunningDataExportProcessView.cs" />
-    <Compile Include="DataExport\Ddi\Impl\DdiMetadataFactory.cs" />
-    <Compile Include="DataExport\Ddi\Impl\DdiMetadataAccessor.cs" />
-    <Compile Include="DataExport\Ddi\IDdiMetadataFactory.cs" />
-    <Compile Include="DataExport\Ddi\IDdiMetadataAccessor.cs" />
-    <Compile Include="DispatcherRegistryHelper.cs" />
-    <Compile Include="Documents\TabletDocument.cs" />
-    <Compile Include="EventHandler\CumulativeChartDenormalizer.cs" />
-    <Compile Include="EventHandler\HardDeletedInterviewEventHandler.cs" />
-    <Compile Include="EventHandler\InterviewEventHandlerFunctional.cs" />
-    <Compile Include="EventHandler\InterviewExportedCommentariesDenormalizer.cs" />
-    <Compile Include="EventHandler\InterviewParaDataEventHandler.cs" />
-    <Compile Include="EventHandler\InterviewReferencesDenormalizer.cs" />
-    <Compile Include="EventHandler\InterviewStatusTimeSpanDenormalizer.cs" />
-    <Compile Include="EventHandler\InterviewSummaryDenormalizer.cs" />
-    <Compile Include="EventHandler\InterviewLifecycleEventHandler.cs" />
-    <Compile Include="EventHandler\LinkedOptionsDenormalizer.cs" />
-    <Compile Include="EventHandler\MapReportDenormalizer.cs" />
-    <Compile Include="EventHandler\QuestionnaireDetailsForChart.cs" />
-    <Compile Include="EventHandler\QuestionnaireQuestionsInfo.cs" />
-    <Compile Include="EventHandler\QuestionnaireStatisticsForChart.cs" />
-    <Compile Include="EventHandler\StatisticsGroupedByDateAndTemplate.cs" />
-    <Compile Include="EventHandler\StatusChangeHistoryDenormalizerFunctional.cs" />
-    <Compile Include="EventHandler\TabletDenormalizer.cs" />
-    <Compile Include="Events\Sync\ClientDeviceLastSyncItemUpdated.cs" />
-    <Compile Include="Events\Sync\NewClientDeviceCreated.cs" />
-    <Compile Include="Events\Sync\NewDeviceRegistered.cs" />
-    <Compile Include="Events\Sync\TabletRegistered.cs" />
-    <Compile Include="Events\Sync\UpdateRegisteredDevice.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="Factories\IChartStatisticsViewFactory.cs" />
-    <Compile Include="Factories\IInterviewSynchronizationDtoFactory.cs" />
-    <Compile Include="Factories\IOldschoolChartStatisticsDataProvider.cs" />
-    <Compile Include="Factories\IPreloadedDataServiceFactory.cs" />
-    <Compile Include="Factories\IQuestionnaireBrowseViewFactory.cs" />
-    <Compile Include="Factories\IRecordsAccessorFactory.cs" />
-    <Compile Include="Implementation\Aggregates\Questionnaire.cs" />
-    <Compile Include="Implementation\ExportSettings.cs" />
-    <Compile Include="Implementation\Factories\ChartStatisticsViewFactory.cs" />
-    <Compile Include="Implementation\Factories\CsvRecordsAccessorFactory.cs" />
-    <Compile Include="Implementation\Factories\IExportViewFactory.cs" />
-    <Compile Include="Implementation\Factories\InterviewSynchronizationDtoFactory.cs" />
-    <Compile Include="Implementation\Factories\OldschoolChartStatisticsDataProvider.cs" />
-    <Compile Include="Implementation\Factories\PreloadedDataServiceFactory.cs" />
-    <Compile Include="Implementation\Factories\QuestionnaireBrowseInputModel.cs" />
-    <Compile Include="Implementation\Factories\QuestionnaireBrowseViewFactory.cs" />
-    <Compile Include="Implementation\IRecordsAccessor.cs" />
-    <Compile Include="Implementation\ReadSide\IReadSideAdministrationService.cs" />
-    <Compile Include="Implementation\ReadSide\ReadSideDenormalizerStatistic.cs" />
-    <Compile Include="Implementation\ReadSide\ReadSideEventHandlerDescription.cs" />
-    <Compile Include="Implementation\ReadSide\ReadSideEventPublishingDetails.cs" />
-    <Compile Include="Implementation\ReadSide\ReadSideRepositoryWriterError.cs" />
-    <Compile Include="Implementation\ReadSide\ReadSideRepositoryWriterStatus.cs" />
-    <Compile Include="Implementation\ReadSide\ReadSideService.cs" />
-    <Compile Include="Implementation\ReadSide\ReadSideStatus.cs" />
-    <Compile Include="Implementation\Repositories\QuestionnaireQuestionOptionsRepository.cs" />
-    <Compile Include="Implementation\Repositories\FilebasedPreloadedDataRepository.cs" />
-    <Compile Include="Implementation\Repositories\QuestionnaireExportStructureStorage.cs" />
-    <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
-    <Compile Include="Implementation\Repositories\TranslationStorage.cs" />
-    <Compile Include="Implementation\SampleRecordsAccessors\CsvRecordsAccessor.cs" />
-    <Compile Include="Implementation\Services\AndroidPackageReader.cs" />
-    <Compile Include="Implementation\Services\AssemblyService.cs" />
-    <Compile Include="Implementation\Services\AttachmentContentService.cs" />
-    <Compile Include="Implementation\Services\BrokenInterviewPackagesViewFactory.cs" />
-    <Compile Include="Implementation\Services\DesignerUserCredentials.cs" />
-    <Compile Include="Implementation\Services\FileNameService.cs" />
-    <Compile Include="Implementation\Services\DecimalToHeaderConverter.cs" />
-    <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\DeleteQuestionnaireService.cs" />
-    <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\InterviewsToDeleteFactory.cs" />
-    <Compile Include="Implementation\Services\HealthCheck\Checks\EventStoreHealthChecker.cs" />
-    <Compile Include="Implementation\Services\HealthCheck\Checks\FolderPermissionChecker.cs" />
-    <Compile Include="Implementation\Services\HealthCheck\Checks\IAtomicHealthCheck.cs" />
-    <Compile Include="Implementation\Services\HealthCheck\Checks\NumberOfUnhandledPackagesChecker.cs" />
-    <Compile Include="Implementation\Services\HealthCheck\Checks\ReadSideHealthChecker.cs" />
-    <Compile Include="Implementation\Services\HealthCheck\HealthCheckService.cs" />
-    <Compile Include="Implementation\Services\InterviewAnswersCommandValidator.cs" />
-    <Compile Include="Implementation\Services\InterviewPreconditionsServiceSettings.cs" />
-    <Compile Include="Implementation\Services\Preloading\InterviewImportDataParsingService.cs" />
-    <Compile Include="Implementation\Services\Preloading\PreloadedDataRecord.cs" />
-    <Compile Include="Implementation\Services\Preloading\PreloadedDataService.cs" />
-    <Compile Include="Implementation\Services\Preloading\PreloadedDataVerifier.cs" />
-    <Compile Include="Implementation\Services\Preloading\PreloadingTemplateService.cs" />
-    <Compile Include="Implementation\Services\Preloading\QuestionDataParser.cs" />
-    <Compile Include="Implementation\Services\QuestionnaireImportService.cs" />
-    <Compile Include="Implementation\Services\QuestionnaireNameValidator.cs" />
-    <Compile Include="Implementation\Services\QuestionnaireUpgradeService.cs" />
-    <Compile Include="Implementation\Services\RosterStructureService.cs" />
-    <Compile Include="Implementation\Services\RosterScopesFiller.cs" />
-    <Compile Include="Implementation\Services\SupportedQuestionnaireVersion.cs" />
-    <Compile Include="Implementation\Services\SupportedVersionProvider.cs" />
-    <Compile Include="Implementation\Services\SurveyManagementInterviewCommandValidator.cs" />
-    <Compile Include="Implementation\Services\SynchronizationLogViewFactory.cs" />
-    <Compile Include="Implementation\Services\TabletInformation\FileBasedTabletInformationService.cs" />
-    <Compile Include="Mappings\ReadonlyUserMap.cs" />
-    <Compile Include="Resources\TroubleshootingMessages.ru.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TroubleshootingMessages.ru.resx</DependentUpon>
-    </Compile>
-    <Compile Include="DataExport\Security\ExportEncryptionSettings.cs" />
-    <Compile Include="DataExport\Security\IExportSettings.cs" />
-    <Compile Include="Troubleshooting\IInterviewLogSummaryReader.cs" />
-    <Compile Include="Troubleshooting\InterviewLogSummaryReader.cs" />
-    <Compile Include="Troubleshooting\TroubleshootingService.cs" />
-    <Compile Include="Implementation\Synchronization\Constants.cs" />
-    <Compile Include="Implementation\Synchronization\InterviewPackagesService.cs" />
-    <Compile Include="Mappings\AssemblyInfoMap.cs" />
-    <Compile Include="Mappings\AttachmentContentMap.cs" />
-    <Compile Include="Mappings\BrokenInterviewPackageMap.cs" />
-    <Compile Include="Mappings\CumulativeReportStatusChangeMap.cs" />
-    <Compile Include="Mappings\InterviewCommentariesMap.cs" />
-    <Compile Include="Mappings\InterviewDataExportViewMap.cs" />
-    <Compile Include="Mappings\InterviewPackageMap.cs" />
-    <Compile Include="Mappings\InterviewStatusesMap.cs" />
-    <Compile Include="Mappings\InterviewStatusTimeSpansMap.cs" />
-    <Compile Include="Mappings\InterviewSummaryMap.cs" />
-    <Compile Include="Mappings\MapReportAnswersCollectionMap.cs" />
-    <Compile Include="Mappings\QuestionnaireBrowseItemMap.cs" />
-    <Compile Include="Mappings\SupportedQuestionnaireVersionMap.cs" />
-    <Compile Include="Mappings\SynchronizationLogItemMap.cs" />
-    <Compile Include="Mappings\TabletDocumentMap.cs" />
-    <Compile Include="Mappings\TimeSpanBetweenStatusesMap.cs" />
-    <Compile Include="MetaInfo\IMetaInfoBuilder.cs" />
-    <Compile Include="MetaInfo\MetaInfoBuilder.cs" />
-    <Compile Include="OwinSecurityModule.cs" />
-    <Compile Include="OwinSecurity\FluentMigratorInitializer.cs" />
-    <Compile Include="OwinSecurity\HqPasswordValidator.cs" />
-    <Compile Include="OwinSecurity\Providers\ApiAuthTokenProvider.cs" />
-    <Compile Include="OwinSecurity\Providers\HashCompatibilityProvider.cs" />
-    <Compile Include="OwinSecurity\HqSignInManager.cs" />
-    <Compile Include="OwinSecurity\HqUserManager.cs" />
-    <Compile Include="OwinSecurity\HqUserStore.cs" />
-    <Compile Include="OwinSecurity\HQIdentityDbContext.cs" />
-    <Compile Include="OwinSecurity\AuthorizedUser.cs" />
-    <Compile Include="OwinSecurity\IApiTokenProvider.cs" />
-    <Compile Include="OwinSecurity\IHashCompatibilityProvider.cs" />
-    <Compile Include="OwinSecurity\IUserRepository.cs" />
-    <Compile Include="OwinSecurity\SchemaBasedHistoryContext.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QuartzIntegration\NinjectJobFactory.cs" />
-    <Compile Include="QuartzIntegration\NinjectSchedulerFactory.cs" />
-    <Compile Include="QuartzIntegration\QuartzNinjectModule.cs" />
-    <Compile Include="Questionnaires\Denormalizers\VersionedQustionnaireDocumentDenormalizer.cs" />
-    <Compile Include="Questionnaires\Implementation\VersionedQustionnaireDocumentViewFactory.cs" />
-    <Compile Include="Questionnaires\IVersionedQuestionnaireReader.cs" />
-    <Compile Include="Questionnaires\Translations\ITranslationManagementService.cs" />
-    <Compile Include="Questionnaires\Translations\TranslationInstance.cs" />
-    <Compile Include="Questionnaires\Translations\TranslationInstanceMap.cs" />
-    <Compile Include="Questionnaires\Translations\Impl\TranslationManagementService.cs" />
-    <Compile Include="QuestionnaireUpgraderModule.cs" />
-    <Compile Include="Repositories\DbConfiguration.cs" />
-    <Compile Include="Repositories\DeviceSyncInfoRepository.cs" />
-    <Compile Include="Repositories\HQPlainStorageDbContext.cs" />
-    <Compile Include="Repositories\IDeviceSyncInfoRepository.cs" />
-    <Compile Include="Repositories\IPreloadedDataRepository.cs" />
-    <Compile Include="Repositories\IQuestionnaireExportStructureStorage.cs" />
-    <Compile Include="Resources\CommandValidatorsMessages.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
+    <Compile Update="Resources\CommandValidatorsMessages.Designer.cs">
       <DependentUpon>CommandValidatorsMessages.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Resources\ErrorMessages.Designer.cs">
+    <Compile Update="Resources\ErrorMessages.Designer.cs">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Resources\FileBasedDataExportRepositoryWriterMessages.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
+    <Compile Update="Resources\FileBasedDataExportRepositoryWriterMessages.Designer.cs">
       <DependentUpon>FileBasedDataExportRepositoryWriterMessages.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\HeadquarterUserCommandValidatorMessages.Designer.cs">
-      <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\HeadquarterUserCommandValidatorMessages.Designer.cs">
       <DependentUpon>HeadquarterUserCommandValidatorMessages.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\PreloadingVerificationMessages.Designer.cs">
-      <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\PreloadingVerificationMessages.Designer.cs">
       <DependentUpon>PreloadingVerificationMessages.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\SurveyManagementInterviewCommandValidatorMessages.Designer.cs">
-      <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\SurveyManagementInterviewCommandValidatorMessages.Designer.cs">
       <DependentUpon>SurveyManagementInterviewCommandValidatorMessages.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Resources\TroubleshootingMessages.Designer.cs">
+    <Compile Update="Resources\TroubleshootingMessages.Designer.cs">
       <DependentUpon>TroubleshootingMessages.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Resources\UserPreloadingServiceMessages.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
+    <Compile Update="Resources\UserPreloadingServiceMessages.Designer.cs">
       <DependentUpon>UserPreloadingServiceMessages.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Services\AndroidPackageInfo.cs" />
-    <Compile Include="Services\DeleteQuestionnaireTemplate\IDeleteQuestionnaireService.cs" />
-    <Compile Include="Services\DeleteQuestionnaireTemplate\IInterviewsToDeleteFactory.cs" />
-    <Compile Include="Services\Export\IExportQuestionService.cs" />
-    <Compile Include="Services\Export\ITabularFormatExportService.cs" />
-    <Compile Include="Services\GoogleApiSettings.cs" />
-    <Compile Include="Services\HealthCheck\IHealthCheckService.cs" />
-    <Compile Include="Services\IAndroidPackageReader.cs" />
-    <Compile Include="Services\IAssemblyService.cs" />
-    <Compile Include="Services\IAttachmentContentService.cs" />
-    <Compile Include="Services\IBrokenInterviewPackagesViewFactory.cs" />
-    <Compile Include="Services\ICsvWriterService.cs" />
-    <Compile Include="Services\IFileNameService.cs" />
-    <Compile Include="Services\IAuthorizedUser.cs" />
-    <Compile Include="Services\IInterviewPackagesService.cs" />
-    <Compile Include="Services\IInterviewUniqueKeyGenerator.cs" />
-    <Compile Include="Services\Internal\InterviewUniqueKeyGenerator.cs" />
-    <Compile Include="Services\IQuestionnaireImportService.cs" />
-    <Compile Include="Services\IQuestionnaireUpgradeService.cs" />
-    <Compile Include="Services\IQuestionnaireVersionProvider.cs" />
-    <Compile Include="Services\IRandomValuesSource.cs" />
-    <Compile Include="Services\IRosterStructureService.cs" />
-    <Compile Include="Services\ISupportedVersionProvider.cs" />
-    <Compile Include="Services\ISynchronizationLogViewFactory.cs" />
-    <Compile Include="Services\ITabletInformationService.cs" />
-    <Compile Include="Troubleshooting\ITroubleshootingService.cs" />
-    <Compile Include="Services\Preloading\IInterviewImportDataParsingService.cs" />
-    <Compile Include="Services\Preloading\IPreloadedDataService.cs" />
-    <Compile Include="Services\Preloading\IPreloadedDataVerifier.cs" />
-    <Compile Include="Services\Preloading\IPreloadingTemplateService.cs" />
-    <Compile Include="Services\Preloading\IQuestionDataParser.cs" />
-    <Compile Include="HeadquartersBoundedContextModule.cs" />
-    <Compile Include="Services\QuestionnaireAssemblyAlreadyExistsException.cs" />
-    <Compile Include="Services\QuestionnaireAssemblyAccessor.cs" />
-    <Compile Include="Services\QuestionnaireImportResult.cs" />
-    <Compile Include="Services\QuestionnaireVersionProvider.cs" />
-    <Compile Include="Services\Internal\RandomValuesSource.cs" />
-    <Compile Include="Services\WebInterview\IWebInterviewNotificationService.cs" />
-    <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\SyncPackagesProcessorBackgroundJob.cs" />
-    <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundSchedulerTask.cs" />
-    <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\SyncPackagesProcessorBackgroundJobSetting.cs" />
-    <Compile Include="SyncSettings.cs" />
-    <Compile Include="UserPreloading\Dto\UserPreloadingDataRecord.cs" />
-    <Compile Include="UserPreloading\Dto\UserPreloadingProcess.cs" />
-    <Compile Include="UserPreloading\Dto\UserPreloadingVerificationError.cs" />
-    <Compile Include="UserPreloading\Dto\UserPrelodingState.cs" />
-    <Compile Include="UserPreloading\Jobs\UserPreloadingCleanerJob.cs" />
-    <Compile Include="UserPreloading\Mapping\UserPreloadingProcessMap.cs" />
-    <Compile Include="UserPreloading\Mapping\UserPreloadingVerificationErrorMap.cs" />
-    <Compile Include="UserPreloading\Services\IUserBatchCreator.cs" />
-    <Compile Include="UserPreloading\Services\IUserPreloadingCleaner.cs" />
-    <Compile Include="UserPreloading\Services\IUserPreloadingService.cs" />
-    <Compile Include="UserPreloading\Services\IUserPreloadingVerifier.cs" />
-    <Compile Include="UserPreloading\Services\UserBatchCreator.cs" />
-    <Compile Include="UserPreloading\Services\UserPreloadingCleaner.cs" />
-    <Compile Include="UserPreloading\Services\UserPreloadingException.cs" />
-    <Compile Include="UserPreloading\Services\UserPreloadingService.cs" />
-    <Compile Include="UserPreloading\Services\UserPreloadingVerifier.cs" />
-    <Compile Include="UserPreloading\Tasks\UserPreloadingCleanerTask.cs" />
-    <Compile Include="UserPreloading\UserPreloadingSettings.cs" />
-    <Compile Include="ValueObjects\Export\ExportFileSettings.cs" />
-    <Compile Include="ValueObjects\GlobalNotice.cs" />
-    <Compile Include="ValueObjects\HealthCheck\EventStoreHealthCheckResult.cs" />
-    <Compile Include="ValueObjects\HealthCheck\FolderPermissionCheckResult.cs" />
-    <Compile Include="ValueObjects\HealthCheck\HealthCheckResults.cs" />
-    <Compile Include="ValueObjects\HealthCheck\HealthCheckStatus.cs" />
-    <Compile Include="ValueObjects\HealthCheck\NumberOfUnhandledPackagesHealthCheckResult.cs" />
-    <Compile Include="ValueObjects\HealthCheck\ReadSideHealthCheckResult.cs" />
-    <Compile Include="ValueObjects\PreloadedData\PreloadedDataVerificationError.cs" />
-    <Compile Include="ValueObjects\PreloadedData\PreloadedDataVerificationReference.cs" />
-    <Compile Include="ValueObjects\PreloadedData\PreloadedDataVerificationReferenceType.cs" />
-    <Compile Include="ValueObjects\PreloadedData\VerificationStatus.cs" />
-    <Compile Include="ValueObjects\ValueParsingResult.cs" />
-    <Compile Include="Views\BaseInterviewGridItem.cs" />
-    <Compile Include="Views\BrokenInterviewPackages\BrokenInterviewPackageExceptionTypesView.cs" />
-    <Compile Include="Views\BrokenInterviewPackages\BrokenInterviewPackageFilter.cs" />
-    <Compile Include="Views\BrokenInterviewPackages\BrokenInterviewPackagesView.cs" />
-    <Compile Include="Views\BrokenInterviewPackages\BrokenInterviewPackageView.cs" />
-    <Compile Include="Views\ChangeStatus\ChangeStatusFactory.cs" />
-    <Compile Include="Views\ChangeStatus\ChangeStatusInputModel.cs" />
-    <Compile Include="Views\ChangeStatus\ChangeStatusView.cs" />
-    <Compile Include="Views\DataExport\ExportedHeaderItem.cs" />
-    <Compile Include="Implementation\Services\Export\ExportQuestionService.cs" />
-    <Compile Include="Views\DataExport\ExportFormatSettings.cs" />
-    <Compile Include="Views\DataExport\HeaderStructureForLevel.cs" />
-    <Compile Include="Views\DataExport\InterviewComment.cs" />
-    <Compile Include="Views\DataExport\InterviewCommentaries.cs" />
-    <Compile Include="Views\DataExport\InterviewDataExportLevelView.cs" />
-    <Compile Include="Views\DataExport\InterviewDataExportRecord.cs" />
-    <Compile Include="Views\DataExport\InterviewDataExportView.cs" />
-    <Compile Include="Views\DataExport\InterviewExportedAction.cs" />
-    <Compile Include="Views\DataExport\InterviewExportedActionUtils.cs" />
-    <Compile Include="Views\DataExport\InterviewExportedDataRecord.cs" />
-    <Compile Include="Views\DataExport\QuestionnaireExportStructure.cs" />
-    <Compile Include="Views\DataExport\QuestionSubType.cs" />
-    <Compile Include="Views\DetailsStatisticView.cs" />
-    <Compile Include="Views\DetailsViewModel.cs" />
-    <Compile Include="Views\Device\DeviceSyncInfo.cs" />
-    <Compile Include="Views\Device\SynchronizationActivity.cs" />
-    <Compile Include="Views\IInterviewDataAndQuestionnaireMerger.cs" />
-    <Compile Include="Views\IListView.cs" />
-    <Compile Include="Views\InterviewDataAndQuestionnaireMerger.cs" />
-    <Compile Include="Views\InterviewDetailsFilter.cs" />
-    <Compile Include="Views\Interviewer\InterviewersItem.cs" />
-    <Compile Include="Views\Interviewer\InterviewerStatisticsInputModel.cs" />
-    <Compile Include="Views\Interviewer\InterviewersView.cs" />
-    <Compile Include="Views\InterviewHistory\IInterviewHistoryFactory.cs" />
-    <Compile Include="Views\InterviewHistory\InterviewDataExportSettings.cs" />
-    <Compile Include="Views\InterviewHistory\InterviewHistoricalAction.cs" />
-    <Compile Include="Views\InterviewHistory\InterviewHistoricalRecordView.cs" />
-    <Compile Include="Views\InterviewHistory\InterviewHistoryFactory.cs" />
-    <Compile Include="Views\InterviewHistory\InterviewHistoryView.cs" />
-    <Compile Include="Views\InterviewLevelUtils.cs" />
-    <Compile Include="Views\InterviewPackage.cs" />
-    <Compile Include="Views\Interviews\ChartStatisticsInputModel.cs" />
-    <Compile Include="Views\Interviews\ChartStatisticsView.cs" />
-    <Compile Include="Views\Interviews\TeamInterviewsFactory.cs" />
-    <Compile Include="Views\Interviews\TeamInterviewsInputModel.cs" />
-    <Compile Include="Views\Interviews\TeamInterviewsView.cs" />
-    <Compile Include="Views\Interviews\TeamInterviewsViewItem.cs" />
-    <Compile Include="Views\Interview\AllInterviewsFactory.cs" />
-    <Compile Include="Views\Interview\AllInterviewsInputModel.cs" />
-    <Compile Include="Views\Interview\AllInterviewsView.cs" />
-    <Compile Include="Views\Interview\AllInterviewsViewItem.cs" />
-    <Compile Include="Views\Interview\AnswersByVariableCollection.cs" />
-    <Compile Include="Views\Interview\CumulativeReportStatusChange.cs" />
-    <Compile Include="Views\Interview\HardDeletedInterview.cs" />
-    <Compile Include="Views\Interview\IAllInterviewsFactory.cs" />
-    <Compile Include="Views\Interview\IInterviewDetailsViewFactory.cs" />
-    <Compile Include="Views\Interview\IInterviewInformationFactory.cs" />
-    <Compile Include="Views\Interview\IInterviewSummaryViewFactory.cs" />
-    <Compile Include="Views\Interview\InterviewDetails\IInterviewEntityViewFactory.cs" />
-    <Compile Include="Views\Interview\InterviewDetails\InterviewAttachmentViewModel.cs" />
-    <Compile Include="Views\Interview\InterviewBrief.cs" />
-    <Compile Include="Views\Interview\InterviewCommentedStatus.cs" />
-    <Compile Include="Views\Interview\InterviewData.cs" />
-    <Compile Include="Views\Interview\InterviewDetailsInputModel.cs" />
-    <Compile Include="Views\Interview\InterviewDetailsView.cs" />
-    <Compile Include="Views\Interview\InterviewDetailsViewFactory.cs" />
-    <Compile Include="Views\Interview\InterviewDetails\InterviewEntityViewFactory.cs" />
-    <Compile Include="Views\Interview\InterviewDetails\InterviewTranslationView.cs" />
-    <Compile Include="Views\Interview\InterviewEntityView.cs" />
-    <Compile Include="Views\Interview\InterviewerInterviewsFactory.cs" />
-    <Compile Include="Views\Interview\InterviewFeaturedQuestion.cs" />
-    <Compile Include="Views\Interview\InterviewGroupView.cs" />
-    <Compile Include="Views\Interview\InterviewInformation.cs" />
-    <Compile Include="Views\Interview\InterviewLevel.cs" />
-    <Compile Include="Views\Interview\InterviewLinkedQuestionOptions.cs" />
-    <Compile Include="Views\Interview\InterviewQuestion.cs" />
-    <Compile Include="Views\Interview\InterviewQuestionComment.cs" />
-    <Compile Include="Views\Interview\InterviewDetails\InterviewQuestionView.cs" />
-    <Compile Include="Views\Interview\InterviewReferences.cs" />
-    <Compile Include="Views\Interview\InterviewStaticText.cs" />
-    <Compile Include="Views\Interview\InterviewDetails\InterviewStaticTextView.cs" />
-    <Compile Include="Views\Interview\InterviewStatuses.cs" />
-    <Compile Include="Views\Interview\InterviewStatusTimeSpans.cs" />
-    <Compile Include="Views\Interview\InterviewSummary.cs" />
-    <Compile Include="Views\Interview\InterviewSummaryForMapPointView.cs" />
-    <Compile Include="Views\Interview\InterviewSummaryViewFactory.cs" />
-    <Compile Include="Views\Interview\LastInterviewStatus.cs" />
-    <Compile Include="Views\Interview\QuestionAnswer.cs" />
-    <Compile Include="Views\Interview\StatisticsLineGroupedByDateAndTemplate.cs" />
-    <Compile Include="Views\Interview\StatisticsLineGroupedByUserAndTemplate.cs" />
-    <Compile Include="Views\Interview\TimeSpanBetweenStatuses.cs" />
-    <Compile Include="Views\ListViewModelBase.cs" />
-    <Compile Include="Views\PreloadedData\PreloadedContentMetaData.cs" />
-    <Compile Include="Views\PreloadedData\PreloadedContentType.cs" />
-    <Compile Include="Views\PreloadedData\PreloadedDataByFile.cs" />
-    <Compile Include="Views\PreloadedData\PreloadedDataVerificationErrorsView.cs" />
-    <Compile Include="Views\PreloadedData\PreloadedFileMetaData.cs" />
-    <Compile Include="Views\PreloadedData\PreloadedMetaDataView.cs" />
-    <Compile Include="Views\Preloading\QuestionnairePreloadingDataInputModel.cs" />
-    <Compile Include="Views\Preloading\QuestionnairePreloadingDataItem.cs" />
-    <Compile Include="Views\Preloading\QuestionnairePreloadingDataViewFactory.cs" />
-    <Compile Include="Views\Questionnaire\AssemblyInfo.cs" />
-    <Compile Include="Views\Questionnaire\AttachmentContent.cs" />
-    <Compile Include="Views\Questionnaire\AttachmentInfoView.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireAndVersionsItem.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireBrowseItem.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireBrowseView.cs" />
-    <Compile Include="Views\Questionnaire\ReferenceInfoByQuestion.cs" />
-    <Compile Include="Views\Questionnaire\SampleUploadView.cs" />
-    <Compile Include="Views\Questionnaire\SampleUploadViewFactory.cs" />
-    <Compile Include="Views\Questionnaire\SampleUploadViewInputModel.cs" />
-    <Compile Include="Views\Reposts\Factories\AbstractTeamsAndStatusesReport.cs" />
-    <Compile Include="Views\Reposts\Factories\HeadquartersTeamsAndStatusesReport.cs" />
-    <Compile Include="Views\Reposts\Factories\IMapReport.cs" />
-    <Compile Include="Views\Reposts\Factories\MapReport.cs" />
-    <Compile Include="Views\Reposts\Factories\QuantityReportFactory.cs" />
-    <Compile Include="Views\Reposts\Factories\SpeedReportFactory.cs" />
-    <Compile Include="Views\Reposts\Factories\SupervisorTeamsAndStatusesReport.cs" />
-    <Compile Include="Views\Reposts\Factories\SurveysAndStatusesReport.cs" />
-    <Compile Include="Views\Reposts\IHeadquartersTeamsAndStatusesReport.cs" />
-    <Compile Include="Views\Reposts\InputModels\MapReportInputModel.cs" />
-    <Compile Include="Views\Reposts\InputModels\QuantityByInterviewersReportInputModel.cs" />
-    <Compile Include="Views\Reposts\InputModels\QuantityBySupervisorsReportInputModel.cs" />
-    <Compile Include="Views\Reposts\InputModels\SpeedBetweenStatusesByInterviewersReportInputModel.cs" />
-    <Compile Include="Views\Reposts\InputModels\SpeedBetweenStatusesBySupervisorsReportInputModel.cs" />
-    <Compile Include="Views\Reposts\InputModels\SpeedByInterviewersReportInputModel.cs" />
-    <Compile Include="Views\Reposts\InputModels\SpeedBySupervisorsReportInputModel.cs" />
-    <Compile Include="Views\Reposts\InputModels\SupervisorTeamMembersAndStatusesReportInputModel.cs" />
-    <Compile Include="Views\Reposts\InputModels\SurveysAndStatusesReportInputModel.cs" />
-    <Compile Include="Views\Reposts\InputModels\TeamsAndStatusesInputModel.cs" />
-    <Compile Include="Views\Reposts\ISupervisorTeamsAndStatusesReport.cs" />
-    <Compile Include="Views\Reposts\ISurveysAndStatusesReport.cs" />
-    <Compile Include="Views\Reposts\PeriodiceReportType.cs" />
-    <Compile Include="Views\Reposts\PeriodicStatusReportModel.cs" />
-    <Compile Include="Views\Reposts\PeriodicStatusReportWebApiActionName.cs" />
-    <Compile Include="Views\Reposts\Views\DateTimeRange.cs" />
-    <Compile Include="Views\Reposts\Views\HeadquarterSurveysAndStatusesReportLine.cs" />
-    <Compile Include="Views\Reposts\Views\MapPointView.cs" />
-    <Compile Include="Views\Reposts\Views\MapReportView.cs" />
-    <Compile Include="Views\Reposts\Views\QuantityByResponsibleReportRow.cs" />
-    <Compile Include="Views\Reposts\Views\QuantityByResponsibleReportView.cs" />
-    <Compile Include="Views\Reposts\Views\QuantityTotalRow.cs" />
-    <Compile Include="Views\Reposts\Views\QuestionnaireAndVersionsView.cs" />
-    <Compile Include="Views\Reposts\Views\ReportLineCounters.cs" />
-    <Compile Include="Views\Reposts\Views\SpeedByResponsibleReportRow.cs" />
-    <Compile Include="Views\Reposts\Views\SpeedByResponsibleReportView.cs" />
-    <Compile Include="Views\Reposts\Views\SurveysAndStatusesReportView.cs" />
-    <Compile Include="Views\Reposts\Views\TeamsAndStatusesReportLine.cs" />
-    <Compile Include="Views\Reposts\Views\TeamsAndStatusesReportView.cs" />
-    <Compile Include="Views\Reposts\Views\TemplateViewItem.cs" />
-    <Compile Include="Views\Responsible\ResponsiblesViewItem.cs" />
-    <Compile Include="Views\Revalidate\InterviewTroubleshootFactory.cs" />
-    <Compile Include="Views\Revalidate\InterviewTroubleshootInputModel.cs" />
-    <Compile Include="Views\Revalidate\InterviewTroubleshootView.cs" />
-    <Compile Include="Views\SampleImport\SampleCreationStatus.cs" />
-    <Compile Include="Views\SampleImport\SampleImportSettings.cs" />
-    <Compile Include="Views\SampleImport\TempFileImportData.cs" />
-    <Compile Include="Views\Supervisor\SupervisorsItem.cs" />
-    <Compile Include="Views\Supervisor\SupervisorsView.cs" />
-    <Compile Include="Views\Survey\DisplayViewInputModel.cs" />
-    <Compile Include="Views\Survey\SurveysInputModel.cs" />
-    <Compile Include="Views\Survey\SurveyStatusViewItem.cs" />
-    <Compile Include="Views\Survey\SurveysView.cs" />
-    <Compile Include="Views\Survey\SurveysViewItem.cs" />
-    <Compile Include="Views\Survey\SurveyUsersView.cs" />
-    <Compile Include="Views\Survey\SurveyUsersViewInputModel.cs" />
-    <Compile Include="Troubleshooting\Views\InterviewLog.cs" />
-    <Compile Include="Views\SynchronizationLog\SynchronizationLog.cs" />
-    <Compile Include="Views\SynchronizationLog\SynchronizationLogDevicesView.cs" />
-    <Compile Include="Views\SynchronizationLog\SynchronizationLogFilter.cs" />
-    <Compile Include="Views\SynchronizationLog\SynchronizationLogItem.cs" />
-    <Compile Include="Views\SynchronizationLog\SynchronizationLogType.cs" />
-    <Compile Include="Views\TabletInformation\TabletInformationsView.cs" />
-    <Compile Include="Views\TabletInformation\TabletInformationView.cs" />
-    <Compile Include="Views\TakeNew\FeaturedAnswerView.cs" />
-    <Compile Include="Views\TakeNew\FeaturedQuestionView.cs" />
-    <Compile Include="Views\TakeNew\TakeNewInterviewInputModel.cs" />
-    <Compile Include="Views\TakeNew\TakeNewAssignmentView.cs" />
-    <Compile Include="Views\TemplateLight.cs" />
-    <Compile Include="Views\Template\DesignerQuestionnaireListViewItem.cs" />
-    <Compile Include="Views\UsersAndQuestionnaires\AllUsersAndQuestionnairesFactory.cs" />
-    <Compile Include="Views\UsersAndQuestionnaires\AllUsersAndQuestionnairesInputModel.cs" />
-    <Compile Include="Views\UsersAndQuestionnaires\AllUsersAndQuestionnairesView.cs" />
-    <Compile Include="Views\UsersAndQuestionnaires\ITeamUsersAndQuestionnairesFactory.cs" />
-    <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesFactory.cs" />
-    <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesInputModel.cs" />
-    <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesView.cs" />
-    <Compile Include="Views\User\HqUser.cs" />
-    <Compile Include="Views\User\InterviewerOptionFilter.cs" />
-    <Compile Include="Views\User\ITeamViewFactory.cs" />
-    <Compile Include="Views\User\IUserViewFactory.cs" />
-    <Compile Include="Views\Responsible\ResponsibleView.cs" />
-    <Compile Include="Views\User\RoleExtensions.cs" />
-    <Compile Include="Views\User\TeamViewFactory.cs" />
-    <Compile Include="Views\User\UserListView.cs" />
-    <Compile Include="Views\User\UserViewFactory.cs" />
-    <Compile Include="Views\User\UsersView.cs" />
-    <Compile Include="Views\User\UsersViewItem.cs" />
-    <Compile Include="Views\User\UserView.cs" />
-    <Compile Include="Views\User\UserViewInputModel.cs" />
-    <Compile Include="Views\ViewerStatus.cs" />
-    <Compile Include="WebInterview\ISampleWebInterviewService.cs" />
-    <Compile Include="WebInterview\Impl\SampleWebInterviewService.cs" />
-    <Compile Include="WebInterview\WebInterviewConfig.cs" />
-    <Compile Include="WebInterview\IWebInterviewConfigProvider.cs" />
-    <Compile Include="WebInterview\IWebInterviewConfigurator.cs" />
-    <Compile Include="WebInterview\Impl\WebInterviewConfigurator.cs" />
-    <Compile Include="WebInterview\Impl\WebInterviewConfigProvider.cs" />
-    <Compile Include="ZipFileData.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="job_scheduling_data_2_0.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
-      <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>
-      <Name>WB.Infrastructure.Native</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
-      <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
-      <Name>WB.Core.GenericSubdomains.Portable</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
-      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
-      <Name>WB.Core.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
-      <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
-      <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
-      <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
-      <Name>WB.Core.SharedKernels.DataCollection</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
-      <Project>{d6616c1d-7c3a-4576-b82b-098721cd4417}</Project>
-      <Name>WB.Core.SharedKernels.Questionnaire</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
-      <Project>{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}</Project>
-      <Name>WB.Core.SharedKernel.Structures</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Synchronization\Questionnaire\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\CommandValidatorsMessages.pt.resx">
-      <DependentUpon>CommandValidatorsMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\CommandValidatorsMessages.resx">
+    <EmbeddedResource Update="Resources\CommandValidatorsMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CommandValidatorsMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\CommandValidatorsMessages.ru.resx">
-      <DependentUpon>CommandValidatorsMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\CommandValidatorsMessages.zh.resx">
-      <DependentUpon>CommandValidatorsMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ErrorMessages.fr.resx">
-      <DependentUpon>ErrorMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ErrorMessages.pt.resx">
-      <DependentUpon>ErrorMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ErrorMessages.resx">
+    <EmbeddedResource Update="Resources\ErrorMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ErrorMessages.ru.resx">
-      <DependentUpon>ErrorMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ErrorMessages.zh.resx">
-      <DependentUpon>ErrorMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.fr.resx">
-      <DependentUpon>FileBasedDataExportRepositoryWriterMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.pt.resx">
-      <DependentUpon>FileBasedDataExportRepositoryWriterMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+    <EmbeddedResource Update="Resources\FileBasedDataExportRepositoryWriterMessages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>FileBasedDataExportRepositoryWriterMessages.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.ru.resx">
-      <DependentUpon>FileBasedDataExportRepositoryWriterMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.zh.resx">
-      <DependentUpon>FileBasedDataExportRepositoryWriterMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.fr.resx">
-      <DependentUpon>HeadquarterUserCommandValidatorMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.pt.resx">
-      <DependentUpon>HeadquarterUserCommandValidatorMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.resx">
+    <EmbeddedResource Update="Resources\HeadquarterUserCommandValidatorMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>HeadquarterUserCommandValidatorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.ru.resx">
-      <DependentUpon>HeadquarterUserCommandValidatorMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.zh.resx">
-      <DependentUpon>HeadquarterUserCommandValidatorMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PreloadingVerificationMessages.pt.resx">
-      <DependentUpon>PreloadingVerificationMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PreloadingVerificationMessages.resx">
+    <EmbeddedResource Update="Resources\PreloadingVerificationMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PreloadingVerificationMessages.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PreloadingVerificationMessages.ru.resx">
-      <DependentUpon>PreloadingVerificationMessages.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PreloadingVerificationMessages.zh.resx">
-      <DependentUpon>PreloadingVerificationMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\SurveyManagementInterviewCommandValidatorMessages.pt.resx">
-      <DependentUpon>SurveyManagementInterviewCommandValidatorMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\SurveyManagementInterviewCommandValidatorMessages.resx">
+    <EmbeddedResource Update="Resources\SurveyManagementInterviewCommandValidatorMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SurveyManagementInterviewCommandValidatorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\SurveyManagementInterviewCommandValidatorMessages.zh.resx">
-      <DependentUpon>SurveyManagementInterviewCommandValidatorMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\TroubleshootingMessages.resx">
+    <EmbeddedResource Update="Resources\TroubleshootingMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>TroubleshootingMessages.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\TroubleshootingMessages.ru.resx">
-      <SubType>Designer</SubType>
+    <EmbeddedResource Update="Resources\UserPreloadingServiceMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>TroubleshootingMessages.ru.Designer.cs</LastGenOutput>
-      <DependentUpon>TroubleshootingMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\TroubleshootingMessages.zh.resx">
-      <DependentUpon>TroubleshootingMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.fr.resx">
-      <DependentUpon>UserPreloadingServiceMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.pt.resx">
-      <DependentUpon>UserPreloadingServiceMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>UserPreloadingServiceMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.ru.resx">
-      <DependentUpon>UserPreloadingServiceMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.zh.resx">
-      <DependentUpon>UserPreloadingServiceMessages.resx</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
-  </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

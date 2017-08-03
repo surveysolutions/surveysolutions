@@ -32,75 +32,82 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\nusing System;\r\nusing System.Collections.Generic;\r\nusing System.Linq;\r\nusing Sys" +
-                    "tem.Text.RegularExpressions;\r\nusing WB.Core.SharedKernels.DataCollection.Express" +
-                    "ionStorage;\r\n\r\nnamespace WB.Core.SharedKernels.DataCollection.Generated\r\n{\r\n\tpub" +
-                    "lic class ");
+            this.Write(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
+using WB.Core.SharedKernels.DataCollection.Portable;
+
+namespace WB.Core.SharedKernels.DataCollection.Generated
+{
+	public class ");
             
-            #line 19 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            #line 20 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ClassName));
             
             #line default
             #line hidden
             this.Write(" : ");
             
-            #line 19 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            #line 20 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IInterviewExpressionStorage).Name));
             
             #line default
             #line hidden
             this.Write(" \r\n\t{\r\n\t\tprivate Dictionary<Guid, Func<RosterVector, ");
             
-            #line 21 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            #line 22 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ClassName));
             
             #line default
             #line hidden
             this.Write(", ");
             
-            #line 21 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            #line 22 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IInterviewLevel).Name));
             
             #line default
             #line hidden
             this.Write(">> levelFactory = new Dictionary<Guid, Func<RosterVector, ");
             
-            #line 21 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            #line 22 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ClassName));
             
             #line default
             #line hidden
             this.Write(", ");
             
-            #line 21 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            #line 22 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IInterviewLevel).Name));
             
             #line default
             #line hidden
             this.Write(">>();\r\n\t\tpublic ");
             
-            #line 22 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            #line 23 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ClassName));
             
             #line default
             #line hidden
             this.Write("()\r\n\t\t{\r\n\t\t\tlevelFactory.Add(IdOf.");
             
-            #line 24 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            #line 25 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(CodeGeneratorV2.QuestionnaireIdName));
             
             #line default
             #line hidden
             this.Write(", (v, s) => new ");
             
-            #line 24 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            #line 25 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(CodeGeneratorV2.QuestionnaireLevel));
             
             #line default
             #line hidden
             this.Write("(v, s));\r\n");
             
-            #line 25 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            #line 26 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
 
 		foreach (var roster in Model.AllRosters) 
 		{
@@ -110,21 +117,21 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line hidden
             this.Write("\t\t\tlevelFactory.Add(IdOf.");
             
-            #line 29 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            #line 30 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(roster.Variable));
             
             #line default
             #line hidden
             this.Write(", (v, s) => new ");
             
-            #line 29 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            #line 30 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(roster.ClassName));
             
             #line default
             #line hidden
             this.Write("(v, s));\r\n");
             
-            #line 30 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            #line 31 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
 
 		}
 
@@ -133,21 +140,21 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line hidden
             this.Write("\t\r\n\t\t}\r\n\r\n\t\tpublic void Initialize(");
             
-            #line 35 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            #line 36 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IInterviewStateForExpressions).Name));
             
             #line default
             #line hidden
             this.Write(" state) \r\n\t\t{\r\n\t\t\tthis.state = state;\r\n\t\t}\r\n\r\n\t\tinternal ");
             
-            #line 40 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            #line 41 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IInterviewStateForExpressions).Name));
             
             #line default
             #line hidden
             this.Write(" state;\r\n\r\n\t\tpublic ");
             
-            #line 42 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            #line 43 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IInterviewLevel).Name));
             
             #line default
@@ -166,7 +173,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
 
 		private ");
             
-            #line 54 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            #line 55 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IInterviewLevel).Name));
             
             #line default
@@ -175,7 +182,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
                     "rIdentity.Id))\r\n\t\t\t\treturn levelFactory[rosterIdentity.Id](rosterIdentity.Roster" +
                     "Vector, this);\r\n\t\t\treturn null;\r\n\t\t}\r\n\t}\r\n\r\n");
             
-            #line 62 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            #line 63 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
 
 	foreach (var level in Model.Levels) 
 	{
@@ -188,7 +195,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line hidden
             this.Write("\r\n\tpublic static class IdOf\r\n\t{\r\n");
             
-            #line 72 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            #line 73 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
 
 		foreach (var pair in Model.IdMap)
 		{
@@ -198,21 +205,21 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line hidden
             this.Write("\t\tpublic static readonly Guid ");
             
-            #line 76 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            #line 77 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(pair.Value));
             
             #line default
             #line hidden
             this.Write(" = ");
             
-            #line 76 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            #line 77 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(pair.Key.AsBytesString()));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 77 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            #line 78 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
 
 		}
 
@@ -221,14 +228,14 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             #line hidden
             this.Write("\t}\r\n\r\n\tpublic class QuestionnaireRandom\r\n\t{\r\n\t\tpublic QuestionnaireRandom(");
             
-            #line 84 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            #line 85 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IInterviewPropertiesForExpressions).Name));
             
             #line default
             #line hidden
             this.Write(" properties)\r\n\t\t{\r\n\t\t\tthis.Properties = properties;\r\n\t\t}\r\n\t\tprivate ");
             
-            #line 88 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            #line 89 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IInterviewPropertiesForExpressions).Name));
             
             #line default

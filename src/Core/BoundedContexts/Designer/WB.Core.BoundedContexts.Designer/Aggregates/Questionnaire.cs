@@ -1478,6 +1478,60 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
+
+        public void UpdateAudioQuestion(UpdateAudioQuestion command)
+        {
+            var title = command.Title;
+            var variableName = command.VariableName;
+
+            PrepareGeneralProperties(ref title, ref variableName);
+
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
+            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
+
+            var isPrefilled = false;
+
+            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
+
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(command.QuestionId, parentGroup, title, variableName, isPrefilled,
+                QuestionType.Audio, command.ResponsibleId, null);
+
+            var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
+            AudioQuestion newQuestion = (AudioQuestion)CreateQuestion(
+                command.QuestionId,
+                QuestionType.Audio,
+                command.Scope,
+                command.Title,
+                command.VariableName,
+                command.VariableLabel,
+                command.EnablementCondition,
+                command.HideIfDisabled,
+                Order.AZ,
+                false,
+                command.Instructions,
+                command.Properties,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                new List<ValidationCondition>(),
+                null,
+                false);
+
+            if (question != null)
+            {
+                this.innerDocument.ReplaceEntity(question, newQuestion);
+            }
+        }
+
         public void UpdateMultimediaQuestion(Guid questionId, string title, string variableName, string variableLabel, string enablementCondition, bool hideIfDisabled, 
             string instructions, Guid responsibleId, QuestionScope scope, QuestionProperties properties)
         {
@@ -1854,23 +1908,26 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 var clonedGroup = entityToInsertAsGroup.Clone();
                 clonedGroup.TreeToEnumerable(x => x.Children).ForEach(c =>
                 {
-                    TypeSwitch.Do(c,
-                        TypeSwitch.Case<Group>(g =>
-                        {
+                    switch (c)
+                    {
+                        case Group g:
                             g.PublicKey = replacementIdDictionary[g.PublicKey];
                             g.RosterSizeQuestionId = GetIdOrReturnSameId(replacementIdDictionary, g.RosterSizeQuestionId);
                             g.RosterTitleQuestionId = GetIdOrReturnSameId(replacementIdDictionary, g.RosterTitleQuestionId);
-                        }),
-                        TypeSwitch.Case<IQuestion>(q =>
-                        {
+                            break;
+                        case IQuestion q:
                             ((AbstractQuestion)q).PublicKey = replacementIdDictionary[q.PublicKey];
                             q.CascadeFromQuestionId = GetIdOrReturnSameId(replacementIdDictionary, q.CascadeFromQuestionId);
                             q.LinkedToQuestionId = GetIdOrReturnSameId(replacementIdDictionary, q.LinkedToQuestionId);
                             q.LinkedToRosterId = GetIdOrReturnSameId(replacementIdDictionary, q.LinkedToRosterId);
-                        }),
-                        TypeSwitch.Case<Variable>(v => v.PublicKey = replacementIdDictionary[v.PublicKey]),
-                        TypeSwitch.Case<StaticText>(st => st.PublicKey = replacementIdDictionary[st.PublicKey])
-                    );
+                            break;
+                        case Variable v:
+                            v.PublicKey = replacementIdDictionary[v.PublicKey];
+                            break;
+                        case StaticText st:
+                            st.PublicKey = replacementIdDictionary[st.PublicKey];
+                            break;
+                    }
                 });
                 this.innerDocument.Insert(targetIndex, clonedGroup, targetToPasteIn.PublicKey);
                 return;
@@ -2243,12 +2300,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 return;
             }
-
-            if (validationExpression.Count > 0)
-            {
-                throw new QuestionnaireException(ExceptionMessages.CascadingCantHaveValidationExpression);
-            }
-
+            
             if (!string.IsNullOrWhiteSpace(enablementCondition))
             {
                 throw new QuestionnaireException(ExceptionMessages.CascadingCantHaveConditionExpression);
@@ -3686,6 +3738,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 case QuestionType.Area:
                     question = new AreaQuestion();
+                    break;
+
+                case QuestionType.Audio:
+                    question = new AudioQuestion();
                     break;
 
                 default:

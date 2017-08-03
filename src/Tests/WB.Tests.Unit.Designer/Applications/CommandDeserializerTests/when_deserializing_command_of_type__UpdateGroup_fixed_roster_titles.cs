@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
 {
     internal class when_deserializing_command_of_type__UpdateGroup_fixed_roster_titles : CommandDeserializerTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             type = "UpdateGroup";
 
             title = @"<b width='7'>MA<font color='red'>IN</font></b><img /><script> alert('hello world!')</script><script/>";
@@ -30,36 +29,37 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
             }}", questionnaireId, groupId, title, propagationKind, rosterFixedTitles);
 
             deserializer = CreateCommandDeserializer();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             result = deserializer.Deserialize(type, command);
 
-        It should_return_NewUpdateGroupCommand = () =>
+        [NUnit.Framework.Test] public void should_return_NewUpdateGroupCommand () =>
             result.ShouldBeOfExactType<UpdateGroup>();
 
-        It should_return_same_title_in_NewUpdateGroupCommand = () =>
+        [NUnit.Framework.Test] public void should_return_same_title_in_NewUpdateGroupCommand () =>
             ((UpdateGroup)result).Title.ShouldEqual(sanitizedTitle);
 
-        It should_return_same_questionnaire_id_in_NewUpdateGroupCommand = () =>
+        [NUnit.Framework.Test] public void should_return_same_questionnaire_id_in_NewUpdateGroupCommand () =>
             ((UpdateGroup)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));
 
-        It should_return_same_group_id_in_NewUpdateGroupCommand = () =>
+        [NUnit.Framework.Test] public void should_return_same_group_id_in_NewUpdateGroupCommand () =>
             ((UpdateGroup)result).GroupId.ShouldEqual(Guid.Parse(groupId));
 
-        It should_return_2_fixed_roster_titles = () =>
+        [NUnit.Framework.Test] public void should_return_2_fixed_roster_titles () =>
             ((UpdateGroup)result).FixedRosterTitles.Count().ShouldEqual(2);
 
-        It should_return_sanizited_first_fixed_title = () =>
+        [NUnit.Framework.Test] public void should_return_sanizited_first_fixed_title () =>
             ((UpdateGroup)result).FixedRosterTitles[0].Title.ShouldEqual("привет, Мир!");
 
-        It should_return_sanizited_second_fixed_title = () =>
+        [NUnit.Framework.Test] public void should_return_sanizited_second_fixed_title () =>
             ((UpdateGroup)result).FixedRosterTitles[1].Title.ShouldEqual("hi, Hello!");
         
-        It should_return_first_fixed_roster_title_value_1_0 = () =>
+        [NUnit.Framework.Test] public void should_return_first_fixed_roster_title_value_1_0 () =>
             ((UpdateGroup)result).FixedRosterTitles[0].Value.ShouldEqual("1.0");
 
-        It should_return_second_fixed_roster_title_value_2_0 = () =>
+        [NUnit.Framework.Test] public void should_return_second_fixed_roster_title_value_2_0 () =>
             ((UpdateGroup)result).FixedRosterTitles[1].Value.ShouldEqual("2.0");
 
 

@@ -1,18 +1,17 @@
 using System;
 using System.Collections.Generic;
 using Machine.Specifications;
-using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactoryTests
 {
-    internal class when_building_view_from_statistics_which_has_1_day_with_1_for_each_count_and_we_request__on_day_before_and_null_to : ChartStatisticsViewFactoryTestsContext
+    public class when_building_view_from_statistics_which_has_1_day_with_1_for_each_count_and_we_request__on_day_before_and_null_to : ChartStatisticsViewFactoryTestsContext
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void Establish()
         {
             var statistics = CreateStatisticsGroupedByDateAndTemplate(new Dictionary<DateTime, QuestionnaireStatisticsForChart>
             {
@@ -32,24 +31,30 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
             };
 
             chartStatisticsViewFactory = CreateChartStatisticsViewFactory(statistics: statistics);
-        };
+            Because();
+        }
 
-        Because of = () => view = chartStatisticsViewFactory.Load(input);
+        public void Because() => view = chartStatisticsViewFactory.Load(input);
 
-        It should_return_7_lines_the_same_as_statuses_count = () =>
-            view.Lines.Length.ShouldEqual(7);
+        [Test]
+        public void should_return_8_lines_the_same_as_statuses_count() =>
+            view.Lines.Length.ShouldEqual(8);
 
-        It should_set_1st_point_horizontal_coord_of_all_lines_equal_to_2014_08_19 = () =>
+        [Test]
+        public void should_set_1st_point_horizontal_coord_of_all_lines_equal_to_2014_08_19() =>
             view.Lines.ShouldEachConformTo(line => (string)line[0][0] == "2014-08-20");
 
-        It should_set_2nd_point_horizontal_coord_of_all_lines_equal_to_2014_08_20 = () =>
+        [Test]
+        public void should_set_2nd_point_horizontal_coord_of_all_lines_equal_to_2014_08_20() =>
             view.Lines.ShouldEachConformTo(line => (string)line[1][0] == "2014-08-21");
 
-        
-        It should_set_1st_point_vertical_size_of_all_lines_equal_to_0_as_starting_day_with_no_data = () =>
+
+        [Test]
+        public void should_set_1st_point_vertical_size_of_all_lines_equal_to_0_as_starting_day_with_no_data() =>
             view.Lines.ShouldEachConformTo(line => (int) line[0][1] == 0);
 
-        It should_set_2nd_point_vertical_size_of_all_lines_equal_to_0_as_starting_day_with_no_data = () =>
+        [Test]
+        public void should_set_2nd_point_vertical_size_of_all_lines_equal_to_0_as_starting_day_with_no_data() =>
             view.Lines.ShouldEachConformTo(line => (int) line[1][1] == 1);
 
         

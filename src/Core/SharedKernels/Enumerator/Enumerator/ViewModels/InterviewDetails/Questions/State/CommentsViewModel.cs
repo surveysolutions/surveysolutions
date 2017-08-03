@@ -14,7 +14,6 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
@@ -31,6 +30,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             public string CommentCaption  { get; set; }
 
             public bool IsCurrentUserComment { get; set; }
+
+            public Identity Identity { get; set; }
         }
 
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -54,15 +55,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private string interviewId;
-        private Identity questionIdentity;
+        public Identity Identity { get; private set; }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
-
-            this.interviewId = interviewId;
-            this.questionIdentity = entityIdentity;
+            this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
+            this.Identity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
 
             this.interview = this.interviewRepository.Get(interviewId);
             this.UpdateCommentsFromInterview();
@@ -72,7 +70,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void UpdateCommentsFromInterview()
         {
-            var comments = interview.GetQuestionComments(this.questionIdentity) ?? new List<AnswerComment>();
+            var comments = interview.GetQuestionComments(this.Identity) ?? new List<AnswerComment>();
 
             this.mainThreadDispatcher.RequestMainThreadAction(() =>
             {
@@ -90,7 +88,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 Comment = comment.Comment,
                 IsCurrentUserComment = isCurrentUserComment,
-                CommentCaption = commentCaption
+                CommentCaption = commentCaption,
+                Identity = this.Identity
             };
         }
 
@@ -160,8 +159,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 new CommentAnswerCommand(
                     interviewId: Guid.Parse(this.interviewId),
                     userId: this.principal.CurrentUserIdentity.UserId,
-                    questionId: this.questionIdentity.Id,
-                    rosterVector: this.questionIdentity.RosterVector,
+                    questionId: this.Identity.Id,
+                    rosterVector: this.Identity.RosterVector,
                     commentTime: DateTime.UtcNow,
                     comment: this.InterviewerComment)).ConfigureAwait(false);
 

@@ -380,4 +380,31 @@
   <data name="Interviewer_Diagnostics" xml:space="preserve">
     <value>Діагностіка</value>
   </data>
+  <data name="Interviewer_Done" xml:space="preserve">
+    <value>Зберегти</value>
+    <comment>Зберегти</comment>
+  </data>
+  <data name="Interviewer_AudioRecording" xml:space="preserve">
+    <value>аудіо запис</value>
+    <comment>аудіо запис</comment>
+  </data>
+  <data name="Interview_Questions_Audio_SaveAnswer" xml:space="preserve">
+    <value>Записати звук</value>
+    <comment>Записати звук</comment>
+  </data>
+  <data name="AudioQuestion_DurationFormat" xml:space="preserve">
+    <value>{0} аудіо запису</value>
+  </data>
+  <data name="Interview_Questions_Audio_RecordNew" xml:space="preserve">
+    <value>Перезаписати</value>
+    <comment>Перезаписати</comment>
+  </data>
+  <data name="Audio_Io_Exception_Message" xml:space="preserve">
+    <value>Не вдалося записати аудіофайл. Переконайтеся, що в пристрої є вільний простір у внутрішньому сховищі</value>
+    <comment>Не вдалося записати аудіофайл. Переконайтеся, що в пристрої є вільний простір у внутрішньому сховищі</comment>
+  </data>
+  <data name="Audio_Unhandled_Exception_Message" xml:space="preserve">
+    <value>Непередбачена помилка під час початку запису</value>
+    <comment>Непередбачена помилка під час початку запису</comment>
+  </data>
 </root>

@@ -166,6 +166,9 @@
   <data name="Unlimited" xml:space="preserve">
     <value>Unlimited</value>
   </data>
+  <data name="CreateInterview" xml:space="preserve">
+    <value>Start new interview</value>
+  </data>
   <data name="UpdatedAt" xml:space="preserve">
     <value>Updated at</value>
   </data>
@@ -173,12 +176,15 @@
     <value>Fill all or some of the identifying fields</value>
   </data>
   <data name="CreateAssignment_QuantityInstruction" xml:space="preserve">
-    <value>Specify maximum number of interviews to be generated for that assignment (Quantity)</value>
+    <value>Specify maximum number of interviews to be generated for that assignment (Quantity). Permitted values: -1 is for Unlimited assignment, 0 is for Empty assignment, numbers for assignment size.</value>
   </data>
   <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
     <value>Select responsible (Supervisor or Interviewer) for this assignment</value>
   </data>
   <data name="InterviewsNeeded" xml:space="preserve">
     <value>Interviews needed</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Questionnaire</value>
   </data>
 </root>

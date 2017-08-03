@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private void CreateStataDataFilesFromTabularDataFiles(QuestionnaireIdentity questionnaireIdentity, string[] tabDataFiles,
             IProgress<int> progress, CancellationToken cancellationToken)
         {
-            var exportProgress = new Microsoft.Progress<int>();
+            var exportProgress = new Progress<int>();
             exportProgress.ProgressChanged +=
                 (sender, donePercent) => progress.Report(50 + (donePercent/2));
 

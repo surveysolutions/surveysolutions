@@ -2,7 +2,6 @@
 using System.Linq;
 using Machine.Specifications;
 using Ncqrs.Spec;
-using WB.Core.BoundedContexts.Headquarters.EventHandler;
 
 namespace WB.Tests.Integration
 {
@@ -37,25 +36,7 @@ namespace WB.Tests.Integration
                     && condition.Invoke((TEvent) @event.Payload));
             }
         }
-
-        public static void ShouldContainValues(this QuestionnaireStatisticsForChart stat,
-            int createdCount,
-            int supervisorAssignedCount,
-            int interviewerAssignedCount,
-            int completedCount,
-            int approvedBySupervisorCount,
-            int rejectedBySupervisorCount,
-            int approvedByHeadquartersCount,
-            int rejectedByHeadquartersCount)
-        {
-            stat.SupervisorAssignedCount.ShouldEqual(supervisorAssignedCount);
-            stat.InterviewerAssignedCount.ShouldEqual(interviewerAssignedCount);
-            stat.CompletedCount.ShouldEqual(completedCount);
-            stat.ApprovedBySupervisorCount.ShouldEqual(approvedBySupervisorCount);
-            stat.RejectedBySupervisorCount.ShouldEqual(rejectedBySupervisorCount);
-            stat.ApprovedByHeadquartersCount.ShouldEqual(approvedByHeadquartersCount);
-            stat.RejectedByHeadquartersCount.ShouldEqual(rejectedByHeadquartersCount);
-        }
+        
         public static void ShouldContainEvents<TEvent>(this EventContext eventContext, int count)
         {
             eventContext.Events.Count(e => e.Payload is TEvent).ShouldEqual(count);

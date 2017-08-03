@@ -32,13 +32,16 @@
     <item name="android:orientation">vertical</item>
   </style>
 
-  <style name="Interview_Question_Title">
+  <style name="Interview_Question_Title_Base">
     <item name="android:textStyle">bold</item>
     <item name="android:textColor">@color/question_title_text</item>
     <item name="android:textSize">@dimen/textsize_18</item>
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_marginTop">@dimen/Interview_Entity_Title_margin_top</item>
+  </style>
+
+  <style name="Interview_Question_Title" parent="Interview_Question_Title_Base">
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_with_border_left</item>
     <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_with_border_right</item>
     <item name="android:layout_marginBottom">@dimen/Interview_Entity_Title_margin_top</item>

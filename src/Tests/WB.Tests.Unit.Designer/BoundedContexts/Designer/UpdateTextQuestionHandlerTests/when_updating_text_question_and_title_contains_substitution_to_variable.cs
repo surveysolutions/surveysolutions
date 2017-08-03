@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
 {
     internal class when_updating_text_question_and_title_contains_substitution_to_variable : QuestionnaireTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddQRBarcodeQuestion(
@@ -31,9 +30,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
                 variableType: VariableType.String,
                 variableName: variableName,
                 variableExpression: "text + text");
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
              exception = Catch.Exception(() =>
                  questionnaire.UpdateTextQuestion(
                      new UpdateTextQuestion(
@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
                          null, scope, false,
                          new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>())));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeNull();
 
 

@@ -13,14 +13,13 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.QuestionnaireEntities;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
 {
     internal class when_getting_all_broken_dependencies_after_group_deleting : QuestionnaireInfoFactoryTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireView = Create.QuestionnaireDocumentWithOneChapter(questionnaireId: docId, chapterId: g1Id, children: new IComposite[]
             {
                 Create.Group(groupId: g2Id, title: "Chapter 1 / Group 1", children: new IComposite[]
@@ -43,16 +42,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             factory = CreateQuestionnaireInfoFactory(
                 questionDetailsReaderMock.Object,
                 expressionProcessor: Create.RoslynExpressionProcessor());
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             result = factory.GetAllBrokenGroupDependencies(questionnaireId, groupId);
 
-        It should_return_not_null_view = () =>
+        [NUnit.Framework.Test] public void should_return_not_null_view () =>
             result.ShouldNotBeNull();
 
-        It should_return_not_null_view1 =
-            () => result.Select(x => x.Id).ShouldContainOnly(new string[] { q2Id.FormatGuid(), q4Id.FormatGuid() });
+        [NUnit.Framework.Test] public void should_return_not_null_view1 () => result.Select(x => x.Id).ShouldContainOnly(new string[] { q2Id.FormatGuid(), q4Id.FormatGuid() });
 
         private static QuestionnaireInfoFactory factory;
         private static List<QuestionnaireItemLink> result;

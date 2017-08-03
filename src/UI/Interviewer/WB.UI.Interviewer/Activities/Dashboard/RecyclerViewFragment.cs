@@ -7,7 +7,7 @@ using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Interviewer.Activities.Dashboard
 {
-    public abstract class RecyclerViewFragment<TViewModel> : BaseFragment<ListViewModel<TViewModel>> where TViewModel : class
+    public abstract class RecyclerViewFragment<TViewModel> : BaseFragment<TViewModel> where TViewModel : ListViewModel
     {
         protected override int ViewResourceId => Resource.Layout.fragment_dashboard_tab;
 

@@ -4,25 +4,25 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.Infrastructure.PlainStorage;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
 {
     internal class when_saving_attachment_content : AttachmentServiceTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             attachmentContentStorage
                 .Setup(x => x.Query(Moq.It.IsAny<Func<IQueryable<AttachmentContent>, bool>>()))
                 .Returns(false);
 
             attachmentService = Create.AttachmentService(attachmentContentStorage: attachmentContentStorage.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             attachmentService.SaveContent(attachmentContentId, contentType, fileContent);
 
-        It should_save_content_to_storage = () =>
+        [NUnit.Framework.Test] public void should_save_content_to_storage () =>
             attachmentContentStorage.Verify(x => x.Store(Moq.It.IsAny<AttachmentContent>(), attachmentContentId), Times.Once);
         
 

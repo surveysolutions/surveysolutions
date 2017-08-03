@@ -8,14 +8,13 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
     internal class when_verifying_questionnaire_with_circular_reference_in_option_filter_and_enablement_condition : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = Create.QuestionnaireDocument(children: new IComposite[]
             {
                 Create.Chapter(children: new IComposite[]
@@ -31,18 +30,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             );
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_contain_error_WB0056 = () =>
+        [NUnit.Framework.Test] public void should_return_contain_error_WB0056 () =>
             verificationMessages.ShouldContainError("WB0056");
 
-        It should_return_message_with_level_general = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_level_general () =>
             verificationMessages.GetError("WB0056").MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
-        It should_return_message_with_two_references = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_two_references () =>
             verificationMessages.GetError("WB0056").References.Count().ShouldEqual(2);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

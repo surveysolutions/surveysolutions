@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.GenericSubdomains.Portable;
@@ -27,13 +27,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadingTemplateService
             var exportFileNameService = Mock.Of<IExportFileNameService>(x => 
                 x.GetFileNameForBatchUploadByQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == "template.zip");
 
-            preloadingTemplateService = CreatePreloadingTemplateService(
+            assignmentImportTemplateGenerator = CreatePreloadingTemplateService(
                 fileSystemAccessor.Object,
                 tabularFormatExportService: exportedDataFormatter.Object,
                 exportFileNameService: exportFileNameService);
         };
 
-        Because of = () => result = preloadingTemplateService.GetFilePathToPreloadingTemplate(questionnaireId, 1);
+        Because of = () => result = assignmentImportTemplateGenerator.GetFilePathToPreloadingTemplate(questionnaireId, 1);
 
         It should_return_not_null_result = () =>
            result.ShouldNotBeNull();
@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadingTemplateService
         It should_only_create_template_for_preload_once = () =>
             exportedDataFormatter.Verify(x => x.CreateHeaderStructureForPreloadingForQuestionnaire(new QuestionnaireIdentity(questionnaireId, 1), Moq.It.IsAny<string>()), Times.Once);
 
-        private static PreloadingTemplateService preloadingTemplateService;
+        private static AssignmentImportTemplateGenerator assignmentImportTemplateGenerator;
         private static string result;
         private static Mock<IFileSystemAccessor> fileSystemAccessor;
         private static Mock<ITabularFormatExportService> exportedDataFormatter;

@@ -6,6 +6,7 @@ using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Tests.Abc;
@@ -39,10 +40,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             rows.Count.ShouldEqual(2);
 
         It should_add_first_header_that_corresponds_to_interview = () =>
-            rows[0].First().ShouldEqual(new object[] { "Id", "1","a", "ssSys_IRnd"});
+            rows[0].First().ShouldEqual(new object[] { ServiceColumns.Id, "1","a", "ssSys_IRnd", ServiceColumns.Key });
 
         It should_add_second_header_that_corresponds_to_nested_roster_level_of_the_interview = () =>
-            rows[1].First().ShouldEqual(new object[] { "Id", "r1", "r2", "1", "a", "ParentId1", "ParentId2" });
+            rows[1].First().ShouldEqual(new object[] { ServiceColumns.Id, "r1", "r2", "1", "a", "ParentId1", "ParentId2" });
 
         private static ReadSideToTabularFormatExportService readSideToTabularFormatExportService;
         private static Guid questionnaireId=Guid.Parse("11111111111111111111111111111111");

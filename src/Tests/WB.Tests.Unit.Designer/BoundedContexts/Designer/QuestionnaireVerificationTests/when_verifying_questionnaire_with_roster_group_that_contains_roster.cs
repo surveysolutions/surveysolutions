@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_roster_group_that_contains_roster : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             rosterGroupId = Guid.Parse("10000000000000000000000000000000");
             var rosterSizeQiestionId = Guid.Parse("20000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument(new IComposite[]{
@@ -42,12 +41,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             });
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_0_messages = () =>
+        [NUnit.Framework.Test] public void should_return_0_messages () =>
             verificationMessages.Count().ShouldEqual(0);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

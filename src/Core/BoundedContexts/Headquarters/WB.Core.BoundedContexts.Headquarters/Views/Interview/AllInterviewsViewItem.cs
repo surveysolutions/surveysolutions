@@ -17,6 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public string Key { get; set; }
         public bool ReceivedByInterviewer { get; set; }
         public string TeamLeadName { get; set; }
+        public string ClientKey { get; set; }
     }
 
     public class InterviewListItem

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -9,21 +9,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_adding_roster_group_referencing_text_list_question_as_roster_size_source : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddTextListQuestion(rosterSizeQuestionId, chapterId ,responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.AddGroupAndMoveIfNeeded(
                     groupId, responsibleId, "title",null, rosterSizeQuestionId, "description", null, false, chapterId,
                     isRoster: true, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: new FixedRosterTitleItem[0], 
                     rosterTitleQuestionId: null));
 
-        It should_not_fail = () =>
+        [NUnit.Framework.Test] public void should_not_fail () =>
             exception.ShouldEqual(null);
 
         private static Exception exception;

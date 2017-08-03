@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -11,13 +11,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
 {
     internal class when_adding_text_question_and_all_parameters_is_specified : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId: responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             questionnaire.AddTextQuestion(
                 questionId: questionId,
                 parentId: chapterId,
@@ -35,31 +35,31 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
                 index: index);
 
 
-        It should_contains_Question_with_QuestionId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_Question_with_QuestionId_specified () =>
             questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
                 .PublicKey.ShouldEqual(questionId);
 
-        It should_contains_NewQuestion_with_ParentGroupId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_NewQuestion_with_ParentGroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(chapterId)
                 .Children.ShouldContain(q => q.PublicKey == questionId);
 
-        It should_contains_NewQuestion_with_title_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_NewQuestion_with_title_specified () =>
             questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
                 .QuestionText.ShouldEqual(title);
 
-        It should_contains_NewQuestion_with_variable_name_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_NewQuestion_with_variable_name_specified () =>
             questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
                 .StataExportCaption.ShouldEqual(variableName);
 
-        It should_contains_NewQuestion_with_enablementCondition_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_NewQuestion_with_enablementCondition_specified () =>
             questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
                 .ConditionExpression.ShouldEqual(enablementCondition);
 
-        It should_contains_NewQuestion_with_ifeatured_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_NewQuestion_with_ifeatured_specified () =>
             questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
                 .Featured.ShouldEqual(isPreFilled);
 
-        It should_contains_NewQuestion_with_instructions_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_NewQuestion_with_instructions_specified () =>
             questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
                 .Instructions.ShouldEqual(instructions);
 

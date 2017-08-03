@@ -1,5 +1,5 @@
 ﻿using Machine.Specifications;
-using WB.UI.Shared.Web.MembershipProvider.Roles;
+using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.RoleProviderTests
 {
@@ -8,7 +8,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.RoleProviderTests
     {
         protected static RoleProvider CreateRoleProvider()
         {
-
             return new RoleProvider();
         }
     }

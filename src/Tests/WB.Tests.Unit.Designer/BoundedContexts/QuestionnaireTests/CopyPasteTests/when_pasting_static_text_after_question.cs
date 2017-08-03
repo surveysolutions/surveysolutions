@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
 {
     internal class when_pasting_static_text_after_question : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             responsibleId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionToPastAfterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             sourceQuestionaireId = Guid.Parse("DCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
@@ -37,19 +36,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
                itemToPasteAfterId: questionToPastAfterId);
 
             command.SourceDocument = doc;
-        };
+            BecauseOf();
+        }
 
-        Because of = () => 
+        private void BecauseOf() => 
             questionnaire.PasteAfter(command);
 
-        It should_clone_MaxAnswerCount_value = () =>
+        [NUnit.Framework.Test] public void should_clone_MaxAnswerCount_value () =>
             questionnaire.QuestionnaireDocument.Find<IStaticText>(targetId).ShouldNotBeNull();
 
-        It should_raise_QuestionCloned_event_with_PublicKey_specified = () =>
+        [NUnit.Framework.Test] public void should_raise_QuestionCloned_event_with_PublicKey_specified () =>
             questionnaire.QuestionnaireDocument.Find<IStaticText>(targetId)
                 .PublicKey.ShouldEqual(targetId);
 
-        It should_raise_QuestionCloned_event_with_stataExportCaption_specified = () =>
+        [NUnit.Framework.Test] public void should_raise_QuestionCloned_event_with_stataExportCaption_specified () =>
             questionnaire.QuestionnaireDocument.Find<IStaticText>(targetId)
                 .Text.ShouldEqual(text);
 

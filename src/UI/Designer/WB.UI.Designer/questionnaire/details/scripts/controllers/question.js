@@ -74,9 +74,7 @@
                 $scope.activeQuestion.yesNoView = question.yesNoView;
                 $scope.activeQuestion.isFilteredCombobox = question.isFilteredCombobox;
                 $scope.activeQuestion.optionsFilterExpression = question.optionsFilterExpression;
-
                 $scope.activeQuestion.validationConditions = question.validationConditions;
-
                 $scope.activeQuestion.isTimestamp = question.isTimestamp;
 
                 var options = question.options || [];
@@ -170,6 +168,7 @@
             $scope.saveQuestion = function (callback) {
                 if ($scope.questionForm.$valid) {
                     $scope.showOptionsInList();
+                    $scope.trimLastEmptyOptions();
                     var shouldGetOptionsOnServer = wasThereOptionsLooseWhileChanginQuestionProperties($scope.initialQuestion, $scope.activeQuestion) && $scope.activeQuestion.isCascade;
                     commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion, shouldGetOptionsOnServer).then(function () {
                         $scope.initialQuestion = angular.copy($scope.activeQuestion);
@@ -228,6 +227,8 @@
                 return false;
             };
 
+            var questionsWithOnlyInterviewerScope = ['Multimedia', 'Audio', 'Area', 'QRBarcode'];
+
             $scope.setQuestionType = function (type) {
                 $scope.activeQuestion.type = type;
                 $scope.activeQuestion.typeName = _.find($scope.activeQuestion.questionTypeOptions, { value: type }).text;
@@ -246,11 +247,11 @@
                         $scope.activeQuestion.questionScope = 'Interviewer';
                     }
                 }
-                if (type === 'GpsCoordinates' && $scope.activeQuestion.questionScope === 'Supervisor') {
+                if (_.contains(questionsWithOnlyInterviewerScope, type)) {
                     $scope.activeQuestion.questionScope = 'Interviewer';
                 }
 
-                if (type === 'Area' && $scope.activeQuestion.questionScope === 'Supervisor') {
+                if (type === 'GpsCoordinates' && $scope.activeQuestion.questionScope === 'Supervisor') {
                     $scope.activeQuestion.questionScope = 'Interviewer';
                 }
 
@@ -382,9 +383,21 @@
                 }
                 if ($scope.activeQuestion.stringifiedOptions) {
                     $scope.activeQuestion.options = optionsService.parseOptions($scope.activeQuestion.stringifiedOptions);
+                    $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
                 }
                 $scope.activeQuestion.useListAsOptionsEditor = true;
             };
+
+            $scope.trimLastEmptyOptions = function () {
+                var count = $scope.activeQuestion.options.length;
+                if (count > 0) {
+                    var lastoption = $scope.activeQuestion.options[count - 1];
+                    if (_.isNull(lastoption.value) && lastoption.title === '') {
+                        $scope.activeQuestion.options.splice(count - 1, 1);
+                        $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
+                    }
+                }
+            }
 
             $scope.changeQuestionScope = function (scope) {
                 $scope.activeQuestion.questionScope = scope.text;
@@ -398,7 +411,15 @@
                 if (!currentQuestion)
                     return [];
                 var allScopes = currentQuestion.allQuestionScopeOptions;
-                if (!currentQuestion.isCascade && !currentQuestion.isLinked && $.inArray(currentQuestion.type, ['TextList', 'QRBarcode', 'Multimedia', 'GpsCoordinates', 'MultyOption', 'Area']) < 0)
+
+                if (_.contains(questionsWithOnlyInterviewerScope, currentQuestion.type)) {
+                    return allScopes.filter(function (o) {
+                        return o.value === 'Interviewer';
+                    });
+                }
+
+                if (!currentQuestion.isCascade && !currentQuestion.isLinked &&
+                    $.inArray(currentQuestion.type, ['TextList', 'GpsCoordinates', 'MultyOption']) < 0)
                     return allScopes;
 
                 return allScopes.filter(function (o) {
@@ -407,7 +428,7 @@
 
                     if (currentQuestion.type === 'GpsCoordinates')
                         return o.value !== 'Supervisor';
-                    
+
                     return o.value !== 'Identifying' && o.value !== 'Supervisor';
                 });
             };
@@ -472,14 +493,12 @@
                 }
             };
 
-            var questionTypesDoesNotSupportValidations = ["Multimedia"];
+            var questionTypesDoesNotSupportValidations = ["Multimedia", "Audio", "Area"];
             
             $scope.doesQuestionSupportValidations = function () {
-                if ($scope.activeQuestion && $scope.activeQuestion.type === 'Area')
-                    return false;
+                return $scope.activeQuestion &&
+                    !_.contains(questionTypesDoesNotSupportValidations, $scope.activeQuestion.type);
 
-                return $scope.activeQuestion && !_.contains(questionTypesDoesNotSupportValidations, $scope.activeQuestion.type)
-                    && !($scope.activeQuestion.isCascade && $scope.activeQuestion.cascadeFromQuestionId);
             };
 
             $scope.doesQuestionSupportOptionsFilters = function () {

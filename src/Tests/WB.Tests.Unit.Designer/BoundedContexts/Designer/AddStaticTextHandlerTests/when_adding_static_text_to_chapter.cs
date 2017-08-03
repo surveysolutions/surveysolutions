@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -9,24 +9,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddStaticTextHandlerTe
 {
     internal class when_adding_static_text_to_chapter : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId: responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
                 questionnaire.AddStaticTextAndMoveIfNeeded(
                     new AddStaticText(questionnaire.Id, entityId, text, responsibleId, chapterId, index));
 
 
-        It should_raise_StaticTextAdded_event_with_EntityId_specified = () =>
+        [NUnit.Framework.Test] public void should_raise_StaticTextAdded_event_with_EntityId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ShouldNotBeNull();
 
-        It should_raise_StaticTextAdded_event_with_ParentId_specified = () =>
+        [NUnit.Framework.Test] public void should_raise_StaticTextAdded_event_with_ParentId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).GetParent().PublicKey.ShouldEqual(chapterId);
 
-        It should_raise_StaticTextAdded_event_with_Text_specified = () =>
+        [NUnit.Framework.Test] public void should_raise_StaticTextAdded_event_with_Text_specified () =>
             questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).Text.ShouldEqual(text);
 
 

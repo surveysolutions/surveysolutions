@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -8,8 +8,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
 {
     internal class when_removing_single_option_question_used_as_cascading_parent : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             rootGroupId = Guid.NewGuid();
             responsibleId = Guid.NewGuid();
             questionnaire = CreateQuestionnaireWithOneGroup(responsibleId, groupId: rootGroupId);
@@ -38,17 +37,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
                     new Option() {Title = "one one", Value= "1.1", ParentValue = "1", Id = Guid.NewGuid() },
                 }
             );
-        };
+            BecauseOf();
+        }
 
-        private Because of = () => exception = Catch.Exception(() => questionnaire.DeleteQuestion(parentQuestionId, responsibleId));
+        private void BecauseOf() => exception = Catch.Exception(() => questionnaire.DeleteQuestion(parentQuestionId, responsibleId));
 
-        private It should_not_allow_removal = () =>
+         [NUnit.Framework.Test] public void should_not_allow_removal () 
         {
             var ex = exception as QuestionnaireException;
             ex.ShouldNotBeNull();
 
             new [] { "remove", "cascading", "parent" }.ShouldEachConformTo(keyword => ex.Message.ToLower().Contains(keyword));
-        };
+        }
         private static Guid rootGroupId;
         private static Questionnaire questionnaire;
         private static Guid parentQuestionId;

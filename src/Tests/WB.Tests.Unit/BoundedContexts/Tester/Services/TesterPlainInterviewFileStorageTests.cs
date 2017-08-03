@@ -11,7 +11,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.Services
 {
-    [TestOf(typeof(TesterPlainInterviewFileStorage))]
+    [TestOf(typeof(TesterImageFileStorage))]
     [TestFixture]
     public class TesterPlainInterviewFileStorageTests
     {
@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.Services
             byte[] imageFileBytes = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
 
             //act
-            interviewerPlainInterviewFileStorage.StoreInterviewBinaryData(Guid.NewGuid(), "imageFileName", imageFileBytes);
+            interviewerPlainInterviewFileStorage.StoreInterviewBinaryData(Guid.NewGuid(), "imageFileName", imageFileBytes, null);
 
             //assert
             fileSystemAccessor.Verify(x => x.WriteAllBytes(Moq.It.IsAny<string>(), imageFileBytes), Times.Once);
@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.Services
             var interviewerPlainInterviewFileStorage = Create.Service.TesterPlainInterviewFileStorage(
                 fileSystemAccessor: fileSystemAccessor,
                 rootDirectory: "temp");
-            interviewerPlainInterviewFileStorage.StoreInterviewBinaryData(interviewId1, imageName, imageFileBytes);
+            interviewerPlainInterviewFileStorage.StoreInterviewBinaryData(interviewId1, imageName, imageFileBytes, null);
 
             //act
             var resImage = interviewerPlainInterviewFileStorage.GetInterviewBinaryData(interviewId2, imageName);

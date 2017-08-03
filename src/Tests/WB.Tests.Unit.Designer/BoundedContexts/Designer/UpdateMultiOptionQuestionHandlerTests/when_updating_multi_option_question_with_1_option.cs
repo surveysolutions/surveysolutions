@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
 {
     internal class when_updating_multi_option_question_with_1_option : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(parentGroupId, responsibleId: responsibleId);
             questionnaire.AddQRBarcodeQuestion(questionId,
@@ -22,9 +21,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                         variableName: "old_variable_name",
                         instructions: "old instructions",
                         enablementCondition: "old condition");
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateMultiOptionQuestion(
                     questionId: questionId,
@@ -44,10 +44,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                 linkedFilterExpression: null, properties: Create.QuestionProperties()));
 
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__categorical_hould_have_options_ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__categorical_hould_have_options_ () =>
             new[] { "question with options should have two options at least" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 

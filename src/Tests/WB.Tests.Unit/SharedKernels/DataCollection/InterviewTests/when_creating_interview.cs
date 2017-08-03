@@ -23,16 +23,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             responsibleSupervisorId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA00");
             questionnaireVersion = 18;
-            answersToFeaturedQuestions = new Dictionary<Guid, AbstractAnswer>();
-            
+
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.Version == questionnaireVersion);
 
-            command = Create.Command.CreateInterviewCommand(questionnaireId: questionnaireId,
-                questionnaireVersion: questionnaireVersion,
-                responsibleSupervisorId: responsibleSupervisorId,
-                answersToFeaturedQuestions: answersToFeaturedQuestions, 
-                userId: userId);
+            this.command = Create.Command.CreateInterview(questionnaireId: this.questionnaireId,
+                questionnaireVersion: this.questionnaireVersion,
+                responsibleSupervisorId: this.responsibleSupervisorId,
+                answersToFeaturedQuestions: new List<InterviewAnswer>(), 
+                userId: this.userId);
 
             interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
 
@@ -66,8 +65,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private long questionnaireVersion;
         private Guid userId;
         private Guid responsibleSupervisorId;
-        private Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions;
         private Interview interview;
-        private CreateInterviewCommand command;
+        private CreateInterview command;
     }
 }
