@@ -10,19 +10,17 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using MvvmCross.Binding.Attributes;
 using MvvmCross.Binding.Droid.Views;
-using MvvmCross.Core.ViewModels;
 
 namespace WB.UI.Shared.Enumerator.CustomControls
 {
     [Register("WB.UI.Shared.Enumerator.CustomControls.InstantAutoCompleteTextView")]
     public class InstantAutoCompleteTextView: AppCompatAutoCompleteTextView
     {
+        private readonly object adapterLock = new object();
+
         public InstantAutoCompleteTextView(Context context, IAttributeSet attrs)
             : this(context, attrs, new MvxFilteringAdapter(context))
         {
-            // note - we shouldn't realy need both of these... but we do
-            this.ItemClick += OnItemClick;
-            this.ItemSelected += OnItemSelected;
         }
 
         public InstantAutoCompleteTextView(Context context, IAttributeSet attrs, MvxFilteringAdapter adapter)
@@ -31,7 +29,11 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             var itemTemplateId = MvxAttributeHelpers.ReadListItemTemplateId(context, attrs);
             adapter.ItemTemplateId = itemTemplateId;
             this.Adapter = adapter;
+
+            // note - we shouldn't realy need both of these... but we do (ask Roma)
             this.ItemClick += this.OnItemClick;
+            this.ItemSelected += OnItemSelected;
+
             this.EditorAction += this.OnEditorAction;
             this.Click += OnEditTextClick;
         }
@@ -54,12 +56,13 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         private void OnItemClick(object sender, AdapterView.ItemClickEventArgs itemClickEventArgs)
             => this.OnItemSelected(itemClickEventArgs.Position);
 
-        private void OnItemSelected(object sender, AdapterView.ItemSelectedEventArgs itemSelectedEventArgs) 
+        private void OnItemSelected(object sender, AdapterView.ItemSelectedEventArgs itemSelectedEventArgs)
             => this.OnItemSelected(itemSelectedEventArgs.Position);
 
         protected virtual void OnItemSelected(int position)
         {
-            this.SelectedObject = this.Adapter.GetRawItem(position);
+            lock (adapterLock)
+                this.SelectedObject = this.Adapter.GetRawItem(position);
             
             this.ClearFocus();
             this.HideKeyboard();
@@ -97,7 +100,11 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         public IEnumerable ItemsSource
         {
             get => this.Adapter.ItemsSource;
-            set => this.Adapter.ItemsSource = value;
+            set
+            {
+                lock (adapterLock)
+                    this.Adapter.ItemsSource = value;
+            }
         }
 
         public int ItemTemplateId
@@ -113,10 +120,13 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {
                 if (this.Adapter.PartialText == value) return;
 
-                var adapter = base.Adapter;
-                base.Adapter = null;
-                this.SetText(value, true);
-                base.Adapter = adapter;
+                lock (adapterLock)
+                {
+                    var adapter = base.Adapter;
+                    base.Adapter = null;
+                    this.SetText(value, true);
+                    base.Adapter = adapter;
+                }
             }
     }
 
