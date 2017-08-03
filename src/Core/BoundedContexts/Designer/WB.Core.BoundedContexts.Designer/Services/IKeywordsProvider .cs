@@ -2,6 +2,6 @@
 {
     public interface IKeywordsProvider 
     {
-        string[] GetAllReservedKeywords();
+        bool IsReservedKeyword(string keyword);
     }
 }
