@@ -43,7 +43,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         {
             if (isDisposing)
             {
-                this.Target.FocusChange -= this.OnFocusChange;
+                if (this.Target != null)
+                    this.Target.FocusChange -= this.OnFocusChange;
             }
             base.Dispose(isDisposing);
         }
