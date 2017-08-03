@@ -14,8 +14,8 @@ export default {
     async loadInterview({ commit }) {
         const info = await apiCaller<IInterviewInfo>(api => api.getInterviewDetails())
         commit("SET_INTERVIEW_INFO", info)
-        const flag = await apiCaller(api => api.hasPrefilledQuestions())
-        commit("SET_HAS_PREFILLED_QUESTIONS", flag)
+        const flag = await apiCaller(api => api.hasCoverPage())
+        commit("SET_HAS_COVER_PAGE", flag)
 
     },
 
@@ -75,11 +75,17 @@ export default {
     answerMultimediaQuestion({ dispatch }, { id, file }) {
         apiCallerAndFetch(id, api => api.answerPictureQuestion(id, file))
     },
+    answerAudioQuestion({ dispatch }, { id, file }) {
+        apiCallerAndFetch(id, api => api.answerAudioQuestion(id, file))
+    },
     answerQRBarcodeQuestion({ dispatch }, { identity, text }) {
         apiCallerAndFetch(identity, api => api.answerQRBarcodeQuestion(identity, text))
     },
     removeAnswer({ dispatch }, questionId: string) {
         apiCallerAndFetch(questionId, api => api.removeAnswer(questionId))
+    },
+    sendNewComment({ dispatch }, { questionId, comment }) {
+        apiCaller(api => api.sendNewComment(questionId, comment))
     },
 
     setAnswerAsNotSaved({ commit }, { id, message }) {
@@ -139,6 +145,12 @@ export default {
 
         dispatch("refreshSectionState", null)
     },
+    // called by server side. refresh
+    refreshComment({ state, dispatch }, questionId: string) {
+        if (state.entityDetails[questionId]) { // do not fetch entity comments that is no in the visible list
+            dispatch("fetchQuestionComments", questionId)
+        }
+    },
 
     refreshSectionState: debounce(({ dispatch }) => {
         dispatch("fetchSectionEnabledStatus")
@@ -184,9 +196,14 @@ export default {
         commit("SET_INTERVIEW_STATUS", interviewState)
     }, 200),
 
-    fetchSamplePrefilled: debounce(async ({ commit }) => {
-        const coverInfo = await apiCaller<ISamplePrefilledData>(api => api.getSamplePrefilled())
+    fetchCoverInfo: debounce(async ({ commit }) => {
+        const coverInfo = await apiCaller<ICoverInfo>(api => api.getCoverInfo())
         commit("SET_COVER_INFO", coverInfo)
+    }, 200),
+
+    fetchQuestionComments: debounce(async ({ commit }, questionId) => {
+        const comments = await apiCaller<IComment[]>(api => api.getQuestionComments(questionId))
+        commit("SET_QUESTION_COMMENTS", { questionId, comments})
     }, 200),
 
     completeInterview({ dispatch }, comment: string) {

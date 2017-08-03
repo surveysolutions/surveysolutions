@@ -277,6 +277,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Caution:.
+        /// </summary>
+        public static string CautionTitle {
+            get {
+                return ResourceManager.GetString("CautionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         public static string CloseLabel {
@@ -403,6 +412,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exclude ESRI Map support.
+        /// </summary>
+        public static string ExcludeEsriTitle {
+            get {
+                return ResourceManager.GetString("ExcludeEsriTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filters.
         /// </summary>
         public static string FilterTitle {
@@ -417,6 +435,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Forbidden_Title {
             get {
                 return ResourceManager.GetString("Forbidden_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ESRI Map support is an experimental feature. Use it only if you need the advanced ESRI GIS functionality. Including this functionality will significantly increase application size and download time. .
+        /// </summary>
+        public static string GetEsriExtraDescription {
+            get {
+                return ResourceManager.GetString("GetEsriExtraDescription", resourceCulture);
             }
         }
         
@@ -966,6 +993,51 @@ namespace WB.UI.Headquarters.Resources {
         public static string InterviewerEdit_TitleFormat {
             get {
                 return ResourceManager.GetString("InterviewerEdit_TitleFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are You sure that You want to discard interview data?.
+        /// </summary>
+        public static string InterviewerHq_DiscardConfirm {
+            get {
+                return ResourceManager.GetString("InterviewerHq_DiscardConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Discard.
+        /// </summary>
+        public static string InterviewerHq_DiscardInterview {
+            get {
+                return ResourceManager.GetString("InterviewerHq_DiscardInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open.
+        /// </summary>
+        public static string InterviewerHq_OpenInterview {
+            get {
+                return ResourceManager.GetString("InterviewerHq_OpenInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please provide a comment if needed to restart an interview.
+        /// </summary>
+        public static string InterviewerHq_RestartConfirm {
+            get {
+                return ResourceManager.GetString("InterviewerHq_RestartConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restart.
+        /// </summary>
+        public static string InterviewerHq_RestartInterview {
+            get {
+                return ResourceManager.GetString("InterviewerHq_RestartInterview", resourceCulture);
             }
         }
         

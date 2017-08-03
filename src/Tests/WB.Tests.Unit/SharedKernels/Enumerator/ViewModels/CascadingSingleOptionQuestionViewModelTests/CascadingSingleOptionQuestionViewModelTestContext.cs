@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Test.Core;
 using Moq;
+using MvvmCross.Core.Views;
+using MvvmCross.Platform.Core;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -13,7 +14,6 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -29,6 +29,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         public CascadingSingleOptionQuestionViewModelTestContext()
         {
             base.Setup();
+
+            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
+            Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadDispatcher>(dispatcher);
         }
 
         protected static CascadingSingleOptionQuestionViewModel CreateCascadingSingleOptionQuestionViewModel(
@@ -39,14 +43,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
 
             var cascadingSingleOptionQuestionViewModel = new CascadingSingleOptionQuestionViewModel(
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                EventRegistry.Object,
                 principal, 
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(), 
-                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 QuestionStateMock.Object,
                 AnsweringViewModelMock.Object,
-                Mock.Of<QuestionInstructionViewModel>(),
-                EventRegistry.Object,
-                Stub.MvxMainThreadDispatcher());
+                Mock.Of<QuestionInstructionViewModel>());
             return cascadingSingleOptionQuestionViewModel;
         }
 

@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
 {
     internal class when_creating_models_with_single_cascading_question : CodeGeneratorTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             AssemblyContext.SetupServiceLocator();
 
             questionnaire = Create.QuestionnaireDocument(questionnaireId, children: new[]
@@ -36,21 +35,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             });
 
             templateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             model = templateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, Create.CodeGenerationSettings());
 
-        It should_create_model_with_2_questions = () =>
+        [NUnit.Framework.Test] public void should_create_model_with_2_questions () =>
             model.AllQuestions.Count.ShouldEqual(2);
 
-        It should_create_questionnaire_level_with_2_questions = () =>
+        [NUnit.Framework.Test] public void should_create_questionnaire_level_with_2_questions () =>
             model.QuestionnaireLevelModel.Questions.Count.ShouldEqual(2);
 
-        It should_reference_same_question_model_in_AllQuestions_and_questionnaire_level = () =>
+        [NUnit.Framework.Test] public void should_reference_same_question_model_in_AllQuestions_and_questionnaire_level () =>
             model.QuestionnaireLevelModel.Questions.Last().ShouldEqual(model.AllQuestions.Last());
 
-        It should_create_single_cascading_question_model = () =>
+        [NUnit.Framework.Test] public void should_create_single_cascading_question_model () 
         {
             QuestionTemplateModel question = model.AllQuestions.Single(x => x.Id == Id.gB);
             question.VariableName.ShouldEqual("singleCascading");
@@ -61,7 +61,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             question.TypeName.ShouldEqual("decimal?");
             question.RosterScopeName.ShouldEqual(CodeGenerator.QuestionnaireScope);
             question.ParentScopeTypeName.ShouldEqual(CodeGenerator.QuestionnaireTypeName);
-        };
+        }
 
         private static QuestionnaireExpressionStateModelFactory templateModelFactory;
         private static QuestionnaireExpressionStateModel model;

@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class InterviewTreeRoster : InterviewTreeGroup
     {
         public InterviewTreeRoster(Identity identity = null,
-            SubstitionText title = null,
+            SubstitutionText title = null,
             string rosterTitle = null,
             int sortIndex = 0,
             RosterType rosterType = RosterType.Fixed,

@@ -37,10 +37,12 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         public InterviewInfo GetInterviewDetails()
         {
+            var statefulInterview = this.GetCallerInterview();
             return new InterviewInfo
             {
                 QuestionnaireTitle = this.GetCallerQuestionnaire().Title,
-                FirstSectionId = this.GetCallerQuestionnaire().GetFirstSectionId().FormatGuid()
+                FirstSectionId = this.GetCallerQuestionnaire().GetFirstSectionId().FormatGuid(),
+                InterviewKey = statefulInterview.GetInterviewKey().ToString()
             };
         }
 
@@ -67,20 +69,6 @@ namespace WB.UI.Headquarters.API.WebInterview
         public string GetInterviewStatus()
         {
             return GetInterviewSimpleStatus().ToString();
-        }
-
-        public SamplePrefilledData GetSamplePrefilled()
-        {
-            var interview = this.GetCallerInterview();
-            var interviewEntityWithTypes = this.GetCallerQuestionnaire()
-                .GetPrefilledQuestions()
-                .Select(x => this.GetIdentifyingQuestion(x, interview))
-                .ToList();
-
-            return new SamplePrefilledData
-            {
-                Questions = interviewEntityWithTypes
-            };
         }
 
         private IdentifyingQuestion GetIdentifyingQuestion(Guid questionId, IStatefulInterview interview)
@@ -485,10 +473,16 @@ namespace WB.UI.Headquarters.API.WebInterview
                     InterviewTreeQuestion barcodeQuestion = callerInterview.GetQuestion(identity);
                     result = this.autoMapper.Map<InterviewBarcodeQuestion>(barcodeQuestion);
                 }
+                else if (question.IsAudio)
+                {
+                    InterviewTreeQuestion audioQuestion = callerInterview.GetQuestion(identity);
+                    result = this.autoMapper.Map<InterviewAudioQuestion>(audioQuestion);
+                }
 
                 this.PutValidationMessages(result.Validity, callerInterview, identity);
                 this.PutInstructions(result, identity);
                 this.ApplyDisablement(result, identity);
+                result.Comments = this.GetComments(question, callerInterview);
 
                 return result;
             }
@@ -540,9 +534,13 @@ namespace WB.UI.Headquarters.API.WebInterview
             return this.autoMapper.Map<InterviewTreeQuestion, T>(question, opts => opts.AfterMap((treeQuestion, target) => afterMap?.Invoke(target)));
         }
 
-        public bool HasPrefilledQuestions()
+        public bool HasCoverPage()
         {
-            return this.GetCallerQuestionnaire().GetPrefilledQuestions().Any();
+            var interview = this.GetCallerInterview();
+
+            return this.GetCallerQuestionnaire().GetPrefilledQuestions().Any() 
+                || interview.GetAllCommentedEnabledQuestions().Any()
+                || !string.IsNullOrWhiteSpace(interview.SupervisorRejectComment);
         }
 
         public Sidebar GetSidebarChildSectionsOf(string[] parentIds)
@@ -636,6 +634,53 @@ namespace WB.UI.Headquarters.API.WebInterview
             return completeInfo;
         }
 
+        public Comment[] GetQuestionComments(string questionId)
+        {
+            var identity = Identity.Parse(questionId);
+
+            var interview = this.GetCallerInterview();
+            InterviewTreeQuestion question = interview.GetQuestion(identity);
+
+            return GetComments(question, interview);
+        }
+
+        public CoverInfo GetCoverInfo()
+        {
+            var interview = this.GetCallerInterview();
+            var commentedQuestionsCount = interview.CountCommentedQuestionsVisibledToInterviewer();
+            var commentedQuestions = interview.GetCommentedBySupervisorQuestionsVisibledToInterviewer().Take(30).ToArray();
+
+            var entitiesWithComments = commentedQuestions.Select(identity =>
+            {
+                var titleText = HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
+                var isPrefilled = interview.IsQuestionPrefilled(identity);
+                var parentId = interview.GetParentGroup(identity).ToString();
+                return new EntityWithComment
+                {
+                    Id = identity.ToString(),
+                    ParentId = parentId,
+                    Title = titleText,
+                    IsPrefilled = isPrefilled
+                };
+
+            }).ToArray();
+
+            var interviewEntityWithTypes = this.GetCallerQuestionnaire()
+                .GetPrefilledQuestions()
+                .Select(x => this.GetIdentifyingQuestion(x, interview))
+                .ToList();
+            
+
+            var completeInfo = new CoverInfo
+            {
+                EntitiesWithComments = entitiesWithComments,
+                IdentifyingQuestions = interviewEntityWithTypes,
+                CommentedQuestionsCount = commentedQuestionsCount,
+                SupervisorRejectComment = interview.SupervisorRejectComment
+            };
+            return completeInfo;
+        }
+
         private void PutValidationMessages(Validity validity, IStatefulInterview callerInterview, Identity identity)
         {
             validity.Messages = callerInterview.GetFailedValidationMessages(identity, Strings.Error)
@@ -658,6 +703,19 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             result.Instructions = callerQuestionnaire.GetQuestionInstruction(id.Id);
             result.HideInstructions = callerQuestionnaire.GetHideInstructions(id.Id);
+        }
+
+        private Comment[] GetComments(InterviewTreeQuestion question, IStatefulInterview statefulInterview)
+        {
+            return question.AnswerComments.Select(ac 
+                => new Comment()
+                {
+                    Text = ac.Comment,
+                    IsOwnComment = ac.UserId == statefulInterview.CurrentResponsibleId,
+                    UserRole = ac.UserRole,
+                    CommentTimeUtc = ac.CommentTime
+                })
+                .ToArray();
         }
 
         private static IEnumerable<LinkedOption> GetLinkedOptionsForLinkedQuestion(IStatefulInterview callerInterview,
@@ -728,6 +786,8 @@ namespace WB.UI.Headquarters.API.WebInterview
                     return InterviewEntityType.TextList;
                 case QuestionType.QRBarcode:
                     return InterviewEntityType.QRBarcode;
+                case QuestionType.Audio:
+                    return InterviewEntityType.Audio;
                 default:
                     return InterviewEntityType.Unsupported;
             }

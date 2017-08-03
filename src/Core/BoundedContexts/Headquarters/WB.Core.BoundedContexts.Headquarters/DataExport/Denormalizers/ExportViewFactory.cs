@@ -33,7 +33,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IExportQuestionService exportQuestionService;
         private readonly IQuestionnaireStorage questionnaireStorage;
-
         private readonly IRosterStructureService rosterStructureService;
 
         public ExportViewFactory(
@@ -55,27 +54,31 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
         public QuestionnaireExportStructure CreateQuestionnaireExportStructure(QuestionnaireIdentity id)
         {
-            var result = new QuestionnaireExportStructure();
-
-            result.QuestionnaireId = id.QuestionnaireId;
-            result.Version = id.Version;
-
-            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(id);
+            QuestionnaireDocument questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(id);
             if (questionnaire == null)
                 return null;
 
+            return CreateQuestionnaireExportStructure(questionnaire, id);
+        }
+
+        public QuestionnaireExportStructure CreateQuestionnaireExportStructure(QuestionnaireDocument questionnaire, QuestionnaireIdentity id)
+        {
+            var result = new QuestionnaireExportStructure
+            {
+                QuestionnaireId = id.QuestionnaireId,
+                Version = id.Version
+            };
+
             var rosterScopes = this.rosterStructureService.GetRosterScopes(questionnaire);
-            var questionnaireDocument = this.questionnaireStorage.GetQuestionnaireDocument(id);
-            
-            var maxValuesForRosterSizeQuestions = GetMaxValuesForRosterSizeQuestions(questionnaireDocument);
+            var maxValuesForRosterSizeQuestions = GetMaxValuesForRosterSizeQuestions(questionnaire);
 
             result.HeaderToLevelMap.Add(new ValueVector<Guid>(),
-                this.BuildHeaderByTemplate(questionnaireDocument, new ValueVector<Guid>(), rosterScopes, maxValuesForRosterSizeQuestions));
+                this.BuildHeaderByTemplate(questionnaire, new ValueVector<Guid>(), rosterScopes, maxValuesForRosterSizeQuestions));
 
             foreach (var rosterScopeDescription in rosterScopes)
             {
                 result.HeaderToLevelMap.Add(rosterScopeDescription.Key,
-                    this.BuildHeaderByTemplate(questionnaireDocument, rosterScopeDescription.Key, rosterScopes, maxValuesForRosterSizeQuestions));
+                    this.BuildHeaderByTemplate(questionnaire, rosterScopeDescription.Key, rosterScopes, maxValuesForRosterSizeQuestions));
             }
 
             return result;
@@ -168,10 +171,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         {
             switch (serviceVariable.VariableType)
             {
-                case ServiceVariableType.InterviewRandom :
-                        return interview.InterviewId.GetRandomDouble().ToString(CultureInfo.InvariantCulture);
+                case ServiceVariableType.InterviewRandom:
+                    return interview.InterviewId.GetRandomDouble().ToString(CultureInfo.InvariantCulture);
+                case ServiceVariableType.InterviewKey:
+                    return interview.InterviewKey ?? string.Empty;
             }
-            
+
             return String.Empty;
         }
 
@@ -392,7 +397,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         private HeaderStructureForLevel BuildHeaderByTemplate(QuestionnaireDocument questionnaire, ValueVector<Guid> levelVector,
             Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes, Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
         {
-            var rootGroups = this.GetRootGroupsForLevel(questionnaire, rosterScopes, levelVector);
+            IEnumerable<IGroup> rootGroups = this.GetRootGroupsForLevel(questionnaire, rosterScopes, levelVector);
 
             if (!rootGroups.Any())
                 throw new InvalidOperationException("level is absent in template");

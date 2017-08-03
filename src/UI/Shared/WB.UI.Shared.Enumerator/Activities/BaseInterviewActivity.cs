@@ -8,6 +8,7 @@ using MvvmCross.Platform;
 using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.UI.Shared.Enumerator.Activities
@@ -69,22 +70,6 @@ namespace WB.UI.Shared.Enumerator.Activities
             }
         }
 
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-
-            if (IsFinishing)
-            {
-                var messenger = Mvx.Resolve<IMvxMessenger>();
-                messenger.Unsubscribe<SectionChangeMessage>(this.sectionChangeSubscriptionToken);
-                messenger.Unsubscribe<InterviewCompletedMessage>(this.interviewCompleteActivityToken);
-
-                this.ViewModel.Sections.Dispose();
-
-                this.Dispose();
-            }
-        }
-
         private void OnSectionChange(SectionChangeMessage msg) =>
             Mvx.Resolve<IMvxMainThreadDispatcher>().RequestMainThreadAction(() =>
             {
@@ -114,6 +99,13 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             base.OnLowMemory();
             GC.Collect(GC.MaxGeneration);
+        }
+
+        protected override void OnStop()
+        {
+            base.OnStop();
+
+            Mvx.Resolve<IAudioDialog>()?.StopRecordingAndSaveResult();
         }
     }
 }

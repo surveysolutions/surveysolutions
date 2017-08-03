@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_roster_group_that_contains_prefilled_question : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             prefilledQuestionId = Guid.Parse("30000000000000000000000000000000");
             var rosterSizeQiestionId = Guid.Parse("20000000000000000000000000000000");
 
@@ -40,24 +39,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 });
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_1_message = () =>
+        [NUnit.Framework.Test] public void should_return_1_message () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_message_with_code__WB0029__ = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_code__WB0029__ () =>
             verificationMessages.Single().Code.ShouldEqual("WB0030");
 
-        It should_return_message_with_1_references = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_1_references () =>
             verificationMessages.Single().References.Count().ShouldEqual(1);
 
-        It should_return_message_reference_with_type_group = () =>
+        [NUnit.Framework.Test] public void should_return_message_reference_with_type_group () =>
             verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_message_reference_with_id_of_rosterGroupId = () =>
+        [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_rosterGroupId () =>
             verificationMessages.Single().References.First().Id.ShouldEqual(prefilledQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

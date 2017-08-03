@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
 {
     internal class when_updating_qr_barcode_question_and_title_contains_substitution_to_question_from_roster : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddNumericQuestion(rosterSizeQuestionId, chapterId, responsibleId, isInteger: true, variableName: "roster_size_question");
@@ -30,9 +29,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
             questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
                 rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
             questionnaire.AddNumericQuestion(questionFromRosterId, rosterId, responsibleId, isInteger: true, variableName: substitutionVariableName);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateQRBarcodeQuestion(
                     new UpdateQRBarcodeQuestion(questionnaire.Id,
@@ -43,10 +43,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
                     QuestionScope.Interviewer,
                     new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>())));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__title__contains_illegal__substitution__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__title__contains_illegal__substitution__ () =>
              new[] { "text", "contains", "illegal", "substitution" }.ShouldEachConformTo(
                     keyword => exception.Message.ToLower().Contains(keyword));
 

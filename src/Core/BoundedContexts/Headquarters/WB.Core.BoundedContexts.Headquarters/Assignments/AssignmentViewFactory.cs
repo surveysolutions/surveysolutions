@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
     {
         private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        
+
         public AssignmentViewFactory(IPlainStorageAccessor<Assignment> assignmentsStorage,
             IQuestionnaireStorage questionnaireStorage)
         {
@@ -44,12 +44,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                     .ToList();
 
                 var neededItems = _.Where(x => ids.Contains(x.Id));
-                var list = this.DefineOrderBy(neededItems, input)
-                                .Fetch(x =>x.IdentifyingData)
-                                .Fetch(x => x.InterviewSummaries)
-                                .Fetch(x => x.Responsible)
-                                // .ThenFetch(x => x.RoleIds) throws Null reference exception, but should be here :( https://stackoverflow.com/q/21243592/72174
-                                .ToList();
+
+                var fetchReqests = this.DefineOrderBy(neededItems, input)
+                    .Fetch(x => x.IdentifyingData)
+                    .Fetch(x => x.InterviewSummaries)
+                    .Fetch(x => x.Responsible);
+                // .ThenFetch(x => x.RoleIds) throws Null reference exception, but should be here :( https://stackoverflow.com/q/21243592/72174
+
+                List<Assignment> list;
+
+                if (input.ShowQuestionnaireTitle)
+                {
+                    list = fetchReqests.Fetch(x => x.Questionnaire).ToList();
+                }
+                else
+                {
+                    list = fetchReqests.ToList();
+                }
 
                 return list;
             });
@@ -58,19 +69,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             {
                 Page = input.Page,
                 PageSize = input.PageSize,
-                Items = assignments.Select(x => new AssignmentRow
+                Items = assignments.Select(x =>
                 {
-                    QuestionnaireId = x.QuestionnaireId,
-                    CreatedAtUtc = x.CreatedAtUtc,
-                    ResponsibleId = x.ResponsibleId,
-                    UpdatedAtUtc = x.UpdatedAtUtc,
-                    Quantity = x.Quantity,
-                    InterviewsCount = x.InterviewSummaries.Count(s => !s.IsDeleted),
-                    Id = x.Id,
-                    Archived = x.Archived,
-                    Responsible = x.Responsible.Name,
-                    ResponsibleRole = x.Responsible.RoleIds.First().ToUserRole().ToString(),
-                    IdentifyingQuestions = this.GetIdentifyingColumnText(x)
+                    var row = new AssignmentRow
+                    {
+                        QuestionnaireId = x.QuestionnaireId,
+                        CreatedAtUtc = x.CreatedAtUtc,
+                        ResponsibleId = x.ResponsibleId,
+                        UpdatedAtUtc = x.UpdatedAtUtc,
+                        Quantity = x.Quantity,
+                        InterviewsCount = x.InterviewSummaries.Count(s => !s.IsDeleted),
+                        Id = x.Id,
+                        Archived = x.Archived,
+                        Responsible = x.Responsible.Name,
+                        ResponsibleRole = x.Responsible.RoleIds.First().ToUserRole().ToString(),
+                        IdentifyingQuestions = this.GetIdentifyingColumnText(x)
+                    };
+
+                    if (input.ShowQuestionnaireTitle)
+                    {
+                        row.QuestionnaireTitle = x.Questionnaire.Title;
+                    }
+
+                    return row;
                 }).ToList(),
             };
 
@@ -86,7 +107,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
             if (questionnaire == null) return new List<AssignmentIdentifyingQuestionRow>();
 
-            List<AssignmentIdentifyingQuestionRow> identifyingColumnText = 
+            List<AssignmentIdentifyingQuestionRow> identifyingColumnText =
                 assignment.IdentifyingData.Select(x => new AssignmentIdentifyingQuestionRow(questionnaire.GetQuestionTitle(x.Identity.Id).RemoveHtmlTags(), x.AnswerAsString))
                 .ToList();
             return identifyingColumnText;
@@ -104,36 +125,60 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             {
                 return OrderByInterviewsCount(query, orderBy);
             }
+
+            if (orderBy.Field.Contains("QuestionnaireTitle"))
+            {
+                return OrderByQuestionnaire(query, orderBy);
+            }
+
             return query.OrderUsingSortExpression(model.Order).AsQueryable();
         }
 
+        private static readonly Expression<Func<Assignment, int>> OrderByQuery = x => x.InterviewSummaries.Count(s => s.IsDeleted == false);
         private static IQueryable<Assignment> OrderByInterviewsCount(IQueryable<Assignment> query, OrderRequestItem orderBy)
         {
-            Expression<Func<Assignment, int>> orderByQuery = x => x.InterviewSummaries.Count(s => s.IsDeleted == false);
+            return orderBy.Direction == OrderDirection.Asc 
+                ? query.OrderBy(OrderByQuery) 
+                : query.OrderByDescending(OrderByQuery);
+        }
 
-            if (orderBy.Direction == OrderDirection.Asc)
-            {
-                var defineOrderBy = query.OrderBy(orderByQuery);
-                return defineOrderBy;
-            }
-            else
-            {
-                return query.OrderByDescending(orderByQuery);
-            }
+        static readonly Expression<Func<Assignment, string>> OrderByQuestionnaireTitle = x => x.Questionnaire.Title;
+        private static IQueryable<Assignment> OrderByQuestionnaire(IQueryable<Assignment> query, OrderRequestItem orderBy)
+        {
+            return orderBy.Direction == OrderDirection.Asc 
+                ? query.OrderBy(OrderByQuestionnaireTitle) 
+                : query.OrderByDescending(OrderByQuestionnaireTitle);
         }
 
         private IQueryable<Assignment> ApplyFilter(AssignmentsInputModel input, IQueryable<Assignment> assignments)
         {
             var items = assignments.Where(x => x.Archived == input.ShowArchive);
+
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
                 int id = 0;
 
                 var lowerSearchBy = input.SearchBy.ToLower();
 
-                Expression<Func<Assignment, bool>> textSearchExpression =
-                    x => x.Responsible.Name.ToLower().Contains(lowerSearchBy) || x.IdentifyingData.Any(a => a.AnswerAsString.ToLower().Contains(lowerSearchBy));
-                if (int.TryParse(input.SearchBy, out id))
+                Expression<Func<Assignment, bool>> textSearchExpression = x => false;
+
+                if (input.SearchByFields.HasFlag(AssignmentsInputModel.SearchTypes.IdentifyingQuestions))
+                {
+                    textSearchExpression = textSearchExpression
+                        .OrCondition(x => x.IdentifyingData.Any(a => a.AnswerAsString.ToLower().Contains(lowerSearchBy)));
+                }
+
+                if (input.SearchByFields.HasFlag(AssignmentsInputModel.SearchTypes.ResponsibleId))
+                {
+                    textSearchExpression = textSearchExpression.OrCondition(x => x.Responsible.Name.ToLower().Contains(lowerSearchBy));
+                }
+
+                if (input.SearchByFields.HasFlag(AssignmentsInputModel.SearchTypes.ResponsibleId))
+                {
+                    textSearchExpression = textSearchExpression.OrCondition(x => x.Questionnaire.Title.ToLower().Contains(lowerSearchBy));
+                }
+
+                if (input.SearchByFields.HasFlag(AssignmentsInputModel.SearchTypes.Id) && int.TryParse(input.SearchBy, out id))
                 {
                     textSearchExpression = textSearchExpression.OrCondition(x => x.Id == id);
                 }
@@ -159,6 +204,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             if (input.SupervisorId.HasValue)
             {
                 items = items.Where(x => x.Responsible.ReadonlyProfile.SupervisorId == input.SupervisorId || x.ResponsibleId == input.SupervisorId);
+            }
+
+            if (input.OnlyWithInterviewsNeeded)
+            {
+                items = items.Where(x => !x.Quantity.HasValue || x.Quantity - x.InterviewSummaries.Count(c => !c.IsDeleted) > 0);
             }
 
             return items;

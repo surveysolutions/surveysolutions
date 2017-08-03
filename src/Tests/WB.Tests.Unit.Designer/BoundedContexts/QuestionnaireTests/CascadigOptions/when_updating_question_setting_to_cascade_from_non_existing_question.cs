@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
 {
     internal class when_updating_question_setting_to_cascade_from_non_existing_question : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             rootGroupId = Guid.NewGuid();
             actorId = Guid.NewGuid();
             questionnaire = CreateQuestionnaireWithOneGroup(actorId, groupId: rootGroupId);
@@ -25,9 +24,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
                 updatedQuestionId,
                 rootGroupId,
                 actorId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => exception = Catch.Exception(() => questionnaire.UpdateSingleOptionQuestion(updatedQuestionId, 
+        private void BecauseOf() => exception = Catch.Exception(() => questionnaire.UpdateSingleOptionQuestion(updatedQuestionId, 
             "title",
             "varia",
             null,
@@ -43,12 +43,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
             cascadeFromQuestionId: Guid.NewGuid(), validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
                 linkedFilterExpression: null, properties: Create.QuestionProperties()));
 
-        It should_not_allow_cascades_from_non_existing_question = () =>
+        [NUnit.Framework.Test] public void should_not_allow_cascades_from_non_existing_question () 
         {
             var ex = exception as QuestionnaireException;
             ex.ShouldNotBeNull();
             new[] { "cascade", "should", "exist" }.ShouldEachConformTo(keyword => ex.Message.ToLower().Contains(keyword));
-        };
+        }
         private static Guid rootGroupId;
         private static Questionnaire questionnaire;
         private static Guid parentQuestionId;

@@ -4,25 +4,25 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.Infrastructure.PlainStorage;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
 {
     internal class when_saving_attachment_content_and_unexpected_content_type : AttachmentServiceTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             attachmentContentStorage
                 .Setup(x => x.Query(Moq.It.IsAny<Func<IQueryable<AttachmentContent>, bool>>()))
                 .Returns(false);
 
             attachmentService = Create.AttachmentService(attachmentContentStorage: attachmentContentStorage.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(()=> attachmentService.SaveContent(attachmentContentId, contentType, fileContent));
 
-        It should_throw_format_exception = () =>
+        [NUnit.Framework.Test] public void should_throw_format_exception () =>
             exception.ShouldBeOfExactType<FormatException>();
         
 

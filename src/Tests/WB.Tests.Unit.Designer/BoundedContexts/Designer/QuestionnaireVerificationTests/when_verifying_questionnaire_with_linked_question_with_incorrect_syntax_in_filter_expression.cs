@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -8,14 +8,13 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
     internal class when_verifying_questionnaire_with_linked_question_with_incorrect_syntax_in_filter_expression : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
                 Create.FixedRoster(rosterId: rosterId, fixedTitles: new[] { "1", "2", "3" },children: new[]
@@ -33,24 +32,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessorGenerator: CreateExpressionProcessorGenerator());
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_1_message = () =>
+        [NUnit.Framework.Test] public void should_return_1_message () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_message_with_code__WB0110 = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_code__WB0110 () =>
             verificationMessages.First().Code.ShouldEqual("WB0110");
 
-        It should_return_message_with_one_references = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_one_references () =>
             verificationMessages.First().References.Count().ShouldEqual(1);
 
-        It should_return_message_with_one_references_with_question_type = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_one_references_with_question_type () =>
             verificationMessages.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_message_with_one_references_with_id_equals_questionId = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_one_references_with_id_equals_questionId () =>
             verificationMessages.First().References.First().Id.ShouldEqual(questionId);
         
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

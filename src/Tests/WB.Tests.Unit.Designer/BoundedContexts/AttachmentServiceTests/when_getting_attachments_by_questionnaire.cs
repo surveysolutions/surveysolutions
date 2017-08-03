@@ -9,26 +9,27 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
 {
     internal class when_getting_attachments_by_questionnaire : AttachmentServiceTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
 
             allAttachments.ForEach(attachment => attachmentMetaStorage.Store(attachment, attachment.AttachmentId));
 
             attachmentService = Create.AttachmentService(attachmentMetaStorage: attachmentMetaStorage);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             expectedAttachments = attachmentService.GetAttachmentsByQuestionnaire(questionnaireId);
 
-        It should_return_2_specified_attachments = () =>
+        [NUnit.Framework.Test] public void should_return_2_specified_attachments () 
         {
             expectedAttachments.Count.ShouldEqual(2);
             expectedAttachments.All(x => x.QuestionnaireId == questionnaireId).ShouldEqual(true);
-        };
+        }
         
         private static AttachmentService attachmentService;
         private static List<AttachmentMeta> expectedAttachments;
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
+
         private static readonly AttachmentMeta[] allAttachments =
         {
             Create.AttachmentMeta(Guid.NewGuid(), "", questionnaireId),

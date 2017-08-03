@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -8,8 +8,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_updating_empty_roster_making_it_a_group_and_another_roster_has_roster_title_question_inside_it : QuestionnaireTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddNumericQuestion(rosterSizeQuestionId,isInteger : true,parentId: chapterId,responsibleId:responsibleId);
@@ -35,20 +34,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     FixedRosterTitles =  null,
                     RosterTitleQuestionId =rosterTitleQuestionId 
                 });*/
-        };
+            BecauseOf();
+        }
 
-        Because of = () => questionnaire.UpdateGroup(groupId: rosterId, responsibleId: responsibleId, title: "title",variableName:null, 
+        private void BecauseOf() => questionnaire.UpdateGroup(groupId: rosterId, responsibleId: responsibleId, title: "title",variableName:null, 
                     rosterSizeQuestionId: null, description: null, condition: null, hideIfDisabled: false, isRoster: false, 
                     rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
 
-        It should_contains_group = () =>
+        [NUnit.Framework.Test] public void should_contains_group () =>
            questionnaire.QuestionnaireDocument.Find<IGroup>(rosterId).ShouldNotBeNull();
 
-        It should_contains_group_with_GroupPublicKey_equal_to_roster_id = () =>
+        [NUnit.Framework.Test] public void should_contains_group_with_GroupPublicKey_equal_to_roster_id () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(rosterId).PublicKey.ShouldEqual(rosterId);
 
-        It should_contains_group_with_IsRoster_equal_to_false = () =>
+        [NUnit.Framework.Test] public void should_contains_group_with_IsRoster_equal_to_false () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(rosterId).IsRoster.ShouldBeFalse();
 
         private static Questionnaire questionnaire;

@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
 {
     internal class when_updating_datetime_question_and_title_contains_substitution_to_question_with_not_supported_type : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddGpsQuestion(
@@ -31,14 +30,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
                         variableName: "old_variable_name",
                         instructions: "old instructions",
                         enablementCondition: "old condition");
-        };
+            BecauseOf();
+        }
 
-        Because of = () => exception = Catch.Exception(() => questionnaire.UpdateDateTimeQuestion(command));
+        private void BecauseOf() => exception = Catch.Exception(() => questionnaire.UpdateDateTimeQuestion(command));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__title___constains__substitution__with__illegal__type__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__title___constains__substitution__with__illegal__type__ () =>
             new[] { "text", "contains", "substitution", "illegal", "type" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 

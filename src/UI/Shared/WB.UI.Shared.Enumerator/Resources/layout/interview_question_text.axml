@@ -10,7 +10,8 @@
                          Mask Mask; 
                          Text Answer; 
                          IsMaskedQuestionAnswered IsMaskedQuestionAnswered; 
-                         FocusValueChanged ValueChangeCommand; " />
+                         FocusValueChanged ValueChangeCommand;
+                         Tag Format('Answer_{0}', Identity)" />
     <include layout="@layout/interview_question__remove_button_input" />
   </LinearLayout>
 </LinearLayout>

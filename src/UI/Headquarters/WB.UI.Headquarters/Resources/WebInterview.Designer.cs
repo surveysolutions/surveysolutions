@@ -79,11 +79,20 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cookies are not enabled on your browser. Please enable cookies in your browser preferences to continue.
+        ///   Looks up a localized string similar to Cookies are not enabled in your browser. Please enable cookies in your browser preferences to continue.
         /// </summary>
         public static string Error_CookiesTurnedOff {
             get {
                 return ResourceManager.GetString("Error_CookiesTurnedOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forbidden.
+        /// </summary>
+        public static string Error_Forbidden {
+            get {
+                return ResourceManager.GetString("Error_Forbidden", resourceCulture);
             }
         }
         
@@ -111,6 +120,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Error_NotFound {
             get {
                 return ResourceManager.GetString("Error_NotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User is not authorized.
+        /// </summary>
+        public static string Error_UserNotAuthorised {
+            get {
+                return ResourceManager.GetString("Error_UserNotAuthorised", resourceCulture);
             }
         }
         
@@ -259,7 +277,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview process requires internet connection, no additional software is needed.
+        ///   Looks up a localized string similar to The interview process requires an internet connection. No additional software is needed..
         /// </summary>
         public static string InvitationSmallText {
             get {
@@ -313,7 +331,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please fill in captcha.
+        ///   Looks up a localized string similar to Please fill in the captcha field.
         /// </summary>
         public static string PleaseFillCaptcha {
             get {
@@ -358,7 +376,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This website is under heavy load. We&apos;re sorry, too many people are accessing this website at the same time. We&apos;re working on this problem. Please try again later..
+        ///   Looks up a localized string similar to We&apos;re sorry, too many people are accessing this website at the same time. We&apos;re working on this problem. Please try again later..
         /// </summary>
         public static string ServerUnderLoad {
             get {

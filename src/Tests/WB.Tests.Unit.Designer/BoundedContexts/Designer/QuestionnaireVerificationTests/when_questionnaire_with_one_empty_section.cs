@@ -8,16 +8,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_questionnaire_with_one_empty_section : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = Create.QuestionnaireDocumentWithOneChapter();
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => 
+        private void BecauseOf() => 
             errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
-        It should_not_return_WB0202_warning = () => 
+        [NUnit.Framework.Test] public void should_not_return_WB0202_warning () => 
             errors.GetWarning("WB0202").ShouldBeNull();
 
         static QuestionnaireDocument questionnaire;

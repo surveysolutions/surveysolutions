@@ -7,14 +7,13 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
 {
     internal class when_getting_multi_roster_edit_view : QuestionnaireInfoFactoryTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
             questionnaireView = CreateQuestionnaireDocument();
             questionDetailsReaderMock
@@ -22,30 +21,31 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                 .Returns(questionnaireView);
 
             factory = CreateQuestionnaireInfoFactory(questionDetailsReaderMock.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             result = factory.GetRosterEditView(questionnaireId, rosterId);
 
-        It should_return_not_null_view = () =>
+        [NUnit.Framework.Test] public void should_return_not_null_view () =>
             result.ShouldNotBeNull();
 
-        It should_return_roster_with_ItemId_equals_groupId = () =>
+        [NUnit.Framework.Test] public void should_return_roster_with_ItemId_equals_groupId () =>
             result.ItemId.ShouldEqual(rosterId.FormatGuid());
         
-        It should_return_roster_with_RosterFixedTitles_count_equals_to_0 = () =>
+        [NUnit.Framework.Test] public void should_return_roster_with_RosterFixedTitles_count_equals_to_0 () =>
             result.FixedRosterTitles.Length.ShouldEqual(0);
 
-        It should_return_roster_with_RosterSizeMultiQuestionId_equals_g3_RosterSizeQuestionId = () =>
+        [NUnit.Framework.Test] public void should_return_roster_with_RosterSizeMultiQuestionId_equals_g3_RosterSizeQuestionId () =>
             result.RosterSizeMultiQuestionId.ShouldEqual(q2Id.FormatGuid());
 
-        It should_return_roster_with_RosterSizeListQuestionId_equals_g3_RosterSizeQuestionId = () =>
+        [NUnit.Framework.Test] public void should_return_roster_with_RosterSizeListQuestionId_equals_g3_RosterSizeQuestionId () =>
             result.RosterSizeListQuestionId.ShouldBeNull();
 
-        It should_return_roster_with_RosterSizeNumericQuestionId_equals_g3_RosterSizeQuestionId = () =>
+        [NUnit.Framework.Test] public void should_return_roster_with_RosterSizeNumericQuestionId_equals_g3_RosterSizeQuestionId () =>
             result.RosterSizeNumericQuestionId.ShouldBeNull();
 
-        It should_return_roster_with_RosterSizeSourceType_equals_g3_RosterSizeSourceType = () =>
+        [NUnit.Framework.Test] public void should_return_roster_with_RosterSizeSourceType_equals_g3_RosterSizeSourceType () =>
             result.Type.ShouldEqual(RosterType.Multi);
         
 

@@ -42,7 +42,7 @@
 			position: relative;
 
 			&.active>a{
-				@include transition;
+				@include transition();
 				font-family: "RobotoBold";
 				span{
 					font-family: "RobotoLight";
@@ -184,6 +184,10 @@
 }
 .navbar-inverse .navbar-text{
 	color: $white;
+}
+.language{
+	background: url("#{$assetsPath}/img/language.png") 0 15px no-repeat;
+	padding-left: 40px;
 }
 @media (max-width: $screen-md-min) {
 	.navbar {
@@ -336,7 +340,7 @@
 		}
 	}
 }
-@media screen and (max-width: $screen-md-min) {
+@media (max-width: $screen-md-min) {
 	.wide-navbar{
 		.navbar-header {
 			float: none;
@@ -518,6 +522,9 @@
 		bottom: 6px;
 		position: relative;
 		@include rotate(-225deg);
+	}
+	.language{
+		background-position-y: 5px;
 	}
 }
 @media (max-width: $screen-xs-min) {

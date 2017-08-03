@@ -5,6 +5,8 @@
 
   <LinearLayout style="@style/Interview_Sidebar_Header">
     <TextView style="@style/Interview_Sidebar_Title"
+              local:MvxBind="Text InterviewKey; Visible InterviewKey;" />
+    <TextView style="@style/Interview_Sidebar_Title"
               local:MvxBind="Text QuestionnaireTitle" />
   </LinearLayout>
 

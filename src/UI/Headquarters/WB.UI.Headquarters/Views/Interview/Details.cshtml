@@ -1,10 +1,10 @@
 ﻿@using Main.Core.Entities.SubEntities
-@using Microsoft.Practices.ServiceLocation
 @using Microsoft.Security.Application
 @using Newtonsoft.Json
 @using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.BoundedContexts.Headquarters.Views
 @using WB.Core.BoundedContexts.Headquarters.Views.Interview
+@using WB.Core.GenericSubdomains.Portable.ServiceLocation
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @using WB.UI.Shared.Web.Extensions
@@ -85,7 +85,7 @@
             <div class="col-md-9">
                 <h3 class="span10 text-overflow-ellipsis">
                     <span>@Html.QuestionnaireName(Model.QuestionnaireName, Model.QuestionnaireVersion)</span>
-                    <span class="small">@Pages.InterviewDetails_StatusLabel :</span><a class="btn-link" data-toggle="modal" data-target="#statusHistoryModal">@Model.InterviewDetails.Status.ToLocalizeString()</a>
+                    <span class="small">@Pages.InterviewDetails_StatusLabel :</span><a href="javascript:void(0);" class="btn-link" data-toggle="modal" data-target="#statusHistoryModal">@Model.InterviewDetails.Status.ToLocalizeString()</a>
                     <span class="small">@Pages.InterviewDetails_ResponsibleLabel :</span><span>@Model.InterviewDetails.Responsible.Name</span>
                     @if (Model.HasUnprocessedSyncPackages)
                     {

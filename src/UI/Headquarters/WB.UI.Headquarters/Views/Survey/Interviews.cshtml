@@ -1,5 +1,5 @@
-﻿@using Microsoft.Practices.ServiceLocation
-@using WB.Core.BoundedContexts.Headquarters.Services
+﻿@using WB.Core.BoundedContexts.Headquarters.Services
+@using WB.Core.GenericSubdomains.Portable.ServiceLocation
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
 
@@ -71,6 +71,17 @@
                     </div>
 
                     <div class="block-filter">
+                        <h5>@Common.Status</h5>
+                        <select data-bind="value: SelectedStatus" class="selectpicker">
+                            <option value="">@Common.Any</option>
+                            @foreach (var item in Model.Statuses)
+                            {
+                                <option value="@item.Status">@item.StatusName</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="block-filter">
                         <h5>@Pages.Survey_ResponsibleTitle</h5>
                         <p class="list-group-item-text">
                             <div class="input-group">
@@ -83,16 +94,6 @@
                         </p>
                     </div>
 
-                    <div class="block-filter">
-                        <h5>@Common.Status</h5>
-                        <select data-bind="value: SelectedStatus" class="selectpicker">
-                            <option value="">@Common.Any</option>
-                            @foreach (var item in Model.Statuses)
-                            {
-                                <option value="@item.Status">@item.StatusName</option>
-                            }
-                        </select>
-                    </div>
                     <div class="block-filter">
                         <h5>@Interviews.Assignment</h5>
                         <p class="list-group-item-text">
@@ -110,7 +111,7 @@
             <div class="main-information">
                 @Html.Partial("_alerts")
                 <div class="page-header clearfix">
-                    <h1>@Common.Interviews</h1>
+                    <h1>@Common.Interviews (<span data-bind='text: TotalCount'></span>)</h1> 
                 </div>
 
                 <div class="interviews-info">
@@ -137,7 +138,7 @@
                                             }
                                             <th class="sorting_disabled interview-id  title-row">
                                                 @Common.InterviewKey
-                                                <a href="#" class="show-prefield-btn" data-bind="text : $root.IsVisiblePrefilledColumns() ? '@Common.HideIdentifying' : '@Common.ShowIdentifying', click: $root.ToggleVisiblePrefilledColumns()"></a>
+                                                <a href="javascript:void(0);" class="show-prefield-btn" data-bind="text : $root.IsVisiblePrefilledColumns() ? '@Common.HideIdentifying' : '@Common.ShowIdentifying', click: $root.ToggleVisiblePrefilledColumns()"></a>
                                             </th>
                                             <!-- ko if:SelectedTemplate() == '' -->
                                             <th class="sorting_disabled prefield-column first-identifying last-identifying" data-bind='css: { visible : $root.IsVisiblePrefilledColumns }'>@Common.PrefilledQuestions</th>
@@ -172,7 +173,12 @@
                                                 </td>
                                             }
                                             <td class="interview-id title-row">
-                                                <a data-bind="attr: { href: $detailsUrl + '/' + InterviewId() }, text: Key"></a>
+                                                <a data-bind="attr: { href: $detailsUrl + '/' + InterviewId() }">
+                                                    <!-- ko text:Key --><!--/ko-->
+                                                    <span data-bind="if: ClientKey() && ClientKey() !== Key()" title="@Interviews.ClientKeyTitle">
+                                                        (<!-- ko text:ClientKey --><!--/ko-->)
+                                                    </span>
+                                                </a>
                                             </td>
                                             <!-- ko if:$root.SelectedTemplate() == '' -->
                                             <td class="prefield-column first-identifying last-identifying" data-bind="css: { visible : $root.IsVisiblePrefilledColumns() }, text: $root.getFormattedPrefilledQuestions(FeaturedQuestions()).joinArrayOfObjects('Question', 'Answer')"></td>

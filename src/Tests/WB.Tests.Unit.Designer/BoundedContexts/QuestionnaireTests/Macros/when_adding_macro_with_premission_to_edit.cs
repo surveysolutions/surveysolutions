@@ -8,17 +8,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Macros
 {
     internal class when_adding_macro_with_premission_to_edit : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: ownerId);
             addMacro = Create.Command.AddMacro(questionnaireId, macroId, sharedPersonId);
             questionnaire.AddSharedPerson(sharedPersonId, "email@email.com", ShareType.Edit, ownerId);
-        };
+            BecauseOf();
+        }
 
 
-        Because of = () => questionnaire.AddMacro(addMacro);
+        private void BecauseOf() => questionnaire.AddMacro(addMacro);
 
-        It should_contains_Macro_with_EntityId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_Macro_with_EntityId_specified () =>
             questionnaire.QuestionnaireDocument.Macros.ShouldContain(t => t.Key == macroId);
 
 

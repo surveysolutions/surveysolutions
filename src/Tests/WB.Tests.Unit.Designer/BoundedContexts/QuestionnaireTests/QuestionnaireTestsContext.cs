@@ -14,7 +14,6 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
-    [Subject(typeof(Questionnaire))]
     internal class QuestionnaireTestsContext
     {
         public static T GetSingleEvent<T>(EventContext eventContext)

@@ -229,7 +229,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 
         public void Register(IEventHandler handler)
         {
-            if (handlersToIgnore.Any(h => h.IsAssignableFrom(handler.GetType())))
+            if (handlersToIgnore.Any(h => h.GetTypeInfo().IsAssignableFrom(handler.GetType())))
                 return;
 
             var inProcessBus = this.getInProcessEventBus();

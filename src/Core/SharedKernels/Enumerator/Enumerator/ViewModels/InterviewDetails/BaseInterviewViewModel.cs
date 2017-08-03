@@ -11,6 +11,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -51,6 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IJsonAllTypesSerializer jsonSerializer;
         private readonly IEnumeratorSettings enumeratorSettings;
+        public static BaseInterviewViewModel CurrentInterviewScope;
 
         protected BaseInterviewViewModel(
             IQuestionnaireStorage questionnaireRepository,
@@ -85,6 +87,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.BreadCrumbs = breadCrumbsViewModel;
             this.Sections = sectionsViewModel;
+            CurrentInterviewScope = this;
         }
 
         private bool isInProgress;
@@ -115,7 +118,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             if (interview == null)
             {
-                this.viewModelNavigationService.NavigateToDashboard();
+                this.viewModelNavigationService.NavigateToDashboard(Guid.Parse(this.interviewId));
                 return;
             }
 
@@ -125,11 +128,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.HasNotEmptyNoteFromSupervior = !string.IsNullOrWhiteSpace(interview.GetLastSupervisorComment());
             this.HasCommentsFromSupervior = interview.CountCommentedQuestionsVisibledToInterviewer() > 0;
-            this.HasPrefilledQuestions = questionnaire
-                .GetPrefilledQuestions()
+
+            var prefilledQuestions = questionnaire
+                .GetPrefilledQuestions();
+
+            this.HasPrefilledQuestions = prefilledQuestions
                 .Any(questionId => questionnaire.GetQuestionType(questionId) != QuestionType.GpsCoordinates);
+            this.HasEdiablePrefilledQuestions = prefilledQuestions
+                .All(questionId => interview.GetQuestion(new Identity(questionId, null))?.IsReadonly ?? true);
 
             this.QuestionnaireTitle = questionnaire.Title;
+
+            var interviewKey = interview.GetInterviewKey()?.ToString();
+            this.InterviewKey = string.IsNullOrEmpty(interviewKey) ? null : String.Format(UIResources.InterviewKey, interviewKey);
         
             this.availableLanguages = questionnaire.GetTranslationLanguages();
             this.currentLanguage = interview.Language;
@@ -257,8 +268,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public BreadCrumbsViewModel BreadCrumbs { get; set; }
         public SideBarSectionsViewModel Sections { get; set; }
         public string QuestionnaireTitle { get; set; }
+        public string InterviewKey { get; set; }
 
         public bool HasPrefilledQuestions { get; set; }
+        public bool HasEdiablePrefilledQuestions { get; set; }
+        
         public bool HasCommentsFromSupervior { get; set; }
         public bool HasNotEmptyNoteFromSupervior { get; set; }
 

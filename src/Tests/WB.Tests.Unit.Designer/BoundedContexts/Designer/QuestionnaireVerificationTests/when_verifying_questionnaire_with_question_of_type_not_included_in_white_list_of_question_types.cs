@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     internal class when_verifying_questionnaire_with_question_of_type_not_included_in_white_list_of_question_types:
         QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
 
             questionId = Guid.Parse("1111CCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
@@ -34,30 +33,31 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 );
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_1_message = () =>
+        [NUnit.Framework.Test] public void should_return_1_message () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_message_with_level_general = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_level_general () =>
             verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
-        It should_return_messages_each_with_code__WB0002__ = () =>
+        [NUnit.Framework.Test] public void should_return_messages_each_with_code__WB0002__ () =>
             verificationMessages.ShouldEachConformTo(error
                 => error.Code == "WB0066");
 
-        It should_return_messages_each_having_single_reference = () =>
+        [NUnit.Framework.Test] public void should_return_messages_each_having_single_reference () =>
             verificationMessages.ShouldEachConformTo(error
                 => error.References.Count() == 1);
 
-        It should_return_messages_each_referencing_question = () =>
+        [NUnit.Framework.Test] public void should_return_messages_each_referencing_question () =>
             verificationMessages.ShouldEachConformTo(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_message_referencing_first_incorrect_question = () =>
+        [NUnit.Framework.Test] public void should_return_message_referencing_first_incorrect_question () =>
             verificationMessages.ShouldContain(error
                 => error.References.Single().Id == questionId);
 

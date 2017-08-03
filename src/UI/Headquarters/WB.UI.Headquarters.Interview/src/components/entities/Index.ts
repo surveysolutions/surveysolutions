@@ -7,6 +7,7 @@ import "jquery-mask-plugin"
 
 import Vue from "vue"
 
+import Audio from "./Audio"
 import CategoricalMulti from "./CategoricalMulti"
 import CategoricalSingle from "./CategoricalSingle"
 import CategoricalYesNo from "./CategoricalYesNo"
@@ -28,6 +29,7 @@ import TextQuestion from "./TextQuestion"
 import Humburger from "./ui/humburger"
 import Unsupported from "./Unsupported"
 
+Vue.component("Audio", Audio)
 Vue.component("CategoricalMulti", CategoricalMulti)
 Vue.component("CategoricalSingle", CategoricalSingle)
 Vue.component("CategoricalYesNo", CategoricalYesNo)

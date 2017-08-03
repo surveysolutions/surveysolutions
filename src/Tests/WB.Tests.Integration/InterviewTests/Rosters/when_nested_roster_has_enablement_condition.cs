@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
@@ -20,7 +20,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var rosterSizeQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 var ageId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
                 var genderId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-                var kidsId =   Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+                var kidsId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
                 var userId = Guid.NewGuid();
                 var roster1Id = Guid.Parse("11111111111111111111111111111111");
                 var roster2Id = Guid.Parse("22222222222222222222222222222222");

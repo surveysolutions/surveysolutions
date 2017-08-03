@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -8,8 +8,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_moving_chapter_with_roster_inside_and_groster_has_question_with_rostertitle_in_substitution : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterBId, responsibleId: responsibleId);
             questionnaire.AddGroup( chapterAId, responsibleId: responsibleId);
@@ -21,13 +20,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 variableName: "var",
                 title: "%rostertitle% hello"
             );
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.MoveGroup(chapterAId, null, 0, responsibleId));
 
-        It should_not_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_not_throw_QuestionnaireException () =>
             exception.ShouldBeNull();
 
         private static Exception exception;

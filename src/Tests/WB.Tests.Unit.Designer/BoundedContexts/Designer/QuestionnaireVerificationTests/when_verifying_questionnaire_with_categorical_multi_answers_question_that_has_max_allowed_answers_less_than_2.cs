@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     class when_verifying_questionnaire_with_categorical_multi_answers_question_that_has_max_allowed_answers_less_than_2 : QuestionnaireVerifierTestsContext
     {
 
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument(Create.MultyOptionsQuestion(
                 id: multyOptionsQuestionId,
                 variable: "var",
@@ -22,15 +21,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             ));
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => 
+        private void BecauseOf() => 
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_1_message = () => 
+        [NUnit.Framework.Test] public void should_return_1_message () => 
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_message_with_code__WB0061__ = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_code__WB0061__ () =>
             verificationMessages.Single().Code.ShouldEqual("WB0061");
 
         private static QuestionnaireVerifier verifier;

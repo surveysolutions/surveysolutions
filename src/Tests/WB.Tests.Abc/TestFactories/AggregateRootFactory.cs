@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using Main.Core.Documents;
 using Moq;
-using NSubstitute;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
@@ -12,16 +10,12 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Tests.Abc.TestFactories
 {
@@ -31,7 +25,7 @@ namespace WB.Tests.Abc.TestFactories
             IQuestionnaireStorage questionnaireRepository = null,
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null,
             QuestionnaireIdentity questionnaireId = null,
-            ISubstitionTextFactory textFactory = null,
+            ISubstitutionTextFactory textFactory = null,
             IQuestionOptionsRepository questionOptionsRepository = null)
         {
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter();
@@ -41,10 +35,11 @@ namespace WB.Tests.Abc.TestFactories
                 repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1, null) &&
                 repository.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument);
 
-            var textFactoryMock = new Mock<ISubstitionTextFactory> {DefaultValue = DefaultValue.Mock};
+            var textFactoryMock = new Mock<ISubstitutionTextFactory> {DefaultValue = DefaultValue.Mock};
             var interview = new Interview(questionnaireRepository ?? questionnaireDefaultRepository,
                 expressionProcessorStatePrototypeProvider ?? Stub.InterviewExpressionStateProvider(),
-                textFactory ?? textFactoryMock.Object);
+                textFactory ?? textFactoryMock.Object,
+                Create.Service.InterviewTreeBuilder());
 
             interview.SetId(interviewId ?? Guid.NewGuid());
 
@@ -102,13 +97,14 @@ namespace WB.Tests.Abc.TestFactories
             var statefulInterview = new StatefulInterview(
                 questionnaireRepository,
                 CreateDefaultInterviewExpressionStateProvider(),
-                Create.Service.SubstitionTextFactory());
+                Create.Service.SubstitutionTextFactory(),
+                Create.Service.InterviewTreeBuilder());
 
             if (shouldBeInitialized)
             {
-                var command = new CreateInterviewOnClientCommand(Guid.Empty, userId ?? Guid.NewGuid(), Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), DateTime.Now,
+                var command = Create.Command.CreateInterview(Guid.Empty, userId ?? Guid.NewGuid(), Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), DateTime.Now,
                     Guid.NewGuid(), null, null, null);
-                statefulInterview.CreateInterviewOnClient(command);
+                statefulInterview.CreateInterview(command);
             }
 
             return statefulInterview;
@@ -129,13 +125,14 @@ namespace WB.Tests.Abc.TestFactories
             var statefulInterview = new StatefulInterview(
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewExpressionStatePrototypeProvider ?? defaultExpressionStatePrototypeProvider,
-                Create.Service.SubstitionTextFactory());
+                Create.Service.SubstitutionTextFactory(),
+                Create.Service.InterviewTreeBuilder());
 
             if (shouldBeInitialized)
             {
-                var command = new CreateInterviewOnClientCommand(Guid.Empty, userId ?? Guid.NewGuid(), Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), DateTime.Now,
+                var command = Create.Command.CreateInterview(Guid.Empty, userId ?? Guid.NewGuid(), Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), DateTime.Now,
                     Guid.NewGuid(), null, null, null);
-                statefulInterview.CreateInterviewOnClient(command);
+                statefulInterview.CreateInterview(command);
             }
 
             return statefulInterview;

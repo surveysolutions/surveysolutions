@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
 {
     internal class when_replacing_with_match_whole_word : QuestionnaireTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             responsibleId = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
             questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
                 groupId: chapterId);
@@ -24,11 +23,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 parentId: chapterId));
 
             command = Create.Command.ReplaceTextsCommand(searchFor.ToLower(), replaceWith, matchWholeWord: true, userId: responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => questionnaire.ReplaceTexts(command);
+        private void BecauseOf() => questionnaire.ReplaceTexts(command);
 
-        It should_find_whole_word_match = () => 
+        [NUnit.Framework.Test] public void should_find_whole_word_match () => 
             questionnaire.QuestionnaireDocument.Find<StaticText>(staticTextId).GetTitle().ShouldEqual($"static {replaceWith} title {searchFor}second");
 
         static Questionnaire questionnaire;

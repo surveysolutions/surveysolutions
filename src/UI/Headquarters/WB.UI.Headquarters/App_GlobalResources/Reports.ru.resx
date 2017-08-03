@@ -174,4 +174,7 @@
   <data name="TemplateVersion" xml:space="preserve">
     <value>Версия шаблона</value>
   </data>
+  <data name="Restarted" xml:space="preserve">
+    <value>Перезапущено</value>
+  </data>
 </root>

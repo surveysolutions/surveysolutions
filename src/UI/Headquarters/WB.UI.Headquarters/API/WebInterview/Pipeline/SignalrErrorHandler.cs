@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using Elmah;
 using Microsoft.AspNet.SignalR.Hubs;
-using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Headquarters.Code;
 

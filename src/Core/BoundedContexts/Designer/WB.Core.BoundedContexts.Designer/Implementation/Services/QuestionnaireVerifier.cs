@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             Error(NoQuestionsExist, "WB0001", VerificationMessages.WB0001_NoQuestions),
 
-            Error<IGroup>(GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion, "WB0009", VerificationMessages.WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion),
+            Critical<IGroup>(GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion, "WB0009", VerificationMessages.WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion),
             Error<IGroup>(RosterSizeSourceQuestionTypeIsIncorrect, "WB0023", VerificationMessages.WB0023_RosterSizeSourceQuestionTypeIsIncorrect),
             Error<IGroup>(GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles, "WB0032", VerificationMessages.WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles),
             Error<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion, "WB0033", VerificationMessages.WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion),
@@ -147,6 +147,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Error<IGroup>(FirstChapterHasEnablingCondition, "WB0263", VerificationMessages.WB0263_FirstChapterHasEnablingCondition),
             ErrorForTranslation<IComposite>(this.IsNotSupportSubstitution, "WB0268", VerificationMessages.WB0268_DoesNotSupportSubstitution),
             Error<IQuestion>(QuestionTitleEmpty, "WB0269", VerificationMessages.WB0269_QuestionTitleIsEmpty),
+            Error<IGroup>(SectionHasMoreThanAllowedQuestions, "WB0270", string.Format(VerificationMessages.WB0270_SectionContainsTooManyQuestions, 400)),
 
             Error_ManyGpsPrefilledQuestions_WB0006,
             ErrorsByCircularReferences,
@@ -168,6 +169,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private const int MaxRosterPropagationLimit = 10000;
         private const int MaxTotalRosterPropagationLimit = 80000;
+        private const int MaxQuestionsCountInSection = 400;
 
         private static readonly QuestionType[] RestrictedVariableLengthQuestionTypes =
             new QuestionType[]
@@ -196,7 +198,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             QuestionType.TextList,
             QuestionType.QRBarcode,
             QuestionType.Multimedia,
-            QuestionType.Area
+            QuestionType.Area,
+            QuestionType.Audio
         };
 
         private static readonly HashSet<QuestionType> QuestionTypesValidToBeRosterTitles = new HashSet<QuestionType>
@@ -923,6 +926,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity)));
         }
 
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Critical<TEntity>(
+            Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
+            where TEntity : class, IComposite
+        {
+            return questionnaire =>
+                questionnaire
+                    .Find<TEntity>(entity => hasError(entity, questionnaire))
+                    .Select(entity => QuestionnaireVerificationMessage.Critical(code, message, CreateReference(entity)));
+        }
+
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity, TReferencedEntity>(
             Func<TEntity, MultiLanguageQuestionnaireDocument, EntityVerificationResult<TReferencedEntity>> verifyEntity, string code, string message)
             where TEntity : class, IComposite
@@ -1295,6 +1308,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool QuestionTitleEmpty(IQuestion question)
             => string.IsNullOrWhiteSpace(question.QuestionText);
+
+        private static bool SectionHasMoreThanAllowedQuestions(IGroup group)
+            => group.Children.OfType<IQuestion>().Count() > MaxQuestionsCountInSection;
 
         private static bool GroupTitleIsTooLong(IGroup group)
             => group.Title?.Length > 500;
@@ -1682,7 +1698,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 var sourceRoster = questionnaire.Find<IGroup>(questionLinkedOnRoster.LinkedToRosterId.Value);
                 if (sourceRoster == null)
                 {
-                    yield return QuestionnaireVerificationMessage.Error("WB0053",
+                    yield return QuestionnaireVerificationMessage.Critical("WB0053",
                         VerificationMessages.WB0053_LinkedQuestionReferencesNotExistingRoster,
                         CreateReference(questionLinkedOnRoster));
                     continue;
@@ -1964,7 +1980,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 CreateReference(questionsWithSubstitution));
 
         private static QuestionnaireVerificationMessage LinkedQuestionReferencesNotExistingQuestion(IQuestion linkedQuestion)
-            => QuestionnaireVerificationMessage.Error("WB0011",
+            => QuestionnaireVerificationMessage.Critical("WB0011",
                 VerificationMessages.WB0011_LinkedQuestionReferencesNotExistingQuestion,
                 CreateReference(linkedQuestion));
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_updating_group_and_roster_become_a_group_with_question_with_rostertitle_in_substitution : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId, isRoster:true);
@@ -19,18 +18,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 responsibleId,
                 title : "%rostertitle% hello",
                 variableName : "var");
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateGroup(groupId: rosterId, responsibleId: responsibleId, title: "title", variableName: null, rosterSizeQuestionId: null,
                     description: null, condition: null, hideIfDisabled: false, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question,
                     rosterFixedTitles: null, rosterTitleQuestionId: null));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__questions____substitution___and_variable_name_of_question_with_rostertitle_in_substitution = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__questions____substitution___and_variable_name_of_question_with_rostertitle_in_substitution () =>
            new[] { "questions", "substitution", "var" }.ShouldEachConformTo(
            keyword => exception.Message.ToLower().Contains(keyword));
 

@@ -191,7 +191,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 this.interviewersPlainStorage.Store(interviewerIdentity);
 
                 this.principal.SignIn(restCredentials.Login, this.Password, true);
-                this.viewModelNavigationService.NavigateToDashboard();
+                await this.viewModelNavigationService.NavigateToDashboard();
             }
             catch (SynchronizationException ex)
             {

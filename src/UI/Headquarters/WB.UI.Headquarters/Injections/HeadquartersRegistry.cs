@@ -11,6 +11,7 @@ using Ninject.Modules;
 using Ninject.Web.Mvc.FilterBindingSyntax;
 using Ninject.Web.WebApi.FilterBindingSyntax;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -31,14 +32,16 @@ using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.MaskFormatter;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
+using WB.UI.Headquarters.API.WebInterview;
+using WB.UI.Headquarters.API.WebInterview.Services;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
-using WB.UI.Headquarters.Implementation.Services;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.CommandDeserialization;
@@ -60,6 +63,7 @@ namespace WB.UI.Headquarters.Injections
             this.Kernel.Bind<IInterviewImportService>().To<InterviewImportService>();
             this.Kernel.Bind<IFormDataConverterLogger>().To<FormDataConverterLogger>();
             this.Kernel.Bind<IMaskedFormatter>().To<MaskedFormatter>();
+            this.Kernel.Bind<IInterviewTreeBuilder>().To<InterviewTreeBuilder>();
             this.Kernel.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>();
             this.Kernel.Bind<IMetaInfoBuilder>().To<MetaInfoBuilder>();
             this.Kernel.Bind<IInterviewEntityViewFactory>().To<InterviewEntityViewFactory>();
@@ -77,6 +81,7 @@ namespace WB.UI.Headquarters.Injections
 
             this.Kernel.Bind<IVersionCheckService>().To<VersionCheckService>().InSingletonScope();
             this.Kernel.Bind<IHttpStatistician>().To<HttpStatistician>().InSingletonScope();
+            this.Kernel.Bind<IAudioProcessingService>().To<AudioProcessingService>().InSingletonScope();
         }
 
         protected virtual void RegisterEventHandlers()
@@ -159,6 +164,7 @@ namespace WB.UI.Headquarters.Injections
             this.Bind<IStringCompressor>().To<JsonCompressor>();
             this.Bind<IRestServiceSettings>().To<DesignerQuestionnaireApiRestServiceSettings>().InSingletonScope();
 
+            this.Bind<IHttpClientFactory>().To<DefaultHttpClientFactory>();
             this.Bind<IRestService>()
                 .To<RestService>()
                 .WithConstructorArgument("networkService", _ => null)
@@ -185,6 +191,7 @@ namespace WB.UI.Headquarters.Injections
             this.Bind<ICommandDeserializer>().To<SurveyManagementCommandDeserializer>();
             this.Bind<IRevalidateInterviewsAdministrationService>().To<RevalidateInterviewsAdministrationService>().InSingletonScope();
             this.Bind<IInterviewerVersionReader>().To<InterviewerVersionReader>().InSingletonScope();
+            this.Bind<IWebInterviewAllowService>().To<WebInterviewAllowService>();
         }
     }
 }

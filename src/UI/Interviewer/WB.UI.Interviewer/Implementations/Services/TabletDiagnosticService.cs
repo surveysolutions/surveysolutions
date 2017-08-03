@@ -1,6 +1,4 @@
-using System;
 using System.Net;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Android.App;
@@ -10,15 +8,13 @@ using Android.Support.V4.App;
 using Android.Support.V4.Content;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Droid.Platform;
-using Flurl;
 using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Infrastructure.Shared.Enumerator;
 using WB.UI.Interviewer.Activities;
+using WB.UI.Shared.Enumerator.Services;
 
 namespace WB.UI.Interviewer.Implementations.Services
 {

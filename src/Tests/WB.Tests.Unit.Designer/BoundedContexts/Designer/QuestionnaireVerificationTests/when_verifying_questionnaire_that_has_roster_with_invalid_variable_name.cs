@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_that_has_rosters_with_invalid_variable_name : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
                 Create.FixedRoster(rosterId: rosterWithVariableNameLongerThen32SymbolsId,
@@ -37,36 +36,37 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             });
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_3_messages = () =>
+        [NUnit.Framework.Test] public void should_return_3_messages () =>
             verificationMessages.Count().ShouldEqual(3);
 
-        It should_return_message_with_code_WB0069 = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_code_WB0069 () =>
             verificationMessages.First().Code.ShouldEqual("WB0069");
 
-        It should_return_first_error_with_one_reference = () =>
+        [NUnit.Framework.Test] public void should_return_first_error_with_one_reference () =>
             verificationMessages.First().References.Count().ShouldEqual(1);
 
-        It should_return_first_message_with_references_with_Roster_type = () =>
+        [NUnit.Framework.Test] public void should_return_first_message_with_references_with_Roster_type () =>
             verificationMessages.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
 
-        It should_return_first_message_with_references_with_id_equals_rosterWithVariableNameLongerThen32SymbolsId = () =>
+        [NUnit.Framework.Test] public void should_return_first_message_with_references_with_id_equals_rosterWithVariableNameLongerThen32SymbolsId () =>
             verificationMessages.First().References.First().Id.ShouldEqual(rosterWithVariableNameLongerThen32SymbolsId);
 
-        It should_return_second_message_with_references_with_Roster_type = () =>
+        [NUnit.Framework.Test] public void should_return_second_message_with_references_with_Roster_type () =>
             verificationMessages.Skip(1).First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
 
-        It should_return_second_message_with_references_with_id_equals_rosterWithVariableNameStartingFromNumberId = () =>
+        [NUnit.Framework.Test] public void should_return_second_message_with_references_with_id_equals_rosterWithVariableNameStartingFromNumberId () =>
             verificationMessages.Skip(1).First().References.First().Id.ShouldEqual(rosterWithVariableNameStartingFromNumberId);
 
-        It should_return_third_message_with_references_with_Roster_type = () =>
+        [NUnit.Framework.Test] public void should_return_third_message_with_references_with_Roster_type () =>
             verificationMessages.Last().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
 
-        It should_return_third_message_with_references_with_id_equals_rosterWithVariableNameWithInvalidSymbolsId = () =>
+        [NUnit.Framework.Test] public void should_return_third_message_with_references_with_id_equals_rosterWithVariableNameWithInvalidSymbolsId () =>
             verificationMessages.Last().References.First().Id.ShouldEqual(rosterWithVariableNameWithInvalidSymbolsId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

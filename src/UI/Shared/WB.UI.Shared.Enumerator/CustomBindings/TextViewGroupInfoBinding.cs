@@ -3,9 +3,9 @@ using Android.Support.V4.Content;
 using Android.Text;
 using Android.Text.Style;
 using Android.Widget;
-using Microsoft.Practices.ServiceLocation;
 using MvvmCross.Binding;
 using MvvmCross.Platform.Droid.Platform;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 

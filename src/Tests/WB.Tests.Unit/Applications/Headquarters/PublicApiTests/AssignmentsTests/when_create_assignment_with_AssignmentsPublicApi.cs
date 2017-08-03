@@ -1,4 +1,3 @@
-using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -7,15 +6,13 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using System.Collections.Generic;
-using Main.Core.Entities.Composite;
-using System.Linq;
-using WB.Core.GenericSubdomains.Portable;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTests
 {
@@ -80,15 +77,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 .Setup(m => m.Map(It.IsAny<CreateAssignmentApiRequest>(), It.IsAny<Assignment>()))
                 .Returns(assignment);
 
-            this.preloadedDataVerifier
-                .Setup(v => v.VerifyAssignmentsSample(qid.QuestionnaireId, qid.Version, It.IsAny<PreloadedDataByFile>()))
-                .Returns(new VerificationStatus
-                {
-                    Errors = new List<PreloadedDataVerificationError>
-                    {
-                        new PreloadedDataVerificationError("CODE", "Message")
-                    }
-                });
+            this.interviewImportService
+                .Setup(x => x.VerifyAssignment(It.IsAny<List<InterviewAnswer>[]>(), It.IsAny<IQuestionnaire>()))
+                .Returns(AssignmentVerificationResult.Error("error"));
 
             try
             {
@@ -121,9 +112,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 .Setup(m => m.Map(It.IsAny<CreateAssignmentApiRequest>(), It.IsAny<Assignment>()))
                 .Returns(assignment);
 
-            this.preloadedDataVerifier
-                .Setup(v => v.VerifyAssignmentsSample(qid.QuestionnaireId, qid.Version, It.IsAny<PreloadedDataByFile>()))
-                .Returns(new VerificationStatus() { Errors = new PreloadedDataVerificationError[0] });
+            this.interviewImportService
+                .Setup(x => x.VerifyAssignment(It.IsAny<List<InterviewAnswer>[]>(), It.IsAny<IQuestionnaire>()))
+                .Returns(AssignmentVerificationResult.Ok());
 
             this.controller.Create(new CreateAssignmentApiRequest
             {

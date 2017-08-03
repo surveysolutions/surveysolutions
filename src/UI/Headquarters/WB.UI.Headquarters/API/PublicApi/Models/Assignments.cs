@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 
@@ -123,7 +124,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
     public class CreateAssignmentResult
     {
         public AssignmentDetails Assignment { get; set; }
-        public VerificationStatus VerificationStatus { get; set; }
+        public ImportDataVerificationState VerificationStatus { get; set; }
     }
 
     public class CreateAssignmentApiRequest

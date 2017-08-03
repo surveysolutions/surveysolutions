@@ -9,24 +9,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
 {
     internal class when_updating_attachment : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: responsibleId);
             questionnaire.AddOrUpdateAttachment(Create.Command.AddOrUpdateAttachment(questionnaireId, oldAttachmentId, "", responsibleId, ""));
 
             updateAttachment = Create.Command.AddOrUpdateAttachment(questionnaireId, attachmentId, attachmentContentId, responsibleId, name, oldAttachmentId);
-        };
+
+            BecauseOf();
+        }
 
 
-        Because of = () => questionnaire.AddOrUpdateAttachment(updateAttachment);
+        private void BecauseOf() => questionnaire.AddOrUpdateAttachment(updateAttachment);
 
-        It should_contains_attachment_with_EntityId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_attachment_with_EntityId_specified () =>
             questionnaire.QuestionnaireDocument.Attachments.Single(a => a.AttachmentId == attachmentId).AttachmentId.ShouldEqual(attachmentId);
 
-        It should_contains_attachment_with_AttachmentName_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_attachment_with_AttachmentName_specified () =>
             questionnaire.QuestionnaireDocument.Attachments.Single(a => a.AttachmentId == attachmentId).Name.ShouldEqual(name);
 
-        It should_contains_attachment_with_ContentId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_attachment_with_ContentId_specified () =>
             questionnaire.QuestionnaireDocument.Attachments.Single(a => a.AttachmentId == attachmentId).ContentId.ShouldEqual(attachmentContentId);
 
         private static AddOrUpdateAttachment updateAttachment;

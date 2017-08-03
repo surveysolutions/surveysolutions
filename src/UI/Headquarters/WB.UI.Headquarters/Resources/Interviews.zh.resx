@@ -161,13 +161,4 @@
   <data name="ChooseResponsibleInterviewer" xml:space="preserve">
     <value>一些访谈没有选择负责人。请选择一个调查员。</value>
   </data>
-  <data name="ImportInterviews_FailedToImportInterview_NoSupervisor" xml:space="preserve">
-    <value>导入访谈失败：{0}。未指定督导员</value>
-  </data>
-  <data name="ImportInterviews_GenericError" xml:space="preserve">
-    <value>导入访谈失败：{0}。InterviewerId {1}, QuestionnaireId {2}, Exception: {3}</value>
-  </data>
-  <data name="ImportInterviews_IncorrectDatafile" xml:space="preserve">
-    <value>数据文件不正确</value>
-  </data>
 </root>

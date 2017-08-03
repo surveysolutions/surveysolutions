@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Mapping;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 
 namespace Ncqrs.Domain.Storage

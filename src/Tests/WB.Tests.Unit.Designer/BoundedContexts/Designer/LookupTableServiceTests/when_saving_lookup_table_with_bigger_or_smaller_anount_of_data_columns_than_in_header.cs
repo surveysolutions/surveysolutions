@@ -4,14 +4,13 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.Infrastructure.PlainStorage;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTests
 {
     internal class when_saving_lookup_table_with_bigger_or_smaller_anount_of_data_columns_than_in_header
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             LookupTableContentStorageMock
                 .Setup(x => x.Store(Moq.It.IsAny<LookupTableContent>(), Moq.It.IsAny<string>()))
                 .Callback((LookupTableContent content, string id) => { lookupTableContent = content; });
@@ -22,24 +21,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTest
                 $"6{_}7{_end}";
 
             lookupTableService = Create.LookupTableService(lookupTableContentStorage: LookupTableContentStorageMock.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             lookupTableService.SaveLookupTableContent(questionnaireId, lookupTableId, fileContent);
 
-        It should_save_not_null_content = () =>
+        [NUnit.Framework.Test] public void should_save_not_null_content () =>
             lookupTableContent.ShouldNotBeNull();
 
-        It should_save_first_row_with_2_values_as_in_header = () =>
+        [NUnit.Framework.Test] public void should_save_first_row_with_2_values_as_in_header () =>
             lookupTableContent.Rows.ElementAt(0).Variables.Length.ShouldEqual(3 - 1);
 
-        It should_save_first_row_with_last_value_5 = () =>
+        [NUnit.Framework.Test] public void should_save_first_row_with_last_value_5 () =>
             lookupTableContent.Rows.ElementAt(0).Variables.Last().ShouldEqual(5);
 
-        It should_save_second_row_with_2_values_as_in_header = () =>
+        [NUnit.Framework.Test] public void should_save_second_row_with_2_values_as_in_header () =>
             lookupTableContent.Rows.ElementAt(1).Variables.Length.ShouldEqual(3 - 1);
 
-        It should_save_second_row_with_last_value__null = () =>
+        [NUnit.Framework.Test] public void should_save_second_row_with_last_value__null () =>
             lookupTableContent.Rows.ElementAt(1).Variables.Last().ShouldBeNull();
 
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");

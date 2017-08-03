@@ -12,17 +12,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
 {
     internal class when_updating_multi_option_question_with_more_than_200_options : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             int incrementer = 0;
             options = new List<Option>(
                     new Option[201].Select(
                         option => new Option(new Guid(), incrementer.ToString(), (incrementer++).ToString()))).ToArray();
 
             questionnaire = CreateQuestionnaireWithOneQuestion(responsibleId: responsibleId, questionId: questionId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateMultiOptionQuestion(
                     questionId: questionId,
@@ -41,10 +41,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                     yesNoView: false, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
                 linkedFilterExpression: null, properties: Create.QuestionProperties()));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_about_riching_options_limit = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_about_riching_options_limit () =>
             new[] { "more than", 200.ToString(), "options" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 

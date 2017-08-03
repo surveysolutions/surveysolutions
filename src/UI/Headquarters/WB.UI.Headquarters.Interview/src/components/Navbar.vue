@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" v-init="">
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container-fluid ">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -10,21 +10,24 @@
                     <span class="icon-bar mid-menu"></span>
                     <span class="icon-bar bottom-menu"></span>
                 </button>
-                <router-link class="navbar-brand rotate-brand" :to="toFirstSection" active-class="rotate-brand" v-if="$store.state.firstSectionId">
-                        <div class="brand-name">Web interview</div>
+                <router-link class="navbar-brand rotate-brand" :to="toFirstSection" active-class="rotate-brand" v-if="$store.state.firstSectionId && hqLink == null">
+                    <div class="brand-name">{{interviewKey}}</div>
                 </router-link>
+                <a :href="hqLink" v-if="hqLink != null" class="navbar-brand rotate-brand">
+                    <div class="brand-name">{{interviewKey}}</div>
+                </a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="navbar">
                 <p class="navbar-text">{{questionnaireTitle}}</p>
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown">
+                    <li class="dropdown language">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" v-bind:title="currentLanguage">{{currentLanguage}}<span class="caret" v-if="canChangeLanguage"></span></a>
                         <ul class="dropdown-menu" v-if="canChangeLanguage">
                             <li v-if="currentLanguage != $store.state.originalLanguageName">
                                 <a href="javascript:void(0)" @click="changeLanguage()">{{ $store.state.originalLanguageName }}</a>
                             </li>
-                            <li v-for="language in $store.state.languages" v-if="language != $store.state.currentLanguage">
+                            <li :key="language.OriginalLanguageName" v-for="language in $store.state.languages" v-if="language != $store.state.currentLanguage">
                                 <a href="javascript:void(0)" @click="changeLanguage(language)">{{ language }}</a>
                             </li>
                         </ul>
@@ -40,6 +43,7 @@
 <script lang="ts">
     import * as $ from "jquery"
     import modal from "modal"
+       import { hqLink } from "src/config"
 
     export default {
         name: 'navbar',
@@ -48,7 +52,7 @@
             this.$store.dispatch("loadInterview")
         },
         updated(){
-            document.title = `${this.questionnaireTitle} | Web Interview`
+            document.title = `${this.questionnaireTitle} | Web interview`
         },
         computed: {
             canChangeLanguage() {
@@ -62,6 +66,12 @@
             },
             toFirstSection(){
                 return { name: 'section', params: { sectionId: this.$store.state.firstSectionId } }
+            },
+            interviewKey() {
+                return this.$store.state.interviewKey || "Web interview";
+            },
+            hqLink() {
+                return hqLink
             }
         },
         methods: {

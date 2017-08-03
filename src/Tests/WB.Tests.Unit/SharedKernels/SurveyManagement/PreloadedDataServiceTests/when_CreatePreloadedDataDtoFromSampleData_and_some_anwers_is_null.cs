@@ -3,7 +3,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
 {
@@ -20,10 +20,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                         PublicKey = Guid.NewGuid()
                     });
 
-            preloadedDataService = CreatePreloadedDataService(questionnaireDocument);
+            importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
         };
 
-        Because of = () => exception = Catch.Exception(() => preloadedDataService.CreatePreloadedDataDtoFromAssignmentData(
+        Because of = () => exception = Catch.Exception(() => importDataParsingService.CreatePreloadedDataDtoFromAssignmentData(
                 CreatePreloadedDataByFile(header: new[] {"Id", "nq1"},
                     content: new[] {new[] {"1", null}},
                     fileName: "some file name")));
@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
         It should_not_throw_null_reference_exception = () =>
             exception.ShouldBeNull();
 
-        private static PreloadedDataService preloadedDataService;
+        private static ImportDataParsingService importDataParsingService;
         private static QuestionnaireDocument questionnaireDocument;
         private static Exception exception;
     }

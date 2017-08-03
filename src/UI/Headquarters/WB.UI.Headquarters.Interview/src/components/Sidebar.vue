@@ -31,7 +31,7 @@
         },
         computed: {
             showCover() {
-                return this.$store.state.hasPrefilledQuestions
+                return this.$store.state.hasCoverPage
             },
             sections() {
                 return this.$store.getters.rootSections

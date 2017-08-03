@@ -23,6 +23,9 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions
         public static bool InList(this int? value, params int?[] valuesList) => 
             valuesList.Length != 0 && valuesList.Any(v => v == value);
 
+        public static bool InList(this int value, params int?[] valuesList) =>
+            ((int?)value).InList(valuesList);
+
         public static bool ContainsAll(this int[] multichoice, params int[] valuesList)
         {
             if (multichoice == null) return false;

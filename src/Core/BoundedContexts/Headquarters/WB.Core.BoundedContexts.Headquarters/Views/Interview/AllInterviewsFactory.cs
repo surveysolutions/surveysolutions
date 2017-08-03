@@ -37,7 +37,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 return summaries;
             });
 
-
             var totalCount = this.reader.Query(_ => ApplyFilter(input, _).Count());
 
             var result = new AllInterviewsView
@@ -78,7 +77,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     AssignmentId = x.AssignmentId,
                     ReceivedByInterviewer = x.ReceivedByInterviewer,
                     TeamLeadName = x.TeamLeadName,
-                    Key = x.Key
+                    Key = x.Key,
+                    ClientKey = x.ClientKey
                 }).ToList()
             };
             return result;
@@ -189,17 +189,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
-                items = items.Where(x => x.Key.StartsWith(input.SearchBy) || x.AnswersToFeaturedQuestions.Any(a => a.Answer.StartsWith(input.SearchBy)));
+                items = items.Where(x => x.Key.StartsWith(input.SearchBy) || x.ClientKey.StartsWith(input.SearchBy) || x.AnswersToFeaturedQuestions.Any(a => a.Answer.StartsWith(input.SearchBy)));
             }
-
-            if (input.Status.HasValue)
+            
+            if (input.Statuses != null)
             {
-                items = items.Where(x => x.Status == input.Status);
+                items = items.Where(x => input.Statuses.Contains(x.Status));
             }
 
             if (!string.IsNullOrWhiteSpace(input.TeamLeadName))
             {
                 items = items.Where(x => x.TeamLeadName == input.TeamLeadName);
+            }
+
+            if (input.ResponsibleId.HasValue)
+            {
+                items = items.Where(x => x.ResponsibleId == input.ResponsibleId.Value);
             }
 
             if (input.QuestionnaireId.HasValue)

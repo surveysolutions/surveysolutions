@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_questionnaire_has_question_with_very_short_title : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 Create.GpsCoordinateQuestion(),
                 Create.TextQuestion(questionId: textQuestionId, variable: "q2", text: "nastya"),
@@ -20,19 +19,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
+        private void BecauseOf() => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
-        It should_return_WB0255_warning = () => errors.ShouldContainWarning("WB0255", "Question is too short. This might be an incomplete question.");
+        [NUnit.Framework.Test] public void should_return_WB0255_warning () => errors.ShouldContainWarning("WB0255", "Question is too short. This might be an incomplete question.");
 
-        It should_return_error_with_references_on_text_question = () =>
+        [NUnit.Framework.Test] public void should_return_error_with_references_on_text_question () =>
           errors.First(warning => warning.Code == "WB0255").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_error_with_references_on_text_question_id = () =>
+        [NUnit.Framework.Test] public void should_return_error_with_references_on_text_question_id () =>
           errors.First(warning => warning.Code == "WB0255").References.First().Id.ShouldEqual(textQuestionId);
 
-        It should_not_return_warning_for_prefilled_question = () => errors.GetWarnings("WB0255").Count().ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_not_return_warning_for_prefilled_question () => errors.GetWarnings("WB0255").Count().ShouldEqual(1);
 
         static QuestionnaireDocument questionnaire;
         static QuestionnaireVerifier verifier;

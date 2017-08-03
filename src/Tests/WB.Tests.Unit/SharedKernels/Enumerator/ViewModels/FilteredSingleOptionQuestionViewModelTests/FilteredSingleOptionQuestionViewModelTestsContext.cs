@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Moq;
+using MvvmCross.Core.Views;
+using MvvmCross.Platform.Core;
+using MvvmCross.Test.Core;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -19,29 +21,33 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOptionQuestionViewModelTests
 {
-    internal class FilteredSingleOptionQuestionViewModelTestsContext
+    internal class FilteredSingleOptionQuestionViewModelTestsContext : MvxIoCSupportingTest
     {
+        public FilteredSingleOptionQuestionViewModelTestsContext()
+        {
+            base.Setup();
+
+            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
+            Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadDispatcher>(dispatcher);
+        }
+
         protected static FilteredSingleOptionQuestionViewModel CreateFilteredSingleOptionQuestionViewModel(
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering,
             IPrincipal principal = null,
             IStatefulInterviewRepository interviewRepository = null,
             FilteredOptionsViewModel filteredOptionsViewModel = null,
-            IQuestionnaireStorage questionnaireStorage = null,
-            string defaultText = "")
+            IQuestionnaireStorage questionnaireStorage = null)
         {
             return new FilteredSingleOptionQuestionViewModel(
-                principal ?? Mock.Of<IPrincipal>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 Mock.Of<ILiteEventRegistry>(),
+                filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(),
+                principal ?? Mock.Of<IPrincipal>(),
                 questionStateViewModel ?? Mock.Of<QuestionStateViewModel<SingleOptionQuestionAnswered>>(),
                 answering ?? Mock.Of<AnsweringViewModel>(),
-                Mock.Of<QuestionInstructionViewModel>(),
-                filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>()
-                )
-            {
-                DefaultText = defaultText
-            };
+                Mock.Of<QuestionInstructionViewModel>());
         }
         
         protected static ReadOnlyCollection<CategoricalOption> Options = new List<CategoricalOption>

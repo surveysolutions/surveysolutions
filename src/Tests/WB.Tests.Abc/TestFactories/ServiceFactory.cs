@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using Main.Core.Documents;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -15,6 +14,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.TopologicalSorter;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
@@ -26,7 +26,6 @@ using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.Su
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -49,6 +48,7 @@ using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
@@ -66,6 +66,7 @@ using WB.Core.Infrastructure.Versions;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
@@ -253,8 +254,8 @@ namespace WB.Tests.Abc.TestFactories
                 TransactionManager = Mock.Of<ITransactionManagerProvider>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>())
             };
 
-        public PreloadedDataService PreloadedDataService(QuestionnaireDocument questionnaire)
-            => new PreloadedDataService(
+        public ImportDataParsingService PreloadedDataService(QuestionnaireDocument questionnaire)
+            => new ImportDataParsingService(
                 new ExportViewFactory(new FileSystemIOAccessor(), 
                                       new ExportQuestionService(), 
                                       Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire && 
@@ -287,7 +288,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public TeamViewFactory TeamViewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader = null)
-            => new TeamViewFactory(interviewSummaryReader);
+            => new TeamViewFactory(interviewSummaryReader, Mock.Of<IUserRepository>());
 
         public ITopologicalSorter<T> TopologicalSorter<T>()
             => new TopologicalSorter<T>();
@@ -328,9 +329,9 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaireExportStructureStorage: questionnaireExportStructureStorage ?? Substitute.For<IQuestionnaireExportStructureStorage>());
         }
 
-        public ISubstitionTextFactory SubstitionTextFactory()
+        public ISubstitutionTextFactory SubstitutionTextFactory()
         {
-            return new SubstitionTextFactory(Create.Service.SubstitutionService(), Create.Service.VariableToUIStringService());
+            return new SubstitutionTextFactory(Create.Service.SubstitutionService(), Create.Service.VariableToUIStringService());
         }
 
         public InterviewViewModelFactory InterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository,
@@ -436,7 +437,8 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IAssignmentsSynchronizer>(),
                 Mock.Of<IQuestionnaireDownloader>(),
                 httpStatistician ?? Mock.Of<IHttpStatistician>(),
-                Mock.Of<IPlainStorage<AssignmentDocument, int>>());
+                Mock.Of<IPlainStorage<AssignmentDocument, int>>(),
+                Mock.Of<IAudioFileStorage>());
         }
 
         public SynchronizationService SynchronizationService(IPrincipal principal = null,
@@ -469,9 +471,9 @@ namespace WB.Tests.Abc.TestFactories
                 brokenPackagesFactory ?? Mock.Of<IBrokenInterviewPackagesViewFactory>());
         }
 
-        public TesterPlainInterviewFileStorage TesterPlainInterviewFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectory)
+        public TesterImageFileStorage TesterPlainInterviewFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectory)
         {
-            return new TesterPlainInterviewFileStorage(fileSystemAccessor, rootDirectory);
+            return new TesterImageFileStorage(fileSystemAccessor, rootDirectory);
         }
 
         public IQuestionnaireDownloader QuestionnaireDownloader(
@@ -530,6 +532,11 @@ namespace WB.Tests.Abc.TestFactories
             var service = new AssignmentsService(accessor, Mock.Of<IInterviewAnswerSerializer>());
 
             return service;
+        }
+
+        public IInterviewTreeBuilder InterviewTreeBuilder()
+        {
+            return new InterviewTreeBuilder(Create.Service.SubstitutionTextFactory());
         }
     }
 }

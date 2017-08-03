@@ -3,6 +3,7 @@
     source = require("vinyl-source-stream");
 
 var gulp = require('gulp'),
+    streamify = require('gulp-streamify'),
     plugins = require('gulp-load-plugins')(),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
@@ -58,6 +59,10 @@ var config = {
             folder: '../Views/Shared/'
         },
         {
+            file: "_MainLayoutVue.cshtml",
+            folder: '../Views/Shared/'
+        },
+        {
             file: "Start.cshtml",
             folder: '../Views/WebInterview/'
         }
@@ -81,9 +86,11 @@ gulp.task('vueify', wrapPipe(function (success, error) {
             return b
                 .transform(babelify, { presets: ['es2015'] })
                 .transform(vueify)
-            .bundle().on('error', error)
-            .pipe(source(entry).on('error', error))
-            .pipe(gulp.dest(config.buildDir).on('error', error));
+
+                .bundle().on('error', error)
+                .pipe(source(entry).on('error', error))
+                .pipe(streamify(uglify()))
+                .pipe(gulp.dest(config.buildDir).on('error', error));
         });
 
         es.merge(tasks).on('end', success);
@@ -97,6 +104,7 @@ gulp.task('vue-libs', wrapPipe(function (success, error) {
         .pipe(mainBowerFiles().on('error', error))
         .pipe(filter)
         .pipe(concat('vue-libs.js').on('error', error))
+        .pipe(plugins.uglify().on('error', error))
         .pipe(gulp.dest(config.buildDir).on('error', error));
 }));
 
@@ -113,7 +121,7 @@ gulp.task('styles', ['move-bootstrap-fonts'], wrapPipe(function (success, error)
         .pipe(rename({ suffix: '.min' }).on('error', error))
         .pipe(plugins.rev().on('error', error))
         .pipe(cssnano().on('error', error))
-    	.pipe(gulp.dest(config.buildDistDir));
+        .pipe(gulp.dest(config.buildDistDir));
 }));
 
 gulp.task('watch-vue', wrapPipe(function (success, error) {
@@ -136,12 +144,13 @@ gulp.task('bowerJs', wrapPipe(function (success, error) {
     return gulp.src('./bower.json')
         .pipe(mainBowerFiles().on('error', error))
         .pipe(filter)
-      	.pipe(concat('libs.js').on('error', error))
+        .pipe(plugins.uglify().on('error', error))
+        .pipe(concat('libs.js').on('error', error))
         .pipe(gulp.dest(config.buildDir).on('error', error))
         .pipe(rename({ suffix: '.min' }).on('error', error))
         .pipe(plugins.uglify().on('error', error))
         .pipe(plugins.rev().on('error', error))
-    	.pipe(gulp.dest(config.buildDistDir));
+        .pipe(gulp.dest(config.buildDistDir));
 }));
 
 gulp.task('bowerCss', wrapPipe(function (success, error) {
@@ -153,11 +162,25 @@ gulp.task('bowerCss', wrapPipe(function (success, error) {
         .pipe(rename({ suffix: '.min' }).on('error', error))
         .pipe(cssnano().on('error', error))
         .pipe(plugins.rev().on('error', error))
-    	.pipe(gulp.dest(config.buildDistDir));
+        .pipe(gulp.dest(config.buildDistDir));
 }));
 
 gulp.task('inject', ['styles', 'bowerCss', 'bowerJs'], wrapPipe(function (success, error) {
     if (config.production) {
+        
+        var toUrlContent = function (filepath) {
+            const url = '@Url.Content("~/Dependencies' + filepath + '")';
+
+            if (filepath.endsWith(".css")) {
+                return "<link rel='stylesheet' href='" + url + "' >";
+            }
+            else if (filepath.endsWith(".js")) {
+                return " <script type='text/javascript' src='" + url + "'></script>";
+            }
+
+            return inject.transform.apply(inject.transform, arguments);
+        }
+
         var cssApp = gulp.src(config.buildDistDir + '/markup-*.min.css', { read: false });
         var cssLibs = gulp.src(config.buildDistDir + '/libs-*.min.css', { read: false });
         var jsLibs = gulp.src(config.buildDistDir + '/libs-*.min.js', { read: false });
@@ -166,9 +189,10 @@ gulp.task('inject', ['styles', 'bowerCss', 'bowerJs'], wrapPipe(function (succes
             var target = gulp.src(fileToInject.folder + fileToInject.file);
 
             return target
-                .pipe(plugins.inject(cssApp, { relative: true, name: config.cssAppInject }).on('error', error))
-                .pipe(plugins.inject(cssLibs, { relative: true, name: config.cssLibsInject }).on('error', error))
-                .pipe(plugins.inject(jsLibs, { relative: true, name: config.jsLibsInject }).on('error', error))
+
+                .pipe(plugins.inject(cssApp, { relative: false, name: config.cssAppInject, transform: toUrlContent }).on('error', error))
+                .pipe(plugins.inject(cssLibs, { relative: false, name: config.cssLibsInject, transform: toUrlContent }).on('error', error))
+                .pipe(plugins.inject(jsLibs, { relative: false, name: config.jsLibsInject, transform: toUrlContent }).on('error', error))
                 .pipe(gulp.dest(fileToInject.folder));
         });
 

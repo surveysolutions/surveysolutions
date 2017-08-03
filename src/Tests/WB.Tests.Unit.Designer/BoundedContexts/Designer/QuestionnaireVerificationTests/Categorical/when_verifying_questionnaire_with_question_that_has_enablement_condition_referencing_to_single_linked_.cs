@@ -10,14 +10,13 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests.Categorical
 {
     internal class when_verifying_questionnaire_with_question_that_has_enablement_condition_referencing_to_categorical_single_linked_question : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var linkedSourceQuestionId = Guid.Parse("33333333333333333333333333333333");
             questionnaire = CreateQuestionnaireDocument(Create.FixedRoster(variable: "a",
                 fixedTitles: new[] {"fixed title 1", "fixed title 2"},
@@ -47,12 +46,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 => processor.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>()) == new[] { categoricalQuestionId.ToString() });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             resultErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_no_errors = () =>
+        [NUnit.Framework.Test] public void should_return_no_errors () =>
             resultErrors.Count().ShouldEqual(0);
 
         private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;

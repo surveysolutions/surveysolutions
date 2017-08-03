@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -15,8 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_question_with_substitutions_inside_roster_unattached_group : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionWithSubstitutionsId = Guid.Parse("10000000000000000000000000000000");
             underDeeperRosterLevelQuestionId = Guid.Parse("12222222222222222222222222222222");
             var rosterGroupId = Guid.Parse("13333333333333333333333333333333");
@@ -47,26 +46,27 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 ));
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_1_message = () =>
+        [NUnit.Framework.Test] public void should_return_1_message () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_message_with_code__WB0019 = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_code__WB0019 () =>
             verificationMessages.Single().Code.ShouldEqual("WB0019");
 
-        It should_return_WB0019_error_with_2_references_on_questions = () =>
+        [NUnit.Framework.Test] public void should_return_WB0019_error_with_2_references_on_questions () =>
             verificationMessages.Single()
                 .References.ToList()
                 .ForEach(question => question.Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question));
 
-        It should_return_WB0019_error_with_first_reference_to_question_with_substitution_text = () =>
+        [NUnit.Framework.Test] public void should_return_WB0019_error_with_first_reference_to_question_with_substitution_text () =>
             verificationMessages.Single().References.ElementAt(0).Id.ShouldEqual(questionWithSubstitutionsId);
 
-        It should_return_WB0019_error_with_second_reference_to_question_that_used_as_substitution_question = () =>
+        [NUnit.Framework.Test] public void should_return_WB0019_error_with_second_reference_to_question_that_used_as_substitution_question () =>
             verificationMessages.Single().References.ElementAt(1).Id.ShouldEqual(underDeeperRosterLevelQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

@@ -80,6 +80,28 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 mto.Update(false);
                 mto.Insert(false);
             });
+
+            ManyToOne(x => x.Questionnaire, mto =>
+            {
+                // TODO: Replace with proper NH relationship
+                // basically map to questionnairebrowseitems id column that is basically QuestionnaireIdent
+                mto.Formula("concat(replace(questionnaireid::text, '-', ''), '$', questionnaireversion)");
+                mto.Cascade(Cascade.None);
+                mto.Update(false);
+                mto.Insert(false);
+            });
+        }
+    }
+
+    [PlainStorage]
+    public class QuestionnaireLiteViewItemMap : ClassMapping<QuestionnaireLiteViewItem>
+    {
+        public QuestionnaireLiteViewItemMap()
+        {
+            this.Table("questionnairebrowseitems");
+
+            Id(x => x.Id);
+            Property(x => x.Title);
         }
     }
 
@@ -95,6 +117,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             Property(x => x.AssignmentId);
             Property(x => x.IsDeleted);
             Property(x => x.TeamLeadId);
+            Property(x => x.Status);
+            Property(x => x.QuestionnaireTitle);
+            Property(x => x.QuestionnaireId);
+            Property(x => x.QuestionnaireVersion);
+            Property(x => x.ResponsibleId, pm => pm.Column(cm => cm.Index("InterviewSummaries_ResponsibleId")));
         }
     }
 }

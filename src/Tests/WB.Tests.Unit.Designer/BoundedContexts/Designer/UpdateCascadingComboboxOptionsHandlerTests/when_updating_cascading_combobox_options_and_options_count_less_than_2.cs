@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateCascadingCombobo
 {
     internal class when_updating_cascading_combobox_options_and_options_count_less_than_2 : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddSingleOptionQuestion(
@@ -37,16 +36,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateCascadingCombobo
                 isFilteredCombobox: false,
                 cascadeFromQuestionId: parentQuestionId
             );
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateCascadingComboboxOptions(questionId: questionId, responsibleId: responsibleId, options: options));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__should_have_two_options_at_least__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__should_have_two_options_at_least__ () =>
              new[] { "should have", "two options at least" }.ShouldEachConformTo(
                     keyword => exception.Message.ToLower().Contains(keyword));
 

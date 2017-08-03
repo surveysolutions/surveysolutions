@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Android.Content;
+using Android.Support.V7.Widget;
 using Android.Widget;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Core.ViewModels;
@@ -11,7 +12,6 @@ using MvvmCross.Platform;
 using MvvmCross.Platform.Converters;
 using MvvmCross.Platform.IoC;
 using Ninject;
-using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
@@ -19,6 +19,7 @@ using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
@@ -26,9 +27,6 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.SurveyManagement;
-using WB.Infrastructure.Shared.Enumerator;
-using WB.Infrastructure.Shared.Enumerator.Internals.MapService;
-using WB.Infrastructure.Shared.Enumerator.Ninject;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Interviewer.Activities.Dashboard;
 using WB.UI.Interviewer.Converters;
@@ -41,6 +39,9 @@ using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Ninject;
+using WB.UI.Shared.Enumerator.Services;
+using WB.UI.Shared.Enumerator.Services.Internals.MapService;
+using WB.UI.Shared.Enumerator.Services.Ninject;
 using Xamarin;
 
 namespace WB.UI.Interviewer
@@ -126,6 +127,7 @@ namespace WB.UI.Interviewer
         {
             registry.RegisterCustomBindingFactory<TextView>("IsCurrentDashboardTab", (view) => new TextViewIsCurrentDashboardTabBinding(view));
             registry.RegisterCustomBindingFactory<ImageView>("CompanyLogo", view => new ImageCompanyLogoBinding(view));
+            registry.RegisterCustomBindingFactory<RecyclerView>("ScrollToPosition", view => new RecyclerViewScrollToPositionBinding(view));
 
             base.FillTargetFactories(registry);
         }
@@ -138,14 +140,12 @@ namespace WB.UI.Interviewer
         private IKernel CreateAndInitializeIoc()
         {
             var kernel = new StandardKernel(
-
                 new NcqrsModule().AsNinject(),
                 new InfrastructureModuleMobile().AsNinject(),
                 new InterviewerInfrastructureModule(),
 
                 new DataCollectionSharedKernelModule().AsNinject(),
                 new EnumeratorSharedKernelModule(),
-                new EnumeratorInfrastructureModule(),
                 new EnumeratorUIModule(),
                 new InterviewerUIModule(),
                 
@@ -164,6 +164,7 @@ namespace WB.UI.Interviewer
             kernel.Bind<IDeviceOrientation>().To<AndroidDeviceOrientation>();
             kernel.Bind<IDeviceInformationService>().To<DeviceInformationService>();
             kernel.Bind<IArchivePatcherService>().To<ArchivePatcherService>();
+            kernel.Bind<IInterviewFromAssignmentCreatorService>().To<InterviewFromAssignmentCreatorService>();
 
             kernel.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
             kernel.Bind<IQuestionnaireContentVersionProvider>().To<QuestionnaireContentVersionProvider>().InSingletonScope();

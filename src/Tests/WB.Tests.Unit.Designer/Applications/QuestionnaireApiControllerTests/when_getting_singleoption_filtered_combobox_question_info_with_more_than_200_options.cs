@@ -3,14 +3,13 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.UI.Designer.Api;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
 {
     internal class when_getting_singleoption_filtered_combobox_question_info_with_more_than_200_options : QuestionnaireApiControllerTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var singleoptionFilteredCombobox = CreateSingleoptionFilteredCombobox(questionId, optionsCount: 250, isFilteredCombobox: true);
 
             questionnaireInfoViewFactoryMock = new Mock<IQuestionnaireInfoFactory>();
@@ -18,18 +17,19 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
                 .Setup(x => x.GetQuestionEditView(questionnaireId, questionId))
                 .Returns(singleoptionFilteredCombobox);
             controller = CreateQuestionnaireController(questionnaireInfoFactory: questionnaireInfoViewFactoryMock.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             result = controller.EditQuestion(questionnaireId, questionId);
 
-        It should_return_edit_question_details = () =>
+        [NUnit.Framework.Test] public void should_return_edit_question_details () =>
             result.ShouldNotBeNull();
 
-        It should_return_edit_question_details_with_200_options = () =>
+        [NUnit.Framework.Test] public void should_return_edit_question_details_with_200_options () =>
             result.Options.Length.ShouldEqual(200);
 
-        It should_return_edit_question_details_with_WasOptionsTruncated_set_in_true = () =>
+        [NUnit.Framework.Test] public void should_return_edit_question_details_with_WasOptionsTruncated_set_in_true () =>
             result.WereOptionsTruncated.ShouldBeTrue();
 
         private static QuestionnaireController controller;

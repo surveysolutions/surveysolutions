@@ -36,6 +36,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
             });
         }
 
+        public override AssignmentDocument GetById(int id)
+        {
+            return RunInTransaction(query =>
+            {
+                var assignment = query.Connection.Get<AssignmentDocument>(id);
+
+                if (assignment == null) return null;
+
+                assignment.Answers = query.Connection
+                    .Table<AssignmentDocument.AssignmentAnswer>().Where(aa => aa.AssignmentId == id).ToList();
+
+                return assignment;
+            });
+        }
+
         public override void Store(AssignmentDocument entity)
         {
             RunInTransaction(table => StoreImplementation(table, entity));

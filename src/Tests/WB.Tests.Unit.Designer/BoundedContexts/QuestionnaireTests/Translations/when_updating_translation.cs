@@ -9,21 +9,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Translations
 {
     internal class when_updating_translation : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: responsibleId);
             questionnaire.AddOrUpdateTranslation(Create.Command.AddOrUpdateTranslation(questionnaireId, oldTranslationId, "", responsibleId));
 
             updateTranslation = Create.Command.AddOrUpdateTranslation(questionnaireId, translationId, name, responsibleId, oldTranslationId);
-        };
+            BecauseOf();
+        }
 
 
-        Because of = () => questionnaire.AddOrUpdateTranslation(updateTranslation);
+        private void BecauseOf() => questionnaire.AddOrUpdateTranslation(updateTranslation);
 
-        It should_contains_Translation_with_EntityId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_Translation_with_EntityId_specified () =>
             questionnaire.QuestionnaireDocument.Translations.ShouldContain(t => t.Id == translationId);
 
-        It should_contains_Translation_with_TranslationName_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_Translation_with_TranslationName_specified () =>
             questionnaire.QuestionnaireDocument.Translations.Single(t => t.Id == translationId).Name.ShouldEqual(name);
 
         private static AddOrUpdateTranslation updateTranslation;

@@ -6,23 +6,23 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
 {
     internal class when_cloning_attachment : AttachmentServiceTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             attachmentContentStorage.Store(Create.AttachmentContent(content: fileContent, contentType: contentType), attachmentContentId);
             attachmentMetaStorage.Store(Create.AttachmentMeta(attachmentId, attachmentContentId, questionnaireId: questionnaireId, fileName: fileName), attachmentId);
 
             attachmentService = Create.AttachmentService(attachmentContentStorage: attachmentContentStorage, attachmentMetaStorage: attachmentMetaStorage);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => attachmentService.CloneMeta(attachmentId, newAttachmentId, newQuestionnaireId);
+        private void BecauseOf() => attachmentService.CloneMeta(attachmentId, newAttachmentId, newQuestionnaireId);
 
-        It should_save_cloned_attachment_meta_with_specified_properties = () =>
+        [NUnit.Framework.Test] public void should_save_cloned_attachment_meta_with_specified_properties () 
         {
             var attachmentMeta = attachmentMetaStorage.GetById(newAttachmentId);
             attachmentMeta.FileName.ShouldEqual(fileName);
             attachmentMeta.QuestionnaireId.ShouldEqual(newQuestionnaireId);
             attachmentMeta.ContentId.ShouldEqual(attachmentContentId);
-        };
+        }
 
         private static AttachmentService attachmentService;
         private static readonly byte[] fileContent = new byte[] { 96, 97, 98, 99, 100 };

@@ -5,27 +5,29 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.Portable;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers
 {
-    public class InterviewAnswer 
+    public class InterviewAnswer
     {
-        public Identity Identity { get; set;  }
+        public Identity Identity { get; set; }
         public AbstractAnswer Answer { get; set; }
     }
 
-    public abstract class AbstractAnswer { }
+    public abstract class AbstractAnswer
+    {
+    }
 
     [DebuggerDisplay("{ToString()}")]
     public class TextAnswer : AbstractAnswer
     {
-        protected  TextAnswer() { }
-
+        protected TextAnswer() { }
         private TextAnswer(string value)
         {
             if (value == null) throw new ArgumentNullException(nameof(value));
+
             this.Value = value;
         }
 
@@ -40,6 +42,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class NumericIntegerAnswer : AbstractAnswer
     {
         protected NumericIntegerAnswer() { }
+
         private NumericIntegerAnswer(int value)
         {
             this.Value = value;
@@ -56,6 +59,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class NumericRealAnswer : AbstractAnswer
     {
         protected NumericRealAnswer() { }
+
         private NumericRealAnswer(double value)
         {
             this.Value = value;
@@ -65,7 +69,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public static NumericRealAnswer FromDouble(double value) => new NumericRealAnswer(value);
 
-        public static NumericRealAnswer FromDecimal(decimal value) => new NumericRealAnswer((double) value);
+        public static NumericRealAnswer FromDecimal(decimal value) => new NumericRealAnswer((double)value);
 
         public override string ToString() => Value.ToString();
     }
@@ -88,9 +92,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     }
 
     [DebuggerDisplay("{ToString()}")]
+
     public class CategoricalFixedSingleOptionAnswer : AbstractAnswer
     {
         protected CategoricalFixedSingleOptionAnswer() { }
+
         private CategoricalFixedSingleOptionAnswer(int selectedValue)
         {
             this.SelectedValue = selectedValue;
@@ -99,24 +105,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public int SelectedValue { get; set; }
 
         public static CategoricalFixedSingleOptionAnswer FromInt(int selectedValue) => new CategoricalFixedSingleOptionAnswer(selectedValue);
-        public static CategoricalFixedSingleOptionAnswer FromDecimal(decimal selectedValue) => new CategoricalFixedSingleOptionAnswer((int) selectedValue);
+
+        public static CategoricalFixedSingleOptionAnswer FromDecimal(decimal selectedValue) => new CategoricalFixedSingleOptionAnswer((int)selectedValue);
 
         public override string ToString() => SelectedValue.ToString();
     }
 
     [DebuggerDisplay("{ToString()}")]
+
     public class CategoricalFixedMultiOptionAnswer : AbstractAnswer
     {
         protected CategoricalFixedMultiOptionAnswer() { }
+
         private CategoricalFixedMultiOptionAnswer(IEnumerable<int> checkedValues)
         {
             if (checkedValues == null) throw new ArgumentNullException(nameof(checkedValues));
+
             this.CheckedValues = checkedValues.ToReadOnlyCollection();
         }
 
         public IReadOnlyCollection<int> CheckedValues { get; set; }
 
-        public IEnumerable<decimal> ToDecimals() => this.CheckedValues.Select(value => (decimal) value);
+        public IEnumerable<decimal> ToDecimals() => this.CheckedValues.Select(value => (decimal)value);
 
         public IEnumerable<int> ToInts() => this.CheckedValues;
 
@@ -124,7 +134,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             => checkedValues == null || !checkedValues.Any() ? null : new CategoricalFixedMultiOptionAnswer(checkedValues);
 
         public static CategoricalFixedMultiOptionAnswer FromDecimalArray(decimal[] checkedValues)
-            => checkedValues == null || !checkedValues.Any() ? null : new CategoricalFixedMultiOptionAnswer(checkedValues.Select(value => (int) value));
+            => checkedValues == null || !checkedValues.Any() ? null : new CategoricalFixedMultiOptionAnswer(checkedValues.Select(value => (int)value));
 
         public override string ToString() => string.Join(", ", CheckedValues);
     }
@@ -133,9 +143,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class CategoricalLinkedSingleOptionAnswer : AbstractAnswer
     {
         protected CategoricalLinkedSingleOptionAnswer() { }
+
         private CategoricalLinkedSingleOptionAnswer(RosterVector selectedValue)
         {
             if (selectedValue == null) throw new ArgumentNullException(nameof(selectedValue));
+
             this.SelectedValue = selectedValue;
         }
 
@@ -151,9 +163,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class CategoricalLinkedMultiOptionAnswer : AbstractAnswer
     {
         protected CategoricalLinkedMultiOptionAnswer() { }
+
         private CategoricalLinkedMultiOptionAnswer(IEnumerable<RosterVector> checkedValues)
         {
             if (checkedValues == null) throw new ArgumentNullException(nameof(checkedValues));
+
             this.CheckedValues = checkedValues.ToReadOnlyCollection();
         }
 
@@ -171,9 +185,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class TextListAnswer : AbstractAnswer
     {
         protected TextListAnswer() { }
+
         private TextListAnswer(IEnumerable<TextListAnswerRow> rows)
         {
             if (rows == null) throw new ArgumentNullException(nameof(rows));
+
             this.Rows = rows.ToReadOnlyCollection();
         }
 
@@ -185,12 +201,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public static TextListAnswer FromTupleArray(Tuple<decimal, string>[] tupleArray)
             => tupleArray == null ? null : new TextListAnswer(
-                tupleArray.Select(tuple => new TextListAnswerRow(Convert.ToInt32(tuple.Item1), tuple.Item2.Trim())));
-        
+               tupleArray.Select(tuple => new TextListAnswerRow(Convert.ToInt32(tuple.Item1), tuple.Item2.Trim())));
+
         public override string ToString() => string.Join(", ", Rows.Select(x => x.Text));
     }
 
-   
     [DebuggerDisplay("{ToString()}")]
     public class GpsAnswer : AbstractAnswer
     {
@@ -198,6 +213,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private GpsAnswer(GeoPosition value)
         {
             if (value == null) throw new ArgumentNullException(nameof(value));
+
             this.Value = value;
         }
 
@@ -207,15 +223,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public GeoLocation ToGeoLocation()
             => new GeoLocation(Value.Latitude, Value.Longitude, Value.Accuracy, Value.Altitude);
-        
 
         public override string ToString() => Value.ToString();
     }
-
     [DebuggerDisplay("{ToString()}")]
     public class QRBarcodeAnswer : AbstractAnswer
     {
         protected QRBarcodeAnswer() { }
+
         private QRBarcodeAnswer(string decodedText)
         {
             if (decodedText == null) throw new ArgumentNullException(nameof(decodedText));
@@ -223,9 +238,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public string DecodedText { get; set; }
-
         public static QRBarcodeAnswer FromString(string decodedText) => decodedText != null ? new QRBarcodeAnswer(decodedText) : null;
-
         public override string ToString() => DecodedText;
     }
 
@@ -233,9 +246,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class MultimediaAnswer : AbstractAnswer
     {
         protected MultimediaAnswer() { }
+
         private MultimediaAnswer(string fileName)
         {
             if (fileName == null) throw new ArgumentNullException(nameof(fileName));
+
             this.FileName = fileName;
         }
 
@@ -245,20 +260,56 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public override string ToString() => FileName;
     }
-    
+
+    [DebuggerDisplay("{ToString()}")]
+    public class AudioAnswer : AbstractAnswer
+    {
+        protected AudioAnswer() { }
+
+        private AudioAnswer(string fileName, TimeSpan length)
+        {
+            if (fileName == null) throw new ArgumentNullException(nameof(fileName));
+            if (length.Ticks == 0) throw new ArgumentNullException(nameof(length));
+
+            this.FileName = fileName;
+            this.Length = length;
+        }
+
+        public string FileName { get; set; }
+        public TimeSpan Length { get; set; }
+
+        public static AudioAnswer FromString(string fileName, TimeSpan? length)
+        {
+            return fileName != null ? new AudioAnswer(fileName, length.Value) : null;
+        }
+
+        public override string ToString() => FileName;
+
+        public AudioAnswerForConditions ToAudioAnswerForContions()
+        {
+            return new AudioAnswerForConditions
+            {
+                FileName = this.FileName,
+                Length = this.Length
+            };
+        }
+    }
+
     [DebuggerDisplay("{ToString()}")]
     public class AreaAnswer : AbstractAnswer
     {
         protected AreaAnswer() { }
+
         private AreaAnswer(Area area)
         {
             if (area == null) throw new ArgumentNullException(nameof(area));
+
             this.Value = area;
         }
 
         public Area Value { get; set; }
 
-        public static AreaAnswer FromArea(Area area) => area!= null ? new AreaAnswer(area) : null;
+        public static AreaAnswer FromArea(Area area) => area != null ? new AreaAnswer(area) : null;
 
         public override string ToString() => Value.ToString();
     }
@@ -267,9 +318,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class YesNoAnswer : AbstractAnswer
     {
         protected YesNoAnswer() { }
+
         private YesNoAnswer(IEnumerable<CheckedYesNoAnswerOption> checkedOptions)
         {
             if (checkedOptions == null) throw new ArgumentNullException(nameof(checkedOptions));
+
             this.CheckedOptions = checkedOptions.ToReadOnlyCollection();
         }
 
@@ -282,19 +335,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public static YesNoAnswer FromAnsweredYesNoOptions(IEnumerable<AnsweredYesNoOption> answeredOptions)
             => answeredOptions == null ? null : new YesNoAnswer(
-                answeredOptions.Select(option => new CheckedYesNoAnswerOption((int) option.OptionValue, option.Yes)));
+                answeredOptions.Select(option => new CheckedYesNoAnswerOption((int)option.OptionValue, option.Yes)));
 
         public static YesNoAnswer FromYesNoAnswersOnly(YesNoAnswersOnly yesNoAnswersOnly)
             => yesNoAnswersOnly == null ? null : new YesNoAnswer(
                 Enumerable.Concat(
-                    yesNoAnswersOnly.Yes.Select(yesOption => new CheckedYesNoAnswerOption((int) yesOption, true)),
-                    yesNoAnswersOnly.No.Select(noOption => new CheckedYesNoAnswerOption((int) noOption, false))));
+                    yesNoAnswersOnly.Yes.Select(yesOption => new CheckedYesNoAnswerOption((int)yesOption, true)),
+                    yesNoAnswersOnly.No.Select(noOption => new CheckedYesNoAnswerOption((int)noOption, false))));
 
         public YesNoAnswersOnly ToYesNoAnswersOnly()
             => new YesNoAnswersOnly(
-                this.CheckedOptions.Where(x => x.Yes).Select(x => (decimal) x.Value).ToArray(),
-                this.CheckedOptions.Where(x => x.No).Select(x => (decimal) x.Value).ToArray());
+                this.CheckedOptions.Where(x => x.Yes).Select(x => (decimal)x.Value).ToArray(),
+                this.CheckedOptions.Where(x => x.No).Select(x => (decimal)x.Value).ToArray());
 
         public override string ToString() => string.Join(", ", CheckedOptions);
     }
 }
+

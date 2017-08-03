@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
 {
     internal class when_creating_models_with_question_with_options_filter_and_condition : CodeGeneratorTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             AssemblyContext.SetupServiceLocator();
 
             questionnaire = Create.QuestionnaireDocument(children: new[]
@@ -28,12 +27,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             });
 
             templateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory(expressionProcessor: new RoslynExpressionProcessor());
-        };
+            BecauseOf();
+        }
 
-        Because of = () => exception = Catch.Exception(
+        private void BecauseOf() => exception = Catch.Exception(
             () => templateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, Create.CodeGenerationSettings()));
 
-        It should_not_throw_agrument_exception = () =>
+        [NUnit.Framework.Test] public void should_not_throw_agrument_exception () =>
             exception.ShouldBeNull();
 
         private static QuestionnaireExpressionStateModelFactory templateModelFactory;

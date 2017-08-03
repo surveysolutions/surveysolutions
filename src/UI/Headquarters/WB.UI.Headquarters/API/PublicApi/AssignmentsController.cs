@@ -8,22 +8,16 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
-using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
-using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -42,21 +36,19 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly IAssignmentViewFactory assignmentViewFactory;
         private readonly IMapper mapper;
         private readonly HqUserManager userManager;
-        private readonly IPreloadedDataVerifier preloadedDataVerifier;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IInterviewCreatorFromAssignment interviewCreatorFromAssignment;
-        private readonly IInterviewAnswerSerializer answerSerializer;
+        private readonly IInterviewImportService importService;
 
         public AssignmentsController(
             IAssignmentViewFactory assignmentViewFactory,
             IPlainStorageAccessor<Assignment> assignmentsStorage,
-            IPreloadedDataVerifier preloadedDataVerifier,
             IMapper mapper,
             HqUserManager userManager,
             ILogger logger,
             IQuestionnaireStorage questionnaireStorage,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
-            IInterviewAnswerSerializer answerSerializer) : base(logger)
+            IInterviewImportService importService) : base(logger)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.assignmentsStorage = assignmentsStorage;
@@ -64,8 +56,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.userManager = userManager;
             this.questionnaireStorage = questionnaireStorage;
             this.interviewCreatorFromAssignment = interviewCreatorFromAssignment;
-            this.answerSerializer = answerSerializer;
-            this.preloadedDataVerifier = preloadedDataVerifier;
+            this.importService = importService;
         }
 
         /// <summary>
@@ -195,10 +186,10 @@ namespace WB.UI.Headquarters.API.PublicApi
                 catch (Exception ae)
                 {
                     throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
-                        (string.IsNullOrEmpty(item.Identity) 
-                        ? "Question Identity cannot be parsed. Expected format: GuidWithoutDashes_Int1-Int2, where _Int1-Int2 - codes of parent rosters (empty if question is not inside any roster). For example: 11111111111111111111111111111111_0-1 should be used for question on the second level"
-                        : "Question cannot be identified by provided variable name") +
-                        Environment.NewLine + 
+                        (string.IsNullOrEmpty(item.Identity)
+                            ? "Question Identity cannot be parsed. Expected format: GuidWithoutDashes_Int1-Int2, where _Int1-Int2 - codes of parent rosters (empty if question is not inside any roster). For example: 11111111111111111111111111111111_0-1 should be used for question on the second level"
+                            : "Question cannot be identified by provided variable name") +
+                        Environment.NewLine +
                         ae.Message));
                 }
                 KeyValuePair<Guid, AbstractAnswer> answer;
@@ -226,24 +217,39 @@ namespace WB.UI.Headquarters.API.PublicApi
                 });
             }
 
-            List<IdentifyingAnswer> identifyingAnswers = answers.Where(x => identifyingQuestionIds.Contains(x.Identity.Id)).Select(a => IdentifyingAnswer.Create(assignment, questionnaire, a.Answer.ToString(), a.Identity)).ToList();
+            List<IdentifyingAnswer> identifyingAnswers =
+                answers.Where(x => identifyingQuestionIds.Contains(x.Identity.Id))
+                    .Select(a => IdentifyingAnswer.Create(assignment, questionnaire, a.Answer.ToString(), a.Identity))
+                    .ToList();
             assignment.SetIdentifyingData(identifyingAnswers);
             assignment.SetAnswers(answers);
-           
+
+            var result = importService.VerifyAssignment(answers.GroupedByLevels(), questionnaire);
+
+            if (!result.Status)
+            {
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, new CreateAssignmentResult
+                {
+                    Assignment = mapper.Map<AssignmentDetails>(assignment),
+                    VerificationStatus = new ImportDataVerificationState
+                    {
+                        Errors = new List<PanelImportVerificationError>
+                        {
+                            new PanelImportVerificationError("PL0011", result.ErrorMessage)
+                        }
+                    }
+                }));
+            }
+
             this.assignmentsStorage.Store(assignment, null);
-            interviewCreatorFromAssignment.CreateInterviewIfQuestionnaireIsOld(responsible.Id, questionnaireId, assignment.Id, answers);
+            interviewCreatorFromAssignment.CreateInterviewIfQuestionnaireIsOld(responsible.Id, questionnaireId,
+                assignment.Id, answers);
             assignment = this.assignmentsStorage.GetById(assignment.Id);
 
             return new CreateAssignmentResult
             {
                 Assignment = mapper.Map<AssignmentDetails>(assignment)
             };
-
-            //throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, new CreateAssignmentResult
-            //{
-            //    Assignment = mapper.Map<AssignmentDetails>(assignment),
-            //    VerificationStatus = verifyResult
-            //}));
         }
 
         /// <summary>
@@ -258,11 +264,13 @@ namespace WB.UI.Headquarters.API.PublicApi
         [Route("{id:int}/assign")]
         public AssignmentDetails Assign(int id, [FromBody] AssignmentAssignRequest assigneeRequest)
         {
-            var assignment = assignmentsStorage.GetById(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
+            var assignment = assignmentsStorage.GetById(id) ??
+            throw new HttpResponseException(HttpStatusCode.NotFound);
 
             var responsibleUser = this.GetResponsibleIdPersonFromRequestValue(assigneeRequest?.Responsible);
 
-            this.VerifyAssigneeInRoles(responsibleUser, assigneeRequest?.Responsible, UserRoles.Interviewer, UserRoles.Supervisor);
+            this.VerifyAssigneeInRoles(responsibleUser, assigneeRequest?.Responsible, UserRoles.Interviewer,
+                UserRoles.Supervisor);
 
             assignment.Reassign(responsibleUser.Id);
 

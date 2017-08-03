@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
 {
     internal class when_pasting_variable_after_question : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             responsibleId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionToPastAfterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             var questionnaireId = Guid.Parse("DCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCE");
@@ -33,24 +32,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
                itemToPasteAfterId: questionToPastAfterId);
 
             command.SourceDocument = doc;
-        };
+            BecauseOf();
+        }
 
-        Because of = () => 
+        private void BecauseOf() => 
             questionnaire.PasteAfter(command);
 
-        It should_contains_variable = () =>
+        [NUnit.Framework.Test] public void should_contains_variable () =>
             questionnaire.QuestionnaireDocument.Find<IVariable>(targetId).ShouldNotBeNull();
 
-        It should_contains_variable_with_QuestionId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_variable_with_QuestionId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IVariable>(targetId).PublicKey.ShouldEqual(targetId);
 
-        It should_contains_variable_with_variableType_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_variable_with_variableType_specified () =>
             questionnaire.QuestionnaireDocument.Find<IVariable>(targetId).Type.ShouldEqual(variableType);
 
-        It should_contains_variable_with_variableName_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_variable_with_variableName_specified () =>
             questionnaire.QuestionnaireDocument.Find<IVariable>(targetId).Name.ShouldEqual(variableName);
 
-        It should_contains_variable_with_variableExpression_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_variable_with_variableExpression_specified () =>
             questionnaire.QuestionnaireDocument.Find<IVariable>(targetId).Expression.ShouldEqual(variableExpression);
 
         static Questionnaire questionnaire;

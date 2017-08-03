@@ -1,304 +1,42 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C6ED30A9-4D14-48D1-8311-C2267DFD424F}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WB.Core.BoundedContexts.Interviewer</RootNamespace>
-    <AssemblyName>WB.Core.BoundedContexts.Interviewer</AssemblyName>
-    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;$(Constants)</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>$(Constants)</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
+    <TargetFramework>netstandard1.5</TargetFramework>
+    <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wpa81</PackageTargetFallback>
+    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wpa81\Microsoft.Threading.Tasks.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wpa81\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="MvvmCross.Core, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Core.4.4.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="MvvmCross.Platform, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Platform.4.4.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Platform.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="MvvmCross.Plugins.File, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.File.4.4.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.File.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="MvvmCross.Plugins.Messenger, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.Messenger.4.4.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.Messenger.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="MvvmCross.Plugins.Network, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.Network.4.4.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Plugins.Network.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Portable.Ninject.3.3.1\lib\portable-net4+sl5+wp8+win8+wpa81+monotouch+monoandroid+Xamarin.iOS\Ninject.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="SQLite-net, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\sqlite-net-pcl.1.2.1\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLite-net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="SQLitePCLRaw.batteries_green, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a84b7dcfb1391f7f, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\SQLitePCLRaw.bundle_green.1.1.5\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.batteries_green.dll</HintPath>
-    </Reference>
-    <Reference Include="SQLitePCLRaw.batteries_v2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8226ea5df37bcae9, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\SQLitePCLRaw.bundle_green.1.1.5\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.batteries_v2.dll</HintPath>
-    </Reference>
-    <Reference Include="SQLitePCLRaw.core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1488e028ca7ab535, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\SQLitePCLRaw.core.1.1.5\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.core.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Net.Http.Extensions, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net45+win8+wpa81\System.Net.Http.Extensions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net45+win8+wpa81\System.Net.Http.Primitives.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <PackageReference Include="MvvmCross.Core" Version="5.1.0" />
+    <PackageReference Include="MvvmCross.Platform" Version="5.1.0" />
+    <PackageReference Include="MvvmCross.Plugin.File" Version="5.1.0" />
+    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="5.1.0" />
+    <PackageReference Include="MvvmCross.Plugin.Network" Version="5.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Portable.Ninject" Version="3.3.1" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.3.3" />
+    <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.7" />
+    <PackageReference Include="SQLitePCLRaw.core" Version="1.1.7" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Implementation\Services\InterviewerPlainInterviewFileStorage.cs" />
-    <Compile Include="Implementation\Services\InterviewerPrincipal.cs" />
-    <Compile Include="Implementation\Services\InterviewerInterviewAccessor.cs" />
-    <Compile Include="Implementation\Services\InterviewerQuestionnaireAccessor.cs" />
-    <Compile Include="Implementation\Services\InterviewEventStreamOptimizer.cs" />
-    <Compile Include="Implementation\Services\MapSynchronizer.cs" />
-    <Compile Include="Implementation\Services\QuestionnaireContentVersionProvider.cs" />
-    <Compile Include="Implementation\Services\QuestionnaireKeyValueStorage.cs" />
-    <Compile Include="Implementation\Storage\IInterviewerEventStorage.cs" />
-    <Compile Include="Implementation\Storage\SqliteMultiFilesEventStorage.cs" />
-    <Compile Include="Implementation\Services\SynchronizationException.cs" />
-    <Compile Include="Implementation\Services\SynchronizationExceptionType.cs" />
-    <Compile Include="Implementation\Services\SynchronizationService.cs" />
-    <Compile Include="LinqUtils.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\InterviewerUIResources.Designer.cs">
-      <AutoGen>True</AutoGen>
+    <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj" />
+    <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj" />
+    <ProjectReference Include="..\..\..\SharedKernels\Enumerator\Enumerator\WB.Core.SharedKernels.Enumerator.csproj" />
+    <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\InterviewerUIResources.Designer.cs">
       <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Implementation\Services\AnswerToStringConverter.cs" />
-    <Compile Include="Services\IAnswerToStringConverter.cs" />
-    <Compile Include="Services\Synchronization\AssignmentDocumentsStorage.cs" />
-    <Compile Include="Services\Synchronization\AssignmentsSynchronizer.cs" />
-    <Compile Include="Services\CompanyLogoInfo.cs" />
-    <Compile Include="Services\IArchivePatcherService.cs" />
-    <Compile Include="Services\IBattery.cs" />
-    <Compile Include="Services\IDeviceInformationService.cs" />
-    <Compile Include="Services\IDeviceOrientation.cs" />
-    <Compile Include="Services\IInterviewerSettings.cs" />
-    <Compile Include="Services\Infrastructure\AttachmentsCleanupService.cs" />
-    <Compile Include="Services\Infrastructure\IInterviewerInterviewAccessor.cs" />
-    <Compile Include="Services\Infrastructure\IInterviewerPrincipal.cs" />
-    <Compile Include="Services\Infrastructure\IInterviewerQuestionnaireAccessor.cs" />
-    <Compile Include="Services\Infrastructure\IInterviewerUserIdentity.cs" />
-    <Compile Include="Services\Infrastructure\IInterviewEventStreamOptimizer.cs" />
-    <Compile Include="Services\IQuestionnaireContentVersionProvider.cs" />
-    <Compile Include="Services\ISyncBgService.cs" />
-    <Compile Include="Services\ISynchronizationService.cs" />
-    <Compile Include="Services\ISynchronizationProcess.cs" />
-    <Compile Include="Services\ITabletDiagnosticService.cs" />
-    <Compile Include="Services\IBackupRestoreService.cs" />
-    <Compile Include="Services\RestorePackageInfo.cs" />
-    <Compile Include="Services\SynchronizationProcess.cs" />
-    <Compile Include="Services\Synchronization\CompanyLogoSynchronizer.cs" />
-    <Compile Include="Services\IAssignmentDocumentsStorage.cs" />
-    <Compile Include="Services\Synchronization\IAssignmentsSynchronizer.cs" />
-    <Compile Include="Services\Synchronization\IQuestionnaireDownloader.cs" />
-    <Compile Include="Services\Synchronization\QuestionnaireDownloader.cs" />
-    <Compile Include="Services\SyncProgressDto.cs" />
-    <Compile Include="Views\AssignmentDocument.cs" />
-    <Compile Include="Views\BackupRestoreViewModel.cs" />
-    <Compile Include="Views\BandwidthTestViewModel.cs" />
-    <Compile Include="Views\CompanyLogo.cs" />
-    <Compile Include="Views\Dashboard\CompletedInterviewsViewModel.cs" />
-    <Compile Include="Views\Dashboard\DashboardItems\AssignmentDashboardItemViewModel.cs" />
-    <Compile Include="Views\Dashboard\DashboardItems\DashboardSubTitleViewModel.cs" />
-    <Compile Include="Views\Dashboard\ListViewModel.cs" />
-    <Compile Include="Views\Dashboard\CreateNewViewModel.cs" />
-    <Compile Include="Views\Dashboard\RejectedInterviewsViewModel.cs" />
-    <Compile Include="Views\Dashboard\StartedInterviewsViewModel.cs" />
-    <Compile Include="Views\Dashboard\PrefilledQuestionView.cs" />
-    <Compile Include="Views\Dashboard\InterviewTabPanel.cs" />
-    <Compile Include="Views\DeviceInfo.cs" />
-    <Compile Include="Views\DiagnosticsViewModel.cs" />
-    <Compile Include="Views\Dashboard\InterviewerDashboardEventHandler.cs" />
-    <Compile Include="Views\Dashboard\Messages\StartingLongOperationMessage.cs" />
-    <Compile Include="Views\FinishInstallationViewModel.cs" />
-    <Compile Include="Views\InterviewAnswerOnPrefilledQuestionView.cs" />
-    <Compile Include="Views\InterviewerCompleteInterviewViewModel.cs" />
-    <Compile Include="Views\InterviewGpsCoordinatesView.cs" />
-    <Compile Include="Views\InterviewGpsLocationView.cs" />
-    <Compile Include="Views\EventView.cs" />
-    <Compile Include="Views\InterviewFileView.cs" />
-    <Compile Include="Views\InterviewMultimediaView.cs" />
-    <Compile Include="Views\Dashboard\InterviewView.cs" />
-    <Compile Include="Views\Dashboard\DashboardItems\CensusQuestionnaireDashboardItemViewModel.cs" />
-    <Compile Include="Views\Dashboard\DashboardInterviewStatus.cs" />
-    <Compile Include="Views\Dashboard\DashboardItems\IDashboardItem.cs" />
-    <Compile Include="Views\Dashboard\DashboardItems\InterviewDashboardItemViewModel.cs" />
-    <Compile Include="Views\Dashboard\DashboardViewModel.cs" />
-    <Compile Include="Views\Dashboard\DashboardItems\PrefilledQuestion.cs" />
-    <Compile Include="Views\InterviewerIdentity.cs" />
-    <Compile Include="Views\LoadingViewModel.cs" />
-    <Compile Include="Views\LocationAddress.cs" />
-    <Compile Include="Views\LoginViewModel.cs" />
-    <Compile Include="Views\QuestionnaireDocumentView.cs" />
-    <Compile Include="Views\ApplicationSettingsView.cs" />
-    <Compile Include="Views\QuestionnaireView.cs" />
-    <Compile Include="Views\RelinkDeviceViewModel.cs" />
-    <Compile Include="Views\BackupViewModel.cs" />
-    <Compile Include="Views\SychronizationStatistics.cs" />
-    <Compile Include="Views\SynchronizationStatus.cs" />
-    <Compile Include="Views\SynchronizationViewModel.cs" />
-    <Compile Include="Views\CheckNewVersionViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
-      <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
-      <Name>WB.Core.GenericSubdomains.Portable</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
-      <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
-      <Name>WB.Core.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
-      <Project>{89b14b50-5305-45e2-9835-7a05bd0b97a9}</Project>
-      <Name>WB.Core.SharedKernels.DataCollection</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernels\Enumerator\Enumerator\WB.Core.SharedKernels.Enumerator.csproj">
-      <Project>{0F1DDEFE-DF5C-4856-A89C-241F3BD41B5F}</Project>
-      <Name>WB.Core.SharedKernels.Enumerator</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
-      <Project>{d6616c1d-7c3a-4576-b82b-098721cd4417}</Project>
-      <Name>WB.Core.SharedKernels.Questionnaire</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
-      <Project>{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}</Project>
-      <Name>WB.Core.SharedKernel.Structures</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
-      <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
-      <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\InterviewerUIResources.es.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\InterviewerUIResources.fr.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\InterviewerUIResources.id-ID.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\InterviewerUIResources.km.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\InterviewerUIResources.pt.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\InterviewerUIResources.resx">
+    <EmbeddedResource Update="Properties\InterviewerUIResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InterviewerUIResources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\InterviewerUIResources.ru.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\InterviewerUIResources.th-TH.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\InterviewerUIResources.uk-UA.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\InterviewerUIResources.vi-VN.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\InterviewerUIResources.zh-CN.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <Import Project="..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
-  </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

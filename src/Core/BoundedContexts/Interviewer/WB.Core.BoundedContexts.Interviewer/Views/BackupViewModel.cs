@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             try
             {
-                var backupFilePath = await this.backupRestoreService.BackupAsync();
+                var backupFilePath = await this.backupRestoreService.BackupAsync().ConfigureAwait(false);
                 this.IsPackageBuild = true;
 
                 var fileSize = this.fileSystemAccessor.GetFileSize(backupFilePath);

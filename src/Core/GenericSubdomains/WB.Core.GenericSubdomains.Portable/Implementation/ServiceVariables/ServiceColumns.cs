@@ -4,6 +4,7 @@
     {
         //Id of the row
         public const string Id = "Id";
+        public const string Key = "interview__key";
 
         //prefix to identify parent record
         public const string ParentId = "ParentId";
@@ -15,8 +16,8 @@
 
         public static readonly ServiceVariable[] SystemVariables = new []
         {
-            new ServiceVariable(ServiceVariableType.InterviewRandom, "ssSys_IRnd") //random number generated for interview
+            new ServiceVariable(ServiceVariableType.InterviewRandom, "ssSys_IRnd"), //random number generated for interview
+            new ServiceVariable(ServiceVariableType.InterviewKey, ServiceColumns.Key), 
         };
-        
     }
 }

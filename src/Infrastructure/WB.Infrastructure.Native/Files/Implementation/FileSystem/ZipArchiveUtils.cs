@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Ionic.Zip;
 using Ionic.Zlib;
 using WB.Core.Infrastructure.FileSystem;
@@ -45,17 +43,9 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             }
         }
 
-
-        public void ZipDirectoryToFile(string sourceDirectory, string archiveFilePath, string directoryFilter = null,
-            string fileFilter = null)
+        public void ZipDirectoryToFile(string sourceDirectory, string archiveFilePath)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task ZipDirectoryToFileAsync(string sourceDirectory, string archiveFilePath, string directoryFilter = null,
-            string fileFilter = null)
-        {
-            throw new NotImplementedException();
+            this.ZipDirectory(sourceDirectory, archiveFilePath);
         }
 
         public void ZipFiles(IEnumerable<string> files, string archiveFilePath, string password)
@@ -83,27 +73,6 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             using (ZipFile decompress = ZipFile.Read(archivedFile))
             {
                 decompress.ExtractAll(extractToFolder, ExtractExistingFileAction.OverwriteSilently);
-            }
-        }
-
-        public Task UnzipAsync(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<UnzippedFile> UnzipStream(Stream zipStream)
-        {
-            zipStream.Seek(0, SeekOrigin.Begin);
-            
-            foreach (var zipEntry in ZipFile.Read(zipStream).Entries.Where(x => !x.IsDirectory))
-            {
-                var unzippedFileStream = new MemoryStream();
-                zipEntry.Extract(unzippedFileStream);
-                yield return new UnzippedFile
-                {
-                    FileName = zipEntry.FileName,
-                    FileBytes = unzippedFileStream.ToArray()
-                };
             }
         }
 

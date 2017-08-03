@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Resources;
@@ -7,26 +7,26 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTest
 {
     internal class when_saving_lookup_table_with_columns_without_headers
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             fileContent =
                 $"next{_}header{_}is{_}missing{_}{_}{_end}" +
                 $"1{_}2{_}3{_}4{_}5{_end}";
 
             lookupTableService = Create.LookupTableService();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 lookupTableService.SaveLookupTableContent(questionnaireId, lookupTableId, fileContent));
 
-        It should_throw_exception = () =>
+        [NUnit.Framework.Test] public void should_throw_exception () =>
             exception.ShouldNotBeNull();
 
-        It should_throw_ArgumentException = () =>
+        [NUnit.Framework.Test] public void should_throw_ArgumentException () =>
             exception.ShouldBeOfExactType<ArgumentException>();
 
-        It should_throw_ArgumentException1 = () =>
+        [NUnit.Framework.Test] public void should_throw_ArgumentException1 () =>
             ((ArgumentException)exception).Message.ShouldEqual(ExceptionMessages.LookupTables_empty_or_invalid_header_are_not_allowed);
 
         private static Exception exception;

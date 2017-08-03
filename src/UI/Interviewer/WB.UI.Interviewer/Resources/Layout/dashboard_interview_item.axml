@@ -14,8 +14,9 @@
   <android.support.constraint.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    
-    <LinearLayout android:id="@+id/card_status"
+
+    <View
+      android:id="@+id/card_status"
       style="@style/Dashboard_Card_Status"
       android:orientation="horizontal"
       app:MvxBind="BackgroundStyle StatusToDasboardBackground(Status);"

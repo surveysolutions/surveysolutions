@@ -1,23 +1,21 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Plugin.Permissions.Abstractions;
 using SQLite;
 using SQLitePCL;
-using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Infrastructure.Shared.Enumerator;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.UI.Shared.Enumerator.Services;
 
 namespace WB.UI.Interviewer.Services
 {
     public class BackupRestoreService : IBackupRestoreService
     {
-        private readonly IArchiveUtils archiver;
+        private readonly IEnumeratorArchiveUtils archiver;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ILogger logger;
         private readonly IPermissions permissions;
@@ -25,7 +23,7 @@ namespace WB.UI.Interviewer.Services
         private readonly string privateStorage;
 
         public BackupRestoreService(
-            IArchiveUtils archiver,
+            IEnumeratorArchiveUtils archiver,
             IFileSystemAccessor fileSystemAccessor,
             ILogger logger,
             string privateStorage, 
@@ -53,17 +51,31 @@ namespace WB.UI.Interviewer.Services
             if (!this.fileSystemAccessor.IsDirectoryExists(backupToFolderPath))
                 this.fileSystemAccessor.CreateDirectory(backupToFolderPath);
 
-            this.CreateDeviceInfoFile();
-
-            await Task.Run(() => this.BackupSqliteDbs()).ConfigureAwait(false);
+            var backupTempFolder = $"_temp-backup-interviewer-{DateTime.Now:s}";
+            var backupFolderPath = this.fileSystemAccessor.CombinePath(backupToFolderPath, backupTempFolder);
 
             var backupFileName = $"backup-interviewer-{DateTime.Now:s}.ibak";
             var backupFilePath = this.fileSystemAccessor.CombinePath(backupToFolderPath, backupFileName);
 
-            await this.archiver.ZipDirectoryToFileAsync(this.privateStorage, backupFilePath, fileFilter: @"\.log$;\.dll$;\.sqlite3.back$;device.info$;")
-                               .ConfigureAwait(false);
+            try
+            {
+                this.CreateDeviceInfoFile();
 
-            this.Cleanup();
+                await Task.Run(() => this.BackupSqliteDbs()).ConfigureAwait(false);
+
+                this.fileSystemAccessor.CopyFileOrDirectory(this.privateStorage, backupFolderPath, false,
+                    new[] {".log", ".dll", ".back", ".info"});
+
+                var backupFolderFilesPath = this.fileSystemAccessor.CombinePath(backupFolderPath, "files");
+
+                await this.archiver.ZipDirectoryToFileAsync(backupFolderFilesPath, backupFilePath)
+                    .ConfigureAwait(false);
+            }
+            finally
+            {
+                this.Cleanup();
+                Directory.Delete(backupFolderPath, true);
+            }
 
             return backupFilePath;
         }

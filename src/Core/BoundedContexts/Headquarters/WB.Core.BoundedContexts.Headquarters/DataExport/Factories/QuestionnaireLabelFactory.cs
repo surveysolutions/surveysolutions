@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
                     }
 
                     variableLabels.Add(new LabeledVariable(headerItem.ColumnNames[i],
-                        headerItem.Titles[i] ?? string.Empty, headerItem.PublicKey, variableValueLabel));
+                        headerItem.Titles[i]?.RemoveHtmlTags() ?? string.Empty, headerItem.PublicKey, variableValueLabel));
                 }
             }
 

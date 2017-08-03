@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <style name="Audio_Dialog_Holder" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:background">@android:color/white</item>
+    <item name="android:paddingBottom">10dp</item>
+    <item name="android:paddingTop">28dp</item>
+    <item name="android:paddingLeft">30dp</item>
+    <item name="android:paddingRight">10dp</item>
+  </style>
+  <style name="Text_Roboto_24">
+    <item name="android:fontFamily">Roboto Light</item>
+    <item name="android:textSize">@dimen/textsize_24</item>
+  </style>
+  <style name="Link_Button">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textColor">@android:color/black</item>
+    <item name="android:layout_gravity">center_vertical</item>
+    <item name="android:padding">@dimen/Interview_Group_button_padding</item>
+    <item name="android:paddingLeft">@dimen/zero</item>
+    <item name="android:layout_marginLeft">14dp</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:letterSpacing">0.1</item>
+    <item name="android:background">?attr/selectableItemBackground</item>
+  </style>
+
+  <style name="Done_Button">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:background">@drawable/default_input_button</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:letterSpacing">0.1</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Question_InputButton_margin_LeftRight</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Question_InputButton_margin_LeftRight</item>
+    <item name="android:padding">@dimen/Interview_Group_button_padding</item>
+  </style>
+  
+</resources>

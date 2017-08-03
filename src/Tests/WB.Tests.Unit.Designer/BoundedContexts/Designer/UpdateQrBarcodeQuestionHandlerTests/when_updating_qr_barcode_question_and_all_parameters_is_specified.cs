@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
 {
     internal class when_updating_qr_barcode_question_and_all_parameters_is_specified : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddQRBarcodeQuestion(
@@ -25,9 +24,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
                 instructions: "old instructions",
                 enablementCondition: "old condition",
                 responsibleId: responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>            
+        private void BecauseOf() =>            
                 questionnaire.UpdateQRBarcodeQuestion(
                     new UpdateQRBarcodeQuestion(
                         questionnaire.Id,
@@ -53,35 +53,35 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
                             }
                         }));
 
-        It should_contains_question_with_QuestionId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_QuestionId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .PublicKey.ShouldEqual(questionId);
 
-        It should_contains_question_with_variable_name_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_variable_name_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .StataExportCaption.ShouldEqual(variableName);
 
-        It should_contains_question_with_title_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_title_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .QuestionText.ShouldEqual(title);
 
-        It should_contains_question_with_condition_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_condition_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .ConditionExpression.ShouldEqual(condition);
 
-        It should_contains_question_with_hideIfDisabled_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_hideIfDisabled_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .HideIfDisabled.ShouldEqual(hideIfDisabled);
 
-        It should_contains_question_with_instructions_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_instructions_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .Instructions.ShouldEqual(instructions);
 
-        It should_contains_question_with_validation_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_validation_specified () =>
            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                .ValidationConditions.First().Expression.ShouldEqual(validation);
 
-        It should_contains_question_with_validation_message_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_validation_message_specified () =>
            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                .ValidationConditions.First().Message.ShouldEqual(validationMessage);
 

@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var exportProgress = new Microsoft.Progress<int>();
+            var exportProgress = new Progress<int>();
 
             exportProgress.ProgressChanged +=
                 (sender, donePercent) => progress.Report(donePercent / 2);

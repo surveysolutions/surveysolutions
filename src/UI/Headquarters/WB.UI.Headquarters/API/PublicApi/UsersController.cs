@@ -146,7 +146,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                 return this.BadRequest();
             }
 
-            var user = this.usersFactory.GetUser(new UserViewInputModel(id));
+            var user = this.usersFactory.GetUser(new UserViewInputModel(userGuid));
             if (user == null)
             {
                 return this.NotFound();

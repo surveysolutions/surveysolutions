@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_deleting_question_and_question_is_referenced_as_roster_size_question : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             var chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             rosterSizeQuestionId = Guid.Parse("11111111111111111111111111111111");
@@ -23,25 +22,26 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             
             questionnaire.AddGroup(rosterId, title: rosterTitle, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
                 rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             exception = Catch.Exception(() =>
                 questionnaire.DeleteQuestion(rosterSizeQuestionId, responsibleId));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__roster__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__roster__ () =>
             exception.Message.ToLower().ShouldContain("roster");
 
-        It should_throw_exception_with_message_containting__using__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__using__ () =>
             exception.Message.ToLower().ShouldContain("source");
 
-        It should_throw_exception_with_message_containting__referenced__ = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__referenced__ () =>
             exception.Message.ToLower().ShouldContain("referenced");
 
-        It should_throw_exception_with_message_containting_group_title = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting_group_title () =>
             exception.Message.ShouldContain(rosterTitle);
 
         private static Exception exception;

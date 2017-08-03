@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -10,22 +10,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MoveStaticTextHandlerT
 {
     internal class when_moving_static_text_and_all_parameters_specified : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddStaticTextAndMoveIfNeeded(new AddStaticText(questionnaire.Id, entityId, "title", responsibleId, chapterId));
             questionnaire.AddGroup(targetEntityId, responsibleId: responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>            
+        private void BecauseOf() =>            
                 questionnaire.MoveStaticText(entityId: entityId, responsibleId: responsibleId, targetEntityId: targetEntityId, targetIndex: targetIndex);
 
 
-        It should_moved_statictext_to_new_group_with_PublicKey_specified = () =>
+        [NUnit.Framework.Test] public void should_moved_statictext_to_new_group_with_PublicKey_specified () =>
             questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).GetParent().PublicKey.ShouldEqual(targetEntityId);
 
-        It should_moved_statictext_to_new_group_with_TargetIndex_specified = () =>
+        [NUnit.Framework.Test] public void should_moved_statictext_to_new_group_with_TargetIndex_specified () =>
             questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).GetParent().Children[targetIndex].PublicKey.ShouldEqual(entityId);
         
         private static Questionnaire questionnaire;

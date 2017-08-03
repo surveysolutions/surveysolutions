@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -8,8 +8,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_updating_roster_group_by_numeric_question_and_roster_title_inside_group_by_roster_size : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             var chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -32,24 +31,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             
 
             questionnaire.AddGroup(parentGroupId, responsibleId: responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             questionnaire.UpdateGroup(groupId: groupId, responsibleId: responsibleId, title: "title", variableName: null,
                 description: null, condition: null, hideIfDisabled: false, rosterSizeQuestionId: rosterSizeQuestionId,
                 isRoster: true, rosterSizeSource: rosterSizeSourceType, rosterFixedTitles: null,
                 rosterTitleQuestionId: rosterTitleQuestionId);
 
 
-        It should_contains_group_with_GroupId_specified = () =>
+        [NUnit.Framework.Test] public void should_contains_group_with_GroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
                 .PublicKey.ShouldEqual(groupId);
 
-        It should_contains_group_with_RosterSizeQuestionId_equal_to_specified_question_id = () =>
+        [NUnit.Framework.Test] public void should_contains_group_with_RosterSizeQuestionId_equal_to_specified_question_id () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
                 .RosterSizeQuestionId.ShouldEqual(rosterSizeQuestionId);
 
-        It should_contains_group_with_RosterTitleQuestionId_equal_to_specified_question_id = () =>
+        [NUnit.Framework.Test] public void should_contains_group_with_RosterTitleQuestionId_equal_to_specified_question_id () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
                 .RosterTitleQuestionId.ShouldEqual(rosterTitleQuestionId);
 

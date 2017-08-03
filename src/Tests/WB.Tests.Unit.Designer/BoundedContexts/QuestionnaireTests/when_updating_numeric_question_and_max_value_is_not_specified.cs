@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
     internal class when_updating_numeric_question_and_max_value_is_not_specified : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             questionId = Guid.Parse("11111111111111111111111111111111");
@@ -22,9 +21,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             
             questionnaire.AddTextQuestion(questionId, chapterId, responsibleId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             questionnaire.UpdateNumericQuestion(
                 new UpdateNumericQuestion(
                     questionnaire.Id,
@@ -39,10 +39,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     validationConditions: new List<ValidationCondition>()));
 
 
-        It should_contains_question = () =>
+        [NUnit.Framework.Test] public void should_contains_question () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId).ShouldNotBeNull();
 
-        It should_contains_question_with_PublicKey_equal_to_question_id = () =>
+        [NUnit.Framework.Test] public void should_contains_question_with_PublicKey_equal_to_question_id () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .PublicKey.ShouldEqual(questionId);
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
@@ -7,15 +7,14 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membersh
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Code.Implementation;
-using It = Machine.Specifications.It;
+
 using it = Moq.It;
 
 namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
 {
     internal class when_PasteAfterCommand_is_inflating : CommandInflaterTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var membershipUserService = Mock.Of<IMembershipUserService>(
                 _ => _.WebUser == Mock.Of<IMembershipWebUser>(
                     u => u.UserId == actionUserId && u.MembershipUser.Email == actionUserEmail));
@@ -28,15 +27,16 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
             command = new PasteAfter(questoinnaireId, entityId, pasteAfterId, questoinnaireId, entityId, ownerId);
 
             commandInflater = CreateCommandInflater(membershipUserService, documentStorage);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             commandInflater.PrepareDeserializedCommandForExecution(command);
 
-        It should_not_be_null = () =>
+        [NUnit.Framework.Test] public void should_not_be_null () =>
            command.SourceDocument.ShouldNotBeNull();
 
-        It should_questionnarie_id_as_provided = () =>
+        [NUnit.Framework.Test] public void should_questionnarie_id_as_provided () =>
             command.SourceDocument.PublicKey.ShouldEqual(questoinnaireId);
 
         private static CommandInflater commandInflater;

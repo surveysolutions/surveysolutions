@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     class when_verifying_questionnaire_that_have_linked_multiquestion_with_max_allowed_answers : QuestionnaireVerifierTestsContext
     {
 
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             multyOptionsQuestionId = Guid.Parse("10000000000000000000000000000000");
             var linkedQuestionId = Guid.Parse("20000000000000000000000000000000");
             var rosterSizeQuestion = Guid.Parse("30000000000000000000000000000000");
@@ -50,12 +49,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     ));
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => 
+        private void BecauseOf() => 
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_no_errors = () =>
+        [NUnit.Framework.Test] public void should_return_no_errors () =>
              verificationMessages.ShouldBeEmpty();
 
         private static QuestionnaireVerifier verifier;

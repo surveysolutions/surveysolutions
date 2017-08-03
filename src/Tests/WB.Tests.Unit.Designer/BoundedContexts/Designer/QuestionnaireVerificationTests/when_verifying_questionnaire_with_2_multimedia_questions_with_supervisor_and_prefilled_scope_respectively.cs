@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_2_multimedia_questions_with_supervisor_and_prefilled_scope_respectively : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument(Create.MultimediaQuestion(
                 supervisorQuestionId,
                 scope: QuestionScope.Supervisor,
@@ -26,39 +25,40 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             ));
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_return_2_messages = () =>
+        [NUnit.Framework.Test] public void should_return_2_messages () =>
             verificationMessages.Count().ShouldEqual(2);
 
-        It should_return_first_error_with_code__WB0078 = () =>
+        [NUnit.Framework.Test] public void should_return_first_error_with_code__WB0078 () =>
             verificationMessages.First().Code.ShouldEqual("WB0078");
 
-        It should_return_message_with_level_general = () =>
+        [NUnit.Framework.Test] public void should_return_message_with_level_general () =>
             verificationMessages.First().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
-        It should_return_first_error_with_1_references = () =>
+        [NUnit.Framework.Test] public void should_return_first_error_with_1_references () =>
             verificationMessages.First().References.Count().ShouldEqual(1);
 
-        It should_return_first_message_reference_with_type_Question = () =>
+        [NUnit.Framework.Test] public void should_return_first_message_reference_with_type_Question () =>
             verificationMessages.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_first_message_reference_with_id_of_supervisorQuestionId = () =>
+        [NUnit.Framework.Test] public void should_return_first_message_reference_with_id_of_supervisorQuestionId () =>
             verificationMessages.First().References.First().Id.ShouldEqual(supervisorQuestionId);
 
-        It should_return_second_error_with_code__WB0078 = () =>
+        [NUnit.Framework.Test] public void should_return_second_error_with_code__WB0078 () =>
             verificationMessages.Last().Code.ShouldEqual("WB0078");
 
-        It should_return_second_error_with_1_references = () =>
+        [NUnit.Framework.Test] public void should_return_second_error_with_1_references () =>
             verificationMessages.Last().References.Count().ShouldEqual(1);
 
-        It should_return_second_message_reference_with_type_Question = () =>
+        [NUnit.Framework.Test] public void should_return_second_message_reference_with_type_Question () =>
             verificationMessages.Last().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_second_message_reference_with_id_of_hqQuestionId = () =>
+        [NUnit.Framework.Test] public void should_return_second_message_reference_with_id_of_hqQuestionId () =>
             verificationMessages.Last().References.First().Id.ShouldEqual(hqQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

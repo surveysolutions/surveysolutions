@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 
@@ -11,8 +11,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_linked_multiple_options_question_referencing_not_existing_linked_to_question : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp]
+        public void context () {
             var notExistingQuestionId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
             questionnaire = Create.QuestionnaireDocument(children: new IComposite[]
@@ -24,22 +24,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             });
 
             verifier = CreateQuestionnaireVerifier();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
-            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+        private void BecauseOf() =>
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
-        It should_return_1_message = () =>
-            verificationMessages.Count().ShouldEqual(1);
+        [NUnit.Framework.Test]
+        public void should_return_1_message() =>
+            Assert.That(verificationMessages, Has.Count.EqualTo(1));
 
-        It should_return_messages_with_code_WB0011 = () =>
-            verificationMessages.ShouldEachConformTo(error => error.Code == "WB0011");
-
-        It should_return_message_with_level_general = () =>
-            verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
+        [NUnit.Framework.Test]
+        public void should_return_messages_with_code_WB0011 () =>
+            verificationMessages.ShouldContainCritical("WB0011");
 
         private static QuestionnaireDocument questionnaire;
         private static QuestionnaireVerifier verifier;
-        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
+        private static List<QuestionnaireVerificationMessage> verificationMessages;
     }
 }

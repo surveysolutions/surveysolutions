@@ -25,6 +25,7 @@ StyleCop.Cache
 _ReSharper.*
 
 *.ncrunchsolution.user
+*.ncrunchproject
 _NCrunch_*
 nCrunchTemp_*
 
@@ -85,3 +86,4 @@ src/UI/Designer/WB.UI.Designer/questionnaire/vendor/ace-builds/src*/mode-*.js
 src/UI/Designer/WB.UI.Designer/questionnaire/vendor/ace-builds/src*/worker-*.js
 src/UI/Designer/WB.UI.Designer/questionnaire/vendor/ace-builds/src*/theme-*.js
 src/UI/Designer/WB.UI.Designer/questionnaire/vendor/ace-builds/src*/ext-*.js
+src/*v3.ncrunchsolution

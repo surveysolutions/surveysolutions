@@ -15,28 +15,41 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.Interview
     [TestOf(typeof(AllInterviewsFactory))]
     internal class AllInterviewsFactoryTests
     {
-        [TestCase(InterviewStatus.SupervisorAssigned,     true)]
-        [TestCase(InterviewStatus.Completed,              true)]
-        [TestCase(InterviewStatus.InterviewerAssigned,    true)]
-        [TestCase(InterviewStatus.RejectedByHeadquarters, true)]
-        [TestCase(InterviewStatus.RejectedBySupervisor,   true)]
+        [TestCase(true ,InterviewStatus.SupervisorAssigned)]
+        [TestCase(true ,InterviewStatus.Completed)]
+        
+        [TestCase(true ,InterviewStatus.InterviewerAssigned)]
+        [TestCase(true ,InterviewStatus.RejectedByHeadquarters)]
+        [TestCase(true ,InterviewStatus.RejectedBySupervisor  )]
 
-        [TestCase(InterviewStatus.ApprovedByHeadquarters, false)]
-        [TestCase(InterviewStatus.ApprovedBySupervisor,   false)]
-        [TestCase(InterviewStatus.Created,                false)]
-        [TestCase(InterviewStatus.Deleted,                false)]
-        [TestCase(InterviewStatus.ReadyForInterview,      false)]
-        public void Load_When_load_interviews_with_statuse_Then_CanBeReassigned_flag_should_set_correctly(InterviewStatus interviewStatus, bool isAllowedReassign)
+        [TestCase(true, InterviewStatus.Completed, InterviewStatus.SupervisorAssigned)]
+        [TestCase(true, InterviewStatus.RejectedByHeadquarters, InterviewStatus.RejectedBySupervisor)]
+        [TestCase(false, InterviewStatus.ApprovedByHeadquarters, InterviewStatus.ApprovedBySupervisor)]
+
+        [TestCase(false,InterviewStatus.ApprovedByHeadquarters)]
+        [TestCase(false,InterviewStatus.ApprovedBySupervisor)]
+        [TestCase(false,InterviewStatus.Created)]
+        [TestCase(false,InterviewStatus.Deleted )]
+        [TestCase(false, InterviewStatus.ReadyForInterview )]
+        public void Load_When_load_interviews_with_statuse_Then_CanBeReassigned_flag_should_set_correctly(bool isAllowedReassign, params InterviewStatus[] interviewStatuses)
         {
             var interviewSummaryStorage = Create.Storage.InMemoryReadeSideStorage<InterviewSummary>();
-            interviewSummaryStorage.Store(Create.Entity.InterviewSummary(status: interviewStatus), Guid.NewGuid());
+
+            foreach (var interviewStatus in interviewStatuses)
+            {
+                interviewSummaryStorage.Store(Create.Entity.InterviewSummary(status: interviewStatus), Guid.NewGuid());
+            }
+            
             AllInterviewsFactory interviewsFactory = Create.Service.AllInterviewsFactory(interviewSummaryStorage);
 
             var interviews = interviewsFactory.Load(new AllInterviewsInputModel());
 
-            var item = interviews.Items.Single();
             IResolveConstraint resolveConstraint = isAllowedReassign ? Is.True : (IResolveConstraint)Is.False;
-            Assert.That(item.CanBeReassigned, resolveConstraint);
+
+            foreach (var item in interviews.Items)
+            {
+                Assert.That(item.CanBeReassigned, resolveConstraint);
+            }
         }
 
         [TestCase]
@@ -92,6 +105,29 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.Interview
 
             // Act
             var foundEntries = factory.Load(new AllInterviewsInputModel { AssignmentId = 5 });
+
+            // Assert
+            Assert.That(foundEntries.TotalCount, Is.EqualTo(1));
+            Assert.That(foundEntries.Items.Single().InterviewId, Is.EqualTo(interviewIdWithAssignment));
+        }
+
+        [Test]
+        public void Should_find_interviews_by_responsibleId()
+        {
+            Guid interviewIdWithAssignment = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            Guid interviewIdWithoutAssignment = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+
+            var summaryThatHasAssignmentId = Create.Entity.InterviewSummary(interviewIdWithAssignment, assignmentId: 5, responsibleId: Id.g1);
+            var summaryWithoutAssignment = Create.Entity.InterviewSummary(interviewIdWithoutAssignment, assignmentId: null, responsibleId: Id.g2);
+
+            var assignments = new TestInMemoryWriter<InterviewSummary>();
+            assignments.Store(summaryThatHasAssignmentId, interviewIdWithAssignment.FormatGuid());
+            assignments.Store(summaryWithoutAssignment, interviewIdWithoutAssignment.FormatGuid());
+
+            var factory = Create.Service.AllInterviewsFactory(assignments);
+
+            // Act
+            var foundEntries = factory.Load(new AllInterviewsInputModel { ResponsibleId = Id.g1});
 
             // Assert
             Assert.That(foundEntries.TotalCount, Is.EqualTo(1));

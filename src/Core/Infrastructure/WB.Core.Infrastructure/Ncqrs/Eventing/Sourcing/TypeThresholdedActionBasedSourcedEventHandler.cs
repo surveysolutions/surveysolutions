@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 namespace Ncqrs.Eventing.Sourcing
 {
@@ -90,7 +91,7 @@ namespace Ncqrs.Eventing.Sourcing
             // This is true when the eventTypeThreshold is 
             // true if event type and the threshold type represent the same type, or if the theshold type is in the inheritance hierarchy 
             // of the event type, or if the threshold type is an interface that event type implements.
-            if (_eventTypeThreshold.IsAssignableFrom(dataType))
+            if (_eventTypeThreshold.GetTypeInfo().IsAssignableFrom(dataType))
             {
                 if (_exact)
                 {

@@ -8,14 +8,13 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Designer.Api;
 using WB.UI.Shared.Web.CommandDeserialization;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
 {
     internal class when_posting_updated_translation : CommandApiControllerTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var addOrUpdateTranslation = Create.Command.AddOrUpdateTranslation(questionnaireId, translationId, name, responsibleId);
 
             var commandDeserializerMock = new Mock<ICommandDeserializer>();
@@ -28,16 +27,17 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
                 commandDeserializer: commandDeserializerMock.Object,
                 translationsService: translationServiceMock.Object,
                 commandService: mockOfCommandService.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             controller.UpdateTranslation(new CommandController.TranslationModel { File = new HttpFile { Buffer = fileBytes, FileName = fileName }, Command = serializedUpdateTranslationCommand });
 
-        It should_save_translation_with_specified_params = () =>
+        [NUnit.Framework.Test] public void should_save_translation_with_specified_params () =>
             translationServiceMock.Verify(
                 x => x.Store(questionnaireId, translationId, fileBytes), Times.Once);
 
-        It should_execute_AddOrUpdateTranslation_command = () =>
+        [NUnit.Framework.Test] public void should_execute_AddOrUpdateTranslation_command () =>
             mockOfCommandService.Verify(
                 x => x.Execute(Moq.It.IsAny<AddOrUpdateTranslation>(), Moq.It.IsAny<string>()), Times.Once);
 

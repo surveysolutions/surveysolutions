@@ -3,7 +3,7 @@
 @model UserEditModel
 @{
     ViewBag.Title = Pages.Profile_HeadquartersEditFormat.FormatString(Model.UserName).RemoveHtmlTags();
-    ViewBag.PageTitle = Pages.Profile_HeadquartersEditFormat.FormatString(Model.UserName);
+    ViewBag.PageTitle = Pages.Profile_HeadquartersEditFormat.FormatString(Html.Encode(Model.UserName));
     
     Layout = "~/Views/Shared/Profile/_UserEditorLayout.cshtml";
 }

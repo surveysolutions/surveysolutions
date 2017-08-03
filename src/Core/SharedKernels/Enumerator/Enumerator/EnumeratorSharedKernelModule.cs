@@ -1,18 +1,23 @@
-﻿using Ninject.Modules;
+﻿using System.Runtime.CompilerServices;
+using Ninject.Modules;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+
+[assembly: InternalsVisibleTo("WB.Tests.Unit")]
+[assembly: InternalsVisibleTo("WB.Tests.Integration")]
+[assembly: InternalsVisibleTo("PerformanceTest")]
+[assembly: InternalsVisibleTo("WB.Tests.Abc")]
 
 namespace WB.Core.SharedKernels.Enumerator
 {
@@ -25,12 +30,12 @@ namespace WB.Core.SharedKernels.Enumerator
             this.Bind<ISideBarSectionViewModelsFactory>().To<SideBarSectionViewModelFactory>();
             this.Bind<IDynamicTextViewModelFactory>().To<DynamicTextViewModelFactory>();
 
-            this.Bind<ISubstitionTextFactory>().To<SubstitionTextFactory>();
-            this.Bind<ISubstitutionService>().To<SubstitutionService>();
+            this.Bind<ISubstitutionTextFactory>().To<SubstitutionTextFactory>();
+            this.Bind<ISubstitutionService>().To<SubstitutionService>().InScope(ctx => BaseInterviewViewModel.CurrentInterviewScope);
             this.Bind<IVariableToUIStringService>().To<VariableToUIStringService>();
             this.Bind<IOptionsRepository>().To<OptionsRepository>();
             this.Bind<IQuestionOptionsRepository>().To<QuestionOptionsRepository>();
-
+            this.Bind<IInterviewTreeBuilder>().To<InterviewTreeBuilder>();
             this.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>().InSingletonScope();
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
 
@@ -42,8 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator
             CommandRegistry
                 .Setup<StatefulInterview>()
                 .InitializesWith<CreateInterviewFromSynchronizationMetadata>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewFromSynchronizationMetadata(command.Id, command.UserId, command.QuestionnaireId, command.QuestionnaireVersion, command.InterviewStatus, command.FeaturedQuestionsMeta, command.Comments, command.RejectedDateTime, command.InterviewerAssignedDateTime, command.Valid, command.CreatedOnClient))
-                .InitializesWith<CreateInterviewWithPreloadedData>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewWithPreloadedData(command))
-                .InitializesWith<CreateInterviewOnClientCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewOnClient(command))
+                .InitializesWith<CreateInterview>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterview(command))
                 .InitializesWith<SynchronizeInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Synchronize(command))
                 .InitializesWith<CreateInterviewFromSnapshotCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewFromSnapshot(command))
                 .Handles<AnswerDateTimeQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerDateTimeQuestion(command.UserId, command.QuestionId, command.RosterVector, command.AnswerTime, command.Answer))
@@ -59,6 +63,7 @@ namespace WB.Core.SharedKernels.Enumerator
                 .Handles<AnswerSingleOptionQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerSingleOptionQuestion(command.UserId, command.QuestionId, command.RosterVector, command.AnswerTime, command.SelectedValue))
                 .Handles<AnswerTextListQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerTextListQuestion(command.UserId, command.QuestionId, command.RosterVector, command.AnswerTime, command.Answers))
                 .Handles<AnswerTextQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerTextQuestion(command.UserId, command.QuestionId, command.RosterVector, command.AnswerTime, command.Answer))
+                .Handles<AnswerAudioQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerAudioQuestion(command.UserId, command.QuestionId, command.RosterVector, command.AnswerTime, command.FileName, command.Length))
                 .Handles<RemoveAnswerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.RemoveAnswer(command.QuestionId, command.RosterVector, command.UserId, command.RemoveTime))
                 .Handles<AnswerAreaQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerAreaQuestion(command))
                 .Handles<ApproveInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Approve(command.UserId, command.Comment, command.ApproveTime))

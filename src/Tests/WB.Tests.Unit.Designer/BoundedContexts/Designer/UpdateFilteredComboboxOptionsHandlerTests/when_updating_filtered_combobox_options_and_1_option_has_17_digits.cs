@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateFilteredCombobox
 {
     internal class when_updating_filtered_combobox_options_and_1_option_has_17_digits : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddSingleOptionQuestion(
@@ -22,16 +21,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateFilteredCombobox
                 variableName: "var",
                 isFilteredCombobox: true
             );
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             questionnaireException = Catch.Only<QuestionnaireException>(() =>
                 questionnaire.UpdateFilteredComboboxOptions(questionId: questionId, responsibleId: responsibleId, options: options));
 
-        It should_throw_QuestionnaireException = () =>
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
             questionnaireException.ShouldNotBeNull();
 
-        It should_throw_exception_with_message_containting__values____too_long__and_value_itself = () =>
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__values____too_long__and_value_itself () =>
             new[] { "values", "too long", "12345678901234567" }.ShouldEachConformTo(
                 keyword => questionnaireException.Message.ToLower().Contains(keyword));
 

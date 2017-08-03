@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
 {
     internal class when_generate_single_class_for_version_9_with_questionnaire_with_roster : CodeGeneratorTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire =
                 Create.QuestionnaireDocument(
                     children: new[]
@@ -29,15 +28,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
                     });
 
             generator = Create.CodeGenerator();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             generatedClassContent = generator.Generate(questionnaire, version).Values.First();
 
-        It should_generate_class_without_IInterviewExpressionStateV4 = () =>
+        [NUnit.Framework.Test] public void should_generate_class_without_IInterviewExpressionStateV4 () =>
             generatedClassContent.ShouldNotContain("IInterviewExpressionStateV10");
 
-        It should_generate_class_with_AbstractConditionalLevelInstanceV4 = () =>
+        [NUnit.Framework.Test] public void should_generate_class_with_AbstractConditionalLevelInstanceV4 () =>
             generatedClassContent.ShouldContain("AbstractInterviewExpressionStateV10");
 
         private static int version = 16;

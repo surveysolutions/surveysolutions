@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -10,24 +10,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.InterviewCompilerTests
 {
     internal class when_generating_assembly_as_string : InterviewCompilerTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             compiler = CreateRoslynCompiler();
             referencedPortableAssemblies = CreateReferencesForCompiler();
             generatedClasses.Add("main", testClassToCompile);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             emitResult = compiler.TryGenerateAssemblyAsStringAndEmitResult(id, generatedClasses, referencedPortableAssemblies, out resultAssembly);
 
 
-        It should_result_succeded = () =>
+        [NUnit.Framework.Test] public void should_result_succeded () =>
             emitResult.Success.ShouldEqual(true);
 
-        It should_diagnostics_count_equal_0 = () =>
+        [NUnit.Framework.Test] public void should_diagnostics_count_equal_0 () =>
             emitResult.Diagnostics.Count().ShouldEqual(0);
 
-        It should_ = () =>
+        [NUnit.Framework.Test] public void should_ () =>
             resultAssembly.Length.ShouldBeGreaterThan(0);
         
         private static IDynamicCompiler compiler;
