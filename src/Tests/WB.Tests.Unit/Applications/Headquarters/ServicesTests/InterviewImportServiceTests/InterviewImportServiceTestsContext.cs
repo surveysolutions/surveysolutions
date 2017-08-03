@@ -54,7 +54,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                         _ => _.GetPlainTransactionManager() == Mock.Of<IPlainTransactionManager>()),
                 transactionManagerProvider: Create.Service.TransactionManagerProvider(),
                 assignmentPlainStorageAccessor: Mock.Of<IPlainStorageAccessor<Assignment>>(),
-                questionnaireBrowseViewFactory: questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
                 userViewFactory : Mock.Of<IUserViewFactory>(),
                 interviewTreeBuilder: interviewTreeBuilder ?? Mock.Of<IInterviewTreeBuilder>(),
                 preloadedDataRepository: preloadedDataRepository ?? Mock.Of<IPreloadedDataRepository>(),

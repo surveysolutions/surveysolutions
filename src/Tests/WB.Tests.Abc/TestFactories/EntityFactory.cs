@@ -22,6 +22,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Troubleshooting.Views;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
@@ -31,6 +32,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
@@ -1786,6 +1788,34 @@ namespace WB.Tests.Abc.TestFactories
                 StataExportCaption = variable,
                 QuestionScope = QuestionScope.Interviewer,
                 QuestionType = QuestionType.Audio
+            };
+        }
+
+        public SampleImportSettings SampleImportSettings(int limit = 1) => new SampleImportSettings(limit);
+
+        public AssignmentImportData AssignmentImportData(Guid interviewerId, Guid? supervisorId = null, params PreloadedLevelDto[] levels)
+        {
+            return new AssignmentImportData
+            {
+                InterviewerId = interviewerId,
+                SupervisorId = supervisorId,
+                Quantity = 1,
+                PreloadedData = new PreloadedDataDto(levels ?? new PreloadedLevelDto[0])
+            };
+        }
+
+        public AssignmentImportData AssignmentImportData(Guid interviewerId, Guid? supervisorId = null, params InterviewAnswer[] answers)
+        {
+            var levels = answers.GroupBy(x => x.Identity.RosterVector)
+                .Select(x => new PreloadedLevelDto(x.Key, x.ToDictionary(a => a.Identity.Id, a => a.Answer)))
+                .ToArray();
+
+            return new AssignmentImportData
+            {
+                InterviewerId = interviewerId,
+                SupervisorId = supervisorId,
+                Quantity = 1,
+                PreloadedData = new PreloadedDataDto(levels)
             };
         }
     }
