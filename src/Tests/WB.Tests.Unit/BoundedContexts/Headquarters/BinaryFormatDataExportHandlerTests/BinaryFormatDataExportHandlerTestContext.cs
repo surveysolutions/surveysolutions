@@ -1,5 +1,6 @@
 ﻿using Machine.Specifications;
 using Moq;
+using NSubstitute;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -45,7 +46,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
                 questionnaireExportStructureStorage: questionnaireExportStructureStorage ?? Mock.Of<IQuestionnaireExportStructureStorage>(),
                 dataExportFileAccessor: dataExportFileAccessor ?? Mock.Of<IDataExportFileAccessor>(),
                 audioFileStorage:audioFileRepository ?? Mock.Of<IAudioFileStorage>(),
-                plainTransactionManagerProvider: plainTransactionManagerProvider ?? Mock.Of<IPlainTransactionManagerProvider>());
+                plainTransactionManagerProvider: plainTransactionManagerProvider ?? Mock.Of<IPlainTransactionManagerProvider>(),
+                logger: Substitute.For<ILogger>());
         }
 
         public static IDataExportFileAccessor CrerateDataExportFileAccessor(IFileSystemAccessor fileSystemAccessor = null,
