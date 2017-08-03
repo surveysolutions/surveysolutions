@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -54,9 +56,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             "rowcode","rowname","rowindex","roster","id", "parentid1", "parentid2", "parentid3", "parentid4", "self", "state", "quest", "optioncode"
         };
         
-        public string[] GetAllReservedKeywords()
+        public bool IsReservedKeyword(string keyword)
         {
-            return this.reservedKeywords;
+            if (string.IsNullOrEmpty(keyword)) throw new ArgumentException(nameof(keyword));
+
+            keyword = keyword.ToLower();
+
+            if (this.reservedKeywords.Contains(keyword))
+                return true;
+
+            if (Regex.IsMatch(keyword, @"^str\d+"))
+                return true;
+
+            return false;
         }
     }
 }
