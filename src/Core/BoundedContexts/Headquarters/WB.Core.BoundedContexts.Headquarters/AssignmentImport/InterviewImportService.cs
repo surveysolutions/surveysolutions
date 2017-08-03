@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Resources;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -50,7 +48,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly IPlainStorageAccessor<Assignment> assignmentPlainStorageAccessor;
         private readonly IUserViewFactory userViewFactory;
-        private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IPreloadedDataRepository preloadedDataRepository;
         private readonly IPreloadedDataVerifier preloadedDataVerifier;
 
@@ -64,7 +61,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             IPlainTransactionManagerProvider plainTransactionManagerProvider,
             ITransactionManagerProvider transactionManagerProvider,
             IPlainStorageAccessor<Assignment> assignmentPlainStorageAccessor,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IUserViewFactory userViewFactory, 
             IInterviewTreeBuilder interviewTreeBuilder, 
             IPreloadedDataRepository preloadedDataRepository, 
@@ -83,7 +79,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             this.interviewTreeBuilder = interviewTreeBuilder;
             this.preloadedDataRepository = preloadedDataRepository;
             this.preloadedDataVerifier = preloadedDataVerifier;
-            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
         }
 
         public void VerifyAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, string fileName)
@@ -153,7 +148,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             return AssignmentVerificationResult.Ok();
         }
 
-        public void ImportAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, Guid? responsibleId, Guid headquartersId, AssignmentImportType mode)
+        public void ImportAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, Guid? responsibleId, Guid headquartersId, 
+            AssignmentImportType mode, bool allowAssignments)
         {
             AssignmentImportData[] assignmentImportData = this.interviewImportDataParsingService.GetAssignmentsData(interviewImportProcessId, questionnaireIdentity, mode);
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
@@ -176,8 +172,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 var responsibleInterviewerId = assignmentRecord.SupervisorId.HasValue ? assignmentRecord.InterviewerId : interviewerIdByResponsible;
                 var assignmentResponsibleId = responsibleInterviewerId ?? responsibleSupervisorId;
 
-                var questionnaireBrowseItem = this.PlainTransactionManager.ExecuteInQueryTransaction(() => this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity));
-
                 List<InterviewAnswer> answers = assignmentRecord.PreloadedData.Answers;
                 var assignment = new Assignment(questionnaireIdentity, assignmentResponsibleId, assignmentRecord.Quantity);
 
@@ -188,7 +182,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 // need save an assignment first to get a real assignmentId
                 this.PlainTransactionManager.ExecuteInPlainTransaction(() => this.assignmentPlainStorageAccessor.Store(assignment, null));
 
-                bool isSupportAssignments = questionnaireBrowseItem.AllowAssignments;
+                bool isSupportAssignments = allowAssignments;
                 if (!isSupportAssignments)
                 {
                     this.transactionManagerProvider.GetTransactionManager().ExecuteInQueryTransaction(() => this.PlainTransactionManager.ExecuteInPlainTransaction(() => this.commandService.Execute(new CreateInterview(Guid.NewGuid(), headquartersId, questionnaireIdentity, supervisorId: responsibleSupervisorId, interviewerId: responsibleInterviewerId, answersTime: DateTime.UtcNow, answers: answers, interviewKey: this.interviewKeyGenerator.Get(), assignmentId: assignment.Id))));
@@ -204,7 +198,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         {
             try
             {
-                var questionnaireDocument = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
+                var questionnaireDocument = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
                 this.Status.QuestionnaireTitle = questionnaireDocument.Title;
 
                 if (records == null)
