@@ -152,6 +152,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
             this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.NaturalId, 100);
 
+            this.paraDataAccessor.ClearParaDataFolder();
+
             this.logger.Info($"Finished paradata creation. Took: {watch.Elapsed:g} ");
         }
 
