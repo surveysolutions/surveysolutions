@@ -750,7 +750,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private bool QuestionHasVariableNameReservedForServiceNeeds(IQuestion question)
         {
-            return question.StataExportCaption != null && keywordsProvider.GetAllReservedKeywords().Contains(question.StataExportCaption.ToLower());
+            return question.StataExportCaption != null && keywordsProvider.IsReservedKeyword(question.StataExportCaption);
         }
 
         private bool RosterHasVariableNameReservedForServiceNeeds(IGroup roster)
@@ -758,7 +758,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (!IsRoster(roster))
                 return false;
 
-            return roster.VariableName != null && keywordsProvider.GetAllReservedKeywords().Contains(roster.VariableName.ToLower());
+            return roster.VariableName != null && keywordsProvider.IsReservedKeyword(roster.VariableName);
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> ErrorForMacro(
@@ -997,7 +997,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             if (string.IsNullOrWhiteSpace(table.FileName) || string.IsNullOrEmpty(table.TableName))
                 return false;
-            return keywordsProvider.GetAllReservedKeywords().Contains(table.TableName.ToLower());
+            return keywordsProvider.IsReservedKeyword(table.TableName);
         }
 
         private bool LookupTableHasEmptyContent(Guid tableId, LookupTable table, MultiLanguageQuestionnaireDocument questionnaire)
@@ -1013,7 +1013,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 if (!IsVariableNameValid(tableContentVariableName))
                     return true;
 
-                if(!string.IsNullOrWhiteSpace(tableContentVariableName) && this.keywordsProvider.GetAllReservedKeywords().Contains(tableContentVariableName.ToLower()))
+                if(!string.IsNullOrWhiteSpace(tableContentVariableName) && this.keywordsProvider.IsReservedKeyword(tableContentVariableName))
                     return true;
             }
 
