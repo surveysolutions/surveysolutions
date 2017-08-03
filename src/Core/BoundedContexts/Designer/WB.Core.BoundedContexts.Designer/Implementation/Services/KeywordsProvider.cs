@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         
         public bool IsReservedKeyword(string keyword)
         {
-            if (string.IsNullOrEmpty(keyword)) throw new ArgumentException(nameof(keyword));
+            if (string.IsNullOrEmpty(keyword)) return false;
 
             keyword = keyword.ToLower();
 
