@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
         };
 
         Because of = () =>
-            plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, 0);
+            plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 0);
 
         It should_return_specified_static_texts = () =>
         {

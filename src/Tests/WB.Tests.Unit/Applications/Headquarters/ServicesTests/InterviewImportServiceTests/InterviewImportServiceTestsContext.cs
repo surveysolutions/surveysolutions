@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             IPreloadedDataRepository preloadedDataRepository = null,
             IPreloadedDataVerifier preloadedDataVerifier = null)
         {
-            var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, 1);
+            var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1);
             var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(_ 
                 => _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), It.IsAny<long>()) == questionnaireDocument
                 && _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), null) == plainQuestionnaire);

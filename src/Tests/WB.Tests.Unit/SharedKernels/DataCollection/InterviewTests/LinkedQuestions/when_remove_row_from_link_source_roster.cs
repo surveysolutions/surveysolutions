@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.LinkedQuesti
                 });
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
-                 new PlainQuestionnaire(questionnaire, 1));
+                 Create.Entity.PlainQuestionnaire(questionnaire, 1));
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
             interview.AnswerTextListQuestion(userId, rosterSizeQuestionId, new decimal[0], DateTime.Now, new[]
