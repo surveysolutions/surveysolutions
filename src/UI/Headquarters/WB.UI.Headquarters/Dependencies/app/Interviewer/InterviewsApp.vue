@@ -9,6 +9,16 @@
                     </option>
                 </select>
             </FilterBlock>
+            <FilterBlock :title="$t('Pages.Filters_Assignment')">
+                <div class="input-group">
+                    <input class="form-control with-clear-btn" :placeholder="$t('Common.Any')" type="text" v-model="assignmentId" />
+                    <div class="input-group-btn" @click="clearAssignmentFilter">
+                        <div class="btn btn-default">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+            </FilterBlock>
         </Filters>
     
         <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addFilteringParams" :contextMenuItems="contextMenuItems"></DataTables>
@@ -18,7 +28,7 @@
             <FilterBlock>
                 <div class="form-group ">
                     <div class="field">
-                        <input class="form-control with-clear-btn" type="text" v-model="restart_comment"/>
+                        <input class="form-control with-clear-btn" type="text" v-model="restart_comment" />
                     </div>
                 </div>
             </FilterBlock>
@@ -37,11 +47,15 @@ export default {
     data() {
         return {
             restart_comment: null,
-            questionnaireId: null
+            questionnaireId: null,
+            assignmentId: null
         }
     },
     watch: {
         questionnaireId: function (value) {
+            this.reload();
+        },
+        assignmentId: function(value) {
             this.reload();
         }
     },
@@ -81,9 +95,9 @@ export default {
     },
 
     methods: {
-        reload() {
+        reload: _.debounce(function() {
             this.$refs.table.reload();
-        },
+        }, 500),
 
         contextMenuItems({ rowData, rowIndex }) {
             const menu = [];
@@ -99,7 +113,7 @@ export default {
             if (rowData.canDelete) {
                 menu.push({
                     name: self.$t("Pages.InterviewerHq_DiscardInterview"),
-                    callback () {
+                    callback() {
                         self.discardInterview(rowData.interviewId, rowIndex)
                     }
                 });
@@ -121,7 +135,7 @@ export default {
         discardInterview(interviewId, rowIndex) {
             const self = this;
             this.$refs.confirmDiscard.promt(ok => {
-                if(ok){
+                if (ok) {
                     self.$refs.table.disableRow(rowIndex)
                     self.$store.dispatch("discardInterview", {
                         interviewId,
@@ -135,14 +149,14 @@ export default {
             const self = this
 
             self.$refs.confirmRestart.promt(ok => {
-                if(ok) {
+                if (ok) {
                     $.post(this.config.interviewerHqEndpoint + "/RestartInterview/" + interviewId, { comment: self.restart_comment }, response => {
                         self.restart_comment = "";
                         self.$store.dispatch("openInterview", interviewId);
                     })
                 }
                 else {
-                     self.$refs.table.reload()
+                    self.$refs.table.reload()
                 }
             });
         },
@@ -152,6 +166,10 @@ export default {
 
             if (this.questionnaireId) {
                 data.questionnaireId = this.questionnaireId.key;
+            }
+
+             if (this.assignmentId) {
+                data.assignmentId = this.assignmentId;
             }
         },
 
@@ -192,6 +210,9 @@ export default {
             ]
 
             return columns
+        },
+        clearAssignmentFilter: function() {
+            this.assignmentId = null;
         }
     },
 
