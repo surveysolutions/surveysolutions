@@ -88,7 +88,8 @@ namespace WB.UI.Headquarters.Controllers
                 QuestionnaireVersion = questionnaireIdentity?.Version,
                 Statuses = request.Statuses,
                 SearchBy = request.SearchBy ?? request.Search.Value,
-                ResponsibleId = this.authorizedUser.Id
+                ResponsibleId = this.authorizedUser.Id,
+                AssignmentId = request.AssignmentId
             };
 
             var allInterviews = this.allInterviewsViewFactory.Load(input);
