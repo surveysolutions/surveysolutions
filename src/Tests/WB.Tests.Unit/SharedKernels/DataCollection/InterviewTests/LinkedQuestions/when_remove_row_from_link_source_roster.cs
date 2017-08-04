@@ -67,7 +67,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.LinkedQuesti
 
         It should_raise_LinkedOptionsChanged_event_for_answered_linked_Question = () =>
           eventContext.ShouldContainEvent<LinkedOptionsChanged>(@event
-              => @event.ChangedLinkedQuestions.Count(q => q.QuestionId == new Identity(linkedQuestionId,new decimal[0]) && q.Options.Length==1) == 1);
+              => @event.ChangedLinkedQuestions.Count(q => q.QuestionId == Create.Identity(linkedQuestionId, RosterVector.Empty) && q.Options.Length==1) == 1);
 
         private static EventContext eventContext;
         private static Interview interview;

@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
         };
 
         Because of = () => 
-            viewModel.Init("interview", new Identity(substitutionTargetId, Empty.RosterVector));
+            viewModel.Init("interview", Create.Identity(substitutionTargetId, Empty.RosterVector));
 
         It should_substitute_question_titles = () => 
             viewModel.Title.HtmlText.ShouldEqual("title with answer");

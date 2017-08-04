@@ -30,22 +30,21 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         };
 
         Because of = () =>
-        {
-            enabledSubgroupsIds =
-                statefulInterview.GetEnabledSubgroups(selectedGroupIdentity).ToArray();
-        };
+            enabledSubgroupsIds = statefulInterview.GetEnabledSubgroups(selectedGroupIdentity).ToArray();
 
         It should_contains_3_identities = () =>
-            enabledSubgroupsIds.ShouldContainOnly(new Identity(rosterId, new[] {rosterInstance2Id}),
-                new Identity(rosterId, new[] {rosterInstance1Id}), new Identity(groupId, new decimal[0]));
+            enabledSubgroupsIds.ShouldContainOnly(
+                Create.Identity(rosterId, rosterInstance2Id),
+                Create.Identity(rosterId, rosterInstance1Id), 
+                Create.Identity(groupId, RosterVector.Empty));
 
         static StatefulInterview statefulInterview;
-        static readonly Identity selectedGroupIdentity = new Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[0]);
+        static readonly Identity selectedGroupIdentity = Create.Identity(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty);
         static Identity[] enabledSubgroupsIds;
         static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111112");
         static readonly Guid rosterId = Guid.Parse("11111111111111111111111111111116");
         static readonly Guid groupId = Guid.Parse("11111111111111111111111111111117");
-        const decimal rosterInstance1Id = 4444m;
-        const decimal rosterInstance2Id = 555m;
+        const int rosterInstance1Id = 4444;
+        const int rosterInstance2Id = 555;
     }
 }
