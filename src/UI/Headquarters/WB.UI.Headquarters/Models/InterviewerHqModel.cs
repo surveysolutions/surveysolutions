@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using WB.UI.Headquarters.Models.ComponentModels;
 
 namespace WB.UI.Headquarters.Models
 {
@@ -12,6 +13,7 @@ namespace WB.UI.Headquarters.Models
         public Dictionary<string, string> Resources { get; set; }
 
         public string Title { get; set; }
+        public ComboboxOptionModel[] Questionnaires { get; set; }
 
         private static readonly JsonSerializerSettings ModelSerializationSettings = new JsonSerializerSettings
         {
