@@ -21,8 +21,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             var staticTextWithSubstitutionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var substitutedVariable1Name = "var1";
             var substitutedVariable2Name = "var2";
-            staticTextIdentity = new Identity(staticTextWithSubstitutionId, Empty.RosterVector);
-            var substitutedVariableIdentity = new Identity(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), RosterVector.Empty);
+            staticTextIdentity = Create.Identity(staticTextWithSubstitutionId, Empty.RosterVector);
+            var substitutedVariableIdentity = Create.Identity(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), RosterVector.Empty);
             
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(new QuestionnaireIdentity(Guid.NewGuid(), 1),
                 Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]

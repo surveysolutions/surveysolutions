@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
         Because of = () => liteEventBus.PublishCommittedEvents(new CommittedEventStream(statefullInterview.EventSourceId,
             Create.Other.CommittedEvent(payload: Create.Event.SubstitutionTitlesChanged(questions: new Identity[]
                 {
-                    new Identity(substitutedQuestionId, Empty.RosterVector)
+                    Create.Identity(substitutedQuestionId, Empty.RosterVector)
                 }), eventSourceId: statefullInterview.EventSourceId)));
 
         It should_change_item_title = () => viewModel.Title.HtmlText.ShouldEqual("Old title new value");

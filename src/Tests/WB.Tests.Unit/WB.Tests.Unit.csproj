@@ -778,7 +778,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewAnswersCommandValidatorTests\when_not_responsible_supervisor_answer_on_supervisors_questions.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\LinkedQuestions\when_remove_answer_from_link_source_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\LinkedQuestions\when_remove_row_from_link_source_roster.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\Validation\when_answering_question_with_multiple_failed_validation_conditions.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_integer_question_decreasing_roster_size_of_roster_with_nested_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_numeric_question_which_triggers_square_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_decreasing_roster_size_of_roster_with_nested_roster.cs" />
@@ -1693,6 +1692,7 @@
     <Folder Include="Applications\Headquarters\PublicApiTests\ApiTests\" />
     <Folder Include="Properties\" />
     <Folder Include="Resources\" />
+    <Folder Include="SharedKernels\DataCollection\InterviewTests\Validation\" />
     <Folder Include="SharedKernels\Enumerator\Services\QuestionnaireModelBuilderTests\" />
     <Folder Include="SharedKernels\SurveyManagement\Factories\ChangeStatusFactoryTests\" />
   </ItemGroup>

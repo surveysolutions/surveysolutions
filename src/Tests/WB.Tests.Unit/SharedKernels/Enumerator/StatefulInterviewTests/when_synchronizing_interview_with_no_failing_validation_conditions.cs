@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             RosterVector rosterVector = Create.Entity.RosterVector(1m, 0m);
             var fixedRosterIdentity = Identity.Create(Guid.Parse("11111111111111111111111111111111"), Create.Entity.RosterVector(1));
             var fixedNestedRosterIdentity = Identity.Create(Guid.Parse("22222222222222222222222222222222"), Create.Entity.RosterVector(1,0));
-            questionIdentity = new Identity(integerQuestionId, rosterVector);
+            questionIdentity = Create.Identity(integerQuestionId, rosterVector);
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
                 children: Create.Entity.FixedRoster(

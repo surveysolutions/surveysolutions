@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
         };
 
         Because of = () => 
-            viewModel.Init("interview", new Identity(staticTextWithSubstitutionToRosterTitleId, Create.Entity.RosterVector(1)), null);
+            viewModel.Init("interview", Create.Identity(staticTextWithSubstitutionToRosterTitleId, Create.Entity.RosterVector(1)), null);
 
         It should_substitute_roster_title_value = () => 
             viewModel.Text.PlainText.ShouldEqual($"uses {rosterTitleAnswerValue}");
