@@ -136,9 +136,6 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             get => this.selectedObject;
             private set
             {
-                if (this.selectedObject == value)
-                    return;
-
                 this.selectedObject = value;
                 this.FireChanged(SelectedObjectChanged);
             }
