@@ -19,22 +19,37 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     attrs: {
       "title": _vm.$t('Pages.Template')
     }
-  }, [_c('Typeahead', {
-    attrs: {
-      "data-vv-name": "questionnaireId",
-      "data-vv-as": "questionnaire",
-      "placeholder": _vm.$t('Common.Any'),
-      "control-id": "questionnaireId",
-      "ajaxParams": {
-        statuses: _vm.statuses.toString()
-      },
-      "value": _vm.questionnaireId,
-      "fetch-url": _vm.config.interviewerHqEndpoint + '/QuestionnairesCombobox'
-    },
+  }, [_c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.questionnaireId),
+      expression: "questionnaireId"
+    }],
+    staticClass: "selectpicker",
     on: {
-      "selected": _vm.questionnaireSelected
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.questionnaireId = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
     }
-  })], 1)], 1), _vm._v(" "), _c('DataTables', {
+  }, [_c('option', {
+    domProps: {
+      "value": null
+    }
+  }, [_vm._v(_vm._s(_vm.$t('Common.Any')))]), _vm._v(" "), _vm._l((_vm.questionnaires), function(questionnaire) {
+    return _c('option', {
+      key: questionnaire.key,
+      domProps: {
+        "value": questionnaire.key
+      }
+    }, [_vm._v("\n                    " + _vm._s(questionnaire.value) + "\n                ")])
+  })], 2)])], 1), _vm._v(" "), _c('DataTables', {
     ref: "table",
     attrs: {
       "tableOptions": _vm.tableOptions,
@@ -86,7 +101,7 @@ var esExports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-118b8bcd", esExports)
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-118b8bcd", esExports)
   }
 }
 // CONCATENATED MODULE: ./Dependencies/app/interviewer/InterviewsApp.vue
@@ -117,7 +132,7 @@ if (Component.options.functional) {console.error("[vue-loader] InterviewsApp.vue
 
 /* hot reload */
 if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
   hotAPI.install(require("vue"), false)
   if (!hotAPI.compatible) return
   module.hot.accept()
@@ -214,6 +229,11 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 exports.default = {
@@ -224,10 +244,17 @@ exports.default = {
         };
     },
 
-
+    watch: {
+        questionnaireId: function questionnaireId(value) {
+            this.reload();
+        }
+    },
     computed: {
         statuses: function statuses() {
             return this.config.statuses;
+        },
+        questionnaires: function questionnaires() {
+            return this.config.questionnaires;
         },
         title: function title() {
             return this.config.title;
@@ -256,10 +283,6 @@ exports.default = {
     },
 
     methods: {
-        questionnaireSelected: function questionnaireSelected(newValue) {
-            this.questionnaireId = newValue;
-            this.reload();
-        },
         reload: function reload() {
             this.$refs.table.reload();
         },
@@ -332,7 +355,7 @@ exports.default = {
             data.statuses = this.statuses;
 
             if (this.questionnaireId) {
-                data.questionnaireId = this.questionnaireId.key;
+                data.questionnaireId = this.questionnaireId;
             }
         },
         getTableColumns: function getTableColumns() {
@@ -523,7 +546,7 @@ var esExports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-d3471dc2", esExports)
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-d3471dc2", esExports)
   }
 }
 // CONCATENATED MODULE: ./Dependencies/app/components/Typeahead.vue
@@ -554,7 +577,7 @@ if (Component.options.functional) {console.error("[vue-loader] Typeahead.vue: fu
 
 /* hot reload */
 if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
   hotAPI.install(require("vue"), false)
   if (!hotAPI.compatible) return
   module.hot.accept()
@@ -606,7 +629,7 @@ var Layout_esExports = { render: Layout_render, staticRenderFns: Layout_staticRe
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-5a677182", Layout_esExports)
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-5a677182", Layout_esExports)
   }
 }
 // CONCATENATED MODULE: ./Dependencies/app/components/Layout.vue
@@ -637,7 +660,7 @@ if (Layout_Component.options.functional) {console.error("[vue-loader] Layout.vue
 
 /* hot reload */
 if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
   hotAPI.install(require("vue"), false)
   if (!hotAPI.compatible) return
   module.hot.accept()
@@ -684,7 +707,7 @@ var Filters_esExports = { render: Filters_render, staticRenderFns: Filters_stati
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-49409053", Filters_esExports)
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-49409053", Filters_esExports)
   }
 }
 // CONCATENATED MODULE: ./Dependencies/app/components/Filters.vue
@@ -715,7 +738,7 @@ if (Filters_Component.options.functional) {console.error("[vue-loader] Filters.v
 
 /* hot reload */
 if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
   hotAPI.install(require("vue"), false)
   if (!hotAPI.compatible) return
   module.hot.accept()
@@ -744,7 +767,7 @@ var FilterBlock_esExports = { render: FilterBlock_render, staticRenderFns: Filte
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-5c3b9966", FilterBlock_esExports)
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-5c3b9966", FilterBlock_esExports)
   }
 }
 // CONCATENATED MODULE: ./Dependencies/app/components/FilterBlock.vue
@@ -775,7 +798,7 @@ if (FilterBlock_Component.options.functional) {console.error("[vue-loader] Filte
 
 /* hot reload */
 if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
   hotAPI.install(require("vue"), false)
   if (!hotAPI.compatible) return
   module.hot.accept()
@@ -806,7 +829,7 @@ var DataTables_esExports = { render: DataTables_render, staticRenderFns: DataTab
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-2447fe87", DataTables_esExports)
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-2447fe87", DataTables_esExports)
   }
 }
 // CONCATENATED MODULE: ./Dependencies/app/components/DataTables.vue
@@ -837,7 +860,7 @@ if (DataTables_Component.options.functional) {console.error("[vue-loader] DataTa
 
 /* hot reload */
 if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
   hotAPI.install(require("vue"), false)
   if (!hotAPI.compatible) return
   module.hot.accept()
@@ -895,7 +918,7 @@ var ModalFrame_esExports = { render: ModalFrame_render, staticRenderFns: ModalFr
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-2ddebe18", ModalFrame_esExports)
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-2ddebe18", ModalFrame_esExports)
   }
 }
 // CONCATENATED MODULE: ./Dependencies/app/components/ModalFrame.vue
@@ -926,7 +949,7 @@ if (ModalFrame_Component.options.functional) {console.error("[vue-loader] ModalF
 
 /* hot reload */
 if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
   hotAPI.install(require("vue"), false)
   if (!hotAPI.compatible) return
   module.hot.accept()
@@ -976,7 +999,7 @@ var Confirm_esExports = { render: Confirm_render, staticRenderFns: Confirm_stati
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-dc702ed0", Confirm_esExports)
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-dc702ed0", Confirm_esExports)
   }
 }
 // CONCATENATED MODULE: ./Dependencies/app/components/Confirm.vue
@@ -1007,7 +1030,7 @@ if (Confirm_Component.options.functional) {console.error("[vue-loader] Confirm.v
 
 /* hot reload */
 if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
   hotAPI.install(require("vue"), false)
   if (!hotAPI.compatible) return
   module.hot.accept()

@@ -2,7 +2,12 @@
     <Layout :title="title" :hasFilter="true">
         <Filters slot="filters">
             <FilterBlock :title="$t('Pages.Template')">
-                <Typeahead data-vv-name="questionnaireId" data-vv-as="questionnaire" :placeholder="$t('Common.Any')" control-id="questionnaireId" :ajaxParams="{ statuses: statuses.toString() }" :value="questionnaireId" v-on:selected="questionnaireSelected" :fetch-url="config.interviewerHqEndpoint + '/QuestionnairesCombobox'"></Typeahead>
+                <select class="selectpicker" v-model="questionnaireId">
+                    <option :value="null">{{$t('Common.Any')}}</option>
+                    <option v-for="questionnaire in questionnaires" :key="questionnaire.key" :value="questionnaire.key">
+                        {{ questionnaire.value }}
+                    </option>
+                </select>
             </FilterBlock>
         </Filters>
     
@@ -35,10 +40,17 @@ export default {
             questionnaireId: null
         }
     },
-
+    watch: {
+        questionnaireId: function (value) {
+            this.reload();
+        }
+    },
     computed: {
         statuses() {
             return this.config.statuses
+        },
+        questionnaires() {
+            return this.config.questionnaires
         },
         title() {
             return this.config.title;
@@ -69,11 +81,6 @@ export default {
     },
 
     methods: {
-        questionnaireSelected(newValue) {
-            this.questionnaireId = newValue;
-            this.reload();
-        },
-
         reload() {
             this.$refs.table.reload();
         },
