@@ -60,10 +60,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     ResponsibleRole = x.ResponsibleRole,
                     HasErrors = x.HasErrors,
                     Status = x.Status.ToString(),
-                    CanDelete =    x.Status == InterviewStatus.Created
+                    CanDelete = (x.Status == InterviewStatus.Created
                         || x.Status == InterviewStatus.SupervisorAssigned
                         || x.Status == InterviewStatus.InterviewerAssigned
-                        || x.Status == InterviewStatus.SentToCapi,
+                        || x.Status == InterviewStatus.SentToCapi) &&
+                        !x.ReceivedByInterviewer,
                     CanApprove = x.Status == InterviewStatus.ApprovedBySupervisor || x.Status == InterviewStatus.Completed,
                     CanReject = x.Status == InterviewStatus.ApprovedBySupervisor,
                     CanUnapprove = x.Status == InterviewStatus.ApprovedByHeadquarters,
