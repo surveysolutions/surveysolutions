@@ -1034,4 +1034,7 @@
   <data name="GetEsriExtraDescription" xml:space="preserve">
     <value>ESRI Map support is an experimental feature. Use it only if you need the advanced ESRI GIS functionality. Including this functionality will significantly increase application size and download time. </value>
   </data>
+  <data name="Filters_Assignment" xml:space="preserve">
+    <value>Assignment</value>
+  </data>
 </root>
