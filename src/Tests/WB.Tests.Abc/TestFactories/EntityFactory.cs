@@ -11,6 +11,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events;
 using Moq;
 using ReflectionMagic;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -732,12 +733,16 @@ namespace WB.Tests.Abc.TestFactories
         public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument questionnaireDocument)
             => Create.Entity.PlainQuestionnaire(document: questionnaireDocument);
 
-        public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document = null, long version = 19)
+        public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document = null, long version = 1)
             => Create.Entity.PlainQuestionnaire(document, version, null);
 
         public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document, long version, Translation translation = null)
         {
-            document.IsUsingExpressionStorage = true;
+            if (document != null)
+            {
+                //document.IsUsingExpressionStorage = true;
+                //document.ExpressionsPlayOrder = document.ExpressionsPlayOrder ?? Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(document.AsReadOnly());
+            }
             return new PlainQuestionnaire(document, version, translation);
         }
 

@@ -36,6 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
             var textFactory = Create.Service.SubstitutionTextFactory();
+
             var interview = Create.AggregateRoot.Interview(
                 questionnaireRepository: questionnaireRepository,
                 expressionProcessorStatePrototypeProvider: expressionProcessorStatePrototypeProvider,

@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         static StatefulInterview statefulInterview;
 
         static readonly Guid questionId = Guid.Parse("11111111111111111111111111111113");
-        static readonly Identity questionIdentity = new Identity(questionId, new decimal[0]);
+        static readonly Identity questionIdentity = Create.Identity(questionId);
         static IEnumerable<CategoricalOption> options;
 
         static List<CategoricalOption> categoricalOptions;

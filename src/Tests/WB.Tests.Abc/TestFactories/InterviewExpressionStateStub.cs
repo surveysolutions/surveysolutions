@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Moq;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.V10;
 
@@ -17,7 +19,18 @@ namespace WB.Tests.Abc.TestFactories
 
         //temp fix 
         public new bool AreLinkedQuestionsSupported() => false;
-        
+    }
+
+    internal class InterviewExpressionStorageStub : IInterviewExpressionStorage
+    {
+        public void Initialize(IInterviewStateForExpressions state)
+        {
+        }
+
+        public IInterviewLevel GetLevel(Identity rosterIdentity)
+        {
+            return new Mock<IInterviewLevel>().Object;
+        }
     }
 }
 

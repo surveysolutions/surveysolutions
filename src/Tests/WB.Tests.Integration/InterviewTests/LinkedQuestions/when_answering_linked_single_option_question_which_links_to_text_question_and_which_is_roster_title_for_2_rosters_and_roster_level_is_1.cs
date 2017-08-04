@@ -3,12 +3,12 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
@@ -21,8 +21,8 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
 
             emptyRosterVector = new decimal[] { };
-            var rosterInstanceId = 0m;
-            rosterVector = emptyRosterVector.Concat(new[] { rosterInstanceId }).ToArray();
+            var rosterInstanceId = 0;
+            rosterVector = Create.RosterVector(rosterInstanceId);
 
             questionId = Guid.Parse("11111111111111111111111111111111");
             var linkedToQuestionId = Guid.Parse("33333333333333333333333333333333");
@@ -64,7 +64,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             interview.AnswerNumericIntegerQuestion(userId, triggerQuestionId, RosterVector.Empty, DateTime.Now, 1);
             interview.Apply(new LinkedOptionsChanged(new[]
             {
-                new ChangedLinkedOptions(new Identity(questionId, rosterVector), new RosterVector[]
+                new ChangedLinkedOptions(Create.Identity(questionId, rosterVector), new RosterVector[]
                 {
                     linkedOption1Vector, linkedOption2Vector, linkedOption3Vector
                 })
@@ -93,7 +93,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
         It should_set_empty_outer_roster_vector_to_all_RosterRowTitleChanged_events = () =>
             eventContext.GetEvents<RosterInstancesTitleChanged>()
-                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.RosterInstance.OuterRosterVector.SequenceEqual(emptyRosterVector)));
+                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.RosterInstance.OuterRosterVector.Length == 0));
 
         It should_set_last_element_of_roster_vector_to_roster_instance_id_in_all_RosterRowTitleChanged_events = () =>
             eventContext.GetEvents<RosterInstancesTitleChanged>()
@@ -108,11 +108,11 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         private static Interview interview;
         private static Guid userId;
         private static Guid questionId;
-        private static decimal[] rosterVector;
-        private static decimal[] emptyRosterVector;
+        private static RosterVector rosterVector;
+        private static RosterVector emptyRosterVector;
         private static Guid rosterAId;
         private static Guid rosterBId;
-        private static decimal[] linkedOption2Vector;
+        private static RosterVector linkedOption2Vector;
         private static string linkedOption2Text;
     }
 }
