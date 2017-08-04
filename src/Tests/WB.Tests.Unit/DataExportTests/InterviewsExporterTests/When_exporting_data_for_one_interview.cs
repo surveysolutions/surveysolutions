@@ -73,6 +73,7 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
             rowReader = new Mock<InterviewExportredDataRowReader>();
             interviewSummaries = new Mock<IReadSideRepositoryReader<InterviewSummary>>();
             transactionManagerProvider = new Mock<ITransactionManagerProvider>();
+            transactionManagerProvider.Setup(x => x.GetTransactionManager()).Returns(Mock.Of<ITransactionManager>());
 
             csvWriter
                 .Setup(x => x.WriteData(It.IsAny<string>(), It.IsAny<IEnumerable<string[]>>(), It.IsAny<string>()))
