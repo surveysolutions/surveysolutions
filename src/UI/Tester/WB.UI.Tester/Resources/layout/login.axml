@@ -60,7 +60,7 @@
               local:MvxBind="Text Password; 
                   Watermark Localization('PasswordHint'); 
                   BackgroundStyle ValidationStyleBackground(IsUserValid);
-                  FocusValueChanged SignInCommand; "/>
+                  OnDone LoginCommand"/>
           </android.support.design.widget.TextInputLayout>
 
           <LinearLayout
