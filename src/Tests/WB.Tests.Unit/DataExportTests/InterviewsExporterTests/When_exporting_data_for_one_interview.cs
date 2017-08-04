@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -45,6 +46,9 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
 
             Guid interviewId = Guid.Parse("11111111111111111111111111111111");
             var interviewKey = "11-11-11-11";
+
+            interviewSummaries.Setup(x => x.GetById(interviewId.FormatGuid()))
+                .Returns(Create.Entity.InterviewSummary(interviewId, key: interviewKey));
 
             rowReader.Setup(x => x.ReadExportDataForInterview(interviewId))
                 .Returns(new List<InterviewDataExportRecord>
