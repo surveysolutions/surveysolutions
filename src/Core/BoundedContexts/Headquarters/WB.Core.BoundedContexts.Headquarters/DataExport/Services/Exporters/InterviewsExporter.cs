@@ -8,12 +8,16 @@ using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 {
@@ -26,20 +30,29 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly ICsvWriter csvWriter;
         private readonly InterviewExportredDataRowReader rowReader;
+        private readonly IReadSideRepositoryReader<InterviewSummary> interviewSummaries;
+        private ITransactionManager TransactionManager => transactionManagerProvider.GetTransactionManager();
+        private readonly ITransactionManagerProvider transactionManagerProvider;
 
-        protected InterviewsExporter() {}
+        protected InterviewsExporter()
+        {
+        }
 
         public InterviewsExporter(IFileSystemAccessor fileSystemAccessor,
             ILogger logger,
             InterviewDataExportSettings interviewDataExportSettings, 
             ICsvWriter csvWriter,
-            InterviewExportredDataRowReader rowReader)
+            InterviewExportredDataRowReader rowReader,
+            IReadSideRepositoryReader<InterviewSummary> interviewSummaries, 
+            ITransactionManagerProvider plainTransactionManagerProvider)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.csvWriter = csvWriter;
             this.rowReader = rowReader;
+            this.interviewSummaries = interviewSummaries;
+            this.transactionManagerProvider = plainTransactionManagerProvider;
         }
 
         public virtual void Export(QuestionnaireExportStructure questionnaireExportStructure, List<Guid> interviewIdsToExport, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
@@ -194,6 +207,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
         private InterviewExportedDataRecord CreateInterviewExportedData(InterviewDataExportView interviewDataExportView, Guid interviewId)
         {
+            var interviewKey = this.TransactionManager.ExecuteInQueryTransaction(() => interviewSummaries.GetById(interviewId).Key);
+            var interviewKeyIndex = Array.FindIndex(ServiceColumns.SystemVariables, x => x.VariableType == ServiceVariableType.InterviewKey); 
             var interviewData = new Dictionary<string, string[]>(); // file name, array of rows
 
             var stringSeparator = ExportFileSettings.DataFileSeparator.ToString();
@@ -211,7 +226,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                         parametersToConcatenate.AddRange(answer.Select(itemValue => string.IsNullOrEmpty(itemValue) ? "" : itemValue));
                     }
 
-                    parametersToConcatenate.AddRange(interviewDataExportRecord.SystemVariableValues);
+                    var systemVariableValues =new List<string>(interviewDataExportRecord.SystemVariableValues);
+                    if (systemVariableValues.Count > 0) // main file?
+                    {
+                        if (systemVariableValues.Count < interviewKeyIndex+1)
+                            systemVariableValues.Add(interviewKey);
+                        if (string.IsNullOrEmpty(systemVariableValues[interviewKeyIndex]))
+                            systemVariableValues[interviewKeyIndex] = interviewKey;
+                    }
+
+                    parametersToConcatenate.AddRange(systemVariableValues);
                     parametersToConcatenate.AddRange(interviewDataExportRecord.ParentRecordIds);
 
                     recordsByLevel.Add(string.Join(stringSeparator,
