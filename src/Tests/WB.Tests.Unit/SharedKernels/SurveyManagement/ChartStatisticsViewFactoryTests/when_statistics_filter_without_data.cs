@@ -61,7 +61,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
         public void Because() => view = chartStatisticsViewFactory.Load(input);
 
         [Test]
-        public void should_have_8_lines() => view.Lines.Length.ShouldEqual(8);
+        public void should_have_7_lines() => view.Lines.Length.ShouldEqual(7);
 
         [Test]
         public void should_each_line_has_2_days_inside() => view.Lines.ShouldEachConformTo(line => line.Length == 2);
