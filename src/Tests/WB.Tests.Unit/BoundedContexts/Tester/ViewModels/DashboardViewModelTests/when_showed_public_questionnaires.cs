@@ -6,17 +6,18 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
 using WB.Tests.Abc.Storage;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
 {
     internal class when_showed_public_questionnaires : DashboardViewModelTestContext
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void Establish()
         {
             var designerApiService = Mock.Of<IDesignerApiService>(
                 _ => _.GetQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(Questionnaires));
@@ -26,13 +27,15 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             viewModel = CreateDashboardViewModel(questionnaireListStorage: storageAccessor,
                 designerApiService: designerApiService);
             viewModel.Load();
-        };
 
-        Because of = () => viewModel.ShowPublicQuestionnairesCommand.Execute();
+            Because();
+        }
 
-        It should_set_IsPublicShowed_to_true = () => viewModel.IsPublicShowed.ShouldBeTrue();
-        It should_Questionnaires_have_3_questionnaires = () => viewModel.Questionnaires.Count.ShouldEqual(3);
-        It should_contains_only_public_questionnaires = () => viewModel.Questionnaires.All(_ => _.IsPublic).ShouldBeTrue();
+        public void Because() => viewModel.ShowPublicQuestionnairesCommand.Execute();
+
+        [Test] public void should_set_IsPublicShowed_to_true () => viewModel.IsPublicShowed.ShouldBeTrue();
+        [Test] public void should_Questionnaires_have_3_questionnaires () => viewModel.Questionnaires.Count.ShouldEqual(3);
+        [Test] public void should_contains_only_public_questionnaires () => viewModel.Questionnaires.All(_ => _.IsPublic).ShouldBeTrue();
 
         private static DashboardViewModel viewModel;
 
