@@ -184,7 +184,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.UnhandleDialog();
 
-            await this.SendAnswerAsync();
+            if (this.QuestionState.Enablement.Enabled)
+                await this.SendAnswerAsync();
         }
 
         private void UnhandleDialog()
