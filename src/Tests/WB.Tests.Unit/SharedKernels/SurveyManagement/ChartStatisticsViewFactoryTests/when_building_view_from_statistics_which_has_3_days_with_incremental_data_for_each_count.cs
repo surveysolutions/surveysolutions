@@ -45,8 +45,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
         public void Because() => view = chartStatisticsViewFactory.Load(input);
 
         [Test]
-        public void should_return_8_lines_the_same_as_statuses_count() =>
-            view.Lines.Length.ShouldEqual(8);
+        public void should_return_7_lines_the_same_as_statuses_count() =>
+            view.Lines.Length.ShouldEqual(7);
 
         [Test]
         public void should_set_1st_point_horizontal_coord_of_all_lines_equal_to_2014_08_20() =>
