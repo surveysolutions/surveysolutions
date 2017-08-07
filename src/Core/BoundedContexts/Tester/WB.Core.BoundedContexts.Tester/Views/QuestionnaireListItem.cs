@@ -13,5 +13,6 @@ namespace WB.Core.BoundedContexts.Tester.Views
         public bool IsPublic { get; set; }
         public string OwnerName { get; set; }
         public bool IsShared { get; set; }
+        public bool IsOwner { get; set; }
     }
 }
