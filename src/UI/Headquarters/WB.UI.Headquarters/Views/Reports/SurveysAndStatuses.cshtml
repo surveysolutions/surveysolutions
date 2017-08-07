@@ -43,11 +43,7 @@
                         render: function(data, type, row) {
                             return getLinkToInterviews(model, data, row, '@InterviewStatus.InterviewerAssigned', model.Url.query['responsible']);
                         }
-                    }, {
-                        render: function(data, type, row) {
-                            return getLinkToInterviews(model, data, row, '@InterviewStatus.Restarted', model.Url.query['responsible']);
-                        }
-                    }, {
+                    },  {
                         render: function(data, type, row) {
                             return getLinkToInterviews(model, data, row, '@InterviewStatus.Completed', model.Url.query['responsible']);
                         }
@@ -134,7 +130,6 @@
                             <th class="without-break title-row changed-recently" data-class="without-break title-row changed-recently" data-name="QuestionnaireTitle" data-data="questionnaireTitle">@Reports.SurveyName</th>
                             <th data-class="type-numeric" data-name="SupervisorAssignedCount" data-data="supervisorAssignedCount">@Reports.SupervisorAssigned</th>
                             <th data-class="type-numeric" data-name="InterviewerAssignedCount" data-data="interviewerAssignedCount">@Reports.InterviewerAssigned</th>
-                            <th data-class="type-numeric" data-name="RestartedCount" data-data="restartedCount">@Reports.Restarted</th>
                             <th data-class="type-numeric" data-name="CompletedCount" data-data="completedCount">@Reports.Completed</th>
                             <th data-class="type-numeric" data-name="RejectedBySupervisorCount" data-data="rejectedBySupervisorCount">@Reports.RejectedBySupervisor</th>
                             <th data-class="type-numeric" data-name="ApprovedBySupervisorCount" data-data="approvedBySupervisorCount">@Reports.ApprovedBySupervisor</th>
