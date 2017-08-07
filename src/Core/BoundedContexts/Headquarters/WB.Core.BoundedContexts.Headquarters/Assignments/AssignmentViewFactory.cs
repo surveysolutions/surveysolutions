@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         CreatedAtUtc = x.CreatedAtUtc,
                         ResponsibleId = x.ResponsibleId,
                         UpdatedAtUtc = x.UpdatedAtUtc,
-                        Quantity = x.Quantity,
+                        Quantity = x.Quantity ?? -1,
                         InterviewsCount = x.InterviewSummaries.Count(s => !s.IsDeleted),
                         Id = x.Id,
                         Archived = x.Archived,
