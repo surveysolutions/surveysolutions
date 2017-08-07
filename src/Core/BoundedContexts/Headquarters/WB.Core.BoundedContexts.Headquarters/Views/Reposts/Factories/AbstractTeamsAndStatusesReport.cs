@@ -73,7 +73,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             return projectionList
                 .Add(this.CountByStatus(InterviewStatus.SupervisorAssigned), "SupervisorAssignedCount")
                 .Add(this.CountByStatus(InterviewStatus.InterviewerAssigned), "InterviewerAssignedCount")
-                .Add(this.CountByStatus(InterviewStatus.Restarted), "RestartedCount")
                 .Add(this.CountByStatus(InterviewStatus.Completed), "CompletedCount")
                 .Add(this.CountByStatus(InterviewStatus.ApprovedBySupervisor), "ApprovedBySupervisorCount")
                 .Add(this.CountByStatus(InterviewStatus.RejectedBySupervisor), "RejectedBySupervisorCount")

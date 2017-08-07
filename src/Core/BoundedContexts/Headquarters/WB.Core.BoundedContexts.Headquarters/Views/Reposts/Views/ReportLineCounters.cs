@@ -6,7 +6,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views
         
         public int SupervisorAssignedCount { get; set; }
         public int InterviewerAssignedCount { get; set; }
-        public int RestartedCount { get; set; }
         public int CompletedCount { get; set; }
         public int ApprovedBySupervisorCount { get; set; }
         public int RejectedBySupervisorCount { get; set; }
