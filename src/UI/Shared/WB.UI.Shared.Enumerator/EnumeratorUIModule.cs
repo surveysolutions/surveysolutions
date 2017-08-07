@@ -68,6 +68,7 @@ namespace WB.UI.Shared.Enumerator
 
             registry.Bind<InterviewEntitiesListFragment>();
             registry.Bind<CompleteInterviewFragment>();
+            registry.Bind<CoverInterviewFragment>();
         }
     }
 }

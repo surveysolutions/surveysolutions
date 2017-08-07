@@ -1702,6 +1702,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new InterviewRestarted(userId, restartTime, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restarted, comment));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment));
         }
 
         public void Approve(Guid userId, string comment, DateTime approveTime)
