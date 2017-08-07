@@ -128,6 +128,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
 
             var interviewerInterviewsFactory =
                 this.CreateInterviewerInterviewsFactory(
+                    interviewData: Create.Entity.InterviewData(status: InterviewStatus.Completed),
                     synchronizationDtoFactory: interviewSynchronizationDtoFactoryMock.Object,
                     statusHistory:
                         new[]
@@ -180,7 +181,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
             IInterviewPackagesService incomingSyncPackagesQueue = null,
             params CommentedStatusHistroyView[] statusHistory)
         {
-            interviewData = interviewData ?? Create.Entity.InterviewData();
+            interviewData = interviewData ?? Create.Entity.InterviewData(status: InterviewStatus.InterviewerAssigned);
             var changeStatusView = new ChangeStatusView() {StatusHistory = statusHistory.ToList()};
             return
                 new InterviewerInterviewsFactory(
