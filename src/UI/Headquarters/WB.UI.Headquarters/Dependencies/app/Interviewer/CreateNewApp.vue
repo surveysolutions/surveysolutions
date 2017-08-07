@@ -104,7 +104,7 @@ export default {
                     searchable: false,
                     render(data) {
                         var date = moment.utc(data);
-                        return date.local().format('lll');
+                        return date.local().format(self.config.dateFormat);
                     }
                 },
                 {
@@ -114,7 +114,7 @@ export default {
                     searchable: false,
                     render: function (data) {
                         var date = moment.utc(data);
-                        return date.local().format('lll');
+                        return date.local().format(self.config.dateFormat);
                     }
                 }]
 

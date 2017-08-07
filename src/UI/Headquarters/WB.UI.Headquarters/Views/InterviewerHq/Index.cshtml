@@ -13,6 +13,7 @@
 <div id="vueApp" configuration="@JsonConvert.SerializeObject(
 new {
     title = @MainMenu.CreateNew,
+    dateFormat = "MMM d, YYYY HH:mm",
     assignmentsEndpoint = Url.Content(@"~/api/Assignments"),
     interviewerHqEndpoint = Url.Content(@"~/interviewerHq"),
     authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>(),
