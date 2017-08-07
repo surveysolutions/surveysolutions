@@ -85,13 +85,7 @@
                             searchable: false,
                             title: "@Assignments.InterviewsCount",
                             render: function(data, type, row) {
-                                var result = "<a href='" +
-                                    $interviewsUrl +
-                                    "?assignmentId=" +
-                                    row.id +
-                                    "'>" +
-                                    (data == null ? "@Assignments.Unlimited" : data) +
-                                    "</a>";
+                                var result = "<a href='" + $interviewsUrl + "?assignmentId=" + row.id + "'>" + data + "</a>";
                                 return result;
                             }
                         },
@@ -297,9 +291,17 @@
                     var self = this;
                     this.$validator.validateAll().then(function() {
                         var patchQuantityUrl = assignmentsEndpoint + "/" + self.editedRowId + "/SetQuantity";
-                        self.$http.patch(patchQuantityUrl,
-                                {
-                                    quantity: self.editedQuantity
+                        var targetQuantity = null;
+                        if (self.editedQuantity == null || self.editedQuantity === "") {
+                            targetQuantity = 1;
+                        } else if (self.editedQuantity == -1) {
+                            targetQuantity = null;
+                        } else {
+                            targetQuantity = self.editedQuantity;
+                        }
+
+                        self.$http.patch(patchQuantityUrl, {
+                                    quantity: targetQuantity
                                 })
                             .then(function() {
                                 $('#editQuantityModal').modal('hide');
@@ -495,12 +497,13 @@
                                 <input type="text" class="form-control"
                                        v-model.trim="editedQuantity"
                                        name="editedQuantity"
-                                       v-validate="'numeric|min_value:1'"
+                                       number
+                                       v-validate="'regex:^-?([0-9]+)$|min_value:-1'"
                                        maxlength="9"
                                        autocomplete="off"
                                        v-on:keyup.enter="updateQuantity"
                                        id="newQuantity"
-                                       placeholder="@Assignments.Unlimited">
+                                       placeholder="1">
                             </div>
                         </form>
                         <div class="modal-footer">
