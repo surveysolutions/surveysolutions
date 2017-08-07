@@ -22,7 +22,8 @@
                       local:MvxBind="HideKeyboardOnClick .; 
                                        Click RequestAnswerCommand; 
                                        Text Localization('Interview_Questions_Multimedia_TapToTakePhoto');
-                                       BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
+                                       BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));
+                                       Tag Format('Answer_{0}', Identity)" />
     </LinearLayout>
   </LinearLayout>
 </LinearLayout>
