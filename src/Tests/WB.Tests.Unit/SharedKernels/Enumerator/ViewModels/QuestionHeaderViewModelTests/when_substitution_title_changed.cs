@@ -5,7 +5,6 @@ using Ncqrs.Eventing;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
 using It = Machine.Specifications.It;
@@ -20,14 +19,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
 
             var substitutedVariable = "var1";
 
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(new QuestionnaireIdentity(Guid.NewGuid(), 1),
-                    Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
-                    {
-                        Create.Entity.TextQuestion(questionWithSubstitutionIdentity.Id, text: $"Old title %{substitutedVariable}%"),
-                        Create.Entity.TextQuestion(variable: substitutedVariable, questionId: substitutedQuestionId)
-                    }));
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.TextQuestion(questionWithSubstitutionIdentity.Id, text: $"Old title %{substitutedVariable}%"),
+                Create.Entity.TextQuestion(variable: substitutedVariable, questionId: substitutedQuestionId)
+            );
 
-            statefullInterview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaireRepository);
+            statefullInterview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
             statefullInterview.AnswerTextQuestion(interviewerId, substitutedQuestionId, RosterVector.Empty, DateTime.UtcNow, "new value");
 
             var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(statefullInterview);
@@ -35,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             ILiteEventRegistry registry = Create.Service.LiteEventRegistry();
             liteEventBus = Create.Service.LiteEventBus(registry);
 
-            viewModel = CreateViewModel(questionnaireRepository, interviewRepository, registry);
+            viewModel = CreateViewModel(Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire), interviewRepository, registry);
             viewModel.Init("interview", questionWithSubstitutionIdentity);
         };
 

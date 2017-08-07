@@ -25,17 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             IQuestionnaireStorage questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, 
                 _ => _.GetOptionsForQuestion(questionId, null, string.Empty) == options);
 
-            var expressionState = new Mock<ILatestInterviewExpressionState>();
-            expressionState.Setup(_ => _.Clone()).Returns(expressionState.Object);
-            expressionState.Setup(_ => _.FilterOptionsForQuestion(questionIdentity, options)).Returns(options);
-            expressionState.Setup(_ => _.GetStructuralChanges()).Returns(new StructuralChanges());
-
-            var interviewExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(
-                provider => provider.GetExpressionState(questionnaireId, Moq.It.IsAny<long>()) == expressionState.Object);
-
-            statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, 
-                questionnaireRepository: questionnaireRepository , 
-                interviewExpressionStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
+            statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>

@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Moq;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
+namespace WB.Tests.Integration.InterviewTests.Rosters
 {
-    internal class when_restore_interview_with_nested_rosters : InterviewTestsContext
+    internal class when_restore_interview_with_nested_rosters : in_standalone_app_domain
     {
         Establish context = () =>
         {
@@ -26,44 +26,21 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             nestedRosterGroupId = Guid.Parse("22222222222222222222222222222222");
 
-            int callOrder = 0;
-            interviewExpressionStateMock = new Mock<ILatestInterviewExpressionState>();
-            interviewExpressionStateMock.Setup(
-                x => x.AddRoster(Moq.It.IsAny<Guid>(), Moq.It.IsAny<decimal[]>(), Moq.It.IsAny<decimal>(), Moq.It.IsAny<int?>()))
-                .Callback<Guid, decimal[], decimal, int?>(
-                    (id, vector, rosterId, sort) =>
-                    {
-                        rosterAddIndex[id] = callOrder;
-                        callOrder++;
-                    });
-            interviewExpressionStateMock.Setup(x => x.Clone()).Returns(interviewExpressionStateMock.Object);
-            var structuralChanges = new StructuralChanges();
-            interviewExpressionStateMock.Setup(x => x.GetStructuralChanges()).Returns(structuralChanges);
-
-            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
-            {
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.Roster(rosterGroupId, fixedRosterTitles: new [] { Create.Entity.FixedTitle(1, "level 1")}, children: new IComposite[]
                 {
                     Create.Entity.Roster(nestedRosterGroupId, fixedRosterTitles: new [] { Create.Entity.FixedTitle(1, "level 2")})
                 })
-            }));
+            );
 
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
-
-            var interviewExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(_
-                => _.GetExpressionState(questionnaireId, Moq.It.IsAny<long>()) == interviewExpressionStateMock.Object);
-
-            interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, 
-                questionnaireRepository: questionnaireRepository,
-                interviewExpressionStatePrototypeProvider: interviewExpressionStatePrototypeProvider,
-                shouldBeInitialized: false);
+            interview = SetupStatefullInterview(questionnaire);
 
             interviewSynchronizationDto =
                 Create.Entity.InterviewSynchronizationDto(interviewId: interview.EventSourceId,
                     status: InterviewStatus.RejectedBySupervisor,
                     userId: userId,
                     questionnaireId: questionnaireId,
-                    questionnaireVersion: questionnaire.Version,
+                    questionnaireVersion: 1,
                     rosterGroupInstances:
                         new Dictionary<InterviewItemId, RosterSynchronizationDto[]>
                         {
@@ -82,8 +59,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                                 }
                             }
                         },
-                    wasCompleted: true
-                    );
+                    wasCompleted: true);
 
             eventContext = new EventContext();
         };
@@ -100,17 +76,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         It should_raise_InterviewSynchronized_event = () =>
             eventContext.ShouldContainEvent<InterviewSynchronized>(@event => @event.InterviewData==interviewSynchronizationDto);
 
-        It should_add_first_roster_to_expression_state = () =>
-            interviewExpressionStateMock.Verify(x => x.AddRoster(rosterGroupId, new decimal[0], 1, 0), Times.Once);
-
-        It should_add_nested_roster_to_expression_state = () =>
-            interviewExpressionStateMock.Verify(x => x.AddRoster(nestedRosterGroupId, new decimal[]{1}, 1, 0), Times.Once);
-
-        It should_add_parent_roster_first = () =>
-            rosterAddIndex[rosterGroupId].ShouldEqual(0);
-
-        It should_add_nested_roster_second = () =>
-           rosterAddIndex[nestedRosterGroupId].ShouldEqual(1);
+        It should_restore_2_rosters_from_the_sync_package = () => 
+            interview.GetAllNodes().Count(x => x is InterviewTreeRoster).ShouldEqual(2);
 
         private static EventContext eventContext;
         private static StatefulInterview interview;
@@ -118,7 +85,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid rosterGroupId;
         private static Guid nestedRosterGroupId;
         private static InterviewSynchronizationDto interviewSynchronizationDto;
-        private static Dictionary<Guid, int> rosterAddIndex = new Dictionary<Guid, int>(); 
         private static Mock<ILatestInterviewExpressionState> interviewExpressionStateMock;
     }
 }
