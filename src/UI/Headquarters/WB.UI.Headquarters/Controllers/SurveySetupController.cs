@@ -431,7 +431,7 @@ namespace WB.UI.Headquarters.Controllers
                         interviewImportProcessId: model.Id,
                         headquartersId: headquartersId,
                         mode: model.AssignmentImportType,
-                        allowAssignments: questionnaireInfo.AllowAssignments);
+                        shouldSkipInterviewCreation: questionnaireInfo.AllowAssignments);
                 }
                 finally
                 {
