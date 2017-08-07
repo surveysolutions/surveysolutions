@@ -20,15 +20,6 @@ module.exports = merge(baseWebpackConfig, {
     devtool: '#cheap-module-eval-source-map',
     // devtool: '#source-map',
     plugins: [
-        new webpack.DefinePlugin({
-            'process.env': config.env
-        }),
-         new webpack.ProvidePlugin({
-            $: 'jquery',
-            jQuery: 'jquery',
-            "window.jQuery": 'jquery',
-            "window.$": 'jquery'
-        }),
         // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin(),

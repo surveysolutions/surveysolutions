@@ -1,6 +1,7 @@
 var path = require('path')
 var utils = require('./utils')
 var config = require('./config').current()
+var webpack = require('webpack')
 var vueLoaderConfig = require('./vue-loader.conf')
 
 var projectRoot = path.resolve(__dirname, '../')
@@ -11,8 +12,8 @@ function resolve(dir) {
 
 module.exports = {
     entry:
-        ["babel-polyfill",
-         './src/main.js' ]
+    ["babel-polyfill",
+        './src/main.js']
     ,
     output: {
         path: config.assetsRoot,
@@ -31,6 +32,17 @@ module.exports = {
             'components': resolve('src/components')
         }
     },
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env': env
+        }),
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery',
+            "window.jQuery": 'jquery',
+            "window.$": 'jquery'
+        }),
+    ],
     module: {
         rules: [
             {
