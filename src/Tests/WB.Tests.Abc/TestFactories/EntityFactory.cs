@@ -740,8 +740,9 @@ namespace WB.Tests.Abc.TestFactories
         {
             if (document != null)
             {
-                //document.IsUsingExpressionStorage = true;
-                //document.ExpressionsPlayOrder = document.ExpressionsPlayOrder ?? Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(document.AsReadOnly());
+                document.IsUsingExpressionStorage = true;
+                document.ExpressionsPlayOrder = document.ExpressionsPlayOrder ?? Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(
+                    document.AsReadOnly().AssignMissingVariables());
             }
             return new PlainQuestionnaire(document, version, translation);
         }

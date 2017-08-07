@@ -571,7 +571,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_single_linked_to_List_question_and_answer_is_specified.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_multi_linked_to_List_question_and_answer_is_specified.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_applying_VariablesChanged_event_for_deleted_variable.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_featured_questions.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_null_interviewkey.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_and_int_question_triggers_roster_and_answer_on_roster_child_single_option_question_is_set.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_and_int_question_triggers_roster_and_answer_on_roster_child_text_question_is_set.cs" />
@@ -618,7 +617,6 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_answering_prefilled_timestamp_question.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_enabled_subgroups_and_same_roster_instance_was_added_twice.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_invalid_interview_entities_having_hidden_and_supervisors_questions.cs" />
-    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_question_option_by_value.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\LinkedQuestions\when_answering_linked_source_question_on_roster_level2_and_linked_question_is_on_level3.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\LinkedQuestions\when_answering_linked_source_question_on_roster_level1_and_linked_question_is_on_level0.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\LinkedQuestions\when_answering_linked_source_question_on_roster_level1_and_linked_question_is_on_level1.cs" />
@@ -690,7 +688,6 @@
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_all_interviews_containing_tags_in_prefield.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\InterviewEntityViewFactoryTestsContext.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Substitutions\when_group_title_has_substitution.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\Substitutions\when_validation_message_contains_substitution.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_completing_interview_with_substitutions_changed.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_invalid_interview_entities_recursively.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_creating_interview_export_view_by_interview_with_1_answered_timestamp_question.cs" />
@@ -814,7 +811,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_interviewer_provided.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_hqreject_interview.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_flag_question_received_by_interviewer.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_restore_interview_with_disabled_static_text.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_set_flag_question_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_two_nested_rosters_linked_to_the_same_list_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_unapprove_by_headquarters.cs" />
@@ -1402,7 +1398,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_and_questionnaire_has_group_with_custom_enablement_condition_and_group_is_propagatable.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_and_questionnaire_has_question_with_custom_enablement_condition_and_question_has_no_propagatable_ancestor_groups.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_and_questionnaire_has_question_with_custom_enablement_condition_and_question_has_propagatable_ancestor_group.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_no_featured_questions_but_with_variable.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_prefilled_questions_and_created_info_and_status.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_with_real_question.cs" />
@@ -1420,7 +1415,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_question_with_custom_enablement_condition.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_question_with_validation_expression.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_recently_enabled_question_with_validation_expression.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_restore_interview_with_nested_rosters.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_roster_row_with_nested_roster_is_removed.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_unchecking_previously_checked_2nd_and_4th_options_in_multioption_question_used_as_roster_size_and_roster_level_of_question_and_rost___.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainInterviewFileStorageTests\ImageQuestionFileStorageTestContext.cs" />
