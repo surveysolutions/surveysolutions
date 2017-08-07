@@ -1,9 +1,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
@@ -14,14 +14,14 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
-using It = Machine.Specifications.It;
 using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
 {
     internal class when_load_questionnaire : DashboardViewModelTestContext
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void Establish()
         {
             mockOfDesignerApiService.Setup(_ => _.GetQuestionnaireAsync(selectedQuestionnaire.Id, Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(),
                     Moq.It.IsAny<CancellationToken>())).Returns(Task.FromResult(downloadedQuestionnaire));
@@ -31,24 +31,30 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 questionnaireImportService: mockOfQuestionnaireImportService.Object,
                 viewModelNavigationService: mockOfViewModelNavigationService.Object
                 );
-        };
 
-        Because of = () => viewModel.LoadQuestionnaireCommand.Execute(selectedQuestionnaire);
+            Because();
+        }
 
-        It should_be_downloaded_questionnaire = () => 
+        public void Because() => viewModel.LoadQuestionnaireCommand.Execute(selectedQuestionnaire);
+
+        [Test]
+        public void should_be_downloaded_questionnaire() => 
             mockOfDesignerApiService.Verify(
                 _ => _.GetQuestionnaireAsync(selectedQuestionnaire.Id, Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<CancellationToken>()), 
                 Times.Once);
 
-        It should_be_questionnaire_stored_to_local_storage = () => 
+        [Test]
+        public void should_be_questionnaire_stored_to_local_storage() => 
             mockOfQuestionnaireImportService.Verify(
                 _ => _.ImportQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), downloadedQuestionnaire.Document, downloadedQuestionnaire.Assembly, new TranslationDto[0]), 
                 Times.Once);
 
-        It should_be_executed_CreateInterviewCommand = () => 
+        [Test]
+        public void should_be_executed_CreateInterviewCommand() => 
             mockOfCommandService.Verify(_ => _.ExecuteAsync(Moq.It.IsAny<CreateInterview>(), null, Moq.It.IsAny<CancellationToken>()), Times.Once);
 
-        It should_be_navigated_to_prefilled_questions_view_model = () => 
+        [Test]
+        public void should_be_navigated_to_prefilled_questions_view_model() => 
             mockOfViewModelNavigationService.Verify(_ => _.NavigateToPrefilledQuestions(Moq.It.IsAny<string>()), Times.Once);
         
         private static DashboardViewModel viewModel;
