@@ -149,7 +149,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         }
 
         public void ImportAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, Guid? responsibleId, Guid headquartersId, 
-            AssignmentImportType mode, bool allowAssignments)
+            AssignmentImportType mode, bool shouldSkipInterviewCreation)
         {
             AssignmentImportData[] assignmentImportData = this.interviewImportDataParsingService.GetAssignmentsData(interviewImportProcessId, questionnaireIdentity, mode);
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
@@ -182,8 +182,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 // need save an assignment first to get a real assignmentId
                 this.PlainTransactionManager.ExecuteInPlainTransaction(() => this.assignmentPlainStorageAccessor.Store(assignment, null));
 
-                bool isSupportAssignments = allowAssignments;
-                if (!isSupportAssignments)
+                if (!shouldSkipInterviewCreation)
                 {
                     this.transactionManagerProvider.GetTransactionManager().ExecuteInQueryTransaction(() => this.PlainTransactionManager.ExecuteInPlainTransaction(() => this.commandService.Execute(new CreateInterview(Guid.NewGuid(), headquartersId, questionnaireIdentity, supervisorId: responsibleSupervisorId, interviewerId: responsibleInterviewerId, answersTime: DateTime.UtcNow, answers: answers, interviewKey: this.interviewKeyGenerator.Get(), assignmentId: assignment.Id))));
                 }
