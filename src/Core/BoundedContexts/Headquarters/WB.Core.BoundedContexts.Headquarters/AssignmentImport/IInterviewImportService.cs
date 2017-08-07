@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
     {
         AssignmentImportStatus Status { get; }
 
-        void ImportAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, Guid? supervisorId, Guid headquartersId, AssignmentImportType mode, bool allowAssignments);
+        void ImportAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, Guid? supervisorId, Guid headquartersId, AssignmentImportType mode, bool shouldSkipInterviewCreation);
 
         void VerifyAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, string fileName);
 
