@@ -82,9 +82,10 @@ namespace WB.Tests.Abc.TestFactories
         public StatefulInterview StatefulInterview(Guid? questionnaireId = null,
             Guid? userId = null,
             QuestionnaireDocument questionnaire = null, 
-            bool shouldBeInitialized = true)
+            bool shouldBeInitialized = true,
+            Action<Mock<IInterviewLevel>> setupLevel = null)
         {
-            questionnaireId = questionnaireId ?? Guid.NewGuid();
+            questionnaireId = questionnaireId ?? questionnaire?.PublicKey ?? Guid.NewGuid();
             if (questionnaire != null)
             {
                 questionnaire.IsUsingExpressionStorage = true;
@@ -92,11 +93,10 @@ namespace WB.Tests.Abc.TestFactories
             }
 
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
-            //Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire)
 
             var statefulInterview = new StatefulInterview(
                 questionnaireRepository,
-                CreateDefaultInterviewExpressionStateProvider(),
+                CreateDefaultInterviewExpressionStateProvider(setupLevel),
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder());
 
@@ -115,16 +115,14 @@ namespace WB.Tests.Abc.TestFactories
             long? questionnaireVersion = null,
             Guid? userId = null,
             IQuestionnaireStorage questionnaireRepository = null,
-            IInterviewExpressionStatePrototypeProvider interviewExpressionStatePrototypeProvider = null,
-            bool shouldBeInitialized = true)
+            bool shouldBeInitialized = true,
+            Action<Mock<IInterviewLevel>> setupLevel = null)
         {
             questionnaireId = questionnaireId ?? Guid.NewGuid();
 
-            var defaultExpressionStatePrototypeProvider = CreateDefaultInterviewExpressionStateProvider();
-
             var statefulInterview = new StatefulInterview(
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                interviewExpressionStatePrototypeProvider ?? defaultExpressionStatePrototypeProvider,
+                CreateDefaultInterviewExpressionStateProvider(setupLevel),
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder());
 
@@ -138,11 +136,12 @@ namespace WB.Tests.Abc.TestFactories
             return statefulInterview;
         }
 
-        private static IInterviewExpressionStatePrototypeProvider CreateDefaultInterviewExpressionStateProvider()
+        private static IInterviewExpressionStatePrototypeProvider CreateDefaultInterviewExpressionStateProvider(Action<Mock<IInterviewLevel>> setupLevel = null)
         {
             //Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
             var expressionStorage = new Mock<IInterviewExpressionStorage>();
             var levelMock = new Mock<IInterviewLevel>();
+            setupLevel?.Invoke(levelMock);
             expressionStorage.Setup(x => x.GetLevel(It.IsAny<Identity>())).Returns(levelMock.Object);
 
             var expressionState = Stub<ILatestInterviewExpressionState>.WithNotEmptyValues;
