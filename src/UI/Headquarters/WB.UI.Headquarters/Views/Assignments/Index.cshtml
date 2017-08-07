@@ -18,7 +18,10 @@
 
     <script type="text/javascript">
 
-        var locale = window.navigator.userLanguage || window.navigator.language;
+        var navigator = window.navigator;
+        var locale = navigator.languages
+            ? navigator.languages[0]
+            : (navigator.language || navigator.userLanguage)
         moment.locale(locale);
 
         var assignmentsEndpoint = "@Url.Content("~/api/Assignments")";
