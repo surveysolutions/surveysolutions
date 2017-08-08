@@ -10,7 +10,7 @@ namespace WB.Tests.Abc.Storage
     {
         private readonly Dictionary<object, T> entites;
 
-        public TestPlainStorage()
+        public TestPlainStorage() : this(null)
         {
 
         }
