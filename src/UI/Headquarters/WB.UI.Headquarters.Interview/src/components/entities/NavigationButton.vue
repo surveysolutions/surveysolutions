@@ -1,6 +1,6 @@
 <template>
     <div class="action-container" v-if="$me">
-        <a class="btn btn-lg" :class="css" @click="navigate"> 
+        <a class="btn btn-lg" :class="css" @click="navigate">
             <span v-html="buttonTitle"></span>
         </a>
     </div>
@@ -37,10 +37,10 @@
                 if(this.$me == null || this.$me.title == null)
                     return "";
 
-                var title = this.$me.title.toUpperCase();
+                var title = this.$me.title;
 
                 if(this.$me.rosterTitle != null)
-                    title +=" - <i>" +  this.$me.rosterTitle.toUpperCase() + "</i>";
+                    title +=" - <i>" +  this.$me.rosterTitle + "</i>";
 
                 return title;
             }
