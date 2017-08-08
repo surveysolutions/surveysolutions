@@ -4,7 +4,7 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field" :class="{answered: $me.isAnswered}">
-                        <input ref="input" autocomplete="off" type="text" class="field-to-fill" :placeholder="'Enter text ' + userFriendlyMask" :value="$me.answer"
+                        <input ref="input" autocomplete="off" type="text" class="field-to-fill" :placeholder="'Enter text' + userFriendlyMask" :value="$me.answer"
                             v-blurOnEnterKey @blur="answerTextQuestion" v-mask="$me.mask" :data-mask-completed="$me.isAnswered" title="Enter text">
                             <wb-remove-answer />
                     </div>
@@ -24,7 +24,7 @@
             userFriendlyMask() {
                 if (this.$me.mask) {
                     const resultMask = this.$me.mask.replace(/\*/g, "_").replace(/\#/g, "_").replace(/\~/g, "_")
-                    return `(${resultMask})`
+                    return ` (${resultMask})`
                 }
 
                 return ""
