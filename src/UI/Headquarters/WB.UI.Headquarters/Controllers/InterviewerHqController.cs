@@ -69,7 +69,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult Rejected()
         {
-            return View("Interviews", NewModel(MenuItem.Rejected, InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters));
+            return View("Interviews", NewModel(MenuItem.Rejected, InterviewStatus.RejectedBySupervisor));
         }
 
         public ActionResult Completed()
