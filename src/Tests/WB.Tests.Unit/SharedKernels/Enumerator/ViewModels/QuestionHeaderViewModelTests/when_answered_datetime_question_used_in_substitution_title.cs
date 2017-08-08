@@ -2,10 +2,7 @@
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewModelTests
@@ -27,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
         Because of = () => statefullInterview.AnswerDateTimeQuestion(Guid.NewGuid(), questionId, RosterVector.Empty, DateTime.UtcNow, new DateTime(2000, 10, 10));
 
         It should_put_time_opening_tag_to_browser_ready_title_html = () => statefullInterview.GetBrowserReadyTitleHtml(staticTextIdentity)
-            .ShouldContain("<time datetime=");
+            .ShouldContain("<time date=");
 
         It should_put_time_closing_tag_to_browser_ready_title_html = () => statefullInterview.GetBrowserReadyTitleHtml(staticTextIdentity)
             .ShouldContain("</time>");
