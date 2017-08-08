@@ -1,6 +1,6 @@
 <template>
     <div class="action-container" v-if="$me">
-        <a class="btn btn-lg" :class="css" @click="navigate"><span>{{ $me.title}}</span></a>
+        <a class="btn btn-lg" :class="css" @click="navigate"><span>{{ buttonTitle }}</span></a>
     </div>
 </template>
 <script lang="js">
@@ -30,6 +30,12 @@
             },
             isParentButton() {
                 return this.$me.type == ButtonType.Parent
+            },
+            buttonTitle() {
+                if(this.$me != null && this.$me.title != null)
+                    return this.$me.title.toUpperCase();
+
+                return "";
             }
         },
         watch: {
