@@ -27,7 +27,7 @@
             <div class="container-info">
                 <h4 class="gray-uppercase">{{commentsTitle}}</h4>
                 <ul class="list-unstyled marked-questions">
-                    <li v-for="commentedQuestion in commentedQuestions">
+                    <li v-for="commentedQuestion in commentedQuestions" :key="commentedQuestion.id">
                         <a href="#" @click="navigateTo(commentedQuestion)">{{ commentedQuestion.title }}</a>
                     </li>
                 </ul>
@@ -35,7 +35,7 @@
         </div>
 
         <template v-for="question in questions">
-            <div class="wrapper-info" v-if="question.isReadonly">
+            <div class="wrapper-info" v-if="question.isReadonly" :key="question.id">
                 <div class="container-info" :id="question.identity">
                     <h5 v-html="question.title"></h5>
                     <p>
