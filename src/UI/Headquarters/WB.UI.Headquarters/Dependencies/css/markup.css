@@ -8846,7 +8846,8 @@ body > .ui-pnotify {
     position: fixed;
     left: 50% !important;
     top: 50% !important;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -51%);
+    -ms-transform: translate3d(-50%, -51%, 0);
     margin: 0; }
 
 @media only screen and (max-width: 680px) {
@@ -10384,7 +10385,8 @@ img#placeholder {
     border-width: 2px;
     border-color: #ccc;
     margin-left: 5px;
-    margin-right: 5px; }
+    margin-right: 5px;
+    padding: 0; }
 
 .start-web-interview .two-columns-form {
   font-size: 16px;
