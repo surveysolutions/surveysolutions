@@ -24,6 +24,7 @@ using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Utils;
 using CommonRes = Resources.Common;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
+using WB.UI.Headquarters.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -57,21 +58,25 @@ namespace WB.UI.Headquarters.Controllers
             this.keyGenerator = keyGenerator;
         }
 
+        [ActivePage(MenuItem.CreateNew)]
         public ActionResult CreateNew()
         {
             return View("Index", NewModel(MenuItem.CreateNew));
         }
 
+        [ActivePage(MenuItem.Started)]
         public ActionResult Started()
         {
             return View("Interviews", NewModel(MenuItem.Started, InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted));
         }
 
+        [ActivePage(MenuItem.Rejected)]
         public ActionResult Rejected()
         {
             return View("Interviews", NewModel(MenuItem.Rejected, InterviewStatus.RejectedBySupervisor));
         }
 
+        [ActivePage(MenuItem.Completed)]
         public ActionResult Completed()
         {
             return View("Interviews", NewModel(MenuItem.Completed, InterviewStatus.Completed));
