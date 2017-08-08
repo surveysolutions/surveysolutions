@@ -102,8 +102,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
                 if (shouldAddBrowserTags && question?.AsDateTime?.IsAnswered == true)
                 {
-                    var dateTime = question.AsDateTime.GetAnswer().Value;
-                    htmlReadyAnswer = $"<time datetime=\"{dateTime:o}\">{htmlReadyAnswer}</time>";
+                    var asDateTime = question.AsDateTime;
+                    var dateTime = asDateTime.GetAnswer().Value;
+                    if (asDateTime.IsTimestamp)
+                    {
+                        htmlReadyAnswer = $"<time datetime=\"{dateTime:s}Z\">{dateTime:g}</time>";
+                    }
+                    else
+                    {
+                        htmlReadyAnswer = $"<time date=\"{dateTime:yyyy-MM-dd}\">{dateTime:yyyy-MM-dd}</time>";
+                    }
                 }
 
                 textWithReplacedSubstitutions =

@@ -76,3 +76,8 @@ export const ButtonType = {
     Parent: 2,
     Complete: 3
 }
+
+export const DateFormats = {
+    dateTime: 'YYYY-MM-DD HH:mm:ss',
+    date: 'YYYY-MM-DD'
+}
