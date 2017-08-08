@@ -22,7 +22,7 @@ namespace WB.UI.Designer.Code
                 if (headquartersVersion == null || headquartersVersion < new Version(5, 22, 0))
                 {
                     assemblyName = "WB.Core.SharedKernel.Structures";
-                    typeName = serializedType.Name;
+                    typeName = serializedType.FullName;
 
                     return;
                 }
