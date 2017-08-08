@@ -2,7 +2,7 @@
     <wb-question :question="$me" :questionCssClassName="$me.ordered ? 'ordered-question' : 'multiselect-question'">
         <div class="question-unit">
             <div class="options-group" v-bind:class="{ 'dotted': noOptions }">
-                <div class="form-group" v-for="option in $me.options">
+                <div class="form-group" v-for="option in $me.options" :key="$me.id + '_' + option.value">
                     <input class="wb-checkbox" type="checkbox" :id="$me.id + '_' + option.value" :name="$me.id" :value="option.value" v-model="answer"
                         v-disabledWhenUnchecked="allAnswersGiven">
                         <label :for="$me.id + '_' + option.value">
