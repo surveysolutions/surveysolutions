@@ -3,8 +3,10 @@ using System.IO;
 using System.Net;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Newtonsoft.Json;
 using WB.Infrastructure.Native.Storage;
 
@@ -39,39 +41,57 @@ namespace WB.UI.Designer.Code
 
         public override Task<object> ReadFromStreamAsync(Type type, Stream readStream, System.Net.Http.HttpContent content, IFormatterLogger formatterLogger)
         {
-            return Task.FromResult(this.DeserializeFromStream(stream: readStream, type: type));
+            var headquartersVersion = GetHeadquartersVersion();
+            return Task.FromResult(this.DeserializeFromStream(stream: readStream, type: type, headquartersVersion: headquartersVersion));
         }
 
         public override Task WriteToStreamAsync(Type type, object value, Stream writeStream, System.Net.Http.HttpContent content, TransportContext transportContext)
         {
-            return Task.Run(() => this.SerializeToStream(value: value, type: type, stream: writeStream));
+            var headquartersVersion = GetHeadquartersVersion();
+            return Task.Run(() => this.SerializeToStream(value: value, type: type, stream: writeStream, headquartersVersion: headquartersVersion));
         }
 
-        private object DeserializeFromStream(Stream stream, Type type)
+        private object DeserializeFromStream(Stream stream, Type type, Version headquartersVersion)
         {
             using (var sr = new StreamReader(stream))
             using (var jsonTextReader = new JsonTextReader(sr))
             {
-                return JsonSerializer.Create(jsonSerializerSettings).Deserialize(jsonTextReader, type);
+                return JsonSerializer.Create(CreateJsonSerializerSettings(headquartersVersion)).Deserialize(jsonTextReader, type);
             }
         }
 
-        private void SerializeToStream(object value, Type type, Stream stream)
+        private void SerializeToStream(object value, Type type, Stream stream, Version headquartersVersion)
         {
             using (var writer = new StreamWriter(stream))
             using (var jsonWriter = new JsonTextWriter(writer))
             {
-                JsonSerializer.Create(jsonSerializerSettings).Serialize(jsonWriter, value, type);
+                JsonSerializer.Create(CreateJsonSerializerSettings(headquartersVersion)).Serialize(jsonWriter, value, type);
             }
         }
 
-        private static readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings
+        private Version GetHeadquartersVersion()
+        {
+            var userAgent = HttpContext.Current.Request.UserAgent;
+            var hqVersionWithFlags = userAgent?.Substring(@"WB.Headquarters/".Length);
+            var startIndexOfFlags = hqVersionWithFlags?.IndexOf(" ");
+            var stringVersion = !startIndexOfFlags.HasValue || startIndexOfFlags == -1 
+                ? hqVersionWithFlags
+                : hqVersionWithFlags?.Remove(startIndexOfFlags.Value);
+
+            if (Version.TryParse(stringVersion, out Version version))
+                return version;
+
+            return null;
+        }
+
+        private JsonSerializerSettings CreateJsonSerializerSettings(Version headquartersVersion) =>
+            new JsonSerializerSettings
         {
             TypeNameHandling = TypeNameHandling.Objects,
             NullValueHandling = NullValueHandling.Ignore,
             FloatParseHandling = FloatParseHandling.Decimal,
             Formatting = Formatting.None,
-            Binder = new OldToNewAssemblyRedirectSerializationBinder()
+            Binder = new DesignerOldCompatibilityBinder(headquartersVersion)
         };
     }
 }
