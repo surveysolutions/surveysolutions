@@ -10,6 +10,9 @@ var ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
 var env = config.env
 
 var webpackConfig = merge(baseWebpackConfig, {
+    entry: {
+        'babel-polyfill': 'babel-polyfill'
+    },
     module: {
         rules: utils.styleLoaders({
             sourceMap: config.cssSourceMap,
@@ -34,6 +37,7 @@ var webpackConfig = merge(baseWebpackConfig, {
             beautify: false, // Don't beautify output (uglier to read)
             comments: false // Eliminate comments
         }),
+        new webpack.HashedModuleIdsPlugin(),
         // extract css into its own file
         new ExtractTextPlugin(utils.assetsPath('css/[name].[contenthash].css')),
         // generate dist index.html with correct asset hash for caching.

@@ -1,4 +1,4 @@
-require("babel-polyfill");
+import "babel-polyfill";
 global.jQuery = require('jquery');
 
 import { assetsPath } from "./config"
