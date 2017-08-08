@@ -257,7 +257,7 @@ a.disabled{
 	border-radius: 4px;
 	font: 17px/19px Arial;
     font-weight: bold;
-    text-transform: none; 
+    text-transform: uppercase; 
     letter-spacing: normal; 
 	&.btn-success{
 		@include btn-back-questionnaire ($green, "back-to-parrent-1-no-animation-2.png");	
