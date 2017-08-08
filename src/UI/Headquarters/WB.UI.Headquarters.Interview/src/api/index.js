@@ -27,6 +27,11 @@ const scriptIncludedPromise = new Promise(resolve =>
             store.dispatch("reloadInterview")
         }
 
+        interviewProxy.client.closeInterview = () => {
+            store.dispatch("closeInterview")
+            store.dispatch("stop")
+        }
+
         interviewProxy.client.finishInterview = () => {
             store.dispatch("finishInterview")
         }
