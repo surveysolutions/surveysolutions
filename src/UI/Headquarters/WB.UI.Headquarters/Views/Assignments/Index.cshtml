@@ -1,4 +1,5 @@
 ﻿@using Main.Core.Entities.SubEntities
+@using WB.Core.BoundedContexts.Headquarters
 @using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.GenericSubdomains.Portable.ServiceLocation
 @model WB.UI.Headquarters.Controllers.AssignmentsFilters
@@ -137,7 +138,7 @@
                     searchable: false,
                     render: function(data) {
                         var date = moment.utc(data);
-                        return date.local().format('lll');
+                        return date.local().format('@Extensions.ClientDateTimeFormat');
                     }
                 },
                 {
@@ -147,7 +148,7 @@
                     searchable: false,
                     render: function(data) {
                         var date = moment.utc(data);
-                        return date.local().format('lll');
+                        return date.local().format('@Extensions.ClientDateTimeFormat');
                     }
                 }
             ],
