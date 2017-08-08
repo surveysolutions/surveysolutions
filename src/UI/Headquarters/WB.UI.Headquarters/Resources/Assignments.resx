@@ -133,7 +133,7 @@
     <value>{0} Assignment(s) selected</value>
   </data>
   <data name="QuantityExplanation" xml:space="preserve">
-    <value>Specify maximum number of interviews to be generated for that assignment (Quantity). Permitted values: -1 is for Unlimited assignment, 0 is for Empty assignment, numbers for assignment size.</value>
+    <value>Specify maximum number of interviews to be generated for that assignment (Quantity). Permitted values: -1 is for Unlimited assignment, 0 is for Empty assignment, numbers for assignment size</value>
   </data>
   <data name="ChangeQuantityModalTitle" xml:space="preserve">
     <value>Edit quantity for assignment {0}</value>
