@@ -2,7 +2,7 @@
     <div class="unit-section first-last-chapter" v-if="hasCompleteInfo" v-bind:class="{'section-with-error' : hasInvalidQuestions, 'complete-section' : isAllAnswered  }" >
         <div class="unit-title">
             <wb-humburger></wb-humburger>
-            <h3>Complete interview</h3>
+            <h3>Complete</h3>
         </div>
         <div class="wrapper-info">
             <div class="container-info">
