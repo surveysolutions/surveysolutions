@@ -2,10 +2,10 @@
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
 }
 <ul class="nav navbar-nav" role="menu">
-    @Html.MainMenuItem(@"CreateNew", @"InterviewerHq", MainMenu.CreateNew, MenuItem.Teams)
-    @Html.MainMenuItem(@"Started", @"InterviewerHq", MainMenu.Started, MenuItem.Teams)
-    @Html.MainMenuItem(@"Rejected", @"InterviewerHq", MainMenu.Rejected, MenuItem.Teams)
-    @Html.MainMenuItem(@"Completed", @"InterviewerHq", MainMenu.Completed, MenuItem.Teams)
+    @Html.MainMenuItem(@"CreateNew", @"InterviewerHq", MainMenu.CreateNew, MenuItem.CreateNew)
+    @Html.MainMenuItem(@"Started", @"InterviewerHq", MainMenu.Started, MenuItem.Started)
+    @Html.MainMenuItem(@"Rejected", @"InterviewerHq", MainMenu.Rejected, MenuItem.Rejected)
+    @Html.MainMenuItem(@"Completed", @"InterviewerHq", MainMenu.Completed, MenuItem.Completed)
 </ul>
 <ul class="nav navbar-nav navbar-right" role="menu">
     @Html.Partial("QueueIndicator")
