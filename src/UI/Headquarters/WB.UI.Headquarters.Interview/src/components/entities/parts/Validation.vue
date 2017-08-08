@@ -3,7 +3,7 @@
         <h6 v-if="$me.validity.errorMessage == null">Answer is invalid</h6>
         <h6 v-if="$me.validity.errorMessage">Answer was not saved</h6>
         <template v-for="message in $me.validity.messages">
-            <p>{{ message }}</p>
+            <p v-dateTimeFormatting v-html="message"></p>
         </template>
     </div>
 </template>
