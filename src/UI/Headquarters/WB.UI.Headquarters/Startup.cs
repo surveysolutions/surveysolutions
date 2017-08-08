@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,9 +11,11 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.SessionState;
+using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.Owin;
 using Microsoft.Owin.BuilderProperties;
 using Microsoft.Owin.Extensions;
@@ -31,6 +34,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Versions;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Filters;
@@ -87,7 +91,19 @@ namespace WB.UI.Headquarters
             var kernel = NinjectConfig.CreateKernel();
             kernel.Inject(perRequestModule); // wiill keep reference to perRequestModule in Kernel instance
             app.UseNinjectMiddleware(() => kernel);
-            
+        }
+
+        internal class SignalRHubMinifier : IJavaScriptMinifier
+        {
+            readonly ConcurrentDictionary<string, string> cache = new ConcurrentDictionary<string, string>();
+
+            public string Minify(string source)
+            {
+                return this.cache.GetOrAdd(source, s => new Minifier().MinifyJavaScript(source, new CodeSettings
+                {
+                    PreserveImportantComments = false
+                }));
+            }
         }
 
         private void ConfigureWebApi(IAppBuilder app)
@@ -99,8 +115,8 @@ namespace WB.UI.Headquarters
             WebApiConfig.Register(config);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            app.MapSignalR(new HubConfiguration { EnableDetailedErrors = true });
+            GlobalHost.DependencyResolver.Register(typeof(IJavaScriptMinifier), () => new SignalRHubMinifier());
+            app.MapSignalR(new HubConfiguration {EnableDetailedErrors = true});
             app.Use(SetSessionStateBehavior).UseStageMarker(PipelineStage.MapHandler);
 
             app.UseNinjectWebApi(config);
@@ -146,6 +162,7 @@ namespace WB.UI.Headquarters
         {
             var userAgent = request.Headers[@"User-Agent"];
             return (userAgent?.ToLowerInvariant().Contains(@"org.worldbank.solutions.") ?? false) || (userAgent?.Contains(@"okhttp/") ?? false);
+                   (userAgent?.Contains(@"okhttp/") ?? false);
         }
 
         private static bool IsBasicAuthApiUnAuthRequest(IOwinResponse response)
