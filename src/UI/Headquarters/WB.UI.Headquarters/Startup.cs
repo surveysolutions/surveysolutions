@@ -162,7 +162,6 @@ namespace WB.UI.Headquarters
         {
             var userAgent = request.Headers[@"User-Agent"];
             return (userAgent?.ToLowerInvariant().Contains(@"org.worldbank.solutions.") ?? false) || (userAgent?.Contains(@"okhttp/") ?? false);
-                   (userAgent?.Contains(@"okhttp/") ?? false);
         }
 
         private static bool IsBasicAuthApiUnAuthRequest(IOwinResponse response)
