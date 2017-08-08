@@ -38,7 +38,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             plainPostgresTransactionManager = new PlainPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 
             origin = "hq";
-            expectedException = new InterviewException("Some interview exception", InterviewDomainExceptionType.QuestionnaireIsMissing);
+            expectedException = new InterviewException("Some interview exception", InterviewDomainExceptionType.StatusIsNotOneOfExpected);
 
             pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
             pgSqlConnection.Open();
