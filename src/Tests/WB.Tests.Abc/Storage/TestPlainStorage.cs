@@ -6,10 +6,14 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Tests.Abc.Storage
 {
-    internal class TestPlainStorage<T> : IPlainStorageAccessor<T> where T : class
+    public class TestPlainStorage<T> : IPlainStorageAccessor<T> where T : class
     {
         private readonly Dictionary<object, T> entites;
 
+        public TestPlainStorage()
+        {
+
+        }
         public TestPlainStorage(Dictionary<object, T> entites = null)
         {
             this.entites = entites ?? new Dictionary<object, T>();
@@ -36,7 +40,7 @@ namespace WB.Tests.Abc.Storage
             }
         }
 
-        public void Store(T entity, object id)
+        public virtual void Store(T entity, object id)
         {
             if (id != null && this.entites.ContainsKey(id))
             {

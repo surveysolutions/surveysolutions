@@ -181,6 +181,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     interviewKey: shouldChangeInterviewKey ? this.uniqueKeyGenerator.Get() : null,
                     synchronizedEvents: serializedEvents), this.syncSettings.Origin);
             }
+            catch (InterviewException e) when (e.ExceptionType == InterviewDomainExceptionType.QuestionnaireIsMissing)
+            {
+                // http://issues.mysurvey.solutions/youtrack/issue/KP-9672
+                this.logger.Error($"Interview {interview.InterviewId} deleted. Reason: '{e.Message}'", e);
+                innerwatch.Restart();
+            }
             catch (Exception exception)
             {
                 this.logger.Error($"Interview events by {interview.InterviewId} processing failed. Reason: '{exception.Message}'", exception);
