@@ -28,6 +28,7 @@
     import 'vue-flatpickr/theme/flatpickr.min.css'
     import * as format from "date-fns/format"
     import * as isSame from "date-fns/is_equal"
+    import { DateFormats } from "components/entities"
 
     const parseUTC = date => new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()));
 
@@ -48,11 +49,11 @@
             answer() {
                 if (this.$me && this.$me.answer) {
                     if (this.$me.isTimestamp){
-                        return format(this.$me.answer, "YYYY-MM-DD HH:mm:ss")
+                        return format(this.$me.answer, DateFormats.dateTime)
                     }
                     else {
                         const date = new Date(this.$me.answer)
-                        const result = format(new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()),"YYYY-MM-DD")
+                        const result = format(new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()), DateFormats.date)
                         return result;
                     }
                 }
