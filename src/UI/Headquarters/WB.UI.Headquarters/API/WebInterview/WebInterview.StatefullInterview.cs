@@ -180,12 +180,14 @@ namespace WB.UI.Headquarters.API.WebInterview
             if (parent != null)
             {
                 var parentGroup = statefulInterview.GetGroup(parent);
+                var parentRoster = parentGroup as InterviewTreeRoster;
 
                 return new ButtonState
                 {
                     Id = id,
                     Status = CalculateSimpleStatus(parent, statefulInterview),
                     Title = parentGroup.Title.Text,
+                    RosterTitle = parentRoster?.RosterTitle,
                     Target = parent.ToString(),
                     Type = ButtonType.Parent
                 };
