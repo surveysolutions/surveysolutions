@@ -699,7 +699,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeDateTimeQuestion Clone() => (InterviewTreeDateTimeQuestion) this.MemberwiseClone();
 
-        public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
+        public string UiFormatString => IsTimestamp ? "yyyy-MM-dd HH:mm:ss" : "yyyy-MM-dd";
+
+        public override string ToString() => this.answer?.Value.ToString(UiFormatString) ?? "NO ANSWER";
 
         public void RunImportInvariants(InterviewQuestionInvariants questionInvariants)
         {

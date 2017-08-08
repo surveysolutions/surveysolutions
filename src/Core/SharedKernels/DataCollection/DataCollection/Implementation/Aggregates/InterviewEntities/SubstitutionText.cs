@@ -106,11 +106,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     var dateTime = asDateTime.GetAnswer().Value;
                     if (asDateTime.IsTimestamp)
                     {
-                        htmlReadyAnswer = $"<time datetime=\"{dateTime:s}Z\">{dateTime:g}</time>";
+                        htmlReadyAnswer = $"<time datetime=\"{dateTime:s}Z\">{dateTime.ToLocalTime().ToString(asDateTime.UiFormatString)}</time>";
                     }
                     else
                     {
-                        htmlReadyAnswer = $"<time date=\"{dateTime:yyyy-MM-dd}\">{dateTime:yyyy-MM-dd}</time>";
+                        htmlReadyAnswer = $"<time date=\"{dateTime:yyyy-MM-dd}\">{dateTime.ToString(asDateTime.UiFormatString)}</time>";
                     }
                 }
 
