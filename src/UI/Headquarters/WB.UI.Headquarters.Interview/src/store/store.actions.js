@@ -5,6 +5,7 @@ import Vue from "vue"
 import { apiCaller, apiCallerAndFetch, apiStop } from "../api"
 import { batchedAction } from "../helpers"
 import router from "./../router"
+import modal from "modal"
 
 export default {
     onBeforeNavigate({ commit }) {
@@ -131,6 +132,26 @@ export default {
         const routeParams = (router.currentRoute.params )
         location.replace(router.resolve({ name: "finish", params: { interviewId: routeParams.interviewId } }).href)
     },
+
+    closeInterview({ state, dispatch }) {
+        modal.alert({
+            title: "This interview is opened in another tab or browser",
+            message: "<p>Web Interview supports only one active tab with the interview.</p>"
+            + "<p>Please reload this page to continue using this tab or close it.</p>",
+            callback: () => {
+                location.reload()
+            },
+            onEscape: false,
+            closeButton: false,
+            buttons: {
+                ok: {
+                    label: "Reload",
+                    className: "btn-success"
+                }
+            }
+        })
+    },
+
     // called by server side. refresh
     refreshEntities({ state, dispatch }, questions) {
         let needSectionUpdate = false
