@@ -40,9 +40,6 @@
         <FixtureName>WB.Tests.Integration.InterviewPackagesServiceTests.when_processing_package</FixtureName>
       </FixtureTestSelector>
       <FixtureTestSelector>
-        <FixtureName>WB.Tests.Integration.InterviewPackagesServiceTests.when_processing_package_failed</FixtureName>
-      </FixtureTestSelector>
-      <FixtureTestSelector>
         <FixtureName>WB.Tests.Integration.OldschoolChartStatisticsDataProviderTests.when_3_interviews_are_completed_during_a_month_period</FixtureName>
       </FixtureTestSelector>
       <FixtureTestSelector>
