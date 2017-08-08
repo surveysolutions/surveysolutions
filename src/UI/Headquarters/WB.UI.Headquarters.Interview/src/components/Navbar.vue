@@ -3,7 +3,9 @@
         <div class="container-fluid ">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                <router-link class="active-page" active-class="active-page" :to="toFirstSection" v-if="$store.state.firstSectionId">Web interview</router-link>
+                <router-link class="active-page" active-class="active-page" :to="toFirstSection" v-if="$store.state.firstSectionId">
+                    {{interviewKey}}
+                </router-link>
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar top-menu"></span>
@@ -52,7 +54,7 @@
             this.$store.dispatch("loadInterview")
         },
         updated(){
-            document.title = `${this.questionnaireTitle} | Web interview`
+            document.title = `${this.$store.state.interviewKey} | ${this.questionnaireTitle} | Web interview`
         },
         computed: {
             canChangeLanguage() {
