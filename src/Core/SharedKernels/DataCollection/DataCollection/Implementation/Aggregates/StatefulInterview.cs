@@ -561,14 +561,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (question?.FailedValidations != null)
             {
                 var questionValidationMassages = question.ValidationMessages
-                    .Select(substitutionText => string.IsNullOrWhiteSpace(substitutionText.Text) ? defaltErrorMessageFallback : substitutionText.Text)
+                    .Select(substitutionText => string.IsNullOrWhiteSpace(substitutionText.BrowserReadyText) ? defaltErrorMessageFallback : substitutionText.BrowserReadyText)
                     .ToList();
 
                 if (questionValidationMassages.Count == 1) return new[] {questionValidationMassages[0]};
 
                 return question.FailedValidations.Select(failedValidation =>
-                    $"{questionValidationMassages.ElementAt(failedValidation.FailedConditionIndex)} " +
-                    $"[{failedValidation.FailedConditionIndex + 1}]");
+                    $"{questionValidationMassages.ElementAt(failedValidation.FailedConditionIndex)} [{failedValidation.FailedConditionIndex + 1}]");
 
             }
 
@@ -576,7 +575,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (staticText?.FailedValidations != null)
             {
                 var staticTextValidationMassages = staticText.ValidationMessages
-                    .Select(substitutionText => string.IsNullOrWhiteSpace(substitutionText.Text) ? defaltErrorMessageFallback : substitutionText.Text)
+                    .Select(substitutionText => string.IsNullOrWhiteSpace(substitutionText.BrowserReadyText) ? defaltErrorMessageFallback : substitutionText.BrowserReadyText)
                     .ToList();
 
                 if (staticTextValidationMassages.Count == 1) return new[] {staticTextValidationMassages[0]};
