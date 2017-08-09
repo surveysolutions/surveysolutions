@@ -16,14 +16,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
 {
     internal class when_linked_options_chagned : SingleOptionLinkedQuestionViewModelTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             linkSourceQuestionId = Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), RosterVector.Empty);
             linkedQuestionId = Create.Entity.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
             interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC").FormatGuid();
 
             var answer = Mock.Of<InterviewTreeSingleLinkedToRosterQuestion>(_ 
-                => _.IsAnswered == true 
+                => _.IsAnswered() == true
                 && _.GetAnswer() == Create.Entity.LinkedSingleOptionAnswer(Create.Entity.RosterVector(2))
                 && _.Options == new List<RosterVector> { Create.Entity.RosterVector(1), Create.Entity.RosterVector(2), Create.Entity.RosterVector(3)});
 
@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             viewModel.Init(interviewId, linkedQuestionId, Create.Other.NavigationState());
 
             var newAnswer = Mock.Of<InterviewTreeSingleLinkedToRosterQuestion>(_
-               => _.IsAnswered == false
+               => _.IsAnswered() == false
                && _.Options == new List<RosterVector> { Create.Entity.RosterVector(1), Create.Entity.RosterVector(2) });
 
             interview.GetLinkedSingleOptionQuestion(linkedQuestionId).Returns(newAnswer);

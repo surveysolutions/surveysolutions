@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
                 var questionType = questionnaire.GetQuestionType(entityIdentity.Id);
                 this.Answer = questionType == QuestionType.GpsCoordinates
-                    ? $"{question.AsGps.GetAnswer().Value.Latitude}, {question.AsGps.GetAnswer().Value.Longitude}"
+                    ? $"{question.GetAsGpsAnswer().Value.Latitude}, {question.GetAsGpsAnswer().Value.Longitude}"
                     : question.GetAnswerAsString(CultureInfo.CurrentUICulture);
             }
         }

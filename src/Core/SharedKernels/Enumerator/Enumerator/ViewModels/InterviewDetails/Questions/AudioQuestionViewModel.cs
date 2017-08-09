@@ -102,7 +102,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.variableName = questionnaire.GetQuestionVariableName(entityIdentity.Id);
 
             var answerModel = interview.GetAudioQuestion(entityIdentity);
-            if (answerModel.IsAnswered)
+            if (answerModel.IsAnswered())
                 this.SetAnswer(answerModel.GetAnswer().Length);
 
             this.liteEventRegistry.Subscribe(this, interviewId);

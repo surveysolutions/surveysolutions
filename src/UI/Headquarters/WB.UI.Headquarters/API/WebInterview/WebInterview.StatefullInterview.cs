@@ -85,15 +85,13 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             if (entityType == InterviewEntityType.Gps)
             {
-                GpsAnswer questionAnswer = interviewQuestion.AsGps.GetAnswer();
+                GpsAnswer questionAnswer = interviewQuestion.GetAsGpsAnswer();
                 string answer = questionAnswer?.Value != null ? $"{questionAnswer.Value.Latitude},{questionAnswer.Value.Longitude}" : null;
                 result.Answer = answer;
             }
-            if (entityType == InterviewEntityType.DateTime && interviewQuestion.AsDateTime.IsTimestamp)
+            if (entityType == InterviewEntityType.DateTime && ((InterviewTreeDateTimeQuestion)interviewQuestion.InterviewQuestion).IsTimestamp)
             {
-                var dateQuestion = interviewQuestion.AsDateTime;
-
-                DateTimeAnswer questionAnswer = dateQuestion.GetAnswer();
+                DateTimeAnswer questionAnswer = interviewQuestion.GetAsDateTimeAnswer();
                 string answer = questionAnswer?.Value != null
                     ? $"<time datetime=\"{questionAnswer.Value:o}\">{interview.GetAnswerAsString(questionIdentity)}</time>"
                     : null;
@@ -362,7 +360,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                     result = this.Map<InterviewSingleOptionQuestion>(question, res =>
                     {
                         res.Options = GetOptionsLinkedToListQuestion(callerInterview, identity,
-                            question.AsSingleLinkedToList.LinkedSourceId).ToList();
+                            ((InterviewTreeSingleOptionLinkedToListQuestion)question.InterviewQuestion).LinkedSourceId).ToList();
                     });
                 }
                 else if (question.IsText)
@@ -419,7 +417,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                     result = this.Map<InterviewMutliOptionQuestion>(question, res =>
                     {
                         res.Options = GetOptionsLinkedToListQuestion(callerInterview, identity,
-                            question.AsMultiLinkedToList.LinkedSourceId).ToList();
+                            ((InterviewTreeMultiOptionLinkedToListQuestion)question.InterviewQuestion).LinkedSourceId).ToList();
                     });
                 }
                 else if (question.IsDateTime)
@@ -593,8 +591,8 @@ namespace WB.UI.Headquarters.API.WebInterview
             var questionIdentity = Identity.Parse(id);
             var statefulInterview = this.GetCallerInterview();
             var question = statefulInterview.GetQuestion(questionIdentity);
-            var parentCascadingQuestion = question.AsCascading?.GetCascadingParentQuestion();
-            var parentCascadingQuestionAnswer = parentCascadingQuestion?.IsAnswered ?? false
+            var parentCascadingQuestion = (question.InterviewQuestion as InterviewTreeCascadingQuestion)?.GetCascadingParentQuestion();
+            var parentCascadingQuestionAnswer = parentCascadingQuestion?.IsAnswered() ?? false
                 ? parentCascadingQuestion?.GetAnswer()?.SelectedValue
                 : null;
 
@@ -733,10 +731,10 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             var listQuestion = callerInterview.FindQuestionInQuestionBranch(linkedSourceId, identity);
 
-            if ((listQuestion == null) || listQuestion.IsDisabled() || listQuestion.AsTextList?.GetAnswer()?.Rows == null)
+            if ((listQuestion == null) || listQuestion.IsDisabled() || listQuestion.GetAsTextListAnswer()?.Rows == null)
                 return new List<CategoricalOption>();
 
-            return new List<CategoricalOption>(listQuestion.AsTextList.GetAnswer().Rows.Select(x => new CategoricalOption
+            return new List<CategoricalOption>(listQuestion.GetAsTextListAnswer().Rows.Select(x => new CategoricalOption
             {
                 Value = (int)x.Value,
                 Title = x.Text

@@ -217,27 +217,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
        
         public InterviewTreeGroup GetGroup(Identity identity) => this.Tree.GetGroup(identity);
         public InterviewTreeRoster GetRoster(Identity identity) => this.Tree.GetRoster(identity);
-        public InterviewTreeGpsQuestion GetGpsQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsGps;
-        public InterviewTreeDateTimeQuestion GetDateTimeQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsDateTime;
-        public InterviewTreeMultimediaQuestion GetMultimediaQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsMultimedia;
-        public InterviewTreeQRBarcodeQuestion GetQRBarcodeQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsQRBarcode;
-        public InterviewTreeTextListQuestion GetTextListQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsTextList;
-        public InterviewTreeMultiOptionQuestion GetMultiOptionQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsMultiFixedOption;
-        public InterviewTreeIntegerQuestion GetIntegerQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsInteger;
-        public InterviewTreeDoubleQuestion GetDoubleQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsDouble;
-        public InterviewTreeTextQuestion GetTextQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsText;
-        public InterviewTreeSingleOptionQuestion GetSingleOptionQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsSingleFixedOption;
-        public InterviewTreeYesNoQuestion GetYesNoQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsYesNo;
 
-        public InterviewTreeSingleOptionLinkedToListQuestion GetSingleOptionLinkedToListQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsSingleLinkedToList;
-        public InterviewTreeAudioQuestion GetAudioQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsAudio;
+        public InterviewTreeGpsQuestion GetGpsQuestion(Identity identity) => (InterviewTreeGpsQuestion)this.Tree.GetQuestion(identity).InterviewQuestion;
+        public InterviewTreeDateTimeQuestion GetDateTimeQuestion(Identity identity) => (InterviewTreeDateTimeQuestion)this.Tree.GetQuestion(identity).InterviewQuestion ;
+        public InterviewTreeMultimediaQuestion GetMultimediaQuestion(Identity identity) => (InterviewTreeMultimediaQuestion)this.Tree.GetQuestion(identity).InterviewQuestion;
+        public InterviewTreeQRBarcodeQuestion GetQRBarcodeQuestion(Identity identity) => (InterviewTreeQRBarcodeQuestion)this.Tree.GetQuestion(identity).InterviewQuestion ;
+        public InterviewTreeTextListQuestion GetTextListQuestion(Identity identity) => (InterviewTreeTextListQuestion)this.Tree.GetQuestion(identity).InterviewQuestion ;
+        public InterviewTreeMultiOptionQuestion GetMultiOptionQuestion(Identity identity) => (InterviewTreeMultiOptionQuestion)this.Tree.GetQuestion(identity).InterviewQuestion;
+        public InterviewTreeIntegerQuestion GetIntegerQuestion(Identity identity) => (InterviewTreeIntegerQuestion)this.Tree.GetQuestion(identity).InterviewQuestion;
+        public InterviewTreeDoubleQuestion GetDoubleQuestion(Identity identity) => (InterviewTreeDoubleQuestion)this.Tree.GetQuestion(identity).InterviewQuestion;
+        public InterviewTreeTextQuestion GetTextQuestion(Identity identity) => (InterviewTreeTextQuestion)this.Tree.GetQuestion(identity).InterviewQuestion;
+        public InterviewTreeSingleOptionQuestion GetSingleOptionQuestion(Identity identity) => (InterviewTreeSingleOptionQuestion)this.Tree.GetQuestion(identity).InterviewQuestion ;
+        public InterviewTreeYesNoQuestion GetYesNoQuestion(Identity identity) => (InterviewTreeYesNoQuestion)this.Tree.GetQuestion(identity).InterviewQuestion ;
+
+        public InterviewTreeSingleOptionLinkedToListQuestion GetSingleOptionLinkedToListQuestion(Identity identity) => (InterviewTreeSingleOptionLinkedToListQuestion)this.Tree.GetQuestion(identity).InterviewQuestion;
+        public InterviewTreeAudioQuestion GetAudioQuestion(Identity identity) => (InterviewTreeAudioQuestion)this.Tree.GetQuestion(identity).InterviewQuestion;
 
         public InterviewTreeQuestion GetQuestion(Identity identity) => this.Tree.GetQuestion(identity);
         public InterviewTreeStaticText GetStaticText(Identity identity) => this.Tree.GetStaticText(identity);
 
-        public InterviewTreeMultiOptionLinkedToListQuestion GetMultiOptionLinkedToListQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsMultiLinkedToList;
+        public InterviewTreeMultiOptionLinkedToListQuestion GetMultiOptionLinkedToListQuestion(Identity identity) => (InterviewTreeMultiOptionLinkedToListQuestion)this.Tree.GetQuestion(identity).InterviewQuestion;
 
-        public InterviewTreeAreaQuestion GetAreaQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsArea;
+        public InterviewTreeAreaQuestion GetAreaQuestion(Identity identity) => (InterviewTreeAreaQuestion)this.Tree.GetQuestion(identity).InterviewQuestion;
 
         public IEnumerable<InterviewTreeSection> GetEnabledSections() => this.Tree.Sections.Where(s => !s.IsDisabled());
 
@@ -663,7 +664,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 var answeredQuestion = new AnsweredQuestionSynchronizationDto(question.Identity.Id,
                     question.Identity.RosterVector,
-                    question.GetAnswerAsObject(question),
+                    InterviewTreeQuestion.GetAnswerAsObject(question),
                     comments);
 
                 if (question.IsAnswered() || answeredQuestion.HasComments())

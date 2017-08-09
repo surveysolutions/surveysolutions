@@ -108,7 +108,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             {
                 var sizeQuestionId = this.AsList.RosterSizeQuestion;
                 var rosterSizeQuestion = this.GetQuestionFromThisOrUpperLevel(sizeQuestionId);
-                this.SetRosterTitle(rosterSizeQuestion.AsTextList.GetTitleByItemCode(this.Identity.RosterVector.Last()));
+                this.SetRosterTitle(((InterviewTreeTextListQuestion)rosterSizeQuestion.InterviewQuestion).GetTitleByItemCode(this.Identity.RosterVector.Last()));
             }
 
             else if (this.IsMulti)
