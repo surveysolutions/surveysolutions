@@ -1,5 +1,6 @@
 .aside-menu{
 	@include absolute(5px, 10px, null, null);
+	z-index: 1;
 	button{
 		display: block;
 		position: relative;
