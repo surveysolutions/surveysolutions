@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             IAudioFileStorage audioFileStorage,
             IPlainTransactionManagerProvider plainTransactionManagerProvider,
             ILogger logger)
-            : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, dataExportFileAccessor, logger)
+            : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, dataExportFileAccessor)
         {
             this.imageFileRepository = imageFileRepository;
             this.transactionManager = transactionManager;
