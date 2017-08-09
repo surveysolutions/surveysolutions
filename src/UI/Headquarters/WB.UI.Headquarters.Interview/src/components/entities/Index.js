@@ -57,13 +57,6 @@ Vue.component("wb-typeahead", (resolve, reject) => {
     }, "libs")
 })
 
-Vue.component("vue-flatpickr", (resolve, reject) => {
-     require.ensure(["vue-flatpickr"], r => {
-        const flatpick = require("vue-flatpickr")
-        resolve(flatpick.default)
-    }, "libs")
-})
-
 export const GroupStatus = {
     Completed: 1,
     Invalid: -1,

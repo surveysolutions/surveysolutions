@@ -4,7 +4,7 @@
             <div class="options-group">
                 <div v-if="!$me.isTimestamp" class="form-group">
                     <div class="field" :class="{answered: $me.isAnswered}">
-                        <vue-flatpickr :options="pickerOpts" :value="answer" class="field-to-fill" placeholder="Enter date" title="Enter date" />
+                        <flat-pickr :config="pickerOpts" :value="answer" class="field-to-fill" placeholder="Enter date" title="Enter date" />
                         <wb-remove-answer/>
                     </div>
                 </div>
@@ -25,7 +25,8 @@
 </template>
 <script lang="js">
     import { entityDetails } from "components/mixins"
-    import 'vue-flatpickr/theme/flatpickr.min.css'
+    import flatPickr from './ui/vue-flatpickr'
+    import 'flatpickr/dist/flatpickr.css'
     import * as format from "date-fns/format"
     import * as isSame from "date-fns/is_equal"
     import { DateFormats } from "components/entities"
@@ -62,17 +63,22 @@
         },
         methods: {
             answerDate(answer) {
-                if (!this.$me.isTimestamp) {
-                    if (!isSame(this.$me.answer, answer)) {
-                        const dateAnswer = parseUTC(answer)
+                if(answer) {
+                    if (!this.$me.isTimestamp) {
+                        if (!isSame(this.$me.answer, answer)) {
+                            const dateAnswer = parseUTC(answer)
 
-                        this.$store.dispatch('answerDateQuestion', { identity: this.$me.id, date: dateAnswer })
+                            this.$store.dispatch('answerDateQuestion', { identity: this.$me.id, date: dateAnswer })
+                        }
+                    }
+                    else {
+                        this.$store.dispatch('answerDateQuestion', { identity: this.$me.id, date: new Date() })
                     }
                 }
-                else {
-                    this.$store.dispatch('answerDateQuestion', { identity: this.$me.id, date: new Date() })
-                }
             }
+        },
+        components: {
+            flatPickr
         }
     }
 
