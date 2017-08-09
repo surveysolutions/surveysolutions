@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             ILogger logger, 
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
             IDataExportFileAccessor dataExportFileAccessor) : 
-            base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, dataExportFileAccessor, logger)
+            base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, dataExportFileAccessor)
         {
             this.transactionManagerProvider = transactionManagerProvider;
             this.tabularFormatExportService = tabularFormatExportService;
