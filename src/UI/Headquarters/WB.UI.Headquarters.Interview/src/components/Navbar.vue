@@ -3,7 +3,7 @@
         <div class="container-fluid ">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                <router-link class="active-page" active-class="active-page" :to="toFirstSection" v-if="$store.state.firstSectionId">
+                <router-link class="interview-ID" active-class="" :to="toFirstSection" v-if="$store.state.firstSectionId">
                     {{interviewKey}}
                 </router-link>
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
@@ -12,12 +12,10 @@
                     <span class="icon-bar mid-menu"></span>
                     <span class="icon-bar bottom-menu"></span>
                 </button>
-                <router-link class="navbar-brand rotate-brand" :to="toFirstSection" active-class="rotate-brand" v-if="$store.state.firstSectionId && hqLink == null">
-                    <div class="brand-name">{{interviewKey}}</div>
-                </router-link>
-                <a :href="hqLink" v-if="hqLink != null" class="navbar-brand rotate-brand">
-                    <div class="brand-name">{{interviewKey}}</div>
-                </a>
+                <div class="navbar-brand">
+                    <router-link class="logo" :to="toFirstSection" v-if="$store.state.firstSectionId && hqLink == null"></router-link>
+                    <a :href="hqLink" v-if="hqLink != null" class="logo"></a>
+                </div>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="navbar">
@@ -53,6 +51,32 @@
             this.$store.dispatch("getLanguageInfo")
             this.$store.dispatch("loadInterview")
         },
+        mounted(){
+            $(window).on('resize', function() {
+                if($(window).width() > 880) {
+                    if ($(".navbar-collapse.collapse.in").length > 0) {
+                      $("main").addClass("display-block");
+                    }
+                }else{
+                        $("main").removeClass("display-block");
+                    }
+            });
+            $(".navbar-toggle").click(function () {
+                $(".navbar-collapse").fadeToggle();
+                $(".navbar-collapse").animate({height: '100%'}, 0);
+                $(".top-menu").toggleClass("top-animate");
+                $(".mid-menu").toggleClass("mid-animate");
+                $(".bottom-menu").toggleClass("bottom-animate");
+                if($(window).width() < 880) {
+                    if ($(".navbar-collapse.collapse.in").length > 0) {
+                        $("main").removeClass("display-block");
+                        $("main").removeClass("hidden");
+                    }else{
+                        $("main").addClass("hidden");
+                    }
+                }
+            });
+        },
         updated(){
             document.title = `${this.$store.state.interviewKey} | ${this.questionnaireTitle} | Web interview`
         },
@@ -86,20 +110,6 @@
 
                     closeButton: false
                 })
-            }
-        },
-        directives:{
-            init: {
-                inserted(el, binding, vnode) {
-                    $(".navbar-toggle").click(function () {
-                        $(".navbar-collapse").fadeToggle();
-                        $(".navbar-collapse").animate({height: '100%'}, 0);
-                        $(".top-menu").toggleClass("top-animate");
-                        $(".mid-menu").toggleClass("mid-animate");
-                        $(".bottom-menu").toggleClass("bottom-animate");
-                        $("main").toggleClass("hidden");
-                    });
-                }
             }
         }
     }
