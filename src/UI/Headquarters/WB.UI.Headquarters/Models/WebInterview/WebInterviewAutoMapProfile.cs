@@ -25,24 +25,24 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
             this.CreateMap<InterviewTreeQuestion, InterviewTextQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
-                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsText.GetAnswer()));
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.GetAsTextAnswer()));
 
             this.CreateMap<InterviewTreeQuestion, InterviewBarcodeQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
-                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsQRBarcode.GetAnswer()));
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.GetAsQRBarcodeAnswer()));
 
             this.CreateMap<InterviewTreeQuestion, InterviewAudioQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
-                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsAudio.GetAnswer()!=null
-                    ? (long)x.AsAudio.GetAnswer().Length.TotalMilliseconds
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.GetAsAudioAnswer()!=null
+                    ? (long)x.GetAsAudioAnswer().Length.TotalMilliseconds
                     : (long?)null));
 
             this.CreateMap<InterviewTreeQuestion, InterviewSingleOptionQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x =>
                     x.IsLinkedToListQuestion
-                        ? x.AsSingleLinkedToList.GetAnswer().SelectedValue
-                        : x.AsSingleFixedOption.GetAnswer().SelectedValue));
+                        ? x.GetAsSingleLinkedToListAnswer().SelectedValue
+                        : x.GetAsSingleFixedOptionAnswer().SelectedValue));
             
             this.CreateMap<InterviewTreeQuestion, InterviewFilteredQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
@@ -54,35 +54,35 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
             this.CreateMap<InterviewTreeQuestion, InterviewLinkedSingleQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
-                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsSingleLinkedOption.GetAnswer().SelectedValue));
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.GetAsSingleLinkedOptionAnswer().SelectedValue));
 
             this.CreateMap<InterviewTreeQuestion, InterviewLinkedMultiQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
-                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsMultiLinkedOption.GetAnswer().CheckedValues));
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.GetAsMultiLinkedOptionAnswer().CheckedValues));
 
             this.CreateMap<InterviewTreeQuestion, InterviewMutliOptionQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x =>
                     x.IsLinkedToListQuestion
-                        ? x.AsMultiLinkedToList.GetAnswer().CheckedValues
-                        : x.AsMultiFixedOption.GetAnswer().CheckedValues));
+                        ? x.GetAsMultiLinkedToListAnswer().CheckedValues
+                        : x.GetAsMultiFixedOptionAnswer().CheckedValues));
 
             this.CreateMap<CheckedYesNoAnswerOption, InterviewYesNoAnswer>();
 
             this.CreateMap<InterviewTreeQuestion, InterviewYesNoQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
-                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsYesNo.GetAnswer().CheckedOptions));
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.GetAsYesNoAnswer().CheckedOptions));
             this.CreateMap<InterviewTreeQuestion, InterviewIntegerQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
-                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsInteger.GetAnswer().Value));
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.GetAsIntegerAnswer().Value));
             this.CreateMap<InterviewTreeQuestion, InterviewDoubleQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
-                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsDouble.GetAnswer().Value));
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.GetAsDoubleAnswer().Value));
 
             this.CreateMap<InterviewTreeQuestion, InterviewDateQuestion>()
                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
-               .ForMember(x => x.IsTimestamp, opts => opts.MapFrom(x => x.AsDateTime.IsTimestamp))
-               .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsDateTime.GetAnswer().Value));
+               .ForMember(x => x.IsTimestamp, opts => opts.MapFrom(x => ((InterviewTreeDateTimeQuestion)x.InterviewQuestion).IsTimestamp))
+               .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.GetAsDateTimeAnswer().Value));
 
             this.CreateMap<TextListAnswerRow, TextListAnswerRowDto>()
                 .ForMember(x => x.Text, opts => opts.MapFrom(x => x.Text))
@@ -90,7 +90,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
             this.CreateMap<InterviewTreeQuestion, InterviewTextListQuestion>()
                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
-               .ForMember(x => x.Rows, opts => opts.MapFrom(x => x.AsTextList.GetAnswer().Rows));
+               .ForMember(x => x.Rows, opts => opts.MapFrom(x => x.GetAsTextListAnswer().Rows));
 
             this.CreateMap<GeoPosition, GpsAnswer>()
                 .ForMember(x => x.Latitude, opts => opts.MapFrom(x => x.Latitude))
@@ -101,7 +101,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
             this.CreateMap<InterviewTreeQuestion, InterviewGpsQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
-                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsGps.GetAnswer().Value));
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.GetAsGpsAnswer().Value));
 
             this.CreateMap<InterviewTreeStaticText, Validity>()
                 .ForMember(x => x.IsValid, opts => opts.MapFrom(x => x.IsValid));
@@ -161,12 +161,12 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
             this.CreateMap<InterviewTreeQuestion, InterviewMultimediaQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
-                .ForMember(x => x.Answer, opts => opts.MapFrom(x => $@"?interviewId={x.Tree.InterviewId}&questionId={x.Identity}&filename={x.AsMultimedia.GetAnswer().FileName}"));
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => $@"?interviewId={x.Tree.InterviewId}&questionId={x.Identity}&filename={x.GetAsMultimediaAnswer().FileName}"));
         }
 
         private static DropdownItem GetSingleFixedOptionAnswerAsDropdownItem(InterviewTreeQuestion question)
         {
-            return new DropdownItem(question.AsSingleFixedOption.GetAnswer().SelectedValue, question.GetAnswerAsString());
+            return new DropdownItem(question.GetAsSingleFixedOptionAnswer().SelectedValue, question.GetAnswerAsString());
         }
 
         private static bool HasQuestionsWithInvalidAnswers(InterviewTreeGroup group)

@@ -81,7 +81,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview.GetRoster(fixedNestedRosterIdentity).ShouldNotBeNull();
 
         It should_set_answer = () => 
-            interview.GetQuestion(questionIdentity).AsInteger.GetAnswer().Value.ShouldEqual(1);
+            interview.GetQuestion(questionIdentity).GetAsIntegerAnswer().Value.ShouldEqual(1);
 
         static InterviewSynchronizationDto synchronizationDto;
         static StatefulInterview interview;

@@ -146,7 +146,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState.Init(interviewId, entityIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
-            var answerModel = interview.GetIntegerQuestion(entityIdentity);
+            
 
             this.InstructionViewModel.Init(interviewId, entityIdentity);
 
@@ -154,7 +154,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.UseFormatting = questionnaire.ShouldUseFormatting(entityIdentity.Id);
 
-            if (answerModel.IsAnswered)
+            var answerModel = interview.GetIntegerQuestion(entityIdentity);
+            if (answerModel.IsAnswered())
             {
                 this.Answer = answerModel.GetAnswer().Value;
                 this.previousAnswer = this.Answer;

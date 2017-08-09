@@ -319,10 +319,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var listQuestion = interview.FindQuestionInQuestionBranch(this.linkedToQuestionId, this.Identity);
 
             if ((listQuestion == null) || listQuestion.IsDisabled() ||
-                listQuestion.AsTextList?.GetAnswer()?.Rows == null)
+                listQuestion.GetAsTextListAnswer()?.Rows == null)
                 return new List<TextListAnswerRow>();
 
-            return new List<TextListAnswerRow>(listQuestion.AsTextList.GetAnswer().Rows);
+            return new List<TextListAnswerRow>(listQuestion.GetAsTextListAnswer().Rows);
         }
 
         private SingleOptionQuestionOptionViewModel CreateOptionViewModel(TextListAnswerRow optionValue)

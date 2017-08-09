@@ -86,7 +86,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.maxAnswerCount = questionnaire.GetMaxSelectedAnswerOptions(this.questionIdentity.Id);
 
             var textListQuestion = interview.GetTextListQuestion(entityIdentity);
-            if (textListQuestion.IsAnswered)
+            if (textListQuestion.IsAnswered())
             {
                 var answerViewModels = textListQuestion.GetAnswer().ToTupleArray().Select(x => this.CreateListItemViewModel(x.Item1, x.Item2));
 
