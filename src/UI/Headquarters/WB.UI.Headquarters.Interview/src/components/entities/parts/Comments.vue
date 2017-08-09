@@ -2,8 +2,10 @@
     <div class="information-block comments-block">
 
         <template v-for="comment in $me.comments">
-            <h6>{{ getCommentTitle(comment) }}</h6>
-            <p>{{ comment.text }}</p>
+            <div :class="{'enumerators-comment': comment.userRole == 4}">
+                <h6>{{ getCommentTitle(comment) }}</h6>
+                <p>{{ comment.text }}</p>
+            </div>
         </template>
 
         <div class="comment active" v-if="isShowingAddCommentDialog">
@@ -11,7 +13,7 @@
                 <label>Your comment</label>
                 <div class="form-group">
                     <div class="input-group field">
-                        <input type="text" class="field-to-fill" v-on:keyup.enter="postComment" v-model="comment" placeholder="Enter your comment" />
+                        <input type="text" class="form-control" v-on:keyup.enter="postComment" v-model="comment" placeholder="Enter your comment" />
                     </div>
                 </div>
                 <button type="button" class="btn btn-default btn-post-comment" :class="buttonClass" @click="postComment($event)">Post</button>
