@@ -255,10 +255,9 @@ a.disabled{
 	background-color: transparent;
 	border-width: 3px;
 	border-radius: 4px;
-	font: 17px/19px Arial;
-    font-weight: bold;
-    text-transform: uppercase; 
-    letter-spacing: normal; 
+	font: 14px/16px "TrebuchetMSBold";
+	letter-spacing: 0.05em;
+    text-transform: uppercase;  
 	&.btn-success{
 		@include btn-back-questionnaire ($green, "back-to-parrent-1-no-animation-2.png");	
 	}
