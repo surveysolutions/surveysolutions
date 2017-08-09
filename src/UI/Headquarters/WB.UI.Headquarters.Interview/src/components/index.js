@@ -1,5 +1,7 @@
 import Vue from "vue"
 
+require("bootstrap-sass/assets/javascripts/bootstrap/collapse");
+
 import Breadcrumbs from "./Breadcrumbs"
 import Cover from "./Cover"
 import Layout from "./Layout"
