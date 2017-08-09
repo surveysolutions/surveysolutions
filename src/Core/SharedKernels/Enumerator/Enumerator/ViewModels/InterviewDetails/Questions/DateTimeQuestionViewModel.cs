@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var interview = this.interviewRepository.Get(interviewId);
             var answerModel = interview.GetDateTimeQuestion(entityIdentity);
             this.answerFormatString = answerModel.UiFormatString;
-            if (answerModel.IsAnswered)
+            if (answerModel.IsAnswered())
             {
                 this.SetToView(answerModel.GetAnswer().Value);
             }

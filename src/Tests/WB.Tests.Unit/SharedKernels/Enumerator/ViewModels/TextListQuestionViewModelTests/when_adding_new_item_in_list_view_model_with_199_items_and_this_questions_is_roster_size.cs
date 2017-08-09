@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
             }
             savedAnswers = TextListAnswer.FromTupleArray(answersAsTuple);
 
-            var textListAnswer = Mock.Of<InterviewTreeTextListQuestion>(_ => _.GetAnswer() == savedAnswers && _.IsAnswered == true);
+            var textListAnswer = Mock.Of<InterviewTreeTextListQuestion>(_ => _.GetAnswer() == savedAnswers && _.IsAnswered() == true);
 
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireId == questionnaireId
