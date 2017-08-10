@@ -41,8 +41,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
                             timestamp: input.From.Date.AddMonths(2), endStatus: InterviewExportedAction.Completed)
                     }), "2");
 
-            quantityReportFactory =
-                CreateQuantityReportFactory(interviewStatusTimeSpansStorage: interviewStatusTimeSpansStorage);
+            var interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
+            interviewStatuses.Store(
+                Create.Entity.InterviewStatuses(questionnaireId: input.QuestionnaireId,
+                    questionnaireVersion: input.QuestionnaireVersion,
+                    statuses: new[]
+                    {
+                        Create.Entity.InterviewCommentedStatus(timestamp: input.From.AddMonths(-2)),
+                    }), "2");
+
+            quantityReportFactory = CreateQuantityReportFactory(interviewStatusTimeSpansStorage: interviewStatusTimeSpansStorage,
+                                                                interviewStatuses: interviewStatuses);
 
             result = quantityReportFactory.Load(input);
         }

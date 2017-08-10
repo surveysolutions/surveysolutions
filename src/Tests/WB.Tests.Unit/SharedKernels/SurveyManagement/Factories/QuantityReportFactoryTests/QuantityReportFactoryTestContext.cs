@@ -42,13 +42,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
         }
 
         protected static QuantityBySupervisorsReportInputModel CreateQuantityBySupervisorsReportInputModel(
-         string period = "d")
+            string period = "d",
+            int columnCount = 2,
+            DateTime? from = null)
         {
             return new QuantityBySupervisorsReportInputModel()
             {
                 Period = period,
-                ColumnCount = 2,
-                From = new DateTime(1984, 4, 18),
+                ColumnCount = columnCount,
+                From = from ?? new DateTime(1984, 4, 18),
                 Page = 0,
                 PageSize = 20,
                 QuestionnaireId = Guid.NewGuid(),
