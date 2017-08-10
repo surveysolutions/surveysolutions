@@ -28,6 +28,7 @@ import TextList from "./TextList"
 import TextQuestion from "./TextQuestion"
 import Humburger from "./ui/humburger"
 import Unsupported from "./Unsupported"
+import Typeahead from "./ui/typeahead"
 
 Vue.component("Audio", Audio)
 Vue.component("CategoricalMulti", CategoricalMulti)
@@ -50,12 +51,7 @@ Vue.component("TextQuestion", TextQuestion)
 Vue.component("Unsupported", Unsupported)
 Vue.component("wb-question", Question)
 Vue.component("wb-humburger", Humburger)
-
-Vue.component("wb-typeahead", (resolve, reject) => {
-     require.ensure(["./ui/typeahead"], r => {
-        resolve(require("./ui/typeahead").default)
-    }, "libs")
-})
+Vue.component("wb-typeahead", Typeahead)
 
 export const GroupStatus = {
     Completed: 1,

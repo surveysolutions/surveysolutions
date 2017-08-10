@@ -9,7 +9,7 @@ export default (Vue, options) => {
                     if (state.config) {
                         var resource = state.config.resources;
 
-                        return state.config.resources[arg] || arg;
+                        return resource[arg] || arg;
                     }
                 }
                 return arg;

@@ -1,6 +1,6 @@
 <template>
     <div v-if="visible" class="loading">
-        <div>Loading, please wait</div>
+        <div>{{ $t("LoadingWait") }}</div>
     </div>
 </template>
 <script lang="js">

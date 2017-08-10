@@ -4,7 +4,9 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field answered">
-                        <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill" placeholder="Enter number" title="Enter number"
+                        <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill"
+                            :placeholder="$t('NumberEnter')"
+                            :title="$t('NumberEnter')"
                             :value="$me.answer" v-blurOnEnterKey @blur="answerIntegerQuestion" v-numericFormatting="{aSep: groupSeparator, mDec: 0, vMin: '-2147483648', vMax: '2147483647', aPad: false }">
                             <button v-if="$me.isAnswered" type="submit" class="btn btn-link btn-clear" @click="removeAnswer">
                             <span></span>
@@ -47,7 +49,7 @@
                 }
 
                 if (answer > 2147483647 || answer < -2147483648 || answer % 1 !== 0) {
-                    this.markAnswerAsNotSavedWithMessage('Entered value can not be parsed as integer value')
+                    this.markAnswerAsNotSavedWithMessage(this.$t("NumberCannotParse"))
                     return
                 }
 
@@ -57,12 +59,14 @@
                 }
 
                 if (answer < 0) {
-                    this.markAnswerAsNotSavedWithMessage(`Answer ${answer} is incorrect because question is used as size of roster and specified answer is negative`)
+                    // `Answer ${answer} is incorrect because question is used as size of roster and specified answer is negative`)
+                    this.markAnswerAsNotSavedWithMessage(this.$t("NumberRosterError", { answer }))
                     return;
                 }
 
                 if (answer > this.$me.answerMaxValue) {
-                    this.markAnswerAsNotSavedWithMessage(`Answer ${answer} is incorrect because answer is greater than Roster upper bound ${this.$me.answerMaxValue}.`)
+                    // `Answer ${answer} is incorrect because answer is greater than Roster upper bound ${this.$me.answerMaxValue}.`
+                    this.markAnswerAsNotSavedWithMessage(this.$t("NumberRosterUpperBound", { answer, answerMaxValue: this.$me.answerMaxValue }))
                     return;
                 }
 
@@ -75,7 +79,9 @@
                 }
 
                 const amountOfRostersToRemove = previousAnswer - answer;
-                const confirmMessage = `Are you sure you want to remove ${amountOfRostersToRemove} row(s) from each related roster?`
+
+                //`Are you sure you want to remove ${amountOfRostersToRemove} row(s) from each related roster?`
+                const confirmMessage = this.$t("NumberRosterRemoveConfirm", { amountOfRostersToRemove })
 
                 modal.confirm(confirmMessage, result => {
                     if (result) {
@@ -98,7 +104,9 @@
                 }
 
                 var amountOfRostersToRemove = this.$me.answer;
-                var confirmMessage = `Are you sure you want to remove ${amountOfRostersToRemove} row(s) from each related roster?`
+
+                 //`Are you sure you want to remove ${amountOfRostersToRemove} row(s) from each related roster?`
+                var confirmMessage = this.$t("NumberRosterRemoveConfirm", { amountOfRostersToRemove })
 
                 modal.confirm(confirmMessage, result => {
                     if (result) {

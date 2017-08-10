@@ -846,7 +846,9 @@
     <EmbeddedResource Include="Resources\EnumNames.zh.resx">
       <DependentUpon>EnumNames.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FieldsAndValidations.ar.resx" />
+    <EmbeddedResource Include="Resources\FieldsAndValidations.ar.resx">
+      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\FieldsAndValidations.fr.resx">
       <DependentUpon>FieldsAndValidations.resx</DependentUpon>
     </EmbeddedResource>
@@ -1068,6 +1070,11 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\WebInterviewSetup.zh.resx">
       <DependentUpon>WebInterviewSetup.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterviewUI.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebInterviewUI.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
@@ -1940,6 +1947,11 @@
       <DependentUpon>WebInterviewSetup.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Resources\WebInterviewUI.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WebInterviewUI.resx</DependentUpon>
     </Compile>
     <Compile Include="ServiceLocationModule.cs" />
     <Compile Include="Services\AudioProcessingService.cs" />

@@ -9,9 +9,9 @@
                         <label :for="$me.id + '_' + option.value">
                         <span class="tick"></span> {{option.title}}
                     </label>
-                        <div class="badge" v-if="$me.ordered">{{getAnswerOrder(option.value)}}</div>
+                        <div class="badge" v-if="$me.ordered">{{ getAnswerOrder(option.value) }}</div>
                 </div>
-                <div v-if="noOptions" class="options-not-available">Options will be available after answering referenced question</div>
+                <div v-if="noOptions" class="options-not-available">{{ $t("OptionsAvailableAfterAnswer") }}</div>
             </div>
         </div>
     </wb-question>
@@ -42,7 +42,7 @@
                         return;
                     }
 
-                    const confirmMessage = 'Are you sure you want to remove related roster?';
+                    const confirmMessage = this.$t("ConfirmRosterRemove");
 
                     modal.confirm(confirmMessage, result => {
                         if (result) {

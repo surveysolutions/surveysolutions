@@ -101,7 +101,7 @@
                     return;
                 }
 
-                const confirmMessage = 'Are you sure you want to remove related roster?';
+                const confirmMessage = this.$t("ConfirmRosterRemove");
 
                 modal.confirm(confirmMessage,  result => {
                     if (result) {

@@ -28,7 +28,6 @@ using WB.UI.Headquarters.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
-
     [LimitsFilter]
     [Authorize(Roles = "Interviewer")]
     public class InterviewerHqController : BaseController
