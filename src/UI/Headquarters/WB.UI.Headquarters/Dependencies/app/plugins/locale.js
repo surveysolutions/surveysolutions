@@ -1,19 +1,38 @@
-export default (Vue, options) => {
+import i18next from "i18next"
 
-    Object.defineProperty(Vue.prototype, '$t', {
-        get() {
-            return (arg) => {
-                if (this.$store) {
-                    const state = this.$store.state;
+/*  the Plugin */
+var VueI18Next = {
+    install: function (Vue, options) {
+        /*  determine options  */
+        i18next.init(Object.assign({
+            fallbackLng: 'en'
+        }, options))
 
-                    if (state.config) {
-                        var resource = state.config.resources;
+        // /*  expose a global API method  */
+        Object.defineProperty(Vue, '$t', {
+            get() {
+                return (key, options) => {
+                    //var opts = { resources: locale }
 
-                        return resource[arg] || arg;
-                    }
+                    // for now we will not support language change on the fly
+                    //Vue.util.extend(opts, options)
+                    return i18next.t(key, options)
                 }
-                return arg;
             }
-        }
-    });
+        })
+
+        /*  expose a local API method  */
+        Object.defineProperty(Vue.prototype, '$t', {
+            get() {
+                return (key, options) => {
+                    //var opts = { resources: locale }
+                    //Vue.util.extend(opts, options)
+                    return i18next.t(key, options)
+                }
+            }
+        })
+    }
 }
+
+/*  export API  */
+export default VueI18Next
