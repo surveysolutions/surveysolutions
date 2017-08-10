@@ -676,9 +676,6 @@
     <Content Include="Content\popover-extra-placements.min.css" />
     <EmbeddedResource Include="Content\swagger.css" />
     <Content Include="Dependencies\css\jqplot-override.css" />
-    <Content Include="Dependencies\dist\libs-c78ea3c5cb.min.js" />
-    <Content Include="Dependencies\dist\libs-e175c7daa8.min.css" />
-    <Content Include="Dependencies\dist\markup-dcbdbce4f4.min.css" />
     <Content Include="Dependencies\build\libs.css" />
     <Content Include="Dependencies\build\libs.js" />
     <Content Include="Dependencies\build\markup.css" />
