@@ -222,4 +222,11 @@
   <data name="From" xml:space="preserve">
     <value>От</value>
   </data>
+  <data name="OverTheLast" xml:space="preserve">
+    <value>За последние</value>
+  </data>
+  <data name="InterviewActions" xml:space="preserve">
+    <value>Действия</value>
+    <comment>Действия</comment>
+  </data>
 </root>

@@ -2,8 +2,8 @@
     Supervisor.VM.PeriodicStatusReport.superclass.constructor.apply(this, arguments);
 
     var self = this;
-
-    var dateFormat = "MM/DD/YYYY";
+    let defaultFromDate = moment();
+    var dateFormat = "YYYY-MM-DD";
 
     self.Url = new Url(window.location.href);
 
@@ -11,7 +11,7 @@
 
     self.SelectedType = ko.observable(null);
 
-    self.FromDate = ko.observable(null);
+    self.FromDate = ko.observable(defaultFromDate);
 
     self.Period = ko.observable(null);
 
@@ -56,7 +56,7 @@
     }
 
     self.load = function () {
-        var todayMinus7Days = moment().add(-6, 'days').format(dateFormat);
+        var todayMinus7Days = defaultFromDate.format(dateFormat);
 
         self.Url.query['questionnaireId'] = self.QueryString['questionnaireId'] || "";
         self.Url.query['questionnaireVersion'] = self.QueryString['questionnaireVersion'] || "";
