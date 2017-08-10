@@ -223,7 +223,7 @@ namespace WB.UI.Headquarters.Controllers
                 SupervisorId = supervisorId,
                 ReportNameDescription = string.Format(GetReportDescriptionByType(reportType), PeriodicStatusReport.Team.ToLower()),
                 TotalRowPresent = totalRowPresent,
-                MinAllowedDate = minAllowedDate
+                MinAllowedDate = minAllowedDate ?? DateTime.Now
             };
         }
 
