@@ -101,7 +101,14 @@
             self.initReport();
         });
 
-        self.Period.subscribe(function () {
+        self.Period.subscribe(function (newVal) {
+            if (newVal === "d") {
+                self.ColumnCount(7);
+            } else if (newVal === "w") {
+                self.ColumnCount(4);
+            } else if (newVal === "m") {
+                self.ColumnCount(3);
+            }
             self.initReport();
         });
 
@@ -138,8 +145,8 @@
         };
     };
 
-    self.initReport = function () {
+    self.initReport = _.throttle(function() {
         self.search();
-    };
+    }, 500, { leading: false });
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.PeriodicStatusReport, Supervisor.VM.ListView);
