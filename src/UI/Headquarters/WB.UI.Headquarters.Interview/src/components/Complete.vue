@@ -30,7 +30,7 @@
         <div class="wrapper-info" v-if="completeInfo.entitiesWithError.length > 0">
             <div class="container-info">
                 <h4 class="gray-uppercase">{{ doesShowErrorsCommentWithCount
-                    ? $t('CompleteFirstErrors', { length: completeInfo.entitiesWithError.length })
+                    ? $t('CompleteFirstErrors', { count: completeInfo.entitiesWithError.length })
                     : $t('CompleteErrors') }}</h4>
                 <ul class="list-unstyled marked-questions">
                     <li v-for="entity in completeInfo.entitiesWithError">

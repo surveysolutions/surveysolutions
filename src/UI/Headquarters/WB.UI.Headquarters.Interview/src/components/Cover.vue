@@ -69,7 +69,7 @@ export default {
         },
         commentsTitle() {
             return this.$store.state.coverInfo.entitiesWithComments.length < this.$store.state.coverInfo.commentedQuestionsCount
-                ? this.$t("CoverFirstComments", { length: this.$store.state.coverInfo.entitiesWithComments.length})
+                ? this.$t("CoverFirstComments", { count: this.$store.state.coverInfo.entitiesWithComments.length})
                 : this.$t("CoverComments");
         },
         questions() {
