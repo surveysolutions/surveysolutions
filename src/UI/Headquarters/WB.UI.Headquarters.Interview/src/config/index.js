@@ -10,3 +10,4 @@ export const assetsPath = INTERVIEW_APP_CONFIG.assetsPath
 export const appVersion = INTERVIEW_APP_CONFIG.appVersion
 export const googleApiKey = INTERVIEW_APP_CONFIG.googleApiKey
 export const hqLink = INTERVIEW_APP_CONFIG.hqLink
+export const locale = INTERVIEW_APP_CONFIG.locale

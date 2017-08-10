@@ -1,7 +1,6 @@
-using System.Collections.Generic;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using WB.UI.Headquarters.Models.ComponentModels;
+using WB.UI.Headquarters.Utils;
 
 namespace WB.UI.Headquarters.Models
 {
@@ -10,26 +9,14 @@ namespace WB.UI.Headquarters.Models
         public string AllInterviews { get; set; }
         public string InterviewerHqEndpoint { get; set; }
         public string[] Statuses { get; set; }
-        public Dictionary<string, string> Resources { get; set; }
+        public TranslationModel Resources { get; set; }
 
         public string Title { get; set; }
         public ComboboxOptionModel[] Questionnaires { get; set; }
 
-        private static readonly JsonSerializerSettings ModelSerializationSettings = new JsonSerializerSettings
-        {
-            
-            ContractResolver = new CamelCasePropertyNamesContractResolver
-            {                
-                NamingStrategy = new CamelCaseNamingStrategy
-                {
-                    ProcessDictionaryKeys = false                    
-                }
-            }
-        };
-
         public override string ToString()
         {
-            return JsonConvert.SerializeObject(this, ModelSerializationSettings);
+            return JsonConvert.SerializeObject(this);
         }
     }
 }

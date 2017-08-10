@@ -135,9 +135,8 @@ export default {
 
     closeInterview({ state, dispatch }) {
         modal.alert({
-            title: "This interview is opened in another tab or browser",
-            message: "<p>Web Interview supports only one active tab with the interview.</p>"
-            + "<p>Please reload this page to continue using this tab or close it.</p>",
+            title: Vue.$t("CloseInterviewTitle"),
+            message: Vue.$t("CloseInterviewMessage"),
             callback: () => {
                 location.reload()
             },
@@ -145,7 +144,7 @@ export default {
             closeButton: false,
             buttons: {
                 ok: {
-                    label: "Reload",
+                    label: Vue.$t("Reload"),
                     className: "btn-success"
                 }
             }

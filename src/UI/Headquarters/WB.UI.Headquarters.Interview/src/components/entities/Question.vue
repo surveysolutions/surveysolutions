@@ -6,8 +6,8 @@
                 <span></span>
             </button>
             <ul class="dropdown-menu">
-                <li v-if="!isShowingAddCommentDialog"><a href="javascript:void(0)" @click="showAddComment">Add comment</a></li>
-                <li v-if="isShowingAddCommentDialog"><a href="javascript:void(0)" @click="hideAddComment">Hide comment</a></li>
+                <li v-if="!isShowingAddCommentDialog"><a href="javascript:void(0)" @click="showAddComment">{{ $t("AddComment") }}</a></li>
+                <li v-else><a href="javascript:void(0)" @click="hideAddComment">{{ $t("HideComment") }}</a></li>
             </ul>
         </div>
 
@@ -21,6 +21,7 @@
         <wb-progress :visible="isFetchInProgress" :valuenow="valuenow" :valuemax="valuemax" />
     </div>
 </template>
+
 <script lang="js">
     import { getLocationHash } from "src/store/store.fetch"
 
@@ -70,7 +71,7 @@
                 if (this.isShowingAddCommentDialogFlag == undefined)
                     return this.question.comments && this.question.comments.length > 0
                 else
-                    return this.isShowingAddCommentDialogFlag 
+                    return this.isShowingAddCommentDialogFlag
             },
             showSideMenu() {
                 return !this.noComments;
