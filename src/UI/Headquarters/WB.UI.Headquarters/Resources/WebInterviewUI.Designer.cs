@@ -367,7 +367,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to First {{ count}} entities with comments:.
+        ///   Looks up a localized string similar to First {{count}} entities with comments:.
         /// </summary>
         internal static string CoverFirstComments {
             get {
