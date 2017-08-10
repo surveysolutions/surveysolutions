@@ -58,7 +58,6 @@
 			: using a System.ComponentModel.TypeConverter
 			: and then encoded with base64 encoding.
 	-->
-
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -182,27 +181,25 @@
   </data>
   <data name="Loading">
     <value>Loading...</value>
-  </data>  
+  </data>
   <data name="NoResultsFound">
     <value>No results found</value>
   </data>
-
   <data name="Done">
     <value>Done</value>
   </data>
   <data name="Cancel">
     <value>Cancel</value>
   </data>
-  
   <data name="AudioInitializationFailed">
     <value>Audio initialization failed</value>
   </data>
   <data name="AudioRecording">
     <value>Audio recording</value>
-  </data>  
+  </data>
   <data name="AudioClickRecord">
     <value>Click to record audio</value>
-  </data>  
+  </data>
   <data name="AudioRecordNew">
     <value>Record new</value>
   </data>
@@ -210,38 +207,33 @@
     <value>{{humanizedLength}} ({{formattedLength}}) of audio recording</value>
     <comment>Do not translate parts inside {{}}: {{humanizedLength}} and {{formattedLength}}</comment>
   </data>
-
   <data name="RecordCurrentTime">
     <value>Record current time</value>
   </data>
-
   <data name="EnterDate">
     <value>Enter date</value>
   </data>
-  
   <data name="DecimalTooBig">
     <value>Entered value is bigger. Allow only 15 digits</value>
-  </data>  
-    <data name="DecimalCannotParse">
+  </data>
+  <data name="DecimalCannotParse">
     <value>Entered value can not be parsed as decimal value</value>
-  </data>  
+  </data>
   <data name="DecimalEnter">
     <value>Enter decimal</value>
   </data>
-  
   <data name="OptionsAvailableAfterAnswer">
     <value>Options will be available after answering referenced question</value>
-  </data>  
+  </data>
   <data name="ConfirmRosterRemove">
     <value>Are you sure you want to remove related roster?</value>
   </data>
-
   <data name="GPSRecord">
     <value>Record GPS</value>
-  </data> 
+  </data>
   <data name="GPSNotAvailable">
     <value>Your browser does not support receiving Geolocation</value>
-  </data>  
+  </data>
   <data name="GPSPermissionDenied">
     <value>This website does not have permission to use the Geolocation API</value>
   </data>
@@ -255,7 +247,6 @@
     <value>The position could not be determined due to an unknown error (Code: {{strErrorCode}}).</value>
     <comment>Do not translate parts inside {{}}: {{strErrorCode}}</comment>
   </data>
-  
   <data name="NumberEnter">
     <value>Enter Number</value>
   </data>
@@ -263,49 +254,42 @@
     <value>Entered value can not be parsed as integer value</value>
   </data>
   <data name="NumberRosterError">
-    <value>Answer {{answer}} is incorrect because question is used as size of roster and specified answer is negative</value>
+    <value>Answer '{{answer}}' is incorrect because question is used as size of roster and specified answer is negative</value>
     <comment>Do not translate parts inside {{}}: {{answer}}</comment>
   </data>
-  <data name="NumberCannotParse">
-    <value>Entered value can not be parsed as integer value</value>
-  </data>
   <data name="NumberRosterUpperBound">
-    <value>Answer {{answer}} is incorrect because answer is greater than Roster upper bound {{answerMaxValue}}.</value>
+    <value>Answer '{{answer}}' is incorrect because answer is greater than Roster upper bound {{answerMaxValue}}.</value>
     <comment>Do not translate parts inside {{}}: {{answer}}, {{answerMaxValue}}</comment>
   </data>
   <data name="NumberRosterRemoveConfirm">
-    <value>Are you sure you want to remove ${amountOfRostersToRemove} row(s) from each related roster?</value>
+    <value>Are you sure you want to remove {{amountOfRostersToRemove}} row(s) from each related roster?</value>
     <comment>Do not translate parts inside {{}}: {{amountOfRostersToRemove}}</comment>
   </data>
-  
   <data name="PhotoUpload">
     <value>Upload Photo</value>
-  </data>  
+  </data>
   <data name="PhotoTooBig">
     <value>Image is too big to upload. Please, choose an image less than 30 Mb</value>
-  </data>  
+  </data>
   <data name="PhotoIsNotImage">
     <value>Only image files are allowed to upload</value>
   </data>
-
   <data name="TextEnter">
     <value>Enter text</value>
-  </data>  
+  </data>
   <data name="TextEnterMasked">
     <value>Enter text {{userFriendlyMask}}</value>
     <comment>Do not translate parts inside {{}}: {{userFriendlyMask}}</comment>
-  </data>  
+  </data>
   <data name="TextEnterNewItem">
     <value>Enter new item</value>
   </data>
   <data name="TextRequired">
     <value>Please, fill in all the required values</value>
   </data>
-
   <data name="QuestionUnsupported">
     <value>Unsupported question type</value>
   </data>
-
   <data name="Complete">
     <value>Complete</value>
   </data>
@@ -321,7 +305,6 @@
   <data name="CompleteQuestionsUnanswered">
     <value>Unanswered</value>
   </data>
-  
   <data name="Error_0">
     <value>Error</value>
     <comment>Plural form: Zero items</comment>
@@ -337,7 +320,7 @@
   <data name="Error_3">
     <value>Errors</value>
     <comment>Plural form: few items</comment>
-  </data>  
+  </data>
   <data name="Error_4">
     <value>Errors</value>
     <comment>Plural form: many items</comment>
@@ -346,47 +329,39 @@
     <value>Errors</value>
     <comment>Plural form: plural</comment>
   </data>
-  
   <data name="CompleteFirstErrors">
-    <value>First {{ length }} entities with errors:</value>
+    <value>First {{ count}} entities with errors:</value>
   </data>
   <data name="CompleteErrors">
     <value>Questions with errors:</value>
   </data>
   <data name="CompleteNoteToSupervisor">
-    <value>Not for supervisor</value>
+    <value>Note for supervisor</value>
   </data>
-
   <data name="No">
     <value>No</value>
   </data>
-  
   <data name="Cover">
     <value>Cover</value>
   </data>
-
   <data name="CoverProvide">
     <value>Please provide answers to all questions to the extent possible. Any answers you provide are sent to our system right away. If you experience a communication disruption you can return to the questionnaire by following the same link you provided so far retained for you. You can then continue by submitting new answers or revising earlier answers.</value>
   </data>
-
   <data name="CoverSupervisorNote">
     <value>Supervisor note:</value>
-  </data> 
-    
+  </data>
   <data name="CoverFirstComments">
-    <value>First {{ length }} entities with comments:</value>
+    <value>First {{ count}} entities with comments:</value>
   </data>
   <data name="CoverComments">
     <value>Questions with comments:</value>
   </data>
-
   <data name="LoadingWait">
     <value>Loading, please wait</value>
   </data>
   <data name="Search">
     <value>Search</value>
   </data>
-
   <data name="ToggleNavigation">
     <value>Toggle navigation</value>
   </data>
@@ -398,6 +373,8 @@
   </data>
   <data name="SwitchingLanguage">
     <value>Switching language. Please wait...</value>
-  </data> 
-   
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
 </root>

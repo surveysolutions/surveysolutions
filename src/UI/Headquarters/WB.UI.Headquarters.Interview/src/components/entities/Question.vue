@@ -6,8 +6,8 @@
                 <span></span>
             </button>
             <ul class="dropdown-menu">
-                <li v-if="!isShowingAddCommentDialog"><a href="javascript:void(0)" @click="showAddComment">{{ $t("AddComment") }}</a></li>
-                <li v-else><a href="javascript:void(0)" @click="hideAddComment">{{ $t("HideComment") }}</a></li>
+                <li v-if="!isShowingAddCommentDialog"><a href="javascript:void(0)" @click="showAddComment">{{ $t("CommentAdd") }}</a></li>
+                <li v-else><a href="javascript:void(0)" @click="hideAddComment">{{ $t("CommentHide") }}</a></li>
             </ul>
         </div>
 

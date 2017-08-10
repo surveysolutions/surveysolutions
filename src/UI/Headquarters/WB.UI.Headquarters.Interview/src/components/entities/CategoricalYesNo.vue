@@ -1,7 +1,7 @@
 <template>
     <wb-question :question="$me" :questionCssClassName="$me.ordered ? 'yes-no-question ordered' : 'yes-no-question'">
         <div class="question-unit">
-            <div class="yes-no-mark">Yes <b>/</b> No</div>
+            <div class="yes-no-mark">{{ $t("Yes") }} <b>/</b> {{ $t("No")}}</div>
             <div class="options-group">
                 <div class="radio" v-for="option in $me.options" :key="$me.id + '_' + option.value">
                     <div class="field">

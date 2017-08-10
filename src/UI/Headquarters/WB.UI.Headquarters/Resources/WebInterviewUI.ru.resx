@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SlowConnection" xml:space="preserve">
+    <value>Медленное сетевое соединение</value>
+  </data>
+  <data name="CloseInterviewTitle" xml:space="preserve">
+    <value>Интервью открыто в другом браузере или вкладке</value>
+  </data>
+  <data name="Network" xml:space="preserve">
+    <value>Сеть</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Перегрузить</value>
+  </data>
+  <data name="SessionTimeoutTitle" xml:space="preserve">
+    <value>Ваша сессия истекла</value>
+  </data>
+  <data name="SessionTimeoutMessageTitle" xml:space="preserve">
+    <value>Ваша сессия истекла потому что вы не совершали никаких действий в течении 15 минут.</value>
+  </data>
+  <data name="SessionTimeoutMessage" xml:space="preserve">
+    <value>Пожалуйста перегрузите страницу чтобы продолжить интервью.</value>
+  </data>
+  <data name="Disconnected" xml:space="preserve">
+    <value>Разъеденены</value>
+  </data>
+  <data name="ConnectionLostTitle" xml:space="preserve">
+    <value>Соединение с сервером потеряно.</value>
+  </data>
+  <data name="ConnectionLostMessage" xml:space="preserve">
+    <value>Пожалуйста перегрузите страницу чтобы восстановить соединение с сервером и продолжить интервью.</value>
+  </data>
+  <data name="CloseInterviewMessage" xml:space="preserve">
+    <value>&lt;p&gt;Веб Интервью поддерживается только в одной активной вкладке&lt;/p&gt;&lt;p&gt;Пожалуйста перегрузите эту страницу если хотите продолжить интервью или закройте окно&lt;/p&gt;</value>
+  </data>
+  <data name="CommentAdd" xml:space="preserve">
+    <value>Добавить комментарий</value>
+  </data>
+  <data name="CommentHide" xml:space="preserve">
+    <value>Скрыть комментарий</value>
+  </data>
+  <data name="CommentEnter" xml:space="preserve">
+    <value>Введите Ваш комментарий</value>
+  </data>
+  <data name="CommentPost" xml:space="preserve">
+    <value>Отправить</value>
+  </data>
+  <data name="CommentYours" xml:space="preserve">
+    <value>Ваш комментарий</value>
+  </data>
+  <data name="CommentAdmin" xml:space="preserve">
+    <value>Комментарий Администратора</value>
+  </data>
+  <data name="CommentSupervisor" xml:space="preserve">
+    <value>Комментарий супервизора</value>
+  </data>
+  <data name="CommentInterviewer" xml:space="preserve">
+    <value>Комментарий интервьюера</value>
+  </data>
+  <data name="CommentHeadquarters" xml:space="preserve">
+    <value>Комментарий хедквотера</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Комментарий</value>
+  </data>
+  <data name="Instruction" xml:space="preserve">
+    <value>Инструкция</value>
+  </data>
+  <data name="InstructionShow" xml:space="preserve">
+    <value>Показать инструкцию</value>
+  </data>
+  <data name="ProgressText" xml:space="preserve">
+    <value>{{progress}}% Завершено</value>
+  </data>
+  <data name="AnswerIsInvalid" xml:space="preserve">
+    <value>Ответ не валиден</value>
+  </data>
+  <data name="AnswerWasNotSaved" xml:space="preserve">
+    <value>Ответ не сохранен</value>
+  </data>
+  <data name="ClickToAnswer" xml:space="preserve">
+    <value>Кликните чтобы ответить</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Загрузка...</value>
+  </data>
+  <data name="NoResultsFound" xml:space="preserve">
+    <value>Ненайдено результатов</value>
+  </data>
+  <data name="Done" xml:space="preserve">
+    <value>Готово</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Отменить</value>
+  </data>
+  <data name="AudioInitializationFailed" xml:space="preserve">
+    <value>Ошибка инициализации аудио</value>
+  </data>
+  <data name="AudioRecording" xml:space="preserve">
+    <value>Аудио запись</value>
+  </data>
+  <data name="AudioClickRecord" xml:space="preserve">
+    <value>Кликните чтобы записать аудио</value>
+  </data>
+  <data name="AudioRecordNew" xml:space="preserve">
+    <value>Записать новое</value>
+  </data>
+  <data name="AudioRecordingDuration" xml:space="preserve">
+    <value>{{humanizedLength}} ({{formattedLength}}) аудио записи</value>
+  </data>
+  <data name="RecordCurrentTime" xml:space="preserve">
+    <value>Записать текущее время</value>
+  </data>
+  <data name="EnterDate" xml:space="preserve">
+    <value>Введите дату</value>
+  </data>
+  <data name="DecimalTooBig" xml:space="preserve">
+    <value>Введенное значение слишком велико. Допускается максимум 15 цифр</value>
+  </data>
+  <data name="DecimalCannotParse" xml:space="preserve">
+    <value>Введенное значение не может быть интерпретировано как вещественное число</value>
+  </data>
+  <data name="DecimalEnter" xml:space="preserve">
+    <value>Введите число</value>
+  </data>
+  <data name="OptionsAvailableAfterAnswer" xml:space="preserve">
+    <value>Опции будут доступны после ответа на соответствующий вопрос</value>
+  </data>
+  <data name="ConfirmRosterRemove" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить зависимый список?</value>
+  </data>
+  <data name="NumberRosterUpperBound" xml:space="preserve">
+    <value>Ответ '{{answer}}' неверный, поскольку он больше значения максимального количества элементов в списке: '{{answerMaxValue}}'.</value>
+  </data>
+  <data name="NumberRosterError" xml:space="preserve">
+    <value>Ответ '{{answer}}' неверный, поскольку нельзя задать отрицательное количество элементов в списке</value>
+  </data>
+  <data name="CompleteQuestionsAnswered" xml:space="preserve">
+    <value>Отвеченных</value>
+  </data>
+  <data name="NumberRosterRemoveConfirm" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить {{amountOfRostersToRemove}} строк(у) у зависимых списков?</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+    <value>Закончить</value>
+  </data>
+  <data name="Cover" xml:space="preserve">
+    <value>Обложка</value>
+  </data>
+  <data name="TextEnterNewItem" xml:space="preserve">
+    <value>Введите новый элемент</value>
+  </data>
+  <data name="NumberEnter" xml:space="preserve">
+    <value>Введите число</value>
+  </data>
+  <data name="TextEnter" xml:space="preserve">
+    <value>Введите текст</value>
+  </data>
+  <data name="TextEnterMasked" xml:space="preserve">
+    <value>Введите текст {{userFriendlyMask}}</value>
+  </data>
+  <data name="NumberCannotParse" xml:space="preserve">
+    <value>Введенное значение не может быть интерпретировано как целое число</value>
+  </data>
+  <data name="Error_1" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="Error_0" xml:space="preserve">
+    <value>Ошибок</value>
+  </data>
+  <data name="Error_5" xml:space="preserve">
+    <value>Ошибок</value>
+  </data>
+  <data name="Error_4" xml:space="preserve">
+    <value>Ошибки</value>
+  </data>
+  <data name="Error_3" xml:space="preserve">
+    <value>Ошибки</value>
+  </data>
+  <data name="Error_2" xml:space="preserve">
+    <value>Ошибки</value>
+  </data>
+  <data name="CoverFirstComments" xml:space="preserve">
+    <value>Первые {{count}} вопросов с комментариями:</value>
+  </data>
+  <data name="CompleteFirstErrors" xml:space="preserve">
+    <value>Первые {{ count}} объектов с ошибкам:</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Помощь</value>
+  </data>
+  <data name="PhotoTooBig" xml:space="preserve">
+    <value>Изображение слишком велико для загрузки. Пожалуйста выберите изображение размеров меньше чем 30Мб</value>
+  </data>
+  <data name="LoadingWait" xml:space="preserve">
+    <value>Загрузка, подождите...</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="CompleteNoteToSupervisor" xml:space="preserve">
+    <value>Заметка для супервизора</value>
+  </data>
+  <data name="PhotoIsNotImage" xml:space="preserve">
+    <value>Загружать можно только изображения</value>
+  </data>
+  <data name="TextRequired" xml:space="preserve">
+    <value>Заполните ответ на вопрос полностью</value>
+  </data>
+  <data name="CompleteQuestionsStatus" xml:space="preserve">
+    <value>Статусы вопросов:</value>
+  </data>
+  <data name="CoverComments" xml:space="preserve">
+    <value>Вопросы с комментариями:</value>
+  </data>
+  <data name="CompleteErrors" xml:space="preserve">
+    <value>Вопросы с ошибками</value>
+  </data>
+  <data name="GPSRecord" xml:space="preserve">
+    <value>Записать GPS</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
+  <data name="CoverSupervisorNote" xml:space="preserve">
+    <value>Замечания супервизора</value>
+  </data>
+  <data name="SwitchingLanguage" xml:space="preserve">
+    <value>Переключение языка. Пожалуйста, подождите</value>
+  </data>
+  <data name="GPSTimeout" xml:space="preserve">
+    <value>Текущее местоположение не может быть определено за указанный промежуток времени</value>
+  </data>
+  <data name="GPSPositionUnavailable" xml:space="preserve">
+    <value>Текущее местоположение не может быть определено</value>
+  </data>
+  <data name="GPSError" xml:space="preserve">
+    <value>Текущее местоположение не может быть определено из за неизвестной ошибки (Код: {{strErrorCode}})</value>
+  </data>
+  <data name="GPSPermissionDenied" xml:space="preserve">
+    <value>Пользователь не дал разрешения на получения местоположения через Geolocation API</value>
+  </data>
+  <data name="ToggleNavigation" xml:space="preserve">
+    <value>Переключить навигацию</value>
+  </data>
+  <data name="CompleteQuestionsUnanswered" xml:space="preserve">
+    <value>Неотвеченных</value>
+  </data>
+  <data name="QuestionUnsupported" xml:space="preserve">
+    <value>Неподдерживаемый тип вопроса</value>
+  </data>
+  <data name="PhotoUpload" xml:space="preserve">
+    <value>Загрузить фото</value>
+  </data>
+  <data name="WebInterview" xml:space="preserve">
+    <value>Веб интервью</value>
+  </data>
+  <data name="CompleteAbout" xml:space="preserve">
+    <value>Вы на финальной стадии работы с интервью</value>
+  </data>
+  <data name="GPSNotAvailable" xml:space="preserve">
+    <value>Ваш Браузер не поддерживает получение местоположения через Geolocation API</value>
+  </data>
+  <data name="CoverProvide" xml:space="preserve">
+    <value>Пожалуйста, предоставьте ответы на все вопросы, насколько это возможно. Любые предоставленные вами ответы сразу отправляются в нашу систему. Если у вас возникли перебои связи, то вы можете вернуться к анкете, используя ту же ссылку при условии, что вы её сохранили. После этого вы можете продолжить, дать новые или пересмотреть данные ранее ответы.</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Да</value>
+  </data>
+</root>

@@ -277,7 +277,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to First {{ length }} entities with errors:.
+        ///   Looks up a localized string similar to First {{ count}} entities with errors:.
         /// </summary>
         internal static string CompleteFirstErrors {
             get {
@@ -286,7 +286,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Not for supervisor.
+        ///   Looks up a localized string similar to Note for supervisor.
         /// </summary>
         internal static string CompleteNoteToSupervisor {
             get {
@@ -367,7 +367,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to First {{ length }} entities with comments:.
+        ///   Looks up a localized string similar to First {{ count}} entities with comments:.
         /// </summary>
         internal static string CoverFirstComments {
             get {
@@ -646,7 +646,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer {{answer}} is incorrect because question is used as size of roster and specified answer is negative.
+        ///   Looks up a localized string similar to Answer &apos;{{answer}}&apos; is incorrect because question is used as size of roster and specified answer is negative.
         /// </summary>
         internal static string NumberRosterError {
             get {
@@ -655,7 +655,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to remove ${amountOfRostersToRemove} row(s) from each related roster?.
+        ///   Looks up a localized string similar to Are you sure you want to remove {{amountOfRostersToRemove}} row(s) from each related roster?.
         /// </summary>
         internal static string NumberRosterRemoveConfirm {
             get {
@@ -664,7 +664,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer {{answer}} is incorrect because answer is greater than Roster upper bound {{answerMaxValue}}..
+        ///   Looks up a localized string similar to Answer &apos;{{answer}}&apos; is incorrect because answer is greater than Roster upper bound {{answerMaxValue}}..
         /// </summary>
         internal static string NumberRosterUpperBound {
             get {
@@ -849,6 +849,15 @@ namespace WB.UI.Headquarters.Resources {
         internal static string WebInterview {
             get {
                 return ResourceManager.GetString("WebInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        internal static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
     }
