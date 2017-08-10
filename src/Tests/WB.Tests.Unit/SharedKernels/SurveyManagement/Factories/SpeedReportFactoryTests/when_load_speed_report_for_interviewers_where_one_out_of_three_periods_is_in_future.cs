@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
@@ -23,10 +24,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
             result.DateTimeRanges.Length.ShouldEqual(2);
 
         It should_return_today_as_a_period = () =>
-            result.DateTimeRanges[1].From.Date.ShouldEqual(now.Date);
+            result.DateTimeRanges.First().From.Date.ShouldEqual(now.Date);
 
         It should_return_yesterday_as_a_period = () =>
-            result.DateTimeRanges[0].From.Date.ShouldEqual(now.Date.AddDays(-1));
+            result.DateTimeRanges.Second().From.Date.ShouldEqual(now.Date.AddDays(-1));
 
         private static SpeedReportFactory quantityReportFactory;
         private static SpeedByInterviewersReportInputModel input;

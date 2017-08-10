@@ -17,6 +17,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts
         public PeriodiceReportType[] ReportTypes { get; set; }
         public string ReportNameDescription { get; set; }
         public bool TotalRowPresent { get; set; }
-        public DateTime MinAllowedDate { get; set; }
+        public DateTime? MinAllowedDate { get; set; }
     }
 }
