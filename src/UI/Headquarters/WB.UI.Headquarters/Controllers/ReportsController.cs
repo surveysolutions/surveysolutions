@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Survey;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -25,19 +27,22 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAuthorizedUser authorizedUser;
         private readonly IUserViewFactory userViewFactory;
         private readonly ITeamUsersAndQuestionnairesFactory teamUsersAndQuestionnairesFactory;
+        private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses;
 
         public ReportsController(
             IMapReport mapReport, 
             IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory, 
             IAuthorizedUser authorizedUser, 
             IUserViewFactory userViewFactory, 
-            ITeamUsersAndQuestionnairesFactory teamUsersAndQuestionnairesFactory)
+            ITeamUsersAndQuestionnairesFactory teamUsersAndQuestionnairesFactory, 
+            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses)
         {
             this.mapReport = mapReport;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.authorizedUser = authorizedUser;
             this.userViewFactory = userViewFactory;
             this.teamUsersAndQuestionnairesFactory = teamUsersAndQuestionnairesFactory;
+            this.interviewStatuses = interviewStatuses;
         }
 
         [Authorize(Roles = "Administrator, Headquarter")]
@@ -195,10 +200,17 @@ namespace WB.UI.Headquarters.Controllers
             return this.View("SpeedAndQuantity", model);
         }
 
-        private PeriodicStatusReportModel CreatePeriodicStatusReportModel(PeriodicStatusReportWebApiActionName webApiActionName, PeriodiceReportType reportType,
-            bool canNavigateToQuantityByTeamMember, bool canNavigateToQuantityBySupervisors, string reportName, string responsibleColumnName, bool totalRowPresent, Guid? supervisorId = null)
+        private PeriodicStatusReportModel CreatePeriodicStatusReportModel(PeriodicStatusReportWebApiActionName webApiActionName, 
+            PeriodiceReportType reportType,
+            bool canNavigateToQuantityByTeamMember, 
+            bool canNavigateToQuantityBySupervisors, 
+            string reportName, 
+            string responsibleColumnName, 
+            bool totalRowPresent, 
+            Guid? supervisorId = null)
         {
             var allUsersAndQuestionnaires = this.allUsersAndQuestionnairesFactory.Load();
+            DateTime minAllowedDate = this.interviewStatuses.Query(_ => _.SelectMany(x => x.InterviewCommentedStatuses).Select(x => x.Timestamp).Min());
 
             return new PeriodicStatusReportModel
             {
@@ -210,7 +222,8 @@ namespace WB.UI.Headquarters.Controllers
                 ResponsibleColumnName = responsibleColumnName,
                 SupervisorId = supervisorId,
                 ReportNameDescription = string.Format(GetReportDescriptionByType(reportType), PeriodicStatusReport.Team.ToLower()),
-                TotalRowPresent = totalRowPresent
+                TotalRowPresent = totalRowPresent,
+                MinAllowedDate = minAllowedDate
             };
         }
 
