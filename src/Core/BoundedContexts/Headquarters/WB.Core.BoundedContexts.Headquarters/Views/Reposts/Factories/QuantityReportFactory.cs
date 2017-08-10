@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             Expression<Func<T, UserAndTimestamp>> selectUserAndTimestamp)
         {
             var from = this.AddPeriod(reportStartDate.Date, period, -columnCount + 1);
-            var to = reportStartDate.Date;
+            var to = reportStartDate.Date.AddDays(1);
 
             DateTime? minDate = GetFirstInterviewCreatedDate(questionnaire);
 
