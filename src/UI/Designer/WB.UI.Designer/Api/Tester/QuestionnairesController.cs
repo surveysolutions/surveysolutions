@@ -111,7 +111,6 @@ namespace WB.UI.Designer.Api.Tester
 
             var userId = this.userHelper.WebUser.UserId;
             var isAdmin = this.userHelper.WebUser.IsAdmin;
-            var email = this.userHelper.WebUser.MembershipUser.Email;
             var userName = this.userHelper.WebUser.UserName;
             
             var questionnaireViews = this.viewFactory.GetUserQuestionnaires(userId, isAdmin, pageIndex, pageSize);
@@ -122,7 +121,7 @@ namespace WB.UI.Designer.Api.Tester
                 Title = questionnaire.Title,
                 LastEntryDate = questionnaire.LastEntryDate,
                 Owner = questionnaire.CreatorName,
-                IsOwner = questionnaire.CreatorName == userName || questionnaire.CreatorName == email,
+                IsOwner = questionnaire.CreatorName == userName,
                 IsPublic = questionnaire.IsPublic || isAdmin,
                 IsShared = questionnaire.SharedPersons.Any(sharedPerson => sharedPerson.UserId == userId)
             });
