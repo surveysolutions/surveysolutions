@@ -7,7 +7,7 @@
                     {{interviewKey}}
                 </router-link>
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
+                    <span class="sr-only">{{ $t('Toggle navigation') }}</span>
                     <span class="icon-bar top-menu"></span>
                     <span class="icon-bar mid-menu"></span>
                     <span class="icon-bar bottom-menu"></span>
@@ -22,17 +22,19 @@
                 <p class="navbar-text">{{questionnaireTitle}}</p>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown language">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" v-bind:title="currentLanguage">{{currentLanguage}}<span class="caret" v-if="canChangeLanguage"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+                            :title="currentLanguage">{{currentLanguage}}<span class="caret" v-if="canChangeLanguage"></span></a>
                         <ul class="dropdown-menu" v-if="canChangeLanguage">
                             <li v-if="currentLanguage != $store.state.originalLanguageName">
                                 <a href="javascript:void(0)" @click="changeLanguage()">{{ $store.state.originalLanguageName }}</a>
                             </li>
-                            <li :key="language.OriginalLanguageName" v-for="language in $store.state.languages" v-if="language != $store.state.currentLanguage">
+                            <li :key="language.OriginalLanguageName" v-for="language in $store.state.languages"
+                                v-if="language != $store.state.currentLanguage">
                                 <a href="javascript:void(0)" @click="changeLanguage(language)">{{ language }}</a>
                             </li>
                         </ul>
                     </li>
-                    <li><a href="http://docs.mysurvey.solutions/web-interview" title="Help">Help</a></li>
+                    <li><a href="http://docs.mysurvey.solutions/web-interview" :title="$t('Help')">{{ $t('Help') }}</a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -78,7 +80,7 @@
             });
         },
         updated(){
-            document.title = `${this.$store.state.interviewKey} | ${this.questionnaireTitle} | Web interview`
+            document.title = `${this.$store.state.interviewKey} | ${this.questionnaireTitle} | ${this.$t("WebInterview")}`
         },
         computed: {
             canChangeLanguage() {
@@ -94,7 +96,7 @@
                 return { name: 'section', params: { sectionId: this.$store.state.firstSectionId } }
             },
             interviewKey() {
-                return this.$store.state.interviewKey || "Web interview";
+                return this.$store.state.interviewKey || this.$t("WebInterview");
             },
             hqLink() {
                 return hqLink
@@ -106,8 +108,7 @@
                 this.$store.dispatch("changeLanguage", { language: language })
 
                 modal.dialog({
-                    message: "<p>Switching language. Please wait...</p>",
-
+                    message: "<p>" + this.$t("SwitchingLanguage") +"</p>",
                     closeButton: false
                 })
             }

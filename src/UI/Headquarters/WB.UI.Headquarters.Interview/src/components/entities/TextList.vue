@@ -10,7 +10,8 @@
                 </div>
                 <div class="form-group" v-if="canAddNewItem">
                     <div class="field answered">
-                        <input autocomplete="off" type="text" class="field-to-fill" placeholder="Enter new item" title="Enter new item" v-blurOnEnterKey @blur="addRow"/>
+                        <input autocomplete="off" type="text" class="field-to-fill"
+                            :placeholder="$t('TextEnterNewItem')" :title="$t('TextEnterNewItem')" v-blurOnEnterKey @blur="addRow"/>
                     </div>
                 </div>
             </div>
@@ -44,7 +45,7 @@
                     return
                 }
 
-                modal.confirm('Are you sure you want to remove related roster?', result => {
+                modal.confirm(this.$t('ConfirmRosterRemove'), result => {
                     if (result) {
                         this.removeRow(index)
                         return;

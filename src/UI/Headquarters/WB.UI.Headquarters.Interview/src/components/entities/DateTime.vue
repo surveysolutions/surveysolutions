@@ -4,18 +4,19 @@
             <div class="options-group">
                 <div v-if="!$me.isTimestamp" class="form-group">
                     <div class="field" :class="{answered: $me.isAnswered}">
-                        <flat-pickr :config="pickerOpts" :value="answer" class="field-to-fill" placeholder="Enter date" title="Enter date" />
+                        <flat-pickr :config="pickerOpts" :value="answer" class="field-to-fill"
+                            :placeholder="$t('Enter date')" :title="$t('Enter date')" />
                         <wb-remove-answer/>
                     </div>
                 </div>
                 <div v-else>
                     <div class="field" :class="{answered: $me.isAnswered}">
-                        <div class="block-with-data">{{answer}}</div>
+                        <div class="block-with-data">{{ answer }}</div>
                         <wb-remove-answer />
                     </div>
                     <div class="action-btn-holder time-question" @click="answerDate">
                         <button type="button" class="btn btn-default btn-lg btn-action-questionnaire">
-                            Record current time
+                            {{ $t("RecordCurrentTime") }}
                         </button>
                     </div>
                 </div>

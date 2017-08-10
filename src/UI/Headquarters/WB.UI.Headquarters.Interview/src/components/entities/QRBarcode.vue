@@ -4,7 +4,8 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field" :class="{answered: $me.isAnswered}">
-                        <input autocomplete="off" type="text" class="field-to-fill" placeholder="Enter text" title="Enter text" :value="$me.answer"
+                        <input autocomplete="off" type="text" class="field-to-fill"
+                            :placeholder="$t('EnterText')" :title="$t('EnterText')" :value="$me.answer"
                             v-blurOnEnterKey @blur="answerQRBarcodeQuestion">
                             <wb-remove-answer />
                     </div>

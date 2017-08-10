@@ -1,7 +1,7 @@
 <template>
     <div class="progress question-progress" v-if="isVisible">
         <div class="progress-bar progress-bar-striped active" role="progressbar" :style="style">
-            <span class="sr-only">{{progress}}% Complete</span>
+            <span class="sr-only"> {{ $t("ProgressText", { progress } ) }}</span>
         </div>
     </div>
 </template>
@@ -39,6 +39,7 @@
             progress() {
                 return Math.round((this.valuenow / this.valuemax) * 100)
             },
+
             style() {
                 return {
                     width: this.progress + "%"
