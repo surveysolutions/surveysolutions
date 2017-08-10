@@ -52,7 +52,7 @@
                     @if (Model.ReportTypes.Length > 1)
                     {
                         <div class="block-filter">
-                            <h5>@PeriodicStatusReport.Type</h5>
+                            <h5>@PeriodicStatusReport.InterviewActions</h5>
                             <select id="reportTypeSelector" data-bind="value: SelectedType, selectPicker: {}">
                                 @foreach (var item in Model.ReportTypes)
                                 {
@@ -64,6 +64,7 @@
                     <div class="block-filter">
                         <h5>@PeriodicStatusReport.Questionnaire</h5>
                         <select id="questionnaireSelector" data-bind="value: SelectedQuestionnaire, selectPicker: {}">
+                            <option value="" selected="selected">@Common.Any</option>
                             @foreach (var item in Model.Questionnaires)
                             {
                                 <option value='{"questionnaireId": "@item.TemplateId","questionnaireVersion": "@item.TemplateVersion"}'>(@PeriodicStatusReport.Version @item.TemplateVersion) @item.TemplateName</option>
@@ -71,19 +72,7 @@
                         </select>
                     </div>
                     <div class="block-filter">
-                        <h5>@PeriodicStatusReport.From</h5>
-                        <div class="form-date input-group" id="dates-range">
-                            <input type="text" data-bind="flatpickr: FromDate, flatpickrOptions: { maxDate: 'today', wrap: true, enableTime: false, dateFormat: 'm/d/Y'}" placeholder="Select start date" class="form-control flatpickr-input" readonly="readonly" data-input>
-                            <button type="submit" class="btn btn-link btn-clear">
-                                <span></span>
-                            </button>
-                            <span class="input-group-addon" data-toggle>
-                                <span class="calendar"></span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="block-filter">
-                        <h5>@PeriodicStatusReport.Period</h5>
+                        <h5>@PeriodicStatusReport.OverTheLast</h5>
                         <select id="periodSelector" data-bind="value: Period, selectPicker: {}">
                             <option value='d'>@PeriodicStatusReport.Day</option>
                             <option value='w'>@PeriodicStatusReport.Week</option>
@@ -99,6 +88,19 @@
                             }
                         </select>
                     </div>
+                    <div class="block-filter">
+                        <h5>@PeriodicStatusReport.LastDateToShowLabel</h5>
+                        <div class="form-date input-group" id="dates-range">
+                            <input type="text" data-bind="flatpickr: FromDate, flatpickrOptions: { minDate: '@Model.MinAllowedDate.ToString("s")', maxDate: 'today', wrap: true, enableTime: false, dateFormat: 'Y-m-d'}" placeholder="Select start date" class="form-control flatpickr-input" readonly="readonly" data-input>
+                            <button type="submit" class="btn btn-link btn-clear">
+                                <span></span>
+                            </button>
+                            <span class="input-group-addon" data-toggle>
+                                <span class="calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+
                 </div>
             </aside>
             <div class="main-information">

@@ -97,7 +97,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A time difference between the moment a supervisor approves a questionnaire and that questionnaire is approved or rejected on HQ..
+        ///   Looks up a localized string similar to Time difference between the moment when a supervisor approves a questionnaire and when that questionnaire is either approved or rejected by HQ..
         /// </summary>
         public static string AverageHQProcessingTimeDescription {
             get {
@@ -115,7 +115,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A time difference between the moment when the first answer is recorded on a tablet and when the complete button is pressed..
+        ///   Looks up a localized string similar to Time difference between the moment when the interviewer records the first answer and when the the interviewer presses the Complete button..
         /// </summary>
         public static string AverageInterviewDurationDescription {
             get {
@@ -133,7 +133,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A time difference between the first assignment and the moment when the interview is approved by HQ..
+        ///   Looks up a localized string similar to Time difference between when the interview is first assignmed and when HQ approves the interview..
         /// </summary>
         public static string AverageOverallCaseProcessingTimeDescription {
             get {
@@ -151,7 +151,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A time difference between the complete button being pressed and the supervisor accepts or rejects that questionnaire..
+        ///   Looks up a localized string similar to Time difference between when the interviewer presses the the Complete button and when the supervisor either accepts or rejects that questionnaire..
         /// </summary>
         public static string AverageSupervisorProcessingTimeDescription {
             get {
@@ -196,6 +196,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interview actions.
+        /// </summary>
+        public static string InterviewActions {
+            get {
+                return ResourceManager.GetString("InterviewActions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to in the.
         /// </summary>
         public static string InThe {
@@ -210,6 +219,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string InTheSupervisorTeamFormat {
             get {
                 return ResourceManager.GetString("InTheSupervisorTeamFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Starting from.
+        /// </summary>
+        public static string LastDateToShowLabel {
+            get {
+                return ResourceManager.GetString("LastDateToShowLabel", resourceCulture);
             }
         }
         
@@ -291,6 +309,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string NumberOfInterviewTransactionsBySupervisorDescription {
             get {
                 return ResourceManager.GetString("NumberOfInterviewTransactionsBySupervisorDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Over the last.
+        /// </summary>
+        public static string OverTheLast {
+            get {
+                return ResourceManager.GetString("OverTheLast", resourceCulture);
             }
         }
         

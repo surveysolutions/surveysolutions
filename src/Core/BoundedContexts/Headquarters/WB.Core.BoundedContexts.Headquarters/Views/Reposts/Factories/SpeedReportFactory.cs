@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             var to = this.AddPeriod(from, period, columnCount);
 
             var dateTimeRanges =
-                Enumerable.Range(0, columnCount)
+                Enumerable.Range(0, columnCount).Reverse()
                     .Select(i => new DateTimeRange(this.AddPeriod(from, period, i).Date, this.AddPeriod(from, period, i + 1).Date))
                     .Where(i => i.From.Date <= DateTime.Now.Date)
                     .ToArray();

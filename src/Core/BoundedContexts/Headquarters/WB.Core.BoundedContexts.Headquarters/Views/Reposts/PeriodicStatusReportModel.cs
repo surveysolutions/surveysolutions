@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts
@@ -16,5 +17,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts
         public PeriodiceReportType[] ReportTypes { get; set; }
         public string ReportNameDescription { get; set; }
         public bool TotalRowPresent { get; set; }
+        public DateTime MinAllowedDate { get; set; }
     }
 }
