@@ -11120,40 +11120,6 @@ td.errors {
     .graphic-wrapper .graphic-explanation {
       float: none; } }
 
-main .before-search {
-  display: none; }
-
-.search-wasnt-started .before-search {
-  display: block; }
-
-.search-wasnt-started .main-information {
-  display: none; }
-
-.search-wasnt-started .filters {
-  position: static;
-  overflow: visible;
-  border: none;
-  width: 100%;
-  margin: 0;
-  padding: 0; }
-  .search-wasnt-started .filters .foldback-button {
-    display: none; }
-  .search-wasnt-started .filters .filters-container {
-    max-width: 310px;
-    border: none;
-    padding: 0 5px; }
-    .search-wasnt-started .filters .filters-container > h4, .search-wasnt-started .filters .filters-container > .import-progress {
-      display: none; }
-
-.search-wasnt-started + .footer {
-  padding-left: 0 !important; }
-
-.troubleshooting-explanation {
-  font-weight: bold; }
-
-.search-wasnt-started .wrapper-view-mode {
-  padding-top: 0 !important; }
-
 .servers-error {
   width: 350px; }
 

@@ -14,7 +14,6 @@ var gulp = require('gulp'),
     util = require('gulp-util'),
     debug = require('gulp-debug'),
     rename = require('gulp-rename'),
-    vueify = require('vueify'),
     glob = require('glob'),
     es = require('event-stream');
 // error handling https://medium.com/@boriscoder/catching-errors-on-gulp-js-4682eee2669f#.rh86s4ad2
@@ -74,40 +73,6 @@ var config = {
     jsLibsInject: 'jsLibs'
 };
 
-gulp.task('vueify', wrapPipe(function (success, error) {
-    glob('./vue/**/*.js', function (err, files) {
-        if (err) error();
-        var tasks = files.map(function (entry) {
-            var b = browserify({
-                entries: entry,
-                debug: !config.production
-            });
-
-            return b
-                .transform(babelify, { presets: ['es2015'] })
-                .transform(vueify)
-
-                .bundle().on('error', error)
-                .pipe(source(entry).on('error', error))
-                .pipe(streamify(uglify()))
-                .pipe(gulp.dest(config.buildDir).on('error', error));
-        });
-
-        es.merge(tasks).on('end', success);
-    });
-}));
-
-gulp.task('vue-libs', wrapPipe(function (success, error) {
-    var filter = plugins.filter(['**/vue*.js', '**/vee*.js']);
-
-    return gulp.src('./bower.json')
-        .pipe(mainBowerFiles().on('error', error))
-        .pipe(filter)
-        .pipe(concat('vue-libs.js').on('error', error))
-        .pipe(plugins.uglify().on('error', error))
-        .pipe(gulp.dest(config.buildDir).on('error', error));
-}));
-
 gulp.task('move-bootstrap-fonts', wrapPipe(function (success, error) {
     return gulp.src(config.bootstrapFontFiles)
         .pipe(gulp.dest(config.fontsDir).on('error', error));
@@ -124,22 +89,13 @@ gulp.task('styles', ['move-bootstrap-fonts'], wrapPipe(function (success, error)
         .pipe(gulp.dest(config.buildDistDir));
 }));
 
-gulp.task('watch-vue', wrapPipe(function (success, error) {
-    if (config.production) {
-        return util.noop();
-    }
-    gulp.watch('./vue/**/*.*', ['vueify']);
-    gulp.watch(config.cssFilesToWatch, ['styles']);
-}));
 
 function mainBowerFilesFilter(filePath) {
-    if (filePath.includes("\\vue")) return false;
-    if (filePath.includes("\\vee")) return false;
     return !filePath.endsWith(".js");
 }
 
 gulp.task('bowerJs', wrapPipe(function (success, error) {
-    var filter = plugins.filter(['**/*.js', '!**/vue*.js', '!**/vee*.js']);
+    var filter = plugins.filter(['**/*.js']);
 
     return gulp.src('./bower.json')
         .pipe(mainBowerFiles().on('error', error))
@@ -233,5 +189,5 @@ gulp.task('clean', function () {
 });
 
 gulp.task('default', ['clean'], function () {
-    gulp.start('move-bootstrap-fonts', 'styles', 'bowerCss', 'bowerJs', 'inject', 'vueify', 'vue-libs', 'watch-vue');
+    gulp.start('move-bootstrap-fonts', 'styles', 'bowerCss', 'bowerJs', 'inject');
 });

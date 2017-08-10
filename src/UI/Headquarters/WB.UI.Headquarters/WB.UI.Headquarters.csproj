@@ -675,9 +675,10 @@
     <Content Include="Content\img\sort_desc_disabled.png" />
     <Content Include="Content\popover-extra-placements.min.css" />
     <EmbeddedResource Include="Content\swagger.css" />
-    <Content Include="Dependencies\build\vue\troubleshooting.js" />
     <Content Include="Dependencies\css\jqplot-override.css" />
-    <Content Include="Dependencies\dist\*.*" />
+    <Content Include="Dependencies\dist\libs-c78ea3c5cb.min.js" />
+    <Content Include="Dependencies\dist\libs-e175c7daa8.min.css" />
+    <Content Include="Dependencies\dist\markup-dcbdbce4f4.min.css" />
     <Content Include="Dependencies\build\libs.css" />
     <Content Include="Dependencies\build\libs.js" />
     <Content Include="Dependencies\build\markup.css" />
@@ -746,7 +747,6 @@
     <Content Include="Dependencies\js\searchHighlight.js" />
     <Content Include="ErrorPages\genericError.html" />
     <Content Include="Dependencies\vue\Typeahead.vue" />
-    <Content Include="Dependencies\vue\troubleshooting.js" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Configuration\Vitalii.Headquarters.Web.config">
       <SubType>Designer</SubType>
@@ -1456,9 +1456,6 @@
     <Content Include="Views\WebInterview\Finish.cshtml" />
     <Content Include="Views\WebInterview\Error.cshtml" />
     <Content Include="Views\Shared\QueueIndicator.cshtml" />
-    <Content Include="Views\Troubleshooting\Index.cshtml" />
-    <Content Include="Views\Troubleshooting\CensusInterviews.cshtml" />
-    <Content Include="Views\Troubleshooting\DataIsMissing.cshtml" />
     <Content Include="Views\Interviewer\Profile.cshtml" />
     <Content Include="Views\Shared\_notice.cshtml" />
     <Content Include="Views\HQ\InterviewsRedesigned.cshtml" />
@@ -1541,7 +1538,6 @@
     <Compile Include="API\Resources\CompanyLogoController.cs" />
     <Compile Include="API\Resources\DataTableTranslationsController.cs" />
     <Compile Include="API\Resources\WebInterviewResourcesController.cs" />
-    <Compile Include="API\TroubleshootingApiController.cs" />
     <Compile Include="API\UserPreloadingController.cs" />
     <Compile Include="API\PublicApi\UsersController.cs" />
     <Compile Include="API\WebInterview\LinksExportController.cs" />
@@ -1694,7 +1690,6 @@
     <Compile Include="Controllers\TabletReportController.cs" />
     <Compile Include="Controllers\Profile\TeamController.cs" />
     <Compile Include="Controllers\TeamsController.cs" />
-    <Compile Include="Controllers\TroubleshootingController.cs" />
     <Compile Include="Controllers\UsersApiController.cs" />
     <Compile Include="Controllers\WebInterviewController.cs" />
     <Compile Include="Filters\ActivePageAttribute.cs" />
@@ -1727,7 +1722,6 @@
     <Compile Include="Migrations\Users\M003_AddDeviceAppVersionToProfile.cs" />
     <Compile Include="Models\InterviewerHqModel.cs" />
     <Compile Include="Models\Reports\MapReportModel.cs" />
-    <Compile Include="Models\Troubleshooting\DataIsMissingModel.cs" />
     <Compile Include="Models\VersionCheck\VersionCheckingInfo.cs" />
     <Compile Include="Filters\WebInterviewAuthorizeAttribute.cs" />
     <Compile Include="Filters\WebInterviewFeatureEnabledAttribute.cs" />
@@ -1813,7 +1807,6 @@
     <Compile Include="Models\InterviewersModel.cs" />
     <Compile Include="Models\InterviewsStatisticsViewModel.cs" />
     <Compile Include="Models\InterviewSummaryViewModel.cs" />
-    <Compile Include="Models\Troubleshooting\TroubleshootingModels.cs" />
     <Compile Include="Models\InverviewChangeStateHistoryView.cs" />
     <Compile Include="Models\JsonBaseResponse.cs" />
     <Compile Include="Models\JsonBundleCommandResponse.cs" />
@@ -2000,6 +1993,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="App_Start\OwinSecurity\" />
+    <Folder Include="Dependencies\dist\" />
     <Folder Include="Migrations\ReadSide\M101-200\" />
   </ItemGroup>
   <ItemGroup>
