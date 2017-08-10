@@ -927,8 +927,8 @@
     <EmbeddedResource Include="Resources\OutdatedBrowser.zh.resx">
       <DependentUpon>OutdatedBrowser.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Pages.ar.resx" >
-	<DependentUpon>Pages.resx</DependentUpon>
+    <EmbeddedResource Include="Resources\Pages.ar.resx">
+      <DependentUpon>Pages.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Pages.fr.resx">
       <DependentUpon>Pages.resx</DependentUpon>
