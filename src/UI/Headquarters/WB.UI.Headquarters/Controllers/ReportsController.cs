@@ -210,7 +210,7 @@ namespace WB.UI.Headquarters.Controllers
             Guid? supervisorId = null)
         {
             var allUsersAndQuestionnaires = this.allUsersAndQuestionnairesFactory.Load();
-            DateTime minAllowedDate = this.interviewStatuses.Query(_ => _.SelectMany(x => x.InterviewCommentedStatuses).Select(x => x.Timestamp).Min());
+            DateTime? minAllowedDate = this.interviewStatuses.Query(_ => _.SelectMany(x => x.InterviewCommentedStatuses).Select(x => (DateTime?)x.Timestamp).Min());
 
             return new PeriodicStatusReportModel
             {

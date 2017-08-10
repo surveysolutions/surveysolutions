@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
             result.Items.Count().ShouldEqual(1);
 
         It should_return_first_row_with_positive_35_minutes_per_interview_at_first_period_and_null_minutes_per_interview_at_second = () =>
-            result.Items.First().SpeedByPeriod.ShouldEqual(new double?[] { 35, null });
+            result.Items.First().SpeedByPeriod.ShouldEqual(new double?[] { null, 35 });
 
         It should_return_first_row_with_positive_35_minutes_in_Total = () =>
             result.Items.First().Total.ShouldEqual(35);
