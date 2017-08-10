@@ -351,7 +351,7 @@
     <value>Supervisor note:</value>
   </data>
   <data name="CoverFirstComments">
-    <value>First {{ count}} entities with comments:</value>
+    <value>First {{count}} entities with comments:</value>
   </data>
   <data name="CoverComments">
     <value>Questions with comments:</value>
