@@ -1,4 +1,3 @@
-import { locale } from "src/config"
 import i18next from "i18next"
 
 /*  the Plugin */
@@ -6,13 +5,7 @@ var VueI18Next = {
     install: function (Vue, options) {
         /*  determine options  */
         i18next.init(Object.assign({
-            fallbackLng: 'en',
-            resources: {
-                // 'en': {
-                //     translation: locale
-                // }
-                'en': locale
-            }
+            fallbackLng: 'en'
         }, options))
 
         // /*  expose a global API method  */

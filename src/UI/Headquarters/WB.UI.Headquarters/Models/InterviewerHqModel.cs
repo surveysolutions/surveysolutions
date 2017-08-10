@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using WB.UI.Headquarters.Models.ComponentModels;
 using WB.UI.Headquarters.Utils;
 
@@ -16,7 +17,18 @@ namespace WB.UI.Headquarters.Models
 
         public override string ToString()
         {
-            return JsonConvert.SerializeObject(this);
+            return JsonConvert.SerializeObject(this, ModelSerializationSettings);
         }
+
+        private static readonly JsonSerializerSettings ModelSerializationSettings = new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver
+            {
+                NamingStrategy = new CamelCaseNamingStrategy
+                {
+                    ProcessDictionaryKeys = false
+                }
+            }
+        };
     }
 }

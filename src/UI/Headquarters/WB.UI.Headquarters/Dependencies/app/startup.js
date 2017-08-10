@@ -9,10 +9,18 @@ import FilterBlock from "./components/FilterBlock"
 import DataTables from "./components/DataTables"
 import ModalFrame from "./components/ModalFrame"
 import Confirm from './components/Confirm'
-import locale from "./plugins/locale"
+import Vuei18n from "./plugins/locale"
 import common_store from "./store"
 
-Vue.use(locale)
+const config = JSON.parse(window.vueApp.getAttribute('configuration'))
+
+Vue.use(Vuei18n, {
+    nsSeparator: '.',
+    keySeparator: ':',
+    resources: {
+        'en': config.resources
+    }
+})
 
 Vue.component("Layout", Layout)
 Vue.component("Filters", Filters)
