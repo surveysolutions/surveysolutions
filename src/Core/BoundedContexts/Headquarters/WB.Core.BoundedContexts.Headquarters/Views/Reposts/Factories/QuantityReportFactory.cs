@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 {
@@ -30,6 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         }
 
         private QuantityByResponsibleReportView Load<T>(
+            QuestionnaireIdentity questionnaire,
             DateTime reportStartDate,
             string period,
             int columnCount,
@@ -40,12 +42,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             Expression<Func<T, UserAndTimestamp>> selectUserAndTimestamp)
         {
             var from = this.AddPeriod(reportStartDate.Date, period, -columnCount + 1);
-            var to = reportStartDate.Date; 
+            var to = reportStartDate.Date;
+
+            DateTime? minDate = GetFirstInterviewCreatedDate(questionnaire);
 
             var dateTimeRanges =
                 Enumerable.Range(0, columnCount)
                     .Select(i => new DateTimeRange(this.AddPeriod(from, period, i).Date, this.AddPeriod(from, period, i + 1).Date))
-                    .Where(i => i.From.Date <= DateTime.Now.Date)
+                    .Where(i => i.From.Date <= DateTime.Now.Date && minDate.HasValue && i.To.Date >= minDate)
                     .ToArray();
 
             var interviewStatusesByDateRange = queryInterviewStatusesByDateRange(from, to);
@@ -85,6 +89,28 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 this.CreateQuantityTotalRow(interviewStatusesByDateRange, dateTimeRanges, selectUserAndTimestamp);
 
             return new QuantityByResponsibleReportView(rows, quantityTotalRow, dateTimeRanges, responsibleUsersCount);
+        }
+
+        private DateTime? GetFirstInterviewCreatedDate(QuestionnaireIdentity questionnaire)
+        {
+            DateTime? minDate;
+            if (questionnaire != null)
+            {
+                minDate = this.interviewstatusStorage.Query(_ => _
+                    .Where(x => x.QuestionnaireId == questionnaire.QuestionnaireId &&
+                                x.QuestionnaireVersion == questionnaire.Version)
+                    .SelectMany(x => x.InterviewCommentedStatuses)
+                    .Select(x => (DateTime?) x.Timestamp.Date)
+                    .Min());
+            }
+            else
+            {
+                minDate = this.interviewstatusStorage.Query(_ => _
+                    .SelectMany(x => x.InterviewCommentedStatuses)
+                    .Select(x => (DateTime?) x.Timestamp.Date)
+                    .Min());
+            }
+            return minDate;
         }
 
         private QuantityTotalRow CreateQuantityTotalRow<T>(IQueryable<T> interviews, DateTimeRange[] dateTimeRanges,
@@ -169,6 +195,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             if (this.IsCompleteReportRequested(input.InterviewStatuses))
             {
                 return this.Load(
+                questionnaire: input.Questionnaire(),
                 reportStartDate: input.From,
                 period: input.Period,
                 columnCount: input.ColumnCount,
@@ -179,6 +206,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 selectUserAndTimestamp: i => new UserAndTimestamp() { UserId = i.InterviewerId, UserName = i.InterviewerName, Timestamp = i.EndStatusTimestamp });
             }
             return this.Load(
+                questionnaire: input.Questionnaire(),
                 reportStartDate: input.From,
                 period: input.Period,
                 columnCount: input.ColumnCount,
@@ -194,6 +222,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             if (this.IsCompleteReportRequested(input.InterviewStatuses))
             {
                 return this.Load(
+                 questionnaire: input.Questionnaire(),
                  reportStartDate: input.From,
                  period: input.Period,
                  columnCount: input.ColumnCount,
@@ -205,6 +234,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             }
 
             return this.Load(
+                questionnaire: input.Questionnaire(),
                 reportStartDate: input.From,
                 period: input.Period,
                 columnCount: input.ColumnCount,
