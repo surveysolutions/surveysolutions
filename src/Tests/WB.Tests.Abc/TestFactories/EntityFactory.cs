@@ -24,7 +24,6 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
-using WB.Core.BoundedContexts.Headquarters.Troubleshooting.Views;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.Views;
@@ -1596,21 +1595,6 @@ namespace WB.Tests.Abc.TestFactories
             {
                 InterviewId = interviewId ?? Guid.NewGuid(),
                 Events = events != null ? serializer.Serialize(events) : serializer.Serialize(new AggregateRootEvent[0])
-            };
-        }
-
-        public InterviewSyncLogSummary InterviewSyncLogSummary(
-            DateTime? firstDownloadInterviewDate = null,
-            DateTime? lastDownloadInterviewDate = null,
-            DateTime? lastLinkDate = null,
-            DateTime? lastUploadInterviewDate = null)
-        {
-            return new InterviewSyncLogSummary
-            {
-                FirstDownloadInterviewDate = firstDownloadInterviewDate,
-                LastDownloadInterviewDate = lastDownloadInterviewDate,
-                LastLinkDate = lastLinkDate,
-                LastUploadInterviewDate = lastUploadInterviewDate
             };
         }
 
