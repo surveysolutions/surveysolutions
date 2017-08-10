@@ -1056,6 +1056,9 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>WebInterview.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterview.ru.resx">
+      <DependentUpon>WebInterview.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\WebInterview.zh.resx">
       <DependentUpon>WebInterview.resx</DependentUpon>
     </EmbeddedResource>
@@ -1073,8 +1076,11 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\WebInterviewUI.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>WebInterviewUI.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>WebInterviewUI.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterviewUI.ru.resx">
+      <DependentUpon>WebInterviewUI.resx</DependentUpon>
     </EmbeddedResource>
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
