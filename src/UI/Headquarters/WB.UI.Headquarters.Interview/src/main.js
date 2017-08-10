@@ -1,17 +1,20 @@
 import "babel-polyfill";
 global.jQuery = require('jquery');
 
-import { assetsPath } from "./config"
+import { assetsPath, locale } from "./config"
 
 if (process.env.NODE_ENV === "production") {
     __webpack_public_path__ = assetsPath
 }
 
 import Vue from "vue"
-import locale from "./locale"
+import VueI18n from "./locale"
 
-Vue.use(locale, {
-    defaultNS: 'WebInterviewUI'
+Vue.use(VueI18n, {
+    defaultNS: 'WebInterviewUI',
+    resources: {
+        'en': locale
+    }
 })
 
 import * as poly from "smoothscroll-polyfill"
