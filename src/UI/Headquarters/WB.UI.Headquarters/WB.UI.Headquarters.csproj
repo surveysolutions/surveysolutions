@@ -743,7 +743,7 @@
     <Content Include="Dependencies\js\dataTables.conditionalPaging.js" />
     <Content Include="Dependencies\js\searchHighlight.js" />
     <Content Include="ErrorPages\genericError.html" />
-    <Content Include="Dependencies\vue\Typeahead.vue" />
+    <None Include="Dependencies\vue\Typeahead.vue" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Configuration\Vitalii.Headquarters.Web.config">
       <SubType>Designer</SubType>
@@ -1146,10 +1146,10 @@
     <Content Include="Dependencies\css\_main-information.scss" />
     <Content Include="Dependencies\css\_modal.scss" />
     <Content Include="Dependencies\css\markup-detalica.scss" />
-    <Content Include="Dependencies\vue\DatePicker.vue" />
-    <Content Include="Dependencies\vue\InterviewTable.vue">
+    <None Include="Dependencies\vue\DatePicker.vue" />
+    <None Include="Dependencies\vue\InterviewTable.vue">
       <SubType>Designer</SubType>
-    </Content>
+    </None>
     <Content Include="Content\bootstrap-datepicker3.standalone.min.css.map" />
     <Content Include="Content\bootstrap-datepicker3.standalone.css.map" />
     <Content Include="Content\bootstrap-datepicker3.min.css.map" />
@@ -2051,7 +2051,6 @@
       </FilesForPackagingFromProject>
     </ItemGroup>
   </Target>
-
   <Target Name="CollecHqDepsDist" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
     <ItemGroup>
       <CollecHqDeps_CustomFiles Include="Dependencies\dist\**\*.js" />
@@ -2060,7 +2059,6 @@
       </FilesForPackagingFromProject>
     </ItemGroup>
   </Target>
-
   <Target Name="CollectWebInterviewAppFiles" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
     <ItemGroup>
       <CollectWebInterviewAppFiles_CustomFiles Include="InterviewApp\**\*" />
