@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
         protected virtual Expression<Func<InterviewSummary, bool>> CreateFilterExpression(TeamsAndStatusesInputModel input)
         {
-            Expression<Func<InterviewSummary, bool>> result = (interview) => true;
+            Expression<Func<InterviewSummary, bool>> result = interview => interview.SummaryId != null;
 
             if (input.TemplateId.HasValue)
             {
@@ -107,6 +107,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             {
                 result = result.AndCondition(x => x.TeamLeadId == input.ViewerId);
             }
+
             return result;
         }
         protected abstract Expression<Func<InterviewSummary, object>> ResponsibleIdSelector { get; }
