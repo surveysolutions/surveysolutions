@@ -116,6 +116,16 @@ namespace WB.UI.Headquarters.Controllers
             });
         }
 
+        [Authorize(Roles = "Administrator, Headquarter")]
+        public ActionResult CountDaysOfInterviewInStatus()
+        {
+            this.ViewBag.ActivePage = MenuItem.CountDaysOfInterviewInStatus;
+
+            AllUsersAndQuestionnairesView usersAndQuestionnaires = this.allUsersAndQuestionnairesFactory.Load();
+
+            return this.View("CountDaysOfInterviewInStatus", usersAndQuestionnaires.Questionnaires);
+        }
+
         public ActionResult QuantityByInterviewers(Guid? supervisorId, PeriodiceReportType reportType = PeriodiceReportType.NumberOfCompletedInterviews)
         {
             this.ViewBag.ActivePage = MenuItem.NumberOfCompletedInterviews;

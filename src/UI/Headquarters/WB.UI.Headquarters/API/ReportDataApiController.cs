@@ -8,6 +8,9 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.Reports;
+using WB.Core.BoundedContexts.Headquarters.Views.Reports.InputModels;
+using WB.Core.BoundedContexts.Headquarters.Views.Reports.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
@@ -38,6 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IMapReport mapReport;
         private readonly IQuantityReportFactory quantityReport;
         private readonly ISpeedReportFactory speedReport;
+        private readonly ICountDaysOfInterviewInStatusReport countDaysOfInterviewInStatusReport;
 
         public ReportDataApiController(
             ICommandService commandService,
@@ -50,7 +54,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IMapReport mapReport,
             IChartStatisticsViewFactory chartStatisticsViewFactory, 
             IQuantityReportFactory quantityReport, 
-            ISpeedReportFactory speedReport)
+            ISpeedReportFactory speedReport,
+            ICountDaysOfInterviewInStatusReport countDaysOfInterviewInStatusReport)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
@@ -62,6 +67,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.chartStatisticsViewFactory = chartStatisticsViewFactory;
             this.quantityReport = quantityReport;
             this.speedReport = speedReport;
+            this.countDaysOfInterviewInStatusReport = countDaysOfInterviewInStatusReport;
         }
 
         [HttpPost]
@@ -364,6 +370,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             };
 
             return this.chartStatisticsViewFactory.Load(input);
+        }
+
+        public CountDaysOfInterviewInStatusView CountDaysOfInterviewInStatus(CountDaysOfInterviewInStatusApiModel data)
+        {
+            var input = new CountDaysOfInterviewInStatusInputModel
+            {
+                QuestionnaireId = data.QuestionnaireId,
+                QuestionnaireVersion = data.QuestionnaireVersion,
+                Statuses = new[]
+                {
+                    InterviewExportedAction.InterviewerAssigned, 
+                    InterviewExportedAction.Completed,
+                    InterviewExportedAction.RejectedBySupervisor,
+                    InterviewExportedAction.ApprovedBySupervisor, 
+                }
+            };
+
+            return this.countDaysOfInterviewInStatusReport.Load(input);
         }
 
         private InterviewExportedAction[] GetInterviewExportedActionsAccordingToReportTypeForQuantityReports(PeriodiceReportType reportType)
