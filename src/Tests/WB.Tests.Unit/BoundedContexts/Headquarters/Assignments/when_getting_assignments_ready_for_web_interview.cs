@@ -18,7 +18,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var completedAssignment = Create.Entity.Assignment(id: 2, questionnaireIdentity: questionnaireIdentity, quantity: 1, assigneeSupervisorId: supervisorId);
             completedAssignment.InterviewSummaries.Add(Create.Entity.InterviewSummary());
             var notCompletedAssignmentWithDeletedInterview = Create.Entity.Assignment(id: 3, questionnaireIdentity: questionnaireIdentity, quantity: 1, assigneeSupervisorId: supervisorId);
-            notCompletedAssignmentWithDeletedInterview.InterviewSummaries.Add(Create.Entity.InterviewSummary(isDeleted: true));
 
             var service = Create.Service.AssignmentService(archivedAssignment, completedAssignment, notCompletedAssignmentWithDeletedInterview);
 

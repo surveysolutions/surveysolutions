@@ -1645,7 +1645,6 @@
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\FileBasedTabletInformationServiceTests\when_TabletInformation_is_saving.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\InterviewSummaryViewFactoryTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\when_load_interview_summary.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\when_load_interview_summary_and_interview_has_deleted_status.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\when_load_interview_summary_and_summary_does_not_exists.cs" />
     <Compile Include="SharedKernels\SurveyManagement\HealthCheckTests\HealthCheckTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\HealthCheckTests\when_healthcheck_service_check_when_there_are_any_errors.cs" />

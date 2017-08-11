@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             var processigPackages = this.incomingSyncPackagesQueue.GetAllPackagesInterviewIds();
 
             var inProgressInterviews =  this.reader.Query(interviews =>
-                interviews.Where(interview => !interview.IsDeleted && (interview.ResponsibleId == interviewerId) && 
+                interviews.Where(interview => interview.ResponsibleId == interviewerId && 
                                               (interview.Status == InterviewStatus.InterviewerAssigned || interview.Status == InterviewStatus.RejectedBySupervisor))
                     .Select(x => new {x.InterviewId, x.QuestionnaireId, x.QuestionnaireVersion, x.WasRejectedBySupervisor})
                     .ToList());
@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public IList<QuestionnaireIdentity> GetQuestionnairesWithAssignments(Guid interviewerId)
         {
             var inProgressQuestionnaires = this.reader.Query(interviews =>
-                                                         interviews.Where(interview => !interview.IsDeleted && (interview.ResponsibleId == interviewerId) && 
+                                                         interviews.Where(interview => interview.ResponsibleId == interviewerId && 
                                                                                        (interview.Status == InterviewStatus.InterviewerAssigned || interview.Status == InterviewStatus.RejectedBySupervisor))
                                                              .Select(x => new { x.QuestionnaireId, x.QuestionnaireVersion})
                                                              .Distinct()

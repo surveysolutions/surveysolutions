@@ -139,7 +139,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         private static IQueryable<InterviewSummary> ApplyFilter(InterviewsWithoutPrefilledInputModel input, IQueryable<InterviewSummary> _)
         {
-            var items = _.Where(x => !x.IsDeleted);
+            var items = _;
 
             if (input.SupervisorId.HasValue)
             {
@@ -186,7 +186,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         private static IQueryable<InterviewSummary> ApplyFilter(AllInterviewsInputModel input, IQueryable<InterviewSummary> _)
         {
-            var items = _.Where(x => !x.IsDeleted);
+            var items = _;
 
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {

@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
         private static IQueryable<InterviewSummary> ApplyFilter(SurveysAndStatusesReportInputModel input, IQueryable<InterviewSummary> _)
         {
-            var filteredInterviews = _.Where(x => !x.IsDeleted);
+            var filteredInterviews = _;
 
             if (!string.IsNullOrWhiteSpace(input.ResponsibleName))
             {

@@ -78,7 +78,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         ResponsibleId = x.ResponsibleId,
                         UpdatedAtUtc = x.UpdatedAtUtc,
                         Quantity = x.Quantity ?? -1,
-                        InterviewsCount = x.InterviewSummaries.Count(s => !s.IsDeleted),
+                        InterviewsCount = x.InterviewSummaries.Count,
                         Id = x.Id,
                         Archived = x.Archived,
                         Responsible = x.Responsible.Name,
@@ -134,7 +134,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return query.OrderUsingSortExpression(model.Order).AsQueryable();
         }
 
-        private static readonly Expression<Func<Assignment, int>> OrderByQuery = x => x.InterviewSummaries.Count(s => s.IsDeleted == false);
+        private static readonly Expression<Func<Assignment, int>> OrderByQuery = x => x.InterviewSummaries.Count;
         private static IQueryable<Assignment> OrderByInterviewsCount(IQueryable<Assignment> query, OrderRequestItem orderBy)
         {
             return orderBy.Direction == OrderDirection.Asc 
@@ -208,7 +208,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
             if (input.OnlyWithInterviewsNeeded)
             {
-                items = items.Where(x => !x.Quantity.HasValue || x.Quantity - x.InterviewSummaries.Count(c => !c.IsDeleted) > 0);
+                items = items.Where(x => !x.Quantity.HasValue || x.Quantity - x.InterviewSummaries.Count > 0);
             }
 
             return items;

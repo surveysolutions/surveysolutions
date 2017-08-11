@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
         public List<InterviewSummary> Load(Guid questionnaireId, long questionnaireVersion)
         {
-            var result = this.interviewsReader.Query(_ => _.Where(interview => !interview.IsDeleted &&
+            var result = this.interviewsReader.Query(_ => _.Where(interview => 
                 interview.QuestionnaireId == questionnaireId &&
                 interview.QuestionnaireVersion == questionnaireVersion).ToList());
 

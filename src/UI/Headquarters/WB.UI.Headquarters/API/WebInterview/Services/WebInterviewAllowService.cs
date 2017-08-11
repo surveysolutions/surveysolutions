@@ -52,9 +52,6 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             if (interview == null)
                 throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Headquarters.Resources.WebInterview.Error_NotFound);
 
-            if (interview.IsDeleted)
-                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, Headquarters.Resources.WebInterview.Error_InterviewExpired);
-
             if (!AllowedInterviewStatuses.Contains(interview.Status))
                 throw new WebInterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, Headquarters.Resources.WebInterview.Error_NoActionsNeeded);
 

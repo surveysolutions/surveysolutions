@@ -156,11 +156,15 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewStatusChanged> @event)
         {
+            if (@event.Payload.Status == InterviewStatus.Deleted)
+            {
+                return null;
+            }
+
             return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
                 interview.Status = @event.Payload.Status;
                 interview.WasRejectedBySupervisor = interview.WasRejectedBySupervisor || @event.Payload.Status == InterviewStatus.RejectedBySupervisor;
-                interview.IsDeleted = @event.Payload.Status == InterviewStatus.Deleted;
 
                 if (interview.Status == @event.Payload.Status)
                 {
@@ -171,10 +175,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewHardDeleted> @event)
         {
-            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
-            {
-                interview.IsDeleted = true;
-            });
+            return null;
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<SupervisorAssigned> @event)
