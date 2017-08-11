@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -279,23 +279,11 @@
   <data name="NumberCannotParse" xml:space="preserve">
     <value>Введенное значение не может быть интерпретировано как целое число</value>
   </data>
-  <data name="Error_1" xml:space="preserve">
+  <data name="Error" xml:space="preserve">
     <value>Ошибка</value>
   </data>
-  <data name="Error_0" xml:space="preserve">
+  <data name="Error_plural" xml:space="preserve">
     <value>Ошибок</value>
-  </data>
-  <data name="Error_5" xml:space="preserve">
-    <value>Ошибок</value>
-  </data>
-  <data name="Error_4" xml:space="preserve">
-    <value>Ошибки</value>
-  </data>
-  <data name="Error_3" xml:space="preserve">
-    <value>Ошибки</value>
-  </data>
-  <data name="Error_2" xml:space="preserve">
-    <value>Ошибки</value>
   </data>
   <data name="CoverFirstComments" xml:space="preserve">
     <value>Первые {{count}} вопросов с комментариями:</value>
