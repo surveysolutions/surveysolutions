@@ -87,15 +87,16 @@ namespace WB.UI.Headquarters.Controllers
             return new InterviewerHqModel
             {
                 Title = title.ToUiString(),
+                BasePath = Url.Content(@"~/InterviewerHq"),
                 AllInterviews = Url.Content(@"~/api/InterviewApi/GetInterviews"),
                 InterviewerHqEndpoint = Url.Content(@"~/InterviewerHq"),
                 Statuses = statuses.Select(s => s.ToString()).ToArray(),
-                Resources = IntervewHqResources.Translations(),
+                Resources = InterviewHqResources.Translations(),
                 Questionnaires = this.GetQuestionnaires(statuses)
             };
         }
 
-        private static readonly ResourceManager[] IntervewHqResources =
+        private static readonly ResourceManager[] InterviewHqResources =
         {
             MainMenu.ResourceManager,
             Assignments.ResourceManager,

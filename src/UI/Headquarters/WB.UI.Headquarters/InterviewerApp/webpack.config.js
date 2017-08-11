@@ -1,24 +1,24 @@
 /// <binding />
 const webpack = require('webpack')
+const cleanWebpackPlugin = require('clean-webpack-plugin');
 const path = require('path')
-const baseAppPath = "./Dependencies/"
+const baseAppPath = "./"
 const devMode = process.env.NODE_ENV != 'production';
 
 console.log("Building HQ UI js in " + (devMode ? "DEVELOPMENT" : "PRODUCTION") + " mode.")
 
 module.exports = {
     entry: {
-        "interviewer_createNew": baseAppPath + "app/interviewer/createNew.js",
-        "interviewer_interviews": baseAppPath + "app/interviewer/interviews.js"
+        "app": baseAppPath + "app/main.js"
     },
     output: {
         path: __dirname,
-        filename: path.join(baseAppPath, "./build/[name].bundle.js")
+        filename: path.join(baseAppPath, "./dist/[name].bundle.js")
     },
     resolve: {
         modules: [
             path.join(__dirname, "node_modules"),
-            path.join(__dirname, "Dependencies/app")
+            path.join(__dirname, "app")
         ],
         extensions: ['.js', '.vue', '.json'],
         alias: {
@@ -37,15 +37,16 @@ module.exports = {
             {
                 test: /\.vue$/,
                 exclude: /(node_modules)/,
-                use: { loader: 'vue-loader', options: { loaders: { js: 'babel-loader?presets[]=es2015' } } }
+                use: { loader: 'vue-loader', options: { loaders: { js: 'babel-loader' } } }
             }, {
                 test: /\.js$/,
                 exclude: /(node_modules)/,
-                use: { loader: 'babel-loader', options: { presets: [["es2015", { "modules": false }]] } }
+                use: { loader: 'babel-loader' }
             }
         ]
     },
     plugins: [
+        new cleanWebpackPlugin('dist'),
         // split vendor js into its own file
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
@@ -53,7 +54,7 @@ module.exports = {
                 // any required modules inside node_modules are extracted to vendor
                 return (
                     module.resource &&
-                    /\.(js|ts)$/.test(module.resource) &&
+                    /\.js$/.test(module.resource) &&
                     module.resource.indexOf(
                         path.join(__dirname, 'node_modules')
                     ) === 0
@@ -61,14 +62,14 @@ module.exports = {
             }
         }),
 
-        new webpack.optimize.ModuleConcatenationPlugin(),
+       // new webpack.optimize.ModuleConcatenationPlugin(),
 
         devMode ? null : function () {
             const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
             
             return new BundleAnalyzerPlugin({
                 analyzerMode: 'static',
-                reportFilename: 'Dependencies/build/stats.html',
+                reportFilename: 'dist/stats.html',
                 openAnalyzer: false,
                 statsOptions: { chunkModules: true, assets: true },
             });
