@@ -71,7 +71,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             ChangeStatusView interviewInfo =
                 this.changeStatusFactory.Load(new ChangeStatusInputModel { InterviewId = id });
 
-            if (interviewInfo == null || interviewSummary == null || interviewSummary.IsDeleted)
+            if (interviewInfo == null || interviewSummary == null)
                 return HttpNotFound();
 
             bool isAccessAllowed =
@@ -100,7 +100,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             ChangeStatusView interviewInfo =
                 this.changeStatusFactory.Load(new ChangeStatusInputModel { InterviewId = id });
 
-            if (interviewInfo == null || interviewSummary == null || interviewSummary.IsDeleted)
+            if (interviewInfo == null || interviewSummary == null)
                 return HttpNotFound();
 
             bool isAccessAllowed =

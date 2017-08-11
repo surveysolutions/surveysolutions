@@ -460,7 +460,6 @@ namespace WB.Tests.Abc.TestFactories
             string key = null,
             DateTime? updateDate = null,
             bool? wasCreatedOnClient= null,
-            bool isDeleted = false,
             bool receivedByInterviewer = false,
             int? assignmentId = null)
             => new InterviewSummary
@@ -477,7 +476,6 @@ namespace WB.Tests.Abc.TestFactories
                 Key = key,
                 UpdateDate = updateDate ?? new DateTime(2017, 3, 23),
                 WasCreatedOnClient = wasCreatedOnClient ?? false,
-                IsDeleted = isDeleted,
                 ReceivedByInterviewer = receivedByInterviewer,
                 AssignmentId = assignmentId
             };

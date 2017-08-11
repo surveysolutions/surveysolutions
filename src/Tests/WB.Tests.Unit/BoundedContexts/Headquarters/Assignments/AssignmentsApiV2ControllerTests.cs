@@ -28,7 +28,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                     Create.Entity.InterviewSummary(status: InterviewStatus.Completed),
 
                     Create.Entity.InterviewSummary(status: InterviewStatus.InterviewerAssigned),
-                    Create.Entity.InterviewSummary(status: InterviewStatus.InterviewerAssigned, isDeleted: true),
 
                     Create.Entity.InterviewSummary(status: InterviewStatus.RejectedByHeadquarters),
                     Create.Entity.InterviewSummary(status: InterviewStatus.RejectedBySupervisor)
@@ -52,12 +51,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         {
             var assignmentEntity = Create.Entity.Assignment(quantity: 10, interviewSummary: new HashSet<InterviewSummary>
             {
-                Create.Entity.InterviewSummary(status: InterviewStatus.Completed, isDeleted: true),
                 Create.Entity.InterviewSummary(status: InterviewStatus.Completed),
                 Create.Entity.InterviewSummary(status: InterviewStatus.Completed),
 
                 Create.Entity.InterviewSummary(status: InterviewStatus.InterviewerAssigned),
-                Create.Entity.InterviewSummary(status: InterviewStatus.InterviewerAssigned, isDeleted: true),
 
                 Create.Entity.InterviewSummary(status: InterviewStatus.RejectedByHeadquarters),
                 Create.Entity.InterviewSummary(status: InterviewStatus.RejectedBySupervisor)

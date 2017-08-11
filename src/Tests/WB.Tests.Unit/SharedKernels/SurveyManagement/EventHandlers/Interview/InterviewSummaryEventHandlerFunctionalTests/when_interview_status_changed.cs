@@ -1,4 +1,5 @@
 ﻿using Machine.Specifications;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -18,8 +19,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         Because of = () => updatedModel = denormalizer.Update(viewModel, Create.PublishedEvent.InterviewStatusChanged(InterviewStatus.InterviewerAssigned));
 
         It should_change_interview_status = () => updatedModel.Status.ShouldEqual(InterviewStatus.InterviewerAssigned);
-
-        It should_not_mark_summary_as_deleted = () => updatedModel.IsDeleted.ShouldBeFalse();
 
         It should_not_change_WasRejectedBySupervisor_flag = () => updatedModel.WasRejectedBySupervisor.ShouldBeTrue();
 

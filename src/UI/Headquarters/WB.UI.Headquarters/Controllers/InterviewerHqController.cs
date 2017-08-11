@@ -164,7 +164,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             var queryResult = this.interviewSummaryReader.Query(_ =>
             {
-                var filter = _.Where(summary => !summary.IsDeleted && summary.ResponsibleId == this.authorizedUser.Id);
+                var filter = _.Where(summary => summary.ResponsibleId == this.authorizedUser.Id);
 
                 if (interviewStatuses != null)
                 {

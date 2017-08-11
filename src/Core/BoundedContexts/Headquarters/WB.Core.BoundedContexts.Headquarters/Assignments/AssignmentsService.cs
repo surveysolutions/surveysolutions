@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             x.Where(assigment =>
                 assigment.ResponsibleId == responsibleId
                 && !assigment.Archived
-                && (assigment.Quantity == null || assigment.InterviewSummaries.Count(i => i.IsDeleted == false) < assigment.Quantity))
+                && (assigment.Quantity == null || assigment.InterviewSummaries.Count < assigment.Quantity))
             .ToList());
         }
 
@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                      x.QuestionnaireId.Version == questionnaireId.Version &&
                      x.Responsible.ReadonlyProfile.SupervisorId != null &&
                      !x.Archived &&
-                     (x.Quantity == null || x.InterviewSummaries.Count(i => i.IsDeleted == false) < x.Quantity);
+                     (x.Quantity == null || x.InterviewSummaries.Count < x.Quantity);
             return readyForWebInterviewAssignments;
         }
 

@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 this.transactionManager.ExecuteInQueryTransaction(() =>
                     this.interviewSummaries.Query(_ =>
                         _.Where(x => x.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
-                                     x.QuestionnaireVersion == questionnaireIdentity.Version && !x.IsDeleted)
+                                     x.QuestionnaireVersion == questionnaireIdentity.Version)
                             .OrderBy(x => x.InterviewId)
                             .Select(x => x.InterviewId).ToList()));
 
@@ -89,7 +89,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 var filesFolderForInterview = this.fileSystemAccessor.CombinePath(directoryPath, interviewId.FormatGuid());
 
                 var interviewDetails = this.transactionManager.ExecuteInQueryTransaction(() => interviewDatas.GetById(interviewId));
-                if (interviewDetails != null && !interviewDetails.IsDeleted)
+                if (interviewDetails != null)
                 {
                     var questionsWithAnswersOnMultimediaQuestions = interviewDetails.Levels.Values.SelectMany(
                         level =>
