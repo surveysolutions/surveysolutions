@@ -73,6 +73,8 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.TakeNew;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.BoundedContexts.Headquarters.Views.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Views.Reports;
+using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Revalidate;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
@@ -251,6 +253,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IHeadquartersTeamsAndStatusesReport>().To<HeadquartersTeamsAndStatusesReport>();
             this.Bind<ISurveysAndStatusesReport>().To<SurveysAndStatusesReport>();
             this.Bind<IMapReport>().To<MapReport>();
+            this.Bind<ICountDaysOfInterviewInStatusReport>().To<CountDaysOfInterviewInStatusReport>();
 
             this.Bind<IInterviewUniqueKeyGenerator>().To<InterviewUniqueKeyGenerator>();
             this.Bind<IRandomValuesSource>().To<RandomValuesSource>().InSingletonScope();
