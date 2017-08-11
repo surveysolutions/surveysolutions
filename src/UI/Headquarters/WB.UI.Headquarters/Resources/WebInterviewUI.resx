@@ -305,27 +305,11 @@
   <data name="CompleteQuestionsUnanswered">
     <value>Unanswered</value>
   </data>
-  <data name="Error_0">
+  <data name="Error">
     <value>Error</value>
     <comment>Plural form: Zero items</comment>
   </data>
-  <data name="Error_1">
-    <value>Error</value>
-    <comment>Plural form: One item</comment>
-  </data>
-  <data name="Error_2">
-    <value>Errors</value>
-    <comment>Plural form: Two items</comment>
-  </data>
-  <data name="Error_3">
-    <value>Errors</value>
-    <comment>Plural form: few items</comment>
-  </data>
-  <data name="Error_4">
-    <value>Errors</value>
-    <comment>Plural form: many items</comment>
-  </data>
-  <data name="Error_5">
+  <data name="Error_plural">
     <value>Errors</value>
     <comment>Plural form: plural</comment>
   </data>
