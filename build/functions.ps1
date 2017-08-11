@@ -148,7 +148,7 @@ function BuildStaticContent($blockName, $targetLocation) {
         Write-Host "Running npm install"
 
         #install node js dependencies
-        &npm install --no-optional | Write-Host
+        &yarn install --no-optional | Write-Host
         
         $wasBuildSuccessfull = $LASTEXITCODE -eq 0
         if (-not $wasBuildSuccessfull) {
@@ -168,7 +168,7 @@ function BuildStaticContent($blockName, $targetLocation) {
         else {
             Write-Host "Running npm run production"
             #will execute script gulpfile.js in target folder
-            &npm run production | Write-Host
+            &yarn run production | Write-Host
 
             $wasBuildSuccessfull = $LASTEXITCODE -eq 0
             if (-not $wasBuildSuccessfull) {
@@ -220,7 +220,7 @@ function BuildSolution($Solution, $BuildConfiguration, [switch] $MultipleSolutio
     Write-Host "##teamcity[blockOpened name='$(TeamCityEncode $blockMessage)']"
     Write-Host "##teamcity[progressStart '$(TeamCityEncode $progressMessage)']"
 
-    & (GetPathToMSBuild) $Solution /t:Build /nologo  /p:CodeContractsRunCodeAnalysis=false /p:Configuration=$BuildConfiguration | Write-Host
+    & (GetPathToMSBuild) $Solution /t:Build /nologo /v:m /p:CodeContractsRunCodeAnalysis=false /p:Configuration=$BuildConfiguration | Write-Host
 
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
