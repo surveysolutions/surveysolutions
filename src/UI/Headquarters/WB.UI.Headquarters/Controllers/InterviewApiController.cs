@@ -1,9 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using NHibernate.Util;
-using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -12,13 +11,10 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Infrastructure.Native.Sanitizer;
-using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.Code;
-using WB.UI.Headquarters.Models.Api;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -133,24 +129,11 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Supervisor, Headquarter")]
-        public InverviewChangeStateHistoryView ChangeStateHistory(ChangeStateHistoryViewModel data)
+        public List<CommentedStatusHistroyView> ChangeStateHistory(ChangeStateHistoryViewModel data)
         {
-            var interviewSummary =
-                this.changeStatusFactory.Load(new ChangeStatusInputModel {InterviewId = data.InterviewId});
+            var interviewSummary = this.changeStatusFactory.Load(new ChangeStatusInputModel {InterviewId = data.InterviewId});
 
-            if (interviewSummary == null)
-                return null;
-
-            return new InverviewChangeStateHistoryView
-            {
-                HistoryItems = interviewSummary.StatusHistory.Select(x => new HistoryItemView()
-                {
-                    Comment = x.Comment,
-                    Date = x.Date.ToShortDateString(),
-                    State = x.Status.ToLocalizeString(),
-                    Responsible = x.Responsible
-                })
-            };
+            return interviewSummary?.StatusHistory;
         }
 
         [Authorize(Roles = "Administrator, Headquarter")]

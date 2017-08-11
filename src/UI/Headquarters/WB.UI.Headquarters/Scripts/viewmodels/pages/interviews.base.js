@@ -179,6 +179,47 @@
         if (self.Url.query['searchBy'].length > 0) {
             $('.dataTables_filter label').addClass("active");
         }
+
+        var contextMenuOptions = {
+            selector: "#interviews tr td:not(:first-child)",
+            autoHide: false,
+            build: function ($trigger, e) {
+                var selectedRow = ko.dataFor($trigger[0]);
+                var items = self.BuildMenuItem(selectedRow);
+                return { items: items };
+            },
+            trigger: 'right'
+        };
+
+        $.contextMenu(contextMenuOptions);
+    }
+
+    self.ShowStatusHistory = function (url, interview) {
+        var statusHistoryTemplateId = "#interview-status-history-template";
+        var modalId = '#statusHistoryModal';
+        
+        self.SendRequest(url,
+            { interviewId: interview.InterviewId() },
+            function(statusHistory) {
+
+                $(modalId).parent().remove();
+
+                var historyModalModel = {
+                    key: interview.Key(),
+                    interviewUrl: $detailsUrl + '/' + interview.InterviewId(),
+                    responsible: interview.ResponsibleName(),
+                    isResponsibleInterviewer: interview.ResponsibleRole() == 4,
+                    statusHistory: statusHistory
+                };
+
+                $('body').append($("<div/>").html($(statusHistoryTemplateId).html())[0]);
+               
+                ko.applyBindings(historyModalModel, $(modalId)[0]);
+
+                $(modalId).modal('show', { backdrop: true });
+            },
+            false,
+            false);
     }
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.InterviewsBase, Supervisor.VM.ListView);

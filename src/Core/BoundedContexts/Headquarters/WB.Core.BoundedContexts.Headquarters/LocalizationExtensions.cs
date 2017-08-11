@@ -1,7 +1,7 @@
-﻿using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.UI.Headquarters.Resources;
+﻿using WB.Core.BoundedContexts.Headquarters.Resources;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
+namespace WB.Core.BoundedContexts.Headquarters
 {
     public static class LocalizationExtensions
     {
