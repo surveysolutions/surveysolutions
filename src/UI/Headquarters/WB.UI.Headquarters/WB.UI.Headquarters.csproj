@@ -2053,7 +2053,7 @@
   </Target>
   <Target Name="CollecHqDepsDist" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
     <ItemGroup>
-      <CollecHqDeps_CustomFiles Include="Dependencies\dist\**\*.js" />
+      <CollecHqDeps_CustomFiles Include="Dependencies\dist\**\*.*" />
       <FilesForPackagingFromProject Include="%(CollecHqDeps_CustomFiles.Identity)">
         <DestinationRelativePath>Dependencies\dist\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
       </FilesForPackagingFromProject>
