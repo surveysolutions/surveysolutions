@@ -265,6 +265,10 @@ namespace WB.UI.Headquarters
                 "~/Scripts/viewmodels/pages/teamsandstatuses.js"
                 ));
 
+            bundles.Add(new ScriptBundle("~/js/countdaysofinterviewinstatus").Include(
+                "~/Scripts/viewmodels/pages/countdaysofinterviewinstatus.js"
+                ));
+
             bundles.Add(new ScriptBundle("~/js/questionnaires").Include(
                 "~/Scripts/viewmodels/pages/questionnaires.js"
                 ));

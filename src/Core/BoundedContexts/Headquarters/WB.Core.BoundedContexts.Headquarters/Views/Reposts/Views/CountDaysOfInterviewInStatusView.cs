@@ -4,8 +4,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Views
 {
     public class CountDaysOfInterviewInStatusView
     {
-        public string[] Header { get; set; }
-
         public CountDaysOfInterviewInStatusRow[] Rows { get; set; }
     }
 
@@ -13,7 +11,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Views
     {
         public int DaysCount { get; set; }
 
-        public int[] Cells { get; set; }
         public DateTime Date { get; set; }
+
+        public int InterviewerAssignedCount { get; set; }
+        public int CompletedCount { get; set; }
+        public int RejectedBySupervisorCount { get; set; }
+        public int ApprovedBySupervisorCount { get; set; }
     }
 }
