@@ -100,10 +100,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (interviewer == null) throw new HttpException(404, string.Empty);
 
             var completedInterviewCount = this.interviewRepository.Query(interviews => interviews.Count(
-                interview => interview.ResponsibleId == userId && interview.Status == InterviewStatus.Completed && !interview.IsDeleted));
+                interview => interview.ResponsibleId == userId && interview.Status == InterviewStatus.Completed));
 
             var approvedByHqCount = this.interviewRepository.Query(interviews => interviews.Count(
-                interview => interview.ResponsibleId == userId && interview.Status == InterviewStatus.ApprovedByHeadquarters && !interview.IsDeleted));
+                interview => interview.ResponsibleId == userId && interview.Status == InterviewStatus.ApprovedByHeadquarters));
 
             var lastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastSuccessByInterviewerId(userId);
             var hasUpdateForInterviewerApp = false;

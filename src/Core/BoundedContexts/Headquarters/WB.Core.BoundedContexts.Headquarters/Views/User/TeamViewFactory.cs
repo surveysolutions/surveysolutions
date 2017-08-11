@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         private static IQueryable<UsersViewItem> ApplyFilterByResponsible(string searchBy, Guid supervisorId, IQueryable<InterviewSummary> interviews)
         {
-            interviews = interviews.Where(interview => !interview.IsDeleted && interview.TeamLeadId == supervisorId);
+            interviews = interviews.Where(interview => interview.TeamLeadId == supervisorId);
 
             if (!string.IsNullOrWhiteSpace(searchBy))
             {
@@ -87,8 +87,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         private static IQueryable<UsersViewItem> ApplyFilterByTeamLead(string searchBy, IQueryable<InterviewSummary> interviews)
         {
-            interviews = interviews.Where(interview => !interview.IsDeleted);
-            
             if (!string.IsNullOrWhiteSpace(searchBy))
             {
                 interviews = interviews.Where(x => x.TeamLeadName.ToLower().Contains(searchBy.ToLower()));

@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
         protected virtual Expression<Func<InterviewSummary, bool>> CreateFilterExpression(TeamsAndStatusesInputModel input)
         {
-            Expression<Func<InterviewSummary, bool>> result = (interview) => !interview.IsDeleted;
+            Expression<Func<InterviewSummary, bool>> result = (interview) => true;
 
             if (input.TemplateId.HasValue)
             {
