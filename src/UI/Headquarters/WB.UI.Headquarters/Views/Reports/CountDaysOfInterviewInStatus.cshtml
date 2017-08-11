@@ -11,17 +11,16 @@
 {
     @Scripts.Render("~/js/main-no-libs")
     @Scripts.Render("~/js/list")
-    @Scripts.Render("~/js/teamsandstatuses")
+    @Scripts.Render("~/js/countdaysofinterviewinstatus")
     @Scripts.Render("~/js/common")
 
 
     <script type="text/javascript">
-        var $surveysUrl = '@Url.Action("CountDaysOfInterviewInStatus", "Reports")';
         var $interviewsUrl = '@Url.Action("Interviews", "HQ")';
         var $totalTitle = '@HttpUtility.JavaScriptStringEncode(Common.Total)';
         $(function () {
-            var model = new Supervisor.VM.TeamsAndStatuses('@Url.RouteUrl("DefaultApiWithAction",
-                                                           new { httproute = "", controller = "ReportDataApi", action = "CountDaysOfInterviewInStatus" })',
+            var model = new Supervisor.VM.CountDaysOfInterviewInStatus('@Url.RouteUrl("DefaultApiWithAction",
+                new { httproute = "", controller = "ReportDataApi", action = "CountDaysOfInterviewInStatus" })',
                 $interviewsUrl);
 
             model.getDataTableColumns = function () {
@@ -34,42 +33,25 @@
                     {
                         className: "type-numeric",
                         render: function (data, type, row) {
-                            return model.getLinkToInterviews(data, row, '@InterviewStatus.SupervisorAssigned', model.Url.query['templateId'], model.Url.query['templateVersion']);
-                        }
-                    }, {
-                        className: "type-numeric",
-                        render: function (data, type, row) {
                             return model.getLinkToInterviews(data, row, '@InterviewStatus.InterviewerAssigned', model.Url.query['templateId'], model.Url.query['templateVersion']);
                         }
-                    }, {
+                    },
+                    {
                         className: "type-numeric",
                         render: function (data, type, row) {
                             return model.getLinkToInterviews(data, row, '@InterviewStatus.Completed', model.Url.query['templateId'], model.Url.query['templateVersion']);
                         }
-                    }, {
+                    },
+                    {
                         className: "type-numeric",
                         render: function (data, type, row) {
                             return model.getLinkToInterviews(data, row, '@InterviewStatus.RejectedBySupervisor', model.Url.query['templateId'], model.Url.query['templateVersion']);
                         }
-                    }, {
+                    },
+                    {
                         className: "type-numeric",
                         render: function (data, type, row) {
                             return model.getLinkToInterviews(data, row, '@InterviewStatus.ApprovedBySupervisor', model.Url.query['templateId'], model.Url.query['templateVersion']);
-                        }
-                    }, {
-                        className: "type-numeric",
-                        render: function (data, type, row) {
-                            return model.getLinkToInterviews(data, row, '@InterviewStatus.RejectedByHeadquarters', model.Url.query['templateId'], model.Url.query['templateVersion']);
-                        }
-                    }, {
-                        className: "type-numeric",
-                        render: function (data, type, row) {
-                            return model.getLinkToInterviews(data, row, '@InterviewStatus.ApprovedByHeadquarters', model.Url.query['templateId'], model.Url.query['templateVersion']);
-                        }
-                    }, {
-                        className: "type-numeric",
-                        render: function (data, type, row) {
-                            return model.getLinkToInterviews(data, row, '', model.Url.query['templateId'], model.Url.query['templateVersion']);
                         }
                     }
                 ];
@@ -110,7 +92,7 @@
             <div class="main-information reports">
                 @Html.Partial("_alerts")
                 <div class="page-header clearfix">
-                    <h1>@Reports.TeamsAndStatuses</h1>
+                    <h1>@Reports.CountDaysOfInterviewInStatus</h1>
                     <p data-bind="text: QuestionnaireName"></p>
                 </div>
 
@@ -119,15 +101,11 @@
                            data-order="[[ 1, &quot;asc&quot;]]" data-searching="false" data-s-Dom="f<&quot;table-with-scroll&quot;t>ip">
                         <thead>
                         <tr>
-                            <th data-name="Responsible" data-data="responsible">@Users.Supervisors</th>
-                            <th data-name="SupervisorAssignedCount" data-data="supervisorAssignedCount">@Reports.SupervisorAssigned</th>
+                            <th data-name="DaysCount" data-data="daysCount">@Common.Total</th>
                             <th data-name="InterviewerAssignedCount" data-data="interviewerAssignedCount">@Reports.InterviewerAssigned</th>
                             <th data-name="CompletedCount" data-data="completedCount">@Reports.Completed</th>
                             <th data-name="RejectedBySupervisorCount" data-data="rejectedBySupervisorCount">@Reports.RejectedBySupervisor</th>
                             <th data-name="ApprovedBySupervisorCount" data-data="approvedBySupervisorCount">@Reports.ApprovedBySupervisor</th>
-                            <th data-name="RejectedByHeadquartersCount" data-data="rejectedByHeadquartersCount">@Reports.RejectedByHQ</th>
-                            <th data-name="ApprovedByHeadquartersCount" data-data="approvedByHeadquartersCount">@Reports.ApprovedByHQ</th>
-                            <th data-name="TotalCount" data-data="totalCount">@Common.Total</th>
                         </tr>
                         </thead>
                     </table>

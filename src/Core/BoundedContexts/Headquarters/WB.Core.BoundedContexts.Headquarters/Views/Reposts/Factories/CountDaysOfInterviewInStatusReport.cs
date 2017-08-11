@@ -26,17 +26,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             public DateTime StatusDate { get; set; }
         }
 
-        public CountDaysOfInterviewInStatusView Load(CountDaysOfInterviewInStatusInputModel input)
+        public CountDaysOfInterviewInStatusRow[] Load(CountDaysOfInterviewInStatusInputModel input)
         {
             var datesAndStatuses = this.interviewStatusesStorage.Query(_ =>
             {
                 var filteredInterviews = _;
 
-                if (input.QuestionnaireId.HasValue && input.QuestionnaireVersion.HasValue)
+                if (input.TemplateId.HasValue && input.TemplateVersion.HasValue)
                 {
                     filteredInterviews = filteredInterviews.Where(x
-                        => x.QuestionnaireId == input.QuestionnaireId.Value
-                           && x.QuestionnaireVersion == input.QuestionnaireVersion.Value);
+                        => x.QuestionnaireId == input.TemplateId.Value
+                           && x.QuestionnaireVersion == input.TemplateVersion.Value);
                 }
 
                 var statuses = filteredInterviews.SelectMany(x => x.InterviewCommentedStatuses);
@@ -84,36 +84,34 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
 
 
             var utcNow = DateTime.UtcNow;
-            var statistics = new CountDaysOfInterviewInStatusView();
 
             var statisticsRows = dictStatistics.OrderBy(s => s.Key).ToList();
-            statistics.Rows = new CountDaysOfInterviewInStatusRow[statisticsRows.Count];
+            var rows = new CountDaysOfInterviewInStatusRow[statisticsRows.Count];
 
             for (int i = 0; i < statisticsRows.Count; i++)
             {
                 var statisticsRow = statisticsRows[i];
                 int daysCount = (utcNow - statisticsRow.Key).Days;
-                statistics.Rows[i] = new CountDaysOfInterviewInStatusRow()
+                rows[i] = new CountDaysOfInterviewInStatusRow()
                     {
-                        DaysCount = daysCount,
-                        Date = statisticsRow.Key,
-                        Cells = GetStatusValuesInCorrectOrder(statisticsRow.Value, input.Statuses)
+                        DaysCount                 = daysCount,
+                        Date                      = statisticsRow.Key,
+                        InterviewerAssignedCount  = GetStatusValue(statisticsRow.Value, InterviewExportedAction.InterviewerAssigned),
+                        CompletedCount            = GetStatusValue(statisticsRow.Value, InterviewExportedAction.Completed),
+                        ApprovedBySupervisorCount = GetStatusValue(statisticsRow.Value, InterviewExportedAction.ApprovedBySupervisor),
+                        RejectedBySupervisorCount = GetStatusValue(statisticsRow.Value, InterviewExportedAction.RejectedBySupervisor),
                     };
             }
             
-            return statistics;
+            return rows;
         }
 
-        private int[] GetStatusValuesInCorrectOrder(Dictionary<InterviewExportedAction, int> dictionary, InterviewExportedAction[] statuses)
+        private int GetStatusValue(Dictionary<InterviewExportedAction, int> dictionary, InterviewExportedAction status)
         {
-            return statuses.Select(status =>
-            {
-                if (dictionary.TryGetValue(status, out int value))
-                    return value;
+            if (dictionary.TryGetValue(status, out int value))
+                return value;
                 
-                return 0;
-            })
-            .ToArray();
+            return 0;
         }
     }
 }
