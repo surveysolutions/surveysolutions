@@ -135,6 +135,9 @@
   <data name="TeamsAndStatuses" xml:space="preserve">
     <value>Teams and Statuses</value>
   </data>
+  <data name="CountDaysOfInterviewInStatus" xml:space="preserve">
+    <value>Count Days of interview in Status</value>
+  </data>
   <data name="SurveyName" xml:space="preserve">
     <value>Questionnaire Template</value>
   </data>
