@@ -1,5 +1,4 @@
 import "babel-polyfill";
-
 import Vue from 'vue'
 
 import Typeahead from './components/Typeahead'
@@ -10,15 +9,17 @@ import DataTables from "./components/DataTables"
 import ModalFrame from "./components/ModalFrame"
 import Confirm from './components/Confirm'
 import Vuei18n from "./plugins/locale"
-import common_store from "./store"
+import store from "./store"
+import App from "./App"
+import config from "./config"
 
-const config = JSON.parse(window.vueApp.getAttribute('configuration'))
+Vue.use(config)
 
 Vue.use(Vuei18n, {
     nsSeparator: '.',
     keySeparator: ':',
     resources: {
-        'en': config.resources
+        'en': Vue.$config.resources
     }
 })
 
@@ -30,13 +31,13 @@ Vue.component("DataTables", DataTables)
 Vue.component("ModalFrame", ModalFrame)
 Vue.component("Confirm", Confirm)
 
-export default ({ app, options}) => {
-    const store = require("./store").default
+const router = require("./router").default
 
-    const vueApp = new Vue(_.assign({
-        el: "#vueApp",
-        render: h => h(app),
-        components: { app },
-        store
-    }, options));
-}
+const vueApp = new Vue({
+    el: "#vueApp",
+    render: h => h(App),
+    components: { App },
+    store,
+    router
+});
+

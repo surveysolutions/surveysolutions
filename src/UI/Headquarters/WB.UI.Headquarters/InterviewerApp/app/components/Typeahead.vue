@@ -13,10 +13,10 @@
                     <a href="javascript:void(0);" v-on:click="selectOption(option)" v-html="highlight(option.value, searchTerm)" v-on:keydown.up="onOptionUpKey"></a>
                 </li>
                 <li v-if="isLoading">
-                    <a>Loading...</a>
+                    <a>{{ $t("Common.Loading") }}</a>
                 </li>
                 <li v-if="!isLoading && options.length === 0">
-                    <a>No results found</a>
+                    <a>{{ $t("Common.NoResultsFound") }}</a>
                 </li>
             </ul>
         </div>
@@ -73,15 +73,12 @@
             fetchOptions: function (filter = "") {
                 this.isLoading = true;
                 var requestParams = Object.assign({ query: filter, cache: false }, this.ajaxParams);
-                this.$http.get(this.fetchUrl, {params: requestParams})
-                    .then(response => {
+                $.get(this.fetchUrl, requestParams)
+                    .done(response => {
                         this.options = response.body.options || [];
                         this.isLoading = false;
-                    }, response => {
-                        
-                        this.isLoading = false;
-                    });
-
+                    })
+                    .always(() => this.isLoading = false)
             },
             clear: function () {
                 this.$emit('selected', null, this.controlId);
