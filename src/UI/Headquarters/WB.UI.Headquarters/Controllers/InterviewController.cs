@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;

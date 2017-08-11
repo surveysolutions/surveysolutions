@@ -13,6 +13,7 @@
         RejectedByHeadquarter,
         Deleted,
         Restored,
-        UnapprovedByHeadquarter
+        UnapprovedByHeadquarter,
+        Created
     }
 }

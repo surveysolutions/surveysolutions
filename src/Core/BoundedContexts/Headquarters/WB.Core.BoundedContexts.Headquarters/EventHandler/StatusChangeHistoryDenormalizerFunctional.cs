@@ -96,21 +96,51 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewStatuses Update(InterviewStatuses state, IPublishedEvent<InterviewOnClientCreated> @event)
         {
-            return this.CreateInterviewStatuses(@event.EventSourceId, @event.Payload.QuestionnaireId,
+            var interviewStatuses = this.CreateInterviewStatuses(@event.EventSourceId, @event.Payload.QuestionnaireId,
                 @event.Payload.QuestionnaireVersion);
+
+            return this.AddCommentedStatus(
+                @event.EventIdentifier,
+                interviewStatuses,
+                @event.Payload.UserId,
+                null,
+                null,
+                InterviewExportedAction.Created,
+                @event.EventTimeStamp,
+                string.Empty);
         }
 
         public InterviewStatuses Update(InterviewStatuses state, IPublishedEvent<InterviewCreated> @event)
         {
-            return this.CreateInterviewStatuses(@event.EventSourceId, @event.Payload.QuestionnaireId,
+            var interviewStatuses = this.CreateInterviewStatuses(@event.EventSourceId, @event.Payload.QuestionnaireId,
                 @event.Payload.QuestionnaireVersion);
+
+            return this.AddCommentedStatus(
+                @event.EventIdentifier,
+                interviewStatuses,
+                @event.Payload.UserId,
+                null,
+                null,
+                InterviewExportedAction.Created,
+                @event.EventTimeStamp,
+                string.Empty);
         }
 
         public InterviewStatuses Update(InterviewStatuses state,
             IPublishedEvent<InterviewFromPreloadedDataCreated> @event)
         {
-            return this.CreateInterviewStatuses(@event.EventSourceId, @event.Payload.QuestionnaireId,
-               @event.Payload.QuestionnaireVersion);
+            var interviewStatuses = this.CreateInterviewStatuses(@event.EventSourceId, @event.Payload.QuestionnaireId,
+                @event.Payload.QuestionnaireVersion);
+
+            return this.AddCommentedStatus(
+                @event.EventIdentifier,
+                interviewStatuses,
+                @event.Payload.UserId,
+                null,
+                null,
+                InterviewExportedAction.Created,
+                @event.EventTimeStamp,
+                string.Empty);
         }
 
         public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewRestarted> @event)

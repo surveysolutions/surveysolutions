@@ -7,6 +7,7 @@ using Resources;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Resources;
 using System.IO;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 
 namespace ASP
 {

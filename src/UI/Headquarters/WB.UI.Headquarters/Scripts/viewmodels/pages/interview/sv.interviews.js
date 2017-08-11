@@ -165,5 +165,9 @@
 
         ko.applyBindings(model, $(".reject-interviewer")[0]);
     };
+
+    self.BuildMenuItem = function () {
+       
+    };
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.SVInterviews, Supervisor.VM.InterviewsBase);
