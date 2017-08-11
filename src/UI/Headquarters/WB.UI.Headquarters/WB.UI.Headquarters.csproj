@@ -666,7 +666,6 @@
     <Content Include="Dependencies\img\icon-mic-2x.png" />
     <Content Include="Dependencies\img\padlock-1dp.png" />
     <Content Include="Dependencies\img\padlock-3dp.png" />
-    <Content Include="webpack.config.js" />
     <EmbeddedResource Include="Content\img\no_image_found.jpg" />
     <Content Include="Content\img\sort_asc.png" />
     <Content Include="Content\img\sort_asc_disabled.png" />
@@ -2045,9 +2044,9 @@
   </Target>
   <Target Name="CollecHqInterviewer" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
     <ItemGroup>
-      <CollecHqInterviewer_CustomFiles Include="Dependencies\build\**\*.js" />
+      <CollecHqInterviewer_CustomFiles Include="InterviewerApp\dist\**\*.*" />
       <FilesForPackagingFromProject Include="%(CollecHqInterviewer_CustomFiles.Identity)">
-        <DestinationRelativePath>Dependencies\build\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
+        <DestinationRelativePath>InterviewerApp\dist\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
       </FilesForPackagingFromProject>
     </ItemGroup>
   </Target>
