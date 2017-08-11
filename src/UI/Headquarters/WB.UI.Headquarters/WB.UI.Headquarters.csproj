@@ -2050,6 +2050,16 @@
       </FilesForPackagingFromProject>
     </ItemGroup>
   </Target>
+
+  <Target Name="CollecHqDepsDist" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
+    <ItemGroup>
+      <CollecHqDeps_CustomFiles Include="Dependencies\dist\**\*.js" />
+      <FilesForPackagingFromProject Include="%(CollecHqDeps_CustomFiles.Identity)">
+        <DestinationRelativePath>Dependencies\dist\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
+      </FilesForPackagingFromProject>
+    </ItemGroup>
+  </Target>
+
   <Target Name="CollectWebInterviewAppFiles" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
     <ItemGroup>
       <CollectWebInterviewAppFiles_CustomFiles Include="InterviewApp\**\*" />
