@@ -2044,7 +2044,7 @@
   </Target>
   <Target Name="CollecHqInterviewer" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
     <ItemGroup>
-      <CollecHqInterviewer_CustomFiles Include="InterviewerApp\dist\**\*.*" />
+      <CollecHqInterviewer_CustomFiles Include="InterviewerApp\dist\**\*.js" />
       <FilesForPackagingFromProject Include="%(CollecHqInterviewer_CustomFiles.Identity)">
         <DestinationRelativePath>InterviewerApp\dist\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
       </FilesForPackagingFromProject>
