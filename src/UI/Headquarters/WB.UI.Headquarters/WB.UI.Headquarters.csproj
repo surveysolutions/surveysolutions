@@ -969,24 +969,6 @@
     <EmbeddedResource Include="Resources\PeriodicStatusReport.zh.resx">
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Strings.fr.resx">
-      <DependentUpon>Strings.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Strings.pt.resx">
-      <DependentUpon>Strings.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Strings.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Strings.ru.resx">
-      <DependentUpon>Strings.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Strings.zh.resx">
-      <DependentUpon>Strings.resx</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\SyncLogMessages.fr.resx">
       <DependentUpon>SyncLogMessages.resx</DependentUpon>
     </EmbeddedResource>
@@ -1643,7 +1625,6 @@
     <Compile Include="Code\InterviewerVersionReader.cs" />
     <Compile Include="Code\IRevalidateInterviewsAdministrationService.cs" />
     <Compile Include="Code\ApplicationSettings.cs" />
-    <Compile Include="Code\LocalizationExtensions.cs" />
     <Compile Include="Code\MessageHandler\BasicAuthMessageHandler.cs" />
     <Compile Include="Code\RevalidateInterviewsAdministrationService.cs" />
     <Compile Include="Code\Security\SimpleTokenVerifier.cs" />
@@ -1914,11 +1895,6 @@
     </Compile>
     <Compile Include="Resources\PeriodicStatusReport.Designer.cs">
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="Resources\Strings.Designer.cs">
-      <DependentUpon>Strings.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
