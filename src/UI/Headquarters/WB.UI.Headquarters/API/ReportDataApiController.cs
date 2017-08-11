@@ -372,21 +372,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             return this.chartStatisticsViewFactory.Load(input);
         }
 
-        public CountDaysOfInterviewInStatusView CountDaysOfInterviewInStatus(CountDaysOfInterviewInStatusApiModel data)
+        public CountDaysOfInterviewInStatusRow[] CountDaysOfInterviewInStatus(CountDaysOfInterviewInStatusInputModel input)
         {
-            var input = new CountDaysOfInterviewInStatusInputModel
-            {
-                QuestionnaireId = data.QuestionnaireId,
-                QuestionnaireVersion = data.QuestionnaireVersion,
-                Statuses = new[]
-                {
-                    InterviewExportedAction.InterviewerAssigned, 
-                    InterviewExportedAction.Completed,
-                    InterviewExportedAction.RejectedBySupervisor,
-                    InterviewExportedAction.ApprovedBySupervisor, 
-                }
-            };
-
             return this.countDaysOfInterviewInStatusReport.Load(input);
         }
 

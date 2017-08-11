@@ -6,6 +6,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports
 {
     public interface ICountDaysOfInterviewInStatusReport
     {
-        CountDaysOfInterviewInStatusView Load(CountDaysOfInterviewInStatusInputModel input);
+        CountDaysOfInterviewInStatusRow[] Load(CountDaysOfInterviewInStatusInputModel input);
     }
 }
