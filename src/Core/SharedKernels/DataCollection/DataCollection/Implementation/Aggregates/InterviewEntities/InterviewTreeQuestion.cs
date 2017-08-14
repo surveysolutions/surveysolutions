@@ -253,7 +253,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public CategoricalFixedSingleOptionAnswer GetAsSingleLinkedToListAnswer() => ((InterviewTreeSingleOptionLinkedToListQuestion)this.InterviewQuestion).GetAnswer();
         public AudioAnswer GetAsAudioAnswer() => ((InterviewTreeAudioQuestion)this.InterviewQuestion).GetAnswer();
 
-
+        public InterviewQuestionType InterviewQuestionType => this.InterviewQuestion.InterviewQuestionType;
         public bool IsDouble => this.InterviewQuestion.InterviewQuestionType == InterviewQuestionType.Double;
         public bool IsInteger => this.InterviewQuestion.InterviewQuestionType == InterviewQuestionType.Integer;
         public bool IsSingleFixedOption => this.InterviewQuestion.InterviewQuestionType == InterviewQuestionType.SingleFixedOption;
