@@ -1,4 +1,5 @@
-﻿@model WB.Core.BoundedContexts.Headquarters.Views.Interview.InterviewQuestionView
+﻿@using WB.Core.BoundedContexts.Headquarters.Resources
+@model WB.Core.BoundedContexts.Headquarters.Views.Interview.InterviewQuestionView
 
 <tr class="@css("danger", !Model.IsValid && Model.IsEnabled) @css("text-muted", !Model.IsEnabled)">
     <td class="answer-status">

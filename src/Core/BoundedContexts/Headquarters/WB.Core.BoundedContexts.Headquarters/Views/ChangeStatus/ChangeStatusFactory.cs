@@ -36,9 +36,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus
                     Status = x.Status.ConvertToInterviewStatus().Value,
                     StatusHumanized = x.Status.ConvertToInterviewStatus().Value.ToLocalizeString(),
                     Responsible = x.StatusChangeOriginatorName,
-                    ResponsibleRole = x.StatusChangeOriginatorRole.ToString(),
+                    ResponsibleRole = x.StatusChangeOriginatorRole.ToString().ToLower(),
                     Assignee = GetAssigneeName(x),
-                    AssigneeRole = GetAssigneeRole(x)
+                    AssigneeRole = GetAssigneeRole(x).ToLower()
                 }).ToList() ?? new List<CommentedStatusHistroyView>();
             
             return new ChangeStatusView

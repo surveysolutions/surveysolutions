@@ -1,0 +1,42 @@
+<script type="text/html" id="interview-status-history-template">
+    <div class="modal fade" id="statusHistoryModal" tabindex="-1" role="dialog" aria-labelledby="statusHistoryModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+                    <h3>Interview</h3>
+                    <p><a data-bind="attr: { href: interviewUrl, title: key },text: key" class="title-row"></a> by <span href="#" data-bind="text: responsible, css: { interviewer: isResponsibleInterviewer, supervisor: !isResponsibleInterviewer}"></span></p>
+                </div>
+                <div class="modal-body">
+                    <h3>History of status changes</h3>
+                    <div class="table-with-scroll">
+                        <table class="table table-striped history">
+                            <thead>
+                            <tr>
+                                <td>status</td>
+                                <td>changed on</td>
+                                <td>by</td>
+                                <td>assigned to</td>
+                                <td>comment</td>
+                            </tr>
+                            </thead>
+                            <tbody  data-bind="foreach:statusHistory">
+                            <tr>
+                                <td data-bind="text: StatusHumanized"></td>
+                                <td class="date" data-bind="text: DateHumanized"></td>
+                                <td><span data-bind="text: Responsible, attr: { 'class' : ResponsibleRole }"></span></td>
+                                <td><span data-bind="text: Assignee, attr: { 'class' : AssigneeRole }"></span></td>
+                                <td data-bind="text: Comment"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-link" data-bind="attr: { href: interviewUrl, title: key }">view interview</a>
+                    <button type="button" class="btn btn-link" data-dismiss="modal">close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

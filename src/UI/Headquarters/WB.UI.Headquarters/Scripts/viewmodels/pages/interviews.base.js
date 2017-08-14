@@ -62,7 +62,7 @@
         return {
             TemplateId: selectedTemplate.templateId,
             TemplateVersion: selectedTemplate.version,
-            ResponsibleName: _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserName,
+            ResponsibleName: _.isUndefined(self.SelectedResponsible()) ? "" : self.SelecteselectAlldResponsible().UserName,
             Status: self.SelectedStatus,
             SearchBy: self.SearchBy,
             AssignmentId: self.AssignmentId
@@ -181,17 +181,20 @@
         }
 
         var contextMenuOptions = {
-            selector: "#interviews tr td:not(:first-child)",
-            autoHide: false,
+            autoHide: true,
             build: function ($trigger, e) {
                 var selectedRow = ko.dataFor($trigger[0]);
+                self.unselectAll();
+                selectedRow.IsSelected(true);
                 var items = self.BuildMenuItem(selectedRow);
                 return { items: items };
             },
-            trigger: 'right'
+            trigger: 'left'
         };
+      
 
-        $.contextMenu(contextMenuOptions);
+        $.contextMenu(Object.assign({ selector: "#interviews tr td:not(:first-child)"}, contextMenuOptions));
+        $.contextMenu(Object.assign({ selector: ".row-unit"}, contextMenuOptions));
     }
 
     self.ShowStatusHistory = function (url, interview) {
