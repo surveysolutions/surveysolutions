@@ -131,9 +131,9 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Supervisor, Headquarter")]
         public List<CommentedStatusHistroyView> ChangeStateHistory(ChangeStateHistoryViewModel data)
         {
-            var interviewSummary = this.changeStatusFactory.Load(new ChangeStatusInputModel {InterviewId = data.InterviewId});
+            var interviewSummary = this.changeStatusFactory.GetFilteredStatuses(data.InterviewId);
 
-            return interviewSummary?.StatusHistory;
+            return interviewSummary;
         }
 
         [Authorize(Roles = "Administrator, Headquarter")]
