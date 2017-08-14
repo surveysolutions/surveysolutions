@@ -1825,6 +1825,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Devices/Interviewers.
+        /// </summary>
+        public static string InterviewersAndDevicesTitle {
+            get {
+                return ResourceManager.GetString("InterviewersAndDevicesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interview History.
         /// </summary>
         public static string InterviewHistory_Header {

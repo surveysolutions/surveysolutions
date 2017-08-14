@@ -46,7 +46,7 @@ module.exports = {
         ]
     },
     plugins: [
-        new cleanWebpackPlugin('dist'),
+        //new cleanWebpackPlugin('dist'),
         // split vendor js into its own file
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',

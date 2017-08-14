@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -29,19 +30,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     {
         private readonly IHeadquartersTeamsAndStatusesReport headquartersTeamsAndStatusesReport;
         private readonly ISupervisorTeamsAndStatusesReport supervisorTeamsAndStatusesReport;
-
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
-
         private readonly IAuthorizedUser authorizedUser;
         private readonly ISurveysAndStatusesReport surveysAndStatusesReport;
-
         private readonly IChartStatisticsViewFactory chartStatisticsViewFactory;
-
         private readonly IMapReport mapReport;
-
-  
         private readonly IQuantityReportFactory quantityReport;
-
         private readonly ISpeedReportFactory speedReport;
 
         public ReportDataApiController(
@@ -319,10 +313,36 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
 
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        [CamelCase]
+        public DeviceInterviewersDataTableResponse DeviceInterviewers([FromUri]DeviceInterviewersFilter request)
+        {
+            var report = ServiceLocator.Current.GetInstance<IDeviceInterviewersReport>();
+            var data = report.Load();
+            return new DeviceInterviewersDataTableResponse
+            {
+                Draw = request.Draw + 1,
+                RecordsTotal = data.TotalCount,
+                RecordsFiltered = data.TotalCount,
+                Data = data.Items
+            };
+        }
+
         public class SurveysAndStatusesDataTableResponse : DataTableResponse<HeadquarterSurveysAndStatusesReportLine>
         {
             public int TotalInterviewCount { get; set; }
             public int TotalResponsibleCount { get; set; }
+        }
+
+
+        public class DeviceInterviewersDataTableResponse : DataTableResponse<DeviceInterviewersReportLine>
+        {
+        }
+
+        public class DeviceInterviewersFilter : DataTableRequest
+        {
+            
         }
 
         public class SurveysAndStatusesFilter : DataTableRequest

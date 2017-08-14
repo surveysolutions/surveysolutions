@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -13,9 +14,11 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.ComponentModels;
 using WB.UI.Headquarters.Models.Reports;
 using WB.UI.Headquarters.Resources;
+using WB.UI.Headquarters.Utils;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -198,6 +201,28 @@ namespace WB.UI.Headquarters.Controllers
             model.ReportTypes = this.speedReportTypesForHeadquarters;
 
             return this.View("SpeedAndQuantity", model);
+        }
+
+        [ActivePage(MenuItem.DevicesInterviewers)]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        public ActionResult InterviewersAndDevices()
+        {
+            return this.View("InterviewersAndDevices", new DevicesInterviewersModel
+            {
+                BasePath = Url.Content(@"~/"),
+                DataUrl = Url.RouteUrl("DefaultApiWithAction", 
+                new
+                {
+                    httproute = "",
+                    controller = "ReportDataApi",
+                    action = "DeviceInterviewers"
+                }),
+                Resources = new[]
+                {
+                    DevicesInterviewers.ResourceManager,
+                    Pages.ResourceManager
+                }.Translations()
+            });
         }
 
         private PeriodicStatusReportModel CreatePeriodicStatusReportModel(PeriodicStatusReportWebApiActionName webApiActionName, 
