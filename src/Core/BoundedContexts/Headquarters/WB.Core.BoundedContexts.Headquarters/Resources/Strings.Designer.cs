@@ -61,6 +61,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to any headquarters.
+        /// </summary>
+        public static string AnyHeadquarters {
+            get {
+                return ResourceManager.GetString("AnyHeadquarters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {

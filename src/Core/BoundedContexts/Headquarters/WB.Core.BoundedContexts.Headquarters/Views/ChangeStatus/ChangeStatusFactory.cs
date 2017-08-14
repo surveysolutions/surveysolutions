@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide;
@@ -76,8 +77,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus
         {
             if (commentedStatus.Status == InterviewExportedAction.Created)
                 return commentedStatus.StatusChangeOriginatorName;
-            if (commentedStatus.Status == InterviewExportedAction.Completed)
+            if (commentedStatus.Status == InterviewExportedAction.Completed || commentedStatus.Status == InterviewExportedAction.RejectedByHeadquarter)
                 return commentedStatus.SupervisorName;
+
+            if (commentedStatus.Status == InterviewExportedAction.ApprovedBySupervisor)
+                return Strings.AnyHeadquarters;
+
+            if (commentedStatus.Status == InterviewExportedAction.ApprovedByHeadquarter)
+                return String.Empty;
+
             return commentedStatus.InterviewerName;
         }
 
@@ -86,8 +94,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus
             if (commentedStatus.Status == InterviewExportedAction.Created)
                 return commentedStatus.StatusChangeOriginatorName;
 
-            if (commentedStatus.Status == InterviewExportedAction.Completed)
+            if (commentedStatus.Status == InterviewExportedAction.Completed || commentedStatus.Status == InterviewExportedAction.RejectedByHeadquarter)
                 return UserRoles.Supervisor.ToString();
+
+            if (commentedStatus.Status == InterviewExportedAction.ApprovedBySupervisor)
+                return UserRoles.Headquarter.ToString();
+
+            if (commentedStatus.Status == InterviewExportedAction.ApprovedByHeadquarter)
+                return String.Empty;
+
             return UserRoles.Interviewer.ToString();
         }
     }
