@@ -134,6 +134,12 @@
         });
     };
 
+    self.unselectAll = function () {
+        ko.utils.arrayForEach(self.Items(), function (item) {
+            item.IsSelected(false);
+        });
+    };
+
     
     self.initDataTable = function (onDataReceivedCallback, onTableInitComplete) {
         $.fn.dataTable.ext.errMode = 'none';
