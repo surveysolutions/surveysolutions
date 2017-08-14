@@ -36,6 +36,52 @@
                     model.Users.AssignTo(undefined);
                 }
             });
+            model.BuildMenuItem = function(selectedRow) {
+                var items = {}
+
+                items["open"] = {
+                    name: "Open",
+                    callback: function(t, e) {
+                        var detailsUrl = $detailsUrl + '/' + selectedRow.InterviewId();
+                        window.location = detailsUrl;
+                    }
+                };
+
+                items["showStatusHistory"] = {
+                    name: "Show Status History",
+                    callback: function(t, e) {
+                        model.ShowStatusHistory('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "ChangeStateHistory" })', selectedRow);
+                    }
+                };
+
+                items["sep1"] = "---------";
+
+                items["assign"] = {
+                    name: "@Common.Assign",
+                    className: "primary-text",
+                    callback: function(t, e) {
+                        model.AssignInterview();
+                    }
+                };
+
+                items["approve"] = {
+                    name: "@Common.Approve",
+                    className: "success-text",
+                    callback: function(t, e) {
+                        model.ApproveInterview();
+                    }
+                };
+
+                items["reject"] = {
+                    name: "@Common.Reject",
+                    className: "error-text",
+                    callback: function(t, e) {
+                        model.RejectInterview();
+                    }
+                };
+
+                return items;
+            };
             ko.applyBindings(model);
             model.load();
         });
@@ -328,5 +374,5 @@
     <script type="text/html" id="confirm-continue-message-template">
         <br />@Interviews.ContinueConfirmMessage
     </script>
-
+    @Html.Partial("~/Views/Shared/Interviews/_InterviewStatusHistoryModal.cshtml")
 </main>
