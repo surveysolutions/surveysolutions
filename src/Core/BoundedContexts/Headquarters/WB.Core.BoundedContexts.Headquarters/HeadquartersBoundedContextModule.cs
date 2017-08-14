@@ -229,6 +229,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IChangeStatusFactory>().To<ChangeStatusFactory>();
             this.Bind<IQuantityReportFactory>().To<QuantityReportFactory>();
             this.Bind<ISpeedReportFactory>().To<SpeedReportFactory>();
+            this.Bind<IDeviceInterviewersReport>().To<DeviceInterviewersReport>();
             this.Bind<ISampleUploadViewFactory>().To<SampleUploadViewFactory>();
             this.Bind<IAllUsersAndQuestionnairesFactory>().To<AllUsersAndQuestionnairesFactory>();
             this.Bind<IQuestionnairePreloadingDataViewFactory>().To<QuestionnairePreloadingDataViewFactory>();
