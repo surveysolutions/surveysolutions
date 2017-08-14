@@ -6470,6 +6470,9 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
 .uploaded-to-hq {
   min-width: 150px; }
 
+.table .interviewer, .table .supervisor {
+  padding-left: 0; }
+
 .btn {
   font: 12px/14px "TrebuchetMSBold";
   text-transform: uppercase;
@@ -8706,6 +8709,11 @@ body > .ui-pnotify {
     -ms-transform: translate3d(-50%, -51%, 0);
     margin: 0; }
 
+@media only screen and (max-width: 840px) {
+  #statusHistoryModal .modal-dialog {
+    width: calc(100% - 40px) !important;
+    margin: 20px; } }
+
 @media only screen and (max-width: 680px) {
   .modal-dialog {
     width: calc(100% - 40px) !important;
@@ -8741,8 +8749,10 @@ body > .ui-pnotify {
     line-height: 18px; }
   .modal .title-row {
     font-size: 16px;
-    line-height: 18px;
-    margin-right: 10px; }
+    line-height: 18px; }
+
+#statusHistoryModal .modal-dialog {
+  width: 800px; }
 
 .modal-dialog {
   display: inline-block;
@@ -8814,8 +8824,10 @@ body > .ui-pnotify {
         color: #3f3f3f; }
       .modal-content .modal-body ul li input + label {
         color: #a6a8a9; }
-    .modal-content .modal-body .table-striped td:last-child {
-      border-left: 1px solid #dbdfe2; }
+    .modal-content .modal-body .table-striped td {
+      border-right: 1px solid #dbdfe2; }
+      .modal-content .modal-body .table-striped td:last-child {
+        border: none; }
   .modal-content .modal-footer {
     border: none;
     text-align: left;
@@ -9298,7 +9310,9 @@ table tr th .census-icon, table tr td .census-icon {
   font-size: 14px;
   line-height: 16px;
   font-weight: normal;
-  color: #3f3f3f; }
+  color: #3f3f3f;
+  padding-left: 5px;
+  white-space: nowrap; }
   .interviewer:hover, .interviewer:focus, .interviewer:active {
     color: #2a81cb;
     text-decoration: none; }
@@ -9322,7 +9336,9 @@ table tr th .census-icon, table tr td .census-icon {
 
 .supervisor {
   color: #3f3f3f !important;
-  font-weight: normal; }
+  font-weight: normal;
+  padding-left: 5px;
+  white-space: nowrap; }
   .supervisor:before {
     display: inline-block;
     content: "";
