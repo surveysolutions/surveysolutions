@@ -827,6 +827,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>DevicesInterviewers.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DevicesInterviewers.ru.resx" />
     <EmbeddedResource Include="Resources\EnumNames.fr.resx">
       <DependentUpon>EnumNames.resx</DependentUpon>
     </EmbeddedResource>
