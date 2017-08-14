@@ -2051,11 +2051,11 @@
       </FilesForPackagingFromProject>
     </ItemGroup>
   </Target>
-  <Target Name="CollecHqInterviewer" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
+  <Target Name="CollecHqApp" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
     <ItemGroup>
-      <CollecHqInterviewer_CustomFiles Include="InterviewerApp\dist\**\*.js" />
-      <FilesForPackagingFromProject Include="%(CollecHqInterviewer_CustomFiles.Identity)">
-        <DestinationRelativePath>InterviewerApp\dist\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
+      <CollecHqApp_CustomFiles Include="HqApp\dist\**\*.js" />
+      <FilesForPackagingFromProject Include="%(CollecHqApp_CustomFiles.Identity)">
+        <DestinationRelativePath>HqApp\dist\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
       </FilesForPackagingFromProject>
     </ItemGroup>
   </Target>
