@@ -1,16 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus
 {
     public interface IChangeStatusFactory
     {
         ChangeStatusView Load(ChangeStatusInputModel input);
+
+        List<CommentedStatusHistroyView> GetFilteredStatuses(Guid interviewId);
     }
 
     public class ChangeStatusFactory : IChangeStatusFactory
@@ -22,28 +26,49 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus
             this.interviews = interviews;
         }
 
+        public List<CommentedStatusHistroyView> GetFilteredStatuses(Guid interviewId)
+        {
+            var interviewStatusChangeHistory = this.interviews.GetById(interviewId);
+
+            var statuses = interviewStatusChangeHistory?.InterviewCommentedStatuses
+                .Where(i => i.Status.ConvertToInterviewStatus().HasValue);
+
+            bool IsAutomaticallyAssignedToSv (InterviewCommentedStatus x) => x.Status == InterviewExportedAction.SupervisorAssigned && x.StatusChangeOriginatorRole == UserRoles.Interviewer;
+
+            var filteredStatuses = statuses?
+                .Where(x => IsAutomaticallyAssignedToSv(x))
+                .Select(CreateCommentedStatusHistroyView).ToList() ?? new List<CommentedStatusHistroyView>();
+
+            return filteredStatuses;
+        }
+            
         public ChangeStatusView Load(ChangeStatusInputModel input)
         {
             var interviewStatusChangeHistory = this.interviews.GetById(input.InterviewId);
 
             var commentedStatusHistroyViews = interviewStatusChangeHistory?.InterviewCommentedStatuses
                 .Where(i => i.Status.ConvertToInterviewStatus().HasValue)
-                .Select(x => new CommentedStatusHistroyView
-                {
-                    Comment = x.Comment,
-                    Date = x.Timestamp.ToLocalTime(),
-                    DateHumanized = x.Timestamp.ToLocalTime().FormatDateWithTime(),
-                    Status = x.Status.ConvertToInterviewStatus().Value,
-                    StatusHumanized = x.Status.ConvertToInterviewStatus().Value.ToLocalizeString(),
-                    Responsible = x.StatusChangeOriginatorName,
-                    ResponsibleRole = x.StatusChangeOriginatorRole.ToString().ToLower(),
-                    Assignee = GetAssigneeName(x),
-                    AssigneeRole = GetAssigneeRole(x).ToLower()
-                }).ToList() ?? new List<CommentedStatusHistroyView>();
+                .Select(CreateCommentedStatusHistroyView).ToList() ?? new List<CommentedStatusHistroyView>();
             
             return new ChangeStatusView
             {
                 StatusHistory = commentedStatusHistroyViews
+            };
+        }
+
+        private CommentedStatusHistroyView CreateCommentedStatusHistroyView(InterviewCommentedStatus commentedStatus)
+        {
+            return new CommentedStatusHistroyView
+            {
+                Comment = commentedStatus.Comment,
+                Date = commentedStatus.Timestamp.ToLocalTime(),
+                DateHumanized = commentedStatus.Timestamp.ToLocalTime().FormatDateWithTime(),
+                Status = commentedStatus.Status.ConvertToInterviewStatus().Value,
+                StatusHumanized = commentedStatus.Status.ConvertToInterviewStatus().Value.ToLocalizeString(),
+                Responsible = commentedStatus.StatusChangeOriginatorName,
+                ResponsibleRole = commentedStatus.StatusChangeOriginatorRole.ToString().ToLower(),
+                Assignee = GetAssigneeName(commentedStatus),
+                AssigneeRole = GetAssigneeRole(commentedStatus).ToLower()
             };
         }
 
