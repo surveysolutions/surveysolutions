@@ -8,7 +8,7 @@
             <div class="container-info">
                 <h2>{{title}}</h2>
                 <p>
-                    <b>{{ $t('Cover')}}</b>
+                    <b>{{ $t('CoverProvide')}}</b>
                 </p>
             </div>
         </div>
