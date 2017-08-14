@@ -95,6 +95,12 @@ body > .ui-pnotify{
         margin: 0;
     }
 }
+@media only screen and (max-width: 840px){
+    #statusHistoryModal .modal-dialog {
+		width: calc(100% - 40px) !important;
+        margin: 20px; 
+	}
+}
 @media only screen and (max-width: 680px){
     .modal-dialog{
 		width: calc(100% - 40px) !important;
@@ -145,12 +151,15 @@ body > .ui-pnotify{
 	.title-row{
 		font-size: 16px;
 		line-height: 18px;
-		margin-right: 10px; 
+		//margin-right: 10px; 
 		@extend %hover;
 	}
 	.interviewer{
 		@extend %hover;
 	}	
+}
+#statusHistoryModal .modal-dialog { 
+    width: 800px; 
 }
 .modal-dialog {
   display: inline-block;
@@ -212,8 +221,11 @@ body > .ui-pnotify{
                 }
             }
         }
-        .table-striped td:last-child{
-            border-left: 1px solid $gray-form;
+        .table-striped td{
+            border-right: 1px solid $gray-form;
+            &:last-child{
+                border: none;
+            }
         }
 	}
     .modal-footer{
