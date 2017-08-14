@@ -199,4 +199,7 @@
   <data name="Error" xml:space="preserve">
     <value>Ошибка</value>
   </data>
+  <data name="AnyHeadquarters" xml:space="preserve">
+    <value>любой хедквотер</value>
+  </data>
 </root>
