@@ -7,7 +7,7 @@
                     {{interviewKey}}
                 </router-link>
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-                    <span class="sr-only">{{ $t('Toggle navigation') }}</span>
+                    <span class="sr-only">{{ $t('ToggleNavigation') }}</span>
                     <span class="icon-bar top-menu"></span>
                     <span class="icon-bar mid-menu"></span>
                     <span class="icon-bar bottom-menu"></span>

@@ -1,11 +1,11 @@
-<template>
+﻿<template>
     <wb-question :question="$me" :questionCssClassName="$me.isTimestamp ? 'current-time-question' : 'time-question'">
         <div class="question-unit">
             <div class="options-group">
                 <div v-if="!$me.isTimestamp" class="form-group">
                     <div class="field" :class="{answered: $me.isAnswered}">
                         <flat-pickr :config="pickerOpts" :value="answer" class="field-to-fill"
-                            :placeholder="$t('Enter date')" :title="$t('Enter date')" />
+                            :placeholder="$t('EnterDate')" :title="$t('EnterDate')" />
                         <wb-remove-answer/>
                     </div>
                 </div>
