@@ -1,4 +1,4 @@
-<template>
+﻿<template>
     <wb-question :question="$me" questionCssClassName="numeric-question">
         <div class="question-unit">
             <div class="options-group">
@@ -59,13 +59,11 @@
                 }
 
                 if (answer < 0) {
-                    // `Answer ${answer} is incorrect because question is used as size of roster and specified answer is negative`)
                     this.markAnswerAsNotSavedWithMessage(this.$t("NumberRosterError", { answer }))
                     return;
                 }
 
                 if (answer > this.$me.answerMaxValue) {
-                    // `Answer ${answer} is incorrect because answer is greater than Roster upper bound ${this.$me.answerMaxValue}.`
                     this.markAnswerAsNotSavedWithMessage(this.$t("NumberRosterUpperBound", { answer, answerMaxValue: this.$me.answerMaxValue }))
                     return;
                 }
@@ -80,7 +78,6 @@
 
                 const amountOfRostersToRemove = previousAnswer - answer;
 
-                //`Are you sure you want to remove ${amountOfRostersToRemove} row(s) from each related roster?`
                 const confirmMessage = this.$t("NumberRosterRemoveConfirm", { amountOfRostersToRemove })
 
                 modal.confirm(confirmMessage, result => {
@@ -103,10 +100,8 @@
                     return
                 }
 
-                var amountOfRostersToRemove = this.$me.answer;
-
-                 //`Are you sure you want to remove ${amountOfRostersToRemove} row(s) from each related roster?`
-                var confirmMessage = this.$t("NumberRosterRemoveConfirm", { amountOfRostersToRemove })
+                const amountOfRostersToRemove = this.$me.answer;
+                const confirmMessage = this.$t("NumberRosterRemoveConfirm", { amountOfRostersToRemove })
 
                 modal.confirm(confirmMessage, result => {
                     if (result) {
