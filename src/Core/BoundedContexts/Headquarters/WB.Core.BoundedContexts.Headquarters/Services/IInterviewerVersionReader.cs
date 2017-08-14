@@ -1,4 +1,4 @@
-﻿namespace WB.UI.Headquarters.Code
+﻿namespace WB.Core.BoundedContexts.Headquarters.Services
 {
     public interface IInterviewerVersionReader
     {

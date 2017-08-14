@@ -28,6 +28,7 @@
         Started = 24,
         Rejected = 25,
         Completed = 26,
-        Profile = 27
+        Profile = 27,
+        DevicesInterviewers = 28
     }
 }

@@ -1037,4 +1037,7 @@
   <data name="Filters_Assignment" xml:space="preserve">
     <value>Assignment</value>
   </data>
+  <data name="InterviewersAndDevicesTitle">
+    <value>Devices/Interviewers</value>
+  </data>
 </root>
