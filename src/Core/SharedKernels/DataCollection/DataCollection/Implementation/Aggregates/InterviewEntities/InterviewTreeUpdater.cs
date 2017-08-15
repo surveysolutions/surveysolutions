@@ -68,7 +68,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var level = this.GetLevel(question);
             var filter = level.GetCategoricalFilter(question.Identity);
             var filterResult = RunOptionFilter(filter,
-                question.GetAsSingleFixedOptionAnswer().SelectedValue);
+                question.GetAsInterviewTreeSingleOptionQuestion().GetAnswer().SelectedValue);
             if (!filterResult)
                 question.RemoveAnswer();
         }
@@ -84,7 +84,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var level = this.GetLevel(question);
             var filter = level.GetCategoricalFilter(question.Identity);
             var selectedOptions =
-                question.GetAsMultiFixedOptionAnswer().CheckedValues.ToArray();
+                question.GetAsInterviewTreeMultiOptionQuestion().GetAnswer().CheckedValues.ToArray();
             var newSelectedOptions =
                 selectedOptions.Where(x => RunOptionFilter(filter, x)).ToArray();
             if (newSelectedOptions.Length != selectedOptions.Length)
@@ -106,7 +106,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             var level = this.GetLevel(question);
             var filter = level.GetCategoricalFilter(question.Identity);
-            var checkedOptions = question.GetAsYesNoAnswer().CheckedOptions;
+            var checkedOptions = question.GetAsInterviewTreeYesNoQuestion().GetAnswer().CheckedOptions;
             var newCheckedOptions =
                 checkedOptions.Where(x => RunOptionFilter(filter, x.Value)).ToArray();
 
@@ -124,7 +124,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 return;
 
             //move to cascading
-            var cascadingParent = ((InterviewTreeCascadingQuestion)question.InterviewQuestion).GetCascadingParentTreeQuestion();
+            var cascadingParent = (question.GetAsInterviewTreeCascadingQuestion()).GetCascadingParentTreeQuestion();
             if (cascadingParent.IsDisabled() || !cascadingParent.IsAnswered())
             {
                 if (question.IsAnswered())
@@ -133,7 +133,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
             else
             {
-                var selectedParentValue = cascadingParent.GetAsSingleFixedOptionAnswer().SelectedValue;
+                var selectedParentValue = cascadingParent.GetAsInterviewTreeSingleOptionQuestion().GetAnswer().SelectedValue;
                 if (!this.questionnaire.HasAnyCascadingOptionsForSelectedParentOption(question.Identity.Id,
                     cascadingParent.Identity.Id, selectedParentValue))
                 {

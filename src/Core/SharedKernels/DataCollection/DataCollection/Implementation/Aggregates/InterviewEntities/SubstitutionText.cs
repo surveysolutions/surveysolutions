@@ -102,8 +102,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
                 if (shouldAddBrowserTags && question.IsDateTime && question.IsAnswered() == true)
                 {
-                	var asDateTime = question.InterviewQuestion as InterviewTreeDateTimeQuestion;
-                    var dateTime = question.GetAsDateTimeAnswer().Value;
+                	var asDateTime = question.GetAsInterviewTreeDateTimeQuestion();
+                    var dateTime = question.GetAsInterviewTreeDateTimeQuestion().GetAnswer().Value;
                     if (asDateTime.IsTimestamp)
                     {
                         htmlReadyAnswer = $"<time datetime=\"{dateTime:s}Z\">{dateTime.ToLocalTime().ToString(asDateTime.UiFormatString)}</time>";

@@ -236,17 +236,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             if (!interviewQuestion.IsAnswered())
                 return string.Empty;
 
-            if (interviewQuestion.IsInteger)
+            if (interviewQuestion.InterviewQuestionType == InterviewQuestionType.Integer)
             {
-                var integerValue = interviewQuestion.GetAsIntegerAnswer().Value;
+                var integerValue = interviewQuestion.GetAsInterviewTreeIntegerQuestion().GetAnswer().Value;
                 return questionnaire.ShouldUseFormatting(interviewQuestion.Identity.Id)
                     ? integerValue.ToString("N0", CultureInfo.InvariantCulture)
                     : integerValue.ToString(CultureInfo.InvariantCulture);
             }
 
-            if (interviewQuestion.IsDouble)
+            if (interviewQuestion.InterviewQuestionType == InterviewQuestionType.Double)
             {
-                var doubleValue = interviewQuestion.GetAsDoubleAnswer().Value;
+                var doubleValue = interviewQuestion.GetAsInterviewTreeDoubleQuestion().GetAnswer().Value;
                 return questionnaire.ShouldUseFormatting(interviewQuestion.Identity.Id)
                     ? $"{doubleValue:0,0.#################}"
                     : doubleValue.ToString(CultureInfo.InvariantCulture);
@@ -271,37 +271,37 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             if (!interviewQuestion.IsAnswered()) return null;
 
             if (interviewQuestion.IsYesNo)
-                return interviewQuestion.GetAsYesNoAnswer().ToAnsweredYesNoOptions().ToArray();
+                return interviewQuestion.GetAsInterviewTreeYesNoQuestion().GetAnswer().ToAnsweredYesNoOptions().ToArray();
 
             if (interviewQuestion.IsMultiFixedOption)
-                return interviewQuestion.GetAsMultiFixedOptionAnswer().ToDecimals().ToArray();
+                return interviewQuestion.GetAsInterviewTreeMultiOptionQuestion().GetAnswer().ToDecimals().ToArray();
 
             if (interviewQuestion.IsMultiLinkedOption)
-                return interviewQuestion.GetAsMultiLinkedOptionAnswer().ToRosterVectorArray();
+                return interviewQuestion.GetAsInterviewTreeMultiLinkedToRosterQuestion().GetAnswer().ToRosterVectorArray();
 
             if (interviewQuestion.IsSingleFixedOption)
-                return interviewQuestion.GetAsSingleFixedOptionAnswer().SelectedValue;
+                return interviewQuestion.GetAsInterviewTreeSingleOptionQuestion().GetAnswer().SelectedValue;
 
             if (interviewQuestion.IsSingleLinkedOption)
-                return interviewQuestion.GetAsSingleLinkedOptionAnswer().SelectedValue;
+                return interviewQuestion.GetAsInterviewTreeSingleLinkedToRosterQuestion().GetAnswer().SelectedValue;
 
             if (interviewQuestion.IsGps)
-                return interviewQuestion.GetAsGpsAnswer().Value;
+                return interviewQuestion.GetAsInterviewTreeGpsQuestion().GetAnswer().Value;
 
             if (interviewQuestion.IsText)
-                return interviewQuestion.GetAsTextAnswer().Value;
+                return interviewQuestion.GetAsInterviewTreeTextQuestion().GetAnswer().Value;
 
             if (interviewQuestion.IsInteger)
-                return interviewQuestion.GetAsIntegerAnswer().Value;
+                return interviewQuestion.GetAsInterviewTreeIntegerQuestion().GetAnswer().Value;
 
             if (interviewQuestion.IsDouble)
-                return interviewQuestion.GetAsDoubleAnswer().Value;
+                return interviewQuestion.GetAsInterviewTreeDoubleQuestion().GetAnswer().Value;
 
             if (interviewQuestion.IsArea)
-                return interviewQuestion.GetAsAreaAnswer().Value;
+                return interviewQuestion.GetAsInterviewTreeAreaQuestion().GetAnswer().Value;
 
             if (interviewQuestion.IsAudio)
-                return interviewQuestion.GetAsAudioAnswer().FileName;
+                return interviewQuestion.GetAsInterviewTreeAudioQuestion().GetAnswer().FileName;
 
             return null;
         }
@@ -318,10 +318,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
                 var optionsToMarkAsSelected = new List<int>();
                 if (interviewQuestion.IsSingleFixedOption && interviewQuestion.IsAnswered())
-                    optionsToMarkAsSelected.Add(interviewQuestion.GetAsSingleFixedOptionAnswer().SelectedValue);
+                    optionsToMarkAsSelected.Add(interviewQuestion.GetAsInterviewTreeSingleOptionQuestion().GetAnswer().SelectedValue);
 
                 if (interviewQuestion.IsMultiFixedOption && interviewQuestion.IsAnswered())
-                    optionsToMarkAsSelected.AddRange(interviewQuestion.GetAsMultiFixedOptionAnswer().CheckedValues);
+                    optionsToMarkAsSelected.AddRange(interviewQuestion.GetAsInterviewTreeMultiOptionQuestion().GetAnswer().CheckedValues);
 
                 foreach (var selectedValue in optionsToMarkAsSelected)
                 {
@@ -339,11 +339,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 var optionsToMarkAsSelected = new List<RosterVector>();
                 if (interviewQuestion.IsSingleLinkedOption && interviewQuestion.IsAnswered())
                 {
-                    optionsToMarkAsSelected.Add(interviewQuestion.GetAsSingleLinkedOptionAnswer().SelectedValue);
+                    optionsToMarkAsSelected.Add(interviewQuestion.GetAsInterviewTreeSingleLinkedToRosterQuestion().GetAnswer().SelectedValue);
                 }
                 if (interviewQuestion.IsMultiLinkedOption && interviewQuestion.IsAnswered())
                 {
-                    optionsToMarkAsSelected.AddRange(interviewQuestion.GetAsMultiLinkedOptionAnswer().CheckedValues);
+                    optionsToMarkAsSelected.AddRange(interviewQuestion.GetAsInterviewTreeMultiLinkedToRosterQuestion().GetAnswer().CheckedValues);
                 }
 
                 var options = interviewQuestion.AsLinked.Options.Select(x => new QuestionOptionView
@@ -362,18 +362,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 var optionsToMarkAsSelected = new List<int>();
                 if (interviewQuestion.IsSingleLinkedToList && interviewQuestion.IsAnswered())
                 {
-                    optionsToMarkAsSelected.Add(interviewQuestion.GetAsSingleLinkedToListAnswer().SelectedValue);
+                    optionsToMarkAsSelected.Add(interviewQuestion.GetAsInterviewTreeSingleOptionLinkedToListQuestion().GetAnswer().SelectedValue);
                 }
                 if (interviewQuestion.IsMultiLinkedToList && interviewQuestion.IsAnswered())
                 {
-                    optionsToMarkAsSelected.AddRange(interviewQuestion.GetAsMultiLinkedToListAnswer().CheckedValues);
+                    optionsToMarkAsSelected.AddRange(interviewQuestion.GetAsInterviewTreeMultiOptionLinkedToListQuestion().GetAnswer().CheckedValues);
                 }
                 var listQuestion = interview.FindQuestionInQuestionBranch(interviewQuestion.AsLinkedToList.LinkedSourceId, interviewQuestion.Identity);
 
                 var options = interviewQuestion.AsLinkedToList.Options.Select(x => new QuestionOptionView
                 {
                     Value = Convert.ToInt32(x),
-                    Label = ((InterviewTreeTextListQuestion)listQuestion.InterviewQuestion).GetTitleByItemCode(x),
+                    Label = (listQuestion.GetAsInterviewTreeTextListQuestion()).GetTitleByItemCode(x),
                     IsChecked = optionsToMarkAsSelected.Contains(Convert.ToInt32(x)),
                     Index = optionsToMarkAsSelected.IndexOf(Convert.ToInt32(x)) + 1
                 }).ToList();
@@ -383,7 +383,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             if (interviewQuestion.IsTextList && interviewQuestion.IsAnswered())
             {
-                return interviewQuestion.GetAsTextListAnswer().Rows.Select(x => new QuestionOptionView
+                return interviewQuestion.GetAsInterviewTreeTextListQuestion().GetAnswer().Rows.Select(x => new QuestionOptionView
                 {
                     Value = Convert.ToInt32(x.Value),
                     Label = x.Text
