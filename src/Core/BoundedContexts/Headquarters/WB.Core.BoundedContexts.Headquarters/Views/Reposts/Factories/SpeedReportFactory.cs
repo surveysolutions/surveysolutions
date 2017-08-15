@@ -226,23 +226,44 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         }
 
         public ReportView GetReport(SpeedByInterviewersReportInputModel model)
-        {
-            throw new NotImplementedException();
-        }
+            => GetReportView(this.Load(model));
 
         public ReportView GetReport(SpeedBySupervisorsReportInputModel model)
-        {
-            throw new NotImplementedException();
-        }
+            => GetReportView(this.Load(model));
 
         public ReportView GetReport(SpeedBetweenStatusesByInterviewersReportInputModel model)
+            => GetReportView(this.Load(model));
+
+        public ReportView GetReport(SpeedBetweenStatusesBySupervisorsReportInputModel model) 
+            => GetReportView(this.Load(model));
+
+        private ReportView GetReportView(SpeedByResponsibleReportView view)
+            => new ReportView
+            {
+                Headers = ToReportHeader(view).ToArray(),
+                Data = view.Items.Select(x => ToReportRow(x).ToArray()).ToArray()
+            };
+
+        private IEnumerable<string> ToReportHeader(SpeedByResponsibleReportView view)
         {
-            throw new NotImplementedException();
+            yield return "TEAM MEMBER";
+
+            foreach (var date in view.DateTimeRanges.Select(y => y.From.ToString("yyyy-MM-dd")))
+                yield return date;
+
+            yield return "AVERAGE";
+            yield return "TOTAL";
         }
 
-        public ReportView GetReport(SpeedBetweenStatusesBySupervisorsReportInputModel model)
+        private IEnumerable<object> ToReportRow(SpeedByResponsibleReportRow row)
         {
-            throw new NotImplementedException();
+            yield return row.ResponsibleName;
+
+            foreach (var quantity in row.SpeedByPeriod)
+                yield return quantity;
+
+            yield return row.Average;
+            yield return row.Total;
         }
     }
 }

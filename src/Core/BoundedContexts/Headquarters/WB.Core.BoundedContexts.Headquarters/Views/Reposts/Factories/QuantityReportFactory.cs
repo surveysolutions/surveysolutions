@@ -267,13 +267,38 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         }
 
         public ReportView GetReport(QuantityByInterviewersReportInputModel model)
+            => GetReportView(this.Load(model));
+
+        public ReportView GetReport(QuantityBySupervisorsReportInputModel model) 
+            => GetReportView(this.Load(model));
+
+        private ReportView GetReportView(QuantityByResponsibleReportView view)
+            => new ReportView
+            {
+                Headers = ToReportHeader(view).ToArray(),
+                Data = view.Items.Select(x => ToReportRow(x).ToArray()).ToArray()
+            };
+
+        private IEnumerable<string> ToReportHeader(QuantityByResponsibleReportView view)
         {
-            throw new NotImplementedException();
+            yield return "TEAM MEMBER";
+
+            foreach (var date in view.DateTimeRanges.Select(y => y.From.ToString("yyyy-MM-dd")))
+                yield return date;
+
+            yield return "AVERAGE";
+            yield return "TOTAL";
         }
 
-        public ReportView GetReport(QuantityBySupervisorsReportInputModel model)
+        private IEnumerable<object> ToReportRow(QuantityByResponsibleReportRow row)
         {
-            throw new NotImplementedException();
+            yield return row.ResponsibleName;
+
+            foreach (var quantity in row.QuantityByPeriod)
+                yield return quantity;
+
+            yield return row.Average;
+            yield return row.Total;
         }
     }
 }

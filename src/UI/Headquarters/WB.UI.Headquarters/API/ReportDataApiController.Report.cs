@@ -80,7 +80,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpGet]
         public HttpResponseMessage QuantityByInterviewers([FromUri]string exportType, [FromUri]QuantityByInterviewersReportModel filter)
         {
-            filter.PageIndex = 0;
+            filter.PageIndex = 1;
             filter.PageSize = MaxPageSize;
 
             var report = this.quantityReport.GetReport(
@@ -105,7 +105,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpGet]
         public HttpResponseMessage QuantityBySupervisors([FromUri]string exportType, [FromUri]QuantityBySupervisorsReportModel filter)
         {
-            filter.PageIndex = 0;
+            filter.PageIndex = 1;
             filter.PageSize = MaxPageSize;
 
             var report = this.quantityReport.GetReport(

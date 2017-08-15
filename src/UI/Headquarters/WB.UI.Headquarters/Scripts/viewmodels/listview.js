@@ -81,6 +81,7 @@
         $.extend(request, filter);
 
         self.SendRequest(self.ServiceUrl, request, function (data) {
+            self.setExportUrls();
             ko.mapping.fromJS(data, self.mappingOptions, self);
         }, true);
     };
