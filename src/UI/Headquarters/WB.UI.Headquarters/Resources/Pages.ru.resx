@@ -1032,4 +1032,8 @@
   <data name="GetEsriExtraDescription" xml:space="preserve">
     <value>Она нужна только если вы пользуетесь функциональностью ESRI GIS. Включение этой фунции значительно увеличит размер приложения и время загрузки.</value>
   </data>
+  <data name="CountDaysOfInterviewInStatus" xml:space="preserve">
+    <value>Статус/Дни</value>
+    <comment>Статус/Дни</comment>
+  </data>
 </root>

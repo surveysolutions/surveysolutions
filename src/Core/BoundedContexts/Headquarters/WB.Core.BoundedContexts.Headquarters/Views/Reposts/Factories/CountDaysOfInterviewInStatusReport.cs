@@ -82,10 +82,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 dictStatistics[counterObject.StatusDate][counterObject.Status] = counterObject.InterviewsCount;
             }
 
-
             var utcNow = DateTime.UtcNow;
 
-            var statisticsRows = dictStatistics.OrderBy(s => s.Key).ToList();
+            var statisticsRows = dictStatistics.ToList();
             var rows = new CountDaysOfInterviewInStatusRow[statisticsRows.Count];
 
             for (int i = 0; i < statisticsRows.Count; i++)
@@ -102,8 +101,41 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                         RejectedBySupervisorCount = GetStatusValue(statisticsRow.Value, InterviewExportedAction.RejectedBySupervisor),
                     };
             }
-            
-            return rows;
+
+            var ranges = new List<int?> { 1, 2, 3, 4, 5, 10, 15, 20, 30 };
+            var defaultGroups =
+                from row in rows
+                group row by ranges.LastOrDefault(range => row.DaysCount >= range) into g
+                where g.Key.HasValue
+                select g;
+
+            var result = new List<CountDaysOfInterviewInStatusRow>();
+
+            foreach (var defaultGroup in defaultGroups)
+            {
+                result.Add(new CountDaysOfInterviewInStatusRow()
+                {
+                    DaysCount = defaultGroup.Key.Value,
+                    InterviewerAssignedCount = defaultGroup.Sum(e => e.InterviewerAssignedCount),
+                    CompletedCount = defaultGroup.Sum(e => e.CompletedCount),
+                    ApprovedBySupervisorCount = defaultGroup.Sum(e => e.ApprovedBySupervisorCount),
+                    RejectedBySupervisorCount = defaultGroup.Sum(e => e.RejectedBySupervisorCount),
+                });
+            }
+
+            var addEmptyRowIfDontExistsData = new Action<int>(days =>
+                {
+                    if (result.FirstOrDefault(r => r.DaysCount == days) == null)
+                        result.Add(new CountDaysOfInterviewInStatusRow() {DaysCount = days });
+                });
+
+            addEmptyRowIfDontExistsData(1);
+            addEmptyRowIfDontExistsData(2);
+            addEmptyRowIfDontExistsData(3);
+            addEmptyRowIfDontExistsData(4);
+            addEmptyRowIfDontExistsData(5);
+
+            return result.OrderBy(r => r.DaysCount).ToArray();
         }
 
         private int GetStatusValue(Dictionary<InterviewExportedAction, int> dictionary, InterviewExportedAction status)

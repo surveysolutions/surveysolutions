@@ -117,97 +117,89 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ApiUsers" xml:space="preserve">
-    <value>API Users</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>Отмена</value>
   </data>
-  <data name="Assignments" xml:space="preserve">
-    <value>Assignments</value>
+  <data name="CommandTransformator_ParseQuestionError" xml:space="preserve">
+    <value>Ошибка при попытке принять ответ</value>
   </data>
-  <data name="CumulativeChart" xml:space="preserve">
-    <value>Cumulative Interview Chart</value>
+  <data name="ControlPanelController_RepeatLastInterviewStatus" xml:space="preserve">
+    <value>Статус установлен командой поддержки Survey Solutions</value>
   </data>
-  <data name="DataExport" xml:space="preserve">
-    <value>Data Export</value>
+  <data name="HQ_AccountController_AccountUpdatedSuccessfully" xml:space="preserve">
+    <value>Сведения об учетной записи успешно обновлены</value>
   </data>
-  <data name="Headquarters" xml:space="preserve">
-    <value>Headquarters</value>
+  <data name="HQ_Views_Manage_Title" xml:space="preserve">
+    <value>Управление учетной записью</value>
   </data>
-  <data name="Help" xml:space="preserve">
-    <value>Help</value>
+  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+    <value>Утверждено Хедквотером</value>
   </data>
-  <data name="Interviewers" xml:space="preserve">
-    <value>Interviewers</value>
+  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+    <value>Утверждено Супервизором</value>
   </data>
-  <data name="Interviews" xml:space="preserve">
-    <value>Interviews</value>
+  <data name="InterviewStatus_Completed" xml:space="preserve">
+    <value>Завершено</value>
   </data>
-  <data name="MapReport" xml:space="preserve">
-    <value>Map Report</value>
+  <data name="InterviewStatus_Created" xml:space="preserve">
+    <value>Создано</value>
   </data>
-  <data name="Observers" xml:space="preserve">
-    <value>Observers</value>
+  <data name="InterviewStatus_Deleted" xml:space="preserve">
+    <value>Удалено</value>
   </data>
-  <data name="Quantity" xml:space="preserve">
-    <value>Quantity</value>
+  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+    <value>Интервьюер назначен</value>
   </data>
-  <data name="SurveySetup" xml:space="preserve">
-    <value>Survey Setup</value>
+  <data name="InterviewStatus_ReadyForInterview" xml:space="preserve">
+    <value>Готово к интервью</value>
   </data>
-  <data name="QueueSizeTitle" xml:space="preserve">
-    <value>Number of interviews synchronized but not yet processed</value>
+  <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+    <value>Отклонено Хедквотером</value>
   </data>
-  <data name="Reports" xml:space="preserve">
-    <value>Reports</value>
+  <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
+    <value>Отклонено Супервизором</value>
   </data>
-  <data name="Speed" xml:space="preserve">
-    <value>Speed</value>
+  <data name="InterviewStatus_Restarted" xml:space="preserve">
+    <value>Перезапущено</value>
   </data>
-  <data name="CountDaysOfInterviewInStatus" xml:space="preserve">
-    <value>Count/Days</value>
+  <data name="InterviewStatus_Restored" xml:space="preserve">
+    <value>Восстановлено</value>
   </data>
-  <data name="Supervisors" xml:space="preserve">
-    <value>Supervisors</value>
+  <data name="InterviewStatus_SentToCapi" xml:space="preserve">
+    <value>Отправлено на планшет</value>
   </data>
-  <data name="CreateNew">
-    <value>Create new</value>
+  <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+    <value>Супервизор назначен</value>
   </data>
-  <data name="Started">
-    <value>Started</value>
+  <data name="ObserverNotAllowed" xml:space="preserve">
+    <value>Выполнение этого действия наблюдателем запрещено</value>
   </data>
-  <data name="Completed">
-    <value>Completed</value>
+  <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
+    <value>Управление учетной записью</value>
   </data>
-  <data name="Rejected">
-    <value>Rejected</value>
+  <data name="UnexpectedErrorOccurred" xml:space="preserve">
+    <value>Произошла непредвиденная ошибка</value>
   </data>
-  <data name="SurveysAndStatuses" xml:space="preserve">
-    <value>Surveys and Statuses</value>
+  <data name="ViewHelpers_Invalid_property" xml:space="preserve">
+    <value>Недопустимое свойство</value>
   </data>
-  <data name="TeamAndRoles" xml:space="preserve">
-    <value>Team and Roles</value>
+  <data name="HQ_AccountController_AccountPasswordChangedSuccessfully" xml:space="preserve">
+    <value>Пароль аккаунта успешно изменён</value>
+    <comment>Пароль аккаунта успешно изменён</comment>
   </data>
-  <data name="TeamMembersAndStatuses" xml:space="preserve">
-    <value>Team members and Statuses</value>
+  <data name="HQ_AccountController_AccountPasswordChangedSuccessfullyFormat" xml:space="preserve">
+    <value>Пароль для аккаунта &lt;b&gt;{0}&lt;/b&gt; успешно изменён</value>
+    <comment>Password for account {0} successfully updated
+Пароль для аккаунта {0} успешно изменён</comment>
   </data>
-  <data name="TeamsAndRoles" xml:space="preserve">
-    <value>Teams and Roles</value>
+  <data name="HQ_AccountController_AccountUpdatedSuccessfullyFormat" xml:space="preserve">
+    <value>Информация об &lt;b&gt;{0}&lt;/b&gt; успешно обновлена</value>
+    <comment>Информация об &lt;b&gt;{0}&lt;/b&gt; успешно обновлена</comment>
   </data>
-  <data name="TeamsAndStatuses" xml:space="preserve">
-    <value>Teams and Statuses</value>
+  <data name="Error" xml:space="preserve">
+    <value>Ошибка</value>
   </data>
-  <data name="DevicesInterviewers" xml:space="preserve">
-    <value>Devices/Interviewers</value>
-  </data>
-  <data name="Troubleshooting" xml:space="preserve">
-    <value>Troubleshooting</value>
-  </data>
-  <data name="UserBatchUpload" xml:space="preserve">
-    <value>Batch User Upload</value>
-  </data>
-  <data name="Users" xml:space="preserve">
-    <value>Users</value>
-  </data>
-  <data name="Questionnaires" xml:space="preserve">
-    <value>Questionnaires</value>
+  <data name="Days" xml:space="preserve">
+    <value>Дни</value>
   </data>
 </root>
