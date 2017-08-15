@@ -1485,6 +1485,7 @@
     <Compile Include="API\AssignmentsApiController.cs" />
     <Compile Include="API\Interviewer\v2\AssignmentsApiV2Controller.cs" />
     <Compile Include="API\PublicApi\AssignmentsController.cs" />
+    <Compile Include="API\ReportDataApiController.Report.cs" />
     <Compile Include="API\PublicApi\Models\CreateInterviewRequest.cs" />
     <Compile Include="API\WebInterview\IWebInterviewAllowService.cs" />
     <Compile Include="API\WebInterview\Services\WebInterviewAllowService.cs" />

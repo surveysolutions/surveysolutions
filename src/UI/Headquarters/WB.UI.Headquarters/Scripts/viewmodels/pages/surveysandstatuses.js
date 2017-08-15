@@ -41,6 +41,8 @@
     self.onDataTableDataReceived = function(data) {
         self.TotalInterviewCount(data.totalInterviewCount);
         self.TotalResponsibleCount(data.totalResponsibleCount);
+
+        
     };
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.SurveysAndStatuses, Supervisor.VM.ListView);

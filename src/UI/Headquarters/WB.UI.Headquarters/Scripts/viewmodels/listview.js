@@ -140,6 +140,35 @@
         });
     };
 
+    self.toQueryString = function (obj) {
+        var str = [];
+        for (var p in obj)
+            if (obj.hasOwnProperty(p)) {
+                str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+            }
+        return str.join("&");
+    };
+
+    self.ExportToExcelUrl = ko.observable("");
+    self.ExportToCsvUrl = ko.observable("");
+    self.ExportToTabUrl = ko.observable("");
+
+    self.setExportUrls = function()
+    {
+        var request = self.Filter() || {};
+
+        request["exportType"] = 'excel';
+
+        self.ExportToExcelUrl(serviceUrl + "?" + self.toQueryString(request));
+
+        request["exportType"] = 'csv';
+
+        self.ExportToCsvUrl(serviceUrl + "?" + self.toQueryString(request));
+
+        request["exportType"] = 'tab';
+
+        self.ExportToTabUrl(serviceUrl + "?" + self.toQueryString(request));
+    };
     
     self.initDataTable = function (onDataReceivedCallback, onTableInitComplete) {
         $.fn.dataTable.ext.errMode = 'none';
@@ -170,6 +199,8 @@
                 $.extend(request, data);
 
                 self.SendRequest(serviceUrl, request, function (d) {
+                    self.setExportUrls();
+
                     if (!_.isUndefined(onDataReceivedCallback))
                         onDataReceivedCallback(d);
                     callback(d);
@@ -207,6 +238,7 @@
             }
         });
     };
+
     self.reloadDataTable = function() {
         self.Datatable.ajax.reload();
     };
