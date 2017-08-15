@@ -129,7 +129,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpGet]
         public HttpResponseMessage SpeedByInterviewers([FromUri]string exportType, [FromUri]SpeedByInterviewersReportModel filter)
         {
-            filter.PageIndex = 0;
+            filter.PageIndex = 1;
             filter.PageSize = MaxPageSize;
 
             var report = this.speedReport.GetReport(
@@ -154,7 +154,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpGet]
         public HttpResponseMessage SpeedBetweenStatusesBySupervisors([FromUri]string exportType, [FromUri]SpeedBySupervisorsReportModel filter)
         {
-            filter.PageIndex = 0;
+            filter.PageIndex = 1;
             filter.PageSize = MaxPageSize;
 
             var report = this.speedReport.GetReport(
@@ -178,7 +178,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpGet]
         public HttpResponseMessage SpeedBetweenStatusesByInterviewers([FromUri]string exportType, [FromUri]SpeedByInterviewersReportModel filter)
         {
-            filter.PageIndex = 0;
+            filter.PageIndex = 1;
             filter.PageSize = MaxPageSize;
 
             var report = this.speedReport.GetReport(
@@ -203,7 +203,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpGet]
         public HttpResponseMessage SpeedBySupervisors([FromUri]string exportType, [FromUri]SpeedBySupervisorsReportModel filter)
         {
-            filter.PageIndex = 0;
+            filter.PageIndex = 1;
             filter.PageSize = MaxPageSize;
 
             var report = this.speedReport.GetReport(
