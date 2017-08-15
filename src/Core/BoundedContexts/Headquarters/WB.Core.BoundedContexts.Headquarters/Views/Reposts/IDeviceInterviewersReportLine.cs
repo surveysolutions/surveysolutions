@@ -7,5 +7,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts
     public interface IDeviceInterviewersReport
     {
         Task<DeviceInterviewersReportView> LoadAsync(string filter, OrderRequestItem order, int pageNumber, int pageSize);
+        Task<ReportView> GetReport(string filter, OrderRequestItem order, int pageNumber, int pageSize);
     }
 }

@@ -430,6 +430,33 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Comma separated values.
+        /// </summary>
+        public static string ExportToCsv {
+            get {
+                return ResourceManager.GetString("ExportToCsv", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excel.
+        /// </summary>
+        public static string ExportToExcel {
+            get {
+                return ResourceManager.GetString("ExportToExcel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tab separated values.
+        /// </summary>
+        public static string ExportToTab {
+            get {
+                return ResourceManager.GetString("ExportToTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assignment.
         /// </summary>
         public static string Filters_Assignment {
