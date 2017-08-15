@@ -343,8 +343,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
 
+        public class CountDaysOfInterviewInStatusDataTableResponse : DataTableResponse<CountDaysOfInterviewInStatusRow>
+        {
+        }
+
         public class DeviceInterviewersDataTableResponse : DataTableResponse<DeviceInterviewersReportLine>
         {
+        }
+
+        public class CountDaysOfInterviewInStatusInputModel : DataTableRequest
+        {
+            public Guid? TemplateId { get; set; }
+            public long? TemplateVersion { get; set; }
         }
 
         public class DeviceInterviewersFilter : DataTableRequest
@@ -372,9 +382,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             return this.chartStatisticsViewFactory.Load(input);
         }
 
-        public CountDaysOfInterviewInStatusRow[] CountDaysOfInterviewInStatus(CountDaysOfInterviewInStatusInputModel input)
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        [CamelCase]
+        public CountDaysOfInterviewInStatusDataTableResponse CountDaysOfInterviewInStatus([FromUri] CountDaysOfInterviewInStatusInputModel request)
         {
-            return this.countDaysOfInterviewInStatusReport.Load(input);
+            var input = new BoundedContexts.Headquarters.Views.Reports.InputModels.CountDaysOfInterviewInStatusInputModel()
+            {
+                TemplateVersion = request.TemplateVersion,
+                TemplateId = request.TemplateId,
+            };
+
+
+            var data = this.countDaysOfInterviewInStatusReport.Load(input);
+
+
+
+            return new CountDaysOfInterviewInStatusDataTableResponse
+            {
+                Draw = request.Draw + 1,
+                RecordsTotal = data.Length,
+                RecordsFiltered = data.Length,
+                Data = data
+            };
         }
 
         private InterviewExportedAction[] GetInterviewExportedActionsAccordingToReportTypeForQuantityReports(PeriodiceReportType reportType)

@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Survey;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -116,14 +117,37 @@ namespace WB.UI.Headquarters.Controllers
             });
         }
 
+        [ActivePage(MenuItem.CountDaysOfInterviewInStatus)]
         [Authorize(Roles = "Administrator, Headquarter")]
         public ActionResult CountDaysOfInterviewInStatus()
         {
-            this.ViewBag.ActivePage = MenuItem.CountDaysOfInterviewInStatus;
+            return this.View("CountDaysOfInterviewInStatus", new CountDaysOfInterviewInStatusModel
+            {
+                BasePath = Url.Content(@"~/"),
+                DataUrl = Url.RouteUrl("DefaultApiWithAction",
+                    new
+                    {
+                        httproute = "",
+                        controller = "ReportDataApi",
+                        action = "CountDaysOfInterviewInStatus"
+                    }),
+                Questionnaires = this.GetQuestionnaires(),
 
+                Resources = new[]
+                {
+                    Strings.ResourceManager,
+                    Pages.ResourceManager
+                }.Translations()
+            });
+        }
+
+        private ComboboxOptionModel[] GetQuestionnaires()
+        {
             AllUsersAndQuestionnairesView usersAndQuestionnaires = this.allUsersAndQuestionnairesFactory.Load();
 
-            return this.View("CountDaysOfInterviewInStatus", usersAndQuestionnaires.Questionnaires);
+            return usersAndQuestionnaires.Questionnaires.Select(s => new ComboboxOptionModel(
+                new QuestionnaireIdentity(s.TemplateId, s.TemplateVersion).ToString(),
+                $@"(ver. {s.TemplateVersion.ToString()}) {s.TemplateName}")).ToArray();
         }
 
         public ActionResult QuantityByInterviewers(Guid? supervisorId, PeriodiceReportType reportType = PeriodiceReportType.NumberOfCompletedInterviews)

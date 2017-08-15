@@ -1,12 +1,19 @@
-﻿@using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
-
-@model IEnumerable<WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views.TemplateViewItem>
-
+﻿@using Newtonsoft.Json
+@using Newtonsoft.Json.Serialization
+@model WB.UI.Headquarters.Models.Reports.CountDaysOfInterviewInStatusModel
 @{
-    ViewBag.Title = Reports.CountDaysOfInterviewInStatus;
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewBag.Title = Pages.CountDaysOfInterviewInStatus;
+    Layout = "~/Views/Shared/_MainLayoutVue.cshtml";
 }
+<div id="vueApp" configuration="@JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
+                                {
+                                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                                })"></div>
 
+@Html.StaticScipt(@"~/HqApp/dist/vendor.bundle.js")
+@Html.StaticScipt(@"~/HqApp/dist/app.bundle.js")
+
+@*
 @section scripts
 {
     @Scripts.Render("~/js/main-no-libs")
@@ -113,4 +120,4 @@
             </div>
         </div>
     </div>
-</main>
+</main>*@
