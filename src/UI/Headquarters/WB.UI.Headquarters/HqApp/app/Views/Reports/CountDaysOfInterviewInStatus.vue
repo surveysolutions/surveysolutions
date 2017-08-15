@@ -17,9 +17,14 @@
 
 <script>
 export default {
-     data() {
+    data() {
         return {
             questionnaireId: null,
+        }
+    },
+    watch: {
+        questionnaireId: function (value) {
+            this.reload();
         }
     },
     mounted() {

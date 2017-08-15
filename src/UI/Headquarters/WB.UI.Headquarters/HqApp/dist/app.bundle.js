@@ -2380,6 +2380,12 @@ if (false) {(function () {
             questionnaireId: null
         };
     },
+
+    watch: {
+        questionnaireId: function questionnaireId(value) {
+            this.reload();
+        }
+    },
     mounted: function mounted() {
         this.$refs.table.reload();
     },
