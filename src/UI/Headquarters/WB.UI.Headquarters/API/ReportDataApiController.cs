@@ -351,10 +351,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
         }
 
-        public class CountDaysOfInterviewInStatusInputModel : DataTableRequest
+        public class CountDaysOfInterviewInStatusRequest : DataTableRequest
         {
-            public Guid? TemplateId { get; set; }
-            public long? TemplateVersion { get; set; }
+            public string QuestionnaireId { get; set; }
         }
 
         public class DeviceInterviewersFilter : DataTableRequest
@@ -385,19 +384,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
         [CamelCase]
-        public CountDaysOfInterviewInStatusDataTableResponse CountDaysOfInterviewInStatus([FromUri] CountDaysOfInterviewInStatusInputModel request)
+        public CountDaysOfInterviewInStatusDataTableResponse CountDaysOfInterviewInStatus([FromUri] CountDaysOfInterviewInStatusRequest request)
         {
-            var input = new BoundedContexts.Headquarters.Views.Reports.InputModels.CountDaysOfInterviewInStatusInputModel()
-            {
-                TemplateVersion = request.TemplateVersion,
-                TemplateId = request.TemplateId,
-            };
+            var input = new CountDaysOfInterviewInStatusInputModel();
 
+            if (!string.IsNullOrEmpty(request.QuestionnaireId))
+            {
+                var questionnaireIdentity = QuestionnaireIdentity.Parse(request.QuestionnaireId);
+                input.TemplateVersion = questionnaireIdentity.Version;
+                input.TemplateId = questionnaireIdentity.QuestionnaireId;
+            }
 
             var data = this.countDaysOfInterviewInStatusReport.Load(input);
-
-
-
             return new CountDaysOfInterviewInStatusDataTableResponse
             {
                 Draw = request.Draw + 1,
