@@ -62,7 +62,7 @@
         return {
             TemplateId: selectedTemplate.templateId,
             TemplateVersion: selectedTemplate.version,
-            ResponsibleName: _.isUndefined(self.SelectedResponsible()) ? "" : self.SelecteselectAlldResponsible().UserName,
+            ResponsibleName: _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserName,
             Status: self.SelectedStatus,
             SearchBy: self.SearchBy,
             AssignmentId: self.AssignmentId
