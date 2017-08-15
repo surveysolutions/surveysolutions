@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import PNotify from 'pnotify'
+// PNotify.prototype.options.styling = "bootstrap3"
 
 Vue.use(Vuex)
 
@@ -18,7 +20,17 @@ const store = new Vuex.Store({
             $.post(rootState.config.interviewerHqEndpoint + "/StartNewInterview/" + assignmentId, response => {
                 dispatch("showProgress", true);
                 window.location = response;
-            }).then(() => dispatch("showProgress", false));
+            })
+            .catch(data => { 
+                new PNotify({
+                    title: 'Unhandled error occurred',
+                    text: data.responseStatus,
+                    type: 'error'
+                  });
+                dispatch("hideProgress")
+            })
+            .then(() => dispatch("hideProgress"))
+            
         },
         showProgress(context) {
             context.commit('SET_PROGRESS_TIMEOUT', setTimeout(() => {
