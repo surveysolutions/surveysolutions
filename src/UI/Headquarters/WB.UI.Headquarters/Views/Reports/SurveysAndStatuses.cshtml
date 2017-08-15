@@ -22,7 +22,7 @@
 
             var statisticsMessage = "@Pages.SurveysAndStatuses_SupervisorStatisticsFormat";
 
-            var model = new Supervisor.VM.SurveysAndStatuses($surveyAndStatusesReportUrl, responsiblesUrl, statisticsMessage, $reportUrl);
+            var model = new Supervisor.VM.SurveysAndStatuses($surveyAndStatusesReportUrl, responsiblesUrl, statisticsMessage);
             model.getDataTableColumns = function () {
                 return [
                     {
