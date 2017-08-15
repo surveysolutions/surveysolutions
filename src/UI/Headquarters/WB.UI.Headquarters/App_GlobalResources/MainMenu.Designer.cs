@@ -88,7 +88,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CountDaysOfInterviewInStatus.
+        ///   Looks up a localized string similar to Count/Days.
         /// </summary>
         internal static string CountDaysOfInterviewInStatus {
             get {

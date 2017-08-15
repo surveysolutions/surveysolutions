@@ -117,97 +117,85 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ApiUsers" xml:space="preserve">
-    <value>API Users</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
   </data>
-  <data name="Assignments" xml:space="preserve">
-    <value>Assignments</value>
+  <data name="HQ_AccountController_AccountUpdatedSuccessfully" xml:space="preserve">
+    <value>Account information successfully updated</value>
   </data>
-  <data name="CumulativeChart" xml:space="preserve">
-    <value>Cumulative Interview Chart</value>
+  <data name="HQ_AccountController_AccountUpdatedSuccessfullyFormat" xml:space="preserve">
+    <value>Information about &lt;b&gt;{0}&lt;/b&gt; successfully updated</value>
   </data>
-  <data name="DataExport" xml:space="preserve">
-    <value>Data Export</value>
+  <data name="HQ_AccountController_AccountPasswordChangedSuccessfully" xml:space="preserve">
+    <value>Account password successfully updated</value>
   </data>
-  <data name="Headquarters" xml:space="preserve">
-    <value>Headquarters</value>
+  <data name="HQ_AccountController_AccountPasswordChangedSuccessfullyFormat" xml:space="preserve">
+    <value>Password for account &lt;b&gt;{0}&lt;/b&gt; successfully updated</value>
   </data>
-  <data name="Help" xml:space="preserve">
-    <value>Help</value>
+  <data name="HQ_Views_Manage_Title" xml:space="preserve">
+    <value>Manage account</value>
   </data>
-  <data name="Interviewers" xml:space="preserve">
-    <value>Interviewers</value>
+  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+    <value>Approved by Headquarters</value>
   </data>
-  <data name="Interviews" xml:space="preserve">
-    <value>Interviews</value>
+  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+    <value>Approved by Supervisor</value>
   </data>
-  <data name="MapReport" xml:space="preserve">
-    <value>Map Report</value>
-  </data>
-  <data name="Observers" xml:space="preserve">
-    <value>Observers</value>
-  </data>
-  <data name="Quantity" xml:space="preserve">
-    <value>Quantity</value>
-  </data>
-  <data name="SurveySetup" xml:space="preserve">
-    <value>Survey Setup</value>
-  </data>
-  <data name="QueueSizeTitle" xml:space="preserve">
-    <value>Number of interviews synchronized but not yet processed</value>
-  </data>
-  <data name="Reports" xml:space="preserve">
-    <value>Reports</value>
-  </data>
-  <data name="Speed" xml:space="preserve">
-    <value>Speed</value>
-  </data>
-  <data name="CountDaysOfInterviewInStatus" xml:space="preserve">
-    <value>Count/Days</value>
-  </data>
-  <data name="Supervisors" xml:space="preserve">
-    <value>Supervisors</value>
-  </data>
-  <data name="CreateNew">
-    <value>Create new</value>
-  </data>
-  <data name="Started">
-    <value>Started</value>
-  </data>
-  <data name="Completed">
+  <data name="InterviewStatus_Completed" xml:space="preserve">
     <value>Completed</value>
   </data>
-  <data name="Rejected">
-    <value>Rejected</value>
+  <data name="InterviewStatus_Created" xml:space="preserve">
+    <value>Created</value>
   </data>
-  <data name="SurveysAndStatuses" xml:space="preserve">
-    <value>Surveys and Statuses</value>
+  <data name="InterviewStatus_Deleted" xml:space="preserve">
+    <value>Deleted</value>
   </data>
-  <data name="TeamAndRoles" xml:space="preserve">
-    <value>Team and Roles</value>
+  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+    <value>Interviewer assigned</value>
   </data>
-  <data name="TeamMembersAndStatuses" xml:space="preserve">
-    <value>Team members and Statuses</value>
+  <data name="InterviewStatus_ReadyForInterview" xml:space="preserve">
+    <value>Ready for interview</value>
   </data>
-  <data name="TeamsAndRoles" xml:space="preserve">
-    <value>Teams and Roles</value>
+  <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+    <value>Rejected by Headquarters</value>
   </data>
-  <data name="TeamsAndStatuses" xml:space="preserve">
-    <value>Teams and Statuses</value>
+  <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
+    <value>Rejected by Supervisor</value>
   </data>
-  <data name="DevicesInterviewers" xml:space="preserve">
-    <value>Devices/Interviewers</value>
+  <data name="InterviewStatus_Restarted" xml:space="preserve">
+    <value>Restarted</value>
   </data>
-  <data name="Troubleshooting" xml:space="preserve">
-    <value>Troubleshooting</value>
+  <data name="InterviewStatus_Restored" xml:space="preserve">
+    <value>Restored</value>
   </data>
-  <data name="UserBatchUpload" xml:space="preserve">
-    <value>Batch User Upload</value>
+  <data name="InterviewStatus_SentToCapi" xml:space="preserve">
+    <value>Sent to Capi</value>
   </data>
-  <data name="Users" xml:space="preserve">
-    <value>Users</value>
+  <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+    <value>Supervisor assigned</value>
   </data>
-  <data name="Questionnaires" xml:space="preserve">
-    <value>Questionnaires</value>
+  <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
+    <value>Manage account</value>
+  </data>
+  <data name="ViewHelpers_Invalid_property" xml:space="preserve">
+    <value>Invalid property</value>
+  </data>
+  <data name="CommandTransformator_ParseQuestionError" xml:space="preserve">
+    <value>Error when parse question answer</value>
+  </data>
+  <data name="ControlPanelController_RepeatLastInterviewStatus" xml:space="preserve">
+    <value>Status set by Survey Solutions support team</value>
+  </data>
+  <data name="ObserverNotAllowed" xml:space="preserve">
+    <value>Observer is not allowed to perform this action</value>
+  </data>
+  <data name="UnexpectedErrorOccurred" xml:space="preserve">
+    <value>Unexpected error occurred</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Days</value>
   </data>
 </root>

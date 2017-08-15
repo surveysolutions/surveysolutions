@@ -1040,4 +1040,7 @@
   <data name="InterviewersAndDevicesTitle">
     <value>Devices/Interviewers</value>
   </data>
+  <data name="CountDaysOfInterviewInStatus">
+    <value>Status/Days</value>
+  </data>
 </root>

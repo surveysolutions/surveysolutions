@@ -313,6 +313,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Status/Days.
+        /// </summary>
+        public static string CountDaysOfInterviewInStatus {
+            get {
+                return ResourceManager.GetString("CountDaysOfInterviewInStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create.
         /// </summary>
         public static string Create {
