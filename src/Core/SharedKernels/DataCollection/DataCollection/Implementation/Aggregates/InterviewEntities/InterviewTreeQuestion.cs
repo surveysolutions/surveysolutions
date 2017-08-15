@@ -168,7 +168,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
         }
 
-        public BaseInterviewQuestion InterviewQuestion { get; private set; }
+        internal BaseInterviewQuestion InterviewQuestion { get; set; }
         
         public InterviewTreeLinkedToListQuestion AsLinkedToList => 
             this.IsSingleLinkedToList ? 
@@ -233,25 +233,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.FailedValidations = Enumerable.Empty<FailedValidationCondition>().ToList();
         }
 
-        
-        
-        public NumericRealAnswer GetAsDoubleAnswer() => ((InterviewTreeDoubleQuestion)this.InterviewQuestion).GetAnswer();
-        public NumericIntegerAnswer GetAsIntegerAnswer() => ((InterviewTreeIntegerQuestion)this.InterviewQuestion).GetAnswer();
-        public CategoricalFixedSingleOptionAnswer GetAsSingleFixedOptionAnswer() => ((InterviewTreeSingleOptionQuestion)this.InterviewQuestion).GetAnswer();
-        public CategoricalFixedMultiOptionAnswer GetAsMultiFixedOptionAnswer() => ((InterviewTreeMultiOptionQuestion)this.InterviewQuestion).GetAnswer();
-        public CategoricalLinkedMultiOptionAnswer GetAsMultiLinkedOptionAnswer() => ((InterviewTreeMultiLinkedToRosterQuestion)this.InterviewQuestion).GetAnswer();
-        public CategoricalLinkedSingleOptionAnswer GetAsSingleLinkedOptionAnswer() => ((InterviewTreeSingleLinkedToRosterQuestion)this.InterviewQuestion).GetAnswer();
-        public QRBarcodeAnswer GetAsQRBarcodeAnswer() => ((InterviewTreeQRBarcodeQuestion)this.InterviewQuestion).GetAnswer();
-        public TextAnswer GetAsTextAnswer() => ((InterviewTreeTextQuestion)this.InterviewQuestion).GetAnswer();
-        public TextListAnswer GetAsTextListAnswer() => ((InterviewTreeTextListQuestion)this.InterviewQuestion).GetAnswer();
-        public YesNoAnswer GetAsYesNoAnswer() => ((InterviewTreeYesNoQuestion)this.InterviewQuestion).GetAnswer();
-        public DateTimeAnswer GetAsDateTimeAnswer() => ((InterviewTreeDateTimeQuestion)this.InterviewQuestion).GetAnswer();
-        public GpsAnswer GetAsGpsAnswer() => ((InterviewTreeGpsQuestion)this.InterviewQuestion).GetAnswer();
-        public MultimediaAnswer GetAsMultimediaAnswer() => ((InterviewTreeMultimediaQuestion)this.InterviewQuestion).GetAnswer();
-        public AreaAnswer GetAsAreaAnswer() => ((InterviewTreeAreaQuestion)this.InterviewQuestion).GetAnswer();
-        public CategoricalFixedMultiOptionAnswer GetAsMultiLinkedToListAnswer() => ((InterviewTreeMultiOptionLinkedToListQuestion)this.InterviewQuestion).GetAnswer();
-        public CategoricalFixedSingleOptionAnswer GetAsSingleLinkedToListAnswer() => ((InterviewTreeSingleOptionLinkedToListQuestion)this.InterviewQuestion).GetAnswer();
-        public AudioAnswer GetAsAudioAnswer() => ((InterviewTreeAudioQuestion)this.InterviewQuestion).GetAnswer();
+        public InterviewTreeDoubleQuestion GetAsInterviewTreeDoubleQuestion() => this.InterviewQuestion as InterviewTreeDoubleQuestion;
+        public InterviewTreeIntegerQuestion GetAsInterviewTreeIntegerQuestion() => this.InterviewQuestion as InterviewTreeIntegerQuestion;
+        public InterviewTreeSingleOptionQuestion GetAsInterviewTreeSingleOptionQuestion() => this.InterviewQuestion as InterviewTreeSingleOptionQuestion;
+        public InterviewTreeMultiOptionQuestion GetAsInterviewTreeMultiOptionQuestion() => this.InterviewQuestion as InterviewTreeMultiOptionQuestion;
+        public InterviewTreeMultiLinkedToRosterQuestion GetAsInterviewTreeMultiLinkedToRosterQuestion() => this.InterviewQuestion as InterviewTreeMultiLinkedToRosterQuestion;
+        public InterviewTreeSingleLinkedToRosterQuestion GetAsInterviewTreeSingleLinkedToRosterQuestion() => this.InterviewQuestion as InterviewTreeSingleLinkedToRosterQuestion;
+        public InterviewTreeQRBarcodeQuestion GetAsInterviewTreeQRBarcodeQuestion() => this.InterviewQuestion as InterviewTreeQRBarcodeQuestion;
+        public InterviewTreeTextQuestion GetAsInterviewTreeTextQuestion() => this.InterviewQuestion as InterviewTreeTextQuestion;
+        public InterviewTreeTextListQuestion GetAsInterviewTreeTextListQuestion() => this.InterviewQuestion as InterviewTreeTextListQuestion;
+        public InterviewTreeYesNoQuestion GetAsInterviewTreeYesNoQuestion() => this.InterviewQuestion as InterviewTreeYesNoQuestion;
+        public InterviewTreeDateTimeQuestion GetAsInterviewTreeDateTimeQuestion() => this.InterviewQuestion as InterviewTreeDateTimeQuestion;
+        public InterviewTreeGpsQuestion GetAsInterviewTreeGpsQuestion() => this.InterviewQuestion as InterviewTreeGpsQuestion;
+        public InterviewTreeMultimediaQuestion GetAsInterviewTreeMultimediaQuestion() => this.InterviewQuestion as InterviewTreeMultimediaQuestion;
+        public InterviewTreeAreaQuestion GetAsInterviewTreeAreaQuestion() => this.InterviewQuestion as InterviewTreeAreaQuestion;
+        public InterviewTreeMultiOptionLinkedToListQuestion GetAsInterviewTreeMultiOptionLinkedToListQuestion() => this.InterviewQuestion as InterviewTreeMultiOptionLinkedToListQuestion;
+        public InterviewTreeSingleOptionLinkedToListQuestion GetAsInterviewTreeSingleOptionLinkedToListQuestion() => this.InterviewQuestion as InterviewTreeSingleOptionLinkedToListQuestion;
+        public InterviewTreeAudioQuestion GetAsInterviewTreeAudioQuestion() => this.InterviewQuestion as InterviewTreeAudioQuestion;
+
+        public InterviewTreeCascadingQuestion GetAsInterviewTreeCascadingQuestion() => this.InterviewQuestion as InterviewTreeCascadingQuestion;
 
         public InterviewQuestionType InterviewQuestionType => this.InterviewQuestion.InterviewQuestionType;
         public bool IsDouble => this.InterviewQuestion.InterviewQuestionType == InterviewQuestionType.Double;
@@ -1372,7 +1372,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override BaseInterviewQuestion Clone()
         {
             var clone = (InterviewTreeCascadingQuestion)this.MemberwiseClone();
-            //clone.question = question;
             return clone;
         }
 
