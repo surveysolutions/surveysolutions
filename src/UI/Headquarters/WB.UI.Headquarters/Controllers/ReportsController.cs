@@ -252,6 +252,7 @@ namespace WB.UI.Headquarters.Controllers
                     controller = "ReportDataApi",
                     action = "DeviceInterviewers"
                 }),
+                InterviewersBaseUrl = Url.Action("Index", "Interviewers"),
                 Resources = new[]
                 {
                     DevicesInterviewers.ResourceManager,

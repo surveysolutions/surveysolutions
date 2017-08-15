@@ -2206,6 +2206,7 @@ if (false) {(function () {
 
     computed: {
         tableOptions: function tableOptions() {
+            var self = this;
             return {
                 deferLoading: 0,
                 columns: [{
@@ -2218,13 +2219,23 @@ if (false) {(function () {
                     name: "NeverSynchedCount",
                     "class": "type-numeric",
                     title: this.$t("DevicesInterviewers.NeverSynchedCount"),
-                    orderable: true
+                    orderable: true,
+                    render: function render(data, type, row) {
+                        if (data === 0) return "<span>" + data + "</span>";else {
+                            return "<a href='" + self.$config.interviewersBaseUrl + "?supervisor=" + row.teamName + "&InterviewerOptionFilter=NotSynced'>" + data + "</a>";
+                        }
+                    }
                 }, {
                     data: "outdatedCount",
                     name: "OutdatedCount",
                     "class": "type-numeric",
                     orderable: true,
-                    title: this.$t("DevicesInterviewers.OldInterviewerVersion")
+                    title: this.$t("DevicesInterviewers.OldInterviewerVersion"),
+                    render: function render(data, type, row) {
+                        if (data === 0) return "<span>" + data + "</span>";else {
+                            return "<a href='" + self.$config.interviewersBaseUrl + "?supervisor=" + row.teamName + "&InterviewerOptionFilter=Outdated'>" + data + "</a>";
+                        }
+                    }
                 }, {
                     data: "lowStorageCount",
                     name: "LowStorageCount",

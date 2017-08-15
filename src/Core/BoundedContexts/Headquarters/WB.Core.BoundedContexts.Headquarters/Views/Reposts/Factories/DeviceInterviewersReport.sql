@@ -1,7 +1,7 @@
 ﻿select up."SupervisorId" TeamId, 
        userNames."UserName" TeamName,
        SUM(case when up."DeviceId" IS NULL then 1 else 0 end) NeverSynchedCount, 
-       SUM(case when up."DeviceAppBuildVersion" < @latestAppBuildVersion then 1 else 0 end) OutdatedCount, 
+       SUM(case when up."DeviceAppBuildVersion" IS NULL OR up."DeviceAppBuildVersion" < @latestAppBuildVersion then 1 else 0 end) OutdatedCount, 
        SUM(case when lastSync."StorageFreeInBytes" < @neededFreeStorageInBytes then 1 else 0 end) LowStorageCount, 
        SUM(case when DATE_PART('minute', lastSync."DeviceDate" - lastSync."SyncDate") > @minutesMismatch then 1 else 0 end) WrongDateOnTabletCount,
        SUM(case when lastSync."AndroidSdkVersion" < @targetAndroidSdkVersion then 1 else 0 end) OldAndroidCount,
