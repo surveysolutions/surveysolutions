@@ -26,34 +26,34 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if ((!question.IsAnswered() || question.IsDisabled()) && !question.IsYesNo) // because of missing field
                 return default(T);
 
-            if (question.IsInteger) return question.GetAsIntegerAnswer().Value.To<T>(); //"int?"
-            if (question.IsDouble) return question.GetAsDoubleAnswer().Value.To<T>(); // double?
+            if (question.IsInteger) return question.GetAsInterviewTreeIntegerQuestion().GetAnswer().Value.To<T>(); //"int?"
+            if (question.IsDouble) return question.GetAsInterviewTreeDoubleQuestion().GetAnswer().Value.To<T>(); // double?
 
-            if (question.IsSingleFixedOption) return question.GetAsSingleFixedOptionAnswer().SelectedValue.To<T>();//int?
-            if (question.IsMultiFixedOption) return question.GetAsMultiFixedOptionAnswer().ToInts().ToArray().To<T>();//int[]
+            if (question.IsSingleFixedOption) return question.GetAsInterviewTreeSingleOptionQuestion().GetAnswer().SelectedValue.To<T>();//int?
+            if (question.IsMultiFixedOption) return question.GetAsInterviewTreeMultiOptionQuestion().GetAnswer().ToInts().ToArray().To<T>();//int[]
             if (question.IsYesNo)
             {
                 return new YesNoAndAnswersMissings(
                     this.questionnaire.GetOptionsForQuestion(questionId, null, "").Select(x => x.Value), 
-                    question.GetAsYesNoAnswer()?.CheckedOptions).To<T>(); //YesNoAndAnswersMissings
+                    question.GetAsInterviewTreeYesNoQuestion().GetAnswer()?.CheckedOptions).To<T>(); //YesNoAndAnswersMissings
             }
 
-            if (question.IsSingleLinkedOption) return question.GetAsSingleLinkedOptionAnswer().SelectedValue.To<T>();//RosterVector
-            if (question.IsMultiLinkedOption) return question.GetAsMultiLinkedOptionAnswer().CheckedValues.ToArray().To<T>();//RosterVector[]
+            if (question.IsSingleLinkedOption) return question.GetAsInterviewTreeSingleLinkedToRosterQuestion().GetAnswer().SelectedValue.To<T>();//RosterVector
+            if (question.IsMultiLinkedOption) return question.GetAsInterviewTreeMultiLinkedToRosterQuestion().GetAnswer().CheckedValues.ToArray().To<T>();//RosterVector[]
 
-            if (question.IsGps) return question.GetAsGpsAnswer().ToGeoLocation().To<T>(); //GeoLocation
-            if (question.IsTextList) return question.GetAsTextListAnswer().Rows.ToArray().To<T>(); // TextListAnswerRow[]
+            if (question.IsGps) return question.GetAsInterviewTreeGpsQuestion().GetAnswer().ToGeoLocation().To<T>(); //GeoLocation
+            if (question.IsTextList) return question.GetAsInterviewTreeTextListQuestion().GetAnswer().Rows.ToArray().To<T>(); // TextListAnswerRow[]
 
-            if (question.IsDateTime) return question.GetAsDateTimeAnswer().Value.To<T>(); //DateTime?
-            if (question.IsText) return question.GetAsTextAnswer().Value.To<T>();//string
+            if (question.IsDateTime) return question.GetAsInterviewTreeDateTimeQuestion().GetAnswer().Value.To<T>(); //DateTime?
+            if (question.IsText) return question.GetAsInterviewTreeTextQuestion().GetAnswer().Value.To<T>();//string
 
-            if (question.IsSingleLinkedToList) return question.GetAsSingleLinkedToListAnswer().SelectedValue.To<T>(); //int?
-            if (question.IsMultiLinkedToList) return question.GetAsMultiLinkedToListAnswer().ToInts().ToArray().To<T>(); // int[]
+            if (question.IsSingleLinkedToList) return question.GetAsInterviewTreeSingleOptionLinkedToListQuestion().GetAnswer().SelectedValue.To<T>(); //int?
+            if (question.IsMultiLinkedToList) return question.GetAsInterviewTreeMultiOptionLinkedToListQuestion().GetAnswer().ToInts().ToArray().To<T>(); // int[]
            
-            if (question.IsMultimedia) return question.GetAsMultimediaAnswer().FileName.To<T>();//string
-            if (question.IsQRBarcode) return question.GetAsQRBarcodeAnswer().DecodedText.To<T>();//string
+            if (question.IsMultimedia) return question.GetAsInterviewTreeMultimediaQuestion().GetAnswer().FileName.To<T>();//string
+            if (question.IsQRBarcode) return question.GetAsInterviewTreeQRBarcodeQuestion().GetAnswer().DecodedText.To<T>();//string
 
-            if (question.IsAudio) return question.GetAsAudioAnswer().ToAudioAnswerForContions().To<T>(); //AudioAnswerForConditions
+            if (question.IsAudio) return question.GetAsInterviewTreeAudioQuestion().GetAnswer().ToAudioAnswerForContions().To<T>(); //AudioAnswerForConditions
 
             return default(T);
         }

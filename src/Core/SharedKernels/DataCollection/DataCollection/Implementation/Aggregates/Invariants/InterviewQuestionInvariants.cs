@@ -507,7 +507,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"Answer option has no parent value. Option value: {answer}, Question id: '{this.QuestionIdentity.Id}'.");
 
             int answerParentValue = answerOption.ParentValue.Value;
-            var parentQuestion = ((InterviewTreeCascadingQuestion)question.InterviewQuestion).GetCascadingParentQuestion();
+            var parentQuestion = (question.GetAsInterviewTreeCascadingQuestion()).GetCascadingParentQuestion();
 
             if (!parentQuestion.IsAnswered())
                 return this;

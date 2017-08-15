@@ -86,13 +86,13 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             if (entityType == InterviewEntityType.Gps)
             {
-                GpsAnswer questionAnswer = interviewQuestion.GetAsGpsAnswer();
+                GpsAnswer questionAnswer = interviewQuestion.GetAsInterviewTreeGpsQuestion().GetAnswer();
                 string answer = questionAnswer?.Value != null ? $"{questionAnswer.Value.Latitude},{questionAnswer.Value.Longitude}" : null;
                 result.Answer = answer;
             }
-            if (entityType == InterviewEntityType.DateTime && ((InterviewTreeDateTimeQuestion)interviewQuestion.InterviewQuestion).IsTimestamp)
+            if (entityType == InterviewEntityType.DateTime && (interviewQuestion.GetAsInterviewTreeDateTimeQuestion()).IsTimestamp)
             {
-                DateTimeAnswer questionAnswer = interviewQuestion.GetAsDateTimeAnswer();
+                DateTimeAnswer questionAnswer = interviewQuestion.GetAsInterviewTreeDateTimeQuestion().GetAnswer();
                 string answer = questionAnswer?.Value != null
                     ? $"<time datetime=\"{questionAnswer.Value:o}\">{interview.GetAnswerAsString(questionIdentity)}</time>"
                     : null;
@@ -364,7 +364,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                         result = this.Map<InterviewSingleOptionQuestion>(question, res =>
                         {
                             res.Options = GetOptionsLinkedToListQuestion(callerInterview, identity,
-                                ((InterviewTreeSingleOptionLinkedToListQuestion)question.InterviewQuestion).LinkedSourceId).ToList();
+                                (question.GetAsInterviewTreeSingleOptionLinkedToListQuestion()).LinkedSourceId).ToList();
                         });
                         break;
                     case InterviewQuestionType.Text:
@@ -424,7 +424,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                         result = this.Map<InterviewMutliOptionQuestion>(question, res =>
                         {
                             res.Options = GetOptionsLinkedToListQuestion(callerInterview, identity,
-                                ((InterviewTreeMultiOptionLinkedToListQuestion)question.InterviewQuestion).LinkedSourceId).ToList();
+                                (question.GetAsInterviewTreeMultiOptionLinkedToListQuestion()).LinkedSourceId).ToList();
                         });
                         break;
                     case InterviewQuestionType.DateTime:
@@ -594,7 +594,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             var questionIdentity = Identity.Parse(id);
             var statefulInterview = this.GetCallerInterview();
             var question = statefulInterview.GetQuestion(questionIdentity);
-            var parentCascadingQuestion = (question.InterviewQuestion as InterviewTreeCascadingQuestion)?.GetCascadingParentQuestion();
+            var parentCascadingQuestion = question.GetAsInterviewTreeCascadingQuestion()?.GetCascadingParentQuestion();
             var parentCascadingQuestionAnswer = parentCascadingQuestion?.IsAnswered() ?? false
                 ? parentCascadingQuestion?.GetAnswer()?.SelectedValue
                 : null;
@@ -734,10 +734,10 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             var listQuestion = callerInterview.FindQuestionInQuestionBranch(linkedSourceId, identity);
 
-            if ((listQuestion == null) || listQuestion.IsDisabled() || listQuestion.GetAsTextListAnswer()?.Rows == null)
+            if ((listQuestion == null) || listQuestion.IsDisabled() || listQuestion.GetAsInterviewTreeTextListQuestion().GetAnswer()?.Rows == null)
                 return new List<CategoricalOption>();
 
-            return new List<CategoricalOption>(listQuestion.GetAsTextListAnswer().Rows.Select(x => new CategoricalOption
+            return new List<CategoricalOption>(listQuestion.GetAsInterviewTreeTextListQuestion().GetAnswer().Rows.Select(x => new CategoricalOption
             {
                 Value = (int)x.Value,
                 Title = x.Text
