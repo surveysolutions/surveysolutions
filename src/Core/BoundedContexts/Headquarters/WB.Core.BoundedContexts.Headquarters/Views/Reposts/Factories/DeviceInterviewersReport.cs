@@ -32,37 +32,47 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         {
             var targetInterviewerVersion = interviewerVersionReader.Version;
 
+            var sql = GetSqlTexts();
+
             using (var connection = new NpgsqlConnection(plainStorageSettings.ConnectionString))
             {
-                var rows = await connection.QueryAsync<DeviceInterviewersReportLine>(GetSqlText(), new
+                var rows = await connection.QueryAsync<DeviceInterviewersReportLine>(sql.query, new
                 {
                     latestAppBuildVersion = targetInterviewerVersion,
                     neededFreeStorageInBytes = 100 * 1024,
                     minutesMismatch = 15,
                     targetAndroidSdkVersion = 20,
                     limit = pageSize,
-                    offset = pageSize * (pageNumber - 1)
+                    offset = pageSize * (pageNumber - 1),
+                    filter = filter + "%"
                 });
+                int totalCount = await connection.ExecuteScalarAsync<int>(sql.countQuery, new {filter = filter + "%" });
 
                 return new DeviceInterviewersReportView
                 {
-                    Items = rows
+                    Items = rows,
+                    TotalCount = totalCount
                 };
             }
         }
 
-        private string GetSqlText()
+        private (string query, string countQuery) GetSqlTexts()
         {
-            var resourceName = "WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.DeviceInterviewersReport.sql";
-
-            using (Stream stream = typeof(DeviceInterviewersReport).Assembly.GetManifestResourceStream(resourceName))
+            string query;
+            string countQuery;
+            var assembly = typeof(DeviceInterviewersReport).Assembly;
+            using (Stream stream = assembly.GetManifestResourceStream("WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.DeviceInterviewersReport.sql"))
             using (StreamReader reader = new StreamReader(stream))
             {
-                string result = reader.ReadToEnd();
-                return result;
+                query = reader.ReadToEnd();
             }
-        }
+            using (Stream stream = assembly.GetManifestResourceStream("WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.DeviceInterviewersReportCount.sql"))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                countQuery = reader.ReadToEnd();
+            }
 
-       
+            return (query, countQuery);
+        }
     }
 }
