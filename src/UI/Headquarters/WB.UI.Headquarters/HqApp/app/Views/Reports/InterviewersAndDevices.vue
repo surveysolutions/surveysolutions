@@ -15,20 +15,51 @@ export default {
                 deferLoading: 0,
                 columns: [
                     {
-                        data: "teamId",
+                        data: "teamName",
                         title: this.$t("DevicesInterviewers.Teams"),
                         orderable: false
                     },
                     {
                         data: "neverSynchedCount",
-                        title: this.$t("Pages.Interviewers_NotSyncedOption"),
+                        title: this.$t("DevicesInterviewers.NeverSynchedCount"),
                         orderable: false
                     },
                     {
                         data: "outdatedCount",
-                        title: this.$t("Pages.Interviewers_OutdatedOption"),
+                        title: this.$t("DevicesInterviewers.OldInterviewerVersion"),
+                        orderable: false
+                    },
+                    {
+                        data: "lowStorageCount",
+                        title: this.$t("DevicesInterviewers.LowStorage"),
+                        orderable: false
+                    },
+                    {
+                        data: "wrongDateOnTabletCount",
+                        title: this.$t("DevicesInterviewers.WrongDateOnTablet"),
+                        orderable: false
+                    },
+                    {
+                        data: "oldAndroidCount",
+                        title: this.$t("DevicesInterviewers.OldAndroidVersion"),
+                        orderable: false
+                    },
+                    {
+                        data: "noQuestionnairesCount",
+                        title: this.$t("DevicesInterviewers.NoAssignments"),
+                        orderable: false
+                    },
+                    {
+                        data: "neverUploadedCount",
+                        title: this.$t("DevicesInterviewers.NeverUploaded"),
+                        orderable: false
+                    },
+                    {
+                        data: "reassignedCount",
+                        title: this.$t("DevicesInterviewers.TabletReassigned"),
                         orderable: false
                     }
+                    
                 ],
                 ajax: {
                     url: this.$config.dataUrl,

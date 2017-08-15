@@ -11,5 +11,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views
         public int NeverSynchedCount { get; set; }
 
         public int OutdatedCount { get; set; }
+
+        public int LowStorageCount { get; set; }
+
+        public int WrongDateOnTabletCount { get; set; }
+
+        public int OldAndroidCount { get; set; }
+
+        public int NeverUploadedCount { get; set; }
+
+        public int ReassignedCount { get; set; }
+
+        public int NoQuestionnairesCount { get; set; }
     }
 }

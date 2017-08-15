@@ -117,10 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="NeverSynched" xml:space="preserve">
+  <data name="LowStorage" xml:space="preserve">
+    <value>Меньше 100MB свободного места</value>
+  </data>
+  <data name="NeverSynchedCount" xml:space="preserve">
     <value>Не синхронизировались</value>
+  </data>
+  <data name="NeverUploaded" xml:space="preserve">
+    <value>Никогда не загружали интервью</value>
+  </data>
+  <data name="NoAssignments" xml:space="preserve">
+    <value>Ни одного задания не получено</value>
+  </data>
+  <data name="OldAndroidVersion" xml:space="preserve">
+    <value>Android 4.4 или ниже</value>
+  </data>
+  <data name="OldInterviewerVersion" xml:space="preserve">
+    <value>Старая версия</value>
+  </data>
+  <data name="TabletReassigned" xml:space="preserve">
+    <value>Устройств переназначено</value>
   </data>
   <data name="Teams" xml:space="preserve">
     <value>Команды</value>
+  </data>
+  <data name="WrongDateOnTablet" xml:space="preserve">
+    <value>Не правильное время на устройстве</value>
   </data>
 </root>
