@@ -44,6 +44,10 @@
         self.Url.query['archived'] = self.QueryString['archived'] || "";
         self.Url.query['InterviewerOptionFilter'] = self.QueryString['InterviewerOptionFilter'] || "";
 
+        setTimeout(function() {
+            $('.selectpicker').selectpicker('val', self.InterviewerOptionFilter());
+        },300);
+
         self.SelectedSupervisor.subscribe(self.reloadDataTable);
         self.Archived.subscribe(self.reloadDataTable);
         self.InterviewerOptionFilter.subscribe(self.reloadDataTable);
