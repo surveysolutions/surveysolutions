@@ -40,25 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 }
 
                 var statuses = filteredInterviews.SelectMany(x => x.InterviewCommentedStatuses);
-
-//                var test = (from f in statuses
-//                    group f by new { f.Status, f.Timestamp.Date } into g
-//                    select new CounterObject
-//                    {
-//                        Status = g.Key.Status,
-//                        StatusDate = g.Key.Date,
-//                        InterviewsCount = g.Count(),
-//                    }
-//                ).ToList();
-//
-//                var statusWithTime2 = ( filteredInterviews//.SelectMany(x => x.InterviewCommentedStatuses)
-//                    //.Select(f => f.InterviewCommentedStatuses.Last())
-//                    .Select(f => f.InterviewCommentedStatuses.OrderByDescending(x => x.Timestamp).FirstOrDefault())
-//                    ).ToList();
-
-                var statusWithTime = (from f in statuses//.SelectMany(x => x.InterviewCommentedStatuses)
-                                                        //.Select(f => f.InterviewCommentedStatuses.Last())
-//                    .Select(f => f.InterviewCommentedStatuses.OrderByDescending(x => x.Timestamp).FirstOrDefault())
+                var statusWithTime = (from f in statuses
                     group f by new { f.Status, f.Timestamp.Date } into g
                     select new CounterObject
                     {

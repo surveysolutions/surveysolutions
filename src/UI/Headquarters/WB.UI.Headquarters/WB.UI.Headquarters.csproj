@@ -664,7 +664,6 @@
     <Content Include="Dependencies\img\icon-mic-2x.png" />
     <Content Include="Dependencies\img\padlock-1dp.png" />
     <Content Include="Dependencies\img\padlock-3dp.png" />
-    <Content Include="Scripts\viewmodels\pages\countdaysofinterviewinstatus.js" />
     <EmbeddedResource Include="Content\img\no_image_found.jpg" />
     <Content Include="Content\img\sort_asc.png" />
     <Content Include="Content\img\sort_asc_disabled.png" />
