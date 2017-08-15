@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Resources;
 using System.Web.Mvc;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
