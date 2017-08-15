@@ -1,5 +1,5 @@
 <template>
-    <Layout>
+    <Layout  :hasFilter="true">
         <Filters slot="filters">
             <FilterBlock :title="$t('Pages.Template')">
                 <select class="selectpicker" v-model="questionnaireId">
