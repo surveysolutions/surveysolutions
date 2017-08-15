@@ -392,7 +392,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
         [CamelCase]
-        public CountDaysOfInterviewInStatusDataTableResponse CountDaysOfInterviewInStatus([FromUri] CountDaysOfInterviewInStatusRequest request)
+        public async Task<CountDaysOfInterviewInStatusDataTableResponse> CountDaysOfInterviewInStatus([FromUri] CountDaysOfInterviewInStatusRequest request)
         {
             var input = new CountDaysOfInterviewInStatusInputModel();
 
@@ -403,7 +403,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 input.TemplateId = questionnaireIdentity.QuestionnaireId;
             }
 
-            var data = this.countDaysOfInterviewInStatusReport.Load(input);
+            var data = await this.countDaysOfInterviewInStatusReport.LoadAsync(input);
             return new CountDaysOfInterviewInStatusDataTableResponse
             {
                 Draw = request.Draw + 1,

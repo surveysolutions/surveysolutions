@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using Dapper;
+using Npgsql;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -8,20 +12,28 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reports.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.Views;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
 {
     public class CountDaysOfInterviewInStatusReport : ICountDaysOfInterviewInStatusReport
     {
+        private readonly PostgresPlainStorageSettings plainStorageSettings;
         private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatusesStorage;
+        private readonly IPlainStorageAccessor<InterviewSummary> interviewSummaryStorage;
         private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
 
-        public CountDaysOfInterviewInStatusReport(IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatusesStorage,
-            IPlainStorageAccessor<Assignment> assignmentsStorage)
+        public CountDaysOfInterviewInStatusReport(
+            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatusesStorage,
+            IPlainStorageAccessor<InterviewSummary> interviewSummaryStorage, 
+            IPlainStorageAccessor<Assignment> assignmentsStorage, 
+            PostgresPlainStorageSettings plainStorageSettings)
         {
             this.interviewStatusesStorage = interviewStatusesStorage;
+            this.interviewSummaryStorage = interviewSummaryStorage;
             this.assignmentsStorage = assignmentsStorage;
+            this.plainStorageSettings = plainStorageSettings;
         }
 
         class CounterObject
@@ -31,9 +43,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             public DateTime StatusDate { get; set; }
         }
 
-        public CountDaysOfInterviewInStatusRow[] Load(CountDaysOfInterviewInStatusInputModel input)
+        public async Task<CountDaysOfInterviewInStatusRow[]> LoadAsync(CountDaysOfInterviewInStatusInputModel input)
         {
-            var datesAndStatuses = this.interviewStatusesStorage.Query(_ =>
+            string query;
+            var assembly = typeof(CountDaysOfInterviewInStatusReport).Assembly;
+            using (Stream stream = assembly.GetManifestResourceStream("WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.CountDaysOfInterviewInStatusReport.sql"))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                query = reader.ReadToEnd();
+            }
+
+            IEnumerable<CounterObject> datesAndStatuses;
+            using (var connection = new NpgsqlConnection(plainStorageSettings.ConnectionString))
+            {
+                datesAndStatuses = await connection.QueryAsync<CounterObject>(query, new
+                {
+                    questionnaireid = input.TemplateId,
+                    questionnaireversion = input.TemplateVersion,
+                });
+            }
+
+            /*var datesAndStatuses = this.interviewStatusesStorage.Query(_ =>
             {
                 var filteredInterviews = _;
 
@@ -55,7 +85,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                     });
 
                 return statusWithTime;
-            });
+            });*/
 
             var assignmentsDatesAndCounts = assignmentsStorage.Query(_ =>
             {
@@ -69,11 +99,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 }
 
                 var statusWithTime = (from f in filteredAssignments
-                    group f by new { f.CreatedAtUtc } into g
+                    where f.Quantity.HasValue
+                    group f by new { f.CreatedAtUtc.Date } into g
+                
                     select new CounterObject
                     {
-                        StatusDate = g.Key.CreatedAtUtc,
-                        InterviewsCount = g.Count(),
+                        StatusDate = g.Key.Date,
+                        InterviewsCount = g.Sum(a => a.Quantity) ?? 0,
                     }
                 );
 
