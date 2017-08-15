@@ -2216,41 +2216,49 @@ if (false) {(function () {
                 }, {
                     data: "neverSynchedCount",
                     name: "NeverSynchedCount",
+                    "class": "type-numeric",
                     title: this.$t("DevicesInterviewers.NeverSynchedCount"),
                     orderable: true
                 }, {
                     data: "outdatedCount",
                     name: "OutdatedCount",
+                    "class": "type-numeric",
                     orderable: true,
                     title: this.$t("DevicesInterviewers.OldInterviewerVersion")
                 }, {
                     data: "lowStorageCount",
                     name: "LowStorageCount",
+                    "class": "type-numeric",
                     orderable: true,
                     title: this.$t("DevicesInterviewers.LowStorage")
                 }, {
                     data: "wrongDateOnTabletCount",
                     name: "WrongDateOnTabletCount",
+                    "class": "type-numeric",
                     orderable: true,
                     title: this.$t("DevicesInterviewers.WrongDateOnTablet")
                 }, {
                     data: "oldAndroidCount",
                     name: "OldAndroidCount",
+                    "class": "type-numeric",
                     orderable: true,
                     title: this.$t("DevicesInterviewers.OldAndroidVersion")
                 }, {
                     data: "noQuestionnairesCount",
                     name: "NoQuestionnairesCount",
+                    "class": "type-numeric",
                     orderable: true,
                     title: this.$t("DevicesInterviewers.NoAssignments")
                 }, {
                     data: "neverUploadedCount",
                     name: "NeverUploadedCount",
+                    "class": "type-numeric",
                     orderable: true,
                     title: this.$t("DevicesInterviewers.NeverUploaded")
                 }, {
                     data: "reassignedCount",
                     name: "ReassignedCount",
+                    "class": "type-numeric",
                     orderable: true,
                     title: this.$t("DevicesInterviewers.TabletReassigned")
                 }],
