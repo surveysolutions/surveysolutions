@@ -43,8 +43,14 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
             if (this.lazyCommandSession.IsValueCreated)
             {
-                this.lazyCommandSession.Value.Transaction.Commit();
-                this.lazyCommandSession.Value.Session.Close();
+                try
+                {
+                    this.lazyCommandSession.Value.Transaction.Commit();
+                }
+                finally
+                {
+                    this.lazyCommandSession.Value.Session.Close();
+                }
             }
 
             this.lazyCommandSession = null;
@@ -59,8 +65,14 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
             if (this.lazyCommandSession?.IsValueCreated == true)
             {
-                this.lazyCommandSession.Value.Transaction.Rollback();
-                this.lazyCommandSession.Value.Session.Close();
+                try
+                {
+                    this.lazyCommandSession.Value.Transaction.Rollback();
+                }
+                finally
+                {
+                    this.lazyCommandSession.Value.Session.Close();
+                }
             }
 
             this.lazyCommandSession = null;
@@ -94,8 +106,14 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
             if (this.lazyQuerySession?.IsValueCreated == true)
             {
-                this.lazyQuerySession.Value.Transaction.Rollback();
-                this.lazyQuerySession.Value.Session.Close();
+                try
+                {
+                    this.lazyQuerySession.Value.Transaction.Rollback();
+                }
+                finally
+                {
+                    this.lazyQuerySession.Value.Session.Close();
+                }
             }
 
             this.lazyQuerySession = null;
