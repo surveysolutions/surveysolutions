@@ -310,7 +310,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewComment InterviewComment(string comment = null)
             => new InterviewComment { Comment = comment };
-
+        
         public InterviewCommentaries InterviewCommentaries(Guid? questionnaireId = null, long? questionnaireVersion = null, params InterviewComment[] comments)
             => new InterviewCommentaries
             {
@@ -319,13 +319,14 @@ namespace WB.Tests.Abc.TestFactories
                 Commentaries = new List<InterviewComment>(comments)
             };
 
-        public InterviewCommentedStatus InterviewCommentedStatus(
-            Guid? statusId = null,
-            Guid? interviewerId = null,
-            Guid? supervisorId = null,
-            DateTime? timestamp = null,
-            TimeSpan? timeSpanWithPreviousStatus = null,
-            InterviewExportedAction status = InterviewExportedAction.ApprovedBySupervisor)
+        public InterviewCommentedStatus InterviewCommentedStatus(InterviewExportedAction status = InterviewExportedAction.ApprovedBySupervisor,
+            string originatorName = "inter",
+            UserRoles originatorRole = UserRoles.Interviewer,
+            Guid? statusId = null, 
+            Guid? interviewerId = null, 
+            Guid? supervisorId = null, 
+            DateTime? timestamp = null, 
+            TimeSpan? timeSpanWithPreviousStatus = null)
             => new InterviewCommentedStatus
             {
                 Id = statusId ?? Guid.NewGuid(),
@@ -333,6 +334,10 @@ namespace WB.Tests.Abc.TestFactories
                 Timestamp = timestamp ?? DateTime.Now,
                 InterviewerId = interviewerId ?? Guid.NewGuid(),
                 SupervisorId = supervisorId ?? Guid.NewGuid(),
+                StatusChangeOriginatorRole = originatorRole,
+                StatusChangeOriginatorName = originatorName,
+                InterviewerName = "inter",
+                SupervisorName = "supervisor",
                 TimeSpanWithPreviousStatus = timeSpanWithPreviousStatus
             };
 
