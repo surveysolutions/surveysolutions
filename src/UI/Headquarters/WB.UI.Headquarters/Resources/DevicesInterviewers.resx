@@ -117,10 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="NeverSynched" xml:space="preserve">
+  <data name="LowStorage" xml:space="preserve">
+    <value>Less than 100MB free space</value>
+  </data>
+  <data name="NeverSynchedCount" xml:space="preserve">
     <value>Never synched</value>
+  </data>
+  <data name="NeverUploaded" xml:space="preserve">
+    <value>Never uploaded</value>
+  </data>
+  <data name="NoAssignments" xml:space="preserve">
+    <value>No assignments received</value>
+  </data>
+  <data name="OldAndroidVersion" xml:space="preserve">
+    <value>Android 4.4 or lower</value>
+  </data>
+  <data name="OldInterviewerVersion" xml:space="preserve">
+    <value>Old version</value>
+  </data>
+  <data name="TabletReassigned" xml:space="preserve">
+    <value>Tablet reassigned</value>
   </data>
   <data name="Teams" xml:space="preserve">
     <value>Teams</value>
+  </data>
+  <data name="WrongDateOnTablet" xml:space="preserve">
+    <value>Wrong time on tablet</value>
   </data>
 </root>
