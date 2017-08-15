@@ -20,6 +20,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
@@ -521,6 +522,19 @@ namespace WB.Tests.Abc.TestFactories
         public IInterviewTreeBuilder InterviewTreeBuilder()
         {
             return new InterviewTreeBuilder(Create.Service.SubstitutionTextFactory());
+        }
+
+        public InterviewActionsExporter InterviewActionsExporter(ICsvWriter csvWriter = null,
+            IFileSystemAccessor fileSystemAccessor = null,
+            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses = null,
+            QuestionnaireExportStructure questionnaireExportStructure = null)
+        {
+            return new InterviewActionsExporter(new InterviewDataExportSettings(),
+                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                csvWriter ?? Mock.Of<ICsvWriter>(),
+                Create.Service.TransactionManagerProvider(),
+                interviewStatuses ?? new TestInMemoryWriter<InterviewStatuses>(),
+                Mock.Of<ILogger>());
         }
     }
 }

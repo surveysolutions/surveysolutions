@@ -77,6 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus
         {
             if (commentedStatus.Status == InterviewExportedAction.Created)
                 return commentedStatus.StatusChangeOriginatorName;
+
             if (commentedStatus.Status == InterviewExportedAction.Completed || commentedStatus.Status == InterviewExportedAction.RejectedByHeadquarter)
                 return commentedStatus.SupervisorName;
 
@@ -92,7 +93,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus
         private string GetAssigneeRole(InterviewCommentedStatus commentedStatus)
         {
             if (commentedStatus.Status == InterviewExportedAction.Created)
-                return commentedStatus.StatusChangeOriginatorName;
+                return commentedStatus.StatusChangeOriginatorRole.ToString();
 
             if (commentedStatus.Status == InterviewExportedAction.Completed || commentedStatus.Status == InterviewExportedAction.RejectedByHeadquarter)
                 return UserRoles.Supervisor.ToString();

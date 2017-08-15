@@ -26,19 +26,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
                     questionnaireVersion: input.QuestionnaireVersion,
                     statuses: new[]
                     {
-                        Create.Entity.InterviewCommentedStatus(interviewerId: user.PublicKey,
-                            supervisorId:supervisorId,
-                            timestamp: input.From.Date.AddHours(1),
-                            status: InterviewExportedAction.Completed,
-                            timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
-                        Create.Entity.InterviewCommentedStatus(interviewerId: user.PublicKey,
-                            supervisorId:supervisorId,
-                            status: InterviewExportedAction.Completed,
-                            timestamp: input.From.Date.AddDays(1)),
-                        Create.Entity.InterviewCommentedStatus(interviewerId: user.PublicKey,
-                            supervisorId:supervisorId,
-                            status: InterviewExportedAction.Completed,
-                            timestamp: input.From.Date.AddMonths(-2))
+                        Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
+                            interviewerId: user.PublicKey, supervisorId: supervisorId, timestamp: input.From.Date.AddHours(1), timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
+                        Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
+                            interviewerId: user.PublicKey, supervisorId: supervisorId, timestamp: input.From.Date.AddDays(1)),
+                        Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
+                            interviewerId: user.PublicKey, supervisorId: supervisorId, timestamp: input.From.Date.AddMonths(-2))
                     }), "2");
 
             quantityReportFactory = CreateSpeedReportFactory(interviewStatuses: interviewStatuses);
