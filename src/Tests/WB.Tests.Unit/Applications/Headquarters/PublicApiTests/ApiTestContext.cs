@@ -3,9 +3,11 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Hosting;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.HealthCheck;
+using WB.Core.BoundedContexts.Headquarters.Services.Internal;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
@@ -17,9 +19,12 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
+using WB.Tests.Abc;
 using WB.UI.Headquarters.API.PublicApi;
+using WB.UI.Headquarters.Services;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {
@@ -65,7 +70,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             ICommandService commandService = null,
             IAuthorizedUser authorizedUser = null,
             IUserViewFactory userViewFactory = null,
-            IReadSideKeyValueStorage<InterviewReferences> interviewReferences = null)
+            IReadSideKeyValueStorage<InterviewReferences> interviewReferences = null,
+            IInterviewUniqueKeyGenerator interviewUniqueKeyGenerator = null,
+            IPlainStorageAccessor<Assignment> assignmentStorageAccessor = null)
         {
             var controller = new InterviewsController(
                 logger ?? Mock.Of<ILogger>(),
@@ -74,7 +81,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
                 commandService ?? Mock.Of<ICommandService>(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 userViewFactory ?? Mock.Of<IUserViewFactory>(),
-                interviewReferences ?? Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>());
+                interviewReferences ?? Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>(),
+                interviewUniqueKeyGenerator ?? Mock.Of<IInterviewUniqueKeyGenerator>(),
+                assignmentStorageAccessor ?? Mock.Of<IPlainStorageAccessor<Assignment>>());
 
             controller.Request = new HttpRequestMessage(HttpMethod.Post, "https://localhost");
             controller.Request.SetConfiguration(new HttpConfiguration());
