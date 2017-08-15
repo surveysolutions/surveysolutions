@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
                 {
                     foreach (var column in row)
                     {
-                        csvWriter.WriteField(column);
+                        csvWriter.WriteField(column ?? "");
                     }
                     csvWriter.NextRecord();
                 }
