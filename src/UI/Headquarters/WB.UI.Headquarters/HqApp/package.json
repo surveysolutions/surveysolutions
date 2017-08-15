@@ -21,6 +21,7 @@
     "clean-webpack-plugin": "^0.1.16",
     "cross-env": "^5.0.5",
     "i18next": "^8.4.3",
+    "pnotify": "^3.2.1",
     "vee-validate": "^2.0.0-rc.9",
     "vue": "^2.4.2",
     "vue-loader": "^13.0.4",
