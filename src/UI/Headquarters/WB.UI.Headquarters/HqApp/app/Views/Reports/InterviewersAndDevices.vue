@@ -1,5 +1,5 @@
 <template>
-    <Layout>
+    <Layout :title="$t('Pages.InterviewersAndDevicesTitle')">
         <DataTables ref="table" :tableOptions="tableOptions"></DataTables>
     </Layout>
 </template>
