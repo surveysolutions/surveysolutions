@@ -78,7 +78,7 @@ namespace WB.UI.Interviewer.Implementations.Services
             DeviceId = this.TryGetDeviceId(),
             DeviceModel = this.TryGetDeviceModel(),
             DeviceType = this.TryGetDeviceType(),
-            DeviceDate = DateTime.Now,
+            DeviceDate = DateTime.UtcNow,
             DeviceLanguage = this.TryGetDeviceLanguage(),
             DeviceLocation = await this.TryGetDeviceLocation().ConfigureAwait(false),
             DeviceManufacturer = this.TryGetDeviceManufacturer(),
