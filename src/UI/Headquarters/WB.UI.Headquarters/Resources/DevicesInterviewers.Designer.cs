@@ -61,11 +61,65 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Less than 100MB free space.
+        /// </summary>
+        public static string LowStorage {
+            get {
+                return ResourceManager.GetString("LowStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Never synched.
         /// </summary>
-        public static string NeverSynched {
+        public static string NeverSynchedCount {
             get {
-                return ResourceManager.GetString("NeverSynched", resourceCulture);
+                return ResourceManager.GetString("NeverSynchedCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Never uploaded.
+        /// </summary>
+        public static string NeverUploaded {
+            get {
+                return ResourceManager.GetString("NeverUploaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No assignments received.
+        /// </summary>
+        public static string NoAssignments {
+            get {
+                return ResourceManager.GetString("NoAssignments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Android 4.4 or lower.
+        /// </summary>
+        public static string OldAndroidVersion {
+            get {
+                return ResourceManager.GetString("OldAndroidVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Old version.
+        /// </summary>
+        public static string OldInterviewerVersion {
+            get {
+                return ResourceManager.GetString("OldInterviewerVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tablet reassigned.
+        /// </summary>
+        public static string TabletReassigned {
+            get {
+                return ResourceManager.GetString("TabletReassigned", resourceCulture);
             }
         }
         
@@ -75,6 +129,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Teams {
             get {
                 return ResourceManager.GetString("Teams", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrong time on tablet.
+        /// </summary>
+        public static string WrongDateOnTablet {
+            get {
+                return ResourceManager.GetString("WrongDateOnTablet", resourceCulture);
             }
         }
     }

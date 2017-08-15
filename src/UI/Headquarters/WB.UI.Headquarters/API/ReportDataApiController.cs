@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
@@ -316,10 +317,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
         [CamelCase]
-        public DeviceInterviewersDataTableResponse DeviceInterviewers([FromUri]DeviceInterviewersFilter request)
+        public async Task<DeviceInterviewersDataTableResponse> DeviceInterviewers([FromUri]DeviceInterviewersFilter request)
         {
             var report = ServiceLocator.Current.GetInstance<IDeviceInterviewersReport>();
-            var data = report.Load();
+            var data = await report.LoadAsync(null, request.PageIndex, request.PageSize);
             return new DeviceInterviewersDataTableResponse
             {
                 Draw = request.Draw + 1,
