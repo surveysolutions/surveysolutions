@@ -112,9 +112,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         }
         protected abstract Expression<Func<InterviewSummary, object>> ResponsibleIdSelector { get; }
         protected abstract Expression<Func<InterviewSummary, object>> ResponsibleNameSelector { get; }
+
+
         public ReportView GetReport(TeamsAndStatusesInputModel model)
         {
-            throw new NotImplementedException();
+            var view = this.Load(model);
+
+            return new ReportView
+            {
+                Headers = new[]
+                {
+                    "TEAM MEMBER", "SUPERVISOR ASSIGNED", "INTERVIEWER ASSIGNED", "COMPLETED", "REJECTED BY SUPERVISOR",
+                    "APPROVED BY SUPERVISOR", "REJECTED BY HQ", "APPROVED BY HQ", "TOTAL"
+                },
+                Data = view.Items.Select(x => new object[]
+                {
+                    x.Responsible, x.SupervisorAssignedCount, x.InterviewerAssignedCount, x.CompletedCount,
+                    x.RejectedBySupervisorCount, x.ApprovedBySupervisorCount, x.RejectedByHeadquartersCount,
+                    x.ApprovedByHeadquartersCount, x.TotalCount
+                }).ToArray()
+            };
         }
     }
 }
