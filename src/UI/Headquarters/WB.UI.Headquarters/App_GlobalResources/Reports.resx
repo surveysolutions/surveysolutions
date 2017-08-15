@@ -180,4 +180,34 @@
   <data name="Version" xml:space="preserve">
     <value>Version</value>
   </data>
+  <data name="Report_Surveys_and_Statuses" xml:space="preserve">
+    <value>Surveys and Statuses</value>
+  </data>
+  <data name="Report_Teams_and_Statuses" xml:space="preserve">
+    <value>Teams and Statuses</value>
+  </data>
+  <data name="Report_Quantity_By_Interviewers" xml:space="preserve">
+    <value>Quantity By Interviewers</value>
+  </data>
+  <data name="Report_Quantity_By_Supervisors" xml:space="preserve">
+    <value>Quantity By Supervisors</value>
+  </data>
+  <data name="Report_Speed_By_Interviewers" xml:space="preserve">
+    <value>Speed By Interviewers</value>
+  </data>
+  <data name="Report_Speed_Between_Statuses_By_Supervisors" xml:space="preserve">
+    <value>Speed Between Statuses By Supervisors</value>
+  </data>
+  <data name="Report_Speed_Between_Statuses_By_Interviewers" xml:space="preserve">
+    <value>Speed Between Statuses By Interviewers</value>
+  </data>
+  <data name="Report_Speed_By_Supervisors" xml:space="preserve">
+    <value>Speed By Supervisors</value>
+  </data>
+  <data name="Report_Supervisors_And_Statuses" xml:space="preserve">
+    <value>Supervisors And Statuses</value>
+  </data>
+  <data name="Report_Devices_and_Interviewers" xml:space="preserve">
+    <value>Devices and Interviewers</value>
+  </data>
 </root>
