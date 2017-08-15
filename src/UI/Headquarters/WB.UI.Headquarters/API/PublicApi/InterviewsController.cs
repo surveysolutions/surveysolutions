@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -10,9 +12,11 @@ using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code;
@@ -28,9 +32,10 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly IInterviewHistoryFactory interviewHistoryViewFactory;
         private readonly IUserViewFactory userViewFactory;
         private readonly IReadSideKeyValueStorage<InterviewReferences> interviewReferences;
-
+        private readonly IInterviewUniqueKeyGenerator keyGenerator;
         private readonly ICommandService commandService;
         private readonly IAuthorizedUser authorizedUser;
+        private readonly IPlainStorageAccessor<Assignment> assignmentStorageAccessor;
 
         public InterviewsController(ILogger logger,
             IAllInterviewsFactory allInterviewsViewFactory,
@@ -39,7 +44,9 @@ namespace WB.UI.Headquarters.API.PublicApi
             ICommandService commandService,
             IAuthorizedUser authorizedUser,
             IUserViewFactory userViewFactory,
-            IReadSideKeyValueStorage<InterviewReferences> interviewReferences)
+            IReadSideKeyValueStorage<InterviewReferences> interviewReferences, 
+            IInterviewUniqueKeyGenerator keyGenerator,
+            IPlainStorageAccessor<Assignment> assignmentStorageAccessor)
             : base(logger)
         {
             this.allInterviewsViewFactory = allInterviewsViewFactory;
@@ -49,6 +56,8 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.authorizedUser = authorizedUser;
             this.userViewFactory = userViewFactory;
             this.interviewReferences = interviewReferences;
+            this.keyGenerator = keyGenerator;
+            this.assignmentStorageAccessor = assignmentStorageAccessor;
         }
 
         [HttpGet]
@@ -197,6 +206,53 @@ namespace WB.UI.Headquarters.API.PublicApi
         }
 
         #endregion
+
+        /// <summary>
+        /// Create interview for assignment
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>Information about created interview</returns>
+        [HttpPost]
+        [Route("create")]
+        public CreateInterviewResult CreateInterview(CreateInterviewRequest request)
+        {
+            var assignment = this.assignmentStorageAccessor.GetById(request.AssignmentId)
+                ?? throw new InvalidOperationException($"Cannot find assignment with id: {request.AssignmentId}");
+
+            if (assignment.InterviewsNeeded.HasValue && assignment.InterviewsNeeded <= 0)
+            {
+                throw new InvalidOperationException($"Cannot create more interviews from this assignmentId: {request.AssignmentId}");
+            }
+
+            var interviewer = this.userViewFactory.GetUser(new UserViewInputModel(assignment.ResponsibleId));
+
+            if (!interviewer.IsInterviewer())
+                throw new InvalidOperationException($"Assignment {assignment.Id} has responsible that is not an interviewer. Interview cannot be created");
+
+            var interviewId = Guid.NewGuid();
+
+            var createInterviewCommand = new CreateInterview(
+                interviewId,
+                interviewer.PublicKey,
+                assignment.QuestionnaireId,
+                assignment.Answers.ToList(),
+                DateTime.UtcNow,
+                interviewer.Supervisor.Id,
+                interviewer.PublicKey,
+                this.keyGenerator.Get(),
+                assignment.Id);
+
+            this.commandService.Execute(createInterviewCommand);
+
+            return new CreateInterviewResult
+            {
+                AssignmentId = assignment.Id,
+                InterviewId = createInterviewCommand.InterviewerId.Value,
+                InterviewKey = createInterviewCommand.InterviewKey.ToString(),
+                AssignedTo = interviewer.UserName,
+                AssignedToId = interviewer.PublicKey
+            };
+        }
 
         private HttpResponseMessage TryExecuteCommand(ICommand command)
         {
