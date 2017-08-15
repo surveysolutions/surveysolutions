@@ -47,11 +47,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
          Expression<Func<T, bool>> restrictUser,
          Expression<Func<T, UserAndTimestampAndTimespan>> userIdSelector)
         {
-            var from = reportStartDate.Date;
-            var to = this.AddPeriod(from, period, columnCount);
+            var from = this.AddPeriod(reportStartDate.Date, period, -columnCount + 1);
+            var to = reportStartDate.Date.AddDays(1);
 
             var dateTimeRanges =
-                Enumerable.Range(0, columnCount).Reverse()
+                Enumerable.Range(0, columnCount)
                     .Select(i => new DateTimeRange(this.AddPeriod(from, period, i).Date, this.AddPeriod(from, period, i + 1).Date))
                     .Where(i => i.From.Date <= DateTime.Now.Date)
                     .ToArray();
@@ -130,13 +130,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             DateTime to,
             InterviewExportedAction[] statuses)
         {
-            return this.interviewStatusesStorage.Query(_ =>
-                _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
-                    .SelectMany(x => x.InterviewCommentedStatuses)
-                    .Where(
-                        ics =>
-                            ics.Timestamp.Date >= from && ics.Timestamp.Date < to.Date && statuses.Contains(ics.Status) &&
-                            ics.TimeSpanWithPreviousStatus.HasValue));
+            if (questionnaireId != Guid.Empty)
+            {
+                return this.interviewStatusesStorage.Query(_ =>
+                    _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
+                        .SelectMany(x => x.InterviewCommentedStatuses)
+                        .Where(
+                            ics =>
+                                ics.Timestamp.Date >= from && ics.Timestamp.Date < to.Date &&
+                                statuses.Contains(ics.Status) &&
+                                ics.TimeSpanWithPreviousStatus.HasValue));
+            }
+            else
+            {
+                return this.interviewStatusesStorage.Query(_ =>
+                    _.SelectMany(x => x.InterviewCommentedStatuses)
+                        .Where(ics =>
+                                ics.Timestamp.Date >= from && ics.Timestamp.Date < to.Date &&
+                                statuses.Contains(ics.Status) &&
+                                ics.TimeSpanWithPreviousStatus.HasValue));
+            }
         }
 
         public SpeedByResponsibleReportView Load(SpeedByInterviewersReportInputModel input)
@@ -149,7 +162,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 pageSize: input.PageSize,
                 questionnaireId: input.QuestionnaireId,
                 questionnaireVersion: input.QuestionnaireVersion,
-                query:(questionnaireId, questionnaireVersion, from,to)=>this.QueryInterviewStatuses(questionnaireId, questionnaireVersion,from, to,input.InterviewStatuses),
+                query:(questionnaireId, questionnaireVersion, from,to) => this.QueryInterviewStatuses(questionnaireId, questionnaireVersion,from, to,input.InterviewStatuses),
                 selectUser: u => u.InterviewerId.Value,
                 restrictUser: i=>i.SupervisorId== input.SupervisorId,
                 userIdSelector: i => new UserAndTimestampAndTimespan() { UserId = i.InterviewerId, Timestamp = i.Timestamp, Timespan = i.TimeSpanWithPreviousStatus.Value, UserName = i.InterviewerName});
