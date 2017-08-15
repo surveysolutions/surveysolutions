@@ -153,7 +153,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                     };
             }
 
-            var ranges = new List<int?> { 0, 1, 2, 3, 4, 5, 10, 15, 20, 30 };
+            var ranges = new List<int?> { 1, 2, 3, 4, 5, 10, 15, 20, 30 };
             var defaultGroups =
                 from row in rows
                 group row by ranges.LastOrDefault(range => row.DaysCount >= range) into g
