@@ -37,6 +37,6 @@ LEFT JOIN (SELECT dsi."InterviewerId" FROM plainstore.devicesyncinfo dsi WHERE E
 -- find supervisor name
 INNER JOIN users.users userNames ON up."SupervisorId" = userNames."Id"
 
-WHERE up."SupervisorId" IS NOT null AND u."IsArchived" = false
+WHERE up."SupervisorId" IS NOT null AND u."IsArchived" = false AND userNames."UserName" ILIKE @filter
 GROUP BY up."SupervisorId", userNames."UserName"
 LIMIT @limit OFFSET @offset
