@@ -319,7 +319,8 @@ namespace WB.Tests.Abc.TestFactories
                 Commentaries = new List<InterviewComment>(comments)
             };
 
-        public InterviewCommentedStatus InterviewCommentedStatus(InterviewExportedAction status = InterviewExportedAction.ApprovedBySupervisor,
+        public InterviewCommentedStatus InterviewCommentedStatus(
+            InterviewExportedAction status = InterviewExportedAction.ApprovedBySupervisor,
             string originatorName = "inter",
             UserRoles originatorRole = UserRoles.Interviewer,
             Guid? statusId = null, 
