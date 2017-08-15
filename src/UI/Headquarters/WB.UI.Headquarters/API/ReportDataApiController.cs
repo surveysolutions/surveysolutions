@@ -43,6 +43,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly ISpeedReportFactory speedReport;
 
         private readonly ICountDaysOfInterviewInStatusReport countDaysOfInterviewInStatusReport;
+        private readonly IDeviceInterviewersReport deviceInterviewersReport;
         private readonly IExportFactory exportFactory;
 
         public ReportDataApiController(
@@ -58,7 +59,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IQuantityReportFactory quantityReport, 
             ISpeedReportFactory speedReport,
             ICountDaysOfInterviewInStatusReport countDaysOfInterviewInStatusReport,
-
+            IDeviceInterviewersReport deviceInterviewersReport,
             IExportFactory exportFactory)
             : base(commandService, logger)
         {
@@ -71,8 +72,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.chartStatisticsViewFactory = chartStatisticsViewFactory;
             this.quantityReport = quantityReport;
             this.speedReport = speedReport;
-            this.deviceInterviewersReport = deviceInterviewersReport;
             this.countDaysOfInterviewInStatusReport = countDaysOfInterviewInStatusReport;
+            this.deviceInterviewersReport = deviceInterviewersReport;
             this.exportFactory = exportFactory;
         }
 
@@ -331,7 +332,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [CamelCase]
         public async Task<DeviceInterviewersDataTableResponse> DeviceInterviewers([FromUri]DeviceInterviewersFilter request)
         {
-            var data = this.deviceInterviewersReport.Load();
+            var data = await this.deviceInterviewersReport.LoadAsync(request.Search.Value,
+                request.GetSortOrderRequestItems().First(), request.PageIndex, request.PageSize);
+
             return new DeviceInterviewersDataTableResponse
             {
                 Draw = request.Draw + 1,

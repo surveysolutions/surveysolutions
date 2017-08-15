@@ -65,6 +65,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             }
         }
 
+        public Task<ReportView> GetReport(string filter, OrderRequestItem order, int pageNumber, int pageSize)
+        {
+            throw new NotImplementedException();
+        }
+
         private (string query, string countQuery) GetSqlTexts()
         {
             string query;

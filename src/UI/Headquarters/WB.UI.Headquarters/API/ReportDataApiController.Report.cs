@@ -3,7 +3,9 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web.Http;
+using Resources;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
@@ -31,7 +33,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 TeamLeadName = filter.ResponsibleName
             });
 
-            return this.CreateReportResponse(exportType, report, "Surveys and Statuses");
+            return this.CreateReportResponse(exportType, report, Reports.Report_Surveys_and_Statuses);
         }
 
         [HttpGet]
@@ -52,7 +54,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     ResponsibleName = filter.ResponsibleName == teamLeadName ? null : filter.ResponsibleName
                 });
 
-            return this.CreateReportResponse(exportType, report, "Surveys and Statuses");
+            return this.CreateReportResponse(exportType, report, Reports.Report_Surveys_and_Statuses);
         }
 
         [HttpGet]
@@ -72,7 +74,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     TemplateVersion = filter.TemplateVersion
                 });
 
-            return this.CreateReportResponse(exportType, report, "Teams and Statuses");
+            return this.CreateReportResponse(exportType, report, Reports.Report_Teams_and_Statuses);
         }
 
         [HttpGet]
@@ -97,7 +99,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     ReportType = filter.ReportType
                 });
 
-            return this.CreateReportResponse(exportType, report, "Quantity By Interviewers");
+            return this.CreateReportResponse(exportType, report, Reports.Report_Quantity_By_Interviewers);
         }
 
         [HttpGet]
@@ -121,7 +123,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     Orders = filter.SortOrder
                 });
 
-            return this.CreateReportResponse(exportType, report, "Quantity By Supervisors");
+            return this.CreateReportResponse(exportType, report, Reports.Report_Quantity_By_Supervisors);
         }
 
         [HttpGet]
@@ -146,7 +148,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     Orders = filter.SortOrder
                 });
 
-            return this.CreateReportResponse(exportType, report, "Speed By Interviewers");
+            return this.CreateReportResponse(exportType, report, Reports.Report_Speed_By_Interviewers);
         }
 
         [HttpGet]
@@ -170,7 +172,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     EndInterviewStatuses = this.GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(filter.ReportType)
                 });
 
-            return this.CreateReportResponse(exportType, report, "Speed Between Statuses By Supervisors");
+            return this.CreateReportResponse(exportType, report, Reports.Report_Speed_Between_Statuses_By_Supervisors);
         }
 
         [HttpGet]
@@ -195,7 +197,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     SupervisorId = filter.SupervisorId ?? this.authorizedUser.Id
                 });
 
-            return this.CreateReportResponse(exportType, report, "Speed Between Statuses By Interviewers");
+            return this.CreateReportResponse(exportType, report, Reports.Report_Speed_Between_Statuses_By_Interviewers);
         }
 
         [HttpGet]
@@ -219,7 +221,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     Orders = filter.SortOrder
                 });
 
-            return this.CreateReportResponse(exportType, report, "Speed By Supervisors");
+            return this.CreateReportResponse(exportType, report, Reports.Report_Speed_By_Supervisors);
         }
 
         [HttpGet]
@@ -235,7 +237,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     TemplateVersion = teamsAndStatusesFilter.TemplateVersion
                 });
 
-            return this.CreateReportResponse(exportType, report, "Supervisors And Statuses");
+            return this.CreateReportResponse(exportType, report, Reports.Report_Supervisors_And_Statuses);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        public async Task<HttpResponseMessage> DeviceInterviewers([FromUri]string exportType, [FromUri]DeviceInterviewersFilter request)
+        {
+            var report = await this.deviceInterviewersReport.GetReport(request.Search.Value,
+                request.GetSortOrderRequestItems().First(), 0, MaxPageSize);
+
+            return this.CreateReportResponse(exportType, report, Reports.Report_Devices_and_Interviewers);
         }
 
         private HttpResponseMessage CreateReportResponse(string exportType, ReportView report, string reportName)
