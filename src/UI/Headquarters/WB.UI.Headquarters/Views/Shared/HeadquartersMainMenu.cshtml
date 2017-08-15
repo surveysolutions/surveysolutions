@@ -7,7 +7,12 @@
     var isCurrentUserObserver = ServiceLocator.Current.GetInstance<IAuthorizedUser>().IsObserver;
 }
 <ul class="nav navbar-nav">
-    <li class="dropdown @(page == MenuItem.MapReport || page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses || page == MenuItem.InterviewsChart ? "active" : "")">
+    <li class="dropdown @(page == MenuItem.MapReport || 
+                          page == MenuItem.Surveys || 
+                          page == MenuItem.Summary || 
+                          page == MenuItem.Statuses || 
+                          page == MenuItem.DevicesInterviewers ||
+                          page == MenuItem.InterviewsChart ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.Reports">
             @MainMenu.Reports <span class="caret"></span>
         </a>

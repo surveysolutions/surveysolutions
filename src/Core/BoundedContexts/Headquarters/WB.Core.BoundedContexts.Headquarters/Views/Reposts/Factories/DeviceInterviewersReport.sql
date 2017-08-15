@@ -22,7 +22,7 @@ from users.users u
 		) AS lastSync ON lastSync."InterviewerId" = u."Id"::uuid 
 
 -- find if there was a sync with > 0 uploaded interviews
-LEFT JOIN (SELECT dsi."InterviewerId" FROM plainstore.devicesyncinfo dsi WHERE EXISTS(SELECT 1 FROM plainstore.devicesyncstatistics WHERE dsi."StatisticsId" = "Id" AND "UploadedInterviewsCount" > 0)) 
+LEFT JOIN (SELECT DISTINCT dsi."InterviewerId" FROM plainstore.devicesyncinfo dsi WHERE EXISTS(SELECT 1 FROM plainstore.devicesyncstatistics WHERE dsi."StatisticsId" = "Id" AND "UploadedInterviewsCount" > 0)) 
 	AS anySync ON anySync."InterviewerId" = u."Id"::uuid 
 
 -- find how many interviewers have more than 1 tablet
@@ -31,7 +31,7 @@ GROUP BY "InterviewerId"
 HAVING COUNT("DeviceId") > 1) AS wasReassign ON wasReassign."InterviewerId" = u."Id"::uuid 
 
 -- find if there was any questionnaire received
-LEFT JOIN (SELECT dsi."InterviewerId" FROM plainstore.devicesyncinfo dsi WHERE EXISTS(SELECT 1 FROM plainstore.devicesyncstatistics WHERE dsi."StatisticsId" = "Id" AND "DownloadedQuestionnairesCount" > 0)) 
+LEFT JOIN (SELECT DISTINCT dsi."InterviewerId" FROM plainstore.devicesyncinfo dsi WHERE EXISTS(SELECT 1 FROM plainstore.devicesyncstatistics WHERE dsi."StatisticsId" = "Id" AND "DownloadedQuestionnairesCount" > 0)) 
 	AS anySyncWithQuestionnaire ON anySyncWithQuestionnaire."InterviewerId" = u."Id"::uuid 
 
 -- find supervisor name
