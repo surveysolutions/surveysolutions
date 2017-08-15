@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 using It = Machine.Specifications.It;
@@ -16,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
     {
         Establish context = () =>
         {
-            input = CreateSpeedByInterviewersReportInputModel(supervisorId: supervisorId, from: new DateTime(2010, 6, 10, 0, 0, 0, DateTimeKind.Utc), columnCount: 2);
+            input = CreateSpeedByInterviewersReportInputModel(supervisorId: supervisorId);
 
             var user = Create.Entity.UserDocument(supervisorId: supervisorId);
 
@@ -26,31 +27,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
                     questionnaireVersion: input.QuestionnaireVersion,
                     statuses: new[]
                     {
-                        Create.Entity.InterviewCommentedStatus(interviewerId: user.PublicKey,
-                            supervisorId: supervisorId,
-                            timestamp: input.From.Date.AddHours(1),
-                            status: InterviewExportedAction.Completed,
-                            timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
-                        Create.Entity.InterviewCommentedStatus(interviewerId: Guid.NewGuid(),
-                            supervisorId: Guid.NewGuid(),
-                            timestamp: input.From.Date.AddHours(1),
-                            status: InterviewExportedAction.Completed,
-                            timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
-                        Create.Entity.InterviewCommentedStatus(interviewerId: user.PublicKey,
-                            supervisorId: supervisorId,
-                            timestamp: input.From.Date.AddHours(1),
-                            status: InterviewExportedAction.Completed,
-                            timeSpanWithPreviousStatus: TimeSpan.FromMinutes(15)),
-                        Create.Entity.InterviewCommentedStatus(interviewerId: user.PublicKey,
-                            supervisorId: supervisorId,
-                            timestamp: input.From.Date.AddDays(-1).AddHours(2), // 2010-6-9
-                            status: InterviewExportedAction.Completed,
-                            timeSpanWithPreviousStatus: TimeSpan.FromMinutes(28)),
-                        Create.Entity.InterviewCommentedStatus(interviewerId: user.PublicKey,
-                            supervisorId: supervisorId,
-                            timestamp: input.From.Date.AddDays(1),
-                            status: InterviewExportedAction.Completed,
-                            timeSpanWithPreviousStatus: TimeSpan.FromMinutes(333))
+                        Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
+                            interviewerId: user.PublicKey, supervisorId: supervisorId, timestamp: input.From.Date.AddHours(1), timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
+                        Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
+                            interviewerId: Guid.NewGuid(), supervisorId: Guid.NewGuid(), timestamp: input.From.Date.AddHours(1), timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
+                        Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
+                            interviewerId: user.PublicKey, supervisorId: supervisorId, timestamp: input.From.Date.AddHours(1), timeSpanWithPreviousStatus: TimeSpan.FromMinutes(15)),
+                        Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
+                            interviewerId: user.PublicKey, supervisorId: supervisorId, timestamp: input.From.Date.AddDays(1), timeSpanWithPreviousStatus: TimeSpan.FromMinutes(10)),
+                        Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
+                            interviewerId: user.PublicKey, supervisorId: supervisorId, timestamp: input.From.Date.AddDays(-1), timeSpanWithPreviousStatus: TimeSpan.FromMinutes(333))
                     }), "2");
 
             speedReportFactory = CreateSpeedReportFactory(interviewStatuses: interviewStatuses);
@@ -62,14 +48,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
         It should_return_one_row = () =>
             result.Items.Count().ShouldEqual(1);
 
-        It should_return_first_row_with_25_minutes_per_interview_at_first_period_and_28_minutes_per_interview_at_second = () =>
-            result.Items.First().SpeedByPeriod.ShouldEqual(new double?[]{ 28, 25 });
+        It should_return_first_row_with_25_minutes_per_interview_at_first_period_and_10_minutes_per_interview_at_second = () =>
+            result.Items.First().SpeedByPeriod.ShouldEqual(new double?[]{10,25});
 
-        It should_return_first_row_with_Total = () =>
-            result.Items.First().Total.ShouldEqual(78);
+        It should_return_first_row_with_60_minutes_in_Total = () =>
+            result.Items.First().Total.ShouldEqual(60);
 
-        It should_return_first_row_with_Average = () =>
-           result.Items.First().Average.ShouldEqual(26);
+        It should_return_first_row_with_20_minutes_in_Average = () =>
+           result.Items.First().Average.ShouldEqual(20);
 
         private static SpeedReportFactory speedReportFactory;
         private static SpeedByInterviewersReportInputModel input;
