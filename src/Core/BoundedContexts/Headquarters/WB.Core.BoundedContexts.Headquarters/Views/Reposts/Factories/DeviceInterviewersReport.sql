@@ -39,4 +39,5 @@ INNER JOIN users.users userNames ON up."SupervisorId" = userNames."Id"
 
 WHERE up."SupervisorId" IS NOT null AND u."IsArchived" = false AND userNames."UserName" ILIKE @filter
 GROUP BY up."SupervisorId", userNames."UserName"
+ORDER BY {0}
 LIMIT @limit OFFSET @offset

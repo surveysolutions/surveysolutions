@@ -326,7 +326,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public async Task<DeviceInterviewersDataTableResponse> DeviceInterviewers([FromUri]DeviceInterviewersFilter request)
         {
             var report = ServiceLocator.Current.GetInstance<IDeviceInterviewersReport>();
-            var data = await report.LoadAsync(request.Search.Value, request.PageIndex, request.PageSize);
+            var data = await report.LoadAsync(request.Search.Value, request.GetSortOrderRequestItems().First(), request.PageIndex, request.PageSize);
             return new DeviceInterviewersDataTableResponse
             {
                 Draw = request.Draw + 1,

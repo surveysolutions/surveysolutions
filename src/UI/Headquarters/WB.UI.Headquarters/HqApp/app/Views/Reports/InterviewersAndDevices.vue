@@ -16,48 +16,57 @@ export default {
                 columns: [
                     {
                         data: "teamName",
+                        name: "TeamName",
                         title: this.$t("DevicesInterviewers.Teams"),
-                        orderable: false
+                        orderable: true
                     },
                     {
                         data: "neverSynchedCount",
+                        name: "NeverSynchedCount",
                         title: this.$t("DevicesInterviewers.NeverSynchedCount"),
-                        orderable: false
+                        orderable: true
                     },
                     {
                         data: "outdatedCount",
-                        title: this.$t("DevicesInterviewers.OldInterviewerVersion"),
-                        orderable: false
+                        name: "OutdatedCount",
+                        orderable: true,
+                        title: this.$t("DevicesInterviewers.OldInterviewerVersion")
                     },
                     {
                         data: "lowStorageCount",
-                        title: this.$t("DevicesInterviewers.LowStorage"),
-                        orderable: false
+                        name: "LowStorageCount",
+                        orderable: true,
+                        title: this.$t("DevicesInterviewers.LowStorage")
                     },
                     {
                         data: "wrongDateOnTabletCount",
-                        title: this.$t("DevicesInterviewers.WrongDateOnTablet"),
-                        orderable: false
+                        name: "WrongDateOnTabletCount",
+                        orderable: true,
+                        title: this.$t("DevicesInterviewers.WrongDateOnTablet")
                     },
                     {
                         data: "oldAndroidCount",
-                        title: this.$t("DevicesInterviewers.OldAndroidVersion"),
-                        orderable: false
+                        name: "OldAndroidCount",
+                        orderable: true,
+                        title: this.$t("DevicesInterviewers.OldAndroidVersion")
                     },
                     {
                         data: "noQuestionnairesCount",
-                        title: this.$t("DevicesInterviewers.NoAssignments"),
-                        orderable: false
+                        name: "NoQuestionnairesCount",
+                        orderable: true,
+                        title: this.$t("DevicesInterviewers.NoAssignments")
                     },
                     {
                         data: "neverUploadedCount",
-                        title: this.$t("DevicesInterviewers.NeverUploaded"),
-                        orderable: false
+                        name: "NeverUploadedCount",
+                        orderable: true,
+                        title: this.$t("DevicesInterviewers.NeverUploaded")
                     },
                     {
                         data: "reassignedCount",
-                        title: this.$t("DevicesInterviewers.TabletReassigned"),
-                        orderable: false
+                        name: "ReassignedCount",
+                        orderable: true,
+                        title: this.$t("DevicesInterviewers.TabletReassigned")
                     }
                     
                 ],
@@ -66,6 +75,7 @@ export default {
                     type: "GET",
                     contentType: 'application/json'
                 },
+                order: [[0, 'asc']],
                 sDom: 'f<"table-with-scroll"t>ip'
             }
         }
