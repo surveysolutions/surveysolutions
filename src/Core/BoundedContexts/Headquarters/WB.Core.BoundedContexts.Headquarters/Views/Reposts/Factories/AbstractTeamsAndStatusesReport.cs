@@ -112,5 +112,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         }
         protected abstract Expression<Func<InterviewSummary, object>> ResponsibleIdSelector { get; }
         protected abstract Expression<Func<InterviewSummary, object>> ResponsibleNameSelector { get; }
+        public ReportView GetReport(TeamsAndStatusesInputModel model)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -125,42 +125,53 @@
                     </div>
                 </div>
                 <div class="table-with-scroll" data-bind="visible: Pager().TotalItemCount() > 0">
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            Export
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li><a data-bind="attr:{ href: ExportToExcelUrl }">Excel</a></li>
+                            <li><a data-bind="attr:{ href: ExportToCsvUrl }">Comma separated values</a></li>
+                            <li><a data-bind="attr:{ href: ExportToTabUrl }">Tab separated values</a></li>
+                        </ul>
+                    </div>
                     <table class="table table-striped table-bordered table-condensed table-hover">
                         <thead>
-                            <tr>
-                                <th>@Model.ResponsibleColumnName</th>
-                                <!-- ko foreach:DateTimeRanges -->
-                                <th>
-                                    <span data-bind="text: $root.GetPeriodName($data)"></span>
-                                </th>
-                                <!-- /ko -->
-                                <th>@PeriodicStatusReport.Average</th>
-                                <th>@PeriodicStatusReport.Total</th>
-                            </tr>
+                        <tr>
+                            <th>@Model.ResponsibleColumnName</th>
+                            <!-- ko foreach:DateTimeRanges -->
+                            <th>
+                                <span data-bind="text: $root.GetPeriodName($data)"></span>
+                            </th>
+                            <!-- /ko -->
+                            <th>@PeriodicStatusReport.Average</th>
+                            <th>@PeriodicStatusReport.Total</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <!-- ko foreach:Items -->
-                            <tr>
-                                <td>@if (Model.CanNavigateToQuantityByTeamMember)
+                        <!-- ko foreach:Items -->
+                        <tr>
+                            <td>@if (Model.CanNavigateToQuantityByTeamMember)
                                 {
-                                <a data-bind="attr: { href: GetInterviewersUrl(ResponsibleId()) }, text: ResponsibleName"> </a>
+                                    <a data-bind="attr: { href: GetInterviewersUrl(ResponsibleId()) }, text: ResponsibleName"> </a>
                                 }
                                 else
                                 {
-                                <span data-bind="text: ResponsibleName"></span>
+                                    <span data-bind="text: ResponsibleName"></span>
                                 }
-                                </td>
-                                <!-- ko foreach:@(Model.ReportName + "ByPeriod") -->
-                                <td class="type-numeric"><span data-bind='text: $root.Format@(Model.ReportName)Period($data)'></span></td>
-                                <!-- /ko -->
-                                <td class="type-numeric"><span data-bind="text: $root.Format@(Model.ReportName)Period(Average())"></span></td>
-                                <td class="type-numeric"><span data-bind="text: $root.Format@(Model.ReportName)Period(Total())"></span></td>
-                            </tr>
+                            </td>
+                            <!-- ko foreach:@(Model.ReportName + "ByPeriod") -->
+                            <td class="type-numeric"><span data-bind='text: $root.Format@(Model.ReportName)Period($data)'></span></td>
                             <!-- /ko -->
+                            <td class="type-numeric"><span data-bind="text: $root.Format@(Model.ReportName)Period(Average())"></span></td>
+                            <td class="type-numeric"><span data-bind="text: $root.Format@(Model.ReportName)Period(Total())"></span></td>
+                        </tr>
+                        <!-- /ko -->
                         </tbody>
                         @if (Model.TotalRowPresent)
                         {
-                        <tfoot>
+                            <tfoot>
                             <tr>
                                 <td>
                                     <b>@PeriodicStatusReport.Total</b>
@@ -171,7 +182,7 @@
                                 <td class="type-numeric"><span data-bind="text:  Format@(Model.ReportName)Period(getTotalAverage())"></span></td>
                                 <td class="type-numeric"><span data-bind="text:  Format@(Model.ReportName)Period(getTotalCount())"></span></td>
                             </tr>
-                        </tfoot>
+                            </tfoot>
                         }
                     </table>
                 </div>

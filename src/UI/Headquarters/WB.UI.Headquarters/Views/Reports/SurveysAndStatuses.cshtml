@@ -19,10 +19,12 @@
                 '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ReportDataApi", action = "HeadquarterSurveysAndStatusesReport"})';
             var responsiblesUrl =
                 '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "AssigneeSupervisorsAndDependentInterviewers"})';
+            var $reportUrl =
+                '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ReportDataApi", action = "Report"})';
 
             var statisticsMessage = "@Pages.SurveysAndStatuses_SupervisorStatisticsFormat";
 
-            var model = new Supervisor.VM.SurveysAndStatuses($surveyAndStatusesReportUrl, responsiblesUrl, statisticsMessage);
+            var model = new Supervisor.VM.SurveysAndStatuses($surveyAndStatusesReportUrl, responsiblesUrl, statisticsMessage, $reportUrl);
             model.getDataTableColumns = function () {
                 return [
                     {
@@ -120,25 +122,37 @@
                 <div class="page-header clearfix">
                     <h1>@Pages.SurveysAndStatuses_Overview</h1>
                     <p data-bind="text: StatisticsMessage"></p>
+                    
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            Export
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li><a data-bind="attr:{ href: ExportToExcelUrl }">Excel</a></li>
+                            <li><a data-bind="attr:{ href: ExportToCsvUrl }">Comma separated values</a></li>
+                            <li><a data-bind="attr:{ href: ExportToTabUrl }">Tab separated values</a></li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="dataTables_wrapper no-footer">
                     <table id="data_holder" class="table table-striped table-ordered table-bordered table-hover table-mobile-devices dataTable no-footer"
                            data-order="[[ 1, &quot;asc&quot; ]]" data-searching="false" data-s-Dom="f<&quot;table-with-scroll&quot;t>ip">
                         <thead>
-                        <tr>
-                            <th class="version" data-class="type-numeric version" data-name="QuestionnaireVersion" data-data="questionnaireVersion" data-th="@Reports.TemplateVersion">@Reports.TemplateVersion</th>
-                            <th class="without-break title-row changed-recently" data-class="without-break title-row changed-recently" data-name="QuestionnaireTitle" data-data="questionnaireTitle">@Reports.SurveyName</th>
-                            <th data-class="type-numeric" data-name="SupervisorAssignedCount" data-data="supervisorAssignedCount">@Reports.SupervisorAssigned</th>
-                            <th data-class="type-numeric" data-name="InterviewerAssignedCount" data-data="interviewerAssignedCount">@Reports.InterviewerAssigned</th>
-                            <th data-class="type-numeric" data-name="CompletedCount" data-data="completedCount">@Reports.Completed</th>
-                            <th data-class="type-numeric" data-name="RejectedBySupervisorCount" data-data="rejectedBySupervisorCount">@Reports.RejectedBySupervisor</th>
-                            <th data-class="type-numeric" data-name="ApprovedBySupervisorCount" data-data="approvedBySupervisorCount">@Reports.ApprovedBySupervisor</th>
-                            <th data-class="type-numeric" data-name="RejectedByHeadquartersCount" data-data="rejectedByHeadquartersCount">@Reports.RejectedByHQ</th>
-                            <th data-class="type-numeric" data-name="ApprovedByHeadquartersCount" data-data="approvedByHeadquartersCount">@Reports.ApprovedByHQ</th>
-                            <th data-class="type-numeric" data-name="TotalCount" data-data="totalCount">@Common.Total</th>
-                        </tr>
+                            <tr>
+                                <th class="version" data-class="type-numeric version" data-name="QuestionnaireVersion" data-data="questionnaireVersion" data-th="@Reports.TemplateVersion">@Reports.TemplateVersion</th>
+                                <th class="without-break title-row changed-recently" data-class="without-break title-row changed-recently" data-name="QuestionnaireTitle" data-data="questionnaireTitle">@Reports.SurveyName</th>
+                                <th data-class="type-numeric" data-name="SupervisorAssignedCount" data-data="supervisorAssignedCount">@Reports.SupervisorAssigned</th>
+                                <th data-class="type-numeric" data-name="InterviewerAssignedCount" data-data="interviewerAssignedCount">@Reports.InterviewerAssigned</th>
+                                <th data-class="type-numeric" data-name="CompletedCount" data-data="completedCount">@Reports.Completed</th>
+                                <th data-class="type-numeric" data-name="RejectedBySupervisorCount" data-data="rejectedBySupervisorCount">@Reports.RejectedBySupervisor</th>
+                                <th data-class="type-numeric" data-name="ApprovedBySupervisorCount" data-data="approvedBySupervisorCount">@Reports.ApprovedBySupervisor</th>
+                                <th data-class="type-numeric" data-name="RejectedByHeadquartersCount" data-data="rejectedByHeadquartersCount">@Reports.RejectedByHQ</th>
+                                <th data-class="type-numeric" data-name="ApprovedByHeadquartersCount" data-data="approvedByHeadquartersCount">@Reports.ApprovedByHQ</th>
+                                <th data-class="type-numeric" data-name="TotalCount" data-data="totalCount">@Common.Total</th>
+                            </tr>
                         </thead>
-                    </table>  
+                    </table>
                 </div>
             </div>
         </div>

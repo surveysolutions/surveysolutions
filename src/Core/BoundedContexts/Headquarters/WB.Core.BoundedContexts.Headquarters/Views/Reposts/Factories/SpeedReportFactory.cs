@@ -10,7 +10,10 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 {
-    public interface ISpeedReportFactory
+    public interface ISpeedReportFactory: IReport<SpeedByInterviewersReportInputModel>, 
+        IReport<SpeedBySupervisorsReportInputModel>,
+        IReport<SpeedBetweenStatusesByInterviewersReportInputModel>,
+        IReport<SpeedBetweenStatusesBySupervisorsReportInputModel>
     {
         SpeedByResponsibleReportView Load(SpeedByInterviewersReportInputModel input);
         SpeedByResponsibleReportView Load(SpeedBySupervisorsReportInputModel input);
@@ -220,6 +223,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             public string UserName { get; set; }
             public DateTime Timestamp { get; set; }
             public TimeSpan Timespan { get; set; }
+        }
+
+        public ReportView GetReport(SpeedByInterviewersReportInputModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ReportView GetReport(SpeedBySupervisorsReportInputModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ReportView GetReport(SpeedBetweenStatusesByInterviewersReportInputModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ReportView GetReport(SpeedBetweenStatusesBySupervisorsReportInputModel model)
+        {
+            throw new NotImplementedException();
         }
     }
 }

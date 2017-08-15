@@ -146,5 +146,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             public int InterviewsCount { get; set; }
             public InterviewStatus Status { get; set; }
         }
+
+        public ReportView GetReport(SurveysAndStatusesReportInputModel model)
+        {
+            var view = this.Load(model);
+
+            return new ReportView
+            {
+                Headers = new[]
+                {
+                    "TEMPLATE VERSION", "QUESTIONNAIRE TEMPLATE", "SUPERVISOR ASSIGNED", "INTERVIEWER ASSIGNED",
+                    "COMPLETED", "REJECTED BY SUPERVISOR", "APPROVED BY SUPERVISOR", "REJECTED BY HQ", "APPROVED BY HQ",
+                    "TOTAL"
+                },
+                Data = view.Items.Select(x => new object[]
+                {
+                    x.QuestionnaireVersion, x.QuestionnaireTitle, x.SupervisorAssignedCount, x.InterviewerAssignedCount,
+                    x.CompletedCount, x.RejectedBySupervisorCount, x.ApprovedBySupervisorCount,
+                    x.RejectedByHeadquartersCount, x.ApprovedByHeadquartersCount,
+                    x.TotalCount
+                }).ToArray()
+            };
+        }
     }
 }
