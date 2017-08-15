@@ -30,7 +30,7 @@ using WB.UI.Headquarters.Models.ComponentModels;
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api  
 {
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-    public class ReportDataApiController : BaseApiController
+    public partial class ReportDataApiController : BaseApiController
     {
         private readonly IHeadquartersTeamsAndStatusesReport headquartersTeamsAndStatusesReport;
         private readonly ISupervisorTeamsAndStatusesReport supervisorTeamsAndStatusesReport;
@@ -41,7 +41,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IMapReport mapReport;
         private readonly IQuantityReportFactory quantityReport;
         private readonly ISpeedReportFactory speedReport;
+
         private readonly ICountDaysOfInterviewInStatusReport countDaysOfInterviewInStatusReport;
+        private readonly IExportFactory exportFactory;
 
         public ReportDataApiController(
             ICommandService commandService,
@@ -55,7 +57,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IChartStatisticsViewFactory chartStatisticsViewFactory, 
             IQuantityReportFactory quantityReport, 
             ISpeedReportFactory speedReport,
-            ICountDaysOfInterviewInStatusReport countDaysOfInterviewInStatusReport)
+            ICountDaysOfInterviewInStatusReport countDaysOfInterviewInStatusReport,
+
+            IExportFactory exportFactory)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
@@ -67,7 +71,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.chartStatisticsViewFactory = chartStatisticsViewFactory;
             this.quantityReport = quantityReport;
             this.speedReport = speedReport;
+            this.deviceInterviewersReport = deviceInterviewersReport;
             this.countDaysOfInterviewInStatusReport = countDaysOfInterviewInStatusReport;
+            this.exportFactory = exportFactory;
         }
 
         [HttpPost]
@@ -325,8 +331,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [CamelCase]
         public async Task<DeviceInterviewersDataTableResponse> DeviceInterviewers([FromUri]DeviceInterviewersFilter request)
         {
-            var report = ServiceLocator.Current.GetInstance<IDeviceInterviewersReport>();
-            var data = await report.LoadAsync(request.Search.Value, request.GetSortOrderRequestItems().First(), request.PageIndex, request.PageSize);
+            var data = this.deviceInterviewersReport.Load();
             return new DeviceInterviewersDataTableResponse
             {
                 Draw = request.Draw + 1,

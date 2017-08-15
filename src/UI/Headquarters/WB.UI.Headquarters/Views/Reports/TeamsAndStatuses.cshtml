@@ -110,6 +110,18 @@
                 <div class="page-header clearfix">
                     <h1>@Reports.TeamsAndStatuses</h1>
                     <p data-bind="text: QuestionnaireName"></p>
+                    
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            Export
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li><a data-bind="attr:{ href: ExportToExcelUrl }">Excel</a></li>
+                            <li><a data-bind="attr:{ href: ExportToCsvUrl }">Comma separated values</a></li>
+                            <li><a data-bind="attr:{ href: ExportToTabUrl }">Tab separated values</a></li>
+                        </ul>
+                    </div>
                 </div>
 
                 <div class="dataTables_wrapper">

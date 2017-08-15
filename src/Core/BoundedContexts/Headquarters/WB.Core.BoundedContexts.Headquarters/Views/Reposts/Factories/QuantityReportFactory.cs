@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 {
-    public interface IQuantityReportFactory
+    public interface IQuantityReportFactory: IReport<QuantityByInterviewersReportInputModel>, IReport<QuantityBySupervisorsReportInputModel>
     {
         QuantityByResponsibleReportView Load(QuantityByInterviewersReportInputModel input);
         QuantityByResponsibleReportView Load(QuantityBySupervisorsReportInputModel input);
@@ -264,6 +264,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             public Guid? UserId { get; set; }
             public string UserName { get; set; }
             public DateTime Timestamp { get; set; }
+        }
+
+        public ReportView GetReport(QuantityByInterviewersReportInputModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ReportView GetReport(QuantityBySupervisorsReportInputModel model)
+        {
+            throw new NotImplementedException();
         }
     }
 }

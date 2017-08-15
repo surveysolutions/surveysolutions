@@ -55,6 +55,9 @@
     <Reference Include="ddidotnet">
       <HintPath>..\..\..\..\..\libs\ddidotnet.dll</HintPath>
     </Reference>
+    <Reference Include="EPPlus">
+      <HintPath>..\..\..\..\..\..\..\Users\RLA376582\.nuget\packages\epplus\4.1.0\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="StatData">
       <HintPath>..\..\..\..\..\libs\StatData.dll</HintPath>
     </Reference>
