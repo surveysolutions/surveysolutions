@@ -6,6 +6,12 @@ namespace WB.UI.Headquarters.Models.Api
     {
         public string SupervisorName { set; get; }
         public bool Archived { set; get; }
-        public InterviewerOptionFilter InterviewerOptionFilter{ set; get; }
+
+        public InterviewerFacet Facet
+        {
+            get;
+            set;
+        }
+        public InterviewerOptionFilter InterviewerOptionFilter { set; get; }
     }
 }

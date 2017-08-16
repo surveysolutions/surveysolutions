@@ -6,5 +6,6 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
     public interface IUserRepository : IQueryableUserStore<HqUser, Guid>
     {
+        HQIdentityDbContext DbContext { get; }
     }
 }
