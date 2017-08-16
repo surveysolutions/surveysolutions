@@ -149,7 +149,7 @@
     {
         var request = self.Filter() || {};
 
-        if (self.Datatable)
+        if ((self.Datatable || null) !=null)
             $.extend(request, self.Datatable.ajax.params());
 
         var requestUrl = self.ServiceUrl + "?" + decodeURIComponent($.param(request));
