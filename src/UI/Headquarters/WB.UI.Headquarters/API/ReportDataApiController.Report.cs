@@ -249,8 +249,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [Authorize(Roles = "Administrator, Headquarter")]
         public async Task<HttpResponseMessage> DeviceInterviewers([FromUri]string exportType, [FromUri]DeviceInterviewersFilter request)
         {
-            var report = await this.deviceInterviewersReport.GetReport(request.Search.Value,
-                request.GetSortOrderRequestItems().First(), 1, MaxPageSize);
+            request.Start = 1;
+            request.Length = MaxPageSize;
+
+            var report = await this.deviceInterviewersReport.GetReportAsync(
+                new DeviceByInterviewersReportInputModel
+                {
+                    Filter = request.Search.Value,
+                    Orders = request.GetSortOrderRequestItems(),
+                    Page = request.Start,
+                    PageSize = request.Length
+                });
 
             return this.CreateReportResponse(exportType, report, Reports.Report_Devices_and_Interviewers);
         }
