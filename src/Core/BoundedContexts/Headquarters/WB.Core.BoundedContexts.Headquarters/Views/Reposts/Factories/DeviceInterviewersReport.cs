@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     minutesMismatch = InterviewerIssuesConstants.MinutesForWrongTime,
                     targetAndroidSdkVersion = InterviewerIssuesConstants.MinAndroidSdkVersion,
                     limit = input.PageSize,
-                    offset = input.PageSize * (input.Page - 1),
+                    offset = input.PageSize * (input.Page),
                     filter = input.Filter + "%"
                 });
                 int totalCount = await connection.ExecuteScalarAsync<int>(sql.countQuery, new {filter = input.Filter + "%" });
