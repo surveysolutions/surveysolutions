@@ -63,31 +63,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                     questionnaireversion = input.TemplateVersion,
                 });
             }
-
-            /*var datesAndStatuses = this.interviewStatusesStorage.Query(_ =>
-            {
-                var filteredInterviews = _;
-
-                if (input.TemplateId.HasValue && input.TemplateVersion.HasValue)
-                {
-                    filteredInterviews = filteredInterviews.Where(x
-                        => x.QuestionnaireId == input.TemplateId.Value
-                           && x.QuestionnaireVersion == input.TemplateVersion.Value);
-                }
-
-                var statuses = filteredInterviews.SelectMany(x => x.InterviewCommentedStatuses);
-                var statusWithTime = (from f in statuses
-                    group f by new { f.Status, f.Timestamp.Date } into g
-                    select new CounterObject
-                    {
-                        Status = g.Key.Status,
-                        StatusDate = g.Key.Date,
-                        InterviewsCount = g.Count(),
-                    });
-
-                return statusWithTime;
-            });*/
-
+            
             var assignmentsDatesAndCounts = assignmentsStorage.Query(_ =>
             {
                 var filteredAssignments = _;
@@ -101,16 +77,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
 
                 var statusWithTime = (from f in filteredAssignments
                     where f.Quantity.HasValue
-                    group f by new { f.CreatedAtUtc.Date } into g
-                
+                    select new 
+                    {
+                        StatusDate = f.CreatedAtUtc.Date,
+                        InterviewsCount = f.Quantity ?? 0,
+                        InterviewSummariesCount = f.InterviewSummaries.Count(),
+                    }
+                ).ToList();
+
+                var groupedByDateStatusWithTime = (from f in statusWithTime
+                    group f by new { f.StatusDate } into g
                     select new CounterObject
                     {
-                        StatusDate = g.Key.Date,
-                        InterviewsCount = g.Sum(a => a.Quantity) ?? 0,
+                        StatusDate = g.Key.StatusDate,
+                        InterviewsCount = g.Sum(a => a.InterviewsCount - a.InterviewSummariesCount),
                     }
                 );
 
-                return statusWithTime;
+                return groupedByDateStatusWithTime;
             });
 
             Dictionary<DateTime, Dictionary<InterviewExportedAction, int>> dictStatistics = new Dictionary<DateTime, Dictionary<InterviewExportedAction, int>>();
