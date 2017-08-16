@@ -8,6 +8,7 @@
 						<h1>
 							{{title}}
 						</h1>
+                        <slot name="exportButtons"/>
 					</div>
 					<slot />
 				</div>

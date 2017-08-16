@@ -1,5 +1,6 @@
 <template>
     <Layout :title="$t('Pages.InterviewersAndDevicesTitle')">
+        <ExportButtons slot="exportButtons" />
         <DataTables ref="table" :tableOptions="tableOptions"></DataTables>
     </Layout>
 </template>
@@ -27,8 +28,8 @@ export default {
                         "class": "type-numeric",
                         title: this.$t("DevicesInterviewers.NeverSynchedCount"),
                         orderable: true,
-                        render: function(data, type, row) {
-                            if(data === 0) return `<span>${data}</span>`;
+                        render: function (data, type, row) {
+                            if (data === 0) return `<span>${data}</span>`;
                             else {
                                 return `<a href='${self.$config.interviewersBaseUrl}?supervisor=${row.teamName}&InterviewerOptionFilter=NotSynced'>${data}</a>`;
                             }
@@ -40,8 +41,8 @@ export default {
                         "class": "type-numeric",
                         orderable: true,
                         title: this.$t("DevicesInterviewers.OldInterviewerVersion"),
-                        render: function(data, type, row) {
-                            if(data === 0) return `<span>${data}</span>`;
+                        render: function (data, type, row) {
+                            if (data === 0) return `<span>${data}</span>`;
                             else {
                                 return `<a href='${self.$config.interviewersBaseUrl}?supervisor=${row.teamName}&InterviewerOptionFilter=Outdated'>${data}</a>`;
                             }

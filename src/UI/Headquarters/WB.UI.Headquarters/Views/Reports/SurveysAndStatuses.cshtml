@@ -121,17 +121,7 @@
                     <h1>@Pages.SurveysAndStatuses_Overview</h1>
                     <p data-bind="text: StatisticsMessage"></p>
                     
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            Export
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                            <li><a data-bind="attr:{ href: ExportToExcelUrl }">@Pages.ExportToExcel</a></li>
-                            <li><a data-bind="attr:{ href: ExportToCsvUrl }">@Pages.ExportToCsv</a></li>
-                            <li><a data-bind="attr:{ href: ExportToTabUrl }">@Pages.ExportToTab</a></li>
-                        </ul>
-                    </div>
+                    @Html.Partial("_export-buttons")
                 </div>
                 <div class="dataTables_wrapper no-footer">
                     <table id="data_holder" class="table table-striped table-ordered table-bordered table-hover table-mobile-devices dataTable no-footer"

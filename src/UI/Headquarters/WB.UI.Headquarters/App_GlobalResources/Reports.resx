@@ -210,4 +210,7 @@
   <data name="Report_Devices_and_Interviewers" xml:space="preserve">
     <value>Devices and Interviewers</value>
   </data>
+  <data name="Report_Days_by_Interview_Status" xml:space="preserve">
+    <value>Days by Interview Status</value>
+  </data>
 </root>

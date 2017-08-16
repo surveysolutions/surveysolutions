@@ -58,9 +58,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             }
         }
 
-        public Task<ReportView> GetReport(string filter, OrderRequestItem order, int pageNumber, int pageSize)
+        public async Task<ReportView> GetReport(string filter, OrderRequestItem order, int pageNumber, int pageSize)
         {
-            throw new NotImplementedException();
+            var view = await this.LoadAsync(filter, order, pageNumber, pageSize);
+
+            return new ReportView
+            {
+                Headers = new[]
+                {
+                    "TEAMS", "NEVER SYNCHED", "OLD VERSION", "LESS THAN 100MB FREE SPACE", "WRONG TIME ON TABLET",
+                    "ANDROID 4.4 OR LOWER", "NO ASSIGNMENTS RECEIVED", "NEVER UPLOADED", "TABLET REASSIGNED"
+                },
+                Data = view.Items.Select(x => new object[]
+                {
+                    x.TeamName, x.NeverSynchedCount, x.OutdatedCount, x.LowStorageCount, x.WrongDateOnTabletCount,
+                    x.OldAndroidCount, x.NoQuestionnairesCount, x.NeverUploadedCount, x.ReassignedCount
+                }).ToArray()
+            };
         }
 
         private (string query, string countQuery) GetSqlTexts()

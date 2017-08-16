@@ -344,36 +344,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             };
         }
 
-        public class SurveysAndStatusesDataTableResponse : DataTableResponse<HeadquarterSurveysAndStatusesReportLine>
-        {
-            public int TotalInterviewCount { get; set; }
-            public int TotalResponsibleCount { get; set; }
-        }
-
-
-        public class CountDaysOfInterviewInStatusDataTableResponse : DataTableResponse<CountDaysOfInterviewInStatusRow>
-        {
-        }
-
-        public class DeviceInterviewersDataTableResponse : DataTableResponse<DeviceInterviewersReportLine>
-        {
-        }
-
-        public class CountDaysOfInterviewInStatusRequest : DataTableRequest
-        {
-            public string QuestionnaireId { get; set; }
-        }
-
-        public class DeviceInterviewersFilter : DataTableRequest
-        {
-            
-        }
-
-        public class SurveysAndStatusesFilter : DataTableRequest
-        {
-            public string ResponsibleName { get; set; }
-        }
-
         [HttpPost]
         public ChartStatisticsView ChartStatistics(InterviewsStatisticsInputModel data)
         {
@@ -411,6 +381,36 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 RecordsFiltered = data.Length,
                 Data = data
             };
+        }
+
+        public class SurveysAndStatusesDataTableResponse : DataTableResponse<HeadquarterSurveysAndStatusesReportLine>
+        {
+            public int TotalInterviewCount { get; set; }
+            public int TotalResponsibleCount { get; set; }
+        }
+
+
+        public class CountDaysOfInterviewInStatusDataTableResponse : DataTableResponse<CountDaysOfInterviewInStatusRow>
+        {
+        }
+
+        public class DeviceInterviewersDataTableResponse : DataTableResponse<DeviceInterviewersReportLine>
+        {
+        }
+
+        public class CountDaysOfInterviewInStatusRequest : DataTableRequest
+        {
+            public string QuestionnaireId { get; set; }
+        }
+
+        public class DeviceInterviewersFilter : DataTableRequest
+        {
+            
+        }
+
+        public class SurveysAndStatusesFilter : DataTableRequest
+        {
+            public string ResponsibleName { get; set; }
         }
 
         private InterviewExportedAction[] GetInterviewExportedActionsAccordingToReportTypeForQuantityReports(PeriodiceReportType reportType)

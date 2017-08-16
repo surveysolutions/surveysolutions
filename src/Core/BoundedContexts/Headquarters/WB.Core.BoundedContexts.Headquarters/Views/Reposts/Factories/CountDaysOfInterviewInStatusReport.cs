@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -195,6 +196,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 return value;
                 
             return 0;
+        }
+
+        public async Task<ReportView> GetReportAsync(CountDaysOfInterviewInStatusInputModel model)
+        {
+            var view = await this.LoadAsync(model);
+
+            return new ReportView
+            {
+                Headers = new[] {"DAYS", "INTERVIEWER ASSIGNED", "COMPLETED", "REJECTED BY SUPERVISOR", "APPROVED BY SUPERVISOR"},
+                Data = view.Select(x => new object[]
+                {
+                    x.DaysCount, x.InterviewerAssignedCount, x.CompletedCount, x.RejectedBySupervisorCount,
+                    x.ApprovedBySupervisorCount
+                }).ToArray()
+            };
         }
     }
 }
