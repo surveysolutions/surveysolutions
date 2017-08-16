@@ -83,7 +83,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                         InterviewsCount = f.Quantity ?? 0,
                         InterviewSummariesCount = f.InterviewSummaries.Count(),
                     }
-                ).ToList();
+                );
 
                 var groupedByDateStatusWithTime = (from f in statusWithTime
                     group f by new { f.StatusDate } into g
