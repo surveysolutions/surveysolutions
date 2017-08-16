@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters
     {
         public override void Load()
         {
-            this.Bind<IUserRepository>().To<HqUserStore>().InSingletonScope();
+            this.Bind<IUserRepository>().To<HqUserStore>();
             this.Bind<IHashCompatibilityProvider>().To<HashCompatibilityProvider>().InSingletonScope();
             this.Bind<IPasswordHasher>().To<PasswordHasher>();
             this.Bind<IIdentityValidator<string>>().To<HqPasswordValidator>();
