@@ -332,8 +332,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [CamelCase]
         public async Task<DeviceInterviewersDataTableResponse> DeviceInterviewers([FromUri]DeviceInterviewersFilter request)
         {
-            var data = await this.deviceInterviewersReport.LoadAsync(request.Search.Value,
-                request.GetSortOrderRequestItems().First(), request.PageIndex, request.PageSize);
+            var data = await this.deviceInterviewersReport.LoadAsync(new DeviceByInterviewersReportInputModel
+            {
+                Filter = request.Search.Value,
+                Orders = request.GetSortOrderRequestItems(),
+                Page = request.Start,
+                PageSize = request.Length
+            });
 
             return new DeviceInterviewersDataTableResponse
             {

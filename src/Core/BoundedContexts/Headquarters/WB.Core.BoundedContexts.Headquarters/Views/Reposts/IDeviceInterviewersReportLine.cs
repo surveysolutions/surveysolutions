@@ -1,12 +1,11 @@
 ﻿using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
-using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts
 {
-    public interface IDeviceInterviewersReport
+    public interface IDeviceInterviewersReport : IAsyncReport<DeviceByInterviewersReportInputModel>
     {
-        Task<DeviceInterviewersReportView> LoadAsync(string filter, OrderRequestItem order, int pageNumber, int pageSize);
-        Task<ReportView> GetReport(string filter, OrderRequestItem order, int pageNumber, int pageSize);
+        Task<DeviceInterviewersReportView> LoadAsync(DeviceByInterviewersReportInputModel input);
     }
 }
