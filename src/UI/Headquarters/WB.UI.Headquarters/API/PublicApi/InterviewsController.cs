@@ -217,17 +217,19 @@ namespace WB.UI.Headquarters.API.PublicApi
         public CreateInterviewResult CreateInterview(CreateInterviewRequest request)
         {
             var assignment = this.assignmentStorageAccessor.GetById(request.AssignmentId)
-                ?? throw new InvalidOperationException($"Cannot find assignment with id: {request.AssignmentId}");
+                             ?? throw new HttpResponseException(HttpStatusCode.NotFound);
 
             if (assignment.InterviewsNeeded.HasValue && assignment.InterviewsNeeded <= 0)
             {
-                throw new InvalidOperationException($"Cannot create more interviews from this assignmentId: {request.AssignmentId}");
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
+                    $@"Cannot create more interviews from this assignmentId: {request.AssignmentId}"));
             }
 
             var interviewer = this.userViewFactory.GetUser(new UserViewInputModel(assignment.ResponsibleId));
 
             if (!interviewer.IsInterviewer())
-                throw new InvalidOperationException($"Assignment {assignment.Id} has responsible that is not an interviewer. Interview cannot be created");
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
+                    $@"Assignment {assignment.Id} has responsible that is not an interviewer. Interview cannot be created"));
 
             var interviewId = Guid.NewGuid();
 
