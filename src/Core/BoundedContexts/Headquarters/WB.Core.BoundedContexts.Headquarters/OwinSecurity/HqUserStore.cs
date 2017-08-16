@@ -8,7 +8,9 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
     {
         public HqUserStore(HQIdentityDbContext context) : base(context)
         {
-
+            this.DbContext = context;
         }
+
+        public HQIdentityDbContext DbContext { get; }
     }
 }
