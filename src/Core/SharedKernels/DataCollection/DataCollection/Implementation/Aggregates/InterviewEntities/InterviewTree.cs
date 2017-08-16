@@ -478,16 +478,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public IInterviewTreeNode FindEntityInQuestionBranch(Guid entityId, Identity questionIdentity)
         {
-            for (int shorterRosterVectorLength = questionIdentity.RosterVector.Length; shorterRosterVectorLength >= 0; shorterRosterVectorLength--)
-            {
-                var shorterRosterVector = questionIdentity.RosterVector.Shrink(shorterRosterVectorLength);
+            IEnumerable<IInterviewTreeNode> entities = FindEntity(entityId);
 
-                var entity = this.GetNodeByIdentity(new Identity(entityId, shorterRosterVector));
-                if (entity != null)
-                    return entity;
-            }
+            if (!entities.Any())
+                return null;
 
-            return null;
+            var shorterRosterVector = questionIdentity.RosterVector.Shrink(entities.First().Identity.RosterVector.Length);
+            var targetIdentity = new Identity(entityId, shorterRosterVector);
+
+            return entities.FirstOrDefault(x => x.Identity.Equals(targetIdentity));
+            //for (int shorterRosterVectorLength = questionIdentity.RosterVector.Length; shorterRosterVectorLength >= 0; shorterRosterVectorLength--)
+            //{
+            //    var shorterRosterVector = questionIdentity.RosterVector.Shrink(shorterRosterVectorLength);
+
+            //    var entity = this.GetNodeByIdentity(new Identity(entityId, shorterRosterVector));
+            //    if (entity != null)
+            //        return entity;
+            //}
+
+            //return null;
         }
 
         public IEnumerable<Identity> FindEntitiesFromSameOrDeeperLevel(Guid entityIdToSearch, Identity startingSearchPointIdentity)
