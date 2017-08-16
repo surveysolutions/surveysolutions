@@ -61,6 +61,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string InterviewerFacet_None {
+            get {
+                return ResourceManager.GetString("InterviewerFacet_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Approved by Headquarters.
         /// </summary>
         public static string InterviewStatus_ApprovedByHeadquarters {

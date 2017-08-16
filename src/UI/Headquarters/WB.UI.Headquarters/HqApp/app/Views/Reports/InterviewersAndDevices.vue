@@ -31,7 +31,7 @@ export default {
                         render: function (data, type, row) {
                             if (data === 0) return `<span>${data}</span>`;
                             else {
-                                return `<a href='${self.$config.interviewersBaseUrl}?supervisor=${row.teamName}&InterviewerOptionFilter=NotSynced'>${data}</a>`;
+                                return `<a href='${self.$config.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=NeverSynchonized'>${data}</a>`;
                             }
                         }
                     },
@@ -44,7 +44,7 @@ export default {
                         render: function (data, type, row) {
                             if (data === 0) return `<span>${data}</span>`;
                             else {
-                                return `<a href='${self.$config.interviewersBaseUrl}?supervisor=${row.teamName}&InterviewerOptionFilter=Outdated'>${data}</a>`;
+                                return `<a href='${self.$config.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=OutdatedApp'>${data}</a>`;
                             }
                         }
                     },

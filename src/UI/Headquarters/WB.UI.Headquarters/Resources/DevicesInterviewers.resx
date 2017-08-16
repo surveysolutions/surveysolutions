@@ -120,8 +120,8 @@
   <data name="LowStorage" xml:space="preserve">
     <value>Less than 100MB free space</value>
   </data>
-  <data name="NeverSynchedCount" xml:space="preserve">
-    <value>Never synched</value>
+  <data name="NeverSynchronized" xml:space="preserve">
+    <value>Never connected</value>
   </data>
   <data name="NeverUploaded" xml:space="preserve">
     <value>Never uploaded</value>

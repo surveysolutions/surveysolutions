@@ -3,11 +3,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
     public enum InterviewerFacet
     {
         None = 0,
-        LowStorage = 1,
-        WrongTime = 2,
-        OldAndroid = 3,
-        NoAssignmentsReceived = 4,
-        NeverUploaded = 5,
-        TabletReassigned = 6
+        NeverSynchonized = 1,
+        OutdatedApp = 2,
+        LowStorage = 3,
+        WrongTime = 4,
+        OldAndroid = 5,
+        NoAssignmentsReceived = 6,
+        NeverUploaded = 7,
+        TabletReassigned = 8
     }
 }

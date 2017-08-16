@@ -19,7 +19,7 @@ namespace Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option or rebuild the Visual Studio project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Web.Application.StronglyTypedResourceProxyBuilder", "14.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Web.Application.StronglyTypedResourceProxyBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Users {
@@ -133,7 +133,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ({0} api users).
+        ///   Looks up a localized string similar to API Users ({0}).
         /// </summary>
         internal static string ApiUsersCountDescription {
             get {
@@ -286,7 +286,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ({0} headquarters).
+        ///   Looks up a localized string similar to Headquarters ({0}).
         /// </summary>
         internal static string HeadquartersCountDescription {
             get {
@@ -322,6 +322,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interviewer issues.
+        /// </summary>
+        internal static string InterviewerIssues {
+            get {
+                return ResourceManager.GetString("InterviewerIssues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interviewers.
         /// </summary>
         internal static string Interviewers {
@@ -331,7 +340,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ({0} interviewers).
+        ///   Looks up a localized string similar to Interviewers ({0}).
         /// </summary>
         internal static string InterviewersCountDescription {
             get {
@@ -403,7 +412,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ({0} observers).
+        ///   Looks up a localized string similar to Observers ({0}).
         /// </summary>
         internal static string ObserversCountDescription {
             get {
@@ -466,7 +475,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ({0} supervisors).
+        ///   Looks up a localized string similar to Supervisors ({0}).
         /// </summary>
         internal static string SupervisorsCountDescription {
             get {
