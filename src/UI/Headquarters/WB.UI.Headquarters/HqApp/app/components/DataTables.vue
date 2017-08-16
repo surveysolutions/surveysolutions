@@ -28,13 +28,12 @@ export default {
         },
         authorizedUser: { type: Object, default() { return {} } }
     },
-    
+
     data() {
         return {
             table: null
         };
     },
-
     methods: {
         reload(data) {
             this.table.ajax.data = this.addParamsToRequest(data || {});
@@ -77,14 +76,14 @@ export default {
         },
 
         initContextMenu() {
-            
+
             var contextMenuOptions = {
                 selector: "#" + this.$el.attributes.id.value + " tbody tr",
                 autoHide: false,
                 build: ($trigger, e) => {
                     var selectedRow = this.selectRowAndGetData($trigger);
-                    
-                    if(selectedRow.rowData == null) return false;
+
+                    if (selectedRow.rowData == null) return false;
 
                     var items = this.contextMenuItems(selectedRow)
                     return { items: items };
@@ -115,6 +114,14 @@ export default {
 
         options.ajax.data = (d) => {
             this.addParamsToRequest(d);
+
+            var requestUrl = this.table.ajax.url() + '?' + decodeURIComponent($.param(d));
+
+            this.$store.dispatch('setExportUrls', {
+                excel: requestUrl + "&exportType=excel",
+                csv: requestUrl + "&exportType=csv",
+                tab: requestUrl + "&exportType=tab",
+            });
         };
 
         options.ajax.complete = (response) => {
