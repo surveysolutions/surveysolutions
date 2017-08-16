@@ -6,6 +6,7 @@ using Dapper;
 using Npgsql;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Infrastructure.Native.Storage.Postgre;
 
@@ -42,9 +43,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 var rows = await connection.QueryAsync<DeviceInterviewersReportLine>(fullQuery, new
                 {
                     latestAppBuildVersion = targetInterviewerVersion,
-                    neededFreeStorageInBytes = 100 * 1024,
-                    minutesMismatch = 15,
-                    targetAndroidSdkVersion = 20,
+                    neededFreeStorageInBytes = InterviewerIssuesConstants.LowMemoryInBytesSize,
+                    minutesMismatch = InterviewerIssuesConstants.MinutesForWrongTime,
+                    targetAndroidSdkVersion = InterviewerIssuesConstants.MinAndroidSdkVersion,
                     limit = pageSize,
                     offset = pageSize * (pageNumber - 1),
                     filter = filter + "%"

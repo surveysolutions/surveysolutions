@@ -66,7 +66,8 @@ namespace WB.UI.Headquarters.Controllers
                 reqest.Archived, 
                 reqest.InterviewerOptionFilter, 
                 interviewerApkVersion,
-                supervisorId);
+                supervisorId,
+                reqest.Facet);
             
             return new DataTableResponse<InterviewerListItem>
             {

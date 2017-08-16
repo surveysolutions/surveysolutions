@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
@@ -146,7 +147,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         }
 
         public InterviewersView GetInterviewers(int pageIndex, int pageSize, string orderBy, string searchBy, 
-            bool archived, InterviewerOptionFilter interviewerOptionFilter, int? apkBuildVersion, Guid? supervisorId)
+            bool archived, InterviewerOptionFilter interviewerOptionFilter, int? apkBuildVersion, Guid? supervisorId,
+            InterviewerFacet facet = InterviewerFacet.None)
         {
             Func<IQueryable<HqUser>, IQueryable<InterviewersItem>> query = allUsers =>
             {
@@ -168,7 +170,47 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     default:
                         throw new ArgumentOutOfRangeException(nameof(interviewerOptionFilter), interviewerOptionFilter, null);
                 }
-                
+
+                switch (facet)
+                {
+                     case InterviewerFacet.LowStorage:
+                        interviewers = from i in interviewers
+                                       let deviceSyncInfo = UserRepository.DbContext.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id).OrderByDescending(x => x.Id).FirstOrDefault()
+                                       where deviceSyncInfo != null && deviceSyncInfo.StorageFreeInBytes < InterviewerIssuesConstants.LowMemoryInBytesSize
+                                       select i;
+                        break;
+                    case InterviewerFacet.WrongTime:
+                        interviewers = from i in interviewers
+                            let deviceSyncInfo = UserRepository.DbContext.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id).OrderByDescending(x => x.Id).FirstOrDefault()
+                            where deviceSyncInfo != null && DbFunctions.DiffMinutes(deviceSyncInfo.DeviceDate, deviceSyncInfo.SyncDate) > InterviewerIssuesConstants.MinutesForWrongTime
+                            select i;
+                        break;
+                    case InterviewerFacet.OldAndroid:
+                        interviewers = from i in interviewers
+                            let deviceSyncInfo = UserRepository.DbContext.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id).OrderByDescending(x => x.Id).FirstOrDefault()
+                            where deviceSyncInfo != null && deviceSyncInfo.AndroidSdkVersion < InterviewerIssuesConstants.MinAndroidSdkVersion
+                            select i;
+                        break;
+                    case InterviewerFacet.NoAssignmentsReceived:
+                        interviewers = from i in interviewers
+                            let deviceSyncInfo = UserRepository.DbContext.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id)
+                            where !deviceSyncInfo.Any(s => s.Statistics.DownloadedQuestionnairesCount > 0)
+                            select i;
+                        break;
+                    case InterviewerFacet.NeverUploaded:
+                        interviewers = from i in interviewers
+                            let deviceSyncInfo = UserRepository.DbContext.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id)
+                            where !deviceSyncInfo.Any(s => s.Statistics.UploadedInterviewsCount > 0)
+                            select i;
+                        break;
+                    case InterviewerFacet.TabletReassigned:
+                        interviewers = from i in interviewers
+                            let deviceSyncInfo = UserRepository.DbContext.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id)
+                            where deviceSyncInfo.Any() && deviceSyncInfo.Select(s => s.DeviceId).Distinct().Count() > 1
+                            select i;
+                        break;
+                }
+
                 if (supervisorId.HasValue)
                     interviewers = interviewers.Where(x => x.Profile.SupervisorId != null && x.Profile.SupervisorId == supervisorId);
 

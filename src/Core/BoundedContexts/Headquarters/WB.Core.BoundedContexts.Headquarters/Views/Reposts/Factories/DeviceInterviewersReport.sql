@@ -28,7 +28,7 @@ LEFT JOIN (SELECT DISTINCT dsi."InterviewerId" FROM plainstore.devicesyncinfo ds
 -- find how many interviewers have more than 1 tablet
 LEFT JOIN (SELECT "InterviewerId" FROM plainstore.devicesyncinfo dsi 
 GROUP BY "InterviewerId"
-HAVING COUNT("DeviceId") > 1) AS wasReassign ON wasReassign."InterviewerId" = u."Id"::uuid 
+HAVING COUNT(DISTINCT "DeviceId") > 1) AS wasReassign ON wasReassign."InterviewerId" = u."Id"::uuid 
 
 -- find if there was any questionnaire received
 LEFT JOIN (SELECT DISTINCT dsi."InterviewerId" FROM plainstore.devicesyncinfo dsi WHERE EXISTS(SELECT 1 FROM plainstore.devicesyncstatistics WHERE dsi."StatisticsId" = "Id" AND "DownloadedQuestionnairesCount" > 0)) 

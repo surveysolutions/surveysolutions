@@ -2431,31 +2431,56 @@ if (false) {(function () {
                     name: "WrongDateOnTabletCount",
                     "class": "type-numeric",
                     orderable: true,
-                    title: this.$t("DevicesInterviewers.WrongDateOnTablet")
+                    title: this.$t("DevicesInterviewers.WrongDateOnTablet"),
+                    render: function render(data, type, row) {
+                        if (data === 0) return "<span>" + data + "</span>";else {
+                            return "<a href='" + self.$config.interviewersBaseUrl + "?supervisor=" + row.teamName + "&Facet=WrongTime'>" + data + "</a>";
+                        }
+                    }
                 }, {
                     data: "oldAndroidCount",
                     name: "OldAndroidCount",
                     "class": "type-numeric",
                     orderable: true,
-                    title: this.$t("DevicesInterviewers.OldAndroidVersion")
+                    title: this.$t("DevicesInterviewers.OldAndroidVersion"),
+                    render: function render(data, type, row) {
+                        if (data === 0) return "<span>" + data + "</span>";else {
+                            return "<a href='" + self.$config.interviewersBaseUrl + "?supervisor=" + row.teamName + "&Facet=OldAndroid'>" + data + "</a>";
+                        }
+                    }
                 }, {
                     data: "noQuestionnairesCount",
                     name: "NoQuestionnairesCount",
                     "class": "type-numeric",
                     orderable: true,
-                    title: this.$t("DevicesInterviewers.NoAssignments")
+                    title: this.$t("DevicesInterviewers.NoAssignments"),
+                    render: function render(data, type, row) {
+                        if (data === 0) return "<span>" + data + "</span>";else {
+                            return "<a href='" + self.$config.interviewersBaseUrl + "?supervisor=" + row.teamName + "&Facet=NoAssignmentsReceived'>" + data + "</a>";
+                        }
+                    }
                 }, {
                     data: "neverUploadedCount",
                     name: "NeverUploadedCount",
                     "class": "type-numeric",
                     orderable: true,
-                    title: this.$t("DevicesInterviewers.NeverUploaded")
+                    title: this.$t("DevicesInterviewers.NeverUploaded"),
+                    render: function render(data, type, row) {
+                        if (data === 0) return "<span>" + data + "</span>";else {
+                            return "<a href='" + self.$config.interviewersBaseUrl + "?supervisor=" + row.teamName + "&Facet=NeverUploaded'>" + data + "</a>";
+                        }
+                    }
                 }, {
                     data: "reassignedCount",
                     name: "ReassignedCount",
                     "class": "type-numeric",
                     orderable: true,
-                    title: this.$t("DevicesInterviewers.TabletReassigned")
+                    title: this.$t("DevicesInterviewers.TabletReassigned"),
+                    render: function render(data, type, row) {
+                        if (data === 0) return "<span>" + data + "</span>";else {
+                            return "<a href='" + self.$config.interviewersBaseUrl + "?supervisor=" + row.teamName + "&Facet=TabletReassigned'>" + data + "</a>";
+                        }
+                    }
                 }],
                 ajax: {
                     url: this.$config.dataUrl,
