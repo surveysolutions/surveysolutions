@@ -52,7 +52,13 @@ export default {
                         name: "LowStorageCount",
                         "class": "type-numeric",
                         orderable: true,
-                        title: this.$t("DevicesInterviewers.LowStorage")
+                        title: this.$t("DevicesInterviewers.LowStorage"),
+                        render: function(data, type, row) {
+                            if(data === 0) return `<span>${data}</span>`;
+                            else {
+                                return `<a href='${self.$config.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=LowStorage'>${data}</a>`;
+                            }
+                        }
                     },
                     {
                         data: "wrongDateOnTabletCount",
