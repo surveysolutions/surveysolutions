@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Dapper;
 using Npgsql;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
@@ -24,8 +25,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             this.interviewerVersionReader = interviewerVersionReader;
         }
 
-        public async Task<DeviceInterviewersReportView> LoadAsync(string filter, OrderRequestItem order, int pageNumber, int pageSize)
+        public async Task<DeviceInterviewersReportView> LoadAsync(DeviceByInterviewersReportInputModel input)
         {
+            if (input == null) throw new ArgumentNullException(nameof(input));
+
+            var order = input.Orders.FirstOrDefault();
             if (order == null) throw new ArgumentNullException(nameof(order));
 
             if (!order.IsSortedByOneOfTheProperties(typeof(DeviceInterviewersReportLine)))
@@ -46,11 +50,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     neededFreeStorageInBytes = InterviewerIssuesConstants.LowMemoryInBytesSize,
                     minutesMismatch = InterviewerIssuesConstants.MinutesForWrongTime,
                     targetAndroidSdkVersion = InterviewerIssuesConstants.MinAndroidSdkVersion,
-                    limit = pageSize,
-                    offset = pageSize * (pageNumber - 1),
-                    filter = filter + "%"
+                    limit = input.PageSize,
+                    offset = input.PageSize * (input.Page - 1),
+                    filter = input.Filter + "%"
                 });
-                int totalCount = await connection.ExecuteScalarAsync<int>(sql.countQuery, new {filter = filter + "%" });
+                int totalCount = await connection.ExecuteScalarAsync<int>(sql.countQuery, new {filter = input.Filter + "%" });
 
                 return new DeviceInterviewersReportView
                 {
@@ -58,25 +62,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     TotalCount = totalCount
                 };
             }
-        }
-
-        public async Task<ReportView> GetReport(string filter, OrderRequestItem order, int pageNumber, int pageSize)
-        {
-            var view = await this.LoadAsync(filter, order, pageNumber, pageSize);
-
-            return new ReportView
-            {
-                Headers = new[]
-                {
-                    "TEAMS", "NEVER SYNCHED", "OLD VERSION", "LESS THAN 100MB FREE SPACE", "WRONG TIME ON TABLET",
-                    "ANDROID 4.4 OR LOWER", "NO ASSIGNMENTS RECEIVED", "NEVER UPLOADED", "TABLET REASSIGNED"
-                },
-                Data = view.Items.Select(x => new object[]
-                {
-                    x.TeamName, x.NeverSynchedCount, x.OutdatedCount, x.LowStorageCount, x.WrongDateOnTabletCount,
-                    x.OldAndroidCount, x.NoQuestionnairesCount, x.NeverUploadedCount, x.ReassignedCount
-                }).ToArray()
-            };
         }
 
         private (string query, string countQuery) GetSqlTexts()
@@ -96,6 +81,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             }
 
             return (query, countQuery);
+        }
+
+        public async Task<ReportView> GetReportAsync(DeviceByInterviewersReportInputModel input)
+        {
+            var view = await this.LoadAsync(input);
+
+            return new ReportView
+            {
+                Headers = new[]
+                {
+                    "TEAMS", "NEVER SYNCHED", "OLD VERSION", "LESS THAN 100MB FREE SPACE", "WRONG TIME ON TABLET",
+                    "ANDROID 4.4 OR LOWER", "NO ASSIGNMENTS RECEIVED", "NEVER UPLOADED", "TABLET REASSIGNED"
+                },
+                Data = view.Items.Select(x => new object[]
+                {
+                    x.TeamName, x.NeverSynchedCount, x.OutdatedCount, x.LowStorageCount, x.WrongDateOnTabletCount,
+                    x.OldAndroidCount, x.NoQuestionnairesCount, x.NeverUploadedCount, x.ReassignedCount
+                }).ToArray()
+            };
         }
     }
 }
