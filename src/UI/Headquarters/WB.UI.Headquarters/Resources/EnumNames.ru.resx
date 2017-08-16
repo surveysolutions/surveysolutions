@@ -156,4 +156,7 @@
   <data name="MenuItem_Profile" xml:space="preserve">
     <value>Профиль</value>
   </data>
+  <data name="InterviewerFacet_None" xml:space="preserve">
+    <value>Нет</value>
+  </data>
 </root>

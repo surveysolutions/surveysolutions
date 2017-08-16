@@ -159,4 +159,7 @@
   <data name="MenuItem_Profile" xml:space="preserve">
     <value>Profile</value>
   </data>
+  <data name="InterviewerFacet_None" xml:space="preserve">
+    <value>None</value>
+  </data>
 </root>

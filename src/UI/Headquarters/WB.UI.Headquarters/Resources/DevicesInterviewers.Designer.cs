@@ -70,11 +70,11 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Never synched.
+        ///   Looks up a localized string similar to Never connected.
         /// </summary>
-        public static string NeverSynchedCount {
+        public static string NeverSynchronized {
             get {
-                return ResourceManager.GetString("NeverSynchedCount", resourceCulture);
+                return ResourceManager.GetString("NeverSynchronized", resourceCulture);
             }
         }
         

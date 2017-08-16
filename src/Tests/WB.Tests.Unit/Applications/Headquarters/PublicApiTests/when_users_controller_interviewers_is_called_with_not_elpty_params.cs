@@ -31,9 +31,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
                 Moq.It.IsAny<string>(), 
                 Moq.It.IsAny<string>(),
                 Moq.It.IsAny<bool>(), 
-                Moq.It.IsAny<InterviewerOptionFilter>(),
                 Moq.It.IsAny<int?>(),
-                Moq.It.IsAny<Guid?>()), Times.Once());
+                Moq.It.IsAny<Guid?>(),
+                Moq.It.IsAny<InterviewerFacet>()), Times.Once());
         
         private static Guid supervisorId = Guid.Parse("11111111111111111111111111111111");
         private static UserApiView actionResult;

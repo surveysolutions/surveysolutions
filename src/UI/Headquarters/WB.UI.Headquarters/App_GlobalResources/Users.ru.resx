@@ -247,4 +247,7 @@
   <data name="HeadquartersCountDescription" xml:space="preserve">
     <value>Хедквотеры ({0})</value>
   </data>
+  <data name="InterviewerIssues" xml:space="preserve">
+    <value>Проблемы</value>
+  </data>
 </root>
