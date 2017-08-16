@@ -932,6 +932,12 @@ if (false) {(function () {
         authorizedUser: { type: Object, default: function _default() {
                 return {};
             }
+        },
+        hasPaging: {
+            type: Boolean,
+            default: function _default() {
+                return true;
+            }
         }
     },
 
@@ -1014,7 +1020,8 @@ if (false) {(function () {
             lengthChange: false, // do not show page size selector
             pageLength: 20, // page size
             dom: "frtp",
-            conditionalPaging: true
+            conditionalPaging: true,
+            paging: this.hasPaging
         }, this.tableOptions);
 
         options.ajax.data = function (d) {
@@ -2397,7 +2404,7 @@ if (false) {(function () {
                     data: "neverSynchedCount",
                     name: "NeverSynchedCount",
                     "class": "type-numeric",
-                    title: this.$t("DevicesInterviewers.NeverSynchedCount"),
+                    title: this.$t("DevicesInterviewers.NeverSynchronized"),
                     orderable: true,
                     render: function render(data, type, row) {
                         if (data === 0) return "<span>" + data + "</span>";else {
@@ -2719,7 +2726,8 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     ref: "table",
     attrs: {
       "tableOptions": _vm.tableOptions,
-      "addParamsToRequest": _vm.addFilteringParams
+      "addParamsToRequest": _vm.addFilteringParams,
+      "hasPaging": false
     }
   })], 1)
 }

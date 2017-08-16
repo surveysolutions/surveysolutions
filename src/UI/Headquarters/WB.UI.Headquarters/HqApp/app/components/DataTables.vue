@@ -26,7 +26,11 @@ export default {
             type: Function,
             default() { return []; }
         },
-        authorizedUser: { type: Object, default() { return {} } }
+        authorizedUser: { type: Object, default() { return {} } },
+        hasPaging: {
+            type: Boolean,
+            default() { return true; }
+        }
     },
 
     data() {
@@ -109,7 +113,8 @@ export default {
             lengthChange: false, // do not show page size selector
             pageLength: 20, // page size
             dom: "frtp",
-            conditionalPaging: true
+            conditionalPaging: true,
+            paging: this.hasPaging
         }, this.tableOptions);
 
         options.ajax.data = (d) => {
