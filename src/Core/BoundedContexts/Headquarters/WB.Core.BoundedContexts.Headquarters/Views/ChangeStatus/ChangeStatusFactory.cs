@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus
             bool IsAutomaticallyAssignedToSv (InterviewCommentedStatus x) => x.Status == InterviewExportedAction.SupervisorAssigned && x.StatusChangeOriginatorRole == UserRoles.Interviewer;
 
             var filteredStatuses = statuses?
-                .Where(x => IsAutomaticallyAssignedToSv(x))
+                .Where(x => !IsAutomaticallyAssignedToSv(x))
                 .Select(CreateCommentedStatusHistroyView).ToList() ?? new List<CommentedStatusHistroyView>();
 
             return filteredStatuses;
