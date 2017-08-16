@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Resources;
 using System.Threading.Tasks;
 using Dapper;
-using NHibernate;
-using Ninject;
 using Npgsql;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Infrastructure.Native.Storage.Postgre;
 
@@ -41,10 +34,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             var targetInterviewerVersion = interviewerVersionReader.Version;
 
             var sql = GetSqlTexts();
+            var fullQuery = string.Format(sql.query, order.ToSqlOrderBy());
 
             using (var connection = new NpgsqlConnection(plainStorageSettings.ConnectionString))
             {
-                var fullQuery = string.Format(sql.query, order.ToSqlOrderBy());
                 var rows = await connection.QueryAsync<DeviceInterviewersReportLine>(fullQuery, new
                 {
                     latestAppBuildVersion = targetInterviewerVersion,
