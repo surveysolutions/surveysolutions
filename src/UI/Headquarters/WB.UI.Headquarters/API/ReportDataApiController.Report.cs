@@ -249,7 +249,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [Authorize(Roles = "Administrator, Headquarter")]
         public async Task<HttpResponseMessage> DeviceInterviewers([FromUri]string exportType, [FromUri]DeviceInterviewersFilter request)
         {
-            request.Start = 1;
+            request.Start = 0;
             request.Length = MaxPageSize;
 
             var report = await this.deviceInterviewersReport.GetReportAsync(
