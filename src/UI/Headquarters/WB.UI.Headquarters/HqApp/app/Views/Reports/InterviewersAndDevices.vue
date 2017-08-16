@@ -26,7 +26,7 @@ export default {
                         data: "neverSynchedCount",
                         name: "NeverSynchedCount",
                         "class": "type-numeric",
-                        title: this.$t("DevicesInterviewers.NeverSynchedCount"),
+                        title: this.$t("DevicesInterviewers.NeverSynchronized"),
                         orderable: true,
                         render: function (data, type, row) {
                             if (data === 0) return `<span>${data}</span>`;
