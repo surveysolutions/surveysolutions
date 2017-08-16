@@ -11,7 +11,12 @@ const store = new Vuex.Store({
     state: {
         pendingHandle: null,
         pendingProgress: false,
-        config
+        config,
+        exportUrls: {
+            excel: "",
+            csv: "",
+            tab: ""
+        }
     },
     actions: {
         createInterview({ rootState, dispatch, commit }, assignmentId) {
@@ -21,16 +26,16 @@ const store = new Vuex.Store({
                 dispatch("showProgress", true);
                 window.location = response;
             })
-            .catch(data => { 
-                new PNotify({
-                    title: 'Unhandled error occurred',
-                    text: data.responseStatus,
-                    type: 'error'
-                  });
-                dispatch("hideProgress")
-            })
-            .then(() => dispatch("hideProgress"))
-            
+                .catch(data => {
+                    new PNotify({
+                        title: 'Unhandled error occurred',
+                        text: data.responseStatus,
+                        type: 'error'
+                    });
+                    dispatch("hideProgress")
+                })
+                .then(() => dispatch("hideProgress"))
+
         },
         showProgress(context) {
             context.commit('SET_PROGRESS_TIMEOUT', setTimeout(() => {
@@ -51,6 +56,9 @@ const store = new Vuex.Store({
                 type: 'DELETE',
                 success: callback
             })
+        },
+        setExportUrls(context, urls) {
+            context.commit("SET_EXPORT_URLS", urls);
         }
     },
     mutations: {
@@ -59,6 +67,11 @@ const store = new Vuex.Store({
         },
         SET_PROGRESS_TIMEOUT(state, handle) {
             state.pendingHandle = handle
+        },
+        SET_EXPORT_URLS(state, urls) {
+            state.exportUrls.excel = urls.excel;
+            state.exportUrls.csv = urls.csv;
+            state.exportUrls.tab = urls.tab;
         }
     },
     getters: {

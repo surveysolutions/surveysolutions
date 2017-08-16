@@ -1,5 +1,5 @@
 <template>
-    <Layout  :hasFilter="true">
+    <Layout :hasFilter="true">
         <Filters slot="filters">
             <FilterBlock :title="$t('Pages.Template')">
                 <select class="selectpicker" v-model="questionnaireId">
@@ -10,7 +10,7 @@
                 </select>
             </FilterBlock>
         </Filters>
-
+        <ExportButtons slot="exportButtons" />
         <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addFilteringParams"></DataTables>
     </Layout>
 </template>
@@ -19,7 +19,7 @@
 export default {
     data() {
         return {
-            questionnaireId: null,
+            questionnaireId: null
         }
     },
     watch: {
@@ -74,7 +74,7 @@ export default {
         }
     },
     methods: {
-        reload: _.debounce(function() {
+        reload: _.debounce(function () {
             this.$refs.table.reload();
         }, 500),
 
@@ -82,7 +82,7 @@ export default {
             if (this.questionnaireId) {
                 data.questionnaireId = this.questionnaireId;
             }
-        },
+        }
     },
 }
 </script>

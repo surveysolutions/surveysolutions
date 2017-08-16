@@ -1052,4 +1052,7 @@
   <data name="ExportToTab">
     <value>Tab separated values</value>
   </data>
+  <data name="ExportButton">
+    <value>Export</value>
+  </data>
 </root>

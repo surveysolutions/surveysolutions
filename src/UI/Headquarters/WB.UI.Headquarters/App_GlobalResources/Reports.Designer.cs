@@ -169,6 +169,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Days by Interview Status.
+        /// </summary>
+        internal static string Report_Days_by_Interview_Status {
+            get {
+                return ResourceManager.GetString("Report_Days_by_Interview_Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Devices and Interviewers.
         /// </summary>
         internal static string Report_Devices_and_Interviewers {

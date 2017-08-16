@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.Views.Reports.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.API;
 
@@ -225,16 +227,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpGet]
-        public HttpResponseMessage HeadquarterSupervisorsAndStatusesReport([FromUri]string exportType, [FromUri]TeamsAndStatusesFilter teamsAndStatusesFilter)
+        public HttpResponseMessage HeadquarterSupervisorsAndStatusesReport([FromUri]string exportType, [FromUri]TeamsAndStatusesFilter filter)
         {
+            filter.Start = 0;
+            filter.Length = MaxPageSize;
+
             var report = this.headquartersTeamsAndStatusesReport.GetReport(
                 new TeamsAndStatusesInputModel
                 {
-                    Orders = teamsAndStatusesFilter.GetSortOrderRequestItems(),
-                    Page = teamsAndStatusesFilter.PageIndex,
-                    PageSize = teamsAndStatusesFilter.PageSize,
-                    TemplateId = teamsAndStatusesFilter.TemplateId,
-                    TemplateVersion = teamsAndStatusesFilter.TemplateVersion
+                    Orders = filter.GetSortOrderRequestItems(),
+                    Page = filter.PageIndex,
+                    PageSize = filter.PageSize,
+                    TemplateId = filter.TemplateId,
+                    TemplateVersion = filter.TemplateVersion
                 });
 
             return this.CreateReportResponse(exportType, report, Reports.Report_Supervisors_And_Statuses);
@@ -245,9 +250,27 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public async Task<HttpResponseMessage> DeviceInterviewers([FromUri]string exportType, [FromUri]DeviceInterviewersFilter request)
         {
             var report = await this.deviceInterviewersReport.GetReport(request.Search.Value,
-                request.GetSortOrderRequestItems().First(), 0, MaxPageSize);
+                request.GetSortOrderRequestItems().First(), 1, MaxPageSize);
 
             return this.CreateReportResponse(exportType, report, Reports.Report_Devices_and_Interviewers);
+        }
+
+        [HttpGet]
+        public async Task<HttpResponseMessage> CountDaysOfInterviewInStatus(
+            [FromUri] string exportType, [FromUri] CountDaysOfInterviewInStatusRequest request)
+        {
+            var input = new CountDaysOfInterviewInStatusInputModel();
+
+            if (!string.IsNullOrEmpty(request.QuestionnaireId))
+            {
+                var questionnaireIdentity = QuestionnaireIdentity.Parse(request.QuestionnaireId);
+                input.TemplateVersion = questionnaireIdentity.Version;
+                input.TemplateId = questionnaireIdentity.QuestionnaireId;
+            }
+
+            var report = await this.countDaysOfInterviewInStatusReport.GetReportAsync(input);
+
+            return this.CreateReportResponse(exportType, report, Reports.Report_Days_by_Interview_Status);
         }
 
         private HttpResponseMessage CreateReportResponse(string exportType, ReportView report, string reportName)

@@ -141,15 +141,6 @@
         });
     };
 
-    self.toQueryString = function (obj) {
-        var str = [];
-        for (var p in obj)
-            if (obj.hasOwnProperty(p)) {
-                str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-            }
-        return str.join("&");
-    };
-
     self.ExportToExcelUrl = ko.observable("");
     self.ExportToCsvUrl = ko.observable("");
     self.ExportToTabUrl = ko.observable("");
@@ -158,17 +149,13 @@
     {
         var request = self.Filter() || {};
 
-        request["exportType"] = 'excel';
+        $.extend(request, self.Datatable.ajax.params());
 
-        self.ExportToExcelUrl(serviceUrl + "?" + self.toQueryString(request));
+        var requestUrl = self.ServiceUrl + "?" + decodeURIComponent($.param(request));
 
-        request["exportType"] = 'csv';
-
-        self.ExportToCsvUrl(serviceUrl + "?" + self.toQueryString(request));
-
-        request["exportType"] = 'tab';
-
-        self.ExportToTabUrl(serviceUrl + "?" + self.toQueryString(request));
+        self.ExportToExcelUrl(requestUrl + "&exportType=excel");
+        self.ExportToCsvUrl(requestUrl + "&exportType=csv");
+        self.ExportToTabUrl(requestUrl + "&exportType=tab");
     };
     
     self.initDataTable = function (onDataReceivedCallback, onTableInitComplete) {
