@@ -199,7 +199,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 return new ButtonState
                 {
                     Id = id,
-                    Title = "Complete interview",
+                    Title = WB.UI.Headquarters.Resources.WebInterview.CompleteInterview,
                     Status = GetInterviewSimpleStatus(),
                     Target = sectionIdentity.ToString(),
                     Type = ButtonType.Complete
