@@ -9,17 +9,19 @@
         </template>
 
         <div class="comment active" v-if="isShowingAddCommentDialog">
-            <div class="form-inline">
+            <form class="form-inline">
                 <label>{{ $t("CommentYours") }}</label>
                 <div class="form-group">
-                    <div class="input-group field">
-                        <input type="text" class="form-control" v-on:keyup.enter="postComment" v-model="comment"
+                    <div class="input-group comment-field">
+                         <input type="text" class="form-control" v-on:keyup.enter="postComment" v-model="comment"
                             :placeholder='$t("CommentEnter")' />
+                        <div class="input-group-btn">
+                             <button type="button" class="btn btn-default btn-post-comment"
+                                :class="buttonClass" @click="postComment($event)">{{ $t("CommentPost") }}</button>
+                        </div>
                     </div>
                 </div>
-                <button type="button" class="btn btn-default btn-post-comment"
-                :class="buttonClass" @click="postComment($event)">{{ $t("CommentPost") }}</button>
-            </div>
+            </form>
         </div>
     </div>
 </template>

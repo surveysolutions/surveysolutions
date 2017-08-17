@@ -6617,6 +6617,25 @@ a.disabled {
     -webkit-box-shadow: none;
             box-shadow: none; }
 
+.input-group .input-group-btn {
+  padding-left: 5px; }
+  .input-group .input-group-btn .btn.btn-post-comment {
+    -webkit-transition: all 0.2s linear 0s;
+    transition: all 0.2s linear 0s;
+    padding: 12px;
+    color: #dbdfe2;
+    border-color: #dbdfe2;
+    border-radius: 5px;
+    border-left: 1px solid; }
+    .input-group .input-group-btn .btn.btn-post-comment:hover, .input-group .input-group-btn .btn.btn-post-comment:focus, .input-group .input-group-btn .btn.btn-post-comment:active, .input-group .input-group-btn .btn.btn-post-comment.comment-added {
+      color: #2a81cb;
+      border-color: #2a81cb;
+      background-color: transparent; }
+    .input-group .input-group-btn .btn.btn-post-comment:active {
+      background-color: #dfeaf4;
+      -webkit-box-shadow: none;
+              box-shadow: none; }
+
 .back-link {
   text-transform: uppercase;
   font: 12.5px/14px "TrebuchetMSBold";
@@ -8412,6 +8431,9 @@ span.image-zoom-box {
       margin-bottom: 10px;
       padding: 5px;
       font-size: 10px; }
+      .panel-table .panel-body .btn.reject {
+        padding-top: 3px;
+        padding-bottom: 3px; }
       .panel-table .panel-body .btn:last-of-type {
         margin-bottom: 0; } }
 
@@ -11135,6 +11157,40 @@ td.errors {
       margin: 0 auto 30px; }
     .graphic-wrapper .graphic-explanation {
       float: none; } }
+
+main .before-search {
+  display: none; }
+
+.search-wasnt-started .before-search {
+  display: block; }
+
+.search-wasnt-started .main-information {
+  display: none; }
+
+.search-wasnt-started .filters {
+  position: static;
+  overflow: visible;
+  border: none;
+  width: 100%;
+  margin: 0;
+  padding: 0; }
+  .search-wasnt-started .filters .foldback-button {
+    display: none; }
+  .search-wasnt-started .filters .filters-container {
+    max-width: 310px;
+    border: none;
+    padding: 0 5px; }
+    .search-wasnt-started .filters .filters-container > h4, .search-wasnt-started .filters .filters-container > .import-progress {
+      display: none; }
+
+.search-wasnt-started + .footer {
+  padding-left: 0 !important; }
+
+.troubleshooting-explanation {
+  font-weight: bold; }
+
+.search-wasnt-started .wrapper-view-mode {
+  padding-top: 0 !important; }
 
 .servers-error {
   width: 350px; }

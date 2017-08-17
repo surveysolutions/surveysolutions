@@ -249,18 +249,13 @@ label.inactive{
 			}
 			.form-control{
 				@extend %form;
-				width: calc(100% + 12px);
+				width: calc(425px + 12px);
 				height: 40px;
 				padding: 10px 12px;
 				z-index: 0;
 				margin-left: -12px;
 				color: $gray_text;
 				font-style: italic;
-			}
-			.btn-post-comment{
-				position: absolute;
-				top: 17px;
-				right: -65px;
 			}
 		}
 	}
@@ -1113,7 +1108,7 @@ label.inactive{
 	    }
 	}
 }
-@media only screen and (max-width: 940px){
+@media only screen and (max-width: 1040px){
 	.audio-question{
 		.recording{
 			.btn-clear{
@@ -1135,17 +1130,16 @@ label.inactive{
 			.comment .form-inline {
 				.form-group{
 					margin-bottom: 0;
-					width: calc(100% - 65px);
 					.input-group{
 						width: 100%;
+						.input-group-btn{
+							width: 1%;
+						}
 					}
 				}
 				.form-control{
 					width: 100%;
 					margin-left: 0;
-				}
-				.btn-post-comment{
-					position: static;
 				}
 			}
 		}
