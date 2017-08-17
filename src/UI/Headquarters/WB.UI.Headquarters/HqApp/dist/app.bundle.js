@@ -2634,7 +2634,7 @@ if (false) {(function () {
                     title: this.$t("Strings.Days"),
                     orderable: false,
                     render: function render(data, type, row) {
-                        if (row.startDate === row.endDate) return "<span>" + data + "</span>";else "<span>" + data + "+</span>";
+                        if (row.startDate === row.endDate) return "<span>" + data + "</span>";else return "<span>" + data + "&#43;</span>";
                     }
                 }, {
                     data: "interviewerAssignedCount",
