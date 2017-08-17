@@ -14,6 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
             => new UserViewFactory(userRepository);
 
         protected static IUserRepository CreateQueryableReadSideRepositoryReaderWithUsers(params HqUser[] users)
-            => Mock.Of<IUserRepository>(x => x.DbContext.Users == QueryableDbSetMock.GetQueryableMockDbSet(users));
+            => Mock.Of<IUserRepository>(x => x.DbContext.Users == QueryableDbSetMock.GetQueryableMockDbSet(users) &&
+                                            x.Users == users.AsQueryable());
     }
 }
