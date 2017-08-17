@@ -35,6 +35,7 @@ export default {
             return this.$config.questionnaires
         },
         tableOptions() {
+            var self = this;
             return {
                 deferLoading: 0,
                 columns: [
@@ -51,7 +52,13 @@ export default {
                     {
                         data: "completedCount",
                         title: this.$t("Strings.InterviewStatus_Completed"),
-                        orderable: false
+                        orderable: false,
+                        render: function(data, type, row) {
+                            if(data === 0) return `<span>${data}</span>`;
+                            else {
+                                return `<a href='${self.$config.interviewsBaseUrl}?unactiveDateStart=${row.startDate}&unactiveDateEnd=${row.endDate}&status=Completed'>${data}</a>`;
+                            }
+                        }
                     },
                     {
                         data: "rejectedBySupervisorCount",
@@ -61,8 +68,14 @@ export default {
                     {
                         data: "approvedBySupervisorCount",
                         title: this.$t("Strings.InterviewStatus_ApprovedBySupervisor"),
-                        orderable: false
-                    }
+                        orderable: false,
+                        render: function(data, type, row) {
+                            if(data === 0) return `<span>${data}</span>`;
+                            else {
+                                return `<a href='${self.$config.interviewsBaseUrl}?startDate=${row.startDate}&endDate=${row.endDate}&status=approvedBySupervisor'>${data}</a>`;
+                            }
+                        }
+                     }
                 ],
                 ajax: {
                     url: this.$config.dataUrl,

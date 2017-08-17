@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Npgsql;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -131,7 +132,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 rows[i] = new CountDaysOfInterviewInStatusRow()
                     {
                         DaysCount                 = daysCount,
-                        Date                      = statisticsRow.Key,
+                        StartDate                 = statisticsRow.Key,
+                        EndDate                   = statisticsRow.Key,
                         InterviewerAssignedCount  = GetStatusValue(statisticsRow.Value, InterviewExportedAction.InterviewerAssigned),
                         CompletedCount            = GetStatusValue(statisticsRow.Value, InterviewExportedAction.Completed),
                         ApprovedBySupervisorCount = GetStatusValue(statisticsRow.Value, InterviewExportedAction.ApprovedBySupervisor),
@@ -153,6 +155,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 result.Add(new CountDaysOfInterviewInStatusRow()
                 {
                     DaysCount = defaultGroup.Key.Value,
+                    StartDate = defaultGroup.Min(e => e.StartDate),
+                    EndDate = defaultGroup.Max(e => e.EndDate),
                     InterviewerAssignedCount = defaultGroup.Sum(e => e.InterviewerAssignedCount),
                     CompletedCount = defaultGroup.Sum(e => e.CompletedCount),
                     ApprovedBySupervisorCount = defaultGroup.Sum(e => e.ApprovedBySupervisorCount),
@@ -163,7 +167,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             var addEmptyRowIfDontExistsData = new Action<int>(days =>
                 {
                     if (result.FirstOrDefault(r => r.DaysCount == days) == null)
-                        result.Add(new CountDaysOfInterviewInStatusRow() {DaysCount = days });
+                        result.Add(new CountDaysOfInterviewInStatusRow()
+                        {
+                            DaysCount = days,
+                            StartDate = utcNow.AddDays(-days),
+                            EndDate = utcNow.AddDays(-days)
+                        });
                 });
 
             addEmptyRowIfDontExistsData(1);

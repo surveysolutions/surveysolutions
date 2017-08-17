@@ -54,7 +54,9 @@ namespace WB.UI.Headquarters.Controllers
                 TeamLeadName = data.ResponsibleName,
                 Statuses = data.Status.HasValue ? new [] {data.Status.Value} : null,
                 SearchBy = data.SearchBy,
-                AssignmentId = data.AssignmentId
+                AssignmentId = data.AssignmentId,
+                UnactiveDateStart = data.UnactiveDateStart,
+                UnactiveDateEnd = data.UnactiveDateEnd,
             };
 
             var allInterviews = this.allInterviewsViewFactory.Load(input);

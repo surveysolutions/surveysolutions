@@ -11,16 +11,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
     internal sealed class AllInterviewsFactory : IAllInterviewsFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> reader;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
+        private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatusesReader;
 
-        public AllInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> reader)
+        public AllInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader,
+            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatusesReader)
         {
-            this.reader = reader;
+            this.interviewSummaryReader = interviewSummaryReader;
+            this.interviewStatusesReader = interviewStatusesReader;
         }
 
         public AllInterviewsView Load(AllInterviewsInputModel input)
         {
-            var interviews = this.reader.Query(_ =>
+            var interviews = this.interviewSummaryReader.Query(_ =>
             {
                 var items = ApplyFilter(input, _);
                 items = this.DefineOrderBy(items, input);
@@ -37,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 return summaries;
             });
 
-            var totalCount = this.reader.Query(_ => ApplyFilter(input, _).Count());
+            var totalCount = this.interviewSummaryReader.Query(_ => ApplyFilter(input, _).Count());
 
             var result = new AllInterviewsView
             {
@@ -91,7 +94,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             int totalCount;
             if (input.InterviewId.HasValue)
             {
-                var interviewSummary = this.reader.GetById(input.InterviewId.Value);
+                var interviewSummary = this.interviewSummaryReader.GetById(input.InterviewId.Value);
                 if (interviewSummary!=null)
                 {
                     interviews = interviewSummary.ToEnumerable().ToList();
@@ -100,7 +103,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             }
             else
             {
-                interviews = this.reader.Query(_ =>
+                interviews = this.interviewSummaryReader.Query(_ =>
                 {
                     var items = ApplyFilter(input, _);
                     if (input.Orders != null)
@@ -113,7 +116,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         .ToList();
                 });
 
-                totalCount = this.reader.Query(_ => ApplyFilter(input, _).Count());
+                totalCount = this.interviewSummaryReader.Query(_ => ApplyFilter(input, _).Count());
             }
             var result = new InterviewsWithoutPrefilledView
             {
@@ -184,7 +187,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return items;
         }
 
-        private static IQueryable<InterviewSummary> ApplyFilter(AllInterviewsInputModel input, IQueryable<InterviewSummary> _)
+        private IQueryable<InterviewSummary> ApplyFilter(AllInterviewsInputModel input, IQueryable<InterviewSummary> _)
         {
             var items = _;
 
@@ -221,6 +224,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             if (input.AssignmentId.HasValue)
             {
                 items = items.Where(x => x.AssignmentId == input.AssignmentId);
+            }
+
+            if (input.UnactiveDateStart.HasValue && input.UnactiveDateEnd.HasValue)
+            {
+                items = from i in items
+                let statusChangeTime = i.InterviewCommentedStatuses.Max(s => s.Timestamp).Date
+                where input.UnactiveDateStart <= statusChangeTime && statusChangeTime <= input.UnactiveDateEnd
+                select i;
+
+                            //                items = from i in items
+                            //                let statusChangeTime = interviewStatusesReader.GetById(i.InterviewId).InterviewCommentedStatuses.Last().Timestamp
+                            //                where input.UnactiveDateStart <= statusChangeTime && statusChangeTime <= input.UnactiveDateEnd
+                            //                select i;
+
+                            //                items = items.Where(x =>
+                            //                {
+                            //                    var statusChangeTime = interviewStatusesReader.GetById(x.InterviewId).InterviewCommentedStatuses.Last().Timestamp;
+                            //                    return input.UnactiveDateStart <= statusChangeTime && statusChangeTime <= input.UnactiveDateEnd;
+                            //                });
             }
 
             return items;
