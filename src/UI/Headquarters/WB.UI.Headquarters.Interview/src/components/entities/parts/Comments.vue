@@ -2,7 +2,7 @@
     <div class="information-block comments-block">
 
         <template v-for="comment in $me.comments">
-            <div :class="{'enumerators-comment': comment.userRole == 4 /*'Interviewer'*/} ">
+            <div :class="{'enumerators-comment': comment.userRole == 4 /*'Interviewer'*/}" :key="comment.commentTimeUtc">
                 <h6>{{ getCommentTitle(comment) }}</h6>
                 <p>{{ comment.text }}</p>
             </div>
