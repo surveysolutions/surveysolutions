@@ -232,17 +232,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 let statusChangeTime = i.InterviewCommentedStatuses.Max(s => s.Timestamp).Date
                 where input.UnactiveDateStart <= statusChangeTime && statusChangeTime <= input.UnactiveDateEnd
                 select i;
-
-                            //                items = from i in items
-                            //                let statusChangeTime = interviewStatusesReader.GetById(i.InterviewId).InterviewCommentedStatuses.Last().Timestamp
-                            //                where input.UnactiveDateStart <= statusChangeTime && statusChangeTime <= input.UnactiveDateEnd
-                            //                select i;
-
-                            //                items = items.Where(x =>
-                            //                {
-                            //                    var statusChangeTime = interviewStatusesReader.GetById(x.InterviewId).InterviewCommentedStatuses.Last().Timestamp;
-                            //                    return input.UnactiveDateStart <= statusChangeTime && statusChangeTime <= input.UnactiveDateEnd;
-                            //                });
             }
 
             return items;
