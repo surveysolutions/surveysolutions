@@ -2649,14 +2649,19 @@ if (false) {(function () {
                 }, {
                     data: "rejectedBySupervisorCount",
                     title: this.$t("Strings.InterviewStatus_RejectedBySupervisor"),
-                    orderable: false
+                    orderable: false,
+                    render: function render(data, type, row) {
+                        if (data === 0) return "<span>" + data + "</span>";else {
+                            return "<a href='" + self.$config.interviewsBaseUrl + "?unactiveDateStart=" + row.startDate + "&unactiveDateEnd=" + row.endDate + "&status=RejectedBySupervisor'>" + data + "</a>";
+                        }
+                    }
                 }, {
                     data: "approvedBySupervisorCount",
                     title: this.$t("Strings.InterviewStatus_ApprovedBySupervisor"),
                     orderable: false,
                     render: function render(data, type, row) {
                         if (data === 0) return "<span>" + data + "</span>";else {
-                            return "<a href='" + self.$config.interviewsBaseUrl + "?startDate=" + row.startDate + "&endDate=" + row.endDate + "&status=approvedBySupervisor'>" + data + "</a>";
+                            return "<a href='" + self.$config.interviewsBaseUrl + "?startDate=" + row.startDate + "&endDate=" + row.endDate + "&status=ApprovedBySupervisor'>" + data + "</a>";
                         }
                     }
                 }],
