@@ -150,7 +150,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
                         .SelectMany(x => x.InterviewCommentedStatuses)
                         .Where(ics =>
-                                ics.Position == 3 &&
                                 ics.Timestamp.Date >= from && 
                                 ics.Timestamp.Date < to.Date &&
                                 statuses.Contains(ics.Status) &&
@@ -161,7 +160,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 return this.interviewStatusesStorage.Query(_ =>
                     _.SelectMany(x => x.InterviewCommentedStatuses)
                         .Where(ics =>
-                            ics.Position == 3 &&
                             ics.Timestamp.Date >= from &&
                             ics.Timestamp.Date < to.Date &&
                             statuses.Contains(ics.Status) &&
