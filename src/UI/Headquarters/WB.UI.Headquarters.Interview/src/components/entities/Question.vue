@@ -74,7 +74,7 @@
                     return this.isShowingAddCommentDialogFlag
             },
             showSideMenu() {
-                return !this.noComments;
+                return !this.question.isDisabled && !this.noComments;
             }
         },
         methods : {
