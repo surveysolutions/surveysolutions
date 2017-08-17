@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A time difference between the moment an interview is assigned to an interviewer and the moment when the complete button is pressed on a tablet..
+        ///   Looks up a localized string similar to Time from when an interview is assigned to an interviewer to when the complete button is pressed on a tablet..
         /// </summary>
         public static string AverageCaseAssignmentDurationDescription {
             get {
@@ -97,7 +97,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Time difference between the moment when a supervisor approves a questionnaire and when that questionnaire is either approved or rejected by HQ..
+        ///   Looks up a localized string similar to Time difference between the moment when a supervisor approves an interview and when that interview is either approved or rejected by HQ..
         /// </summary>
         public static string AverageHQProcessingTimeDescription {
             get {
@@ -115,7 +115,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Time difference between the moment when the interviewer records the first answer and when the interviewer presses the Complete button..
+        ///   Looks up a localized string similar to Time difference between the moment when an interviewer records the first answer on a tablet and when that interviewer presses the Complete button..
         /// </summary>
         public static string AverageInterviewDurationDescription {
             get {
@@ -133,7 +133,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Time difference between when the interview is first assignmed and when HQ approves the interview..
+        ///   Looks up a localized string similar to Time difference between the moment when the interview is first assigned and when HQ approves that interview..
         /// </summary>
         public static string AverageOverallCaseProcessingTimeDescription {
             get {
@@ -151,7 +151,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Time difference between when the interviewer presses the Complete button and when the supervisor either accepts or rejects that questionnaire..
+        ///   Looks up a localized string similar to Time difference between the moment when an interviewer presses the Complete button and when the supervisor either accepts or rejects that interview. .
         /// </summary>
         public static string AverageSupervisorProcessingTimeDescription {
             get {
@@ -160,7 +160,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  Back to supervisors.
+        ///   Looks up a localized string similar to Back to supervisors.
         /// </summary>
         public static string BackToSupervisors {
             get {
@@ -268,7 +268,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of interviews collected by a {0} that were approved by HQ..
+        ///   Looks up a localized string similar to Number of interviews collected by {0} approved by HQ..
         /// </summary>
         public static string NumberOfInterviewsApprovedByHQDescription {
             get {
@@ -286,7 +286,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of approvals and rejections performed by a HQ on questionnaires collected by a {0}..
+        ///   Looks up a localized string similar to Number of approvals and rejections by HQ on interviews collected by {0}..
         /// </summary>
         public static string NumberOfInterviewTransactionsByHQDescription {
             get {
@@ -304,7 +304,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of approvals and rejections performed by a supervisor on questionnaires collected by a {0}..
+        ///   Looks up a localized string similar to Number of approvals and rejections by a supervisor on interviews collected by {0}..
         /// </summary>
         public static string NumberOfInterviewTransactionsBySupervisorDescription {
             get {
