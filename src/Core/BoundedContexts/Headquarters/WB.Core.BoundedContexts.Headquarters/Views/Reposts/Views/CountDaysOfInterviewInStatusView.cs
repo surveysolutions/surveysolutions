@@ -11,7 +11,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Views
     {
         public int DaysCount { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
 
         public int InterviewerAssignedCount { get; set; }
         public int CompletedCount { get; set; }

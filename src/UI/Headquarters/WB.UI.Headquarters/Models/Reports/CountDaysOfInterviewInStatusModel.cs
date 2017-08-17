@@ -9,6 +9,8 @@ namespace WB.UI.Headquarters.Models.Reports
 
         public string DataUrl { get; set; }
 
+        public string InterviewsBaseUrl { get; set; }
+
         public ComboboxOptionModel[] Questionnaires { get; set; }
 
         public TranslationModel Resources { get; set; }

@@ -51,6 +51,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                 rel => { 
                     rel.OneToMany();
                 });
+
+            List(x => x.InterviewCommentedStatuses, listMap =>
+            {
+                listMap.Table("InterviewCommentedStatuses");
+                listMap.Index(index => index.Column("Position"));
+                listMap.Key(key => key.Column("interviewId"));
+                listMap.Lazy(CollectionLazy.Lazy);
+                listMap.Cascade(Cascade.None);
+            });
         }
     }
 
