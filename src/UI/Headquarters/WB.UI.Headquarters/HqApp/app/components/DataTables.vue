@@ -29,6 +29,10 @@ export default {
         hasPaging: {
             type: Boolean,
             default() { return true; }
+        },
+        hasSearch: {
+            type: Boolean,
+            default() { return true; }
         }
     },
 
@@ -113,7 +117,8 @@ export default {
             pageLength: 20, // page size
             dom: "frtp",
             conditionalPaging: true,
-            paging: this.hasPaging
+            paging: this.hasPaging,
+            searching: this.hasSearch
         }, this.tableOptions);
 
         options.ajax.data = (d) => {
