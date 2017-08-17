@@ -190,6 +190,8 @@
                     requestData.responsibleId = (this.responsibleId || {}).key;
                     requestData.questionnaireId = (this.questionnaireId || {}).key;
                     requestData.showArchive = this.showArchive;
+                    requestData.dateStart = this.dateStart;
+                    requestData.dateEnd = this.dateEnd;
                 },
                 responseProcessor: function(response) {
                     this.isLoading = false;
@@ -230,6 +232,10 @@
 
                     if (this.responsibleId)
                         queryString.responsible = this.responsibleId.value;
+                    if (this.dateStart)
+                        queryString.dateStart = this.dateStart;
+                    if (this.dateEnd)
+                        queryString.dateEnd = this.dateEnd;
 
                     this.$router.push({ query: queryString });
                 },
@@ -339,6 +345,9 @@
 
                 this.showArchive = this.$route.query.showArchive != undefined &&
                                    this.$route.query.showArchive === "true";
+
+                this.dateStart = this.$route.query.dateStart;
+                this.dateEnd = this.$route.query.dateEnd;
 
                 self.loadQuestionnaireIdByName(function(questionnaireId) {
                     if (questionnaireId != undefined)

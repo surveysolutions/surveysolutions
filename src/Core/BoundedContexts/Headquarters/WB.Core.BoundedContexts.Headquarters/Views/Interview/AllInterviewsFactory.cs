@@ -12,13 +12,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     internal sealed class AllInterviewsFactory : IAllInterviewsFactory
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
-        private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatusesReader;
 
-        public AllInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader,
-            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatusesReader)
+        public AllInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader)
         {
             this.interviewSummaryReader = interviewSummaryReader;
-            this.interviewStatusesReader = interviewStatusesReader;
         }
 
         public AllInterviewsView Load(AllInterviewsInputModel input)
