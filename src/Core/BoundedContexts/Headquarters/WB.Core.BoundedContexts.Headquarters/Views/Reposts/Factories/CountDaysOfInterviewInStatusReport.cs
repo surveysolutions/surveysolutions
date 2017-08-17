@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Dapper;
 using Npgsql;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.InputModels;
@@ -188,7 +189,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
 
             return new ReportView
             {
-                Headers = new[] {"DAYS", "INTERVIEWER ASSIGNED", "COMPLETED", "REJECTED BY SUPERVISOR", "APPROVED BY SUPERVISOR"},
+                Headers = new[]
+                {
+                    Report.COLUMN_DAYS, Report.COLUMN_INTERVIEWER_ASSIGNED, Report.COLUMN_COMPLETED,
+                    Report.COLUMN_REJECTED_BY_SUPERVISOR, Report.COLUMN_APPROVED_BY_SUPERVISOR
+                },
                 Data = view.Select(x => new object[]
                 {
                     x.DaysCount, x.InterviewerAssignedCount, x.CompletedCount, x.RejectedBySupervisorCount,
