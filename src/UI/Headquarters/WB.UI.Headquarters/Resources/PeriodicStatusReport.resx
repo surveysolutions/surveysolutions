@@ -202,13 +202,13 @@
     <value>Time difference between the moment when a supervisor approves a questionnaire and when that questionnaire is either approved or rejected by HQ.</value>
   </data>
   <data name="AverageInterviewDurationDescription" xml:space="preserve">
-    <value>Time difference between the moment when the interviewer records the first answer and when the the interviewer presses the Complete button.</value>
+    <value>Time difference between the moment when the interviewer records the first answer and when the interviewer presses the Complete button.</value>
   </data>
   <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
     <value>Time difference between when the interview is first assignmed and when HQ approves the interview.</value>
   </data>
   <data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
-    <value>Time difference between when the interviewer presses the the Complete button and when the supervisor either accepts or rejects that questionnaire.</value>
+    <value>Time difference between when the interviewer presses the Complete button and when the supervisor either accepts or rejects that questionnaire.</value>
   </data>
   <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
     <value>Number of interview completions by a team. Rejected and then completed interviews are counted as separate completion events.</value>

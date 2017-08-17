@@ -115,7 +115,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Time difference between the moment when the interviewer records the first answer and when the the interviewer presses the Complete button..
+        ///   Looks up a localized string similar to Time difference between the moment when the interviewer records the first answer and when the interviewer presses the Complete button..
         /// </summary>
         public static string AverageInterviewDurationDescription {
             get {
@@ -151,7 +151,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Time difference between when the interviewer presses the the Complete button and when the supervisor either accepts or rejects that questionnaire..
+        ///   Looks up a localized string similar to Time difference between when the interviewer presses the Complete button and when the supervisor either accepts or rejects that questionnaire..
         /// </summary>
         public static string AverageSupervisorProcessingTimeDescription {
             get {
