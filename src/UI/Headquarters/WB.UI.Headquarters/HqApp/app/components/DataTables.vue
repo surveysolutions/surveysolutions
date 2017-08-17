@@ -23,8 +23,7 @@ export default {
             default() { return {}; }
         },
         contextMenuItems: {
-            type: Function,
-            default() { return []; }
+            type: Function
         },
         authorizedUser: { type: Object, default() { return {} } },
         hasPaging: {
@@ -80,23 +79,22 @@ export default {
         },
 
         initContextMenu() {
-            if (this.contextMenuItems().length > 0) {
-                var contextMenuOptions = {
-                    selector: "#" + this.$el.attributes.id.value + " tbody tr",
-                    autoHide: false,
-                    build: ($trigger, e) => {
-                        var selectedRow = this.selectRowAndGetData($trigger);
+            if(this.contextMenuItems == null) return;
+            var contextMenuOptions = {
+                selector: "#" + this.$el.attributes.id.value + " tbody tr",
+                autoHide: false,
+                build: ($trigger, e) => {
+                    var selectedRow = this.selectRowAndGetData($trigger);
 
-                        if (selectedRow.rowData == null) return false;
+                    if (selectedRow.rowData == null) return false;
 
-                        var items = this.contextMenuItems(selectedRow)
-                        return { items: items };
-                    },
-                    trigger: 'left'
-                };
+                    var items = this.contextMenuItems(selectedRow)
+                    return { items: items };
+                },
+                trigger: 'left'
+            };
 
-                $.contextMenu(contextMenuOptions);
-            }
+            $.contextMenu(contextMenuOptions);
         }
     },
 
