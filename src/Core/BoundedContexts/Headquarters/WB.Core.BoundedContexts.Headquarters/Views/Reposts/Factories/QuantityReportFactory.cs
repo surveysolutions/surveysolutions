@@ -77,9 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
                 foreach (var dateTimeRange in dateTimeRanges)
                 {
-                    var count =
-                        interviewsForUser.Count(
-                            ics => ics.Timestamp.Date >= dateTimeRange.From && ics.Timestamp.Date < dateTimeRange.To);
+                    var count = interviewsForUser.Count(ics => ics.Timestamp >= dateTimeRange.From && ics.Timestamp < dateTimeRange.To);
                     quantityByPeriod.Add(count);
                 }
                 return new QuantityByResponsibleReportRow(u, quantityByPeriod.ToArray(),
@@ -143,13 +141,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 return this.interviewStatusTimeSpansStorage.Query(_ =>
                     _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
                         .SelectMany(x => x.TimeSpansBetweenStatuses)
-                        .Where(ics => ics.EndStatusTimestamp.Date >= from && ics.EndStatusTimestamp.Date < to.Date && ics.EndStatus == InterviewExportedAction.Completed));
+                        .Where(ics => ics.EndStatusTimestamp >= from && ics.EndStatusTimestamp < to.Date && ics.EndStatus == InterviewExportedAction.Completed));
             }
             else
             {
                 return this.interviewStatusTimeSpansStorage.Query(_ =>
                         _.SelectMany(x => x.TimeSpansBetweenStatuses)
-                        .Where(ics => ics.EndStatusTimestamp.Date >= from && ics.EndStatusTimestamp.Date < to.Date && ics.EndStatus == InterviewExportedAction.Completed));
+                        .Where(ics => ics.EndStatusTimestamp >= from && ics.EndStatusTimestamp < to.Date && ics.EndStatus == InterviewExportedAction.Completed));
 
             }
         }
@@ -170,7 +168,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                                      x.QuestionnaireVersion == questionnaireVersion)
                             .SelectMany(x => x.InterviewCommentedStatuses)
                             .Where(ics =>
-                                ics.Timestamp.Date >= from && ics.Timestamp.Date < to.Date &&
+                                ics.Timestamp >= from && ics.Timestamp < to.Date &&
                                 statuses.Contains(ics.Status)));
             }
             else
@@ -179,7 +177,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     _ =>
                         _.SelectMany(x => x.InterviewCommentedStatuses)
                             .Where(ics =>
-                                ics.Timestamp.Date >= from && ics.Timestamp.Date < to.Date &&
+                                ics.Timestamp >= from && ics.Timestamp < to.Date &&
                                 statuses.Contains(ics.Status)));
             }
         }
