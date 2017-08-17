@@ -197,6 +197,7 @@
     <Compile Include="EventExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setup.cs" />
+    <Compile Include="Storage\QueryableDbSetMock.cs" />
     <Compile Include="Storage\SqliteInmemoryStorage.cs" />
     <Compile Include="Storage\TestInMemoryWriter.cs" />
     <Compile Include="Storage\TestPlainStorage.cs" />
