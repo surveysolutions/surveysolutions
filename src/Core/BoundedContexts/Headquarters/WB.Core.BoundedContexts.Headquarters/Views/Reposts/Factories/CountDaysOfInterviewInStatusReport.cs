@@ -16,6 +16,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 
@@ -43,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
         class CounterObject
         {
             public int InterviewsCount { get; set; }
-            public InterviewExportedAction Status { get; set; }
+            public InterviewStatus Status { get; set; }
             public DateTime StatusDate { get; set; }
         }
 
@@ -55,15 +56,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             var datesAndStatuses = await ExecuteQueryForInterviewsStatistics(input);
             var assignmentsDatesAndCounts = ExecuteQueryForAssignmentsStatistics(input);
 
-            Dictionary<DateTime, Dictionary<InterviewExportedAction, int>> dictStatistics = new Dictionary<DateTime, Dictionary<InterviewExportedAction, int>>();
+            Dictionary<DateTime, Dictionary<InterviewStatus, int>> dictStatistics = new Dictionary<DateTime, Dictionary<InterviewStatus, int>>();
 
             foreach (var counterObject in datesAndStatuses.AsQueryable())
             {
-                if (counterObject.Status == InterviewExportedAction.InterviewerAssigned)
-                    continue; // ignore, this statistics will be counted in assignments
-
                 if (!dictStatistics.ContainsKey(counterObject.StatusDate))
-                    dictStatistics[counterObject.StatusDate] = new Dictionary<InterviewExportedAction, int>();
+                    dictStatistics[counterObject.StatusDate] = new Dictionary<InterviewStatus, int>();
 
                 dictStatistics[counterObject.StatusDate][counterObject.Status] = counterObject.InterviewsCount;
             }
@@ -71,9 +69,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             foreach (var counterObject in assignmentsDatesAndCounts.AsQueryable())
             {
                 if (!dictStatistics.ContainsKey(counterObject.StatusDate))
-                    dictStatistics[counterObject.StatusDate] = new Dictionary<InterviewExportedAction, int>();
+                    dictStatistics[counterObject.StatusDate] = new Dictionary<InterviewStatus, int>();
 
-                dictStatistics[counterObject.StatusDate][InterviewExportedAction.InterviewerAssigned] = counterObject.InterviewsCount;
+                dictStatistics[counterObject.StatusDate][InterviewStatus.InterviewerAssigned] = counterObject.InterviewsCount;
             }
 
             var utcNow = DateTime.UtcNow;
@@ -90,10 +88,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                         DaysCount                 = daysCount,
                         StartDate                 = statisticsRow.Key,
                         EndDate                   = statisticsRow.Key,
-                        InterviewerAssignedCount  = GetStatusValue(statisticsRow.Value, InterviewExportedAction.InterviewerAssigned),
-                        CompletedCount            = GetStatusValue(statisticsRow.Value, InterviewExportedAction.Completed),
-                        ApprovedBySupervisorCount = GetStatusValue(statisticsRow.Value, InterviewExportedAction.ApprovedBySupervisor),
-                        RejectedBySupervisorCount = GetStatusValue(statisticsRow.Value, InterviewExportedAction.RejectedBySupervisor),
+                        InterviewerAssignedCount  = GetStatusValue(statisticsRow.Value, InterviewStatus.InterviewerAssigned),
+                        CompletedCount            = GetStatusValue(statisticsRow.Value, InterviewStatus.Completed),
+                        ApprovedBySupervisorCount = GetStatusValue(statisticsRow.Value, InterviewStatus.ApprovedBySupervisor),
+                        RejectedBySupervisorCount = GetStatusValue(statisticsRow.Value, InterviewStatus.RejectedBySupervisor),
                     };
             }
 
@@ -205,7 +203,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             }
         }
 
-        private int GetStatusValue(Dictionary<InterviewExportedAction, int> dictionary, InterviewExportedAction status)
+        private int GetStatusValue(Dictionary<InterviewStatus, int> dictionary, InterviewStatus status)
         {
             if (dictionary.TryGetValue(status, out int value))
                 return value;
