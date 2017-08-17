@@ -2626,6 +2626,7 @@ if (false) {(function () {
             return this.$config.questionnaires;
         },
         tableOptions: function tableOptions() {
+            var self = this;
             return {
                 deferLoading: 0,
                 columns: [{
@@ -2639,7 +2640,12 @@ if (false) {(function () {
                 }, {
                     data: "completedCount",
                     title: this.$t("Strings.InterviewStatus_Completed"),
-                    orderable: false
+                    orderable: false,
+                    render: function render(data, type, row) {
+                        if (data === 0) return "<span>" + data + "</span>";else {
+                            return "<a href='" + self.$config.interviewsBaseUrl + "?unactiveDateStart=" + row.startDate + "&unactiveDateEnd=" + row.endDate + "&status=Completed'>" + data + "</a>";
+                        }
+                    }
                 }, {
                     data: "rejectedBySupervisorCount",
                     title: this.$t("Strings.InterviewStatus_RejectedBySupervisor"),
@@ -2647,7 +2653,12 @@ if (false) {(function () {
                 }, {
                     data: "approvedBySupervisorCount",
                     title: this.$t("Strings.InterviewStatus_ApprovedBySupervisor"),
-                    orderable: false
+                    orderable: false,
+                    render: function render(data, type, row) {
+                        if (data === 0) return "<span>" + data + "</span>";else {
+                            return "<a href='" + self.$config.interviewsBaseUrl + "?startDate=" + row.startDate + "&endDate=" + row.endDate + "&status=approvedBySupervisor'>" + data + "</a>";
+                        }
+                    }
                 }],
                 ajax: {
                     url: this.$config.dataUrl,

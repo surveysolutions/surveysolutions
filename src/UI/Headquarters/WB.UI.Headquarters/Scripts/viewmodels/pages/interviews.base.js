@@ -26,6 +26,8 @@
     self.IsVisiblePrefilledColumns = ko.observable(false);
 
     self.TemplateName = ko.observable();
+    self.UnactiveDateStart = ko.observable();
+    self.UnactiveDateEnd = ko.observable();
 
     self.getFormattedPrefilledQuestions = function(prefilledQuestions) {
         prefilledQuestions.forEach(function(prefilledQuestion) {
@@ -54,6 +56,8 @@
         self.Url.query['responsible'] = _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserName;
         self.Url.query['searchBy'] = self.SearchBy() || "";
         self.Url.query['assignmentId'] = self.AssignmentId() || "";
+        self.Url.query['unactiveDateStart'] = self.UnactiveDateStart() || "";
+        self.Url.query['unactiveDateEnd'] = self.UnactiveDateEnd() || "";
         
         if (Modernizr.history) {
             window.history.pushState({}, "Interviews", self.Url.toString());
@@ -65,7 +69,9 @@
             ResponsibleName: _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserName,
             Status: self.SelectedStatus,
             SearchBy: self.SearchBy,
-            AssignmentId: self.AssignmentId
+            AssignmentId: self.AssignmentId,
+            UnactiveDateStart: self.UnactiveDateStart,
+            UnactiveDateEnd: self.UnactiveDateEnd
         };
     };
 
@@ -79,6 +85,8 @@
         }
         self.AssignmentId(self.QueryString['assignmentId']);
         self.SearchBy(decodeURIComponent(self.QueryString['searchBy'] || ""));
+        self.UnactiveDateStart(self.QueryString['unactiveDateStart']);
+        self.UnactiveDateEnd(self.QueryString['unactiveDateEnd']);
 
         updateTemplateName(self.SelectedTemplate());
 
@@ -88,6 +96,8 @@
         self.Url.query['responsible'] = self.QueryString['responsible'] || "";
         self.Url.query['searchBy'] = self.QueryString['searchBy'] || "";
         self.Url.query['assignmentId'] = self.QueryString['assignmentId'] || "";
+        self.Url.query['unactiveDateStart'] = self.QueryString['unactiveDateStart'] || "";
+        self.Url.query['unactiveDateEnd'] = self.QueryString['unactiveDateEnd'] || "";
 
         self.SelectedTemplate.subscribe(
             function (value) {
