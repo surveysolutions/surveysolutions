@@ -208,4 +208,7 @@
     <value>Отклоненные</value>
     <comment>Отклоненные</comment>
   </data>
+  <data name="DevicesInterviewers" xml:space="preserve">
+    <value>Устройства/Интервьюеры</value>
+  </data>
 </root>
