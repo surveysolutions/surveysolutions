@@ -106,6 +106,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to DAYS.
+        /// </summary>
+        internal static string COLUMN_DAYS {
+            get {
+                return ResourceManager.GetString("COLUMN_DAYS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to INTERVIEWER ASSIGNED.
         /// </summary>
         internal static string COLUMN_INTERVIEWER_ASSIGNED {
