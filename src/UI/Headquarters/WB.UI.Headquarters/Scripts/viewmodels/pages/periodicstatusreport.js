@@ -2,7 +2,7 @@
     Supervisor.VM.PeriodicStatusReport.superclass.constructor.apply(this, arguments);
 
     var self = this;
-    let defaultFromDate = moment();
+    var defaultFromDate = moment();
     var dateFormat = "YYYY-MM-DD";
 
     self.Url = new Url(window.location.href);
