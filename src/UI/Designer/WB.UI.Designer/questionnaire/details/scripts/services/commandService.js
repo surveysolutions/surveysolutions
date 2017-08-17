@@ -79,8 +79,9 @@
                     data: { file: _.isNull(lookupTable.file) ? "" : lookupTable.file, "command": JSON.stringify(command) }
                 }).then(function () {
                     blockUI.stop();
-                }).catch(function () {
+                }).catch(function (err) {
                     blockUI.stop();
+                    throw err; 
                 });
             };
 
