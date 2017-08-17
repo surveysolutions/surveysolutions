@@ -2,18 +2,18 @@
 {
     public enum InterviewExportedAction
     {
-        SupervisorAssigned,
-        InterviewerAssigned,
-        FirstAnswerSet,
-        Completed,
-        Restarted,
-        ApprovedBySupervisor,
-        ApprovedByHeadquarter,
-        RejectedBySupervisor,
-        RejectedByHeadquarter,
-        Deleted,
-        Restored,
-        UnapprovedByHeadquarter,
-        Created
+        SupervisorAssigned = 0,
+        InterviewerAssigned = 1,
+        FirstAnswerSet = 2,
+        Completed = 3,
+        Restarted = 4,
+        ApprovedBySupervisor = 5,
+        ApprovedByHeadquarter = 6,
+        RejectedBySupervisor = 7,
+        RejectedByHeadquarter = 8,
+        Deleted = 9,
+        Restored = 10,
+        UnapprovedByHeadquarter = 11,
+        Created = 12
     }
 }
