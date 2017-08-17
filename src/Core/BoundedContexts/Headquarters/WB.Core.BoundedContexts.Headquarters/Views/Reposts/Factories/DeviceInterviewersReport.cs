@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Npgsql;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
@@ -91,8 +92,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             {
                 Headers = new[]
                 {
-                    "TEAMS", "NEVER SYNCHED", "OLD VERSION", "LESS THAN 100MB FREE SPACE", "WRONG TIME ON TABLET",
-                    "ANDROID 4.4 OR LOWER", "NO ASSIGNMENTS RECEIVED", "NEVER UPLOADED", "TABLET REASSIGNED"
+                    Report.COLUMN_TEAMS, Report.COLUMN_NEVER_SYNCHED, Report.COLUMN_OLD_VERSION, Report.COLUMN_LESS_THAN_100MB_FREE_SPACE, Report.COLUMN_WRONG_TIME_ON_TABLET,
+                    Report.COLUMN_ANDROID_4_4_OR_LOWER, Report.COLUMN_NO_ASSIGNMENTS_RECEIVED, Report.COLUMN_NEVER_UPLOADED, Report.COLUMN_TABLET_REASSIGNED
                 },
                 Data = view.Items.Select(x => new object[]
                 {

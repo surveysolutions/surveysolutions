@@ -153,4 +153,34 @@
   <data name="COLUMN_QUESTIONNAIRE_TEMPLATE" xml:space="preserve">
     <value>QUESTIONNAIRE TEMPLATE</value>
   </data>
+  <data name="COLUMN_TEAMS" xml:space="preserve">
+    <value>TEAMS</value>
+  </data>
+  <data name="COLUMN_NEVER_SYNCHED" xml:space="preserve">
+    <value>NEVER SYNCHED</value>
+  </data>
+  <data name="COLUMN_OLD_VERSION" xml:space="preserve">
+    <value>OLD VERSION</value>
+  </data>
+  <data name="COLUMN_LESS_THAN_100MB_FREE_SPACE" xml:space="preserve">
+    <value>LESS THAN 100MB FREE SPACE</value>
+  </data>
+  <data name="COLUMN_WRONG_TIME_ON_TABLET" xml:space="preserve">
+    <value>WRONG TIME ON TABLET</value>
+  </data>
+  <data name="COLUMN_ANDROID_4_4_OR_LOWER" xml:space="preserve">
+    <value>ANDROID 4.4 OR LOWER</value>
+  </data>
+  <data name="COLUMN_NO_ASSIGNMENTS_RECEIVED" xml:space="preserve">
+    <value>NO ASSIGNMENTS RECEIVED</value>
+  </data>
+  <data name="COLUMN_NEVER_UPLOADED" xml:space="preserve">
+    <value>NEVER UPLOADED</value>
+  </data>
+  <data name="COLUMN_TABLET_REASSIGNED" xml:space="preserve">
+    <value>TABLET REASSIGNED</value>
+  </data>
+  <data name="COLUMN_DAYS" xml:space="preserve">
+    <value>DAYS</value>
+  </data>
 </root>
