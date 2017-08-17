@@ -33,6 +33,7 @@ using WebInterview = WB.UI.Headquarters.Resources.WebInterview;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Utils;
@@ -254,7 +255,8 @@ namespace WB.UI.Headquarters.Controllers
             var interview = this.statefulInterviewRepository.Get(id);
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
 
-            if (this.IsAuthorizedUser(interview.CurrentResponsibleId))
+            if (this.IsAuthorizedUser(interview.CurrentResponsibleId) 
+                && interview.Status == InterviewStatus.Completed)
             {
                 return RedirectToAction("Completed", "InterviewerHq");
             }
