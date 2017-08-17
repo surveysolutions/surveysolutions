@@ -1044,13 +1044,13 @@
     <value>Status/Days</value>
   </data>
   <data name="ExportToExcel">
-    <value>Excel</value>
+    <value>Excel (.xlsx)</value>
   </data>
   <data name="ExportToCsv">
-    <value>Comma separated values</value>
+    <value>Comma separated values (.csv)</value>
   </data>
   <data name="ExportToTab">
-    <value>Tab separated values</value>
+    <value>Tab separated values (.tsv)</value>
   </data>
   <data name="ExportButton">
     <value>Export</value>

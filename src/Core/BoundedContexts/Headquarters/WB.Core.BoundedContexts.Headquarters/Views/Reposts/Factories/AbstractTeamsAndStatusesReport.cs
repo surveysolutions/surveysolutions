@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
@@ -122,8 +123,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             {
                 Headers = new[]
                 {
-                    "TEAM MEMBER", "SUPERVISOR ASSIGNED", "INTERVIEWER ASSIGNED", "COMPLETED", "REJECTED BY SUPERVISOR",
-                    "APPROVED BY SUPERVISOR", "REJECTED BY HQ", "APPROVED BY HQ", "TOTAL"
+                    Report.COLUMN_TEAM_MEMBER, Report.COLUMN_SUPERVISOR_ASSIGNED, Report.COLUMN_INTERVIEWER_ASSIGNED, Report.COLUMN_COMPLETED, Report.COLUMN_REJECTED_BY_SUPERVISOR,
+                    Report.COLUMN_APPROVED_BY_SUPERVISOR, Report.COLUMN_REJECTED_BY_HQ, Report.COLUMN_APPROVED_BY_HQ, Report.COLUMN_TOTAL
                 },
                 Data = view.Items.Select(x => new object[]
                 {

@@ -439,7 +439,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comma separated values.
+        ///   Looks up a localized string similar to Comma separated values (.csv).
         /// </summary>
         public static string ExportToCsv {
             get {
@@ -448,7 +448,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Excel.
+        ///   Looks up a localized string similar to Excel (.xlsx).
         /// </summary>
         public static string ExportToExcel {
             get {
@@ -457,7 +457,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tab separated values.
+        ///   Looks up a localized string similar to Tab separated values (.tsv).
         /// </summary>
         public static string ExportToTab {
             get {

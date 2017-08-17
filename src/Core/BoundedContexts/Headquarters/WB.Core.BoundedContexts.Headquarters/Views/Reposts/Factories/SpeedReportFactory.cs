@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
@@ -259,13 +260,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
         private IEnumerable<string> ToReportHeader(SpeedByResponsibleReportView view)
         {
-            yield return "TEAM MEMBER";
+            yield return Report.COLUMN_TEAM_MEMBER;
 
             foreach (var date in view.DateTimeRanges.Select(y => y.From.ToString("yyyy-MM-dd")))
                 yield return date;
 
-            yield return "AVERAGE";
-            yield return "TOTAL";
+            yield return Report.COLUMN_AVERAGE;
+            yield return Report.COLUMN_TOTAL;
         }
 
         private IEnumerable<object> ToReportRow(SpeedByResponsibleReportRow row)

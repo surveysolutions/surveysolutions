@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
@@ -155,9 +156,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             {
                 Headers = new[]
                 {
-                    "TEMPLATE VERSION", "QUESTIONNAIRE TEMPLATE", "SUPERVISOR ASSIGNED", "INTERVIEWER ASSIGNED",
-                    "COMPLETED", "REJECTED BY SUPERVISOR", "APPROVED BY SUPERVISOR", "REJECTED BY HQ", "APPROVED BY HQ",
-                    "TOTAL"
+                    Report.COLUMN_TEMPLATE_VERSION, Report.COLUMN_QUESTIONNAIRE_TEMPLATE, Report.COLUMN_SUPERVISOR_ASSIGNED, Report.COLUMN_INTERVIEWER_ASSIGNED,
+                    Report.COLUMN_COMPLETED, Report.COLUMN_REJECTED_BY_SUPERVISOR, Report.COLUMN_APPROVED_BY_SUPERVISOR, Report.COLUMN_REJECTED_BY_HQ, Report.COLUMN_APPROVED_BY_HQ,
+                    Report.COLUMN_TOTAL
                 },
                 Data = view.Items.Select(x => new object[]
                 {

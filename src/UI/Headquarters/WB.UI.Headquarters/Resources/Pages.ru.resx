@@ -1036,4 +1036,20 @@
     <value>Статус/Дни</value>
     <comment>Статус/Дни</comment>
   </data>
+  <data name="ExportToExcel" xml:space="preserve">
+    <value>Эксель (.xlsx)</value>
+    <comment>Эксель (.xlsx)</comment>
+  </data>
+  <data name="ExportToCsv" xml:space="preserve">
+    <value>Значения, разделенные запятой (.csv)</value>
+    <comment>Значения, разделенные запятой (.csv)</comment>
+  </data>
+  <data name="ExportToTab" xml:space="preserve">
+    <value>Значения, разделенные табуляцией (.tsv)</value>
+    <comment>Значения, разделенные табуляцией (.tsv)</comment>
+  </data>
+  <data name="ExportButton" xml:space="preserve">
+    <value>Экспорт</value>
+    <comment>Экспорт</comment>
+  </data>
 </root>
