@@ -35,6 +35,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             this.interviewStatusTimeSpansStorage = interviewStatusTimeSpansStorage;
         }
 
+        private class StatusChangeRecord
+        {
+            public Guid UserId { set; get; }
+            public string UserName { set; get; }
+            public DateTime Timestamp { set; get; }
+            public TimeSpan Timespan { set; get; }
+        }
+
         private SpeedByResponsibleReportView Load<T>(
          DateTime reportStartDate,
          string period,
@@ -71,41 +79,46 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             var userIds = users.Skip((page - 1) * pageSize)
                 .Take(pageSize).ToArray();
 
+        
             var allInterviewsInStatus =
                  query(questionnaireId, questionnaireVersion, from, to)
                     .Select(userIdSelector)
                     .Where(ics => ics.UserId.HasValue && userIds.Contains(ics.UserId.Value))
-                    .Select(i => new { UserId = i.UserId.Value, i.UserName, i.Timestamp, i.Timespan })
+                    .Select(i => new StatusChangeRecord { UserId = i.UserId.Value, UserName = i.UserName, Timestamp = i.Timestamp, Timespan =  i.Timespan })
                     .ToArray();
 
-            var rows = userIds.Select(u =>
-            {
-                var interviewsForUser = allInterviewsInStatus.Where(i => i.UserId == u).ToArray();
-                var speedByPeriod = new List<double?>();
-
-                foreach (var dateTimeRange in dateTimeRanges)
-                {
-                    var interviewsInPeriod =
-                        interviewsForUser.Where(
-                            ics => ics.Timestamp.Date >= dateTimeRange.From && ics.Timestamp.Date < dateTimeRange.To).ToArray();
-                    if (interviewsInPeriod.Any())
-                    {
-                        speedByPeriod.Add(Math.Round(interviewsInPeriod.Select(i => Math.Abs(i.Timespan.TotalMinutes)).Average(), 2));
-                    }
-                    else
-                    {
-                        speedByPeriod.Add(null);
-                    }
-                }
-                return new SpeedByResponsibleReportRow(
-                    responsibleId: u,
-                    periods: speedByPeriod.ToArray(),
-                    responsibleName: interviewsForUser.Any() ? interviewsForUser.First().UserName : "",
-                    average: interviewsForUser.Any() ? Math.Round(interviewsForUser.Select(i => Math.Abs(i.Timespan.TotalMinutes)).Average(), 2) : (double?)null,
-                    total: interviewsForUser.Any() ? Math.Round(interviewsForUser.Select(i => Math.Abs(i.Timespan.TotalMinutes)).Sum(), 2) : (double?)null);
-            }).ToArray();
+            var rows = userIds.Select(u => GetSpeedByResponsibleReportRow(u, dateTimeRanges, allInterviewsInStatus)).ToArray();
 
             return new SpeedByResponsibleReportView(rows, dateTimeRanges, usersCount);
+        }
+
+
+        private SpeedByResponsibleReportRow GetSpeedByResponsibleReportRow(Guid u, DateTimeRange[] dateTimeRanges, StatusChangeRecord[] allInterviewsInStatus)
+        {
+            var interviewsForUser = allInterviewsInStatus.Where(i => i.UserId == u).ToArray();
+            var speedByPeriod = new List<double?>();
+
+            foreach (var dateTimeRange in dateTimeRanges)
+            {
+                var interviewsInPeriod =
+                    interviewsForUser.Where(
+                        ics => ics.Timestamp.Date >= dateTimeRange.From && ics.Timestamp.Date < dateTimeRange.To).ToArray();
+                if (interviewsInPeriod.Any())
+                {
+                    var total = interviewsInPeriod.Select(i => Math.Abs(i.Timespan.TotalMinutes)).Sum();
+                    speedByPeriod.Add(Math.Round(interviewsInPeriod.Select(i => Math.Abs(i.Timespan.TotalMinutes)).Average(), 2));
+                }
+                else
+                {
+                    speedByPeriod.Add(null);
+                }
+            }
+            return new SpeedByResponsibleReportRow(
+                responsibleId: u,
+                periods: speedByPeriod.ToArray(),
+                responsibleName: interviewsForUser.Any() ? interviewsForUser.First().UserName : "",
+                average: interviewsForUser.Any() ? Math.Round(interviewsForUser.Select(i => Math.Abs(i.Timespan.TotalMinutes)).Average(), 2) : (double?)null,
+                total: interviewsForUser.Any() ? Math.Round(interviewsForUser.Select(i => Math.Abs(i.Timespan.TotalMinutes)).Sum(), 2) : (double?)null);
         }
 
         private IQueryable<TimeSpanBetweenStatuses> QueryTimeSpanBetweenStatuses(
@@ -136,9 +149,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 return this.interviewStatusesStorage.Query(_ =>
                     _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
                         .SelectMany(x => x.InterviewCommentedStatuses)
-                        .Where(
-                            ics =>
-                                ics.Timestamp.Date >= from && ics.Timestamp.Date < to.Date &&
+                        .Where(ics =>
+                                ics.Position == 3 &&
+                                ics.Timestamp.Date >= from && 
+                                ics.Timestamp.Date < to.Date &&
                                 statuses.Contains(ics.Status) &&
                                 ics.TimeSpanWithPreviousStatus.HasValue));
             }
@@ -147,9 +161,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 return this.interviewStatusesStorage.Query(_ =>
                     _.SelectMany(x => x.InterviewCommentedStatuses)
                         .Where(ics =>
-                                ics.Timestamp.Date >= from && ics.Timestamp.Date < to.Date &&
-                                statuses.Contains(ics.Status) &&
-                                ics.TimeSpanWithPreviousStatus.HasValue));
+                            ics.Position == 3 &&
+                            ics.Timestamp.Date >= from &&
+                            ics.Timestamp.Date < to.Date &&
+                            statuses.Contains(ics.Status) &&
+                            ics.TimeSpanWithPreviousStatus.HasValue));
             }
         }
 
