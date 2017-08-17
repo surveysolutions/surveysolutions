@@ -249,4 +249,8 @@
   <data name="ServerUnderLoad" xml:space="preserve">
     <value>Нам очень жаль, но слишком много людей пытается одновременно получить доступ к сайту. Мы работаем над решением этой проблемы</value>
   </data>
+  <data name="CompleteInterview" xml:space="preserve">
+    <value>Завершить интервью</value>
+    <comment>Завершить интервью</comment>
+  </data>
 </root>
