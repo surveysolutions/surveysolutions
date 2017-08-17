@@ -924,10 +924,7 @@ if (false) {(function () {
             }
         },
         contextMenuItems: {
-            type: Function,
-            default: function _default() {
-                return [];
-            }
+            type: Function
         },
         authorizedUser: { type: Object, default: function _default() {
                 return {};
@@ -987,23 +984,22 @@ if (false) {(function () {
         initContextMenu: function initContextMenu() {
             var _this = this;
 
-            if (this.contextMenuItems().length > 0) {
-                var contextMenuOptions = {
-                    selector: "#" + this.$el.attributes.id.value + " tbody tr",
-                    autoHide: false,
-                    build: function build($trigger, e) {
-                        var selectedRow = _this.selectRowAndGetData($trigger);
+            if (this.contextMenuItems == null) return;
+            var contextMenuOptions = {
+                selector: "#" + this.$el.attributes.id.value + " tbody tr",
+                autoHide: false,
+                build: function build($trigger, e) {
+                    var selectedRow = _this.selectRowAndGetData($trigger);
 
-                        if (selectedRow.rowData == null) return false;
+                    if (selectedRow.rowData == null) return false;
 
-                        var items = _this.contextMenuItems(selectedRow);
-                        return { items: items };
-                    },
-                    trigger: 'left'
-                };
+                    var items = _this.contextMenuItems(selectedRow);
+                    return { items: items };
+                },
+                trigger: 'left'
+            };
 
-                $.contextMenu(contextMenuOptions);
-            }
+            $.contextMenu(contextMenuOptions);
         }
     },
 
