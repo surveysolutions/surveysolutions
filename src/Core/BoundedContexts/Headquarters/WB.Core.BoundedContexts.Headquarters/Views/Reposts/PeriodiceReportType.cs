@@ -11,6 +11,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts
         AverageInterviewDuration,
         AverageSupervisorProcessingTime,
         AverageHQProcessingTime,
-        AverageOverallCaseProcessingTime,
+        AverageOverallCaseProcessingTime
     }
 }

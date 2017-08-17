@@ -935,6 +935,12 @@ if (false) {(function () {
             default: function _default() {
                 return true;
             }
+        },
+        hasSearch: {
+            type: Boolean,
+            default: function _default() {
+                return true;
+            }
         }
     },
 
@@ -1019,7 +1025,8 @@ if (false) {(function () {
             pageLength: 20, // page size
             dom: "frtp",
             conditionalPaging: true,
-            paging: this.hasPaging
+            paging: this.hasPaging,
+            searching: this.hasSearch
         }, this.tableOptions);
 
         options.ajax.data = function (d) {
@@ -2632,7 +2639,7 @@ if (false) {(function () {
                 columns: [{
                     data: "daysCount",
                     title: this.$t("Strings.Days"),
-                    orderable: false,
+                    orderable: true,
                     render: function render(data, type, row) {
                         if (row.startDate === row.endDate) return "<span>" + data + "</span>";else return "<span>" + data + "&#43;</span>";
                     }
@@ -2678,7 +2685,8 @@ if (false) {(function () {
                     type: "GET",
                     contentType: 'application/json'
                 },
-                sDom: 'f<"table-with-scroll"t>ip'
+                sDom: 'f<"table-with-scroll"t>ip',
+                order: [[0, "desc"]]
             };
         }
     },
@@ -2704,7 +2712,8 @@ if (false) {(function () {
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('Layout', {
     attrs: {
-      "hasFilter": true
+      "hasFilter": true,
+      "title": _vm.$t('Pages.CountDaysOfInterviewInStatus')
     }
   }, [_c('Filters', {
     slot: "filters"
@@ -2749,7 +2758,8 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     attrs: {
       "tableOptions": _vm.tableOptions,
       "addParamsToRequest": _vm.addFilteringParams,
-      "hasPaging": false
+      "hasPaging": false,
+      "hasSearch": false
     }
   })], 1)
 }
