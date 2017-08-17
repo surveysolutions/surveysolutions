@@ -47,7 +47,13 @@ export default {
                     {
                         data: "interviewerAssignedCount",
                         title: this.$t("Strings.InterviewStatus_InterviewerAssigned"),
-                        orderable: false
+                        orderable: false,
+                        render: function(data, type, row) {
+                            if(data === 0) return `<span>${data}</span>`;
+                            else {
+                                return `<a href='${self.$config.assignmentsBaseUrl}?dateStart=${row.startDate}&dateEnd=${row.endDate}'>${data}</a>`;
+                            }
+                        }
                     },
                     {
                         data: "completedCount",

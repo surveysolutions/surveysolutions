@@ -133,6 +133,7 @@ namespace WB.UI.Headquarters.Controllers
                         action = "CountDaysOfInterviewInStatus"
                     }),
                 InterviewsBaseUrl = Url.Action("Interviews", "HQ"),
+                AssignmentsBaseUrl = Url.Action("Index", "Assignments"),
                 Questionnaires = this.GetQuestionnaires(),
 
                 Resources = new[]

@@ -2632,11 +2632,19 @@ if (false) {(function () {
                 columns: [{
                     data: "daysCount",
                     title: this.$t("Strings.Days"),
-                    orderable: false
+                    orderable: false,
+                    render: function render(data, type, row) {
+                        if (row.startDate === row.endDate) return "<span>" + data + "</span>";else "<span>" + data + "+</span>";
+                    }
                 }, {
                     data: "interviewerAssignedCount",
                     title: this.$t("Strings.InterviewStatus_InterviewerAssigned"),
-                    orderable: false
+                    orderable: false,
+                    render: function render(data, type, row) {
+                        if (data === 0) return "<span>" + data + "</span>";else {
+                            return "<a href='" + self.$config.assignmentsBaseUrl + "?dateStart=" + row.startDate + "&dateEnd=" + row.endDate + "'>" + data + "</a>";
+                        }
+                    }
                 }, {
                     data: "completedCount",
                     title: this.$t("Strings.InterviewStatus_Completed"),

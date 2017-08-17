@@ -64,7 +64,9 @@ namespace WB.UI.Headquarters.API
                 QuestionnaireId = questionnaireIdentity?.QuestionnaireId,
                 QuestionnaireVersion = questionnaireIdentity?.Version,
                 ResponsibleId = isInterviewer ? this.authorizedUser.Id :request.ResponsibleId,
-                ShowArchive = !isInterviewer && request.ShowArchive
+                ShowArchive = !isInterviewer && request.ShowArchive,
+                DateStart= request.DateStart?.Date,
+                DateEnd = request.DateEnd?.Date.AddDays(1)
             };
 
             if (this.authorizedUser.IsSupervisor)
@@ -241,6 +243,9 @@ namespace WB.UI.Headquarters.API
             public Guid? ResponsibleId { get; set; }
 
             public bool ShowArchive { get; set; }
+
+            public DateTime? DateStart { get; set; }
+            public DateTime? DateEnd { get; set; }
         }
     }
 }

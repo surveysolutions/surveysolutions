@@ -155,8 +155,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 result.Add(new CountDaysOfInterviewInStatusRow()
                 {
                     DaysCount = defaultGroup.Key.Value,
-                    StartDate = defaultGroup.Min(e => e.StartDate),
-                    EndDate = defaultGroup.Max(e => e.EndDate),
+                    StartDate = defaultGroup.Min(e => e.StartDate).Date,
+                    EndDate = defaultGroup.Max(e => e.EndDate).Date,
                     InterviewerAssignedCount = defaultGroup.Sum(e => e.InterviewerAssignedCount),
                     CompletedCount = defaultGroup.Sum(e => e.CompletedCount),
                     ApprovedBySupervisorCount = defaultGroup.Sum(e => e.ApprovedBySupervisorCount),
