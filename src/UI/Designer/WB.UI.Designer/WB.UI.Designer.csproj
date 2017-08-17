@@ -463,6 +463,7 @@
     <Content Include="questionnaire\details\scripts\controllers\findReplace.js" />
     <Content Include="questionnaire\details\scripts\controllers\translations.js" />
     <Content Include="questionnaire\details\scripts\extensions\ace\mode-text-extended.js" />
+    <Content Include="questionnaire\details\scripts\extensions\ace\ui-ace.js" />
     <Content Include="questionnaire\details\views\find-replace.html" />
     <Content Include="RecaptchaNet.Readme.txt" />
     <Content Include="Scripts\custom\bootstrap3-unobtrusive-hack.js" />
