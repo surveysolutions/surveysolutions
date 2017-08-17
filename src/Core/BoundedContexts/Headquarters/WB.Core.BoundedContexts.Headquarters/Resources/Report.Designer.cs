@@ -61,6 +61,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ANDROID 4.4 OR LOWER.
+        /// </summary>
+        internal static string COLUMN_ANDROID_4_4_OR_LOWER {
+            get {
+                return ResourceManager.GetString("COLUMN_ANDROID_4_4_OR_LOWER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to APPROVED BY HQ.
         /// </summary>
         internal static string COLUMN_APPROVED_BY_HQ {
@@ -106,6 +115,51 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to LESS THAN 100MB FREE SPACE.
+        /// </summary>
+        internal static string COLUMN_LESS_THAN_100MB_FREE_SPACE {
+            get {
+                return ResourceManager.GetString("COLUMN_LESS_THAN_100MB_FREE_SPACE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NEVER SYNCHED.
+        /// </summary>
+        internal static string COLUMN_NEVER_SYNCHED {
+            get {
+                return ResourceManager.GetString("COLUMN_NEVER_SYNCHED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NEVER UPLOADED.
+        /// </summary>
+        internal static string COLUMN_NEVER_UPLOADED {
+            get {
+                return ResourceManager.GetString("COLUMN_NEVER_UPLOADED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NO ASSIGNMENTS RECEIVED.
+        /// </summary>
+        internal static string COLUMN_NO_ASSIGNMENTS_RECEIVED {
+            get {
+                return ResourceManager.GetString("COLUMN_NO_ASSIGNMENTS_RECEIVED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OLD VERSION.
+        /// </summary>
+        internal static string COLUMN_OLD_VERSION {
+            get {
+                return ResourceManager.GetString("COLUMN_OLD_VERSION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to QUESTIONNAIRE TEMPLATE.
         /// </summary>
         internal static string COLUMN_QUESTIONNAIRE_TEMPLATE {
@@ -142,11 +196,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to TABLET REASSIGNED.
+        /// </summary>
+        internal static string COLUMN_TABLET_REASSIGNED {
+            get {
+                return ResourceManager.GetString("COLUMN_TABLET_REASSIGNED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to TEAM MEMBER.
         /// </summary>
         internal static string COLUMN_TEAM_MEMBER {
             get {
                 return ResourceManager.GetString("COLUMN_TEAM_MEMBER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TEAMS.
+        /// </summary>
+        internal static string COLUMN_TEAMS {
+            get {
+                return ResourceManager.GetString("COLUMN_TEAMS", resourceCulture);
             }
         }
         
@@ -165,6 +237,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         internal static string COLUMN_TOTAL {
             get {
                 return ResourceManager.GetString("COLUMN_TOTAL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WRONG TIME ON TABLET.
+        /// </summary>
+        internal static string COLUMN_WRONG_TIME_ON_TABLET {
+            get {
+                return ResourceManager.GetString("COLUMN_WRONG_TIME_ON_TABLET", resourceCulture);
             }
         }
     }

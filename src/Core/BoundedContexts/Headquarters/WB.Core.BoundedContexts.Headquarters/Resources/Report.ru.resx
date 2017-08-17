@@ -98,4 +98,92 @@
 	<resheader name="writer">
 		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
 	</resheader>
+  <data name="COLUMN_TEAM_MEMBER" xml:space="preserve">
+    <value>УЧАСТНИК КОМАНДЫ</value>
+    <comment>ЧЛЕН КОМАНДЫ</comment>
+  </data>
+  <data name="COLUMN_SUPERVISOR_ASSIGNED" xml:space="preserve">
+    <value>НАЗНАЧЕНО НА СУПЕРВИЗОРА</value>
+    <comment>НАЗНАЧЕНО СУПЕРВИЗОРОВ</comment>
+  </data>
+  <data name="COLUMN_INTERVIEWER_ASSIGNED" xml:space="preserve">
+    <value>НАЗНАЧЕНО НА ИНТЕРВЬЮЕРА</value>
+    <comment>НАЗНАЧЕНО НА ИНТЕРВЬЮЕРА</comment>
+  </data>
+  <data name="COLUMN_COMPLETED" xml:space="preserve">
+    <value>ВЫПОЛНЕНО</value>
+    <comment>ВЫПОЛНЕНО</comment>
+  </data>
+  <data name="COLUMN_REJECTED_BY_SUPERVISOR" xml:space="preserve">
+    <value>ВОЗВРАЩЕНО СУПЕРВИЗОРОМ</value>
+    <comment>ВОЗВРАЩЕНО СУПЕРВИЗОРОМ</comment>
+  </data>
+  <data name="COLUMN_APPROVED_BY_SUPERVISOR" xml:space="preserve">
+    <value>УТВЕРЖДЕНО СУПЕРВИЗОРОМ</value>
+    <comment>ПОДТВЕРЖДЕНО СУПЕРВИЗОРОМ</comment>
+  </data>
+  <data name="COLUMN_REJECTED_BY_HQ" xml:space="preserve">
+    <value>ВОЗВРАЩЕНО ХЕДКВОТЕРОМ</value>
+    <comment>ВОЗВРАЩЕНО ХЕДКВОТЕРОМ</comment>
+  </data>
+  <data name="COLUMN_APPROVED_BY_HQ" xml:space="preserve">
+    <value>УТВЕРЖДЕНО ХЕДКВОТЕРОМ</value>
+    <comment>УТВЕРЖДЕНО ХЕДКВОТЕРОМ</comment>
+  </data>
+  <data name="COLUMN_TOTAL" xml:space="preserve">
+    <value>ВСЕГО</value>
+    <comment>ВСЕГО</comment>
+  </data>
+  <data name="COLUMN_AVERAGE" xml:space="preserve">
+    <value>СРЕДНЕЕ</value>
+    <comment>СРЕДНЕЕ</comment>
+  </data>
+  <data name="COLUMN_TEMPLATE_VERSION" xml:space="preserve">
+    <value>ВЕРСИЯ ОПРОСНИКА</value>
+    <comment>ВЕРСИЯ ОПРОСНИКА</comment>
+  </data>
+  <data name="COLUMN_QUESTIONNAIRE_TEMPLATE" xml:space="preserve">
+    <value>ИМЯ ОПРОСНИКА</value>
+    <comment>ИМЯ ОПРОСНИКА</comment>
+  </data>
+  <data name="COLUMN_TEAMS" xml:space="preserve">
+    <value>КОМАНДЫ</value>
+    <comment>КОМАНДЫ</comment>
+  </data>
+  <data name="COLUMN_NEVER_SYNCHED" xml:space="preserve">
+    <value>НИКОГДА НЕ СИНХРОНИЗИРОВАЛИСЬ</value>
+    <comment>НИКОГДА НЕ СИНХРОНИЗИРОВАЛИСЬ</comment>
+  </data>
+  <data name="COLUMN_OLD_VERSION" xml:space="preserve">
+    <value>СТАРАЯ ВЕРСИЯ</value>
+    <comment>СТАРАЯ ВЕРСИЯ</comment>
+  </data>
+  <data name="COLUMN_LESS_THAN_100MB_FREE_SPACE" xml:space="preserve">
+    <value>МЕНЬШЕ ЧЕМ 100МБ СВОБОДНОГО МЕСТА</value>
+    <comment>МЕНЬШЕ ЧЕМ 100МБ СВОБОДНОГО МЕСТА</comment>
+  </data>
+  <data name="COLUMN_WRONG_TIME_ON_TABLET" xml:space="preserve">
+    <value>НЕПРАВИЛЬНОЕ ВРЕМЯ НА УСТРОЙСТВЕ</value>
+    <comment>НЕПРАВИЛЬНОЕ ВРЕМЯ НА УСТРОЙСТВЕ</comment>
+  </data>
+  <data name="COLUMN_ANDROID_4_4_OR_LOWER" xml:space="preserve">
+    <value>АНДРОИД НИЖЕ ВЕРСИИ 4.4</value>
+    <comment>АНДРОИД НИЖЕ ВЕРСИИ 4.4</comment>
+  </data>
+  <data name="COLUMN_NO_ASSIGNMENTS_RECEIVED" xml:space="preserve">
+    <value>НЕ ПОЛУЧЕНЫ НАЗНАЧЕНИЯ</value>
+    <comment>НЕ ПОЛУЧЕНЫ НАЗНАЧЕНИЯ</comment>
+  </data>
+  <data name="COLUMN_NEVER_UPLOADED" xml:space="preserve">
+    <value>НИКОГДА НЕ ЗАГРУЖАЛИ ДАННЫЕ НА СЕРВЕР</value>
+    <comment>НИКОГДА НЕ ЗАГРУЖАЛИ ДАННЫЕ НА СЕРВЕР</comment>
+  </data>
+  <data name="COLUMN_TABLET_REASSIGNED" xml:space="preserve">
+    <value>СМЕНА УСТРОЙСТВА</value>
+    <comment>СМЕНА УСТРОЙСТВА</comment>
+  </data>
+  <data name="COLUMN_DAYS" xml:space="preserve">
+    <value>КОЛИЧЕСТВО ДНЕЙ</value>
+    <comment>КОЛИЧЕСТВО ДНЕЙ</comment>
+  </data>
 </root>
