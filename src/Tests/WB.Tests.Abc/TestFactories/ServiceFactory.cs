@@ -343,8 +343,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public AllInterviewsFactory AllInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummarys = null)
         {
-            return new AllInterviewsFactory(interviewSummarys ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
-                Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatuses>>());
+            return new AllInterviewsFactory(interviewSummarys ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>());
         }
 
         public ITeamInterviewsFactory TeamInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummarys = null)

@@ -11,6 +11,8 @@ namespace WB.UI.Headquarters.Models.Reports
 
         public string InterviewsBaseUrl { get; set; }
 
+        public string AssignmentsBaseUrl { get; set; }
+
         public ComboboxOptionModel[] Questionnaires { get; set; }
 
         public TranslationModel Resources { get; set; }
