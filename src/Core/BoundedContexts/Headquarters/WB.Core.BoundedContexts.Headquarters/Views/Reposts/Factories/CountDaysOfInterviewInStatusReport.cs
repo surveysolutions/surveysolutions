@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -48,56 +49,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
 
         public async Task<CountDaysOfInterviewInStatusRow[]> LoadAsync(CountDaysOfInterviewInStatusInputModel input)
         {
-            string query;
-            var assembly = typeof(CountDaysOfInterviewInStatusReport).Assembly;
-            using (Stream stream = assembly.GetManifestResourceStream("WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.CountDaysOfInterviewInStatusReport.sql"))
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                query = reader.ReadToEnd();
-            }
+            var order = input.Orders.FirstOrDefault();
+            if (order == null) throw new ArgumentNullException(nameof(order));
 
-            IEnumerable<CounterObject> datesAndStatuses;
-            using (var connection = new NpgsqlConnection(plainStorageSettings.ConnectionString))
-            {
-                datesAndStatuses = await connection.QueryAsync<CounterObject>(query, new
-                {
-                    questionnaireid = input.TemplateId,
-                    questionnaireversion = input.TemplateVersion,
-                });
-            }
-            
-            var assignmentsDatesAndCounts = assignmentsStorage.Query(_ =>
-            {
-                var filteredAssignments = _;
-
-                if (input.TemplateId.HasValue && input.TemplateVersion.HasValue)
-                {
-                    filteredAssignments = filteredAssignments.Where(x
-                        => x.QuestionnaireId.QuestionnaireId == input.TemplateId.Value
-                           && x.QuestionnaireId.Version == input.TemplateVersion.Value);
-                }
-
-                var statusWithTime = (from f in filteredAssignments
-                    where f.Quantity.HasValue
-                    select new 
-                    {
-                        StatusDate = f.CreatedAtUtc.Date,
-                        InterviewsCount = f.Quantity ?? 0,
-                        InterviewSummariesCount = f.InterviewSummaries.Count(),
-                    }
-                );
-
-                var groupedByDateStatusWithTime = (from f in statusWithTime
-                    group f by new { f.StatusDate } into g
-                    select new CounterObject
-                    {
-                        StatusDate = g.Key.StatusDate,
-                        InterviewsCount = g.Sum(a => a.InterviewsCount - a.InterviewSummariesCount),
-                    }
-                );
-
-                return groupedByDateStatusWithTime;
-            });
+            var datesAndStatuses = await ExecuteQueryForInterviewsStatistics(input);
+            var assignmentsDatesAndCounts = ExecuteQueryForAssignmentsStatistics(input);
 
             Dictionary<DateTime, Dictionary<InterviewExportedAction, int>> dictStatistics = new Dictionary<DateTime, Dictionary<InterviewExportedAction, int>>();
 
@@ -181,7 +137,72 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             addEmptyRowIfDontExistsData(4);
             addEmptyRowIfDontExistsData(5);
 
-            return result.OrderBy(r => r.DaysCount).ToArray();
+            return order.Direction == OrderDirection.Desc
+                ? result.OrderBy(r => r.DaysCount).ToArray()
+                : result.OrderByDescending(r => r.DaysCount).ToArray();
+        }
+
+        private IQueryable<CounterObject> ExecuteQueryForAssignmentsStatistics(CountDaysOfInterviewInStatusInputModel input)
+        {
+            return assignmentsStorage.Query(_ =>
+            {
+                var filteredAssignments = _;
+
+                if (input.TemplateId.HasValue && input.TemplateVersion.HasValue)
+                {
+                    filteredAssignments = filteredAssignments.Where(x
+                        => x.QuestionnaireId.QuestionnaireId == input.TemplateId.Value
+                           && x.QuestionnaireId.Version == input.TemplateVersion.Value);
+                }
+
+                var statusWithTime = (from f in filteredAssignments
+                    where f.Quantity.HasValue
+                    select new 
+                    {
+                        StatusDate = f.CreatedAtUtc.Date,
+                        InterviewsCount = f.Quantity ?? 0,
+                        InterviewSummariesCount = f.InterviewSummaries.Count(),
+                    }
+                );
+
+                var groupedByDateStatusWithTime = (from f in statusWithTime
+                    group f by new { f.StatusDate } into g
+                    select new CounterObject
+                    {
+                        StatusDate = g.Key.StatusDate,
+                        InterviewsCount = g.Sum(a => a.InterviewsCount - a.InterviewSummariesCount),
+                    }
+                );
+
+                return groupedByDateStatusWithTime;
+            });
+        }
+
+        private async Task<IEnumerable<CounterObject>> ExecuteQueryForInterviewsStatistics(CountDaysOfInterviewInStatusInputModel input)
+        {
+            string query = GetSqlQueryForInterviews();
+
+            IEnumerable<CounterObject> datesAndStatuses;
+            using (var connection = new NpgsqlConnection(plainStorageSettings.ConnectionString))
+            {
+                datesAndStatuses = await connection.QueryAsync<CounterObject>(query, new
+                {
+                    questionnaireid = input.TemplateId,
+                    questionnaireversion = input.TemplateVersion,
+                });
+            }
+            return datesAndStatuses;
+        }
+
+        private static string GetSqlQueryForInterviews()
+        {
+            var assembly = typeof(CountDaysOfInterviewInStatusReport).Assembly;
+            using (Stream stream = assembly.GetManifestResourceStream("WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.CountDaysOfInterviewInStatusReport.sql"))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                string query = reader.ReadToEnd();
+                return query;
+            }
         }
 
         private int GetStatusValue(Dictionary<InterviewExportedAction, int> dictionary, InterviewExportedAction status)

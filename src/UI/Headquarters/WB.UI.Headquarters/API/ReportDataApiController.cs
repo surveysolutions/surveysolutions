@@ -369,7 +369,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [CamelCase]
         public async Task<CountDaysOfInterviewInStatusDataTableResponse> CountDaysOfInterviewInStatus([FromUri] CountDaysOfInterviewInStatusRequest request)
         {
-            var input = new CountDaysOfInterviewInStatusInputModel();
+            var input = new CountDaysOfInterviewInStatusInputModel
+            {
+                Orders = request.GetSortOrderRequestItems()
+            };
 
             if (!string.IsNullOrEmpty(request.QuestionnaireId))
             {

@@ -1,5 +1,5 @@
 <template>
-    <Layout :hasFilter="true">
+    <Layout :hasFilter="true" :title="$t('Pages.CountDaysOfInterviewInStatus')">
         <Filters slot="filters">
             <FilterBlock :title="$t('Pages.Template')">
                 <select class="selectpicker" v-model="questionnaireId">
@@ -11,7 +11,7 @@
             </FilterBlock>
         </Filters>
         <ExportButtons slot="exportButtons" />
-        <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addFilteringParams" :hasPaging="false"></DataTables>
+        <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addFilteringParams" :hasPaging="false" :hasSearch="false"></DataTables>
     </Layout>
 </template>
 
@@ -42,7 +42,7 @@ export default {
                     {
                         data: "daysCount",
                         title: this.$t("Strings.Days"),
-                        orderable: false,
+                        orderable: true,
                         render: function(data, type, row) {
                             if(row.startDate === row.endDate) return `<span>${data}</span>`;
                             else return `<span>${data}&#43;</span>`;
@@ -98,7 +98,8 @@ export default {
                     type: "GET",
                     contentType: 'application/json'
                 },
-                sDom: 'f<"table-with-scroll"t>ip'
+                sDom: 'f<"table-with-scroll"t>ip',
+                order: [[ 0, "desc" ]]
             }
         }
     },
