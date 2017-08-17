@@ -90,10 +90,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             lock (LockObject)
             {
                 var handlerKey = GetEventKey(eventType);
-                ICollection<LiteEventRegistryEntity> handlersForEventType = this.handlers.GetOrAdd(handlerKey, () => new ConcurrentHashSet<LiteEventRegistryEntity>());
-
-                if (IsHandlerAlreadySubscribed(handler, handlersForEventType))
-                    throw new InvalidOperationException($"This handler {handler} already subscribed to event {eventType.Name}");
+                var handlersForEventType = this.handlers.GetOrAdd(handlerKey, () => new ConcurrentHashSet<LiteEventRegistryEntity>());
 
                 var liteEventRegistryEntity = new LiteEventRegistryEntity(handler, raiseFilter);
                 handlersForEventType.Add(liteEventRegistryEntity);
@@ -132,13 +129,6 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             return handlerNoLongerExists || unregisteringHandler == handlerFromWeakReference;
         }
 
-        private static bool IsHandlerAlreadySubscribed(ILiteEventHandler handler, IEnumerable<LiteEventRegistryEntity> handlersForEventType)
-        {
-            ILiteEventHandler handlerFromWeakReference;
-
-            return handlersForEventType.Any(h => h.EventHandler.TryGetTarget(out handlerFromWeakReference) && handlerFromWeakReference == handler);
-        }
-
         private static Action<object> GetActionHandler(ILiteEventHandler handler)
         {
             return @event =>
@@ -164,14 +154,23 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
 
         private static Type[] GetHandledEventTypes(ILiteEventHandler handler)
         {
-            return handler
-                .GetType()
-                .GetTypeInfo()
-                .ImplementedInterfaces
-                .Where(type => IsEventHandlerInterface(type) || IsPublishedEventHandlerInterface(type))
-                .Select(GetEventType)
-                .ToArray();
+            var type = handler.GetType();
+            if (!HandledEventTypesCache.ContainsKey(type))
+            {
+                var handledEvents = handler
+                    .GetType()
+                    .GetTypeInfo()
+                    .ImplementedInterfaces
+                    .Where(t => IsEventHandlerInterface(t) || IsPublishedEventHandlerInterface(t))
+                    .Select(GetEventType)
+                    .ToArray();
+                HandledEventTypesCache[type] = handledEvents;
+            }
+
+            return HandledEventTypesCache[type];
         }
+
+        private static readonly Dictionary<Type, Type[]> HandledEventTypesCache = new Dictionary<Type, Type[]>();
 
         private static Type GetEventType(Type type)
         {
