@@ -42,7 +42,11 @@ export default {
                     {
                         data: "daysCount",
                         title: this.$t("Strings.Days"),
-                        orderable: false
+                        orderable: false,
+                        render: function(data, type, row) {
+                            if(row.startDate === row.endDate) return `<span>${data}</span>`;
+                            else return `<span>${data}&#43;</span>`;
+                        }
                     },
                     {
                         data: "interviewerAssignedCount",
