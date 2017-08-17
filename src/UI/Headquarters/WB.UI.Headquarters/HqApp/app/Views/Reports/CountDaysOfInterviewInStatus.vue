@@ -63,7 +63,13 @@ export default {
                     {
                         data: "rejectedBySupervisorCount",
                         title: this.$t("Strings.InterviewStatus_RejectedBySupervisor"),
-                        orderable: false
+                        orderable: false,
+                        render: function(data, type, row) {
+                            if(data === 0) return `<span>${data}</span>`;
+                            else {
+                                return `<a href='${self.$config.interviewsBaseUrl}?unactiveDateStart=${row.startDate}&unactiveDateEnd=${row.endDate}&status=RejectedBySupervisor'>${data}</a>`;
+                            }
+                        }
                     },
                     {
                         data: "approvedBySupervisorCount",
@@ -72,7 +78,7 @@ export default {
                         render: function(data, type, row) {
                             if(data === 0) return `<span>${data}</span>`;
                             else {
-                                return `<a href='${self.$config.interviewsBaseUrl}?startDate=${row.startDate}&endDate=${row.endDate}&status=approvedBySupervisor'>${data}</a>`;
+                                return `<a href='${self.$config.interviewsBaseUrl}?startDate=${row.startDate}&endDate=${row.endDate}&status=ApprovedBySupervisor'>${data}</a>`;
                             }
                         }
                      }
