@@ -45,12 +45,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             var from = this.AddPeriod(reportStartDate.Date, period, -columnCount + 1);
             var to = reportStartDate.Date.AddDays(1);
 
-            DateTime? minDate = GetFirstInterviewCreatedDate(questionnaire);
+            DateTime? minDate = ReportHelpers.GetFirstInterviewCreatedDate(questionnaire, this.interviewstatusStorage);
 
             var dateTimeRanges =
                 Enumerable.Range(0, columnCount)
                     .Select(i => new DateTimeRange(this.AddPeriod(from, period, i).Date, this.AddPeriod(from, period, i + 1).Date))
-                    .Where(i => i.From.Date <= DateTime.Now.Date && minDate.HasValue && i.To.Date >= minDate)
+                    .Where(i => minDate.HasValue && i.To.Date >= minDate)
                     .ToArray();
 
             var interviewStatusesByDateRange = queryInterviewStatusesByDateRange(from, to);
@@ -90,33 +90,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             return new QuantityByResponsibleReportView(rows, quantityTotalRow, dateTimeRanges, responsibleUsersCount);
         }
 
-        private DateTime? GetFirstInterviewCreatedDate(QuestionnaireIdentity questionnaire)
-        {
-            DateTime? minDate;
-            if (questionnaire != null)
-            {
-                minDate = this.interviewstatusStorage.Query(_ => _
-                    .Where(x => x.QuestionnaireId == questionnaire.QuestionnaireId &&
-                                x.QuestionnaireVersion == questionnaire.Version)
-                    .SelectMany(x => x.InterviewCommentedStatuses)
-                    .Select(x => (DateTime?) x.Timestamp.Date)
-                    .Min());
-            }
-            else
-            {
-                minDate = this.interviewstatusStorage.Query(_ => _
-                    .SelectMany(x => x.InterviewCommentedStatuses)
-                    .Select(x => (DateTime?) x.Timestamp.Date)
-                    .Min());
-            }
-            return minDate;
-        }
-
+        
         private QuantityTotalRow CreateQuantityTotalRow<T>(IQueryable<T> interviews, DateTimeRange[] dateTimeRanges,
             Expression<Func<T, UserAndTimestamp>> userIdSelector)
         {
             var allInterviewsInStatus = interviews.Select(userIdSelector)
-                  .Select(i => i.Timestamp.Date)
+                  .Select(i => i.Timestamp)
                   .ToArray();
 
             var quantityByPeriod = new List<long>();
