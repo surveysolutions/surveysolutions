@@ -35,12 +35,16 @@
         responsible = {},
         questionnaire = {};
 
+    function hasValue(input) {
+        return !_.isUndefined(input) && input !== "";
+    }
+
     var prepareQuestion = function () {
         var answers = $.map(questions.getAllLocal(), function (question) {
             var answer = null;
             switch (question.type()) {
                 case "Text":
-                    if (!_.isUndefined(question.selectedOption())) {
+                    if (hasValue(question.selectedOption())) {
                         var inputValue = question.selectedOption().split(',').join('');
 
                         if (_.isEmpty(inputValue))
@@ -72,7 +76,7 @@
                         };
                     }
                 case "Numeric":
-                    if (!_.isUndefined(question.selectedOption())) {
+                    if (hasValue(question.selectedOption())) {
                         answer = {
                             id: question.id(),
                             answer: question.selectedOption().split(',').join(''),
@@ -83,7 +87,7 @@
                     break;
                 case "DateTime":
                     var dateAnswer = question.selectedOption();
-                    if (!_.isUndefined(dateAnswer) && !_.isNull(dateAnswer)) {
+                    if (hasValue(dateAnswer) && !_.isNull(dateAnswer)) {
                         var answerUTC = null;
 
                         if (question.settings().IsTimestamp) {
@@ -103,7 +107,7 @@
                     }
                     break;
                 case "GpsCoordinates":
-                    if (!_.isUndefined(question.latitude()) && !_.isUndefined(question.longitude())) {
+                    if (hasValue(question.latitude()) && hasValue(question.longitude())) {
                         answer = {
                             id: question.id(),
                             answer: question.latitude() + "$" + question.longitude(),
@@ -114,11 +118,11 @@
                 case "SingleOption":
                     var singleAnswer = question.selectedOption();
 
-                    if (!_.isUndefined(singleAnswer)) {
+                    if (hasValue(singleAnswer)) {
                         if (question.isFilteredCombobox())
                             singleAnswer = question.selectedOption().value();
 
-                        if (!_.isUndefined(singleAnswer)) {
+                        if (hasValue(singleAnswer)) {
                             answer = {
                                 id: question.id(),
                                 answer: singleAnswer,
