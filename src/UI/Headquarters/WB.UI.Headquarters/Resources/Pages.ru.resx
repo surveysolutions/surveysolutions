@@ -229,19 +229,19 @@
     <value>Страница проверки работоспособности</value>
   </data>
   <data name="HistoryOfStatuses_By" xml:space="preserve">
-    <value>по</value>
+    <value>Кем</value>
   </data>
   <data name="HistoryOfStatuses_Comment" xml:space="preserve">
-    <value>комментарий</value>
+    <value>Комментарий</value>
   </data>
   <data name="HistoryOfStatuses_On" xml:space="preserve">
-    <value>на</value>
+    <value>Изменено</value>
   </data>
   <data name="HistoryOfStatuses_State" xml:space="preserve">
     <value>Состояние</value>
   </data>
   <data name="HistoryOfStatuses_Title" xml:space="preserve">
-    <value>Журнал изменений статуса интервью</value>
+    <value>Изменения статуса интервью</value>
   </data>
   <data name="Index_cshtml_Execute_Do_you_want_to_continue_" xml:space="preserve">
     <value>Вы хотите продолжить?</value>
@@ -1051,6 +1051,15 @@
   <data name="ExportButton" xml:space="preserve">
     <value>Экспорт</value>
     <comment>Экспорт</comment>
+  </data>
+  <data name="HistoryOfStatuses_AssignedTo" xml:space="preserve">
+    <value>Назначено на</value>
+  </data>
+  <data name="HistoryOfStatuses_Interview" xml:space="preserve">
+    <value>Интервью</value>
+  </data>
+  <data name="HistoryOfStatuses_ViewInterview" xml:space="preserve">
+    <value>Посмотреть интервью</value>
   </data>
   <data name="CountDaysOfInterviewInStatusDescription" xml:space="preserve">
     <value>Количество дней когда интервью находятся в их текущем статусе</value>
