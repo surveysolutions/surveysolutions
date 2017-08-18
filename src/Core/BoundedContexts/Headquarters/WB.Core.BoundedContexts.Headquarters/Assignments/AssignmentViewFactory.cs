@@ -211,9 +211,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 items = items.Where(x => !x.Quantity.HasValue || x.Quantity - x.InterviewSummaries.Count > 0);
             }
 
-            if (input.DateStart.HasValue && input.DateEnd.HasValue)
+            if (input.DateStart.HasValue || input.DateEnd.HasValue)
             {
-                items = items.Where(x => x.Quantity.HasValue && x.CreatedAtUtc >= input.DateStart && x.CreatedAtUtc <= input.DateEnd);
+                items = items.Where(x => 
+                    x.Quantity.HasValue 
+                    && (x.CreatedAtUtc >= input.DateStart || input.DateStart == null)
+                    && (x.CreatedAtUtc <= input.DateEnd || input.DateEnd == null)
+                );
+            }
+
+            if (input.UserRole.HasValue)
+            {
+                items = items.Where(x => 
+                    x.Responsible.RoleIds.Any(r => r == input.UserRole.Value.ToUserId())
+                );
             }
 
             return items;

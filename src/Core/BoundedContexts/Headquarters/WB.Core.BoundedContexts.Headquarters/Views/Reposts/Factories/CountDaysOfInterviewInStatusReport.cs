@@ -88,15 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 if (selectedRange == null)
                     continue;
 
-                switch (counterObject.Status)
-                {
-                    case InterviewStatus.InterviewerAssigned:
-                        selectedRange.InterviewerAssignedCount += counterObject.InterviewsCount;
-                        break;
-                    case InterviewStatus.SupervisorAssigned:
-                        selectedRange.SupervisorAssignedCount += counterObject.InterviewsCount;
-                        break;
-                }
+                selectedRange.InterviewerAssignedCount += counterObject.InterviewsCount;
             }
 
             var assignmentsDatesAndCountsForSupervisors = ExecuteQueryForAssignmentsStatistics(input, UserRoles.Interviewer.ToUserId());
@@ -105,16 +97,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 var selectedRange = rows.Find(r => r.StartDate <= counterObject.StatusDate && counterObject.StatusDate < r.EndDate);
                 if (selectedRange == null)
                     continue;
-
-                switch (counterObject.Status)
-                {
-                    case InterviewStatus.InterviewerAssigned:
-                        selectedRange.InterviewerAssignedCount += counterObject.InterviewsCount;
-                        break;
-                    case InterviewStatus.SupervisorAssigned:
-                        selectedRange.SupervisorAssignedCount += counterObject.InterviewsCount;
-                        break;
-                }
+                selectedRange.SupervisorAssignedCount += counterObject.InterviewsCount;
             }
 
             return order.Direction == OrderDirection.Desc
@@ -132,7 +115,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 {
                     DaysCountStart = daysStart,
                     DaysCountEnd = daysEnd,
-                    StartDate = daysEnd.HasValue ? utcNow.AddDays(-daysEnd.Value).Date : new DateTime(),
+                    StartDate = daysEnd.HasValue ? utcNow.AddDays(-daysEnd.Value).Date : (DateTime?)null,
                     EndDate = utcNow.AddDays(-daysStart + 1).Date
                 });
             });

@@ -553,10 +553,12 @@ if (false) {(function () {
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     props: {
         title: String,
+        subtitle: String,
         hasFilter: {
             type: Boolean,
             default: function _default() {
@@ -604,7 +606,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     class: _vm.information
   }, [_c('div', {
     staticClass: "page-header clearfix"
-  }, [_c('h1', [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(_vm.title) + "\n\t\t\t\t\t\t")]), _vm._v(" "), _vm._t("exportButtons")], 2), _vm._v(" "), _vm._t("default")], 2)], 2), _vm._v(" "), _vm._t("modals"), _vm._v(" "), _c('ModalFrame', {
+  }, [_c('h1', [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(_vm.title) + "\n\t\t\t\t\t\t")]), _vm._v(" "), (_vm.subtitle) ? _c('h3', [_vm._v(_vm._s(_vm.subtitle))]) : _vm._e(), _vm._v(" "), _vm._t("exportButtons")], 2), _vm._v(" "), _vm._t("default")], 2)], 2), _vm._v(" "), _vm._t("modals"), _vm._v(" "), _c('ModalFrame', {
     ref: "pending",
     attrs: {
       "id": "pendingProgress",
@@ -2649,7 +2651,7 @@ if (false) {(function () {
                     orderable: false,
                     render: function render(data, type, row) {
                         if (data === 0) return "<span>" + data + "</span>";else {
-                            return "<a href='" + self.$config.assignmentsBaseUrl + "?dateStart=" + row.startDate + "&dateEnd=" + row.endDate + "'>" + data + "</a>";
+                            return "<a href='" + self.$config.assignmentsBaseUrl + "?dateStart=" + row.startDate + "&dateEnd=" + row.endDate + "&userRole=Supervisor'>" + data + "</a>";
                         }
                     }
                 }, {
@@ -2658,7 +2660,7 @@ if (false) {(function () {
                     orderable: false,
                     render: function render(data, type, row) {
                         if (data === 0) return "<span>" + data + "</span>";else {
-                            return "<a href='" + self.$config.assignmentsBaseUrl + "?dateStart=" + row.startDate + "&dateEnd=" + row.endDate + "'>" + data + "</a>";
+                            return "<a href='" + self.$config.assignmentsBaseUrl + "?dateStart=" + row.startDate + "&dateEnd=" + row.endDate + "&userRole=Interviewer'>" + data + "</a>";
                         }
                     }
                 }, {
@@ -2666,45 +2668,35 @@ if (false) {(function () {
                     title: this.$t("Strings.InterviewStatus_Completed"),
                     orderable: false,
                     render: function render(data, type, row) {
-                        if (data === 0) return "<span>" + data + "</span>";else {
-                            return "<a href='" + self.$config.interviewsBaseUrl + "?unactiveDateStart=" + row.startDate + "&unactiveDateEnd=" + row.endDate + "&status=Completed'>" + data + "</a>";
-                        }
+                        return self.renderInterviewsUrl(row, data, 'Completed');
                     }
                 }, {
                     data: "rejectedBySupervisorCount",
                     title: this.$t("Strings.InterviewStatus_RejectedBySupervisor"),
                     orderable: false,
                     render: function render(data, type, row) {
-                        if (data === 0) return "<span>" + data + "</span>";else {
-                            return "<a href='" + self.$config.interviewsBaseUrl + "?unactiveDateStart=" + row.startDate + "&unactiveDateEnd=" + row.endDate + "&status=RejectedBySupervisor'>" + data + "</a>";
-                        }
+                        return self.renderInterviewsUrl(row, data, 'RejectedBySupervisor');
                     }
                 }, {
                     data: "approvedBySupervisorCount",
                     title: this.$t("Strings.InterviewStatus_ApprovedBySupervisor"),
                     orderable: false,
                     render: function render(data, type, row) {
-                        if (data === 0) return "<span>" + data + "</span>";else {
-                            return "<a href='" + self.$config.interviewsBaseUrl + "?startDate=" + row.startDate + "&endDate=" + row.endDate + "&status=ApprovedBySupervisor'>" + data + "</a>";
-                        }
+                        return self.renderInterviewsUrl(row, data, 'ApprovedBySupervisor');
                     }
                 }, {
                     data: "rejectedByHeadquartersCount",
                     title: this.$t("Strings.InterviewStatus_RejectedByHeadquarters"),
                     orderable: false,
                     render: function render(data, type, row) {
-                        if (data === 0) return "<span>" + data + "</span>";else {
-                            return "<a href='" + self.$config.interviewsBaseUrl + "?unactiveDateStart=" + row.startDate + "&unactiveDateEnd=" + row.endDate + "&status=RejectedByHeadquarters'>" + data + "</a>";
-                        }
+                        return self.renderInterviewsUrl(row, data, 'RejectedByHeadquarters');
                     }
                 }, {
                     data: "approvedByHeadquartersCount",
                     title: this.$t("Strings.InterviewStatus_ApprovedByHeadquarters"),
                     orderable: false,
                     render: function render(data, type, row) {
-                        if (data === 0) return "<span>" + data + "</span>";else {
-                            return "<a href='" + self.$config.interviewsBaseUrl + "?startDate=" + row.startDate + "&endDate=" + row.endDate + "&status=ApprovedByHeadquarters'>" + data + "</a>";
-                        }
+                        return self.renderInterviewsUrl(row, data, 'ApprovedByHeadquarters');
                     }
                 }],
                 ajax: {
@@ -2712,8 +2704,9 @@ if (false) {(function () {
                     type: "GET",
                     contentType: 'application/json'
                 },
-                sDom: 'f<"table-with-scroll"t>ip',
-                order: [[0, "desc"]]
+                sDom: 'rf<"table-with-scroll"t>ip',
+                order: [[0, "desc"]],
+                bInfo: false
             };
         }
     },
@@ -2725,6 +2718,14 @@ if (false) {(function () {
         addFilteringParams: function addFilteringParams(data) {
             if (this.questionnaireId) {
                 data.questionnaireId = this.questionnaireId;
+            }
+        },
+        renderInterviewsUrl: function renderInterviewsUrl(row, data, status) {
+            if (data === 0) return "<span>" + data + "</span>";else {
+                if (row.startDate == undefined) return "<a href='" + this.$config.interviewsBaseUrl + "?endDate=" + row.endDate + "&status=" + status + "'>" + data + "</a>";
+                if (row.endDate == undefined) return "<a href='" + this.$config.interviewsBaseUrl + "?startDate=" + row.startDate + "&status=" + status + "'>" + data + "</a>";
+
+                return "<a href='" + this.$config.interviewsBaseUrl + "?startDate=" + row.startDate + "&endDate=" + row.endDate + "&status=" + status + "'>" + data + "</a>";
             }
         }
     }
@@ -2740,7 +2741,8 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   return _c('Layout', {
     attrs: {
       "hasFilter": true,
-      "title": _vm.$t('Pages.CountDaysOfInterviewInStatus')
+      "title": _vm.$t('Pages.CountDaysOfInterviewInStatus'),
+      "subtitle": _vm.$t('Pages.CountDaysOfInterviewInStatusDescription')
     }
   }, [_c('Filters', {
     slot: "filters"
