@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
 
             foreach (var counterObject in datesAndStatuses.AsQueryable())
             {
-                var selectedRange = rows.Find(r => (!r.StartDate.HasValue || r.StartDate <= counterObject.StatusDate) && counterObject.StatusDate < r.EndDate.AddDays(1));
+                var selectedRange = rows.Find(r => (!r.StartDate.HasValue || r.StartDate <= counterObject.StatusDate) && counterObject.StatusDate < r.EndDate);
 
                 if (selectedRange == null)
                     continue;
@@ -84,7 +84,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             var assignmentsDatesAndCountsForInterviewers = ExecuteQueryForAssignmentsStatistics(input, UserRoles.Interviewer.ToUserId());
             foreach (var counterObject in assignmentsDatesAndCountsForInterviewers.AsQueryable())
             {
-                var selectedRange = rows.Find(r => (!r.StartDate.HasValue || r.StartDate <= counterObject.StatusDate) && counterObject.StatusDate < r.EndDate.AddDays(1));
+                var selectedRange = rows.Find(r => (!r.StartDate.HasValue || r.StartDate <= counterObject.StatusDate) && counterObject.StatusDate <= r.EndDate);
                 if (selectedRange == null)
                     continue;
 
@@ -94,7 +94,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             var assignmentsDatesAndCountsForSupervisors = ExecuteQueryForAssignmentsStatistics(input, UserRoles.Supervisor.ToUserId());
             foreach (var counterObject in assignmentsDatesAndCountsForSupervisors.AsQueryable())
             {
-                var selectedRange = rows.Find(r => (!r.StartDate.HasValue || r.StartDate <= counterObject.StatusDate) && counterObject.StatusDate < r.EndDate.AddDays(1));
+                var selectedRange = rows.Find(r => (!r.StartDate.HasValue || r.StartDate <= counterObject.StatusDate) && counterObject.StatusDate <= r.EndDate);
                 if (selectedRange == null)
                     continue;
                 selectedRange.SupervisorAssignedCount += counterObject.InterviewsCount;
@@ -115,8 +115,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 {
                     DaysCountStart = daysStart,
                     DaysCountEnd = daysEnd,
-                    StartDate = daysEnd.HasValue ? utcNow.AddDays(-daysEnd.Value).Date : (DateTime?)null,
-                    EndDate = utcNow.AddDays(-daysStart).Date
+                    StartDate = daysEnd.HasValue ? utcNow.AddDays(-daysEnd.Value) : (DateTime?)null,
+                    EndDate = utcNow.AddDays(-daysStart + 1).AddSeconds(-1)
                 });
             });
             addRowWithRange(1, 1);
