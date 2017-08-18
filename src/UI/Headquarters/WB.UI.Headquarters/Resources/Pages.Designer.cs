@@ -682,7 +682,16 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to by.
+        ///   Looks up a localized string similar to Assigned to.
+        /// </summary>
+        public static string HistoryOfStatuses_AssignedTo {
+            get {
+                return ResourceManager.GetString("HistoryOfStatuses_AssignedTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By.
         /// </summary>
         public static string HistoryOfStatuses_By {
             get {
@@ -691,7 +700,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to with comment.
+        ///   Looks up a localized string similar to Comment.
         /// </summary>
         public static string HistoryOfStatuses_Comment {
             get {
@@ -700,7 +709,16 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to on.
+        ///   Looks up a localized string similar to Interview.
+        /// </summary>
+        public static string HistoryOfStatuses_Interview {
+            get {
+                return ResourceManager.GetString("HistoryOfStatuses_Interview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changed on.
         /// </summary>
         public static string HistoryOfStatuses_On {
             get {
@@ -718,11 +736,20 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview change status history.
+        ///   Looks up a localized string similar to Interview status history.
         /// </summary>
         public static string HistoryOfStatuses_Title {
             get {
                 return ResourceManager.GetString("HistoryOfStatuses_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View interview.
+        /// </summary>
+        public static string HistoryOfStatuses_ViewInterview {
+            get {
+                return ResourceManager.GetString("HistoryOfStatuses_ViewInterview", resourceCulture);
             }
         }
         
