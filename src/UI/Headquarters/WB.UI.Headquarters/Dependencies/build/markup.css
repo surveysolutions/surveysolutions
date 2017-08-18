@@ -5915,7 +5915,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   font-weight: bold;
   padding-right: 38px;
   border-radius: 5px; }
-  .combo-box .dropdown-toggle:focus, .field .field-to-fill:focus {
+  .combo-box .dropdown-toggle:hover, .field .field-to-fill:hover, .combo-box .dropdown-toggle:focus, .field .field-to-fill:focus, .combo-box .dropdown-toggle:active, .field .field-to-fill:active, .combo-box .dropdown-toggle:active:focus, .field .field-to-fill:active:focus {
     outline: none;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
             box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6); }
@@ -7459,14 +7459,26 @@ a.disabled {
   -webkit-box-shadow: none;
           box-shadow: none; }
   .form-control:hover, .form-control:focus, .form-control:active, .form-control:active:focus {
-    -webkit-box-shadow: inset 0 0 3px rgba(102, 175, 233, 0.6);
-            box-shadow: inset 0 0 3px rgba(102, 175, 233, 0.6); }
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6); }
   .form-control.with-clear-btn {
     padding-right: 40px; }
 
-.has-error .form-control {
+.has-error .form-control, .has-error .field-to-fill {
   -webkit-box-shadow: inset 0 0 3px rgba(231, 73, 36, 0.6);
           box-shadow: inset 0 0 3px rgba(231, 73, 36, 0.6); }
+  .has-error .form-control:hover, .has-error .form-control:focus, .has-error .form-control:active, .has-error .form-control:active:focus, .has-error .field-to-fill:hover, .has-error .field-to-fill:focus, .has-error .field-to-fill:active, .has-error .field-to-fill:active:focus {
+    border-color: #c33615;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #f19580;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #f19580; }
+
+.has-error .information-block .form-control {
+  -webkit-box-shadow: none;
+          box-shadow: none; }
+  .has-error .information-block .form-control:hover, .has-error .information-block .form-control:focus, .has-error .information-block .form-control:active, .has-error .information-block .form-control:active:focus {
+    border-color: #dbdfe2;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6); }
 
 .field {
   position: relative; }
@@ -7722,8 +7734,8 @@ input.double-checkbox-white {
       outline: none !important;
       background-color: transparent;
       border-color: #dbdfe2;
-      -webkit-box-shadow: inset 0 0 3px rgba(102, 175, 233, 0.6);
-              box-shadow: inset 0 0 3px rgba(102, 175, 233, 0.6); }
+      -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+              box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6); }
     .bootstrap-select.btn-group .dropdown-toggle .filter-option {
       overflow: hidden;
       text-overflow: ellipsis;
@@ -7748,8 +7760,8 @@ input.double-checkbox-white {
       .bootstrap-select.btn-group .dropdown-menu > li > a:hover, .bootstrap-select.btn-group .dropdown-menu > li > a:focus, .bootstrap-select.btn-group .dropdown-menu > li > a:active {
         color: #000; }
   .bootstrap-select.btn-group.open .dropdown-toggle {
-    -webkit-box-shadow: inset 0 0 3px rgba(102, 175, 233, 0.6);
-            box-shadow: inset 0 0 3px rgba(102, 175, 233, 0.6); }
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6); }
   .bootstrap-select.btn-group.open .bs-caret .caret {
     border-top: none;
     border-bottom: 12px solid #a6a8a9; }
@@ -7777,8 +7789,8 @@ ul.typeahead.dropdown-menu {
     text-overflow: ellipsis;
     white-space: nowrap; }
     .btn-input .dropdown-toggle:hover, .btn-input .dropdown-toggle:focus, .btn-input .dropdown-toggle:active, .btn-input .dropdown-toggle:active:focus {
-      -webkit-box-shadow: inset 0 0 3px rgba(102, 175, 233, 0.6);
-              box-shadow: inset 0 0 3px rgba(102, 175, 233, 0.6); }
+      -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+              box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6); }
     .btn-input .dropdown-toggle span:first-child {
       left: 10px;
       overflow: hidden;
@@ -7804,8 +7816,8 @@ ul.typeahead.dropdown-menu {
     .btn-input .dropdown-menu > li > a:hover, .btn-input .dropdown-menu > li > a:focus {
       background-color: #ececec; }
   .btn-input.open .dropdown-toggle {
-    -webkit-box-shadow: inset 0 0 3px rgba(102, 175, 233, 0.6);
-            box-shadow: inset 0 0 3px rgba(102, 175, 233, 0.6); }
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6); }
   .btn-input.open .caret-large {
     border-top: none;
     border-bottom: 12px solid #a6a8a9; }
