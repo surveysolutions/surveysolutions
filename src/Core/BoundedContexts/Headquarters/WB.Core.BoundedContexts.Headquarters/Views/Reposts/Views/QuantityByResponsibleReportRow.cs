@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views
             this.ResponsibleId = responsibleId;
             this.QuantityByPeriod = periods;
             this.ResponsibleName = responsibleName;
-            this.Average = Math.Round(periods.Average(), 2);
+            this.Average = periods.Length > 0 ? Math.Round(periods.Average(), 2) : 0;
             this.Total = total;
         }
 
