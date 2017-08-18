@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
+using Main.Core.Entities.SubEntities;
 using Npgsql;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -13,10 +14,12 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Infrastructure.Native.Fetching;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 
@@ -25,18 +28,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
     public class CountDaysOfInterviewInStatusReport : ICountDaysOfInterviewInStatusReport
     {
         private readonly PostgresPlainStorageSettings plainStorageSettings;
-        private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatusesStorage;
-        private readonly IPlainStorageAccessor<InterviewSummary> interviewSummaryStorage;
         private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
 
         public CountDaysOfInterviewInStatusReport(
-            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatusesStorage,
-            IPlainStorageAccessor<InterviewSummary> interviewSummaryStorage, 
             IPlainStorageAccessor<Assignment> assignmentsStorage, 
             PostgresPlainStorageSettings plainStorageSettings)
         {
-            this.interviewStatusesStorage = interviewStatusesStorage;
-            this.interviewSummaryStorage = interviewSummaryStorage;
             this.assignmentsStorage = assignmentsStorage;
             this.plainStorageSettings = plainStorageSettings;
         }
@@ -53,94 +50,104 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             var order = input.Orders.FirstOrDefault();
             if (order == null) throw new ArgumentNullException(nameof(order));
 
-            var datesAndStatuses = await ExecuteQueryForInterviewsStatistics(input);
-            var assignmentsDatesAndCounts = ExecuteQueryForAssignmentsStatistics(input);
+            var rows = CreateResultSetWithPredifinedRanges();
 
-            Dictionary<DateTime, Dictionary<InterviewStatus, int>> dictStatistics = new Dictionary<DateTime, Dictionary<InterviewStatus, int>>();
+            var datesAndStatuses = await ExecuteQueryForInterviewsStatistics(input);
 
             foreach (var counterObject in datesAndStatuses.AsQueryable())
             {
-                if (!dictStatistics.ContainsKey(counterObject.StatusDate))
-                    dictStatistics[counterObject.StatusDate] = new Dictionary<InterviewStatus, int>();
+                var selectedRange = rows.Find(r => r.StartDate <= counterObject.StatusDate && counterObject.StatusDate < r.EndDate);
 
-                dictStatistics[counterObject.StatusDate][counterObject.Status] = counterObject.InterviewsCount;
-            }
+                if (selectedRange == null)
+                    continue;
 
-            foreach (var counterObject in assignmentsDatesAndCounts.AsQueryable())
-            {
-                if (!dictStatistics.ContainsKey(counterObject.StatusDate))
-                    dictStatistics[counterObject.StatusDate] = new Dictionary<InterviewStatus, int>();
-
-                dictStatistics[counterObject.StatusDate][InterviewStatus.InterviewerAssigned] = counterObject.InterviewsCount;
-            }
-
-            var utcNow = DateTime.UtcNow;
-
-            var statisticsRows = dictStatistics.ToList();
-            var rows = new CountDaysOfInterviewInStatusRow[statisticsRows.Count];
-
-            for (int i = 0; i < statisticsRows.Count; i++)
-            {
-                var statisticsRow = statisticsRows[i];
-                int daysCount = (utcNow - statisticsRow.Key).Days;
-                rows[i] = new CountDaysOfInterviewInStatusRow()
-                    {
-                        DaysCount                 = daysCount,
-                        StartDate                 = statisticsRow.Key,
-                        EndDate                   = statisticsRow.Key,
-                        InterviewerAssignedCount  = GetStatusValue(statisticsRow.Value, InterviewStatus.InterviewerAssigned),
-                        CompletedCount            = GetStatusValue(statisticsRow.Value, InterviewStatus.Completed),
-                        ApprovedBySupervisorCount = GetStatusValue(statisticsRow.Value, InterviewStatus.ApprovedBySupervisor),
-                        RejectedBySupervisorCount = GetStatusValue(statisticsRow.Value, InterviewStatus.RejectedBySupervisor),
-                    };
-            }
-
-            var ranges = new List<int?> { 1, 2, 3, 4, 5, 10, 15, 20, 30 };
-            var defaultGroups =
-                from row in rows
-                group row by ranges.LastOrDefault(range => row.DaysCount >= range) into g
-                where g.Key.HasValue
-                select g;
-
-            var result = new List<CountDaysOfInterviewInStatusRow>();
-
-            foreach (var defaultGroup in defaultGroups)
-            {
-                result.Add(new CountDaysOfInterviewInStatusRow()
+                switch (counterObject.Status)
                 {
-                    DaysCount = defaultGroup.Key.Value,
-                    StartDate = defaultGroup.Min(e => e.StartDate).Date,
-                    EndDate = defaultGroup.Max(e => e.EndDate).Date,
-                    InterviewerAssignedCount = defaultGroup.Sum(e => e.InterviewerAssignedCount),
-                    CompletedCount = defaultGroup.Sum(e => e.CompletedCount),
-                    ApprovedBySupervisorCount = defaultGroup.Sum(e => e.ApprovedBySupervisorCount),
-                    RejectedBySupervisorCount = defaultGroup.Sum(e => e.RejectedBySupervisorCount),
-                });
+                    case InterviewStatus.Completed:
+                        selectedRange.CompletedCount += counterObject.InterviewsCount;
+                        break;
+                    case InterviewStatus.ApprovedBySupervisor:
+                        selectedRange.ApprovedBySupervisorCount += counterObject.InterviewsCount;
+                        break;
+                    case InterviewStatus.RejectedBySupervisor:
+                        selectedRange.RejectedBySupervisorCount += counterObject.InterviewsCount;
+                        break;
+                    case InterviewStatus.ApprovedByHeadquarters:
+                        selectedRange.ApprovedByHeadquartersCount += counterObject.InterviewsCount;
+                        break;
+                    case InterviewStatus.RejectedByHeadquarters:
+                        selectedRange.RejectedByHeadquartersCount += counterObject.InterviewsCount;
+                        break;
+                }
             }
 
-            var addEmptyRowIfDontExistsData = new Action<int>(days =>
-                {
-                    if (result.FirstOrDefault(r => r.DaysCount == days) == null)
-                        result.Add(new CountDaysOfInterviewInStatusRow()
-                        {
-                            DaysCount = days,
-                            StartDate = utcNow.AddDays(-days),
-                            EndDate = utcNow.AddDays(-days)
-                        });
-                });
+            var assignmentsDatesAndCountsForInterviewers = ExecuteQueryForAssignmentsStatistics(input, UserRoles.Interviewer.ToUserId());
+            foreach (var counterObject in assignmentsDatesAndCountsForInterviewers.AsQueryable())
+            {
+                var selectedRange = rows.Find(r => r.StartDate <= counterObject.StatusDate && counterObject.StatusDate < r.EndDate);
+                if (selectedRange == null)
+                    continue;
 
-            addEmptyRowIfDontExistsData(1);
-            addEmptyRowIfDontExistsData(2);
-            addEmptyRowIfDontExistsData(3);
-            addEmptyRowIfDontExistsData(4);
-            addEmptyRowIfDontExistsData(5);
+                switch (counterObject.Status)
+                {
+                    case InterviewStatus.InterviewerAssigned:
+                        selectedRange.InterviewerAssignedCount += counterObject.InterviewsCount;
+                        break;
+                    case InterviewStatus.SupervisorAssigned:
+                        selectedRange.SupervisorAssignedCount += counterObject.InterviewsCount;
+                        break;
+                }
+            }
+
+            var assignmentsDatesAndCountsForSupervisors = ExecuteQueryForAssignmentsStatistics(input, UserRoles.Interviewer.ToUserId());
+            foreach (var counterObject in assignmentsDatesAndCountsForSupervisors.AsQueryable())
+            {
+                var selectedRange = rows.Find(r => r.StartDate <= counterObject.StatusDate && counterObject.StatusDate < r.EndDate);
+                if (selectedRange == null)
+                    continue;
+
+                switch (counterObject.Status)
+                {
+                    case InterviewStatus.InterviewerAssigned:
+                        selectedRange.InterviewerAssignedCount += counterObject.InterviewsCount;
+                        break;
+                    case InterviewStatus.SupervisorAssigned:
+                        selectedRange.SupervisorAssignedCount += counterObject.InterviewsCount;
+                        break;
+                }
+            }
 
             return order.Direction == OrderDirection.Desc
-                ? result.OrderBy(r => r.DaysCount).ToArray()
-                : result.OrderByDescending(r => r.DaysCount).ToArray();
+                ? rows.OrderBy(r => r.DaysCountStart).ToArray()
+                : rows.OrderByDescending(r => r.DaysCountStart).ToArray();
         }
 
-        private IQueryable<CounterObject> ExecuteQueryForAssignmentsStatistics(CountDaysOfInterviewInStatusInputModel input)
+        private static List<CountDaysOfInterviewInStatusRow> CreateResultSetWithPredifinedRanges()
+        {
+            var utcNow = DateTime.UtcNow;
+            var rows = new List<CountDaysOfInterviewInStatusRow>();
+            var addRowWithRange = new Action<int, int?>((daysStart, daysEnd) =>
+            {
+                rows.Add(new CountDaysOfInterviewInStatusRow()
+                {
+                    DaysCountStart = daysStart,
+                    DaysCountEnd = daysEnd,
+                    StartDate = daysEnd.HasValue ? utcNow.AddDays(-daysEnd.Value).Date : new DateTime(),
+                    EndDate = utcNow.AddDays(-daysStart + 1).Date
+                });
+            });
+            addRowWithRange(1, 1);
+            addRowWithRange(2, 2);
+            addRowWithRange(3, 3);
+            addRowWithRange(4, 4);
+            addRowWithRange(5, 9);
+            addRowWithRange(10, 19);
+            addRowWithRange(20, 29);
+            addRowWithRange(30, null);
+            return rows;
+        }
+
+        private IEnumerable<CounterObject> ExecuteQueryForAssignmentsStatistics(CountDaysOfInterviewInStatusInputModel input, Guid userRoleId)
         {
             return assignmentsStorage.Query(_ =>
             {
@@ -154,7 +161,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 }
 
                 var statusWithTime = (from f in filteredAssignments
-                    where f.Quantity.HasValue
+                    let roleId = f.Responsible.RoleIds.First()
+                    where f.Quantity.HasValue && roleId == userRoleId
                     select new 
                     {
                         StatusDate = f.CreatedAtUtc.Date,
@@ -165,7 +173,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
 
                 var groupedByDateStatusWithTime = (from f in statusWithTime
                     group f by new { f.StatusDate } into g
-                    select new CounterObject
+                    select new CounterObject()
                     {
                         StatusDate = g.Key.StatusDate,
                         InterviewsCount = g.Sum(a => a.InterviewsCount - a.InterviewSummariesCount),
@@ -224,7 +232,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 },
                 Data = view.Select(x => new object[]
                 {
-                    x.DaysCount, x.InterviewerAssignedCount, x.CompletedCount, x.RejectedBySupervisorCount,
+                    x.DaysCountStart, x.InterviewerAssignedCount, x.CompletedCount, x.RejectedBySupervisorCount,
                     x.ApprovedBySupervisorCount
                 }).ToArray()
             };
