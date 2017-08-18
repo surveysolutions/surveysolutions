@@ -237,7 +237,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     )
                     .Max(s => s.Timestamp).Date
                 where (input.UnactiveDateStart <= statusChangeTime || input.UnactiveDateStart == null)
-                   && (statusChangeTime <= input.UnactiveDateEnd || input.UnactiveDateEnd == null)
+                   && (statusChangeTime < input.UnactiveDateEnd || input.UnactiveDateEnd == null)
                 select i;
             }
 
