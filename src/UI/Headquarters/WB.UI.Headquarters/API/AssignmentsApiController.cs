@@ -66,8 +66,8 @@ namespace WB.UI.Headquarters.API
                 QuestionnaireVersion = questionnaireIdentity?.Version,
                 ResponsibleId = isInterviewer ? this.authorizedUser.Id :request.ResponsibleId,
                 ShowArchive = !isInterviewer && request.ShowArchive,
-                DateStart = request.DateStart?.Date,
-                DateEnd = request.DateEnd?.Date.AddDays(1),
+                DateStart = request.DateStart?.ToUniversalTime(),
+                DateEnd = request.DateEnd?.ToUniversalTime(),
                 UserRole = request.UserRole
             };
 
