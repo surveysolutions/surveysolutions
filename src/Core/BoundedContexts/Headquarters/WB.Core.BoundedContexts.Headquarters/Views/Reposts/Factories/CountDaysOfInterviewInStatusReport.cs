@@ -144,7 +144,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 }
 
                 var statusWithTime = (from f in filteredAssignments
-                    where f.Quantity.HasValue && f.Responsible.RoleIds.First() == userRoleId
+                    where f.Quantity.HasValue 
+                       && f.Responsible.RoleIds.First() == userRoleId
+                       && f.Archived == false
                     select new 
                     {
                         StatusDate = f.CreatedAtUtc.Date,
