@@ -40,12 +40,27 @@ export default {
                 deferLoading: 0,
                 columns: [
                     {
-                        data: "daysCount",
+                        data: "daysCountStart",
                         title: this.$t("Strings.Days"),
                         orderable: true,
                         render: function(data, type, row) {
-                            if(row.startDate === row.endDate) return `<span>${data}</span>`;
-                            else return `<span>${data}&#43;</span>`;
+                            if(row.daysCountStart === row.daysCountEnd) 
+                                return `<span>${data}</span>`;
+                            else if(row.daysCountEnd == undefined) 
+                                return `<span>${data}&#43;</span>`;
+                            else 
+                                return `<span>${row.daysCountStart}-${row.daysCountEnd}</span>`;
+                        }
+                    },
+                    {
+                        data: "supervisorAssignedCount",
+                        title: this.$t("Strings.InterviewStatus_SupervisorAssigned"),
+                        orderable: false,
+                        render: function(data, type, row) {
+                            if(data === 0) return `<span>${data}</span>`;
+                            else {
+                                return `<a href='${self.$config.assignmentsBaseUrl}?dateStart=${row.startDate}&dateEnd=${row.endDate}'>${data}</a>`;
+                            }
                         }
                     },
                     {
@@ -91,7 +106,29 @@ export default {
                                 return `<a href='${self.$config.interviewsBaseUrl}?startDate=${row.startDate}&endDate=${row.endDate}&status=ApprovedBySupervisor'>${data}</a>`;
                             }
                         }
-                     }
+                    },
+                    {
+                        data: "rejectedByHeadquartersCount",
+                        title: this.$t("Strings.InterviewStatus_RejectedByHeadquarters"),
+                        orderable: false,
+                        render: function(data, type, row) {
+                            if(data === 0) return `<span>${data}</span>`;
+                            else {
+                                return `<a href='${self.$config.interviewsBaseUrl}?unactiveDateStart=${row.startDate}&unactiveDateEnd=${row.endDate}&status=RejectedByHeadquarters'>${data}</a>`;
+                            }
+                        }
+                    },
+                    {
+                        data: "approvedByHeadquartersCount",
+                        title: this.$t("Strings.InterviewStatus_ApprovedByHeadquarters"),
+                        orderable: false,
+                        render: function(data, type, row) {
+                            if(data === 0) return `<span>${data}</span>`;
+                            else {
+                                return `<a href='${self.$config.interviewsBaseUrl}?startDate=${row.startDate}&endDate=${row.endDate}&status=ApprovedByHeadquarters'>${data}</a>`;
+                            }
+                        }
+                    }
                 ],
                 ajax: {
                     url: this.$config.dataUrl,
