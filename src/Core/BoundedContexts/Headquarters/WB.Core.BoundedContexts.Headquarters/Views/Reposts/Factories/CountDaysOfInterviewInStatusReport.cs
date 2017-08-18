@@ -107,7 +107,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
 
         private static List<CountDaysOfInterviewInStatusRow> CreateResultSetWithPredifinedRanges()
         {
-            var utcNow = DateTime.UtcNow;
+            var utcNow = DateTime.UtcNow.Date;
             var rows = new List<CountDaysOfInterviewInStatusRow>();
             var addRowWithRange = new Action<int, int?>((daysStart, daysEnd) =>
             {
