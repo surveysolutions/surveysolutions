@@ -150,7 +150,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             bool archived, int? apkBuildVersion, Guid? supervisorId,
             InterviewerFacet facet = InterviewerFacet.None)
         {
-            var dbContext = this.UserRepository.DbContext;
+            var repository = this.UserRepository;
 
             Func<IQueryable<HqUser>, IQueryable<InterviewersItem>> query = allUsers =>
             {
@@ -166,37 +166,37 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                         break;
                     case InterviewerFacet.LowStorage:
                         interviewers = from i in interviewers
-                                       let deviceSyncInfo = dbContext.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id).OrderByDescending(x => x.Id).FirstOrDefault()
+                                       let deviceSyncInfo = repository.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id).OrderByDescending(x => x.Id).FirstOrDefault()
                                        where deviceSyncInfo != null && deviceSyncInfo.StorageFreeInBytes < InterviewerIssuesConstants.LowMemoryInBytesSize
                                        select i;
                         break;
                     case InterviewerFacet.WrongTime:
                         interviewers = from i in interviewers
-                                       let deviceSyncInfo = dbContext.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id).OrderByDescending(x => x.Id).FirstOrDefault()
+                                       let deviceSyncInfo = repository.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id).OrderByDescending(x => x.Id).FirstOrDefault()
                                        where deviceSyncInfo != null && DbFunctions.DiffMinutes(deviceSyncInfo.DeviceDate, deviceSyncInfo.SyncDate) > InterviewerIssuesConstants.MinutesForWrongTime
                                        select i;
                         break;
                     case InterviewerFacet.OldAndroid:
                         interviewers = from i in interviewers
-                                       let deviceSyncInfo = dbContext.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id).OrderByDescending(x => x.Id).FirstOrDefault()
+                                       let deviceSyncInfo = repository.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id).OrderByDescending(x => x.Id).FirstOrDefault()
                                        where deviceSyncInfo != null && deviceSyncInfo.AndroidSdkVersion < InterviewerIssuesConstants.MinAndroidSdkVersion
                                        select i;
                         break;
                     case InterviewerFacet.NoAssignmentsReceived:
                         interviewers = from i in interviewers
-                                       let deviceSyncInfo = dbContext.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id)
+                                       let deviceSyncInfo = repository.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id)
                                        where !deviceSyncInfo.Any(s => s.Statistics.DownloadedQuestionnairesCount > 0)
                                        select i;
                         break;
                     case InterviewerFacet.NeverUploaded:
                         interviewers = from i in interviewers
-                                       let deviceSyncInfo = dbContext.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id)
+                                       let deviceSyncInfo = repository.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id)
                                        where !deviceSyncInfo.Any(s => s.Statistics.UploadedInterviewsCount > 0)
                                        select i;
                         break;
                     case InterviewerFacet.TabletReassigned:
                         interviewers = from i in interviewers
-                                       let deviceSyncInfo = dbContext.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id)
+                                       let deviceSyncInfo = repository.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id)
                                        where deviceSyncInfo.Any() && deviceSyncInfo.Select(s => s.DeviceId).Distinct().Count() > 1
                                        select i;
                         break;
@@ -224,12 +224,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             orderBy = string.IsNullOrWhiteSpace(orderBy) ? nameof(HqUser.UserName) : orderBy;
             var filteredUsers = query
                 .PagedAndOrderedQuery(orderBy, pageIndex, pageSize)
-                .Invoke(dbContext.Users)
+                .Invoke(repository.Users)
                 .ToList();
 
             return new InterviewersView
             {
-                TotalCount = query.Invoke(dbContext.Users).Count(),
+                TotalCount = query.Invoke(repository.Users).Count(),
                 Items = filteredUsers.ToList()
             };
         }
