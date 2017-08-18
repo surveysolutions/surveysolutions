@@ -133,7 +133,7 @@ export default {
                     contentType: 'application/json'
                 },
                 order: [[0, 'asc']],
-                sDom: 'f<"table-with-scroll"t>ip'
+                sDom: 'rf<"table-with-scroll"t>ip'
             }
         }
     },
