@@ -113,6 +113,19 @@ export default {
                         render: function(data, type, row) {
                             return self.renderInterviewsUrl(row, data, 'ApprovedByHeadquarters');
                         }
+                    },
+                    {
+                        data: "daysCountStart",
+                        title: this.$t("Strings.Total"),
+                        orderable: false,
+                        render: function(data, type, row) {
+                            var total = row.supervisorAssignedCount + row.interviewerAssignedCount + row.completedCount
+                                + row.rejectedBySupervisorCount + row.approvedBySupervisorCount
+                                + row.rejectedByHeadquartersCount + row.approvedByHeadquartersCount;
+                            //if(total == 0)
+                                return  `<span>${total}</span>`;
+                            //return `<a href='${self.$config.interviewsBaseUrl}?unactiveDateStart=${row.startDate}&unactiveDateEnd=${row.endDate}'>${total}</a>`;
+                        }
                     }
                 ],
                 ajax: {
