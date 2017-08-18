@@ -55,8 +55,8 @@ namespace WB.UI.Headquarters.Controllers
                 Statuses = data.Status.HasValue ? new [] {data.Status.Value} : null,
                 SearchBy = data.SearchBy,
                 AssignmentId = data.AssignmentId,
-                UnactiveDateStart = data.UnactiveDateStart?.Date,
-                UnactiveDateEnd = data.UnactiveDateEnd?.Date.AddDays(1),
+                UnactiveDateStart = data.UnactiveDateStart?.ToUniversalTime(),
+                UnactiveDateEnd = data.UnactiveDateEnd?.ToUniversalTime(),
             };
 
             var allInterviews = this.allInterviewsViewFactory.Load(input);
