@@ -304,7 +304,7 @@
     <value>الإجابة '{{answer}}' غير صحيح لأن المسألة كحجم قائمة والجواب المحدد سلبي</value>
   </data>
   <data name="NumberRosterRemoveConfirm" xml:space="preserve">
-    <value>هل أنت متأكد من أنك تريد إزالة {{أamountOfRostersToRemove}} الصف (الصفوف) من كل قائمة ذات الصلة?</value>
+    <value>هل أنت متأكد من أنك تريد إزالة {{amountOfRostersToRemove}} الصف (الصفوف) من كل قائمة ذات الصلة?</value>
   </data>
   <data name="NumberRosterUpperBound" xml:space="preserve">
     <value>الإجابة '{{answer}}' غير صحيحة لأن الجواب أكبر من الحد الأعلى قائمة {{answerMaxValue}}.</value>
