@@ -11,7 +11,9 @@
             </FilterBlock>
         </Filters>
         <ExportButtons slot="exportButtons" />
-        <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addFilteringParams" :hasPaging="false" :hasSearch="false"></DataTables>
+        <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addFilteringParams" :hasPaging="false"
+             :hasSearch="false">
+        </DataTables>
     </Layout>
 </template>
 
@@ -122,9 +124,7 @@ export default {
                             var total = row.supervisorAssignedCount + row.interviewerAssignedCount + row.completedCount
                                 + row.rejectedBySupervisorCount + row.approvedBySupervisorCount
                                 + row.rejectedByHeadquartersCount + row.approvedByHeadquartersCount;
-                            //if(total == 0)
-                                return  `<span>${total}</span>`;
-                            //return `<a href='${self.$config.interviewsBaseUrl}?unactiveDateStart=${row.startDate}&unactiveDateEnd=${row.endDate}'>${total}</a>`;
+                            return  `<span>${total}</span>`;
                         }
                     }
                 ],
@@ -138,6 +138,9 @@ export default {
                 bInfo : false,
                 footer: true,
                 footerCallback: function (row, data, start, end, display) {
+                    //if ($(this).find("tfoot").length == 0)
+                    //    $(this).append("<tfoot><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tfoot>")
+
                     var api = this.api(), data;
                     var colNumber = [1, 2, 3, 4, 5, 6, 7];
         
