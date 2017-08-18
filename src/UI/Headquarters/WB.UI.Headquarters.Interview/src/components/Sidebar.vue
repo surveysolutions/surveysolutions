@@ -19,7 +19,7 @@
             return {
                 coverSection: {
                     collapsed: true,
-                    title: "Cover",
+                    title: this.$t("Cover"),
                     to: {
                         name: 'prefilled'
                     },
@@ -45,7 +45,7 @@
             completeSection() {
                 return {
                     collapsed: true,
-                    title: "Complete",
+                    title: this.$t("Complete"),
                     to: {
                         name: 'complete'
                     },
