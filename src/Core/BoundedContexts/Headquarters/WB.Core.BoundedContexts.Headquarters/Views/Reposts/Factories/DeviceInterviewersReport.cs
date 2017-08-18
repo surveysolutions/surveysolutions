@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 let anyAssignmentReceived = userRepository.DeviceSyncInfos.Any(ds => ds.InterviewerId == i.Id && ds.Statistics.DownloadedQuestionnairesCount > 0)
                 let anyInterviewsUploaded = userRepository.DeviceSyncInfos.Any(ds => ds.InterviewerId == i.Id && ds.Statistics.UploadedInterviewsCount > 0)
                 let hasTwoTablets = userRepository.DeviceSyncInfos.Where(ds => ds.InterviewerId == i.Id).Select(ds => ds.DeviceId).Distinct().Count() > 1
-                where i.Profile.SupervisorId != null
+                where i.Profile.SupervisorId != null && i.IsArchived == false
                 select new
                 {
                     UserId = i.Id,
