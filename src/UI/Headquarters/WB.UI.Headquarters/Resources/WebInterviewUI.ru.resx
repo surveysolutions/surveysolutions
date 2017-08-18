@@ -289,7 +289,7 @@
     <value>Первые {{count}} вопросов с комментариями:</value>
   </data>
   <data name="CompleteFirstErrors" xml:space="preserve">
-    <value>Первые {{ count}} объектов с ошибкам:</value>
+    <value>Первые {{count}} объектов с ошибкам:</value>
   </data>
   <data name="Help" xml:space="preserve">
     <value>Помощь</value>
