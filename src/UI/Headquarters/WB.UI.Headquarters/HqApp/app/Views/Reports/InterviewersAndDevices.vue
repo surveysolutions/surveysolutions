@@ -36,58 +36,6 @@ export default {
                         }
                     },
                     {
-                        data: "outdatedCount",
-                        name: "OutdatedCount",
-                        "class": "type-numeric",
-                        orderable: true,
-                        title: this.$t("DevicesInterviewers.OldInterviewerVersion"),
-                        render: function (data, type, row) {
-                            if (data === 0) return `<span>${data}</span>`;
-                            else {
-                                return `<a href='${self.$config.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=OutdatedApp'>${data}</a>`;
-                            }
-                        }
-                    },
-                    {
-                        data: "lowStorageCount",
-                        name: "LowStorageCount",
-                        "class": "type-numeric",
-                        orderable: true,
-                        title: this.$t("DevicesInterviewers.LowStorage"),
-                        render: function(data, type, row) {
-                            if(data === 0) return `<span>${data}</span>`;
-                            else {
-                                return `<a href='${self.$config.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=LowStorage'>${data}</a>`;
-                            }
-                        }
-                    },
-                    {
-                        data: "wrongDateOnTabletCount",
-                        name: "WrongDateOnTabletCount",
-                        "class": "type-numeric",
-                        orderable: true,
-                        title: this.$t("DevicesInterviewers.WrongDateOnTablet"),
-                        render: function(data, type, row) {
-                            if(data === 0) return `<span>${data}</span>`;
-                            else {
-                                return `<a href='${self.$config.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=WrongTime'>${data}</a>`;
-                            }
-                        }
-                    },
-                    {
-                        data: "oldAndroidCount",
-                        name: "OldAndroidCount",
-                        "class": "type-numeric",
-                        orderable: true,
-                        title: this.$t("DevicesInterviewers.OldAndroidVersion"),
-                        render: function(data, type, row) {
-                            if(data === 0) return `<span>${data}</span>`;
-                            else {
-                                return `<a href='${self.$config.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=OldAndroid'>${data}</a>`;
-                            }
-                        }
-                    },
-                    {
                         data: "noQuestionnairesCount",
                         name: "NoQuestionnairesCount",
                         "class": "type-numeric",
@@ -123,6 +71,58 @@ export default {
                             if(data === 0) return `<span>${data}</span>`;
                             else {
                                 return `<a href='${self.$config.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=TabletReassigned'>${data}</a>`;
+                            }
+                        }
+                    },
+                    {
+                        data: "outdatedCount",
+                        name: "OutdatedCount",
+                        "class": "type-numeric",
+                        orderable: true,
+                        title: this.$t("DevicesInterviewers.OldInterviewerVersion"),
+                        render: function (data, type, row) {
+                            if (data === 0) return `<span>${data}</span>`;
+                            else {
+                                return `<a href='${self.$config.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=OutdatedApp'>${data}</a>`;
+                            }
+                        }
+                    },
+                    {
+                        data: "oldAndroidCount",
+                        name: "OldAndroidCount",
+                        "class": "type-numeric",
+                        orderable: true,
+                        title: this.$t("DevicesInterviewers.OldAndroidVersion"),
+                        render: function(data, type, row) {
+                            if(data === 0) return `<span>${data}</span>`;
+                            else {
+                                return `<a href='${self.$config.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=OldAndroid'>${data}</a>`;
+                            }
+                        }
+                    },
+                    {
+                        data: "wrongDateOnTabletCount",
+                        name: "WrongDateOnTabletCount",
+                        "class": "type-numeric",
+                        orderable: true,
+                        title: this.$t("DevicesInterviewers.WrongDateOnTablet"),
+                        render: function(data, type, row) {
+                            if(data === 0) return `<span>${data}</span>`;
+                            else {
+                                return `<a href='${self.$config.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=WrongTime'>${data}</a>`;
+                            }
+                        }
+                    },
+                    {
+                        data: "lowStorageCount",
+                        name: "LowStorageCount",
+                        "class": "type-numeric",
+                        orderable: true,
+                        title: this.$t("DevicesInterviewers.LowStorage"),
+                        render: function(data, type, row) {
+                            if(data === 0) return `<span>${data}</span>`;
+                            else {
+                                return `<a href='${self.$config.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=LowStorage'>${data}</a>`;
                             }
                         }
                     }
