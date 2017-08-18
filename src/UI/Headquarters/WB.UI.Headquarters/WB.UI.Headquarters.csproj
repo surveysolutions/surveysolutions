@@ -117,13 +117,6 @@
       <HintPath>..\..\..\..\packages\FluentMigrator.1.6.2\lib\40\FluentMigrator.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="HibernatingRhinos.Profiler.Appender, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0774796e73ebf640, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Install\Programing\NHibernate.Profiler\NHibernate.Profiler-v4.0-Build-4046\Appender\net46\HibernatingRhinos.Profiler.Appender.dll</HintPath>
-    </Reference>
-    <Reference Include="HibernatingRhinos.Profiler.Appender.NHibernateLog4Net">
-      <HintPath>..\..\..\..\..\..\Install\Programing\NHibernate.Profiler\NHibernate.Profiler-v4.0-Build-4046\Appender\net46\HibernatingRhinos.Profiler.Appender.NHibernateLog4Net.dll</HintPath>
-    </Reference>
     <Reference Include="HtmlSanitizationLibrary, Version=4.3.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\AntiXSS.4.3.0\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
       <Private>True</Private>
