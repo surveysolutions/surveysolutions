@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
         Establish context = () =>
         {
             input = CreateSpeedBetweenStatusesByInterviewersReportInputModel(supervisorId: supervisorId, period: "w");
-            var initialStatusChangeDate = input.From.Date.AddHours(-1);
+            var initialStatusChangeDate = input.From.Date.AddHours(1);
 
             var user = Create.Entity.UserDocument(supervisorId: supervisorId);
 
@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
             result.Items.Should().HaveCount(1);
 
         It should_return_first_row_with_positive_35_minutes_per_interview_at_first_period_and_null_minutes_per_interview_at_second = () =>
-            result.Items.First().SpeedByPeriod.Should().Equal(new double?[] { 35, null });
+            result.Items.First().SpeedByPeriod.Should().Equal(new double?[] { 35 });
 
         It should_return_first_row_with_positive_35_minutes_in_Total = () =>
             result.Items.First().Total.Should().Be(35);
