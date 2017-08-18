@@ -2613,6 +2613,8 @@ if (false) {(function () {
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     data: function data() {
@@ -2704,9 +2706,7 @@ if (false) {(function () {
                     orderable: false,
                     render: function render(data, type, row) {
                         var total = row.supervisorAssignedCount + row.interviewerAssignedCount + row.completedCount + row.rejectedBySupervisorCount + row.approvedBySupervisorCount + row.rejectedByHeadquartersCount + row.approvedByHeadquartersCount;
-                        //if(total == 0)
                         return "<span>" + total + "</span>";
-                        //return `<a href='${self.$config.interviewsBaseUrl}?unactiveDateStart=${row.startDate}&unactiveDateEnd=${row.endDate}'>${total}</a>`;
                     }
                 }],
                 ajax: {
@@ -2719,6 +2719,8 @@ if (false) {(function () {
                 bInfo: false,
                 footer: true,
                 footerCallback: function footerCallback(row, data, start, end, display) {
+                    if ($(this).find("tfoot").length == 0) $(this).append("<tfoot><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tfoot>");
+
                     var api = this.api(),
                         data;
                     var colNumber = [1, 2, 3, 4, 5, 6, 7];
