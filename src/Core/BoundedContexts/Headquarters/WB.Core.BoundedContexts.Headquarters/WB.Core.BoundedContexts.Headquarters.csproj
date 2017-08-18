@@ -13,10 +13,6 @@
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\Reposts\Factories\CountDaysOfInterviewInStatusReport.sql" />
-    <EmbeddedResource Include="Views\Reposts\Factories\DeviceInterviewersReportCount.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Views\Reposts\Factories\DeviceInterviewersReport.sql" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj" />
