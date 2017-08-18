@@ -18,6 +18,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
         Establish context = () =>
         {
             input = CreateSpeedBetweenStatusesBySupervisorsReportInputModel(period: "w");
+            var timestamp = input.From.Date.AddHours(1);
+
+            var interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
+            interviewStatuses.Store(Create.Entity.InterviewStatuses(questionnaireId: input.QuestionnaireId,
+                questionnaireVersion: input.QuestionnaireVersion, statuses: new[]
+                {
+                    Create.Entity.InterviewCommentedStatus(timestamp: timestamp)
+                }), "1");
 
             var user = Create.Entity.UserDocument(supervisorId: supervisorId);
 
@@ -28,11 +36,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
                     timeSpans: new[]
                     {
                         Create.Entity.TimeSpanBetweenStatuses(interviewerId: user.PublicKey,
-                            timestamp: input.From.Date.AddHours(1),
+                            timestamp: timestamp,
                             timeSpanWithPreviousStatus: TimeSpan.FromMinutes(-35))
                     }), "2");
 
-            quantityReportFactory = CreateSpeedReportFactory(interviewStatusTimeSpans: interviewStatusTimeSpans);
+            quantityReportFactory = CreateSpeedReportFactory(interviewStatusTimeSpans: interviewStatusTimeSpans,
+                interviewStatuses: interviewStatuses);
         };
 
         Because of = () =>
