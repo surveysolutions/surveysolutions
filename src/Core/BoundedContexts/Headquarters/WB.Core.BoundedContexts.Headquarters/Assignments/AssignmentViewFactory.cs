@@ -216,7 +216,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 items = items.Where(x => 
                     x.Quantity.HasValue 
                     && (x.CreatedAtUtc >= input.DateStart || input.DateStart == null)
-                    && (x.CreatedAtUtc <= input.DateEnd || input.DateEnd == null)
+                    && (x.CreatedAtUtc <  input.DateEnd   || input.DateEnd == null)
                 );
             }
 
