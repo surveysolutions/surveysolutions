@@ -27,7 +27,7 @@
 
     export default {
         name: 'wb-question',
-        props: ["question", 'questionCssClassName', 'noTitle', 'noInstructions', 'noValidation', 'noAnswer', 'noComments'],
+        props: ["question", 'questionCssClassName', 'noTitle', 'noInstructions', 'noValidation', 'noAnswer', 'noComments', 'isDisabled'],
         data() {
             return {
                 isShowingAddCommentDialogFlag: undefined
@@ -59,7 +59,7 @@
                 return !this.question.isLoading && !(this.question.isDisabled && this.question.hideIfDisabled)
             },
             questionClass() {
-                return [{ 'disabled-question': this.question.isDisabled }]
+                return [{ 'disabled-question': this.isDisabled || this.question.isDisabled }]
             },
             questionEditorClass() {
                 return [{

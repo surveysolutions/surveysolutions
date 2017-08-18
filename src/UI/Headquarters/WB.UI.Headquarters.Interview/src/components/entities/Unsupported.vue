@@ -1,6 +1,6 @@
 <template>
-    <wb-question :question="$me">
-        <h1 class="disabled"><span>{{ $t("QuestionUnsupported") }}</span></h1>
+    <wb-question :question="$me" isDisabled="true">
+        <h1><span>{{ $t("QuestionUnsupported") }}</span></h1>
     </wb-question>
 </template>
 <script lang="js">
