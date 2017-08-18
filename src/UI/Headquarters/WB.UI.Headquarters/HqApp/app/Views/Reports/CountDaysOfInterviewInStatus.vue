@@ -1,5 +1,5 @@
 <template>
-    <Layout :hasFilter="true" :title="$t('Pages.CountDaysOfInterviewInStatus')">
+    <Layout :hasFilter="true" :title="$t('Pages.CountDaysOfInterviewInStatus')" :subtitle="$t('Pages.CountDaysOfInterviewInStatusDescription')">
         <Filters slot="filters">
             <FilterBlock :title="$t('Pages.Template')">
                 <select class="selectpicker" v-model="questionnaireId">
@@ -59,7 +59,7 @@ export default {
                         render: function(data, type, row) {
                             if(data === 0) return `<span>${data}</span>`;
                             else {
-                                return `<a href='${self.$config.assignmentsBaseUrl}?dateStart=${row.startDate}&dateEnd=${row.endDate}'>${data}</a>`;
+                                return `<a href='${self.$config.assignmentsBaseUrl}?dateStart=${row.startDate}&dateEnd=${row.endDate}&userRole=Supervisor'>${data}</a>`;
                             }
                         }
                     },
@@ -70,7 +70,7 @@ export default {
                         render: function(data, type, row) {
                             if(data === 0) return `<span>${data}</span>`;
                             else {
-                                return `<a href='${self.$config.assignmentsBaseUrl}?dateStart=${row.startDate}&dateEnd=${row.endDate}'>${data}</a>`;
+                                return `<a href='${self.$config.assignmentsBaseUrl}?dateStart=${row.startDate}&dateEnd=${row.endDate}&userRole=Interviewer'>${data}</a>`;
                             }
                         }
                     },
@@ -79,10 +79,7 @@ export default {
                         title: this.$t("Strings.InterviewStatus_Completed"),
                         orderable: false,
                         render: function(data, type, row) {
-                            if(data === 0) return `<span>${data}</span>`;
-                            else {
-                                return `<a href='${self.$config.interviewsBaseUrl}?unactiveDateStart=${row.startDate}&unactiveDateEnd=${row.endDate}&status=Completed'>${data}</a>`;
-                            }
+                            return self.renderInterviewsUrl(row, data, 'Completed');
                         }
                     },
                     {
@@ -90,10 +87,7 @@ export default {
                         title: this.$t("Strings.InterviewStatus_RejectedBySupervisor"),
                         orderable: false,
                         render: function(data, type, row) {
-                            if(data === 0) return `<span>${data}</span>`;
-                            else {
-                                return `<a href='${self.$config.interviewsBaseUrl}?unactiveDateStart=${row.startDate}&unactiveDateEnd=${row.endDate}&status=RejectedBySupervisor'>${data}</a>`;
-                            }
+                            return self.renderInterviewsUrl(row, data, 'RejectedBySupervisor');
                         }
                     },
                     {
@@ -101,10 +95,7 @@ export default {
                         title: this.$t("Strings.InterviewStatus_ApprovedBySupervisor"),
                         orderable: false,
                         render: function(data, type, row) {
-                            if(data === 0) return `<span>${data}</span>`;
-                            else {
-                                return `<a href='${self.$config.interviewsBaseUrl}?startDate=${row.startDate}&endDate=${row.endDate}&status=ApprovedBySupervisor'>${data}</a>`;
-                            }
+                            return self.renderInterviewsUrl(row, data, 'ApprovedBySupervisor');
                         }
                     },
                     {
@@ -112,10 +103,7 @@ export default {
                         title: this.$t("Strings.InterviewStatus_RejectedByHeadquarters"),
                         orderable: false,
                         render: function(data, type, row) {
-                            if(data === 0) return `<span>${data}</span>`;
-                            else {
-                                return `<a href='${self.$config.interviewsBaseUrl}?unactiveDateStart=${row.startDate}&unactiveDateEnd=${row.endDate}&status=RejectedByHeadquarters'>${data}</a>`;
-                            }
+                            return self.renderInterviewsUrl(row, data, 'RejectedByHeadquarters');
                         }
                     },
                     {
@@ -123,10 +111,7 @@ export default {
                         title: this.$t("Strings.InterviewStatus_ApprovedByHeadquarters"),
                         orderable: false,
                         render: function(data, type, row) {
-                            if(data === 0) return `<span>${data}</span>`;
-                            else {
-                                return `<a href='${self.$config.interviewsBaseUrl}?startDate=${row.startDate}&endDate=${row.endDate}&status=ApprovedByHeadquarters'>${data}</a>`;
-                            }
+                            return self.renderInterviewsUrl(row, data, 'ApprovedByHeadquarters');
                         }
                     }
                 ],
@@ -135,8 +120,9 @@ export default {
                     type: "GET",
                     contentType: 'application/json'
                 },
-                sDom: 'f<"table-with-scroll"t>ip',
-                order: [[ 0, "desc" ]]
+                sDom: 'rf<"table-with-scroll"t>ip',
+                order: [[ 0, "desc" ]],
+                bInfo : false
             }
         }
     },
@@ -148,6 +134,18 @@ export default {
         addFilteringParams(data) {
             if (this.questionnaireId) {
                 data.questionnaireId = this.questionnaireId;
+            }
+        },
+
+        renderInterviewsUrl(row, data, status){
+            if(data === 0) return `<span>${data}</span>`;
+            else {
+                if (row.startDate == undefined)
+                    return `<a href='${this.$config.interviewsBaseUrl}?endDate=${row.endDate}&status=${status}'>${data}</a>`;
+                if (row.endDate == undefined)
+                    return `<a href='${this.$config.interviewsBaseUrl}?startDate=${row.startDate}&status=${status}'>${data}</a>`;
+
+                return `<a href='${this.$config.interviewsBaseUrl}?startDate=${row.startDate}&endDate=${row.endDate}&status=${status}'>${data}</a>`;
             }
         }
     },

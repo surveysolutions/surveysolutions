@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
+using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -65,8 +66,9 @@ namespace WB.UI.Headquarters.API
                 QuestionnaireVersion = questionnaireIdentity?.Version,
                 ResponsibleId = isInterviewer ? this.authorizedUser.Id :request.ResponsibleId,
                 ShowArchive = !isInterviewer && request.ShowArchive,
-                DateStart= request.DateStart?.Date,
-                DateEnd = request.DateEnd?.Date.AddDays(1)
+                DateStart = request.DateStart?.Date,
+                DateEnd = request.DateEnd?.Date,
+                UserRole = request.UserRole
             };
 
             if (this.authorizedUser.IsSupervisor)
@@ -246,6 +248,7 @@ namespace WB.UI.Headquarters.API
 
             public DateTime? DateStart { get; set; }
             public DateTime? DateEnd { get; set; }
+            public UserRoles? UserRole { get; set; }
         }
     }
 }

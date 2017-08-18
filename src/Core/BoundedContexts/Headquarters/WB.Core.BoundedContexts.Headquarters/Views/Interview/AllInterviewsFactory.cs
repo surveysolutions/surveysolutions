@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -223,11 +224,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 items = items.Where(x => x.AssignmentId == input.AssignmentId);
             }
 
-            if (input.UnactiveDateStart.HasValue && input.UnactiveDateEnd.HasValue)
+            if (input.UnactiveDateStart.HasValue || input.UnactiveDateEnd.HasValue)
             {
                 items = from i in items
-                let statusChangeTime = i.InterviewCommentedStatuses.Max(s => s.Timestamp).Date
-                where input.UnactiveDateStart <= statusChangeTime && statusChangeTime <= input.UnactiveDateEnd
+                let statusChangeTime = i.InterviewCommentedStatuses
+                    .Where(s => 
+                        (s.Status == InterviewExportedAction.Completed && i.Status == InterviewStatus.Completed)
+                        || (s.Status == InterviewExportedAction.ApprovedBySupervisor && i.Status == InterviewStatus.ApprovedBySupervisor)
+                        || (s.Status == InterviewExportedAction.ApprovedByHeadquarter && i.Status == InterviewStatus.ApprovedByHeadquarters)
+                        || (s.Status == InterviewExportedAction.RejectedBySupervisor && i.Status == InterviewStatus.RejectedBySupervisor)
+                        || (s.Status == InterviewExportedAction.RejectedByHeadquarter && i.Status == InterviewStatus.RejectedByHeadquarters)
+                    )
+                    .Max(s => s.Timestamp).Date
+                where (input.UnactiveDateStart <= statusChangeTime || input.UnactiveDateStart == null)
+                   && (statusChangeTime <= input.UnactiveDateEnd || input.UnactiveDateEnd == null)
                 select i;
             }
 

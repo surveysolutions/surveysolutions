@@ -1052,4 +1052,8 @@
     <value>Экспорт</value>
     <comment>Экспорт</comment>
   </data>
+  <data name="CountDaysOfInterviewInStatusDescription" xml:space="preserve">
+    <value>Количество дней когда интервью находятся в их текущем статусе</value>
+    <comment>Количество дней когда интервью находятся в их текущем статусе</comment>
+  </data>
 </root>
