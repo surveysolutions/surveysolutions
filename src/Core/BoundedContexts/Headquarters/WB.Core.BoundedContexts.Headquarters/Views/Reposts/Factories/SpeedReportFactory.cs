@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 {
@@ -59,10 +60,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             var from = this.AddPeriod(reportStartDate.Date, period, -columnCount + 1);
             var to = reportStartDate.Date.AddDays(1);
 
+            DateTime? minDate = ReportHelpers.GetFirstInterviewCreatedDate(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), this.interviewStatusesStorage);
             var dateTimeRanges =
                 Enumerable.Range(0, columnCount)
                     .Select(i => new DateTimeRange(this.AddPeriod(from, period, i).Date, this.AddPeriod(from, period, i + 1).Date))
-                    .Where(i => i.From.Date <= DateTime.Now.Date)
+                    .Where(i => minDate.HasValue && i.To.Date >= minDate)
                     .ToArray();
 
             var allUsersQuery = query(questionnaireId, questionnaireVersion, from, to);
@@ -102,7 +104,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             {
                 var interviewsInPeriod =
                     interviewsForUser.Where(
-                        ics => ics.Timestamp.Date >= dateTimeRange.From && ics.Timestamp.Date < dateTimeRange.To).ToArray();
+                        ics => ics.Timestamp >= dateTimeRange.From && ics.Timestamp < dateTimeRange.To).ToArray();
                 if (interviewsInPeriod.Any())
                 {
                     var total = interviewsInPeriod.Select(i => Math.Abs(i.Timespan.TotalMinutes)).Sum();
@@ -134,7 +136,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     .SelectMany(x => x.TimeSpansBetweenStatuses)
                     .Where(
                         ics =>
-                            ics.EndStatusTimestamp.Date >= from && ics.EndStatusTimestamp.Date < to.Date && endStatuses.Contains(ics.EndStatus) && beginStatuses.Contains(ics.BeginStatus)));
+                            ics.EndStatusTimestamp >= from && ics.EndStatusTimestamp < to.Date && endStatuses.Contains(ics.EndStatus) && beginStatuses.Contains(ics.BeginStatus)));
         }
 
         private IQueryable<InterviewCommentedStatus> QueryInterviewStatuses(
@@ -150,8 +152,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
                         .SelectMany(x => x.InterviewCommentedStatuses)
                         .Where(ics =>
-                                ics.Timestamp.Date >= from && 
-                                ics.Timestamp.Date < to.Date &&
+                                ics.Timestamp >= from && 
+                                ics.Timestamp < to.Date &&
                                 statuses.Contains(ics.Status) &&
                                 ics.TimeSpanWithPreviousStatus.HasValue));
             }
@@ -160,8 +162,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 return this.interviewStatusesStorage.Query(_ =>
                     _.SelectMany(x => x.InterviewCommentedStatuses)
                         .Where(ics =>
-                            ics.Timestamp.Date >= from &&
-                            ics.Timestamp.Date < to.Date &&
+                            ics.Timestamp >= from &&
+                            ics.Timestamp < to.Date &&
                             statuses.Contains(ics.Status) &&
                             ics.TimeSpanWithPreviousStatus.HasValue));
             }
