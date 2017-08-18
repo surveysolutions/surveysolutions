@@ -67,7 +67,7 @@ namespace WB.UI.Headquarters.API
                 ResponsibleId = isInterviewer ? this.authorizedUser.Id :request.ResponsibleId,
                 ShowArchive = !isInterviewer && request.ShowArchive,
                 DateStart = request.DateStart?.Date,
-                DateEnd = request.DateEnd?.Date,
+                DateEnd = request.DateEnd?.Date.AddDays(1),
                 UserRole = request.UserRole
             };
 
