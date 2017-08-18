@@ -340,6 +340,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Period unit.
+        /// </summary>
+        public static string PeriodUnit {
+            get {
+                return ResourceManager.GetString("PeriodUnit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questionnaire.
         /// </summary>
         public static string Questionnaire {

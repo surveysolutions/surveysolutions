@@ -229,4 +229,7 @@
     <value>Действия</value>
     <comment>Действия</comment>
   </data>
+  <data name="PeriodUnit" xml:space="preserve">
+    <value>Длительность</value>
+  </data>
 </root>
