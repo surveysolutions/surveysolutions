@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Views
         public int DaysCountStart { get; set; }
         public int? DaysCountEnd { get; set; }
 
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
         public int SupervisorAssignedCount { get; set; }
