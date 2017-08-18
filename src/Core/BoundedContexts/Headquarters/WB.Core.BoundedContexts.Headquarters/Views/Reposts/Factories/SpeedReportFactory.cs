@@ -80,7 +80,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
             var userIds = users.Skip((page - 1) * pageSize)
                 .Take(pageSize).ToArray();
-
         
             var allInterviewsInStatus =
                  query(questionnaireId, questionnaireVersion, from, to)
