@@ -59,7 +59,7 @@ export default {
                         render: function(data, type, row) {
                             if(data === 0) return `<span>${data}</span>`;
                             else {
-                                return `<a href='${self.$config.assignmentsBaseUrl}?dateStart=${row.startDate}&dateEnd=${row.endDate}&userRole=Supervisor'>${data}</a>`;
+                                return `<a href='${self.$config.assignmentsBaseUrl}?dateStart=${row.startDate}&dateEnd=${row.endDate}&questionnaire=${self.questionnaireId}&userRole=Supervisor'>${data}</a>`;
                             }
                         }
                     },
@@ -70,7 +70,7 @@ export default {
                         render: function(data, type, row) {
                             if(data === 0) return `<span>${data}</span>`;
                             else {
-                                return `<a href='${self.$config.assignmentsBaseUrl}?dateStart=${row.startDate}&dateEnd=${row.endDate}&userRole=Interviewer'>${data}</a>`;
+                                return `<a href='${self.$config.assignmentsBaseUrl}?dateStart=${row.startDate}&dateEnd=${row.endDate}&questionnaire=${self.questionnaireId}&userRole=Interviewer'>${data}</a>`;
                             }
                         }
                     },
@@ -122,7 +122,23 @@ export default {
                 },
                 sDom: 'rf<"table-with-scroll"t>ip',
                 order: [[ 0, "desc" ]],
-                bInfo : false
+                bInfo : false,
+                footer: true,
+                footerCallback: function (row, data, start, end, display) {
+                    var api = this.api(), data;
+                    var colNumber = [1, 2, 3, 4, 5, 6, 7];
+        
+                    for (var i = 0; i < colNumber.length; i++) {
+                        var colNo = colNumber[i];
+                        var total = api
+                                .column(colNo,{ page: 'current'})
+                                .data()
+                                .reduce(function (a, b) {
+                                    return a + b;
+                                }, 0);
+                        $(api.column(colNo).footer()).html(total);
+                    }
+                }
             }
         }
     },
@@ -138,15 +154,14 @@ export default {
         },
 
         renderInterviewsUrl(row, data, status){
-            if(data === 0) return `<span>${data}</span>`;
-            else {
-                if (row.startDate == undefined)
-                    return `<a href='${this.$config.interviewsBaseUrl}?endDate=${row.endDate}&status=${status}'>${data}</a>`;
-                if (row.endDate == undefined)
-                    return `<a href='${this.$config.interviewsBaseUrl}?startDate=${row.startDate}&status=${status}'>${data}</a>`;
+            if(data === 0) 
+                return `<span>${data}</span>`;
+            if (row.startDate == undefined)
+                return `<a href='${this.$config.interviewsBaseUrl}?unactiveDateEnd=${row.endDate}&status=${status}'>${data}</a>`;
+            if (row.endDate == undefined)
+                return `<a href='${this.$config.interviewsBaseUrl}?unactiveDateStart=${row.startDate}&status=${status}'>${data}</a>`;
 
-                return `<a href='${this.$config.interviewsBaseUrl}?startDate=${row.startDate}&endDate=${row.endDate}&status=${status}'>${data}</a>`;
-            }
+            return `<a href='${this.$config.interviewsBaseUrl}?unactiveDateStart=${row.startDate}&unactiveDateEnd=${row.endDate}&status=${status}'>${data}</a>`;
         }
     },
 }
