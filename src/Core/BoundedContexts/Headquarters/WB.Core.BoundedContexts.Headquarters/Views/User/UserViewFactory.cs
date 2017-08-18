@@ -173,7 +173,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     case InterviewerFacet.WrongTime:
                         interviewers = from i in interviewers
                                        let deviceSyncInfo = repository.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id).OrderByDescending(x => x.Id).FirstOrDefault()
-                                       where deviceSyncInfo != null && DbFunctions.DiffMinutes(deviceSyncInfo.DeviceDate, deviceSyncInfo.SyncDate) > InterviewerIssuesConstants.MinutesForWrongTime
+                                       where deviceSyncInfo != null && Math.Abs((int)DbFunctions.DiffMinutes(deviceSyncInfo.DeviceDate, deviceSyncInfo.SyncDate)) > InterviewerIssuesConstants.MinutesForWrongTime
                                        select i;
                         break;
                     case InterviewerFacet.OldAndroid:
