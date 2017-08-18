@@ -150,6 +150,9 @@
   <data name="Period" xml:space="preserve">
     <value>Period</value>
   </data>
+  <data name="PeriodUnit" xml:space="preserve">
+    <value>Period unit</value>
+  </data>
   <data name="PeriodCount" xml:space="preserve">
     <value>Period count</value>
   </data>
