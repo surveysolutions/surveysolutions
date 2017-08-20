@@ -67,8 +67,6 @@ export default {
         },
 
         onTableInitComplete() {
-            var self = this;
-
             $(this.$el).parents('.dataTables_wrapper').find('.dataTables_filter label').on('click', function (e) {
                 if (e.target !== this)
                     return;
@@ -87,7 +85,7 @@ export default {
             var contextMenuOptions = {
                 selector: "#" + this.$el.attributes.id.value + " tbody tr",
                 autoHide: false,
-                build: ($trigger, e) => {
+                build: ($trigger) => {
                     var selectedRow = this.selectRowAndGetData($trigger);
 
                     if (selectedRow.rowData == null) return false;

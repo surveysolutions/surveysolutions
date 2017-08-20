@@ -25,7 +25,7 @@ export default {
         }
     },
     watch: {
-        questionnaireId: function (value) {
+        questionnaireId: function () {
             this.reload();
         }
     },
@@ -137,11 +137,11 @@ export default {
                 order: [[ 0, "desc" ]],
                 bInfo : false,
                 footer: true,
-                footerCallback: function (row, data, start, end, display) {
+                footerCallback: function () {
                     //if ($(this).find("tfoot").length == 0)
                     //    $(this).append("<tfoot><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tfoot>")
 
-                    var api = this.api(), data;
+                    var api = this.api();
                     var colNumber = [1, 2, 3, 4, 5, 6, 7];
         
                     for (var i = 0; i < colNumber.length; i++) {

@@ -19,7 +19,7 @@ const store = new Vuex.Store({
         }
     },
     actions: {
-        createInterview({ rootState, dispatch, commit }, assignmentId) {
+        createInterview({ rootState, dispatch }, assignmentId) {
             dispatch("showProgress", true);
 
             $.post(rootState.config.interviewerHqEndpoint + "/StartNewInterview/" + assignmentId, response => {
