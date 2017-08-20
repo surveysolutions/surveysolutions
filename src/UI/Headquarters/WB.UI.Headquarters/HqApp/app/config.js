@@ -2,7 +2,7 @@ const config = JSON.parse(window.vueApp.getAttribute('configuration'))
 
 /*  the Plugin */
 const configuration  = {
-    install: function (Vue, options) {
+    install: function (Vue) {
         // /*  expose a global API method  */
         Object.defineProperty(Vue, '$config', {
             get() {

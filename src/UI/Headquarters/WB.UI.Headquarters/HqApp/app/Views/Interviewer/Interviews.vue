@@ -52,10 +52,10 @@ export default {
         }
     },
     watch: {
-        questionnaireId: function (value) {
+        questionnaireId: function () {
             this.reload();
         },
-        assignmentId: function(value) {
+        assignmentId: function() {
             this.reload();
         }
     },
@@ -150,7 +150,7 @@ export default {
 
             self.$refs.confirmRestart.promt(ok => {
                 if (ok) {
-                    $.post(this.config.interviewerHqEndpoint + "/RestartInterview/" + interviewId, { comment: self.restart_comment }, response => {
+                    $.post(this.config.interviewerHqEndpoint + "/RestartInterview/" + interviewId, { comment: self.restart_comment }, () => {
                         self.restart_comment = "";
                         self.$store.dispatch("openInterview", interviewId);
                     })

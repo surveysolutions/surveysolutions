@@ -1,28 +1,28 @@
 <template>
-	<main>
-		<div class="container-fluid">
-			<div class="row">
-				<slot name="filters" />
-				 <div :class="information">
-					<div class="page-header clearfix">
-						<h1>
-							{{title}}
-						</h1>
+    <main>
+        <div class="container-fluid">
+            <div class="row">
+                <slot name="filters" />
+                 <div :class="information">
+                    <div class="page-header clearfix">
+                        <h1>
+                            {{title}}
+                        </h1>
                         <h3 v-if="subtitle">{{ subtitle }}</h3>
                         <slot name="exportButtons"/>
-					</div>
-					<slot />
-				</div>
-			</div>
-		   
-			<slot name="modals" />
-			<ModalFrame id="pendingProgress" ref="pending" :title="$t('Common.Loading')" :canClose="false">
-				<div class="progress progress-striped active" style="margin-bottom:0;">
-					<div class="progress-bar" style="width: 100%"></div>
-				</div>
-			</ModalFrame>
-		</div>
-	</main>
+                    </div>
+                    <slot />
+                </div>
+            </div>
+           
+            <slot name="modals" />
+            <ModalFrame id="pendingProgress" ref="pending" :title="$t('Common.Loading')" :canClose="false">
+                <div class="progress progress-striped active" style="margin-bottom:0;">
+                    <div class="progress-bar" style="width: 100%"></div>
+                </div>
+            </ModalFrame>
+        </div>
+    </main>
 </template>
 
 <script>

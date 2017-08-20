@@ -1,6 +1,5 @@
 /// <binding />
 const webpack = require('webpack')
-const cleanWebpackPlugin = require('clean-webpack-plugin');
 const path = require('path')
 const baseAppPath = "./"
 const devMode = process.env.NODE_ENV != 'production';
@@ -37,11 +36,20 @@ module.exports = {
             {
                 test: /\.vue$/,
                 exclude: /(node_modules)/,
-                use: { loader: 'vue-loader', options: { loaders: { js: 'babel-loader' } } }
+                use: [{
+                    loader: 'vue-loader', options: { loaders: { js: 'babel-loader' } }
+                }]
             }, {
                 test: /\.js$/,
                 exclude: /(node_modules)/,
                 use: { loader: 'babel-loader' }
+            }, {
+                test: /\.(js|vue)$/,
+                loader: 'eslint-loader',
+                enforce: 'pre',
+                options: {
+                    formatter: require('eslint-friendly-formatter')
+                }
             }
         ]
     },
@@ -50,7 +58,7 @@ module.exports = {
         // split vendor js into its own file
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
-            minChunks: function (module, count) {
+            minChunks: function (module) {
                 // any required modules inside node_modules are extracted to vendor
                 return (
                     module.resource &&
@@ -62,11 +70,11 @@ module.exports = {
             }
         }),
 
-       // new webpack.optimize.ModuleConcatenationPlugin(),
+        new webpack.optimize.ModuleConcatenationPlugin(),
 
         devMode ? null : function () {
             const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-            
+
             return new BundleAnalyzerPlugin({
                 analyzerMode: 'static',
                 reportFilename: 'dist/stats.html',

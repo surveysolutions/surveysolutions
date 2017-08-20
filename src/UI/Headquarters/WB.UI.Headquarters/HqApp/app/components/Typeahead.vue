@@ -58,7 +58,7 @@
             })
         },
         methods: {
-            onSearchBoxDownKey(event) {
+            onSearchBoxDownKey() {
                 var $firstOptionAnchor = $(this.$refs.dropdownMenu).find('a').first();
                 $firstOptionAnchor.focus();
             },
@@ -96,7 +96,7 @@
                     var safeSearchTerm = _.escape(_.escapeRegExp(searchTerm));
 
                     var iQuery = new RegExp(safeSearchTerm, "ig");
-                    return encodedTitle.replace(iQuery, (matchedTxt, a, b) => {
+                    return encodedTitle.replace(iQuery, (matchedTxt) => {
                         return `<strong>${matchedTxt}</strong>`;
                     });
                 }

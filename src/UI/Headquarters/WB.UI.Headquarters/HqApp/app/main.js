@@ -35,7 +35,7 @@ Vue.component("ExportButtons", ExportButtons)
 
 const router = require("./router").default
 
-const vueApp = new Vue({
+new Vue({
     el: "#vueApp",
     render: h => h(App),
     components: { App },
