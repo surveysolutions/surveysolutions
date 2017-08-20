@@ -2,5 +2,26 @@
 {
     "search.exclude": {
         "**/dist": true
-    }
+    },
+    "eslint.enable": true,
+    "eslint.autoFixOnSave": true,
+    "eslint.run": "onType",
+    "eslint.workingDirectories": [
+        "app"
+    ],
+    "eslint.validate": [
+        {
+            "language": "html",
+            "autoFix": true
+        },
+        {
+            "language": "vue",
+            "autoFix": true
+        },
+        {
+            "language": "javascript",
+            "autoFix": true
+        }     
+    ],
+    "vetur.format.html.wrap_attributes": "force-aligned"    
 }
