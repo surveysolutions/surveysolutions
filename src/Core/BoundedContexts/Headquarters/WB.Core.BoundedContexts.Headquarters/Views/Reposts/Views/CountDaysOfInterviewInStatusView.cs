@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Views
         public int RejectedByHeadquartersCount { get; set; }
         public int ApprovedByHeadquartersCount { get; set; }
 
-        public int? TotalCount => InterviewerAssignedCount + SupervisorAssignedCount +
+        public int TotalCount => InterviewerAssignedCount + SupervisorAssignedCount +
                                  CompletedCount + ApprovedBySupervisorCount + RejectedBySupervisorCount +
                                  ApprovedByHeadquartersCount + RejectedByHeadquartersCount;
     }
