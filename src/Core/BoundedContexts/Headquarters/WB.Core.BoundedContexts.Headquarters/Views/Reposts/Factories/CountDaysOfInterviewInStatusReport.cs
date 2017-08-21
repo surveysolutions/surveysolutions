@@ -241,10 +241,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 },
                 Data = view.Select(x => new object[]
                 {
-                    x.DaysCountStart, x.SupervisorAssignedCount, x.InterviewerAssignedCount, x.CompletedCount,
+                    x.RowHeader, x.SupervisorAssignedCount, x.InterviewerAssignedCount, x.CompletedCount,
                     x.RejectedBySupervisorCount, x.ApprovedBySupervisorCount, x.RejectedByHeadquartersCount, x.ApprovedByHeadquartersCount,
-                    x.SupervisorAssignedCount + x.InterviewerAssignedCount + x.CompletedCount +
-                    x.RejectedBySupervisorCount + x.ApprovedBySupervisorCount + x.RejectedByHeadquartersCount + x.ApprovedByHeadquartersCount
+                    x.TotalCount
                 }).ToArray()
             };
         }
