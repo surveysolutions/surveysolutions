@@ -235,9 +235,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         || (s.Status == InterviewExportedAction.RejectedBySupervisor && i.Status == InterviewStatus.RejectedBySupervisor)
                         || (s.Status == InterviewExportedAction.RejectedByHeadquarter && i.Status == InterviewStatus.RejectedByHeadquarters)
                     )
-                    .Max(s => s.Timestamp).Date
+                    .Max(s => s.Timestamp)
                 where (input.UnactiveDateStart <= statusChangeTime || input.UnactiveDateStart == null)
-                   && (statusChangeTime < input.UnactiveDateEnd || input.UnactiveDateEnd == null)
+                   && (statusChangeTime <= input.UnactiveDateEnd || input.UnactiveDateEnd == null)
                 select i;
             }
 
