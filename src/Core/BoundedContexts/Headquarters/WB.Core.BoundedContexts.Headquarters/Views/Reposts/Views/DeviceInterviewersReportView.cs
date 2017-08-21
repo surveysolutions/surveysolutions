@@ -11,5 +11,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views
 
         public int TotalCount { get; set; }
         public IEnumerable<DeviceInterviewersReportLine> Items { get; set; }
+        public DeviceInterviewersReportLine TotalRow { get; set; }
     }
 }

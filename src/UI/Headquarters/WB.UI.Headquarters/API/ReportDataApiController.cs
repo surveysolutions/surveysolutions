@@ -345,7 +345,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 Draw = request.Draw + 1,
                 RecordsTotal = data.TotalCount,
                 RecordsFiltered = data.TotalCount,
-                Data = data.Items
+                Data = data.Items,
+                TotalRow = data.TotalRow
             };
         }
 
@@ -404,6 +405,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         public class DeviceInterviewersDataTableResponse : DataTableResponse<DeviceInterviewersReportLine>
         {
+            public DeviceInterviewersReportLine TotalRow { get; set; }
         }
 
         public class CountDaysOfInterviewInStatusRequest : DataTableRequest
