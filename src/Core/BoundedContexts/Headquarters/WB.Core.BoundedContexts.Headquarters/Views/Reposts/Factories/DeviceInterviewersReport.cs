@@ -1,77 +1,115 @@
 ﻿using System;
-using System.Data.Entity;
+using System.Data;
+using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 using Npgsql;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Resources;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Infrastructure.Native.Utils;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 {
     public class DeviceInterviewersReport : IDeviceInterviewersReport
     {
-        private readonly IUserRepository userRepository;
+        private readonly PostgresPlainStorageSettings plainStorageSettings;
+        private readonly IInterviewerVersionReader interviewerVersionReader;
 
-        public DeviceInterviewersReport(IUserRepository userRepository)
+        public DeviceInterviewersReport(PostgresPlainStorageSettings plainStorageSettings,
+            IInterviewerVersionReader interviewerVersionReader)
         {
-            this.userRepository = userRepository;
+            this.plainStorageSettings = plainStorageSettings;
+            this.interviewerVersionReader = interviewerVersionReader;
         }
 
         public async Task<DeviceInterviewersReportView> LoadAsync(DeviceByInterviewersReportInputModel input)
         {
             if (input == null) throw new ArgumentNullException(nameof(input));
 
-            var items = from i in userRepository.Users
-                let lastSync = userRepository.DeviceSyncInfos.Where(ds => ds.InterviewerId == i.Id).OrderByDescending(ds => ds.Id).FirstOrDefault()
-                let anyAssignmentReceived = userRepository.DeviceSyncInfos.Any(ds => ds.InterviewerId == i.Id && ds.Statistics.DownloadedQuestionnairesCount > 0)
-                let anyInterviewsUploaded = userRepository.DeviceSyncInfos.Any(ds => ds.InterviewerId == i.Id && ds.Statistics.UploadedInterviewsCount > 0)
-                let hasTwoTablets = userRepository.DeviceSyncInfos.Where(ds => ds.InterviewerId == i.Id).Select(ds => ds.DeviceId).Distinct().Count() > 1
-                where i.Profile.SupervisorId != null && i.IsArchived == false
-                select new
-                {
-                    UserId = i.Id,
-                    NeverSynched = lastSync == null ? 1 : 0,
-                    SupervisorId = i.Profile.SupervisorId,
-                    anyAssignmentReceived = anyAssignmentReceived ? 0 : 1,
-                    noInterviewsUploaded = anyInterviewsUploaded ? 0 : 1,
-                    hasTwoTablets = hasTwoTablets ? 1 : 0,
-                    hasOldAndroidVersion = lastSync != null && lastSync.AndroidSdkVersion < InterviewerIssuesConstants.MinAndroidSdkVersion ? 1 : 0,
-                    hasWrongTimeOnTablet = lastSync != null && Math.Abs((int)DbFunctions.DiffMinutes(lastSync.DeviceDate, lastSync.SyncDate)) > InterviewerIssuesConstants.MinutesForWrongTime ? 1 : 0,
-                    hasLowStorage = lastSync != null && lastSync.StorageFreeInBytes < InterviewerIssuesConstants.LowMemoryInBytesSize ? 1 : 0
-                };
+            var order = input.Orders.FirstOrDefault();
+            if (order == null) throw new ArgumentNullException(nameof(order));
 
-            var lines = from i in items
-                group i by i.SupervisorId
-                into grouping
-                join u in userRepository.Users on grouping.Key equals u.Id
-                select new DeviceInterviewersReportLine
-                {
-                    TeamId = grouping.Key.Value,
-                    TeamName = u.UserName,
-                    NeverSynchedCount = grouping.Sum(x => x.NeverSynched),
-                    NoQuestionnairesCount = grouping.Sum(x => x.anyAssignmentReceived),
-                    NeverUploadedCount = grouping.Sum(x => x.noInterviewsUploaded),
-                    ReassignedCount = grouping.Sum(x => x.hasTwoTablets),
-                    OldAndroidCount = grouping.Sum(x => x.hasOldAndroidVersion),
-                    WrongDateOnTabletCount = grouping.Sum(x => x.hasWrongTimeOnTablet),
-                    LowStorageCount = grouping.Sum(x => x.hasLowStorage)
-                };
-            if (!string.IsNullOrWhiteSpace(input.Filter))
+            if (!order.IsSortedByOneOfTheProperties(typeof(DeviceInterviewersReportLine)))
             {
-                lines = lines.Where(u => u.TeamName.ToLower().Contains(input.Filter.ToLower()));
+                throw new ArgumentException("Invalid order by column passed", nameof(order));
             }
 
-            return new DeviceInterviewersReportView
+            var targetInterviewerVersion = interviewerVersionReader.Version;
+
+            var sql = GetSqlTexts();
+            var fullQuery = string.Format(sql.query, order.ToSqlOrderBy());
+
+            using (var connection = new NpgsqlConnection(plainStorageSettings.ConnectionString))
             {
-                Items = await lines.OrderUsingSortExpression(input.Order).Take(input.PageSize).Skip(input.PageSize * input.Page).ToListAsync(),
-                TotalCount = await lines.CountAsync()
-            };
+                var rows = await connection.QueryAsync<DeviceInterviewersReportLine>(fullQuery, new
+                {
+                    latestAppBuildVersion = targetInterviewerVersion,
+                    neededFreeStorageInBytes = InterviewerIssuesConstants.LowMemoryInBytesSize,
+                    minutesMismatch = InterviewerIssuesConstants.MinutesForWrongTime,
+                    targetAndroidSdkVersion = InterviewerIssuesConstants.MinAndroidSdkVersion,
+                    limit = input.PageSize,
+                    offset = input.PageSize * (input.Page),
+                    filter = input.Filter + "%"
+                });
+                int totalCount = await connection.ExecuteScalarAsync<int>(sql.countQuery, new {filter = input.Filter + "%" });
+                var totalRow = await GetTotalLine(fullQuery, connection);
+
+                return new DeviceInterviewersReportView
+                {
+                    Items = rows,
+                    TotalRow = totalRow,
+                    TotalCount = totalCount
+                };
+            }
+        }
+
+        private async Task<DeviceInterviewersReportLine> GetTotalLine(string sql, IDbConnection connection)
+        {
+            string summarySql = $@"SELECT SUM(report.NeverSynchedCount) as NeverSynchedCount,
+                                          SUM(OutdatedCount) as OutdatedCount,
+                                          SUM(LowStorageCount) as LowStorageCount,
+                                          SUM(WrongDateOnTabletCount) as WrongDateOnTabletCount,
+                                          SUM(OldAndroidCount) as OldAndroidCount,
+                                          SUM (NeverUploadedCount) as NeverUploadedCount,
+                                          SUM(ReassignedCount) as ReassignedCount,
+                                          SUM(NoQuestionnairesCount) as NoQuestionnairesCount
+                                   FROM ({sql}) as report";
+            var row = await connection.QueryAsync<DeviceInterviewersReportLine>(summarySql, new
+            {
+                latestAppBuildVersion = 15,
+                neededFreeStorageInBytes = InterviewerIssuesConstants.LowMemoryInBytesSize,
+                minutesMismatch = InterviewerIssuesConstants.MinutesForWrongTime,
+                targetAndroidSdkVersion = InterviewerIssuesConstants.MinAndroidSdkVersion,
+                limit = (int?) null,
+                offset = 0,
+                filter = "%"
+            });
+
+            return row.FirstOrDefault() ?? new DeviceInterviewersReportLine();
+        }
+
+        private (string query, string countQuery) GetSqlTexts()
+        {
+            string query;
+            string countQuery;
+            var assembly = typeof(DeviceInterviewersReport).Assembly;
+            using (Stream stream = assembly.GetManifestResourceStream("WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.DeviceInterviewersReport.sql"))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                query = reader.ReadToEnd();
+            }
+            using (Stream stream = assembly.GetManifestResourceStream("WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.DeviceInterviewersReportCount.sql"))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                countQuery = reader.ReadToEnd();
+            }
+
+            return (query, countQuery);
         }
 
         public async Task<ReportView> GetReportAsync(DeviceByInterviewersReportInputModel input)
