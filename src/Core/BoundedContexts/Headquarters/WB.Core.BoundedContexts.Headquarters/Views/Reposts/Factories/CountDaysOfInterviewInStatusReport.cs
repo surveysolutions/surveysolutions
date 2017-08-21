@@ -1,28 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Core.Objects;
-using System.Data.Entity.SqlServer;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Main.Core.Entities.SubEntities;
 using Npgsql;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Resources;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Infrastructure.Native.Fetching;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 
@@ -103,20 +95,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 selectedRange.SupervisorAssignedCount += counterObject.InterviewsCount;
             }
 
-            var data = order.Direction == OrderDirection.Desc
-                ? rows.OrderBy(r => r.DaysCountStart).ToList()
-                : rows.OrderByDescending(r => r.DaysCountStart).ToList();
+            var data = SortData(order, rows);
+            SetRowHeaderForEachRecord(data);
+            AddTotalRowAsFirstRow(data);
 
-            foreach (var dataRow in data)
-            {
-                if (dataRow.DaysCountStart == dataRow.DaysCountEnd)
-                    dataRow.RowHeader = $"{dataRow.DaysCountStart}";
-                else if (!dataRow.DaysCountEnd.HasValue)
-                    dataRow.RowHeader = $"{dataRow.DaysCountStart}+";
-                else
-                    dataRow.RowHeader = $"{dataRow.DaysCountStart}-{dataRow.DaysCountEnd}";
-            }
+            return data.ToArray();
+        }
 
+        private static void AddTotalRowAsFirstRow(List<CountDaysOfInterviewInStatusRow> data)
+        {
             var totalRow = new CountDaysOfInterviewInStatusRow()
             {
                 InterviewerAssignedCount = data.Sum(r => r.InterviewerAssignedCount),
@@ -130,8 +117,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             };
 
             data.Insert(0, totalRow);
+        }
 
-            return data.ToArray();
+        private static void SetRowHeaderForEachRecord(List<CountDaysOfInterviewInStatusRow> data)
+        {
+            foreach (var dataRow in data)
+            {
+                if (dataRow.DaysCountStart == dataRow.DaysCountEnd)
+                    dataRow.RowHeader = $"{dataRow.DaysCountStart}";
+                else if (!dataRow.DaysCountEnd.HasValue)
+                    dataRow.RowHeader = $"{dataRow.DaysCountStart}+";
+                else
+                    dataRow.RowHeader = $"{dataRow.DaysCountStart}-{dataRow.DaysCountEnd}";
+            }
+        }
+
+        private static List<CountDaysOfInterviewInStatusRow> SortData(OrderRequestItem order, List<CountDaysOfInterviewInStatusRow> rows)
+        {
+            var data = order.Direction == OrderDirection.Desc
+                ? rows.OrderBy(r => r.DaysCountStart).ToList()
+                : rows.OrderByDescending(r => r.DaysCountStart).ToList();
+            return data;
         }
 
         private static List<CountDaysOfInterviewInStatusRow> CreateResultSetWithPredifinedRanges()
