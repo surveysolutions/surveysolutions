@@ -1,4 +1,4 @@
-﻿Supervisor.VM.SurveysAndStatuses = function (listViewUrl, responsiblesUrl, statisticsMessage) {
+﻿Supervisor.VM.SurveysAndStatuses = function (listViewUrl, responsiblesUrl) {
     Supervisor.VM.SurveysAndStatuses.superclass.constructor.apply(this, arguments);
 
     var self = this;
@@ -15,10 +15,7 @@
     }
     self.SelectedResponsible = ko.observable();
     self.TotalInterviewCount = ko.observable(0);
-    self.TotalResponsibleCount = ko.observable(0);
-    self.StatisticsMessage = ko.computed(function () {
-        return statisticsMessage.replace('{0}', self.TotalInterviewCount());
-    }, this);
+    self.StatisticsMessage = ko.observable("");
 
     self.GetFilterMethod = function () {
         self.Url.query['responsible'] = _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserName;
@@ -32,17 +29,27 @@
         if (self.QueryString['responsible']) {
             self.SelectedResponsible({ UserName: self.QueryString['responsible'] });
         }
-        self.SelectedResponsible.subscribe(function () { self.reloadDataTable(); });
+
+        self.setStatisticsMessage();
+        self.SelectedResponsible.subscribe(function () {
+            self.setStatisticsMessage();
+            self.reloadDataTable();
+        });
 
         self.initDataTable(this.onDataTableDataReceived);
         self.reloadDataTable();
     };
 
+    self.setStatisticsMessage = function () {
+        var message = !_.isUndefined(self.SelectedResponsible())
+            ? self.SelectedResponsible().UserName
+            : $("#responsibleSelector").attr("placeholder");
+
+        self.StatisticsMessage(message);
+    };
+
     self.onDataTableDataReceived = function(data) {
         self.TotalInterviewCount(data.totalInterviewCount);
-        self.TotalResponsibleCount(data.totalResponsibleCount);
-
-        
     };
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.SurveysAndStatuses, Supervisor.VM.ListView);

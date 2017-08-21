@@ -288,7 +288,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 TeamLeadName = teamLeadName,
                 Page = surveysAndStatusesFilter.PageIndex,
                 PageSize = surveysAndStatusesFilter.PageSize,
-                Orders = surveysAndStatusesFilter.GetSortOrderRequestItems(),
+                Orders = surveysAndStatusesFilter.ToOrderRequestItems(),
                 ResponsibleName = surveysAndStatusesFilter.ResponsibleName == teamLeadName ? null : surveysAndStatusesFilter.ResponsibleName
             });
 
@@ -297,9 +297,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 Draw = surveysAndStatusesFilter.Draw + 1,
                 RecordsTotal = view.TotalCount,
                 RecordsFiltered = view.TotalCount,
-                Data = view.Items,
-                TotalResponsibleCount = view.TotalResponsibleCount,
-                TotalInterviewCount = view.TotalInterviewCount
+                Data = view.Items
             };
         }
 
@@ -309,7 +307,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             var view = this.surveysAndStatusesReport.Load(new SurveysAndStatusesReportInputModel
             {
-                Orders = surveysAndStatusesFilter.GetSortOrderRequestItems(),
+                Orders = surveysAndStatusesFilter.ToOrderRequestItems(),
                 Page = surveysAndStatusesFilter.PageIndex,
                 PageSize = surveysAndStatusesFilter.PageSize,
                 TeamLeadName = surveysAndStatusesFilter.ResponsibleName
@@ -320,9 +318,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 Draw = surveysAndStatusesFilter.Draw + 1,
                 RecordsTotal = view.TotalCount,
                 RecordsFiltered = view.TotalCount,
-                Data = view.Items,
-                TotalResponsibleCount = view.TotalResponsibleCount,
-                TotalInterviewCount = view.TotalInterviewCount
+                Data = view.Items
             };
         }
 
@@ -395,8 +391,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         public class SurveysAndStatusesDataTableResponse : DataTableResponse<HeadquarterSurveysAndStatusesReportLine>
         {
-            public int TotalInterviewCount { get; set; }
-            public int TotalResponsibleCount { get; set; }
+            public long TotalInterviewCount { get; set; }
         }
 
 

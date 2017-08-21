@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
             var report = this.surveysAndStatusesReport.GetReport(new SurveysAndStatusesReportInputModel
             {
-                Orders = filter.GetSortOrderRequestItems(),
+                Orders = filter.ToOrderRequestItems(),
                 Page = filter.PageIndex,
                 PageSize = filter.PageSize,
                 TeamLeadName = filter.ResponsibleName
@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     TeamLeadName = teamLeadName,
                     Page = filter.PageIndex,
                     PageSize = filter.PageSize,
-                    Orders = filter.GetSortOrderRequestItems(),
+                    Orders = filter.ToOrderRequestItems(),
                     ResponsibleName = filter.ResponsibleName == teamLeadName ? null : filter.ResponsibleName
                 });
 

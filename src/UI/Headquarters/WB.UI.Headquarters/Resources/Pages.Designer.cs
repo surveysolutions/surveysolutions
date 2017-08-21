@@ -2600,15 +2600,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} interviews.
-        /// </summary>
-        public static string SurveysAndStatuses_SupervisorStatisticsFormat {
-            get {
-                return ResourceManager.GetString("SurveysAndStatuses_SupervisorStatisticsFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Supervisor (teams).
         /// </summary>
         public static string SurveysAndStatuses_SupervisorTitle {
