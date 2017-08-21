@@ -18,9 +18,7 @@
             var $surveyAndStatusesReportUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "SupervisorSurveysAndStatusesReport" })';
             var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "AsigneeInterviewersBySupervisor" })';
 
-            var statisticsMessage = "@Pages.SurveysAndStatuses_InterviewerStatisticsFormat";
-
-            var model = new Supervisor.VM.SurveysAndStatuses($surveyAndStatusesReportUrl, responsiblesUrl, statisticsMessage);
+            var model = new Supervisor.VM.SurveysAndStatuses($surveyAndStatusesReportUrl, responsiblesUrl);
             model.getDataTableColumns = function () {
                 return [
                     {
@@ -96,7 +94,7 @@
                     <div class="block-filter">
                         <h5>@Pages.SurveysAndStatuses_InterviewerTitle</h5>
                         <div class="input-group">
-                            <input class="form-control" placeholder="@Common.Any" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
+                            <input id="responsibleSelector" class="form-control" placeholder="@Common.Any" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
                             <span data-bind="spinner: IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
                             <div class="input-group-btn" data-bind="click: function(){ SelectedResponsible(undefined); }">
                                 <div class="btn btn-default">
