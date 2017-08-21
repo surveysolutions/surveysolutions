@@ -268,7 +268,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public async Task<HttpResponseMessage> CountDaysOfInterviewInStatus(
             [FromUri] string exportType, [FromUri] CountDaysOfInterviewInStatusRequest request)
         {
-            var input = new CountDaysOfInterviewInStatusInputModel();
+            var input = new CountDaysOfInterviewInStatusInputModel
+            {
+                Orders = request.GetSortOrderRequestItems()
+            };
 
             if (!string.IsNullOrEmpty(request.QuestionnaireId))
             {
