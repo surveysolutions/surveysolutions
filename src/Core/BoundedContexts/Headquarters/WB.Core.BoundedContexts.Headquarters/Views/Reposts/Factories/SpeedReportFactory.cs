@@ -133,9 +133,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             return this.interviewStatusTimeSpansStorage.Query(_ =>
                 _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
                     .SelectMany(x => x.TimeSpansBetweenStatuses)
-                    .Where(
-                        ics =>
-                            ics.EndStatusTimestamp >= from && ics.EndStatusTimestamp < to.Date && endStatuses.Contains(ics.EndStatus) && beginStatuses.Contains(ics.BeginStatus)));
+                    .Where(ics =>
+                            ics.EndStatusTimestamp.Date >= from && 
+                            ics.EndStatusTimestamp.Date < to.Date && 
+                            endStatuses.Contains(ics.EndStatus) && 
+                            beginStatuses.Contains(ics.BeginStatus)));
         }
 
         private IQueryable<InterviewCommentedStatus> QueryInterviewStatuses(
@@ -197,7 +199,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 query: (questionnaireId, questionnaireVersion, from, to) => this.QueryInterviewStatuses(questionnaireId, questionnaireVersion, from, to, input.InterviewStatuses),
                 selectUser: u => u.SupervisorId.Value,
                 restrictUser: null,
-                userIdSelector: i => new UserAndTimestampAndTimespan() { UserId = i.SupervisorId, Timestamp = i.Timestamp, Timespan = i.TimeSpanWithPreviousStatus.Value, UserName = i.SupervisorName});
+                userIdSelector: i => new UserAndTimestampAndTimespan()
+                        {
+                            UserId = i.SupervisorId,
+                            Timestamp = i.Timestamp,
+                            Timespan = i.TimeSpanWithPreviousStatus.Value,
+                            UserName = i.SupervisorName
+                        });
         }
 
         public SpeedByResponsibleReportView Load(SpeedBetweenStatusesByInterviewersReportInputModel input)
