@@ -107,6 +107,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 ? rows.OrderBy(r => r.DaysCountStart).ToList()
                 : rows.OrderByDescending(r => r.DaysCountStart).ToList();
 
+            foreach (var dataRow in data)
+            {
+                if (dataRow.DaysCountStart == dataRow.DaysCountEnd)
+                    dataRow.DaysCount = $"{dataRow.DaysCountStart}";
+                else if (!dataRow.DaysCountEnd.HasValue)
+                    dataRow.DaysCount = $"{dataRow.DaysCountStart}+";
+                else
+                    dataRow.DaysCount = $"{dataRow.DaysCountStart}-{dataRow.DaysCountEnd}";
+
+                dataRow.TotalCount = dataRow.InterviewerAssignedCount + dataRow.SupervisorAssignedCount +
+                                     dataRow.CompletedCount + dataRow.ApprovedBySupervisorCount + dataRow.RejectedBySupervisorCount +
+                                     dataRow.ApprovedByHeadquartersCount + dataRow.RejectedByHeadquartersCount;
+            }
+
             var totalRow = new CountDaysOfInterviewInStatusRow()
             {
                 InterviewerAssignedCount = data.Sum(r => r.InterviewerAssignedCount),
@@ -116,6 +130,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 RejectedBySupervisorCount = data.Sum(r => r.RejectedBySupervisorCount),
                 ApprovedByHeadquartersCount = data.Sum(r => r.ApprovedByHeadquartersCount),
                 RejectedByHeadquartersCount = data.Sum(r => r.RejectedByHeadquartersCount),
+                DaysCount = Strings.Total
             };
 
             data.Insert(0, totalRow);

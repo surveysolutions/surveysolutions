@@ -97,15 +97,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Days.
-        /// </summary>
-        public static string Days {
-            get {
-                return ResourceManager.GetString("Days", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string Error {
@@ -291,6 +282,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string SurverManagement_MainMenu_ManageAccount {
             get {
                 return ResourceManager.GetString("SurverManagement_MainMenu_ManageAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total.
+        /// </summary>
+        public static string Total {
+            get {
+                return ResourceManager.GetString("Total", resourceCulture);
             }
         }
         
