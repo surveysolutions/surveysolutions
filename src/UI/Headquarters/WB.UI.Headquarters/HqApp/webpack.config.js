@@ -24,6 +24,7 @@ module.exports = {
             'vue$': 'vue/dist/vue.esm.js'
         }
     },
+    stats: { chunks: false },
     externals: {
         "jquery": "jQuery",
         "$": "jQuery",
@@ -36,45 +37,22 @@ module.exports = {
             {
                 test: /\.vue$/,
                 exclude: /(node_modules)/,
-                use: [{
-                    loader: 'vue-loader', options: { loaders: { js: 'babel-loader' } }
-                }]
+                use: { loader: 'vue-loader', options: { loaders: { js: 'babel-loader' } } }
             }, {
                 test: /\.js$/,
                 exclude: /(node_modules)/,
                 use: { loader: 'babel-loader' }
-            }, {
-                test: /\.(js|vue)$/,
-                loader: 'eslint-loader',
-                enforce: 'pre',
-                options: {
-                    formatter: require('eslint-friendly-formatter')
-                }
             }
         ]
     },
     plugins: [
-        //new cleanWebpackPlugin('dist'),
-        // split vendor js into its own file
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor',
-            minChunks: function (module) {
-                // any required modules inside node_modules are extracted to vendor
-                return (
-                    module.resource &&
-                    /\.js$/.test(module.resource) &&
-                    module.resource.indexOf(
-                        path.join(__dirname, 'node_modules')
-                    ) === 0
-                )
-            }
+        new webpack.DllReferencePlugin({
+            manifest: require('./dist/vendor.manifest.json')
         }),
-
-        new webpack.optimize.ModuleConcatenationPlugin(),
 
         devMode ? null : function () {
             const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-
+            
             return new BundleAnalyzerPlugin({
                 analyzerMode: 'static',
                 reportFilename: 'dist/stats.html',

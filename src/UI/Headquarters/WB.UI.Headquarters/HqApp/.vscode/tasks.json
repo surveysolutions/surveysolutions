@@ -28,6 +28,11 @@
             "type": "npm",
             "script": "production",
             "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "vendor",
+            "problemMatcher": []
         }
     ]
 }
