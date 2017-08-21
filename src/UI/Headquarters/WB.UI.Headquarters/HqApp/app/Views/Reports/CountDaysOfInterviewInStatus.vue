@@ -51,8 +51,8 @@ export default {
                         className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_SupervisorAssigned"),
                         orderable: false,
-                        render: function(data, type, row) {
-                            if(data === 0) return `<span>${data}</span>`;
+                        render: function(data, type, row, meta) {
+                            if(data === 0 || meta.row == 0) return `<span>${data}</span>`;
                             else {
                                 return `<a href='${self.$config.assignmentsBaseUrl}?dateStart=${row.startDate}&dateEnd=${row.endDate}&questionnaire=${self.questionnaireId}&userRole=Supervisor'>${data}</a>`;
                             }
@@ -63,8 +63,8 @@ export default {
                         className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_InterviewerAssigned"),
                         orderable: false,
-                        render: function(data, type, row) {
-                            if(data === 0) return `<span>${data}</span>`;
+                        render: function(data, type, row, meta) {
+                            if(data === 0 || meta.row == 0) return `<span>${data}</span>`;
                             else {
                                 return `<a href='${self.$config.assignmentsBaseUrl}?dateStart=${row.startDate}&dateEnd=${row.endDate}&questionnaire=${self.questionnaireId}&userRole=Interviewer'>${data}</a>`;
                             }
@@ -75,8 +75,8 @@ export default {
                         className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_Completed"),
                         orderable: false,
-                        render: function(data, type, row) {
-                            return self.renderInterviewsUrl(row, data, 'Completed');
+                        render: function(data, type, row, meta) {
+                            return self.renderInterviewsUrl(row, data, 'Completed', meta.row);
                         }
                     },
                     {
@@ -84,8 +84,8 @@ export default {
                         className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_RejectedBySupervisor"),
                         orderable: false,
-                        render: function(data, type, row) {
-                            return self.renderInterviewsUrl(row, data, 'RejectedBySupervisor');
+                        render: function(data, type, row, meta) {
+                            return self.renderInterviewsUrl(row, data, 'RejectedBySupervisor', meta.row);
                         }
                     },
                     {
@@ -93,8 +93,8 @@ export default {
                         className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_ApprovedBySupervisor"),
                         orderable: false,
-                        render: function(data, type, row) {
-                            return self.renderInterviewsUrl(row, data, 'ApprovedBySupervisor');
+                        render: function(data, type, row, meta) {
+                            return self.renderInterviewsUrl(row, data, 'ApprovedBySupervisor', meta.row);
                         }
                     },
                     {
@@ -102,8 +102,8 @@ export default {
                         className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_RejectedByHeadquarters"),
                         orderable: false,
-                        render: function(data, type, row) {
-                            return self.renderInterviewsUrl(row, data, 'RejectedByHeadquarters');
+                        render: function(data, type, row, meta) {
+                            return self.renderInterviewsUrl(row, data, 'RejectedByHeadquarters', meta.row);
                         }
                     },
                     {
@@ -111,8 +111,8 @@ export default {
                         className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_ApprovedByHeadquarters"),
                         orderable: false,
-                        render: function(data, type, row) {
-                            return self.renderInterviewsUrl(row, data, 'ApprovedByHeadquarters');
+                        render: function(data, type, row, meta) {
+                            return self.renderInterviewsUrl(row, data, 'ApprovedByHeadquarters', meta.row);
                         }
                     },
                     {
@@ -150,8 +150,8 @@ export default {
             data.timezone = new Date().getTimezoneOffset();
         },
 
-        renderInterviewsUrl(row, data, status){
-            if(data === 0) 
+        renderInterviewsUrl(row, data, status, rowIndex){
+            if(data === 0 || rowIndex === 0) 
                 return `<span>${data}</span>`;
             if (row.startDate == undefined)
                 return `<a href='${this.$config.interviewsBaseUrl}?unactiveDateEnd=${row.endDate}&status=${status}'>${data}</a>`;
