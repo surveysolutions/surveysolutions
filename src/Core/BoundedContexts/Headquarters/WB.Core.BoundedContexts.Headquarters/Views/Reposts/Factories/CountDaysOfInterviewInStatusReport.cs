@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.SqlServer;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -100,9 +103,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 selectedRange.SupervisorAssignedCount += counterObject.InterviewsCount;
             }
 
-            return order.Direction == OrderDirection.Desc
-                ? rows.OrderBy(r => r.DaysCountStart).ToArray()
-                : rows.OrderByDescending(r => r.DaysCountStart).ToArray();
+            var data = order.Direction == OrderDirection.Desc
+                ? rows.OrderBy(r => r.DaysCountStart).ToList()
+                : rows.OrderByDescending(r => r.DaysCountStart).ToList();
+
+            var totalRow = new CountDaysOfInterviewInStatusRow()
+            {
+                InterviewerAssignedCount = data.Sum(r => r.InterviewerAssignedCount),
+                SupervisorAssignedCount = data.Sum(r => r.SupervisorAssignedCount),
+                CompletedCount = data.Sum(r => r.CompletedCount),
+                ApprovedBySupervisorCount = data.Sum(r => r.ApprovedBySupervisorCount),
+                RejectedBySupervisorCount = data.Sum(r => r.RejectedBySupervisorCount),
+                ApprovedByHeadquartersCount = data.Sum(r => r.ApprovedByHeadquartersCount),
+                RejectedByHeadquartersCount = data.Sum(r => r.RejectedByHeadquartersCount),
+            };
+
+            data.Insert(0, totalRow);
+
+            return data.ToArray();
         }
 
         private static List<CountDaysOfInterviewInStatusRow> CreateResultSetWithPredifinedRanges()
@@ -149,6 +167,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                        && f.Archived == false
                     select new 
                     {
+                        //StatusDate = EntityFunctions.AddMinutes(f.CreatedAtUtc, input.MinutesOffsetToUtc).Value.Date,
+                        //StatusDate = SqlFunctions.DateAdd("minutes", input.MinutesOffsetToUtc, f.CreatedAtUtc).Value.Date,
                         StatusDate = f.CreatedAtUtc.Date,
                         InterviewsCount = f.Quantity ?? 0,
                         InterviewSummariesCount = f.InterviewSummaries.Count(),
@@ -179,6 +199,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 {
                     questionnaireid = input.TemplateId,
                     questionnaireversion = input.TemplateVersion,
+                    minutesoffset = input.MinutesOffsetToUtc,
                 });
             }
             return datesAndStatuses;
