@@ -42,17 +42,9 @@ export default {
                 deferLoading: 0,
                 columns: [
                     {
-                        data: "daysCountStart",
+                        data: "daysCount",
                         title: this.$t("Strings.Days"),
-                        orderable: true,
-                        render: function(data, type, row) {
-                            if(row.daysCountStart === row.daysCountEnd) 
-                                return `<span>${data}</span>`;
-                            else if(row.daysCountEnd == undefined) 
-                                return `<span>${data}&#43;</span>`;
-                            else 
-                                return `<span>${row.daysCountStart}-${row.daysCountEnd}</span>`;
-                        }
+                        orderable: true
                     },
                     {
                         data: "supervisorAssignedCount",
@@ -124,16 +116,10 @@ export default {
                         }
                     },
                     {
-                        data: "daysCountStart",
+                        data: "totalCount",
                         className: "type-numeric",
                         title: this.$t("Strings.Total"),
-                        orderable: false,
-                        render: function(data, type, row) {
-                            var total = row.supervisorAssignedCount + row.interviewerAssignedCount + row.completedCount
-                                + row.rejectedBySupervisorCount + row.approvedBySupervisorCount
-                                + row.rejectedByHeadquartersCount + row.approvedByHeadquartersCount;
-                            return  `<span>${total}</span>`;
-                        }
+                        orderable: false
                     }
                 ],
                 ajax: {

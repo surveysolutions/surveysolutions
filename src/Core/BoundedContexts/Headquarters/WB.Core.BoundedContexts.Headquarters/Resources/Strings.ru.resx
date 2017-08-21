@@ -202,4 +202,8 @@
   <data name="AnyHeadquarters" xml:space="preserve">
     <value>любой хедквотер</value>
   </data>
+  <data name="Total" xml:space="preserve">
+    <value>Всего</value>
+    <comment>Всего</comment>
+  </data>
 </root>
