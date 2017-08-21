@@ -56,6 +56,7 @@ export default {
                     },
                     {
                         data: "supervisorAssignedCount",
+                        className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_SupervisorAssigned"),
                         orderable: false,
                         render: function(data, type, row) {
@@ -67,6 +68,7 @@ export default {
                     },
                     {
                         data: "interviewerAssignedCount",
+                        className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_InterviewerAssigned"),
                         orderable: false,
                         render: function(data, type, row) {
@@ -78,6 +80,7 @@ export default {
                     },
                     {
                         data: "completedCount",
+                        className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_Completed"),
                         orderable: false,
                         render: function(data, type, row) {
@@ -86,6 +89,7 @@ export default {
                     },
                     {
                         data: "rejectedBySupervisorCount",
+                        className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_RejectedBySupervisor"),
                         orderable: false,
                         render: function(data, type, row) {
@@ -94,6 +98,7 @@ export default {
                     },
                     {
                         data: "approvedBySupervisorCount",
+                        className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_ApprovedBySupervisor"),
                         orderable: false,
                         render: function(data, type, row) {
@@ -102,6 +107,7 @@ export default {
                     },
                     {
                         data: "rejectedByHeadquartersCount",
+                        className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_RejectedByHeadquarters"),
                         orderable: false,
                         render: function(data, type, row) {
@@ -110,6 +116,7 @@ export default {
                     },
                     {
                         data: "approvedByHeadquartersCount",
+                        className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_ApprovedByHeadquarters"),
                         orderable: false,
                         render: function(data, type, row) {
@@ -118,6 +125,7 @@ export default {
                     },
                     {
                         data: "daysCountStart",
+                        className: "type-numeric",
                         title: this.$t("Strings.Total"),
                         orderable: false,
                         render: function(data, type, row) {
@@ -137,23 +145,9 @@ export default {
                 order: [[ 0, "desc" ]],
                 bInfo : false,
                 footer: true,
-                footerCallback: function () {
-                    //if ($(this).find("tfoot").length == 0)
-                    //    $(this).append("<tfoot><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tfoot>")
-
-                    var api = this.api();
-                    var colNumber = [1, 2, 3, 4, 5, 6, 7];
-        
-                    for (var i = 0; i < colNumber.length; i++) {
-                        var colNo = colNumber[i];
-                        var total = api
-                                .column(colNo,{ page: 'current'})
-                                .data()
-                                .reduce(function (a, b) {
-                                    return a + b;
-                                }, 0);
-                        $(api.column(colNo).footer()).html(total);
-                    }
+                fnRowCallback: function( nRow, aData, iDisplayIndex) {
+                    if (iDisplayIndex == 0)
+                        $(nRow).addClass("total-row");
                 }
             }
         }
@@ -167,6 +161,7 @@ export default {
             if (this.questionnaireId) {
                 data.questionnaireId = this.questionnaireId;
             }
+            data.timezone = new Date().getTimezoneOffset();
         },
 
         renderInterviewsUrl(row, data, status){

@@ -371,7 +371,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             var input = new CountDaysOfInterviewInStatusInputModel
             {
-                Orders = request.GetSortOrderRequestItems()
+                Orders = request.GetSortOrderRequestItems(),
+                MinutesOffsetToUtc = request.Timezone
             };
 
             if (!string.IsNullOrEmpty(request.QuestionnaireId))
@@ -382,12 +383,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             }
 
             var data = await this.countDaysOfInterviewInStatusReport.LoadAsync(input);
+
             return new CountDaysOfInterviewInStatusDataTableResponse
             {
                 Draw = request.Draw + 1,
                 RecordsTotal = data.Length,
                 RecordsFiltered = data.Length,
-                Data = data
+                Data = data,
             };
         }
 
@@ -410,6 +412,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public class CountDaysOfInterviewInStatusRequest : DataTableRequest
         {
             public string QuestionnaireId { get; set; }
+            public int Timezone { get; set; }
         }
 
         public class DeviceInterviewersFilter : DataTableRequest
