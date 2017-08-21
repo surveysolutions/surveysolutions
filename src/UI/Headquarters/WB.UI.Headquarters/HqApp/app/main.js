@@ -1,4 +1,6 @@
-import "babel-polyfill";
+import 'core-js/es6/promise'
+import 'core-js/modules/es6.object.assign'
+
 import Vue from 'vue'
 
 import ExportButtons from './components/ExportButtons'
@@ -35,7 +37,7 @@ Vue.component("ExportButtons", ExportButtons)
 
 const router = require("./router").default
 
-new Vue({
+export default new Vue({
     el: "#vueApp",
     render: h => h(App),
     components: { App },

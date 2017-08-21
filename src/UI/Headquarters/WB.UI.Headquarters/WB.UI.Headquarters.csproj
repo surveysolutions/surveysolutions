@@ -2031,6 +2031,22 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  
+  <Target Name="RunWebpackVendor" BeforeTargets="AfterBuild" Condition=" '$(Configuration)' == 'Debug' And !Exists('HqApp\dist\vendor.bundle.js') ">
+    <!-- In development, the dist files won't exist on the first run or when cloning to
+         a different machine, so rebuild them if not already present. -->
+    <Message Importance="high" Text="Performing first-run Webpack build..." />
+	<Exec Command="yarn" WorkingDirectory="HqApp" />
+    <Exec Command="npm run vendor" WorkingDirectory="HqApp" />
+    <Exec Command="npm run dev" WorkingDirectory="HqApp" />
+  </Target>
+    
+  <Target Name="RunWebpackDev" BeforeTargets="AfterBuild" Condition=" '$(Configuration)' == 'Debug' And Exists('HqApp\dist\vendor.bundle.js') ">
+    <Message Importance="high" Text="Performing dev Webpack build..." />
+	<Exec Command="yarn" WorkingDirectory="HqApp" />
+    <Exec Command="npm run dev" WorkingDirectory="HqApp" />
+  </Target>
+    
   <Target Name="CollectWebInterviewView" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
     <ItemGroup>
       <CollectWebInterviewView_CustomFiles Include="Views\WebInterview\**\*" />
