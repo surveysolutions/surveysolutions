@@ -10,6 +10,19 @@ export default {
     mounted() {
         this.$refs.table.reload();
     },
+    methods: {
+        renderCell: function(data, row, facet){
+                if (data === 0) {
+                    return `<span>${data}</span>`;
+                }
+                if (row.teamId === '00000000-0000-0000-0000-000000000000'){
+                     return `<a href='${this.$config.interviewersBaseUrl}?Facet=${facet}'>${data}</a>`;
+                }
+                else {
+                    return `<a href='${this.$config.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=${facet}'>${data}</a>`;
+                }
+        }
+    },
     computed: {
         tableOptions() {
             var self = this;
@@ -29,10 +42,7 @@ export default {
                         title: this.$t("DevicesInterviewers.NeverSynchronized"),
                         orderable: true,
                         render: function (data, type, row) {
-                            if (data === 0) return `<span>${data}</span>`;
-                            else {
-                                return `<a href='${self.$config.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=NeverSynchonized'>${data}</a>`;
-                            }
+                            return self.renderCell(data, row, 'NeverSynchonized');
                         }
                     },
                     {
@@ -42,10 +52,7 @@ export default {
                         orderable: true,
                         title: this.$t("DevicesInterviewers.NoAssignments"),
                         render: function(data, type, row) {
-                            if(data === 0) return `<span>${data}</span>`;
-                            else {
-                                return `<a href='${self.$config.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=NoAssignmentsReceived'>${data}</a>`;
-                            }
+                            return self.renderCell(data, row, 'NoAssignmentsReceived');
                         }
                     },
                     {
@@ -55,10 +62,7 @@ export default {
                         orderable: true,
                         title: this.$t("DevicesInterviewers.NeverUploaded"),
                         render: function(data, type, row) {
-                            if(data === 0) return `<span>${data}</span>`;
-                            else {
-                                return `<a href='${self.$config.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=NeverUploaded'>${data}</a>`;
-                            }
+                             return self.renderCell(data, row, 'NeverUploaded');
                         }
                     },
                     {
@@ -68,10 +72,7 @@ export default {
                         orderable: true,
                         title: this.$t("DevicesInterviewers.TabletReassigned"),
                         render: function(data, type, row) {
-                            if(data === 0) return `<span>${data}</span>`;
-                            else {
-                                return `<a href='${self.$config.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=TabletReassigned'>${data}</a>`;
-                            }
+                            return self.renderCell(data, row, 'TabletReassigned');
                         }
                     },
                     {
@@ -81,10 +82,7 @@ export default {
                         orderable: true,
                         title: this.$t("DevicesInterviewers.OldInterviewerVersion"),
                         render: function (data, type, row) {
-                            if (data === 0) return `<span>${data}</span>`;
-                            else {
-                                return `<a href='${self.$config.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=OutdatedApp'>${data}</a>`;
-                            }
+                            return self.renderCell(data, row, 'OutdatedApp');
                         }
                     },
                     {
@@ -94,10 +92,7 @@ export default {
                         orderable: true,
                         title: this.$t("DevicesInterviewers.OldAndroidVersion"),
                         render: function(data, type, row) {
-                            if(data === 0) return `<span>${data}</span>`;
-                            else {
-                                return `<a href='${self.$config.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=OldAndroid'>${data}</a>`;
-                            }
+                            return self.renderCell(data, row, 'OldAndroid');
                         }
                     },
                     {
@@ -107,10 +102,7 @@ export default {
                         orderable: true,
                         title: this.$t("DevicesInterviewers.WrongDateOnTablet"),
                         render: function(data, type, row) {
-                            if(data === 0) return `<span>${data}</span>`;
-                            else {
-                                return `<a href='${self.$config.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=WrongTime'>${data}</a>`;
-                            }
+                            return self.renderCell(data, row, 'WrongTime');
                         }
                     },
                     {
@@ -120,10 +112,7 @@ export default {
                         orderable: true,
                         title: this.$t("DevicesInterviewers.LowStorage"),
                         render: function(data, type, row) {
-                            if(data === 0) return `<span>${data}</span>`;
-                            else {
-                                return `<a href='${self.$config.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=LowStorage'>${data}</a>`;
-                            }
+                            return self.renderCell(data, row, 'LowStorage');
                         }
                     }
                 ],
@@ -133,7 +122,12 @@ export default {
                     contentType: 'application/json'
                 },
                 order: [[0, 'asc']],
-                sDom: 'rf<"table-with-scroll"t>ip'
+                sDom: 'rf<"table-with-scroll"t>ip',
+                createdRow: function(row, data, dataIndex){
+                    if (dataIndex === 0){
+                          $(row).addClass('total-row');
+                    }
+                }
             }
         }
     },
