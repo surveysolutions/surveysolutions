@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Views
         public int DaysCountStart { get; set; }
         public int? DaysCountEnd { get; set; }
 
-        public string DaysCount { get; set; }
+        public string RowHeader { get; set; }
 
         public DateTime? StartDate { get; set; }
         public DateTime EndDate { get; set; }
@@ -25,6 +25,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Views
         public int RejectedByHeadquartersCount { get; set; }
         public int ApprovedByHeadquartersCount { get; set; }
 
-        public int? TotalCount { get; set; }
+        public int? TotalCount => InterviewerAssignedCount + SupervisorAssignedCount +
+                                 CompletedCount + ApprovedBySupervisorCount + RejectedBySupervisorCount +
+                                 ApprovedByHeadquartersCount + RejectedByHeadquartersCount;
     }
 }

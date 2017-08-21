@@ -42,7 +42,7 @@ export default {
                 deferLoading: 0,
                 columns: [
                     {
-                        data: "daysCount",
+                        data: "rowHeader",
                         title: this.$t("Strings.Days"),
                         orderable: true
                     },
