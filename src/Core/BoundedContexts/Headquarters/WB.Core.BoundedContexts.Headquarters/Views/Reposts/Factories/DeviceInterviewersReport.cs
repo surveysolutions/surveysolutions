@@ -61,8 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
                 return new DeviceInterviewersReportView
                 {
-                    Items = rows,
-                    TotalRow = totalRow,
+                    Items = totalRow.ToEnumerable().Concat(rows),
                     TotalCount = totalCount
                 };
             }
@@ -90,7 +89,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 filter = "%"
             });
 
-            return row.FirstOrDefault() ?? new DeviceInterviewersReportLine();
+            var result = row.FirstOrDefault() ?? new DeviceInterviewersReportLine();
+            result.TeamName = Report.COLUMN_TOTAL;
+            return result;
         }
 
         private (string query, string countQuery) GetSqlTexts()
