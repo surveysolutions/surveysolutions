@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     offset = input.PageSize * (input.Page),
                     filter = input.Filter + "%"
                 });
-                int totalCount = await GetTotalRowsCountAsync(fullQuery, connection);
+                int totalCount = await GetTotalRowsCountAsync(fullQuery, input, connection);
                 var totalRow = await GetTotalLine(fullQuery, connection);
 
                 return new DeviceInterviewersReportView
@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             }
         }
 
-        private async Task<int> GetTotalRowsCountAsync(string sql, IDbConnection connection)
+        private async Task<int> GetTotalRowsCountAsync(string sql, DeviceByInterviewersReportInputModel input, IDbConnection connection)
         {
             string summarySql = $@"SELECT COUNT(*) 
                                    FROM ({sql}) as report";
@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 targetAndroidSdkVersion = InterviewerIssuesConstants.MinAndroidSdkVersion,
                 limit = (int?) null,
                 offset = 0,
-                filter = "%"
+                filter = input.Filter + "%"
             });
 
             return row;
