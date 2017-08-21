@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
         {
             public int Count { get; set; }
             public Guid RoleId { get; set; }
-            public DateTime CreateDate { get; set; }
+            public DateTime CreatedDate { get; set; }
         }
 
         public async Task<CountDaysOfInterviewInStatusRow[]> LoadAsync(CountDaysOfInterviewInStatusInputModel input)
@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             var assignmentsDatesAndCountsForInterviewers = await ExecuteQueryForAssignmentsStatistics(input);
             foreach (var counterObject in assignmentsDatesAndCountsForInterviewers.AsQueryable())
             {
-                var selectedRange = rows.Find(r => (!r.StartDate.HasValue || r.StartDate <= counterObject.CreateDate) && counterObject.CreateDate <= r.EndDate);
+                var selectedRange = rows.Find(r => (!r.StartDate.HasValue || r.StartDate <= counterObject.CreatedDate) && counterObject.CreatedDate <= r.EndDate);
                 if (selectedRange == null)
                     continue;
 
