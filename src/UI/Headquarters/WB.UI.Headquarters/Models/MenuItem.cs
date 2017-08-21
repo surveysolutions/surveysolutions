@@ -31,5 +31,6 @@
         Profile = 27,
         DevicesInterviewers = 28,
         CountDaysOfInterviewInStatus = 29,
+        SurveyAndStatuses = 30
     }
 }

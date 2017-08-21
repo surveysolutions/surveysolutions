@@ -2,6 +2,8 @@
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewBag.ActivePage = MenuItem.SurveyAndStatuses;
+    ViewBag.Title = MainMenu.SurveysAndStatuses;
 }
 
 @section scripts
@@ -98,7 +100,7 @@
                     <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
                 </div>
                 <div class="filters-container">
-                    <h4>@Pages.FilterTitle:</h4>
+                    <h4>@Pages.FilterTitle</h4>
                     <div class="block-filter">
                         <h5>@Pages.SurveysAndStatuses_SupervisorTitle</h5>
                         <div class="input-group">

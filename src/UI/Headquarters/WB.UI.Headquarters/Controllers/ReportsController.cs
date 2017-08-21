@@ -97,7 +97,10 @@ namespace WB.UI.Headquarters.Controllers
 
             return this.View(new MapReportModel
             {
-                Questionnaires = new ComboboxModel(questionnaires.Select(x => new ComboboxOptionModel(x.Id, $"(ver. {x.Version}) {x.Title}")).ToArray(), questionnaires.Count)
+                Questionnaires = new ComboboxModel(questionnaires
+                    .OrderBy(x => x.Title).ThenBy(x => x.Version)
+                    .Select(x => new ComboboxOptionModel(x.Id, $"(ver. {x.Version}) {x.Title}"))
+                    .ToArray(), questionnaires.Count)
             });
         }
 

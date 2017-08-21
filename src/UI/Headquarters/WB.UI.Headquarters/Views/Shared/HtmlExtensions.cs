@@ -113,6 +113,7 @@ namespace ASP
                 case MenuItem.Started: return MainMenu.Started;
                 case MenuItem.Rejected: return MainMenu.Rejected;
                 case MenuItem.Completed: return MainMenu.Completed;
+                case MenuItem.SurveyAndStatuses: return MainMenu.SurveysAndStatuses;
                 default: return String.Empty;
             }
         }

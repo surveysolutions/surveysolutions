@@ -169,7 +169,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to QUESTIONNAIRE TEMPLATE.
+        ///   Looks up a localized string similar to QUESTIONNAIRE TITLE.
         /// </summary>
         internal static string COLUMN_QUESTIONNAIRE_TEMPLATE {
             get {
@@ -232,7 +232,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TEMPLATE VERSION.
+        ///   Looks up a localized string similar to QUESTIONNAIRE VERSION.
         /// </summary>
         internal static string COLUMN_TEMPLATE_VERSION {
             get {

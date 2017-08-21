@@ -322,7 +322,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Template Version.
+        ///   Looks up a localized string similar to Questionnaire Version.
         /// </summary>
         internal static string TemplateVersion {
             get {
