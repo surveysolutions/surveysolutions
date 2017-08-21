@@ -124,10 +124,10 @@
     <value>Back to supervisors</value>
   </data>
   <data name="Day" xml:space="preserve">
-    <value>Day</value>
+    <value>Days</value>
   </data>
   <data name="Month" xml:space="preserve">
-    <value>Month</value>
+    <value>Months</value>
   </data>
   <data name="NumberOfCompletedInterviews" xml:space="preserve">
     <value>Number of completed interviews</value>
@@ -181,7 +181,7 @@
     <value>ver.</value>
   </data>
   <data name="Week" xml:space="preserve">
-    <value>Week</value>
+    <value>Weeks</value>
   </data>
   <data name="AverageCaseAssignmentDuration" xml:space="preserve">
     <value>Average case assignment duration</value>
