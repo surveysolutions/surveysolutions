@@ -203,13 +203,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             {
                 Headers = new[]
                 {
-                    Report.COLUMN_DAYS, Report.COLUMN_INTERVIEWER_ASSIGNED, Report.COLUMN_COMPLETED,
-                    Report.COLUMN_REJECTED_BY_SUPERVISOR, Report.COLUMN_APPROVED_BY_SUPERVISOR
+                    Report.COLUMN_DAYS, Report.COLUMN_SUPERVISOR_ASSIGNED, Report.COLUMN_INTERVIEWER_ASSIGNED, Report.COLUMN_COMPLETED,
+                    Report.COLUMN_REJECTED_BY_SUPERVISOR, Report.COLUMN_APPROVED_BY_SUPERVISOR, Report.COLUMN_REJECTED_BY_HQ, Report.COLUMN_APPROVED_BY_HQ,
+                    Report.COLUMN_TOTAL
                 },
                 Data = view.Select(x => new object[]
                 {
-                    x.DaysCountStart, x.InterviewerAssignedCount, x.CompletedCount, x.RejectedBySupervisorCount,
-                    x.ApprovedBySupervisorCount
+                    x.DaysCountStart, x.SupervisorAssignedCount, x.InterviewerAssignedCount, x.CompletedCount,
+                    x.RejectedBySupervisorCount, x.ApprovedBySupervisorCount, x.RejectedByHeadquartersCount, x.ApprovedByHeadquartersCount,
+                    x.SupervisorAssignedCount + x.InterviewerAssignedCount + x.CompletedCount +
+                    x.RejectedBySupervisorCount + x.ApprovedBySupervisorCount + x.RejectedByHeadquartersCount + x.ApprovedByHeadquartersCount
                 }).ToArray()
             };
         }
