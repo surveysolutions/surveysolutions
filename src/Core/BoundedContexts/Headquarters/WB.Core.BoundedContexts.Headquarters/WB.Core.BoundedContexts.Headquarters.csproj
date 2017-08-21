@@ -14,7 +14,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Views\Reposts\Factories\CountDaysOfInterviewInStatusReportAssignments.sql" />
     <EmbeddedResource Include="Views\Reposts\Factories\CountDaysOfInterviewInStatusReportInterviews.sql" />
-    <EmbeddedResource Include="Views\Reposts\Factories\DeviceInterviewersReportCount.sql" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\Reposts\Factories\DeviceInterviewersReport.sql" />

@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             var targetInterviewerVersion = interviewerVersionReader.Version;
 
             var sql = GetSqlTexts();
-            var fullQuery = string.Format(sql.query, order.ToSqlOrderBy());
+            var fullQuery = string.Format(sql, order.ToSqlOrderBy());
 
             using (var connection = new NpgsqlConnection(plainStorageSettings.ConnectionString))
             {
@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     offset = input.PageSize * (input.Page),
                     filter = input.Filter + "%"
                 });
-                int totalCount = await connection.ExecuteScalarAsync<int>(sql.countQuery, new {filter = input.Filter + "%" });
+                int totalCount = await GetTotalRowsCountAsync(fullQuery, connection);
                 var totalRow = await GetTotalLine(fullQuery, connection);
 
                 return new DeviceInterviewersReportView
@@ -65,6 +65,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     TotalCount = totalCount
                 };
             }
+        }
+
+        private async Task<int> GetTotalRowsCountAsync(string sql, IDbConnection connection)
+        {
+            string summarySql = $@"SELECT COUNT(*) 
+                                   FROM ({sql}) as report";
+            var row = await connection.ExecuteScalarAsync<int>(summarySql, new
+            {
+                latestAppBuildVersion = 15,
+                neededFreeStorageInBytes = InterviewerIssuesConstants.LowMemoryInBytesSize,
+                minutesMismatch = InterviewerIssuesConstants.MinutesForWrongTime,
+                targetAndroidSdkVersion = InterviewerIssuesConstants.MinAndroidSdkVersion,
+                limit = (int?) null,
+                offset = 0,
+                filter = "%"
+            });
+
+            return row;
         }
 
         private async Task<DeviceInterviewersReportLine> GetTotalLine(string sql, IDbConnection connection)
@@ -94,23 +112,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             return result;
         }
 
-        private (string query, string countQuery) GetSqlTexts()
+        private string GetSqlTexts()
         {
             string query;
-            string countQuery;
             var assembly = typeof(DeviceInterviewersReport).Assembly;
             using (Stream stream = assembly.GetManifestResourceStream("WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.DeviceInterviewersReport.sql"))
             using (StreamReader reader = new StreamReader(stream))
             {
                 query = reader.ReadToEnd();
             }
-            using (Stream stream = assembly.GetManifestResourceStream("WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.DeviceInterviewersReportCount.sql"))
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                countQuery = reader.ReadToEnd();
-            }
-
-            return (query, countQuery);
+            return query;
         }
 
         public async Task<ReportView> GetReportAsync(DeviceByInterviewersReportInputModel input)
