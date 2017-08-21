@@ -116,7 +116,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
                 var magicDeviceId = lastSuccessDeviceInfo.DeviceId.ToGuid().FormatGuid();
                 var tabletDocument = this.tabletDocumentReader.GetById(magicDeviceId);
-                deviceAssignmentDate = tabletDocument.RegistrationDate;
+                deviceAssignmentDate = tabletDocument?.RegistrationDate;
             }
 
             var interviewerProfileModel = new InterviewerProfileModel
