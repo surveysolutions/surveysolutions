@@ -178,7 +178,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Day.
+        ///   Looks up a localized string similar to Days.
         /// </summary>
         public static string Day {
             get {
@@ -232,7 +232,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Month.
+        ///   Looks up a localized string similar to Months.
         /// </summary>
         public static string Month {
             get {
@@ -412,7 +412,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Week.
+        ///   Looks up a localized string similar to Weeks.
         /// </summary>
         public static string Week {
             get {
