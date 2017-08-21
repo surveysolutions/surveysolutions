@@ -34,6 +34,7 @@ namespace WB.UI.Headquarters.Models.Api
             public bool Orderable { get; set; }
             public SearchInfo Search { get; set; }
         }
+
         public int Draw { get; set; }
         public int Start { get; set; }
         public int Length { get; set; }
@@ -63,7 +64,20 @@ namespace WB.UI.Headquarters.Models.Api
 
             var columnName = this.Columns[order.Column].Name;
 
-            return new[] { new OrderRequestItem { Direction = order.Dir, Field = columnName } };
+            return new[] {new OrderRequestItem {Direction = order.Dir, Field = columnName}};
+        }
+
+        public IEnumerable<OrderRequestItem> ToOrderRequestItems()
+        {
+            if (this.Order == null)
+                yield break;
+
+            foreach (var order in this.Order)
+            {
+                var columnName = this.Columns[order.Column].Name;
+
+                yield return new OrderRequestItem {Direction = order.Dir, Field = columnName};
+            }
         }
     }
 }

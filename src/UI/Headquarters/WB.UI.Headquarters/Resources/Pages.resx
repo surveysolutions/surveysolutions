@@ -590,9 +590,6 @@
   <data name="SurveysAndStatuses_Overview" xml:space="preserve">
     <value>Surveys and statuses</value>
   </data>
-  <data name="SurveysAndStatuses_SupervisorStatisticsFormat" xml:space="preserve">
-    <value>{0} interviews</value>
-  </data>
   <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
     <value>{0} interviews</value>
   </data>
