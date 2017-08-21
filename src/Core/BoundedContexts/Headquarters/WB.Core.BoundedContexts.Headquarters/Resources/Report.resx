@@ -148,10 +148,10 @@
     <value>AVERAGE</value>
   </data>
   <data name="COLUMN_TEMPLATE_VERSION" xml:space="preserve">
-    <value>TEMPLATE VERSION</value>
+    <value>QUESTIONNAIRE VERSION</value>
   </data>
   <data name="COLUMN_QUESTIONNAIRE_TEMPLATE" xml:space="preserve">
-    <value>QUESTIONNAIRE TEMPLATE</value>
+    <value>QUESTIONNAIRE TITLE</value>
   </data>
   <data name="COLUMN_TEAMS" xml:space="preserve">
     <value>TEAMS</value>

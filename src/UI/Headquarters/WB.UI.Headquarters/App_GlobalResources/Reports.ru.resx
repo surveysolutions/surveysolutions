@@ -142,7 +142,7 @@
     <value>Интервьюер назначен</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
-    <value>Вопросник</value>
+    <value>Опросник</value>
   </data>
   <data name="RejectedByHQ" xml:space="preserve">
     <value>Отклонено хедквотером</value>
@@ -172,7 +172,7 @@
     <value>Версия</value>
   </data>
   <data name="TemplateVersion" xml:space="preserve">
-    <value>Версия шаблона</value>
+    <value>Версия опросника</value>
   </data>
   <data name="Restarted" xml:space="preserve">
     <value>Перезапущено</value>

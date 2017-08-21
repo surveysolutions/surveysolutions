@@ -142,7 +142,7 @@
     <value>Questionnaire Template</value>
   </data>
   <data name="TemplateVersion" xml:space="preserve">
-    <value>Template Version</value>
+    <value>Questionnaire Version</value>
   </data>
   <data name="SupervisorAssigned" xml:space="preserve">
     <value>Supervisor assigned</value>

@@ -1,7 +1,7 @@
 <template>
     <Layout :hasFilter="true" :title="$t('Pages.CountDaysOfInterviewInStatus')" :subtitle="$t('Pages.CountDaysOfInterviewInStatusDescription')">
         <Filters slot="filters">
-            <FilterBlock :title="$t('Pages.Template')">
+            <FilterBlock :title="$t('Reports.Questionnaire')">
                 <select class="selectpicker" v-model="questionnaireId">
                     <option :value="null">{{ $t('Common.Any') }}</option>
                     <option v-for="questionnaire in questionnaires" :key="questionnaire.key" :value="questionnaire.key">
