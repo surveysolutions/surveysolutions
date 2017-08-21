@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Time from when an interview is assigned to an interviewer to when the complete button is pressed on a tablet..
+        ///   Looks up a localized string similar to Average time from when an interview is assigned to an interviewer to when the complete button is pressed on a tablet..
         /// </summary>
         public static string AverageCaseAssignmentDurationDescription {
             get {
@@ -97,7 +97,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Time from when a supervisor approves an interview to when that interview is either approved or rejected by HQ..
+        ///   Looks up a localized string similar to Average time from when a supervisor approves an interview to when that interview is either approved or rejected by HQ..
         /// </summary>
         public static string AverageHQProcessingTimeDescription {
             get {
@@ -115,7 +115,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Time from when an interviewer records the first answer on a tablet to when that interviewer presses the Complete button..
+        ///   Looks up a localized string similar to Average time from when an interviewer records the first answer on a tablet to when that interviewer presses the Complete button..
         /// </summary>
         public static string AverageInterviewDurationDescription {
             get {
@@ -133,7 +133,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Time from when the interview is first assigned to when HQ approves that interview..
+        ///   Looks up a localized string similar to Average time from when the interview is first assigned to when HQ approves that interview..
         /// </summary>
         public static string AverageOverallCaseProcessingTimeDescription {
             get {
@@ -151,7 +151,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Time from when an interviewer presses the Complete button to when the supervisor either accepts or rejects that interview. .
+        ///   Looks up a localized string similar to Average time from when an interviewer presses the Complete button to when the supervisor either accepts or rejects that interview. .
         /// </summary>
         public static string AverageSupervisorProcessingTimeDescription {
             get {

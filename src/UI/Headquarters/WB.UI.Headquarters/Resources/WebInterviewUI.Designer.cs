@@ -277,7 +277,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to First {{ count}} entities with errors:.
+        ///   Looks up a localized string similar to First {{count}} entities with errors:.
         /// </summary>
         internal static string CompleteFirstErrors {
             get {
@@ -450,54 +450,18 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
-        internal static string Error_0 {
+        internal static string Error {
             get {
-                return ResourceManager.GetString("Error_0", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error.
-        /// </summary>
-        internal static string Error_1 {
-            get {
-                return ResourceManager.GetString("Error_1", resourceCulture);
+                return ResourceManager.GetString("Error", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Errors.
         /// </summary>
-        internal static string Error_2 {
+        internal static string Error_plural {
             get {
-                return ResourceManager.GetString("Error_2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Errors.
-        /// </summary>
-        internal static string Error_3 {
-            get {
-                return ResourceManager.GetString("Error_3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Errors.
-        /// </summary>
-        internal static string Error_4 {
-            get {
-                return ResourceManager.GetString("Error_4", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Errors.
-        /// </summary>
-        internal static string Error_5 {
-            get {
-                return ResourceManager.GetString("Error_5", resourceCulture);
+                return ResourceManager.GetString("Error_plural", resourceCulture);
             }
         }
         
