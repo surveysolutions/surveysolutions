@@ -12,6 +12,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Views
         public int DaysCountStart { get; set; }
         public int? DaysCountEnd { get; set; }
 
+        public string DaysCount { get; set; }
+
         public DateTime? StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
@@ -22,5 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Views
         public int ApprovedBySupervisorCount { get; set; }
         public int RejectedByHeadquartersCount { get; set; }
         public int ApprovedByHeadquartersCount { get; set; }
+
+        public int? TotalCount { get; set; }
     }
 }
