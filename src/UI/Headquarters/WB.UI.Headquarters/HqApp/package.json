@@ -6,7 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack --color --watch",
     "dev": "webpack --color --hide-modules",
-    "production": "cross-env NODE_ENV=production webpack -p --color --hide-modules",
+    "production": "npm run vendor && cross-env NODE_ENV=production webpack -p --color --hide-modules",
     "vendor": "webpack --config webpack.vendor.config.js  -p --color --hide-modules"
   },
   "author": "World Bank Group",
