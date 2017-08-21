@@ -345,8 +345,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 Draw = request.Draw + 1,
                 RecordsTotal = data.TotalCount,
                 RecordsFiltered = data.TotalCount,
-                Data = data.Items,
-                TotalRow = data.TotalRow
+                Data = data.Items
             };
         }
 
