@@ -7,6 +7,11 @@ if (process.env.NODE_ENV === "production") {
     __webpack_public_path__ = assetsPath
 }
 
+import * as moment from 'moment'
+var navigator = window.navigator;
+var lang = navigator.languages ? navigator.languages[0] : (navigator.language || navigator.userLanguage)
+moment.locale(lang);
+
 import Vue from "vue"
 import VueI18n from "./locale"
 
