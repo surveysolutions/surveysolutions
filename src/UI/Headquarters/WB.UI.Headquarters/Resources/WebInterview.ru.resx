@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -241,7 +241,7 @@
     <value>Survey Solutions Web Survey</value>
   </data>
   <data name="WelcomeText" xml:space="preserve">
-    <value>ствуйте и Добро пожаловать в Survey Solutions Web Survey</value>
+    <value>Здравствуйте и Добро пожаловать в Survey Solutions Web Survey</value>
   </data>
   <data name="Error_CookiesTurnedOff" xml:space="preserve">
     <value>Для работы интервью требуются куки. Пожалуйста убедитесь, что куки включены в настройках Вашего браузера</value>

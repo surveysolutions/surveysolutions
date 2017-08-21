@@ -1065,4 +1065,19 @@
     <value>Количество дней когда интервью находятся в их текущем статусе</value>
     <comment>Количество дней когда интервью находятся в их текущем статусе</comment>
   </data>
+  <data name="Filters_Assignment" xml:space="preserve">
+    <value>Задания</value>
+  </data>
+  <data name="Interviewers_InterviewerNeverConnected" xml:space="preserve">
+    <value>Никогда не соединялись</value>
+  </data>
+  <data name="Supervisors_ActiveUsers" xml:space="preserve">
+    <value>Активные супервизоры</value>
+  </data>
+  <data name="Supervisors_ArchivedUsers" xml:space="preserve">
+    <value>Архивные супервизоры</value>
+  </data>
+  <data name="Supervisors_ArchiveStatusTitle" xml:space="preserve">
+    <value>Статус архивирования</value>
+  </data>
 </root>

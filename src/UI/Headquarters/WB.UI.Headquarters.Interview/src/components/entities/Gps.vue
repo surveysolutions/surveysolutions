@@ -103,7 +103,7 @@
                     message = this.$t("GPSError", { strErrorCode })  //"The position could not be determined due to an unknown error (Code: " + strErrorCode + ")."
                 }
 
-                this.markAnswerAsNotSavedWithMessage(error.message)
+                this.markAnswerAsNotSavedWithMessage(message)
                 this.$store.dispatch("fetchProgress", -1)
                 this.isInProgress = false
             }
