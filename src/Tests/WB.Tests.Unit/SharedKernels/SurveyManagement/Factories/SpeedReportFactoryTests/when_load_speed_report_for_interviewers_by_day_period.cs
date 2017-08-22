@@ -63,13 +63,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
             result.Items.Count().ShouldEqual(1);
 
         It should_return_first_row_with_25_minutes_per_interview_at_first_period_and_28_minutes_per_interview_at_second = () =>
-            result.Items.First().SpeedByPeriod.ShouldEqual(new double?[]{ 28, 25 });
+            result.Items.First().SpeedByPeriod.ShouldEqual(new double?[]{ 28, null });
 
         It should_return_first_row_with_Total = () =>
-            result.Items.First().Total.ShouldEqual(78);
+            result.Items.First().Total.ShouldEqual(28);
 
         It should_return_first_row_with_Average = () =>
-           result.Items.First().Average.ShouldEqual(26);
+           result.Items.First().Average.ShouldEqual(28);
 
         private static SpeedReportFactory speedReportFactory;
         private static SpeedByInterviewersReportInputModel input;
