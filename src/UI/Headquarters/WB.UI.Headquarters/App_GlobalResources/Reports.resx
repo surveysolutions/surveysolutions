@@ -139,7 +139,7 @@
     <value>Count Days of interview in Status</value>
   </data>
   <data name="SurveyName" xml:space="preserve">
-    <value>Questionnaire Template</value>
+    <value>Questionnaire Title</value>
   </data>
   <data name="TemplateVersion" xml:space="preserve">
     <value>Questionnaire Version</value>
