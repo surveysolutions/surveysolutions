@@ -129,7 +129,6 @@ namespace WB.UI.Headquarters.Controllers
         {
             return this.View("CountDaysOfInterviewInStatus", new CountDaysOfInterviewInStatusModel
             {
-                BasePath = Url.Content(@"~/"),
                 DataUrl = Url.RouteUrl("DefaultApiWithAction",
                     new
                     {
@@ -253,7 +252,6 @@ namespace WB.UI.Headquarters.Controllers
         {
             return this.View("InterviewersAndDevices", new DevicesInterviewersModel
             {
-                BasePath = Url.Content(@"~/"),
                 DataUrl = Url.RouteUrl("DefaultApiWithAction", 
                 new
                 {

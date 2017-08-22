@@ -87,7 +87,6 @@ namespace WB.UI.Headquarters.Controllers
             return new InterviewerHqModel
             {
                 Title = title.ToUiString(),
-                BasePath = Url.Content(@"~/"),
                 AllInterviews = Url.Content(@"~/api/InterviewApi/GetInterviews"),
                 InterviewerHqEndpoint = Url.Content(@"~/InterviewerHq"),
                 Statuses = statuses.Select(s => s.ToString()).ToArray(),
