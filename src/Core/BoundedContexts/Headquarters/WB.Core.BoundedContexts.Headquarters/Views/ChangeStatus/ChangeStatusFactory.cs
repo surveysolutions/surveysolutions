@@ -35,9 +35,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus
                 .Where(i => i.Status.ConvertToInterviewStatus().HasValue);
 
             bool IsAutomaticallyAssignedToSv (InterviewCommentedStatus x) => x.Status == InterviewExportedAction.SupervisorAssigned && x.StatusChangeOriginatorRole == UserRoles.Interviewer;
+            bool IsAutomaticallyAssignedToIn(InterviewCommentedStatus x) => x.Status == InterviewExportedAction.InterviewerAssigned && !x.InterviewerId.HasValue;
 
             var filteredStatuses = statuses?
-                .Where(x => !IsAutomaticallyAssignedToSv(x))
+                .Where(x => !IsAutomaticallyAssignedToSv(x) && !IsAutomaticallyAssignedToIn(x))
                 .Select(CreateCommentedStatusHistroyView).ToList() ?? new List<CommentedStatusHistroyView>();
 
             return filteredStatuses;
@@ -75,34 +76,44 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus
 
         private string GetAssigneeName(InterviewCommentedStatus commentedStatus)
         {
-            if (commentedStatus.Status == InterviewExportedAction.Created)
-                return commentedStatus.StatusChangeOriginatorName;
-
-            if (commentedStatus.Status == InterviewExportedAction.Completed || commentedStatus.Status == InterviewExportedAction.RejectedByHeadquarter)
-                return commentedStatus.SupervisorName;
-
-            if (commentedStatus.Status == InterviewExportedAction.ApprovedBySupervisor || commentedStatus.Status == InterviewExportedAction.UnapprovedByHeadquarter)
-                return Strings.AnyHeadquarters;
-
-            if (commentedStatus.Status == InterviewExportedAction.ApprovedByHeadquarter)
-                return String.Empty;
+            switch (commentedStatus.Status)
+            {
+                case InterviewExportedAction.Created:
+                    return commentedStatus.StatusChangeOriginatorName;
+                case InterviewExportedAction.Completed:
+                case InterviewExportedAction.RejectedByHeadquarter:
+                case InterviewExportedAction.SupervisorAssigned:
+                    return commentedStatus.SupervisorName;
+                case InterviewExportedAction.ApprovedBySupervisor:
+                case InterviewExportedAction.UnapprovedByHeadquarter:
+                    return Strings.AnyHeadquarters;
+                case InterviewExportedAction.ApprovedByHeadquarter:
+                    return String.Empty;
+            }
 
             return commentedStatus.InterviewerName;
         }
 
         private string GetAssigneeRole(InterviewCommentedStatus commentedStatus)
         {
-            if (commentedStatus.Status == InterviewExportedAction.Created)
-                return commentedStatus.StatusChangeOriginatorRole.ToString();
-
-            if (commentedStatus.Status == InterviewExportedAction.Completed || commentedStatus.Status == InterviewExportedAction.RejectedByHeadquarter)
-                return UserRoles.Supervisor.ToString();
-
-            if (commentedStatus.Status == InterviewExportedAction.ApprovedBySupervisor || commentedStatus.Status == InterviewExportedAction.UnapprovedByHeadquarter)
-                return UserRoles.Headquarter.ToString();
-
-            if (commentedStatus.Status == InterviewExportedAction.ApprovedByHeadquarter)
-                return String.Empty;
+            switch (commentedStatus.Status)
+            {
+                case InterviewExportedAction.Created:
+                    return commentedStatus.StatusChangeOriginatorRole.ToString();
+                case InterviewExportedAction.Completed:
+                case InterviewExportedAction.RejectedByHeadquarter:
+                case InterviewExportedAction.SupervisorAssigned:
+                    return UserRoles.Supervisor.ToString();
+                case InterviewExportedAction.ApprovedBySupervisor:
+                case InterviewExportedAction.UnapprovedByHeadquarter:
+                    return UserRoles.Headquarter.ToString();
+                case InterviewExportedAction.ApprovedByHeadquarter:
+                    return String.Empty;
+                case InterviewExportedAction.InterviewerAssigned:
+                    if (string.IsNullOrWhiteSpace(commentedStatus.InterviewerName))
+                        return string.Empty;
+                    break;
+            }
 
             return UserRoles.Interviewer.ToString();
         }

@@ -117,7 +117,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     interview.StatusChangeOriginatorName,
                     this.GetUserRole(interview.StatusChangeOriginatorRole),
                     this.GetResponsibleName(interview.Status, interview.InterviewerName, interview.SupervisorName, interview.StatusChangeOriginatorName),
-                    this.GetResponsibleRole(interview.Status, interview.StatusChangeOriginatorRole),
+                    this.GetResponsibleRole(interview.Status, interview.StatusChangeOriginatorRole, interview.InterviewerName),
                     interview.Timestamp.ToString("d", CultureInfo.InvariantCulture),
                     interview.Timestamp.ToString("T", CultureInfo.InvariantCulture)
                 };
@@ -146,7 +146,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             return interviewerName;
         }
 
-        private string GetResponsibleRole(InterviewExportedAction status, UserRoles statusChangeOriginatorRole)
+        private string GetResponsibleRole(InterviewExportedAction status, UserRoles statusChangeOriginatorRole, string interviewerName)
         {
             switch (status)
             {
@@ -161,6 +161,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     return FileBasedDataExportRepositoryWriterMessages.Headquarter;
                 case InterviewExportedAction.ApprovedByHeadquarter:
                     return String.Empty;
+                case InterviewExportedAction.InterviewerAssigned:
+                    if (string.IsNullOrWhiteSpace(interviewerName))
+                        return string.Empty;
+                    break;
             }
 
             return FileBasedDataExportRepositoryWriterMessages.Interviewer;
