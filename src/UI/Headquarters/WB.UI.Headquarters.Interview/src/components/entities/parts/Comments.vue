@@ -9,7 +9,7 @@
         </template>
 
         <div class="comment active" v-if="isShowingAddCommentDialog">
-            <form class="form-inline">
+            <form class="form-inline" v-on:submit.prevent="onSubmit">
                 <label>{{ $t("CommentYours") }}</label>
                 <div class="form-group">
                     <div class="input-group comment-field">
