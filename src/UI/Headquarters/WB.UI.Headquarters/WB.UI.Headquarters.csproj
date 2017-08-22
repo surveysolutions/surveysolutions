@@ -1479,6 +1479,7 @@
     <Content Include="Views\Shared\Interviews\_InterviewStatusHistoryModal.cshtml" />
     <Content Include="Views\Reports\CountDaysOfInterviewInStatus.cshtml" />
     <Content Include="Views\Shared\_export-buttons.cshtml" />
+    <Content Include="Views\Shared\_MainLayoutHq.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>

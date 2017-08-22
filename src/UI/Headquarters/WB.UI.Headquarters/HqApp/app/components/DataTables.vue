@@ -15,6 +15,10 @@
 
 <script>
 
+import 'datatables.net'
+import 'datatables.net-select'
+import 'jquery-contextmenu'
+
 export default {
 
     props: {
@@ -40,11 +44,6 @@ export default {
         exportable: { type: Boolean }
     },
 
-    data() {
-        return {
-            table: null
-        };
-    },
     methods: {
         reload: _.debounce(function (data) {
             this.table.ajax.data = this.addParamsToRequest(data || {});
@@ -108,6 +107,7 @@ export default {
         var self = this;
         var options = $.extend({
             processing: true,
+            select: true,
             serverSide: true,
             language:
             {

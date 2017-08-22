@@ -38,6 +38,7 @@
                         enabled: @(ServiceLocator.Current.GetInstance<SyncSettings>().UseBackgroundJobForProcessingPackages ? "true" : "false"),
                         lengthUrl: '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ControlPanelApi", action = "GetIncomingPackagesQueueLength"})'
                     },
+                    basePath: '@Url.Content("~/")',
                     dataTableTranslationsUrl: '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "DataTableTranslations" })'
                 }
             }
