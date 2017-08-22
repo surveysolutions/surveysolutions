@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using NHibernate.Criterion;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -67,27 +68,58 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             var interviewStatusChangeDateWithResponsible = queryInterviewStatusesByDateRange(from, to)
                     .Select(selectUserAndTimestamp)
                     .Where(ics => ics.UserId.HasValue && responsibleUserIdsForOnePage.Contains(ics.UserId.Value))
-                    .Select(i => new { UserId = i.UserId.Value, i.UserName, i.Timestamp })
-                    .ToArray();
-
-            var rows = responsibleUserIdsForOnePage.Select(u =>
-            {
-                var interviewsForUser = interviewStatusChangeDateWithResponsible.Where(i => i.UserId == u).ToArray();
-                var quantityByPeriod = new List<long>();
-
-                foreach (var dateTimeRange in dateTimeRanges)
+                    .Select(i => new { UserId = i.UserId.Value, i.UserName, i.Timestamp });
+            
+            List<QuantityByResponsibleReportRow> list = responsibleUserIdsForOnePage
+                .Select(x => new QuantityByResponsibleReportRow(dateTimeRanges.Length)
                 {
-                    var count = interviewsForUser.Count(ics => ics.Timestamp >= dateTimeRange.From && ics.Timestamp < dateTimeRange.To);
-                    quantityByPeriod.Add(count);
+                    ResponsibleId = x
+                }).ToList();
+
+            for (int dateRangeIndex = 0; dateRangeIndex < dateTimeRanges.Length; dateRangeIndex++)
+            {
+                var range = (from i in interviewStatusChangeDateWithResponsible
+                    where i.Timestamp >= dateTimeRanges[dateRangeIndex].From && i.Timestamp < dateTimeRanges[dateRangeIndex].To
+                    group i by new {i.UserId, i.UserName } into grouping
+                    select new
+                    {
+                        grouping.Key.UserId,
+                        grouping.Key.UserName,
+                        Count = grouping.Count()
+                    }).ToList();
+
+
+                foreach (var r in range)
+                {
+                    var quantityByResponsibleReportRow = list.First(x => x.ResponsibleId == r.UserId);
+
+                    quantityByResponsibleReportRow.ResponsibleName = r.UserName;
+                    quantityByResponsibleReportRow.QuantityByPeriod[dateRangeIndex] = r.Count;
                 }
-                return new QuantityByResponsibleReportRow(u, quantityByPeriod.ToArray(),
-                    interviewsForUser.Any() ? interviewsForUser.First().UserName : "", interviewsForUser.Count());
-            }).ToArray();
+            }
+
+            for (int dateRangeIndex = 0; dateRangeIndex < dateTimeRanges.Length; dateRangeIndex++)
+            {
+                var range = (from i in interviewStatusChangeDateWithResponsible
+                    group i by i.UserId into grouping
+                    select new
+                    {
+                        UserId = grouping.Key,
+                        Count = grouping.Count()
+                    }).ToList();
+
+
+                foreach (var r in range)
+                {
+                    var quantityByResponsibleReportRow = list.First(x => x.ResponsibleId == r.UserId);
+                    quantityByResponsibleReportRow.Total = r.Count;
+                }
+            }
 
             var quantityTotalRow =
                 this.CreateQuantityTotalRow(interviewStatusesByDateRange, dateTimeRanges, selectUserAndTimestamp);
 
-            return new QuantityByResponsibleReportView(rows, quantityTotalRow, dateTimeRanges, responsibleUsersCount);
+            return new QuantityByResponsibleReportView(list, quantityTotalRow, dateTimeRanges, responsibleUsersCount);
         }
 
         
@@ -95,8 +127,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             Expression<Func<T, UserAndTimestamp>> userIdSelector)
         {
             var allInterviewsInStatus = interviews.Select(userIdSelector)
-                  .Select(i => i.Timestamp)
-                  .ToArray();
+                  .Select(i => i.Timestamp);
 
             var quantityByPeriod = new List<long>();
 
@@ -106,7 +137,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 quantityByPeriod.Add(count);
             }
 
-            return new QuantityTotalRow(quantityByPeriod.ToArray(), allInterviewsInStatus.Length);
+            return new QuantityTotalRow(quantityByPeriod.ToArray(), allInterviewsInStatus.Count());
         }
 
         private IQueryable<TimeSpanBetweenStatuses> QueryCompleteStatusesExcludingRestarts(
@@ -142,8 +173,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             {
                 return this.interviewstatusStorage.Query(
                     _ =>
-                        _.Where(
-                                x => x.QuestionnaireId == questionnaireId &&
+                        _.Where(x => x.QuestionnaireId == questionnaireId &&
                                      x.QuestionnaireVersion == questionnaireVersion)
                             .SelectMany(x => x.InterviewCommentedStatuses)
                             .Where(ics =>
