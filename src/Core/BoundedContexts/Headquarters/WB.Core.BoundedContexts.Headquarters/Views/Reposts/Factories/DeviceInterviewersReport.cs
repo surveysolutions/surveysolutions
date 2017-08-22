@@ -108,7 +108,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             });
 
             var result = row.FirstOrDefault() ?? new DeviceInterviewersReportLine();
-            result.TeamName = Report.COLUMN_TOTAL;
+            result.TeamName = Strings.Total;
             return result;
         }
 
