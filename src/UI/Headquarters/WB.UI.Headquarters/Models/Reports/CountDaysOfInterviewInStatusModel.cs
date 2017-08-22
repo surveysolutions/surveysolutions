@@ -5,8 +5,6 @@ namespace WB.UI.Headquarters.Models.Reports
 {
     public class CountDaysOfInterviewInStatusModel
     {
-        public string BasePath { get; set; }
-
         public string DataUrl { get; set; }
 
         public string InterviewsBaseUrl { get; set; }

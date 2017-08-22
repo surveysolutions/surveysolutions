@@ -9,7 +9,7 @@ import CountDaysOfInterviewInStatus from "./views/Reports/CountDaysOfInterviewIn
 Vue.use(VueRouter)
 
 export default new VueRouter({
-    base: Vue.$config.basePath,
+    base: window.input.settings.config.basePath,
     mode: "history",
     routes: [{
         path: '/Reports/InterviewersAndDevices',
@@ -24,5 +24,14 @@ export default new VueRouter({
         path: '/InterviewerHq/Completed', component: Interviews
     }, {
         path: '/InterviewerHq/Started', component: Interviews
-    }]
+    }, {
+        path: "*", component: {
+            render: function (createElement) {
+                return createElement(
+                    'h2', "Route not found. Base path is window.input.settings.config.basePath: " + window.input.settings.config.basePath
+                )
+            },
+        }
+    }
+    ]
 })
