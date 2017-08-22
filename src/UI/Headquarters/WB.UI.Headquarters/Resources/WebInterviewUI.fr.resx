@@ -190,7 +190,7 @@
     <value>Questions avec erreurs</value>
   </data>
   <data name="CompleteFirstErrors" xml:space="preserve">
-    <value>Premières {{ count}} entités avec erreurs:</value>
+    <value>Premières {{count}} entités avec erreurs:</value>
   </data>
   <data name="CompleteNoteToSupervisor" xml:space="preserve">
     <value>Notes à l'attention du superviseur</value>
@@ -220,10 +220,7 @@
     <value>Questions avec commentaires:</value>
   </data>
   <data name="CoverFirstComments" xml:space="preserve">
-    <value>Premières {{ count}} entités avec erreurs:</value>
-  </data>
-  <data name="CoverProvide" xml:space="preserve">
-    <value>Veuillez fournir des réponses à toutes les questions dans la mesure du possible. Toute réponse que vous fournissez est envoyée directement à notre système. Si vous rencontrez une perturbation de la communication, vous pouvez revenir au questionnaire en suivant le même lien qui vous a été remis. Vous pouvez ensuite continuer en soumettant de nouvelles réponses ou en révisant des réponses antérieures.</value>
+    <value>Premières {{count}} entités avec erreurs:</value>
   </data>
   <data name="CoverSupervisorNote" xml:space="preserve">
     <value>Note(s) du superviseur</value>
