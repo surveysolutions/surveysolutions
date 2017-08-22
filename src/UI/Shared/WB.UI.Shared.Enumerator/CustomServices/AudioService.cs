@@ -96,6 +96,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             if (!this.IsRecording()) return;
 
             this.recorder.Stop();
+
             this.duration.Stop();
             this.ReleaseAudioRecorder();
         }
@@ -108,6 +109,22 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 : null;
 
         public TimeSpan GetLastRecordDuration() => this.duration.Elapsed;
+
+        public TimeSpan GetAudioRecordDuration()
+        {
+            if(!this.fileSystemAccessor.IsFileExists(this.pathToAudioFile))
+            {
+                return TimeSpan.Zero;
+            }
+
+            var metaRetriever = new MediaMetadataRetriever();
+            metaRetriever.SetDataSource(pathToAudioFile);
+            var durationMs = metaRetriever.ExtractMetadata(MetadataKey.Duration);
+
+            return long.TryParse(durationMs, out long duration) 
+                ? TimeSpan.FromMilliseconds(duration) 
+                : TimeSpan.Zero;
+        }
 
         public string GetMimeType() => MimeTypeMap.Singleton.GetMimeTypeFromExtension(AudioFileExtension);
         public string GetAudioType() => AudioFileExtension;

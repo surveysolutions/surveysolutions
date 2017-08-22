@@ -2,7 +2,7 @@
     <wb-question :question="$me" questionCssClassName="single-select-question" :noAnswer="noOptions">
         <div class="question-unit">
             <div class="options-group" v-bind:class="{ 'dotted': noOptions }">
-                <div class="radio" v-for="option in $me.options">
+                <div class="radio" v-for="option in $me.options" :key="$me.id + '_' + option.value">
                     <div class="field">
                         <input class="wb-radio" type="radio" :id="$me.id + '_' + option.value" :name="$me.id" :value="option.value" v-model="answer">
                         <label :for="$me.id + '_' + option.value">
@@ -11,12 +11,12 @@
                         <wb-remove-answer />
                     </div>
                 </div>
-                <div v-if="noOptions" class="options-not-available">Options will be available after answering referenced question</div>
+                <div v-if="noOptions" class="options-not-available">{{ $t("OptionsAvailableAfterAnswer") }}</div>
             </div>
         </div>
     </wb-question>
 </template>
-<script lang="ts">
+<script lang="js">
     import { entityDetails } from "components/mixins"
 
     export default {

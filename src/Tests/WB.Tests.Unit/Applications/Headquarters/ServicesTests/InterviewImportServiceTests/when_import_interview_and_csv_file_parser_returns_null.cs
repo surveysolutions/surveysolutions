@@ -8,7 +8,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
-using WB.UI.Headquarters.Implementation.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportServiceTests
@@ -33,7 +32,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
         };
 
         Because of = () => 
-            interviewImportService.ImportAssignments(questionnaireIdentity, "sampleId", null, Guid.Parse("22222222222222222222222222222222"), AssignmentImportType.Assignments);
+            interviewImportService.ImportAssignments(questionnaireIdentity, "sampleId", null, Guid.Parse("22222222222222222222222222222222"), AssignmentImportType.Assignments, false);
 
         It should_in_progress_be_false = () =>
             interviewImportService.Status.IsInProgress.ShouldBeFalse();

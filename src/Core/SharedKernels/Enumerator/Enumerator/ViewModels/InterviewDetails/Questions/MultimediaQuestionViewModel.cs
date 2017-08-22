@@ -96,7 +96,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             this.variableName = questionnaire.GetQuestionVariableName(entityIdentity.Id);
             var multimediaQuestion = interview.GetMultimediaQuestion(entityIdentity);
-            if (multimediaQuestion.IsAnswered)
+            if (multimediaQuestion.IsAnswered())
             {
                 this.Answer = this.imageFileStorage.GetInterviewBinaryData(this.interviewId, multimediaQuestion.GetAnswer().FileName);
             }

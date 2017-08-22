@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
@@ -70,7 +71,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 });
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
-                new PlainQuestionnaire(questionnaire, 1));
+                Create.Entity.PlainQuestionnaire(questionnaire, 1));
 
             eventContext = new EventContext();
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);

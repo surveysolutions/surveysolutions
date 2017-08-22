@@ -16,7 +16,7 @@ using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Tester.Activities;
 using WB.UI.Tester.Converters;
-using WB.UI.Tester.Ninject;
+using WB.UI.Tester.ServiceLocation;
 using Xamarin;
 
 namespace WB.UI.Tester
@@ -35,7 +35,8 @@ namespace WB.UI.Tester
 
         protected override IMvxIoCProvider CreateIocProvider()
         {
-            return NinjectIoCAdapterSetup.CreateIocProvider();
+
+            return IoCAdapterSetup.CreateIocProvider();
         }
 
         protected override void InitializeViewLookup()

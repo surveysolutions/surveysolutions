@@ -1,11 +1,11 @@
 ﻿using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
-using Ninject.Modules;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Implementation;
+using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
@@ -29,7 +29,7 @@ using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.UI.Tester.Infrastructure
 {
-    public class TesterInfrastructureModule : NinjectModule
+    public class TesterInfrastructureModule : IModule
     {
         private readonly string basePath;
         private readonly string questionnaireAssembliesFolder;
@@ -40,50 +40,44 @@ namespace WB.UI.Tester.Infrastructure
             this.questionnaireAssembliesFolder = questionnaireAssembliesFolder;
         }
 
-        public override void Load()
+        public void Load(IIocRegistry registry)
         {
-            this.Bind<IEventStore>().To<InMemoryEventStore>().InSingletonScope();
-            this.Bind<ISnapshotStore>().To<InMemoryEventStore>().InSingletonScope();
+            registry.BindAsSingleton<IEventStore, InMemoryEventStore>();
+            registry.BindAsSingleton<ISnapshotStore, InMemoryEventStore>();
+            registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, InMemoryKeyValueStorage<QuestionnaireDocument>>();
+            registry.BindToConstant(() => new SqliteSettings
+            {
+                PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data")
+            });
 
-            this.Bind<IPlainKeyValueStorage<QuestionnaireDocument>>().To<InMemoryKeyValueStorage<QuestionnaireDocument>>().InSingletonScope();
+            registry.BindAsSingleton(typeof(IPlainStorage<>), typeof(SqlitePlainStorage<>)); // TODO Move to generic module between IN, T
 
-            this.Bind<SqliteSettings>().ToConstant(
-                new SqliteSettings
-                {
-                    PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data")
-                });
-            this.Bind(typeof(IPlainStorage<>)).To(typeof(SqlitePlainStorage<>)).InSingletonScope();
+            // this.Unbind<IPlainStorage<OptionView>>(); // TODO check wtf?
+            registry.BindAsSingleton<IPlainStorage<OptionView>, InMemoryPlainStorage<OptionView>>();
 
-            this.Unbind<IPlainStorage<OptionView>>();
-            this.Bind<IPlainStorage<OptionView>>().To<InMemoryPlainStorage<OptionView>>().InSingletonScope();
+            registry.Bind<ILoggerProvider, XamarinInsightsLoggerProvider>();
+            registry.BindAsSingleton<ILogger, XamarinInsightsLogger>();
+            registry.Bind<IRestServiceSettings, TesterSettings>();
+            registry.Bind<INetworkService, AndroidNetworkService>();
+            registry.Bind<IEnumeratorSettings, TesterSettings>();
+            registry.Bind<IRestServicePointManager, RestServicePointManager>();
+            registry.Bind<IHttpClientFactory, ModernHttpClientFactory>();
+            registry.Bind<IRestService, RestService>();
+            registry.Bind<ISerializer, PortableJsonSerializer>();
+            registry.Bind<IInterviewAnswerSerializer,PortableInterviewAnswerJsonSerializer>();
+            registry.Bind<IJsonAllTypesSerializer, PortableJsonAllTypesSerializer>();
 
-            this.Bind<ILoggerProvider>().To<XamarinInsightsLoggerProvider>();
-            this.Bind<ILogger>().To<XamarinInsightsLogger>().InSingletonScope();
+            registry.Bind<IStringCompressor, JsonCompressor>();
+            registry.BindAsSingleton<IDesignerApiService, DesignerApiService>();
+            registry.BindAsSingleton<IPrincipal, TesterPrincipal>();
 
-            this.Bind<IRestServiceSettings>().To<TesterSettings>();
-            this.Bind<INetworkService>().To<AndroidNetworkService>();
-            this.Bind<IEnumeratorSettings>().To<TesterSettings>();
-            this.Bind<IRestServicePointManager>().To<RestServicePointManager>();
-            this.Bind<IHttpClientFactory>().To<ModernHttpClientFactory>();
-            this.Bind<IRestService>().To<RestService>();
+            registry.BindAsSingletonWithConstructorArgument<IQuestionnaireAssemblyAccessor, TesterQuestionnaireAssemblyAccessor>(
+                "assemblyStorageDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory(this.questionnaireAssembliesFolder));
 
-            this.Bind<ISerializer>().ToMethod((ctx) => new PortableJsonSerializer());
-            this.Bind<IInterviewAnswerSerializer>().ToMethod((ctx) => new PortableInterviewAnswerJsonSerializer());
-            this.Bind<IJsonAllTypesSerializer>().ToMethod((ctx) => new PortableJsonAllTypesSerializer());
-
-            this.Bind<IStringCompressor>().To<JsonCompressor>();
-
-            this.Bind<IDesignerApiService>().To<DesignerApiService>().InSingletonScope();
-
-            this.Bind<IPrincipal>().To<TesterPrincipal>().InSingletonScope();
-
-            this.Bind<IQuestionnaireAssemblyAccessor>().To<TesterQuestionnaireAssemblyAccessor>().InSingletonScope()
-                .WithConstructorArgument("assemblyStorageDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory(this.questionnaireAssembliesFolder));
-
-            this.Bind<IAudioFileStorage>().To<TesterAudioFileStorage>().InSingletonScope().WithConstructorArgument("rootDirectoryPath", basePath);
-            this.Bind<IImageFileStorage>().To<TesterImageFileStorage>().InSingletonScope().WithConstructorArgument("rootDirectoryPath", basePath);
-            this.Bind<IQuestionnaireTranslator>().To<QuestionnaireTranslator>();
-            this.Bind<IQuestionnaireStorage>().To<QuestionnaireStorage>().InSingletonScope();
+            registry.BindAsSingletonWithConstructorArgument<IAudioFileStorage, TesterAudioFileStorage>("rootDirectoryPath", basePath);
+            registry.BindAsSingletonWithConstructorArgument<IImageFileStorage, TesterImageFileStorage>("rootDirectoryPath", basePath);
+            registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
+            registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
         }
     }
 }

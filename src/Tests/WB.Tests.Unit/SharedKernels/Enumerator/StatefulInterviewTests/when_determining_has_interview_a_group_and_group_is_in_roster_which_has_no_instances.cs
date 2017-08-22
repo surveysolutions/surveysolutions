@@ -30,6 +30,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         private static StatefulInterview interview;
         private static Guid questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid rosterId = Guid.Parse("44444444444444444444444444444444");
-        static Identity group = new Identity(Guid.Parse("11111111111111111111111111111111"), new [] { 4444m });
+        static Identity group = Create.Identity(Guid.Parse("11111111111111111111111111111111"), 4444);
     }
 }

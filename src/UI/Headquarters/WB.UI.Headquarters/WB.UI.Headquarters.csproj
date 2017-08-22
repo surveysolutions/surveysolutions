@@ -25,6 +25,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
     <TargetFrameworkProfile />
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -368,8 +369,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\WebActivatorEx.2.1.0\lib\net40\WebActivatorEx.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\..\..\packages\WebActivatorEx.2.2.0\lib\net40\WebActivatorEx.dll</HintPath>
     </Reference>
     <Reference Include="WebGrease">
       <HintPath>..\..\..\..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
@@ -557,6 +557,7 @@
     <Content Include="App_GlobalResources\Reports.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Reports.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\Reports.ru.resx">
       <SubType>Designer</SubType>
@@ -664,7 +665,6 @@
     <Content Include="Dependencies\img\icon-mic-2x.png" />
     <Content Include="Dependencies\img\padlock-1dp.png" />
     <Content Include="Dependencies\img\padlock-3dp.png" />
-    <Content Include="webpack.config.js" />
     <EmbeddedResource Include="Content\img\no_image_found.jpg" />
     <Content Include="Content\img\sort_asc.png" />
     <Content Include="Content\img\sort_asc_disabled.png" />
@@ -673,9 +673,7 @@
     <Content Include="Content\img\sort_desc_disabled.png" />
     <Content Include="Content\popover-extra-placements.min.css" />
     <EmbeddedResource Include="Content\swagger.css" />
-    <Content Include="Dependencies\build\vue\troubleshooting.js" />
     <Content Include="Dependencies\css\jqplot-override.css" />
-    <Content Include="Dependencies\dist\*.*" />
     <Content Include="Dependencies\build\libs.css" />
     <Content Include="Dependencies\build\libs.js" />
     <Content Include="Dependencies\build\markup.css" />
@@ -743,8 +741,7 @@
     <Content Include="Dependencies\js\dataTables.conditionalPaging.js" />
     <Content Include="Dependencies\js\searchHighlight.js" />
     <Content Include="ErrorPages\genericError.html" />
-    <Content Include="Dependencies\vue\Typeahead.vue" />
-    <Content Include="Dependencies\vue\troubleshooting.js" />
+    <None Include="Dependencies\vue\Typeahead.vue" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Configuration\Vitalii.Headquarters.Web.config">
       <SubType>Designer</SubType>
@@ -828,6 +825,11 @@
     <EmbeddedResource Include="Resources\Details.zh.resx">
       <DependentUpon>Details.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DevicesInterviewers.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DevicesInterviewers.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DevicesInterviewers.ru.resx" />
     <EmbeddedResource Include="Resources\EnumNames.fr.resx">
       <DependentUpon>EnumNames.resx</DependentUpon>
     </EmbeddedResource>
@@ -843,6 +845,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\EnumNames.zh.resx">
       <DependentUpon>EnumNames.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\FieldsAndValidations.ar.resx">
+      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\FieldsAndValidations.fr.resx">
       <DependentUpon>FieldsAndValidations.resx</DependentUpon>
@@ -927,6 +932,9 @@
     <EmbeddedResource Include="Resources\OutdatedBrowser.zh.resx">
       <DependentUpon>OutdatedBrowser.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Pages.ar.resx">
+      <DependentUpon>Pages.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Pages.fr.resx">
       <DependentUpon>Pages.resx</DependentUpon>
     </EmbeddedResource>
@@ -947,6 +955,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\PeriodicStatusReport.fr.resx">
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\PeriodicStatusReport.pt.resx">
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
@@ -962,24 +971,8 @@
     <EmbeddedResource Include="Resources\PeriodicStatusReport.zh.resx">
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Strings.fr.resx">
-      <DependentUpon>Strings.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Strings.pt.resx">
-      <DependentUpon>Strings.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Strings.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Strings.ru.resx">
-      <DependentUpon>Strings.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Strings.zh.resx">
-      <DependentUpon>Strings.resx</DependentUpon>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Strings.resx" />
+    <EmbeddedResource Include="Resources\Strings.ru.resx" />
     <EmbeddedResource Include="Resources\SyncLogMessages.fr.resx">
       <DependentUpon>SyncLogMessages.resx</DependentUpon>
     </EmbeddedResource>
@@ -1042,14 +1035,23 @@
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.zh.resx">
       <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterview.ar.resx" />
+    <EmbeddedResource Include="Resources\WebInterview.es.resx" />
+    <EmbeddedResource Include="Resources\WebInterview.fr.resx" />
     <EmbeddedResource Include="Resources\WebInterview.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>WebInterview.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterview.ru.resx">
+      <DependentUpon>WebInterview.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\WebInterview.zh.resx">
       <DependentUpon>WebInterview.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterviewSetup.ar.resx" />
+    <EmbeddedResource Include="Resources\WebInterviewSetup.es.resx" />
+    <EmbeddedResource Include="Resources\WebInterviewSetup.fr.resx" />
     <EmbeddedResource Include="Resources\WebInterviewSetup.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1061,6 +1063,17 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\WebInterviewSetup.zh.resx">
       <DependentUpon>WebInterviewSetup.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterviewUI.ar.resx" />
+    <EmbeddedResource Include="Resources\WebInterviewUI.es.resx" />
+    <EmbeddedResource Include="Resources\WebInterviewUI.fr.resx" />
+    <EmbeddedResource Include="Resources\WebInterviewUI.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>WebInterviewUI.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterviewUI.ru.resx">
+      <DependentUpon>WebInterviewUI.resx</DependentUpon>
     </EmbeddedResource>
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
@@ -1129,10 +1142,10 @@
     <Content Include="Dependencies\css\_main-information.scss" />
     <Content Include="Dependencies\css\_modal.scss" />
     <Content Include="Dependencies\css\markup-detalica.scss" />
-    <Content Include="Dependencies\vue\DatePicker.vue" />
-    <Content Include="Dependencies\vue\InterviewTable.vue">
+    <None Include="Dependencies\vue\DatePicker.vue" />
+    <None Include="Dependencies\vue\InterviewTable.vue">
       <SubType>Designer</SubType>
-    </Content>
+    </None>
     <Content Include="Content\bootstrap-datepicker3.standalone.min.css.map" />
     <Content Include="Content\bootstrap-datepicker3.standalone.css.map" />
     <Content Include="Content\bootstrap-datepicker3.min.css.map" />
@@ -1436,9 +1449,6 @@
     <Content Include="Views\WebInterview\Finish.cshtml" />
     <Content Include="Views\WebInterview\Error.cshtml" />
     <Content Include="Views\Shared\QueueIndicator.cshtml" />
-    <Content Include="Views\Troubleshooting\Index.cshtml" />
-    <Content Include="Views\Troubleshooting\CensusInterviews.cshtml" />
-    <Content Include="Views\Troubleshooting\DataIsMissing.cshtml" />
     <Content Include="Views\Interviewer\Profile.cshtml" />
     <Content Include="Views\Shared\_notice.cshtml" />
     <Content Include="Views\HQ\InterviewsRedesigned.cshtml" />
@@ -1465,6 +1475,10 @@
     <Content Include="Views\Shared\InterviewerMainMenu.cshtml" />
     <Content Include="Views\InterviewerHq\Index.cshtml" />
     <Content Include="Views\InterviewerHq\Interviews.cshtml" />
+    <Content Include="Views\Reports\InterviewersAndDevices.cshtml" />
+    <Content Include="Views\Shared\Interviews\_InterviewStatusHistoryModal.cshtml" />
+    <Content Include="Views\Reports\CountDaysOfInterviewInStatus.cshtml" />
+    <Content Include="Views\Shared\_export-buttons.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1484,6 +1498,7 @@
     <Compile Include="API\AssignmentsApiController.cs" />
     <Compile Include="API\Interviewer\v2\AssignmentsApiV2Controller.cs" />
     <Compile Include="API\PublicApi\AssignmentsController.cs" />
+    <Compile Include="API\ReportDataApiController.Report.cs" />
     <Compile Include="API\WebInterview\IWebInterviewAllowService.cs" />
     <Compile Include="API\WebInterview\Services\WebInterviewAllowService.cs" />
     <Compile Include="Code\AutoMapperResolutionContextExtensions.cs" />
@@ -1521,7 +1536,6 @@
     <Compile Include="API\Resources\CompanyLogoController.cs" />
     <Compile Include="API\Resources\DataTableTranslationsController.cs" />
     <Compile Include="API\Resources\WebInterviewResourcesController.cs" />
-    <Compile Include="API\TroubleshootingApiController.cs" />
     <Compile Include="API\UserPreloadingController.cs" />
     <Compile Include="API\PublicApi\UsersController.cs" />
     <Compile Include="API\WebInterview\LinksExportController.cs" />
@@ -1625,11 +1639,9 @@
     <Compile Include="Code\HtmlEncodeStringPropertiesConverter.cs" />
     <Compile Include="Code\HtmlHelper.cs" />
     <Compile Include="Code\HttpForbiddenResult.cs" />
-    <Compile Include="Code\IInterviewerVersionReader.cs" />
     <Compile Include="Code\InterviewerVersionReader.cs" />
     <Compile Include="Code\IRevalidateInterviewsAdministrationService.cs" />
     <Compile Include="Code\ApplicationSettings.cs" />
-    <Compile Include="Code\LocalizationExtensions.cs" />
     <Compile Include="Code\MessageHandler\BasicAuthMessageHandler.cs" />
     <Compile Include="Code\RevalidateInterviewsAdministrationService.cs" />
     <Compile Include="Code\Security\SimpleTokenVerifier.cs" />
@@ -1665,7 +1677,12 @@
     <Compile Include="Controllers\WebInterviewController.Actions.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M020_AddContentType.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M021_AddIndexOnQuestionnaierBrowseItems_QuestionnaireId.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M014_AddStatusIndexToStatusHistory.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M012_DeleteDeletedInterviews.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M013_AddIndexesForQuantityReport.cs" />
     <Compile Include="Models\InterviewsDataTableRequest.cs" />
+    <Compile Include="Models\Reports\CountDaysOfInterviewInStatusModel.cs" />
+    <Compile Include="Models\Reports\DevicesInterviewersModel.cs" />
     <Compile Include="Models\User\ResponsibleComboboxModel.cs" />
     <Compile Include="Models\User\ResponsibleComboboxOptionModel.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
@@ -1674,7 +1691,6 @@
     <Compile Include="Controllers\TabletReportController.cs" />
     <Compile Include="Controllers\Profile\TeamController.cs" />
     <Compile Include="Controllers\TeamsController.cs" />
-    <Compile Include="Controllers\TroubleshootingController.cs" />
     <Compile Include="Controllers\UsersApiController.cs" />
     <Compile Include="Controllers\WebInterviewController.cs" />
     <Compile Include="Filters\ActivePageAttribute.cs" />
@@ -1707,7 +1723,6 @@
     <Compile Include="Migrations\Users\M003_AddDeviceAppVersionToProfile.cs" />
     <Compile Include="Models\InterviewerHqModel.cs" />
     <Compile Include="Models\Reports\MapReportModel.cs" />
-    <Compile Include="Models\Troubleshooting\DataIsMissingModel.cs" />
     <Compile Include="Models\VersionCheck\VersionCheckingInfo.cs" />
     <Compile Include="Filters\WebInterviewAuthorizeAttribute.cs" />
     <Compile Include="Filters\WebInterviewFeatureEnabledAttribute.cs" />
@@ -1793,7 +1808,6 @@
     <Compile Include="Models\InterviewersModel.cs" />
     <Compile Include="Models\InterviewsStatisticsViewModel.cs" />
     <Compile Include="Models\InterviewSummaryViewModel.cs" />
-    <Compile Include="Models\Troubleshooting\TroubleshootingModels.cs" />
     <Compile Include="Models\InverviewChangeStateHistoryView.cs" />
     <Compile Include="Models\JsonBaseResponse.cs" />
     <Compile Include="Models\JsonBundleCommandResponse.cs" />
@@ -1854,6 +1868,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Include="Resources\DevicesInterviewers.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DevicesInterviewers.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\EnumNames.Designer.cs">
       <DependentUpon>EnumNames.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -1899,11 +1918,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Resources\Strings.Designer.cs">
-      <DependentUpon>Strings.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Include="Resources\SyncLogMessages.Designer.cs">
       <DependentUpon>SyncLogMessages.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -1934,6 +1948,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Include="Resources\WebInterviewUI.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WebInterviewUI.resx</DependentUpon>
+    </Compile>
     <Compile Include="ServiceLocationModule.cs" />
     <Compile Include="Services\AudioProcessingService.cs" />
     <Compile Include="Services\IAudioProcessingService.cs" />
@@ -1954,6 +1973,8 @@
     <Compile Include="Utils\ExceptionExtensoins.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\Threading\AsyncQuestionnaireUpdater.cs" />
+    <Compile Include="Models\TranslationModel.cs" />
+    <Compile Include="Utils\TranslationModelConverter.cs" />
     <Compile Include="Views\DesignerQuestionnaireApiRestServiceSettings.cs" />
     <Compile Include="Views\Interview\HtmlExtensions.cs" />
     <Compile Include="Views\Shared\HtmlExtensions.cs" />
@@ -1975,6 +1996,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="App_Start\OwinSecurity\" />
+    <Folder Include="Dependencies\dist\" />
     <Folder Include="Migrations\ReadSide\M101-200\" />
   </ItemGroup>
   <ItemGroup>
@@ -2018,6 +2040,26 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <!-- HQ APP -->
+  <Target Name="RestoreHqAppDeps" BeforeTargets="AfterBuild" Condition=" '$(Configuration)' == 'Debug'">
+    <Message Importance="high" Text="Restoring HQ App npm deps" />
+    <Exec Command="yarn --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Exec Command="yarn" WorkingDirectory="HqApp" Condition="'$(ErrorCode)' == '0'" />
+    <Exec Command="npm install" WorkingDirectory="HqApp" Condition="'$(ErrorCode)' != '0'" />
+  </Target>
+  <Target Name="RunWebpackVendor" AfterTargets="RestoreHqAppDeps" Condition=" '$(Configuration)' == 'Debug' And !Exists('HqApp\dist\vendor.bundle.js') ">
+    <!-- In development, the dist files won't exist on the first run or when cloning to a different machine, so rebuild them if not already present. -->
+    <Message Importance="high" Text="Performing first-run Webpack build..." />
+    <Exec Command="npm run vendor" WorkingDirectory="HqApp" />
+    <Exec Command="npm run dev" WorkingDirectory="HqApp" />
+  </Target>
+  <Target Name="RunWebpackDev" AfterTargets="RestoreHqAppDeps" Condition=" '$(Configuration)' == 'Debug' And Exists('HqApp\dist\vendor.bundle.js') ">
+    <Message Importance="high" Text="Performing dev Webpack build..." />
+    <Exec Command="npm run dev" WorkingDirectory="HqApp" />
+  </Target>
+  <!-- /HQ APP -->
   <Target Name="CollectWebInterviewView" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
     <ItemGroup>
       <CollectWebInterviewView_CustomFiles Include="Views\WebInterview\**\*" />
@@ -2026,11 +2068,19 @@
       </FilesForPackagingFromProject>
     </ItemGroup>
   </Target>
-  <Target Name="CollecHqInterviewer" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
+  <Target Name="CollecHqApp" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
     <ItemGroup>
-      <CollecHqInterviewer_CustomFiles Include="Dependencies\build\**\*.js" />
-      <FilesForPackagingFromProject Include="%(CollecHqInterviewer_CustomFiles.Identity)">
-        <DestinationRelativePath>Dependencies\build\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
+      <CollecHqApp_CustomFiles Include="HqApp\dist\**\*.js" />
+      <FilesForPackagingFromProject Include="%(CollecHqApp_CustomFiles.Identity)">
+        <DestinationRelativePath>HqApp\dist\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
+      </FilesForPackagingFromProject>
+    </ItemGroup>
+  </Target>
+  <Target Name="CollecHqDepsDist" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
+    <ItemGroup>
+      <CollecHqDeps_CustomFiles Include="Dependencies\dist\**\*.*" />
+      <FilesForPackagingFromProject Include="%(CollecHqDeps_CustomFiles.Identity)">
+        <DestinationRelativePath>Dependencies\dist\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
       </FilesForPackagingFromProject>
     </ItemGroup>
   </Target>
@@ -2050,7 +2100,7 @@
       </FilesForPackagingFromProject>
     </ItemGroup>
   </Target>
-    <Target Name="CollectVendorFileFonts" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
+  <Target Name="CollectVendorFileFonts" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
     <ItemGroup>
       <CollectVendorFileFonts_CustomFiles Include="Dependencies\vendor\bootstrap-sass\assets\fonts\bootstrap\*" />
       <FilesForPackagingFromProject Include="%(CollectVendorFileFonts_CustomFiles.Identity)">

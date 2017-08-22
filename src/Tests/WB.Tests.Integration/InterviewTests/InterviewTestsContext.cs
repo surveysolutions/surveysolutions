@@ -53,7 +53,7 @@ namespace WB.Tests.Integration.InterviewTests
             questionnaireDocument.ExpressionsPlayOrder = IntegrationCreate.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(questionnaireDocument.AsReadOnly());
 
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
-                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1, null));
+                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument, 1));
 
             Setup.InstanceToMockedServiceLocator(questionnaireRepository);
             Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
@@ -142,8 +142,7 @@ namespace WB.Tests.Integration.InterviewTests
             questionnaireDocument.ExpressionsPlayOrder = IntegrationCreate.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(questionnaireDocument.AsReadOnly());
 
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
-                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1, null));
-
+                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument, 1));
 
             Setup.InstanceToMockedServiceLocator(questionnaireRepository);
             Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));

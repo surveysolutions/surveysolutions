@@ -5,12 +5,12 @@
             <div :class="[{'text-danger': !$me.validity.isValid}]">
                 <wb-title />
             </div>
-            <wb-attachment :contentId="$me.attachmentContent" :interviewId="interviewId" customCssClass="static-text-image" v-if="$me.attachmentContent" />
+            <wb-attachment :contentId="$me.attachmentContent" :interviewId="interviewId" customCssClass="static-text-image" v-if="$me.attachmentContent && !$me.isDisabled" />
             <wb-validation />
         </div>
     </div>
 </template>
-<script lang="ts">
+<script lang="js">
     import { entityDetails } from "components/mixins"
     import { getLocationHash } from "src/store/store.fetch"
 

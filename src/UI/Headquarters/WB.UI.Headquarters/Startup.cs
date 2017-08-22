@@ -49,6 +49,7 @@ namespace WB.UI.Headquarters
         {
             SetupNConfig();
             //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
+            //HibernatingRhinos.Profiler.Appender.EntityFramework.EntityFrameworkProfiler.Initialize();
         }
 
         public void Configuration(IAppBuilder app)
@@ -87,7 +88,6 @@ namespace WB.UI.Headquarters
             var kernel = NinjectConfig.CreateKernel();
             kernel.Inject(perRequestModule); // wiill keep reference to perRequestModule in Kernel instance
             app.UseNinjectMiddleware(() => kernel);
-            
         }
 
         private void ConfigureWebApi(IAppBuilder app)
@@ -99,8 +99,9 @@ namespace WB.UI.Headquarters
             WebApiConfig.Register(config);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            app.MapSignalR(new HubConfiguration { EnableDetailedErrors = true });
+            
+            
+            app.MapSignalR(new HubConfiguration {EnableDetailedErrors = true});
             app.Use(SetSessionStateBehavior).UseStageMarker(PipelineStage.MapHandler);
 
             app.UseNinjectWebApi(config);

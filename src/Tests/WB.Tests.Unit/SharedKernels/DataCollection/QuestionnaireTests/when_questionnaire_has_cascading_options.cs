@@ -4,8 +4,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 
@@ -37,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                });
         };
 
-        Because of = () => foundQuestions = new PlainQuestionnaire(questionnaire, 1).GetCascadingQuestionsThatDependUponQuestion(parentSingleOptionQuestionId);
+        Because of = () => foundQuestions = Create.Entity.PlainQuestionnaire(questionnaire, 1).GetCascadingQuestionsThatDependUponQuestion(parentSingleOptionQuestionId);
 
         It should_find_expected_dependant_questions = () => foundQuestions.ShouldContainOnly(childCascadedComboboxId, grandChildCascadedComboboxId);
 

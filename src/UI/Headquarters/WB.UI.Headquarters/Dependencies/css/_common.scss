@@ -448,6 +448,8 @@ table{
 	line-height: 16px;
 	font-weight: normal;
 	color: $gray_text;
+	padding-left: 5px;
+	white-space: nowrap;
 	&:hover, &:focus, &:active{
 		color: $blue;
 		text-decoration: none;
@@ -468,6 +470,8 @@ table{
 .supervisor{
 	color: $gray-text !important;
 	font-weight: normal;
+	padding-left: 5px;
+	white-space: nowrap;
 	&:before{
 		display: inline-block;
 		content:"";

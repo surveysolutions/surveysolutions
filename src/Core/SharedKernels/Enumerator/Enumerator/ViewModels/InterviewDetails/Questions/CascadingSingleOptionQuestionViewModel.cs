@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.parentQuestionIdentity = new Identity(cascadingQuestionParentId.Value, parentRosterVector);
 
             var parentSingleOptionQuestion = interview.GetSingleOptionQuestion(this.parentQuestionIdentity);
-            if (parentSingleOptionQuestion.IsAnswered)
+            if (parentSingleOptionQuestion.IsAnswered())
             {
                 this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer().SelectedValue;
             }
@@ -82,7 +82,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (!this.parentQuestionIdentity.Equals(@event.QuestionId, @event.RosterVector)) return;
 
             var parentSingleOptionQuestion = this.interview.GetSingleOptionQuestion(this.parentQuestionIdentity);
-            if (!parentSingleOptionQuestion.IsAnswered) return;
+            if (!parentSingleOptionQuestion.IsAnswered()) return;
 
             this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer().SelectedValue;
 

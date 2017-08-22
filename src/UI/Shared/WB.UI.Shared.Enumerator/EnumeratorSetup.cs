@@ -130,6 +130,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<Button>("ToParentButtonGroupStyle", button => new ToParentGroupButtonBinding(button));
             registry.RegisterCustomBindingFactory<TextView>("GroupStatus", textView => new TextViewGroupStatusBinding(textView));
             registry.RegisterCustomBindingFactory<View>("HideKeyboardOnClick", view => new ViewHideKeyboardOnClickBinding(view));
+            registry.RegisterCustomBindingFactory<TextView>("OnDone", view => new TextViewOnDoneBinding(view));
             registry.RegisterCustomBindingFactory<ViewGroup>("ColorByInterviewStatus", view => new ViewGroupColorByInterviewStatusBinding(view));
             registry.RegisterCustomBindingFactory<ViewGroup>("StatusBarColorByInterviewStatus", view => new ViewGroupStatusBarColorByInterviewStatusBinding(view));
             registry.RegisterCustomBindingFactory<View>("Transparent", view => new ViewTransparentBinding(view));

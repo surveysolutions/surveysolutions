@@ -313,6 +313,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Status Duration.
+        /// </summary>
+        public static string CountDaysOfInterviewInStatus {
+            get {
+                return ResourceManager.GetString("CountDaysOfInterviewInStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of days that interviews have stayed in their current status.
+        /// </summary>
+        public static string CountDaysOfInterviewInStatusDescription {
+            get {
+                return ResourceManager.GetString("CountDaysOfInterviewInStatusDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create.
         /// </summary>
         public static string Create {
@@ -417,6 +435,51 @@ namespace WB.UI.Headquarters.Resources {
         public static string ExcludeEsriTitle {
             get {
                 return ResourceManager.GetString("ExcludeEsriTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export.
+        /// </summary>
+        public static string ExportButton {
+            get {
+                return ResourceManager.GetString("ExportButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comma separated values (.csv).
+        /// </summary>
+        public static string ExportToCsv {
+            get {
+                return ResourceManager.GetString("ExportToCsv", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excel (.xlsx).
+        /// </summary>
+        public static string ExportToExcel {
+            get {
+                return ResourceManager.GetString("ExportToExcel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tab separated values (.tsv).
+        /// </summary>
+        public static string ExportToTab {
+            get {
+                return ResourceManager.GetString("ExportToTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assignment.
+        /// </summary>
+        public static string Filters_Assignment {
+            get {
+                return ResourceManager.GetString("Filters_Assignment", resourceCulture);
             }
         }
         
@@ -619,7 +682,16 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to by.
+        ///   Looks up a localized string similar to Assigned to.
+        /// </summary>
+        public static string HistoryOfStatuses_AssignedTo {
+            get {
+                return ResourceManager.GetString("HistoryOfStatuses_AssignedTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By.
         /// </summary>
         public static string HistoryOfStatuses_By {
             get {
@@ -628,7 +700,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to with comment.
+        ///   Looks up a localized string similar to Comment.
         /// </summary>
         public static string HistoryOfStatuses_Comment {
             get {
@@ -637,7 +709,16 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to on.
+        ///   Looks up a localized string similar to Interview.
+        /// </summary>
+        public static string HistoryOfStatuses_Interview {
+            get {
+                return ResourceManager.GetString("HistoryOfStatuses_Interview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changed on.
         /// </summary>
         public static string HistoryOfStatuses_On {
             get {
@@ -655,11 +736,20 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview change status history.
+        ///   Looks up a localized string similar to Interview status history.
         /// </summary>
         public static string HistoryOfStatuses_Title {
             get {
                 return ResourceManager.GetString("HistoryOfStatuses_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View interview.
+        /// </summary>
+        public static string HistoryOfStatuses_ViewInterview {
+            get {
+                return ResourceManager.GetString("HistoryOfStatuses_ViewInterview", resourceCulture);
             }
         }
         
@@ -1816,6 +1906,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Devices/Interviewers.
+        /// </summary>
+        public static string InterviewersAndDevicesTitle {
+            get {
+                return ResourceManager.GetString("InterviewersAndDevicesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interview History.
         /// </summary>
         public static string InterviewHistory_Header {
@@ -2492,20 +2591,11 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Surveys and statuses.
+        ///   Looks up a localized string similar to Surveys and Statuses.
         /// </summary>
         public static string SurveysAndStatuses_Overview {
             get {
                 return ResourceManager.GetString("SurveysAndStatuses_Overview", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0} interviews.
-        /// </summary>
-        public static string SurveysAndStatuses_SupervisorStatisticsFormat {
-            get {
-                return ResourceManager.GetString("SurveysAndStatuses_SupervisorStatisticsFormat", resourceCulture);
             }
         }
         

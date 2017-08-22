@@ -52,6 +52,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private Dictionary<string, HashSet<Guid>> substitutionReferencedQuestionsCache = null;
         private Dictionary<string, HashSet<Guid>> substitutionReferencedStaticTextsCache = null;
         private Dictionary<string, HashSet<Guid>> substitutionReferencedGroupsCache = null;
+        private HashSet<string> questionVariableNamesCache = null;
+        private HashSet<string> rosterVariableNamesCache = null;
+        private HashSet<string> variableNamesCache = null;
+
 
         private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroupsAndRosters = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
         private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroups = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
@@ -167,6 +171,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private Dictionary<string, HashSet<Guid>> SubstitutionReferencedGroupsCache
            => this.substitutionReferencedGroupsCache
            ?? (this.substitutionReferencedGroupsCache = this.GetSubstitutionReferencedGroups());
+
+        private HashSet<string> QuestionVariableNamesCache
+            => this.questionVariableNamesCache
+               ?? (this.questionVariableNamesCache = this.GetQuestionVariableNamesCache());
+
+        private HashSet<string> VariableNamesCache
+            => this.variableNamesCache
+               ?? (this.variableNamesCache = this.GetVariableNamesCache());
+
+        private HashSet<string> RosterVariableNamesCache
+            => this.rosterVariableNamesCache
+               ?? (this.rosterVariableNamesCache = this.GetRosterNamesCache());
 
         private IEnumerable<IStaticText> AllStaticTexts => this.StaticTextCache.Values;
 
@@ -943,17 +959,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool HasVariable(string variableName)
         {
-            return this.VariablesCache.Values.Any(x => x.Name == variableName);
+            return this.VariableNamesCache.Contains(variableName);
         }
 
         public bool HasQuestion(string variableName)
         {
-            return this.QuestionCache.Values.Any(x => x.StataExportCaption == variableName);
+            return this.QuestionVariableNamesCache.Contains(variableName);
         }
 
         public bool HasRoster(string variableName)
         {
-            return this.GroupCache.Values.Any(x => x.IsRoster && x.VariableName == variableName);
+            return this.RosterVariableNamesCache.Contains(variableName);
         }
 
         public bool IsTimestampQuestion(Guid questionId) => (this.GetQuestion(questionId) as DateTimeQuestion)?.IsTimestamp ?? false;
@@ -1218,6 +1234,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private Dictionary<string, HashSet<Guid>> GetSubstitutionReferencedGroups()
         {
             return this.GetSubstitutionReferencedEntities(this.AllGroups);
+        }
+
+        private HashSet<string> GetQuestionVariableNamesCache()
+        {
+            return this.AllQuestions.Select(x => x.StataExportCaption).ToHashSet();
+        }
+
+        private HashSet<string> GetVariableNamesCache()
+        {
+            return this.AllVariables.Select(x => x.Name).ToHashSet();
+        }
+
+        private HashSet<string> GetRosterNamesCache()
+        {
+            return this.AllGroups.Where(x => x.IsRoster).Select(x => x.VariableName).ToHashSet();
         }
 
         private Dictionary<string, HashSet<Guid>> GetSubstitutionReferencedEntities(IEnumerable<IComposite> entities)

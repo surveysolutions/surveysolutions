@@ -24,7 +24,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.QuestionnaireVersion);
             Property(x => x.ResponsibleId, pm => pm.Column(cm => cm.Index("InterviewSummaries_ResponsibleId")));
             Property(x => x.Status, pm => pm.Column(cm => cm.Index("InterviewSummaries_Status")));
-            Property(x => x.IsDeleted);
             Property(x => x.Key);
             Property(x => x.ClientKey);
             Property(x => x.HasErrors);
@@ -52,6 +51,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                 rel => { 
                     rel.OneToMany();
                 });
+
+            List(x => x.InterviewCommentedStatuses, listMap =>
+            {
+                listMap.Table("InterviewCommentedStatuses");
+                listMap.Index(index => index.Column("Position"));
+                listMap.Key(key => key.Column("interviewId"));
+                listMap.Lazy(CollectionLazy.Lazy);
+                listMap.Cascade(Cascade.None);
+            });
         }
     }
 

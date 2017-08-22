@@ -67,13 +67,14 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations.Impl;
 using WB.Core.BoundedContexts.Headquarters.Services.Internal;
-using WB.Core.BoundedContexts.Headquarters.Troubleshooting;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.TakeNew;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.BoundedContexts.Headquarters.Views.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Views.Reports;
+using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Revalidate;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
@@ -224,15 +225,13 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IExportViewFactory>().To<ExportViewFactory>();
             this.Bind<IQuestionnaireVersionProvider>().To<QuestionnaireVersionProvider>();
             this.Bind<ITranslationManagementService>().To<TranslationManagementService>();
-
             
-            this.Bind<IInterviewLogSummaryReader>().To<InterviewLogSummaryReader>();
-            this.Bind<ITroubleshootingService>().To<TroubleshootingService>();
             this.Bind<IAllInterviewsFactory>().To<AllInterviewsFactory>();
             this.Bind<ITeamInterviewsFactory>().To<TeamInterviewsFactory>();
             this.Bind<IChangeStatusFactory>().To<ChangeStatusFactory>();
             this.Bind<IQuantityReportFactory>().To<QuantityReportFactory>();
             this.Bind<ISpeedReportFactory>().To<SpeedReportFactory>();
+            this.Bind<IDeviceInterviewersReport>().To<DeviceInterviewersReport>();
             this.Bind<ISampleUploadViewFactory>().To<SampleUploadViewFactory>();
             this.Bind<IAllUsersAndQuestionnairesFactory>().To<AllUsersAndQuestionnairesFactory>();
             this.Bind<IQuestionnairePreloadingDataViewFactory>().To<QuestionnairePreloadingDataViewFactory>();
@@ -254,6 +253,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IHeadquartersTeamsAndStatusesReport>().To<HeadquartersTeamsAndStatusesReport>();
             this.Bind<ISurveysAndStatusesReport>().To<SurveysAndStatusesReport>();
             this.Bind<IMapReport>().To<MapReport>();
+            this.Bind<ICountDaysOfInterviewInStatusReport>().To<CountDaysOfInterviewInStatusReport>();
 
             this.Bind<IInterviewUniqueKeyGenerator>().To<InterviewUniqueKeyGenerator>();
             this.Bind<IRandomValuesSource>().To<RandomValuesSource>().InSingletonScope();
@@ -269,6 +269,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<ITabletInformationService>().To<FileBasedTabletInformationService>().WithConstructorArgument("parentFolder", this.currentFolderPath);
 
             this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
+
+            this.Bind<IExportFactory>().To<ExportFactory>();
 
             this.Kernel.RegisterDenormalizer<InterviewEventHandlerFunctional>();
             this.Kernel.RegisterDenormalizer<InterviewLifecycleEventHandler>();

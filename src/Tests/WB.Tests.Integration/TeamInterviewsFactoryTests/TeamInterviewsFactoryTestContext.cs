@@ -19,7 +19,7 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
             out PostgreReadSideStorage<InterviewSummary> reader,
             out PostgreReadSideStorage<QuestionAnswer> featuredQuestionAnswersReader)
         {
-            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewSummaryMap), typeof(QuestionAnswerMap) }, true);
+            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewSummaryMap), typeof(QuestionAnswerMap), typeof(InterviewStatusesMap) }, true);
             postgresTransactionManager = new CqrsPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 
             pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);

@@ -1,9 +1,11 @@
 ﻿@using System.Web.Optimization
+@using WB.Core.BoundedContexts.Headquarters
 @using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.GenericSubdomains.Portable
 @using WB.Core.GenericSubdomains.Portable.ServiceLocation
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
+@using WB.UI.Headquarters.Code
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.DocumentFilter
 @{
     ViewBag.Title = Common.Interviews;
@@ -24,13 +26,78 @@
         var $detailsUrl = '@Url.Action("Details", "Interview")';
         var $surveysUrl = '@Url.Action("SurveysAndStatuses", "Reports")';
         var $profileUrl = '@Url.Action("Profile", "Interviewer")';
-        var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "ExecuteCommands"})';
-        var statistics = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "AllInterviews"})';
-        var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "AssigneeSupervisorsAndDependentInterviewers" })';
-        var usersToAssignUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "Responsibles" })';
+        var commandExecutionUrl =
+            '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "ExecuteCommands"})';
+        var statistics =
+            '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "AllInterviews"})';
+        var responsiblesUrl =
+            '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "AssigneeSupervisorsAndDependentInterviewers"})';
+        var usersToAssignUrl =
+            '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Responsibles"})';
         $(function() {
             var notifier = new Notifier();
-            var model = new Supervisor.VM.HQInterviews(statistics, $interviewsPageUrl, responsiblesUrl, commandExecutionUrl, usersToAssignUrl, notifier, $profileUrl);
+            var model = new Supervisor.VM.HQInterviews(statistics,
+                $interviewsPageUrl,
+                responsiblesUrl,
+                commandExecutionUrl,
+                usersToAssignUrl,
+                notifier,
+                $profileUrl);
+            model.BuildMenuItem = function(selectedRow) {
+                var items = {}
+
+                items["open"] = {
+                    name: "Open",
+                    callback: function(t, e) {
+                        var detailsUrl = $detailsUrl + '/' + selectedRow.InterviewId();
+                        window.location = detailsUrl;
+                    }
+                };
+
+                items["showStatusHistory"] = {
+                    name: "Show Status History",
+                    callback: function(t, e) {
+                        model.ShowStatusHistory(
+                            '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "ChangeStateHistory"})',
+                            selectedRow);
+                    }
+                };
+
+                items["sep1"] = "---------";
+
+                items["assign"] = {
+                    name: "@Common.Assign",
+                    className: "primary-text",
+                    callback: function(t, e) {
+                        model.AssignInterview();
+                    }
+                };
+
+                items["approve"] = {
+                    name: "@Common.Approve",
+                    className: "success-text",
+                    callback: function(t, e) {
+                        model.ApproveInterview();
+                    }
+                };
+
+                items["reject"] = {
+                    name: "@Common.Reject",
+                    className: "error-text",
+                    callback: function(t, e) {
+                        model.RejectInterview();
+                    }
+                };
+
+                items["unapprove"] = {
+                    name: "@Common.Unapprove",
+                    callback: function(t, e) {
+                        model.UnapproveInterview();
+                    }
+                };
+
+                return items;
+            };
             ko.applyBindings(model);
             model.load();
         });
@@ -49,7 +116,7 @@
 
                 <div class="filters-container">
                     <h4>@Pages.FilterTitle:</h4>
-                    
+
                     <div class="block-filter">
                         <h5>@Pages.Template</h5>
                         <select id="templateSelector" data-bind="value: SelectedTemplate" class="selectpicker">
@@ -87,7 +154,7 @@
                             </div>
                         </p>
                     </div>
-                   
+
                     <div class="block-filter">
                         <h5>@Interviews.Assignment</h5>
                         <p class="list-group-item-text">
@@ -134,7 +201,7 @@
                                             }
                                             <th class="sorting_disabled  interview-id  title-row">
                                                 @Common.InterviewKey
-                                                <a href="javascript:void(0);" class="show-prefield-btn" 
+                                                <a href="javascript:void(0);" class="show-prefield-btn"
                                                    data-bind="text : $root.IsVisiblePrefilledColumns() ? '@Common.HideIdentifying' : '@Common.ShowIdentifying', click: $root.ToggleVisiblePrefilledColumns()"></a>
                                             </th>
                                             <!-- ko if:SelectedTemplate() == '' -->
@@ -159,7 +226,7 @@
                                         <tr class="odd" data-bind="visible : Items().length == 0">
                                             <td colspan="9" class="dataTables_empty" valign="top">@DataTables.ZeroRecords</td>
                                         </tr>
-                                    
+
                                         <!-- ko foreach:Items -->
                                         <tr data-bind="css: { 'selected' : IsSelected }">
                                             @if (!authorizedUser.IsObserver && !authorizedUser.IsObserving)
@@ -261,10 +328,6 @@
                     </div>
                 </div>
                 @Html.Partial("_ListDataTablePagingScript")
-
-
-
-
             </div>
         </div>
     </div>
@@ -312,5 +375,5 @@
     <script type="text/html" id="confirm-continue-message-template">
         <br />@Interviews.ContinueConfirmMessage
     </script>
-
+    @Html.Partial("~/Views/Shared/Interviews/_InterviewStatusHistoryModal.cshtml")
 </main>

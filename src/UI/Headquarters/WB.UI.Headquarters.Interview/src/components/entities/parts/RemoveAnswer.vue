@@ -3,7 +3,8 @@
         <span></span>
     </button>
 </template>
-<script lang="ts">
+ <script lang="js">
+
     import { entityPartial } from "components/mixins"
 
     export default {

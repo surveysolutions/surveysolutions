@@ -193,12 +193,17 @@
                         </div>
                     }
                     <div class="block-filter">
-                        <h5>@Pages.Interviewers_InterviewerVersion</h5>
-                        <select data-bind="value: InterviewerOptionFilter" class="selectpicker">
-                            <option value="@InterviewerOptionFilter.Any.ToString()">@Pages.AnyOption</option>
-                            <option value="@InterviewerOptionFilter.NotSynced.ToString()">@Pages.Interviewers_NotSyncedOption</option>
-                            <option value="@InterviewerOptionFilter.UpToDate.ToString()">@Pages.Interviewers_UpToDateOption</option>
-                            <option value="@InterviewerOptionFilter.Outdated.ToString()">@Pages.Interviewers_OutdatedOption</option>
+                        <h5>@Users.InterviewerIssues</h5>
+                        <select data-bind="value: Facet" class="selectpicker facet">
+                            <option value="@InterviewerFacet.None">@EnumNames.InterviewerFacet_None</option>
+                            <option value="@InterviewerFacet.NeverSynchonized">@DevicesInterviewers.NeverSynchronized</option>
+                            <option value="@InterviewerFacet.NoAssignmentsReceived">@DevicesInterviewers.NoAssignments</option>
+                            <option value="@InterviewerFacet.NeverUploaded">@DevicesInterviewers.NeverUploaded</option>
+                            <option value="@InterviewerFacet.TabletReassigned">@DevicesInterviewers.TabletReassigned</option>
+                            <option value="@InterviewerFacet.OutdatedApp">@DevicesInterviewers.OldInterviewerVersion</option>
+                            <option value="@InterviewerFacet.OldAndroid">@DevicesInterviewers.OldAndroidVersion</option>
+                            <option value="@InterviewerFacet.WrongTime">@DevicesInterviewers.WrongDateOnTablet</option>
+                            <option value="@InterviewerFacet.LowStorage">@DevicesInterviewers.LowStorage</option>
                         </select>
                     </div>
 

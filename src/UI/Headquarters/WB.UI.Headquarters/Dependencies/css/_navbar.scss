@@ -9,13 +9,15 @@
 	.navbar-header .navbar-brand{
 		position: relative;
 		margin-left: 0;
-		@extend %font-header;
-		font-family: "RobotoBold";
-		&:hover, &:focus{
-			font-family: "RobotoBold";
-		}
+		padding: 0;
 		.brand-name{
-			padding: 8px 10px 8px 30px;
+			float: left;
+			font: 18px/20px "RobotoBold";
+			padding: 24px 10px;
+			color: $white;
+			&:hover, &:focus{
+				text-decoration: none;
+			}
 			&::after {
 			   	display:block;
 			    font-family: "RobotoBold";
@@ -27,10 +29,10 @@
 			    margin-bottom:-1px;
 			}
 		}
-		&:before{
-			display: block;
-			content: "";
-			@include absolute(15px, null, null, 0);
+		.logo{
+			float: left;
+			margin-top: 15px;
+			margin-right: 20px;
 			@include size(15px, 41px);
 			background: url(#{$assetsPath}/img/logo.png) no-repeat;
 			background-size: 15px 41px;
@@ -163,17 +165,23 @@
     max-width: 55%;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+.interview-ID, .active-page{
 	&:hover, &:focus, &:active{
 		color: white;
 		text-decoration: none;
 	}
 }
-.navbar-text{
-	font-family: "RobotoBold";
-	font-size: 18px;
-	line-height: 20px;
-	white-space: nowrap;
+.navbar-text, .interview-ID{
+	font: 18px/20px "RobotoBold";
 	padding: 24px 9px;
+}
+.interview-ID{
+	color: $white;
+	display: inline-block;
+}
+.navbar-text{
+	white-space: nowrap;
 	margin-bottom: 0;
 	margin-top: 0;
     width: 50%;
@@ -212,20 +220,16 @@
 					display: inline-block;
 				}
 				.navbar-brand{
-					padding: 15px 0 15px 30px;
-					&:before{
-						top: 5px;
-					}
-					&.rotate-brand{
+					.logo{
 						min-height: 41px;
 						min-width: 15px;
 						padding: 0;
 						transform: rotate(270deg);
-						.brand-name{
+					}
+					.brand-name{
+						display: none;
+						&:after{
 							display: none;
-							&:after{
-								display: none;
-							}
 						}
 					}
 				}
@@ -344,6 +348,12 @@
 	.wide-navbar{
 		.navbar-header {
 			float: none;
+			.navbar-brand{
+				.logo{
+					margin-top: 5px;
+					transform: rotate(270deg);
+				}
+			}
 		}
 		.navbar-left,.navbar-right {
 			float: none !important;
@@ -390,6 +400,9 @@
 		.navbar-text{
 				display: none;
 			}
+		.interview-ID{
+			padding: 15px 9px;
+		}
 		.navbar-header{
 			margin: 0;
 			padding-top: 5px;
@@ -397,20 +410,14 @@
 				display: inline-block;
 			}
 			.navbar-brand{
-				padding: 15px 0 15px 30px;
-				&:before{
-					top: 5px;
-				}
-				&.rotate-brand{
-					min-height: 41px;
-					min-width: 15px;
-					padding: 0;
+				.logo{
+					margin-top: 5px;
 					transform: rotate(270deg);
-					.brand-name{
+				}
+				.brand-name{
+					display: none;
+					&:after{
 						display: none;
-						&:after{
-							display: none;
-						}
 					}
 				}
 			}

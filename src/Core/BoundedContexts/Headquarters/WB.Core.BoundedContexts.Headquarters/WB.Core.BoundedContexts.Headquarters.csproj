@@ -12,6 +12,13 @@
     <NoWarn>1701;1702;1705;618</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Views\Reposts\Factories\CountDaysOfInterviewInStatusReportAssignments.sql" />
+    <EmbeddedResource Include="Views\Reposts\Factories\CountDaysOfInterviewInStatusReportInterviews.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Reposts\Factories\DeviceInterviewersReport.sql" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj" />
     <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj" />
@@ -25,6 +32,7 @@
     <PackageReference Include="CsvHelper" Version="2.16.3" />
     <PackageReference Include="Dapper" Version="1.50.2" />
     <PackageReference Include="EntityFramework" Version="6.1.3" />
+    <PackageReference Include="EPPlus" Version="4.1.0" />
     <PackageReference Include="Iesi.Collections" Version="4.0.1.4000" />
     <PackageReference Include="Iteedee.ApkReader" Version="1.0.1" />
     <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.1" />
@@ -48,6 +56,9 @@
   <ItemGroup>
     <Reference Include="ddidotnet">
       <HintPath>..\..\..\..\..\libs\ddidotnet.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus">
+      <HintPath>..\..\..\..\..\..\..\Users\RLA376582\.nuget\packages\epplus\4.1.0\lib\net40\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="StatData">
       <HintPath>..\..\..\..\..\libs\StatData.dll</HintPath>
@@ -78,6 +89,16 @@
     </Compile>
     <Compile Update="Resources\PreloadingVerificationMessages.Designer.cs">
       <DependentUpon>PreloadingVerificationMessages.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\Report.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Report.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Strings.Designer.cs">
+      <DependentUpon>Strings.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -117,6 +138,29 @@
     <EmbeddedResource Update="Resources\PreloadingVerificationMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PreloadingVerificationMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Report.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Report.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Report.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Strings.fr.resx">
+      <DependentUpon>Strings.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Strings.pt.resx">
+      <DependentUpon>Strings.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Strings.resx">
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Strings.ru.resx">
+      <DependentUpon>Strings.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Strings.zh.resx">
+      <DependentUpon>Strings.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\SurveyManagementInterviewCommandValidatorMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

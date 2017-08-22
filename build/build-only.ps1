@@ -50,12 +50,12 @@ try {
                 Exit 
             }}
 
-        BuildStaticContent "Hq UI" "src\UI\Headquarters\WB.UI.Headquarters" | % { if (-not $_) {
+        BuildStaticContent "Hq UI" "src\UI\Headquarters\WB.UI.Headquarters\HqApp" | % { if (-not $_) {
                 Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
-                Write-Host "##teamcity[buildProblem description='Failed to build static content for HQ']"
+                Write-Host "##teamcity[buildProblem description='Failed to build static content for HQ App']"
                 Exit 
         } else {
-            Move-Item "..\WB.UI.Headquarters\Dependencies\build\stats.html" "$artifactsFolder\Hq.UI.stats.html" -ErrorAction SilentlyContinue
+            Move-Item "..\WB.UI.Headquarters\HqApp\dist\stats.html" "$artifactsFolder\HqApp.stats.html" -ErrorAction SilentlyContinue
         }}
 
         BuildStaticContent "Web Interview" $ProjectWebInterview | % { if (-not $_) { 

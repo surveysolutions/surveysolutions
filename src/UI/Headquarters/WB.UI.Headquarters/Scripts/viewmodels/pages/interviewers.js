@@ -18,7 +18,7 @@
     self.SelectedSupervisor = ko.observable();
 
     self.Archived = ko.observable(false);
-    self.InterviewerOptionFilter = ko.observable('');
+    self.Facet = ko.observable();
 
     self.GetFilterMethod = function () {
 
@@ -27,7 +27,7 @@
                                 ? null
                                 : self.SelectedSupervisor().UserName,
             Archived : self.Archived(),
-            InterviewerOptionFilter : self.InterviewerOptionFilter()
+            Facet: self.Facet()
         }
     };
 
@@ -38,15 +38,19 @@
         }
 
         self.Archived(self.QueryString['archived']);
-        self.InterviewerOptionFilter(self.QueryString['InterviewerOptionFilter']);
+        self.Facet(self.QueryString['Facet'] || null);
 
         self.Url.query['supervisor'] = self.QueryString['supervisor'] || "";
         self.Url.query['archived'] = self.QueryString['archived'] || "";
-        self.Url.query['InterviewerOptionFilter'] = self.QueryString['InterviewerOptionFilter'] || "";
+        self.Url.query['Facet'] = self.QueryString['Facet'] || "";
+
+        setTimeout(function() {
+            $('.facet').selectpicker('val', self.Facet());
+        },300);
 
         self.SelectedSupervisor.subscribe(self.reloadDataTable);
         self.Archived.subscribe(self.reloadDataTable);
-        self.InterviewerOptionFilter.subscribe(self.reloadDataTable);
+        self.Facet.subscribe(self.reloadDataTable);
         
         self.initDataTable(this.onDataTableDataReceived, this.onTableInitComplete);
         self.reloadDataTable();

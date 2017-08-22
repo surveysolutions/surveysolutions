@@ -23,12 +23,14 @@
         UserBatchUpload = 18,
         ApiUsers = 19,
         Settings = 20,
-        Troubleshooting = 21,
         Assignments = 22,
         CreateNew = 23,
         Started = 24,
         Rejected = 25,
         Completed = 26,
-        Profile = 27
+        Profile = 27,
+        DevicesInterviewers = 28,
+        CountDaysOfInterviewInStatus = 29,
+        SurveyAndStatuses = 30
     }
 }

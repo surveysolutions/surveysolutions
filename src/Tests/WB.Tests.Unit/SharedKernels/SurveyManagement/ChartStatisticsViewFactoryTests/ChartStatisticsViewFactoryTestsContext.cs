@@ -27,7 +27,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
             {
                 ApprovedByHeadquartersCount = approvedByHeadquarters,
                 ApprovedBySupervisorCount = approvedBySupervisor,
-                RestartedCount = restarted,
                 CompletedCount = completed,
                 InterviewerAssignedCount = interviewerAssigned,
                 RejectedByHeadquartersCount = rejectedByHeadquarters,

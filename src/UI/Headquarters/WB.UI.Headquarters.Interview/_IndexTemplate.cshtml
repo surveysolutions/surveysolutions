@@ -1,4 +1,5 @@
 ﻿@using WB.Core.GenericSubdomains.Portable.ServiceLocation
+@using WB.UI.Headquarters.Controllers
 @{ Layout = null; }
 <!DOCTYPE html>
 <html>
@@ -20,6 +21,7 @@
 <body class="gray-background">
     <script>
         global: INTERVIEW_APP_CONFIG = {
+            "locale": @Html.Raw(WebInterviewController.Locale()),
             "virtualPath": '@Url.RouteUrl("Default", new {controller = "WebInterview", Action = "Index"})',
             "imageUploadUri": '@Url.RouteUrl(@"WebInterview.ImageAnswering", new { controller = "WebInterview", Action = "Image"})',
             "audioUploadUri": '@Url.RouteUrl(@"WebInterview.AudioAnswering", new { controller = "WebInterview", Action = "Audio"})',

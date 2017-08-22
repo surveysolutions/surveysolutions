@@ -25,6 +25,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public SimpleGroupStatus Status { get; set; }
         public string Target { get; set; }
         public ButtonType Type { get; set; }
+        public string RosterTitle { get; set; }
     }
 
     public enum ButtonType

@@ -1,25 +1,30 @@
+using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public abstract class BaseInterviewsViewModel : ListViewModel
     {
         private readonly IInterviewViewModelFactory viewModelFactory;
+        private readonly IPlainStorage<InterviewView> interviewViewRepository;
 
-        protected BaseInterviewsViewModel(IInterviewViewModelFactory viewModelFactory)
+        protected BaseInterviewsViewModel(IInterviewViewModelFactory viewModelFactory, 
+            IPlainStorage<InterviewView> interviewViewRepository)
         {
             this.viewModelFactory = viewModelFactory;
+            this.interviewViewRepository = interviewViewRepository;
         }
-
-        private IReadOnlyCollection<InterviewView> dbItems;
+        
         private int? highLightedItemIndex;
+        private Guid? lastVisitedInterviewId;
 
         protected abstract string TabTitle { get; }
         protected abstract string TabDescription { get; }
-        protected abstract IReadOnlyCollection<InterviewView> GetDbItems();
+        protected abstract Expression<Func<InterviewView, bool>> GetDbQuery();
         protected virtual void OnItemCreated(InterviewDashboardItemViewModel interviewDashboardItem) { }
 
         protected void UpdateTitle() => this.Title = string.Format(this.TabTitle, this.ItemsCount);
@@ -30,24 +35,30 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             set => SetProperty(ref highLightedItemIndex, value);
         }
 
-        public async Task Load()
-        {
-            this.dbItems = this.GetDbItems();
+        private IReadOnlyCollection<InterviewView> GetDbItems()
+            => this.interviewViewRepository.Where(this.GetDbQuery());
 
-            this.ItemsCount = this.dbItems.Count;
+        private int GetDbItemsCount()
+            => this.interviewViewRepository.Count(this.GetDbQuery());
+
+        public void Load(Guid? lastVisitedInterviewId)
+        {
+            this.lastVisitedInterviewId = lastVisitedInterviewId;
+
+            this.ItemsCount = this.GetDbItemsCount();
             this.UpdateTitle();
 
-            var uiItems = await Task.Run(() => this.GetUiItems());
-            this.UiItems.ReplaceWith(uiItems);
+            this.UpdateUiItems();
         }
 
-        protected virtual IEnumerable<IDashboardItem> GetUiItems()
+        protected override IEnumerable<IDashboardItem> GetUiItems()
         {
             var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
             subTitle.Title = this.TabDescription;
 
             yield return subTitle;
 
+            var interviewIndex = 1;
             foreach (var interviewView in this.GetDbItems())
             {
                 var interviewDashboardItem = this.viewModelFactory.GetNew<InterviewDashboardItemViewModel>();
@@ -55,16 +66,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
                 this.OnItemCreated(interviewDashboardItem);
 
-                yield return interviewDashboardItem;
-            }
-        }
+                if (interviewDashboardItem.InterviewId == lastVisitedInterviewId)
+                    this.HighLightedItemIndex = interviewIndex;
 
-        public void HighLight(InterviewDashboardItemViewModel dashboardItem)
-        {
-            var index = this.UiItems.IndexOf(dashboardItem);
-            if (index > 0)
-            {
-                this.HighLightedItemIndex = index;
+                interviewIndex++;
+
+                yield return interviewDashboardItem;
             }
         }
     }

@@ -4,8 +4,10 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field" :class="{answered: $me.isAnswered}">
-                        <input ref="input" autocomplete="off" type="text" class="field-to-fill" :placeholder="'Enter text ' + userFriendlyMask" :value="$me.answer"
-                            v-blurOnEnterKey @blur="answerTextQuestion" v-mask="$me.mask" :data-mask-completed="$me.isAnswered" title="Enter text">
+                        <input ref="input" autocomplete="off" type="text" class="field-to-fill"
+                            :placeholder="$t('TextEnterMasked', { userFriendlyMask })" :value="$me.answer"
+                            v-blurOnEnterKey @blur="answerTextQuestion" v-mask="$me.mask" :data-mask-completed="$me.isAnswered"
+                            :title="$t('TextEnter')">
                             <wb-remove-answer />
                     </div>
                 </div>
@@ -13,7 +15,7 @@
         </div>
     </wb-question>
 </template>
-<script lang="ts">
+<script lang="js">
     import { entityDetails } from "components/mixins"
     import * as $ from "jquery"
 
@@ -24,7 +26,7 @@
             userFriendlyMask() {
                 if (this.$me.mask) {
                     const resultMask = this.$me.mask.replace(/\*/g, "_").replace(/\#/g, "_").replace(/\~/g, "_")
-                    return `(${resultMask})`
+                    return ` (${resultMask})`
                 }
 
                 return ""
@@ -40,7 +42,7 @@
                 }
 
                 if (this.$me.mask && !target.data("maskCompleted")) {
-                    this.markAnswerAsNotSavedWithMessage("Please, fill in all the required values")
+                    this.markAnswerAsNotSavedWithMessage(this.$t("TextRequired"))
                 }
                 else {
                     this.$store.dispatch('answerTextQuestion', { identity: this.id, text: answer })

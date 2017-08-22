@@ -1,14 +1,8 @@
 using System;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-
-using Machine.Specifications;
-
-using Main.Core.Documents;
-
 using Moq;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
@@ -21,7 +15,6 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
 using AttachmentContentEnumerable = WB.Core.SharedKernels.Enumerator.Views.AttachmentContent;
 
@@ -29,7 +22,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 {
     internal class when_load_questionnaire_with_attachments : DashboardViewModelTestContext
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void Establish()
         {
             downloadedQuestionnaire = new Questionnaire
             {
@@ -63,31 +57,32 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 viewModelNavigationService: mockOfViewModelNavigationService.Object,
                 attachmentContentStorage: mockOfAttachmentContentStorage.Object
                 );
-        };
+            Because();
+        }
 
-        Because of = () => viewModel.LoadQuestionnaireCommand.Execute(selectedQuestionnaire);
+        public void Because() => viewModel.LoadQuestionnaireCommand.Execute(selectedQuestionnaire);
 
-        It should_be_downloaded_questionnaire = () => 
+        [Test] public void should_be_downloaded_questionnaire () => 
             mockOfDesignerApiService.Verify(_ => _.GetQuestionnaireAsync(selectedQuestionnaire.Id, Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<CancellationToken>()), Times.Once);
 
-        It should_store_attachment_1_to_local_storage = () =>
+        [Test] public void should_store_attachment_1_to_local_storage () =>
             mockOfAttachmentContentStorage.Verify(_ => _.Store(Moq.It.Is<AttachmentContentEnumerable>(ac => ac.Id == "1")), Times.Once);
 
-        It should_store_attachment_2_to_local_storage = () =>
+        [Test] public void should_store_attachment_2_to_local_storage () =>
             mockOfAttachmentContentStorage.Verify(_ => _.Store(Moq.It.Is<AttachmentContentEnumerable>(ac => ac.Id == "2")), Times.Once);
 
-        It should_not_store_attachment_5_to_local_storage = () =>
+        [Test] public void should_not_store_attachment_5_to_local_storage () =>
             mockOfAttachmentContentStorage.Verify(_ => _.Store(Moq.It.Is<AttachmentContentEnumerable>(ac => ac.Id == "5")), Times.Never);
 
-        It should_be_questionnaire_stored_to_local_storage = () => 
+        [Test] public void should_be_questionnaire_stored_to_local_storage () => 
             mockOfQuestionnaireImportService.Verify(
                 _ => _.ImportQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), downloadedQuestionnaire.Document, downloadedQuestionnaire.Assembly, new TranslationDto[0]), 
                 Times.Once);
 
-        It should_be_executed_CreateInterviewCommand = () => 
+        [Test] public void should_be_executed_CreateInterviewCommand () => 
             mockOfCommandService.Verify(_ => _.ExecuteAsync(Moq.It.IsAny<CreateInterview>(), null, Moq.It.IsAny<CancellationToken>()), Times.Once);
 
-        It should_be_navigated_to_prefilled_questions_view_model = () => 
+        [Test] public void should_be_navigated_to_prefilled_questions_view_model () => 
             mockOfViewModelNavigationService.Verify(_ => _.NavigateToPrefilledQuestions(Moq.It.IsAny<string>()), Times.Once);
         
         private static DashboardViewModel viewModel;

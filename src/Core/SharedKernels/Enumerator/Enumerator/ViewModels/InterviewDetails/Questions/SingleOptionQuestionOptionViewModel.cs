@@ -40,7 +40,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-
         public IMvxCommand RemoveAnswerCommand => new MvxCommand(OnAnswerRemoved);
 
         public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; set; }

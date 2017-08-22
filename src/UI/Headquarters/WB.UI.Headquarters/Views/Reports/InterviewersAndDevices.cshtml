@@ -1,0 +1,14 @@
+﻿@using Newtonsoft.Json
+@using Newtonsoft.Json.Serialization
+@model WB.UI.Headquarters.Models.Reports.DevicesInterviewersModel
+@{
+    ViewBag.Title = Pages.InterviewersAndDevicesTitle;
+    Layout = "~/Views/Shared/_MainLayoutVue.cshtml";
+}
+<div id="vueApp" configuration="@JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
+                                {
+                                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                                })"></div>
+
+@Html.StaticScipt(@"~/HqApp/dist/vendor.bundle.js")
+@Html.StaticScipt(@"~/HqApp/dist/app.bundle.js")

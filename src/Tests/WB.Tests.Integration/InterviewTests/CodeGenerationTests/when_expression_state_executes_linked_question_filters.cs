@@ -8,6 +8,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.V8;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
@@ -38,13 +39,13 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 IInterviewExpressionStateV8 state = GetInterviewExpressionState(questionnaireDocument,version: 17) as IInterviewExpressionStateV8;
                 state.AddRoster(rosterId, new decimal[0], 1, null);
                 state.AddRoster(rosterId, new decimal[0], 2, null);
-                state.DisableGroups(new[] { new Identity(rosterId, new decimal[] {2}) });
+                state.DisableGroups(new[] { Create.Identity(rosterId, 2) });
                 state.AddRoster(rosterId, new decimal[0], 3, null);
 
                 var filterResults = state.ProcessLinkedQuestionFilters();
                 return new InvokeResults()
                 {
-                    CountOfOptions = filterResults.LinkedQuestionOptionsSet[new Identity(questionId, RosterVector.Empty)].Count()
+                    CountOfOptions = filterResults.LinkedQuestionOptionsSet[Create.Identity(questionId, RosterVector.Empty)].Count()
                 };
             });
         

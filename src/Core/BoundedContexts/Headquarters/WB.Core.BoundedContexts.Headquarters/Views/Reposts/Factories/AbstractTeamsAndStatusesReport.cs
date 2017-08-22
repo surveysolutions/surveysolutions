@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
@@ -73,7 +75,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             return projectionList
                 .Add(this.CountByStatus(InterviewStatus.SupervisorAssigned), "SupervisorAssignedCount")
                 .Add(this.CountByStatus(InterviewStatus.InterviewerAssigned), "InterviewerAssignedCount")
-                .Add(this.CountByStatus(InterviewStatus.Restarted), "RestartedCount")
                 .Add(this.CountByStatus(InterviewStatus.Completed), "CompletedCount")
                 .Add(this.CountByStatus(InterviewStatus.ApprovedBySupervisor), "ApprovedBySupervisorCount")
                 .Add(this.CountByStatus(InterviewStatus.RejectedBySupervisor), "RejectedBySupervisorCount")
@@ -92,7 +93,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
         protected virtual Expression<Func<InterviewSummary, bool>> CreateFilterExpression(TeamsAndStatusesInputModel input)
         {
-            Expression<Func<InterviewSummary, bool>> result = (interview) => !interview.IsDeleted;
+            Expression<Func<InterviewSummary, bool>> result = interview => interview.SummaryId != null;
 
             if (input.TemplateId.HasValue)
             {
@@ -108,9 +109,33 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             {
                 result = result.AndCondition(x => x.TeamLeadId == input.ViewerId);
             }
+
             return result;
         }
         protected abstract Expression<Func<InterviewSummary, object>> ResponsibleIdSelector { get; }
         protected abstract Expression<Func<InterviewSummary, object>> ResponsibleNameSelector { get; }
+
+
+        public ReportView GetReport(TeamsAndStatusesInputModel model)
+        {
+            var view = this.Load(model);
+            view.TotalRow.Responsible = Report.COLUMN_TOTAL;
+
+            return new ReportView
+            {
+                Headers = new[]
+                {
+                    Report.COLUMN_TEAM_MEMBER, Report.COLUMN_SUPERVISOR_ASSIGNED, Report.COLUMN_INTERVIEWER_ASSIGNED,
+                    Report.COLUMN_COMPLETED, Report.COLUMN_REJECTED_BY_SUPERVISOR,
+                    Report.COLUMN_APPROVED_BY_SUPERVISOR, Report.COLUMN_REJECTED_BY_HQ, Report.COLUMN_APPROVED_BY_HQ,
+                },
+                Data = new[] {view.TotalRow}.Concat(view.Items).Select(x => new object[]
+                {
+                    x.Responsible, x.SupervisorAssignedCount, x.InterviewerAssignedCount, x.CompletedCount,
+                    x.RejectedBySupervisorCount, x.ApprovedBySupervisorCount, x.RejectedByHeadquartersCount,
+                    x.ApprovedByHeadquartersCount, x.TotalCount
+                }).ToArray()
+            };
+        }
     }
 }

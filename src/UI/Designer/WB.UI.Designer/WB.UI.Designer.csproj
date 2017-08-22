@@ -182,6 +182,9 @@
     <Reference Include="System.Spatial, Version=5.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\System.Spatial.5.8.2\lib\net40\System.Spatial.dll</HintPath>
     </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\System.ValueTuple.4.3.1\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -254,6 +257,7 @@
     <Compile Include="Api\Designer\QuestionnairePermissionsAttribute.cs" />
     <Compile Include="Code\ConfigurationManager\DeskConfigSection.cs" />
     <Compile Include="Code\CustomWebApiAuthorizeFilter.cs" />
+    <Compile Include="Code\DesignerOldCompatibilityBinder.cs" />
     <Compile Include="Controllers\DeskController.cs" />
     <Compile Include="Api\Designer\TranslationsController.cs" />
     <Compile Include="Api\Designer\AttachmentsController.cs" />
@@ -459,6 +463,7 @@
     <Content Include="questionnaire\details\scripts\controllers\findReplace.js" />
     <Content Include="questionnaire\details\scripts\controllers\translations.js" />
     <Content Include="questionnaire\details\scripts\extensions\ace\mode-text-extended.js" />
+    <Content Include="questionnaire\details\scripts\extensions\ace\ui-ace.js" />
     <Content Include="questionnaire\details\views\find-replace.html" />
     <Content Include="RecaptchaNet.Readme.txt" />
     <Content Include="Scripts\custom\bootstrap3-unobtrusive-hack.js" />

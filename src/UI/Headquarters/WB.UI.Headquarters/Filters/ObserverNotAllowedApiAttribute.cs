@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.UI.Headquarters.Resources;

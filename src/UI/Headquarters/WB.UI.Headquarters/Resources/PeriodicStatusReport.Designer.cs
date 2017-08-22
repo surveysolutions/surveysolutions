@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A time difference between the moment an interview is assigned to an interviewer and the moment when the complete button is pressed on a tablet..
+        ///   Looks up a localized string similar to Average time from when an interview is assigned to an interviewer to when the complete button is pressed on a tablet..
         /// </summary>
         public static string AverageCaseAssignmentDurationDescription {
             get {
@@ -97,7 +97,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A time difference between the moment a supervisor approves a questionnaire and that questionnaire is approved or rejected on HQ..
+        ///   Looks up a localized string similar to Average time from when a supervisor approves an interview to when that interview is either approved or rejected by HQ..
         /// </summary>
         public static string AverageHQProcessingTimeDescription {
             get {
@@ -115,7 +115,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A time difference between the moment when the first answer is recorded on a tablet and when the complete button is pressed..
+        ///   Looks up a localized string similar to Average time from when an interviewer records the first answer on a tablet to when that interviewer presses the Complete button..
         /// </summary>
         public static string AverageInterviewDurationDescription {
             get {
@@ -133,7 +133,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A time difference between the first assignment and the moment when the interview is approved by HQ..
+        ///   Looks up a localized string similar to Average time from when the interview is first assigned to when HQ approves that interview..
         /// </summary>
         public static string AverageOverallCaseProcessingTimeDescription {
             get {
@@ -151,7 +151,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A time difference between the complete button being pressed and the supervisor accepts or rejects that questionnaire..
+        ///   Looks up a localized string similar to Average time from when an interviewer presses the Complete button to when the supervisor either accepts or rejects that interview. .
         /// </summary>
         public static string AverageSupervisorProcessingTimeDescription {
             get {
@@ -160,7 +160,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  Back to supervisors.
+        ///   Looks up a localized string similar to Back to supervisors.
         /// </summary>
         public static string BackToSupervisors {
             get {
@@ -178,7 +178,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Day.
+        ///   Looks up a localized string similar to Days.
         /// </summary>
         public static string Day {
             get {
@@ -192,6 +192,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string From {
             get {
                 return ResourceManager.GetString("From", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview actions.
+        /// </summary>
+        public static string InterviewActions {
+            get {
+                return ResourceManager.GetString("InterviewActions", resourceCulture);
             }
         }
         
@@ -214,7 +223,16 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Month.
+        ///   Looks up a localized string similar to Starting from.
+        /// </summary>
+        public static string LastDateToShowLabel {
+            get {
+                return ResourceManager.GetString("LastDateToShowLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Months.
         /// </summary>
         public static string Month {
             get {
@@ -250,7 +268,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of interviews collected by a {0} that were approved by HQ..
+        ///   Looks up a localized string similar to Number of interviews collected by {0} approved by HQ..
         /// </summary>
         public static string NumberOfInterviewsApprovedByHQDescription {
             get {
@@ -268,7 +286,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of approvals and rejections performed by a HQ on questionnaires collected by a {0}..
+        ///   Looks up a localized string similar to Number of approvals and rejections by HQ on interviews collected by {0}..
         /// </summary>
         public static string NumberOfInterviewTransactionsByHQDescription {
             get {
@@ -286,11 +304,20 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of approvals and rejections performed by a supervisor on questionnaires collected by a {0}..
+        ///   Looks up a localized string similar to Number of approvals and rejections by a supervisor on interviews collected by {0}..
         /// </summary>
         public static string NumberOfInterviewTransactionsBySupervisorDescription {
             get {
                 return ResourceManager.GetString("NumberOfInterviewTransactionsBySupervisorDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Over the last.
+        /// </summary>
+        public static string OverTheLast {
+            get {
+                return ResourceManager.GetString("OverTheLast", resourceCulture);
             }
         }
         
@@ -309,6 +336,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string PeriodCount {
             get {
                 return ResourceManager.GetString("PeriodCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Period unit.
+        /// </summary>
+        public static string PeriodUnit {
+            get {
+                return ResourceManager.GetString("PeriodUnit", resourceCulture);
             }
         }
         
@@ -376,7 +412,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Week.
+        ///   Looks up a localized string similar to Weeks.
         /// </summary>
         public static string Week {
             get {

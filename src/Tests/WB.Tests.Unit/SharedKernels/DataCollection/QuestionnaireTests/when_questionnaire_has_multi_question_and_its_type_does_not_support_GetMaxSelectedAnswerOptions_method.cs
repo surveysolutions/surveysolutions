@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
@@ -30,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         };
 
         Because of = () =>
-            exception = Catch.Exception(() => new PlainQuestionnaire(questionnaireDocument, 1).GetMaxSelectedAnswerOptions(validatedQuestionId));
+            exception = Catch.Exception(() => Create.Entity.PlainQuestionnaire(questionnaireDocument, 1).GetMaxSelectedAnswerOptions(validatedQuestionId));
 
         It should_throw_questionnaire_exception = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
