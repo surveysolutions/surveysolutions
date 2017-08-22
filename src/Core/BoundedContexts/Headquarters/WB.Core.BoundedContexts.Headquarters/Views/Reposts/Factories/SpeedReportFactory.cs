@@ -147,27 +147,60 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         private IQueryable<InterviewCommentedStatus> QueryInterviewStatuses(
             Guid questionnaireId,
             long questionnaireVersion,
-            DateTime from,
+            DateTime fromDate,
             DateTime to,
             InterviewExportedAction[] statuses)
         {
             if (questionnaireId != Guid.Empty)
             {
+
+                if (statuses.Length == 1 && statuses[0] == InterviewExportedAction.Completed)
+                {
+                    return this.interviewStatusesStorage.Query(_ =>
+                        _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
+                            .SelectMany(x => x.InterviewCommentedStatuses
+                                .Where(c => c.Status == InterviewExportedAction.Completed &&
+                                            c.Timestamp == x.InterviewCommentedStatuses.Where(y => y.Status == InterviewExportedAction.Completed).Min(y => y.Timestamp))
+                            )
+                            .Where(ics =>
+                                ics.Timestamp >= fromDate &&
+                                ics.Timestamp < to.Date &&
+                                ics.TimeSpanWithPreviousStatus.HasValue));
+                }
+
                 return this.interviewStatusesStorage.Query(_ =>
                     _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
                         .SelectMany(x => x.InterviewCommentedStatuses)
                         .Where(ics =>
-                                ics.Timestamp >= from && 
+                                ics.Timestamp >= fromDate && 
                                 ics.Timestamp < to.Date &&
                                 statuses.Contains(ics.Status) &&
                                 ics.TimeSpanWithPreviousStatus.HasValue));
             }
             else
             {
+                if (statuses.Length == 1 && statuses[0] == InterviewExportedAction.Completed)
+                {
+                    var ttt = this.interviewStatusesStorage.Query(_ =>
+                        _ .SelectMany(x => x.InterviewCommentedStatuses
+                                .Where(c => c.Status == InterviewExportedAction.Completed && 
+                                       c.Timestamp == x.InterviewCommentedStatuses.Where(y => y.Status == InterviewExportedAction.Completed).Min(y=>y.Timestamp))
+                                ));
+
+                    var erer = from ics in ttt
+                               where 
+                                     ics.Timestamp >= fromDate &&
+                                     ics.Timestamp < to.Date &&
+                                     ics.TimeSpanWithPreviousStatus.HasValue
+                               select ics;
+
+                    return erer.AsQueryable();
+
+                }
                 return this.interviewStatusesStorage.Query(_ =>
                     _.SelectMany(x => x.InterviewCommentedStatuses)
                         .Where(ics =>
-                            ics.Timestamp >= from &&
+                            ics.Timestamp >= fromDate &&
                             ics.Timestamp < to.Date &&
                             statuses.Contains(ics.Status) &&
                             ics.TimeSpanWithPreviousStatus.HasValue));
@@ -222,7 +255,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 pageSize: input.PageSize,
                 questionnaireId: input.QuestionnaireId,
                 questionnaireVersion: input.QuestionnaireVersion,
-                query: (questionnaireId, questionnaireVersion, from, to) => this.QueryTimeSpanBetweenStatuses(questionnaireId, questionnaireVersion, from, to, input.BeginInterviewStatuses, input.EndInterviewStatuses),
+                query: (questionnaireId, questionnaireVersion, from, to) => 
+                    this.QueryTimeSpanBetweenStatuses(questionnaireId, questionnaireVersion, from, to, input.BeginInterviewStatuses, input.EndInterviewStatuses),
                 selectUser: u => u.InterviewerId.Value, 
                 restrictUser: i => i.SupervisorId == input.SupervisorId,
                 userIdSelector: i => new UserAndTimestampAndTimespan() { UserId = i.InterviewerId, Timestamp = i.EndStatusTimestamp, Timespan = i.TimeSpan, UserName = i.InterviewerName });
@@ -238,7 +272,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 pageSize:input.PageSize,
                 questionnaireId:input.QuestionnaireId,
                 questionnaireVersion:input.QuestionnaireVersion,
-                query:(questionnaireId, questionnaireVersion, from, to) => this.QueryTimeSpanBetweenStatuses(questionnaireId, questionnaireVersion, from, to, input.BeginInterviewStatuses, input.EndInterviewStatuses),
+                query:(questionnaireId, questionnaireVersion, from, to) => 
+                    this.QueryTimeSpanBetweenStatuses(questionnaireId, questionnaireVersion, from, to, input.BeginInterviewStatuses, input.EndInterviewStatuses),
                 selectUser:u => u.SupervisorId.Value,
                 restrictUser: null,
                 userIdSelector: i => new UserAndTimestampAndTimespan() { UserId = i.SupervisorId, Timestamp = i.EndStatusTimestamp, Timespan = i.TimeSpan, UserName = i.SupervisorName });
