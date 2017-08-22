@@ -159,10 +159,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 switch (facet)
                 {
                     case InterviewerFacet.NeverSynchonized:
-                        interviewers = interviewers.Where(x => x.Profile.DeviceAppBuildVersion == null);
+                        interviewers = interviewers.Where(x => x.Profile.DeviceId == null);
                         break;
                     case InterviewerFacet.OutdatedApp:
-                        interviewers = interviewers.Where(x => x.Profile.DeviceAppBuildVersion < apkBuildVersion);
+                        interviewers = interviewers.Where(x => x.Profile.DeviceAppBuildVersion.HasValue && x.Profile.DeviceAppBuildVersion < apkBuildVersion);
                         break;
                     case InterviewerFacet.LowStorage:
                         interviewers = from i in interviewers
