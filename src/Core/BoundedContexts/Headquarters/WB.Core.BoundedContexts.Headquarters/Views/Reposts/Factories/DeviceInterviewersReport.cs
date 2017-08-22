@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     offset = input.Page,
                     filter = input.Filter + "%"
                 });
-                int totalCount = await GetTotalRowsCountAsync(fullQuery, input, connection);
+                int totalCount = await GetTotalRowsCountAsync(fullQuery, targetInterviewerVersion, input, connection);
                 var totalRow = await GetTotalLine(fullQuery, connection);
 
                 return new DeviceInterviewersReportView
@@ -67,13 +67,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             }
         }
 
-        private async Task<int> GetTotalRowsCountAsync(string sql, DeviceByInterviewersReportInputModel input, IDbConnection connection)
+        private async Task<int> GetTotalRowsCountAsync(string sql, int? targetInterviewerVersion, DeviceByInterviewersReportInputModel input, IDbConnection connection)
         {
             string summarySql = $@"SELECT COUNT(*) 
                                    FROM ({sql}) as report";
             var row = await connection.ExecuteScalarAsync<int>(summarySql, new
             {
-                latestAppBuildVersion = 15,
+                latestAppBuildVersion = targetInterviewerVersion,
                 neededFreeStorageInBytes = InterviewerIssuesConstants.LowMemoryInBytesSize,
                 minutesMismatch = InterviewerIssuesConstants.MinutesForWrongTime,
                 targetAndroidSdkVersion = InterviewerIssuesConstants.MinAndroidSdkVersion,
