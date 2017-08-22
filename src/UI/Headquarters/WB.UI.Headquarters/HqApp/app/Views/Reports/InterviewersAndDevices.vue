@@ -12,15 +12,24 @@ export default {
     },
     methods: {
         renderCell: function(data, row, facet){
-                if (data === 0) {
-                    return `<span>${data}</span>`;
-                }
-                if (row.teamId === '00000000-0000-0000-0000-000000000000'){
-                     return `<a href='${this.$config.interviewersBaseUrl}?Facet=${facet}'>${data}</a>`;
+            if (data === 0) {
+                return `<span>${data}</span>`;
+            }
+            if (row.teamId === '00000000-0000-0000-0000-000000000000') {
+                if (facet) {
+                    return `<a href='${this.$config.interviewersBaseUrl}?Facet=${facet}'>${data}</a>`;
                 }
                 else {
-                    return `<a href='${this.$config.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=${facet}'>${data}</a>`;
+                    return `<span>${data}</span>`;
                 }
+            }
+            if(facet) {
+                return `<a href='${this.$config.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=${facet}'>${data}</a>`;
+            }
+            else {
+                 return `<a href='${this.$config.interviewersBaseUrl}?supervisor=${row.teamName}'>${data}</a>`;
+            }
+            return "";
         }
     },
     computed: {
@@ -33,7 +42,10 @@ export default {
                         data: "teamName",
                         name: "TeamName",
                         title: this.$t("DevicesInterviewers.Teams"),
-                        orderable: true
+                        orderable: true,
+                        render: function(data, type, row) {
+                            return self.renderCell(data, row, null);
+                        }
                     },
                     {
                         data: "neverSynchedCount",
