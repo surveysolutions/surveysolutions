@@ -81,7 +81,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus
             if (commentedStatus.Status == InterviewExportedAction.Completed || commentedStatus.Status == InterviewExportedAction.RejectedByHeadquarter)
                 return commentedStatus.SupervisorName;
 
-            if (commentedStatus.Status == InterviewExportedAction.ApprovedBySupervisor)
+            if (commentedStatus.Status == InterviewExportedAction.ApprovedBySupervisor || commentedStatus.Status == InterviewExportedAction.UnapprovedByHeadquarter)
                 return Strings.AnyHeadquarters;
 
             if (commentedStatus.Status == InterviewExportedAction.ApprovedByHeadquarter)
@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus
             if (commentedStatus.Status == InterviewExportedAction.Completed || commentedStatus.Status == InterviewExportedAction.RejectedByHeadquarter)
                 return UserRoles.Supervisor.ToString();
 
-            if (commentedStatus.Status == InterviewExportedAction.ApprovedBySupervisor)
+            if (commentedStatus.Status == InterviewExportedAction.ApprovedBySupervisor || commentedStatus.Status == InterviewExportedAction.UnapprovedByHeadquarter)
                 return UserRoles.Headquarter.ToString();
 
             if (commentedStatus.Status == InterviewExportedAction.ApprovedByHeadquarter)
