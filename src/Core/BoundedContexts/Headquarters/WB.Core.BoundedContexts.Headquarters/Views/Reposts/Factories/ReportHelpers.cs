@@ -17,13 +17,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     .Where(x => x.QuestionnaireId == questionnaire.QuestionnaireId &&
                                 x.QuestionnaireVersion == questionnaire.Version)
                     .SelectMany(x => x.InterviewCommentedStatuses)
-                    .Min(x => (DateTime?)x.Timestamp));
+                    .Select(x => (DateTime?)x.Timestamp)
+                    .OrderBy(x => x))
+                    .Take(1)
+                    .FirstOrDefault();
             }
+
             else
             {
                 minDate = interviewstatusStorage.Query(_ => _
                     .SelectMany(x => x.InterviewCommentedStatuses)
-                    .Min(x => (DateTime?)x.Timestamp));
+                    .Select(x => (DateTime?)x.Timestamp)
+                    .OrderBy(x => x))
+                    .Take(1)
+                    .FirstOrDefault();
             }
             return minDate;
         }
