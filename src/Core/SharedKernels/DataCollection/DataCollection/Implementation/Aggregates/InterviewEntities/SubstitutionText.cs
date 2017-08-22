@@ -34,6 +34,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.substitutionService = substitutionService;
             this.variableToUiStringService = variableToUiStringService;
             this.substitutionVariables = variables;
+
+            HasSubstitutions = this.substitutionVariables != null &&
+                               (this.substitutionVariables.ByRosters.Count > 0 ||
+                                this.substitutionVariables.ByVariables.Count > 0 ||
+                                this.substitutionVariables.ByQuestions.Count > 0);
         }
 
         public void SetTree(InterviewTree interviewTree)
@@ -45,10 +50,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public string Text { get; private set; }
         public string BrowserReadyText { get; private set; }
 
-        public bool HasSubstitutions => this.substitutionVariables!= null &&
-                (this.substitutionVariables.ByRosters.Count > 0 ||
-                this.substitutionVariables.ByVariables.Count > 0 ||
-                this.substitutionVariables.ByQuestions.Count > 0);
+        public bool HasSubstitutions { get; private set; }
         
         public void ReplaceSubstitutions()
         {
@@ -100,10 +102,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
                 var htmlReadyAnswer = shouldAddBrowserTags ? WebUtility.HtmlEncode(answerString) : answerString;
 
-                if (shouldAddBrowserTags && question?.AsDateTime?.IsAnswered == true)
+                if (shouldAddBrowserTags && question.IsDateTime && question.IsAnswered() == true)
                 {
-                    var dateTime = question.AsDateTime.GetAnswer().Value;
-                    htmlReadyAnswer = $"<time datetime=\"{dateTime:o}\">{htmlReadyAnswer}</time>";
+                	var asDateTime = question.GetAsInterviewTreeDateTimeQuestion();
+                    var dateTime = question.GetAsInterviewTreeDateTimeQuestion().GetAnswer().Value;
+                    if (asDateTime.IsTimestamp)
+                    {
+                        htmlReadyAnswer = $"<time datetime=\"{dateTime:s}Z\">{dateTime.ToLocalTime().ToString(asDateTime.UiFormatString)}</time>";
+                    }
+                    else
+                    {
+                        htmlReadyAnswer = $"<time date=\"{dateTime:yyyy-MM-dd}\">{dateTime.ToString(asDateTime.UiFormatString)}</time>";
+                    }
                 }
 
                 textWithReplacedSubstitutions =

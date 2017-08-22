@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             Guid questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             Guid integerQuestionId = Guid.Parse("00000000000000000000000000000001");
             RosterVector rosterVector = Create.Entity.RosterVector();
-            questionIdentity = new Identity(integerQuestionId, rosterVector);
+            questionIdentity = Create.Identity(integerQuestionId, rosterVector);
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
                 children: Create.Entity.NumericIntegerQuestion(questionIdentity.Id));

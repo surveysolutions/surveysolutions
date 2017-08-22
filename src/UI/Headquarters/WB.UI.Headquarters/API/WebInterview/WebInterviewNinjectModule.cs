@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Concurrent;
+using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
+using Microsoft.AspNet.SignalR.Messaging;
 using Microsoft.AspNet.SignalR.Ninject;
 using Ninject;
 using Ninject.Modules;
@@ -33,10 +36,25 @@ namespace WB.UI.Headquarters.API.WebInterview
                 new DotNetStatsCollector ()
             });
 
+            this.Bind<IJavaScriptMinifier>().ToConstant(new SignalRHubMinifier());
+
             this.Bind<IHubContext>()
                 .ToMethod(context => GlobalHost.ConnectionManager.GetHubContext<WebInterview>())
                 .InSingletonScope()
                 .Named(@"WebInterview");
+        }
+
+        internal class SignalRHubMinifier : IJavaScriptMinifier
+        {
+            readonly ConcurrentDictionary<string, string> cache = new ConcurrentDictionary<string, string>();
+
+            public string Minify(string source)
+            {
+                return this.cache.GetOrAdd(source, s => new Minifier().MinifyJavaScript(source, new CodeSettings
+                {
+                    PreserveImportantComments = false
+                }));
+            }
         }
     }
 }

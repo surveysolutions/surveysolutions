@@ -50,35 +50,32 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private bool isInProgress = false;
         public bool IsInProgress
         {
-            get { return isInProgress; }
+            get => isInProgress;
             set { isInProgress = value; RaisePropertyChanged(); }
         }
 
         private string loginName;
         public string LoginName
         {
-            get { return loginName; }
+            get => loginName;
             set { loginName = value; RaisePropertyChanged(); }
         }
 
         private string password;
         public string Password
         {
-            get { return password; }
+            get => password;
             set { password = value; RaisePropertyChanged(); }
         }
 
         private bool staySignedIn = true;
         public bool StaySignedIn
         {
-            get { return staySignedIn; }
+            get => staySignedIn;
             set { staySignedIn = value; RaisePropertyChanged(); }
         }
 
-        public IMvxCommand LoginCommand
-        {
-            get { return new MvxCommand(async () => await this.LoginAsync(), () => !IsInProgress); }
-        }
+        public IMvxAsyncCommand LoginCommand => new MvxAsyncCommand(this.LoginAsync, () => !IsInProgress);
 
         private async Task LoginAsync()
         {
@@ -88,7 +85,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             try
             {
-                if (await this.designerApiService.Authorize(login: LoginName, password: Password).ConfigureAwait(false))
+                if (await this.designerApiService.Authorize(login: LoginName, password: Password))
                 {
                     this.userStorage.RemoveAll();
                     this.dashboardLastUpdateStorage.RemoveAll();
@@ -118,7 +115,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
 
             if (!string.IsNullOrEmpty(errorMessage))
-                await this.userInteractionService.AlertAsync(errorMessage).ConfigureAwait(false);
+                await this.userInteractionService.AlertAsync(errorMessage);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             ITabularFormatExportService tabularFormatExportService,
             ILogger logger,
             IDataExportFileAccessor dataExportFileAccessor)
-            : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, dataExportFileAccessor, logger)
+            : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, dataExportFileAccessor)
         {
             this.tabularFormatExportService = tabularFormatExportService;
         }

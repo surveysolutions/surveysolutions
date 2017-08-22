@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Machine.Specifications;
-using Main.Core.Documents;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;

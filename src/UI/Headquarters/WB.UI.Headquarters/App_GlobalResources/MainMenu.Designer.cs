@@ -88,6 +88,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Status Duration.
+        /// </summary>
+        internal static string CountDaysOfInterviewInStatus {
+            get {
+                return ResourceManager.GetString("CountDaysOfInterviewInStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create new.
         /// </summary>
         internal static string CreateNew {
@@ -111,6 +120,15 @@ namespace Resources {
         internal static string DataExport {
             get {
                 return ResourceManager.GetString("DataExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Devices/Interviewers.
+        /// </summary>
+        internal static string DevicesInterviewers {
+            get {
+                return ResourceManager.GetString("DevicesInterviewers", resourceCulture);
             }
         }
         

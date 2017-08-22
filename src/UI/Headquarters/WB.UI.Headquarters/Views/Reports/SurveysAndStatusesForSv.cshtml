@@ -18,9 +18,7 @@
             var $surveyAndStatusesReportUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "SupervisorSurveysAndStatusesReport" })';
             var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "AsigneeInterviewersBySupervisor" })';
 
-            var statisticsMessage = "@Pages.SurveysAndStatuses_InterviewerStatisticsFormat";
-
-            var model = new Supervisor.VM.SurveysAndStatuses($surveyAndStatusesReportUrl, responsiblesUrl, statisticsMessage);
+            var model = new Supervisor.VM.SurveysAndStatuses($surveyAndStatusesReportUrl, responsiblesUrl);
             model.getDataTableColumns = function () {
                 return [
                     {
@@ -41,11 +39,7 @@
                         render: function (data, type, row) {
                             return getLinkToInterviews(model, data, row, '@InterviewStatus.InterviewerAssigned', model.Url.query['responsible']);
                         }
-                    }, {
-                        render: function (data, type, row) {
-                            return getLinkToInterviews(model, data, row, '@InterviewStatus.Restarted', model.Url.query['responsible']);
-                        }
-                    }, {
+                    },  {
                         render: function (data, type, row) {
                             return getLinkToInterviews(model, data, row, '@InterviewStatus.Completed', model.Url.query['responsible']);
                         }
@@ -96,11 +90,11 @@
                     <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
                 </div>
                 <div class="filters-container">
-                    <h4>@Pages.FilterTitle:</h4>
+                    <h4>@Pages.FilterTitle</h4>
                     <div class="block-filter">
                         <h5>@Pages.SurveysAndStatuses_InterviewerTitle</h5>
                         <div class="input-group">
-                            <input class="form-control" placeholder="@Common.Any" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
+                            <input id="responsibleSelector" class="form-control" placeholder="@Common.Any" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
                             <span data-bind="spinner: IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
                             <div class="input-group-btn" data-bind="click: function(){ SelectedResponsible(undefined); }">
                                 <div class="btn btn-default">
@@ -116,6 +110,8 @@
                 <div class="page-header clearfix">
                     <h1>@Pages.SurveysAndStatuses_Overview</h1>
                     <p data-bind="text: StatisticsMessage"></p>
+                    
+                    @Html.Partial("_export-buttons")
                 </div>
                 <div class="dataTables_wrapper no-footer">
                     <table id="data_holder" class="table table-striped table-ordered table-bordered table-hover table-mobile-devices dataTable no-footer"
@@ -126,7 +122,6 @@
                             <th class="without-break title-row changed-recently" data-class="without-break title-row changed-recently" data-name="QuestionnaireTitle" data-data="questionnaireTitle">@Reports.SurveyName</th>
                             <th data-class="type-numeric" data-name="SupervisorAssignedCount" data-data="supervisorAssignedCount">@Reports.SupervisorAssigned</th>
                             <th data-class="type-numeric" data-name="InterviewerAssignedCount" data-data="interviewerAssignedCount">@Reports.InterviewerAssigned</th>
-                            <th data-class="type-numeric" data-name="RestartedCount" data-data="restartedCount">@Reports.Restarted</th>
                             <th data-class="type-numeric" data-name="CompletedCount" data-data="completedCount">@Reports.Completed</th>
                             <th data-class="type-numeric" data-name="RejectedBySupervisorCount" data-data="rejectedBySupervisorCount">@Reports.RejectedBySupervisor</th>
                             <th data-class="type-numeric" data-name="ApprovedBySupervisorCount" data-data="approvedBySupervisorCount">@Reports.ApprovedBySupervisor</th>

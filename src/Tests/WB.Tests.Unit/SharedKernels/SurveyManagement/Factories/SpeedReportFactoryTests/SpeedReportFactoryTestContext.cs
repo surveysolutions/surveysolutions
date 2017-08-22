@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
             {
                 Period = period,
                 ColumnCount = columnCount,
-                From = from??new DateTime(1984, 4, 18),
+                From = from ?? new DateTime(1984, 4, 18),
                 Page = 0,
                 PageSize = 20,
                 SupervisorId = supervisorId ?? Guid.NewGuid(),

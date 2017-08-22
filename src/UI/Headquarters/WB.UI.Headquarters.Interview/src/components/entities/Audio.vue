@@ -2,15 +2,17 @@
     <wb-question :question="$me" questionCssClassName=" audio-question">
         <div class="question-unit">
             <div class="options-group">
-                <button type="button" class="btn btn-default btn-lg btn-action-questionnaire" v-if="!isRecording && !$me.isAnswered" v-on:click="startRecording">Click to record audio</button>
+                <button type="button" class="btn btn-default btn-lg btn-action-questionnaire"
+                    v-if="!isRecording && !$me.isAnswered" v-on:click="startRecording">{{ $t('AudioClickRecord')}}</button>
                 <div class="field answered" v-if="$me.isAnswered">
                     <ul class="block-with-data list-unstyled">
-                        <li>{{humanizedLength}} ({{formattedLength}}) of audio recording</li>
+                        <li>{{ $t("AudioRecordingDuration", { humanizedLength: humanizedLength, formattedLength }) }}</li>
                     </ul>
                     <wb-remove-answer @answerRemoved="answerRemoved" />
                 </div>
                 <div v-if="$me.isAnswered" class="action-btn-holder time-question">
-                    <button v-if="!isRecording" v-on:click="startRecording" type="button" class="btn btn-default btn-lg btn-action-questionnaire">Record new</button>
+                    <button v-if="!isRecording" v-on:click="startRecording" type="button"
+                        class="btn btn-default btn-lg btn-action-questionnaire">{{ $t("AudioRecordNew") }}</button>
                 </div>
             </div>
         </div>
@@ -21,7 +23,7 @@
                         <button type="button" v-on:click="cancelRecording" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true"></span>
                         </button>
-                        <h4 class="modal-title">Audio recording</h4>
+                        <h4 class="modal-title">{{ $t("AudioRecording") }}</h4>
                         <h5 v-dateTimeFormatting v-html="$me.title"></h5>
                     </div>
                     <div class="modal-body">
@@ -29,8 +31,8 @@
                     </div>
                     <div class="modal-footer">
                         <div class="recordign-time">{{formattedTimer}}</div>
-                        <button type="button" v-on:click="stopRecording" class="btn btn-primary" v-if="isRecording">Done</button>
-                        <button type="button" v-on:click="cancelRecording" class="btn btn-link " data-dismiss="modal">Cancel</button>
+                        <button type="button" v-on:click="stopRecording" class="btn btn-primary" v-if="isRecording">{{ $t("Done") }}</button>
+                        <button type="button" v-on:click="cancelRecording" class="btn btn-link " data-dismiss="modal">{{ $t("Cancel") }}</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -41,11 +43,11 @@
         <!-- /.modal -->
     </wb-question>
 </template>
-<script lang="ts">
+<script lang="js">
 import { entityDetails } from "components/mixins"
 import * as $ from 'jquery'
 import * as moment from "moment"
-const AudioRecorder = new ((window as any).AudioRecorder)
+const AudioRecorder = new window.AudioRecorder
 
 export default {
     name: 'Audio',
@@ -78,9 +80,9 @@ export default {
             }
         },
     methods: {
-
         answerRemoved() {
         },
+
         showModal() {
             var modal = $(this.$el).find(".modal");
             $(this.$el).find(".modal-backdrop").show()
@@ -122,7 +124,7 @@ export default {
                     self.maxDurationInterval = setInterval(self.stopRecording, self.maxDuration)
                 },
                 errorCallback: (e) => {
-                    self.markAnswerAsNotSavedWithMessage("Audio initialization failed")
+                    self.markAnswerAsNotSavedWithMessage(this.$t("AudioInitializationFailed"))
                     console.log(e)
                 },
                 doneCallback: (blob) => {

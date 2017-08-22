@@ -81,6 +81,7 @@
         $.extend(request, filter);
 
         self.SendRequest(self.ServiceUrl, request, function (data) {
+            self.setExportUrls();
             ko.mapping.fromJS(data, self.mappingOptions, self);
         }, true);
     };
@@ -134,6 +135,29 @@
         });
     };
 
+    self.unselectAll = function () {
+        ko.utils.arrayForEach(self.Items(), function (item) {
+            item.IsSelected(false);
+        });
+    };
+
+    self.ExportToExcelUrl = ko.observable("");
+    self.ExportToCsvUrl = ko.observable("");
+    self.ExportToTabUrl = ko.observable("");
+
+    self.setExportUrls = function()
+    {
+        var request = self.Filter() || {};
+
+        if ((self.Datatable || null) !=null)
+            $.extend(request, self.Datatable.ajax.params());
+
+        var requestUrl = self.ServiceUrl + "?" + decodeURIComponent($.param(request));
+
+        self.ExportToExcelUrl(requestUrl + "&exportType=excel");
+        self.ExportToCsvUrl(requestUrl + "&exportType=csv");
+        self.ExportToTabUrl(requestUrl + "&exportType=tab");
+    };
     
     self.initDataTable = function (onDataReceivedCallback, onTableInitComplete) {
         $.fn.dataTable.ext.errMode = 'none';
@@ -164,6 +188,8 @@
                 $.extend(request, data);
 
                 self.SendRequest(serviceUrl, request, function (d) {
+                    self.setExportUrls();
+
                     if (!_.isUndefined(onDataReceivedCallback))
                         onDataReceivedCallback(d);
                     callback(d);
@@ -201,6 +227,7 @@
             }
         });
     };
+
     self.reloadDataTable = function() {
         self.Datatable.ajax.reload();
     };

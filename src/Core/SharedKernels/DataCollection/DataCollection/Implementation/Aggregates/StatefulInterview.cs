@@ -217,27 +217,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
        
         public InterviewTreeGroup GetGroup(Identity identity) => this.Tree.GetGroup(identity);
         public InterviewTreeRoster GetRoster(Identity identity) => this.Tree.GetRoster(identity);
-        public InterviewTreeGpsQuestion GetGpsQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsGps;
-        public InterviewTreeDateTimeQuestion GetDateTimeQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsDateTime;
-        public InterviewTreeMultimediaQuestion GetMultimediaQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsMultimedia;
-        public InterviewTreeQRBarcodeQuestion GetQRBarcodeQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsQRBarcode;
-        public InterviewTreeTextListQuestion GetTextListQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsTextList;
-        public InterviewTreeMultiOptionQuestion GetMultiOptionQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsMultiFixedOption;
-        public InterviewTreeIntegerQuestion GetIntegerQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsInteger;
-        public InterviewTreeDoubleQuestion GetDoubleQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsDouble;
-        public InterviewTreeTextQuestion GetTextQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsText;
-        public InterviewTreeSingleOptionQuestion GetSingleOptionQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsSingleFixedOption;
-        public InterviewTreeYesNoQuestion GetYesNoQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsYesNo;
 
-        public InterviewTreeSingleOptionLinkedToListQuestion GetSingleOptionLinkedToListQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsSingleLinkedToList;
-        public InterviewTreeAudioQuestion GetAudioQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsAudio;
+        public InterviewTreeGpsQuestion GetGpsQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeGpsQuestion();
+        public InterviewTreeDateTimeQuestion GetDateTimeQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeDateTimeQuestion();
+        public InterviewTreeMultimediaQuestion GetMultimediaQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeMultimediaQuestion();
+        public InterviewTreeQRBarcodeQuestion GetQRBarcodeQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeQRBarcodeQuestion();
+        public InterviewTreeTextListQuestion GetTextListQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeTextListQuestion();
+        public InterviewTreeMultiOptionQuestion GetMultiOptionQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeMultiOptionQuestion();
+        public InterviewTreeIntegerQuestion GetIntegerQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeIntegerQuestion();
+        public InterviewTreeDoubleQuestion GetDoubleQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeDoubleQuestion();
+        public InterviewTreeTextQuestion GetTextQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeTextQuestion();
+        public InterviewTreeSingleOptionQuestion GetSingleOptionQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeSingleOptionQuestion();
+        public InterviewTreeYesNoQuestion GetYesNoQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeYesNoQuestion();
+
+        public InterviewTreeSingleOptionLinkedToListQuestion GetSingleOptionLinkedToListQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeSingleOptionLinkedToListQuestion();
+        public InterviewTreeAudioQuestion GetAudioQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeAudioQuestion();
 
         public InterviewTreeQuestion GetQuestion(Identity identity) => this.Tree.GetQuestion(identity);
         public InterviewTreeStaticText GetStaticText(Identity identity) => this.Tree.GetStaticText(identity);
 
-        public InterviewTreeMultiOptionLinkedToListQuestion GetMultiOptionLinkedToListQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsMultiLinkedToList;
+        public InterviewTreeMultiOptionLinkedToListQuestion GetMultiOptionLinkedToListQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeMultiOptionLinkedToListQuestion();
 
-        public InterviewTreeAreaQuestion GetAreaQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsArea;
+        public InterviewTreeAreaQuestion GetAreaQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeAreaQuestion();
 
         public IEnumerable<InterviewTreeSection> GetEnabledSections() => this.Tree.Sections.Where(s => !s.IsDisabled());
 
@@ -561,14 +562,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (question?.FailedValidations != null)
             {
                 var questionValidationMassages = question.ValidationMessages
-                    .Select(substitutionText => string.IsNullOrWhiteSpace(substitutionText.Text) ? defaltErrorMessageFallback : substitutionText.Text)
+                    .Select(substitutionText => string.IsNullOrWhiteSpace(substitutionText.BrowserReadyText) ? defaltErrorMessageFallback : substitutionText.BrowserReadyText)
                     .ToList();
 
                 if (questionValidationMassages.Count == 1) return new[] {questionValidationMassages[0]};
 
                 return question.FailedValidations.Select(failedValidation =>
-                    $"{questionValidationMassages.ElementAt(failedValidation.FailedConditionIndex)} " +
-                    $"[{failedValidation.FailedConditionIndex + 1}]");
+                    $"{questionValidationMassages.ElementAt(failedValidation.FailedConditionIndex)} [{failedValidation.FailedConditionIndex + 1}]");
 
             }
 
@@ -576,7 +576,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (staticText?.FailedValidations != null)
             {
                 var staticTextValidationMassages = staticText.ValidationMessages
-                    .Select(substitutionText => string.IsNullOrWhiteSpace(substitutionText.Text) ? defaltErrorMessageFallback : substitutionText.Text)
+                    .Select(substitutionText => string.IsNullOrWhiteSpace(substitutionText.BrowserReadyText) ? defaltErrorMessageFallback : substitutionText.BrowserReadyText)
                     .ToList();
 
                 if (staticTextValidationMassages.Count == 1) return new[] {staticTextValidationMassages[0]};
@@ -664,7 +664,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 var answeredQuestion = new AnsweredQuestionSynchronizationDto(question.Identity.Id,
                     question.Identity.RosterVector,
-                    question.GetAnswerAsObject(question),
+                    InterviewTreeQuestion.GetAnswerAsObject(question),
                     comments);
 
                 if (question.IsAnswered() || answeredQuestion.HasComments())

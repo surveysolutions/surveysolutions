@@ -12,6 +12,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 {
@@ -42,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         };
 
         Because of = () =>
-            nestedRosters = new PlainQuestionnaire(questionnaireDocument, 1).GetNestedRostersOfGroupById(rosterGroupId);
+            nestedRosters = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1).GetNestedRostersOfGroupById(rosterGroupId);
 
         It should_rosterGroups_not_be_empty = () =>
             nestedRosters.ShouldNotBeEmpty();

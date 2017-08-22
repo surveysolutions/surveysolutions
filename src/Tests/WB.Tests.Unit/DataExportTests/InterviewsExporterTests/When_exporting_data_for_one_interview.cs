@@ -7,10 +7,14 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Transactions;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
@@ -30,16 +34,21 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
             );
 
             exporter = new InterviewsExporter(
-                fileSystemAccessor.Object, 
-                logger.Object, 
+                fileSystemAccessor.Object,
+                logger.Object,
                 interviewDataExportSettings,
-                csvWriter.Object, 
-                rowReader.Object);
+                csvWriter.Object,
+                rowReader.Object,
+                interviewSummaries.Object,
+                transactionManagerProvider.Object);
 
             var questionnaireExportStructure = Create.Entity.QuestionnaireExportStructure(questionnaire);
 
             Guid interviewId = Guid.Parse("11111111111111111111111111111111");
             var interviewKey = "11-11-11-11";
+
+            interviewSummaries.Setup(x => x.GetById(interviewId.FormatGuid()))
+                .Returns(Create.Entity.InterviewSummary(interviewId, key: interviewKey));
 
             rowReader.Setup(x => x.ReadExportDataForInterview(interviewId))
                 .Returns(new List<InterviewDataExportRecord>
@@ -51,7 +60,7 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
                         answers: new [] { "8" })
                 });
             //act
-            exporter.Export(questionnaireExportStructure, new List<Guid>{ interviewId }, "path", new Microsoft.Progress<int>(), CancellationToken.None);
+            exporter.Export(questionnaireExportStructure, new List<Guid>{ interviewId }, "path", new Progress<int>(), CancellationToken.None);
 
             //assert
             Assert.That(dataInCsvFile.Count, Is.EqualTo(2));
@@ -66,6 +75,9 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
             logger = new Mock<ILogger>();
             csvWriter = new Mock<ICsvWriter>();
             rowReader = new Mock<InterviewExportredDataRowReader>();
+            interviewSummaries = new Mock<IReadSideRepositoryReader<InterviewSummary>>();
+            transactionManagerProvider = new Mock<ITransactionManagerProvider>();
+            transactionManagerProvider.Setup(x => x.GetTransactionManager()).Returns(Mock.Of<ITransactionManager>());
 
             csvWriter
                 .Setup(x => x.WriteData(It.IsAny<string>(), It.IsAny<IEnumerable<string[]>>(), It.IsAny<string>()))
@@ -90,6 +102,8 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
         private InterviewDataExportSettings interviewDataExportSettings = new InterviewDataExportSettings("folder", false, 1, 1, 1, 1);
         private Mock<ICsvWriter> csvWriter;
         private Mock<InterviewExportredDataRowReader> rowReader;
+        private Mock<IReadSideRepositoryReader<InterviewSummary>> interviewSummaries;
+        private Mock<ITransactionManagerProvider> transactionManagerProvider;
 
         class CsvData
         {

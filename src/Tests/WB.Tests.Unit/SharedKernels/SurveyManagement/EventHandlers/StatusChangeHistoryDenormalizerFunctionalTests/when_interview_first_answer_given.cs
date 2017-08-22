@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
         Establish context = () =>
         {
             interviewStatusesStorage = new TestInMemoryWriter<InterviewStatuses>();
-            interviewStatuses = Create.Entity.InterviewStatuses(statuses:Create.Entity.InterviewCommentedStatus(interviewId,status:InterviewExportedAction.InterviewerAssigned));
+            interviewStatuses = Create.Entity.InterviewStatuses(statuses:Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.InterviewerAssigned, statusId: interviewId));
             denormalizer = CreateDenormalizer(interviewStatuses: interviewStatusesStorage);
         };
 

@@ -304,10 +304,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var listQuestion = interview.FindQuestionInQuestionBranch(this.linkedToQuestionId, this.Identity);
 
-            if ((listQuestion == null) || listQuestion.IsDisabled() || listQuestion.AsTextList?.GetAnswer()?.Rows == null)
+            if ((listQuestion == null) || listQuestion.IsDisabled() || listQuestion.GetAsInterviewTreeTextListQuestion().GetAnswer()?.Rows == null)
                 return new List<TextListAnswerRow>();
 
-            return new List<TextListAnswerRow>(listQuestion.AsTextList.GetAnswer().Rows);
+            return new List<TextListAnswerRow>(listQuestion.GetAsInterviewTreeTextListQuestion().GetAnswer().Rows);
         }
 
         private void ClearOptions() =>

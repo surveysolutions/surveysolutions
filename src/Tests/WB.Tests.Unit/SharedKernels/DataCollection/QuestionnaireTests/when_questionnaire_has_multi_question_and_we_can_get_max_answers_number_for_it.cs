@@ -4,9 +4,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
@@ -28,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         };
 
         Because of = () =>
-            maxSelectedAnswerOptions = new PlainQuestionnaire(questionnaireDocument, 1).GetMaxSelectedAnswerOptions(validatedQuestionId);
+            maxSelectedAnswerOptions = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1).GetMaxSelectedAnswerOptions(validatedQuestionId);
 
         It should_max_selected_answer_options_be_equal_of_proposed_selected_answer_options = () =>
             maxSelectedAnswerOptions.ShouldEqual(proposedSelectedAnswerOptions);

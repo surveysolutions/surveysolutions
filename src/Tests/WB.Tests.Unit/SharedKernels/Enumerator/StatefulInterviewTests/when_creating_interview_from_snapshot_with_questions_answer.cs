@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             RosterVector rosterVector = Create.Entity.RosterVector(1m, 0m);
             fixedRosterIdentity = Identity.Create(Guid.Parse("11111111111111111111111111111111"), Create.Entity.RosterVector(1));
             fixedNestedRosterIdentity = Identity.Create(Guid.Parse("22222222222222222222222222222222"), Create.Entity.RosterVector(1,0));
-            questionIdentity = new Identity(integerQuestionId, rosterVector);
+            questionIdentity = Create.Identity(integerQuestionId, rosterVector);
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
                 children: Create.Entity.FixedRoster(
@@ -81,7 +81,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview.GetRoster(fixedNestedRosterIdentity).ShouldNotBeNull();
 
         It should_set_answer = () => 
-            interview.GetQuestion(questionIdentity).AsInteger.GetAnswer().Value.ShouldEqual(1);
+            interview.GetQuestion(questionIdentity).GetAsInterviewTreeIntegerQuestion().GetAnswer().Value.ShouldEqual(1);
 
         static InterviewSynchronizationDto synchronizationDto;
         static StatefulInterview interview;

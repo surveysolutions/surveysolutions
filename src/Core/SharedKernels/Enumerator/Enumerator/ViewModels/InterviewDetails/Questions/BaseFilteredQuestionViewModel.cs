@@ -209,7 +209,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.answer = singleOptionQuestion.GetAnswer()?.SelectedValue;
 
-            if (!singleOptionQuestion.IsAnswered)
+            if (!singleOptionQuestion.IsAnswered())
                 await this.UpdateFilterAndSuggestionsAsync(string.Empty);
             else
                 await this.UpdateFilterAndSuggestionsAsync(this.GetAnsweredOption(this.answer.Value).Title);

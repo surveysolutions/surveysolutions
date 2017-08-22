@@ -21,6 +21,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public int? AssignmentId { get; set; }
         
         public Guid? ResponsibleId { get; set; }
+
+        public DateTime? UnactiveDateStart { get; set; }
+
+        public DateTime? UnactiveDateEnd { get; set; }
     }
 
     public class InterviewsWithoutPrefilledInputModel : ListViewModelBase

@@ -267,7 +267,10 @@ else
                                 }
                             </b>
                         </li>
-                        <li><b>@Pages.InterviewerProfile_DeviceAssignmentDate: @Model.DeviceAssignmentDate.Value.ToString(@"dd MMM yyyy, hh:mm:ss") (UTC)</b></li>
+                        @if (Model.DeviceAssignmentDate.HasValue)
+                        {
+                            <li><b>@Pages.InterviewerProfile_DeviceAssignmentDate: @Model.DeviceAssignmentDate.Value.ToString(@"dd MMM yyyy, hh:mm:ss") (UTC)</b></li>
+                        }
                     </ul>
                     <ul class="list-unstyled">
                         <li>@Pages.InterviewerProfile_NumberOfSuccessSynchronizations: @Model.TotalSuccessSynchronizationCount</li>

@@ -17,6 +17,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
 {
@@ -29,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                 ? null
                 : new ExportViewFactory(Mock.Of<IFileSystemAccessor>(_ => _.MakeStataCompatibleFileName(questionnaireDocument.Title) == questionnaireDocument.Title),
                                         new ExportQuestionService(),
-                                        Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1, null) && 
+                                        Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null) && 
                                                                             _.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument),
                                         new RosterStructureService())
                       .CreateQuestionnaireExportStructure(new QuestionnaireIdentity()));

@@ -21,7 +21,7 @@ namespace WB.UI.Headquarters.Controllers
             var questionIdentity = Identity.Parse(questionId);
             InterviewTreeQuestion question = interview.GetQuestion(questionIdentity);
 
-            if (!interview.AcceptsInterviewerAnswers() && question?.AsAudio != null)
+            if (!interview.AcceptsInterviewerAnswers() && question.IsAudio)
             {
                 return this.Json("fail");
             }
@@ -62,7 +62,7 @@ namespace WB.UI.Headquarters.Controllers
             var questionIdentity = Identity.Parse(questionId);
             var question = interview.GetQuestion(questionIdentity);
 
-            if (!interview.AcceptsInterviewerAnswers() && question?.AsMultimedia != null)
+            if (!interview.AcceptsInterviewerAnswers() && question.IsMultimedia)
             {
                 return this.Json("fail");
             }

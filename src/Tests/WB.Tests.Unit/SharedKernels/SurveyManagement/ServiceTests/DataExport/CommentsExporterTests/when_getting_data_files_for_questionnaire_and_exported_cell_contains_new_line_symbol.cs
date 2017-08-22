@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.C
         };
 
         Because of = () =>
-            readSideToTabularFormatExportService.Export(questionnaireExportStructure, new List<Guid>(), "", new Microsoft.Progress<int>());
+            readSideToTabularFormatExportService.Export(questionnaireExportStructure, new List<Guid>(), "", new Progress<int>());
 
         It should_return_correct_file_name = () =>
             csvWriterMock.Verify(x => x.WriteData(fileName, Moq.It.IsAny<IEnumerable<string[]>>(), Moq.It.IsAny<string>()));

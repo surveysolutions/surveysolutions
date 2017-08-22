@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
         {
             SetUp();
 
-            var integerNumericAnswer = Mock.Of<InterviewTreeIntegerQuestion>(_ => _.IsAnswered == false);
+            var integerNumericAnswer = Mock.Of<InterviewTreeIntegerQuestion>(_ => _.IsAnswered() == false);
 
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireId == questionnaireId

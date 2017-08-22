@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Revalidate
         public InterviewTroubleshootView Load(InterviewTroubleshootInputModel input)
         {
             var interview = this.interviewStore.GetById(input.InterviewId);
-            if (interview == null || interview.IsDeleted)
+            if (interview == null)
                 return null;
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireId, interview.QuestionnaireVersion);

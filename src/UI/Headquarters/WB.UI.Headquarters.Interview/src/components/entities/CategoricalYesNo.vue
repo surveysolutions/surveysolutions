@@ -1,9 +1,9 @@
 <template>
     <wb-question :question="$me" :questionCssClassName="$me.ordered ? 'yes-no-question ordered' : 'yes-no-question'">
         <div class="question-unit">
-            <div class="yes-no-mark">Yes <b>/</b> No</div>
+            <div class="yes-no-mark">{{ $t("Yes") }} <b>/</b> {{ $t("No")}}</div>
             <div class="options-group">
-                <div class="radio" v-for="option in $me.options">
+                <div class="radio" v-for="option in $me.options" :key="$me.id + '_' + option.value">
                     <div class="field">
                         <input class="wb-radio" type="radio" :name="$me.id + '_' + option.value" :id="$me.id + '_' + option.value + '_yes'" :checked="isYesChecked(option.value)" value="true"
                             @click="answerYes(option.value)" v-disabledWhenUnchecked="allAnswersGiven" />
@@ -27,7 +27,7 @@
         </div>
     </wb-question>
 </template>
-<script lang="ts">
+<script lang="js">
     import { entityDetails } from "components/mixins"
 
     import * as $ from "jquery"
@@ -101,7 +101,7 @@
                     return;
                 }
 
-                const confirmMessage = 'Are you sure you want to remove related roster?';
+                const confirmMessage = this.$t("ConfirmRosterRemove");
 
                 modal.confirm(confirmMessage,  result => {
                     if (result) {

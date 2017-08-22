@@ -1,4 +1,5 @@
 using System;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
@@ -17,6 +18,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public bool OnlyWithInterviewsNeeded { get; set; } = false;
         public int? Limit { get; set; }
         public int? Offset { get; set; }
+        public DateTime? DateStart { get; set; }
+        public DateTime? DateEnd { get; set; }
+        public UserRoles? UserRole { get; set; }
 
         [Flags]
         public enum SearchTypes

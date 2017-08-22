@@ -7,14 +7,14 @@
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="MvvmCross.Core" Version="5.1.0" />
-    <PackageReference Include="MvvmCross.Platform" Version="5.1.0" />
-    <PackageReference Include="MvvmCross.Plugin.File" Version="5.1.0" />
-    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="5.1.0" />
-    <PackageReference Include="MvvmCross.Plugin.Network" Version="5.1.0" />
+    <PackageReference Include="Autofac" Version="4.6.1" />
+    <PackageReference Include="MvvmCross.Core" Version="5.1.1" />
+    <PackageReference Include="MvvmCross.Platform" Version="5.1.1" />
+    <PackageReference Include="MvvmCross.Plugin.File" Version="5.1.1" />
+    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="5.1.1" />
+    <PackageReference Include="MvvmCross.Plugin.Network" Version="5.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="Portable.Ninject" Version="3.3.1" />
-    <PackageReference Include="sqlite-net-pcl" Version="1.3.3" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.4.118" />
     <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.7" />
     <PackageReference Include="SQLitePCLRaw.core" Version="1.1.7" />
   </ItemGroup>
@@ -34,9 +34,39 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.es.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.fr.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.id-ID.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.km.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.pt.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Update="Properties\InterviewerUIResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InterviewerUIResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.ru.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.th-TH.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.uk-UA.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.vi-VN.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.zh-CN.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

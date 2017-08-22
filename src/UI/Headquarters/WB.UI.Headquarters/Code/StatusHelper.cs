@@ -16,7 +16,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             InterviewStatus.ReadyForInterview,
             InterviewStatus.SentToCapi,
             InterviewStatus.Restored,
-            InterviewStatus.Deleted
+            InterviewStatus.Deleted,
+            InterviewStatus.Restarted, 
         };
 
         private static readonly InterviewStatus[] invisibleForSupervisorStatuses =
@@ -24,6 +25,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             { 
                 InterviewStatus.ApprovedBySupervisor,
                 InterviewStatus.ApprovedByHeadquarters,
+                InterviewStatus.Restarted,
             }).ToArray();
 
         internal static IEnumerable<SurveyStatusViewItem> GetAllSurveyStatusViewItems(InterviewStatus[] skipStatuses)

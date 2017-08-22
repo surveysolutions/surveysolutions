@@ -229,19 +229,19 @@
     <value>Страница проверки работоспособности</value>
   </data>
   <data name="HistoryOfStatuses_By" xml:space="preserve">
-    <value>по</value>
+    <value>Кем</value>
   </data>
   <data name="HistoryOfStatuses_Comment" xml:space="preserve">
-    <value>комментарий</value>
+    <value>Комментарий</value>
   </data>
   <data name="HistoryOfStatuses_On" xml:space="preserve">
-    <value>на</value>
+    <value>Изменено</value>
   </data>
   <data name="HistoryOfStatuses_State" xml:space="preserve">
     <value>Состояние</value>
   </data>
   <data name="HistoryOfStatuses_Title" xml:space="preserve">
-    <value>Журнал изменений статуса интервью</value>
+    <value>Изменения статуса интервью</value>
   </data>
   <data name="Index_cshtml_Execute_Do_you_want_to_continue_" xml:space="preserve">
     <value>Вы хотите продолжить?</value>
@@ -362,9 +362,6 @@
   </data>
   <data name="SurveysAndStatuses_Overview" xml:space="preserve">
     <value>Состояние созданных и собранных интервью</value>
-  </data>
-  <data name="SurveysAndStatuses_SupervisorStatisticsFormat" xml:space="preserve">
-    <value>{0} интервью</value>
   </data>
   <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
     <value>{0} интервью</value>
@@ -1031,5 +1028,53 @@
   </data>
   <data name="GetEsriExtraDescription" xml:space="preserve">
     <value>Она нужна только если вы пользуетесь функциональностью ESRI GIS. Включение этой фунции значительно увеличит размер приложения и время загрузки.</value>
+  </data>
+  <data name="CountDaysOfInterviewInStatus" xml:space="preserve">
+    <value>Статус/Дни</value>
+    <comment>Статус/Дни</comment>
+  </data>
+  <data name="ExportToExcel" xml:space="preserve">
+    <value>Эксель (.xlsx)</value>
+    <comment>Эксель (.xlsx)</comment>
+  </data>
+  <data name="ExportToCsv" xml:space="preserve">
+    <value>Значения, разделенные запятой (.csv)</value>
+    <comment>Значения, разделенные запятой (.csv)</comment>
+  </data>
+  <data name="ExportToTab" xml:space="preserve">
+    <value>Значения, разделенные табуляцией (.tsv)</value>
+    <comment>Значения, разделенные табуляцией (.tsv)</comment>
+  </data>
+  <data name="ExportButton" xml:space="preserve">
+    <value>Экспорт</value>
+    <comment>Экспорт</comment>
+  </data>
+  <data name="HistoryOfStatuses_AssignedTo" xml:space="preserve">
+    <value>Назначено на</value>
+  </data>
+  <data name="HistoryOfStatuses_Interview" xml:space="preserve">
+    <value>Интервью</value>
+  </data>
+  <data name="HistoryOfStatuses_ViewInterview" xml:space="preserve">
+    <value>Посмотреть интервью</value>
+  </data>
+  <data name="CountDaysOfInterviewInStatusDescription" xml:space="preserve">
+    <value>Количество дней когда интервью находятся в их текущем статусе</value>
+    <comment>Количество дней когда интервью находятся в их текущем статусе</comment>
+  </data>
+  <data name="Filters_Assignment" xml:space="preserve">
+    <value>Задания</value>
+  </data>
+  <data name="Interviewers_InterviewerNeverConnected" xml:space="preserve">
+    <value>Никогда не соединялись</value>
+  </data>
+  <data name="Supervisors_ActiveUsers" xml:space="preserve">
+    <value>Активные супервизоры</value>
+  </data>
+  <data name="Supervisors_ArchivedUsers" xml:space="preserve">
+    <value>Архивные супервизоры</value>
+  </data>
+  <data name="Supervisors_ArchiveStatusTitle" xml:space="preserve">
+    <value>Статус архивирования</value>
   </data>
 </root>

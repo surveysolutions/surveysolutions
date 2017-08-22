@@ -1,10 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Machine.Specifications;
-using Microsoft.AspNet.Identity;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests

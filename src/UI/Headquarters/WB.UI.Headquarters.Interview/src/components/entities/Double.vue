@@ -4,7 +4,8 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field answered">
-                        <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill" placeholder="Enter decimal" title="Enter decimal"
+                        <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill"
+                            :placeholder="$t('DecimalEnter')" :title="$t('DecimalEnter')"
                             :value="$me.answer" v-blurOnEnterKey @blur="answerDoubleQuestion"
                             v-numericFormatting="{aSep: groupSeparator, mDec: $me.countOfDecimalPlaces, vMin: '-99999999999999.99999999999999', vMax: '99999999999999.99999999999999', aPad: false }">
                             <wb-remove-answer />
@@ -14,7 +15,7 @@
         </div>
     </wb-question>
 </template>
-<script lang="ts">
+<script lang="js">
     import { entityDetails } from "components/mixins"
     import * as $ from "jquery"
 
@@ -36,7 +37,7 @@
             answerDoubleQuestion(evnt) {
                 const answerString = $(evnt.target).autoNumeric('get');
                 if (answerString.replace(/[^0-9]/g, "").length > 15) {
-                    this.markAnswerAsNotSavedWithMessage('Entered value is bigger. Allow only 15 digits')
+                    this.markAnswerAsNotSavedWithMessage($("DecimalTooBig"))
                     return
                 }
 
@@ -48,7 +49,7 @@
                     return
                 }
                 if (answer > 999999999999999 || answer < -999999999999999) {
-                    this.markAnswerAsNotSavedWithMessage('Entered value can not be parsed as decimal value')
+                    this.markAnswerAsNotSavedWithMessage($t("DecimalCannotParse"))
                     return
                 }
 

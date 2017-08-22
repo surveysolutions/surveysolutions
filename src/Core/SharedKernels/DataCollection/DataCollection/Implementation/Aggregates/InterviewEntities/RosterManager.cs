@@ -91,8 +91,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public override List<Identity> CalcuateExpectedIdentities(Identity parentIdentity)
         {
-            var rosterSizeQuestion = this.GetRosterSizeQuestion(parentIdentity, this.rosterSizeQuestionId)?.AsInteger;
-            var integerAnswer = rosterSizeQuestion?.IsAnswered ?? false? rosterSizeQuestion.GetAnswer().Value : 0;
+            var rosterSizeQuestion = this.GetRosterSizeQuestion(parentIdentity, this.rosterSizeQuestionId)?.GetAsInterviewTreeIntegerQuestion();
+            var integerAnswer = rosterSizeQuestion?.IsAnswered() ?? false? rosterSizeQuestion.GetAnswer().Value : 0;
             return Enumerable.Range(0, integerAnswer)
                 .Select(index => 
                     new Identity(rosterId, parentIdentity.RosterVector.ExtendWithOneCoordinate(index)))
@@ -138,8 +138,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public override List<Identity> CalcuateExpectedIdentities(Identity parentIdentity)
         {
-            var rosterSizeQuestion = this.GetRosterSizeQuestion(parentIdentity, this.rosterSizeQuestionId)?.AsTextList;
-            var listAnswer = rosterSizeQuestion?.IsAnswered ?? false ? rosterSizeQuestion.GetAnswer().ToTupleArray() : new Tuple<decimal, string>[0];
+            var rosterSizeQuestion = this.GetRosterSizeQuestion(parentIdentity, this.rosterSizeQuestionId)?.GetAsInterviewTreeTextListQuestion();
+            var listAnswer = rosterSizeQuestion?.IsAnswered() ?? false ? rosterSizeQuestion.GetAnswer().ToTupleArray() : new Tuple<decimal, string>[0];
             return listAnswer
                 .Select(answer => new RosterIdentity(rosterId, parentIdentity.RosterVector, answer.Item1, 0).ToIdentity())
                 .ToList();
@@ -155,7 +155,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             base.UpdateRoster(roster, parentIdentity, rosterIdentity, sortIndex);
 
             var rosterSizeQuestion = this.GetRosterSizeQuestion(parentIdentity, this.rosterSizeQuestionId);
-            var rosterTitle = rosterSizeQuestion.AsTextList.GetTitleByItemCode(rosterIdentity.RosterVector.Last());
+            var rosterTitle = (rosterSizeQuestion.GetAsInterviewTreeTextListQuestion()).GetTitleByItemCode(rosterIdentity.RosterVector.Last());
             
             roster.SetRosterTitle(rosterTitle);
         }
@@ -174,8 +174,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public override List<Identity> CalcuateExpectedIdentities(Identity parentIdentity)
         {
-            var rosterSizeQuestion = this.GetRosterSizeQuestion(parentIdentity, this.rosterSizeQuestionId)?.AsMultiFixedOption;
-            decimal[] newMultiAnswer = rosterSizeQuestion?.IsAnswered ?? false ? rosterSizeQuestion.GetAnswer().ToDecimals().ToArray() : new decimal[0];
+            var rosterSizeQuestion = this.GetRosterSizeQuestion(parentIdentity, this.rosterSizeQuestionId)?.GetAsInterviewTreeMultiOptionQuestion();
+            decimal[] newMultiAnswer = rosterSizeQuestion?.IsAnswered() ?? false ? rosterSizeQuestion.GetAnswer().ToDecimals().ToArray() : new decimal[0];
 
             return this.shouldQuestionRecordAnswersOrder
                 ? this.GetIdentitiesByUserDefinedOrder(parentIdentity, newMultiAnswer)
@@ -231,8 +231,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public override List<Identity> CalcuateExpectedIdentities(Identity parentIdentity)
         {
-            var rosterSizeQuestion = this.GetRosterSizeQuestion(parentIdentity, this.rosterSizeQuestionId)?.AsYesNo;
-            var newYesNoAnswer = rosterSizeQuestion?.IsAnswered ?? false ? rosterSizeQuestion.GetAnswer().ToAnsweredYesNoOptions() : new AnsweredYesNoOption[0];
+            var rosterSizeQuestion = this.GetRosterSizeQuestion(parentIdentity, this.rosterSizeQuestionId)?.GetAsInterviewTreeYesNoQuestion();
+            var newYesNoAnswer = rosterSizeQuestion?.IsAnswered() ?? false ? rosterSizeQuestion.GetAnswer().ToAnsweredYesNoOptions() : new AnsweredYesNoOption[0];
 
             return this.shouldQuestionRecordAnswersOrder
                 ? this.GetIdentitiesByUserDefinedOrder(parentIdentity, newYesNoAnswer)

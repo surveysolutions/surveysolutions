@@ -138,14 +138,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 InterviewStatus requiredStatus = status.Value;
                 expression = x => x.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
                                   x.QuestionnaireVersion == questionnaireIdentity.Version &&
-                                  !x.IsDeleted &&
                                   x.Status == requiredStatus;
             }
             else
             {
                 expression = x => x.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
-                                  x.QuestionnaireVersion == questionnaireIdentity.Version &&
-                                  !x.IsDeleted;
+                                  x.QuestionnaireVersion == questionnaireIdentity.Version;
             }
 
             List<Guid> interviewIdsToExport = new List<Guid>();

@@ -115,12 +115,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.DynamicUpdate(true);
             Id(x => x.SummaryId);
             Property(x => x.AssignmentId);
-            Property(x => x.IsDeleted);
             Property(x => x.TeamLeadId);
             Property(x => x.Status);
-            Property(x => x.QuestionnaireTitle);
-            Property(x => x.QuestionnaireId);
-            Property(x => x.QuestionnaireVersion);
+            Property(x => x.QuestionnaireTitle, pm => pm.Column(cm => cm.Index("InterviewSummaries_QuestionnaireTitle")));
+            Property(x => x.QuestionnaireId, pm => pm.Column(cm => cm.Index("InterviewSummaries_QuestionnaireId")));
+            Property(x => x.QuestionnaireVersion, pm => pm.Column(cm => cm.Index("InterviewSummaries_QuestionnaireVersion")));
             Property(x => x.ResponsibleId, pm => pm.Column(cm => cm.Index("InterviewSummaries_ResponsibleId")));
         }
     }

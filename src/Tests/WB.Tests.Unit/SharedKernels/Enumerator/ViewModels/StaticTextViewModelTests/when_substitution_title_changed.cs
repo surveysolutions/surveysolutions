@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             interviewId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
             var staticTextWithSubstitutionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             substitedQuestionIdentity = Identity.Create(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
-            var substitutionIdentity = new Identity(staticTextWithSubstitutionId, Empty.RosterVector);
+            var substitutionIdentity = Create.Identity(staticTextWithSubstitutionId, Empty.RosterVector);
             answerOnDoubleQuestion = 122;
             interviewerId = Guid.Parse("11111111111111111111111111111111");
 

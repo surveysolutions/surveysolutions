@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
         };
 
         Because of = () => exception = Catch.Exception(() =>
-                interviewImportService.ImportAssignments(questionnaireIdentity, "sampleId", null, Guid.Parse("22222222222222222222222222222222"), AssignmentImportType.Assignments));
+                interviewImportService.ImportAssignments(questionnaireIdentity, "sampleId", null, Guid.Parse("22222222222222222222222222222222"), AssignmentImportType.Assignments, false));
 
         It should_not_be_exception = () =>
             exception.ShouldBeNull();
@@ -77,9 +77,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
         It should_be_specified_supervisor = () =>
             executedCommand.SupervisorId.ShouldEqual(supervisorId);
 
-        private static readonly byte[] csvBytes = Encoding.UTF8.GetBytes(
-            "Responsible	EANo	MapRefNo	DUNo	Prov	LocalMunic	MainPlace	SubPlace	LongLat__Latitude	LongLat__Longitude\r\n" +
-            @"GONZALES	138215891	318	2513	<?=/)L62O]#)7P#I_JOG[;>)1'	;A)=1C9'82LQ+K-S;YJ`AR	OR	`^!!4_!\\QF@RG_HL73ZD\	-6	1");
+        //private static readonly byte[] csvBytes = Encoding.UTF8.GetBytes(
+        //    "Responsible	EANo	MapRefNo	DUNo	Prov	LocalMunic	MainPlace	SubPlace	LongLat__Latitude	LongLat__Longitude\r\n" +
+        //    @"GONZALES	138215891	318	2513	<?=/)L62O]#)7P#I_JOG[;>)1'	;A)=1C9'82LQ+K-S;YJ`AR	OR	`^!!4_!\\QF@RG_HL73ZD\	-6	1");
 
         private static CreateInterview executedCommand = null;
         private static Exception exception;

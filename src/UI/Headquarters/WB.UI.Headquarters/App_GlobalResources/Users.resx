@@ -270,4 +270,7 @@
   <data name="ArchivingStatusTitle" xml:space="preserve">
     <value>Archiving Status</value>
   </data>
+  <data name="InterviewerIssues" xml:space="preserve">
+    <value>Interviewer issues</value>
+  </data>
 </root>

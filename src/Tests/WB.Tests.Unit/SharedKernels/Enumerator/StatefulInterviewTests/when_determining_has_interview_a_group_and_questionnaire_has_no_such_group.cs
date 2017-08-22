@@ -28,6 +28,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         private static bool result;
         private static StatefulInterview interview;
         private static Guid questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-        static Identity group = new Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[] { });
+        static Identity group = Create.Identity(Guid.Parse("11111111111111111111111111111111"));
     }
 }

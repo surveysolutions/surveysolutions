@@ -105,12 +105,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
                 {
                     this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
                     interviews = this.interviewsReader.Query(_ => _.Where(interview =>
-                        interview.IsDeleted == false
-                        && (interview.Status == InterviewStatus.Completed
-                            || interview.Status == InterviewStatus.RejectedBySupervisor
-                            || interview.Status == InterviewStatus.ApprovedBySupervisor
-                            || interview.Status == InterviewStatus.ApprovedByHeadquarters
-                            || interview.Status == InterviewStatus.RejectedByHeadquarters)).ToList());
+                         interview.Status == InterviewStatus.Completed
+                         || interview.Status == InterviewStatus.RejectedBySupervisor
+                         || interview.Status == InterviewStatus.ApprovedBySupervisor
+                         || interview.Status == InterviewStatus.ApprovedByHeadquarters
+                         || interview.Status == InterviewStatus.RejectedByHeadquarters).ToList());
                 }
                 finally
                 {

@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             var processigPackages = this.incomingSyncPackagesQueue.GetAllPackagesInterviewIds();
 
             var inProgressInterviews =  this.reader.Query(interviews =>
-                interviews.Where(interview => !interview.IsDeleted && (interview.ResponsibleId == interviewerId) && 
+                interviews.Where(interview => interview.ResponsibleId == interviewerId && 
                                               (interview.Status == InterviewStatus.InterviewerAssigned || interview.Status == InterviewStatus.RejectedBySupervisor))
                     .Select(x => new {x.InterviewId, x.QuestionnaireId, x.QuestionnaireVersion, x.WasRejectedBySupervisor})
                     .ToList());
@@ -81,7 +81,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public InterviewSynchronizationDto GetInProgressInterviewDetails(Guid interviewId)
         {
-            var interviewData = this.interviewDataRepository.GetById(interviewId);
+            InterviewData interviewData = this.interviewDataRepository.GetById(interviewId);
+            var isInterviewerAcceptedStatus = interviewData.Status == InterviewStatus.InterviewerAssigned
+                                           || interviewData.Status == InterviewStatus.RejectedBySupervisor;
+            if (!isInterviewerAcceptedStatus)
+                return null;
 
             // do not sort status history by date! Status timestamp is taken from event timestamp and occasionally timestamp of an earlier event could be greater then timestamp of the latest events. StatusHistory is ordered list and the order of statuses is preserved by db.
             var fullStatusHistory = this
@@ -91,11 +95,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 .ToList();
 
             var lastInterviewStatus = fullStatusHistory.Last();
-
-            var isInterviewerAcceptedStatus = lastInterviewStatus.Status == InterviewStatus.InterviewerAssigned
-                                           || lastInterviewStatus.Status == InterviewStatus.RejectedBySupervisor;
-            if (!isInterviewerAcceptedStatus)
-                return null;
 
             var lastInterviewerAssignedStatus = fullStatusHistory.LastOrDefault(status => status.Status == InterviewStatus.InterviewerAssigned);
 
@@ -125,7 +124,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public IList<QuestionnaireIdentity> GetQuestionnairesWithAssignments(Guid interviewerId)
         {
             var inProgressQuestionnaires = this.reader.Query(interviews =>
-                                                         interviews.Where(interview => !interview.IsDeleted && (interview.ResponsibleId == interviewerId) && 
+                                                         interviews.Where(interview => interview.ResponsibleId == interviewerId && 
                                                                                        (interview.Status == InterviewStatus.InterviewerAssigned || interview.Status == InterviewStatus.RejectedBySupervisor))
                                                              .Select(x => new { x.QuestionnaireId, x.QuestionnaireVersion})
                                                              .Distinct()

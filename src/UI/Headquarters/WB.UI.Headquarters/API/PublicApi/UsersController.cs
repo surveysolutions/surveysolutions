@@ -46,7 +46,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         [HttpGet]
         [Route("supervisors/{supervisorId:guid}/interviewers")]
         public UserApiView Interviewers(Guid supervisorId, int limit = 10, int offset = 1)
-            => new UserApiView(this.usersFactory.GetInterviewers(offset, limit, null, null, false, InterviewerOptionFilter.Any, null, supervisorId));
+            => new UserApiView(this.usersFactory.GetInterviewers(offset, limit, null, null, false, null, supervisorId));
 
         /// <summary>
         /// Gets detailed info about single user

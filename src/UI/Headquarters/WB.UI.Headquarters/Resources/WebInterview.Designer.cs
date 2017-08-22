@@ -61,6 +61,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Complete interview.
+        /// </summary>
+        public static string CompleteInterview {
+            get {
+                return ResourceManager.GetString("CompleteInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This interview has been completed.
         /// </summary>
         public static string CompletionText {

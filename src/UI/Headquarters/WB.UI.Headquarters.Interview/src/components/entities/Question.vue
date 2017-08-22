@@ -6,8 +6,8 @@
                 <span></span>
             </button>
             <ul class="dropdown-menu">
-                <li v-if="!isShowingAddCommentDialog"><a href="javascript:void(0)" @click="showAddComment">Add comment</a></li>
-                <li v-if="isShowingAddCommentDialog"><a href="javascript:void(0)" @click="hideAddComment">Hide comment</a></li>
+                <li v-if="!isShowingAddCommentDialog"><a href="javascript:void(0)" @click="showAddComment">{{ $t("CommentAdd") }}</a></li>
+                <li v-else><a href="javascript:void(0)" @click="hideAddComment">{{ $t("CommentHide") }}</a></li>
             </ul>
         </div>
 
@@ -21,12 +21,13 @@
         <wb-progress :visible="isFetchInProgress" :valuenow="valuenow" :valuemax="valuemax" />
     </div>
 </template>
-<script lang="ts">
+
+<script lang="js">
     import { getLocationHash } from "src/store/store.fetch"
 
     export default {
         name: 'wb-question',
-        props: ["question", 'questionCssClassName', 'noTitle', 'noInstructions', 'noValidation', 'noAnswer', 'noComments'],
+        props: ["question", 'questionCssClassName', 'noTitle', 'noInstructions', 'noValidation', 'noAnswer', 'noComments', 'isDisabled'],
         data() {
             return {
                 isShowingAddCommentDialogFlag: undefined
@@ -58,7 +59,7 @@
                 return !this.question.isLoading && !(this.question.isDisabled && this.question.hideIfDisabled)
             },
             questionClass() {
-                return [{ 'disabled-question': this.question.isDisabled }]
+                return [{ 'disabled-question': this.isDisabled || this.question.isDisabled }]
             },
             questionEditorClass() {
                 return [{
@@ -70,10 +71,10 @@
                 if (this.isShowingAddCommentDialogFlag == undefined)
                     return this.question.comments && this.question.comments.length > 0
                 else
-                    return this.isShowingAddCommentDialogFlag 
+                    return this.isShowingAddCommentDialogFlag
             },
             showSideMenu() {
-                return !this.noComments;
+                return !this.question.isDisabled && !this.noComments;
             }
         },
         methods : {

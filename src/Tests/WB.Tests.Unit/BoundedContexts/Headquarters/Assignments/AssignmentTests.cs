@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         {
             var assignment = Create.Entity.Assignment(quantity: 2);
 
-            assignment.InterviewSummaries.Add(Create.Entity.InterviewSummary(isDeleted: true));
-            assignment.InterviewSummaries.Add(Create.Entity.InterviewSummary(isDeleted: false));
+            assignment.InterviewSummaries.Add(Create.Entity.InterviewSummary());
 
             Assert.That(assignment.InterviewsNeeded, Is.EqualTo(1));
             Assert.That(assignment.IsCompleted, Is.False);
@@ -24,12 +23,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         {
             var assignment = Create.Entity.Assignment(quantity: null);
 
-            assignment.InterviewSummaries.Add(Create.Entity.InterviewSummary(isDeleted: true));
-            assignment.InterviewSummaries.Add(Create.Entity.InterviewSummary(isDeleted: false));
+            assignment.InterviewSummaries.Add(Create.Entity.InterviewSummary());
 
             Assert.That(assignment.IsCompleted, Is.False);
             Assert.That(assignment.InterviewsNeeded, Is.Null);
-
         }
     }
 }

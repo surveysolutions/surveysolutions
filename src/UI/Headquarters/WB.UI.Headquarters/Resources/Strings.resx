@@ -195,4 +195,7 @@
   <data name="Error" xml:space="preserve">
     <value>Error</value>
   </data>
+  <data name="Days" xml:space="preserve">
+    <value>Days</value>
+  </data>
 </root>

@@ -2,8 +2,8 @@
     Supervisor.VM.PeriodicStatusReport.superclass.constructor.apply(this, arguments);
 
     var self = this;
-
-    var dateFormat = "MM/DD/YYYY";
+    var defaultFromDate = moment();
+    var dateFormat = "YYYY-MM-DD";
 
     self.Url = new Url(window.location.href);
 
@@ -11,7 +11,7 @@
 
     self.SelectedType = ko.observable(null);
 
-    self.FromDate = ko.observable(null);
+    self.FromDate = ko.observable(defaultFromDate);
 
     self.Period = ko.observable(null);
 
@@ -56,7 +56,7 @@
     }
 
     self.load = function () {
-        var todayMinus7Days = moment().add(-6, 'days').format(dateFormat);
+        var todayMinus7Days = defaultFromDate.format(dateFormat);
 
         self.Url.query['questionnaireId'] = self.QueryString['questionnaireId'] || "";
         self.Url.query['questionnaireVersion'] = self.QueryString['questionnaireVersion'] || "";
@@ -101,7 +101,14 @@
             self.initReport();
         });
 
-        self.Period.subscribe(function () {
+        self.Period.subscribe(function (newVal) {
+            if (newVal === "d") {
+                self.ColumnCount(7);
+            } else if (newVal === "w") {
+                self.ColumnCount(4);
+            } else if (newVal === "m") {
+                self.ColumnCount(3);
+            }
             self.initReport();
         });
 
@@ -138,8 +145,8 @@
         };
     };
 
-    self.initReport = function () {
+    self.initReport = _.throttle(function() {
         self.search();
-    };
+    }, 500, { leading: false });
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.PeriodicStatusReport, Supervisor.VM.ListView);

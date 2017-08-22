@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
@@ -7,11 +8,15 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.Reports;
+using WB.Core.BoundedContexts.Headquarters.Views.Reports.InputModels;
+using WB.Core.BoundedContexts.Headquarters.Views.Reports.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -25,24 +30,21 @@ using WB.UI.Headquarters.Models.ComponentModels;
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api  
 {
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-    public class ReportDataApiController : BaseApiController
+    public partial class ReportDataApiController : BaseApiController
     {
         private readonly IHeadquartersTeamsAndStatusesReport headquartersTeamsAndStatusesReport;
         private readonly ISupervisorTeamsAndStatusesReport supervisorTeamsAndStatusesReport;
-
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
-
         private readonly IAuthorizedUser authorizedUser;
         private readonly ISurveysAndStatusesReport surveysAndStatusesReport;
-
         private readonly IChartStatisticsViewFactory chartStatisticsViewFactory;
-
         private readonly IMapReport mapReport;
-
-  
         private readonly IQuantityReportFactory quantityReport;
-
         private readonly ISpeedReportFactory speedReport;
+
+        private readonly ICountDaysOfInterviewInStatusReport countDaysOfInterviewInStatusReport;
+        private readonly IDeviceInterviewersReport deviceInterviewersReport;
+        private readonly IExportFactory exportFactory;
 
         public ReportDataApiController(
             ICommandService commandService,
@@ -55,7 +57,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IMapReport mapReport,
             IChartStatisticsViewFactory chartStatisticsViewFactory, 
             IQuantityReportFactory quantityReport, 
-            ISpeedReportFactory speedReport)
+            ISpeedReportFactory speedReport,
+            ICountDaysOfInterviewInStatusReport countDaysOfInterviewInStatusReport,
+            IDeviceInterviewersReport deviceInterviewersReport,
+            IExportFactory exportFactory)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
@@ -67,6 +72,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.chartStatisticsViewFactory = chartStatisticsViewFactory;
             this.quantityReport = quantityReport;
             this.speedReport = speedReport;
+            this.countDaysOfInterviewInStatusReport = countDaysOfInterviewInStatusReport;
+            this.deviceInterviewersReport = deviceInterviewersReport;
+            this.exportFactory = exportFactory;
         }
 
         [HttpPost]
@@ -280,7 +288,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 TeamLeadName = teamLeadName,
                 Page = surveysAndStatusesFilter.PageIndex,
                 PageSize = surveysAndStatusesFilter.PageSize,
-                Orders = surveysAndStatusesFilter.GetSortOrderRequestItems(),
+                Orders = surveysAndStatusesFilter.ToOrderRequestItems(),
                 ResponsibleName = surveysAndStatusesFilter.ResponsibleName == teamLeadName ? null : surveysAndStatusesFilter.ResponsibleName
             });
 
@@ -289,9 +297,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 Draw = surveysAndStatusesFilter.Draw + 1,
                 RecordsTotal = view.TotalCount,
                 RecordsFiltered = view.TotalCount,
-                Data = view.Items,
-                TotalResponsibleCount = view.TotalResponsibleCount,
-                TotalInterviewCount = view.TotalInterviewCount
+                Data = view.Items
             };
         }
 
@@ -301,7 +307,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             var view = this.surveysAndStatusesReport.Load(new SurveysAndStatusesReportInputModel
             {
-                Orders = surveysAndStatusesFilter.GetSortOrderRequestItems(),
+                Orders = surveysAndStatusesFilter.ToOrderRequestItems(),
                 Page = surveysAndStatusesFilter.PageIndex,
                 PageSize = surveysAndStatusesFilter.PageSize,
                 TeamLeadName = surveysAndStatusesFilter.ResponsibleName
@@ -312,22 +318,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 Draw = surveysAndStatusesFilter.Draw + 1,
                 RecordsTotal = view.TotalCount,
                 RecordsFiltered = view.TotalCount,
-                Data = view.Items,
-                TotalResponsibleCount = view.TotalResponsibleCount,
-                TotalInterviewCount = view.TotalInterviewCount
+                Data = view.Items
             };
         }
 
 
-        public class SurveysAndStatusesDataTableResponse : DataTableResponse<HeadquarterSurveysAndStatusesReportLine>
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        [CamelCase]
+        public async Task<DeviceInterviewersDataTableResponse> DeviceInterviewers([FromUri]DeviceInterviewersFilter request)
         {
-            public int TotalInterviewCount { get; set; }
-            public int TotalResponsibleCount { get; set; }
-        }
+            var data = await this.deviceInterviewersReport.LoadAsync(new DeviceByInterviewersReportInputModel
+            {
+                Filter = request.Search.Value,
+                Orders = request.GetSortOrderRequestItems(),
+                Page = request.Start,
+                PageSize = request.Length
+            });
 
-        public class SurveysAndStatusesFilter : DataTableRequest
-        {
-            public string ResponsibleName { get; set; }
+            return new DeviceInterviewersDataTableResponse
+            {
+                Draw = request.Draw + 1,
+                RecordsTotal = data.TotalCount,
+                RecordsFiltered = data.TotalCount,
+                Data = data.Items
+            };
         }
 
         [HttpPost]
@@ -343,6 +358,66 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             };
 
             return this.chartStatisticsViewFactory.Load(input);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        [CamelCase]
+        public async Task<CountDaysOfInterviewInStatusDataTableResponse> CountDaysOfInterviewInStatus([FromUri] CountDaysOfInterviewInStatusRequest request)
+        {
+            var input = new CountDaysOfInterviewInStatusInputModel
+            {
+                Orders = request.GetSortOrderRequestItems(),
+                MinutesOffsetToUtc = request.Timezone
+            };
+
+            if (!string.IsNullOrEmpty(request.QuestionnaireId))
+            {
+                var questionnaireIdentity = QuestionnaireIdentity.Parse(request.QuestionnaireId);
+                input.TemplateVersion = questionnaireIdentity.Version;
+                input.TemplateId = questionnaireIdentity.QuestionnaireId;
+            }
+
+            var data = await this.countDaysOfInterviewInStatusReport.LoadAsync(input);
+
+            return new CountDaysOfInterviewInStatusDataTableResponse
+            {
+                Draw = request.Draw + 1,
+                RecordsTotal = data.Length,
+                RecordsFiltered = data.Length,
+                Data = data,
+            };
+        }
+
+        public class SurveysAndStatusesDataTableResponse : DataTableResponse<HeadquarterSurveysAndStatusesReportLine>
+        {
+            public long TotalInterviewCount { get; set; }
+        }
+
+
+        public class CountDaysOfInterviewInStatusDataTableResponse : DataTableResponse<CountDaysOfInterviewInStatusRow>
+        {
+        }
+
+        public class DeviceInterviewersDataTableResponse : DataTableResponse<DeviceInterviewersReportLine>
+        {
+            public DeviceInterviewersReportLine TotalRow { get; set; }
+        }
+
+        public class CountDaysOfInterviewInStatusRequest : DataTableRequest
+        {
+            public string QuestionnaireId { get; set; }
+            public int Timezone { get; set; }
+        }
+
+        public class DeviceInterviewersFilter : DataTableRequest
+        {
+            
+        }
+
+        public class SurveysAndStatusesFilter : DataTableRequest
+        {
+            public string ResponsibleName { get; set; }
         }
 
         private InterviewExportedAction[] GetInterviewExportedActionsAccordingToReportTypeForQuantityReports(PeriodiceReportType reportType)

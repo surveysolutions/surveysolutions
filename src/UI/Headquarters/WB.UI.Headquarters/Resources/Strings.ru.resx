@@ -199,4 +199,7 @@
   <data name="Error" xml:space="preserve">
     <value>Ошибка</value>
   </data>
+  <data name="Days" xml:space="preserve">
+    <value>Дни</value>
+  </data>
 </root>

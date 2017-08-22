@@ -36,6 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
             var textFactory = Create.Service.SubstitutionTextFactory();
+
             var interview = Create.AggregateRoot.Interview(
                 questionnaireRepository: questionnaireRepository,
                 expressionProcessorStatePrototypeProvider: expressionProcessorStatePrototypeProvider,
@@ -74,7 +75,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] children)
         {
-            var result = new QuestionnaireDocument()
+            var result = new QuestionnaireDocument
             {
                 Children = new IComposite[]
                 {
