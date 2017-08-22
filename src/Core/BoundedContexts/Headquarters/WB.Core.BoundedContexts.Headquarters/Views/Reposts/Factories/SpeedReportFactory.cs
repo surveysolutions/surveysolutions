@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Humanizer;
+using Humanizer.Configuration;
+using Humanizer.DateTimeHumanizeStrategy;
+using Humanizer.Localisation;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -297,10 +301,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             yield return row.ResponsibleName;
 
             foreach (var quantity in row.SpeedByPeriod)
-                yield return quantity;
+                yield return ToSpecDaysFormat(quantity);
 
-            yield return row.Average;
-            yield return row.Total;
+            yield return ToSpecDaysFormat(row.Average);
+            yield return ToSpecDaysFormat(row.Total);
+        }
+
+        private static string ToSpecDaysFormat(double? quantity)
+        {
+            if (quantity == null) return "-";
+
+            var quantityInMinutes = TimeSpan.FromMinutes(quantity ?? 0);
+
+            var days = quantityInMinutes.Days > 0 ? $"{quantityInMinutes:%d}d" : "";
+            var hours = quantityInMinutes.Hours > 0 ? $"{quantityInMinutes:%h}h" : "";
+            var minutes = quantityInMinutes.Minutes > 0 ? $"{quantityInMinutes:mm}m" : "";
+
+            return string.Join(" ", days, hours, minutes);
         }
     }
 }

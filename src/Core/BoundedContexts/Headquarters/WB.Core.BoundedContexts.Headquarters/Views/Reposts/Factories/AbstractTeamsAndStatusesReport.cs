@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using NHibernate;
@@ -118,15 +119,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         public ReportView GetReport(TeamsAndStatusesInputModel model)
         {
             var view = this.Load(model);
+            view.TotalRow.Responsible = Report.COLUMN_TOTAL;
 
             return new ReportView
             {
                 Headers = new[]
                 {
-                    Report.COLUMN_TEAM_MEMBER, Report.COLUMN_SUPERVISOR_ASSIGNED, Report.COLUMN_INTERVIEWER_ASSIGNED, Report.COLUMN_COMPLETED, Report.COLUMN_REJECTED_BY_SUPERVISOR,
-                    Report.COLUMN_APPROVED_BY_SUPERVISOR, Report.COLUMN_REJECTED_BY_HQ, Report.COLUMN_APPROVED_BY_HQ, Report.COLUMN_TOTAL
+                    Report.COLUMN_TEAM_MEMBER, Report.COLUMN_SUPERVISOR_ASSIGNED, Report.COLUMN_INTERVIEWER_ASSIGNED,
+                    Report.COLUMN_COMPLETED, Report.COLUMN_REJECTED_BY_SUPERVISOR,
+                    Report.COLUMN_APPROVED_BY_SUPERVISOR, Report.COLUMN_REJECTED_BY_HQ, Report.COLUMN_APPROVED_BY_HQ,
                 },
-                Data = view.Items.Select(x => new object[]
+                Data = new[] {view.TotalRow}.Union(view.Items).Select(x => new object[]
                 {
                     x.Responsible, x.SupervisorAssignedCount, x.InterviewerAssignedCount, x.CompletedCount,
                     x.RejectedBySupervisorCount, x.ApprovedBySupervisorCount, x.RejectedByHeadquartersCount,
