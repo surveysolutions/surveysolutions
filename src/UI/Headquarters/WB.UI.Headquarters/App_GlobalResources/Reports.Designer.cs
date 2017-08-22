@@ -295,7 +295,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire Template.
+        ///   Looks up a localized string similar to Questionnaire Title.
         /// </summary>
         internal static string SurveyName {
             get {
