@@ -7,9 +7,6 @@
         <div class="wrapper-info">
             <div class="container-info">
                 <h2>{{title}}</h2>
-                <p>
-                    <b>{{ $t('CoverProvide')}}</b>
-                </p>
             </div>
         </div>
 

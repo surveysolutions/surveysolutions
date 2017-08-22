@@ -376,15 +376,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please provide answers to all questions to the extent possible. Any answers you provide are sent to our system right away. If you experience a communication disruption you can return to the questionnaire by following the same link you provided so far retained for you. You can then continue by submitting new answers or revising earlier answers..
-        /// </summary>
-        internal static string CoverProvide {
-            get {
-                return ResourceManager.GetString("CoverProvide", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Supervisor note:.
         /// </summary>
         internal static string CoverSupervisorNote {
