@@ -1670,9 +1670,9 @@
     <Compile Include="Controllers\WebInterviewController.Actions.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M020_AddContentType.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M021_AddIndexOnQuestionnaierBrowseItems_QuestionnaireId.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M013_AddStatusIndexToStatusHistory.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M014_AddStatusIndexToStatusHistory.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M012_DeleteDeletedInterviews.cs" />
-    <Compile Include="Migrations\ReadSide\M013_AddIndexesForQuantityReport.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M013_AddIndexesForQuantityReport.cs" />
     <Compile Include="Models\InterviewsDataTableRequest.cs" />
     <Compile Include="Models\Reports\CountDaysOfInterviewInStatusModel.cs" />
     <Compile Include="Models\Reports\DevicesInterviewersModel.cs" />
