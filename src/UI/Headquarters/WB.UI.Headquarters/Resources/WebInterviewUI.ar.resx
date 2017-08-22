@@ -222,9 +222,6 @@
   <data name="CoverFirstComments" xml:space="preserve">
     <value>أول الكيانات {{count}} مع التعليقات:</value>
   </data>
-  <data name="CoverProvide" xml:space="preserve">
-    <value>يرجى تقديم إجابات على كل الأسئلة إلى أقصى حد ممكن. يتم إرسال أي إجابات يمكنك توفير لنظامنا الحق بعيداً. إذا كنت تواجه انقطاع اتصالات يمكنك العودة إلى الاستبيان باتباع نفس الرابط الذي قدم حتى الآن الاحتفاظ لك. ثم يمكنك الاستمرار بتقديم إجابات جديدة أو مراجعة الإجابات السابقة.</value>
-  </data>
   <data name="CoverSupervisorNote" xml:space="preserve">
     <value>ملاحظة المشرف:</value>
   </data>
