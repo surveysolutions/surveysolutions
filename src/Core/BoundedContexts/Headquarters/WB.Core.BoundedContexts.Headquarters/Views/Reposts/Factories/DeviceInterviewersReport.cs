@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     filter = input.Filter + "%"
                 });
                 int totalCount = await GetTotalRowsCountAsync(fullQuery, targetInterviewerVersion, input, connection);
-                var totalRow = await GetTotalLine(fullQuery, connection);
+                var totalRow = await GetTotalLine(fullQuery, targetInterviewerVersion, connection);
 
                 return new DeviceInterviewersReportView
                 {
@@ -85,20 +85,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             return row;
         }
 
-        private async Task<DeviceInterviewersReportLine> GetTotalLine(string sql, IDbConnection connection)
+        private async Task<DeviceInterviewersReportLine> GetTotalLine(string sql, int? targetInterviewerVersion, IDbConnection connection)
         {
             string summarySql = $@"SELECT SUM(report.NeverSynchedCount) as NeverSynchedCount,
-                                          SUM(OutdatedCount) as OutdatedCount,
-                                          SUM(LowStorageCount) as LowStorageCount,
-                                          SUM(WrongDateOnTabletCount) as WrongDateOnTabletCount,
-                                          SUM(OldAndroidCount) as OldAndroidCount,
-                                          SUM (NeverUploadedCount) as NeverUploadedCount,
-                                          SUM(ReassignedCount) as ReassignedCount,
-                                          SUM(NoQuestionnairesCount) as NoQuestionnairesCount
+                                          SUM(report.OutdatedCount) as OutdatedCount,
+                                          SUM(report.LowStorageCount) as LowStorageCount,
+                                          SUM(report.WrongDateOnTabletCount) as WrongDateOnTabletCount,
+                                          SUM(report.OldAndroidCount) as OldAndroidCount,
+                                          SUM(report.NeverUploadedCount) as NeverUploadedCount,
+                                          SUM(report.ReassignedCount) as ReassignedCount,
+                                          SUM(report.NoQuestionnairesCount) as NoQuestionnairesCount
                                    FROM ({sql}) as report";
             var row = await connection.QueryAsync<DeviceInterviewersReportLine>(summarySql, new
             {
-                latestAppBuildVersion = 15,
+                latestAppBuildVersion = targetInterviewerVersion,
                 neededFreeStorageInBytes = InterviewerIssuesConstants.LowMemoryInBytesSize,
                 minutesMismatch = InterviewerIssuesConstants.MinutesForWrongTime,
                 targetAndroidSdkVersion = InterviewerIssuesConstants.MinAndroidSdkVersion,
