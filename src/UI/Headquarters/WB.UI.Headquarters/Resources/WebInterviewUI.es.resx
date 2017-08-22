@@ -133,7 +133,7 @@
     <value>Grabación de audio</value>
   </data>
   <data name="AudioRecordingDuration" xml:space="preserve">
-    <value>{{HumanizedLength}} ({{formattedLength}}) de grabación de audio</value>
+    <value>{{humanizedLength}} ({{formattedLength}}) de grabación de audio</value>
   </data>
   <data name="AudioRecordNew" xml:space="preserve">
     <value>Nueva grabación</value>
@@ -190,7 +190,7 @@
     <value>Preguntas con errores:</value>
   </data>
   <data name="CompleteFirstErrors" xml:space="preserve">
-    <value>Primeras {{contar}} entidades con errores:</value>
+    <value>Primeras {{count}} entidades con errores:</value>
   </data>
   <data name="CompleteNoteToSupervisor" xml:space="preserve">
     <value>Nota para el supervisor</value>
@@ -220,10 +220,7 @@
     <value>Preguntas con comentarios:</value>
   </data>
   <data name="CoverFirstComments" xml:space="preserve">
-    <value>Primeras {{contar}} entidades con comentarios:</value>
-  </data>
-  <data name="CoverProvide" xml:space="preserve">
-    <value>Por favor proporcione respuestas a todas las preguntas en la medida de lo posible. Cualquier respuesta que nos proporcione se envía a nuestro sistema de inmediato. Si experimenta una interrupción en la comunicación, puede regresar al cuestionario siguiendo el mismo enlace que le ha sido proporcionado. A continuación, usted puede seguir enviando nuevas respuestas o revisar respuestas anteriores.</value>
+    <value>Primeras {{count}} entidades con comentarios:</value>
   </data>
   <data name="CoverSupervisorNote" xml:space="preserve">
     <value>Nota del supervisor:</value>
