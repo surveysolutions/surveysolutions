@@ -89,15 +89,15 @@ export default {
                     style: 'multi',
                     selector: 'td>.checkbox-filter'
                 },
-                sDom: 'f<"table-with-scroll"t>ip'
+                sDom: 'rf<"table-with-scroll"t>ip'
             }
         }
     },
 
     methods: {
-        reload: _.debounce(function() {
+        reload() {
             this.$refs.table.reload();
-        }, 500),
+        },
 
         contextMenuItems({ rowData, rowIndex }) {
             const menu = [];
