@@ -181,6 +181,7 @@
                     editedRowId: null,
                     editedQuantity: null,
                     questionnaireApiUrl: "@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesCombobox"})",
+                    questionnaireByIdApiUrl: "@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesComboboxById" })",
                     responsibleApiUrl: "@(Model.IsSupervisor ? Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"}) :
                                                                Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"}))"
                 }
@@ -311,8 +312,8 @@
                         }
 
                         self.$http.patch(patchQuantityUrl, {
-                                    quantity: targetQuantity
-                                })
+                                quantity: targetQuantity
+                            })
                             .then(function() {
                                 $('#editQuantityModal').modal('hide');
                                 self.editedQuantity = self.editedRowId = null;
@@ -331,13 +332,24 @@
                             });
                     } else onDone();
                 },
-                loadQuestionnaireIdByName: function(onDone) {
+                loadQuestionnaireId: function (onDone) {
+
                     if (this.$route.query.questionnaire != undefined) {
                         var requestParams = $.extend({ query: this.$route.query.questionnaire, pageSize: 1, cache: false }, this.ajaxParams);
                         this.$http.get(this.questionnaireApiUrl, { params: requestParams })
                             .then(function(response) {
-                                onDone(response.body.options.length > 0 ? response.body.options[0].key : undefined);
+                                if (response.body.options.length > 0) {
+                                    onDone(response.body.options[0].key, response.body.options[0].value);
+                                }
                             });
+                    } else if (this.$route.query.questionnaireId != undefined) {
+                        var requestParams = $.extend({ questionnaireIdentity: this.$route.query.questionnaireId, cache: false }, this.ajaxParams);
+                        this.$http.get(this.questionnaireByIdApiUrl, { params: requestParams })
+                            .then(function (response) {
+                                if (response.body.options.length > 0) {
+                                    onDone(response.body.options[0].key, response.body.options[0].value);
+                                }
+                            });                        
                     } else onDone();
                 }
             },
@@ -347,18 +359,20 @@
                 $("footer").addClass("footer-adaptive");
 
                 this.showArchive = this.$route.query.showArchive != undefined &&
-                                   this.$route.query.showArchive === "true";
+                    this.$route.query.showArchive === "true";
 
                 this.dateStart = this.$route.query.dateStart;
                 this.dateEnd = this.$route.query.dateEnd;
                 this.userRole = this.$route.query.userRole;
 
-                self.loadQuestionnaireIdByName(function(questionnaireId) {
-                    if (questionnaireId != undefined)
+                self.loadQuestionnaireId(function (questionnaireId, questionnaireTitle) {
+
+                    if (questionnaireId != undefined) {
                         self.questionnaireId = {
-                            key: questionnaireId.split('$')[0] + '$' + self.$route.query.version,
-                            value: '(ver. ' + self.$route.query.version + ') ' + self.$route.query.questionnaire
+                            key: questionnaireId,
+                            value: questionnaireTitle
                         };
+                    }
 
                     self.loadResponsibleIdByName(function (responsibleId) {
                         if (responsibleId != undefined)
