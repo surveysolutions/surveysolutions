@@ -3,8 +3,8 @@ using FluentMigrator;
 
 namespace WB.UI.Headquarters.Migrations.ReadSide
 {
-    [Migration(13)]
-    public class M013_AddStatusIndexToStatusHistory : Migration
+    [Migration(14)]
+    public class M014_AddStatusIndexToStatusHistory : Migration
     {
         public override void Up()
         {
