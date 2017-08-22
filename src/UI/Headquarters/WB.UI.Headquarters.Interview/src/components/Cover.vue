@@ -2,21 +2,17 @@
     <div class="unit-section complete-section">
         <div class="unit-title">
             <wb-humburger></wb-humburger>
-            <h3>Cover</h3>
+            <h3>{{ $t("Cover")}}</h3>
         </div>
         <div class="wrapper-info">
             <div class="container-info">
                 <h2>{{title}}</h2>
-                <p>
-                    <b>Please provide answers to all questions to the extent possible. Any answers you provide are sent to our system right away. If you experience a communication disruption you can return to the questionnaire by following the same link you provided so far retained for you. You can then continue by submitting new answers or revising earlier answers.
-                    </b>
-                </p>
             </div>
         </div>
 
         <div class="wrapper-info" v-if="hasSupervisorComment">
             <div class="container-info">
-                <h4 class="gray-uppercase">Supervisor note:</h4>
+                <h4 class="gray-uppercase">{{ $t("CoverSupervisorNote")}}</h4>
                 <p>
                     <b>{{supervisorComment}}</b>
                 </p>
@@ -27,7 +23,7 @@
             <div class="container-info">
                 <h4 class="gray-uppercase">{{commentsTitle}}</h4>
                 <ul class="list-unstyled marked-questions">
-                    <li v-for="commentedQuestion in commentedQuestions">
+                    <li v-for="commentedQuestion in commentedQuestions" :key="commentedQuestion.id">
                         <a href="#" @click="navigateTo(commentedQuestion)">{{ commentedQuestion.title }}</a>
                     </li>
                 </ul>
@@ -35,7 +31,7 @@
         </div>
 
         <template v-for="question in questions">
-            <div class="wrapper-info" v-if="question.isReadonly">
+            <div class="wrapper-info" v-if="question.isReadonly" :key="question.id">
                 <div class="container-info" :id="question.identity">
                     <h5 v-html="question.title"></h5>
                     <p>
@@ -56,7 +52,7 @@
     </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import * as isEmpty from "lodash/isempty"
 
 export default {
@@ -70,8 +66,8 @@ export default {
         },
         commentsTitle() {
             return this.$store.state.coverInfo.entitiesWithComments.length < this.$store.state.coverInfo.commentedQuestionsCount
-                ? 'First ' + this.$store.state.coverInfo.entitiesWithComments.length + ' entities with comments:'
-                : 'Questions with comments:';
+                ? this.$t("CoverFirstComments", { count: this.$store.state.coverInfo.entitiesWithComments.length})
+                : this.$t("CoverComments");
         },
         questions() {
             return this.$store.state.coverInfo.identifyingQuestions
@@ -93,7 +89,7 @@ export default {
         fetch() {
             this.$store.dispatch("fetchCoverInfo")
         },
-        getGpsUrl(question: IReadonlyPrefilledQuestion) {
+        getGpsUrl(question) {
             return `http://maps.google.com/maps?q=${question.answer}`
         },
         navigateTo(commentedQuestion) {

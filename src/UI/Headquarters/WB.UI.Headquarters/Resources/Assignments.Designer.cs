@@ -205,7 +205,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can set number of interviews that should be created from this assignment.
+        ///   Looks up a localized string similar to Specify maximum number of interviews to be generated for that assignment (Quantity). Permitted values: -1 is for Unlimited assignment, 0 is for Empty assignment, numbers for assignment size.
         /// </summary>
         public static string QuantityExplanation {
             get {

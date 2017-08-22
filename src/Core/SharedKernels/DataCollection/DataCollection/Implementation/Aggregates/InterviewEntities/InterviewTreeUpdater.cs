@@ -37,7 +37,40 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (result)
                 entity.Enable();
             else
+            {
                 entity.Disable();
+                var question = entity as InterviewTreeQuestion;
+                if (question == null)
+                    return;
+
+                if (IsRosterSizeQuestionType(question))
+                    return;
+
+                DisableDependingFormSourceQuestionRosters(question.Identity, question.Tree);
+            }
+        }
+
+        private void DisableDependingFormSourceQuestionRosters(Identity questionIdentity, InterviewTree interviewTree)
+        {
+            var rosterIdsToBeDisabled = questionnaire.GetRosterGroupsByRosterSizeQuestion(questionIdentity.Id);
+            var rostersToBeDisabled = rosterIdsToBeDisabled
+                .SelectMany(x => interviewTree.FindEntitiesFromSameOrDeeperLevel(x, questionIdentity))
+                .Select(interviewTree.GetRoster)
+                .Where(x => x != null)
+                .ToList();
+
+            rostersToBeDisabled.ForEach(x =>
+            {
+                x.Disable();
+                this.disabledNodes.Add(x.Identity);
+                List<Identity> disabledChildNodes = x.DisableChildNodes();
+                disabledChildNodes.ForEach(d => this.disabledNodes.Add(d));
+            });
+        }
+
+        private static bool IsRosterSizeQuestionType(InterviewTreeQuestion question)
+        {
+            return !question.IsInteger && !question.IsMultiFixedOption && !question.IsTextList && !question.IsYesNo;
         }
 
         public void UpdateEnablement(InterviewTreeGroup group)
@@ -46,6 +79,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 return;
 
             var level = this.GetLevel(group);
+
             var result = RunConditionExpression(level.GetConditionExpression(group.Identity));
             if (result)
                 group.Enable();
@@ -68,7 +102,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var level = this.GetLevel(question);
             var filter = level.GetCategoricalFilter(question.Identity);
             var filterResult = RunOptionFilter(filter,
-                question.AsSingleFixedOption.GetAnswer().SelectedValue);
+                question.GetAsInterviewTreeSingleOptionQuestion().GetAnswer().SelectedValue);
             if (!filterResult)
                 question.RemoveAnswer();
         }
@@ -84,12 +118,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var level = this.GetLevel(question);
             var filter = level.GetCategoricalFilter(question.Identity);
             var selectedOptions =
-                question.AsMultiFixedOption.GetAnswer().CheckedValues.ToArray();
+                question.GetAsInterviewTreeMultiOptionQuestion().GetAnswer().CheckedValues.ToArray();
             var newSelectedOptions =
                 selectedOptions.Where(x => RunOptionFilter(filter, x)).ToArray();
             if (newSelectedOptions.Length != selectedOptions.Length)
             {
-                question.AsMultiFixedOption.SetAnswer(
+                question.SetAnswer(
                     CategoricalFixedMultiOptionAnswer.FromInts(newSelectedOptions));
                 // remove rosters, implement cheaper solutions
                 question.Tree.ActualizeTree();
@@ -106,13 +140,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             var level = this.GetLevel(question);
             var filter = level.GetCategoricalFilter(question.Identity);
-            var checkedOptions = question.AsYesNo.GetAnswer().CheckedOptions;
+            var checkedOptions = question.GetAsInterviewTreeYesNoQuestion().GetAnswer().CheckedOptions;
             var newCheckedOptions =
                 checkedOptions.Where(x => RunOptionFilter(filter, x.Value)).ToArray();
 
             if (newCheckedOptions.Length != checkedOptions.Count)
             {
-                question.AsYesNo.SetAnswer(YesNoAnswer.FromCheckedYesNoAnswerOptions(newCheckedOptions));
+                question.SetAnswer(YesNoAnswer.FromCheckedYesNoAnswerOptions(newCheckedOptions));
                 // remove rosters, implement cheaper solutions
                 question.Tree.ActualizeTree();
             }
@@ -124,7 +158,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 return;
 
             //move to cascading
-            var cascadingParent = question.AsCascading.GetCascadingParentTreeQuestion();
+            var cascadingParent = (question.GetAsInterviewTreeCascadingQuestion()).GetCascadingParentTreeQuestion();
             if (cascadingParent.IsDisabled() || !cascadingParent.IsAnswered())
             {
                 if (question.IsAnswered())
@@ -133,7 +167,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
             else
             {
-                var selectedParentValue = cascadingParent.AsSingleFixedOption.GetAnswer().SelectedValue;
+                var selectedParentValue = cascadingParent.GetAsInterviewTreeSingleOptionQuestion().GetAnswer().SelectedValue;
                 if (!this.questionnaire.HasAnyCascadingOptionsForSelectedParentOption(question.Identity.Id,
                     cascadingParent.Identity.Id, selectedParentValue))
                 {

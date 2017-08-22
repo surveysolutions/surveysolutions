@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -14,8 +13,8 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationDtoFactoryTests
 {
@@ -24,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
     {
         protected static InterviewSynchronizationDtoFactory CreateInterviewSynchronizationDtoFactory(QuestionnaireDocument document)
         {
-            var questionnaire = new PlainQuestionnaire(document, 1, null);
+            var questionnaire = Create.Entity.PlainQuestionnaire(document, 1, null);
             return new InterviewSynchronizationDtoFactory(
                 Mock.Of<IReadSideRepositoryWriter<InterviewStatuses>>(),
                 Mock.Of<IReadSideKeyValueStorage<InterviewLinkedQuestionOptions>>(),
@@ -38,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
             return new InterviewData()
             {
                 InterviewId = interviewId ?? Guid.NewGuid(),
-                Levels = new Dictionary<string, InterviewLevel>()
+                Levels = new Dictionary<string, InterviewLevel>
                 {
                     {
                         "#",

@@ -9,7 +9,7 @@
         <h3>{{info.title}} <span v-if="info.isRoster"> - <i>{{getRosterTitle(info.rosterTitle)}}</i></span></h3>
     </div>
 </template>
-<script lang="ts">
+<script lang="js">
     export default {
         name: 'breadcrumbs-view',
         beforeMount() {

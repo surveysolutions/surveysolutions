@@ -281,7 +281,7 @@ namespace WB.Tests.Abc
 
         public static IInterviewSynchronizationDtoFactory InterviewSynchronizationDtoFactory(QuestionnaireDocument document)
         {
-            var questionnaire = new PlainQuestionnaire(document, 1, null);
+            var questionnaire = Create.Entity.PlainQuestionnaire(document, 1, null);
             return new InterviewSynchronizationDtoFactory(
                 Mock.Of<IReadSideRepositoryWriter<InterviewStatuses>>(),
                 Mock.Of<IReadSideKeyValueStorage<InterviewLinkedQuestionOptions>>(),

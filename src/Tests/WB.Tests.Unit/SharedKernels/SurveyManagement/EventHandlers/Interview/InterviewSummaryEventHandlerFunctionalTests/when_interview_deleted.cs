@@ -1,4 +1,5 @@
 ﻿using Machine.Specifications;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -8,21 +9,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 {
     internal class when_interview_deleted : InterviewSummaryDenormalizerTestsContext
     {
-        Establish context = () =>
+        [Test]
+        public void should_delete_interview()
         {
-            viewModel = new InterviewSummary();
-            denormalizer = CreateDenormalizer();
-        };
+            var viewModel = new InterviewSummary();
+            var denormalizer = CreateDenormalizer();
 
-        Because of = () => updatedModel = denormalizer.Update(viewModel, Create.PublishedEvent.InterviewStatusChanged(InterviewStatus.Deleted));
+            // Act
+            var updatedModel = denormalizer.Update(viewModel, Create.PublishedEvent.InterviewStatusChanged(InterviewStatus.Deleted));
 
-        It should_mark_summary_as_deleted = () => updatedModel.IsDeleted.ShouldBeTrue();
-
-        It should_change_summary_status = () => updatedModel.Status.ShouldEqual(InterviewStatus.Deleted);
-
-        static InterviewSummary viewModel;
-        static InterviewSummaryDenormalizer denormalizer;
-        static InterviewSummary updatedModel;
+            // Assert
+            Assert.That(updatedModel, Is.Null);
+        }
     }
 }
 

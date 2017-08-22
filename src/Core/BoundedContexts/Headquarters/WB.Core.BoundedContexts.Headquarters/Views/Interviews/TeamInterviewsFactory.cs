@@ -87,8 +87,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
         private static IQueryable<InterviewSummary> ApplyDynamicFilter(TeamInterviewsInputModel input, IQueryable<InterviewSummary> _)
         {
             var items = _
-                .Where(x => !x.IsDeleted)
-                .Where(x => (x.Status != InterviewStatus.ApprovedBySupervisor && x.Status != InterviewStatus.ApprovedByHeadquarters));
+                .Where(x => x.Status != InterviewStatus.ApprovedBySupervisor && x.Status != InterviewStatus.ApprovedByHeadquarters);
 
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {

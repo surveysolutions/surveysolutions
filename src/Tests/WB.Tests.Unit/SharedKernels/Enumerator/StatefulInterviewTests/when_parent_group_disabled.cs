@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                             Create.Entity.Question(childQuestionId),
                         })
                   });
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, new PlainQuestionnaire(questionnaire, 1));
+            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, Create.Entity.PlainQuestionnaire(questionnaire, 1));
 
             statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId,
                 questionnaireRepository: questionnaireRepository);

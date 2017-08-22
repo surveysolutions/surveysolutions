@@ -142,7 +142,7 @@
     <value>Интервьюер назначен</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
-    <value>Вопросник</value>
+    <value>Опросник</value>
   </data>
   <data name="RejectedByHQ" xml:space="preserve">
     <value>Отклонено хедквотером</value>
@@ -172,9 +172,53 @@
     <value>Версия</value>
   </data>
   <data name="TemplateVersion" xml:space="preserve">
-    <value>Версия шаблона</value>
+    <value>Версия опросника</value>
   </data>
   <data name="Restarted" xml:space="preserve">
     <value>Перезапущено</value>
+  </data>
+  <data name="Report_Surveys_and_Statuses" xml:space="preserve">
+    <value>Отчет по обследованиям и статусам интервью</value>
+    <comment>Обследования и статусы</comment>
+  </data>
+  <data name="Report_Teams_and_Statuses" xml:space="preserve">
+    <value>Отчет по командам и статусам интервью</value>
+    <comment>Команды и статусы</comment>
+  </data>
+  <data name="Report_Quantity_By_Interviewers" xml:space="preserve">
+    <value>Отчет по кол-ву выполненой работы интервьюеров</value>
+    <comment>Отчет по интервьюерам</comment>
+  </data>
+  <data name="Report_Days_by_Interview_Status" xml:space="preserve">
+    <value>Отчет по кол-ву дней в статусе интервью</value>
+    <comment>Отчет по кол-ву дней в статусе интервью</comment>
+  </data>
+  <data name="Report_Devices_and_Interviewers" xml:space="preserve">
+    <value>Отчет по устройствам интервьюеров</value>
+    <comment>Отчет по устройствам интервьюеров</comment>
+  </data>
+  <data name="Report_Supervisors_And_Statuses" xml:space="preserve">
+    <value>Отчет по супервизорам и статусам интервью</value>
+    <comment>Отчет по супервизорам и статусам интервью</comment>
+  </data>
+  <data name="Report_Speed_By_Supervisors" xml:space="preserve">
+    <value>Отчет по скорости супервизоров</value>
+    <comment>Отчет по скорости супервизоров</comment>
+  </data>
+  <data name="Report_Speed_Between_Statuses_By_Interviewers" xml:space="preserve">
+    <value>Отчет по скорости интервьюеров при переводе из одного статуса интевью в другое</value>
+    <comment>Отчет по скорости интервьюеров при переводе из одного статуса интевью в другое</comment>
+  </data>
+  <data name="Report_Speed_Between_Statuses_By_Supervisors" xml:space="preserve">
+    <value>Отчет по скорости супервизоров перевода из одного статуса интервью в другое</value>
+    <comment>Отчет по скорости супервизоров перевода из одного статуса интервью в другое</comment>
+  </data>
+  <data name="Report_Speed_By_Interviewers" xml:space="preserve">
+    <value>Отчет по скорости работы интервьюеров</value>
+    <comment>Отчет по скорости работы интервьюеров</comment>
+  </data>
+  <data name="Report_Quantity_By_Supervisors" xml:space="preserve">
+    <value>Отчет по кол-ву выполненой работы супервизоров</value>
+    <comment>Отчет по кол-ву выполненой работы супервизоров</comment>
   </data>
 </root>

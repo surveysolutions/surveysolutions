@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -19,11 +19,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IInterviewViewModelFactory viewModelFactory;
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IPlainStorage<AssignmentDocument, int> assignmentViewRepository;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private SynchronizationViewModel synchronization;
-
-        private IReadOnlyCollection<QuestionnaireView> dbQuestionnaires;
-        private IReadOnlyCollection<AssignmentDocument> dbAssignments;
 
         public IMvxCommand SynchronizationCommand => new MvxCommand(this.RunSynchronization, () => !this.synchronization.IsSynchronizationInProgress);
 
@@ -32,27 +30,28 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IInterviewViewModelFactory viewModelFactory,
             IAssignmentDocumentsStorage assignmentsRepository,
             IPlainStorage<InterviewView> interviewViewRepository,
+            IPlainStorage<AssignmentDocument, int> assignmentViewRepository,
             IViewModelNavigationService viewModelNavigationService)
         {
             this.questionnaireViewRepository = questionnaireViewRepository;
             this.viewModelFactory = viewModelFactory;
             this.assignmentsRepository = assignmentsRepository;
             this.interviewViewRepository = interviewViewRepository;
+            this.assignmentViewRepository = assignmentViewRepository;
             this.viewModelNavigationService = viewModelNavigationService;
         }
 
-        public async Task Load(SynchronizationViewModel sync)
+        public void Load(SynchronizationViewModel sync)
         {
             this.synchronization = sync;
             this.Title = InterviewerUIResources.Dashboard_AssignmentsTabTitle;
 
-            this.dbQuestionnaires = this.questionnaireViewRepository.Where(questionnaire => questionnaire.Census);
-            this.dbAssignments = this.assignmentsRepository.LoadAll();
+            var censusQuestionnairesCount = this.questionnaireViewRepository.Count(questionnaire => questionnaire.Census);
+            var assignmentsCount = this.assignmentViewRepository.Count();
 
-            this.ItemsCount = this.dbQuestionnaires.Count + this.dbAssignments.Count;
+            this.ItemsCount = censusQuestionnairesCount + assignmentsCount;
 
-            var uiItems = await Task.Run(() => this.GetUiItems());
-            this.UiItems.ReplaceWith(uiItems);
+            this.UpdateUiItems();
         }
 
         private void RunSynchronization()
@@ -67,9 +66,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.synchronization.Synchronize();
         }
 
-        private IEnumerable<IDashboardItem> GetUiItems()
+        protected override IEnumerable<IDashboardItem> GetUiItems()
         {
-            if (this.dbQuestionnaires.Count > 0 || this.dbAssignments.Count > 0)
+            var dbQuestionnaires = this.questionnaireViewRepository.Where(questionnaire => questionnaire.Census);
+            var dbAssignments = this.assignmentsRepository.LoadAll();
+
+            if (dbQuestionnaires.Count > 0 || dbAssignments.Count > 0)
             {
                 var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
                 subTitle.Title = InterviewerUIResources.Dashboard_CreateNewTabText;
@@ -77,7 +79,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 yield return subTitle;
             }
 
-            foreach (var censusQuestionnaireView in this.dbQuestionnaires)
+            foreach (var censusQuestionnaireView in dbQuestionnaires)
             {
                 var censusQuestionnaireDashboardItem = this.viewModelFactory.GetNew<CensusQuestionnaireDashboardItemViewModel>();
                 censusQuestionnaireDashboardItem.Init(censusQuestionnaireView);
@@ -87,7 +89,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             var interviewsCount = this.interviewViewRepository.LoadAll().ToLookup(iv => iv.Assignment);
 
-            foreach (var assignment in this.dbAssignments)
+            foreach (var assignment in dbAssignments)
             {
                 var dashboardItem = this.viewModelFactory.GetNew<AssignmentDashboardItemViewModel>();
                 dashboardItem.Init(assignment, interviewsCount[assignment.Id].Count());

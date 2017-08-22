@@ -1,5 +1,6 @@
 using System;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels
 {
@@ -18,5 +19,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels
         public int ColumnCount { get; set; }
         public InterviewExportedAction[] InterviewStatuses { get; set; }
         public PeriodiceReportType ReportType { get; set; }
+
+        public QuestionnaireIdentity Questionnaire()
+        {
+            return QuestionnaireId != Guid.Empty ? new QuestionnaireIdentity(QuestionnaireId, QuestionnaireVersion) : null;
+        }
     }
 }

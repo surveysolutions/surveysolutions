@@ -43,6 +43,10 @@
 			margin-bottom: 10px;
 			padding: 5px;
 			font-size: 10px;
+			&.reject{
+				padding-top: 3px;
+				padding-bottom: 3px;
+			}
 			&:last-of-type{
 				margin-bottom: 0;
 			}

@@ -4,11 +4,10 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
@@ -24,33 +23,19 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             conditionallyInvalidQuestionId = Guid.Parse("33333333333333333333333333333333");
 
-
             var questionaire = Mock.Of<IQuestionnaire>(_ =>
                                                         _.GetCustomEnablementConditionForQuestion(conditionallyInvalidQuestionId) == enablementCondition
-                                                        //&& _.GetAllQuestionsWithNotEmptyValidationExpressions() == new Guid[] { conditionallyInvalidQuestionId }
-                                                        //&& _.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new Guid[] { conditionallyInvalidQuestionId }
                                                         && _.GetCustomEnablementConditionForQuestion(conditionallyInvalidQuestionId) == enablementCondition
                                                         && _.HasQuestion(conditionallyInvalidQuestionId) == true
                                                         && _.GetQuestionType(conditionallyInvalidQuestionId) == QuestionType.Text);
 
-            //var expressionProcessor = new Mock<IExpressionProcessor>();
-
-            //setup expression processor throw exception
-            /*expressionProcessor.Setup(x => x.EvaluateBooleanExpression(enablementCondition, Moq.It.IsAny<Func<string, object>>()))
-                .Returns(true);
-
-            expressionProcessor.Setup(x => x.EvaluateBooleanExpression(validationCondition, Moq.It.IsAny<Func<string, object>>()))
-            .Returns(false);*/
-
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                                                                                                 questionaire);
 
-            //Setup.InstanceToMockedServiceLocator<IExpressionProcessor>(expressionProcessor.Object);
-
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
             interview.Apply(new TextQuestionAnswered(userId, conditionallyInvalidQuestionId, new decimal[0], DateTime.Now, "answer"));
-            interview.Apply(new QuestionsDisabled(new[] { new Identity(conditionallyInvalidQuestionId, new decimal[0]) }));
-            interview.Apply(new AnswersDeclaredInvalid(new[] { new Identity(conditionallyInvalidQuestionId, new decimal[0]) }));
+            interview.Apply(new QuestionsDisabled(new[] { Create.Identity(conditionallyInvalidQuestionId, 0) }));
+            interview.Apply(new AnswersDeclaredInvalid(new[] { Create.Identity(conditionallyInvalidQuestionId, 0) }));
             eventContext = new EventContext();
         };
 

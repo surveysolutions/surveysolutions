@@ -68,7 +68,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             var interview = this.interviewRepository.Get(interviewId);
             var answerModel = interview.GetDateTimeQuestion(entityIdentity);
-            if (answerModel.IsAnswered)
+            this.answerFormatString = answerModel.UiFormatString;
+            if (answerModel.IsAnswered())
             {
                 this.SetToView(answerModel.GetAnswer().Value);
             }
@@ -121,10 +122,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void SetToView(DateTime answerValue)
         {
-            this.Answer = answerValue.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
+            this.Answer = answerValue.ToString(answerFormatString);
         }
 
         private string answer;
+        private string answerFormatString;
+
         public string Answer
         {
             get { return this.answer; }

@@ -2,11 +2,10 @@
 
 @{
     ViewBag.Title = Html.ActivePage();
-
-    Layout = @"~/Views/Shared/_MainLayout.cshtml";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
 <div id="vueApp" configuration="@Model.ToString()"></div>
 
-@Html.StaticScipt("~/Dependencies/build/vendor.bundle.js")
-@Html.StaticScipt("~/Dependencies/build/interviewer_interviews.bundle.js")
+@Html.StaticScipt(@"~/HqApp/dist/vendor.bundle.js")
+@Html.StaticScipt(@"~/HqApp/dist/app.bundle.js")

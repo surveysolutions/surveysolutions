@@ -22,9 +22,9 @@
             var picker;
 
             if (options.wrap) {
-                picker = new Flatpickr(element.parentNode, options);
+                picker = new FlatpickrInstance(element.parentNode, options);
             } else {
-                picker = new Flatpickr(element, options);
+                picker = new FlatpickrInstance(element, options);
             }
 
             // Save instance for update method.

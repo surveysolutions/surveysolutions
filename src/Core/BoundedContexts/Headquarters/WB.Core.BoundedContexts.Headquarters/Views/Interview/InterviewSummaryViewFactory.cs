@@ -15,8 +15,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public InterviewSummary Load(Guid interviewId)
         {
             var interview = this.interviewSummaryReader.GetById(interviewId);
-            if (interview == null || interview.IsDeleted)
-                return null;
 
             return interview;
         }

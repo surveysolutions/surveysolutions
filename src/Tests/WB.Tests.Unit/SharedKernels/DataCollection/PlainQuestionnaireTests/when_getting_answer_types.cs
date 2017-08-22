@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
         };
 
         Because of = () =>
-            plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, 0);
+            plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 0);
 
         It should_return_optioncode_answer_type_for_single_option_question = () =>
             plainQuestionnaire.GetAnswerType(singleOptionQuestionId).ShouldEqual(AnswerType.OptionCode);

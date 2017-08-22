@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
         private static bool result;
         private static StatefulInterview interview;
-        private static decimal rosterInstanceId = 4444m;
-        static Identity group = new Identity(Guid.Parse("11111111111111111111111111111111"), new[] { rosterInstanceId });
+        private static int rosterInstanceId = 4444;
+        static Identity group = Create.Identity(Guid.Parse("11111111111111111111111111111111"), rosterInstanceId);
     }
 }
