@@ -121,7 +121,10 @@ export default {
                         data: "totalCount",
                         className: "type-numeric",
                         title: this.$t("Strings.Total"),
-                        orderable: false
+                        orderable: false,
+                        render: function(data) {
+                            return `<span>${data}</span>`;
+                        }
                     }
                 ],
                 ajax: {
