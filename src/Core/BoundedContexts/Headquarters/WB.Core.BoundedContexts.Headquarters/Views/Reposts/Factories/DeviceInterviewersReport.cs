@@ -132,13 +132,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             {
                 Headers = new[]
                 {
-                    Report.COLUMN_TEAMS, Report.COLUMN_NEVER_SYNCHED, Report.COLUMN_OLD_VERSION, Report.COLUMN_LESS_THAN_100MB_FREE_SPACE, Report.COLUMN_WRONG_TIME_ON_TABLET,
-                    Report.COLUMN_ANDROID_4_4_OR_LOWER, Report.COLUMN_NO_ASSIGNMENTS_RECEIVED, Report.COLUMN_NEVER_UPLOADED, Report.COLUMN_TABLET_REASSIGNED
+                    Report.COLUMN_TEAMS, Report.COLUMN_NEVER_SYNCHED, Report.COLUMN_NO_ASSIGNMENTS_RECEIVED, Report.COLUMN_NEVER_UPLOADED,Report.COLUMN_TABLET_REASSIGNED,
+                    Report.COLUMN_OLD_VERSION, Report.COLUMN_ANDROID_4_4_OR_LOWER, Report.COLUMN_WRONG_TIME_ON_TABLET, Report.COLUMN_LESS_THAN_100MB_FREE_SPACE
+                       
                 },
                 Data = view.Items.Select(x => new object[]
                 {
-                    x.TeamName, x.NeverSynchedCount, x.OutdatedCount, x.LowStorageCount, x.WrongDateOnTabletCount,
-                    x.OldAndroidCount, x.NoQuestionnairesCount, x.NeverUploadedCount, x.ReassignedCount
+                    x.TeamName, x.NeverSynchedCount,  x.NoQuestionnairesCount, x.NeverUploadedCount, x.ReassignedCount, x.OldAndroidCount,
+                    x.OutdatedCount, x.WrongDateOnTabletCount, x.LowStorageCount
+                    
                 }).ToArray()
             };
         }
