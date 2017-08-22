@@ -32,7 +32,7 @@ export default {
                     style: 'multi',
                     selector: 'td>.checkbox-filter'
                 },
-                sDom: 'f<"table-with-scroll"t>ip'
+                sDom: 'rf<"table-with-scroll"t>ip'
             }
         }
     },

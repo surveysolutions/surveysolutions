@@ -26,14 +26,9 @@ export default {
             type: Function
         },
         authorizedUser: { type: Object, default() { return {} } },
-        hasPaging: {
-            type: Boolean,
-            default() { return true; }
-        },
-        hasSearch: {
-            type: Boolean,
-            default() { return true; }
-        }
+        reloadDebounce: {type: Number, default: 500},
+        noPaging: { type: Boolean },
+        noSearch: { type: Boolean }
     },
 
     data() {
@@ -42,11 +37,11 @@ export default {
         };
     },
     methods: {
-        reload(data) {
+        reload: _.debounce(function (data) {
             this.table.ajax.data = this.addParamsToRequest(data || {});
             this.table.rows().deselect();
             this.table.ajax.reload();
-        },
+        }, this.reloadDebounce),
 
         disableRow(rowIndex) {
             $(this.table.row(rowIndex).node()).addClass("disabled")
@@ -115,8 +110,8 @@ export default {
             pageLength: 20, // page size
             dom: "frtp",
             conditionalPaging: true,
-            paging: this.hasPaging,
-            searching: this.hasSearch
+            paging: !this.noPaging,
+            searching: !this.noSearch
         }, this.tableOptions);
 
         options.ajax.data = (d) => {
