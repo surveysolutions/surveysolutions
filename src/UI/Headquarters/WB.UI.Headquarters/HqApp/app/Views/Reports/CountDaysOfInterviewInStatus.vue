@@ -1,18 +1,26 @@
 <template>
-    <Layout :hasFilter="true" :title="$t('Pages.CountDaysOfInterviewInStatus')" :subtitle="$t('Pages.CountDaysOfInterviewInStatusDescription')">
+    <Layout :hasFilter="true"
+            :title="$t('Pages.CountDaysOfInterviewInStatus')"
+            :subtitle="$t('Pages.CountDaysOfInterviewInStatusDescription')">
         <Filters slot="filters">
             <FilterBlock :title="$t('Reports.Questionnaire')">
-                <select class="selectpicker" v-model="questionnaireId">
+                <select class="selectpicker"
+                        v-model="questionnaireId">
                     <option :value="null">{{ $t('Common.Any') }}</option>
-                    <option v-for="questionnaire in questionnaires" :key="questionnaire.key" :value="questionnaire.key">
+                    <option v-for="questionnaire in questionnaires"
+                            :key="questionnaire.key"
+                            :value="questionnaire.key">
                         {{ questionnaire.value }}
                     </option>
                 </select>
             </FilterBlock>
         </Filters>
         <ExportButtons slot="exportButtons" />
-        <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addFilteringParams" :hasPaging="false"
-             :hasSearch="false">
+        <DataTables ref="table"
+                    :tableOptions="tableOptions"
+                    :addParamsToRequest="addFilteringParams"
+                    noPaging
+                    noSearch>
         </DataTables>
     </Layout>
 </template>
@@ -30,7 +38,7 @@ export default {
         }
     },
     mounted() {
-        this.$refs.table.reload();
+        this.reload();
     },
     computed: {
         questionnaires() {
@@ -133,9 +141,9 @@ export default {
         }
     },
     methods: {
-        reload: _.debounce(function () {
+        reload() {
             this.$refs.table.reload();
-        }, 500),
+        },
 
         addFilteringParams(data) {
             if (this.questionnaireId) {
