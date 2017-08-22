@@ -25,6 +25,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
     <TargetFrameworkProfile />
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -1035,6 +1036,7 @@
       <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\WebInterview.ar.resx" />
+    <EmbeddedResource Include="Resources\WebInterview.fr.resx" />
     <EmbeddedResource Include="Resources\WebInterview.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1047,6 +1049,7 @@
       <DependentUpon>WebInterview.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\WebInterviewSetup.ar.resx" />
+    <EmbeddedResource Include="Resources\WebInterviewSetup.fr.resx" />
     <EmbeddedResource Include="Resources\WebInterviewSetup.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1060,6 +1063,7 @@
       <DependentUpon>WebInterviewSetup.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\WebInterviewUI.ar.resx" />
+    <EmbeddedResource Include="Resources\WebInterviewUI.fr.resx" />
     <EmbeddedResource Include="Resources\WebInterviewUI.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
@@ -2033,30 +2037,26 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
-  
   <!-- HQ APP -->
   <Target Name="RestoreHqAppDeps" BeforeTargets="AfterBuild" Condition=" '$(Configuration)' == 'Debug'">
     <Message Importance="high" Text="Restoring HQ App npm deps" />
-     <Exec Command="yarn --version" ContinueOnError="true">
+    <Exec Command="yarn --version" ContinueOnError="true">
       <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
     </Exec>
     <Exec Command="yarn" WorkingDirectory="HqApp" Condition="'$(ErrorCode)' == '0'" />
     <Exec Command="npm install" WorkingDirectory="HqApp" Condition="'$(ErrorCode)' != '0'" />
   </Target>
-  
   <Target Name="RunWebpackVendor" AfterTargets="RestoreHqAppDeps" Condition=" '$(Configuration)' == 'Debug' And !Exists('HqApp\dist\vendor.bundle.js') ">
     <!-- In development, the dist files won't exist on the first run or when cloning to a different machine, so rebuild them if not already present. -->
     <Message Importance="high" Text="Performing first-run Webpack build..." />
     <Exec Command="npm run vendor" WorkingDirectory="HqApp" />
     <Exec Command="npm run dev" WorkingDirectory="HqApp" />
   </Target>
-    
   <Target Name="RunWebpackDev" AfterTargets="RestoreHqAppDeps" Condition=" '$(Configuration)' == 'Debug' And Exists('HqApp\dist\vendor.bundle.js') ">
     <Message Importance="high" Text="Performing dev Webpack build..." />
     <Exec Command="npm run dev" WorkingDirectory="HqApp" />
   </Target>
   <!-- /HQ APP -->
-  
   <Target Name="CollectWebInterviewView" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
     <ItemGroup>
       <CollectWebInterviewView_CustomFiles Include="Views\WebInterview\**\*" />
