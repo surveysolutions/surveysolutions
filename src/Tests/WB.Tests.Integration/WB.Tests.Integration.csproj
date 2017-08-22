@@ -372,6 +372,7 @@
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_multipleoptionquestion_triggering_roster_with_condition_with_rowindex.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_question_that_enables_section_with_nested_rosters_inside_it_after_preloading.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_multipleoptionquestion_triggering_roster_having_condition_with_rowindex.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_question_enables_previously_disabled_roster_size_question.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_index_of_failed_validation_condition_changes.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_referencing_questionnaire_level_roster_in_validation.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_using_IsAnswered_with_yes_no_question.cs" />

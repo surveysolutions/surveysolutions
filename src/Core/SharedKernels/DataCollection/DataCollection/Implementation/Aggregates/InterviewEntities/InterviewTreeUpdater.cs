@@ -37,7 +37,40 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (result)
                 entity.Enable();
             else
+            {
                 entity.Disable();
+                var question = entity as InterviewTreeQuestion;
+                if (question == null)
+                    return;
+
+                if (IsRosterSizeQuestionType(question))
+                    return;
+
+                DisableDependingFormSourceQuestionRosters(question.Identity, question.Tree);
+            }
+        }
+
+        private void DisableDependingFormSourceQuestionRosters(Identity questionIdentity, InterviewTree interviewTree)
+        {
+            var rosterIdsToBeDisabled = questionnaire.GetRosterGroupsByRosterSizeQuestion(questionIdentity.Id);
+            var rostersToBeDisabled = rosterIdsToBeDisabled
+                .SelectMany(x => interviewTree.FindEntitiesFromSameOrDeeperLevel(x, questionIdentity))
+                .Select(interviewTree.GetRoster)
+                .Where(x => x != null)
+                .ToList();
+
+            rostersToBeDisabled.ForEach(x =>
+            {
+                x.Disable();
+                this.disabledNodes.Add(x.Identity);
+                List<Identity> disabledChildNodes = x.DisableChildNodes();
+                disabledChildNodes.ForEach(d => this.disabledNodes.Add(d));
+            });
+        }
+
+        private static bool IsRosterSizeQuestionType(InterviewTreeQuestion question)
+        {
+            return !question.IsInteger && !question.IsMultiFixedOption && !question.IsTextList && !question.IsYesNo;
         }
 
         public void UpdateEnablement(InterviewTreeGroup group)
@@ -46,6 +79,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 return;
 
             var level = this.GetLevel(group);
+
             var result = RunConditionExpression(level.GetConditionExpression(group.Identity));
             if (result)
                 group.Enable();
