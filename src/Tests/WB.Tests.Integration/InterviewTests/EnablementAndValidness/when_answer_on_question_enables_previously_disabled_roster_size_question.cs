@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Main.Core.Documents;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
@@ -8,14 +8,14 @@ using WB.Tests.Abc;
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
     [TestOf(typeof(Interview))]
-    internal class when_answer_on_question_disables_roster_size_question : InterviewTestsContext
+    internal class when_answer_on_question_enables_previously_disabled_roster_size_question : InterviewTestsContext
     {
         [SetUp]
         public void Context()
         {
             QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.NumericIntegerQuestion(id: questionWhichDisablesRosterSizeQuestion, variable: "num_disable"),
-                Create.Entity.NumericIntegerQuestion(id: rosterSizeId, variable: "num_trigger", enablementCondition:"num_disable == 2"),
+                Create.Entity.NumericIntegerQuestion(id: rosterSizeId, variable: "num_trigger", enablementCondition: "num_disable == 2"),
                 Create.Entity.NumericRoster(rosterId: rosterId, variable: "ros", rosterSizeQuestionId: rosterSizeId)
             );
 
@@ -23,28 +23,29 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
             interview.AnswerNumericIntegerQuestion(userId, questionWhichDisablesRosterSizeQuestion, RosterVector.Empty, DateTime.Now, 2);
             interview.AnswerNumericIntegerQuestion(userId, rosterSizeId, RosterVector.Empty, DateTime.Now, 2);
-
             interview.AnswerNumericIntegerQuestion(userId, questionWhichDisablesRosterSizeQuestion, RosterVector.Empty, DateTime.Now, 1);
+
+            interview.AnswerNumericIntegerQuestion(userId, questionWhichDisablesRosterSizeQuestion, RosterVector.Empty, DateTime.Now, 2);
         }
 
         [TearDown]
-        public void Cleanup ()
+        public void Cleanup()
         {
             interview = null;
         }
 
         [Test]
-        public void should_disable_first_roster_row()
+        public void should_enable_first_roster_row()
         {
             var roster = interview.GetRoster(Create.Identity(rosterId, 0));
-            Assert.That(roster.IsDisabled, Is.True);
+            Assert.That(roster.IsDisabled, Is.False);
         }
 
         [Test]
-        public void should_disable_second_roster_row()
+        public void should_enable_second_roster_row()
         {
             var roster = interview.GetRoster(Create.Identity(rosterId, 1));
-            Assert.That(roster.IsDisabled, Is.True);
+            Assert.That(roster.IsDisabled, Is.False);
         }
 
         private static StatefulInterview interview;
