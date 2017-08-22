@@ -129,7 +129,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     Report.COLUMN_COMPLETED, Report.COLUMN_REJECTED_BY_SUPERVISOR,
                     Report.COLUMN_APPROVED_BY_SUPERVISOR, Report.COLUMN_REJECTED_BY_HQ, Report.COLUMN_APPROVED_BY_HQ,
                 },
-                Data = new[] {view.TotalRow}.Union(view.Items).Select(x => new object[]
+                Data = new[] {view.TotalRow}.Concat(view.Items).Select(x => new object[]
                 {
                     x.Responsible, x.SupervisorAssignedCount, x.InterviewerAssignedCount, x.CompletedCount,
                     x.RejectedBySupervisorCount, x.ApprovedBySupervisorCount, x.RejectedByHeadquartersCount,
