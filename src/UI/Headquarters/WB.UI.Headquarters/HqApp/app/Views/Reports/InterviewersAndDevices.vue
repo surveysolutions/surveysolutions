@@ -133,6 +133,7 @@ export default {
                     type: "GET",
                     contentType: 'application/json'
                 },
+                responsive: false,
                 order: [[0, 'asc']],
                 sDom: 'rf<"table-with-scroll"t>ip',
                 createdRow: function(row, data, dataIndex){
