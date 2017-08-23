@@ -10,81 +10,43 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 {
     internal class HeadquartersTeamsAndStatusesReport : AbstractTeamsAndStatusesReport, IHeadquartersTeamsAndStatusesReport
     {
-        private readonly INativeReadSideStorage<InterviewSummary> interviewsReader;
-
-        public HeadquartersTeamsAndStatusesReport(INativeReadSideStorage<InterviewSummary> interviewsReader)
+        public HeadquartersTeamsAndStatusesReport(INativeReadSideStorage<InterviewSummary> interviewsReader) : base(interviewsReader)
         {
-            this.interviewsReader = interviewsReader;
         }
 
         public override TeamsAndStatusesReportView Load(TeamsAndStatusesInputModel input)
         {
-            var query = this.interviewsReader.Query(_ => FilterByQuestionnaireOrTeamLead(_, input).Select(x => new
+            var query = this.interviewsReader.Query(_ => FilterByQuestionnaireOrTeamLead(_, input)
+                .Select(x => new
                 {
-                    x.TeamLeadId,
-                    x.TeamLeadName,
-                    SupervisorAssigned = x.Status == InterviewStatus.SupervisorAssigned ? 1 : 0,
-                    InterviewerAssigned = x.Status == InterviewStatus.InterviewerAssigned ? 1 : 0,
-                    Completed = x.Status == InterviewStatus.Completed ? 1 : 0,
-                    RejectedBySupervisor = x.Status == InterviewStatus.RejectedBySupervisor ? 1 : 0,
-                    ApprovedBySupervisor = x.Status == InterviewStatus.ApprovedBySupervisor ? 1 : 0,
-                    RejectedByHeadquarters = x.Status == InterviewStatus.RejectedByHeadquarters ? 1 : 0,
-                    ApprovedByHeadquarters = x.Status == InterviewStatus.ApprovedByHeadquarters ? 1 : 0
+                    ResponsibleId = x.TeamLeadId,
+                    Responsible = x.TeamLeadName,
+                    SupervisorAssignedCount = x.Status == InterviewStatus.SupervisorAssigned ? 1 : 0,
+                    InterviewerAssignedCount = x.Status == InterviewStatus.InterviewerAssigned ? 1 : 0,
+                    CompletedCount = x.Status == InterviewStatus.Completed ? 1 : 0,
+                    RejectedBySupervisorCount = x.Status == InterviewStatus.RejectedBySupervisor ? 1 : 0,
+                    ApprovedBySupervisorCount = x.Status == InterviewStatus.ApprovedBySupervisor ? 1 : 0,
+                    RejectedByHeadquartersCount = x.Status == InterviewStatus.RejectedByHeadquarters ? 1 : 0,
+                    ApprovedByHeadquartersCount = x.Status == InterviewStatus.ApprovedByHeadquarters ? 1 : 0
                 })
-                .GroupBy(x => new { x.TeamLeadName, x.TeamLeadId })
-                .Select(x => new 
+                .GroupBy(x => new { x.Responsible, x.ResponsibleId })
+                .Select(x => new
                 {
-                    ResponsibleId = x.Key.TeamLeadId,
-                    Responsible = x.Key.TeamLeadName,
-                    SupervisorAssignedCount = (int?) x.Sum(y => y.SupervisorAssigned) ?? 0,
-                    InterviewerAssignedCount = (int?)x.Sum(y => y.InterviewerAssigned) ?? 0,
-                    CompletedCount = (int?)x.Sum(y => y.Completed) ?? 0,
-                    RejectedBySupervisorCount = (int?)x.Sum(y => y.RejectedBySupervisor) ?? 0,
-                    ApprovedBySupervisorCount = (int?)x.Sum(y => y.ApprovedBySupervisor) ?? 0,
-                    RejectedByHeadquartersCount = (int?)x.Sum(y => y.RejectedByHeadquarters) ?? 0,
-                    ApprovedByHeadquartersCount = (int?)x.Sum(y => y.ApprovedByHeadquarters) ?? 0,
+                    ResponsibleId = x.Key.ResponsibleId,
+                    Responsible = x.Key.Responsible,
+                    SupervisorAssignedCount = (int?) x.Sum(y => y.SupervisorAssignedCount) ?? 0,
+                    InterviewerAssignedCount = (int?)x.Sum(y => y.InterviewerAssignedCount) ?? 0,
+                    CompletedCount = (int?)x.Sum(y => y.CompletedCount) ?? 0,
+                    RejectedBySupervisorCount = (int?)x.Sum(y => y.RejectedBySupervisorCount) ?? 0,
+                    ApprovedBySupervisorCount = (int?)x.Sum(y => y.ApprovedBySupervisorCount) ?? 0,
+                    RejectedByHeadquartersCount = (int?)x.Sum(y => y.RejectedByHeadquartersCount) ?? 0,
+                    ApprovedByHeadquartersCount = (int?)x.Sum(y => y.ApprovedByHeadquartersCount) ?? 0,
                     TotalCount = x.Count()
                 }));
 
-            var totalRaw = this.interviewsReader.Query(_ =>
-                    FilterByQuestionnaireOrTeamLead(_, input)
-                    .Select(x => new
-                    {
-                        SupervisorAssigned = x.Status == InterviewStatus.SupervisorAssigned ? 1 : 0,
-                        InterviewerAssigned = x.Status == InterviewStatus.InterviewerAssigned ? 1 : 0,
-                        Completed = x.Status == InterviewStatus.Completed ? 1 : 0,
-                        RejectedBySupervisor = x.Status == InterviewStatus.RejectedBySupervisor ? 1 : 0,
-                        ApprovedBySupervisor = x.Status == InterviewStatus.ApprovedBySupervisor ? 1 : 0,
-                        RejectedByHeadquarters = x.Status == InterviewStatus.RejectedByHeadquarters ? 1 : 0,
-                        ApprovedByHeadquarters = x.Status == InterviewStatus.ApprovedByHeadquarters ? 1 : 0
-                    })
-                    .GroupBy(x => 1)
-                    .Select(x => new
-                    {
-                        SupervisorAssignedCount = (int?)x.Sum(y => y.SupervisorAssigned) ?? 0,
-                        InterviewerAssignedCount = (int?)x.Sum(y => y.InterviewerAssigned) ?? 0,
-                        CompletedCount = (int?)x.Sum(y => y.Completed) ?? 0,
-                        RejectedBySupervisorCount = (int?)x.Sum(y => y.RejectedBySupervisor) ?? 0,
-                        ApprovedBySupervisorCount = (int?)x.Sum(y => y.ApprovedBySupervisor) ?? 0,
-                        RejectedByHeadquartersCount = (int?)x.Sum(y => y.RejectedByHeadquarters) ?? 0,
-                        ApprovedByHeadquartersCount = (int?)x.Sum(y => y.ApprovedByHeadquarters) ?? 0,
-                        TotalCount = x.Count()
-                    }))
-                .ToList().FirstOrDefault();
+            var totalStatistics = QueryReportTotalRow(input);
 
-            var totalStatistics = new TeamsAndStatusesReportLine
-            {
-                SupervisorAssignedCount = totalRaw?.SupervisorAssignedCount ?? 0,
-                InterviewerAssignedCount = totalRaw?.InterviewerAssignedCount ?? 0,
-                CompletedCount = totalRaw?.CompletedCount ?? 0,
-                RejectedBySupervisorCount = totalRaw?.RejectedBySupervisorCount ?? 0,
-                ApprovedBySupervisorCount = totalRaw?.ApprovedBySupervisorCount ?? 0,
-                RejectedByHeadquartersCount = totalRaw?.RejectedByHeadquartersCount ?? 0,
-                ApprovedByHeadquartersCount = totalRaw?.ApprovedByHeadquartersCount ?? 0,
-                TotalCount = totalRaw?.TotalCount ?? 0
-            };
-
-            var totalCount = query.ToList().Count();
+            var totalCount = this.interviewsReader.CountDistinctWithRecursiveIndex(_ => _.Where(this.CreateFilterExpression(input)).Select(x => x.TeamLeadId));
 
             return new TeamsAndStatusesReportView
             {
