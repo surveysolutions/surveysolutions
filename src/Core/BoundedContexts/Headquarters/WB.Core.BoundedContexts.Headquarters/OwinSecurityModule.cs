@@ -7,6 +7,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Ninject;
 using Ninject.Modules;
+using Ninject.Web.Common;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -19,7 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters
     {
         public override void Load()
         {
-            this.Bind<IUserRepository>().To<HqUserStore>();
+            this.Bind<IUserRepository>().To<HqUserStore>().InRequestScope();
             this.Bind<IHashCompatibilityProvider>().To<HashCompatibilityProvider>().InSingletonScope();
             this.Bind<IPasswordHasher>().To<PasswordHasher>();
             this.Bind<IIdentityValidator<string>>().To<HqPasswordValidator>();
