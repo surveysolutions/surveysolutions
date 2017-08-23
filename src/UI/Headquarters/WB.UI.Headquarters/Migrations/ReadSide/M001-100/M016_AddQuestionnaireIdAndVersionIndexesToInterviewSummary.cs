@@ -2,8 +2,8 @@
 
 namespace WB.UI.Headquarters.Migrations.ReadSide
 {
-    [Migration(15)]
-    public class M015_AddQuestionnaireIdAndVersionIndexesToInterviewSummary : Migration
+    [Migration(16)]
+    public class M016_AddQuestionnaireIdAndVersionIndexesToInterviewSummary : Migration
     {
         public override void Up()
         {
