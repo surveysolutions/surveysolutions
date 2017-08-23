@@ -14,6 +14,8 @@
 
     <script type="text/javascript">
         var $interviewsUrl = '@Url.Action("Interviews", "Survey")';
+        var $totalTitle = '@HttpUtility.JavaScriptStringEncode(Common.Total)';
+        var totalRowClass = 'total-row';
         $(function () {
             var $surveyAndStatusesReportUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "SupervisorSurveysAndStatusesReport" })';
             var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "AsigneeInterviewersBySupervisor" })';

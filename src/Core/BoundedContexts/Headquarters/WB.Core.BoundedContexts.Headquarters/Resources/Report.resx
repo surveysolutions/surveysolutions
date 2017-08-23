@@ -144,6 +144,9 @@
   <data name="COLUMN_TOTAL" xml:space="preserve">
     <value>TOTAL</value>
   </data>
+  <data name="TOTAL" xml:space="preserve">
+    <value>Total</value>
+  </data>
   <data name="COLUMN_AVERAGE" xml:space="preserve">
     <value>AVERAGE</value>
   </data>
