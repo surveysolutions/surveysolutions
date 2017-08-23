@@ -15,7 +15,6 @@
                 </select>
             </FilterBlock>
         </Filters>
-        <ExportButtons slot="exportButtons" />
         <DataTables ref="table"
                     :tableOptions="tableOptions"
                     :addParamsToRequest="addFilteringParams"

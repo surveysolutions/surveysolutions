@@ -2,6 +2,17 @@
     <table class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews responsive">
         <thead></thead>
         <tbody></tbody>
+        <tfoot v-if="table">
+            <tr>
+                <th v-bind:colSpan="tableOptions.columns.length"
+                    style="text-align: right">
+                    {{$t("Pages.DownloadReport")}}
+                    <a target="_blank" v-bind:href="$store.state.exportUrls.excel">XLSX</a>, {{$t("Pages.Or")}}
+                    <a target="_blank" v-bind:href="$store.state.exportUrls.csv">CSV</a>, {{$t("Pages.Or")}}
+                    <a target="_blank" v-bind:href="$store.state.exportUrls.tab">TAB</a>
+                </th>
+            </tr>
+        </tfoot>
     </table>
 </template>
 

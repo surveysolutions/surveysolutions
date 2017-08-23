@@ -83,6 +83,10 @@
         self.SendRequest(self.ServiceUrl, request, function (data) {
             self.setExportUrls();
             ko.mapping.fromJS(data, self.mappingOptions, self);
+
+            if (self.Items().length > 0)
+                self.datatableColumnLength(Object.keys(self.Items()[0]).length);
+
         }, true);
     };
     self.clear = function() {
@@ -158,11 +162,16 @@
         self.ExportToCsvUrl(requestUrl + "&exportType=csv");
         self.ExportToTabUrl(requestUrl + "&exportType=tab");
     };
+
+    self.datatableColumnLength = ko.observable(0);
     
     self.initDataTable = function (onDataReceivedCallback, onTableInitComplete) {
         $.fn.dataTable.ext.errMode = 'none';
 
         var tableColumns = self.getDataTableColumns();
+
+        self.datatableColumnLength(tableColumns.length);
+
         var tableColumnDefs = [];
         for (var columnIndex = 0; columnIndex < tableColumns.length; columnIndex ++) {
             tableColumnDefs.push({

@@ -394,6 +394,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download report as.
+        /// </summary>
+        public static string DownloadReport {
+            get {
+                return ResourceManager.GetString("DownloadReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         public static string EditQuestion_Save {
@@ -2091,6 +2100,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string OperationFailedTitle {
             get {
                 return ResourceManager.GetString("OperationFailedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to or.
+        /// </summary>
+        public static string Or {
+            get {
+                return ResourceManager.GetString("Or", resourceCulture);
             }
         }
         
