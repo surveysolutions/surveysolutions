@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Resources;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -144,6 +145,7 @@ namespace WB.UI.Headquarters.Controllers
                     Strings.ResourceManager,
                     Pages.ResourceManager,
                     CommonRes.ResourceManager,
+                    Reports.ResourceManager,
                 }.Translations()
             });
         }
