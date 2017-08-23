@@ -134,7 +134,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 else if (!dataRow.DaysCountEnd.HasValue)
                     dataRow.RowHeader = $"{dataRow.DaysCountStart}+";
                 else
-                    dataRow.RowHeader = $"{dataRow.DaysCountStart}-{dataRow.DaysCountEnd}";
+                    dataRow.RowHeader = $"{dataRow.DaysCountStart} - {dataRow.DaysCountEnd}";
             }
         }
 

@@ -9,7 +9,6 @@
                             {{title}}
                         </h1>
                         <h3 v-if="subtitle">{{ subtitle }}</h3>
-                        <slot name="exportButtons"/>
                     </div>
                     <slot />
                 </div>

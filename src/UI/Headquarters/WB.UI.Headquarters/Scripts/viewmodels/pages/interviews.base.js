@@ -202,11 +202,11 @@
             },
             trigger: 'left'
         };
-      
 
-        $.contextMenu(Object.assign({ selector: "#interviews tr td:not(:first-child)"}, contextMenuOptions));
-        $.contextMenu(Object.assign({ selector: ".row-unit"}, contextMenuOptions));
-    }
+
+        $.contextMenu(_.assign({ selector: "#interviews tr td:not(:first-child)" }, contextMenuOptions));
+        $.contextMenu(_.assign({ selector: ".row-unit" }, contextMenuOptions));
+    };
 
     self.ShowStatusHistory = function (url, interview) {
         var statusHistoryTemplateId = "#interview-status-history-template";
