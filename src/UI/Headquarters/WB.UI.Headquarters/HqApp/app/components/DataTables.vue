@@ -117,6 +117,12 @@ export default {
         options.ajax.data = (d) => {
             this.addParamsToRequest(d);
 
+            d.columns.forEach(function (column){
+                delete (column.orderable);
+                delete (column.search);
+                delete (column.searchable);
+            });
+
             var requestUrl = this.table.ajax.url() + '?' + decodeURIComponent($.param(d));
 
             this.$store.dispatch('setExportUrls', {
