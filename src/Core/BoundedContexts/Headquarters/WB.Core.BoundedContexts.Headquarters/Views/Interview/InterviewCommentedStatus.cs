@@ -47,7 +47,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual UserRoles StatusChangeOriginatorRole { get; set; }
         public virtual InterviewExportedAction Status { get; set; }
         public virtual DateTime Timestamp { get; set; }
-        public virtual TimeSpan? TimeSpanWithPreviousStatus { get; set; }
+
+        public virtual TimeSpan? TimeSpanWithPreviousStatus
+        {
+            get => TimespanWithPreviousStatusLong.HasValue ? new TimeSpan(TimespanWithPreviousStatusLong.Value) : (TimeSpan?)null;
+            set => this.TimespanWithPreviousStatusLong = value?.Ticks;
+        }
+
+        public virtual long? TimespanWithPreviousStatusLong { get; protected set; }
         public virtual string Comment { get; set; }
 
         public virtual InterviewStatuses InterviewStatuses { get; set; }
