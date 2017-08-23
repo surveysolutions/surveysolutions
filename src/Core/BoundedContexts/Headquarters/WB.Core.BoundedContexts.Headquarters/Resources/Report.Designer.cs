@@ -257,5 +257,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("COLUMN_WRONG_TIME_ON_TABLET", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total.
+        /// </summary>
+        internal static string TOTAL {
+            get {
+                return ResourceManager.GetString("TOTAL", resourceCulture);
+            }
+        }
     }
 }

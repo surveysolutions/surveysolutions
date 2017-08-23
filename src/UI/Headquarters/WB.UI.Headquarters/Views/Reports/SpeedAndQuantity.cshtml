@@ -2,6 +2,7 @@
 @using WB.UI.Headquarters.Resources
 @model WB.Core.BoundedContexts.Headquarters.Views.Reposts.PeriodicStatusReportModel
 @{
+    ViewBag.Title = Model.ReportName;
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
@@ -64,7 +65,7 @@
                     <div class="block-filter">
                         <h5>@PeriodicStatusReport.Questionnaire</h5>
                         <select id="questionnaireSelector" data-bind="value: SelectedQuestionnaire, selectPicker: {}">
-                            <option value="" selected="selected">@Common.Any</option>
+                            <option value="" selected="selected">@Common.AllQuestionnaires</option>
                             @foreach (var item in Model.Questionnaires)
                             {
                                 <option value='{"questionnaireId": "@item.TemplateId","questionnaireVersion": "@item.TemplateVersion"}'>(@PeriodicStatusReport.Version @item.TemplateVersion) @item.TemplateName</option>
@@ -141,6 +142,19 @@
                         </tr>
                         </thead>
                         <tbody>
+                        @if (Model.TotalRowPresent)
+                        {
+                            <tr class="total-row">
+                                <td>
+                                    <span><b>@PeriodicStatusReport.Total</b></span>
+                                </td>
+                                <!-- ko foreach: ((TotalRow() || {}).@(Model.ReportName)ByPeriod || []) -->
+                                <td class="type-numeric"><span data-bind='text: $root.Format@(Model.ReportName)Period($data)'></span></td>
+                                <!-- /ko -->
+                                <td class="type-numeric"><span data-bind="text:  Format@(Model.ReportName)Period(getTotalAverage())"></span></td>
+                                <td class="type-numeric"><span data-bind="text:  Format@(Model.ReportName)Period(getTotalCount())"></span></td>
+                            </tr>
+                        }
                         <!-- ko foreach:Items -->
                         <tr>
                             <td>@if (Model.CanNavigateToQuantityByTeamMember)
@@ -160,21 +174,6 @@
                         </tr>
                         <!-- /ko -->
                         </tbody>
-                        @if (Model.TotalRowPresent)
-                        {
-                            <tfoot>
-                            <tr>
-                                <td>
-                                    <b>@PeriodicStatusReport.Total</b>
-                                </td>
-                                <!-- ko foreach: ((TotalRow() || {}).@(Model.ReportName)ByPeriod || []) -->
-                                <td class="type-numeric"><span data-bind='text: $root.Format@(Model.ReportName)Period($data)'></span></td>
-                                <!-- /ko -->
-                                <td class="type-numeric"><span data-bind="text:  Format@(Model.ReportName)Period(getTotalAverage())"></span></td>
-                                <td class="type-numeric"><span data-bind="text:  Format@(Model.ReportName)Period(getTotalCount())"></span></td>
-                            </tr>
-                            </tfoot>
-                        }
                     </table>
                 </div>
             </div>
