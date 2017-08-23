@@ -146,16 +146,17 @@
         </div>
     </footer>
     @Html.Partial("Clickjacking")
-    <!-- jsLibs:js -->
-    <script type="text/javascript" src="@Url.Content("~/Dependencies/build/libs.js")"></script>
-
+    
     <script type="text/javascript">
         $(document).ready(function () {
-            $("<img/>")
-                .on('error', function () { $("img#placeholder").parent().addClass("no-logo"); })
-                .attr("src", $("img#placeholder").attr("src"));
+        $("<img/>")
+            .on('error', function () { $("img#placeholder").parent().addClass("no-logo"); })
+            .attr("src", $("img#placeholder").attr("src"));
         });
     </script>
+
+    <!-- jsLibs:js -->
+    <script type="text/javascript" src="@Url.Content("~/Dependencies/build/libs.js")"></script>
     <!-- endinject -->
     <!-- jsApp:js -->
     <!-- endinject -->
