@@ -1030,8 +1030,7 @@
     <value>Она нужна только если вы пользуетесь функциональностью ESRI GIS. Включение этой фунции значительно увеличит размер приложения и время загрузки.</value>
   </data>
   <data name="CountDaysOfInterviewInStatus" xml:space="preserve">
-    <value>Статус/Дни</value>
-    <comment>Статус/Дни</comment>
+    <value>Длительность статусов</value>
   </data>
   <data name="ExportToExcel" xml:space="preserve">
     <value>Эксель (.xlsx)</value>
