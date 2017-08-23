@@ -47,7 +47,7 @@
                 var items = {}
 
                 items["open"] = {
-                    name: "Open",
+                    name: "@Common.Open",
                     callback: function(t, e) {
                         var detailsUrl = $detailsUrl + '/' + selectedRow.InterviewId();
                         window.location = detailsUrl;
@@ -55,7 +55,7 @@
                 };
 
                 items["showStatusHistory"] = {
-                    name: "Show Status History",
+                    name: "@Common.ShowStatusHistory",
                     callback: function(t, e) {
                         model.ShowStatusHistory(
                             '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "ChangeStateHistory"})',
@@ -93,6 +93,16 @@
                     name: "@Common.Unapprove",
                     callback: function(t, e) {
                         model.UnapproveInterview();
+                    }
+                };
+
+                items["sep1"] = "---------";
+
+                items["delete"] = {
+                    name: "@Common.Delete",
+                    className: "error-text",
+                    callback: function(t, e) {
+                        model.DeleteInterview();
                     }
                 };
 
@@ -231,12 +241,12 @@
                                         <tr data-bind="css: { 'selected' : IsSelected }">
                                             @if (!authorizedUser.IsObserver && !authorizedUser.IsObserving)
                                             {
-                                                <td class="checkbox-cell no-menu">
+                                                <td class="checkbox-cell">
                                                     <input type="checkbox" data-bind="value: InterviewId(), attr: { id: 'cbx_' + InterviewId() }, checked: IsSelected" class="checkbox-filter" />
                                                     <label data-bind="attr: { for: 'cbx_' + InterviewId() }"><span class="tick"></span></label>
                                                 </td>
                                             }
-                                            <td class="interview-id title-row no-menu">
+                                            <td class="interview-id title-row">
                                                 <a data-bind="attr: { href: $detailsUrl + '/' + InterviewId() }">
                                                     <!-- ko text:Key --><!--/ko-->
                                                     <span data-bind="if: ClientKey() && ClientKey() !== Key()" title="@Interviews.ClientKeyTitle">
@@ -252,7 +262,7 @@
                                             <td class="prefield-column" data-bind="css: { 'first-identifying' :  ($index() == 0), 'last-identifying' : ($parent.FeaturedQuestions().length - 1 == $index()), visible : $root.IsVisiblePrefilledColumns }, text: Answer"></td>
                                             <!-- /ko -->
                                             <!-- /ko -->
-                                            <td class="no-menu">
+                                            <td>
                                                 <!-- ko if:ResponsibleRole() == 4 -->
                                                 <a data-bind="attr: { href: $profileUrl + '/' + ResponsibleId() }, text: ResponsibleName"></a>
                                                 <!-- /ko -->

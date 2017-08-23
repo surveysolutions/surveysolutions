@@ -259,4 +259,10 @@
     <value>Все опросники</value>
     <comment>Все опросники</comment>
   </data>
+  <data name="Open" xml:space="preserve">
+    <value>Открыть</value>
+  </data>
+  <data name="ShowStatusHistory" xml:space="preserve">
+    <value>Показать историю статусов</value>
+  </data>
 </root>
