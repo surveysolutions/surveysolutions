@@ -141,6 +141,19 @@
                         </tr>
                         </thead>
                         <tbody>
+                        @if (Model.TotalRowPresent)
+                        {
+                            <tr class="total-row">
+                                <td>
+                                    <b>@PeriodicStatusReport.Total</b>
+                                </td>
+                                <!-- ko foreach: ((TotalRow() || {}).@(Model.ReportName)ByPeriod || []) -->
+                                <td class="type-numeric"><span data-bind='text: $root.Format@(Model.ReportName)Period($data)'></span></td>
+                                <!-- /ko -->
+                                <td class="type-numeric"><span data-bind="text:  Format@(Model.ReportName)Period(getTotalAverage())"></span></td>
+                                <td class="type-numeric"><span data-bind="text:  Format@(Model.ReportName)Period(getTotalCount())"></span></td>
+                            </tr>
+                        }
                         <!-- ko foreach:Items -->
                         <tr>
                             <td>@if (Model.CanNavigateToQuantityByTeamMember)
@@ -160,21 +173,6 @@
                         </tr>
                         <!-- /ko -->
                         </tbody>
-                        @if (Model.TotalRowPresent)
-                        {
-                            <tfoot>
-                            <tr>
-                                <td>
-                                    <b>@PeriodicStatusReport.Total</b>
-                                </td>
-                                <!-- ko foreach: ((TotalRow() || {}).@(Model.ReportName)ByPeriod || []) -->
-                                <td class="type-numeric"><span data-bind='text: $root.Format@(Model.ReportName)Period($data)'></span></td>
-                                <!-- /ko -->
-                                <td class="type-numeric"><span data-bind="text:  Format@(Model.ReportName)Period(getTotalAverage())"></span></td>
-                                <td class="type-numeric"><span data-bind="text:  Format@(Model.ReportName)Period(getTotalCount())"></span></td>
-                            </tr>
-                            </tfoot>
-                        }
                     </table>
                 </div>
             </div>
