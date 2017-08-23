@@ -2,6 +2,7 @@
 using System;
 using Ninject;
 using Ninject.Modules;
+using Ninject.Web.Common;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -237,7 +238,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IQuestionnairePreloadingDataViewFactory>().To<QuestionnairePreloadingDataViewFactory>();
             this.Bind<IInterviewTroubleshootFactory>().To<InterviewTroubleshootFactory>();
             this.Bind<ITeamViewFactory>().To<TeamViewFactory>();
-            this.Bind<IUserViewFactory>().ToMethod(context => new UserViewFactory());
+            this.Bind<IUserViewFactory>().To<UserViewFactory>().InRequestScope();
             this.Bind<ITeamUsersAndQuestionnairesFactory>().To<TeamUsersAndQuestionnairesFactory>();
             this.Bind<IInterviewDetailsViewFactory>().To<InterviewDetailsViewFactory>();
             this.Bind<IInterviewSummaryViewFactory>().To<InterviewSummaryViewFactory>();
