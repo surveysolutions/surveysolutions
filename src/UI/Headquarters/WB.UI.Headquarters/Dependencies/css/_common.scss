@@ -450,10 +450,6 @@ table{
 	color: $gray_text;
 	padding-left: 5px;
 	white-space: nowrap;
-	&:hover, &:focus, &:active{
-		color: $blue;
-		text-decoration: none;
-	}
 	&:before{
 		display: inline-block;
 		content:"";
@@ -465,6 +461,12 @@ table{
 		@include image-2x("#{$assetsPath}/img/icon-tablet2k.png", 11px, 14px);
 		@include opacity(0.3);
 		background-size: 11px 14px;
+	}
+}
+a.interviewer, a.supervisor{
+	&:hover, &:focus, &:active{
+		color: $blue;
+		text-decoration: none;
 	}
 }
 .supervisor{
