@@ -214,7 +214,7 @@ namespace WB.UI.Headquarters.Controllers
                 canNavigateToQuantityBySupervisors: this.authorizedUser.IsAdministrator || this.authorizedUser.IsHeadquarter,
                 reportName: "Speed",
                 responsibleColumnName: PeriodicStatusReport.TeamMember,
-                totalRowPresent: false,
+                totalRowPresent: true,
                 supervisorId: supervisorId);
 
             model.ReportTypes = this.speedReportTypesForSupervisor;
@@ -238,7 +238,7 @@ namespace WB.UI.Headquarters.Controllers
                 webApiActionName: periodicStatusReportWebApiActionName,
                 canNavigateToQuantityByTeamMember: true,
                 canNavigateToQuantityBySupervisors: false,
-                reportName: "Speed", totalRowPresent: false,
+                reportName: "Speed", totalRowPresent: true,
                 responsibleColumnName: PeriodicStatusReport.Team);
 
             model.ReportTypes = this.speedReportTypesForHeadquarters;
