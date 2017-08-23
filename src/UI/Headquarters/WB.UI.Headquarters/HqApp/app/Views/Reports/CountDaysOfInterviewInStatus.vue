@@ -141,6 +141,7 @@ export default {
                 order: [[ 0, "desc" ]],
                 bInfo : false,
                 footer: true,
+                responsive: false,
                 fnRowCallback: function( nRow, aData, iDisplayIndex) {
                     if (iDisplayIndex == 0)
                         $(nRow).addClass("total-row");
