@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             Set(x => x.InterviewSummaries, set =>
             {
                 set.Key(key => key.Column("assignmentid"));
-                set.Lazy(CollectionLazy.Lazy);
+                set.Lazy(CollectionLazy.Extra);
                 set.Cascade(Cascade.None);
             },
 
