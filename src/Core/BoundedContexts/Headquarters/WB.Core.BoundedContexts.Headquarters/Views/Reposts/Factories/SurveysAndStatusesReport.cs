@@ -20,15 +20,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
         public SurveysAndStatusesReportView Load(SurveysAndStatusesReportInputModel input)
         {
-            var query = this.interviewSummaryReader.Query(_ =>
-            {
-                if (!string.IsNullOrWhiteSpace(input.ResponsibleName))
-                    _ = _.Where(x => x.ResponsibleName.ToLower() == input.ResponsibleName.ToLower());
+            var responsible = input.ResponsibleName?.ToLower();
+            var teamLead = input.TeamLeadName?.ToLower();
 
-                if (!string.IsNullOrWhiteSpace(input.TeamLeadName))
-                    _ = _.Where(x => x.TeamLeadName.ToLower() == input.TeamLeadName.ToLower());
-
-                return _.Select(x => new
+            var queryForItems = this.interviewSummaryReader.Query(_ =>
+                FilterByResponsibleOrTeamLead(_, responsible, teamLead).Select(x => new
                     {
                         x.QuestionnaireId,
                         x.QuestionnaireVersion,
@@ -44,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                         ApprovedByHeadquarters = x.Status == InterviewStatus.ApprovedByHeadquarters ? 1 : 0
                     })
                     .GroupBy(x => new {x.QuestionnaireId, x.QuestionnaireVersion, x.QuestionnaireTitle})
-                    .Select(x => new 
+                    .Select(x => new
                     {
                         QuestionnaireId = x.Key.QuestionnaireId,
                         QuestionnaireVersion = x.Key.QuestionnaireVersion,
@@ -57,13 +53,41 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                         RejectedByHeadquartersCount = x.Sum(y => y.RejectedByHeadquarters),
                         ApprovedByHeadquartersCount = x.Sum(y => y.ApprovedByHeadquarters),
                         TotalCount = x.Count()
-                    });
-            });
+                    }));
+
+            var queryForTotalRow = this.interviewSummaryReader.Query(_ =>
+                FilterByResponsibleOrTeamLead(_, responsible, teamLead).Select(x => new
+                    {
+                        x.QuestionnaireId,
+                        x.QuestionnaireVersion,
+                        x.QuestionnaireTitle,
+                        x.ResponsibleName,
+                        x.TeamLeadName,
+                        SupervisorAssigned = x.Status == InterviewStatus.SupervisorAssigned ? 1 : 0,
+                        InterviewerAssigned = x.Status == InterviewStatus.InterviewerAssigned ? 1 : 0,
+                        Completed = x.Status == InterviewStatus.Completed ? 1 : 0,
+                        RejectedBySupervisor = x.Status == InterviewStatus.RejectedBySupervisor ? 1 : 0,
+                        ApprovedBySupervisor = x.Status == InterviewStatus.ApprovedBySupervisor ? 1 : 0,
+                        RejectedByHeadquarters = x.Status == InterviewStatus.RejectedByHeadquarters ? 1 : 0,
+                        ApprovedByHeadquarters = x.Status == InterviewStatus.ApprovedByHeadquarters ? 1 : 0
+                    })
+                    .GroupBy(x => 1)
+                    .Select(x => new HeadquarterSurveysAndStatusesReportLine
+                    {
+                        SupervisorAssignedCount = x.Sum(y => y.SupervisorAssigned),
+                        InterviewerAssignedCount = x.Sum(y => y.InterviewerAssigned),
+                        CompletedCount = x.Sum(y => y.Completed),
+                        RejectedBySupervisorCount = x.Sum(y => y.RejectedBySupervisor),
+                        ApprovedBySupervisorCount = x.Sum(y => y.ApprovedBySupervisor),
+                        RejectedByHeadquartersCount = x.Sum(y => y.RejectedByHeadquarters),
+                        ApprovedByHeadquartersCount = x.Sum(y => y.ApprovedByHeadquarters),
+                        TotalCount = x.Count()
+                    }));
 
             return new SurveysAndStatusesReportView
             {
-                TotalCount = query.Count(),
-                Items = query.OrderUsingSortExpression(input.Order).Skip((input.Page - 1) * input.PageSize)
+                TotalCount = queryForItems.Count(),
+                Items = queryForItems.OrderUsingSortExpression(input.Order).Skip((input.Page - 1) * input.PageSize)
                     .Take(input.PageSize).ToList().Select(x=> new HeadquarterSurveysAndStatusesReportLine
                     {
                         QuestionnaireId = x.QuestionnaireId,
@@ -77,8 +101,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                         RejectedByHeadquartersCount = x.RejectedByHeadquartersCount,
                         ApprovedByHeadquartersCount = x.ApprovedByHeadquartersCount,
                         TotalCount = x.TotalCount
-                    })
+                    }),
+                TotalRow = queryForTotalRow.FirstOrDefault() 
             };
+        }
+
+        private static IQueryable<InterviewSummary> FilterByResponsibleOrTeamLead(IQueryable<InterviewSummary> _, string responsible, string teamLead)
+        {
+            if (!string.IsNullOrWhiteSpace(responsible))
+                _ = _.Where(x => x.ResponsibleName.ToLower() == responsible);
+
+            if (!string.IsNullOrWhiteSpace(teamLead))
+                _ = _.Where(x => x.TeamLeadName.ToLower() == teamLead);
+
+            return _;
         }
 
         public ReportView GetReport(SurveysAndStatusesReportInputModel model)
@@ -89,17 +125,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             {
                 Headers = new[]
                 {
-                    Report.COLUMN_TEMPLATE_VERSION, Report.COLUMN_QUESTIONNAIRE_TEMPLATE, Report.COLUMN_SUPERVISOR_ASSIGNED, Report.COLUMN_INTERVIEWER_ASSIGNED,
-                    Report.COLUMN_COMPLETED, Report.COLUMN_REJECTED_BY_SUPERVISOR, Report.COLUMN_APPROVED_BY_SUPERVISOR, Report.COLUMN_REJECTED_BY_HQ, Report.COLUMN_APPROVED_BY_HQ,
+                    Report.COLUMN_TEMPLATE_VERSION, Report.COLUMN_QUESTIONNAIRE_TEMPLATE,
+                    Report.COLUMN_SUPERVISOR_ASSIGNED, Report.COLUMN_INTERVIEWER_ASSIGNED,
+                    Report.COLUMN_COMPLETED, Report.COLUMN_REJECTED_BY_SUPERVISOR, Report.COLUMN_APPROVED_BY_SUPERVISOR,
+                    Report.COLUMN_REJECTED_BY_HQ, Report.COLUMN_APPROVED_BY_HQ,
                     Report.COLUMN_TOTAL
                 },
-                Data = view.Items.Select(x => new object[]
+                Data = new[]
+                {
+                    new object[]
+                    {
+                        Report.TOTAL, "", view.TotalRow.SupervisorAssignedCount, view.TotalRow.InterviewerAssignedCount,
+                        view.TotalRow.CompletedCount, view.TotalRow.RejectedBySupervisorCount,
+                        view.TotalRow.ApprovedBySupervisorCount,
+                        view.TotalRow.RejectedByHeadquartersCount, view.TotalRow.ApprovedByHeadquartersCount,
+                        view.TotalRow.TotalCount
+                    }
+                }.Concat(view.Items.Select(x => new object[]
                 {
                     x.QuestionnaireVersion, x.QuestionnaireTitle, x.SupervisorAssignedCount, x.InterviewerAssignedCount,
                     x.CompletedCount, x.RejectedBySupervisorCount, x.ApprovedBySupervisorCount,
                     x.RejectedByHeadquartersCount, x.ApprovedByHeadquartersCount,
                     x.TotalCount
-                }).ToArray()
+                })).ToArray()
             };
         }
     }

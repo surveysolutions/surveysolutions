@@ -49,7 +49,13 @@
     };
 
     self.onDataTableDataReceived = function(data) {
-        self.TotalInterviewCount(data.totalInterviewCount);
+        if (data.data.length > 0) {
+            var totalRow = data.totalRow;
+            totalRow.questionnaireVersion = $totalTitle;
+            totalRow.questionnaireTitle = "";
+            totalRow.DT_RowClass = totalRowClass;
+            data.data.unshift(totalRow);
+        }
     };
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.SurveysAndStatuses, Supervisor.VM.ListView);

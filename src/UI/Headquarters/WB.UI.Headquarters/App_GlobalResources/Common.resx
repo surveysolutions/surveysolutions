@@ -177,6 +177,9 @@
   <data name="Any" xml:space="preserve">
     <value>Any</value>
   </data>
+  <data name="AllQuestionnaires" xml:space="preserve">
+    <value>All questionnaires</value>
+  </data>
   <data name="NoResultsFound" xml:space="preserve">
     <value>No results found</value>
   </data>

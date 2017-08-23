@@ -58,8 +58,11 @@
             isEnabled() {
                 return !this.question.isLoading && !(this.question.isDisabled && this.question.hideIfDisabled)
             },
+            disabled() {
+                return this.isDisabled || this.question.isDisabled;
+            },
             questionClass() {
-                return [{ 'disabled-question': this.isDisabled || this.question.isDisabled }]
+                return [{ 'disabled-question': this.disabled }]
             },
             questionEditorClass() {
                 return [{
@@ -74,7 +77,7 @@
                     return this.isShowingAddCommentDialogFlag
             },
             showSideMenu() {
-                return !this.question.isDisabled && !this.noComments;
+                return !this.disabled && !this.noComments;
             }
         },
         methods : {

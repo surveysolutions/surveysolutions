@@ -14,6 +14,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HQ Login</title>
+
     @this.GenerateFavicon(Url.Content("~/Dependencies/img/identity/favicon-hq"))
     <!-- cssLibs:css -->
     <!-- endinject -->
@@ -71,21 +72,36 @@
                                         </p>
                                     </div>
                                 }
-                                <div class="form-group">
-                                    @Html.TextBoxFor(m => m.UserName, new {@class = "form-control", @autofocus = @"autofocus", autocomplete = "off", placeholder = Pages.Login})
-                                </div>
-                                <div class="form-group">
-                                    @Html.PasswordFor(m => m.Password, new {@class = "form-control", autocomplete = "off", placeholder = Pages.Password})
-                                </div>
-                                if (this.Model.RequireCaptcha)
+                                if ((Request.Browser.Browser == "IE") && ((Request.Browser.MajorVersion <= 9)))
                                 {
-                                    <div class="form-group">
-                                        @Html.RenderCaptcha()
+                                    <div id="outdated" class="form-group">
+                                        <h2>@OutdatedBrowser.HellowText</h2>
+                                        <h3>
+                                            @OutdatedBrowser.PleaseUpdate
+                                        </h3>
+                                        <p>
+                                            @OutdatedBrowser.LinkToUpdate <a href="http://outdatedbrowser.com">browser-update.org</a>
+                                        </p>
                                     </div>
                                 }
-                                <div class="form-actions">
-                                    <button class="btn btn-success btn-lg" type="submit">@Pages.LogOn_LogIn</button>
-                                </div>
+                                else
+                                {
+                                    <div class="form-group">
+                                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @autofocus = @"autofocus", autocomplete = "off", placeholder = Pages.Login })
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", autocomplete = "off", placeholder = Pages.Password })
+                                    </div>
+                                    if (this.Model.RequireCaptcha)
+                                    {
+                                        <div class="form-group">
+                                            @Html.RenderCaptcha()
+                                        </div>
+                                    }
+                                    <div class="form-actions">
+                                        <button class="btn btn-success btn-lg" type="submit">@Pages.LogOn_LogIn</button>
+                                    </div>
+                                }
                             }
                         </div>
                     </div>
@@ -104,7 +120,7 @@
                     <a href="@Url.Action("Index", "Download")" class="get-interviewer-app">
                         <span>@Pages.GetLatestApp</span>
                         <span class="version">Version @(ServiceLocator.Current.GetInstance<IProductVersion>())</span>
-                        </a>
+                    </a>
                 </div>
             </div>
         </div>
@@ -132,14 +148,16 @@
     @Html.Partial("Clickjacking")
     <!-- jsLibs:js -->
     <script type="text/javascript" src="@Url.Content("~/Dependencies/build/libs.js")"></script>
-    <!-- endinject -->
 
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("<img/>")
+                .on('error', function () { $("img#placeholder").parent().addClass("no-logo"); })
+                .attr("src", $("img#placeholder").attr("src"));
+        });
+    </script>
+    <!-- endinject -->
     <!-- jsApp:js -->
     <!-- endinject -->
-    <script type="text/javascript">
-    $("<img/>")
-        .on('error', function () { $("img#placeholder").parent().addClass("no-logo"); })
-        .attr("src", $("img#placeholder").attr("src"))
-    </script>
 </body>
 </html>

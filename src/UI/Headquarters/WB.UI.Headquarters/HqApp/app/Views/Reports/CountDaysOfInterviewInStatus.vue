@@ -6,7 +6,7 @@
             <FilterBlock :title="$t('Reports.Questionnaire')">
                 <select class="selectpicker"
                         v-model="questionnaireId">
-                    <option :value="null">{{ $t('Common.Any') }}</option>
+                    <option :value="null">{{ $t('Common.AllQuestionnaires') }}</option>
                     <option v-for="questionnaire in questionnaires"
                             :key="questionnaire.key"
                             :value="questionnaire.key">
@@ -52,7 +52,12 @@ export default {
                     {
                         data: "rowHeader",
                         title: this.$t("Strings.Days"),
-                        orderable: true
+                        orderable: true,
+                        render: function(data, type, row, meta) {
+                            if (meta.row == 0)
+                                return `<span>${data}</span>`;
+                            return data;
+                        }
                     },
                     {
                         data: "supervisorAssignedCount",
@@ -136,6 +141,7 @@ export default {
                 order: [[ 0, "desc" ]],
                 bInfo : false,
                 footer: true,
+                responsive: false,
                 fnRowCallback: function( nRow, aData, iDisplayIndex) {
                     if (iDisplayIndex == 0)
                         $(nRow).addClass("total-row");
