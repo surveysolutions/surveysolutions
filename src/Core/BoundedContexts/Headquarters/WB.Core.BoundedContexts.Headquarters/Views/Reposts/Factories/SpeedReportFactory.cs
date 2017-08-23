@@ -89,12 +89,34 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                  query(questionnaireId, questionnaireVersion, from, to)
                     .Select(userIdSelector)
                     .Where(ics => ics.UserId.HasValue && userIds.Contains(ics.UserId.Value))
-                    .Select(i => new StatusChangeRecord { UserId = i.UserId.Value, UserName = i.UserName, Timestamp = i.Timestamp, Timespan =  i.Timespan })
+                    .Select(i => new StatusChangeRecord { UserId = i.UserId.Value, UserName = i.UserName, Timestamp = i.Timestamp, Timespan = new TimeSpan(i.Timespan) })
                     .ToArray();
-
+            //var temp = allInterviewsInStatus.Select(i => new StatusChangeRecord
+            //{
+            //    UserId = i.UserId,
+            //    UserName = i.UserName,
+            //    Timestamp = i.Timestamp,
+            //    Timespan = new TimeSpan(i.Timespan)
+            //}).ToArray();
             var rows = userIds.Select(u => GetSpeedByResponsibleReportRow(u, dateTimeRanges, allInterviewsInStatus)).ToArray();
 
-            return new SpeedByResponsibleReportView(rows, dateTimeRanges, usersCount);
+            SpeedByResponsibleTotalRow totalRow = new SpeedByResponsibleTotalRow();
+            foreach (var dateTimeRange in dateTimeRanges)
+            {
+                double? totalAvgDuration = query(questionnaireId, questionnaireVersion, dateTimeRange.From, dateTimeRange.To)
+                                            .Select(userIdSelector)
+                                            .Select(x => (long?)x.Timespan)
+                                            .Average();
+                double? dbl = totalAvgDuration.HasValue ? new TimeSpan((long) totalAvgDuration.Value).TotalMinutes : (double?)null;
+
+                totalRow.SpeedByPeriod.Add(dbl.HasValue ? Math.Round(dbl.Value, 2) : (double?)null);
+            }
+
+
+            return new SpeedByResponsibleReportView(rows, dateTimeRanges, usersCount)
+            {
+                TotalRow = totalRow
+            };
         }
 
 
@@ -165,7 +187,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                             .Where(ics =>
                                 ics.Timestamp >= fromDate &&
                                 ics.Timestamp < to.Date &&
-                                ics.TimeSpanWithPreviousStatus.HasValue));
+                                ics.TimespanWithPreviousStatusLong.HasValue));
                 }
 
                 return this.interviewStatusesStorage.Query(_ =>
@@ -175,7 +197,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                                 ics.Timestamp >= fromDate && 
                                 ics.Timestamp < to.Date &&
                                 statuses.Contains(ics.Status) &&
-                                ics.TimeSpanWithPreviousStatus.HasValue));
+                                ics.TimespanWithPreviousStatusLong.HasValue));
             }
             else
             {
@@ -191,7 +213,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                                where 
                                      ics.Timestamp >= fromDate &&
                                      ics.Timestamp < to.Date &&
-                                     ics.TimeSpanWithPreviousStatus.HasValue
+                                     ics.TimespanWithPreviousStatusLong.HasValue
                                select ics;
 
                     return erer.AsQueryable();
@@ -203,7 +225,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                             ics.Timestamp >= fromDate &&
                             ics.Timestamp < to.Date &&
                             statuses.Contains(ics.Status) &&
-                            ics.TimeSpanWithPreviousStatus.HasValue));
+                            ics.TimespanWithPreviousStatusLong.HasValue));
             }
         }
 
@@ -220,7 +242,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 query:(questionnaireId, questionnaireVersion, from,to) => this.QueryInterviewStatuses(questionnaireId, questionnaireVersion,from, to,input.InterviewStatuses),
                 selectUser: u => u.InterviewerId.Value,
                 restrictUser: i=>i.SupervisorId== input.SupervisorId,
-                userIdSelector: i => new UserAndTimestampAndTimespan() { UserId = i.InterviewerId, Timestamp = i.Timestamp, Timespan = i.TimeSpanWithPreviousStatus.Value, UserName = i.InterviewerName});
+                userIdSelector: i => new UserAndTimestampAndTimespan() { UserId = i.InterviewerId, Timestamp = i.Timestamp, Timespan = i.TimespanWithPreviousStatusLong.Value, UserName = i.InterviewerName});
         }
 
         public SpeedByResponsibleReportView Load(SpeedBySupervisorsReportInputModel input)
@@ -240,7 +262,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                         {
                             UserId = i.SupervisorId,
                             Timestamp = i.Timestamp,
-                            Timespan = i.TimeSpanWithPreviousStatus.Value,
+                            Timespan = i.TimespanWithPreviousStatusLong.Value,
                             UserName = i.SupervisorName
                         });
         }
@@ -259,7 +281,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     this.QueryTimeSpanBetweenStatuses(questionnaireId, questionnaireVersion, from, to, input.BeginInterviewStatuses, input.EndInterviewStatuses),
                 selectUser: u => u.InterviewerId.Value, 
                 restrictUser: i => i.SupervisorId == input.SupervisorId,
-                userIdSelector: i => new UserAndTimestampAndTimespan() { UserId = i.InterviewerId, Timestamp = i.EndStatusTimestamp, Timespan = i.TimeSpan, UserName = i.InterviewerName });
+                userIdSelector: i => new UserAndTimestampAndTimespan() { UserId = i.InterviewerId, Timestamp = i.EndStatusTimestamp, Timespan = i.TimeSpanLong, UserName = i.InterviewerName });
         }
 
         public SpeedByResponsibleReportView Load(SpeedBetweenStatusesBySupervisorsReportInputModel input)
@@ -276,7 +298,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     this.QueryTimeSpanBetweenStatuses(questionnaireId, questionnaireVersion, from, to, input.BeginInterviewStatuses, input.EndInterviewStatuses),
                 selectUser:u => u.SupervisorId.Value,
                 restrictUser: null,
-                userIdSelector: i => new UserAndTimestampAndTimespan() { UserId = i.SupervisorId, Timestamp = i.EndStatusTimestamp, Timespan = i.TimeSpan, UserName = i.SupervisorName });
+                userIdSelector: i => new UserAndTimestampAndTimespan() { UserId = i.SupervisorId, Timestamp = i.EndStatusTimestamp, Timespan = i.TimeSpanLong, UserName = i.SupervisorName });
         }
 
         private DateTime AddPeriod(DateTime d, string period, int value)
@@ -298,7 +320,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             public Guid? UserId { get; set; }
             public string UserName { get; set; }
             public DateTime Timestamp { get; set; }
-            public TimeSpan Timespan { get; set; }
+            public long Timespan { get; set; }
         }
 
         public ReportView GetReport(SpeedByInterviewersReportInputModel model)
