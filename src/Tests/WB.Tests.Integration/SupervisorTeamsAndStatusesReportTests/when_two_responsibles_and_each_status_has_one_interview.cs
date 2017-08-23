@@ -43,6 +43,7 @@ namespace WB.Tests.Integration.SupervisorTeamsAndStatusesReportTests
 
         Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.Load(new TeamsAndStatusesInputModel() {Order = "CompletedCount ASC" }));
 
+        [Ignore("Fix in KP-9839")]
         It should_return_row_per_responsible = () => report.TotalCount.ShouldEqual(2);
 
         It should_return_1_in_each_status_for_first_responsible = () =>
