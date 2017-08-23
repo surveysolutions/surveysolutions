@@ -112,8 +112,6 @@
                 <div class="page-header clearfix">
                     <h1>@Pages.SurveysAndStatuses_Overview</h1>
                     <p data-bind="text: StatisticsMessage"></p>
-                    
-                    @Html.Partial("_export-buttons")
                 </div>
                 <div class="dataTables_wrapper no-footer">
                     <table id="data_holder" class="table table-striped table-ordered table-bordered table-hover table-mobile-devices dataTable no-footer"
@@ -132,6 +130,7 @@
                             <th data-class="type-numeric" data-name="TotalCount" data-data="totalCount">@Common.Total</th>
                         </tr>
                         </thead>
+                        @Html.Partial("_export-buttons")
                     </table>
                 </div>
             </div>

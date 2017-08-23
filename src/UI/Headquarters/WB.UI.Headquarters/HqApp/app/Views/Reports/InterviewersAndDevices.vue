@@ -1,6 +1,5 @@
 <template>
     <Layout :title="$t('Pages.InterviewersAndDevicesTitle')">
-        <ExportButtons slot="exportButtons" />
         <DataTables ref="table" :tableOptions="tableOptions"></DataTables>
     </Layout>
 </template>
