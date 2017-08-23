@@ -231,12 +231,12 @@
                                         <tr data-bind="css: { 'selected' : IsSelected }">
                                             @if (!authorizedUser.IsObserver && !authorizedUser.IsObserving)
                                             {
-                                                <td class="checkbox-cell">
+                                                <td class="checkbox-cell no-menu">
                                                     <input type="checkbox" data-bind="value: InterviewId(), attr: { id: 'cbx_' + InterviewId() }, checked: IsSelected" class="checkbox-filter" />
                                                     <label data-bind="attr: { for: 'cbx_' + InterviewId() }"><span class="tick"></span></label>
                                                 </td>
                                             }
-                                            <td class="interview-id title-row">
+                                            <td class="interview-id title-row no-menu">
                                                 <a data-bind="attr: { href: $detailsUrl + '/' + InterviewId() }">
                                                     <!-- ko text:Key --><!--/ko-->
                                                     <span data-bind="if: ClientKey() && ClientKey() !== Key()" title="@Interviews.ClientKeyTitle">
@@ -252,7 +252,7 @@
                                             <td class="prefield-column" data-bind="css: { 'first-identifying' :  ($index() == 0), 'last-identifying' : ($parent.FeaturedQuestions().length - 1 == $index()), visible : $root.IsVisiblePrefilledColumns }, text: Answer"></td>
                                             <!-- /ko -->
                                             <!-- /ko -->
-                                            <td>
+                                            <td class="no-menu">
                                                 <!-- ko if:ResponsibleRole() == 4 -->
                                                 <a data-bind="attr: { href: $profileUrl + '/' + ResponsibleId() }, text: ResponsibleName"></a>
                                                 <!-- /ko -->

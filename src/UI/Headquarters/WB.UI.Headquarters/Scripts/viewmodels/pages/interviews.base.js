@@ -193,6 +193,7 @@
         var contextMenuOptions = {
             autoHide: true,
             build: function ($trigger, e) {
+                if ($trigger.hasClass("no-menu")) return false;
                 var selectedRow = ko.dataFor($trigger[0]);
                 self.unselectAll();
                 selectedRow.IsSelected(true);
