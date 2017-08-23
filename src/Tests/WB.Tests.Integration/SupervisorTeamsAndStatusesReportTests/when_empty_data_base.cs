@@ -6,7 +6,6 @@ using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Tests.Integration.SupervisorTeamsAndStatusesReportTests
 {
-    [Ignore("Fix in KP-9839")]
     internal class when_empty_data_base : SupervisorTeamsAndStatusesReportContext
     {
         Establish context = () =>
