@@ -289,7 +289,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 Page = surveysAndStatusesFilter.PageIndex,
                 PageSize = surveysAndStatusesFilter.PageSize,
                 Orders = surveysAndStatusesFilter.ToOrderRequestItems(),
-                ResponsibleName = surveysAndStatusesFilter.ResponsibleName == teamLeadName ? null : surveysAndStatusesFilter.ResponsibleName
+                ResponsibleName = surveysAndStatusesFilter.ResponsibleName == teamLeadName ? null : surveysAndStatusesFilter.ResponsibleName,
             });
 
             return new SurveysAndStatusesDataTableResponse
@@ -297,7 +297,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 Draw = surveysAndStatusesFilter.Draw + 1,
                 RecordsTotal = view.TotalCount,
                 RecordsFiltered = view.TotalCount,
-                Data = view.Items
+                Data = view.Items,
+                TotalRow = view.TotalRow
             };
         }
 
@@ -318,7 +319,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 Draw = surveysAndStatusesFilter.Draw + 1,
                 RecordsTotal = view.TotalCount,
                 RecordsFiltered = view.TotalCount,
-                Data = view.Items
+                Data = view.Items,
+                TotalRow = view.TotalRow
             };
         }
 
@@ -392,6 +394,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public class SurveysAndStatusesDataTableResponse : DataTableResponse<HeadquarterSurveysAndStatusesReportLine>
         {
             public long TotalInterviewCount { get; set; }
+            public HeadquarterSurveysAndStatusesReportLine TotalRow { get; set; }
         }
 
 

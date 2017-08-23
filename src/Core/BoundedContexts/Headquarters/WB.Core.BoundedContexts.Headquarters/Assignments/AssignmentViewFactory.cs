@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Fetching;
@@ -16,17 +18,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
     internal class AssignmentViewFactory : IAssignmentViewFactory
     {
         private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> summaries;
         private readonly IQuestionnaireStorage questionnaireStorage;
 
         public AssignmentViewFactory(IPlainStorageAccessor<Assignment> assignmentsStorage,
+            IQueryableReadSideRepositoryReader<InterviewSummary> summaries,
             IQuestionnaireStorage questionnaireStorage)
         {
             this.assignmentsStorage = assignmentsStorage;
+            this.summaries = summaries;
             this.questionnaireStorage = questionnaireStorage;
         }
 
         public AssignmentsWithoutIdentifingData Load(AssignmentsInputModel input)
         {
+            List<int> ids = new List<int>();
             var assignments = this.assignmentsStorage.Query(_ =>
             {
                 if (input.Limit == null && input.Offset == null)
@@ -38,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 var items = this.ApplyFilter(input, _);
                 items = this.DefineOrderBy(items, input);
 
-                var ids = items.Skip(input.Offset.Value)
+                ids = items.Skip(input.Offset.Value)
                     .Take(input.Limit.Value)
                     .Select(x => x.Id)
                     .ToList();
@@ -47,9 +53,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
                 var fetchReqests = this.DefineOrderBy(neededItems, input)
                     .Fetch(x => x.IdentifyingData)
-                    .Fetch(x => x.InterviewSummaries)
                     .Fetch(x => x.Responsible);
-                // .ThenFetch(x => x.RoleIds) throws Null reference exception, but should be here :( https://stackoverflow.com/q/21243592/72174
+                    //.Fetch(x => x.RoleIds); //throws Null reference exception, but should be here :( https://stackoverflow.com/q/21243592/72174
 
                 List<Assignment> list;
 
@@ -65,6 +70,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 return list;
             });
 
+            var counts = summaries.Query(_ => 
+                (from i in _
+                where ids.Contains((int)i.AssignmentId)
+                group i by i.AssignmentId into gr
+                select new
+                {
+                    gr.Key,
+                    InterviewsCount = gr.Count()
+                }).ToList());
+
             var result = new AssignmentsWithoutIdentifingData
             {
                 Page = input.Page,
@@ -78,7 +93,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         ResponsibleId = x.ResponsibleId,
                         UpdatedAtUtc = x.UpdatedAtUtc,
                         Quantity = x.Quantity ?? -1,
-                        InterviewsCount = x.InterviewSummaries.Count,
+                        InterviewsCount = counts.FirstOrDefault(c => c.Key == x.Id)?.InterviewsCount ?? 0,
                         Id = x.Id,
                         Archived = x.Archived,
                         Responsible = x.Responsible.Name,

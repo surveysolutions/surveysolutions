@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In order to continue please update .
+        ///   Looks up a localized string similar to In order to continue please update Your browser.
         /// </summary>
         public static string PleaseUpdate {
             get {

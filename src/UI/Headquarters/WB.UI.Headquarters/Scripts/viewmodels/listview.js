@@ -186,6 +186,11 @@
                 var request = self.Filter() || {};
 
                 $.extend(request, data);
+                _.map(data.columns, function (column) {
+                    delete (column.orderable);
+                    delete (column.search);
+                    delete (column.searchable);
+                });
 
                 self.SendRequest(serviceUrl, request, function (d) {
                     self.setExportUrls();
