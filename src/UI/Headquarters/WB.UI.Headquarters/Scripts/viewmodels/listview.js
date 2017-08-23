@@ -211,7 +211,7 @@
             },
             columns: tableColumns,
             columnDefs: tableColumnDefs,
-            pageLength: 50,
+            pageLength: 20,
             pagingType: "full_numbers",
             lengthChange: false,
             conditionalPaging: true,

@@ -304,6 +304,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open.
+        /// </summary>
+        internal static string Open {
+            get {
+                return ResourceManager.GetString("Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Identifying Questions.
         /// </summary>
         internal static string PrefilledQuestions {
@@ -399,6 +408,15 @@ namespace Resources {
         internal static string ShowIdentifying {
             get {
                 return ResourceManager.GetString("ShowIdentifying", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Status History.
+        /// </summary>
+        internal static string ShowStatusHistory {
+            get {
+                return ResourceManager.GetString("ShowStatusHistory", resourceCulture);
             }
         }
         
