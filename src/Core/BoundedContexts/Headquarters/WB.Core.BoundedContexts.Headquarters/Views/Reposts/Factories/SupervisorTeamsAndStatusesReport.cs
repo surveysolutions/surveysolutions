@@ -38,13 +38,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 {
                     ResponsibleId = x.Key.ResponsibleId,
                     Responsible = x.Key.ResponsibleName,
-                    SupervisorAssignedCount = x.Sum(y => y.SupervisorAssigned),
-                    InterviewerAssignedCount = x.Sum(y => y.InterviewerAssigned),
-                    CompletedCount = x.Sum(y => y.Completed),
-                    RejectedBySupervisorCount = x.Sum(y => y.RejectedBySupervisor),
-                    ApprovedBySupervisorCount = x.Sum(y => y.ApprovedBySupervisor),
-                    RejectedByHeadquartersCount = x.Sum(y => y.RejectedByHeadquarters),
-                    ApprovedByHeadquartersCount = x.Sum(y => y.ApprovedByHeadquarters),
+                    SupervisorAssignedCount = (int?)x.Sum(y => y.SupervisorAssigned) ?? 0,
+                    InterviewerAssignedCount = (int?)x.Sum(y => y.InterviewerAssigned) ?? 0,
+                    CompletedCount = (int?)x.Sum(y => y.Completed) ?? 0,
+                    RejectedBySupervisorCount = (int?)x.Sum(y => y.RejectedBySupervisor) ?? 0,
+                    ApprovedBySupervisorCount = (int?)x.Sum(y => y.ApprovedBySupervisor) ?? 0,
+                    RejectedByHeadquartersCount = (int?)x.Sum(y => y.RejectedByHeadquarters) ?? 0,
+                    ApprovedByHeadquartersCount = (int?)x.Sum(y => y.ApprovedByHeadquarters) ?? 0,
                     TotalCount = x.Count()
                 }));
 
@@ -62,13 +62,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 .GroupBy(x => 1)
                 .Select(x => new
                 {
-                    SupervisorAssignedCount = x.Sum(y => y.SupervisorAssigned),
-                    InterviewerAssignedCount = x.Sum(y => y.InterviewerAssigned),
-                    CompletedCount = x.Sum(y => y.Completed),
-                    RejectedBySupervisorCount = x.Sum(y => y.RejectedBySupervisor),
-                    ApprovedBySupervisorCount = x.Sum(y => y.ApprovedBySupervisor),
-                    RejectedByHeadquartersCount = x.Sum(y => y.RejectedByHeadquarters),
-                    ApprovedByHeadquartersCount = x.Sum(y => y.ApprovedByHeadquarters),
+                    SupervisorAssignedCount = (int?)x.Sum(y => y.SupervisorAssigned) ?? 0,
+                    InterviewerAssignedCount = (int?)x.Sum(y => y.InterviewerAssigned) ?? 0,
+                    CompletedCount = (int?)x.Sum(y => y.Completed) ?? 0,
+                    RejectedBySupervisorCount = (int?)x.Sum(y => y.RejectedBySupervisor) ?? 0,
+                    ApprovedBySupervisorCount = (int?)x.Sum(y => y.ApprovedBySupervisor) ?? 0,
+                    RejectedByHeadquartersCount = (int?)x.Sum(y => y.RejectedByHeadquarters) ?? 0,
+                    ApprovedByHeadquartersCount = (int?)x.Sum(y => y.ApprovedByHeadquarters) ?? 0,
                     TotalCount = x.Count()
                 }))
                 .FirstOrDefault();
@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
             return new TeamsAndStatusesReportView
             {
-                TotalCount = queryItems.Count(),
+                TotalCount = queryItems.ToList().Count(),
                 Items = queryItems.OrderUsingSortExpression(input.Order)
                     .Skip((input.Page - 1) * input.PageSize)
                     .Take(input.PageSize)
