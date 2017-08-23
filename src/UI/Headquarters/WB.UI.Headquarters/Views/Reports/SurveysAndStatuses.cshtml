@@ -16,6 +16,8 @@
 
     <script type="text/javascript">
         var $interviewsUrl = '@Url.Action("Interviews", "HQ")';
+        var $totalTitle = '@HttpUtility.JavaScriptStringEncode(Common.Total)';
+        var totalRowClass = 'total-row';
         $(function() {
             var $surveyAndStatusesReportUrl =
                 '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ReportDataApi", action = "HeadquarterSurveysAndStatusesReport"})';
@@ -74,7 +76,7 @@
             model.load();
         });
         function getLinkToInterviews(model, data, row, interviewStatus, responsible) {
-            if (data === 0) return "<span>" + data + "</span>";
+            if (data === 0 || row.DT_RowClass === totalRowClass) return "<span>" + data + "</span>";
 
             var link = "<a href=\"" + $interviewsUrl + '?templateId=' + row.questionnaireId +
                 '&templateVersion=' + row.questionnaireVersion;

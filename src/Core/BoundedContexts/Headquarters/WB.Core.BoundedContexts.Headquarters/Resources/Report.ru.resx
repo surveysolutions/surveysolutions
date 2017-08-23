@@ -186,4 +186,8 @@
     <value>КОЛИЧЕСТВО ДНЕЙ</value>
     <comment>КОЛИЧЕСТВО ДНЕЙ</comment>
   </data>
+  <data name="TOTAL" xml:space="preserve">
+    <value>Всего</value>
+    <comment>Всего</comment>
+  </data>
 </root>
