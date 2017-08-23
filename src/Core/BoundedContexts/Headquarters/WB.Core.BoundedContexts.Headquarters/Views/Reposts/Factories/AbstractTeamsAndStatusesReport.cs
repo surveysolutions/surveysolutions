@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Resources;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 
@@ -7,6 +8,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 {
     internal abstract class AbstractTeamsAndStatusesReport
     {
+        protected static IQueryable<InterviewSummary> FilterByQuestionnaireOrTeamLead(IQueryable<InterviewSummary> _, TeamsAndStatusesInputModel input)
+        {
+            if (input.TemplateId.HasValue)
+            {
+                _ = _.Where(x => x.QuestionnaireId == input.TemplateId);
+            }
+
+            if (input.TemplateVersion.HasValue)
+            {
+                _ = _.Where(x => x.QuestionnaireVersion == input.TemplateVersion);
+            }
+
+            if (input.ViewerId.HasValue)
+            {
+                _ = _.Where(x => x.TeamLeadId == input.ViewerId);
+            }
+
+            return _;
+        }
+
         public abstract TeamsAndStatusesReportView Load(TeamsAndStatusesInputModel input);
 
         public ReportView GetReport(TeamsAndStatusesInputModel model)
