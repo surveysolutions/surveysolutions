@@ -46,7 +46,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                         cmp.Property(x => x.StatusChangeOriginatorRole);
                         cmp.Property(x => x.Status);
                         cmp.Property(x => x.Comment);
-                        cmp.Property(x => x.TimeSpanWithPreviousStatus);
+                        cmp.Property(x => x.TimespanWithPreviousStatusLong, clm =>
+                        {
+                            clm.Column("TimeSpanWithPreviousStatus");
+                        });
                         cmp.Property(x => x.SupervisorName);
                         cmp.Property(x => x.InterviewerName);
                     });
