@@ -1080,4 +1080,12 @@
   <data name="InterviewersAndDevicesTitle" xml:space="preserve">
     <value>Устройства/Интервьюеры</value>
   </data>
+  <data name="DownloadReport" xml:space="preserve">
+    <value>Экспортировать отчет в</value>
+    <comment>Экспортировать отчет в</comment>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>или</value>
+    <comment>или</comment>
+  </data>
 </root>

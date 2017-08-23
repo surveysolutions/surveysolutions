@@ -3,7 +3,6 @@ import 'core-js/modules/es6.object.assign'
 
 import Vue from 'vue'
 
-import ExportButtons from './components/ExportButtons'
 import Typeahead from './components/Typeahead'
 import Layout from "./components/Layout"
 import Filters from "./components/Filters"
@@ -33,7 +32,6 @@ Vue.component("Typeahead", Typeahead)
 Vue.component("DataTables", DataTables)
 Vue.component("ModalFrame", ModalFrame)
 Vue.component("Confirm", Confirm)
-Vue.component("ExportButtons", ExportButtons)
 
 const router = require("./router").default
 

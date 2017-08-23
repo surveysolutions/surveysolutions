@@ -1064,4 +1064,10 @@
   <data name="HistoryOfStatuses_ViewInterview" xml:space="preserve">
     <value>View interview</value>
   </data>
+  <data name="DownloadReport" xml:space="preserve">
+    <value>Download report as</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>or</value>
+  </data>
 </root>
