@@ -53,6 +53,7 @@ export default {
                         data: "rowHeader",
                         title: this.$t("Strings.Days"),
                         orderable: true,
+                        className: "nowrap",
                         render: function(data, type, row, meta) {
                             if (meta.row == 0)
                                 return `<span>${data}</span>`;
@@ -142,9 +143,11 @@ export default {
                 bInfo : false,
                 footer: true,
                 responsive: false,
-                fnRowCallback: function( nRow, aData, iDisplayIndex) {
-                    if (iDisplayIndex == 0)
-                        $(nRow).addClass("total-row");
+                createdRow: function(row, data, dataIndex) {
+                    if (dataIndex == 0)
+                        $(row).addClass("total-row");
+
+                    $(row).find('td:eq(0)').attr('nowrap', 'nowrap');
                 }
             }
         }
@@ -168,10 +171,6 @@ export default {
             if (this.questionnaireId != undefined){
                 var questionnaireId = this.questionnaireId;
                 var questionnaireVersion = this.questionnaireId.split('$')[1];
-                var questItem = this.$config.questionnaires.find(function(element, index, array){
-                    return element.key == questionnaireId;
-                });
-                var qTitle = questItem.value;
                 var startDate = row.startDate == undefined ? '' : row.startDate;
 
                 return `<a href='${this.$config.assignmentsBaseUrl}?dateStart=${startDate}&dateEnd=${row.endDate}&questionnaireId=${questionnaireId}&version=${questionnaireVersion}&userRole=${userRole}'>${data}</a>`;
