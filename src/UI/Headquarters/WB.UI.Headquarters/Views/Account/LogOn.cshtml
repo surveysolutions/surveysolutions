@@ -147,18 +147,19 @@
     </footer>
     @Html.Partial("Clickjacking")
     
-    <script type="text/javascript">
-        $(document).ready(function () {
-        $("<img/>")
-            .on('error', function () { $("img#placeholder").parent().addClass("no-logo"); })
-            .attr("src", $("img#placeholder").attr("src"));
-        });
-    </script>
-
     <!-- jsLibs:js -->
     <script type="text/javascript" src="@Url.Content("~/Dependencies/build/libs.js")"></script>
     <!-- endinject -->
     <!-- jsApp:js -->
     <!-- endinject -->
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("<img/>")
+            .on('error', function () { $("img#placeholder").parent().addClass("no-logo"); })
+            .attr("src", $("img#placeholder").attr("src"));
+        });
+    </script>
+
 </body>
 </html>
