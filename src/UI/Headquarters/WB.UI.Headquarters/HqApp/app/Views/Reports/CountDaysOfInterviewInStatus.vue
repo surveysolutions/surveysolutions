@@ -6,7 +6,7 @@
             <FilterBlock :title="$t('Reports.Questionnaire')">
                 <select class="selectpicker"
                         v-model="questionnaireId">
-                    <option :value="null">{{ $t('Common.Any') }}</option>
+                    <option :value="null">{{ $t('Common.AllQuestionnaires') }}</option>
                     <option v-for="questionnaire in questionnaires"
                             :key="questionnaire.key"
                             :value="questionnaire.key">
