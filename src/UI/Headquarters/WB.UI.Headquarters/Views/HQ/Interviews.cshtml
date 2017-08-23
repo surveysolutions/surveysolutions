@@ -47,7 +47,7 @@
                 var items = {}
 
                 items["open"] = {
-                    name: "Open",
+                    name: "@Common.Open",
                     callback: function(t, e) {
                         var detailsUrl = $detailsUrl + '/' + selectedRow.InterviewId();
                         window.location = detailsUrl;
@@ -55,7 +55,7 @@
                 };
 
                 items["showStatusHistory"] = {
-                    name: "Show Status History",
+                    name: "@Common.ShowStatusHistory",
                     callback: function(t, e) {
                         model.ShowStatusHistory(
                             '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "ChangeStateHistory"})',
@@ -93,6 +93,16 @@
                     name: "@Common.Unapprove",
                     callback: function(t, e) {
                         model.UnapproveInterview();
+                    }
+                };
+
+                items["sep1"] = "---------";
+
+                items["delete"] = {
+                    name: "@Common.Delete",
+                    className: "error-text",
+                    callback: function(t, e) {
+                        model.DeleteInterview();
                     }
                 };
 
