@@ -258,4 +258,10 @@
   <data name="Download" xml:space="preserve">
     <value>Download</value>
   </data>
+  <data name="Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="ShowStatusHistory" xml:space="preserve">
+    <value>Show Status History</value>
+  </data>
 </root>
