@@ -95,7 +95,7 @@
                         <select id="questionnaireSelector" data-bind="value: SelectedTemplate, selectPicker: {}" class="form-control">
                             @if (Model.Count() > 1)
                             {
-                                <option value="">@Common.Any</option>
+                                <option value="">@Common.AllQuestionnaires</option>
                             }
                             @foreach (var item in Model)
                             {

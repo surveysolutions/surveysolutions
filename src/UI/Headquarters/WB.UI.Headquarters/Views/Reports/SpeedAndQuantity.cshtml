@@ -2,6 +2,7 @@
 @using WB.UI.Headquarters.Resources
 @model WB.Core.BoundedContexts.Headquarters.Views.Reposts.PeriodicStatusReportModel
 @{
+    ViewBag.Title = Model.ReportName;
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
@@ -64,7 +65,7 @@
                     <div class="block-filter">
                         <h5>@PeriodicStatusReport.Questionnaire</h5>
                         <select id="questionnaireSelector" data-bind="value: SelectedQuestionnaire, selectPicker: {}">
-                            <option value="" selected="selected">@Common.Any</option>
+                            <option value="" selected="selected">@Common.AllQuestionnaires</option>
                             @foreach (var item in Model.Questionnaires)
                             {
                                 <option value='{"questionnaireId": "@item.TemplateId","questionnaireVersion": "@item.TemplateVersion"}'>(@PeriodicStatusReport.Version @item.TemplateVersion) @item.TemplateName</option>
