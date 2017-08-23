@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Resources;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -21,6 +20,7 @@ using WB.UI.Headquarters.Models.ComponentModels;
 using WB.UI.Headquarters.Models.Reports;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Utils;
+using CommonRes = Resources.Common;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -142,7 +142,8 @@ namespace WB.UI.Headquarters.Controllers
                 Resources = new[]
                 {
                     Strings.ResourceManager,
-                    Pages.ResourceManager
+                    Pages.ResourceManager,
+                    CommonRes.ResourceManager,
                 }.Translations()
             });
         }
