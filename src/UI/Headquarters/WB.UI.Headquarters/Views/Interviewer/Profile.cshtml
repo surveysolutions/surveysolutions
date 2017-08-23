@@ -85,68 +85,70 @@ else
     }
 }
 <main class="enumerators">
-    <div class="container">
-        <div class="row">
-            @Html.Partial("_alerts")
-            <div class="page-header">
-                @if (!authorizedUser.IsInterviewer)
+<div class="container">
+    <div class="row">
+        @Html.Partial("_alerts")
+        <div class="page-header">
+            @if (!authorizedUser.IsInterviewer)
+            {
+                <ol class="breadcrumb">
+                    <li><a href="@Url.Action("Index", "Interviewers")">@Pages.InterviewerProfile_Interviewers</a></li>
+                </ol>
+            }
+            <h1>
+                @string.Format(Pages.InterviewerProfile_AssignedToFormat, Model.LoginName, Model.SupervisorName)
+            </h1>
+
+            <ul class="list-unstyled">
+                @if (!string.IsNullOrEmpty(Model.Email) || !string.IsNullOrEmpty(Model.FullName) || !string.IsNullOrEmpty(Model.Phone))
                 {
-                    <ol class="breadcrumb">
-                        <li><a href="@Url.Action("Index", "Interviewers")">@Pages.InterviewerProfile_Interviewers</a></li>
-                    </ol>
+                    <li>@string.Format(Pages.InterviewerProfile_EmailFormat, Model.Email)</li>
+                    <li>@string.Format(Pages.InterviewerProfile_FullNameFormat, Model.FullName)</li>
+                    <li>@string.Format(Pages.InterviewerProfile_PhoneFormat, Model.Phone)</li>
                 }
-                <h1>
-                    @string.Format(Pages.InterviewerProfile_AssignedToFormat, Model.LoginName, Model.SupervisorName)
-                </h1>
 
-                <ul class="list-unstyled">
-                    @if (!string.IsNullOrEmpty(Model.Email) || !string.IsNullOrEmpty(Model.FullName) || !string.IsNullOrEmpty(Model.Phone))
+                <li>
+                    @if (!User.IsInRole(UserRoles.Interviewer.ToString()))
                     {
-                        <li>@string.Format(Pages.InterviewerProfile_EmailFormat, Model.Email)</li>
-                        <li>@string.Format(Pages.InterviewerProfile_FullNameFormat, Model.FullName)</li>
-                        <li>@string.Format(Pages.InterviewerProfile_PhoneFormat, Model.Phone)</li>
-                    }
-
-                    <li>
-                        @if (!User.IsInRole(UserRoles.Interviewer.ToString()))
+                        if (!Model.IsArchived)
                         {
-                            if (!Model.IsArchived)
-                            {
-                                <a href="@Url.Action("Edit", new {Id = Model.Id})">@Pages.InterviewerProfile_Info</a>
-                            }
-                            else
-                            {
-                                @Pages.InterviewerIsArchived
+                            <a href="@Url.Action("Edit", new {Id = Model.Id})">@Pages.InterviewerProfile_Info</a>
+                        }
+                        else
+                        {
+                            @Pages.InterviewerIsArchived
 
-                                if (authorizedUser.IsAdministrator)
-                                {
-                                    <text>(<a href="@Url.Action("UnArchive", new {Id = Model.Id})">@Pages.Unarchive</a>)</text>
-                                }
+                            if (authorizedUser.IsAdministrator)
+                            {
+                                <text>(<a href="@Url.Action("UnArchive", new {Id = Model.Id})">@Pages.Unarchive</a>)</text>
                             }
                         }
-                    </li>
-                </ul>
-            </div>
+                    }
+                </li>
+            </ul>
         </div>
+    </div>
+</div>
+<div class="container-fluid">
         <div class="row">
-            <div class="col-sm-8">
+            <div class="col-sm-12">
                 <div class="interviews-information clearfix">
-                    <a href="#" class="number-information">
+                    <div class="number-information">
                         <div class="amount-of-questionnaires">@newInterviewsOnDeviceCount</div>
                         <div class="description">@Pages.InterviewerProfile_NewOnDevice</div>
-                    </a>
-                    <a href="#" class="number-information">
+                    </div>
+                    <div class="number-information">
                         <div class="amount-of-questionnaires">@rejectedInterviewsOnDeviceCount</div>
                         <div class="description">@Pages.InterviewerProfile_Rejected</div>
-                    </a>
-                    <a href="#" class="number-information">
+                    </div>
+                    <div class="number-information">
                         <div class="amount-of-questionnaires">@Model.WaitingInterviewsForApprovalCount</div>
                         <div class="description">@Pages.InterviewerProfile_WaitingForApproval</div>
-                    </a>
-                    <a href="#" class="number-information">
+                    </div>
+                    <div class="number-information">
                         <div class="amount-of-questionnaires">@Model.ApprovedInterviewsByHqCount</div>
                         <div class="description">@Pages.InterviewerProfile_Approved</div>
-                    </a>
+                    </div>
                 </div>
             </div>
         </div>

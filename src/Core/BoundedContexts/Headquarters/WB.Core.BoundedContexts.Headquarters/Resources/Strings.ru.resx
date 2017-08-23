@@ -203,7 +203,13 @@
     <value>любой хедквотер</value>
   </data>
   <data name="Total" xml:space="preserve">
-    <value>Всего</value>
-    <comment>Всего</comment>
+    <value>Итого</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Дни</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Среднее</value>
+    <comment>Среднее</comment>
   </data>
 </root>

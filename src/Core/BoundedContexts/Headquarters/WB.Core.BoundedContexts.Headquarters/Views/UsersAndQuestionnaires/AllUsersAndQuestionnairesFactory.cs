@@ -37,13 +37,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires
                             .Select(x => new UsersViewItem {UserId = x.Key.TeamLeadId, UserName = x.Key.TeamLeadName})
                             .OrderBy(x => x.UserName).ToList());
 
-            var questionnaires = this.GetTemplates();
+            var allQuestionnaires =
+                this.interviewSummaryReader.Query(
+                    _ => _.GroupBy(x => new { x.QuestionnaireTitle, x.QuestionnaireId, x.QuestionnaireVersion })
+                        .Where(x => x.Count() > 0)
+                        .Select(questionnaire => new TemplateViewItem
+                        {
+                            TemplateId = questionnaire.Key.QuestionnaireId,
+                            TemplateName = questionnaire.Key.QuestionnaireTitle,
+                            TemplateVersion = questionnaire.Key.QuestionnaireVersion
+                        })
+                        .OrderBy(x => x.TemplateName)
+                        .ThenBy(n => n.TemplateVersion)
+                        .ToList());
 
             return new AllUsersAndQuestionnairesView
              {
                  Users = allUsers,
-                 Questionnaires = questionnaires
-             };
+                 Questionnaires = allQuestionnaires
+            };
         }
 
         public List<TemplateViewItem> GetQuestionnaires()
