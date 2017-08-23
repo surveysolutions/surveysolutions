@@ -110,8 +110,6 @@
                 <div class="page-header clearfix">
                     <h1>@Reports.TeamsAndStatuses</h1>
                     <p data-bind="text: QuestionnaireName"></p>
-                    
-                    @Html.Partial("_export-buttons")
                 </div>
 
                 <div class="dataTables_wrapper">
@@ -130,6 +128,7 @@
                             <th data-name="TotalCount" data-data="totalCount">@Common.Total</th>
                         </tr>
                         </thead>
+                        @Html.Partial("_export-buttons")
                     </table>
                 </div>
             </div>
