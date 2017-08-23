@@ -7,6 +7,7 @@
 	from plainstore.Assignments ass
 		left outer join users.userroles ur on ass.ResponsibleId = ur."UserId"
 	where ass.Quantity is not null 
+		AND ass.archived = false
 		AND (ass.questionnaireid = @questionnaireid OR @questionnaireid is NULL)
 		AND (ass.questionnaireversion = @questionnaireversion OR @questionnaireversion is NULL)
 	) tmp
