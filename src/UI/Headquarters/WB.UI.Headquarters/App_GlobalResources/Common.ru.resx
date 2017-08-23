@@ -255,7 +255,7 @@
   <data name="Download" xml:space="preserve">
     <value>Скачать</value>
   </data>
-  <data name="AllQuestionnaire" xml:space="preserve">
+  <data name="AllQuestionnaires" xml:space="preserve">
     <value>Все опросники</value>
     <comment>Все опросники</comment>
   </data>
