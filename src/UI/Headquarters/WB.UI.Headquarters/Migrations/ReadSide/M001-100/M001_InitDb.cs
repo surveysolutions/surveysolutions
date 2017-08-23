@@ -195,14 +195,6 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 .OnTable("interviewsummaries")
                 .OnColumn("responsibleid");
 
-            Create.Index("interviewsummaries_responsiblename")
-                .OnTable("interviewsummaries")
-                .OnColumn("responsiblename");
-
-            Create.Index("interviewsummaries_teamleadname")
-                .OnTable("interviewsummaries")
-                .OnColumn("teamleadname");
-
             Create.Index("interviewsummaries_status")
                 .OnTable("interviewsummaries")
                 .OnColumn("status");
