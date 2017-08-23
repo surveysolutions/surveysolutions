@@ -52,7 +52,12 @@ export default {
                     {
                         data: "rowHeader",
                         title: this.$t("Strings.Days"),
-                        orderable: true
+                        orderable: true,
+                        render: function(data, type, row, meta) {
+                            if (meta.row == 0)
+                                return `<span>${data}</span>`;
+                            return data;
+                        }
                     },
                     {
                         data: "supervisorAssignedCount",

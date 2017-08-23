@@ -145,7 +145,7 @@
                         {
                             <tr class="total-row">
                                 <td>
-                                    <b>@PeriodicStatusReport.Total</b>
+                                    <span><b>@PeriodicStatusReport.Total</b></span>
                                 </td>
                                 <!-- ko foreach: ((TotalRow() || {}).@(Model.ReportName)ByPeriod || []) -->
                                 <td class="type-numeric"><span data-bind='text: $root.Format@(Model.ReportName)Period($data)'></span></td>
