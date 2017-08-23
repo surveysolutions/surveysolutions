@@ -16,7 +16,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.BeginStatus);
             Property(x => x.EndStatus);
             Property(x => x.EndStatusTimestamp);
-            Property(x => x.TimeSpan);
+            Property(x => x.TimeSpanLong, clm =>
+            {
+                clm.Column("TimeSpan");
+            });
             ManyToOne(x => x.InterviewStatusTimeSpans, mto =>
             {
                 mto.Index("InterviewStatusTimeSpans_TimeSpansBetweenStatuses");

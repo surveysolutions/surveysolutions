@@ -10,66 +10,49 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 {
     internal class SupervisorTeamsAndStatusesReport : AbstractTeamsAndStatusesReport, ISupervisorTeamsAndStatusesReport
     {
-        private readonly INativeReadSideStorage<InterviewSummary> interviewsReader;
-
-        public SupervisorTeamsAndStatusesReport(INativeReadSideStorage<InterviewSummary> interviewsReader)
+        public SupervisorTeamsAndStatusesReport(INativeReadSideStorage<InterviewSummary> interviewsReader) : base(interviewsReader)
         {
-            this.interviewsReader = interviewsReader;
         }
 
         public override TeamsAndStatusesReportView Load(TeamsAndStatusesInputModel input)
         {
-            var query = this.interviewsReader.Query(_ =>
-            {
-                if (input.TemplateId.HasValue)
+            var queryItems = this.interviewsReader.Query(_ => 
+                FilterByQuestionnaireOrTeamLead(_, input)
+                .Select(x => new
                 {
-                    _ = _.Where(x => x.QuestionnaireId == input.TemplateId);
-                }
-
-                if (input.TemplateVersion.HasValue)
-                {
-                    _ = _.Where(x => x.QuestionnaireVersion == input.TemplateVersion);
-                }
-
-                if (input.ViewerId.HasValue)
-                {
-                    _ = _.Where(x => x.TeamLeadId == input.ViewerId);
-                }
-
-                return _.Select(x => new
-                {
-                    x.ResponsibleId,
-                    x.ResponsibleName,
-                    SupervisorAssigned = x.Status == InterviewStatus.SupervisorAssigned ? 1 : 0,
-                    InterviewerAssigned = x.Status == InterviewStatus.InterviewerAssigned ? 1 : 0,
-                    Completed = x.Status == InterviewStatus.Completed ? 1 : 0,
-                    RejectedBySupervisor = x.Status == InterviewStatus.RejectedBySupervisor ? 1 : 0,
-                    ApprovedBySupervisor = x.Status == InterviewStatus.ApprovedBySupervisor ? 1 : 0,
-                    RejectedByHeadquarters = x.Status == InterviewStatus.RejectedByHeadquarters ? 1 : 0,
-                    ApprovedByHeadquarters = x.Status == InterviewStatus.ApprovedByHeadquarters ? 1 : 0
+                    ResponsibleId = x.ResponsibleId,
+                    Responsible = x.ResponsibleName,
+                    SupervisorAssignedCount = x.Status == InterviewStatus.SupervisorAssigned ? 1 : 0,
+                    InterviewerAssignedCount = x.Status == InterviewStatus.InterviewerAssigned ? 1 : 0,
+                    CompletedCount = x.Status == InterviewStatus.Completed ? 1 : 0,
+                    RejectedBySupervisorCount = x.Status == InterviewStatus.RejectedBySupervisor ? 1 : 0,
+                    ApprovedBySupervisorCount = x.Status == InterviewStatus.ApprovedBySupervisor ? 1 : 0,
+                    RejectedByHeadquartersCount = x.Status == InterviewStatus.RejectedByHeadquarters ? 1 : 0,
+                    ApprovedByHeadquartersCount = x.Status == InterviewStatus.ApprovedByHeadquarters ? 1 : 0
                 })
-                .GroupBy(x => new { x.ResponsibleName, x.ResponsibleId })
+                .GroupBy(x => new { x.Responsible, x.ResponsibleId })
                 .Select(x => new
                 {
                     ResponsibleId = x.Key.ResponsibleId,
-                    Responsible = x.Key.ResponsibleName,
-                    SupervisorAssignedCount = x.Sum(y => y.SupervisorAssigned),
-                    InterviewerAssignedCount = x.Sum(y => y.InterviewerAssigned),
-                    CompletedCount = x.Sum(y => y.Completed),
-                    RejectedBySupervisorCount = x.Sum(y => y.RejectedBySupervisor),
-                    ApprovedBySupervisorCount = x.Sum(y => y.ApprovedBySupervisor),
-                    RejectedByHeadquartersCount = x.Sum(y => y.RejectedByHeadquarters),
-                    ApprovedByHeadquartersCount = x.Sum(y => y.ApprovedByHeadquarters),
+                    Responsible = x.Key.Responsible,
+                    SupervisorAssignedCount = (int?)x.Sum(y => y.SupervisorAssignedCount) ?? 0,
+                    InterviewerAssignedCount = (int?)x.Sum(y => y.InterviewerAssignedCount) ?? 0,
+                    CompletedCount = (int?)x.Sum(y => y.CompletedCount) ?? 0,
+                    RejectedBySupervisorCount = (int?)x.Sum(y => y.RejectedBySupervisorCount) ?? 0,
+                    ApprovedBySupervisorCount = (int?)x.Sum(y => y.ApprovedBySupervisorCount) ?? 0,
+                    RejectedByHeadquartersCount = (int?)x.Sum(y => y.RejectedByHeadquartersCount) ?? 0,
+                    ApprovedByHeadquartersCount = (int?)x.Sum(y => y.ApprovedByHeadquartersCount) ?? 0,
                     TotalCount = x.Count()
-                });
-            });
+                }));
 
-            var totalStatistics = new TeamsAndStatusesReportLine();
+            var totalRow = QueryReportTotalRow(input);
+
+            var totalCount = this.interviewsReader.CountDistinctWithRecursiveIndex(_ => _.Where(this.CreateFilterExpression(input)).Select(x => x.ResponsibleId));
 
             return new TeamsAndStatusesReportView
             {
-                TotalCount = query.Count(),
-                Items = query.OrderUsingSortExpression(input.Order)
+                TotalCount = totalCount,
+                Items = queryItems.OrderUsingSortExpression(input.Order)
                     .Skip((input.Page - 1) * input.PageSize)
                     .Take(input.PageSize)
                     .ToList()
@@ -86,8 +69,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                         ApprovedByHeadquartersCount = x.ApprovedByHeadquartersCount,
                         TotalCount = x.TotalCount
                     }),
-                TotalRow = totalStatistics
+                TotalRow = totalRow
             };
         }
+
     }
 }
