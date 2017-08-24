@@ -6278,7 +6278,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
         outline: none;
         padding: 5px 0; }
 
-.dataTables_wrapper .dataTables_info {
+.dataTables_wrapper .dataTables_info, .dataTables_wrapper .download-report {
   clear: both;
   float: right;
   padding-top: 0.755em;
@@ -10633,11 +10633,10 @@ td.errors {
     float: left;
     padding-right: 15px;
     font-family: "RobotoLight";
-    width: 25%; }
-    .interviews-information .number-information:last-of-type {
-      padding-right: 0; }
+    min-width: 110px;
+    cursor: default; }
     .interviews-information .number-information .amount-of-questionnaires {
-      padding-right: 100px;
+      padding-right: 10px;
       border-bottom: 2px solid #f0f0f0;
       font-size: 60px;
       line-height: 62px;
@@ -10693,7 +10692,7 @@ td.errors {
   .enumerators .screen-small-resolution {
     padding: 0; } }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 840px) {
   .interviews-information .number-information {
     width: 50%; } }
 
