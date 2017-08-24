@@ -7,17 +7,25 @@ using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Integration.PostgreSQLTests;
 
-namespace WB.Tests.Integration.SupervisorTeamsAndStatusesReportTests
+namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
 {
-    [Subject(typeof(SupervisorTeamsAndStatusesReport))]
-    internal class SupervisorTeamsAndStatusesReportContext : with_postgres_db
+    [Subject(typeof(HeadquartersTeamsAndStatusesReport))]
+    internal class TeamsAndStatusesReportContext: with_postgres_db
     {
-        protected static SupervisorTeamsAndStatusesReport CreateTeamsAndStatusesReport(INativeReadSideStorage<InterviewSummary> reader = null)
+        protected static HeadquartersTeamsAndStatusesReport CreateHqTeamsAndStatusesReport(INativeReadSideStorage<InterviewSummary> reader = null)
+        {
+            if (reader == null)
+            {
+                reader = CreateInterviewSummaryRepository();
+            }
+            return new HeadquartersTeamsAndStatusesReport(reader);
+        }
+        
+        protected static SupervisorTeamsAndStatusesReport CreateSvTeamsAndStatusesReport(INativeReadSideStorage<InterviewSummary> reader = null)
         {
             if (reader == null)
             {
@@ -25,6 +33,7 @@ namespace WB.Tests.Integration.SupervisorTeamsAndStatusesReportTests
             }
             return new SupervisorTeamsAndStatusesReport(reader);
         }
+
         protected static PostgreReadSideStorage<InterviewSummary> CreateInterviewSummaryRepository()
         {
             var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewSummaryMap), typeof(QuestionAnswerMap), typeof(InterviewStatusesMap) }, true);
@@ -35,6 +44,7 @@ namespace WB.Tests.Integration.SupervisorTeamsAndStatusesReportTests
 
             return new PostgreReadSideStorage<InterviewSummary>(postgresTransactionManager, Mock.Of<ILogger>(), "InterviewId");
         }
+
         protected static void ExecuteInCommandTransaction(Action action)
         {
             try
