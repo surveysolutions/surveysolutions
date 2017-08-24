@@ -176,7 +176,11 @@
                         @Html.Partial("_export-buttons")
                     </table>
                 </div>
+                <!-- ko if:Pager().LastPage() > 1 -->
+                <div data-bind="template: { name: 'datatable-pager', data: Pager }"></div>
+                <!-- /ko -->
             </div>
         </div>
     </div>
+    @Html.Partial("_ListDataTablePagingScript")
 </main>
