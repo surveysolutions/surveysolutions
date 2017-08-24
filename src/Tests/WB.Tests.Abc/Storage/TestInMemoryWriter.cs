@@ -2,14 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using NHibernate;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Abc.Storage
 {
     public class TestInMemoryWriter<T> : IReadSideRepositoryWriter<T>,
         IReadSideKeyValueStorage<T>,
-        IQueryableReadSideRepositoryReader<T>
+        IQueryableReadSideRepositoryReader<T>,
+        INativeReadSideStorage<T>
         where T : class, IReadSideRepositoryEntity
     {
         private readonly Dictionary<string, T> storage = new Dictionary<string, T>();
@@ -81,6 +84,16 @@ namespace WB.Tests.Abc.Storage
         public TResult Query<TResult>(Func<IQueryable<T>, TResult> query)
         {
             return query.Invoke(this.Dictionary.Values.AsQueryable());
+        }
+
+        public TResult QueryOver<TResult>(Func<IQueryOver<T, T>, TResult> query)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int CountDistinctWithRecursiveIndex<TResult>(Func<IQueryOver<T, T>, IQueryOver<TResult, TResult>> query)
+        {
+            throw new NotImplementedException();
         }
     }
 }
