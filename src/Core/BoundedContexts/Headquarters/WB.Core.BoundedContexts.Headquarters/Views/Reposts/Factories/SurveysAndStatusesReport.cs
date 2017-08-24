@@ -86,9 +86,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                         TotalCount = x.Count()
                     }));
 
+
+            var totalRow = queryForTotalRow.FirstOrDefault();
+
             //var totalCount = queryForItems.Count();
-            var filterExpression = this.CreateFilterExpression(responsible, teamLead);
-            var totalCount = this.interviewSummaryReader.CountDistinctWithRecursiveIndex(_ => _.Where(filterExpression).Select(x => new { x.QuestionnaireId, x.QuestionnaireVersion}));
+            int totalCount = this.interviewSummaryReader.Query(_ => FilterByResponsibleOrTeamLead(_, responsible, teamLead)
+                .Select(x => new { x.QuestionnaireId, x.QuestionnaireVersion })
+                .Distinct()
+                .ToList()
+                .Count);
+
             return new SurveysAndStatusesReportView
             {
                 TotalCount = totalCount,
@@ -107,7 +114,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                         ApprovedByHeadquartersCount = x.ApprovedByHeadquartersCount,
                         TotalCount = x.TotalCount
                     }),
-                TotalRow = queryForTotalRow.FirstOrDefault() 
+                TotalRow = totalRow 
             };
         }
 
