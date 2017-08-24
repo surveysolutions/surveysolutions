@@ -229,8 +229,6 @@
                             </a>
                         }
                     </div>
-                </div>
-                <div class="col-sm-9 col-xs-10 prefilled-data-info info-block">
                     <ol class="list-unstyled">
                         @if (!authorizedUser.IsSupervisor && !authorizedUser.IsObserving)
                         {
@@ -239,6 +237,7 @@
                         <li>@Pages.Users_Interviewers_Instruction2</li>
                     </ol>
                 </div>
+                
                 <table id="data_holder" class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes"
                        data-order="[[ 1, &quot;asc&quot; ]]" data-searching="true">
                     <thead>
