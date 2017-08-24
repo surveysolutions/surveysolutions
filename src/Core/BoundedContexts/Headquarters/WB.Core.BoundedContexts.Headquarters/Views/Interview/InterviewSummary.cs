@@ -44,6 +44,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             }
         }
 
+        public virtual string QuestionnaireIdentity { get; set; }
+
         public virtual string Key { get; set; }
 
         public virtual string ClientKey { get; set; }

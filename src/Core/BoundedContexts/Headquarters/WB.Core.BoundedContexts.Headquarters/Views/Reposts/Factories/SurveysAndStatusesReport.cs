@@ -89,12 +89,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
             var totalRow = queryForTotalRow.FirstOrDefault();
 
-            //var totalCount = queryForItems.Count();
             int totalCount = this.interviewSummaryReader.Query(_ => FilterByResponsibleOrTeamLead(_, responsible, teamLead)
-                .Select(x => new { x.QuestionnaireId, x.QuestionnaireVersion })
+                .Select(x => x.QuestionnaireIdentity)
                 .Distinct()
-                .ToList()
-                .Count);
+                .Count());
+
+            // doesn't workm, but should. Should be faster than distinct
+            //var totalCount = this.interviewSummaryReader.CountDistinctWithRecursiveIndex(_ => _.Where(this.CreateFilterExpression(input)).Select(x => x.QuestionnaireIdentity));
 
             return new SurveysAndStatusesReportView
             {
@@ -118,20 +119,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             };
         }
 
-        protected Expression<Func<InterviewSummary, bool>> CreateFilterExpression(string responsible, string teamLead)
+        protected Expression<Func<InterviewSummary, bool>> CreateFilterExpression(SurveysAndStatusesReportInputModel input)
         {
             Expression<Func<InterviewSummary, bool>> result = null;
 
-            if (!string.IsNullOrWhiteSpace(responsible))
+            if (!string.IsNullOrWhiteSpace(input.ResponsibleName))
             {
-                result = x => x.ResponsibleName.ToLower() == responsible;
+                result = x => x.ResponsibleName.ToLower() == input.ResponsibleName.ToLower();
             }
 
-            if (!string.IsNullOrWhiteSpace(teamLead))
+            if (!string.IsNullOrWhiteSpace(input.TeamLeadName))
             {
                 result = result == null
-                    ? z => z.TeamLeadName.ToLower() == teamLead
-                    : result.AndCondition(x => x.TeamLeadName.ToLower() == teamLead);
+                    ? z => z.TeamLeadName.ToLower() == input.TeamLeadName.ToLower()
+                    : result.AndCondition(x => x.TeamLeadName.ToLower() == input.TeamLeadName.ToLower());
             }
 
             return result ?? (x => x.SummaryId != null);
