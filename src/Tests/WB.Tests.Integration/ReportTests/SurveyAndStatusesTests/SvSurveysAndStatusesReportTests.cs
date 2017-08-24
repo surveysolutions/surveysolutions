@@ -56,12 +56,12 @@ namespace WB.Tests.Integration.ReportTests.SurveyAndStatusesTests
             var view = transactionManager.ExecuteInQueryTransaction(() => report.Load(new SurveysAndStatusesReportInputModel
             {
                 // this filter doesm't work in tests for some reasons
-                //TeamLeadName = firstTeamLeadId.FormatGuid(),
+                TeamLeadName = firstTeamLeadId.FormatGuid(),
                 Order = "CompletedCount ASC"
             }));
             
             //assert
-            Assert.That(view.TotalCount, Is.EqualTo(2));
+            Assert.That(view.TotalCount, Is.EqualTo(1));
             
             var firstLine = view.Items.First();
 
