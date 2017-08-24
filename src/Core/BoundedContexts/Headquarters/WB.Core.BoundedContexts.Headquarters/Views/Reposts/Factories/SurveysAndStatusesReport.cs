@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
             //var totalCount = queryForItems.Count();
             var filterExpression = this.CreateFilterExpression(responsible, teamLead);
-            var totalCount = this.interviewSummaryReader.CountDistinctWithRecursiveIndex(_ => _.Where(z => z.TeamLeadName.ToLower() == teamLead).Select(x => new { x.QuestionnaireId, x.QuestionnaireVersion}));
+            var totalCount = this.interviewSummaryReader.CountDistinctWithRecursiveIndex(_ => _.Where(filterExpression).Select(x => new { x.QuestionnaireId, x.QuestionnaireVersion}));
             return new SurveysAndStatusesReportView
             {
                 TotalCount = totalCount,
@@ -113,19 +113,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
         protected Expression<Func<InterviewSummary, bool>> CreateFilterExpression(string responsible, string teamLead)
         {
-            Expression<Func<InterviewSummary, bool>> result = z => z.TeamLeadName.ToLower() == teamLead;
+            Expression<Func<InterviewSummary, bool>> result = null;
 
-            //if (!string.IsNullOrWhiteSpace(responsible))
-            //{
-            //    result = x => x.ResponsibleName.ToLower() == responsible;
-            //}
+            if (!string.IsNullOrWhiteSpace(responsible))
+            {
+                result = x => x.ResponsibleName.ToLower() == responsible;
+            }
 
-            //if (!string.IsNullOrWhiteSpace(teamLead))
-            //{
-            //    result = result == null
-            //        ? z => z.TeamLeadName.ToLower() == teamLead
-            //        : result.AndCondition(x => x.TeamLeadName.ToLower() == teamLead);
-            //}
+            if (!string.IsNullOrWhiteSpace(teamLead))
+            {
+                result = result == null
+                    ? z => z.TeamLeadName.ToLower() == teamLead
+                    : result.AndCondition(x => x.TeamLeadName.ToLower() == teamLead);
+            }
 
             return result ?? (x => x.SummaryId != null);
         }
