@@ -361,7 +361,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         private static string ToSpecDaysFormat(double? quantity)
         {
             return quantity == null ?
-                "-" :
+                null :
                 TimeSpan.FromMinutes(quantity ?? 0).Humanize(3, minUnit: TimeUnit.Minute, maxUnit: TimeUnit.Day);
         }
     }
