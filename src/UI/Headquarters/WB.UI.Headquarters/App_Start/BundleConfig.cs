@@ -184,6 +184,7 @@ namespace WB.UI.Headquarters
                 "~/Scripts/viewmodels/pages/mapreport.js"
                 ));
             bundles.Add(new ScriptBundle("~/js/periodicstatusreport").Include(
+                "~/Dependencies/js/ajax.js",
                 "~/Scripts/ko.pager.js",
                 "~/Scripts/components/bindings.js",
                 "~/Scripts/viewmodels/listview.js",
