@@ -51,7 +51,7 @@ export default {
         information() {
             return {
                 "main-information": this.hasFilter,
-                "information": !this.hasFilter
+                "main-information-no-filter": !this.hasFilter
             }
         },
         showProgress() {

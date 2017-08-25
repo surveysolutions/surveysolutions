@@ -1,19 +1,21 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 {
     internal class SurveysAndStatusesReport : ISurveysAndStatusesReport
     {
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
+        private readonly INativeReadSideStorage<InterviewSummary> interviewSummaryReader;
 
-        public SurveysAndStatusesReport(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader)
+        public SurveysAndStatusesReport(INativeReadSideStorage<InterviewSummary> interviewSummaryReader)
         {
             this.interviewSummaryReader = interviewSummaryReader;
         }
@@ -45,13 +47,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                         QuestionnaireId = x.Key.QuestionnaireId,
                         QuestionnaireVersion = x.Key.QuestionnaireVersion,
                         QuestionnaireTitle = x.Key.QuestionnaireTitle,
-                        SupervisorAssignedCount = x.Sum(y => y.SupervisorAssigned),
-                        InterviewerAssignedCount = x.Sum(y => y.InterviewerAssigned),
-                        CompletedCount = x.Sum(y => y.Completed),
-                        RejectedBySupervisorCount = x.Sum(y => y.RejectedBySupervisor),
-                        ApprovedBySupervisorCount = x.Sum(y => y.ApprovedBySupervisor),
-                        RejectedByHeadquartersCount = x.Sum(y => y.RejectedByHeadquarters),
-                        ApprovedByHeadquartersCount = x.Sum(y => y.ApprovedByHeadquarters),
+                        SupervisorAssignedCount = (int?)x.Sum(y => y.SupervisorAssigned) ?? 0,
+                        InterviewerAssignedCount = (int?)x.Sum(y => y.InterviewerAssigned) ?? 0,
+                        CompletedCount = (int?)x.Sum(y => y.Completed) ?? 0,
+                        RejectedBySupervisorCount = (int?)x.Sum(y => y.RejectedBySupervisor) ?? 0,
+                        ApprovedBySupervisorCount = (int?)x.Sum(y => y.ApprovedBySupervisor) ?? 0,
+                        RejectedByHeadquartersCount = (int?)x.Sum(y => y.RejectedByHeadquarters) ?? 0,
+                        ApprovedByHeadquartersCount = (int?)x.Sum(y => y.ApprovedByHeadquarters) ?? 0,
                         TotalCount = x.Count()
                     }));
 
@@ -74,19 +76,30 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     .GroupBy(x => 1)
                     .Select(x => new HeadquarterSurveysAndStatusesReportLine
                     {
-                        SupervisorAssignedCount = x.Sum(y => y.SupervisorAssigned),
-                        InterviewerAssignedCount = x.Sum(y => y.InterviewerAssigned),
-                        CompletedCount = x.Sum(y => y.Completed),
-                        RejectedBySupervisorCount = x.Sum(y => y.RejectedBySupervisor),
-                        ApprovedBySupervisorCount = x.Sum(y => y.ApprovedBySupervisor),
-                        RejectedByHeadquartersCount = x.Sum(y => y.RejectedByHeadquarters),
-                        ApprovedByHeadquartersCount = x.Sum(y => y.ApprovedByHeadquarters),
+                        SupervisorAssignedCount = (int?)x.Sum(y => y.SupervisorAssigned) ?? 0,
+                        InterviewerAssignedCount = (int?)x.Sum(y => y.InterviewerAssigned) ?? 0,
+                        CompletedCount = (int?)x.Sum(y => y.Completed) ?? 0,
+                        RejectedBySupervisorCount = (int?)x.Sum(y => y.RejectedBySupervisor) ?? 0,
+                        ApprovedBySupervisorCount = (int?)x.Sum(y => y.ApprovedBySupervisor) ?? 0,
+                        RejectedByHeadquartersCount = (int?)x.Sum(y => y.RejectedByHeadquarters) ?? 0,
+                        ApprovedByHeadquartersCount = (int?)x.Sum(y => y.ApprovedByHeadquarters) ?? 0,
                         TotalCount = x.Count()
                     }));
 
+
+            var totalRow = queryForTotalRow.FirstOrDefault();
+
+            int totalCount = this.interviewSummaryReader.Query(_ => FilterByResponsibleOrTeamLead(_, responsible, teamLead)
+                .Select(x => x.QuestionnaireIdentity)
+                .Distinct()
+                .Count());
+
+            // doesn't workm, but should. Should be faster than distinct
+            //var totalCount = this.interviewSummaryReader.CountDistinctWithRecursiveIndex(_ => _.Where(this.CreateFilterExpression(input)).Select(x => x.QuestionnaireIdentity));
+
             return new SurveysAndStatusesReportView
             {
-                TotalCount = queryForItems.Count(),
+                TotalCount = totalCount,
                 Items = queryForItems.OrderUsingSortExpression(input.Order).Skip((input.Page - 1) * input.PageSize)
                     .Take(input.PageSize).ToList().Select(x=> new HeadquarterSurveysAndStatusesReportLine
                     {
@@ -102,8 +115,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                         ApprovedByHeadquartersCount = x.ApprovedByHeadquartersCount,
                         TotalCount = x.TotalCount
                     }),
-                TotalRow = queryForTotalRow.FirstOrDefault() 
+                TotalRow = totalRow 
             };
+        }
+
+        protected Expression<Func<InterviewSummary, bool>> CreateFilterExpression(SurveysAndStatusesReportInputModel input)
+        {
+            Expression<Func<InterviewSummary, bool>> result = null;
+
+            if (!string.IsNullOrWhiteSpace(input.ResponsibleName))
+            {
+                result = x => x.ResponsibleName.ToLower() == input.ResponsibleName.ToLower();
+            }
+
+            if (!string.IsNullOrWhiteSpace(input.TeamLeadName))
+            {
+                result = result == null
+                    ? z => z.TeamLeadName.ToLower() == input.TeamLeadName.ToLower()
+                    : result.AndCondition(x => x.TeamLeadName.ToLower() == input.TeamLeadName.ToLower());
+            }
+
+            return result ?? (x => x.SummaryId != null);
         }
 
         private static IQueryable<InterviewSummary> FilterByResponsibleOrTeamLead(IQueryable<InterviewSummary> _, string responsible, string teamLead)
