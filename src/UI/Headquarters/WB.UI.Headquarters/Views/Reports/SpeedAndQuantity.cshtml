@@ -4,6 +4,7 @@
 @{
     ViewBag.Title = Model.ReportName;
     Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var isSpeedReport = ViewBag.ActivePage == MenuItem.SpeedOfCompletingInterviews;
 }
 
 @section scripts
@@ -145,14 +146,16 @@
                             @if (Model.TotalRowPresent)
                             {
                                 <tr class="total-row">
-                                    <td>
-                                        <span><b>@PeriodicStatusReport.Total</b></span>
-                                    </td>
+                                    <td><span><b>@(isSpeedReport? PeriodicStatusReport.Average: PeriodicStatusReport.Total)</b></span></td>
                                     <!-- ko foreach: ((TotalRow() || {}).@(Model.ReportName)ByPeriod || []) -->
                                     <td class="type-numeric"><span data-bind='text: $root.Format@(Model.ReportName)Period($data)'></span></td>
                                     <!-- /ko -->
-                                    <td class="type-numeric"><span data-bind="text:  Format@(Model.ReportName)Period(getTotalAverage())"></span></td>
-                                    <td class="type-numeric"><span data-bind="text:  Format@(Model.ReportName)Period(getTotalCount())"></span></td>
+                                    <td class="type-numeric">
+                                        <span data-bind="text:Format@(Model.ReportName)Period(getTotalAverage())"></span>
+                                    </td>
+                                    <td class="type-numeric">
+                                        <span data-bind="text:Format@(Model.ReportName)Period(getTotalCount())"></span>
+                                    </td>
                                 </tr>
                             }
                             <!-- ko foreach:Items -->
