@@ -30,11 +30,13 @@
     };
 
     self.getTotalAverage = function () {
-        return (self.TotalRow() || {}).Average || 0;
+        var average = (self.TotalRow() || {}).Average || null;
+        return (ko.isObservable(average)) ? average() : null;
     };
 
     self.getTotalCount = function () {
-        return (self.TotalRow() || {}).Total || 0;
+        var total = (self.TotalRow() || {}).Total || null;
+        return (ko.isObservable(total)) ? total() : null;
     };
 
     self.FormatSpeedPeriod = function(data) {
