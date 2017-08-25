@@ -10,9 +10,9 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace WB.Tests.Integration.HeadquartersTeamsAndStatusesReportTests
+namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Hq
 {
-    internal class when_two_responsibles_and_each_status_has_one_interview : HeadquartersTeamsAndStatusesReportContext
+    internal class when_two_responsibles_and_each_status_has_one_interview : TeamsAndStatusesReportContext
     {
         Establish context = () =>
         {
@@ -38,7 +38,7 @@ namespace WB.Tests.Integration.HeadquartersTeamsAndStatusesReportTests
             var repository = CreateInterviewSummaryRepository();
             ExecuteInCommandTransaction(() => interviews.ForEach(x => repository.Store(x, x.InterviewId.FormatGuid())));
 
-            reportFactory = CreateTeamsAndStatusesReport(repository);
+            reportFactory = CreateHqTeamsAndStatusesReport(repository);
         };
 
         Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.Load(new TeamsAndStatusesInputModel {Order = "CompletedCount ASC" }));

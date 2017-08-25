@@ -465,14 +465,17 @@ namespace WB.Tests.Abc.TestFactories
             UserRoles role = UserRoles.Interviewer,
             string key = null,
             DateTime? updateDate = null,
-            bool? wasCreatedOnClient= null,
+            bool? wasCreatedOnClient = null,
             bool receivedByInterviewer = false,
             int? assignmentId = null)
-            => new InterviewSummary
+        {
+            var qId = questionnaireId ?? Guid.NewGuid();
+            var qVersion = questionnaireVersion ?? 1;
+            return new InterviewSummary
             {
                 InterviewId = interviewId ?? Guid.NewGuid(),
-                QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
-                QuestionnaireVersion = questionnaireVersion ?? 1,
+                QuestionnaireId = qId,
+                QuestionnaireVersion = qVersion,
                 Status = status.GetValueOrDefault(),
                 ResponsibleId = responsibleId.GetValueOrDefault(),
                 ResponsibleName = string.IsNullOrWhiteSpace(responsibleName) ? responsibleId.FormatGuid() : responsibleName,
@@ -483,8 +486,10 @@ namespace WB.Tests.Abc.TestFactories
                 UpdateDate = updateDate ?? new DateTime(2017, 3, 23),
                 WasCreatedOnClient = wasCreatedOnClient ?? false,
                 ReceivedByInterviewer = receivedByInterviewer,
-                AssignmentId = assignmentId
+                AssignmentId = assignmentId,
+                QuestionnaireIdentity = new QuestionnaireIdentity(qId, qVersion).ToString()
             };
+        }
 
         public InterviewSynchronizationDto InterviewSynchronizationDto(
             Guid? questionnaireId = null,
