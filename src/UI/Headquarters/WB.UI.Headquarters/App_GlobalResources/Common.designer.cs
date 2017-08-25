@@ -331,6 +331,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open responsible&apos;s profile.
+        /// </summary>
+        internal static string OpenResponsiblesProfile {
+            get {
+                return ResourceManager.GetString("OpenResponsiblesProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Identifying Questions.
         /// </summary>
         internal static string PrefilledQuestions {
