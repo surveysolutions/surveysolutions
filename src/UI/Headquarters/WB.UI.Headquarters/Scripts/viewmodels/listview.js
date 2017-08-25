@@ -68,7 +68,7 @@
     
     self.mappingOptions = {};
 
-    self.search = function() {
+    self.search = function(onSuccess, onDone) {
         var filter = {
             PageIndex: self.Pager().CurrentPage(),
             PageSize: self.Pager().PageSize(),
@@ -87,7 +87,11 @@
             if (self.Items().length > 0)
                 self.datatableColumnLength(Object.keys(self.Items()[0]).length);
 
-        }, true);
+            if (!_.isUndefined(onSuccess) && !_.isNull(onSuccess)) {
+                onSuccess();
+            }
+
+        }, true, false, onDone);
     };
     self.clear = function() {
         self.SearchBy("");
