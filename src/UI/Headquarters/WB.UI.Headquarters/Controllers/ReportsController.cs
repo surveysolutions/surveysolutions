@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Survey;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
@@ -138,7 +139,7 @@ namespace WB.UI.Headquarters.Controllers
                     }),
                 InterviewsBaseUrl = Url.Action("Interviews", "HQ"),
                 AssignmentsBaseUrl = Url.Action("Index", "Assignments"),
-                Questionnaires = this.GetQuestionnaires(),
+                Questionnaires = this.GetAllQuestionnaires(),
 
                 Resources = new[]
                 {
@@ -150,11 +151,11 @@ namespace WB.UI.Headquarters.Controllers
             });
         }
 
-        private ComboboxOptionModel[] GetQuestionnaires()
+        private ComboboxOptionModel[] GetAllQuestionnaires()
         {
-            AllUsersAndQuestionnairesView usersAndQuestionnaires = this.allUsersAndQuestionnairesFactory.Load();
+            List<TemplateViewItem> questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnaires();
 
-            return usersAndQuestionnaires.Questionnaires.Select(s => new ComboboxOptionModel(
+            return questionnaires.Select(s => new ComboboxOptionModel(
                 new QuestionnaireIdentity(s.TemplateId, s.TemplateVersion).ToString(),
                 $@"(ver. {s.TemplateVersion.ToString()}) {s.TemplateName}")).ToArray();
         }
