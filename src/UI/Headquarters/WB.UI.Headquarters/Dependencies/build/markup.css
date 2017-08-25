@@ -6280,10 +6280,12 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   clear: both;
   float: right;
   padding-top: 0.755em;
-  font-size: 13px;
-  line-height: 15px;
+  font: 13px/15px "TrebuchetMSBold";
   padding-left: 20px;
   text-align: right; }
+
+.dataTables_wrapper .download-report {
+  padding-top: 5px; }
 
 .dataTables_paginate {
   position: relative;
@@ -9412,8 +9414,9 @@ main.hidden.display-block {
   display: block !important; }
 
 .download-report-as {
-  font: 13px/15px Arial, sans-serif;
-  text-align: right; }
+  font: 13px/15px "TrebuchetMSBold";
+  text-align: right;
+  clear: both; }
 
 @media (max-width: 1210px) {
   html body {
@@ -10075,11 +10078,14 @@ img#placeholder {
   .export-types .data {
     width: 100%;
     margin-bottom: 30px; }
+    .export-types .data h3 {
+      margin-left: 15px; }
     .export-types .data p {
       font-size: 14px;
       line-height: 16px;
       font-family: inherit;
-      margin-bottom: 0; }
+      margin-bottom: 0;
+      margin-left: 15px; }
       .export-types .data p span {
         display: block; }
       .export-types .data p a {

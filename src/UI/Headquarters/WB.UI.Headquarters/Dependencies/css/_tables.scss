@@ -420,12 +420,13 @@
         clear: both;
         float: right;
         padding-top: 0.755em;
-        font-size: 13px;
-        line-height: 15px;
+        font: 13px/15px "TrebuchetMSBold";
         padding-left: 20px;
         text-align: right;
     }
-    
+    .download-report{
+        padding-top: 5px;
+    }
 }
 .dataTables_paginate{
         position: relative;

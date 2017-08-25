@@ -19,7 +19,8 @@
                     :tableOptions="tableOptions"
                     :addParamsToRequest="addFilteringParams"
                     noPaging
-                    noSearch>
+                    noSearch
+                    exportable>
         </DataTables>
     </Layout>
 </template>

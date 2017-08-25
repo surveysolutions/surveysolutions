@@ -114,7 +114,6 @@
                     <h1>@Pages.TeamMembersAndStatuses</h1>
                     <p data-bind="text: QuestionnaireName"></p>
                 </div>
-
                 <div class="table-with-scroll">
                     <div class="dataTables_wrapper">
                         <table id="data_holder" class="table table-striped table-ordered table-bordered table-hover table-mobile-devices dataTable"
@@ -132,11 +131,13 @@
                                 <th data-name="TotalCount" data-data="totalCount">@Common.Total</th>
                             </tr>
                             </thead>
-                            @Html.Partial("_export-buttons")
                         </table>
+                        
                     </div>
                 </div>
+                @Html.Partial("_export-buttons")
             </div>
         </div>
     </div>
+    
 </main>
