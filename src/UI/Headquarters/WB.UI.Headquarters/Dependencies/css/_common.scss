@@ -494,8 +494,9 @@ main.hidden.display-block{
 	display: block !important;
 }
 .download-report-as{
-	font: 13px/15px Arial, sans-serif;
+	font: 13px/15px "TrebuchetMSBold";
 	text-align: right;
+	clear: both;
 }
 @media (max-width: $screen-md-min){
 	html body {

@@ -1,6 +1,6 @@
 <template>
     <Layout :title="$t('Pages.InterviewersAndDevicesTitle')">
-        <DataTables ref="table" :tableOptions="tableOptions"></DataTables>
+        <DataTables ref="table" :tableOptions="tableOptions" exportable></DataTables>
     </Layout>
 </template>
 
