@@ -96,7 +96,7 @@
                     <div class="block-filter">
                         <h5>@Pages.SurveysAndStatuses_InterviewerTitle</h5>
                         <div class="input-group">
-                            <input id="responsibleSelector" class="form-control" placeholder="@Common.Any" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
+                            <input id="responsibleSelector" class="form-control" placeholder="@Common.AllInterviewers" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
                             <span data-bind="spinner: IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
                             <div class="input-group-btn" data-bind="click: function(){ SelectedResponsible(undefined); }">
                                 <div class="btn btn-default">
