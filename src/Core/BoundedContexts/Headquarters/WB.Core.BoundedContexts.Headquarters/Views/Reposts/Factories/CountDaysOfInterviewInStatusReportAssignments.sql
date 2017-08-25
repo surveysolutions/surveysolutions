@@ -1,6 +1,6 @@
 ﻿select cast(CreatedDate as date), RoleId, SUM(Quantity - Count) as Count from (
 	select 
-		ass.CreatedAtUtc + (@minutesoffset ||' minutes')::interval as CreatedDate, 
+		ass.CreatedAtUtc as CreatedDate, 
 		ur."RoleId" as RoleId,
 		ass.Quantity as Quantity,
 		(select count(*) from readside.InterviewSummaries isum where ass.Id=isum.assignmentid) as Count
