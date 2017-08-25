@@ -265,4 +265,10 @@
   <data name="ShowStatusHistory" xml:space="preserve">
     <value>Показать историю статусов</value>
   </data>
+  <data name="AllInterviewers" xml:space="preserve">
+    <value>Все интервьюверы</value>
+  </data>
+  <data name="AllTeams" xml:space="preserve">
+    <value>Все команды</value>
+  </data>
 </root>
