@@ -1,5 +1,5 @@
 ﻿select status, StatusDate, COUNT(*) as InterviewsCount from (
-	SELECT isum.status, cast((timestamp + (@minutesoffset * interval '1 minute')) as date) as StatusDate, row_number() over (partition by ics."interviewid" order by position desc) rnk
+	SELECT isum.status, timestamp as StatusDate, row_number() over (partition by ics."interviewid" order by position desc) rnk
 		FROM readside.interviewcommentedstatuses ics
 		   INNER JOIN readside.interviewsummaries isum ON CAST(ics.interviewid as uuid) = isum.interviewid
 		WHERE 
