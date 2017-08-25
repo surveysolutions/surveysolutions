@@ -62,7 +62,15 @@
                             selectedRow);
                     }
                 };
-
+                if (selectedRow.ResponsibleRole() === 4 /* Interviewer */) {
+                    items["openInterviewerProfile"] = {
+                        name: "@Common.OpenResponsiblesProfile",
+                        callback: function(t, e) {
+                            var profileUrl = $profileUrl + '/' + selectedRow.ResponsibleId();
+                            window.location = profileUrl;
+                        }
+                    };
+                }
                 items["sep1"] = "---------";
 
                 items["assign"] = {
@@ -96,7 +104,7 @@
                     }
                 };
 
-                items["sep1"] = "---------";
+                items["sep2"] = "---------";
 
                 items["delete"] = {
                     name: "@Common.Delete",

@@ -270,4 +270,7 @@
   <data name="AllTeams" xml:space="preserve">
     <value>All teams</value>
   </data>
+  <data name="OpenResponsiblesProfile" xml:space="preserve">
+    <value>Open responsible's profile</value>
+  </data>
 </root>
