@@ -284,7 +284,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             => new ReportView
             {
                 Headers = ToReportHeader(view).ToArray(),
-                Data = view.Items.Select(x => ToReportRow(x).ToArray()).ToArray()
+                Data = ToDataView(view) 
             };
 
         private IEnumerable<string> ToReportHeader(QuantityByResponsibleReportView view)
@@ -296,6 +296,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
             yield return Report.COLUMN_AVERAGE;
             yield return Report.COLUMN_TOTAL;
+        }
+
+        private object[][] ToDataView(QuantityByResponsibleReportView view)
+        {
+            var data = new List<object[]> {ToReportRow(view.TotalRow).ToArray()};
+
+            data.AddRange(view.Items.Select(ToReportRow).Select(item => item.ToArray()));
+
+            return data.ToArray();
+        }
+
+        private IEnumerable<object> ToReportRow(QuantityTotalRow totalRow)
+        {
+            yield return Report.COLUMN_TOTAL;
+            foreach (var total in totalRow.QuantityByPeriod)
+            {
+                yield return total;
+            }
+            yield return totalRow.Average;
+            yield return totalRow.Total;
         }
 
         private IEnumerable<object> ToReportRow(QuantityByResponsibleReportRow row)
