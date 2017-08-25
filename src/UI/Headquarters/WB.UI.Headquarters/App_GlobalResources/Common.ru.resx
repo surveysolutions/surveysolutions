@@ -271,4 +271,7 @@
   <data name="AllTeams" xml:space="preserve">
     <value>Все команды</value>
   </data>
+  <data name="OpenResponsiblesProfile" xml:space="preserve">
+    <value>Открыть профиль ответственного</value>
+  </data>
 </root>
