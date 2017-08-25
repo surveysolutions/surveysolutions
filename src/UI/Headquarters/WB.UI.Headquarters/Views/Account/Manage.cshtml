@@ -1,4 +1,5 @@
-﻿@model ManageAccountModel
+﻿@using WB.Core.BoundedContexts.Headquarters.Resources
+@model ManageAccountModel
 @{
     ViewBag.Title = Strings.HQ_Views_Manage_Title;
     ViewBag.PageTitle = string.Format(Pages.AccountManage_Title, Html.Encode(Model.UserName));
