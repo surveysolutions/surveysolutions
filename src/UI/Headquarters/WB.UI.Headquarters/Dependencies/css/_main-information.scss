@@ -58,61 +58,6 @@
         margin-right: 5px;
     }
 }
-@media only screen and (max-width: 1300px){
-	@include fullscreen-hidden-filter('main-information');
-	.fullscreen-hidden-filters .main-information .panel-table{
-		left: 12px;
-	}
-}
-@media (max-width: $screen-md-min){
-	.main-information {
-		margin-left: $filter-width - $margin-container-md-screen + 15px + 12px;
-		padding-right: 20px;
-		.page-header div{
-			padding-right: 255px;
-		}
-		.panel-table{
-			left: $filter-width+ 12px;
-		}
-	}
-	.fullscreen-hidden-filters{
-		.main-information{
-			margin-left: 12px;
-			.panel-table{
-				left: 12px;
-			}
-		}
-	}
-}
-@media (max-width: $screen-sm-min){
-	.main-information{
-		margin-left: 15px;
-		padding-right: 15px;
-		padding-left: 0;
-		.page-header div{
-			padding-right: 0;
-		}
-		.panel-table{
-			left:  12px;
-		}
-	}
-	.fullscreen-hidden-filters .main-information{
-		display: none;
-		.panel-table{
-			z-index: 0;
-		}
-	}
-}
-@media (max-width: $screen-xs-min){
-	.main-information{
-		margin-left: 0px;
-		padding-right: 0px;
-		padding-top: 10px;
-	}
-	.main-information #DataTables_Table_0_wrapper #DataTables_Table_0_filter{
-		left: 0;
-	}
-}
 .map-report{
 	padding-bottom: 0;
 	main .container-fluid{
@@ -130,6 +75,13 @@
 			padding-left: 12px;
 		}
 	}
+	.fullscreen-hidden-filters .main-information {
+		margin-left: 0;
+        padding-left: 0;
+		.panel-table{
+			left: 12px;
+		}
+	}
 }
 @media (max-width: $screen-md-min){
 	.map-report{
@@ -142,11 +94,46 @@
 			}
 		}
 	}
+	.main-information {
+		margin-left: $filter-width - $margin-container-md-screen + 15px;
+		padding-right: 15px;
+		.page-header div{
+			padding-right: 255px;
+		}
+		.panel-table{
+			left: $filter-width+ 12px;
+		}
+	}
+	.fullscreen-hidden-filters{
+		.main-information{
+			padding: 0 10px;
+			margin: 0;
+			.panel-table{
+				left: 12px;
+			}
+		}
+	}
 }
 @media (max-width: $screen-sm-min){
 	.map-report{
 		.main-information{
-			margin-left: 12px;
+			margin-left: 2px;
+		}
+	}
+	.main-information{
+		margin-left: 0;
+		padding: 0 10px;
+		.page-header div{
+			padding-right: 0;
+		}
+		.panel-table{
+			left:  12px;
+		}
+	}
+	.fullscreen-hidden-filters .main-information{
+		display: none;
+		.panel-table{
+			z-index: 0;
 		}
 	}
 }
@@ -154,6 +141,15 @@
 	.map-report{
 		.main-information{
 			padding-top: 0;
+			margin-left: 7px;
 		}
 	}
+	.main-information{
+		padding: 10px 5px 0 5px;
+
+	}
+	.main-information #DataTables_Table_0_wrapper #DataTables_Table_0_filter{
+		left: 0;
+	}
 }
+

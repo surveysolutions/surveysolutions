@@ -173,10 +173,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             DateTime to,
             InterviewExportedAction[] statuses)
         {
+            var isCompleteStatusReport = statuses.Length == 1 && statuses[0] == InterviewExportedAction.Completed;
+
             if (questionnaireId != Guid.Empty)
             {
-
-                if (statuses.Length == 1 && statuses[0] == InterviewExportedAction.Completed)
+                if (isCompleteStatusReport)
                 {
                     return this.interviewStatusesStorage.Query(_ =>
                         _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
@@ -201,23 +202,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             }
             else
             {
-                if (statuses.Length == 1 && statuses[0] == InterviewExportedAction.Completed)
+                if (isCompleteStatusReport)
                 {
-                    var ttt = this.interviewStatusesStorage.Query(_ =>
+                    return this.interviewStatusesStorage.Query(_ =>
                         _ .SelectMany(x => x.InterviewCommentedStatuses
                                 .Where(c => c.Status == InterviewExportedAction.Completed && 
                                        c.Timestamp == x.InterviewCommentedStatuses.Where(y => y.Status == InterviewExportedAction.Completed).Min(y=>y.Timestamp))
-                                ));
-
-                    var erer = from ics in ttt
-                               where 
-                                     ics.Timestamp >= fromDate &&
-                                     ics.Timestamp < to.Date &&
-                                     ics.TimespanWithPreviousStatusLong.HasValue
-                               select ics;
-
-                    return erer.AsQueryable();
-
+                                )).Where(ics =>
+                        ics.Timestamp >= fromDate &&
+                        ics.Timestamp < to.Date &&
+                        ics.TimespanWithPreviousStatusLong.HasValue);
                 }
                 return this.interviewStatusesStorage.Query(_ =>
                     _.SelectMany(x => x.InterviewCommentedStatuses)
@@ -366,15 +360,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
         private static string ToSpecDaysFormat(double? quantity)
         {
-            if (quantity == null) return "-";
-
-            var quantityInMinutes = TimeSpan.FromMinutes(quantity ?? 0);
-
-            var days = quantityInMinutes.Days > 0 ? $"{quantityInMinutes:%d}d" : "";
-            var hours = quantityInMinutes.Hours > 0 ? $"{quantityInMinutes:%h}h" : "";
-            var minutes = quantityInMinutes.Minutes > 0 ? $"{quantityInMinutes:mm}m" : "";
-
-            return string.Join(" ", days, hours, minutes);
+            return quantity == null ?
+                null :
+                TimeSpan.FromMinutes(quantity ?? 0).Humanize(3, minUnit: TimeUnit.Minute, maxUnit: TimeUnit.Day);
         }
     }
 }

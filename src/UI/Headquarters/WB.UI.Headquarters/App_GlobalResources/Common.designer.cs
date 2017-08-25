@@ -70,11 +70,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All interviewers.
+        /// </summary>
+        internal static string AllInterviewers {
+            get {
+                return ResourceManager.GetString("AllInterviewers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All questionnaires.
         /// </summary>
         internal static string AllQuestionnaires {
             get {
                 return ResourceManager.GetString("AllQuestionnaires", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All teams.
+        /// </summary>
+        internal static string AllTeams {
+            get {
+                return ResourceManager.GetString("AllTeams", resourceCulture);
             }
         }
         

@@ -1677,6 +1677,7 @@
     <Compile Include="Controllers\WebInterviewController.Actions.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M020_AddContentType.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M021_AddIndexOnQuestionnaierBrowseItems_QuestionnaireId.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M017_AddQuestionnaireIdentityColumn.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M015_Add_indexes_for_interviewSummary.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M014_AddStatusIndexToStatusHistory.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M012_DeleteDeletedInterviews.cs" />

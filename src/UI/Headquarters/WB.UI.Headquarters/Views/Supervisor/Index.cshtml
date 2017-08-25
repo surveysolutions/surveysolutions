@@ -144,26 +144,23 @@
 
         <div class="row">
             @Html.Partial("_alerts")
-            <div class="row">
-                <div class="page-header clearfix">
-                    <div>
-                        <h1>@Html.Raw(string.Format(Users.SupervisorsCountDescription, @"<span data-bind='text: UsersCount'></span>"))</h1>
-                        @if ((authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter) && !authorizedUser.IsObserving)
-                        {
-                            <a class="btn btn-success" href="@Url.Action("Create", "Supervisor", new {area = string.Empty})">@Users.AddSupervisor</a>
-                        }
-                    </div>
+            <div class="page-header clearfix">
+                <div class="clearfix">
+                <h1>@Html.Raw(string.Format(Users.SupervisorsCountDescription, @"<span data-bind='text: UsersCount'></span>"))</h1>
+                @if ((authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter) && !authorizedUser.IsObserving)
+                {
+                    <a class="btn btn-success" href="@Url.Action("Create", "Supervisor", new {area = string.Empty})">@Users.AddSupervisor</a>
+                }
                 </div>
-                <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">
-                    <ol class="list-unstyled">
-                        @if (!authorizedUser.IsObserving && !authorizedUser.IsObserver)
-                        {
-                            <li>@Pages.Users_Supervisors_Instruction1</li>
-                            <li>@Pages.Users_Supervisors_Instruction2</li>
-                        }
-                    </ol>
-                </div>
+                <ol class="list-unstyled">
+                    @if (!authorizedUser.IsObserving && !authorizedUser.IsObserver)
+                    {
+                        <li>@Pages.Users_Supervisors_Instruction1</li>
+                        <li>@Pages.Users_Supervisors_Instruction2</li>
+                    }
+                </ol>
             </div>
+            
             <table id="data_holder" class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes"
                    data-order="[[ 1, &quot;asc&quot; ]]" data-searching="true">
                 <thead>

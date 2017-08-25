@@ -1,19 +1,16 @@
 <template>
-    <table class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews responsive">
-        <thead></thead>
-        <tbody></tbody>
-        <tfoot v-if="table">
-            <tr>
-                <th v-bind:colSpan="tableOptions.columns.length"
-                    style="text-align: right">
-                    {{$t("Pages.DownloadReport")}}
-                    <a target="_blank" v-bind:href="$store.state.exportUrls.excel">XLSX</a>, {{$t("Pages.Or")}}
-                    <a target="_blank" v-bind:href="$store.state.exportUrls.csv">CSV</a>, {{$t("Pages.Or")}}
-                    <a target="_blank" v-bind:href="$store.state.exportUrls.tab">TAB</a>
-                </th>
-            </tr>
-        </tfoot>
-    </table>
+    <div>
+        <table class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews responsive">
+            <thead></thead>
+            <tbody></tbody>
+        </table>
+        <div class="download-report-as" v-if="exportable && table">
+            {{$t("Pages.DownloadReport")}}
+            <a target="_blank" v-bind:href="$store.state.exportUrls.excel">XLSX</a>, {{$t("Pages.Or")}}
+            <a target="_blank" v-bind:href="$store.state.exportUrls.csv">CSV</a>, {{$t("Pages.Or")}}
+            <a target="_blank" v-bind:href="$store.state.exportUrls.tab">TAB</a>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -39,7 +36,8 @@ export default {
         authorizedUser: { type: Object, default() { return {} } },
         reloadDebounce: {type: Number, default: 500},
         noPaging: { type: Boolean },
-        noSearch: { type: Boolean }
+        noSearch: { type: Boolean },
+        exportable: { type: Boolean }
     },
 
     data() {
@@ -147,7 +145,7 @@ export default {
             this.responseProcessor(response.responseJSON);
         };
 
-        this.table = $(this.$el).DataTable(options);
+        this.table = $(this.$el).find('table').DataTable(options);
         this.table.on('init.dt', this.onTableInitComplete);
         this.table.on('select', function (e, dt, type, indexes) {
             self.$emit('select', e, dt, type, indexes);
