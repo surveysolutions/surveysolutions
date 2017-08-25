@@ -333,7 +333,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             => new ReportView
             {
                 Headers = ToReportHeader(view).ToArray(),
-                Data = view.Items.Select(x => ToReportRow(x).ToArray()).ToArray()
+                Data = ToDataView(view)
             };
 
         private IEnumerable<string> ToReportHeader(SpeedByResponsibleReportView view)
@@ -345,6 +345,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
             yield return Report.COLUMN_AVERAGE;
             yield return Report.COLUMN_TOTAL;
+        }
+
+        private object[][] ToDataView(SpeedByResponsibleReportView view)
+        {
+            var data = new List<object[]> { ToReportRow(view.TotalRow).ToArray() };
+
+            data.AddRange(view.Items.Select(ToReportRow).Select(item => item.ToArray()));
+
+            return data.ToArray();
+        }
+
+        private IEnumerable<object> ToReportRow(SpeedByResponsibleTotalRow totalRow)
+        {
+            yield return Report.COLUMN_AVERAGE;
+            foreach (var total in totalRow.SpeedByPeriod)
+            {
+                yield return ToSpecDaysFormat(total);
+            }
+            yield return totalRow.Average;
+            yield return totalRow.Total;
         }
 
         private IEnumerable<object> ToReportRow(SpeedByResponsibleReportRow row)
@@ -360,9 +380,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
         private static string ToSpecDaysFormat(double? quantity)
         {
-            return quantity == null ?
-                null :
-                TimeSpan.FromMinutes(quantity ?? 0).Humanize(3, minUnit: TimeUnit.Minute, maxUnit: TimeUnit.Day);
+            if (quantity == null) return null;
+
+            return quantity < 1 ? 
+                "0 minutes" : 
+                TimeSpan.FromMinutes(quantity.Value).Humanize(3, minUnit: TimeUnit.Minute, maxUnit: TimeUnit.Day);
         }
     }
 }
