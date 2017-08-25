@@ -37,25 +37,38 @@
                         render: function (data, type, row) {
                             return getLinkToInterviews(model, data, row, '@InterviewStatus.SupervisorAssigned', model.Url.query['responsible']);
                         }
-                    }, {
+                    },
+                    {
                         render: function (data, type, row) {
                             return getLinkToInterviews(model, data, row, '@InterviewStatus.InterviewerAssigned', model.Url.query['responsible']);
                         }
-                    },  {
+                    },
+                    {
                         render: function (data, type, row) {
                             return getLinkToInterviews(model, data, row, '@InterviewStatus.Completed', model.Url.query['responsible']);
                         }
-                    }, {
+                    },
+                    {
                         render: function (data, type, row) {
                             return getLinkToInterviews(model, data, row, '@InterviewStatus.RejectedBySupervisor', model.Url.query['responsible']);
                         }
-                    }, {
-                    }, {
+                    },
+                    {
+                        render: function (data, type, row) {
+                            return "<span>" + data + "</span>";
+                        }
+                    },
+                    {
                         render: function (data, type, row) {
                             return getLinkToInterviews(model, data, row, '@InterviewStatus.RejectedByHeadquarters', model.Url.query['responsible']);
                         }
-                    }, {
-                    }, {
+                    },
+                    {
+                        render: function (data, type, row) {
+                            return "<span>" + data + "</span>";
+                        }
+                    },
+                    {
                         render: function (data, type, row) {
                             return getLinkToInterviews(model, data, row, '', model.Url.query['responsible']);
                         }
@@ -119,7 +132,7 @@
                         <thead>
                         <tr>
                             <th class="version" data-class="type-numeric version" data-name="QuestionnaireVersion" data-data="questionnaireVersion" data-th="@Reports.TemplateVersion">@Reports.TemplateVersion</th>
-                            <th class="without-break title-row changed-recently" data-class="without-break title-row changed-recently" data-name="QuestionnaireTitle" data-data="questionnaireTitle">@Reports.SurveyName</th>
+                            <th class="without-break changed-recently" data-class="without-break changed-recently" data-name="QuestionnaireTitle" data-data="questionnaireTitle">@Reports.SurveyName</th>
                             <th data-class="type-numeric" data-name="SupervisorAssignedCount" data-data="supervisorAssignedCount">@Reports.SupervisorAssigned</th>
                             <th data-class="type-numeric" data-name="InterviewerAssignedCount" data-data="interviewerAssignedCount">@Reports.InterviewerAssigned</th>
                             <th data-class="type-numeric" data-name="CompletedCount" data-data="completedCount">@Reports.Completed</th>
