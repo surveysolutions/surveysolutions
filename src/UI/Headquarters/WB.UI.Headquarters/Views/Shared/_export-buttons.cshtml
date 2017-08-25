@@ -1,7 +1,6 @@
-<tfoot>
-    <tr>
-        <th data-bind="attr:{ colSpan: datatableColumnLength }" style="text-align: right">
-            @Pages.DownloadReport <a target="_blank" data-bind="attr:{ href: ExportToExcelUrl }">XLSX</a>, @Pages.Or <a target="_blank" data-bind="attr:{ href: ExportToCsvUrl }">CSV</a> @Pages.Or <a target="_blank" data-bind="attr:{ href: ExportToTabUrl }">TAB</a>
-        </th>
-    </tr>
-</tfoot>
+<div class="download-report-as">
+    @Pages.DownloadReport
+    <a target="_blank" data-bind="attr:{ href: ExportToExcelUrl }">XLSX</a> @Pages.Or
+    <a target="_blank" data-bind="attr:{ href: ExportToCsvUrl }">CSV</a> @Pages.Or
+    <a target="_blank" data-bind="attr:{ href: ExportToTabUrl }">TAB</a>
+</div>

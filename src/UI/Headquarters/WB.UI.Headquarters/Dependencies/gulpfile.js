@@ -233,5 +233,5 @@ gulp.task('clean', function () {
 });
 
 gulp.task('default', ['clean'], function () {
-    gulp.start('move-bootstrap-fonts', 'styles', 'bowerCss', 'bowerJs', 'inject', 'vueify', 'vue-libs', 'watch-vue');
+    gulp.start('move-bootstrap-fonts', 'styles', 'bowerCss', 'bowerJs', 'inject', 'vueify', 'vue-libs' /*, 'watch-vue'*/);
 });

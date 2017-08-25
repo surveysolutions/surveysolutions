@@ -7,11 +7,15 @@
 	background-color: #fff;
 
 	.data{
+		h3{
+			margin-left: 15px;
+		}
 		width: 100%;
 		margin-bottom: 30px;
 		p{
 			@include font(14px, 16px);
 			margin-bottom: 0;
+			margin-left: 15px;
 			span{
 				display: block;
 			}
