@@ -26,7 +26,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             {
                 cmp.Lazy(false);
                 cmp.Property(x => x.QuestionnaireId);
+                cmp.Property(x => x.Id, ptp => ptp.Column("Questionnaire"));
                 cmp.Property(x => x.Version, ptp => ptp.Column("QuestionnaireVersion"));
+            });
+
+            ManyToOne(x => x.Questionnaire, mto =>
+            {
+                mto.Column("Questionnaire");
+                mto.Cascade(Cascade.None);
+                mto.Update(false);
+                mto.Insert(false);
             });
 
             Set(x => x.InterviewSummaries, set =>
@@ -81,15 +90,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 mto.Insert(false);
             });
 
-            ManyToOne(x => x.Questionnaire, mto =>
-            {
-                // TODO: Replace with proper NH relationship
-                // basically map to questionnairebrowseitems id column that is basically QuestionnaireIdent
-                mto.Formula("concat(replace(questionnaireid::text, '-', ''), '$', questionnaireversion)");
-                mto.Cascade(Cascade.None);
-                mto.Update(false);
-                mto.Insert(false);
-            });
         }
     }
 
