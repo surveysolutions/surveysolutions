@@ -10,10 +10,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             this.QuestionnaireId = questionnaireId;
             this.Version = version;
+            this.Id = this.ToString();
         }
 
         public long Version { get; set; }
         public Guid QuestionnaireId { get; set; }
+        public string Id { get; set; }
 
         public bool Equals(QuestionnaireIdentity other)
         {
