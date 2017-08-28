@@ -5,7 +5,7 @@
             <thead></thead>
             <tbody></tbody>
         </table>
-        <div class="download-report-as" v-if="exportable && table">
+        <div class="download-report-as" v-if="exportable">
             {{$t("Pages.DownloadReport")}}
             <a target="_blank" v-bind:href="$store.state.exportUrls.excel">XLSX</a>, {{$t("Pages.Or")}}
             <a target="_blank" v-bind:href="$store.state.exportUrls.csv">CSV</a>, {{$t("Pages.Or")}}
@@ -78,6 +78,8 @@ export default {
                     $(this).children("input[type='search']").delay(200).queue(function () { $(this).focus(); $(this).dequeue(); });
                 }
             });
+
+            this.initContextMenu();
         },
 
         initContextMenu() {
@@ -160,8 +162,6 @@ export default {
             }
         });
         this.$emit('DataTableRef', this.table);
-
-        this.initContextMenu();
     }
 
 }
