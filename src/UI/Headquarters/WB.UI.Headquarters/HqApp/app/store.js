@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import PNotify from 'pnotify'
-// PNotify.prototype.options.styling = "bootstrap3"
 
 Vue.use(Vuex)
 
