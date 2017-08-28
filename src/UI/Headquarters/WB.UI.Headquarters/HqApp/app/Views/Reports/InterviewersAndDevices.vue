@@ -87,23 +87,23 @@ export default {
                         }
                     },
                     {
-                        data: "outdatedCount",
-                        name: "OutdatedCount",
-                        "class": "type-numeric",
-                        orderable: true,
-                        title: this.$t("DevicesInterviewers.OldInterviewerVersion"),
-                        render: function (data, type, row) {
-                            return self.renderCell(data, row, 'OutdatedApp');
-                        }
-                    },
-                    {
                         data: "oldAndroidCount",
                         name: "OldAndroidCount",
                         "class": "type-numeric",
                         orderable: true,
-                        title: this.$t("DevicesInterviewers.OldAndroidVersion"),
+                        title: this.$t("DevicesInterviewers.OldInterviewerVersion"),
                         render: function(data, type, row) {
                             return self.renderCell(data, row, 'OldAndroid');
+                        }
+                    },
+                    {
+                        data: "outdatedCount",
+                        name: "OutdatedCount",
+                        "class": "type-numeric",
+                        orderable: true,
+                        title: this.$t("DevicesInterviewers.OldAndroidVersion"),
+                        render: function (data, type, row) {
+                            return self.renderCell(data, row, 'OutdatedApp');
                         }
                     },
                     {
