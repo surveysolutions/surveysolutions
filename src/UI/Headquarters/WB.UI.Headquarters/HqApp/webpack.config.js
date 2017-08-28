@@ -71,14 +71,14 @@ module.exports = {
             'moment': 'moment'
         }),
 
-        new webpack.optimize.ModuleConcatenationPlugin(),
-
         new BundleAnalyzerPlugin({
             analyzerMode: 'static',
             reportFilename: 'dist/stats.html',
             defaultSizes: 'gzip',
             openAnalyzer: false,
             statsOptions: { chunkModules: true, assets: true },
-        })
+        }),
+
+        new webpack.optimize.ModuleConcatenationPlugin()
     ].filter(x => x != null)
 }
