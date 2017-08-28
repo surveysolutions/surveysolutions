@@ -367,11 +367,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Quantity should be more then 0..
+        ///   Looks up a localized string similar to Quantity should be greater than equal to -1..
         /// </summary>
-        public static string PL0036_QuantityShouldBePositive {
+        public static string PL0036_QuantityShouldBeGreaterThanMinus1 {
             get {
-                return ResourceManager.GetString("PL0036_QuantityShouldBePositive", resourceCulture);
+                return ResourceManager.GetString("PL0036_QuantityShouldBeGreaterThanMinus1", resourceCulture);
             }
         }
         

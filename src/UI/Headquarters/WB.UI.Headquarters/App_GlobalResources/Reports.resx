@@ -213,4 +213,16 @@
   <data name="Report_Days_by_Interview_Status" xml:space="preserve">
     <value>Days by Interview Status</value>
   </data>
+  <data name="Report_Average_Interview_Duration" xml:space="preserve">
+    <value>Average interview duration</value>
+  </data>
+  <data name="Report_Number_of_Completed_Interviews" xml:space="preserve">
+    <value>Number of completed interviews</value>
+  </data>
+  <data name="Report_Status_Duration" xml:space="preserve">
+    <value>Status Duration</value>
+  </data>
+  <data name="Report_Team_Members_and_Statuses" xml:space="preserve">
+    <value>Team Members and Statuses</value>
+  </data>
 </root>
