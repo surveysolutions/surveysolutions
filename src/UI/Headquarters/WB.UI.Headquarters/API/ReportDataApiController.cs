@@ -150,7 +150,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                From = data.From,
                Orders = data.SortOrder ?? Enumerable.Empty<OrderRequestItem>(),
                Period = data.Period,
-               ReportType = data.ReportType
+               ReportType = data.ReportType,
+               TimezoneOffsetMinutes = data.TimezoneOffsetMinutes
             }; 
 
             return this.quantityReport.Load(input);
@@ -169,7 +170,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 QuestionnaireId = data.QuestionnaireId,
                 ColumnCount = data.ColumnCount,
                 From = data.From,
-                Orders = data.SortOrder
+                Orders = data.SortOrder,
+                TimezoneOffsetMinutes = data.TimezoneOffsetMinutes
             };
 
             return this.quantityReport.Load(input);
@@ -189,7 +191,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 From = data.From,
                 ReportType = data.ReportType,
                 Period = data.Period,
-                Orders = data.SortOrder
+                Orders = data.SortOrder,
+                TimezoneOffsetMinutes = data.TimezoneOffsetMinutes
             };
 
             return this.speedReport.Load(input);
@@ -208,7 +211,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 QuestionnaireId = input.QuestionnaireId,
                 QuestionnaireVersion = input.QuestionnaireVersion,
                 BeginInterviewStatuses = this.GetBeginInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType),
-                EndInterviewStatuses = this.GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType)
+                EndInterviewStatuses = this.GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType),
+                TimezoneOffsetMinutes = input.TimezoneOffsetMinutes
             };
 
             return this.speedReport.Load(inputParameters);
@@ -228,7 +232,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 QuestionnaireVersion = input.QuestionnaireVersion,
                 BeginInterviewStatuses = this.GetBeginInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType),
                 EndInterviewStatuses = this.GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType),
-                SupervisorId = input.SupervisorId ?? this.authorizedUser.Id
+                SupervisorId = input.SupervisorId ?? this.authorizedUser.Id,
+                TimezoneOffsetMinutes = input.TimezoneOffsetMinutes
             };
 
             return this.speedReport.Load(inputParameters);
@@ -247,7 +252,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 QuestionnaireId = data.QuestionnaireId,
                 ReportType = data.ReportType,
                 Period = data.Period,
-                Orders = data.SortOrder
+                Orders = data.SortOrder,
+                TimezoneOffsetMinutes = data.TimezoneOffsetMinutes
             };
 
             return this.speedReport.Load(input);

@@ -61,8 +61,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
          Expression<Func<T, bool>> restrictUser,
          Expression<Func<T, UserAndTimestampAndTimespan>> userIdSelector)
         {
-            var from = this.AddPeriod(reportStartDate.Date, period, -columnCount + 1);
-            var to = reportStartDate.Date.AddDays(1);
+            var from = this.AddPeriod(reportStartDate, period, -columnCount + 1);
+            var to = reportStartDate.AddDays(1);
 
             DateTime? minDate = ReportHelpers.GetFirstInterviewCreatedDate(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), this.interviewStatusesStorage);
             var dateTimeRanges =
@@ -226,7 +226,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         public SpeedByResponsibleReportView Load(SpeedByInterviewersReportInputModel input)
         {
             return this.Load(
-                reportStartDate: input.From,
+                reportStartDate: input.FromAdjastedToUsersTimezone,
                 period: input.Period,
                 columnCount: input.ColumnCount,
                 page: input.Page,
@@ -242,7 +242,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         public SpeedByResponsibleReportView Load(SpeedBySupervisorsReportInputModel input)
         {
             return this.Load(
-                reportStartDate: input.From,
+                reportStartDate: input.FromAdjastedToUsersTimezone,
                 period: input.Period,
                 columnCount: input.ColumnCount,
                 page: input.Page,
@@ -264,7 +264,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         public SpeedByResponsibleReportView Load(SpeedBetweenStatusesByInterviewersReportInputModel input)
         {
             return this.Load(
-                reportStartDate: input.From,
+                reportStartDate: input.FromAdjastedToUsersTimezone,
                 period: input.Period,
                 columnCount: input.ColumnCount,
                 page: input.Page,
@@ -281,7 +281,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         public SpeedByResponsibleReportView Load(SpeedBetweenStatusesBySupervisorsReportInputModel input)
         {
             return this.Load(
-                reportStartDate:input.From,
+                reportStartDate:input.FromAdjastedToUsersTimezone,
                 period:input.Period,
                 columnCount:input.ColumnCount,
                 page:input.Page,
