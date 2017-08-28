@@ -20,5 +20,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         public int ColumnCount { get; set; }
         public InterviewExportedAction[] InterviewStatuses { get; set; }
         public PeriodiceReportType ReportType { get; set; }
+        public int? TimezoneOffsetMinutes { get; set; }
     }
 }
