@@ -169,6 +169,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     Report.COLUMN_TEAM_MEMBER, Report.COLUMN_SUPERVISOR_ASSIGNED, Report.COLUMN_INTERVIEWER_ASSIGNED,
                     Report.COLUMN_COMPLETED, Report.COLUMN_REJECTED_BY_SUPERVISOR,
                     Report.COLUMN_APPROVED_BY_SUPERVISOR, Report.COLUMN_REJECTED_BY_HQ, Report.COLUMN_APPROVED_BY_HQ,
+                    Report.COLUMN_TOTAL
                 },
                 Data = new[] {view.TotalRow}.Concat(view.Items).Select(x => new object[]
                 {
