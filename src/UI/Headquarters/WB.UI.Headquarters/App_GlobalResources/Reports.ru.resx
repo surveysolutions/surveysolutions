@@ -221,4 +221,16 @@
     <value>Отчет по кол-ву выполненой работы супервизоров</value>
     <comment>Отчет по кол-ву выполненой работы супервизоров</comment>
   </data>
+  <data name="Report_Average_Interview_Duration" xml:space="preserve">
+    <value>Средняя продолжительность интервью</value>
+  </data>
+  <data name="Report_Number_of_Completed_Interviews" xml:space="preserve">
+    <value>Количество завершенных интервью</value>
+  </data>
+  <data name="Report_Status_Duration" xml:space="preserve">
+    <value>Длительность статусов</value>
+  </data>
+  <data name="Report_Team_Members_and_Statuses" xml:space="preserve">
+    <value>Члены команды и статусы</value>
+  </data>
 </root>

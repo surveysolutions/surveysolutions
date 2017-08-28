@@ -138,8 +138,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 },
                 Data = view.Items.Select(x => new object[]
                 {
-                    x.TeamName, x.NeverSynchedCount,  x.NoQuestionnairesCount, x.NeverUploadedCount, x.ReassignedCount, x.OldAndroidCount,
-                    x.OutdatedCount, x.WrongDateOnTabletCount, x.LowStorageCount
+                    x.TeamName, x.NeverSynchedCount,  x.NoQuestionnairesCount, x.NeverUploadedCount, x.ReassignedCount, x.OutdatedCount,
+                    x.OldAndroidCount, x.WrongDateOnTabletCount, x.LowStorageCount
                     
                 }).ToArray()
             };
