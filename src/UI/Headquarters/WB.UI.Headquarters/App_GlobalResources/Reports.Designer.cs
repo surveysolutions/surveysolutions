@@ -169,6 +169,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Average interview duration.
+        /// </summary>
+        internal static string Report_Average_Interview_Duration {
+            get {
+                return ResourceManager.GetString("Report_Average_Interview_Duration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Days by Interview Status.
         /// </summary>
         internal static string Report_Days_by_Interview_Status {
@@ -183,6 +192,15 @@ namespace Resources {
         internal static string Report_Devices_and_Interviewers {
             get {
                 return ResourceManager.GetString("Report_Devices_and_Interviewers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of completed interviews.
+        /// </summary>
+        internal static string Report_Number_of_Completed_Interviews {
+            get {
+                return ResourceManager.GetString("Report_Number_of_Completed_Interviews", resourceCulture);
             }
         }
         
@@ -241,6 +259,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Status Duration.
+        /// </summary>
+        internal static string Report_Status_Duration {
+            get {
+                return ResourceManager.GetString("Report_Status_Duration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Supervisors And Statuses.
         /// </summary>
         internal static string Report_Supervisors_And_Statuses {
@@ -264,6 +291,15 @@ namespace Resources {
         internal static string Report_Teams_and_Statuses {
             get {
                 return ResourceManager.GetString("Report_Teams_and_Statuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team Members and Statuses.
+        /// </summary>
+        internal static string Report_Team_Members_and_Statuses {
+            get {
+                return ResourceManager.GetString("Report_Team_Members_and_Statuses", resourceCulture);
             }
         }
         
