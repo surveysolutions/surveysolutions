@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 using Dapper;
 using Main.Core.Entities.SubEntities;
 using Npgsql;
-using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage.Postgre;
 
@@ -23,16 +21,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
     public class CountDaysOfInterviewInStatusReport : ICountDaysOfInterviewInStatusReport
     {
         private readonly PostgresPlainStorageSettings plainStorageSettings;
-        private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
 
         private const string InterviewsScriptName = "WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.CountDaysOfInterviewInStatusReportInterviews.sql";
         private const string AssignmentsScriptName = "WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.CountDaysOfInterviewInStatusReportAssignments.sql";
 
-        public CountDaysOfInterviewInStatusReport(
-            IPlainStorageAccessor<Assignment> assignmentsStorage, 
-            PostgresPlainStorageSettings plainStorageSettings)
+        public CountDaysOfInterviewInStatusReport(PostgresPlainStorageSettings plainStorageSettings)
         {
-            this.assignmentsStorage = assignmentsStorage;
             this.plainStorageSettings = plainStorageSettings;
         }
 
@@ -40,14 +34,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
         {
             public int InterviewsCount { get; set; }
             public InterviewStatus Status { get; set; }
-            public DateTime StatusDate { get; set; }
+            public int Days { get; set; }
         }
 
         class AssignmentsCounterObject
         {
             public int Count { get; set; }
             public Guid RoleId { get; set; }
-            public DateTime CreatedDate { get; set; }
+            public int Days { get; set; }
         }
 
         public async Task<CountDaysOfInterviewInStatusRow[]> LoadAsync(CountDaysOfInterviewInStatusInputModel input)
@@ -55,13 +49,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             var order = input.Orders.FirstOrDefault();
             if (order == null) throw new ArgumentNullException(nameof(order));
 
-            var rows = CreateResultSetWithPredifinedRanges();
+            var rows = CreateResultSetWithPredefinedRanges();
 
             var datesAndStatuses = await ExecuteQueryForInterviewsStatistics(input);
 
             foreach (var counterObject in datesAndStatuses.AsQueryable())
             {
-                var selectedRange = rows.Find(r => (!r.StartDate.HasValue || r.StartDate <= counterObject.StatusDate) && counterObject.StatusDate < r.EndDate);
+                var selectedRange = rows.Find(r => (!r.DaysCountEnd.HasValue || r.DaysCountEnd >= counterObject.Days) && counterObject.Days >= r.DaysCountStart);
 
                 if (selectedRange == null)
                     continue;
@@ -91,7 +85,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             var assignmentsDatesAndCountsForInterviewers = await ExecuteQueryForAssignmentsStatistics(input);
             foreach (var counterObject in assignmentsDatesAndCountsForInterviewers.AsQueryable())
             {
-                var selectedRange = rows.Find(r => (!r.StartDate.HasValue || r.StartDate <= counterObject.CreatedDate) && counterObject.CreatedDate <= r.EndDate);
+                var selectedRange = rows.Find(r => (!r.DaysCountEnd.HasValue || r.DaysCountEnd >= counterObject.Days) && counterObject.Days >= r.DaysCountStart);
                 if (selectedRange == null)
                     continue;
 
@@ -146,7 +140,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             return data;
         }
 
-        private static List<CountDaysOfInterviewInStatusRow> CreateResultSetWithPredifinedRanges()
+        private static List<CountDaysOfInterviewInStatusRow> CreateResultSetWithPredefinedRanges()
         {
             var utcNow = DateTime.UtcNow;
             var rows = new List<CountDaysOfInterviewInStatusRow>();
