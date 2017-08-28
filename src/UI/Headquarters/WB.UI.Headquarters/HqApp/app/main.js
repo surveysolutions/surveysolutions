@@ -8,7 +8,6 @@ import Vue from 'vue'
 import Vuei18n from "./plugins/locale"
 import store from "./store"
 
-import App from "./App"
 import config from "./config"
 
 Vue.use(config)
@@ -25,8 +24,7 @@ const router = require("./router").default
 
 export default new Vue({
     el: "#vueApp",
-    render: h => h(App),
-    components: { App },
+    render: h => h('router-view'),
     store,
     router
 });

@@ -54,7 +54,8 @@ module.exports = {
             "jQuery": 'jquery',
             'moment': 'moment'
         }),
-
+        new webpack.optimize.ModuleConcatenationPlugin(),
+        
         // https://webpack.js.org/guides/production/
         devMode ? null : new webpack.optimize.UglifyJsPlugin({
             sourceMap: true
@@ -74,6 +75,7 @@ module.exports = {
             analyzerMode: 'static',
             reportFilename: 'dist/stats.vendor.html',
             openAnalyzer: false,
+            defaultSizes: 'gzip',
             statsOptions: { chunkModules: true, assets: true },
         })
     ].filter(x => x != null)
