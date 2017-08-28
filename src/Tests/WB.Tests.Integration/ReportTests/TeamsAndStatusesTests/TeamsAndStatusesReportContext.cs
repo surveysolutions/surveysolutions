@@ -13,25 +13,25 @@ using WB.Tests.Integration.PostgreSQLTests;
 
 namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
 {
-    [Subject(typeof(HeadquartersTeamsAndStatusesReport))]
+    [Subject(typeof(TeamsAndStatusesReport))]
     internal class TeamsAndStatusesReportContext: with_postgres_db
     {
-        protected static HeadquartersTeamsAndStatusesReport CreateHqTeamsAndStatusesReport(INativeReadSideStorage<InterviewSummary> reader = null)
+        protected static TeamsAndStatusesReport CreateHqTeamsAndStatusesReport(INativeReadSideStorage<InterviewSummary> reader = null)
         {
             if (reader == null)
             {
                 reader = CreateInterviewSummaryRepository();
             }
-            return new HeadquartersTeamsAndStatusesReport(reader);
+            return new TeamsAndStatusesReport(reader);
         }
         
-        protected static SupervisorTeamsAndStatusesReport CreateSvTeamsAndStatusesReport(INativeReadSideStorage<InterviewSummary> reader = null)
+        protected static TeamsAndStatusesReport CreateSvTeamsAndStatusesReport(INativeReadSideStorage<InterviewSummary> reader = null)
         {
             if (reader == null)
             {
                 reader = CreateInterviewSummaryRepository();
             }
-            return new SupervisorTeamsAndStatusesReport(reader);
+            return new TeamsAndStatusesReport(reader);
         }
 
         protected static PostgreReadSideStorage<InterviewSummary> CreateInterviewSummaryRepository()

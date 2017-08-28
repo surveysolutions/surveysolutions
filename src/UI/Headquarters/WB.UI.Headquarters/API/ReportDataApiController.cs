@@ -16,7 +16,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -32,8 +31,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     public partial class ReportDataApiController : BaseApiController
     {
-        private readonly IHeadquartersTeamsAndStatusesReport headquartersTeamsAndStatusesReport;
-        private readonly ISupervisorTeamsAndStatusesReport supervisorTeamsAndStatusesReport;
+        private readonly ITeamsAndStatusesReport teamsAndStatusesReport;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IAuthorizedUser authorizedUser;
         private readonly ISurveysAndStatusesReport surveysAndStatusesReport;
@@ -51,8 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IAuthorizedUser authorizedUser,
             ILogger logger,
             ISurveysAndStatusesReport surveysAndStatusesReport,
-            IHeadquartersTeamsAndStatusesReport headquartersTeamsAndStatusesReport,
-            ISupervisorTeamsAndStatusesReport supervisorTeamsAndStatusesReport,
+            ITeamsAndStatusesReport teamsAndStatusesReport,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IMapReport mapReport,
             IChartStatisticsViewFactory chartStatisticsViewFactory, 
@@ -65,8 +62,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             this.authorizedUser = authorizedUser;
             this.surveysAndStatusesReport = surveysAndStatusesReport;
-            this.headquartersTeamsAndStatusesReport = headquartersTeamsAndStatusesReport;
-            this.supervisorTeamsAndStatusesReport = supervisorTeamsAndStatusesReport;
+            this.teamsAndStatusesReport = teamsAndStatusesReport;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.mapReport = mapReport;
             this.chartStatisticsViewFactory = chartStatisticsViewFactory;
@@ -91,7 +87,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 TemplateVersion = teamsAndStatusesFilter.TemplateVersion
             };
 
-            var view = this.supervisorTeamsAndStatusesReport.Load(input);
+            var view = this.teamsAndStatusesReport.GetBySupervisorAndDependentInterviewers(input);
             return new TeamsAndStatusesReportResponse
             {
                 Draw = teamsAndStatusesFilter.Draw + 1,
@@ -272,7 +268,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 TemplateVersion = teamsAndStatusesFilter.TemplateVersion
             };
 
-            var view = this.headquartersTeamsAndStatusesReport.Load(input);
+            var view = this.teamsAndStatusesReport.GetBySupervisors(input);
             return new TeamsAndStatusesReportResponse
             {
                 Draw = teamsAndStatusesFilter.Draw + 1,

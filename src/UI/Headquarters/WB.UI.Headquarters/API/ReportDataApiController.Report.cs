@@ -65,7 +65,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             filter.Start = 0;
             filter.Length = MaxPageSize;
 
-            var report = this.supervisorTeamsAndStatusesReport.GetReport(
+            var report = this.teamsAndStatusesReport.GetReport(
                 new TeamsAndStatusesInputModel
                 {
                     ViewerId = this.authorizedUser.Id,
@@ -238,7 +238,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             filter.Start = 0;
             filter.Length = MaxPageSize;
 
-            var report = this.headquartersTeamsAndStatusesReport.GetReport(
+            var report = this.teamsAndStatusesReport.GetReport(
                 new TeamsAndStatusesInputModel
                 {
                     Orders = filter.GetSortOrderRequestItems(),
