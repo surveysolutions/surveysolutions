@@ -56,7 +56,7 @@
 
                 if (selectedRow.ResponsibleRole() === 4 /* Interviewer */) {
                     items["openInterviewerProfile"] = {
-                        name: "@Common.OpenResponsiblesProfile",
+                        name: "@Html.Raw(Common.OpenResponsiblesProfile)",
                         callback: function(t, e) {
                             var profileUrl = $profileUrl + '/' + selectedRow.ResponsibleId();
                             window.location = profileUrl;
