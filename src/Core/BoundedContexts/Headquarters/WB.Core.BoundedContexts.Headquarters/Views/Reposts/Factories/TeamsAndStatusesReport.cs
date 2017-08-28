@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using NHibernate;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
@@ -116,8 +117,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 }));
 
             var totalStatistics = GetTotalRow(input);
+            
 
-            var totalCount = this.interviewsReader.CountDistinctWithRecursiveIndex(_ => _.Where(this.CreateFilterExpression(input)).Select(x => x.TeamLeadId));
+            var totalCount = this.interviewsReader.CountDistinctWithRecursiveIndex(x =>
+            {
+                x = x.Where(CreateFilterExpression(input));
+
+                if (forAdminOrHq) x.Select(y => y.TeamLeadId);
+                else x.Select(y => y.ResponsibleId);
+
+                return x;
+            });
 
             return new TeamsAndStatusesReportView
             {
