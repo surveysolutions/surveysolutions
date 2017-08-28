@@ -876,11 +876,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                         continue;
                     }
 
-                    if (quantity < 1)
+                    if (quantity < -1)
                     {
                         yield return
                             new PanelImportVerificationError("PL0036",
-                                PreloadingVerificationMessages.PL0036_QuantityShouldBePositive,
+                                PreloadingVerificationMessages.PL0036_QuantityShouldBeGreaterThanMinus1,
                                 new PreloadedDataVerificationReference(quantityColumnIndex, y,
                                     PreloadedDataVerificationReferenceType.Cell,
                                     "",

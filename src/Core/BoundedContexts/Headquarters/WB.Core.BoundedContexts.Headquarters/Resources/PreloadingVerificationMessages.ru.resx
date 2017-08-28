@@ -130,8 +130,8 @@
     <value>Только целые значения разрешины.</value>
     <comment>Только целые значения разрешины.</comment>
   </data>
-  <data name="PL0036_QuantityShouldBePositive" xml:space="preserve">
-    <value>Количество должно быть больше 0.</value>
+  <data name="PL0036_QuantityShouldBeGreaterThanMinus1" xml:space="preserve">
+    <value>Количество должно быть больше -1.</value>
     <comment>Количество должно быть больше 0.</comment>
   </data>
   <data name="PL0037_ColumnIsNotIdentifying" xml:space="preserve">
