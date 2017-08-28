@@ -4,6 +4,7 @@ const baseAppPath = "./"
 const devMode = process.env.NODE_ENV != 'production';
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
+
 console.log("Building HQ UI js in " + (devMode ? "DEVELOPMENT" : "PRODUCTION") + " mode.")
 
 var fs = require('fs');
@@ -12,6 +13,8 @@ if (!fs.existsSync(path.join(baseAppPath, "./dist/vendor.bundle.js"))) {
     console.log("Build missing `vendor.bundle.js`")
     execSync ('npm run vendor')
 }
+
+var manifest = require("./dist/vendor.manifest.json");
 
 module.exports = {
     entry: {
@@ -51,17 +54,22 @@ module.exports = {
     },
     plugins: [
         new webpack.DllReferencePlugin({
-            manifest: require('./dist/vendor.manifest.json')
+            manifest
         }),
+        
         new webpack.ProvidePlugin({
             _: 'lodash',
             '$': "jquery",
             "jQuery": 'jquery',
             'moment': 'moment'
         }),
+        
+        new webpack.optimize.ModuleConcatenationPlugin(),
+        
         new BundleAnalyzerPlugin({
             analyzerMode: 'static',
             reportFilename: 'dist/stats.html',
+            defaultSizes: 'gzip',
             openAnalyzer: false,
             statsOptions: { chunkModules: true, assets: true },
         })
