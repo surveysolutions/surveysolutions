@@ -1,6 +1,7 @@
 <template>
     <div>
-        <table class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews responsive">
+        <table ref="table" 
+            class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews responsive">
             <thead></thead>
             <tbody></tbody>
         </table>
@@ -40,11 +41,6 @@ export default {
         exportable: { type: Boolean }
     },
 
-    data() {
-        return {
-            table: null
-        };
-    },
     methods: {
         reload: _.debounce(function (data) {
             this.table.ajax.data = this.addParamsToRequest(data || {});
@@ -71,7 +67,7 @@ export default {
         },
 
         onTableInitComplete() {
-            $(this.$el).parents('.dataTables_wrapper').find('.dataTables_filter label').on('click', function (e) {
+            $(this.$refs.table).parents('.dataTables_wrapper').find('.dataTables_filter label').on('click', function (e) {
                 if (e.target !== this)
                     return;
                 if ($(this).hasClass("active")) {
@@ -87,7 +83,7 @@ export default {
         initContextMenu() {
             if(this.contextMenuItems == null) return;
             var contextMenuOptions = {
-                selector: "#" + this.$el.attributes.id.value + " tbody tr",
+                selector: "#" + this.$refs.table.attributes.id.value + " tbody tr",
                 autoHide: false,
                 build: ($trigger) => {
                     var selectedRow = this.selectRowAndGetData($trigger);
@@ -145,7 +141,7 @@ export default {
             this.responseProcessor(response.responseJSON);
         };
 
-        this.table = $(this.$el).find('table').DataTable(options);
+        this.table = $(this.$refs.table).DataTable(options);
         this.table.on('init.dt', this.onTableInitComplete);
         this.table.on('select', function (e, dt, type, indexes) {
             self.$emit('select', e, dt, type, indexes);
