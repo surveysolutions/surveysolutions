@@ -13,11 +13,11 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Hq
             reportFactory = CreateHqTeamsAndStatusesReport();
         };
 
-        Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.Load(new TeamsAndStatusesInputModel()));
+        Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.GetBySupervisors(new TeamsAndStatusesInputModel()));
 
         It should_return_0_records = () => report.TotalCount.ShouldEqual(0);
 
-        private static HeadquartersTeamsAndStatusesReport reportFactory;
+        private static TeamsAndStatusesReport reportFactory;
         private static TeamsAndStatusesReportView report;
     }
 }

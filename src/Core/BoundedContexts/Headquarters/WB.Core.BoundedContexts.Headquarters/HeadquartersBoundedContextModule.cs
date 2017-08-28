@@ -250,8 +250,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Bind<IOldschoolChartStatisticsDataProvider>().To<OldschoolChartStatisticsDataProvider>();
 
-            this.Bind<ISupervisorTeamsAndStatusesReport>().To<SupervisorTeamsAndStatusesReport>();
-            this.Bind<IHeadquartersTeamsAndStatusesReport>().To<HeadquartersTeamsAndStatusesReport>();
+            this.Bind<ITeamsAndStatusesReport>().To<TeamsAndStatusesReport>();
             this.Bind<ISurveysAndStatusesReport>().To<SurveysAndStatusesReport>();
             this.Bind<IMapReport>().To<MapReport>();
             this.Bind<ICountDaysOfInterviewInStatusReport>().To<CountDaysOfInterviewInStatusReport>();

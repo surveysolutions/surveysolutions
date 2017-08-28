@@ -114,13 +114,13 @@ namespace WB.Tests.Integration.ReportTests
                 this.reportContext = reportContext;
             }
 
-            public HeadquartersTeamsAndStatusesReport TeamsAndStatuses(INativeReadSideStorage<InterviewSummary> reader = null)
+            public TeamsAndStatusesReport TeamsAndStatuses(INativeReadSideStorage<InterviewSummary> reader = null)
             {
                 if (reader == null)
                 {
                     reader = reportContext.CreateInterviewSummaryRepository();
                 }
-                return new HeadquartersTeamsAndStatusesReport(reader);
+                return new TeamsAndStatusesReport(reader);
             }
 
 
@@ -150,13 +150,13 @@ namespace WB.Tests.Integration.ReportTests
                 this.reportContext = reportContext;
             }
 
-            public SupervisorTeamsAndStatusesReport TeamsAndStatuses(INativeReadSideStorage<InterviewSummary> reader = null)
+            public TeamsAndStatusesReport TeamsAndStatuses(INativeReadSideStorage<InterviewSummary> reader = null)
             {
                 if (reader == null)
                 {
                     reader = reportContext.CreateInterviewSummaryRepository();
                 }
-                return new SupervisorTeamsAndStatusesReport(reader);
+                return new TeamsAndStatusesReport(reader);
             }
 
             public SurveysAndStatusesReport SurveyAndStatuses(INativeReadSideStorage<InterviewSummary> reader = null)

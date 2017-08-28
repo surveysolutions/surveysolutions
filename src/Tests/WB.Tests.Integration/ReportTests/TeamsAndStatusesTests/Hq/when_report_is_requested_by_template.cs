@@ -34,7 +34,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Hq
             reportFactory = CreateHqTeamsAndStatusesReport(repository);
         };
 
-        Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(()=>reportFactory.Load(new TeamsAndStatusesInputModel
+        Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(()=>reportFactory.GetBySupervisors(new TeamsAndStatusesInputModel
         {
             TemplateId = questionnaireId, 
             TemplateVersion = version,
@@ -42,7 +42,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Hq
 
         It should_count_statuses_by_questionnaire = () => report.Items.First().CompletedCount.ShouldEqual(2);
 
-        static HeadquartersTeamsAndStatusesReport reportFactory;
+        static TeamsAndStatusesReport reportFactory;
         static TeamsAndStatusesReportView report;
         static Guid questionnaireId;
         static int version;
