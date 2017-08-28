@@ -37,12 +37,14 @@ try {
         -BuildConfiguration $BuildConfiguration
     if ($buildSuccessful) { 
 
+        New-Item "$artifactsFolder\stats" -Type Directory -Force
+
         BuildStaticContent "Designer Questionnaire" "src\UI\Designer\WB.UI.Designer\questionnaire" | % { if (-not $_) { 
             Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
             Write-Host "##teamcity[buildProblem description='Failed to build static content for Designer']"
             Exit 
         }}
-        
+        C
         BuildStaticContent "Hq Deps" "src\UI\Headquarters\WB.UI.Headquarters\Dependencies" | % { if (-not $_) {
                 Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
                 Write-Host "##teamcity[buildProblem description='Failed to build static content for HQ']"
@@ -66,7 +68,7 @@ try {
             Move-Item "..\WB.UI.Headquarters\InterviewApp\stats.html" "$artifactsFolder\stats\WebInterview.html" -ErrorAction SilentlyContinue
         }}
 
-        Compress-Archive -Path "$artifactsFolder\stats" -DestinationPath "$artifactsFolder\stats.zip" -CompressionLevel Optimal
+        Compress-Archive -Path "$artifactsFolder\stats\*.*" -DestinationPath "$artifactsFolder\stats.zip" -CompressionLevel Optimal
         Remove-Item -Path "$artifactsFolder\stats" -Recurse -Force -ErrorAction SilentlyContinue
 
         RunConfigTransform $ProjectDesigner $BuildConfiguration
