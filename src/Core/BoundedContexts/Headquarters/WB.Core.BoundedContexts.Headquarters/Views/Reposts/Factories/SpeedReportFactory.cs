@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Humanizer;
-using Humanizer.Configuration;
-using Humanizer.DateTimeHumanizeStrategy;
 using Humanizer.Localisation;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -50,6 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
         private SpeedByResponsibleReportView Load<T>(
          DateTime reportStartDate,
+         int timezoneAdjastmentMins,
          string period,
          int columnCount,
          int page,
@@ -67,11 +66,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             DateTime? minDate = ReportHelpers.GetFirstInterviewCreatedDate(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), this.interviewStatusesStorage);
             var dateTimeRanges =
                 Enumerable.Range(0, columnCount)
-                    .Select(i => new DateTimeRange(this.AddPeriod(from, period, i).Date, this.AddPeriod(from, period, i + 1).Date))
+                    .Select(i => new DateTimeRange(this.AddPeriod(from, period, i), this.AddPeriod(from, period, i + 1)))
                     .Where(i => minDate.HasValue && i.To.Date >= minDate)
                     .ToArray();
 
-            var allUsersQuery = query(questionnaireId, questionnaireVersion, from, to);
+            DateTime fromInUsersTimezone = from.AddMinutes(timezoneAdjastmentMins);
+            DateTime toInUsersTimezone = to.AddMinutes(timezoneAdjastmentMins);
+            var allUsersQuery = query(questionnaireId, questionnaireVersion, fromInUsersTimezone, toInUsersTimezone);
 
             if (restrictUser != null)
                 allUsersQuery = allUsersQuery.Where(restrictUser);
@@ -86,7 +87,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 .Take(pageSize).ToArray();
         
             var allInterviewsInStatus =
-                 query(questionnaireId, questionnaireVersion, from, to)
+                 query(questionnaireId, questionnaireVersion, fromInUsersTimezone, toInUsersTimezone)
                     .Select(userIdSelector)
                     .Where(ics => ics.UserId.HasValue && userIds.Contains(ics.UserId.Value))
                     .Select(i => new StatusChangeRecord { UserId = i.UserId.Value, UserName = i.UserName, Timestamp = i.Timestamp, Timespan = new TimeSpan(i.Timespan) })
@@ -98,12 +99,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             //    Timestamp = i.Timestamp,
             //    Timespan = new TimeSpan(i.Timespan)
             //}).ToArray();
-            var rows = userIds.Select(u => GetSpeedByResponsibleReportRow(u, dateTimeRanges, allInterviewsInStatus)).ToArray();
+            var rows = userIds.Select(u => GetSpeedByResponsibleReportRow(u, dateTimeRanges, timezoneAdjastmentMins, allInterviewsInStatus)).ToArray();
 
             SpeedByResponsibleTotalRow totalRow = new SpeedByResponsibleTotalRow();
             foreach (var dateTimeRange in dateTimeRanges)
             {
-                double? totalAvgDuration = query(questionnaireId, questionnaireVersion, dateTimeRange.From, dateTimeRange.To)
+                var fromDate = dateTimeRange.From.AddMinutes(timezoneAdjastmentMins);
+                var toDate = dateTimeRange.To.AddMinutes(timezoneAdjastmentMins);
+                double? totalAvgDuration = query(questionnaireId, questionnaireVersion, fromDate, toDate)
                                             .Select(userIdSelector)
                                             .Select(x => (long?)x.Timespan)
                                             .Average();
@@ -120,7 +123,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         }
 
 
-        private SpeedByResponsibleReportRow GetSpeedByResponsibleReportRow(Guid u, DateTimeRange[] dateTimeRanges, StatusChangeRecord[] allInterviewsInStatus)
+        private SpeedByResponsibleReportRow GetSpeedByResponsibleReportRow(Guid u, DateTimeRange[] dateTimeRanges, int timezoneAdjastmentMins, StatusChangeRecord[] allInterviewsInStatus)
         {
             var interviewsForUser = allInterviewsInStatus.Where(i => i.UserId == u).ToArray();
             var speedByPeriod = new List<double?>();
@@ -129,7 +132,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             {
                 var interviewsInPeriod =
                     interviewsForUser.Where(
-                        ics => ics.Timestamp >= dateTimeRange.From && ics.Timestamp < dateTimeRange.To).ToArray();
+                        ics => ics.Timestamp >= dateTimeRange.From.AddMinutes(timezoneAdjastmentMins) && ics.Timestamp < dateTimeRange.To.AddMinutes(timezoneAdjastmentMins)).ToArray();
                 if (interviewsInPeriod.Any())
                 {
                     var total = interviewsInPeriod.Select(i => Math.Abs(i.Timespan.TotalMinutes)).Sum();
@@ -156,14 +159,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
           InterviewExportedAction[] beginStatuses,
           InterviewExportedAction[] endStatuses)
         {
-            return this.interviewStatusTimeSpansStorage.Query(_ =>
-                _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
-                    .SelectMany(x => x.TimeSpansBetweenStatuses)
-                    .Where(ics =>
-                            ics.EndStatusTimestamp.Date >= from && 
-                            ics.EndStatusTimestamp.Date < to.Date && 
-                            endStatuses.Contains(ics.EndStatus) && 
+            if (questionnaireId != Guid.Empty)
+            {
+                return this.interviewStatusTimeSpansStorage.Query(_ =>
+                    _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
+                        .SelectMany(x => x.TimeSpansBetweenStatuses)
+                        .Where(ics =>
+                            ics.EndStatusTimestamp >= from &&
+                            ics.EndStatusTimestamp < to &&
+                            endStatuses.Contains(ics.EndStatus) &&
                             beginStatuses.Contains(ics.BeginStatus)));
+            }
+            else
+            {
+                return this.interviewStatusTimeSpansStorage.Query(_ =>
+                    _.SelectMany(x => x.TimeSpansBetweenStatuses)
+                        .Where(ics =>
+                            ics.EndStatusTimestamp >= from &&
+                            ics.EndStatusTimestamp < to &&
+                            endStatuses.Contains(ics.EndStatus) &&
+                            beginStatuses.Contains(ics.BeginStatus)));
+            }
         }
 
         private IQueryable<InterviewCommentedStatus> QueryInterviewStatuses(
@@ -187,7 +203,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                             )
                             .Where(ics =>
                                 ics.Timestamp >= fromDate &&
-                                ics.Timestamp < to.Date &&
+                                ics.Timestamp < to &&
                                 ics.TimespanWithPreviousStatusLong.HasValue));
                 }
 
@@ -196,7 +212,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                         .SelectMany(x => x.InterviewCommentedStatuses)
                         .Where(ics =>
                                 ics.Timestamp >= fromDate && 
-                                ics.Timestamp < to.Date &&
+                                ics.Timestamp < to &&
                                 statuses.Contains(ics.Status) &&
                                 ics.TimespanWithPreviousStatusLong.HasValue));
             }
@@ -210,14 +226,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                                        c.Timestamp == x.InterviewCommentedStatuses.Where(y => y.Status == InterviewExportedAction.Completed).Min(y=>y.Timestamp))
                                 )).Where(ics =>
                         ics.Timestamp >= fromDate &&
-                        ics.Timestamp < to.Date &&
+                        ics.Timestamp < to &&
                         ics.TimespanWithPreviousStatusLong.HasValue);
                 }
                 return this.interviewStatusesStorage.Query(_ =>
                     _.SelectMany(x => x.InterviewCommentedStatuses)
                         .Where(ics =>
                             ics.Timestamp >= fromDate &&
-                            ics.Timestamp < to.Date &&
+                            ics.Timestamp < to &&
                             statuses.Contains(ics.Status) &&
                             ics.TimespanWithPreviousStatusLong.HasValue));
             }
@@ -227,6 +243,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         {
             return this.Load(
                 reportStartDate: input.From,
+                timezoneAdjastmentMins: input.TimezoneOffsetMinutes,
                 period: input.Period,
                 columnCount: input.ColumnCount,
                 page: input.Page,
@@ -243,6 +260,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         {
             return this.Load(
                 reportStartDate: input.From,
+                timezoneAdjastmentMins: input.TimezoneOffsetMinutes,
                 period: input.Period,
                 columnCount: input.ColumnCount,
                 page: input.Page,
@@ -265,6 +283,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         {
             return this.Load(
                 reportStartDate: input.From,
+                timezoneAdjastmentMins: input.TimezoneOffsetMinutes,
                 period: input.Period,
                 columnCount: input.ColumnCount,
                 page: input.Page,
@@ -282,6 +301,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         {
             return this.Load(
                 reportStartDate:input.From,
+                timezoneAdjastmentMins: input.TimezoneOffsetMinutes,
                 period:input.Period,
                 columnCount:input.ColumnCount,
                 page:input.Page,
