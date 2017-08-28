@@ -95,7 +95,7 @@ export default {
                             return self.renderCell(data, row, 'OutdatedApp');
                         }
                     },
-                    {
+                     {
                         data: "oldAndroidCount",
                         name: "OldAndroidCount",
                         "class": "type-numeric",
@@ -104,7 +104,7 @@ export default {
                         render: function(data, type, row) {
                             return self.renderCell(data, row, 'OldAndroid');
                         }
-                    },
+                     },
                     {
                         data: "wrongDateOnTabletCount",
                         name: "WrongDateOnTabletCount",

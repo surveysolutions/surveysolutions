@@ -1,6 +1,6 @@
-﻿select cast(CreatedDate as date), RoleId, SUM(Quantity - Count) as Count from (
+﻿select Days, RoleId, SUM(Quantity - Count) as Count from (
 	select 
-		ass.CreatedAtUtc as CreatedDate, 
+		DATE_PART('day', (now() at time zone 'utc')::timestamp - ass.CreatedAtUtc::timestamp) + 1 as Days, 
 		ur."RoleId" as RoleId,
 		ass.Quantity as Quantity,
 		(select count(*) from readside.InterviewSummaries isum where ass.Id=isum.assignmentid) as Count
@@ -12,6 +12,6 @@
 		AND (ass.questionnaireversion = @questionnaireversion OR @questionnaireversion is NULL)
 	) tmp
 	where Quantity > Count
-group by cast (CreatedDate as date), RoleId
---order by CreatedAtUtc
+group by Days, RoleId
+--order by Days
 		
