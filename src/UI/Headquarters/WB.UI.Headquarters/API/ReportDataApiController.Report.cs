@@ -276,7 +276,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             var input = new CountDaysOfInterviewInStatusInputModel
             {
-                Orders = request.GetSortOrderRequestItems()
+                Orders = request.GetSortOrderRequestItems(),
+                MinutesOffsetToUtc = request.Timezone
             };
 
             if (!string.IsNullOrEmpty(request.QuestionnaireId))
