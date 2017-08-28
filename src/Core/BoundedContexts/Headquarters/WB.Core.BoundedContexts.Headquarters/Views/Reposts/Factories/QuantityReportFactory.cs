@@ -43,15 +43,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             Expression<Func<T, Guid>> selectUserId,
             Expression<Func<T, UserAndTimestamp>> selectUserAndTimestamp)
         {
-            var from = this.AddPeriod(reportStartDate.Date, period, -columnCount + 1);
-            var to = reportStartDate.Date.AddDays(1);
+            var from = this.AddPeriod(reportStartDate, period, -columnCount + 1);
+            var to = reportStartDate.AddDays(1);
 
             DateTime? minDate = ReportHelpers.GetFirstInterviewCreatedDate(questionnaire, this.interviewstatusStorage);
 
             var dateTimeRanges =
                 Enumerable.Range(0, columnCount)
-                    .Select(i => new DateTimeRange(this.AddPeriod(from, period, i).Date, this.AddPeriod(from, period, i + 1).Date))
-                    .Where(i => minDate.HasValue && i.To.Date >= minDate)
+                    .Select(i => new DateTimeRange(this.AddPeriod(from, period, i), this.AddPeriod(from, period, i + 1)))
+                    .Where(i => minDate.HasValue && i.To >= minDate)
                     .ToArray();
 
             var interviewStatusesByDateRange = queryInterviewStatusesByDateRange(from, to);
@@ -151,13 +151,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 return this.interviewStatusTimeSpansStorage.Query(_ =>
                     _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
                         .SelectMany(x => x.TimeSpansBetweenStatuses)
-                        .Where(ics => ics.EndStatusTimestamp >= from && ics.EndStatusTimestamp < to.Date && ics.EndStatus == InterviewExportedAction.Completed));
+                        .Where(ics => ics.EndStatusTimestamp >= from && ics.EndStatusTimestamp < to && ics.EndStatus == InterviewExportedAction.Completed));
             }
             else
             {
                 return this.interviewStatusTimeSpansStorage.Query(_ =>
                         _.SelectMany(x => x.TimeSpansBetweenStatuses)
-                        .Where(ics => ics.EndStatusTimestamp >= from && ics.EndStatusTimestamp < to.Date && ics.EndStatus == InterviewExportedAction.Completed));
+                        .Where(ics => ics.EndStatusTimestamp >= from && ics.EndStatusTimestamp < to && ics.EndStatus == InterviewExportedAction.Completed));
 
             }
         }
@@ -177,7 +177,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                                      x.QuestionnaireVersion == questionnaireVersion)
                             .SelectMany(x => x.InterviewCommentedStatuses)
                             .Where(ics =>
-                                ics.Timestamp >= from && ics.Timestamp < to.Date &&
+                                ics.Timestamp >= from && ics.Timestamp < to &&
                                 statuses.Contains(ics.Status)));
             }
             else
@@ -186,7 +186,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     _ =>
                         _.SelectMany(x => x.InterviewCommentedStatuses)
                             .Where(ics =>
-                                ics.Timestamp >= from && ics.Timestamp < to.Date &&
+                                ics.Timestamp >= from && ics.Timestamp < to &&
                                 statuses.Contains(ics.Status)));
             }
         }
@@ -204,7 +204,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             {
                 return this.Load(
                 questionnaire: input.Questionnaire(),
-                reportStartDate: input.From,
+                reportStartDate: input.FromAdjastedToUsersTimezone,
                 period: input.Period,
                 columnCount: input.ColumnCount,
                 page: input.Page,
@@ -215,7 +215,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             }
             return this.Load(
                 questionnaire: input.Questionnaire(),
-                reportStartDate: input.From,
+                reportStartDate: input.FromAdjastedToUsersTimezone,
                 period: input.Period,
                 columnCount: input.ColumnCount,
                 page: input.Page,
@@ -231,7 +231,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             {
                 return this.Load(
                  questionnaire: input.Questionnaire(),
-                 reportStartDate: input.From,
+                 reportStartDate: input.FromAdjastedToUsersTimezone,
                  period: input.Period,
                  columnCount: input.ColumnCount,
                  page: input.Page,
@@ -243,7 +243,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
             return this.Load(
                 questionnaire: input.Questionnaire(),
-                reportStartDate: input.From,
+                reportStartDate: input.FromAdjastedToUsersTimezone,
                 period: input.Period,
                 columnCount: input.ColumnCount,
                 page: input.Page,
