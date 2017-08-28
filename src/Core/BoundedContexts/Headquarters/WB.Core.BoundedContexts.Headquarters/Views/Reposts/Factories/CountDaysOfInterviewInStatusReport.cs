@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
 
             var rows = CreateResultSetWithPredifinedRanges();
 
-            var datesAndStatuses = await ExecuteQueryForInteerviewsStatistics(input);
+            var datesAndStatuses = await ExecuteQueryForInterviewsStatistics(input);
 
             foreach (var counterObject in datesAndStatuses.AsQueryable())
             {
@@ -148,7 +148,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
 
         private static List<CountDaysOfInterviewInStatusRow> CreateResultSetWithPredifinedRanges()
         {
-            var utcNow = DateTime.UtcNow.Date;
+            var utcNow = DateTime.UtcNow;
             var rows = new List<CountDaysOfInterviewInStatusRow>();
             var addRowWithRange = new Action<int, int?>((daysStart, daysEnd) =>
             {
@@ -181,14 +181,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 datesAndStatuses = await connection.QueryAsync<AssignmentsCounterObject>(query, new
                 {
                     questionnaireid = input.TemplateId,
-                    questionnaireversion = input.TemplateVersion,
-                    minutesoffset = input.MinutesOffsetToUtc,
+                    questionnaireversion = input.TemplateVersion
                 });
             }
             return datesAndStatuses;
         }
 
-        private async Task<IEnumerable<InterviewsCounterObject>> ExecuteQueryForInteerviewsStatistics(CountDaysOfInterviewInStatusInputModel input)
+        private async Task<IEnumerable<InterviewsCounterObject>> ExecuteQueryForInterviewsStatistics(CountDaysOfInterviewInStatusInputModel input)
         {
             string query = GetSqlQueryForInterviews(InterviewsScriptName);
 
@@ -198,8 +197,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 datesAndStatuses = await connection.QueryAsync<InterviewsCounterObject>(query, new
                 {
                     questionnaireid = input.TemplateId,
-                    questionnaireversion = input.TemplateVersion,
-                    minutesoffset = input.MinutesOffsetToUtc,
+                    questionnaireversion = input.TemplateVersion
                 });
             }
             return datesAndStatuses;
