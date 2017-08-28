@@ -44,7 +44,7 @@ try {
             Write-Host "##teamcity[buildProblem description='Failed to build static content for Designer']"
             Exit 
         }}
-        C
+        
         BuildStaticContent "Hq Deps" "src\UI\Headquarters\WB.UI.Headquarters\Dependencies" | % { if (-not $_) {
                 Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
                 Write-Host "##teamcity[buildProblem description='Failed to build static content for HQ']"
