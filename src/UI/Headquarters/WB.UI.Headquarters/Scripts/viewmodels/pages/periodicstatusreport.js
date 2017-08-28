@@ -143,7 +143,8 @@
             period: self.Period(),
             columnCount: self.ColumnCount(),
             supervisorId: self.Url.query['supervisorId'],
-            reportType: self.SelectedType()
+            reportType: self.SelectedType(),
+            timezoneOffsetMinutes: new Date().getTimezoneOffset()
         };
     };
 
