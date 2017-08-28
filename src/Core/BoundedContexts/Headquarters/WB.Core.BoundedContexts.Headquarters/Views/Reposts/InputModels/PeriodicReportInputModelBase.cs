@@ -9,14 +9,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels
         public Guid QuestionnaireId { get; set; }
         public long QuestionnaireVersion { get; set; }
         public int ColumnCount { get; set; }
-        public int? TimezoneOffsetMinutes { get; set; }
+        public int TimezoneOffsetMinutes { get; set; }
 
         public QuestionnaireIdentity Questionnaire()
         {
             return QuestionnaireId != Guid.Empty ? new QuestionnaireIdentity(QuestionnaireId, QuestionnaireVersion) : null;
         }
-
-        public DateTime FromAdjastedToUsersTimezone => 
-            TimezoneOffsetMinutes.HasValue ? this.From.Date.AddMinutes(TimezoneOffsetMinutes.Value) : this.From.Date;
     }
 }
