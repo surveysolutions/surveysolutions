@@ -98,7 +98,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     From = filter.From,
                     Orders = filter.SortOrder ?? Enumerable.Empty<OrderRequestItem>(),
                     Period = filter.Period,
-                    ReportType = filter.ReportType
+                    ReportType = filter.ReportType,
+                    TimezoneOffsetMinutes = filter.TimezoneOffsetMinutes
                 });
 
             return this.CreateReportResponse(exportType, report, Reports.Report_Quantity_By_Interviewers);
@@ -122,7 +123,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     QuestionnaireId = filter.QuestionnaireId,
                     ColumnCount = filter.ColumnCount,
                     From = filter.From,
-                    Orders = filter.SortOrder
+                    Orders = filter.SortOrder,
+                    TimezoneOffsetMinutes = filter.TimezoneOffsetMinutes
                 });
 
             return this.CreateReportResponse(exportType, report, Reports.Report_Quantity_By_Supervisors);
@@ -147,7 +149,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     From = filter.From,
                     ReportType = filter.ReportType,
                     Period = filter.Period,
-                    Orders = filter.SortOrder
+                    Orders = filter.SortOrder,
+                    TimezoneOffsetMinutes = filter.TimezoneOffsetMinutes
                 });
 
             return this.CreateReportResponse(exportType, report, Reports.Report_Speed_By_Interviewers);
@@ -171,7 +174,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     QuestionnaireId = filter.QuestionnaireId,
                     QuestionnaireVersion = filter.QuestionnaireVersion,
                     BeginInterviewStatuses = this.GetBeginInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(filter.ReportType),
-                    EndInterviewStatuses = this.GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(filter.ReportType)
+                    EndInterviewStatuses = this.GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(filter.ReportType),
+                    TimezoneOffsetMinutes = filter.TimezoneOffsetMinutes
                 });
 
             return this.CreateReportResponse(exportType, report, Reports.Report_Speed_Between_Statuses_By_Supervisors);
@@ -196,7 +200,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     QuestionnaireVersion = filter.QuestionnaireVersion,
                     BeginInterviewStatuses = this.GetBeginInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(filter.ReportType),
                     EndInterviewStatuses = this.GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(filter.ReportType),
-                    SupervisorId = filter.SupervisorId ?? this.authorizedUser.Id
+                    SupervisorId = filter.SupervisorId ?? this.authorizedUser.Id,
+                    TimezoneOffsetMinutes = filter.TimezoneOffsetMinutes
                 });
 
             return this.CreateReportResponse(exportType, report, Reports.Report_Speed_Between_Statuses_By_Interviewers);
@@ -220,7 +225,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     QuestionnaireId = filter.QuestionnaireId,
                     ReportType = filter.ReportType,
                     Period = filter.Period,
-                    Orders = filter.SortOrder
+                    Orders = filter.SortOrder,
+                    TimezoneOffsetMinutes = filter.TimezoneOffsetMinutes
                 });
 
             return this.CreateReportResponse(exportType, report, Reports.Report_Speed_By_Supervisors);
