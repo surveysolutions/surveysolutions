@@ -11,7 +11,7 @@ var fs = require('fs');
 if (!fs.existsSync(path.join(baseAppPath, "./dist/vendor.bundle.js"))) {
     const { execSync } = require('child_process');
     console.log("Build missing `vendor.bundle.js`")
-    execSync ('npm run vendor')
+    execSync('npm run vendor')
 }
 
 var manifest = require("./dist/vendor.manifest.json");
@@ -48,7 +48,14 @@ module.exports = {
             }, {
                 test: /\.js$/,
                 include: path.resolve(__dirname, "app"),
-                use: ['babel-loader' ]
+                use: ['babel-loader']
+            }, {
+                test: /\.(js|vue)$/,
+                loader: 'eslint-loader',
+                enforce: 'pre',
+                options: {
+                    formatter: require('eslint-friendly-formatter')
+                }
             }
         ]
     },
@@ -56,16 +63,16 @@ module.exports = {
         new webpack.DllReferencePlugin({
             manifest
         }),
-        
+
         new webpack.ProvidePlugin({
             _: 'lodash',
             '$': "jquery",
             "jQuery": 'jquery',
             'moment': 'moment'
         }),
-        
+
         new webpack.optimize.ModuleConcatenationPlugin(),
-        
+
         new BundleAnalyzerPlugin({
             analyzerMode: 'static',
             reportFilename: 'dist/stats.html',
