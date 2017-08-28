@@ -76,7 +76,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     TemplateVersion = filter.TemplateVersion
                 });
 
-            return this.CreateReportResponse(exportType, report, Reports.Report_Teams_and_Statuses);
+            return this.CreateReportResponse(exportType, report, Reports.Report_Team_Members_and_Statuses);
         }
 
         [HttpGet]
@@ -102,7 +102,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     TimezoneOffsetMinutes = filter.TimezoneOffsetMinutes
                 });
 
-            return this.CreateReportResponse(exportType, report, Reports.Report_Quantity_By_Interviewers);
+            return this.CreateReportResponse(exportType, report, Reports.Report_Number_of_Completed_Interviews);
         }
 
         [HttpGet]
@@ -127,7 +127,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     TimezoneOffsetMinutes = filter.TimezoneOffsetMinutes
                 });
 
-            return this.CreateReportResponse(exportType, report, Reports.Report_Quantity_By_Supervisors);
+            return this.CreateReportResponse(exportType, report, Reports.Report_Number_of_Completed_Interviews);
         }
 
         [HttpGet]
@@ -153,7 +153,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     TimezoneOffsetMinutes = filter.TimezoneOffsetMinutes
                 });
 
-            return this.CreateReportResponse(exportType, report, Reports.Report_Speed_By_Interviewers);
+            return this.CreateReportResponse(exportType, report, Reports.Report_Average_Interview_Duration);
         }
 
         [HttpGet]
@@ -229,7 +229,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     TimezoneOffsetMinutes = filter.TimezoneOffsetMinutes
                 });
 
-            return this.CreateReportResponse(exportType, report, Reports.Report_Speed_By_Supervisors);
+            return this.CreateReportResponse(exportType, report, Reports.Report_Average_Interview_Duration);
         }
 
         [HttpGet]
@@ -248,7 +248,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     TemplateVersion = filter.TemplateVersion
                 });
 
-            return this.CreateReportResponse(exportType, report, Reports.Report_Supervisors_And_Statuses);
+            return this.CreateReportResponse(exportType, report, Reports.Report_Teams_and_Statuses);
         }
 
         [HttpGet]
@@ -289,7 +289,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
             var report = await this.countDaysOfInterviewInStatusReport.GetReportAsync(input);
 
-            return this.CreateReportResponse(exportType, report, Reports.Report_Days_by_Interview_Status);
+            return this.CreateReportResponse(exportType, report, Reports.Report_Status_Duration);
         }
 
         private HttpResponseMessage CreateReportResponse(string exportType, ReportView report, string reportName)
