@@ -179,6 +179,12 @@
       <HintPath>..\..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Ploeh.AutoFixture, Version=3.50.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\AutoFixture.3.50.6\lib\net40\Ploeh.AutoFixture.dll</HintPath>
+    </Reference>
+    <Reference Include="Ploeh.AutoFixture.AutoMoq, Version=3.50.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\AutoFixture.AutoMoq.3.50.6\lib\net40\Ploeh.AutoFixture.AutoMoq.dll</HintPath>
+    </Reference>
     <Reference Include="Plugin.Permissions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Plugin.Permissions.2.0.1\lib\netstandard1.0\Plugin.Permissions.dll</HintPath>
     </Reference>
@@ -217,6 +223,7 @@
       <HintPath>..\..\..\libs\StatData.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Activities" />
     <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
       <Private>True</Private>
@@ -471,6 +478,7 @@
     <Compile Include="BoundedContexts\Headquarters\Assignments\AssignmentsApiV2ControllerTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\Assignments\AssignmentsServiceTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\Assignments\AssignmentTests.cs" />
+    <Compile Include="BoundedContexts\Headquarters\Assignments\when_filter_assignments_list.cs" />
     <Compile Include="BoundedContexts\Headquarters\Assignments\when_getting_assignments_for_web_interview.cs" />
     <Compile Include="BoundedContexts\Headquarters\Assignments\when_getting_assignments_ready_for_web_interview.cs" />
     <Compile Include="BoundedContexts\Headquarters\ExtensionsTest.cs" />

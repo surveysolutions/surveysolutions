@@ -1664,7 +1664,8 @@ namespace WB.Tests.Abc.TestFactories
             int? quantity = null,
             Guid? assigneeSupervisorId = null,
             string responsibleName = null,
-            ISet<InterviewSummary> interviewSummary = null)
+            ISet<InterviewSummary> interviewSummary = null,
+            string questionnaireTitle = null, DateTime? updatedAt = null)
         {
             var result = new Assignment();
             var asDynamic = result.AsDynamic();
@@ -1672,7 +1673,7 @@ namespace WB.Tests.Abc.TestFactories
             asDynamic.Id = id ?? 0;
             result.QuestionnaireId = questionnaireIdentity;
 
-            var readonlyUser = new ReadonlyUser();
+            var readonlyUser = new ReadonlyUser() { RoleIds = { UserRoles.Interviewer.ToUserId() } };
             var readonlyProfile = new ReadonlyProfile();
             
             readonlyUser.AsDynamic().ReadonlyProfile = readonlyProfile;
@@ -1682,9 +1683,24 @@ namespace WB.Tests.Abc.TestFactories
             {
                 readonlyProfile.AsDynamic().SupervisorId = assigneeSupervisorId;
             }
+
             if (!string.IsNullOrEmpty(responsibleName))
             {
                 readonlyUser.AsDynamic().Name = responsibleName;
+            }
+
+            if (!string.IsNullOrWhiteSpace(questionnaireTitle))
+            {
+                result.Questionnaire = new QuestionnaireLiteViewItem
+                {
+                    Id = questionnaireIdentity?.Id,
+                    Title = questionnaireTitle
+                };
+            }
+
+            if (updatedAt.HasValue)
+            {
+                result.AsDynamic().UpdatedAtUtc = updatedAt.Value;
             }
 
             if(interviewSummary != null)
