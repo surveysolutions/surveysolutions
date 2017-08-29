@@ -22,7 +22,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
         {
             var translations = this.translationsRepository
                 .Query(t => 
-                    t.Where(translation => translation.QuestionnaireId == questionnaireIdentity && translation.TranslationId == translationId)
+                    t.Where(translation => translation.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId 
+                            && translation.QuestionnaireId.Version == questionnaireIdentity.Version
+                            && translation.TranslationId == translationId)
                     .Cast<TranslationDto>()
                     .ToList()
                 );
