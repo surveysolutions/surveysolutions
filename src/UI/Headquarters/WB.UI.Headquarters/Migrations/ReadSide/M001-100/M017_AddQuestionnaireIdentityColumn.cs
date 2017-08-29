@@ -15,7 +15,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
         {
             Alter.Table(InterviewSummariesTable).AddColumn(QuestionnaireIdentityColumn).AsString().Nullable();
 
-            Execute.Sql($@"UPDATE plainstore.readside.{InterviewSummariesTable} 
+            Execute.Sql($@"UPDATE readside.{InterviewSummariesTable} 
                            SET {QuestionnaireIdentityColumn}=concat(replace(questionnaireid::text, '-', ''), '$', questionnaireversion)");
 
             Create.Index("interviewsummaries_questionnaire_identity_indx").OnTable(InterviewSummariesTable).OnColumn(QuestionnaireIdentityColumn);
