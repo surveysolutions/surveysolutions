@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Caching;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
@@ -10,7 +9,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
 
@@ -30,8 +28,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             }
 
             public string Product { get; }
-            public int ReadSide_Application { get; }
-            public int? ReadSide_Database { get; }
             public Dictionary<DateTime, string> History { get; }
         }
 
@@ -41,7 +37,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IInterviewPackagesService incomingSyncPackagesQueue;
         private readonly ISynchronizationLogViewFactory synchronizationLogViewFactory;
         private readonly IBrokenInterviewPackagesViewFactory brokenInterviewPackagesViewFactory;
-        private readonly MemoryCache cache = MemoryCache.Default;
         private readonly IProductVersion productVersion;
         private readonly IProductVersionHistory productVersionHistory;
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
