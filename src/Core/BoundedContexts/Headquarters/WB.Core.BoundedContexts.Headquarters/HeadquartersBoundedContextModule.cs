@@ -70,7 +70,6 @@ using WB.Core.BoundedContexts.Headquarters.Services.Internal;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
-using WB.Core.BoundedContexts.Headquarters.Views.TakeNew;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.BoundedContexts.Headquarters.Views.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports;
