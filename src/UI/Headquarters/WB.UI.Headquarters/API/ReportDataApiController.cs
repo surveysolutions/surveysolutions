@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Resources;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.InputModels;
-using WB.Core.BoundedContexts.Headquarters.Views.Reports.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
@@ -31,6 +31,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     public partial class ReportDataApiController : BaseApiController
     {
+        const int MaxPageSize = 1024;
+
         private readonly ITeamsAndStatusesReport teamsAndStatusesReport;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IAuthorizedUser authorizedUser;
@@ -73,29 +75,39 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.exportFactory = exportFactory;
         }
 
-        [HttpPost]
+        [HttpGet]
         [CamelCase]
-        public TeamsAndStatusesReportResponse SupervisorTeamMembersAndStatusesReport(TeamsAndStatusesFilter teamsAndStatusesFilter)
+        public HttpResponseMessage SupervisorTeamMembersAndStatusesReport([FromUri]TeamsAndStatusesFilter filter, [FromUri]string exportType = null)
         {
             var input = new TeamsAndStatusesInputModel
             {
                 ViewerId = this.authorizedUser.Id,
-                Orders = teamsAndStatusesFilter.GetSortOrderRequestItems(),
-                Page = teamsAndStatusesFilter.PageIndex,
-                PageSize = teamsAndStatusesFilter.PageSize,
-                TemplateId = teamsAndStatusesFilter.TemplateId,
-                TemplateVersion = teamsAndStatusesFilter.TemplateVersion
+                Orders = filter.GetSortOrderRequestItems(),
+                Page = filter.PageIndex,
+                PageSize = filter.PageSize,
+                TemplateId = filter.TemplateId,
+                TemplateVersion = filter.TemplateVersion
             };
 
-            var view = this.teamsAndStatusesReport.GetBySupervisorAndDependentInterviewers(input);
-            return new TeamsAndStatusesReportResponse
+            if (!string.IsNullOrEmpty(exportType))
             {
-                Draw = teamsAndStatusesFilter.Draw + 1,
+                input.Page = 1;
+                input.PageSize = MaxPageSize;
+
+                var report = this.teamsAndStatusesReport.GetReport(input);
+
+                return this.CreateReportResponse(exportType, report, Reports.Report_Team_Members_and_Statuses);
+            }
+            
+            var view = this.teamsAndStatusesReport.GetBySupervisorAndDependentInterviewers(input);
+            return this.Request.CreateResponse(new TeamsAndStatusesReportResponse
+            {
+                Draw = filter.Draw + 1,
                 RecordsTotal = view.TotalCount,
                 RecordsFiltered = view.TotalCount,
                 Data = view.Items,
                 TotalRow = view.TotalRow
-            };
+            });
         }
 
         [HttpPost]
@@ -132,7 +144,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             return new ComboboxModel(variables.Select(x => new ComboboxOptionModel(x, x)).ToArray(), variables.Count);
         }
 
-        public QuantityByResponsibleReportView QuantityByInterviewers(QuantityByInterviewersReportModel data)
+        [HttpGet]
+        public HttpResponseMessage QuantityByInterviewers([FromUri]QuantityByInterviewersReportModel data, [FromUri]string exportType = null)
         {
             var input = new QuantityByInterviewersReportInputModel
             {
@@ -148,12 +161,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                Period = data.Period,
                ReportType = data.ReportType,
                TimezoneOffsetMinutes = data.TimezoneOffsetMinutes
-            }; 
+            };
 
-            return this.quantityReport.Load(input);
+            if (!string.IsNullOrEmpty(exportType))
+            {
+                input.Page = 1;
+                input.PageSize = MaxPageSize;
+
+                var report = this.quantityReport.GetReport(input);
+
+                return this.CreateReportResponse(exportType, report, Reports.Report_Number_of_Completed_Interviews);
+            }
+
+            return this.Request.CreateResponse(this.quantityReport.Load(input));
         }
 
-        public QuantityByResponsibleReportView QuantityBySupervisors(QuantityBySupervisorsReportModel data)
+        [HttpGet]
+        public HttpResponseMessage QuantityBySupervisors([FromUri]QuantityBySupervisorsReportModel data, [FromUri]string exportType = null)
         {
             var input = new QuantityBySupervisorsReportInputModel
             {
@@ -170,10 +194,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 TimezoneOffsetMinutes = data.TimezoneOffsetMinutes
             };
 
-            return this.quantityReport.Load(input);
+            if (!string.IsNullOrEmpty(exportType))
+            {
+                input.Page = 1;
+                input.PageSize = MaxPageSize;
+
+                var report = this.quantityReport.GetReport(input);
+
+                return this.CreateReportResponse(exportType, report, Reports.Report_Number_of_Completed_Interviews);
+            }
+
+            return this.Request.CreateResponse(this.quantityReport.Load(input));
         }
 
-        public SpeedByResponsibleReportView SpeedByInterviewers(SpeedByInterviewersReportModel data)
+        [HttpGet]
+        public HttpResponseMessage SpeedByInterviewers([FromUri]SpeedByInterviewersReportModel data, [FromUri]string exportType = null)
         {
             var input = new SpeedByInterviewersReportInputModel
             {
@@ -191,51 +226,84 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 TimezoneOffsetMinutes = data.TimezoneOffsetMinutes
             };
 
-            return this.speedReport.Load(input);
+            if (!string.IsNullOrEmpty(exportType))
+            {
+                input.Page = 1;
+                input.PageSize = MaxPageSize;
+
+                var report = this.speedReport.GetReport(input);
+
+                return this.CreateReportResponse(exportType, report, Reports.Report_Average_Interview_Duration);
+            }
+
+            return this.Request.CreateResponse(this.speedReport.Load(input));
         }
 
-        public SpeedByResponsibleReportView SpeedBetweenStatusesBySupervisors(SpeedBySupervisorsReportModel input)
+        [HttpGet]
+        public HttpResponseMessage SpeedBetweenStatusesBySupervisors([FromUri]SpeedBySupervisorsReportModel filter, [FromUri]string exportType = null)
         {
-            var inputParameters = new SpeedBetweenStatusesBySupervisorsReportInputModel
+            var input = new SpeedBetweenStatusesBySupervisorsReportInputModel
             {
-                Page = input.PageIndex,
-                PageSize = input.PageSize,
-                ColumnCount = input.ColumnCount,
-                From = input.From,
-                Orders = input.SortOrder,
-                Period = input.Period,
-                QuestionnaireId = input.QuestionnaireId,
-                QuestionnaireVersion = input.QuestionnaireVersion,
-                BeginInterviewStatuses = this.GetBeginInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType),
-                EndInterviewStatuses = this.GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType),
-                TimezoneOffsetMinutes = input.TimezoneOffsetMinutes
+                Page = filter.PageIndex,
+                PageSize = filter.PageSize,
+                ColumnCount = filter.ColumnCount,
+                From = filter.From,
+                Orders = filter.SortOrder,
+                Period = filter.Period,
+                QuestionnaireId = filter.QuestionnaireId,
+                QuestionnaireVersion = filter.QuestionnaireVersion,
+                BeginInterviewStatuses = this.GetBeginInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(filter.ReportType),
+                EndInterviewStatuses = this.GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(filter.ReportType),
+                TimezoneOffsetMinutes = filter.TimezoneOffsetMinutes
             };
 
-            return this.speedReport.Load(inputParameters);
+            if (!string.IsNullOrEmpty(exportType))
+            {
+                input.Page = 1;
+                input.PageSize = MaxPageSize;
+
+                var report = this.speedReport.GetReport(input);
+
+                return this.CreateReportResponse(exportType, report, Reports.Report_Speed_Between_Statuses_By_Supervisors);
+            }
+
+            return this.Request.CreateResponse(this.speedReport.Load(input));
         }
 
-        public SpeedByResponsibleReportView SpeedBetweenStatusesByInterviewers(SpeedByInterviewersReportModel input)
+        [HttpGet]
+        public HttpResponseMessage SpeedBetweenStatusesByInterviewers([FromUri]SpeedByInterviewersReportModel filter, [FromUri]string exportType = null)
         {
-            var inputParameters = new SpeedBetweenStatusesByInterviewersReportInputModel
+            var input = new SpeedBetweenStatusesByInterviewersReportInputModel
             {
-                Page = input.PageIndex,
-                PageSize = input.PageSize,
-                ColumnCount = input.ColumnCount,
-                From = input.From,
-                Orders = input.SortOrder,
-                Period = input.Period,
-                QuestionnaireId = input.QuestionnaireId,
-                QuestionnaireVersion = input.QuestionnaireVersion,
-                BeginInterviewStatuses = this.GetBeginInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType),
-                EndInterviewStatuses = this.GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType),
-                SupervisorId = input.SupervisorId ?? this.authorizedUser.Id,
-                TimezoneOffsetMinutes = input.TimezoneOffsetMinutes
+                Page = filter.PageIndex,
+                PageSize = filter.PageSize,
+                ColumnCount = filter.ColumnCount,
+                From = filter.From,
+                Orders = filter.SortOrder,
+                Period = filter.Period,
+                QuestionnaireId = filter.QuestionnaireId,
+                QuestionnaireVersion = filter.QuestionnaireVersion,
+                BeginInterviewStatuses = this.GetBeginInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(filter.ReportType),
+                EndInterviewStatuses = this.GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(filter.ReportType),
+                SupervisorId = filter.SupervisorId ?? this.authorizedUser.Id,
+                TimezoneOffsetMinutes = filter.TimezoneOffsetMinutes
             };
 
-            return this.speedReport.Load(inputParameters);
+            if (!string.IsNullOrEmpty(exportType))
+            {
+                input.Page = 1;
+                input.PageSize = MaxPageSize;
+
+                var report = this.speedReport.GetReport(input);
+
+                return this.CreateReportResponse(exportType, report, Reports.Report_Speed_Between_Statuses_By_Interviewers);
+            }
+
+            return this.Request.CreateResponse(this.speedReport.Load(input));
         }
 
-        public SpeedByResponsibleReportView SpeedBySupervisors(SpeedBySupervisorsReportModel data)
+        [HttpGet]
+        public HttpResponseMessage SpeedBySupervisors([FromUri]SpeedBySupervisorsReportModel data, [FromUri]string exportType = null)
         {
             var input = new SpeedBySupervisorsReportInputModel
             {
@@ -252,101 +320,157 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 TimezoneOffsetMinutes = data.TimezoneOffsetMinutes
             };
 
-            return this.speedReport.Load(input);
+            if (!string.IsNullOrEmpty(exportType))
+            {
+                input.Page = 1;
+                input.PageSize = MaxPageSize;
+
+                var report = this.speedReport.GetReport(input);
+
+                return this.CreateReportResponse(exportType, report, Reports.Report_Average_Interview_Duration);
+            }
+
+            return this.Request.CreateResponse(this.speedReport.Load(input));
         }
 
-        [HttpPost]
+        [HttpGet]
         [CamelCase]
-        public DataTableResponse<TeamsAndStatusesReportLine> HeadquarterSupervisorsAndStatusesReport(TeamsAndStatusesFilter teamsAndStatusesFilter)
+        public HttpResponseMessage HeadquarterSupervisorsAndStatusesReport([FromUri]TeamsAndStatusesFilter filter, [FromUri]string exportType = null)
         {
+
             var input = new TeamsAndStatusesInputModel
             {
-                Orders = teamsAndStatusesFilter.GetSortOrderRequestItems(),
-                Page = teamsAndStatusesFilter.PageIndex,
-                PageSize = teamsAndStatusesFilter.PageSize,
-                TemplateId = teamsAndStatusesFilter.TemplateId,
-                TemplateVersion = teamsAndStatusesFilter.TemplateVersion
+                Orders = filter.GetSortOrderRequestItems(),
+                Page = filter.PageIndex,
+                PageSize = filter.PageSize,
+                TemplateId = filter.TemplateId,
+                TemplateVersion = filter.TemplateVersion
             };
+
+            if (!string.IsNullOrEmpty(exportType))
+            {
+                input.Page = 1;
+                input.PageSize = MaxPageSize;
+
+                var report = this.teamsAndStatusesReport.GetReport(input);
+
+                return this.CreateReportResponse(exportType, report, Reports.Report_Teams_and_Statuses);
+            }
 
             var view = this.teamsAndStatusesReport.GetBySupervisors(input);
-            return new TeamsAndStatusesReportResponse
+            return this.Request.CreateResponse(new TeamsAndStatusesReportResponse
             {
-                Draw = teamsAndStatusesFilter.Draw + 1,
+                Draw = filter.Draw + 1,
                 RecordsTotal = view.TotalCount,
                 RecordsFiltered = view.TotalCount,
                 Data = view.Items,
                 TotalRow = view.TotalRow
-            };
+            });
         }
 
-        [HttpPost]
+        [HttpGet]
         [CamelCase]
-        public SurveysAndStatusesDataTableResponse SupervisorSurveysAndStatusesReport(SurveysAndStatusesFilter surveysAndStatusesFilter)
+        public HttpResponseMessage SupervisorSurveysAndStatusesReport([FromUri]SurveysAndStatusesFilter filter, [FromUri]string exportType = null)
         {
             var teamLeadName = this.authorizedUser.UserName;
-
-            var view = this.surveysAndStatusesReport.Load(new SurveysAndStatusesReportInputModel
+            var input = new SurveysAndStatusesReportInputModel
             {
                 TeamLeadName = teamLeadName,
-                Page = surveysAndStatusesFilter.PageIndex,
-                PageSize = surveysAndStatusesFilter.PageSize,
-                Orders = surveysAndStatusesFilter.ToOrderRequestItems(),
-                ResponsibleName = surveysAndStatusesFilter.ResponsibleName == teamLeadName ? null : surveysAndStatusesFilter.ResponsibleName,
-            });
+                Page = filter.PageIndex,
+                PageSize = filter.PageSize,
+                Orders = filter.ToOrderRequestItems(),
+                ResponsibleName = filter.ResponsibleName == teamLeadName ? null : filter.ResponsibleName,
+            };
 
-            return new SurveysAndStatusesDataTableResponse
+            if (!string.IsNullOrEmpty(exportType))
             {
-                Draw = surveysAndStatusesFilter.Draw + 1,
+                input.Page = 1;
+                input.PageSize = MaxPageSize;
+
+                var report = this.surveysAndStatusesReport.GetReport(input);
+
+                return this.CreateReportResponse(exportType, report, Reports.Report_Surveys_and_Statuses);
+            }
+            
+            var view = this.surveysAndStatusesReport.Load(input);
+
+            return this.Request.CreateResponse(new SurveysAndStatusesDataTableResponse
+            {
+                Draw = filter.Draw + 1,
                 RecordsTotal = view.TotalCount,
                 RecordsFiltered = view.TotalCount,
                 Data = view.Items,
                 TotalRow = view.TotalRow
-            };
+            });
         }
 
-        [HttpPost]
+        [HttpGet]
         [CamelCase]
-        public SurveysAndStatusesDataTableResponse HeadquarterSurveysAndStatusesReport(SurveysAndStatusesFilter surveysAndStatusesFilter)
+        public HttpResponseMessage HeadquarterSurveysAndStatusesReport([FromUri]SurveysAndStatusesFilter filter, [FromUri]string exportType = null)
         {
-            var view = this.surveysAndStatusesReport.Load(new SurveysAndStatusesReportInputModel
+            var input = new SurveysAndStatusesReportInputModel
             {
-                Orders = surveysAndStatusesFilter.ToOrderRequestItems(),
-                Page = surveysAndStatusesFilter.PageIndex,
-                PageSize = surveysAndStatusesFilter.PageSize,
-                TeamLeadName = surveysAndStatusesFilter.ResponsibleName
-            });
+                Orders = filter.ToOrderRequestItems(),
+                Page = filter.PageIndex,
+                PageSize = filter.PageSize,
+                TeamLeadName = filter.ResponsibleName
+            };
 
-            return new SurveysAndStatusesDataTableResponse
+            if (!string.IsNullOrEmpty(exportType))
             {
-                Draw = surveysAndStatusesFilter.Draw + 1,
+                input.Page = 1;
+                input.PageSize = MaxPageSize;
+
+                var report = this.surveysAndStatusesReport.GetReport(input);
+
+                return this.CreateReportResponse(exportType, report, Reports.Report_Surveys_and_Statuses);
+            }
+
+            var view = this.surveysAndStatusesReport.Load(input);
+
+            return this.Request.CreateResponse(new SurveysAndStatusesDataTableResponse
+            {
+                Draw = filter.Draw + 1,
                 RecordsTotal = view.TotalCount,
                 RecordsFiltered = view.TotalCount,
                 Data = view.Items,
                 TotalRow = view.TotalRow
-            };
+            });
         }
 
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
         [CamelCase]
-        public async Task<DeviceInterviewersDataTableResponse> DeviceInterviewers([FromUri]DeviceInterviewersFilter request)
+        public async Task<HttpResponseMessage> DeviceInterviewers([FromUri]DeviceInterviewersFilter request, [FromUri]string exportType = null)
         {
-            var data = await this.deviceInterviewersReport.LoadAsync(new DeviceByInterviewersReportInputModel
+            var input = new DeviceByInterviewersReportInputModel
             {
                 Filter = request.Search.Value,
                 Orders = request.GetSortOrderRequestItems(),
                 Page = request.Start,
                 PageSize = request.Length
-            });
+            };
 
-            return new DeviceInterviewersDataTableResponse
+            if (!string.IsNullOrEmpty(exportType))
+            {
+                input.Page = 0;
+                input.PageSize = MaxPageSize;
+
+                var report = await this.deviceInterviewersReport.GetReportAsync(input);
+
+                return this.CreateReportResponse(exportType, report, Reports.Report_Devices_and_Interviewers);
+            }
+
+            var data = await this.deviceInterviewersReport.LoadAsync(input);
+
+            return this.Request.CreateResponse(new DeviceInterviewersDataTableResponse
             {
                 Draw = request.Draw + 1,
                 RecordsTotal = data.TotalCount,
                 RecordsFiltered = data.TotalCount,
                 Data = data.Items
-            };
+            });
         }
 
         [HttpPost]
@@ -367,7 +491,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
         [CamelCase]
-        public async Task<CountDaysOfInterviewInStatusDataTableResponse> CountDaysOfInterviewInStatus([FromUri] CountDaysOfInterviewInStatusRequest request)
+        public async Task<HttpResponseMessage> CountDaysOfInterviewInStatus([FromUri] CountDaysOfInterviewInStatusRequest request, [FromUri] string exportType = null)
         {
             var input = new CountDaysOfInterviewInStatusInputModel
             {
@@ -382,101 +506,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 input.TemplateId = questionnaireIdentity.QuestionnaireId;
             }
 
+            if (!string.IsNullOrEmpty(exportType))
+            {
+                var report = await this.countDaysOfInterviewInStatusReport.GetReportAsync(input);
+
+                return this.CreateReportResponse(exportType, report, Reports.Report_Status_Duration);
+            }
+
             var data = await this.countDaysOfInterviewInStatusReport.LoadAsync(input);
 
-            return new CountDaysOfInterviewInStatusDataTableResponse
+            return this.Request.CreateResponse(new CountDaysOfInterviewInStatusDataTableResponse
             {
                 Draw = request.Draw + 1,
                 RecordsTotal = data.Length,
                 RecordsFiltered = data.Length,
                 Data = data,
-            };
-        }
-
-        public class SurveysAndStatusesDataTableResponse : DataTableResponse<HeadquarterSurveysAndStatusesReportLine>
-        {
-            public long TotalInterviewCount { get; set; }
-            public HeadquarterSurveysAndStatusesReportLine TotalRow { get; set; }
-        }
-
-
-        public class CountDaysOfInterviewInStatusDataTableResponse : DataTableResponse<CountDaysOfInterviewInStatusRow>
-        {
-        }
-
-        public class DeviceInterviewersDataTableResponse : DataTableResponse<DeviceInterviewersReportLine>
-        {
-            public DeviceInterviewersReportLine TotalRow { get; set; }
-        }
-
-        public class CountDaysOfInterviewInStatusRequest : DataTableRequest
-        {
-            public string QuestionnaireId { get; set; }
-            public int Timezone { get; set; }
-        }
-
-        public class DeviceInterviewersFilter : DataTableRequest
-        {
-            
-        }
-
-        public class SurveysAndStatusesFilter : DataTableRequest
-        {
-            public string ResponsibleName { get; set; }
-        }
-
-        private InterviewExportedAction[] GetInterviewExportedActionsAccordingToReportTypeForQuantityReports(PeriodiceReportType reportType)
-        {
-            switch (reportType)
-            {
-                case PeriodiceReportType.NumberOfInterviewTransactionsBySupervisor:
-                    return new[] { InterviewExportedAction.ApprovedByHeadquarter, InterviewExportedAction.RejectedBySupervisor };
-                case PeriodiceReportType.NumberOfCompletedInterviews:
-                    return new[] { InterviewExportedAction.Completed };
-                case PeriodiceReportType.NumberOfInterviewTransactionsByHQ:
-                    return new[] { InterviewExportedAction.ApprovedByHeadquarter, InterviewExportedAction.RejectedByHeadquarter };
-                case PeriodiceReportType.NumberOfInterviewsApprovedByHQ:
-                    return new[] { InterviewExportedAction.ApprovedByHeadquarter };
-            }
-            return new InterviewExportedAction[0];
-        }
-
-        private InterviewExportedAction[] GetInterviewExportedActionsAccordingToReportTypeForSpeedReports(PeriodiceReportType reportType)
-        {
-            switch (reportType)
-            {
-                case PeriodiceReportType.AverageInterviewDuration:
-                    return new[] { InterviewExportedAction.Completed };
-                case PeriodiceReportType.AverageSupervisorProcessingTime:
-                    return new[] { InterviewExportedAction.ApprovedBySupervisor, InterviewExportedAction.RejectedBySupervisor };
-                case PeriodiceReportType.AverageHQProcessingTime:
-                    return new[] { InterviewExportedAction.ApprovedByHeadquarter, InterviewExportedAction.RejectedByHeadquarter };
-            }
-            return new InterviewExportedAction[0];
-        }
-
-        private InterviewExportedAction[] GetBeginInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(PeriodiceReportType reportType)
-        {
-            switch (reportType)
-            {
-                case PeriodiceReportType.AverageOverallCaseProcessingTime:
-                    return new[] { InterviewExportedAction.InterviewerAssigned };
-                case PeriodiceReportType.AverageCaseAssignmentDuration:
-                    return new[] { InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restarted };
-            }
-            return new InterviewExportedAction[0];
-        }
-
-        private InterviewExportedAction[] GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(PeriodiceReportType reportType)
-        {
-            switch (reportType)
-            {
-                case PeriodiceReportType.AverageOverallCaseProcessingTime:
-                    return new[] { InterviewExportedAction.ApprovedByHeadquarter };
-                case PeriodiceReportType.AverageCaseAssignmentDuration:
-                    return new[] { InterviewExportedAction.Completed };
-            }
-            return new InterviewExportedAction[0];
+            });
         }
     }
 }
