@@ -1401,8 +1401,6 @@
     <Content Include="Views\Interview\ReadOnlyQuestionPartialView.cshtml" />
     <Content Include="Views\Interview\ReadOnlyYesNoQuestionPartialView.cshtml" />
     <Content Include="Views\Interview\StaticTextPartialView.cshtml" />
-    <Content Include="Views\Interview\Troubleshoot.cshtml" />
-    <Content Include="Views\Interview\Troubleshooting.cshtml" />
     <Content Include="Views\Interviewer\Create.cshtml" />
     <Content Include="Views\Interviewer\Edit.cshtml" />
     <Content Include="Views\Maintenance\ReadSideIsOutdated.cshtml" />
@@ -1834,7 +1832,6 @@
     <Compile Include="Models\TabletInfoReportListViewModel.cs" />
     <Compile Include="Models\Template\ImportQuestionnaireList.cs" />
     <Compile Include="Models\Template\QuestionnaireListItemModel.cs" />
-    <Compile Include="Models\TroubleshootModel.cs" />
     <Compile Include="Models\UserBatchUploadModel.cs" />
     <Compile Include="Models\Account\UserEditModel.cs" />
     <Compile Include="Models\Account\UserModel.cs" />
