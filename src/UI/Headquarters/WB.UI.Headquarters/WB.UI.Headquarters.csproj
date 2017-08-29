@@ -2053,7 +2053,7 @@
     <Exec Command="npm run vendor" WorkingDirectory="HqApp" />
     <Exec Command="npm run dev" WorkingDirectory="HqApp" />
   </Target>
-  <Target Name="RunWebpackDev" AfterTargets="RestoreHqAppDeps" Condition=" '$(Configuration)' == 'Debug' And Exists('HqApp\dist\vendor.bundle.js') ">
+  <Target Name="RunWebpackDev" AfterTargets="RestoreHqAppDeps" Condition=" '$(Configuration)' == 'Debug' And !Exists('HqApp\dist\app.bundle.js') ">
     <Message Importance="high" Text="Performing dev Webpack build..." />
     <Exec Command="npm run dev" WorkingDirectory="HqApp" />
   </Target>
