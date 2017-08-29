@@ -11,8 +11,8 @@ using Prometheus;
 using System.Diagnostics;
 using System.Threading;
 using System.Text;
-using Elmah;
 using System.Web;
+using StackExchange.Exceptional;
 
 namespace WB.UI.Headquarters.Services
 {
@@ -71,9 +71,9 @@ namespace WB.UI.Headquarters.Services
             }
             catch (Exception ex)
             {
-                ErrorLog.GetDefault(HttpContext.Current).Log(new Error(ex, HttpContext.Current));
+                ex.Log(HttpContext.Current);
 
-                audioResult.MimeType = "audio/wav";
+                audioResult.MimeType = @"audio/wav";
                 audioResult.Binary = audio;
 
                 return audioResult;

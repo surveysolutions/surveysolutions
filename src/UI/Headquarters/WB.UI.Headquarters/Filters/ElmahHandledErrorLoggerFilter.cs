@@ -1,6 +1,7 @@
+using System.Web;
 using System.Web.Http.Filters;
-using Elmah;
 using Prometheus;
+using StackExchange.Exceptional;
 using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Filters
@@ -17,8 +18,8 @@ namespace WB.UI.Headquarters.Filters
             if (actionExecutedContext.Exception is WebInterviewAccessException)
                 return;
 
-            ErrorSignal.FromCurrentContext().Raise(actionExecutedContext.Exception);
-
+            actionExecutedContext.Exception
+                .AddLogData("Handler", "ElmahHandledErrorLoggerFilter").Log(HttpContext.Current);
         }
     }
 }
