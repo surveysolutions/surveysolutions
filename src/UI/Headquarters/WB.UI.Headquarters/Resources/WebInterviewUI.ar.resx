@@ -118,127 +118,127 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AnswerIsInvalid" xml:space="preserve">
-    <value>الإجابة غير صحيحة</value>
+    <value>الجواب غير صالح</value>
   </data>
   <data name="AnswerWasNotSaved" xml:space="preserve">
-    <value>لم يتم حفظ الإجابات</value>
+    <value>لم يتم حفظ الجواب</value>
   </data>
   <data name="AudioClickRecord" xml:space="preserve">
-    <value>انقر فوق لتسجيل الصوت</value>
+    <value>أنقر للقيام بتسجيل صوتي</value>
   </data>
   <data name="AudioInitializationFailed" xml:space="preserve">
-    <value>فشل تهيئة الصوت</value>
+    <value>فشل إعداد الملف الصوتي</value>
   </data>
   <data name="AudioRecording" xml:space="preserve">
-    <value>تسجيل الصوت</value>
+    <value>تسجيل صوتي</value>
   </data>
   <data name="AudioRecordingDuration" xml:space="preserve">
-    <value>{{humanizedLength}} ({{formattedLength}}) لتسجيل الصوت</value>
+    <value>{{humanizedLength}} ({{formattedLength}}) من التسجيل الصوتي</value>
   </data>
   <data name="AudioRecordNew" xml:space="preserve">
-    <value>سجل جديد</value>
+    <value>تسجيل صوتي جديد</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>إلغاء الأمر</value>
+    <value>إلغاء</value>
   </data>
   <data name="ClickToAnswer" xml:space="preserve">
-    <value>انقر فوق للإجابة</value>
+    <value>أنقر للإجابة</value>
   </data>
   <data name="CloseInterviewMessage" xml:space="preserve">
-    <value>&lt;p&gt;وتؤيد مقابلة ويب واحد فقط علامة التبويب النشطة مع المقابلة.&lt;/p&gt;&lt;p&gt;الرجاء إعادة تحميل هذه الصفحة لمتابعة استخدام هذا التبويب أو إغلاقه.&lt;/p&gt;</value>
+    <value>&lt;p&gt;يدعم الاستجواب الإلكتروني تبويباً واحداً ناشطاً للاستجواب.&lt;/p&gt;&lt;p&gt; يرجى إعادة تحميل هذه الصفحة لمواصلة استخدام هذا التبويب أو إغلاقه.&lt;/p&gt;</value>
   </data>
   <data name="CloseInterviewTitle" xml:space="preserve">
-    <value>يتم فتح هذه المقابلة في علامة التبويب أو مستعرض آخر</value>
+    <value>هذا الاستجواب مفتوح في تبويب أو متصفح آخر </value>
   </data>
   <data name="Comment" xml:space="preserve">
-    <value>التعليق</value>
+    <value>التعليقات</value>
   </data>
   <data name="CommentAdd" xml:space="preserve">
-    <value>إضافة تعليق</value>
+    <value>أضف تعليقاً</value>
   </data>
   <data name="CommentAdmin" xml:space="preserve">
-    <value>تعليق المشرف</value>
+    <value>تعليق مدير الموقع</value>
   </data>
   <data name="CommentEnter" xml:space="preserve">
     <value>أدخل تعليقك</value>
   </data>
   <data name="CommentHeadquarters" xml:space="preserve">
-    <value>تعليق المقر</value>
+    <value>تعليق المقر الرئيسي</value>
   </data>
   <data name="CommentHide" xml:space="preserve">
-    <value>إخفاء التعليق</value>
+    <value>إغفال التعليق</value>
   </data>
   <data name="CommentInterviewer" xml:space="preserve">
-    <value>تعليق المقابلة</value>
+    <value>تعليق المستجوب</value>
   </data>
   <data name="CommentPost" xml:space="preserve">
-    <value>وظيفة</value>
+    <value>نشر</value>
   </data>
   <data name="CommentSupervisor" xml:space="preserve">
     <value>تعليق المشرف</value>
   </data>
   <data name="CommentYours" xml:space="preserve">
-    <value>التعليق الخاص بك</value>
+    <value>تعليقك</value>
   </data>
   <data name="Complete" xml:space="preserve">
-    <value>إكمال</value>
+    <value>مكتمل</value>
   </data>
   <data name="CompleteAbout" xml:space="preserve">
-    <value>أنت على وشك الانتهاء من هذه المقابلة</value>
+    <value>أنت على وشك إكمال هذا الاستجواب</value>
   </data>
   <data name="CompleteErrors" xml:space="preserve">
-    <value>الأسئلة مع الأخطاء:</value>
+    <value>الأسئلة التي تنطوي على أخطاء: </value>
   </data>
   <data name="CompleteFirstErrors" xml:space="preserve">
-    <value>أول الكيانات {{count}} مع الأخطاء:</value>
+    <value>أول {{count}} مادة/مواد تنطوي على أخطاء:</value>
   </data>
   <data name="CompleteNoteToSupervisor" xml:space="preserve">
     <value>ملاحظة للمشرف</value>
   </data>
   <data name="CompleteQuestionsAnswered" xml:space="preserve">
-    <value>الرد على</value>
+    <value>تمت الإجابة عنها</value>
   </data>
   <data name="CompleteQuestionsStatus" xml:space="preserve">
-    <value>وضع الأسئلة:</value>
+    <value>حالة الأسئلة:</value>
   </data>
   <data name="CompleteQuestionsUnanswered" xml:space="preserve">
-    <value>بلا إجابة</value>
+    <value>لم تتم الإجابة عنها</value>
   </data>
   <data name="ConfirmRosterRemove" xml:space="preserve">
-    <value>هل أنت متأكد من أنك تريد إزالة القائمة ذات الصلة?</value>
+    <value>هل أنت واثق من حذف الجدول ذي الصلة؟ </value>
   </data>
   <data name="ConnectionLostMessage" xml:space="preserve">
-    <value>الرجاء إعادة تحميل الصفحة لاستعادة اتصال وتواصل هذه المقابلة.</value>
+    <value>يرجى إعادة تحميل الصفحة لإقامة الاتصال من جديد ومواصلة هذا الاستجواب.</value>
   </data>
   <data name="ConnectionLostTitle" xml:space="preserve">
-    <value>يتم فقدان الاتصال بالملقم.</value>
+    <value>فقد الاتصال بالخادم. </value>
   </data>
   <data name="Cover" xml:space="preserve">
-    <value>غطاء</value>
+    <value>غلاف</value>
   </data>
   <data name="CoverComments" xml:space="preserve">
-    <value>الأسئلة مع التعليقات:</value>
+    <value>الأسئلة المقترنة بتعليقات</value>
   </data>
   <data name="CoverFirstComments" xml:space="preserve">
-    <value>أول الكيانات {{count}} مع التعليقات:</value>
+    <value>المواد  {{count}} التي تنطوي على أخطاء:</value>
   </data>
   <data name="CoverSupervisorNote" xml:space="preserve">
-    <value>ملاحظة المشرف:</value>
+    <value>ملاحظة المشرف: </value>
   </data>
   <data name="DecimalCannotParse" xml:space="preserve">
-    <value>لا يمكن تحليل القيمة المدخلة كقيمة عشرية</value>
+    <value>لا يمكن تجزئة القيمة المدخلة كقيمة عشرية</value>
   </data>
   <data name="DecimalEnter" xml:space="preserve">
-    <value>أدخل رقم عشري</value>
+    <value>أدخل قيمة عشرية </value>
   </data>
   <data name="DecimalTooBig" xml:space="preserve">
-    <value>القيمة المدخلة أكبر. السماح بالأرقام فقط 15</value>
+    <value>القيمة التي أدخلتها أكبر.  مكن فقط إدخال 15 رقماً</value>
   </data>
   <data name="Disconnected" xml:space="preserve">
     <value>قطع الاتصال</value>
   </data>
   <data name="Done" xml:space="preserve">
-    <value>عمله</value>
+    <value>أنجز</value>
   </data>
   <data name="EnterDate" xml:space="preserve">
     <value>أدخل التاريخ</value>
@@ -250,40 +250,40 @@
     <value>أخطاء</value>
   </data>
   <data name="GPSError" xml:space="preserve">
-    <value>لا يمكن تحديد الموقف بسبب خطأ غير معروف (رمز: {{strErrorCode}}).</value>
+    <value>تعذر تحديد الموقع بسبب خطأ غير معروف (الرمز:  {{strErrorCode}}).</value>
   </data>
   <data name="GPSNotAvailable" xml:space="preserve">
-    <value>لا يدعم المستعرض الخاص بك تلقي تحديد الموقع الجغرافي</value>
+    <value>متصفحك لا يدعم تلقي تحديد المواقع الجغرافية</value>
   </data>
   <data name="GPSPermissionDenied" xml:space="preserve">
-    <value>هذا الموقع ليس لديه الإذن لاستخدام API تحديد الموقع الجغرافي</value>
+    <value>هذا الموقع الإلكتروني لا يملك الإذن باستخدام  API تحديد المواقع الجغرافية</value>
   </data>
   <data name="GPSPositionUnavailable" xml:space="preserve">
-    <value>لا يمكن تحديد الموضع الحالي.</value>
+    <value>تعذر تحديد الموقع الحالي. </value>
   </data>
   <data name="GPSRecord" xml:space="preserve">
-    <value>السجل العالمي لتحديد المواقع</value>
+    <value>تسجيل النظام العالمي لتحديد المواقع</value>
   </data>
   <data name="GPSTimeout" xml:space="preserve">
-    <value>لا يمكن تحديد الموقف الحالي ضمن المهلة المحددة.</value>
+    <value>تعذر تحديد الموقع الحالي ضمن المهلة الزمنية المحددة</value>
   </data>
   <data name="Help" xml:space="preserve">
-    <value>تعليمات</value>
+    <value>مساعدة</value>
   </data>
   <data name="Instruction" xml:space="preserve">
     <value>تعليمات</value>
   </data>
   <data name="InstructionShow" xml:space="preserve">
-    <value>إظهار تعليمات</value>
+    <value>إظهار التعليمات</value>
   </data>
   <data name="Loading" xml:space="preserve">
     <value>تحميل...</value>
   </data>
   <data name="LoadingWait" xml:space="preserve">
-    <value>التحميل، الرجاء الانتظار</value>
+    <value>التحميل جار، يرجى الانتظار</value>
   </data>
   <data name="Network" xml:space="preserve">
-    <value>شبكة</value>
+    <value>الشبكة</value>
   </data>
   <data name="No" xml:space="preserve">
     <value>لا</value>
@@ -292,79 +292,79 @@
     <value>لم يتم العثور على نتائج</value>
   </data>
   <data name="NumberCannotParse" xml:space="preserve">
-    <value>لا يمكن تحليل القيمة المدخلة كقيمة عدد صحيح</value>
+    <value>تعذرت تجزئة القيمة المدخلة كعدد صحيح</value>
   </data>
   <data name="NumberEnter" xml:space="preserve">
-    <value>أدخل رقم</value>
+    <value>أدخل رقماً</value>
   </data>
   <data name="NumberRosterError" xml:space="preserve">
-    <value>الإجابة '{{answer}}' غير صحيح لأن المسألة كحجم قائمة والجواب المحدد سلبي</value>
+    <value>الإجابة '{{answer}}' غير صحيحة لأن السؤال مستخدم كحجم الجدول والإجابة المحددة سلبية</value>
   </data>
   <data name="NumberRosterRemoveConfirm" xml:space="preserve">
-    <value>هل أنت متأكد من أنك تريد إزالة {{amountOfRostersToRemove}} الصف (الصفوف) من كل قائمة ذات الصلة?</value>
+    <value>هل أنت أكيد من أنك تريد حذف {{amountOfRostersToRemove}} صفاً (صفوفاً) من كل جدول ذي صلة؟</value>
   </data>
   <data name="NumberRosterUpperBound" xml:space="preserve">
-    <value>الإجابة '{{answer}}' غير صحيحة لأن الجواب أكبر من الحد الأعلى قائمة {{answerMaxValue}}.</value>
+    <value>الإجابة  '{{answer}}' غير صحيحة لأن الإجابة أكبر من الحد الأعلى للجدول {{answerMaxValue}}</value>
   </data>
   <data name="OptionsAvailableAfterAnswer" xml:space="preserve">
-    <value>الخيارات ستكون متاحة بعد الإجابة على السؤال المشار إليه</value>
+    <value>سوف تصبح الخيارات متاحة بعد الإجابة عن السؤال المشار إليه</value>
   </data>
   <data name="PhotoIsNotImage" xml:space="preserve">
-    <value>يسمح لتحميل ملفات الصور فقط</value>
+    <value>يمكن تحميل ملفات صور فقط</value>
   </data>
   <data name="PhotoTooBig" xml:space="preserve">
-    <value>كبير جداً لتحميل الصورة. الرجاء اختيار صورة أقل من 30 ميغابايت</value>
+    <value>الصورة أكبر من أن يتم تحميلها. الرجاء اختيار صورة يقل حجمها عن 30 ميغابايت</value>
   </data>
   <data name="PhotoUpload" xml:space="preserve">
-    <value>تحميل صور</value>
+    <value>تحميل صورة </value>
   </data>
   <data name="ProgressText" xml:space="preserve">
-    <value>{{progress}} % اكتمال</value>
+    <value>{{progress}}% مكتمل</value>
   </data>
   <data name="QuestionUnsupported" xml:space="preserve">
-    <value>نوع السؤال غير معتمد</value>
+    <value>نوع السؤال غير مدعوم</value>
   </data>
   <data name="RecordCurrentTime" xml:space="preserve">
-    <value>سجل الوقت الحالي</value>
+    <value>تسجيل الوقت الحالي</value>
   </data>
   <data name="Reload" xml:space="preserve">
-    <value>إعادة تحميل</value>
+    <value>إعادة التحميل</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>البحث عن</value>
+    <value>ابحث</value>
   </data>
   <data name="SessionTimeoutMessage" xml:space="preserve">
-    <value>الرجاء إعادة تحميل الصفحة لمواصلة هذه المقابلة.</value>
+    <value>يرجى إعادة تحميل الصفحة لمواصلة العمل على هذا الاستجواب.</value>
   </data>
   <data name="SessionTimeoutMessageTitle" xml:space="preserve">
-    <value>انتهت مهلة جلسة العمل الخاصة بك لأنك لم تفعل أي عمل لمدة 15 دقيقة.</value>
+    <value>انتهى الوقت لأنك لم تقم بأي عمل طيلة 15 دقيقة.</value>
   </data>
   <data name="SessionTimeoutTitle" xml:space="preserve">
-    <value>انتهت مهلة جلسة العمل الخاصة بك</value>
+    <value>انتهى الوقت</value>
   </data>
   <data name="SlowConnection" xml:space="preserve">
-    <value>اتصال الشبكة بطيء</value>
+    <value>الاتصال بالشبكة بطيء</value>
   </data>
   <data name="SwitchingLanguage" xml:space="preserve">
-    <value>التبديل بين اللغات. الرجاء الانتظار...</value>
+    <value>تبديل اللغة.  يرجى الانتظار...</value>
   </data>
   <data name="TextEnter" xml:space="preserve">
-    <value>إدخال النص</value>
+    <value>أدخل نصاً</value>
   </data>
   <data name="TextEnterMasked" xml:space="preserve">
-    <value>أدخل النص {{userFriendlyMask}}</value>
+    <value>أدخل نصاً {{userFriendlyMask}}</value>
   </data>
   <data name="TextEnterNewItem" xml:space="preserve">
-    <value>إدخال عنصر جديد</value>
+    <value>أدخل بنداً جديداً</value>
   </data>
   <data name="TextRequired" xml:space="preserve">
-    <value>يرجى ملء كافة القيم المطلوبة</value>
+    <value>يرجى ملء كل القيم المطلوبة</value>
   </data>
   <data name="ToggleNavigation" xml:space="preserve">
-    <value>تبديل التنقل</value>
+    <value>تبديل</value>
   </data>
   <data name="WebInterview" xml:space="preserve">
-    <value>مقابلة مع الشبكة</value>
+    <value>الاستجواب الإلكتروني</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>نعم</value>
