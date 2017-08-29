@@ -60,19 +60,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
          Expression<Func<T, bool>> restrictUser,
          Expression<Func<T, UserAndTimestampAndTimespan>> userIdSelector)
         {
-            var from = this.AddPeriod(reportStartDate.Date, period, -columnCount + 1);
-            var to = reportStartDate.Date.AddDays(1);
+            var to = reportStartDate.Date.AddDays(1).AddSeconds(-1);
+            var from = this.AddPeriod(to, period, -columnCount);
+
+
+            DateTime fromInUsersTimezone = from.AddMinutes(timezoneAdjastmentMins);
+            DateTime toInUsersTimezone = to.AddMinutes(timezoneAdjastmentMins);
 
             DateTime? minDate = ReportHelpers.GetFirstInterviewCreatedDate(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), this.interviewStatusesStorage);
             var dateTimeRanges =
                 Enumerable.Range(0, columnCount)
-                    .Select(i => new DateTimeRange(this.AddPeriod(from, period, i), this.AddPeriod(from, period, i + 1)))
+                    .Select(i => new DateTimeRange(this.AddPeriod(fromInUsersTimezone, period, i), this.AddPeriod(fromInUsersTimezone, period, i + 1)))
                     .Where(i => minDate.HasValue && i.To.Date >= minDate)
                     .ToArray();
 
-            DateTime fromInUsersTimezone = from.AddMinutes(timezoneAdjastmentMins);
-            DateTime toInUsersTimezone = to.AddMinutes(timezoneAdjastmentMins);
-            var allUsersQuery = query(questionnaireId, questionnaireVersion, fromInUsersTimezone, toInUsersTimezone);
+           var allUsersQuery = query(questionnaireId, questionnaireVersion, fromInUsersTimezone, toInUsersTimezone);
 
             if (restrictUser != null)
                 allUsersQuery = allUsersQuery.Where(restrictUser);
@@ -104,17 +106,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             SpeedByResponsibleTotalRow totalRow = new SpeedByResponsibleTotalRow();
             foreach (var dateTimeRange in dateTimeRanges)
             {
-                var fromDate = dateTimeRange.From.AddMinutes(timezoneAdjastmentMins);
-                var toDate = dateTimeRange.To.AddMinutes(timezoneAdjastmentMins);
-                double? totalAvgDuration = query(questionnaireId, questionnaireVersion, fromDate, toDate)
+                double? totalAvgDuration = query(questionnaireId, questionnaireVersion, dateTimeRange.From, dateTimeRange.To)
                                             .Select(userIdSelector)
                                             .Select(x => (long?)x.Timespan)
                                             .Average();
                 double? dbl = totalAvgDuration.HasValue ? new TimeSpan((long) totalAvgDuration.Value).TotalMinutes : (double?)null;
 
                 totalRow.SpeedByPeriod.Add(dbl.HasValue ? Math.Round(dbl.Value, 2) : (double?)null);
-            }
 
+                dateTimeRange.From = dateTimeRange.From.AddMinutes(-timezoneAdjastmentMins);
+                dateTimeRange.To = dateTimeRange.To.AddMinutes(-timezoneAdjastmentMins);
+            }
 
             return new SpeedByResponsibleReportView(rows, dateTimeRanges, usersCount)
             {
