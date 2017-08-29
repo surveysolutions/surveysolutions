@@ -169,11 +169,47 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Average case assignment duration.
+        /// </summary>
+        internal static string Report_Average_case_assignment_duration {
+            get {
+                return ResourceManager.GetString("Report_Average_case_assignment_duration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average HQ processing time.
+        /// </summary>
+        internal static string Report_Average_HQ_processing_time {
+            get {
+                return ResourceManager.GetString("Report_Average_HQ_processing_time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Average interview duration.
         /// </summary>
         internal static string Report_Average_Interview_Duration {
             get {
                 return ResourceManager.GetString("Report_Average_Interview_Duration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average overall case processing time.
+        /// </summary>
+        internal static string Report_Average_overall_case_processing_time {
+            get {
+                return ResourceManager.GetString("Report_Average_overall_case_processing_time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average supervisor processing time.
+        /// </summary>
+        internal static string Report_Average_supervisor_processing_time {
+            get {
+                return ResourceManager.GetString("Report_Average_supervisor_processing_time", resourceCulture);
             }
         }
         
@@ -201,6 +237,33 @@ namespace Resources {
         internal static string Report_Number_of_Completed_Interviews {
             get {
                 return ResourceManager.GetString("Report_Number_of_Completed_Interviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of interviews approved by HQ.
+        /// </summary>
+        internal static string Report_Number_of_interviews_approved_by_HQ {
+            get {
+                return ResourceManager.GetString("Report_Number_of_interviews_approved_by_HQ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of interview transactions by HQ.
+        /// </summary>
+        internal static string Report_Number_of_interview_transactions_by_HQ {
+            get {
+                return ResourceManager.GetString("Report_Number_of_interview_transactions_by_HQ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of interview transactions by Supervisor.
+        /// </summary>
+        internal static string Report_Number_of_interview_transactions_by_Supervisor {
+            get {
+                return ResourceManager.GetString("Report_Number_of_interview_transactions_by_Supervisor", resourceCulture);
             }
         }
         
