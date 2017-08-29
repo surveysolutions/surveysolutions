@@ -8,6 +8,7 @@ using System.Web.Http;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.InputModels;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
@@ -102,7 +103,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     TimezoneOffsetMinutes = filter.TimezoneOffsetMinutes
                 });
 
-            return this.CreateReportResponse(exportType, report, Reports.Report_Number_of_Completed_Interviews);
+            return this.CreateReportResponse(exportType, report, filter.ReportType == 0 ? Reports.Report_Number_of_Completed_Interviews : Reports.Report_Number_of_interview_transactions_by_Supervisor);
         }
 
         [HttpGet]
@@ -127,7 +128,34 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     TimezoneOffsetMinutes = filter.TimezoneOffsetMinutes
                 });
 
-            return this.CreateReportResponse(exportType, report, Reports.Report_Number_of_Completed_Interviews);
+            return this.CreateReportResponse(exportType, report, GetReportFileName(filter.ReportType));
+        }
+
+        private string GetReportFileName(PeriodiceReportType reportType)
+        {
+            switch (reportType)
+            {
+                case PeriodiceReportType.NumberOfCompletedInterviews:
+                    return Reports.Report_Number_of_Completed_Interviews;
+                case PeriodiceReportType.NumberOfInterviewTransactionsBySupervisor:
+                    return Reports.Report_Number_of_interview_transactions_by_Supervisor;
+                case PeriodiceReportType.NumberOfInterviewTransactionsByHQ:
+                    return Reports.Report_Number_of_interview_transactions_by_HQ;
+                case PeriodiceReportType.NumberOfInterviewsApprovedByHQ:
+                    return Reports.Report_Number_of_interviews_approved_by_HQ;
+                case PeriodiceReportType.AverageCaseAssignmentDuration:
+                    return Reports.Report_Average_case_assignment_duration;
+                case PeriodiceReportType.AverageInterviewDuration:
+                    return Reports.Report_Average_Interview_Duration;
+                case PeriodiceReportType.AverageSupervisorProcessingTime:
+                    return Reports.Report_Average_supervisor_processing_time;
+                case PeriodiceReportType.AverageHQProcessingTime:
+                    return Reports.Report_Average_HQ_processing_time;
+                case PeriodiceReportType.AverageOverallCaseProcessingTime:
+                    return Reports.Report_Average_overall_case_processing_time;
+                default:
+                    throw  new InvalidOperationException("Invalid report type");
+            }
         }
 
         [HttpGet]
@@ -153,7 +181,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     TimezoneOffsetMinutes = filter.TimezoneOffsetMinutes
                 });
 
-            return this.CreateReportResponse(exportType, report, Reports.Report_Average_Interview_Duration);
+            return this.CreateReportResponse(exportType, report, GetReportFileName(filter.ReportType));
         }
 
         [HttpGet]
@@ -178,7 +206,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     TimezoneOffsetMinutes = filter.TimezoneOffsetMinutes
                 });
 
-            return this.CreateReportResponse(exportType, report, Reports.Report_Speed_Between_Statuses_By_Supervisors);
+            return this.CreateReportResponse(exportType, report, 
+                filter.ReportType == PeriodiceReportType.AverageOverallCaseProcessingTime ? 
+                    Reports.Report_Average_overall_case_processing_time : 
+                    Reports.Report_Average_case_assignment_duration);
         }
 
         [HttpGet]
@@ -204,7 +235,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     TimezoneOffsetMinutes = filter.TimezoneOffsetMinutes
                 });
 
-            return this.CreateReportResponse(exportType, report, Reports.Report_Speed_Between_Statuses_By_Interviewers);
+            return this.CreateReportResponse(exportType, report, Reports.Report_Average_case_assignment_duration);
         }
 
         [HttpGet]
@@ -229,7 +260,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     TimezoneOffsetMinutes = filter.TimezoneOffsetMinutes
                 });
 
-            return this.CreateReportResponse(exportType, report, Reports.Report_Average_Interview_Duration);
+            return this.CreateReportResponse(exportType, report, GetReportFileName(filter.ReportType));
         }
 
         [HttpGet]
