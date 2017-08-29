@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -11,7 +12,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
     internal class InterviewStatusTimeSpanDenormalizer : BaseDenormalizer, IEventHandler<InterviewCompleted>,
                                             IEventHandler<InterviewApprovedByHQ>,
-                                            IEventHandler<UnapprovedByHeadquarters>
+                                            IEventHandler<UnapprovedByHeadquarters>,
+                                            IEventHandler<InterviewHardDeleted>
+                        
 
     {
         private readonly IReadSideRepositoryWriter<InterviewStatusTimeSpans> interviewCustomStatusTimestampStorage;
@@ -157,13 +160,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public void Handle(IPublishedEvent<UnapprovedByHeadquarters> evnt)
         {
-           var interviewCustomStatusTimestamps = this.interviewCustomStatusTimestampStorage.GetById(evnt.EventSourceId);
+           InterviewStatusTimeSpans interviewCustomStatusTimestamps = this.interviewCustomStatusTimestampStorage.GetById(evnt.EventSourceId);
             if (interviewCustomStatusTimestamps == null)
             {
                 return;
             }
 
-            var itemsToRemove = interviewCustomStatusTimestamps.TimeSpansBetweenStatuses.Where(
+            List<TimeSpanBetweenStatuses> itemsToRemove = interviewCustomStatusTimestamps.TimeSpansBetweenStatuses.Where(
                     x => x.EndStatus == InterviewExportedAction.ApprovedByHeadquarter).ToList();
 
             if (itemsToRemove.Any())
@@ -176,6 +179,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 this.interviewCustomStatusTimestampStorage.Store(interviewCustomStatusTimestamps,
                     interviewCustomStatusTimestamps.InterviewId);
             }
+        }
+
+        public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
+        {
+            var interviewId = evnt.EventSourceId;
+            interviewCustomStatusTimestampStorage.Remove(interviewId);
+            statuses.Remove(interviewId);
         }
     }
 }

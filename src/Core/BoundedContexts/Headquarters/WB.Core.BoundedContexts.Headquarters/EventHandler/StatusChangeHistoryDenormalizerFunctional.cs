@@ -275,31 +275,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewDeleted> @event)
         {
-            if (@event.Origin == Constants.HeadquartersSynchronizationOrigin)
-                return interviewStatuses;
-
-            return this.AddCommentedStatus(
-                @event.EventIdentifier,
-                interviewStatuses,
-                @event.Payload.UserId,
-                null,
-                null,
-                InterviewExportedAction.Deleted,
-                @event.EventTimeStamp,
-                null);
+            return null;
         }
 
         public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewHardDeleted> @event)
         {
-            return this.AddCommentedStatus(
-                @event.EventIdentifier,
-                interviewStatuses,
-                @event.Payload.UserId,
-                null,
-                null,
-                InterviewExportedAction.Deleted,
-                @event.EventTimeStamp,
-                null);
+            return null;
         }
 
         public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewRestored> @event)
