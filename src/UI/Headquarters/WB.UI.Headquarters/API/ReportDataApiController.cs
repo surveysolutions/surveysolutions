@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IQuantityReportFactory quantityReport;
         private readonly ISpeedReportFactory speedReport;
 
-        private readonly IStatusDurationReport countDaysOfInterviewInStatusReport;
+        private readonly IStatusDurationReport statusDurationReport;
         private readonly IDeviceInterviewersReport deviceInterviewersReport;
         private readonly IExportFactory exportFactory;
 
@@ -57,7 +57,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IChartStatisticsViewFactory chartStatisticsViewFactory, 
             IQuantityReportFactory quantityReport, 
             ISpeedReportFactory speedReport,
-            IStatusDurationReport countDaysOfInterviewInStatusReport,
+            IStatusDurationReport statusDurationReport,
             IDeviceInterviewersReport deviceInterviewersReport,
             IExportFactory exportFactory)
             : base(commandService, logger)
@@ -70,7 +70,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.chartStatisticsViewFactory = chartStatisticsViewFactory;
             this.quantityReport = quantityReport;
             this.speedReport = speedReport;
-            this.countDaysOfInterviewInStatusReport = countDaysOfInterviewInStatusReport;
+            this.statusDurationReport = statusDurationReport;
             this.deviceInterviewersReport = deviceInterviewersReport;
             this.exportFactory = exportFactory;
         }
@@ -508,12 +508,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
             if (!string.IsNullOrEmpty(exportType))
             {
-                var report = await this.countDaysOfInterviewInStatusReport.GetReportAsync(input);
+                var report = await this.statusDurationReport.GetReportAsync(input);
 
                 return this.CreateReportResponse(exportType, report, Reports.Report_Status_Duration);
             }
 
-            var data = await this.countDaysOfInterviewInStatusReport.LoadAsync(input);
+            var data = await this.statusDurationReport.LoadAsync(input);
 
             return this.Request.CreateResponse(new StatusDurationDataTableResponse
             {
