@@ -63,7 +63,6 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.Core.BoundedContexts.Headquarters.Implementation.ReadSide;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations.Impl;
@@ -87,7 +86,6 @@ namespace WB.Core.BoundedContexts.Headquarters
         private readonly string currentFolderPath;
         private readonly SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting;
         private readonly int? interviewLimitCount;
-        private readonly ReadSideSettings readSideSettings;
         private readonly string syncDirectoryName;
         private readonly UserPreloadingSettings userPreloadingSettings;
         private readonly ExportSettings exportSettings;
@@ -97,7 +95,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
         public HeadquartersBoundedContextModule(string currentFolderPath,
             SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting,
-            ReadSideSettings readSideSettings,
             UserPreloadingSettings userPreloadingSettings,
             ExportSettings exportSettings,
             InterviewDataExportSettings interviewDataExportSettings,
@@ -112,7 +109,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.sampleImportSettings = sampleImportSettings;
             this.currentFolderPath = currentFolderPath;
             this.syncPackagesProcessorBackgroundJobSetting = syncPackagesProcessorBackgroundJobSetting;
-            this.readSideSettings = readSideSettings;
             this.interviewLimitCount = interviewLimitCount;
             this.syncSettings = syncSettings;
             this.syncDirectoryName = syncDirectoryName;
@@ -281,11 +277,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Bind<IInterviewPackagesService>().To<InterviewPackagesService>();
 
-            this.Bind<ReadSideSettings>().ToConstant(this.readSideSettings);
-            this.Bind<ReadSideService>().ToSelf().InSingletonScope();
-            this.Bind<IReadSideStatusService>().ToMethod(context => context.Kernel.Get<ReadSideService>());
-            this.Bind<IReadSideAdministrationService>().ToMethod(context => context.Kernel.Get<ReadSideService>());
-         
             this.Bind<IDeleteQuestionnaireService>().To<DeleteQuestionnaireService>().InSingletonScope();
             this.Bind<IAtomicHealthCheck<EventStoreHealthCheckResult>>().To<EventStoreHealthChecker>();
             this.Bind<IAtomicHealthCheck<FolderPermissionCheckResult>>().To<FolderPermissionChecker>().WithConstructorArgument("folderPath", this.currentFolderPath);

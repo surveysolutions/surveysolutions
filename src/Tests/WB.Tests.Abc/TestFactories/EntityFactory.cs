@@ -898,9 +898,6 @@ namespace WB.Tests.Abc.TestFactories
         public ReadSideCacheSettings ReadSideCacheSettings(int cacheSizeInEntities = 128, int storeOperationBulkSize = 8)
             => new ReadSideCacheSettings(true, "folder", cacheSizeInEntities, storeOperationBulkSize);
 
-        public ReadSideSettings ReadSideSettings()
-            => new ReadSideSettings(readSideVersion: 0);
-
         public InterviewTreeDoubleQuestion InterviewTreeDoubleQuestion(double answer = 42.42)
             => new InterviewTreeDoubleQuestion(answer);
 

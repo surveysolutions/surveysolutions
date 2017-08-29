@@ -193,9 +193,6 @@ namespace WB.UI.Headquarters
                     phoneNumberMaxLength: UserModel.PhoneNumberLength,
                     personNameFormatRegex: UserModel.PersonNameRegex);
 
-            var readSideSettings = new ReadSideSettings(
-                settingsProvider.AppSettings["ReadSide.Version"].ParseIntOrNull() ?? 0);
-
             var exportSettings = new ExportSettings(
                 settingsProvider.AppSettings["Export.BackgroundExportIntervalInSeconds"].ToIntOrDefault(15));
             var interviewDataExportSettings =
@@ -222,7 +219,6 @@ namespace WB.UI.Headquarters
                 new DataCollectionSharedKernelModule().AsNinject(),
                 new HeadquartersBoundedContextModule(basePath,
                     interviewDetailsDataLoaderSettings,
-                    readSideSettings,
                     userPreloadingSettings,
                     exportSettings,
                     interviewDataExportSettings,

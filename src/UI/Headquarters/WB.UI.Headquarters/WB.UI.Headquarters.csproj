@@ -1377,7 +1377,6 @@
     <Content Include="Views\ControlPanel\Designer.cshtml" />
     <Content Include="Views\ControlPanel\Index.cshtml" />
     <Content Include="Views\ControlPanel\NConfig.cshtml" />
-    <Content Include="Views\ControlPanel\ReadSide.cshtml" />
     <Content Include="Views\ControlPanel\RepeatLastInterviewStatus.cshtml" />
     <Content Include="Views\ControlPanel\RevalidateInterviews.cshtml" />
     <Content Include="Views\ControlPanel\Settings.cshtml" />
@@ -1796,9 +1795,7 @@
     <Compile Include="Controllers\Profile\HeadquartersController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TypeExtensions.cs" />
-    <Compile Include="Filters\ApiMaintenanceFilter.cs" />
     <Compile Include="Filters\FormMultipartEncodedMediaTypeFormatter .cs" />
-    <Compile Include="Filters\MaintenanceFilter.cs" />
     <Compile Include="Filters\InstallationAttribute.cs" />
     <Compile Include="Controllers\Profile\SupervisorController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
@@ -1824,8 +1821,6 @@
     <Compile Include="Models\PreloadedDataInterviewProgressModel.cs" />
     <Compile Include="Models\QuantityByInterviewersReportModel.cs" />
     <Compile Include="Models\QuantityBySupervisorsReportModel.cs" />
-    <Compile Include="Models\RebuildReadSideInputViewModel.cs" />
-    <Compile Include="Models\RebuildReadSideType.cs" />
     <Compile Include="Models\SpeedByInterviewersReportModel.cs" />
     <Compile Include="Models\SpeedBySupervisorsReportModel.cs" />
     <Compile Include="Models\TeamsAndStatusesFilter.cs" />
