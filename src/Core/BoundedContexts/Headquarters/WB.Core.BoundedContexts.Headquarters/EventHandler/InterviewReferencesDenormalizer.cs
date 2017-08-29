@@ -10,7 +10,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
     public class InterviewReferencesDenormalizer : AbstractFunctionalEventHandler<InterviewReferences, IReadSideKeyValueStorage<InterviewReferences>>,
         IUpdateHandler<InterviewReferences, InterviewCreated>,
         IUpdateHandler<InterviewReferences, InterviewFromPreloadedDataCreated>,
-        IUpdateHandler<InterviewReferences, InterviewOnClientCreated>
+        IUpdateHandler<InterviewReferences, InterviewOnClientCreated>,
+        IUpdateHandler<InterviewReferences, InterviewHardDeleted>
     {
         public InterviewReferencesDenormalizer(IReadSideKeyValueStorage<InterviewReferences> readSideStorage)
             : base(readSideStorage) {}
@@ -28,5 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             return new InterviewReferences(interviewId, questionnaireId, questionnaireVersion);
         }
+
+        public InterviewReferences Update(InterviewReferences state, IPublishedEvent<InterviewHardDeleted> @event) => null;
     }
 }
