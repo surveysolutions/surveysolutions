@@ -1,4 +1,6 @@
-﻿using System.Web.Http.Filters;
+﻿using System.Web;
+using System.Web.Http.Filters;
+using StackExchange.Exceptional;
 using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.Filters
@@ -10,7 +12,7 @@ namespace WB.UI.Headquarters.API.Filters
             if (context.Exception is WebInterviewAccessException)
                 return;
 
-            Elmah.ErrorSignal.FromCurrentContext().Raise(context.Exception);
+            context.Exception.Log(HttpContext.Current);
         }
     }
 }
