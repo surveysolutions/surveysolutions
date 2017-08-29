@@ -42,7 +42,7 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
             EventBaseType = typeof(Object);
         }
 
-        static ParameterInfo[] EmptyParameters = new ParameterInfo[0];
+        static readonly ParameterInfo[] EmptyParameters = Array.Empty<ParameterInfo>();
 
         private ParameterInfo[] GetParameters(MethodInfo method)
         {
@@ -82,9 +82,9 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
                 var methodCopy = method.MethodInfo;
                 Type firstParameterType = GetParameters(methodCopy).First().ParameterType;
 
-                Action<object> invokeAction = (e) => methodCopy.Invoke(target, new[] { e });
+                void InvokeAction(object e) => methodCopy.Invoke(target, new[] {e});
 
-                var handler = new TypeThresholdedActionBasedDomainEventHandler(invokeAction, firstParameterType, methodCopy.Name, true);
+                var handler = new TypeThresholdedActionBasedDomainEventHandler(InvokeAction, firstParameterType, methodCopy.Name, true);
                 handlers.Add(handler);
             }
 
