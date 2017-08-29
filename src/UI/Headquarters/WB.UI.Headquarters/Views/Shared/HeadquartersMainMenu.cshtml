@@ -12,7 +12,7 @@
                           page == MenuItem.Summary || 
                           page == MenuItem.Statuses || 
                           page == MenuItem.DevicesInterviewers ||
-                          page == MenuItem.CountDaysOfInterviewInStatus ||
+                          page == MenuItem.StatusDuration ||
                           page == MenuItem.InterviewsChart ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.Reports">
             @MainMenu.Reports <span class="caret"></span>
@@ -20,7 +20,7 @@
         <ul class="dropdown-menu">
             @Html.MainMenuItem("SurveysAndStatuses", "Reports", @MainMenu.SurveysAndStatuses, MenuItem.Surveys)
             @Html.MainMenuItem("SupervisorsAndStatuses", "Reports", @MainMenu.TeamsAndStatuses, MenuItem.Summary)
-            @Html.MainMenuItem("CountDaysOfInterviewInStatus", "Reports", @MainMenu.CountDaysOfInterviewInStatus, MenuItem.CountDaysOfInterviewInStatus)
+            @Html.MainMenuItem("StatusDuration", "Reports", @MainMenu.StatusDuration, MenuItem.StatusDuration)
             @Html.MainMenuItem("InterviewersAndDevices", "Reports", @MainMenu.DevicesInterviewers, MenuItem.DevicesInterviewers)
             @Html.MainMenuItem("MapReport", "Reports", @MainMenu.MapReport, MenuItem.MapReport)
             @Html.MainMenuItem("InterviewsChart", "Reports", @MainMenu.CumulativeChart, MenuItem.InterviewsChart)

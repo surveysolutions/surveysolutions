@@ -12,8 +12,8 @@
     <NoWarn>1701;1702;1705;618</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\Reposts\Factories\CountDaysOfInterviewInStatusReportAssignments.sql" />
-    <EmbeddedResource Include="Views\Reposts\Factories\CountDaysOfInterviewInStatusReportInterviews.sql" />
+    <EmbeddedResource Include="Views\Reposts\Factories\StatusDurationReportAssignments.sql" />
+    <EmbeddedResource Include="Views\Reposts\Factories\StatusDurationReportInterviews.sql" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\Reposts\Factories\DeviceInterviewersReport.sql" />

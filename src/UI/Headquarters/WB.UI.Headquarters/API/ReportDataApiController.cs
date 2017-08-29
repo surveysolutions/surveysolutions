@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IQuantityReportFactory quantityReport;
         private readonly ISpeedReportFactory speedReport;
 
-        private readonly ICountDaysOfInterviewInStatusReport countDaysOfInterviewInStatusReport;
+        private readonly IStatusDurationReport countDaysOfInterviewInStatusReport;
         private readonly IDeviceInterviewersReport deviceInterviewersReport;
         private readonly IExportFactory exportFactory;
 
@@ -57,7 +57,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IChartStatisticsViewFactory chartStatisticsViewFactory, 
             IQuantityReportFactory quantityReport, 
             ISpeedReportFactory speedReport,
-            ICountDaysOfInterviewInStatusReport countDaysOfInterviewInStatusReport,
+            IStatusDurationReport countDaysOfInterviewInStatusReport,
             IDeviceInterviewersReport deviceInterviewersReport,
             IExportFactory exportFactory)
             : base(commandService, logger)
@@ -491,9 +491,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
         [CamelCase]
-        public async Task<HttpResponseMessage> CountDaysOfInterviewInStatus([FromUri] CountDaysOfInterviewInStatusRequest request, [FromUri] string exportType = null)
+        public async Task<HttpResponseMessage> StatusDuration([FromUri] StatusDurationRequest request, [FromUri] string exportType = null)
         {
-            var input = new CountDaysOfInterviewInStatusInputModel
+            var input = new StatusDurationInputModel
             {
                 Orders = request.GetSortOrderRequestItems(),
                 MinutesOffsetToUtc = request.Timezone
@@ -515,7 +515,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
             var data = await this.countDaysOfInterviewInStatusReport.LoadAsync(input);
 
-            return this.Request.CreateResponse(new CountDaysOfInterviewInStatusDataTableResponse
+            return this.Request.CreateResponse(new StatusDurationDataTableResponse
             {
                 Draw = request.Draw + 1,
                 RecordsTotal = data.Length,

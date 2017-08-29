@@ -3,7 +3,7 @@ using WB.UI.Headquarters.Models.ComponentModels;
 
 namespace WB.UI.Headquarters.Models.Reports
 {
-    public class CountDaysOfInterviewInStatusModel
+    public class StatusDurationModel
     {
         public string DataUrl { get; set; }
 

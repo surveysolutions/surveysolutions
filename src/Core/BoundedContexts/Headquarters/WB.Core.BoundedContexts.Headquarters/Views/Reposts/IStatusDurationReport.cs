@@ -6,8 +6,8 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reports
 {
-    public interface ICountDaysOfInterviewInStatusReport : IAsyncReport<CountDaysOfInterviewInStatusInputModel>
+    public interface IStatusDurationReport : IAsyncReport<StatusDurationInputModel>
     {
-        Task<CountDaysOfInterviewInStatusRow[]> LoadAsync(CountDaysOfInterviewInStatusInputModel input);
+        Task<StatusDurationRow[]> LoadAsync(StatusDurationInputModel input);
     }
 }
