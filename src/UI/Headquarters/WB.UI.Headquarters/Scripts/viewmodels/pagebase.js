@@ -131,7 +131,11 @@
                 else {
                     try {
                         var json = $.parseJSON(jqXhr.responseText);
-                        self.ShowError(json.Message);
+                        if (json.hasOwnProperty('Message')) {
+                            self.ShowError(json.Message);
+                        } else {
+                            self.ShowError(json);
+                        }
                     }
                     catch (err) {
                         self.ShowError(jqXhr.responseText);

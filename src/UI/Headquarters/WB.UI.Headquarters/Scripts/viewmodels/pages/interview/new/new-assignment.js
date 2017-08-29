@@ -49,7 +49,7 @@
                     window.location = self.assignmentListUrl + "?templateId=" +
                         datacontext.questionnaire.templateId + "&templateVersion=" +
                         datacontext.questionnaire.templateVersion;
-                }, function() {
+                }, undefined, undefined, function() {
                     self.submitting = false;
                 });
             }
