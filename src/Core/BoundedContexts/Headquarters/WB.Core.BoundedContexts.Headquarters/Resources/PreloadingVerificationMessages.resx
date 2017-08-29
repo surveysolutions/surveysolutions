@@ -221,7 +221,7 @@
     <value>Only integer values are allowed.</value>
   </data>
   <data name="PL0036_QuantityShouldBeGreaterThanMinus1" xml:space="preserve">
-    <value>Quantity should be greater than equal to -1.</value>
+    <value>Quantity should be greater than or equal to -1.</value>
   </data>
   <data name="PL0037_ColumnIsNotIdentifying" xml:space="preserve">
     <value>Column cannot be mapped to non identifying question</value>
