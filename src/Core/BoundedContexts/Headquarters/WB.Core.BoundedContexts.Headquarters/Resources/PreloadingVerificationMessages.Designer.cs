@@ -367,7 +367,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Quantity should be greater than equal to -1..
+        ///   Looks up a localized string similar to Quantity should be greater than or equal to -1..
         /// </summary>
         public static string PL0036_QuantityShouldBeGreaterThanMinus1 {
             get {
