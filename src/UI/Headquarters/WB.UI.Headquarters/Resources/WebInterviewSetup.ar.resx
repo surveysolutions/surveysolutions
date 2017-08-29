@@ -118,42 +118,42 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BackToQuestionnaires" xml:space="preserve">
-    <value>مرة أخرى لمسح الإعداد</value>
+    <value>العودة إلى تهيئة المسح</value>
   </data>
   <data name="Done" xml:space="preserve">
-    <value>عمله</value>
+    <value>أنجز</value>
   </data>
   <data name="DownloadTitle" xml:space="preserve">
-    <value>تحميل {0}</value>
+    <value>تنزيل ({0})</value>
   </data>
   <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>يمكنك تحميل قائمة تعيينات المنشأة التي يتم تعيينها للمقابلة من أجل تقديم ارتباطات ويب للمجيبين</value>
+    <value>يمكنك تنزيل قائمة بالمهام المستحدثة التي أسندت إلى المستجوب من أجل تسليم الوصلات الإلكترونية إلى المجيبين</value>
   </data>
   <data name="SelectInterviwer" xml:space="preserve">
-    <value>حدد المقابلة</value>
+    <value>اختر المستجوب </value>
   </data>
   <data name="Start" xml:space="preserve">
-    <value>بدء تشغيل</value>
+    <value>بدء</value>
   </data>
   <data name="Started_Title" xml:space="preserve">
-    <value>مقابلة مع شبكة الإنترنت بدأت</value>
+    <value>تم البدء بالاستجواب الإلكتروني</value>
   </data>
   <data name="StartInfo" xml:space="preserve">
-    <value>بدء مقابلة على شبكة الإنترنت ل {0}</value>
+    <value>البدء بالاستجواب الإلكتروني لـ {0}</value>
   </data>
   <data name="StopWebInterview" xml:space="preserve">
-    <value>وقف مقابلة ويب</value>
+    <value>إيقاف الاستجواب الإلكتروني</value>
   </data>
   <data name="UseCaptcha" xml:space="preserve">
-    <value>تمكين حماية البريد المزعج</value>
+    <value>تمكين الحماية من البريد الإلكتروني غير المطلوب</value>
   </data>
   <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
-    <value>إعداد مقابلة مع ويب</value>
+    <value>تهيئة الاستجواب الإلكتروني</value>
   </data>
   <data name="WebInterviewSetup_Title" xml:space="preserve">
-    <value>إعداد مقابلة مع ويب</value>
+    <value>تهيئة الاستجواب الإلكتروني</value>
   </data>
   <data name="WebInterviewStarted" xml:space="preserve">
-    <value>بدأت المقابلة على شبكة الإنترنت {0}</value>
+    <value>تم البدء بالاستجواب الإلكتروني لـ {0}</value>
   </data>
 </root>
