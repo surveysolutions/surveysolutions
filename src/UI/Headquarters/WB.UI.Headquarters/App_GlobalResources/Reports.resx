@@ -225,4 +225,25 @@
   <data name="Report_Team_Members_and_Statuses" xml:space="preserve">
     <value>Team Members and Statuses</value>
   </data>
+  <data name="Report_Average_case_assignment_duration" xml:space="preserve">
+    <value>Average case assignment duration</value>
+  </data>
+  <data name="Report_Average_HQ_processing_time" xml:space="preserve">
+    <value>Average HQ processing time</value>
+  </data>
+  <data name="Report_Average_overall_case_processing_time" xml:space="preserve">
+    <value>Average overall case processing time</value>
+  </data>
+  <data name="Report_Average_supervisor_processing_time" xml:space="preserve">
+    <value>Average supervisor processing time</value>
+  </data>
+  <data name="Report_Number_of_interviews_approved_by_HQ" xml:space="preserve">
+    <value>Number of interviews approved by HQ</value>
+  </data>
+  <data name="Report_Number_of_interview_transactions_by_HQ" xml:space="preserve">
+    <value>Number of interview transactions by HQ</value>
+  </data>
+  <data name="Report_Number_of_interview_transactions_by_Supervisor" xml:space="preserve">
+    <value>Number of interview transactions by Supervisor</value>
+  </data>
 </root>

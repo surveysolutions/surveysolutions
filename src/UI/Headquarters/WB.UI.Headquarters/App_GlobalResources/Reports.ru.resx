@@ -233,4 +233,25 @@
   <data name="Report_Team_Members_and_Statuses" xml:space="preserve">
     <value>Члены команды и статусы</value>
   </data>
+  <data name="Report_Average_case_assignment_duration" xml:space="preserve">
+    <value>Средняя продолжительность назначений</value>
+  </data>
+  <data name="Report_Average_HQ_processing_time" xml:space="preserve">
+    <value>Среднее время обработки хедквотером</value>
+  </data>
+  <data name="Report_Average_overall_case_processing_time" xml:space="preserve">
+    <value>Среднее время обработки</value>
+  </data>
+  <data name="Report_Average_supervisor_processing_time" xml:space="preserve">
+    <value>Среднее время обработки супервизором</value>
+  </data>
+  <data name="Report_Number_of_interviews_approved_by_HQ" xml:space="preserve">
+    <value>Количество интервью утвержденных хедквотером</value>
+  </data>
+  <data name="Report_Number_of_interview_transactions_by_HQ" xml:space="preserve">
+    <value>Количество интервью обработанных хедквотером</value>
+  </data>
+  <data name="Report_Number_of_interview_transactions_by_Supervisor" xml:space="preserve">
+    <value>Количество интервью обработанных супервизором</value>
+  </data>
 </root>
