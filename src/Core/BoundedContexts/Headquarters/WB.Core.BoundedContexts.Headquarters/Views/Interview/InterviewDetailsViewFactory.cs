@@ -128,11 +128,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             foreach (var interviewEntityView in allEntities)
             {
-                var groupView = interviewEntityView as InterviewGroupView;
-                if (groupView == null)
+                if (interviewEntityView is InterviewGroupView groupView)
+                {
+                    if (parentsOfQuestions.Contains(groupView.Id) || parentsOfStaticTexts.Contains(groupView.Id))
+                        yield return groupView;
+                }
+                else
+                {
                     yield return interviewEntityView;
-                else if (parentsOfQuestions.Contains(groupView.Id) || parentsOfStaticTexts.Contains(groupView.Id))
-                    yield return groupView;
+                }
             }
         }
 
@@ -142,19 +146,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             var groupEntities = currentGroupIdentity == null || currentGroupIdentity.Id == questionnaire.QuestionnaireId
                 ? interview.GetAllSections()
-                : (interview.GetGroup(currentGroupIdentity) as IInterviewTreeNode).ToEnumerable();
+                : (interview.GetGroup(currentGroupIdentity) as IInterviewTreeNode).ToEnumerable().Where(n => n != null);
 
             foreach (var entity in this.GetQuestionsFirstAndGroupsAfterFrom(groupEntities))
             {
                 if (!IsEntityInFilter(questionsTypes, entity, interviewData)) continue;
 
-                var question = entity as InterviewTreeQuestion;
-                var group = entity as InterviewTreeGroup;
-                var staticText = entity as InterviewTreeStaticText;
-
-                if (question != null) yield return this.ToQuestionView(question, questionnaire, questionnaireDocument, interview, interviewData);
-                else if (group != null) yield return this.ToGroupView(group);
-                else if (staticText != null) yield return this.ToStaticTextView(interview, staticText, questionnaire, questionnaireDocument);
+                switch (entity)
+                {
+                    case InterviewTreeQuestion question:
+                        yield return this.ToQuestionView(question, questionnaire, questionnaireDocument, interview, interviewData);
+                        break;
+                    case InterviewTreeGroup group:
+                        yield return this.ToGroupView(@group);
+                        break;
+                    case InterviewTreeStaticText staticText:
+                        yield return this.ToStaticTextView(interview, staticText, questionnaire, questionnaireDocument);
+                        break;
+                }
             }
         }
 
