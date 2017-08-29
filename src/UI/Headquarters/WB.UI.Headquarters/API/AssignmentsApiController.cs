@@ -3,13 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
+using System.Web.Http.Results;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.Code;
@@ -29,18 +35,21 @@ namespace WB.UI.Headquarters.API
         private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IInterviewCreatorFromAssignment interviewCreatorFromAssignment;
+        private readonly IInterviewImportService interviewImportService;
 
         public AssignmentsApiController(IAssignmentViewFactory assignmentViewFactory,
             IAuthorizedUser authorizedUser,
             IPlainStorageAccessor<Assignment> assignmentsStorage,
             IQuestionnaireStorage questionnaireStorage,
-            IInterviewCreatorFromAssignment interviewCreatorFromAssignment)
+            IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
+            IInterviewImportService interviewImportService)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.authorizedUser = authorizedUser;
             this.assignmentsStorage = assignmentsStorage;
             this.questionnaireStorage = questionnaireStorage;
             this.interviewCreatorFromAssignment = interviewCreatorFromAssignment;
+            this.interviewImportService = interviewImportService;
         }
         
         [Route("")]
@@ -204,6 +213,10 @@ namespace WB.UI.Headquarters.API
                 });
             }
 
+            var verificationResult = interviewImportService.VerifyAssignment(answers.GroupedByLevels(), questionnaire);
+            if (!verificationResult.Status)
+                return Content(HttpStatusCode.Forbidden, verificationResult.ErrorMessage);
+
             assignment.SetIdentifyingData(identifyingAnswers);
             assignment.SetAnswers(answers);
 
@@ -214,6 +227,7 @@ namespace WB.UI.Headquarters.API
             return this.Ok(new {});
         }
 
+ 
         public class CreateAssignmentRequest
         {
             public Guid QuestionnaireId { get; set; }
