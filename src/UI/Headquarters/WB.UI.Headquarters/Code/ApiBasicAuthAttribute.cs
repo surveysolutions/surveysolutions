@@ -21,9 +21,6 @@ namespace WB.UI.Headquarters.Code
 
         private HqSignInManager userManager => ServiceLocator.Current.GetInstance<HqSignInManager>();
 
-        private IReadSideStatusService readSideStatusService
-            => ServiceLocator.Current.GetInstance<IReadSideStatusService>();
-
         public bool TreatPasswordAsPlain { get; set; } = false;
         private readonly UserRoles[] roles;
 
@@ -34,12 +31,6 @@ namespace WB.UI.Headquarters.Code
 
         public override async Task OnAuthorizationAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
         {
-            if (this.readSideStatusService.AreViewsBeingRebuiltNow())
-            {
-                this.RespondWithMaintenanceMessage(actionContext);
-                return;
-            }
-
             if (actionContext.Request.Headers?.Authorization == null)
             {
                 this.RespondWithMessageThatUserDoesNotExists(actionContext);
@@ -87,11 +78,6 @@ namespace WB.UI.Headquarters.Code
                 ReasonPhrase = string.Format(TabletSyncMessages.InvalidUserFormat, actionContext.Request.RequestUri.GetLeftPart(UriPartial.Authority))
             };
             actionContext.Response.Headers.Add(AuthHeader, $@"Basic realm=""{actionContext.Request.RequestUri.DnsSafeHost}""");
-        }
-
-        private void RespondWithMaintenanceMessage(HttpActionContext actionContext)
-        {
-            actionContext.Response = new HttpResponseMessage(HttpStatusCode.ServiceUnavailable) { ReasonPhrase = TabletSyncMessages.Maintenance };
         }
 
         private void RespondWithMessageThatUserIsNoPermittedRole(HttpActionContext actionContext)

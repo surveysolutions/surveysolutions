@@ -121,7 +121,6 @@ namespace WB.Tests.Unit.Designer
 
         public static void ServiceLocatorForCustomWebApiAuthorizeFilter(
             IPlainTransactionManagerProvider transactionManagerProvider = null,
-            IReadSideStatusService readSideStatusService = null,
             IMembershipUserService membershipUserService = null)
         {
             var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
@@ -129,10 +128,6 @@ namespace WB.Tests.Unit.Designer
             serviceLocatorMock
                 .Setup(locator => locator.GetInstance<IPlainTransactionManagerProvider>())
                 .Returns(transactionManagerProvider ?? Mock.Of<IPlainTransactionManagerProvider>(t => t.GetPlainTransactionManager() == Mock.Of<IPlainTransactionManager>()));
-
-            serviceLocatorMock
-                .Setup(locator => locator.GetInstance<IReadSideStatusService>())
-                .Returns(readSideStatusService ?? Mock.Of<IReadSideStatusService>());
 
             serviceLocatorMock
                 .Setup(locator => locator.GetInstance<IMembershipUserService>())

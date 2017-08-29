@@ -444,7 +444,6 @@
     <Compile Include="Applications\Headquarters\ExportApiTests\when_starting_export_process_and_questionnaire_identity_is_invalid.cs" />
     <Compile Include="Applications\Headquarters\ExportApiTests\when_getting_export_file_which_does_not_exist_on_server.cs" />
     <Compile Include="Applications\Headquarters\ExportApiTests\when_getting_export_file_and_questionnaire_identity_is_invalid.cs" />
-    <Compile Include="Applications\Headquarters\FilterTests\MaintenanceFilterTests\when_action_executing_and_read_side_is_outdated.cs" />
     <Compile Include="Applications\Headquarters\InterviewerApiTests\when_map_assignment_to_assignmentApiDocument_AssignmentViewFactoryTests.cs" />
     <Compile Include="Applications\Headquarters\InterviewerApiTests\CompanyLogoApiV2ControllerTests.cs" />
     <Compile Include="Applications\Headquarters\PublicApiTests\AssignmentsTests\BaseAssignmentsControllerTest.cs" />
@@ -1258,8 +1257,6 @@
     <Compile Include="Applications\Headquarters\FilterTests\InstallationAttributeTests\when_action_executing_and_admin_user_does_not_exists_and_install_controller.cs" />
     <Compile Include="Applications\Headquarters\FilterTests\InstallationAttributeTests\when_action_executing_and_admin_user_does_not_exists_and_not_install_controller.cs" />
     <Compile Include="Applications\Headquarters\FilterTests\InstallationAttributeTests\when_action_executing_and_admin_user_exists_and_install_controller.cs" />
-    <Compile Include="Applications\Headquarters\FilterTests\MaintenanceFilterTests\MaintenanceFilterTestsContext.cs" />
-    <Compile Include="Applications\Headquarters\FilterTests\MaintenanceFilterTests\when_action_executing_and_views_are_being_rebuilt_now.cs" />
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="SharedKernels\DataCollection\MaskedFormatterTests\when_answer_is_1_and_mask_has_8_symbols.cs" />
     <Compile Include="SharedKernels\DataCollection\MaskedFormatterTests\when_creating_mask_formatter_with_variety_of_symbols.cs" />
@@ -1325,11 +1322,6 @@
     <Compile Include="Infrastructure\ReadSideStorageExtensionsTests\when_getting_view_by_guid_id.cs" />
     <Compile Include="Infrastructure\ReadSideStorageExtensionsTests\when_removing_view_by_guid_id.cs" />
     <Compile Include="Infrastructure\ReadSideStorageExtensionsTests\when_storing_view_by_guid_id.cs" />
-    <Compile Include="Infrastructure\ReadSideServiceTests\ReadSideServiceTestContext.cs" />
-    <Compile Include="Infrastructure\ReadSideServiceTests\when_get_list_of_all_available_handlers.cs" />
-    <Compile Include="Infrastructure\ReadSideServiceTests\when_rebuild_all_views.cs" />
-    <Compile Include="Infrastructure\ReadSideServiceTests\when_rebuild_selected_views.cs" />
-    <Compile Include="Infrastructure\ReadSideServiceTests\when_rebuild_selected_views_by_selected_event_sources.cs" />
     <Compile Include="Infrastructure\View.cs" />
     <Compile Include="MockExtensions.cs" />
     <Compile Include="QuestionnaireDocumentExtensions.cs" />
