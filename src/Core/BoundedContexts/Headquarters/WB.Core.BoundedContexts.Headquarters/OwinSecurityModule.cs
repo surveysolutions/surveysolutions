@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<HQPlainStorageDbContext>().ToSelf();
             this.Kernel.Get<HQIdentityDbContext>().Roles.FirstOrDefault();
 
-            this.Bind<IUserStore<HqUser, Guid>>().To<HqUserStore>().InRequestScope();
+            this.Bind<IUserStore<HqUser, Guid>>().To<HqUserStore>();
             this.Bind<HqUserManager>().ToSelf();
             this.Bind<HqSignInManager>().ToSelf();
 
