@@ -76,7 +76,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.BoundedContexts.Headquarters.Views.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
-using WB.Core.BoundedContexts.Headquarters.Views.Revalidate;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview.Impl;
@@ -236,7 +235,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<ISampleUploadViewFactory>().To<SampleUploadViewFactory>();
             this.Bind<IAllUsersAndQuestionnairesFactory>().To<AllUsersAndQuestionnairesFactory>();
             this.Bind<IQuestionnairePreloadingDataViewFactory>().To<QuestionnairePreloadingDataViewFactory>();
-            this.Bind<IInterviewTroubleshootFactory>().To<InterviewTroubleshootFactory>();
             this.Bind<ITeamViewFactory>().To<TeamViewFactory>();
             this.Bind<IUserViewFactory>().To<UserViewFactory>().InRequestScope();
             this.Bind<ITeamUsersAndQuestionnairesFactory>().To<TeamUsersAndQuestionnairesFactory>();
