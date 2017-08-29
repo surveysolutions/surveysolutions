@@ -246,7 +246,6 @@ namespace WB.UI.Headquarters
             filters.Add(new NlogExceptionFilter());
             filters.Add(new RequireSecureConnectionAttribute());
             filters.Add(new NoCacheAttribute());
-            filters.Add(new MaintenanceFilter());
             filters.Add(new InstallationAttribute(), 100);
         }
 
@@ -257,7 +256,6 @@ namespace WB.UI.Headquarters
 
         public static void RegisterWebApiFilters(HttpFilterCollection filters)
         {
-            filters.Add(new ApiMaintenanceFilter());
         }
     }
 }

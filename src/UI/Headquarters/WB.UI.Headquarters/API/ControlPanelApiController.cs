@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
 using System.Web.Http;
-using WB.Core.BoundedContexts.Headquarters.Implementation.ReadSide;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
@@ -24,11 +23,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     {
         public class VersionsInfo
         {
-            public VersionsInfo(string product, int readSideApplication, int? readSideDatabase, Dictionary<DateTime, string> history)
+            public VersionsInfo(string product, Dictionary<DateTime, string> history)
             {
                 this.Product = product;
-                this.ReadSide_Application = readSideApplication;
-                this.ReadSide_Database = readSideDatabase;
                 this.History = history;
             }
 
@@ -41,7 +38,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private const string DEFAULTEMPTYQUERY = "";
         private const int DEFAULTPAGESIZE = 12;
 
-        private readonly IReadSideAdministrationService readSideAdministrationService;
         private readonly IInterviewPackagesService incomingSyncPackagesQueue;
         private readonly ISynchronizationLogViewFactory synchronizationLogViewFactory;
         private readonly IBrokenInterviewPackagesViewFactory brokenInterviewPackagesViewFactory;
@@ -54,7 +50,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
 
         public ControlPanelApiController(
-            IReadSideAdministrationService readSideAdministrationService,
             IInterviewPackagesService incomingSyncPackagesQueue,
             ISynchronizationLogViewFactory synchronizationLogViewFactory,
             IBrokenInterviewPackagesViewFactory brokenInterviewPackagesViewFactory,
@@ -64,7 +59,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IInterviewPackagesService interviewPackagesService,
             IUserViewFactory userViewFactory)
         {
-            this.readSideAdministrationService = readSideAdministrationService;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.synchronizationLogViewFactory = synchronizationLogViewFactory;
             this.brokenInterviewPackagesViewFactory = brokenInterviewPackagesViewFactory;
@@ -78,43 +72,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [NoTransaction]
         public VersionsInfo GetVersions()
         {
-            var readSideStatus = this.readSideAdministrationService.GetRebuildStatus();
-
             return new VersionsInfo(
                 this.productVersion.ToString(),
-                readSideStatus.ReadSideApplicationVersion,
-                readSideStatus.ReadSideDatabaseVersion,
                 this.productVersionHistory.GetHistory().ToDictionary(
                     change => change.UpdateTimeUtc,
                     change => change.ProductVersion));
         }
-
-        public IEnumerable<ReadSideEventHandlerDescription> GetAllAvailableHandlers()
-            => this.readSideAdministrationService.GetAllAvailableHandlers();
-        
-        [NoTransaction]
-        public ReadSideStatus GetReadSideStatus() => this.readSideAdministrationService.GetRebuildStatus();
-
-        [HttpPost]
-        public void RebuildReadSide(RebuildReadSideInputViewModel model)
-        {
-            switch (model.RebuildType)
-            {
-                case RebuildReadSideType.All:
-                    this.readSideAdministrationService.RebuildAllViewsAsync(model.NumberOfSkipedEvents);
-                    break;
-                case RebuildReadSideType.ByHandlers:
-                    this.readSideAdministrationService.RebuildViewsAsync(model.ListOfHandlers, model.NumberOfSkipedEvents);
-                    break;
-                case RebuildReadSideType.ByHandlersAndEventSource:
-                    this.readSideAdministrationService.RebuildViewForEventSourcesAsync(model.ListOfHandlers, model.ListOfEventSources);
-                    break;
-            }
-        }
-
-        [HttpPost]
-        [NoTransaction]
-        public void StopReadSideRebuilding() => this.readSideAdministrationService.StopAllViewsRebuilding();
 
         [HttpGet]
         public int GetIncomingPackagesQueueLength() => this.incomingSyncPackagesQueue.QueueLength;
