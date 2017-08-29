@@ -8,7 +8,9 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
-    public class CumulativeChartDenormalizer : BaseDenormalizer, IEventHandler<InterviewStatusChanged>
+    public class CumulativeChartDenormalizer : BaseDenormalizer, 
+        IEventHandler<InterviewStatusChanged>,
+        IEventHandler<InterviewHardDeleted>
     {
         private readonly IReadSideKeyValueStorage<LastInterviewStatus> lastStatusesStorage;
         private readonly IReadSideRepositoryWriter<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage;
@@ -62,6 +64,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 +1);
 
             this.cumulativeReportStatusChangeStorage.Store(plusChange, plusChange.EntryId);
+        }
+
+        public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
+        {
+            this.lastStatusesStorage.Remove(evnt.EventSourceId);
         }
     }
 }
