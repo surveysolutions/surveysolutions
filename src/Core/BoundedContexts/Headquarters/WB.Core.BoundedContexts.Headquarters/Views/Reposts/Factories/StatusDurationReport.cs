@@ -18,14 +18,14 @@ using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
 {
-    public class CountDaysOfInterviewInStatusReport : ICountDaysOfInterviewInStatusReport
+    public class StatusDurationReport : IStatusDurationReport
     {
         private readonly PostgresPlainStorageSettings plainStorageSettings;
 
-        private const string InterviewsScriptName = "WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.CountDaysOfInterviewInStatusReportInterviews.sql";
-        private const string AssignmentsScriptName = "WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.CountDaysOfInterviewInStatusReportAssignments.sql";
+        private const string InterviewsScriptName = "WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.StatusDurationReportInterviews.sql";
+        private const string AssignmentsScriptName = "WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.StatusDurationReportAssignments.sql";
 
-        public CountDaysOfInterviewInStatusReport(PostgresPlainStorageSettings plainStorageSettings)
+        public StatusDurationReport(PostgresPlainStorageSettings plainStorageSettings)
         {
             this.plainStorageSettings = plainStorageSettings;
         }
@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             public int Days { get; set; }
         }
 
-        public async Task<CountDaysOfInterviewInStatusRow[]> LoadAsync(CountDaysOfInterviewInStatusInputModel input)
+        public async Task<StatusDurationRow[]> LoadAsync(StatusDurationInputModel input)
         {
             var order = input.Orders.FirstOrDefault();
             if (order == null) throw new ArgumentNullException(nameof(order));
@@ -102,9 +102,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             return data.ToArray();
         }
 
-        private static void AddTotalRowAsFirstRow(List<CountDaysOfInterviewInStatusRow> data)
+        private static void AddTotalRowAsFirstRow(List<StatusDurationRow> data)
         {
-            var totalRow = new CountDaysOfInterviewInStatusRow()
+            var totalRow = new StatusDurationRow()
             {
                 InterviewerAssignedCount = data.Sum(r => r.InterviewerAssignedCount),
                 SupervisorAssignedCount = data.Sum(r => r.SupervisorAssignedCount),
@@ -119,7 +119,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             data.Insert(0, totalRow);
         }
 
-        private static void SetRowHeaderForEachRecord(List<CountDaysOfInterviewInStatusRow> data)
+        private static void SetRowHeaderForEachRecord(List<StatusDurationRow> data)
         {
             foreach (var dataRow in data)
             {
@@ -132,7 +132,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             }
         }
 
-        private static List<CountDaysOfInterviewInStatusRow> SortData(OrderRequestItem order, List<CountDaysOfInterviewInStatusRow> rows)
+        private static List<StatusDurationRow> SortData(OrderRequestItem order, List<StatusDurationRow> rows)
         {
             var data = order.Direction == OrderDirection.Desc
                 ? rows.OrderBy(r => r.DaysCountStart).ToList()
@@ -140,13 +140,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             return data;
         }
 
-        private static List<CountDaysOfInterviewInStatusRow> CreateResultSetWithPredefinedRanges()
+        private static List<StatusDurationRow> CreateResultSetWithPredefinedRanges()
         {
             var utcNow = DateTime.UtcNow;
-            var rows = new List<CountDaysOfInterviewInStatusRow>();
+            var rows = new List<StatusDurationRow>();
             var addRowWithRange = new Action<int, int?>((daysStart, daysEnd) =>
             {
-                rows.Add(new CountDaysOfInterviewInStatusRow()
+                rows.Add(new StatusDurationRow()
                 {
                     DaysCountStart = daysStart,
                     DaysCountEnd = daysEnd,
@@ -165,7 +165,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             return rows;
         }
 
-        private async Task<IEnumerable<AssignmentsCounterObject>> ExecuteQueryForAssignmentsStatistics(CountDaysOfInterviewInStatusInputModel input)
+        private async Task<IEnumerable<AssignmentsCounterObject>> ExecuteQueryForAssignmentsStatistics(StatusDurationInputModel input)
         {
             string query = GetSqlQueryForInterviews(AssignmentsScriptName);
 
@@ -181,7 +181,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             return datesAndStatuses;
         }
 
-        private async Task<IEnumerable<InterviewsCounterObject>> ExecuteQueryForInterviewsStatistics(CountDaysOfInterviewInStatusInputModel input)
+        private async Task<IEnumerable<InterviewsCounterObject>> ExecuteQueryForInterviewsStatistics(StatusDurationInputModel input)
         {
             string query = GetSqlQueryForInterviews(InterviewsScriptName);
 
@@ -199,7 +199,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
 
         private static string GetSqlQueryForInterviews(string scriptName)
         {
-            var assembly = typeof(CountDaysOfInterviewInStatusReport).Assembly;
+            var assembly = typeof(StatusDurationReport).Assembly;
             using (Stream stream = assembly.GetManifestResourceStream(scriptName))
             using (StreamReader reader = new StreamReader(stream))
             {
@@ -208,7 +208,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             }
         }
 
-        public async Task<ReportView> GetReportAsync(CountDaysOfInterviewInStatusInputModel model)
+        public async Task<ReportView> GetReportAsync(StatusDurationInputModel model)
         {
             var view = await this.LoadAsync(model);
 

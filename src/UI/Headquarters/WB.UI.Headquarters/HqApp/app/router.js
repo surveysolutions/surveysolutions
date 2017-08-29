@@ -4,7 +4,7 @@ import VueRouter from 'vue-router'
 import { Assignments, Interviews } from "./views/Interviewer"
 
 import InterviewersAndDevices from "./views/Reports/InterviewersAndDevices"
-import CountDaysOfInterviewInStatus from "./views/Reports/CountDaysOfInterviewInStatus"
+import StatusDuration from "./views/Reports/StatusDuration"
 
 Vue.use(VueRouter)
 
@@ -15,7 +15,7 @@ export default new VueRouter({
         path: '/Reports/InterviewersAndDevices',
         component: InterviewersAndDevices
     }, {
-        path: '/Reports/CountDaysOfInterviewInStatus', component: CountDaysOfInterviewInStatus
+        path: '/Reports/StatusDuration', component: StatusDuration
     }, {
         path: '/InterviewerHq/CreateNew', component: Assignments
     }, {

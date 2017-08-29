@@ -162,7 +162,7 @@
   <data name="Speed" xml:space="preserve">
     <value>Speed</value>
   </data>
-  <data name="CountDaysOfInterviewInStatus" xml:space="preserve">
+  <data name="StatusDuration" xml:space="preserve">
     <value>Status Duration</value>
   </data>
   <data name="Supervisors" xml:space="preserve">

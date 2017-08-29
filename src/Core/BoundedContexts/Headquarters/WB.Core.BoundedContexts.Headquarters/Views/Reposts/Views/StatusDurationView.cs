@@ -2,12 +2,12 @@
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Views
 {
-    public class CountDaysOfInterviewInStatusView
+    public class StatusDurationView
     {
-        public CountDaysOfInterviewInStatusRow[] Rows { get; set; }
+        public StatusDurationRow[] Rows { get; set; }
     }
 
-    public class CountDaysOfInterviewInStatusRow
+    public class StatusDurationRow
     {
         public int DaysCountStart { get; set; }
         public int? DaysCountEnd { get; set; }

@@ -211,7 +211,7 @@
   <data name="DevicesInterviewers" xml:space="preserve">
     <value>Устройства/Интервьюеры</value>
   </data>
-  <data name="CountDaysOfInterviewInStatus" xml:space="preserve">
+  <data name="StatusDuration" xml:space="preserve">
     <value>Длительность статусов</value>
     <comment>Длительность статусов</comment>
   </data>

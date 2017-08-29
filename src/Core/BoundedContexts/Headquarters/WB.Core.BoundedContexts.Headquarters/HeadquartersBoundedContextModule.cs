@@ -247,7 +247,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<ITeamsAndStatusesReport>().To<TeamsAndStatusesReport>();
             this.Bind<ISurveysAndStatusesReport>().To<SurveysAndStatusesReport>();
             this.Bind<IMapReport>().To<MapReport>();
-            this.Bind<ICountDaysOfInterviewInStatusReport>().To<CountDaysOfInterviewInStatusReport>();
+            this.Bind<IStatusDurationReport>().To<StatusDurationReport>();
 
             this.Bind<IInterviewUniqueKeyGenerator>().To<InterviewUniqueKeyGenerator>();
             this.Bind<IRandomValuesSource>().To<RandomValuesSource>().InSingletonScope();

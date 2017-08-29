@@ -1,8 +1,8 @@
 ﻿@using Newtonsoft.Json
 @using Newtonsoft.Json.Serialization
-@model WB.UI.Headquarters.Models.Reports.CountDaysOfInterviewInStatusModel
+@model WB.UI.Headquarters.Models.Reports.StatusDurationModel
 @{
-    ViewBag.Title = Pages.CountDaysOfInterviewInStatus;
+    ViewBag.Title = Pages.StatusDuration;
     Layout = "~/Views/Shared/_MainLayoutHq.cshtml";
 }
 <div id="vueApp" configuration="@JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings

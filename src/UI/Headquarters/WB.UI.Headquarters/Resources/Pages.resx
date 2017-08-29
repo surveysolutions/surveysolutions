@@ -1037,10 +1037,10 @@
   <data name="InterviewersAndDevicesTitle" xml:space="preserve">
     <value>Devices/Interviewers</value>
   </data>
-  <data name="CountDaysOfInterviewInStatus" xml:space="preserve">
+  <data name="StatusDuration" xml:space="preserve">
     <value>Status Duration</value>
   </data>  
-  <data name="CountDaysOfInterviewInStatusDescription">
+  <data name="StatusDurationDescription">
     <value>Number of days that interviews have stayed in their current status</value>
   </data>
   <data name="ExportToExcel" xml:space="preserve">

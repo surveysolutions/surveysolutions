@@ -1,7 +1,7 @@
 <template>
     <Layout :hasFilter="true"
-            :title="$t('Pages.CountDaysOfInterviewInStatus')"
-            :subtitle="$t('Pages.CountDaysOfInterviewInStatusDescription')">
+            :title="$t('Pages.StatusDuration')"
+            :subtitle="$t('Pages.StatusDurationDescription')">
         <Filters slot="filters">
             <FilterBlock :title="$t('Reports.Questionnaire')">
                 <select class="selectpicker"
