@@ -121,135 +121,135 @@
     <value>مقابلة كاملة</value>
   </data>
   <data name="CompletionText" xml:space="preserve">
-    <value>وقد اكتملت هذه المقابلة</value>
+    <value>هذا الاستجواب قد اكتمل</value>
   </data>
   <data name="DiscardAndStart" xml:space="preserve">
-    <value>قم بإعادة تشغيل</value>
+    <value>البدء من جديد</value>
   </data>
   <data name="Error_CookiesTurnedOff" xml:space="preserve">
-    <value>لم يتم تمكين ملفات تعريف الارتباط في المستعرض الخاص بك. الرجاء تمكين ملفات تعريف الارتباط في تفضيلات المتصفح لمواصلة</value>
+    <value>الكوكيز (Cookies) غير ممكّنة في متصفحك.  يرجى تمكين الكوكيز في تفضيلات متصفحك من أجل المتابعة</value>
   </data>
   <data name="Error_Forbidden" xml:space="preserve">
     <value>ممنوع</value>
   </data>
   <data name="Error_InterviewExpired" xml:space="preserve">
-    <value>انتهت مدة صلاحية الرابط</value>
+    <value>هذا الرابط لم يعد صالحاً</value>
   </data>
   <data name="Error_NoActionsNeeded" xml:space="preserve">
-    <value>وقد سجلت المعلومات الواردة في تلك المقابلة. لا توجد إجراءات أخرى مطلوبة</value>
+    <value>تم تسجيل المعلومات المتصلة بهذا الاستجواب. لا ضرورة للقيام بخطوات أخرى</value>
   </data>
   <data name="Error_NotFound" xml:space="preserve">
-    <value>لم يتم العثور على المقابلة</value>
+    <value>تعذر العثور على الاستجواب</value>
   </data>
   <data name="Error_UserNotAuthorised" xml:space="preserve">
-    <value>مستخدم غير مخول</value>
+    <value>المستخدم لا يملك الإذن بالدخول</value>
   </data>
   <data name="FinishInterviewText" xml:space="preserve">
-    <value>وقد اكتملت هذه المقابلة</value>
+    <value>هذا الاستجواب قد اكتمل</value>
   </data>
   <data name="HasPreviousStartedInterview" xml:space="preserve">
-    <value>كنت قد بدأت بمقابلة</value>
+    <value>لقد بدأت استجواباً</value>
   </data>
   <data name="InProgressText" xml:space="preserve">
-    <value>في التقدم</value>
+    <value>العمل جار</value>
   </data>
   <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
-    <value> {0} إجابات</value>
+    <value>{0} جواب/أجوبة</value>
   </data>
   <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
-    <value>إجابة واحدة</value>
+    <value>جواب واحد</value>
   </data>
   <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
-    <value>{0} أخطاء</value>
+    <value>{0} خطأ / أخطاء</value>
   </data>
   <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
     <value>خطأ واحد</value>
   </data>
   <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
-    <value>قسم الانتهاء:{0}</value>
+    <value>اكتمل القسم: {0}</value>
   </data>
   <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
-    <value>قسم لم تبدأ</value>
+    <value>لم يبدأ القسم</value>
   </data>
   <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
-    <value>بدأ قسم: {0}</value>
+    <value>تم البدء بالقسم: {0}</value>
   </data>
   <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
-    <value>{0} الأقسام الفرعية</value>
+    <value>{0} أقسام فرعية</value>
   </data>
   <data name="Interview_Group_Subgroups_One" xml:space="preserve">
     <value>قسم فرعي واحد</value>
   </data>
   <data name="Interview_Group_Subgroups_Zero" xml:space="preserve">
-    <value>لا يوجد أقسام فرعية</value>
+    <value>لا أقسام فرعية</value>
   </data>
   <data name="InterviewCompletionDateFormatText" xml:space="preserve">
-    <value>مقابلة تاريخ الانتهاء: </value>
+    <value>تاريخ إكمال الاستجواب: </value>
   </data>
   <data name="InterviewIdFormatText" xml:space="preserve">
-    <value>معرف المقابلة:{0}</value>
+    <value>رقم تعريف الاستجواب: {0}</value>
   </data>
   <data name="InterviewStartDateFormatText" xml:space="preserve">
-    <value>تاريخ بدء المقابلة: </value>
+    <value>تاريخ بداية الاستجواب: </value>
   </data>
   <data name="InvitationSmallText" xml:space="preserve">
-    <value>عملية إجراء المقابلات يتطلب وجود اتصال بإنترنت. هناك حاجة إلى لا برامج إضافية.</value>
+    <value>تحتاج عملية الاستجواب إلى الاتصال بالإنترنت.  لا حاجة إلى برمجيات إضافية.</value>
   </data>
   <data name="InvitationText" xml:space="preserve">
-    <value>كنت قد دعيت للمشاركة في هذه الدراسة التالية: "{0}"</value>
+    <value>أنت مدعو إلى المشاركة في الاستجواب التالي: "{0}"</value>
   </data>
   <data name="NotStartedText" xml:space="preserve">
-    <value>لم يتم بدء تشغيلها</value>
+    <value>لم يبدأ</value>
   </data>
   <data name="Original_Language" xml:space="preserve">
     <value>اللغة الأصلية</value>
   </data>
   <data name="OrStartInterview" xml:space="preserve">
-    <value>أو يمكنك البدء في إجراء مقابلة جديدة</value>
+    <value>أو يمكنك البدء باستجواب جديد</value>
   </data>
   <data name="PictureQuestionNotAPicture" xml:space="preserve">
-    <value>يتم قبول ملفات الصور فقط</value>
+    <value>وحدها ملفات الصور مقبولة</value>
   </data>
   <data name="PleaseFillCaptcha" xml:space="preserve">
-    <value>يرجى تعبئة الحقل كلمة التحقق</value>
+    <value>يرجى ملء خانة captcha</value>
   </data>
   <data name="RefreshPage" xml:space="preserve">
-    <value>قم بتحديث الصفحة</value>
+    <value>جدد الصفحة</value>
   </data>
   <data name="Resume_InvitationSmallText" xml:space="preserve">
-    <value>عملية المقابلة يتطلب اتصال بالإنترنت، وهناك حاجة إلى لا برامج إضافية</value>
+    <value>تحتاج عملية الاستجواب إلى اتصال بالإنترنت، لا حاجة إلى برمجيات إضافية.</value>
   </data>
   <data name="Resume_InvitationText" xml:space="preserve">
-    <value>يمكنك التنقل إلى مقابلة في الدراسة التالية: "{0}"</value>
+    <value>يمكنك الانتقال إلى الاستجواب في المسح التالي: "{0}"</value>
   </data>
   <data name="Resume_WelcomeText" xml:space="preserve">
-    <value>أهلا ومرحبا بكم في الدراسة الاستقصائية الاستقصاء حلول ويب</value>
+    <value>مرحباً وأهلاً بك في المسح الإلكتروني من Survey Solutions </value>
   </data>
   <data name="ServerUnderLoad" xml:space="preserve">
-    <value>نحن آسفون، الكثير من الناس من الوصول إلى هذا الموقع في نفس الوقت. نحن نعمل على حل هذه المشكلة. الرجاء المحاولة مرة أخرى لاحقاً.</value>
+    <value>عذراً، عدد كبير من الناس يتصلون بهذا الموقع  معاً في آنٍ واحد.  نحن نعمل على حل هذه المشكلة.  ترجى المحاولة لاحقاً.</value>
   </data>
   <data name="Start" xml:space="preserve">
-    <value>بدء المقابلة</value>
+    <value>ابدأ الاستجواب</value>
   </data>
   <data name="StartedInterviewText" xml:space="preserve">
-    <value>لم يتم إكمال هذه المقابلة</value>
+    <value>هذا الاستجواب لم يكتمل</value>
   </data>
   <data name="StartPageTitle" xml:space="preserve">
-    <value>مسح الشبكة</value>
+    <value>المسح الإلكتروني</value>
   </data>
   <data name="Stopped" xml:space="preserve">
-    <value>مقابلة مع شبكة الإنترنت توقفت</value>
+    <value>توقف الاستجواب الإلكتروني</value>
   </data>
   <data name="SurveyFormatText" xml:space="preserve">
-    <value>مسح: "{0}"</value>
+    <value>المسح: "{0}"</value>
   </data>
   <data name="ToInterview" xml:space="preserve">
-    <value>مقابلة</value>
+    <value>للاستجواب</value>
   </data>
   <data name="WebSurvey" xml:space="preserve">
-    <value>مسح حلول ويب المسح</value>
+    <value>الاستجواب الإلكتروني من Survey Solutions </value>
   </data>
   <data name="WelcomeText" xml:space="preserve">
-    <value>أهلا ومرحبا بكم في الدراسة الاستقصائية الاستقصاء حلول ويب</value>
+    <value>مرحباً وأهلاً بك في المسح الإلكتروني من Survey Solutions </value>
   </data>
 </root>
