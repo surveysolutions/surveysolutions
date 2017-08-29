@@ -244,10 +244,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="StackExchange.Exceptional, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\StackExchange.Exceptional.2.0.0-alpha-136\lib\net451\StackExchange.Exceptional.dll</HintPath>
+      <HintPath>..\..\..\..\packages\StackExchange.Exceptional.2.0.0-alpha-129\lib\net451\StackExchange.Exceptional.dll</HintPath>
     </Reference>
     <Reference Include="StackExchange.Exceptional.Shared, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\StackExchange.Exceptional.Shared.2.0.0-alpha-136\lib\net451\StackExchange.Exceptional.Shared.dll</HintPath>
+      <HintPath>..\..\..\..\packages\StackExchange.Exceptional.Shared.2.0.0-alpha-129\lib\net451\StackExchange.Exceptional.Shared.dll</HintPath>
     </Reference>
     <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Swashbuckle.Core.5.6.0\lib\net40\Swashbuckle.Core.dll</HintPath>
