@@ -91,7 +91,7 @@
                 onSuccess();
             }
 
-        }, true, false, onDone);
+        }, true, true, onDone);
     };
     self.clear = function() {
         self.SearchBy("");
@@ -211,7 +211,7 @@
                     if (!_.isUndefined(onDataReceivedCallback))
                         onDataReceivedCallback(d);
                     callback(d);
-                });
+                }, false, true);
             },
             columns: tableColumns,
             columnDefs: tableColumnDefs,
