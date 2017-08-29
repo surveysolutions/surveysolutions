@@ -1,5 +1,5 @@
 ﻿Supervisor.VM.PeriodicStatusReport = function (listViewUrl) {
-    Supervisor.VM.PeriodicStatusReport.superclass.constructor.apply(this, arguments);
+    Supervisor.VM.PeriodicStatusReport.superclass.constructor.apply(this, [listViewUrl, undefined, true]);
 
     var self = this;
     var defaultFromDate = moment();

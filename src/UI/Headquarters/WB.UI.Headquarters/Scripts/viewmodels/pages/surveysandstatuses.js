@@ -1,5 +1,5 @@
 ﻿Supervisor.VM.SurveysAndStatuses = function (listViewUrl, responsiblesUrl) {
-    Supervisor.VM.SurveysAndStatuses.superclass.constructor.apply(this, arguments);
+    Supervisor.VM.SurveysAndStatuses.superclass.constructor.apply(this, [listViewUrl, undefined, true]);
 
     var self = this;
     self.Url = new Url(window.location.href);
