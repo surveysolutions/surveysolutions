@@ -2,7 +2,7 @@
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.InputModels
 {
-    public class CountDaysOfInterviewInStatusInputModel : ListViewModelBase
+    public class StatusDurationInputModel : ListViewModelBase
     {
         public Guid? TemplateId { get; set; }
         public long? TemplateVersion { get; set; }

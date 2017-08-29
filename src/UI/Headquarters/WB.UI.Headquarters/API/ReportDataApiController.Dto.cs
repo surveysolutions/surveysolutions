@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
 
-        public class CountDaysOfInterviewInStatusDataTableResponse : DataTableResponse<CountDaysOfInterviewInStatusRow>
+        public class StatusDurationDataTableResponse : DataTableResponse<StatusDurationRow>
         {
         }
 
@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             public DeviceInterviewersReportLine TotalRow { get; set; }
         }
 
-        public class CountDaysOfInterviewInStatusRequest : DataTableRequest
+        public class StatusDurationRequest : DataTableRequest
         {
             public string QuestionnaireId { get; set; }
             public int Timezone { get; set; }

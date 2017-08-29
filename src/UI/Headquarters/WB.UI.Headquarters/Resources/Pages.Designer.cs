@@ -315,18 +315,18 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Status Duration.
         /// </summary>
-        public static string CountDaysOfInterviewInStatus {
+        public static string StatusDuration {
             get {
-                return ResourceManager.GetString("CountDaysOfInterviewInStatus", resourceCulture);
+                return ResourceManager.GetString("StatusDuration", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Number of days that interviews have stayed in their current status.
         /// </summary>
-        public static string CountDaysOfInterviewInStatusDescription {
+        public static string StatusDurationDescription {
             get {
-                return ResourceManager.GetString("CountDaysOfInterviewInStatusDescription", resourceCulture);
+                return ResourceManager.GetString("StatusDurationDescription", resourceCulture);
             }
         }
         

@@ -123,18 +123,18 @@ namespace WB.UI.Headquarters.Controllers
             });
         }
 
-        [ActivePage(MenuItem.CountDaysOfInterviewInStatus)]
+        [ActivePage(MenuItem.StatusDuration)]
         [Authorize(Roles = "Administrator, Headquarter")]
-        public ActionResult CountDaysOfInterviewInStatus()
+        public ActionResult StatusDuration()
         {
-            return this.View("CountDaysOfInterviewInStatus", new CountDaysOfInterviewInStatusModel
+            return this.View("StatusDuration", new StatusDurationModel
             {
                 DataUrl = Url.RouteUrl("DefaultApiWithAction",
                     new
                     {
                         httproute = "",
                         controller = "ReportDataApi",
-                        action = "CountDaysOfInterviewInStatus"
+                        action = "StatusDuration"
                     }),
                 InterviewsBaseUrl = Url.Action("Interviews", "HQ"),
                 AssignmentsBaseUrl = Url.Action("Index", "Assignments"),
