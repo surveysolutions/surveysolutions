@@ -1,7 +1,9 @@
-﻿Supervisor.VM.ListView = function (serviceUrl, commandExecutionUrl) {
+﻿Supervisor.VM.ListView = function (serviceUrl, commandExecutionUrl, useGetRequests) {
     Supervisor.VM.ListView.superclass.constructor.apply(this, [commandExecutionUrl]);
     
     var self = this;
+
+    self.useGetRequests = useGetRequests === true;
     
     self.ServiceUrl = serviceUrl;
 
@@ -91,7 +93,7 @@
                 onSuccess();
             }
 
-        }, true, true, onDone);
+        }, true, self.useGetRequests, onDone);
     };
     self.clear = function() {
         self.SearchBy("");
@@ -211,7 +213,7 @@
                     if (!_.isUndefined(onDataReceivedCallback))
                         onDataReceivedCallback(d);
                     callback(d);
-                }, false, true);
+                }, true, self.useGetRequests);
             },
             columns: tableColumns,
             columnDefs: tableColumnDefs,

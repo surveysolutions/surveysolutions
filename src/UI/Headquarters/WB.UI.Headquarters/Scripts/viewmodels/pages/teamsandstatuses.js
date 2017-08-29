@@ -1,5 +1,5 @@
 ﻿Supervisor.VM.TeamsAndStatuses = function (listViewUrl, $interviewsUrl) {
-    Supervisor.VM.TeamsAndStatuses.superclass.constructor.apply(this, arguments);
+    Supervisor.VM.TeamsAndStatuses.superclass.constructor.apply(this, [listViewUrl, undefined, true]);
     
     var self = this;
     self.Url = new Url(window.location.href);
