@@ -71,8 +71,6 @@ namespace WB.UI.Designer.App_Start
             }
 
             var cacheSettings = new ReadSideCacheSettings(
-                enableEsentCache: settingsProvider.AppSettings.GetBool("Esent.Cache.Enabled", @default: true),
-                esentCacheFolder: Path.Combine(appDataDirectory, settingsProvider.AppSettings.GetString("Esent.Cache.Folder", @default: @"Temp\EsentCache")),
                 cacheSizeInEntities: settingsProvider.AppSettings.GetInt("ReadSide.CacheSize", @default: 1024),
                 storeOperationBulkSize: settingsProvider.AppSettings.GetInt("ReadSide.BulkSize", @default: 512));
 

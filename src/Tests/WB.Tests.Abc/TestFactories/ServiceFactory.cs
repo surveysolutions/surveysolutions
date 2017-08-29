@@ -274,9 +274,6 @@ namespace WB.Tests.Abc.TestFactories
             => new QuestionnaireNameValidator(
                 questionnaireBrowseItemStorage ?? Stub<IPlainStorageAccessor<QuestionnaireBrowseItem>>.WithNotEmptyValues);
 
-        public RebuildReadSideCqrsPostgresTransactionManagerWithoutSessions RebuildReadSideCqrsPostgresTransactionManager()
-            => new RebuildReadSideCqrsPostgresTransactionManagerWithoutSessions();
-
         public IStatefulInterviewRepository StatefulInterviewRepository(IEventSourcedAggregateRootRepository aggregateRootRepository, ILiteEventBus liteEventBus = null)
             => new StatefulInterviewRepository(
                 aggregateRootRepository: aggregateRootRepository ?? Mock.Of<IEventSourcedAggregateRootRepository>());
@@ -297,10 +294,7 @@ namespace WB.Tests.Abc.TestFactories
             ICqrsPostgresTransactionManager rebuildReadSideTransactionManager = null)
             => new TransactionManagerProvider(
                 transactionManagerFactory ?? (() => Mock.Of<ICqrsPostgresTransactionManager>()),
-                noTransactionTransactionManagerFactory ?? (() => Mock.Of<ICqrsPostgresTransactionManager>()),
-                rebuildReadSideTransactionManager ?? Mock.Of<ICqrsPostgresTransactionManager>(),
-                rebuildReadSideTransactionManager ?? Mock.Of<ICqrsPostgresTransactionManager>(),
-                Create.Entity.ReadSideCacheSettings());
+                noTransactionTransactionManagerFactory ?? (() => Mock.Of<ICqrsPostgresTransactionManager>()));
 
         public VariableToUIStringService VariableToUIStringService()
             => new VariableToUIStringService();

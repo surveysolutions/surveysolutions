@@ -2,11 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.Entity;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web;
-using System.Web.Configuration;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using AutoMapper;
@@ -42,7 +40,6 @@ using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -75,7 +72,6 @@ using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
 using WB.UI.Shared.Web.Versions;
 using FilterScope = System.Web.Http.Filters.FilterScope;
-using WB.UI.Headquarters.API.PublicApi.Models;
 
 namespace WB.UI.Headquarters
 {
@@ -123,12 +119,7 @@ namespace WB.UI.Headquarters
                 }
             };
 
-            var cacheSettings = new ReadSideCacheSettings(
-                enableEsentCache: settingsProvider.AppSettings.GetBool("Esent.Cache.Enabled", @default: true),
-                esentCacheFolder:
-                Path.Combine(appDataDirectory,
-                    settingsProvider.AppSettings.GetString("Esent.Cache.Folder", @default: @"Temp\EsentCache")),
-                cacheSizeInEntities: settingsProvider.AppSettings.GetInt("ReadSide.CacheSize", @default: 1024),
+            var cacheSettings = new ReadSideCacheSettings(cacheSizeInEntities: settingsProvider.AppSettings.GetInt("ReadSide.CacheSize", @default: 1024),
                 storeOperationBulkSize: settingsProvider.AppSettings.GetInt("ReadSide.BulkSize", @default: 512));
 
             var applicationSecuritySection = settingsProvider.GetSection<HqSecuritySection>(@"applicationSecurity");

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -21,7 +20,6 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
@@ -41,7 +39,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
@@ -896,7 +893,7 @@ namespace WB.Tests.Abc.TestFactories
             => new QuestionnaireLevelLabels(levelName, variableLabels);
 
         public ReadSideCacheSettings ReadSideCacheSettings(int cacheSizeInEntities = 128, int storeOperationBulkSize = 8)
-            => new ReadSideCacheSettings(true, "folder", cacheSizeInEntities, storeOperationBulkSize);
+            => new ReadSideCacheSettings(cacheSizeInEntities, storeOperationBulkSize);
 
         public InterviewTreeDoubleQuestion InterviewTreeDoubleQuestion(double answer = 42.42)
             => new InterviewTreeDoubleQuestion(answer);
