@@ -7,8 +7,8 @@
         </table>
         <div class="download-report-as" v-if="exportable">
             {{$t("Pages.DownloadReport")}}
-            <a target="_blank" v-bind:href="$store.state.exportUrls.excel">XLSX</a>, {{$t("Pages.Or")}}
-            <a target="_blank" v-bind:href="$store.state.exportUrls.csv">CSV</a>, {{$t("Pages.Or")}}
+            <a target="_blank" v-bind:href="$store.state.exportUrls.excel">XLSX</a> {{$t("Pages.Or")}}
+            <a target="_blank" v-bind:href="$store.state.exportUrls.csv">CSV</a> {{$t("Pages.Or")}}
             <a target="_blank" v-bind:href="$store.state.exportUrls.tab">TAB</a>
         </div>
     </div>
