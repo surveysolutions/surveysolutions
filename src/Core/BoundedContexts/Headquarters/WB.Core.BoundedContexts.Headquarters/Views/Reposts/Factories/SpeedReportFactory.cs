@@ -71,10 +71,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             var dateTimeRanges =
                 Enumerable.Range(0, columnCount)
                     .Select(i => new DateTimeRange(this.AddPeriod(fromInUsersTimezone, period, i), this.AddPeriod(fromInUsersTimezone, period, i + 1)))
-                    .Where(i => minDate.HasValue && i.To.Date >= minDate)
+                    .Where(i => minDate.HasValue && i.To >= minDate)
                     .ToArray();
 
-           var allUsersQuery = query(questionnaireId, questionnaireVersion, fromInUsersTimezone, toInUsersTimezone);
+            
+            var allUsersQuery = query(questionnaireId, questionnaireVersion, fromInUsersTimezone, toInUsersTimezone);
 
             if (restrictUser != null)
                 allUsersQuery = allUsersQuery.Where(restrictUser);

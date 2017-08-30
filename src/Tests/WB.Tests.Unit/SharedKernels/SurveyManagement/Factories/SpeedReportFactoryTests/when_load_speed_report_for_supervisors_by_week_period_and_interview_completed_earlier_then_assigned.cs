@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
         Establish context = () =>
         {
             input = CreateSpeedBetweenStatusesBySupervisorsReportInputModel(period: "w");
-            var timestamp = input.From.Date.AddHours(1);
+            var timestamp = input.From.Date.AddHours(-1);
 
             var interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
             interviewStatuses.Store(Create.Entity.InterviewStatuses(questionnaireId: input.QuestionnaireId,
