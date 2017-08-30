@@ -749,7 +749,6 @@
     <Content Include="Dependencies\js\dataTables.conditionalPaging.js" />
     <Content Include="Dependencies\js\searchHighlight.js" />
     <Content Include="ErrorPages\genericError.html" />
-    <None Include="Dependencies\vue\Typeahead.vue" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Configuration\Vitalii.Headquarters.Web.config">
       <SubType>Designer</SubType>
@@ -1187,10 +1186,6 @@
     <Content Include="Dependencies\css\_main-information.scss" />
     <Content Include="Dependencies\css\_modal.scss" />
     <Content Include="Dependencies\css\markup-detalica.scss" />
-    <None Include="Dependencies\vue\DatePicker.vue" />
-    <None Include="Dependencies\vue\InterviewTable.vue">
-      <SubType>Designer</SubType>
-    </None>
     <Content Include="Content\bootstrap-datepicker3.standalone.min.css.map" />
     <Content Include="Content\bootstrap-datepicker3.standalone.css.map" />
     <Content Include="Content\bootstrap-datepicker3.min.css.map" />
