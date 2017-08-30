@@ -24,6 +24,7 @@ using Ninject.Web.WebApi.OwinHost;
 using NLog;
 using Owin;
 using Quartz;
+using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -64,6 +65,46 @@ namespace WB.UI.Headquarters
             InitializeAppShutdown(app);
             InitializeMVC();
             ConfigureWebApi(app);
+
+            Settings.Current.GetCustomData += (exception, dictionary) =>
+            {
+                void AddAllSqlData(Exception e)
+                {
+                    if (e is Npgsql.PostgresException pe)
+                    {
+                        if (pe.InternalQuery != null)
+                            exception.AddLogData(@"Internal Query", pe.InternalQuery);
+
+                        if (pe.Statement?.SQL != null)
+                            exception.AddLogData(@"SQL Statement", pe.Statement.SQL);
+                    }
+
+                    if (e.InnerException != null)
+                    {
+                        AddAllSqlData(e.InnerException);
+                    }
+                }
+
+                //AddAllSqlData(exception);
+            };
+
+            Settings.Current.ExceptionActions.AddHandler<TargetInvocationException>((error, exception) =>
+            {
+                void AddAllSqlData(Exception e)
+                {
+                    if (e is Npgsql.PostgresException pe)
+                    {
+                        error.AddCommand(new Command("NpgSql", pe.Statement.SQL));
+                    }
+
+                    if (e.InnerException != null)
+                    {
+                        AddAllSqlData(e.InnerException);
+                    }
+                }
+
+               AddAllSqlData(exception);
+            });
         }
 
         private void ConfigureNinject(IAppBuilder app)
