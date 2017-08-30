@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Plugins.WebBrowser;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -15,8 +15,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly INetworkService networkService;
         private readonly IInterviewerSettings interviewerSettings;
         private readonly IRestService restService;
+        private readonly IMvxWebBrowserTask webBrowser;
         private const int countOfPingAttemps = 5;
-        
+
         private bool isConnectionAbsent;
         private bool isBandwidthTested;
         private string connectionDescription;
@@ -28,11 +29,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public BandwidthTestViewModel(
             INetworkService networkService,
             IInterviewerSettings interviewerSettings,
-            IRestService restService)
+            IRestService restService,
+            IMvxWebBrowserTask webBrowser)
         {
             this.networkService = networkService;
             this.interviewerSettings = interviewerSettings;
             this.restService = restService;
+            this.webBrowser = webBrowser;
         }
 
         public bool IsConnectionAbsent
@@ -77,13 +80,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set { this.RaiseAndSetIfChanged(ref this.ping, value); }
         }
 
-        public IMvxAsyncCommand TestConnectionCommand => new MvxAsyncCommand(this.TestConnectionAsync);
+        public string ServerUrl => this.interviewerSettings.Endpoint;
+
+        public IMvxAsyncCommand TestConnectionCommand => new MvxAsyncCommand(this.TestConnectionAsync, () => !string.IsNullOrEmpty(this.ServerUrl));
+
+        public IMvxCommand OpenSyncEndPointCommand => new MvxCommand(() =>
+        {
+            this.webBrowser.ShowWebPage(this.interviewerSettings.Endpoint);
+        });
 
         private async Task TestConnectionAsync()
         {
             this.IsBandwidthTested = false;
             this.IsConnectionAbsent = false;
-
+            
             if (!this.networkService.IsNetworkEnabled())
             {
                 this.IsBandwidthTested = true;
