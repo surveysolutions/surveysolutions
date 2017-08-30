@@ -662,6 +662,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Server URL: .
+        /// </summary>
+        public static string Diagnostics_ServerUrl {
+            get {
+                return ResourceManager.GetString("Diagnostics_ServerUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All information below will be shared as plain text. It can be sent by email, google hangouts of any other messaging app.
         /// </summary>
         public static string Diagnostics_Share_Description {
