@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
     {
         Establish context = () =>
         {
-            input = CreateSpeedByInterviewersReportInputModel(supervisorId: supervisorId, period: "w");
+            input = CreateSpeedByInterviewersReportInputModel(supervisorId: supervisorId, period: "w", columnCount:2);
 
             var user = Create.Entity.UserDocument(supervisorId: supervisorId);
 
@@ -28,10 +28,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
                     {
                         Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
                             interviewerId: user.PublicKey, 
-                            supervisorId: supervisorId, timestamp: input.From.Date.AddHours(-15), timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
+                            supervisorId: supervisorId, timestamp: input.From.Date.AddDays(-9), timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
                         Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
                             interviewerId: user.PublicKey,
-                            supervisorId: supervisorId, timestamp: input.From.Date.AddDays(1)),
+                            supervisorId: supervisorId, timestamp: input.From.Date.AddDays(-3)),
                         Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
                             interviewerId: user.PublicKey, supervisorId: supervisorId, timestamp: input.From.Date.AddDays(5))
                     }), "2");

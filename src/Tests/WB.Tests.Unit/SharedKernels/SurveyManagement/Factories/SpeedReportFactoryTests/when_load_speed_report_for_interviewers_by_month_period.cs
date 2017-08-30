@@ -27,9 +27,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
                     statuses: new[]
                     {
                         Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
-                            interviewerId: user.PublicKey, supervisorId: supervisorId, timestamp: input.From.Date.AddHours(-2), timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
+                            interviewerId: user.PublicKey, supervisorId: supervisorId, timestamp: input.From.Date.AddDays(-32), timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
                         Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
-                            interviewerId: user.PublicKey, supervisorId: supervisorId, timestamp: input.From.Date.AddDays(1)),
+                            interviewerId: user.PublicKey, supervisorId: supervisorId, timestamp: input.From.Date.AddDays(-1)),
                         Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
                             interviewerId: user.PublicKey, supervisorId: supervisorId, timestamp: input.From.Date.AddMonths(2))
                     }), "2");
