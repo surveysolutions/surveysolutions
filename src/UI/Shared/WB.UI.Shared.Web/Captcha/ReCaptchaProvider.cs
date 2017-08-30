@@ -16,7 +16,7 @@ namespace WB.UI.Shared.Web.Captcha
             this.configurationManager = configurationManager;
         }
 
-        public IHtmlString RenderCaptcha(HtmlHelper helper) => helper.Recaptcha(language: CultureInfo.CurrentCulture.ThreeLetterISOLanguageName);
+        public IHtmlString RenderCaptcha(HtmlHelper helper) => helper.Recaptcha(language: CultureInfo.CurrentCulture.TwoLetterISOLanguageName);
 
         public bool IsCaptchaValid(Controller controller)
         {
