@@ -31,11 +31,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
                     {
                         Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
                             supervisorId: user.PublicKey, 
-                            timestamp: input.From.Date.AddHours(-1), timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
+                            timestamp: input.From.Date.AddDays(-33), timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
                         Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
-                            supervisorId: user.PublicKey, timestamp: input.From.Date.AddDays(1)),
+                            supervisorId: user.PublicKey, timestamp: input.From.Date.AddDays(-11)),
                         Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
-                            supervisorId: user.PublicKey, timestamp: input.From.Date.AddMonths(2))
+                            supervisorId: user.PublicKey, timestamp: input.From.Date.AddDays(-2))
                     }), "2");
 
             quantityReportFactory = CreateSpeedReportFactory(interviewStatuses: interviewStatuses);

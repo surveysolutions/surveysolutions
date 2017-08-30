@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
         Establish context = () =>
         {
             input = CreateSpeedBetweenStatusesByInterviewersReportInputModel(supervisorId: supervisorId, period: "w");
-            var initialStatusChangeDate = input.From.Date.AddHours(1);
+            var initialStatusChangeDate = input.From.Date.AddHours(-1);
 
             var user = Create.Entity.UserDocument(supervisorId: supervisorId);
 
