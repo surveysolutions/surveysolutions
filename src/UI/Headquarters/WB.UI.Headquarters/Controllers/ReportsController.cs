@@ -280,7 +280,8 @@ namespace WB.UI.Headquarters.Controllers
             Guid? supervisorId = null)
         {
             var allUsersAndQuestionnaires = this.allUsersAndQuestionnairesFactory.Load();
-            DateTime? minAllowedDate = this.interviewStatuses.Query(_ => _.SelectMany(x => x.InterviewCommentedStatuses).Select(x => (DateTime?)x.Timestamp).Min());
+            DateTime? utcMinAllowedDate = this.interviewStatuses.Query(_ => _.SelectMany(x => x.InterviewCommentedStatuses).Select(x => (DateTime?)x.Timestamp).Min());
+            var localDate = utcMinAllowedDate?.ToLocalTime();
 
             return new PeriodicStatusReportModel
             {
@@ -293,7 +294,7 @@ namespace WB.UI.Headquarters.Controllers
                 SupervisorId = supervisorId,
                 ReportNameDescription = string.Format(GetReportDescriptionByType(reportType), PeriodicStatusReport.Team.ToLower()),
                 TotalRowPresent = totalRowPresent,
-                MinAllowedDate = minAllowedDate ?? DateTime.Now
+                MinAllowedDate = localDate ?? DateTime.Now
             };
         }
 
