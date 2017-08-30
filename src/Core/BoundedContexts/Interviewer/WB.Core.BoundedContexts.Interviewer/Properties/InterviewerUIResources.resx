@@ -501,6 +501,9 @@ for further instructions</value>
   <data name="Diagnostics_Title" xml:space="preserve">
     <value>Diagnostics</value>
   </data>
+  <data name="Diagnostics_ServerUrl" xml:space="preserve">
+    <value>Server URL: </value>
+  </data>
   <data name="MenuItem_Title_Diagnostics" xml:space="preserve">
     <value>Diagnostics</value>
   </data>
