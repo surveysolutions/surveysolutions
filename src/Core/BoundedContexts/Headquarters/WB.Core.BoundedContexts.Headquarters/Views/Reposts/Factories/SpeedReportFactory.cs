@@ -63,19 +63,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             var to = reportStartDate.Date.AddDays(1).AddSeconds(-1);
             var from = this.AddPeriod(to, period, -columnCount);
 
-
-            DateTime fromInUsersTimezone = from.AddMinutes(timezoneAdjastmentMins);
-            DateTime toInUsersTimezone = to.AddMinutes(timezoneAdjastmentMins);
+            DateTime fromUtc = from.AddMinutes(timezoneAdjastmentMins);
+            DateTime toUtc = to.AddMinutes(timezoneAdjastmentMins);
 
             DateTime? minDate = ReportHelpers.GetFirstInterviewCreatedDate(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), this.interviewStatusesStorage);
             var dateTimeRanges =
                 Enumerable.Range(0, columnCount)
-                    .Select(i => new DateTimeRange(this.AddPeriod(fromInUsersTimezone, period, i), this.AddPeriod(fromInUsersTimezone, period, i + 1)))
+                    .Select(i => new DateTimeRange(this.AddPeriod(fromUtc, period, i), this.AddPeriod(fromUtc, period, i + 1)))
                     .Where(i => minDate.HasValue && i.To >= minDate)
                     .ToArray();
-
             
-            var allUsersQuery = query(questionnaireId, questionnaireVersion, fromInUsersTimezone, toInUsersTimezone);
+            var allUsersQuery = query(questionnaireId, questionnaireVersion, fromUtc, toUtc);
 
             if (restrictUser != null)
                 allUsersQuery = allUsersQuery.Where(restrictUser);
@@ -90,7 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 .Take(pageSize).ToArray();
         
             var allInterviewsInStatus =
-                 query(questionnaireId, questionnaireVersion, fromInUsersTimezone, toInUsersTimezone)
+                 query(questionnaireId, questionnaireVersion, fromUtc, toUtc)
                     .Select(userIdSelector)
                     .Where(ics => ics.UserId.HasValue && userIds.Contains(ics.UserId.Value))
                     .Select(i => new StatusChangeRecord { UserId = i.UserId.Value, UserName = i.UserName, Timestamp = i.Timestamp, Timespan = new TimeSpan(i.Timespan) })
