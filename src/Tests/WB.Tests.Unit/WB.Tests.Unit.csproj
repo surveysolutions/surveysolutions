@@ -1198,7 +1198,6 @@
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_rejected_by_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_status_changed.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\StatusChangeHistoryDenormalizerFunctionalTests\StatusChangeHistoryDenormalizerFunctionalTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\StatusChangeHistoryDenormalizerFunctionalTests\when_interview_deleted_and_restored_by_synchronization.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\StatusChangeHistoryDenormalizerFunctionalTests\when_interview_is_created.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\StatusChangeHistoryDenormalizerFunctionalTests\when_interview_status_changed.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\QuantityReportFactoryTestContext.cs" />
