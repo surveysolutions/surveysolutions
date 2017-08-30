@@ -44,18 +44,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             Expression<Func<T, Guid>> selectUserId,
             Expression<Func<T, UserAndTimestamp>> selectUserAndTimestamp)
         {
-            var from = this.AddPeriod(reportStartDate.Date, period, -columnCount + 1);
-            var to = reportStartDate.Date.AddDays(1);
+            var localFrom = this.AddPeriod(reportStartDate.Date, period, -columnCount + 1);
+            var localTo = reportStartDate.Date.AddDays(1);
+            var utcFrom = localFrom.AddMinutes(timezoneAdjastmentMins);
+            var utcTo = localTo.AddMinutes(timezoneAdjastmentMins);
 
-            DateTime? minDate = ReportHelpers.GetFirstInterviewCreatedDate(questionnaire, this.interviewstatusStorage);
+            DateTime? utcMinDate = ReportHelpers.GetFirstInterviewCreatedDate(questionnaire, this.interviewstatusStorage);
+            DateTime? localMinDate = utcMinDate?.AddMinutes(-timezoneAdjastmentMins);
 
             var dateTimeRanges =
                 Enumerable.Range(0, columnCount)
-                    .Select(i => new DateTimeRange(this.AddPeriod(from, period, i), this.AddPeriod(from, period, i + 1)))
-                    .Where(i => minDate.HasValue && i.To >= minDate)
+                    .Select(i => new DateTimeRange(this.AddPeriod(localFrom, period, i), this.AddPeriod(localFrom, period, i + 1)))
+                    .Where(i => localMinDate.HasValue && i.To >= localMinDate)
                     .ToArray();
 
-            var interviewStatusesByDateRange = queryInterviewStatusesByDateRange(from, to);
+            var interviewStatusesByDateRange = queryInterviewStatusesByDateRange(utcFrom, utcTo);
 
             var userIdsOfAllResponsibleForTheInterviews = interviewStatusesByDateRange
                     .Select(selectUserId)
@@ -66,7 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             var responsibleUserIdsForOnePage = userIdsOfAllResponsibleForTheInterviews.Skip((page - 1) * pageSize)
                 .Take(pageSize).ToArray();
 
-            var interviewStatusChangeDateWithResponsible = queryInterviewStatusesByDateRange(from, to)
+            var interviewStatusChangeDateWithResponsible = queryInterviewStatusesByDateRange(utcFrom, utcTo)
                     .Select(selectUserAndTimestamp)
                     .Where(ics => ics.UserId.HasValue && responsibleUserIdsForOnePage.Contains(ics.UserId.Value))
                     .Select(i => new { UserId = i.UserId.Value, i.UserName, i.Timestamp });
