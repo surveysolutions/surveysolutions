@@ -16,9 +16,9 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
@@ -42,6 +42,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IQuantityReportFactory quantityReport;
         private readonly ISpeedReportFactory speedReport;
 
+        private readonly IFileSystemAccessor fileSystemAccessor;
+
         private readonly ICountDaysOfInterviewInStatusReport countDaysOfInterviewInStatusReport;
         private readonly IDeviceInterviewersReport deviceInterviewersReport;
         private readonly IExportFactory exportFactory;
@@ -60,7 +62,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             ISpeedReportFactory speedReport,
             ICountDaysOfInterviewInStatusReport countDaysOfInterviewInStatusReport,
             IDeviceInterviewersReport deviceInterviewersReport,
-            IExportFactory exportFactory)
+            IExportFactory exportFactory,
+            IFileSystemAccessor fileSystemAccessor)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
@@ -75,6 +78,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.countDaysOfInterviewInStatusReport = countDaysOfInterviewInStatusReport;
             this.deviceInterviewersReport = deviceInterviewersReport;
             this.exportFactory = exportFactory;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         [HttpPost]

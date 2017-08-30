@@ -103,7 +103,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     TimezoneOffsetMinutes = filter.TimezoneOffsetMinutes
                 });
 
-            return this.CreateReportResponse(exportType, report, filter.ReportType == 0 ? Reports.Report_Number_of_Completed_Interviews : Reports.Report_Number_of_interview_transactions_by_Supervisor);
+            return this.CreateReportResponse(exportType, report, filter.ReportType == PeriodiceReportType.NumberOfCompletedInterviews ? Reports.Report_Number_of_Completed_Interviews : Reports.Report_Number_of_interview_transactions_by_Supervisor);
         }
 
         [HttpGet]
@@ -334,9 +334,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(report.Headers, report.Data));
             var result = new ProgressiveDownload(this.Request).ResultMessage(exportFileStream, exportFile.MimeType);
 
+            var reportNameCleaned = this.fileSystemAccessor.MakeValidFileName(reportName);
+
             result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
             {
-                FileNameStar = $@"{reportName}{exportFile.FileExtension}"
+                FileNameStar = $@"{reportNameCleaned}{exportFile.FileExtension}"
             };
             return result;
         }
