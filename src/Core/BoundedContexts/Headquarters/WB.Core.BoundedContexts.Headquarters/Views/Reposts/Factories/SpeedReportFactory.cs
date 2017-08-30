@@ -60,9 +60,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
          Expression<Func<T, bool>> restrictUser,
          Expression<Func<T, UserAndTimestampAndTimespan>> userIdSelector)
         {
-            var to = reportStartDate.Date.AddDays(1).AddSeconds(-1);
+            var to = reportStartDate.Date.AddDays(1);
             var from = this.AddPeriod(to, period, -columnCount);
-
 
             DateTime fromInUsersTimezone = from.AddMinutes(timezoneAdjastmentMins);
             DateTime toInUsersTimezone = to.AddMinutes(timezoneAdjastmentMins);
