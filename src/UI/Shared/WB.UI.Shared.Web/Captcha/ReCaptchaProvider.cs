@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Web;
 using System.Web.Mvc;
 using Recaptcha.Web;
@@ -15,7 +16,7 @@ namespace WB.UI.Shared.Web.Captcha
             this.configurationManager = configurationManager;
         }
 
-        public IHtmlString RenderCaptcha(HtmlHelper helper) => helper.Recaptcha();
+        public IHtmlString RenderCaptcha(HtmlHelper helper) => helper.Recaptcha(language: CultureInfo.CurrentCulture.ThreeLetterISOLanguageName);
 
         public bool IsCaptchaValid(Controller controller)
         {
