@@ -203,8 +203,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\Captcha.es.resx" />
     <EmbeddedResource Include="Resources\Captcha.ar.resx" />
-    <EmbeddedResource Include="Resources\Captcha.fr.resx" />
-    <EmbeddedResource Include="Resources\Captcha.zh.resx" />
+    <EmbeddedResource Include="Resources\Captcha.fr.resx" />    
     <EmbeddedResource Include="Resources\ErrorMessages.pt.resx" />
     <EmbeddedResource Include="Resources\Captcha.resx">
       <Generator>ResXFileCodeGenerator</Generator>
