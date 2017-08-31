@@ -802,6 +802,8 @@
     <EmbeddedResource Include="Resources\Archived.zh.resx">
       <DependentUpon>Archived.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Assignments.fr.resx" />
+    <EmbeddedResource Include="Resources\Assignments.pt.resx" />
     <EmbeddedResource Include="Resources\Assignments.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Assignments.Designer.cs</LastGenOutput>
@@ -810,6 +812,7 @@
     <EmbeddedResource Include="Resources\Assignments.ru.resx">
       <DependentUpon>Assignments.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Assignments.zh.resx" />
     <EmbeddedResource Include="Resources\DataTables.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -915,6 +918,8 @@
     <EmbeddedResource Include="Resources\LimitsIndicator.zh.resx">
       <DependentUpon>LimitsIndicator.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\LoginToDesigner.fr.resx" />
+    <EmbeddedResource Include="Resources\LoginToDesigner.pt.resx" />
     <EmbeddedResource Include="Resources\LoginToDesigner.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>

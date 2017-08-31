@@ -113,11 +113,11 @@
                     <h4>@Pages.FilterTitle:</h4>
 
                     <div class="block-filter">
-                        <h5>@Pages.Template</h5>
+                        <h5>@Common.Questionnaire</h5>
                         <select id="templateSelector" data-bind="value: SelectedTemplate" class="selectpicker">
                             @if (Model.Templates.Count() > 1)
                             {
-                                <option value="">@Common.Any</option>
+                                <option value="">@Common.AllQuestionnaires</option>
                             }
                             @foreach (var item in Model.Templates)
                             {
@@ -129,7 +129,7 @@
                     <div class="block-filter">
                         <h5>@Common.Status</h5>
                         <select data-bind="value: SelectedStatus" class="selectpicker">
-                            <option value="">@Common.Any</option>
+                            <option value="">@Common.AllStatuses</option>
                             @foreach (var item in Model.Statuses)
                             {
                                 <option value="@item.Status">@item.StatusName</option>
@@ -141,7 +141,7 @@
                         <h5>@Pages.Survey_ResponsibleTitle</h5>
                         <p class="list-group-item-text">
                             <div class="input-group">
-                                <input class="form-control with-clear-btn" placeholder="@Common.Any" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
+                                <input class="form-control with-clear-btn" placeholder="@Common.AllResponsible" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
                                 <span data-bind="spinner: IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
                                 <div class="input-group-btn" data-bind="click: function(){ SelectedResponsible(undefined); }">
                                     <div class="btn btn-default"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></div>
@@ -154,7 +154,7 @@
                         <h5>@Interviews.Assignment</h5>
                         <p class="list-group-item-text">
                             <div class="input-group">
-                                <input class="form-control with-clear-btn" placeholder="@Common.Any" data-bind="numeric, textInput: AssignmentId" type="text" />
+                                <input class="form-control with-clear-btn" placeholder="@Assignments.AllAssignments" data-bind="numeric, textInput: AssignmentId" type="text" />
                                 <div class="input-group-btn" data-bind="click: function(){AssignmentId(undefined); }">
                                     <div class="btn btn-default"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></div>
                                 </div>

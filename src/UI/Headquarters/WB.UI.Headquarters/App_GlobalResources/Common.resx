@@ -147,6 +147,9 @@
   <data name="Questionnaires" xml:space="preserve">
     <value>Questionnaires</value>
   </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Questionnaire</value>
+  </data>
   <data name="Interviews" xml:space="preserve">
     <value>Interviews</value>
   </data>
@@ -178,7 +181,7 @@
     <value>Any</value>
   </data>
   <data name="AllQuestionnaires" xml:space="preserve">
-    <value>All questionnaires</value>
+    <value>All Questionnaires</value>
   </data>
   <data name="NoResultsFound" xml:space="preserve">
     <value>No results found</value>
@@ -269,6 +272,15 @@
   </data>
   <data name="AllTeams" xml:space="preserve">
     <value>All teams</value>
+  </data>
+  <data name="AllStatuses" xml:space="preserve">
+    <value>All Statuses</value>
+  </data>
+  <data name="AllSupervisors" xml:space="preserve">
+    <value>All Supervisors</value>
+  </data>
+  <data name="AllResponsible" xml:space="preserve">
+    <value>All Responsible</value>
   </data>
   <data name="OpenResponsiblesProfile" xml:space="preserve">
     <value>Open responsible's profile</value>

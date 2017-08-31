@@ -189,4 +189,7 @@
     <value>Опросник</value>
     <comment>Опросник</comment>
   </data>
+  <data name="AllAssignments" xml:space="preserve">
+    <value>Все задачи</value>
+  </data>
 </root>
