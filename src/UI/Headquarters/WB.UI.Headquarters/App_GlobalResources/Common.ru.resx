@@ -283,4 +283,7 @@
   <data name="AllResponsible" xml:space="preserve">
     <value>Все ответственные</value>
   </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Подтвердить</value>
+  </data>
 </root>
