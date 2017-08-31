@@ -417,7 +417,8 @@
                             <ul class="verification-items" ng-class="{singleError: !error.isGroupedMessage}">
                                 <empty-tag ng-repeat="referencesWithErrors in error.errors">
                                     <li class="verification-item-container" ng-repeat="reference in referencesWithErrors.references" ng-click="navigateTo(reference)">
-                                        <a class="verification-item" href="javascript:void(0);">
+                                        <a class="verification-item" href="javascript:void(0);" 
+                                           tooltip-class="error-tooltip" tooltip-append-to-body="true" tooltip-placement="right" uib-tooltip-html="referencesWithErrors.compilationErrorMessages != null ? referencesWithErrors.compilationErrorMessages.slice(0, 10).join('<br />') + (referencesWithErrors.compilationErrorMessages.length > 10 ? '<br />...' : '') : ''">
                                             <span ng-if="reference.type == 'Question'" class="icon {{reference.questionType}}  icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
                                             <span ng-if="reference.type == 'Macro'" class="icon icon-macro icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
                                             <span ng-if="reference.type == 'LookupTable'" class="icon icon-lookup icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
@@ -425,7 +426,7 @@
                                             <span ng-if="reference.type == 'Attachment'" class="icon icon-attachment icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
                                             <span ng-if="reference.type == 'Variable'" class="icon icon-variable icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
                                             <span ng-if="reference.type == 'Translation'" class="icon icon-translation icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
-                                            <span class="title" tooltip-class="error-tooltip" tooltip-append-to-body="true" tooltip-placement="right" uib-tooltip-html="referencesWithErrors.compilationErrorMessages != null ? referencesWithErrors.compilationErrorMessages.slice(0, 10).join('<br />') + (referencesWithErrors.compilationErrorMessages.length > 10 ? '<br />...' : '') : ''">{{reference.title}}</span>
+                                            <span class="title">{{reference.title}}</span>
                                             <span class="variable" ng-bind-html="reference.variable || '&nbsp;'">&nbsp;</span>
                                         </a>
                                     </li>
