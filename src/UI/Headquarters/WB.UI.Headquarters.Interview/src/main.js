@@ -1,16 +1,14 @@
 import "babel-polyfill";
 global.jQuery = require('jquery');
 
-import { assetsPath, locale } from "./config"
+import { assetsPath, locale, browserLanguage } from "./config"
 
 if (process.env.NODE_ENV === "production") {
     __webpack_public_path__ = assetsPath
 }
 
 import * as moment from 'moment'
-var navigator = window.navigator;
-var lang = navigator.languages ? navigator.languages[0] : (navigator.language || navigator.userLanguage)
-moment.locale(lang);
+moment.locale(browserLanguage);
 
 import Vue from "vue"
 import VueI18n from "./locale"

@@ -13,6 +13,10 @@
 
 <script type="text/javascript">
   import Flatpickr from 'flatpickr';
+  import { browserLanguage } from "src/config"
+  import FlatpickrLocale from "flatpickr/dist/l10n"
+
+  Flatpickr.localize(FlatpickrLocale[browserLanguage]);
   // You have to import css yourself
 
   export default {
