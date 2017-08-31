@@ -292,7 +292,7 @@ namespace WB.UI.Headquarters
 
         public static void RegisterHttpFilters(HttpFilterCollection filters)
         {
-            filters.Add(new ElmahHandledErrorLoggerFilter());
+            filters.Add(new ErrorLoggerFilter());
         }
 
         public static void RegisterWebApiFilters(HttpFilterCollection filters)
