@@ -464,7 +464,8 @@ namespace WB.Tests.Abc.TestFactories
             DateTime? updateDate = null,
             bool? wasCreatedOnClient = null,
             bool receivedByInterviewer = false,
-            int? assignmentId = null)
+            int? assignmentId = null,
+            bool wasCompleted = false)
         {
             var qId = questionnaireId ?? Guid.NewGuid();
             var qVersion = questionnaireVersion ?? 1;
@@ -484,7 +485,8 @@ namespace WB.Tests.Abc.TestFactories
                 WasCreatedOnClient = wasCreatedOnClient ?? false,
                 ReceivedByInterviewer = receivedByInterviewer,
                 AssignmentId = assignmentId,
-                QuestionnaireIdentity = new QuestionnaireIdentity(qId, qVersion).ToString()
+                QuestionnaireIdentity = new QuestionnaireIdentity(qId, qVersion).ToString(),
+                WasCompleted = wasCompleted
             };
         }
 
