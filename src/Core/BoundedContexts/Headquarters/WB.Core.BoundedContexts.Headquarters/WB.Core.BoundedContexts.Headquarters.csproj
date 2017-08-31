@@ -12,10 +12,11 @@
     <NoWarn>1701;1702;1705;618</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\Reposts\Factories\StatusDurationReportAssignments.sql" />
-    <EmbeddedResource Include="Views\Reposts\Factories\StatusDurationReportInterviews.sql" />
+    <Compile Remove="Mappings\DbQuestionMap.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Views\Reposts\Factories\StatusDurationReportAssignments.sql" />
+    <EmbeddedResource Include="Views\Reposts\Factories\StatusDurationReportInterviews.sql" />
     <EmbeddedResource Include="Views\Reposts\Factories\DeviceInterviewersReport.sql" />
   </ItemGroup>
   <ItemGroup>
