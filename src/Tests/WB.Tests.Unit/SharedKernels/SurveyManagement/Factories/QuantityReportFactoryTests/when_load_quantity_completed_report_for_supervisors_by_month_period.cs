@@ -63,9 +63,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
         }
 
         [Test]
-        public void should_return_first_row_with_1_interview_at_first_period_and_zero_interviews_at_second()
+        public void should_return_first_row_with_0_interview_at_first_period_and_1_interviews_at_second()
         {
-            result.Items.First().QuantityByPeriod.Should().Equal(1, 0);
+            result.Items.First().QuantityByPeriod.Should().Equal(0, 1);
         }
 
         [Test]
@@ -81,9 +81,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
         }
 
         [Test]
-        public void should_return_total_row_with_1_interview_at_first_period_and_zero_interviews_at_second()
+        public void should_return_total_row_with_0_interview_at_first_period_and_1_interviews_at_second()
         {
-            result.TotalRow.QuantityByPeriod.Should().Equal(1, 0);
+            result.TotalRow.QuantityByPeriod.Should().Equal(0, 1);
         }
 
         [Test]

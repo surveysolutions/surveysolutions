@@ -58,36 +58,5 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                     yield return $"<{translatedResourceFile}> {translatedResource.Key}: has '{translatedStringFormatEntries}', but should have '{originalStringFormatEntries}'";
             }
         }
-
-        public  IEnumerable<string> GetAllLinkedResourceFiles(IEnumerable<string> csprojFiles)
-        {
-            foreach (var csproj in csprojFiles)
-            {
-                using (XmlReader reader = XmlReader.Create(csproj))
-                {
-                    while (reader.Read())
-                    {
-                        if (reader.NodeType == XmlNodeType.Element)
-                        {
-                            if (string.Equals(reader.Name, "Content", StringComparison.OrdinalIgnoreCase) ||
-                                string.Equals(reader.Name, "EmbeddedResource", StringComparison.OrdinalIgnoreCase))
-                            {
-                                while (reader.MoveToNextAttribute())
-                                {
-                                    if (string.Equals(reader.Name, "Include", StringComparison.OrdinalIgnoreCase))
-                                    {
-                                        if (reader.Value.EndsWith(".resx", StringComparison.OrdinalIgnoreCase))
-                                        {
-                                            var fi = new FileInfo(csproj);
-                                            yield return Path.Combine(fi.DirectoryName, reader.Value);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
 }

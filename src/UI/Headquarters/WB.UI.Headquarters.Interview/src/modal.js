@@ -1,9 +1,13 @@
+import { browserLanguage } from "src/config"
+
 function modal(action) {
     require.ensure(["bootbox", "bootstrap-sass/assets/javascripts/bootstrap/modal"], r => {
         const jQuery = require("jquery")
        // const $ = (window).$ = (window).jQuery = jQuery
         require("bootstrap-sass/assets/javascripts/bootstrap/modal")
-        action(require("bootbox"))
+        const bootbox = require("bootbox")
+        bootbox.setLocale(browserLanguage)
+        action(bootbox)
     }, "libs")
 }
 

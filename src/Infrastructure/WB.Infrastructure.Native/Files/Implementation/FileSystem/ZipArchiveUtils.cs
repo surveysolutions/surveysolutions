@@ -30,7 +30,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             using (var zipFile = new ZipFile()
             {
                 ParallelDeflateThreshold = -1,
-                AlternateEncoding = System.Text.Encoding.UTF8,
+                AlternateEncoding = Encoding.UTF8,
                 AlternateEncodingUsage = ZipOption.Always,
                 UseZip64WhenSaving = Zip64Option.AsNecessary
             })
@@ -38,7 +38,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                 if (password != null)
                     zipFile.Password = password;
 
-                zipFile.AddDirectory(directory, this.fileSystemAccessor.GetFileName(directory));
+                zipFile.AddDirectory(directory, "");
                 zipFile.Save(archiveFile);
             }
         }

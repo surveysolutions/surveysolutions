@@ -246,4 +246,10 @@
   <data name="WelcomeText" xml:space="preserve">
     <value>Bonjour et bienvenue à l'Enquête Web de Survey Survey </value>
   </data>
+  <data name="CompleteInterview" xml:space="preserve">
+    <value>Entretien complet</value>
+  </data>
+  <data name="PoweredBy" xml:space="preserve">
+    <value>Alimenté par</value>
+  </data>
 </root>

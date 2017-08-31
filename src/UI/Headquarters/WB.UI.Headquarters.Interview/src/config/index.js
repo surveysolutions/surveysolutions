@@ -11,3 +11,7 @@ export const appVersion = INTERVIEW_APP_CONFIG.appVersion
 export const googleApiKey = INTERVIEW_APP_CONFIG.googleApiKey
 export const hqLink = INTERVIEW_APP_CONFIG.hqLink
 export const locale = INTERVIEW_APP_CONFIG.locale
+
+var navigator = window.navigator;
+var lang = navigator.languages ? navigator.languages[0] : (navigator.language || navigator.userLanguage)
+export const browserLanguage = lang
