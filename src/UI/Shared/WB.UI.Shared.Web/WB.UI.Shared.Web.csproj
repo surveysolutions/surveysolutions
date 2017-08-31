@@ -138,7 +138,6 @@
     <Compile Include="DataAnnotations\PasswordRegularExpressionAttribute.cs" />
     <Compile Include="DataAnnotations\PasswordStringLengthAttribute.cs" />
     <Compile Include="DataAnnotations\DataAnnotationsConfig.cs" />
-    <Compile Include="Elmah\ElmahDataFilter.cs" />
     <Compile Include="Extensions\Alerts.cs" />
     <Compile Include="Extensions\ModelStateDictionaryHelper.cs" />
     <Compile Include="Extensions\LinkExtensions.cs" />
