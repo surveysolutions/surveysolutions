@@ -12,9 +12,6 @@
     <NoWarn>1701;1702;1705;618</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Mappings\DbQuestionMap.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Views\Reposts\Factories\StatusDurationReportAssignments.sql" />
     <EmbeddedResource Include="Views\Reposts\Factories\StatusDurationReportInterviews.sql" />
     <EmbeddedResource Include="Views\Reposts\Factories\DeviceInterviewersReport.sql" />
