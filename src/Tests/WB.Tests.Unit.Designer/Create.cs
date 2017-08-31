@@ -1239,5 +1239,10 @@ namespace WB.Tests.Unit.Designer
         {
             return new QuestionTypeToCSharpTypeMapper();
         }
+
+        public static JsonFormatter JsonFormatter(Version hqVersion)
+        {
+            return new JsonFormatter(new Func<Version>(() => hqVersion));
+        }
     }
 }
