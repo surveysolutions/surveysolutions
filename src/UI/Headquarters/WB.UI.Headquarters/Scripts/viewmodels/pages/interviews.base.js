@@ -199,6 +199,7 @@
                 var items = self.BuildMenuItem(selectedRow);
                 return { items: items };
             },
+            zIndex: 999999,
             trigger: 'left'
         };
 
