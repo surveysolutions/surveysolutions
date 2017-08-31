@@ -157,10 +157,10 @@ gulp.task('bowerCss', wrapPipe(function (success, error) {
     return gulp.src('./bower.json')
         .pipe(mainBowerFiles('**/*.css').on('error', error))
         .pipe(autoprefixer('last 2 version').on('error', error))
+        //.pipe(cssnano().on('error', error))
         .pipe(concat('libs.css').on('error', error))
         .pipe(gulp.dest(config.buildDir).on('error', error))
         .pipe(rename({ suffix: '.min' }).on('error', error))
-        .pipe(cssnano().on('error', error))
         .pipe(plugins.rev().on('error', error))
         .pipe(gulp.dest(config.buildDistDir));
 }));

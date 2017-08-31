@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="EnterText" xml:space="preserve">
-    <value>Enter the text you see above</value>
+    <value>أدخل النص الذي تراه أعلاه</value>
   </data>
   <data name="InvalidCaptcha" xml:space="preserve">
-    <value>Invalid captcha</value>
+    <value>كلمة التحقق غير صالحة</value>
   </data>
   <data name="Required" xml:space="preserve">
-    <value>Is required field</value>
+    <value>مطلوب</value>
   </data>
   <data name="TryAnother" xml:space="preserve">
-    <value>Try another one</value>
+    <value>جرب شئ اخر</value>
   </data>
 </root>
