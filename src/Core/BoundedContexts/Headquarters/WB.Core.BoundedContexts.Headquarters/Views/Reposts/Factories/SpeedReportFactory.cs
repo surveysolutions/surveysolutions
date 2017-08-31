@@ -60,21 +60,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
          Expression<Func<T, bool>> restrictUser,
          Expression<Func<T, UserAndTimestampAndTimespan>> userIdSelector)
         {
-            var to = reportStartDate.Date.AddDays(1);
-            var from = this.AddPeriod(to, period, -columnCount);
+            var ranges = ReportHelpers.BuildColumns(reportStartDate, period, columnCount, timezoneAdjastmentMins,
+                new QuestionnaireIdentity(questionnaireId, questionnaireVersion), this.interviewStatusesStorage);
 
-            DateTime fromInUsersTimezone = from.AddMinutes(timezoneAdjastmentMins);
-            DateTime toInUsersTimezone = to.AddMinutes(timezoneAdjastmentMins);
-
-            DateTime? minDate = ReportHelpers.GetFirstInterviewCreatedDate(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), this.interviewStatusesStorage);
-            var dateTimeRanges =
-                Enumerable.Range(0, columnCount)
-                    .Select(i => new DateTimeRange(this.AddPeriod(fromInUsersTimezone, period, i), this.AddPeriod(fromInUsersTimezone, period, i + 1)))
-                    .Where(i => minDate.HasValue && i.To >= minDate)
-                    .ToArray();
-
-            
-            var allUsersQuery = query(questionnaireId, questionnaireVersion, fromInUsersTimezone, toInUsersTimezone);
+            var allUsersQuery = query(questionnaireId, questionnaireVersion, ranges.FromUtc, ranges.ToUtc);
 
             if (restrictUser != null)
                 allUsersQuery = allUsersQuery.Where(restrictUser);
@@ -89,22 +78,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 .Take(pageSize).ToArray();
         
             var allInterviewsInStatus =
-                 query(questionnaireId, questionnaireVersion, fromInUsersTimezone, toInUsersTimezone)
+                 query(questionnaireId, questionnaireVersion, ranges.FromUtc, ranges.ToUtc)
                     .Select(userIdSelector)
                     .Where(ics => ics.UserId.HasValue && userIds.Contains(ics.UserId.Value))
                     .Select(i => new StatusChangeRecord { UserId = i.UserId.Value, UserName = i.UserName, Timestamp = i.Timestamp, Timespan = new TimeSpan(i.Timespan) })
                     .ToArray();
-            //var temp = allInterviewsInStatus.Select(i => new StatusChangeRecord
-            //{
-            //    UserId = i.UserId,
-            //    UserName = i.UserName,
-            //    Timestamp = i.Timestamp,
-            //    Timespan = new TimeSpan(i.Timespan)
-            //}).ToArray();
-            var rows = userIds.Select(u => GetSpeedByResponsibleReportRow(u, dateTimeRanges, timezoneAdjastmentMins, allInterviewsInStatus)).ToArray();
+
+            var rows = userIds.Select(u => GetSpeedByResponsibleReportRow(u, ranges.ColumnRangesUtc, timezoneAdjastmentMins, allInterviewsInStatus)).ToArray();
 
             SpeedByResponsibleTotalRow totalRow = new SpeedByResponsibleTotalRow();
-            foreach (var dateTimeRange in dateTimeRanges)
+            foreach (var dateTimeRange in ranges.ColumnRangesUtc)
             {
                 double? totalAvgDuration = query(questionnaireId, questionnaireVersion, dateTimeRange.From, dateTimeRange.To)
                                             .Select(userIdSelector)
@@ -118,7 +101,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 dateTimeRange.To = dateTimeRange.To.AddMinutes(-timezoneAdjastmentMins);
             }
 
-            return new SpeedByResponsibleReportView(rows, dateTimeRanges, usersCount)
+            return new SpeedByResponsibleReportView(rows, ranges.ColumnRangesLocal, usersCount)
             {
                 TotalRow = totalRow
             };
@@ -315,20 +298,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 selectUser:u => u.SupervisorId.Value,
                 restrictUser: null,
                 userIdSelector: i => new UserAndTimestampAndTimespan() { UserId = i.SupervisorId, Timestamp = i.EndStatusTimestamp, Timespan = i.TimeSpanLong, UserName = i.SupervisorName });
-        }
-
-        private DateTime AddPeriod(DateTime d, string period, int value)
-        {
-            switch (period)
-            {
-                case "d":
-                    return d.AddDays(value);
-                case "w":
-                    return d.AddDays(value * 7);
-                case "m":
-                    return d.AddMonths(value);
-            }
-            throw new ArgumentException(string.Format("period '{0}' can't be recognized", period));
         }
 
         class UserAndTimestampAndTimespan

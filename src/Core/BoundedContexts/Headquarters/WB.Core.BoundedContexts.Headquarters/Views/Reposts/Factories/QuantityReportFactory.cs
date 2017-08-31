@@ -44,22 +44,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             Expression<Func<T, Guid>> selectUserId,
             Expression<Func<T, UserAndTimestamp>> selectUserAndTimestamp)
         {
-            var localTo = reportStartDate.Date.AddDays(1);
-            var localFrom = this.AddPeriod(localTo, period, -columnCount);
+            var ranges = ReportHelpers.BuildColumns(reportStartDate, period, columnCount, timezoneAdjastmentMins,
+                questionnaire, this.interviewstatusStorage);
 
-            var utcFrom = localFrom.AddMinutes(timezoneAdjastmentMins);
-            var utcTo = localTo.AddMinutes(timezoneAdjastmentMins);
-
-            DateTime? utcMinDate = ReportHelpers.GetFirstInterviewCreatedDate(questionnaire, this.interviewstatusStorage);
-            DateTime? localMinDate = utcMinDate?.AddMinutes(-timezoneAdjastmentMins);
-
-            var dateTimeRanges =
-                Enumerable.Range(0, columnCount)
-                    .Select(i => new DateTimeRange(this.AddPeriod(localFrom, period, i), this.AddPeriod(localFrom, period, i + 1)))
-                    .Where(i => localMinDate.HasValue && i.To >= localMinDate)
-                    .ToArray();
-
-            var interviewStatusesByDateRange = queryInterviewStatusesByDateRange(utcFrom, utcTo);
+            var interviewStatusesByDateRange = queryInterviewStatusesByDateRange(ranges.FromUtc, ranges.ToUtc);
 
             var userIdsOfAllResponsibleForTheInterviews = interviewStatusesByDateRange
                     .Select(selectUserId)
@@ -70,21 +58,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             var responsibleUserIdsForOnePage = userIdsOfAllResponsibleForTheInterviews.Skip((page - 1) * pageSize)
                 .Take(pageSize).ToArray();
 
-            var interviewStatusChangeDateWithResponsible = queryInterviewStatusesByDateRange(utcFrom, utcTo)
+            var interviewStatusChangeDateWithResponsible = queryInterviewStatusesByDateRange(ranges.FromUtc, ranges.ToUtc)
                     .Select(selectUserAndTimestamp)
                     .Where(ics => ics.UserId.HasValue && responsibleUserIdsForOnePage.Contains(ics.UserId.Value))
                     .Select(i => new { UserId = i.UserId.Value, i.UserName, i.Timestamp });
             
             List<QuantityByResponsibleReportRow> list = responsibleUserIdsForOnePage
-                .Select(x => new QuantityByResponsibleReportRow(dateTimeRanges.Length)
+                .Select(x => new QuantityByResponsibleReportRow(ranges.ColumnRangesLocal.Length)
                 {
                     ResponsibleId = x
                 }).ToList();
 
-            for (int dateRangeIndex = 0; dateRangeIndex < dateTimeRanges.Length; dateRangeIndex++)
+            for (int dateRangeIndex = 0; dateRangeIndex < ranges.ColumnRangesUtc.Length; dateRangeIndex++)
             {
-                var timeSpanFrom = dateTimeRanges[dateRangeIndex].From.AddMinutes(timezoneAdjastmentMins);
-                var timeSpanTo = dateTimeRanges[dateRangeIndex].To.AddMinutes(timezoneAdjastmentMins);
+                var timeSpanFrom = ranges.ColumnRangesUtc[dateRangeIndex].From;
+                var timeSpanTo = ranges.ColumnRangesUtc[dateRangeIndex].To;
                 var range = (from i in interviewStatusChangeDateWithResponsible
                     where i.Timestamp >= timeSpanFrom && i.Timestamp < timeSpanTo
                     group i by new {i.UserId, i.UserName } into grouping
@@ -105,7 +93,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 }
             }
 
-            for (int dateRangeIndex = 0; dateRangeIndex < dateTimeRanges.Length; dateRangeIndex++)
+            foreach (var column in ranges.ColumnRangesUtc)
             {
                 var range = (from i in interviewStatusChangeDateWithResponsible
                     group i by i.UserId into grouping
@@ -115,7 +103,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                         Count = grouping.Count()
                     }).ToList();
 
-
                 foreach (var r in range)
                 {
                     var quantityByResponsibleReportRow = list.First(x => x.ResponsibleId == r.UserId);
@@ -124,9 +111,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             }
 
             var quantityTotalRow =
-                this.CreateQuantityTotalRow(interviewStatusesByDateRange, dateTimeRanges, timezoneAdjastmentMins, selectUserAndTimestamp);
+                this.CreateQuantityTotalRow(interviewStatusesByDateRange, ranges.ColumnRangesLocal, timezoneAdjastmentMins, selectUserAndTimestamp);
 
-            return new QuantityByResponsibleReportView(list, quantityTotalRow, dateTimeRanges, responsibleUsersCount);
+            return new QuantityByResponsibleReportView(list, quantityTotalRow, ranges.ColumnRangesLocal, responsibleUsersCount);
         }
 
         
@@ -266,20 +253,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 queryInterviewStatusesByDateRange: (from, to) => this.QueryInterviewStatuses(input.QuestionnaireId, input.QuestionnaireVersion, from, to, input.InterviewStatuses),
                 selectUserId: u => u.SupervisorId.Value,
                 selectUserAndTimestamp: i => new UserAndTimestamp() { UserId = i.SupervisorId, UserName = i.SupervisorName, Timestamp = i.Timestamp });
-        }
-
-        private DateTime AddPeriod(DateTime d, string period, int value)
-        {
-            switch (period)
-            {
-                case "d":
-                    return d.AddDays(value);
-                case "w":
-                    return d.AddDays(value * 7);
-                case "m":
-                    return d.AddMonths(value);
-            }
-            throw new ArgumentException($"period '{period}' can't be recognized");
         }
 
         class UserAndTimestamp
