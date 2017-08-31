@@ -42,8 +42,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
         [Test] public void should_return_one_row () =>
             result.Items.Should().HaveCount(1);
 
-        [Test] public void should_return_first_row_with_1_interview_at_first_period_and_zero_interviews_at_second () =>
-            result.Items.First().QuantityByPeriod.Should().Equal(1, 0);
+        [Test] public void should_return_first_row_with_0_interview_at_first_period_and_1_interviews_at_second () =>
+            result.Items.First().QuantityByPeriod.Should().Equal(0, 1);
 
         [Test] public void should_return_first_row_with_1_in_Total () =>
             result.Items.First().Total.Should().Be(1);
@@ -51,8 +51,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
         [Test] public void should_return_first_row_with_0_5_in_Average () =>
            result.Items.First().Average.Should().Be(0.5);
 
-        [Test] public void should_return_total_row_with_1_interview_at_first_period_and_zero_interviews_at_second () =>
-            result.TotalRow.QuantityByPeriod.Should().Equal(1, 0);
+        [Test] public void should_return_total_row_with_0_interview_at_first_period_and_1_interviews_at_second () =>
+            result.TotalRow.QuantityByPeriod.Should().Equal(0, 1);
 
         [Test] public void should_return_total_row_with_1_in_Total () =>
             result.TotalRow.Total.Should().Be(1);
