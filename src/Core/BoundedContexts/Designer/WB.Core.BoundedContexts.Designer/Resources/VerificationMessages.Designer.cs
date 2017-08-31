@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class VerificationMessages {
+    public class VerificationMessages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.Designer.Resources.VerificationMessages", typeof(VerificationMessages).Assembly);
@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Questionnaire must contain at least one question..
         /// </summary>
-        internal static string WB0001_NoQuestions {
+        public static string WB0001_NoQuestions {
             get {
                 return ResourceManager.GetString("WB0001_NoQuestions", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Validation condition has a syntax error..
         /// </summary>
-        internal static string WB0002_CustomValidationExpressionHasIncorrectSyntax {
+        public static string WB0002_CustomValidationExpressionHasIncorrectSyntax {
             get {
                 return ResourceManager.GetString("WB0002_CustomValidationExpressionHasIncorrectSyntax", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Enabling condition has a syntax error..
         /// </summary>
-        internal static string WB0003_CustomEnablementConditionHasIncorrectSyntax {
+        public static string WB0003_CustomEnablementConditionHasIncorrectSyntax {
             get {
                 return ResourceManager.GetString("WB0003_CustomEnablementConditionHasIncorrectSyntax", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Variable cannot have empty expression..
         /// </summary>
-        internal static string WB0004_VariableHasEmptyExpression {
+        public static string WB0004_VariableHasEmptyExpression {
             get {
                 return ResourceManager.GetString("WB0004_VariableHasEmptyExpression", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Variable expression has length more than 10,000 characters..
         /// </summary>
-        internal static string WB0005_VariableExpressionHasLengthMoreThan10000Characters {
+        public static string WB0005_VariableExpressionHasLengthMoreThan10000Characters {
             get {
                 return ResourceManager.GetString("WB0005_VariableExpressionHasLengthMoreThan10000Characters", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Only one GPS question could be marked as identifying.
         /// </summary>
-        internal static string WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled {
+        public static string WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled {
             get {
                 return ResourceManager.GetString("WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Multi select yes/no question can&apos;t be linked.
         /// </summary>
-        internal static string WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked {
+        public static string WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked {
             get {
                 return ResourceManager.GetString("WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Multi select question supports only integer values in range from -2147483648 to 2147483647.
         /// </summary>
-        internal static string WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues {
+        public static string WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues {
             get {
                 return ResourceManager.GetString("WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Roster size question is missing..
         /// </summary>
-        internal static string WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion {
+        public static string WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion {
             get {
                 return ResourceManager.GetString("WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Macro has invalid name..
         /// </summary>
-        internal static string WB0010_MacroHasInvalidName {
+        public static string WB0010_MacroHasInvalidName {
             get {
                 return ResourceManager.GetString("WB0010_MacroHasInvalidName", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Linked question references a nonexistent question..
         /// </summary>
-        internal static string WB0011_LinkedQuestionReferencesNotExistingQuestion {
+        public static string WB0011_LinkedQuestionReferencesNotExistingQuestion {
             get {
                 return ResourceManager.GetString("WB0011_LinkedQuestionReferencesNotExistingQuestion", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Linked question references a question type that is not supported..
         /// </summary>
-        internal static string WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType {
+        public static string WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType {
             get {
                 return ResourceManager.GetString("WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType", resourceCulture);
             }
@@ -171,7 +171,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Linked question references a question not in a roster..
         /// </summary>
-        internal static string WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup {
+        public static string WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup {
             get {
                 return ResourceManager.GetString("WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup", resourceCulture);
             }
@@ -180,7 +180,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Macro cannot have empty name..
         /// </summary>
-        internal static string WB0014_MacroHasEmptyName {
+        public static string WB0014_MacroHasEmptyName {
             get {
                 return ResourceManager.GetString("WB0014_MacroHasEmptyName", resourceCulture);
             }
@@ -189,7 +189,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Question with title substitution cannot be marked as identifying..
         /// </summary>
-        internal static string WB0015_QuestionWithTitleSubstitutionCantBePrefilled {
+        public static string WB0015_QuestionWithTitleSubstitutionCantBePrefilled {
             get {
                 return ResourceManager.GetString("WB0015_QuestionWithTitleSubstitutionCantBePrefilled", resourceCulture);
             }
@@ -198,7 +198,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Question with title substitution cannot reference itself..
         /// </summary>
-        internal static string WB0016_QuestionWithTitleSubstitutionCantReferenceSelf {
+        public static string WB0016_QuestionWithTitleSubstitutionCantReferenceSelf {
             get {
                 return ResourceManager.GetString("WB0016_QuestionWithTitleSubstitutionCantReferenceSelf", resourceCulture);
             }
@@ -207,7 +207,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Substitution references a nonexistent question or variable..
         /// </summary>
-        internal static string WB0017_SubstitutionReferencesNotExistingQuestionOrVariable {
+        public static string WB0017_SubstitutionReferencesNotExistingQuestionOrVariable {
             get {
                 return ResourceManager.GetString("WB0017_SubstitutionReferencesNotExistingQuestionOrVariable", resourceCulture);
             }
@@ -216,7 +216,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Substitution references an item that is not supported in substitutions..
         /// </summary>
-        internal static string WB0018_SubstitutionReferencesUnsupportedEntity {
+        public static string WB0018_SubstitutionReferencesUnsupportedEntity {
             get {
                 return ResourceManager.GetString("WB0018_SubstitutionReferencesUnsupportedEntity", resourceCulture);
             }
@@ -225,7 +225,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Substitution cannot reference items from a deeper roster level..
         /// </summary>
-        internal static string WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel {
+        public static string WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel {
             get {
                 return ResourceManager.GetString("WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel", resourceCulture);
             }
@@ -234,7 +234,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Another Macro with the same name already exists..
         /// </summary>
-        internal static string WB0020_NameForMacrosIsNotUnique {
+        public static string WB0020_NameForMacrosIsNotUnique {
             get {
                 return ResourceManager.GetString("WB0020_NameForMacrosIsNotUnique", resourceCulture);
             }
@@ -243,7 +243,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Max number of answers is greater than number of question&apos;s options..
         /// </summary>
-        internal static string WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount {
+        public static string WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount {
             get {
                 return ResourceManager.GetString("WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCou" +
                         "nt", resourceCulture);
@@ -253,7 +253,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Question of this type cannot be identifying..
         /// </summary>
-        internal static string WB0022_PrefilledQuestionsOfIllegalType {
+        public static string WB0022_PrefilledQuestionsOfIllegalType {
             get {
                 return ResourceManager.GetString("WB0022_PrefilledQuestionsOfIllegalType", resourceCulture);
             }
@@ -262,7 +262,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Roster size source question is incorrect. Only numeric, categorical with multi-select or text list questions can be used..
         /// </summary>
-        internal static string WB0023_RosterSizeSourceQuestionTypeIsIncorrect {
+        public static string WB0023_RosterSizeSourceQuestionTypeIsIncorrect {
             get {
                 return ResourceManager.GetString("WB0023_RosterSizeSourceQuestionTypeIsIncorrect", resourceCulture);
             }
@@ -271,7 +271,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Lookup table has invalid name..
         /// </summary>
-        internal static string WB0024_LookupHasInvalidName {
+        public static string WB0024_LookupHasInvalidName {
             get {
                 return ResourceManager.GetString("WB0024_LookupHasInvalidName", resourceCulture);
             }
@@ -280,7 +280,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Lookup table cannot have empty name..
         /// </summary>
-        internal static string WB0025_LookupHasEmptyName {
+        public static string WB0025_LookupHasEmptyName {
             get {
                 return ResourceManager.GetString("WB0025_LookupHasEmptyName", resourceCulture);
             }
@@ -289,7 +289,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Items with the same name found..
         /// </summary>
-        internal static string WB0026_ItemsWithTheSameNamesFound {
+        public static string WB0026_ItemsWithTheSameNamesFound {
             get {
                 return ResourceManager.GetString("WB0026_ItemsWithTheSameNamesFound", resourceCulture);
             }
@@ -298,7 +298,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Expression has a syntax error..
         /// </summary>
-        internal static string WB0027_VariableExpresssionHasIncorrectSyntax {
+        public static string WB0027_VariableExpresssionHasIncorrectSyntax {
             get {
                 return ResourceManager.GetString("WB0027_VariableExpresssionHasIncorrectSyntax", resourceCulture);
             }
@@ -307,7 +307,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Options filter expression has length more than 10,000 characters..
         /// </summary>
-        internal static string WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters {
+        public static string WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters {
             get {
                 return ResourceManager.GetString("WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters", resourceCulture);
             }
@@ -316,7 +316,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Question with options filter expression cannot be identifying..
         /// </summary>
-        internal static string WB0029_QuestionWithOptionsFilterCannotBePrefilled {
+        public static string WB0029_QuestionWithOptionsFilterCannotBePrefilled {
             get {
                 return ResourceManager.GetString("WB0029_QuestionWithOptionsFilterCannotBePrefilled", resourceCulture);
             }
@@ -325,7 +325,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Identifying questions cannot be inside a roster..
         /// </summary>
-        internal static string WB0030_PrefilledQuestionCantBeInsideOfRoster {
+        public static string WB0030_PrefilledQuestionCantBeInsideOfRoster {
             get {
                 return ResourceManager.GetString("WB0030_PrefilledQuestionCantBeInsideOfRoster", resourceCulture);
             }
@@ -334,7 +334,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Lookup table has invalid column headers..
         /// </summary>
-        internal static string WB0031_LookupTableHasInvalidHeaders {
+        public static string WB0031_LookupTableHasInvalidHeaders {
             get {
                 return ResourceManager.GetString("WB0031_LookupTableHasInvalidHeaders", resourceCulture);
             }
@@ -343,7 +343,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Roster where roster size source is question could not have fixed set of items..
         /// </summary>
-        internal static string WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles {
+        public static string WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles {
             get {
                 return ResourceManager.GetString("WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles", resourceCulture);
             }
@@ -352,7 +352,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Fixed set of items roster cannot have roster size question..
         /// </summary>
-        internal static string WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion {
+        public static string WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion {
             get {
                 return ResourceManager.GetString("WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion", resourceCulture);
             }
@@ -361,7 +361,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Fixed set of items roster cannot have roster title question..
         /// </summary>
-        internal static string WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion {
+        public static string WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion {
             get {
                 return ResourceManager.GetString("WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion", resourceCulture);
             }
@@ -370,7 +370,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Roster where roster size source is question has invalid roster title question..
         /// </summary>
-        internal static string WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion {
+        public static string WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion {
             get {
                 return ResourceManager.GetString("WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion", resourceCulture);
             }
@@ -379,7 +379,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Roster where roster size question is categorical multi answers question could not have roster title question..
         /// </summary>
-        internal static string WB0036_GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion {
+        public static string WB0036_GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion {
             get {
                 return ResourceManager.GetString("WB0036_GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestio" +
                         "n", resourceCulture);
@@ -389,7 +389,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Fixed set of items roster cannot have empty titles or less than two items..
         /// </summary>
-        internal static string WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles {
+        public static string WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles {
             get {
                 return ResourceManager.GetString("WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles", resourceCulture);
             }
@@ -398,7 +398,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Fixed set of items roster cannot have more than {0} rows..
         /// </summary>
-        internal static string WB0038_RosterFixedTitlesHaveMoreThan200Items {
+        public static string WB0038_RosterFixedTitlesHaveMoreThan200Items {
             get {
                 return ResourceManager.GetString("WB0038_RosterFixedTitlesHaveMoreThan200Items", resourceCulture);
             }
@@ -407,7 +407,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to List question cannot be identifying..
         /// </summary>
-        internal static string WB0039_TextListQuestionCannotBePrefilled {
+        public static string WB0039_TextListQuestionCannotBePrefilled {
             get {
                 return ResourceManager.GetString("WB0039_TextListQuestionCannotBePrefilled", resourceCulture);
             }
@@ -416,7 +416,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to List  question cannot be filled by supervisor..
         /// </summary>
-        internal static string WB0040_TextListQuestionCannotBeFilledBySupervisor {
+        public static string WB0040_TextListQuestionCannotBeFilledBySupervisor {
             get {
                 return ResourceManager.GetString("WB0040_TextListQuestionCannotBeFilledBySupervisor", resourceCulture);
             }
@@ -425,7 +425,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Fixed set of items roster values must be unique..
         /// </summary>
-        internal static string WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues {
+        public static string WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues {
             get {
                 return ResourceManager.GetString("WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues", resourceCulture);
             }
@@ -434,7 +434,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Maximum number of list elements must be in range [1, {0}]..
         /// </summary>
-        internal static string WB0042_TextListQuestionMaxAnswerInRange1And200 {
+        public static string WB0042_TextListQuestionMaxAnswerInRange1And200 {
             get {
                 return ResourceManager.GetString("WB0042_TextListQuestionMaxAnswerInRange1And200", resourceCulture);
             }
@@ -443,7 +443,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Lookup table has too many columns.
         /// </summary>
-        internal static string WB0043_LookupTableMoreThan11Columns {
+        public static string WB0043_LookupTableMoreThan11Columns {
             get {
                 return ResourceManager.GetString("WB0043_LookupTableMoreThan11Columns", resourceCulture);
             }
@@ -452,7 +452,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Lookup table has too many rows.
         /// </summary>
-        internal static string WB0044_LookupTableMoreThan5000Rows {
+        public static string WB0044_LookupTableMoreThan5000Rows {
             get {
                 return ResourceManager.GetString("WB0044_LookupTableMoreThan5000Rows", resourceCulture);
             }
@@ -461,7 +461,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Question has option(s) with empty value..
         /// </summary>
-        internal static string WB0045_QuestionHasOptionsWithEmptyValue {
+        public static string WB0045_QuestionHasOptionsWithEmptyValue {
             get {
                 return ResourceManager.GetString("WB0045_QuestionHasOptionsWithEmptyValue", resourceCulture);
             }
@@ -470,7 +470,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Enabling condition cannot refer to a question from a deeper roster level..
         /// </summary>
-        internal static string WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel {
+        public static string WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel {
             get {
                 return ResourceManager.GetString("WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel", resourceCulture);
             }
@@ -479,7 +479,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Lookup table has not unique rowcode values.
         /// </summary>
-        internal static string WB0047_LookupTableNotUniqueRowcodeValues {
+        public static string WB0047_LookupTableNotUniqueRowcodeValues {
             get {
                 return ResourceManager.GetString("WB0047_LookupTableNotUniqueRowcodeValues", resourceCulture);
             }
@@ -488,7 +488,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Lookup table cannot be empty.
         /// </summary>
-        internal static string WB0048_LookupHasEmptyContent {
+        public static string WB0048_LookupHasEmptyContent {
             get {
                 return ResourceManager.GetString("WB0048_LookupHasEmptyContent", resourceCulture);
             }
@@ -497,7 +497,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Barcode question cannot be filled by supervisor..
         /// </summary>
-        internal static string WB0049_QRBarcodeQuestionIsSupervisorQuestion {
+        public static string WB0049_QRBarcodeQuestionIsSupervisorQuestion {
             get {
                 return ResourceManager.GetString("WB0049_QRBarcodeQuestionIsSupervisorQuestion", resourceCulture);
             }
@@ -506,7 +506,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Barcode question cannot be identifying..
         /// </summary>
-        internal static string WB0050_QRBarcodeQuestionIsPreFilledQuestion {
+        public static string WB0050_QRBarcodeQuestionIsPreFilledQuestion {
             get {
                 return ResourceManager.GetString("WB0050_QRBarcodeQuestionIsPreFilledQuestion", resourceCulture);
             }
@@ -515,7 +515,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Sub-sections cannot have enabling condition referencing child question..
         /// </summary>
-        internal static string WB0051_GroupsCustomConditionExpressionReferencesChildQuestion {
+        public static string WB0051_GroupsCustomConditionExpressionReferencesChildQuestion {
             get {
                 return ResourceManager.GetString("WB0051_GroupsCustomConditionExpressionReferencesChildQuestion", resourceCulture);
             }
@@ -524,7 +524,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Lookup table name cannot be a reserved word..
         /// </summary>
-        internal static string WB0052_LookupNameIsKeyword {
+        public static string WB0052_LookupNameIsKeyword {
             get {
                 return ResourceManager.GetString("WB0052_LookupNameIsKeyword", resourceCulture);
             }
@@ -533,7 +533,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Roster which is the source of the link should exist..
         /// </summary>
-        internal static string WB0053_LinkedQuestionReferencesNotExistingRoster {
+        public static string WB0053_LinkedQuestionReferencesNotExistingRoster {
             get {
                 return ResourceManager.GetString("WB0053_LinkedQuestionReferencesNotExistingRoster", resourceCulture);
             }
@@ -542,7 +542,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Roster should have deeper or the same roster level as it&apos;s roster size question..
         /// </summary>
-        internal static string WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster {
+        public static string WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster {
             get {
                 return ResourceManager.GetString("WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster", resourceCulture);
             }
@@ -551,7 +551,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Roster can have no more than 3 parent rosters..
         /// </summary>
-        internal static string WB0055_RosterHasRosterLevelMoreThan4 {
+        public static string WB0055_RosterHasRosterLevelMoreThan4 {
             get {
                 return ResourceManager.GetString("WB0055_RosterHasRosterLevelMoreThan4", resourceCulture);
             }
@@ -560,7 +560,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Circular references are not allowed..
         /// </summary>
-        internal static string WB0056_EntityShouldNotHaveCircularReferences {
+        public static string WB0056_EntityShouldNotHaveCircularReferences {
             get {
                 return ResourceManager.GetString("WB0056_EntityShouldNotHaveCircularReferences", resourceCulture);
             }
@@ -569,7 +569,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Question cannot have empty variable name..
         /// </summary>
-        internal static string WB0057_QuestionHasEmptyVariableName {
+        public static string WB0057_QuestionHasEmptyVariableName {
             get {
                 return ResourceManager.GetString("WB0057_QuestionHasEmptyVariableName", resourceCulture);
             }
@@ -578,7 +578,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Variable name or roster ID cannot be a reserved word..
         /// </summary>
-        internal static string WB0058_QuestionHasVariableNameReservedForServiceNeeds {
+        public static string WB0058_QuestionHasVariableNameReservedForServiceNeeds {
             get {
                 return ResourceManager.GetString("WB0058_QuestionHasVariableNameReservedForServiceNeeds", resourceCulture);
             }
@@ -587,7 +587,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to If item uses %rostertitle% substitution it needs to be placed inside roster..
         /// </summary>
-        internal static string WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster {
+        public static string WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster {
             get {
                 return ResourceManager.GetString("WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster", resourceCulture);
             }
@@ -596,7 +596,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Question has less than 2 options..
         /// </summary>
-        internal static string WB0060_CategoricalQuestionHasLessThan2Options {
+        public static string WB0060_CategoricalQuestionHasLessThan2Options {
             get {
                 return ResourceManager.GetString("WB0060_CategoricalQuestionHasLessThan2Options", resourceCulture);
             }
@@ -605,7 +605,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Question has max allowed answers less than 2..
         /// </summary>
-        internal static string WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2 {
+        public static string WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2 {
             get {
                 return ResourceManager.GetString("WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2", resourceCulture);
             }
@@ -614,7 +614,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Option filter expression has a syntax error..
         /// </summary>
-        internal static string WB0062_OptionFilterExpresssionHasIncorrectSyntax {
+        public static string WB0062_OptionFilterExpresssionHasIncorrectSyntax {
             get {
                 return ResourceManager.GetString("WB0062_OptionFilterExpresssionHasIncorrectSyntax", resourceCulture);
             }
@@ -623,7 +623,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Categorical linked question cannot be used in validation condition #{0}..
         /// </summary>
-        internal static string WB0063_CategoricalLinkedQuestionUsedInValidationExpression {
+        public static string WB0063_CategoricalLinkedQuestionUsedInValidationExpression {
             get {
                 return ResourceManager.GetString("WB0063_CategoricalLinkedQuestionUsedInValidationExpression", resourceCulture);
             }
@@ -632,7 +632,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Categorical linked question cannot be used in enabling condition..
         /// </summary>
-        internal static string WB0064_CategoricalLinkedQuestionUsedInEnablementCondition {
+        public static string WB0064_CategoricalLinkedQuestionUsedInEnablementCondition {
             get {
                 return ResourceManager.GetString("WB0064_CategoricalLinkedQuestionUsedInEnablementCondition", resourceCulture);
             }
@@ -641,7 +641,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Another attachment with the same name already exists..
         /// </summary>
-        internal static string WB0065_NameForAyyachmentIsNotUnique {
+        public static string WB0065_NameForAyyachmentIsNotUnique {
             get {
                 return ResourceManager.GetString("WB0065_NameForAyyachmentIsNotUnique", resourceCulture);
             }
@@ -650,7 +650,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Question of this type is not supported..
         /// </summary>
-        internal static string WB0066_QuestionTypeIsNotAllowed {
+        public static string WB0066_QuestionTypeIsNotAllowed {
             get {
                 return ResourceManager.GetString("WB0066_QuestionTypeIsNotAllowed", resourceCulture);
             }
@@ -659,7 +659,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Roster cannot have empty roster ID..
         /// </summary>
-        internal static string WB0067_RosterHasEmptyVariableName {
+        public static string WB0067_RosterHasEmptyVariableName {
             get {
                 return ResourceManager.GetString("WB0067_RosterHasEmptyVariableName", resourceCulture);
             }
@@ -668,7 +668,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Roster cannot have more than {0} child elements.
         /// </summary>
-        internal static string WB0068_RosterHasMoreThanAllowedChildElements {
+        public static string WB0068_RosterHasMoreThanAllowedChildElements {
             get {
                 return ResourceManager.GetString("WB0068_RosterHasMoreThanAllowedChildElements", resourceCulture);
             }
@@ -677,7 +677,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Roster has invalid roster ID..
         /// </summary>
-        internal static string WB0069_RosterHasInvalidVariableName {
+        public static string WB0069_RosterHasInvalidVariableName {
             get {
                 return ResourceManager.GetString("WB0069_RosterHasInvalidVariableName", resourceCulture);
             }
@@ -686,7 +686,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Roster has roster ID equal to questionnaire title..
         /// </summary>
-        internal static string WB0070_RosterHasVariableNameEqualToQuestionnaireTitle {
+        public static string WB0070_RosterHasVariableNameEqualToQuestionnaireTitle {
             get {
                 return ResourceManager.GetString("WB0070_RosterHasVariableNameEqualToQuestionnaireTitle", resourceCulture);
             }
@@ -695,7 +695,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Static text cannot be empty..
         /// </summary>
-        internal static string WB0071_StaticTextIsEmpty {
+        public static string WB0071_StaticTextIsEmpty {
             get {
                 return ResourceManager.GetString("WB0071_StaticTextIsEmpty", resourceCulture);
             }
@@ -704,7 +704,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Option titles must be unique..
         /// </summary>
-        internal static string WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion {
+        public static string WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion {
             get {
                 return ResourceManager.GetString("WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion", resourceCulture);
             }
@@ -713,7 +713,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Option values must be unique..
         /// </summary>
-        internal static string WB0073_OptionValuesMustBeUniqueForCategoricalQuestion {
+        public static string WB0073_OptionValuesMustBeUniqueForCategoricalQuestion {
             get {
                 return ResourceManager.GetString("WB0073_OptionValuesMustBeUniqueForCategoricalQuestion", resourceCulture);
             }
@@ -722,7 +722,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Combo box cannot be linked to another question..
         /// </summary>
-        internal static string WB0074_FilteredComboboxIsLinked {
+        public static string WB0074_FilteredComboboxIsLinked {
             get {
                 return ResourceManager.GetString("WB0074_FilteredComboboxIsLinked", resourceCulture);
             }
@@ -731,7 +731,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Contains more than 5000 options..
         /// </summary>
-        internal static string WB0075_FilteredComboboxContainsMoreThan5000Options {
+        public static string WB0075_FilteredComboboxContainsMoreThan5000Options {
             get {
                 return ResourceManager.GetString("WB0075_FilteredComboboxContainsMoreThan5000Options", resourceCulture);
             }
@@ -740,7 +740,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Contains more than 200 options..
         /// </summary>
-        internal static string WB0076_CategoricalOptionsCountMoreThan200 {
+        public static string WB0076_CategoricalOptionsCountMoreThan200 {
             get {
                 return ResourceManager.GetString("WB0076_CategoricalOptionsCountMoreThan200", resourceCulture);
             }
@@ -749,7 +749,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Question has invalid variable name..
         /// </summary>
-        internal static string WB0077_QuestionHasInvalidVariableName {
+        public static string WB0077_QuestionHasInvalidVariableName {
             get {
                 return ResourceManager.GetString("WB0077_QuestionHasInvalidVariableName", resourceCulture);
             }
@@ -758,7 +758,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Picture question can be interviewers only..
         /// </summary>
-        internal static string WB0078_MultimediaQuestionIsInterviewersOnly {
+        public static string WB0078_MultimediaQuestionIsInterviewersOnly {
             get {
                 return ResourceManager.GetString("WB0078_MultimediaQuestionIsInterviewersOnly", resourceCulture);
             }
@@ -767,7 +767,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Picture question cannot have a validation condition..
         /// </summary>
-        internal static string WB0079_MultimediaShouldNotHaveValidationExpression {
+        public static string WB0079_MultimediaShouldNotHaveValidationExpression {
             get {
                 return ResourceManager.GetString("WB0079_MultimediaShouldNotHaveValidationExpression", resourceCulture);
             }
@@ -776,7 +776,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Roster with more than {0} rows cannot have nested rosters.
         /// </summary>
-        internal static string WB0080_LongRosterCannotHaveNestedRosters {
+        public static string WB0080_LongRosterCannotHaveNestedRosters {
             get {
                 return ResourceManager.GetString("WB0080_LongRosterCannotHaveNestedRosters", resourceCulture);
             }
@@ -785,7 +785,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Roster with more than {0} rows cannot be nested.
         /// </summary>
-        internal static string WB0081_LongRosterCannotBeNested {
+        public static string WB0081_LongRosterCannotBeNested {
             get {
                 return ResourceManager.GetString("WB0081_LongRosterCannotBeNested", resourceCulture);
             }
@@ -794,7 +794,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Roster size multi-select question should have limit.
         /// </summary>
-        internal static string WB0082_RosterSizeMultiOptionQuestionShouldBeLimited {
+        public static string WB0082_RosterSizeMultiOptionQuestionShouldBeLimited {
             get {
                 return ResourceManager.GetString("WB0082_RosterSizeMultiOptionQuestionShouldBeLimited", resourceCulture);
             }
@@ -803,7 +803,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Question with current type can not be used as roster title..
         /// </summary>
-        internal static string WB0083_QuestionCannotBeUsedAsRosterTitle {
+        public static string WB0083_QuestionCannotBeUsedAsRosterTitle {
             get {
                 return ResourceManager.GetString("WB0083_QuestionCannotBeUsedAsRosterTitle", resourceCulture);
             }
@@ -812,7 +812,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Options in child cascading combo box question should reference only existing option in parent question..
         /// </summary>
-        internal static string WB0084_CascadingOptionsShouldHaveParent {
+        public static string WB0084_CascadingOptionsShouldHaveParent {
             get {
                 return ResourceManager.GetString("WB0084_CascadingOptionsShouldHaveParent", resourceCulture);
             }
@@ -821,7 +821,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Question should have deeper or the same level as it&apos;s parent question..
         /// </summary>
-        internal static string WB0085_CascadingQuestionWrongParentLevel {
+        public static string WB0085_CascadingQuestionWrongParentLevel {
             get {
                 return ResourceManager.GetString("WB0085_CascadingQuestionWrongParentLevel", resourceCulture);
             }
@@ -830,7 +830,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cascading combo box question references missing or unsupported type question..
         /// </summary>
-        internal static string WB0086_ParentCascadingQuestionShouldExist {
+        public static string WB0086_ParentCascadingQuestionShouldExist {
             get {
                 return ResourceManager.GetString("WB0086_ParentCascadingQuestionShouldExist", resourceCulture);
             }
@@ -839,7 +839,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Circular references in cascading combo box questions not allowed..
         /// </summary>
-        internal static string WB0087_CascadingQuestionHasCicularReference {
+        public static string WB0087_CascadingQuestionHasCicularReference {
             get {
                 return ResourceManager.GetString("WB0087_CascadingQuestionHasCicularReference", resourceCulture);
             }
@@ -848,7 +848,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cascading combo box question should have less than 15,000 options..
         /// </summary>
-        internal static string WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers {
+        public static string WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers {
             get {
                 return ResourceManager.GetString("WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers", resourceCulture);
             }
@@ -857,7 +857,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cascading combo box question should have unique value and parent value options list..
         /// </summary>
-        internal static string WB0089_CascadingQuestionOptionWithParentShouldBeUnique {
+        public static string WB0089_CascadingQuestionOptionWithParentShouldBeUnique {
             get {
                 return ResourceManager.GetString("WB0089_CascadingQuestionOptionWithParentShouldBeUnique", resourceCulture);
             }
@@ -866,7 +866,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Linked question can be interviewers only..
         /// </summary>
-        internal static string WB0090_LinkedQuestionIsInterviewersOnly {
+        public static string WB0090_LinkedQuestionIsInterviewersOnly {
             get {
                 return ResourceManager.GetString("WB0090_LinkedQuestionIsInterviewersOnly", resourceCulture);
             }
@@ -875,7 +875,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Child cascading combo box question should not contain enabling condition. .
         /// </summary>
-        internal static string WB0091_CascadingChildQuestionShouldNotContainCondition {
+        public static string WB0091_CascadingChildQuestionShouldNotContainCondition {
             get {
                 return ResourceManager.GetString("WB0091_CascadingChildQuestionShouldNotContainCondition", resourceCulture);
             }
@@ -884,7 +884,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Child cascading combo box question should not contain validation condition..
         /// </summary>
-        internal static string WB0092_CascadingChildQuesionShouldNotContainValidation {
+        public static string WB0092_CascadingChildQuesionShouldNotContainValidation {
             get {
                 return ResourceManager.GetString("WB0092_CascadingChildQuesionShouldNotContainValidation", resourceCulture);
             }
@@ -893,7 +893,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Roster size text list question should have limit.
         /// </summary>
-        internal static string WB0093_RosterSizeListOptionQuestionShouldBeLimit {
+        public static string WB0093_RosterSizeListOptionQuestionShouldBeLimit {
             get {
                 return ResourceManager.GetString("WB0093_RosterSizeListOptionQuestionShouldBeLimit", resourceCulture);
             }
@@ -902,7 +902,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Enabling condition has length more than 10,000 characters..
         /// </summary>
-        internal static string WB0094_ConditionExpresssionHasLengthMoreThan10000Characters {
+        public static string WB0094_ConditionExpresssionHasLengthMoreThan10000Characters {
             get {
                 return ResourceManager.GetString("WB0094_ConditionExpresssionHasLengthMoreThan10000Characters", resourceCulture);
             }
@@ -911,7 +911,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Static text refers absent attachment.
         /// </summary>
-        internal static string WB0095_StaticTextRefersAbsentAttachment {
+        public static string WB0095_StaticTextRefersAbsentAttachment {
             get {
                 return ResourceManager.GetString("WB0095_StaticTextRefersAbsentAttachment", resourceCulture);
             }
@@ -920,7 +920,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Error occurred during questionnaire compilation..
         /// </summary>
-        internal static string WB0096_GeneralCompilationError {
+        public static string WB0096_GeneralCompilationError {
             get {
                 return ResourceManager.GetString("WB0096_GeneralCompilationError", resourceCulture);
             }
@@ -929,7 +929,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Questionnaire title contains characters that are not allowed. Only non Unicode letters, numbers, space and _ are allowed..
         /// </summary>
-        internal static string WB0097_QuestionnaireTitleHasInvalidCharacters {
+        public static string WB0097_QuestionnaireTitleHasInvalidCharacters {
             get {
                 return ResourceManager.GetString("WB0097_QuestionnaireTitleHasInvalidCharacters", resourceCulture);
             }
@@ -938,7 +938,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Size of questionnaire is approximately {0:0.##}MB and is too big to work correctly with Survey Solutions. Try to reduce amount of data until it will be at least less than 5MB..
         /// </summary>
-        internal static string WB0098_QuestionnaireHasSizeMoreThan5MB {
+        public static string WB0098_QuestionnaireHasSizeMoreThan5MB {
             get {
                 return ResourceManager.GetString("WB0098_QuestionnaireHasSizeMoreThan5MB", resourceCulture);
             }
@@ -947,7 +947,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Max number of answers for roster size question cannot be empty when question has more than 40 options..
         /// </summary>
-        internal static string WB0099_MaxNumberOfAnswersForRosterSizeQuestionCannotBeEmptyWhenQuestionHasMoreThan40Options {
+        public static string WB0099_MaxNumberOfAnswersForRosterSizeQuestionCannotBeEmptyWhenQuestionHasMoreThan40Options {
             get {
                 return ResourceManager.GetString("WB0099_MaxNumberOfAnswersForRosterSizeQuestionCannotBeEmptyWhenQuestionHasMoreTha" +
                         "n40Options", resourceCulture);
@@ -957,7 +957,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Max number of answers for roster size question cannot be greater than 200..
         /// </summary>
-        internal static string WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200 {
+        public static string WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200 {
             get {
                 return ResourceManager.GetString("WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200", resourceCulture);
             }
@@ -966,7 +966,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Sub-section can have no more than 10 parent sub-sections..
         /// </summary>
-        internal static string WB0101_GroupHasLevelDepthMoreThan10 {
+        public static string WB0101_GroupHasLevelDepthMoreThan10 {
             get {
                 return ResourceManager.GetString("WB0101_GroupHasLevelDepthMoreThan10", resourceCulture);
             }
@@ -975,7 +975,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Following questionnaire items (question/group/static text/etc.) use same internal ID. Please delete one of them..
         /// </summary>
-        internal static string WB0102_QuestionnaireEntitiesShareSameInternalId {
+        public static string WB0102_QuestionnaireEntitiesShareSameInternalId {
             get {
                 return ResourceManager.GetString("WB0102_QuestionnaireEntitiesShareSameInternalId", resourceCulture);
             }
@@ -984,7 +984,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Roster which is the source of the link is a roster, not a subsection..
         /// </summary>
-        internal static string WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster {
+        public static string WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster {
             get {
                 return ResourceManager.GetString("WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster", resourceCulture);
             }
@@ -993,7 +993,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Validation condition #{0} is too long. It should be no longer than 10000 characters..
         /// </summary>
-        internal static string WB0104_ValidationConditionIsTooLong {
+        public static string WB0104_ValidationConditionIsTooLong {
             get {
                 return ResourceManager.GetString("WB0104_ValidationConditionIsTooLong", resourceCulture);
             }
@@ -1002,7 +1002,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Validation error message #{0} is too long. It should be no longer than 250 characters..
         /// </summary>
-        internal static string WB0105_ValidationMessageIsTooLong {
+        public static string WB0105_ValidationMessageIsTooLong {
             get {
                 return ResourceManager.GetString("WB0105_ValidationMessageIsTooLong", resourceCulture);
             }
@@ -1011,7 +1011,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Validation condition #{0} is empty..
         /// </summary>
-        internal static string WB0106_ValidationConditionIsEmpty {
+        public static string WB0106_ValidationConditionIsEmpty {
             get {
                 return ResourceManager.GetString("WB0106_ValidationConditionIsEmpty", resourceCulture);
             }
@@ -1020,7 +1020,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Validation error message #{0} is empty..
         /// </summary>
-        internal static string WB0107_ValidationMessageIsEmpty {
+        public static string WB0107_ValidationMessageIsEmpty {
             get {
                 return ResourceManager.GetString("WB0107_ValidationMessageIsEmpty", resourceCulture);
             }
@@ -1029,7 +1029,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Linked question filter expression has length more than 10,000 characters..
         /// </summary>
-        internal static string WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters {
+        public static string WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters {
             get {
                 return ResourceManager.GetString("WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters", resourceCulture);
             }
@@ -1038,7 +1038,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to The question cannot be used in is it own filter expression..
         /// </summary>
-        internal static string WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion {
+        public static string WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion {
             get {
                 return ResourceManager.GetString("WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion", resourceCulture);
             }
@@ -1047,7 +1047,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Filter expression has a syntax error..
         /// </summary>
-        internal static string WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax {
+        public static string WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax {
             get {
                 return ResourceManager.GetString("WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax", resourceCulture);
             }
@@ -1056,7 +1056,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Attachment cannot be empty.
         /// </summary>
-        internal static string WB0111_AttachmentHasEmptyContent {
+        public static string WB0111_AttachmentHasEmptyContent {
             get {
                 return ResourceManager.GetString("WB0111_AttachmentHasEmptyContent", resourceCulture);
             }
@@ -1065,7 +1065,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Variable has invalid name..
         /// </summary>
-        internal static string WB0112_VariableHasInvalidName {
+        public static string WB0112_VariableHasInvalidName {
             get {
                 return ResourceManager.GetString("WB0112_VariableHasInvalidName", resourceCulture);
             }
@@ -1074,7 +1074,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Variable cannot have empty name..
         /// </summary>
-        internal static string WB0113_VariableHasEmptyVariableName {
+        public static string WB0113_VariableHasEmptyVariableName {
             get {
                 return ResourceManager.GetString("WB0113_VariableHasEmptyVariableName", resourceCulture);
             }
@@ -1083,7 +1083,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Single select question supports only integer values in range from -2147483648 to 2147483647.
         /// </summary>
-        internal static string WB0114_SingleOptionQuestionSupportsOnlyIntegerPositiveValues {
+        public static string WB0114_SingleOptionQuestionSupportsOnlyIntegerPositiveValues {
             get {
                 return ResourceManager.GetString("WB0114_SingleOptionQuestionSupportsOnlyIntegerPositiveValues", resourceCulture);
             }
@@ -1092,7 +1092,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Fix roster supports only integer title values.
         /// </summary>
-        internal static string WB0115_FixRosterSupportsOnlyIntegerTitleValues {
+        public static string WB0115_FixRosterSupportsOnlyIntegerTitleValues {
             get {
                 return ResourceManager.GetString("WB0115_FixRosterSupportsOnlyIntegerTitleValues", resourceCulture);
             }
@@ -1101,7 +1101,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Linked question references a list question from wrong level..
         /// </summary>
-        internal static string WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope {
+        public static string WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope {
             get {
                 return ResourceManager.GetString("WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope", resourceCulture);
             }
@@ -1110,7 +1110,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Linked to list question doen&apos;t support options filter.
         /// </summary>
-        internal static string WB0117_LinkedToTextListQuestionDoesNotSupportFilters {
+        public static string WB0117_LinkedToTextListQuestionDoesNotSupportFilters {
             get {
                 return ResourceManager.GetString("WB0117_LinkedToTextListQuestionDoesNotSupportFilters", resourceCulture);
             }
@@ -1119,7 +1119,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Expression referencing forbidden DateTime properties: DateTime.Now, DateTime.UtcNow, DateTime.Today. Consider using current time question instead..
         /// </summary>
-        internal static string WB0118_ExpressionReferencingForbiddenDateTimeProperies {
+        public static string WB0118_ExpressionReferencingForbiddenDateTimeProperies {
             get {
                 return ResourceManager.GetString("WB0118_ExpressionReferencingForbiddenDateTimeProperies", resourceCulture);
             }
@@ -1128,7 +1128,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters..
         /// </summary>
-        internal static string WB0200_LargeNumberOfRostersIsCreated {
+        public static string WB0200_LargeNumberOfRostersIsCreated {
             get {
                 return ResourceManager.GetString("WB0200_LargeNumberOfRostersIsCreated", resourceCulture);
             }
@@ -1137,7 +1137,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Section or Roster contains more than 200 questions, consider splitting into sub-sections..
         /// </summary>
-        internal static string WB0201_LargeNumberOfQuestionsInGroup {
+        public static string WB0201_LargeNumberOfQuestionsInGroup {
             get {
                 return ResourceManager.GetString("WB0201_LargeNumberOfQuestionsInGroup", resourceCulture);
             }
@@ -1146,7 +1146,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Section contains no questions. Consider removing the empty section..
         /// </summary>
-        internal static string WB0202_GroupWithoutQuestions {
+        public static string WB0202_GroupWithoutQuestions {
             get {
                 return ResourceManager.GetString("WB0202_GroupWithoutQuestions", resourceCulture);
             }
@@ -1155,7 +1155,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Roster group contains only one question. Consider grouping with other rosters. For fixed roster, consider presenting as a set of independent questions..
         /// </summary>
-        internal static string WB0203_RosterHasSingleQuestion {
+        public static string WB0203_RosterHasSingleQuestion {
             get {
                 return ResourceManager.GetString("WB0203_RosterHasSingleQuestion", resourceCulture);
             }
@@ -1164,7 +1164,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Roster is empty. Remove it if it is not needed..
         /// </summary>
-        internal static string WB0204_EmptyRoster {
+        public static string WB0204_EmptyRoster {
             get {
                 return ResourceManager.GetString("WB0204_EmptyRoster", resourceCulture);
             }
@@ -1173,7 +1173,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Questionnaire has more than 1000 questions. It might be difficult to administer it..
         /// </summary>
-        internal static string WB0205_TooManyQuestions {
+        public static string WB0205_TooManyQuestions {
             get {
                 return ResourceManager.GetString("WB0205_TooManyQuestions", resourceCulture);
             }
@@ -1182,7 +1182,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Questionnaire contains more than 100 questions but only one or two sections. Group questions into sections to simplify navigation and improve performance..
         /// </summary>
-        internal static string WB0206_FewSectionsManyQuestions {
+        public static string WB0206_FewSectionsManyQuestions {
             get {
                 return ResourceManager.GetString("WB0206_FewSectionsManyQuestions", resourceCulture);
             }
@@ -1191,7 +1191,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Fixed roster contains 3 or less items. Consider using sub-sections and a series of questions. Rosters complicate structure of exported data..
         /// </summary>
-        internal static string WB0207_FixedRosterContains3OrLessItems {
+        public static string WB0207_FixedRosterContains3OrLessItems {
             get {
                 return ResourceManager.GetString("WB0207_FixedRosterContains3OrLessItems", resourceCulture);
             }
@@ -1200,7 +1200,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to More than 50% of questions contain no validation conditions. Add validation conditions to improve data quality..
         /// </summary>
-        internal static string WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions {
+        public static string WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions {
             get {
                 return ResourceManager.GetString("WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions", resourceCulture);
             }
@@ -1209,7 +1209,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Enabling condition is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList())..
         /// </summary>
-        internal static string WB0209_LongEnablementCondition {
+        public static string WB0209_LongEnablementCondition {
             get {
                 return ResourceManager.GetString("WB0209_LongEnablementCondition", resourceCulture);
             }
@@ -1218,7 +1218,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Single-choice question has too many categories, consider changing to combo box..
         /// </summary>
-        internal static string WB0210_CategoricalQuestionHasManyOptions {
+        public static string WB0210_CategoricalQuestionHasManyOptions {
             get {
                 return ResourceManager.GetString("WB0210_CategoricalQuestionHasManyOptions", resourceCulture);
             }
@@ -1227,7 +1227,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Questionnaire contains no GPS questions. Consider adding a GPS question..
         /// </summary>
-        internal static string WB0211_QuestionnaireHasNoGpsQuestion {
+        public static string WB0211_QuestionnaireHasNoGpsQuestion {
             get {
                 return ResourceManager.GetString("WB0211_QuestionnaireHasNoGpsQuestion", resourceCulture);
             }
@@ -1236,7 +1236,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Validation condition #{0} is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList())..
         /// </summary>
-        internal static string WB0212_LongValidationCondition {
+        public static string WB0212_LongValidationCondition {
             get {
                 return ResourceManager.GetString("WB0212_LongValidationCondition", resourceCulture);
             }
@@ -1245,7 +1245,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Attachment size is more than 5Mb.
         /// </summary>
-        internal static string WB0213_AttachmentSizeIsMoreThan5Mb {
+        public static string WB0213_AttachmentSizeIsMoreThan5Mb {
             get {
                 return ResourceManager.GetString("WB0213_AttachmentSizeIsMoreThan5Mb", resourceCulture);
             }
@@ -1254,7 +1254,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Total size of attachments is more than 50Mb.
         /// </summary>
-        internal static string WB0214_TotalAttachmentsSizeIsMoreThan50Mb {
+        public static string WB0214_TotalAttachmentsSizeIsMoreThan50Mb {
             get {
                 return ResourceManager.GetString("WB0214_TotalAttachmentsSizeIsMoreThan50Mb", resourceCulture);
             }
@@ -1263,7 +1263,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Questionnaire contains unused attachments.
         /// </summary>
-        internal static string WB0215_UnusedAttachments {
+        public static string WB0215_UnusedAttachments {
             get {
                 return ResourceManager.GetString("WB0215_UnusedAttachments", resourceCulture);
             }
@@ -1272,7 +1272,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to No identifying questions are defined. Define at least one identifying question..
         /// </summary>
-        internal static string WB0216_NoPrefilledQuestions {
+        public static string WB0216_NoPrefilledQuestions {
             get {
                 return ResourceManager.GetString("WB0216_NoPrefilledQuestions", resourceCulture);
             }
@@ -1281,7 +1281,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Variable label is too long (more than 120 chars) and will be truncated in SPSS file export..
         /// </summary>
-        internal static string WB0217_VariableLableMoreThan120Characters {
+        public static string WB0217_VariableLableMoreThan120Characters {
             get {
                 return ResourceManager.GetString("WB0217_VariableLableMoreThan120Characters", resourceCulture);
             }
@@ -1290,7 +1290,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Consecutive questions contain identical enablement conditions. Consider placing in a sub-section and assign condition to the sub-section..
         /// </summary>
-        internal static string WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions {
+        public static string WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions {
             get {
                 return ResourceManager.GetString("WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions", resourceCulture);
             }
@@ -1299,7 +1299,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Multiple consecutive unconditional single choice options with 2 options. Consider one multiple choice question..
         /// </summary>
-        internal static string WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options {
+        public static string WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options {
             get {
                 return ResourceManager.GetString("WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options", resourceCulture);
             }
@@ -1308,7 +1308,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Using @rowindex with a multi-choice roster may be unstable. Consider using @rowcode instead..
         /// </summary>
-        internal static string WB0220_RowIndexInMultiOptionBasedRoster {
+        public static string WB0220_RowIndexInMultiOptionBasedRoster {
             get {
                 return ResourceManager.GetString("WB0220_RowIndexInMultiOptionBasedRoster", resourceCulture);
             }
@@ -1317,7 +1317,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to No current time question was found. Consider recording the date of interview in your questionnaire..
         /// </summary>
-        internal static string WB0221_NoCurrentTimeQuestions {
+        public static string WB0221_NoCurrentTimeQuestions {
             get {
                 return ResourceManager.GetString("WB0221_NoCurrentTimeQuestions", resourceCulture);
             }
@@ -1326,7 +1326,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Single-choice question is marked as identifying. Consider using a text question..
         /// </summary>
-        internal static string WB0222_SingleOptionPrefilled {
+        public static string WB0222_SingleOptionPrefilled {
             get {
                 return ResourceManager.GetString("WB0222_SingleOptionPrefilled", resourceCulture);
             }
@@ -1335,7 +1335,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Section contains less than five questions. Consider joining with other sections..
         /// </summary>
-        internal static string WB0223_SectionWithLessThan5Questions {
+        public static string WB0223_SectionWithLessThan5Questions {
             get {
                 return ResourceManager.GetString("WB0223_SectionWithLessThan5Questions", resourceCulture);
             }
@@ -1344,7 +1344,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Too many sub-sections at one level. Consider hierarchical layout..
         /// </summary>
-        internal static string WB0224_TooManySubsectionsAtOneLevel {
+        public static string WB0224_TooManySubsectionsAtOneLevel {
             get {
                 return ResourceManager.GetString("WB0224_TooManySubsectionsAtOneLevel", resourceCulture);
             }
@@ -1353,7 +1353,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Drop-down menu (combo box) contains less than 10 elements. Consider switching to a standard single choice representation..
         /// </summary>
-        internal static string WB0225_ComboBoxWithLessThan10Elements {
+        public static string WB0225_ComboBoxWithLessThan10Elements {
             get {
                 return ResourceManager.GetString("WB0225_ComboBoxWithLessThan10Elements", resourceCulture);
             }
@@ -1362,7 +1362,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cascading combo box questions have the same parent question..
         /// </summary>
-        internal static string WB0226_SameCascadingParentQuestion {
+        public static string WB0226_SameCascadingParentQuestion {
             get {
                 return ResourceManager.GetString("WB0226_SameCascadingParentQuestion", resourceCulture);
             }
@@ -1371,7 +1371,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Questionnaire hasn’t been reviewed. Consider sharing it with another user for feedback..
         /// </summary>
-        internal static string WB0227_NotShared {
+        public static string WB0227_NotShared {
             get {
                 return ResourceManager.GetString("WB0227_NotShared", resourceCulture);
             }
@@ -1380,7 +1380,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Categorical question has nonconsecutive option codes. Check for omitted options..
         /// </summary>
-        internal static string WB0228_OmittedOptions {
+        public static string WB0228_OmittedOptions {
             get {
                 return ResourceManager.GetString("WB0228_OmittedOptions", resourceCulture);
             }
@@ -1389,7 +1389,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Supervisor question is used in validation. Check the condition accounts for supervisor non-response or instruct supervisors to always respond..
         /// </summary>
-        internal static string WB0229_SupervisorQuestionInValidation {
+        public static string WB0229_SupervisorQuestionInValidation {
             get {
                 return ResourceManager.GetString("WB0229_SupervisorQuestionInValidation", resourceCulture);
             }
@@ -1398,7 +1398,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Nonconsecutive cascade questions. Consider laying the cascading questions one after another..
         /// </summary>
-        internal static string WB0230_NonconsecutiveCascadings {
+        public static string WB0230_NonconsecutiveCascadings {
             get {
                 return ResourceManager.GetString("WB0230_NonconsecutiveCascadings", resourceCulture);
             }
@@ -1407,7 +1407,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Multichoice question contains too many (&gt;20) categories. It will be difficult to navigate on tablets. Consider splitting into two multichoice questions if possible..
         /// </summary>
-        internal static string WB0231_MultiOptionWithMoreThan20Options {
+        public static string WB0231_MultiOptionWithMoreThan20Options {
             get {
                 return ResourceManager.GetString("WB0231_MultiOptionWithMoreThan20Options", resourceCulture);
             }
@@ -1416,7 +1416,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Five or more questions have the same enabling condition. Place questions in a group and apply single enabling condition to a group to improve questionnaire efficiency..
         /// </summary>
-        internal static string WB0232_FiveOrMoreQuestionsWithSameEnabling {
+        public static string WB0232_FiveOrMoreQuestionsWithSameEnabling {
             get {
                 return ResourceManager.GetString("WB0232_FiveOrMoreQuestionsWithSameEnabling", resourceCulture);
             }
@@ -1425,7 +1425,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Nested roster with three or more degrees of nesting. Try avoiding such complex structures that might lead to problems in data collection..
         /// </summary>
-        internal static string WB0233_NestedRosterDegree3OrMore {
+        public static string WB0233_NestedRosterDegree3OrMore {
             get {
                 return ResourceManager.GetString("WB0233_NestedRosterDegree3OrMore", resourceCulture);
             }
@@ -1434,7 +1434,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Subordinate levels in a nested roster are based on the same parent question. Try revising, such rosters might lead to problems in data collection..
         /// </summary>
-        internal static string WB0234_RosterInRosterWithSameSourceQuestion {
+        public static string WB0234_RosterInRosterWithSameSourceQuestion {
             get {
                 return ResourceManager.GetString("WB0234_RosterInRosterWithSameSourceQuestion", resourceCulture);
             }
@@ -1443,7 +1443,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to The same long enablement condition is used in several questions. You might want to create a Boolean variable to simplify the code management..
         /// </summary>
-        internal static string WB0235_FewQuestionsWithSameLongEnablement {
+        public static string WB0235_FewQuestionsWithSameLongEnablement {
             get {
                 return ResourceManager.GetString("WB0235_FewQuestionsWithSameLongEnablement", resourceCulture);
             }
@@ -1452,7 +1452,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to The same long validation condition is used in several questions. You might want to create a Boolean variable to simplify the code management..
         /// </summary>
-        internal static string WB0236_FewQuestionsWithSameLongValidation {
+        public static string WB0236_FewQuestionsWithSameLongValidation {
             get {
                 return ResourceManager.GetString("WB0236_FewQuestionsWithSameLongValidation", resourceCulture);
             }
@@ -1461,7 +1461,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to &amp; is used in expression. Make sure you understand the difference between &amp; and &amp;&amp; operators. In most cases, use &amp;&amp;..
         /// </summary>
-        internal static string WB0237_BitwiseAnd {
+        public static string WB0237_BitwiseAnd {
             get {
                 return ResourceManager.GetString("WB0237_BitwiseAnd", resourceCulture);
             }
@@ -1470,7 +1470,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to | is used in expression. Make sure you understand the difference between | and || operators. In most cases, use ||..
         /// </summary>
-        internal static string WB0238_BitwiseOr {
+        public static string WB0238_BitwiseOr {
             get {
                 return ResourceManager.GetString("WB0238_BitwiseOr", resourceCulture);
             }
@@ -1479,7 +1479,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Validation condition #{0} refers to a future question. Consider reversing the order..
         /// </summary>
-        internal static string WB0250_ValidationConditionRefersToAFutureQuestion {
+        public static string WB0250_ValidationConditionRefersToAFutureQuestion {
             get {
                 return ResourceManager.GetString("WB0250_ValidationConditionRefersToAFutureQuestion", resourceCulture);
             }
@@ -1488,7 +1488,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Enablement condition refers to a future question. Consider reversing the order..
         /// </summary>
-        internal static string WB0251_EnablementConditionRefersToAFutureQuestion {
+        public static string WB0251_EnablementConditionRefersToAFutureQuestion {
             get {
                 return ResourceManager.GetString("WB0251_EnablementConditionRefersToAFutureQuestion", resourceCulture);
             }
@@ -1497,7 +1497,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Too few variable labels are defined. Add variable labels to improve the usability of exported data and to provide input into metadata for Data Documentation Initiative (DDI) format..
         /// </summary>
-        internal static string WB0253_TooFewVariableLabelsAreDefined {
+        public static string WB0253_TooFewVariableLabelsAreDefined {
             get {
                 return ResourceManager.GetString("WB0253_TooFewVariableLabelsAreDefined", resourceCulture);
             }
@@ -1506,7 +1506,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Use function IsValidEmail() to validate email address..
         /// </summary>
-        internal static string WB0254_UseFunctionIsValidEmailToValidateEmailAddress {
+        public static string WB0254_UseFunctionIsValidEmailToValidateEmailAddress {
             get {
                 return ResourceManager.GetString("WB0254_UseFunctionIsValidEmailToValidateEmailAddress", resourceCulture);
             }
@@ -1515,7 +1515,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Question is too short. This might be an incomplete question..
         /// </summary>
-        internal static string WB0255_QuestionIsTooShort {
+        public static string WB0255_QuestionIsTooShort {
             get {
                 return ResourceManager.GetString("WB0255_QuestionIsTooShort", resourceCulture);
             }
@@ -1524,7 +1524,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Translation name is invalid.
         /// </summary>
-        internal static string WB0256_TranslationNameIsInvalid {
+        public static string WB0256_TranslationNameIsInvalid {
             get {
                 return ResourceManager.GetString("WB0256_TranslationNameIsInvalid", resourceCulture);
             }
@@ -1533,7 +1533,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Translation has empty content.
         /// </summary>
-        internal static string WB0257_TranslationHasEmptyContent {
+        public static string WB0257_TranslationHasEmptyContent {
             get {
                 return ResourceManager.GetString("WB0257_TranslationHasEmptyContent", resourceCulture);
             }
@@ -1542,7 +1542,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Translations have duplicate names.
         /// </summary>
-        internal static string WB0258_TranslationsHaveDuplicatedNames {
+        public static string WB0258_TranslationsHaveDuplicatedNames {
             get {
                 return ResourceManager.GetString("WB0258_TranslationsHaveDuplicatedNames", resourceCulture);
             }
@@ -1551,7 +1551,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Question title is too long. It should be no longer than 500 characters..
         /// </summary>
-        internal static string WB0259_QuestionTitleIsTooLong {
+        public static string WB0259_QuestionTitleIsTooLong {
             get {
                 return ResourceManager.GetString("WB0259_QuestionTitleIsTooLong", resourceCulture);
             }
@@ -1560,7 +1560,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Title is too long. It should be no longer than 500 characters..
         /// </summary>
-        internal static string WB0260_GroupTitleIsTooLong {
+        public static string WB0260_GroupTitleIsTooLong {
             get {
                 return ResourceManager.GetString("WB0260_GroupTitleIsTooLong", resourceCulture);
             }
@@ -1569,7 +1569,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Questionnaire contains rosters with total number of roster instances exceeding the system limits..
         /// </summary>
-        internal static string WB0261_RosterStructureTooExplosive {
+        public static string WB0261_RosterStructureTooExplosive {
             get {
                 return ResourceManager.GetString("WB0261_RosterStructureTooExplosive", resourceCulture);
             }
@@ -1578,7 +1578,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Roster has reached size limit. Reduce roster size or decrease nesting..
         /// </summary>
-        internal static string WB0262_RosterHasTooBigPropagation {
+        public static string WB0262_RosterHasTooBigPropagation {
             get {
                 return ResourceManager.GetString("WB0262_RosterHasTooBigPropagation", resourceCulture);
             }
@@ -1587,7 +1587,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to First section can not have enabling condition..
         /// </summary>
-        internal static string WB0263_FirstChapterHasEnablingCondition {
+        public static string WB0263_FirstChapterHasEnablingCondition {
             get {
                 return ResourceManager.GetString("WB0263_FirstChapterHasEnablingCondition", resourceCulture);
             }
@@ -1596,7 +1596,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to You have a GPS question. Tablets must support geolocation to be used with this questionnaire..
         /// </summary>
-        internal static string WB0264_GpsQuestion {
+        public static string WB0264_GpsQuestion {
             get {
                 return ResourceManager.GetString("WB0264_GpsQuestion", resourceCulture);
             }
@@ -1605,7 +1605,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to More than 30% of questions are text questions. Text questions are difficult to answer on tablets. Consider using single- or multi-choice questions instead..
         /// </summary>
-        internal static string WB0265_MoreThan30PercentQuestionsAreText {
+        public static string WB0265_MoreThan30PercentQuestionsAreText {
             get {
                 return ResourceManager.GetString("WB0265_MoreThan30PercentQuestionsAreText", resourceCulture);
             }
@@ -1614,7 +1614,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Duplicate questions. (Questions have the same title.).
         /// </summary>
-        internal static string WB0266_SameTitle {
+        public static string WB0266_SameTitle {
             get {
                 return ResourceManager.GetString("WB0266_SameTitle", resourceCulture);
             }
@@ -1623,7 +1623,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to You have a barcode question. Tablets must support autofocus to be used with this questionnaire..
         /// </summary>
-        internal static string WB0267_QRBarcodeQuestion {
+        public static string WB0267_QRBarcodeQuestion {
             get {
                 return ResourceManager.GetString("WB0267_QRBarcodeQuestion", resourceCulture);
             }
@@ -1632,7 +1632,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to You try to use substitution for unsupported entity..
         /// </summary>
-        internal static string WB0268_DoesNotSupportSubstitution {
+        public static string WB0268_DoesNotSupportSubstitution {
             get {
                 return ResourceManager.GetString("WB0268_DoesNotSupportSubstitution", resourceCulture);
             }
@@ -1641,7 +1641,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Question cannot have empty text..
         /// </summary>
-        internal static string WB0269_QuestionTitleIsEmpty {
+        public static string WB0269_QuestionTitleIsEmpty {
             get {
                 return ResourceManager.GetString("WB0269_QuestionTitleIsEmpty", resourceCulture);
             }
@@ -1650,7 +1650,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Section should not contain more than {0} questions..
         /// </summary>
-        internal static string WB0270_SectionContainsTooManyQuestions {
+        public static string WB0270_SectionContainsTooManyQuestions {
             get {
                 return ResourceManager.GetString("WB0270_SectionContainsTooManyQuestions", resourceCulture);
             }
