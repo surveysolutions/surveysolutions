@@ -44,8 +44,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             Expression<Func<T, Guid>> selectUserId,
             Expression<Func<T, UserAndTimestamp>> selectUserAndTimestamp)
         {
-            var localFrom = this.AddPeriod(reportStartDate.Date, period, -columnCount + 1);
             var localTo = reportStartDate.Date.AddDays(1);
+            var localFrom = this.AddPeriod(localTo, period, -columnCount);
+
             var utcFrom = localFrom.AddMinutes(timezoneAdjastmentMins);
             var utcTo = localTo.AddMinutes(timezoneAdjastmentMins);
 
