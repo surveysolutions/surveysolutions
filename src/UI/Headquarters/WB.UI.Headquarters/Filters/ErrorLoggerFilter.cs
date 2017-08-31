@@ -6,9 +6,9 @@ using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Filters
 {
-    public class ElmahHandledErrorLoggerFilter : ExceptionFilterAttribute
+    public class ErrorLoggerFilter : ExceptionFilterAttribute
     {
-        private static readonly Counter ExceptionsLogged = Prometheus.Metrics.CreateCounter(@"exceptions_raised", @"Total exceptions raised");
+        private static readonly Counter ExceptionsLogged = Metrics.CreateCounter(@"exceptions_raised", @"Total exceptions raised");
 
         public override void OnException(HttpActionExecutedContext actionExecutedContext)
         {
@@ -18,8 +18,7 @@ namespace WB.UI.Headquarters.Filters
             if (actionExecutedContext.Exception is WebInterviewAccessException)
                 return;
 
-            actionExecutedContext.Exception
-                .AddLogData("Handler", "ElmahHandledErrorLoggerFilter").Log(HttpContext.Current);
+            actionExecutedContext.Exception.Log(HttpContext.Current);
         }
     }
 }
