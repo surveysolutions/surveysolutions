@@ -84,7 +84,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     .Select(i => new StatusChangeRecord { UserId = i.UserId.Value, UserName = i.UserName, Timestamp = i.Timestamp, Timespan = new TimeSpan(i.Timespan) })
                     .ToArray();
 
-            var rows = userIds.Select(u => GetSpeedByResponsibleReportRow(u, ranges.ColumnRangesUtc, timezoneAdjastmentMins, allInterviewsInStatus)).ToArray();
+            var rows = userIds.Select(u => GetSpeedByResponsibleReportRow(u, ranges.ColumnRangesUtc, allInterviewsInStatus)).ToArray();
 
             SpeedByResponsibleTotalRow totalRow = new SpeedByResponsibleTotalRow();
             foreach (var dateTimeRange in ranges.ColumnRangesUtc)
@@ -96,9 +96,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 double? dbl = totalAvgDuration.HasValue ? new TimeSpan((long) totalAvgDuration.Value).TotalMinutes : (double?)null;
 
                 totalRow.SpeedByPeriod.Add(dbl.HasValue ? Math.Round(dbl.Value, 2) : (double?)null);
-
-                dateTimeRange.From = dateTimeRange.From.AddMinutes(-timezoneAdjastmentMins);
-                dateTimeRange.To = dateTimeRange.To.AddMinutes(-timezoneAdjastmentMins);
             }
 
             return new SpeedByResponsibleReportView(rows, ranges.ColumnRangesLocal, usersCount)
@@ -108,7 +105,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         }
 
 
-        private SpeedByResponsibleReportRow GetSpeedByResponsibleReportRow(Guid u, DateTimeRange[] dateTimeRanges, int timezoneAdjastmentMins, StatusChangeRecord[] allInterviewsInStatus)
+        private SpeedByResponsibleReportRow GetSpeedByResponsibleReportRow(Guid u, DateTimeRange[] dateTimeRanges, StatusChangeRecord[] allInterviewsInStatus)
         {
             var interviewsForUser = allInterviewsInStatus.Where(i => i.UserId == u).ToArray();
             var speedByPeriod = new List<double?>();
@@ -117,10 +114,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             {
                 var interviewsInPeriod =
                     interviewsForUser.Where(
-                        ics => ics.Timestamp >= dateTimeRange.From.AddMinutes(timezoneAdjastmentMins) && ics.Timestamp < dateTimeRange.To.AddMinutes(timezoneAdjastmentMins)).ToArray();
+                        ics => ics.Timestamp >= dateTimeRange.From && ics.Timestamp < dateTimeRange.To).ToArray();
                 if (interviewsInPeriod.Any())
                 {
-                    var total = interviewsInPeriod.Select(i => Math.Abs(i.Timespan.TotalMinutes)).Sum();
                     speedByPeriod.Add(Math.Round(interviewsInPeriod.Select(i => Math.Abs(i.Timespan.TotalMinutes)).Average(), 2));
                 }
                 else
