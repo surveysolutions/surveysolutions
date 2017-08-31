@@ -79,11 +79,38 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All questionnaires.
+        ///   Looks up a localized string similar to All Questionnaires.
         /// </summary>
         internal static string AllQuestionnaires {
             get {
                 return ResourceManager.GetString("AllQuestionnaires", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Responsible.
+        /// </summary>
+        internal static string AllResponsible {
+            get {
+                return ResourceManager.GetString("AllResponsible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Statuses.
+        /// </summary>
+        internal static string AllStatuses {
+            get {
+                return ResourceManager.GetString("AllStatuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Supervisors.
+        /// </summary>
+        internal static string AllSupervisors {
+            get {
+                return ResourceManager.GetString("AllSupervisors", resourceCulture);
             }
         }
         
@@ -147,6 +174,15 @@ namespace Resources {
         internal static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        internal static string Confirm {
+            get {
+                return ResourceManager.GetString("Confirm", resourceCulture);
             }
         }
         
@@ -345,6 +381,15 @@ namespace Resources {
         internal static string PrefilledQuestions {
             get {
                 return ResourceManager.GetString("PrefilledQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire.
+        /// </summary>
+        internal static string Questionnaire {
+            get {
+                return ResourceManager.GetString("Questionnaire", resourceCulture);
             }
         }
         

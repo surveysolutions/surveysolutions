@@ -225,4 +225,7 @@
   <data name="НasErrors" xml:space="preserve">
     <value>Erreurs</value>
   </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Questionnaire</value>
+  </data>
 </root>

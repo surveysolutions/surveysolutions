@@ -408,10 +408,10 @@
                     <div class="filters-container">
                         <h4>@Pages.FilterTitle</h4>
                         <div class="block-filter">
-                            <h5>@Pages.Template</h5>
+                            <h5>@Common.Questionnaire</h5>
                             <typeahead data-vv-name="questionnaireId"
                                        data-vv-as="questionnaire"
-                                       placeholder="@Common.Any"
+                                       placeholder="@Common.AllQuestionnaires"
                                        control-id="questionnaireId"
                                        :ajax-params="questionnaireParams"
                                        :value="questionnaireId"
@@ -420,7 +420,7 @@
                         </div>
                         <div class="block-filter">
                             <h5>@Common.Responsible</h5>
-                            <typeahead placeholder="@Common.Any"
+                            <typeahead placeholder="@Common.AllResponsible"
                                        control-id="responsibleId"
                                        :value="responsibleId"
                                        :ajax-params="{ }"

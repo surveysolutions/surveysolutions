@@ -1,12 +1,17 @@
 import { browserLanguage } from "src/config"
+import Vue from 'vue'
 
 function modal(action) {
     require.ensure(["bootbox", "bootstrap-sass/assets/javascripts/bootstrap/modal"], r => {
-        const jQuery = require("jquery")
-       // const $ = (window).$ = (window).jQuery = jQuery
         require("bootstrap-sass/assets/javascripts/bootstrap/modal")
         const bootbox = require("bootbox")
+
         bootbox.setLocale(browserLanguage)
+        bootbox.addLocale("ar", {
+            OK: Vue.$t("Common.Ok"),
+            CANCEL: Vue.$t("Common.Cancel"),
+            CONFIRM: Vue.$t("Common.Confirm")
+        })
         action(bootbox)
     }, "libs")
 }
