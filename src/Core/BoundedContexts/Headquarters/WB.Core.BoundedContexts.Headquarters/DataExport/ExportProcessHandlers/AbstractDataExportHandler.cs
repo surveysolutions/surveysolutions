@@ -54,12 +54,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
             dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
-            var filesToArchive = this.fileSystemAccessor.GetFilesInDirectory(this.exportTempDirectoryPath, true);
-
             var archiveName = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
                 dataExportProcessDetails.Questionnaire, Format, dataExportProcessDetails.InterviewStatus);
 
-            dataExportFileAccessor.RecreateExportArchive(filesToArchive, archiveName);
+            dataExportFileAccessor.RecreateExportArchive(this.exportTempDirectoryPath, archiveName);
 
             this.DeleteExportTempDirectory();
         }

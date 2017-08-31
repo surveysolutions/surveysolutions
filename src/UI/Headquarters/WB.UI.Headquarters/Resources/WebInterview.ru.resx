@@ -253,4 +253,7 @@
     <value>Завершить интервью</value>
     <comment>Завершить интервью</comment>
   </data>
+  <data name="PoweredBy" xml:space="preserve">
+    <value>Работает на</value>
+  </data>
 </root>

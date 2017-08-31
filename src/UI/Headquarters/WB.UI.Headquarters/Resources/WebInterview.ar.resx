@@ -211,7 +211,7 @@
     <value>وحدها ملفات الصور مقبولة</value>
   </data>
   <data name="PleaseFillCaptcha" xml:space="preserve">
-    <value>يرجى ملء خانة captcha</value>
+    <value>يرجى ملء خانة كلمة التحقق</value>
   </data>
   <data name="RefreshPage" xml:space="preserve">
     <value>جدد الصفحة</value>
@@ -251,5 +251,8 @@
   </data>
   <data name="WelcomeText" xml:space="preserve">
     <value>مرحباً وأهلاً بك في المسح الإلكتروني من Survey Solutions </value>
+  </data>
+  <data name="PoweredBy" xml:space="preserve">
+    <value>مشغل بواسطة</value>
   </data>
 </root>
