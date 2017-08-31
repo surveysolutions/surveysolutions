@@ -89,7 +89,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             SpeedByResponsibleTotalRow totalRow = new SpeedByResponsibleTotalRow();
             foreach (var dateTimeRange in ranges.ColumnRangesUtc)
             {
-                double? totalAvgDuration = query(questionnaireId, questionnaireVersion, dateTimeRange.From, dateTimeRange.To)
+                var allStatusChanges = query(questionnaireId, questionnaireVersion, dateTimeRange.From, dateTimeRange.To);
+                if (restrictUser != null)
+                {
+                    allStatusChanges = allStatusChanges.Where(restrictUser);
+                }
+                var totalAvgDuration = allStatusChanges
                                             .Select(userIdSelector)
                                             .Select(x => (long?)x.Timespan)
                                             .Average();
