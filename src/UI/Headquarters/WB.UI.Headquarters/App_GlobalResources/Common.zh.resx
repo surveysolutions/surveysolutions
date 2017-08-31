@@ -141,9 +141,6 @@
   <data name="CreatedOnClient" xml:space="preserve">
     <value>已在客户端创建</value>
   </data>
-  <data name="CreateNewAssignment" xml:space="preserve">
-    <value/>
-  </data>
   <data name="Delete" xml:space="preserve">
     <value>删除</value>
   </data>
