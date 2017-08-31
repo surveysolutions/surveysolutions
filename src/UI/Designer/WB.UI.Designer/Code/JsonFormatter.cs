@@ -14,8 +14,12 @@ namespace WB.UI.Designer.Code
 {
     public class JsonFormatter : MediaTypeFormatter
     {
-        public JsonFormatter()
+        private readonly Func<Version> headquartersVersionGetter;
+
+        public JsonFormatter(Func<Version> hqVersionGetter = null)
         {
+            this.headquartersVersionGetter = hqVersionGetter ?? GetHeadquartersVersion;
+
             SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json"));
 
             SupportedEncodings.Add(new UTF8Encoding(encoderShouldEmitUTF8Identifier: false, throwOnInvalidBytes: true));
@@ -41,13 +45,13 @@ namespace WB.UI.Designer.Code
 
         public override Task<object> ReadFromStreamAsync(Type type, Stream readStream, System.Net.Http.HttpContent content, IFormatterLogger formatterLogger)
         {
-            var headquartersVersion = GetHeadquartersVersion();
+            var headquartersVersion = this.headquartersVersionGetter.Invoke();
             return Task.FromResult(this.DeserializeFromStream(stream: readStream, type: type, headquartersVersion: headquartersVersion));
         }
 
         public override Task WriteToStreamAsync(Type type, object value, Stream writeStream, System.Net.Http.HttpContent content, TransportContext transportContext)
         {
-            var headquartersVersion = GetHeadquartersVersion();
+            var headquartersVersion = this.headquartersVersionGetter.Invoke();
             return Task.Run(() => this.SerializeToStream(value: value, type: type, stream: writeStream, headquartersVersion: headquartersVersion));
         }
 
