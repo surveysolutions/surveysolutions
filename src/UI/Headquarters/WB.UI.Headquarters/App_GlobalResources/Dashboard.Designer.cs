@@ -178,7 +178,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import template.
+        ///   Looks up a localized string similar to Import questionnaire.
         /// </summary>
         internal static string ImportTemplate {
             get {
@@ -223,7 +223,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Click Import Template  button to load a questionnaire from Designer.
+        ///   Looks up a localized string similar to Click Import Questionnaire button to load a questionnaire from Designer.
         /// </summary>
         internal static string SurveySetupIntroMessage1 {
             get {

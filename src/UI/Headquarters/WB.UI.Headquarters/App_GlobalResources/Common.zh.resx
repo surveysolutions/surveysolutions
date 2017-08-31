@@ -246,4 +246,7 @@
   <data name="Yes" xml:space="preserve">
     <value>是</value>
   </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>问卷</value>
+  </data>
 </root>
