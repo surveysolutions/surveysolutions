@@ -4,15 +4,11 @@
             :subtitle="$t('Pages.StatusDurationDescription')">
         <Filters slot="filters">
             <FilterBlock :title="$t('Reports.Questionnaire')">
-                <select class="selectpicker"
-                        v-model="questionnaireId">
-                    <option :value="null">{{ $t('Common.AllQuestionnaires') }}</option>
-                    <option v-for="questionnaire in questionnaires"
-                            :key="questionnaire.key"
-                            :value="questionnaire.key">
-                        {{ questionnaire.value }}
-                    </option>
-                </select>
+                 <Typeahead :placeholder="$t('Common.AllQuestionnaires')"
+                           :values="questionnaires"
+                           :value="questionnaireId"
+                           noSearch
+                           @selected="selectQuestionnaire" />
             </FilterBlock>
         </Filters>
         <DataTables ref="table"
@@ -156,10 +152,14 @@ export default {
         reload() {
             this.$refs.table.reload();
         },
+ 
+        selectQuestionnaire(value) {
+            this.questionnaireId = value;
+        },
 
         addFilteringParams(data) {
             if (this.questionnaireId) {
-                data.questionnaireId = this.questionnaireId;
+                data.questionnaireId = this.questionnaireId.key;
             }
             data.timezone = new Date().getTimezoneOffset();
         },
@@ -169,8 +169,8 @@ export default {
                 return `<span>${data}</span>`;
 
             if (this.questionnaireId != undefined){
-                var questionnaireId = this.questionnaireId;
-                var questionnaireVersion = this.questionnaireId.split('$')[1];
+                var questionnaireId = this.questionnaireId.key;
+                var questionnaireVersion = this.questionnaireId.key.split('$')[1];
                 var startDate = row.startDate == undefined ? '' : row.startDate;
 
                 return `<a href='${this.$config.assignmentsBaseUrl}?dateStart=${startDate}&dateEnd=${row.endDate}&questionnaireId=${questionnaireId}&version=${questionnaireVersion}&userRole=${userRole}'>${data}</a>`;
@@ -183,8 +183,8 @@ export default {
             if(data === 0 || rowIndex === 0) 
                 return `<span>${data}</span>`;
 
-            var templateId = this.questionnaireId == undefined ? '' : this.formatGuid(this.questionnaireId.split('$')[0]);
-            var templateVersion = this.questionnaireId == undefined ? '' : this.questionnaireId.split('$')[1];
+            var templateId = this.questionnaireId == undefined ? '' : this.formatGuid(this.questionnaireId.key.split('$')[0]);
+            var templateVersion = this.questionnaireId == undefined ? '' : this.questionnaireId.key.split('$')[1];
             
             if (row.startDate == undefined)
                 return `<a href='${this.$config.interviewsBaseUrl}?unactiveDateEnd=${row.endDate}&status=${status}&templateId=${templateId}&templateVersion=${templateVersion}'>${data}</a>`;

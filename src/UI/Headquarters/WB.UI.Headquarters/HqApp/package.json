@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "watch": "webpack --color --watch",
+    "watch": "webpack --color --watch --hide-modules",
     "dev": "webpack --color --hide-modules",
     "production": "cross-env NODE_ENV=production npm run rebuild",
     "vendor": "webpack --config webpack.vendor.config.js --color --hide-modules",
