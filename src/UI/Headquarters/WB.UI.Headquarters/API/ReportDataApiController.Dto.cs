@@ -113,7 +113,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
             result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
             {
-                FileNameStar = $@"{reportName}{exportFile.FileExtension}"
+                FileNameStar = $@"{this.fileSystemAccessor.MakeValidFileName(reportName)}{exportFile.FileExtension}"
             };
             return result;
         }
