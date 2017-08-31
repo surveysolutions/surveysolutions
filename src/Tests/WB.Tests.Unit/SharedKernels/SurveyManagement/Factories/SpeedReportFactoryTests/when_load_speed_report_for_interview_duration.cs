@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Linq;
+using FluentAssertions;
 using Machine.Specifications;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
-using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 
@@ -14,9 +15,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
 {
     internal class when_load_speed_report_for_interview_duration : SpeedReportFactoryTestContext
     {
-        Establish context = () =>
+        [Test]
+        public void should_return_one_record()
         {
-            input = CreateSpeedByInterviewersReportInputModel(supervisorId: supervisorId, period: "w", from: DateTime.Now);
+            input = CreateSpeedByInterviewersReportInputModel(supervisorId: supervisorId, period: "w",
+                from: DateTime.Now);
 
             var user = Create.Entity.UserDocument(supervisorId: supervisorId);
 
@@ -27,31 +30,31 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
                     statuses: new[]
                     {
                         Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
-                            interviewerId: user.PublicKey, supervisorId: supervisorId, timestamp: input.From.Date.AddDays(-3), timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
+                            interviewerId: user.PublicKey, supervisorId: supervisorId,
+                            timestamp: input.From.Date.AddDays(-3),
+                            timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
                         Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
-                            interviewerId: user.PublicKey, supervisorId: supervisorId, timestamp: input.From.Date.AddDays(-2), timeSpanWithPreviousStatus: TimeSpan.FromMinutes(25)),
+                            interviewerId: user.PublicKey, supervisorId: supervisorId,
+                            timestamp: input.From.Date.AddDays(-2),
+                            timeSpanWithPreviousStatus: TimeSpan.FromMinutes(25)),
                         Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
-                            interviewerId: user.PublicKey, supervisorId: supervisorId, timestamp: input.From.Date.AddDays(1), timeSpanWithPreviousStatus: TimeSpan.FromMinutes(15))
+                            interviewerId: user.PublicKey, supervisorId: supervisorId,
+                            timestamp: input.From.Date.AddDays(1), timeSpanWithPreviousStatus: TimeSpan.FromMinutes(15))
                     }), "2");
 
             quantityReportFactory = CreateSpeedReportFactory(interviewStatuses: interviewStatuses);
-        };
 
-        Because of = () =>
+
+            //Act
             result = quantityReportFactory.Load(input);
 
-        It should_return_one_row = () =>
-            result.Items.Count().ShouldEqual(1);
-
-        It should_return_first_row_with_35_minutes_per_interview_at_first_period_and_null_minutes_per_interview_at_second = () =>
+            //Assert
+            result.Items.Should().HaveCount(1);
             result.Items.First().SpeedByPeriod.ShouldEqual(new double?[] { 35 });
-
-        It should_return_first_row_with_35_minutes_in_Total = () =>
             result.Items.First().Total.ShouldEqual(35);
-
-        It should_return_first_row_with_35_minutes_in_Average = () =>
-           result.Items.First().Average.ShouldEqual(35);
-
+            result.Items.First().Average.ShouldEqual(35);
+        }
+        
         private static SpeedReportFactory quantityReportFactory;
         private static SpeedByInterviewersReportInputModel input;
         private static SpeedByResponsibleReportView result;
