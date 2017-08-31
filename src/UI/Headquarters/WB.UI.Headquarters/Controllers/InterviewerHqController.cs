@@ -171,7 +171,9 @@ namespace WB.UI.Headquarters.Controllers
                     filter = filter.Where(summary => interviewStatuses.Contains(summary.Status));
                 }
 
-                return filter.Select(s => new
+                return filter
+                    .OrderBy(s => s.QuestionnaireTitle).ThenBy(s => s.QuestionnaireVersion)
+                    .Select(s => new
                     {
                         s.QuestionnaireTitle,
                         s.QuestionnaireId,
