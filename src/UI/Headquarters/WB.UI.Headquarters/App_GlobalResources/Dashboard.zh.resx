@@ -156,9 +156,6 @@
   <data name="LastEntryDate" xml:space="preserve">
     <value>最近一次输入日期</value>
   </data>
-  <data name="NewAssignment" xml:space="preserve">
-    <value/>
-  </data>
   <data name="Questionnaires" xml:space="preserve">
     <value>问卷</value>
   </data>
