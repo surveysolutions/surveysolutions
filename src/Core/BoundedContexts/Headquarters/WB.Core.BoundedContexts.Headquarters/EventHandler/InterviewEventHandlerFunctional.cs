@@ -63,8 +63,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewData, QuestionsEnabled>,
         IUpdateHandler<InterviewData, AnswersDeclaredInvalid>,
         IUpdateHandler<InterviewData, AnswersDeclaredValid>,
-        IUpdateHandler<InterviewData, FlagRemovedFromAnswer>,
-        IUpdateHandler<InterviewData, FlagSetToAnswer>,
         IUpdateHandler<InterviewData, InterviewDeclaredInvalid>,
         IUpdateHandler<InterviewData, InterviewDeclaredValid>,
         IUpdateHandler<InterviewData, InterviewHardDeleted>,
@@ -272,17 +270,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 {
                     answeredQuestion.QuestionState = answeredQuestion.QuestionState.With(QuestionState.Answered);
                 }
-            });
-        }
-
-        private static InterviewData SetFlagStateForQuestion(InterviewData interview, decimal[] vector, Guid questionId, bool isFlagged)
-        {
-            return UpdateQuestion(interview, vector, questionId, (question) =>
-            {
-                if (isFlagged)
-                    question.QuestionState = question.QuestionState | QuestionState.Flagged;
-                else
-                    question.QuestionState &= ~QuestionState.Flagged;
             });
         }
 
@@ -725,18 +712,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 @event.Payload.Questions.Aggregate(
                     state,
                     (document, question) => ChangeQuestionConditionValidity(document, question.RosterVector, question.Id, false, new FailedValidationCondition[] {}));
-        }
-
-        public InterviewData Update(InterviewData state, IPublishedEvent<FlagRemovedFromAnswer> @event)
-        {
-            return
-                   SetFlagStateForQuestion(state, @event.Payload.RosterVector, @event.Payload.QuestionId, false);
-        }
-
-        public InterviewData Update(InterviewData state, IPublishedEvent<FlagSetToAnswer> @event)
-        {
-            return
-                 SetFlagStateForQuestion(state, @event.Payload.RosterVector, @event.Payload.QuestionId, true);
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<InterviewDeclaredInvalid> @event)

@@ -1551,32 +1551,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new AnswerCommented(userId, questionId, rosterVector, commentTime, comment));
         }
 
-        public void SetFlagToAnswer(Guid userId, Guid questionId, RosterVector rosterVector)
-        {
-            new InterviewPropertiesInvariants(this.properties)
-                .RequireAnswerCanBeChanged();
-
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-
-            new InterviewQuestionInvariants(new Identity(questionId, rosterVector), questionnaire, this.Tree)
-                .RequireQuestionExists();
-
-            this.ApplyEvent(new FlagSetToAnswer(userId, questionId, rosterVector));
-        }
-
-        public void RemoveFlagFromAnswer(Guid userId, Guid questionId, RosterVector rosterVector)
-        {
-            new InterviewPropertiesInvariants(this.properties)
-                .RequireAnswerCanBeChanged();
-
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-
-            new InterviewQuestionInvariants(new Identity(questionId, rosterVector), questionnaire, this.Tree)
-                .RequireQuestionExists();
-
-            this.ApplyEvent(new FlagRemovedFromAnswer(userId, questionId, rosterVector));
-        }
-
         private void AssignResponsible(Guid userId, Guid? interviewerId, Guid? supervisorId, DateTime? assignTime)
         {
             InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);

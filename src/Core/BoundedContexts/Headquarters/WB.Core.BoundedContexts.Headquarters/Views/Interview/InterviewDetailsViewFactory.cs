@@ -5,7 +5,6 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -30,8 +29,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         private readonly IInterviewPackagesService incomingSyncPackagesQueue;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryRepository;
-        private readonly IReadSideKeyValueStorage<InterviewData> interviewDataRepository;
         private readonly ISubstitutionService substitutionService;
+        private readonly IInterviewFactory interviewFactory;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
 
         private class ValidationView
@@ -47,16 +46,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             IQuestionnaireStorage questionnaireStorage,
             IStatefulInterviewRepository statefulInterviewRepository,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryRepository,
-            IReadSideKeyValueStorage<InterviewData>  interviewDataRepository,
-            ISubstitutionService substitutionService)
+            ISubstitutionService substitutionService,
+            IInterviewFactory interviewFactory)
         {
             this.userStore = userStore;
             this.changeStatusFactory = changeStatusFactory;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.questionnaireStorage = questionnaireStorage;
             this.interviewSummaryRepository = interviewSummaryRepository;
-            this.interviewDataRepository = interviewDataRepository;
             this.substitutionService = substitutionService;
+            this.interviewFactory = interviewFactory;
             this.statefulInterviewRepository = statefulInterviewRepository;
         }
 
@@ -64,7 +63,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
             InterviewSummary interviewSummary = this.interviewSummaryRepository.GetById(interviewId);
-            var interviewData = this.interviewDataRepository.GetById(interviewId);
+
+            Identity[] allInterviewQuestions = interview.GetAllQuestions().Select(x => x.Identity).ToArray();
+            Identity[] flaggedQuestionIds = this.interviewFactory.GetFlaggedQuestionIds(interviewId).Intersect(allInterviewQuestions).ToArray();
 
             var questionnaireIdentity = new QuestionnaireIdentity(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, interview.Language);
@@ -79,7 +80,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             var interviewGroupViews = rootNode.ToEnumerable()
                                               .Concat(interview.GetAllGroupsAndRosters().Select(this.ToGroupView)).ToList();
 
-            var interviewEntityViews = this.GetFilteredEntities(interview, interviewData, questionnaire, questionnaireDocument, currentGroupIdentity, questionsTypes);
+            var interviewEntityViews = this.GetFilteredEntities(interview, flaggedQuestionIds, questionnaire, questionnaireDocument, currentGroupIdentity, questionsTypes);
             if (questionsTypes != InterviewDetailsFilter.All)
                 interviewEntityViews = this.GetEntitiesWithoutEmptyGroupsAndRosters(interviewEntityViews);
 
@@ -106,7 +107,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     AllCount = interview.CountAllEnabledQuestions(),
                     CommentedCount = interview.GetAllCommentedEnabledQuestions().Count(),
                     EnabledCount = interview.CountAllEnabledQuestions(),
-                    FlaggedCount = interviewData.Levels.Sum(lvl => lvl.Value.QuestionsSearchCache.Values.Count(q => q.IsFlagged())),
+                    FlaggedCount = flaggedQuestionIds.Length,
                     InvalidCount = interview.CountAllInvalidEntities(),
                     SupervisorsCount = interview.CountEnabledSupervisorQuestions(),
                     HiddenCount = interview.CountEnabledHiddenQuestions(),
@@ -141,7 +142,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         }
 
         private IEnumerable<InterviewEntityView> GetFilteredEntities(IStatefulInterview interview,
-            InterviewData interviewData, IQuestionnaire questionnaire, QuestionnaireDocument questionnaireDocument, Identity currentGroupIdentity,
+            Identity[] flaggedQuestionIds, IQuestionnaire questionnaire, QuestionnaireDocument questionnaireDocument, Identity currentGroupIdentity,
             InterviewDetailsFilter questionsTypes)
         {
             var groupEntities = currentGroupIdentity == null || currentGroupIdentity.Id == questionnaire.QuestionnaireId
@@ -150,12 +151,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             foreach (var entity in this.GetQuestionsFirstAndGroupsAfterFrom(groupEntities))
             {
-                if (!IsEntityInFilter(questionsTypes, entity, interviewData)) continue;
+                if (!IsEntityInFilter(questionsTypes, entity, flaggedQuestionIds)) continue;
 
                 switch (entity)
                 {
                     case InterviewTreeQuestion question:
-                        yield return this.ToQuestionView(question, questionnaire, questionnaireDocument, interview, interviewData);
+                        yield return this.ToQuestionView(question, questionnaire, questionnaireDocument, interview, flaggedQuestionIds);
                         break;
                     case InterviewTreeGroup group:
                         yield return this.ToGroupView(@group);
@@ -208,7 +209,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         }
 
         private InterviewEntityView ToQuestionView(InterviewTreeQuestion interviewQuestion, IQuestionnaire questionnaire, 
-            QuestionnaireDocument questionnaireDocument, IStatefulInterview interview, InterviewData interviewData)
+            QuestionnaireDocument questionnaireDocument, IStatefulInterview interview, Identity[] flaggedQuestionIds)
         {
             var questionnaireQuestion = questionnaireDocument.FirstOrDefault<IQuestion>(q => q.PublicKey == interviewQuestion.Identity.Id);
             
@@ -232,7 +233,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 IsReadOnly = !(interviewQuestion.IsSupervisors && interview.Status < InterviewStatus.ApprovedByHeadquarters),
                 Options = ToOptionsView(interviewQuestion, interview),
                 Answer = ToAnswerView(interviewQuestion),
-                IsFlagged = GetIsFlagged(interviewQuestion, interviewData),
+                IsFlagged = GetIsFlagged(interviewQuestion, flaggedQuestionIds),
                 FailedValidationMessages = GetFailedValidationMessages(
                     interviewQuestion.FailedValidations?.Select(
                         (x, index) => ToValidationView(interviewQuestion.ValidationMessages, x, index)),
@@ -264,16 +265,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return interviewQuestion.GetAnswerAsString();
         }
 
-        private static bool GetIsFlagged(InterviewTreeQuestion interviewQuestion, InterviewData interviewData)
-        {
-            var levelId = InterviewEventHandlerFunctional.CreateLevelIdFromPropagationVector(
-                    interviewQuestion.Identity.RosterVector);
-
-            if (!interviewData.Levels.ContainsKey(levelId)) return false;
-            if (!interviewData.Levels[levelId].QuestionsSearchCache.ContainsKey(interviewQuestion.Identity.Id)) return false;
-
-            return interviewData.Levels[levelId].QuestionsSearchCache[interviewQuestion.Identity.Id].IsFlagged();
-        }
+        private static bool GetIsFlagged(InterviewTreeQuestion interviewQuestion, Identity[] flaggedQuestionIds) 
+            => flaggedQuestionIds.Contains(interviewQuestion.Identity);
 
         private static object ToAnswerView(InterviewTreeQuestion interviewQuestion)
         {
@@ -543,7 +536,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 : @group.Title.Text;
         }
 
-        private static bool IsEntityInFilter(InterviewDetailsFilter? filter, IInterviewTreeNode entity, InterviewData interviewData)
+        private static bool IsEntityInFilter(InterviewDetailsFilter? filter, IInterviewTreeNode entity, Identity[] flaggedQuestionIds)
         {
             var question = entity as InterviewTreeQuestion;
 
@@ -560,7 +553,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     case InterviewDetailsFilter.Enabled:
                         return !question.IsDisabled();
                     case InterviewDetailsFilter.Flagged:
-                        return GetIsFlagged(question, interviewData);
+                        return GetIsFlagged(question, flaggedQuestionIds);
                     case InterviewDetailsFilter.Invalid:
                         return !question.IsValid;
                     case InterviewDetailsFilter.Supervisors:

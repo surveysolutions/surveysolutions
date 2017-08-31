@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Net;
 using NHibernate;
 using NHibernate.Dialect;
@@ -10,6 +11,7 @@ using Npgsql;
 using NpgsqlTypes;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
 {
@@ -81,6 +83,46 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
 
         public Type ReturnedType => typeof(IPAddress);
 
+        public bool IsMutable { get; private set; }
+    }
+
+    public class PostgresRosterVector : IUserType
+    {
+        bool IUserType.Equals(object x, object y) => x.Equals(y);
+        public int GetHashCode(object x) => x?.GetHashCode() ?? 0;
+
+        public virtual object NullSafeGet(IDataReader resultSet, string[] names, object owner)
+        {
+            var index = resultSet.GetOrdinal(names[0]);
+
+            if (resultSet.IsDBNull(index))
+                return RosterVector.Empty;
+            
+            RosterVector res = resultSet.GetValue(index) as int[];
+
+            return res == null ? RosterVector.Empty : res;
+        }
+
+        public virtual void NullSafeSet(IDbCommand cmd, object value, int index)
+        {
+            var parameter = ((IDbDataParameter)cmd.Parameters[index]);
+            if (value == null)
+            {
+                parameter.Value = DBNull.Value;
+            }
+            else
+            {
+                var list = ((RosterVector)value).ToList();
+                parameter.Value = list;
+            }
+        }
+
+        public object DeepCopy(object value) => value;
+        public object Replace(object original, object target, object owner) => original;
+        public object Assemble(object cached, object owner) => cached;
+        public object Disassemble(object value) => value;
+        public SqlType[] SqlTypes => new SqlType[] {new NpgsqlExtendedSqlType(DbType.Object, NpgsqlDbType.Array | NpgsqlDbType.Integer)};
+        public virtual Type ReturnedType => typeof(RosterVector);
         public bool IsMutable { get; private set; }
     }
 
