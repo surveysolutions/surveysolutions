@@ -172,7 +172,7 @@
     <value>Идентифицирующие вопросы</value>
   </data>
   <data name="Questionnaires" xml:space="preserve">
-    <value>Вопросники</value>
+    <value>Опросники</value>
   </data>
   <data name="ReceivedByInterviewer" xml:space="preserve">
     <value>Получил интервьюер</value>
@@ -273,5 +273,17 @@
   </data>
   <data name="OpenResponsiblesProfile" xml:space="preserve">
     <value>Открыть профиль ответственного</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Опросник</value>
+  </data>
+  <data name="AllStatuses" xml:space="preserve">
+    <value>Все статусы</value>
+  </data>
+  <data name="AllResponsible" xml:space="preserve">
+    <value>Все ответственные</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Подтвердить</value>
   </data>
 </root>

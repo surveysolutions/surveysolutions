@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,79 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Active" xml:space="preserve">
-    <value>Активные</value>
-  </data>
-  <data name="Archive" xml:space="preserve">
-    <value>Архивировать</value>
-  </data>
-  <data name="Archived" xml:space="preserve">
-    <value>Архивные</value>
-  </data>
-  <data name="AssignmentsHeader" xml:space="preserve">
-    <value>Задания</value>
-  </data>
-  <data name="AssignmentsSelected" xml:space="preserve">
-    <value>{0} Заданий выбрано </value>
-  </data>
-  <data name="QuantityExplanation" xml:space="preserve">
-    <value>Изменение количества интервью, которые будут созданы согласно этому заданию. Разрешенные значения: -1 для не ограниченного задания, 0 для пустого, число для конкретного количества</value>
-  </data>
-  <data name="ChangeQuantityModalTitle" xml:space="preserve">
-    <value>Редактировать количество интервью для задания {0}</value>
-    <comment>{0} - id of the assignment</comment>
-  </data>
-  <data name="CreatedAt" xml:space="preserve">
-    <value>Создан</value>
-  </data>
-  <data name="IdentifyingQuestions" xml:space="preserve">
-    <value>Идентификационные вопросы</value>
-  </data>
-  <data name="InterviewsCount" xml:space="preserve">
-    <value>Количество интервью</value>
-  </data>
-  <data name="NumberOfAssignmentsAffected" xml:space="preserve">
-    <value>{0} Заданий будет изменено</value>
-  </data>
-  <data name="Quantity" xml:space="preserve">
-    <value>Количество</value>
-  </data>
-  <data name="SelectResponsible" xml:space="preserve">
-    <value>Выбор ответственного</value>
-  </data>
-  <data name="ShowArchived" xml:space="preserve">
-    <value>Статус</value>
-  </data>
-  <data name="Unarchive" xml:space="preserve">
-    <value>Разархивировать</value>
-  </data>
-  <data name="Unlimited" xml:space="preserve">
-    <value>Не ограничено</value>
-  </data>
-  <data name="UpdatedAt" xml:space="preserve">
-    <value>Обновлено</value>
-  </data>
-  <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
-    <value>Заполните все или несколько идентификационных полей</value>
-  </data>
-  <data name="CreateAssignment_QuantityInstruction" xml:space="preserve">
-    <value>Выберите ответственного (Супервизора или Интервьюера) для задания</value>
-  </data>
-  <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
-    <value>Введите максимальное число интервью которое возможно создать на основе этого задания</value>
-  </data>
-  <data name="InterviewsNeeded" xml:space="preserve">
-    <value>Необходимо интервью</value>
-  </data>
-  <data name="CreateInterview" xml:space="preserve">
-    <value>Начать новое интервью</value>
-    <comment>Начать новое интервью</comment>
-  </data>
   <data name="Questionnaire" xml:space="preserve">
-    <value>Опросник</value>
-    <comment>Опросник</comment>
-  </data>
-  <data name="AllAssignments" xml:space="preserve">
-    <value>Все задачи</value>
+    <value>Questionário</value>
   </data>
 </root>

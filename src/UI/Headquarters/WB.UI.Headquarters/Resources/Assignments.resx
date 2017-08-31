@@ -187,4 +187,7 @@
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionnaire</value>
   </data>
+  <data name="AllAssignments" xml:space="preserve">
+    <value>All Assignments</value>
+  </data>  
 </root>

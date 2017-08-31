@@ -165,4 +165,7 @@
   <data name="Version" xml:space="preserve">
     <value>Version</value>
   </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Questionnaire</value>
+  </data>
 </root>

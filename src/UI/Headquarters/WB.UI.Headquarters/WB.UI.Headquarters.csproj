@@ -396,6 +396,10 @@
     <Content Include="App_GlobalResources\BatchUpload.zh.resx">
       <DependentUpon>BatchUpload.resx</DependentUpon>
     </Content>
+    <Content Include="App_GlobalResources\Common.ar.resx">
+      <LastGenOutput>Common.ar.designer.cs</LastGenOutput>
+      <DependentUpon>Common.resx</DependentUpon>
+    </Content>
     <Content Include="App_GlobalResources\Common.fr.resx">
       <DependentUpon>Common.resx</DependentUpon>
     </Content>
@@ -480,6 +484,9 @@
     </Content>
     <Content Include="App_GlobalResources\Import.zh.resx">
       <DependentUpon>Import.resx</DependentUpon>
+    </Content>
+    <Content Include="App_GlobalResources\MainMenu.ar.resx">
+      <DependentUpon>MainMenu.resx</DependentUpon>
     </Content>
     <Content Include="App_GlobalResources\MainMenu.fr.resx">
       <DependentUpon>MainMenu.resx</DependentUpon>
@@ -666,10 +673,6 @@
     <Content Include="Dependencies\img\icon-mic-2x.png" />
     <Content Include="Dependencies\img\padlock-1dp.png" />
     <Content Include="Dependencies\img\padlock-3dp.png" />
-    <Content Include="App_GlobalResources\MainMenu.ar.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>MainMenu.ar.designer.cs</LastGenOutput>
-    </Content>
     <EmbeddedResource Include="Content\img\no_image_found.jpg" />
     <Content Include="Content\img\sort_asc.png" />
     <Content Include="Content\img\sort_asc_disabled.png" />
@@ -803,12 +806,21 @@
     <EmbeddedResource Include="Resources\Archived.zh.resx">
       <DependentUpon>Archived.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Assignments.fr.resx">
+      <DependentUpon>Assignments.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Assignments.pt.resx">
+      <DependentUpon>Assignments.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Assignments.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Assignments.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Assignments.ru.resx">
+      <DependentUpon>Assignments.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Assignments.zh.resx">
       <DependentUpon>Assignments.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\DataTables.resx">
@@ -834,7 +846,9 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>DevicesInterviewers.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DevicesInterviewers.ru.resx" />
+    <EmbeddedResource Include="Resources\DevicesInterviewers.ru.resx">
+      <DependentUpon>DevicesInterviewers.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\EnumNames.fr.resx">
       <DependentUpon>EnumNames.resx</DependentUpon>
     </EmbeddedResource>
@@ -916,6 +930,12 @@
     <EmbeddedResource Include="Resources\LimitsIndicator.zh.resx">
       <DependentUpon>LimitsIndicator.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\LoginToDesigner.fr.resx">
+      <DependentUpon>LoginToDesigner.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\LoginToDesigner.pt.resx">
+      <DependentUpon>LoginToDesigner.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\LoginToDesigner.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -977,7 +997,9 @@
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Strings.resx" />
-    <EmbeddedResource Include="Resources\Strings.ru.resx" />
+    <EmbeddedResource Include="Resources\Strings.ru.resx">
+      <DependentUpon>Strings.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\SyncLogMessages.fr.resx">
       <DependentUpon>SyncLogMessages.resx</DependentUpon>
     </EmbeddedResource>
@@ -1040,9 +1062,15 @@
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.zh.resx">
       <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterview.ar.resx" />
-    <EmbeddedResource Include="Resources\WebInterview.es.resx" />
-    <EmbeddedResource Include="Resources\WebInterview.fr.resx" />
+    <EmbeddedResource Include="Resources\WebInterview.ar.resx">
+      <DependentUpon>WebInterview.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterview.es.resx">
+      <DependentUpon>WebInterview.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterview.fr.resx">
+      <DependentUpon>WebInterview.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\WebInterview.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1054,9 +1082,15 @@
     <EmbeddedResource Include="Resources\WebInterview.zh.resx">
       <DependentUpon>WebInterview.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterviewSetup.ar.resx" />
-    <EmbeddedResource Include="Resources\WebInterviewSetup.es.resx" />
-    <EmbeddedResource Include="Resources\WebInterviewSetup.fr.resx" />
+    <EmbeddedResource Include="Resources\WebInterviewSetup.ar.resx">
+      <DependentUpon>WebInterviewSetup.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterviewSetup.es.resx">
+      <DependentUpon>WebInterviewSetup.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterviewSetup.fr.resx">
+      <DependentUpon>WebInterviewSetup.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\WebInterviewSetup.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1069,9 +1103,15 @@
     <EmbeddedResource Include="Resources\WebInterviewSetup.zh.resx">
       <DependentUpon>WebInterviewSetup.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterviewUI.ar.resx" />
-    <EmbeddedResource Include="Resources\WebInterviewUI.es.resx" />
-    <EmbeddedResource Include="Resources\WebInterviewUI.fr.resx" />
+    <EmbeddedResource Include="Resources\WebInterviewUI.ar.resx">
+      <DependentUpon>WebInterviewUI.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterviewUI.es.resx">
+      <DependentUpon>WebInterviewUI.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterviewUI.fr.resx">
+      <DependentUpon>WebInterviewUI.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\WebInterviewUI.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
@@ -1504,11 +1544,6 @@
     <Compile Include="API\ReportDataApiController.Dto.cs" />
     <Compile Include="API\WebInterview\IWebInterviewAllowService.cs" />
     <Compile Include="API\WebInterview\Services\WebInterviewAllowService.cs" />
-    <Compile Include="App_GlobalResources\MainMenu.ar.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MainMenu.ar.resx</DependentUpon>
-    </Compile>
     <Compile Include="Code\AutoMapperResolutionContextExtensions.cs" />
     <Compile Include="API\PublicApi\BaseApiServiceController.cs" />
     <Compile Include="API\PublicApi\IncludeOnlyPublicApiDocumentFilter.cs" />

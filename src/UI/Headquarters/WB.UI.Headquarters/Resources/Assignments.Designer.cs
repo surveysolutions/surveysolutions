@@ -70,6 +70,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All Assignments.
+        /// </summary>
+        public static string AllAssignments {
+            get {
+                return ResourceManager.GetString("AllAssignments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Archive.
         /// </summary>
         public static string Archive {

@@ -178,13 +178,13 @@
                 </div>
 
                 <div class="filters-container">
-                    <h4>@Pages.FilterTitle:</h4> 
+                    <h4>@Pages.FilterTitle</h4> 
                     @if (isVisibleSupervisorColumn)
                     {
                         <div class="block-filter">
                             <h5 >@Pages.Interviewers_SupervisorTitle</h5>
                             <div class="input-group">
-                                <input class="form-control" placeholder="@Pages.AnyOption" data-bind="typeahead: SelectedSupervisor, typeaheadOptions: {source: Supervisors, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
+                                <input class="form-control" placeholder="@Common.AllSupervisors" data-bind="typeahead: SelectedSupervisor, typeaheadOptions: {source: Supervisors, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
                                 <span data-bind="spinner: IsSupervisorsLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
                                 <div class="input-group-btn" data-bind="click: function(){ SelectedSupervisor(undefined); }">
                                     <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
