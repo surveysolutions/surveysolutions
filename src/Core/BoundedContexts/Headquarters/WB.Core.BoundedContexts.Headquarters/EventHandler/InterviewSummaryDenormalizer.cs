@@ -172,6 +172,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 {
                     interview.LastStatusChangeComment = @event.Payload.Comment;
                 }
+
+                if (!state.WasCompleted && @event.Payload.Status == InterviewStatus.Completed)
+                {
+                    state.WasCompleted = true;
+                }
             });
         }
 
