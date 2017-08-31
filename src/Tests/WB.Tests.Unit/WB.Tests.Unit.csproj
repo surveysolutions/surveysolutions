@@ -696,6 +696,7 @@
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_question_text_contains_html.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_first_created_intervew_exists.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_loading_report_with_data_in_last_period.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_calculating_grand_averagel_with_supervisor_id_provided.cs" />
     <Compile Include="SharedKernels\SurveyManagement\FilebasedPreloadedDataRepositoryTests\FilebasedPreloadedDataRepositoryTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_all_interviews_for_team_containing_tags_in_prefield.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_all_interviews_containing_tags_in_prefield.cs" />
