@@ -63,6 +63,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             var to = reportStartDate.Date.AddDays(1);
             var from = this.AddPeriod(to, period, -columnCount);
 
+            DateTime fromUtc = from.AddMinutes(timezoneAdjastmentMins);
+            DateTime toUtc = to.AddMinutes(timezoneAdjastmentMins);
+
             DateTime? minDate = ReportHelpers.GetFirstInterviewCreatedDate(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), this.interviewStatusesStorage);
             var dateTimeRanges =
                 Enumerable.Range(0, columnCount)

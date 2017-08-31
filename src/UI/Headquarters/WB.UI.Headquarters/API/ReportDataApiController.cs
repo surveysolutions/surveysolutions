@@ -46,6 +46,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IStatusDurationReport statusDurationReport;
         private readonly IDeviceInterviewersReport deviceInterviewersReport;
         private readonly IExportFactory exportFactory;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
         public ReportDataApiController(
             ICommandService commandService,
@@ -60,7 +61,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             ISpeedReportFactory speedReport,
             IStatusDurationReport statusDurationReport,
             IDeviceInterviewersReport deviceInterviewersReport,
-            IExportFactory exportFactory)
+            IExportFactory exportFactory,
+            IFileSystemAccessor fileSystemAccessor)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
@@ -74,6 +76,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.statusDurationReport = statusDurationReport;
             this.deviceInterviewersReport = deviceInterviewersReport;
             this.exportFactory = exportFactory;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         [HttpGet]
