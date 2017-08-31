@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Resources;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code.CommandTransformation;
@@ -19,13 +22,16 @@ namespace WB.UI.Headquarters.Controllers
     public class CommandApiController : BaseApiController
     {
         private readonly ICommandDeserializer commandDeserializer;
+        private readonly IInterviewFactory _interviewFactory;
         private const string DefaultErrorMessage = "Unexpected error occurred";
 
         public CommandApiController(
-            ICommandService commandService, ICommandDeserializer commandDeserializer, ILogger logger)
+            ICommandService commandService, ICommandDeserializer commandDeserializer, ILogger logger,
+            IInterviewFactory interviewFactory)
             : base(commandService, logger)
         {
             this.commandDeserializer = commandDeserializer;
+            _interviewFactory = interviewFactory;
         }
 
         [HttpPost]
@@ -57,7 +63,21 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     ICommand concreteCommand = this.commandDeserializer.Deserialize(request.Type, request.Command);
                     ICommand transformedCommand = new CommandTransformator().TransformCommnadIfNeeded(concreteCommand);
-                    this.CommandService.Execute(transformedCommand);
+
+                    switch (transformedCommand)
+                    {
+                        case SetFlagToAnswerCommand setFlagCommand:
+                            this._interviewFactory.SetFlagToQuestion(setFlagCommand.InterviewId,
+                                Identity.Create(setFlagCommand.QuestionId, setFlagCommand.RosterVector));
+                            break;
+                        case RemoveFlagFromAnswerCommand removeFlagCommand:
+                            this._interviewFactory.RemoveFlagFromQuestion(removeFlagCommand.InterviewId,
+                                Identity.Create(removeFlagCommand.QuestionId, removeFlagCommand.RosterVector));
+                            break;
+                        default:
+                            this.CommandService.Execute(transformedCommand);
+                            break;
+                    }
 
                     response.IsSuccess = true;
                 }

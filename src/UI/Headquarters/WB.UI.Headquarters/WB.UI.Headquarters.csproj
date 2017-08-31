@@ -1727,6 +1727,7 @@
     <Compile Include="Migrations\ReadSide\M001-100\M012_DeleteDeletedInterviews.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M013_AddIndexesForQuantityReport.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M016_AddQuestionnaireIdAndVersionIndexesToInterviewSummary.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M023AddInterviewEntitiesTable.cs" />
     <Compile Include="Models\InterviewsDataTableRequest.cs" />
     <Compile Include="Models\Reports\StatusDurationModel.cs" />
     <Compile Include="Models\Reports\DevicesInterviewersModel.cs" />
