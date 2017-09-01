@@ -81,11 +81,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             });
         }
 
-        private readonly bool isUseStatefulInterviewForDate = true;
+        private readonly bool isUseStatefulInterviewForData = true;
 
         public InterviewSynchronizationDto GetInProgressInterviewDetails(Guid interviewId)
         {
-            if (isUseStatefulInterviewForDate)
+            if (isUseStatefulInterviewForData)
             {
                 var statefulInterview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
 
