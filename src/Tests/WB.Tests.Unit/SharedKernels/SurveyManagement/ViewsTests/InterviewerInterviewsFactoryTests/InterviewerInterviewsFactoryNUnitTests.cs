@@ -194,7 +194,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
                         _ => _.GetById(Moq.It.IsAny<string>()) == interviewData),
                     Mock.Of<IChangeStatusFactory>(
                         _ => _.Load(Moq.It.IsAny<ChangeStatusInputModel>()) == changeStatusView),
-                    incomingSyncPackagesQueue ?? Mock.Of<IInterviewPackagesService>());
+                    incomingSyncPackagesQueue ?? Mock.Of<IInterviewPackagesService>()) { isUseStatefulInterviewForData = false };
         }
     }
 }
