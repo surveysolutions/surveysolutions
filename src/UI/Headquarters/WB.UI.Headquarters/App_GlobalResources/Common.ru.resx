@@ -286,4 +286,7 @@
   <data name="Confirm" xml:space="preserve">
     <value>Подтвердить</value>
   </data>
+  <data name="AllSupervisors" xml:space="preserve">
+    <value>Все супервизоры</value>
+  </data>
 </root>
