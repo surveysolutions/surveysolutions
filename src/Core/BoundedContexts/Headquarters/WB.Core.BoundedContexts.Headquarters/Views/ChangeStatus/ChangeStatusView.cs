@@ -13,7 +13,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus
     {
         public string Comment { get; set; }
         public DateTime Date { get; set; }
-        public string DateHumanized { get; set; }
 
         public InterviewStatus Status { get; set; }
 

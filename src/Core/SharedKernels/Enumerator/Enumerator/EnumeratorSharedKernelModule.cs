@@ -28,7 +28,6 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<ISideBarSectionViewModelsFactory, SideBarSectionViewModelFactory>();
             registry.Bind<IDynamicTextViewModelFactory, DynamicTextViewModelFactory>();
             registry.Bind<ISubstitutionTextFactory, SubstitutionTextFactory>();
-            //todo ank: Might affect performance
             registry.Bind<ISubstitutionService, SubstitutionService>(); //.InScope(ctx => BaseInterviewViewModel.CurrentInterviewScope); 
             registry.Bind<IVariableToUIStringService, VariableToUIStringService>();
             registry.Bind<IOptionsRepository, OptionsRepository>();
@@ -162,7 +161,6 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<QuestionInstructionViewModel>();
             registry.Bind<ValidityViewModel>();
             registry.BindGeneric(typeof(QuestionStateViewModel<>));
-            
         }
     }
 }
