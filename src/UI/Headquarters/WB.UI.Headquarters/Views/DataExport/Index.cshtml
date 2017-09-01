@@ -40,7 +40,7 @@
             }
 
             var statuses = [
-                { status: null, title: @Common.AllStatuses },
+                { status: null, title: '@Common.AllStatuses' },
                 @foreach (var item in Model.ExportStatuses)
                 {
                     <text>{ status: @((int)item), title: '@item.ToUiString()' },</text>
