@@ -736,10 +736,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
 
-            return new InterviewSynchronizationDto(
+            var interviewSynchronizationDto = new InterviewSynchronizationDto(
                 id: Id,
                 status: Status,
-                comments: SupervisorRejectComment,
+                comments: Status == InterviewStatus.RejectedBySupervisor ? SupervisorRejectComment : null,
                 rejectDateTime:  this.properties.RejectDateTime,
                 interviewerAssignedDateTime : this.properties.InterviewerAssignedDateTime,
                 userId: CurrentResponsibleId,
@@ -762,6 +762,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 disabledVariables: disabledVariables,
                 wasCompleted: this.properties.WasCompleted,
                 createdOnClient: true);
+            interviewSynchronizationDto.InterviewKey = GetInterviewKey();
+            interviewSynchronizationDto.AssignmentId = GetAssignmentId();
+
+            return interviewSynchronizationDto;
         }
 
         public bool IsReadOnlyQuestion(Identity identity)
