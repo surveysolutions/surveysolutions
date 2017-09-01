@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 {
+    [Obsolete("Now we use StatefulInterview.GetSynchronizationDto()")]
     internal class InterviewSynchronizationDtoFactory : IInterviewSynchronizationDtoFactory
     {
         private readonly IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore;
