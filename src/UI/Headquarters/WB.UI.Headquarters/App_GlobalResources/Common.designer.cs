@@ -88,7 +88,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All Responsible.
+        ///   Looks up a localized string similar to All Responsibles.
         /// </summary>
         internal static string AllResponsible {
             get {

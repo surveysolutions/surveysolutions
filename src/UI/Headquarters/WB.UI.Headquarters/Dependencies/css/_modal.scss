@@ -1,5 +1,5 @@
 body > .ui-pnotify{
-    z-index: 100050;
+    z-index: 100050 !important;
 }
 .ui-pnotify-modal-overlay, .modal-backdrop{
     background-color: rgba(0,0,0,.2);

@@ -223,7 +223,10 @@
                     interviewUrl: $detailsUrl + '/' + interview.InterviewId(),
                     responsible: interview.ResponsibleName(),
                     isResponsibleInterviewer: interview.ResponsibleRole() == 4,
-                    statusHistory: statusHistory
+                    statusHistory: statusHistory,
+                    formatDate: function(date) {
+                        return moment.utc(date).local().format('MMM DD, YYYY HH:MM');
+                    }
                 };
 
                 $('body').append($("<div/>").html($(statusHistoryTemplateId).html())[0]);

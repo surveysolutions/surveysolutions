@@ -23,7 +23,7 @@
                             <tbody  data-bind="foreach:statusHistory">
                             <tr>
                                 <td data-bind="text: StatusHumanized"></td>
-                                <td class="date" data-bind="text: DateHumanized"></td>
+                                <td class="date" data-bind="text: $root.formatDate(Date)"></td>
                                 <td><span data-bind="text: Responsible, attr: { 'class' : ResponsibleRole }"></span></td>
                                 <td><span data-bind="text: Assignee, attr: { 'class' : AssigneeRole }"></span></td>
                                 <td data-bind="text: Comment"></td>
