@@ -51,6 +51,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.entitiesRepository.Store(flaggedQuestion, null);
         }
 
+        public void RemoveInterview(Guid interviewId)
+        {
+            var removedEntities = this.entitiesRepository.Query(x => x.Where(y => y.InterviewId == interviewId));
+            this.entitiesRepository.Remove(removedEntities);
+        }
+
         private void ThrowIfInterviewDeletedOrReadOnly(Guid interviewId)
         {
             var interview = this.summaryRepository.GetById(interviewId);

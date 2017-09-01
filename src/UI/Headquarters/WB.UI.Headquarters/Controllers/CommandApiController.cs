@@ -74,6 +74,10 @@ namespace WB.UI.Headquarters.Controllers
                             this._interviewFactory.RemoveFlagFromQuestion(removeFlagCommand.InterviewId,
                                 Identity.Create(removeFlagCommand.QuestionId, removeFlagCommand.RosterVector));
                             break;
+                        case HardDeleteInterview deleteInterview:
+                            this.CommandService.Execute(transformedCommand);
+                            this._interviewFactory.RemoveInterview(deleteInterview.InterviewId);
+                            break;
                         default:
                             this.CommandService.Execute(transformedCommand);
                             break;

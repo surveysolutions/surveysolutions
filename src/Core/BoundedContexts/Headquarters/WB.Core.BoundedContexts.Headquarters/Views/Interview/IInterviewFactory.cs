@@ -8,5 +8,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         Identity[] GetFlaggedQuestionIds(Guid interviewId);
         void SetFlagToQuestion(Guid interviewId, Identity questionIdentity);
         void RemoveFlagFromQuestion(Guid interviewId, Identity questionIdentity);
+        void RemoveInterview(Guid interviewId);
     }
 }
