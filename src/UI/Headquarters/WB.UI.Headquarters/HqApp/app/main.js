@@ -1,11 +1,17 @@
 import 'core-js/es6/promise'
 import 'core-js/modules/es6.object.assign'
 import 'bootstrap/js/dropdown.js'
-
-import './components'
+import 'bootstrap/js/modal.js'
+import 'bootstrap-select'
 
 import Vue from 'vue'
 import Vuei18n from "./plugins/locale"
+import VueAxios from "./plugins/http"
+Vue.use(VueAxios);
+
+import VeeValidate from 'vee-validate';
+Vue.use(VeeValidate);
+
 import store from "./store"
 
 import config from "./config"
@@ -19,6 +25,8 @@ Vue.use(Vuei18n, {
         'en': Vue.$config.resources
     }
 })
+
+import './components'
 
 const router = require("./router").default
 

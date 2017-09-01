@@ -1517,6 +1517,7 @@
     <Content Include="Views\Reports\StatusDuration.cshtml" />
     <Content Include="Views\Shared\_export-buttons.cshtml" />
     <Content Include="Views\Shared\_MainLayoutHq.cshtml" />
+    <Content Include="Views\Assignments\list.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -2078,15 +2079,13 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
-  
   <Target Name="Cleanup HqApp" BeforeTargets="BeforeRebuild">
     <Message Text="Cleaning up HQ App" />
-     <ItemGroup>
-       <FilesToDelete Include="HqApp\dist\**\*.js" />
-    </ItemGroup>   
+    <ItemGroup>
+      <FilesToDelete Include="HqApp\dist\**\*.js" />
+    </ItemGroup>
     <Delete Files="@(FilesToDelete)" />
   </Target>
-
   <!-- HQ APP -->
   <Target Name="RestoreHqAppDeps" BeforeTargets="RunWebpackDev" Condition=" '$(Configuration)' == 'Debug'">
     <Message Importance="high" Text="Restoring HQ App npm deps" />
@@ -2096,12 +2095,10 @@
     <Exec Command="yarn" WorkingDirectory="HqApp" Condition="'$(ErrorCode)' == '0'" />
     <Exec Command="npm install" WorkingDirectory="HqApp" Condition="'$(ErrorCode)' != '0'" />
   </Target>
-
   <Target Name="RunWebpackDev" AfterTargets="AfterBuild" Condition=" '$(Configuration)' == 'Debug' And !Exists('HqApp\dist\app.bundle.js') ">
     <Message Importance="high" Text="Performing dev Webpack build..." />
     <Exec Command="npm run dev -- --no-color" WorkingDirectory="HqApp" />
   </Target>
-  
   <!-- /HQ APP -->
   <Target Name="CollectWebInterviewView" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
     <ItemGroup>

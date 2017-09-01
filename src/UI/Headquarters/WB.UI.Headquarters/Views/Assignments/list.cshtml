@@ -1,0 +1,7 @@
+﻿@using Newtonsoft.Json
+@model WB.UI.Headquarters.Controllers.AssignmentsFilters
+@{
+    ViewBag.Title = Pages.InterviewersAndDevicesTitle;
+    Layout = "~/Views/Shared/_MainLayoutHq.cshtml";
+}
+<div id="vueApp" configuration="@JsonConvert.SerializeObject(Model) "></div>
