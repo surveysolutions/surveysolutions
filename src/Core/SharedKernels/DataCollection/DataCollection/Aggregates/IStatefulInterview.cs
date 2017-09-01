@@ -115,7 +115,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<InterviewTreeGroup> GetAllEnabledGroupsAndRosters();
         IEnumerable<IInterviewTreeNode> GetAllNodes();
-        IEnumerable<InterviewTreeQuestion> GetAllQuestions();
         IEnumerable<InterviewTreeGroup> GetAllGroupsAndRosters();
         InterviewTreeSection FirstSection { get; }
         Guid CurrentResponsibleId { get; }
