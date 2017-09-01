@@ -4,7 +4,6 @@ const baseAppPath = "./"
 const devMode = process.env.NODE_ENV != 'production';
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
-
 console.log("Building HQ UI js in " + (devMode ? "DEVELOPMENT" : "PRODUCTION") + " mode.")
 
 var fs = require('fs');
@@ -49,7 +48,7 @@ module.exports = {
                 test: /\.js$/,
                 include: path.resolve(__dirname, "app"),
                 use: ['babel-loader']
-            }, {
+            } , {
                 test: /\.(js|vue)$/,
                 loader: 'eslint-loader',
                 enforce: 'pre',

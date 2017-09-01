@@ -11,7 +11,10 @@ console.log("Building HQ UI vendor libs");
 module.exports = {
     entry: {
         "vendor": [
+            "axios",
             "bootstrap/js/dropdown.js",
+            "bootstrap/js/modal.js",
+            "bootstrap-select",
             "core-js/es6/promise", 
             "core-js/modules/es6.object.assign",
             "datatables.net-select", 
