@@ -53,16 +53,18 @@
         <div class="row">
             @Html.Partial("_alerts")
             <div class="page-header clearfix">
-                <div>
-                    <h1>@Html.Raw(string.Format(Users.ObserversCountDescription, @"<span data-bind='text: UsersCount'></span>"))</h1>
-                    <a class="btn btn-success" href="@Url.Action("Create", "Observer", new {area = string.Empty})">@Users.AddObserver</a>
+                <div class="neighbor-block-to-search">
+                    <div class="topic-with-button">
+                        <h1>@Html.Raw(string.Format(Users.ObserversCountDescription, @"<span data-bind='text: UsersCount'></span>"))</h1>
+                        <a class="btn btn-success" href="@Url.Action("Create", "Observer", new {area = string.Empty})">@Users.AddObserver</a>
+                    </div>
+                    <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">
+                        <ol class="list-unstyled">
+                            <li>@Pages.Users_Observers_Instruction1</li>
+                            <li>@Pages.Users_Observers_Instruction2</li>
+                        </ol>
+                    </div>
                 </div>
-            </div>
-            <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">
-                <ol class="list-unstyled">
-                    <li>@Pages.Users_Observers_Instruction1</li>
-                    <li>@Pages.Users_Observers_Instruction2</li>
-                </ol>
             </div>
         </div>
 
