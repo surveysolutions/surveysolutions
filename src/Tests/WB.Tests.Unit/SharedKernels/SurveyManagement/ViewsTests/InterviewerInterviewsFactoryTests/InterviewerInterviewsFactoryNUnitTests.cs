@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
 
@@ -188,6 +189,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
                     reader ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
                     questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
                     synchronizationDtoFactory ?? Mock.Of<IInterviewSynchronizationDtoFactory>(),
+                    Mock.Of<IStatefulInterviewRepository>(),
                     Mock.Of<IReadSideKeyValueStorage<InterviewData>>(
                         _ => _.GetById(Moq.It.IsAny<string>()) == interviewData),
                     Mock.Of<IChangeStatusFactory>(
