@@ -28,6 +28,7 @@ using WB.UI.Interviewer.Activities.Dashboard;
 using WB.UI.Interviewer.Converters;
 using WB.UI.Interviewer.CustomBindings;
 using WB.UI.Interviewer.Infrastructure;
+using WB.UI.Interviewer.Infrastructure.Logging;
 using WB.UI.Interviewer.ServiceLocation;
 using WB.UI.Interviewer.Settings;
 using WB.UI.Interviewer.ViewModel;
@@ -143,6 +144,7 @@ namespace WB.UI.Interviewer
             builder.RegisterModule(new InterviewerUIModule().AsAutofac());
             builder.RegisterModule(new InterviewerLoggingModule());
 
+            builder.RegisterType<NLogLogger>().As<ILogger>();
 
             builder.RegisterType<InterviewerSettings>().As<IEnumeratorSettings>().As<IRestServiceSettings>().As<IInterviewerSettings>()
                 .WithParameter("backupFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Backup"))
