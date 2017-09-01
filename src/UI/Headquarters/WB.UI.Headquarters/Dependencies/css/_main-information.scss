@@ -3,7 +3,7 @@
 	padding: 0 0 0 30px;
 	@include transition(margin, 0.3s);
 	.page-header{
-		div{
+		.neighbor-block-to-search{
 			h1{
 				padding: 0;
 			}
@@ -16,6 +16,9 @@
 			&.row-without-padding{
 				padding-right: 0;
 			}
+		}
+		.topic-with-button{
+			overflow: hidden;
 		}
 	} 
 	.panel-table{
@@ -97,8 +100,10 @@
 	.main-information {
 		margin-left: $filter-width - $margin-container-md-screen + 15px;
 		padding-right: 15px;
-		.page-header div{
-			padding-right: 255px;
+		.page-header {
+			.neighbor-block-to-search{
+				padding-right: 255px;
+			}
 		}
 		.panel-table{
 			left: $filter-width+ 12px;
@@ -123,7 +128,7 @@
 	.main-information{
 		margin-left: 0;
 		padding: 0 10px;
-		.page-header div{
+		.page-header .neighbor-block-to-search{
 			padding-right: 0;
 		}
 		.panel-table{
