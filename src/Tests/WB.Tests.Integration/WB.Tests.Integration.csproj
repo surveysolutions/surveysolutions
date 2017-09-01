@@ -522,6 +522,7 @@
     <Compile Include="ResourcesTranslationTests\ResourcesTranslationTestsContext.cs" />
     <Compile Include="ResourcesTranslationTests\when_checking_all_translations.cs" />
     <Compile Include="ResourcesTranslationTests\when_checking_availability_of_resources_in_Russian_comparing_to_English.cs" />
+    <Compile Include="ResourcesTranslationTests\when_checking_that_translated_resources_have_same_property_names_in_format_elements_as_original.cs" />
     <Compile Include="ResourcesTranslationTests\when_checking_that_translated_resources_have_same_string_format_elements_as_original.cs" />
     <Compile Include="SequentialCommandServiceTests\when_canceling_2_commands_after_1_second_of_their_execution_in_parallel_and_each_command_takes_5_seconds_to_execute.cs" />
     <Compile Include="SequentialCommandServiceTests\when_executing_3_commands_in_parallel_each_taking_1_second_to_execute.cs" />
