@@ -50,16 +50,18 @@
         @Html.Partial("_alerts")
         <div class="row">
             <div class="page-header clearfix">
-                <div>
-                    <h1>@Html.Raw(string.Format(Users.ApiUsersCountDescription, @"<span data-bind='text: UsersCount'></span>"))</h1>
-                    <a class="btn btn-success" href="@Url.Action("Create", "ApiUser", new {area = string.Empty})">@Users.AddAPIUser</a>
+                <div class="neighbor-block-to-search">
+                    <div class="topic-with-button">
+                        <h1>@Html.Raw(string.Format(Users.ApiUsersCountDescription, @"<span data-bind='text: UsersCount'></span>"))</h1>
+                        <a class="btn btn-success" href="@Url.Action("Create", "ApiUser", new {area = string.Empty})">@Users.AddAPIUser</a>
+                    </div>
+                    <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">
+                        <ol class="list-unstyled">
+                            <li>@Pages.Users_API_Instruction1</li>
+                            <li>@Pages.Users_API_Instruction2</li>
+                        </ol>
+                    </div>
                 </div>
-            </div>
-            <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">
-                <ol class="list-unstyled">
-                    <li>@Pages.Users_API_Instruction1</li>
-                    <li>@Pages.Users_API_Instruction2</li>
-                </ol>
             </div>
         </div>
         <table id="data_holder" class="table table-striped table-bordered table-condensed table-hover table-ordered"
