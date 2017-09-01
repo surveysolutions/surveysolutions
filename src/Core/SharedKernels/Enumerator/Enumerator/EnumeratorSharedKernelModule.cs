@@ -28,7 +28,6 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<ISideBarSectionViewModelsFactory, SideBarSectionViewModelFactory>();
             registry.Bind<IDynamicTextViewModelFactory, DynamicTextViewModelFactory>();
             registry.Bind<ISubstitutionTextFactory, SubstitutionTextFactory>();
-            //todo ank: Might affect performance
             registry.Bind<ISubstitutionService, SubstitutionService>(); //.InScope(ctx => BaseInterviewViewModel.CurrentInterviewScope); 
             registry.Bind<IVariableToUIStringService, VariableToUIStringService>();
             registry.Bind<IOptionsRepository, OptionsRepository>();
@@ -104,6 +103,7 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<CoverInterviewViewModel>();
             registry.Bind<DynamicTextViewModel>();
             registry.Bind<EntityWithErrorsViewModel>();
+            registry.Bind<EntityWithCommentsViewModel>();
             registry.Bind<EnumerationStageViewModel>();
             registry.Bind<ReadOnlyQuestionViewModel>();
             registry.Bind<SideBarCompleteSectionViewModel>();
@@ -148,7 +148,7 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<TimestampQuestionViewModel>();
             registry.Bind<YesNoQuestionOptionViewModel>();
             registry.Bind<YesNoQuestionViewModel>();
-
+            
             // question state
             registry.Bind<AnswersRemovedNotifier>();
             registry.Bind<AttachmentViewModel>();
@@ -160,7 +160,6 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<QuestionInstructionViewModel>();
             registry.Bind<ValidityViewModel>();
             registry.BindGeneric(typeof(QuestionStateViewModel<>));
-            
         }
     }
 }

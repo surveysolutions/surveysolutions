@@ -5,9 +5,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus
 {
@@ -63,8 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus
             return new CommentedStatusHistroyView
             {
                 Comment = commentedStatus.Comment,
-                Date = commentedStatus.Timestamp.ToLocalTime(),
-                DateHumanized = commentedStatus.Timestamp.ToLocalTime().FormatDateWithTime(),
+                Date = commentedStatus.Timestamp,
                 Status = commentedStatus.Status.ConvertToInterviewStatus().Value,
                 StatusHumanized = commentedStatus.Status.ConvertToInterviewStatus().Value.ToLocalizeString(),
                 Responsible = commentedStatus.StatusChangeOriginatorName,

@@ -297,7 +297,7 @@ namespace WB.UI.Headquarters.Controllers
             return View();
         }
 
-        private static readonly ResourceManager[] WebUiLocales = { WebInterviewUI.ResourceManager };
+        private static readonly ResourceManager[] WebUiLocales = { WebInterviewUI.ResourceManager, global::Resources.Common.ResourceManager };
         
         public static string Locale() => WebUiLocales.Translations().ToString();
 

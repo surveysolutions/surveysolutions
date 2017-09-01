@@ -15,6 +15,8 @@ import VueI18n from "./locale"
 
 Vue.use(VueI18n, {
     defaultNS: 'WebInterviewUI',
+    ns: ['WebInterviewUI', 'Common'],
+    nsSeparator: '.',
     resources: {
         'en': locale
     }
