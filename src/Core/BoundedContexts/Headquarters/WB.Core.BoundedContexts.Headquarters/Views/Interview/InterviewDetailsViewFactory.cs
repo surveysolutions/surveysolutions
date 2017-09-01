@@ -64,8 +64,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
             InterviewSummary interviewSummary = this.interviewSummaryRepository.GetById(interviewId);
 
-            Identity[] allInterviewQuestions = interview.GetAllQuestions().Select(x => x.Identity).ToArray();
-            Identity[] flaggedQuestionIds = this.interviewFactory.GetFlaggedQuestionIds(interviewId).Intersect(allInterviewQuestions).ToArray();
+            Identity[] flaggedQuestionIds = this.interviewFactory.GetFlaggedQuestionIds(interviewId)
+                .Where(x => interview.GetQuestion(x) != null).ToArray();
 
             var questionnaireIdentity = new QuestionnaireIdentity(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, interview.Language);
