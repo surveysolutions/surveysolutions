@@ -120,7 +120,7 @@ gulp.task('styles', ['move-bootstrap-fonts'], wrapPipe(function (success, error)
         .pipe(gulp.dest(config.buildDir).on('error', error))
         .pipe(rename({ suffix: '.min' }).on('error', error))
         .pipe(plugins.rev().on('error', error))
-        .pipe(cssnano().on('error', error))
+        //.pipe(cssnano().on('error', error))
         .pipe(gulp.dest(config.buildDistDir));
 }));
 
