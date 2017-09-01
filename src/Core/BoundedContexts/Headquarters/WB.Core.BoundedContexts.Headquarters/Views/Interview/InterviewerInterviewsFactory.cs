@@ -10,6 +10,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
@@ -18,22 +19,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> reader;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
-        private readonly IInterviewSynchronizationDtoFactory synchronizationDtoFactory;
+        private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewDataRepository;
         private readonly IChangeStatusFactory interviewStatusesFactory;
-        private readonly IInterviewPackagesService incomingSyncPackagesQueue;
+        private readonly IInterviewSynchronizationDtoFactory synchronizationDtoFactory;        private readonly IInterviewPackagesService incomingSyncPackagesQueue;
 
         public InterviewerInterviewsFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> reader,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IInterviewSynchronizationDtoFactory synchronizationDtoFactory,
+            IStatefulInterviewRepository statefulInterviewRepository,
             IReadSideKeyValueStorage<InterviewData> interviewDataRepository,
             IChangeStatusFactory interviewStatusesFactory,
             IInterviewPackagesService incomingSyncPackagesQueue)
         {
             this.reader = reader;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
-            this.synchronizationDtoFactory = synchronizationDtoFactory;
+            this.statefulInterviewRepository = statefulInterviewRepository;
             this.interviewDataRepository = interviewDataRepository;
             this.interviewStatusesFactory = interviewStatusesFactory;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
@@ -81,44 +83,54 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public InterviewSynchronizationDto GetInProgressInterviewDetails(Guid interviewId)
         {
-            InterviewData interviewData = this.interviewDataRepository.GetById(interviewId);
-            var isInterviewerAcceptedStatus = interviewData.Status == InterviewStatus.InterviewerAssigned
-                                           || interviewData.Status == InterviewStatus.RejectedBySupervisor;
+            var statefulInterview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
+
+            var isInterviewerAcceptedStatus = statefulInterview.Status == InterviewStatus.InterviewerAssigned
+                                           || statefulInterview.Status == InterviewStatus.RejectedBySupervisor;
             if (!isInterviewerAcceptedStatus)
                 return null;
 
+            return statefulInterview.GetSynchronizationDto();
+
+            //            InterviewData interviewData = this.interviewDataRepository.GetById(interviewId);
+            //            var isInterviewerAcceptedStatus = interviewData.Status == InterviewStatus.InterviewerAssigned
+            //                                              || interviewData.Status == InterviewStatus.RejectedBySupervisor;
+            //            if (!isInterviewerAcceptedStatus)
+            //                return null;
+
+
             // do not sort status history by date! Status timestamp is taken from event timestamp and occasionally timestamp of an earlier event could be greater then timestamp of the latest events. StatusHistory is ordered list and the order of statuses is preserved by db.
-            var fullStatusHistory = this
-                .interviewStatusesFactory
-                .Load(new ChangeStatusInputModel { InterviewId = interviewId })
-                .StatusHistory
-                .ToList();
+            //            var fullStatusHistory = this
+            //                .interviewStatusesFactory
+            //                .Load(new ChangeStatusInputModel { InterviewId = interviewId })
+            //                .StatusHistory
+            //                .ToList();
 
-            var lastInterviewStatus = fullStatusHistory.Last();
+            //            var lastInterviewStatus = fullStatusHistory.Last();
+            //
+            //            var lastInterviewerAssignedStatus = fullStatusHistory.LastOrDefault(status => status.Status == InterviewStatus.InterviewerAssigned);
+            //
+            //            var lastCompleteStatus = fullStatusHistory.LastOrDefault(x => x.Status == InterviewStatus.Completed);
 
-            var lastInterviewerAssignedStatus = fullStatusHistory.LastOrDefault(status => status.Status == InterviewStatus.InterviewerAssigned);
+            //            var statusHistoryStartingWithLastComplete =
+            //                lastCompleteStatus != null
+            //                    ? fullStatusHistory.SkipWhile(status => status != lastCompleteStatus).ToList()
+            //                    : fullStatusHistory;
 
-            var lastCompleteStatus = fullStatusHistory.LastOrDefault(x => x.Status == InterviewStatus.Completed);
+            //            var orderedInterviewStatuses = statusHistoryStartingWithLastComplete
+            //                .Where(status => status.Status == InterviewStatus.RejectedBySupervisor)
+            //                .ToList();
 
-            var statusHistoryStartingWithLastComplete =
-                lastCompleteStatus != null
-                    ? fullStatusHistory.SkipWhile(status => status != lastCompleteStatus).ToList()
-                    : fullStatusHistory;
+            //var lastRejectedBySupervisorStatus =
+            //    orderedInterviewStatuses.LastOrDefault(status => status.Status == InterviewStatus.RejectedBySupervisor);
 
-            var orderedInterviewStatuses = statusHistoryStartingWithLastComplete
-                .Where(status => status.Status == InterviewStatus.RejectedBySupervisor)
-                .ToList();
+            //var interviewStatus = lastRejectedBySupervisorStatus?.Status ?? lastInterviewStatus.Status;
 
-            var lastRejectedBySupervisorStatus =
-                orderedInterviewStatuses.LastOrDefault(status => status.Status == InterviewStatus.RejectedBySupervisor);
-
-            var interviewStatus = lastRejectedBySupervisorStatus?.Status ?? lastInterviewStatus.Status;
-
-            return this.synchronizationDtoFactory.BuildFrom(interviewData, interviewData.ResponsibleId,
-                interviewStatus,
-                lastRejectedBySupervisorStatus?.Comment,
-                lastRejectedBySupervisorStatus?.Date,
-                lastInterviewerAssignedStatus?.Date);
+            //            return this.synchronizationDtoFactory.BuildFrom(interviewData, interviewData.ResponsibleId,
+            //                interviewStatus,
+            //                lastRejectedBySupervisorStatus?.Comment,
+            //                lastRejectedBySupervisorStatus?.Date,
+            //                lastInterviewerAssignedStatus?.Date);
         }
 
         public IList<QuestionnaireIdentity> GetQuestionnairesWithAssignments(Guid interviewerId)
