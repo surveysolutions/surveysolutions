@@ -22,7 +22,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewDataRepository;
         private readonly IChangeStatusFactory interviewStatusesFactory;
-        private readonly IInterviewSynchronizationDtoFactory synchronizationDtoFactory;        private readonly IInterviewPackagesService incomingSyncPackagesQueue;
+        private readonly IInterviewSynchronizationDtoFactory synchronizationDtoFactory;
+        private readonly IInterviewPackagesService incomingSyncPackagesQueue;
 
         public InterviewerInterviewsFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> reader,
@@ -36,6 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.reader = reader;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.statefulInterviewRepository = statefulInterviewRepository;
+            this.synchronizationDtoFactory = synchronizationDtoFactory;
             this.interviewDataRepository = interviewDataRepository;
             this.interviewStatusesFactory = interviewStatusesFactory;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
@@ -81,7 +83,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             });
         }
 
-        private readonly bool isUseStatefulInterviewForData = true;
+        internal bool isUseStatefulInterviewForData = true;
 
         public InterviewSynchronizationDto GetInProgressInterviewDetails(Guid interviewId)
         {
