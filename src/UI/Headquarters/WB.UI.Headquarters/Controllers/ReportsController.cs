@@ -290,7 +290,7 @@ namespace WB.UI.Headquarters.Controllers
                 ReportName = reportName,
                 ResponsibleColumnName = responsibleColumnName,
                 SupervisorId = supervisorId,
-                ReportNameDescription = string.Format(GetReportDescriptionByType(reportType), PeriodicStatusReport.Team.ToLower()),
+                ReportNameDescription = string.Format(GetReportDescriptionByType(supervisorId, reportType), PeriodicStatusReport.Team.ToLower()),
                 TotalRowPresent = totalRowPresent,
                 MinAllowedDate = localDate ?? DateTime.Now
             };
@@ -331,7 +331,7 @@ namespace WB.UI.Headquarters.Controllers
             PeriodiceReportType.NumberOfInterviewTransactionsBySupervisor
         };
 
-        private string GetReportDescriptionByType(PeriodiceReportType reportType)
+        private string GetReportDescriptionByType(Guid? supervisorId, PeriodiceReportType reportType)
         {
             switch (reportType)
             {
@@ -340,19 +340,21 @@ namespace WB.UI.Headquarters.Controllers
                 case PeriodiceReportType.NumberOfInterviewTransactionsBySupervisor:
                     return PeriodicStatusReport.NumberOfInterviewTransactionsBySupervisorDescription;
                 case PeriodiceReportType.NumberOfInterviewTransactionsByHQ:
-                    return PeriodicStatusReport.NumberOfInterviewTransactionsByHQDescription;
+                    return supervisorId.HasValue ? PeriodicStatusReport.NumberOfCompletedInterviewsDescription : PeriodicStatusReport.NumberOfInterviewTransactionsByHQDescription;
                 case PeriodiceReportType.NumberOfInterviewsApprovedByHQ:
-                    return PeriodicStatusReport.NumberOfInterviewsApprovedByHQDescription;
+                    return supervisorId.HasValue ? PeriodicStatusReport.NumberOfCompletedInterviewsDescription : PeriodicStatusReport.NumberOfInterviewsApprovedByHQDescription;
+
+
                 case PeriodiceReportType.AverageCaseAssignmentDuration:
                     return PeriodicStatusReport.AverageCaseAssignmentDurationDescription;
                 case PeriodiceReportType.AverageInterviewDuration:
                     return PeriodicStatusReport.AverageInterviewDurationDescription;
                 case PeriodiceReportType.AverageSupervisorProcessingTime:
-                    return PeriodicStatusReport.AverageSupervisorProcessingTimeDescription;
+                    return supervisorId.HasValue ? PeriodicStatusReport.AverageInterviewDuration : PeriodicStatusReport.AverageSupervisorProcessingTimeDescription;
                 case PeriodiceReportType.AverageHQProcessingTime:
-                    return PeriodicStatusReport.AverageHQProcessingTimeDescription;
+                    return supervisorId.HasValue ? PeriodicStatusReport.AverageInterviewDuration : PeriodicStatusReport.AverageHQProcessingTimeDescription;
                 case PeriodiceReportType.AverageOverallCaseProcessingTime:
-                    return PeriodicStatusReport.AverageOverallCaseProcessingTimeDescription;
+                    return supervisorId.HasValue ? PeriodicStatusReport.AverageInterviewDuration : PeriodicStatusReport.AverageOverallCaseProcessingTimeDescription;
             }
 
             return string.Empty;
