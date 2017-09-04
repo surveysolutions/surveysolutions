@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     filter = input.Filter + "%"
                 });
                 int totalCount = await GetTotalRowsCountAsync(fullQuery, targetInterviewerVersion, input, connection);
-                var totalRow = await GetTotalLine(fullQuery, targetInterviewerVersion, connection);
+                var totalRow = await GetTotalLine(fullQuery, targetInterviewerVersion, input.Filter, connection);
 
                 return new DeviceInterviewersReportView
                 {
