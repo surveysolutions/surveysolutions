@@ -145,14 +145,14 @@
   <data name="IdentifyingQuestions" xml:space="preserve">
     <value>Identifying Questions</value>
   </data>
-  <data name="InterviewsCount" xml:space="preserve">
-    <value>Interviews quantity</value>
+  <data name="Count" xml:space="preserve">
+    <value>Count</value>
   </data>
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
     <value>{0} Assignment(s) are going to be changed</value>
   </data>
-  <data name="Quantity" xml:space="preserve">
-    <value>Quantity</value>
+  <data name="Size" xml:space="preserve">
+    <value>Size</value>
   </data>
   <data name="SelectResponsible" xml:space="preserve">
     <value>Select responsible</value>
