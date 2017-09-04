@@ -6228,7 +6228,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   position: relative; }
   .dataTables_wrapper .dataTables_filter {
     position: absolute;
-    top: -50px;
+    top: -65px;
     right: -10px;
     z-index: 2; }
     .dataTables_wrapper .dataTables_filter label {
@@ -6280,6 +6280,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   clear: both;
   float: right;
   padding-top: 0.755em;
+  padding-bottom: 10px;
   font: 13px/15px "TrebuchetMSBold";
   padding-left: 20px;
   text-align: right; }
@@ -6322,9 +6323,6 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
       display: none; }
     .dataTables_scroll .dataTables_scrollBody th:after {
       display: none !important; }
-
-.table-wrapper .dataTables_filter {
-  top: -40px; }
 
 @media only screen and (max-width: 1450px) {
   .table-ordered thead tr th:after {
@@ -8644,7 +8642,7 @@ span.image-zoom-box {
     display: none; } }
 
 body > .ui-pnotify {
-  z-index: 100050 !important; }
+  z-index: 100050; }
 
 .ui-pnotify-modal-overlay, .modal-backdrop {
   background-color: rgba(0, 0, 0, 0.2); }
@@ -9079,14 +9077,19 @@ h5, .preset-filters-container a, .preset-filters-container .export-queue {
   padding-bottom: 15px; }
   .page-header h1 + .maintenance-mode {
     margin-top: 15px; }
-  .page-header > div h1 {
-    float: left;
-    margin-right: 30px;
-    margin-bottom: 15px; }
-  .page-header > div .btn {
-    float: left;
-    padding: 8px;
-    margin-bottom: 10px; }
+  .page-header .neighbor-block-to-search {
+    padding-right: 365px; }
+    .page-header .neighbor-block-to-search.row-without-padding {
+      padding-right: 0; }
+  .page-header .topic-with-button {
+    overflow: hidden; }
+    .page-header .topic-with-button h1 {
+      float: left;
+      margin-right: 30px; }
+    .page-header .topic-with-button .btn {
+      float: left;
+      padding: 8px;
+      margin-bottom: 10px; }
   .page-header p {
     font-family: "RobotoRegular"; }
   .page-header ul {
@@ -9430,7 +9433,9 @@ main.hidden.display-block {
   .view-mode {
     top: 70px; }
   .main-information-no-filter {
-    padding: 0 10px; } }
+    padding: 0 10px; }
+  .page-header .neighbor-block-to-search {
+    padding-right: 255px; } }
 
 @media (max-width: 880px) {
   html body {
@@ -9443,6 +9448,8 @@ main.hidden.display-block {
     top: 60px; }
   .interviews-large-screen {
     display: none; }
+  .page-header .neighbor-block-to-search {
+    padding-right: 0; }
   .screen-small-resolution {
     display: block;
     font: 14px/16px Arial, sans-serif; }
@@ -10412,16 +10419,6 @@ body.no-cookies div.no-cookies {
   padding: 0 0 0 30px;
   -webkit-transition: margin 0.3s linear 0s;
   transition: margin 0.3s linear 0s; }
-  .main-information .page-header div {
-    padding-right: 365px; }
-    .main-information .page-header div h1 {
-      padding: 0; }
-    .main-information .page-header div:after {
-      display: table;
-      content: "";
-      clear: both; }
-    .main-information .page-header div.row-without-padding {
-      padding-right: 0; }
   .main-information .panel-table {
     left: 282px;
     -webkit-transition: left 0.3s linear 0s;
@@ -10485,8 +10482,6 @@ body.no-cookies div.no-cookies {
   .main-information {
     margin-left: 250px;
     padding-right: 15px; }
-    .main-information .page-header div {
-      padding-right: 255px; }
     .main-information .panel-table {
       left: 282px; }
   .fullscreen-hidden-filters .main-information {
@@ -10501,8 +10496,6 @@ body.no-cookies div.no-cookies {
   .main-information {
     margin-left: 0;
     padding: 0 10px; }
-    .main-information .page-header div {
-      padding-right: 0; }
     .main-information .panel-table {
       left: 12px; }
   .fullscreen-hidden-filters .main-information {

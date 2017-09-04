@@ -114,6 +114,8 @@ namespace ASP
                 case MenuItem.Rejected: return MainMenu.Rejected;
                 case MenuItem.Completed: return MainMenu.Completed;
                 case MenuItem.SurveyAndStatuses: return MainMenu.SurveysAndStatuses;
+                case MenuItem.StatusDuration: return MainMenu.StatusDuration;
+                case MenuItem.DevicesInterviewers: return MainMenu.DevicesInterviewers;
                 default: return String.Empty;
             }
         }
