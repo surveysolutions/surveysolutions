@@ -124,6 +124,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Count.
+        /// </summary>
+        public static string Count {
+            get {
+                return ResourceManager.GetString("Count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fill all or some of the identifying fields.
         /// </summary>
         public static string CreateAssignment_AnswersInstruction {
@@ -178,15 +187,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviews quantity.
-        /// </summary>
-        public static string InterviewsCount {
-            get {
-                return ResourceManager.GetString("InterviewsCount", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Interviews needed.
         /// </summary>
         public static string InterviewsNeeded {
@@ -201,15 +201,6 @@ namespace WB.UI.Headquarters.Resources {
         public static string NumberOfAssignmentsAffected {
             get {
                 return ResourceManager.GetString("NumberOfAssignmentsAffected", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Quantity.
-        /// </summary>
-        public static string Quantity {
-            get {
-                return ResourceManager.GetString("Quantity", resourceCulture);
             }
         }
         
@@ -246,6 +237,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string ShowArchived {
             get {
                 return ResourceManager.GetString("ShowArchived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size.
+        /// </summary>
+        public static string Size {
+            get {
+                return ResourceManager.GetString("Size", resourceCulture);
             }
         }
         
