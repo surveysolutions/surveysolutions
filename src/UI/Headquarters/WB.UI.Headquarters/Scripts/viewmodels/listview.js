@@ -26,10 +26,18 @@
 
     self.Pager().PageSize(20);
 
+    self.isNeedFireEventOnChangeCurrentPage = true;
+
     // Subscribe to current page changes.
-    self.Pager().CurrentPage.subscribe(function() {
-        self.search(self.SortOrder);
+    self.Pager().CurrentPage.subscribe(function () {
+        if (self.isNeedFireEventOnChangeCurrentPage)
+            self.search(self.SortOrder);
     });
+    self.SetCurrentPageWithoutRunSubscribers = function(value) {
+        self.isNeedFireEventOnChangeCurrentPage = false;
+        self.Pager().CurrentPage(value);
+        self.isNeedFireEventOnChangeCurrentPage = true;
+    };
 
     self.Pager().CanChangeCurrentPage = ko.computed(function() { return self.IsAjaxComplete(); });
 
@@ -59,11 +67,10 @@
     };
 
     self.filter = function (onSuccess, onDone) {
-        if (self.Pager().CurrentPage() !== 1) {
-            self.Pager().CurrentPage(1);
-        } else { // becouse after set 1 to CurrentPage will be raised event with search
-            self.search(onSuccess, onDone);
-        }
+        if (self.Pager().CurrentPage() !== 1) 
+            self.SetCurrentPageWithoutRunSubscribers(1);
+
+        self.search(onSuccess, onDone);
     };
 
     
@@ -96,11 +103,11 @@
     };
     self.clear = function() {
         self.SearchBy("");
-        if (self.Pager().CurrentPage() !== 1) {
-            self.Pager().CurrentPage(1);
-        } else { // becouse after set 1 to CurrentPage will be raised event with search
-            self.search();
-        }
+
+        if (self.Pager().CurrentPage() !== 1) 
+            self.SetCurrentPageWithoutRunSubscribers(1);
+
+        self.search();
     };
 
     self.SelectedItems = ko.computed(function () {
