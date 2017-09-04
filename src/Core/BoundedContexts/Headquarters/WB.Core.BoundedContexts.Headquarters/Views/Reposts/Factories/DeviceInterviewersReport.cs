@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
             if (!order.IsSortedByOneOfTheProperties(typeof(DeviceInterviewersReportLine)))
             {
-                throw new ArgumentException("Invalid order by column passed", nameof(order));
+                throw new ArgumentException(@"Invalid order by column passed", nameof(order));
             }
 
             var targetInterviewerVersion = interviewerVersionReader.Version;
@@ -69,8 +69,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
         private async Task<int> GetTotalRowsCountAsync(string sql, int? targetInterviewerVersion, DeviceByInterviewersReportInputModel input, IDbConnection connection)
         {
-            string summarySql = $@"SELECT COUNT(*) 
-                                   FROM ({sql}) as report";
+            string summarySql = $@"SELECT COUNT(*) FROM ({sql}) as report";
+
             var row = await connection.ExecuteScalarAsync<int>(summarySql, new
             {
                 latestAppBuildVersion = targetInterviewerVersion,
@@ -85,7 +85,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             return row;
         }
 
-        private async Task<DeviceInterviewersReportLine> GetTotalLine(string sql, int? targetInterviewerVersion, IDbConnection connection)
+        private async Task<DeviceInterviewersReportLine> GetTotalLine(string sql, int? targetInterviewerVersion, string filter, IDbConnection connection)
         {
             string summarySql = $@"SELECT SUM(report.NeverSynchedCount) as NeverSynchedCount,
                                           SUM(report.OutdatedCount) as OutdatedCount,
@@ -96,6 +96,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                                           SUM(report.ReassignedCount) as ReassignedCount,
                                           SUM(report.NoQuestionnairesCount) as NoQuestionnairesCount
                                    FROM ({sql}) as report";
+
             var row = await connection.QueryAsync<DeviceInterviewersReportLine>(summarySql, new
             {
                 latestAppBuildVersion = targetInterviewerVersion,
@@ -104,7 +105,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 targetAndroidSdkVersion = InterviewerIssuesConstants.MinAndroidSdkVersion,
                 limit = (int?) null,
                 offset = 0,
-                filter = "%"
+                filter = filter + "%"
             });
 
             var result = row.FirstOrDefault() ?? new DeviceInterviewersReportLine();
@@ -112,16 +113,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             return result;
         }
 
+        private static string DeviceInterviewersReportSql = null;
+
         private string GetSqlTexts()
         {
-            string query;
+            if (DeviceInterviewersReportSql != null) return DeviceInterviewersReportSql;
+
             var assembly = typeof(DeviceInterviewersReport).Assembly;
             using (Stream stream = assembly.GetManifestResourceStream("WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.DeviceInterviewersReport.sql"))
             using (StreamReader reader = new StreamReader(stream))
             {
-                query = reader.ReadToEnd();
+                DeviceInterviewersReportSql = reader.ReadToEnd();
             }
-            return query;
+            return DeviceInterviewersReportSql;
         }
 
         public async Task<ReportView> GetReportAsync(DeviceByInterviewersReportInputModel input)
