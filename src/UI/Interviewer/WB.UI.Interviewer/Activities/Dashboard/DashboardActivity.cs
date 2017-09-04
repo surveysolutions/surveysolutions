@@ -11,6 +11,7 @@ using MvvmCross.Platform;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Interviewer.Services;
 using WB.UI.Shared.Enumerator.Activities;
 using MvxFragmentStatePagerAdapter = WB.UI.Interviewer.CustomControls.MvxFragmentStatePagerAdapter;
@@ -40,15 +41,21 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
         protected override void OnResume()
         {
-            base.OnResume();
+            if (Mvx.Resolve<IPrincipal>()?.CurrentUserIdentity?.Name == null) // happens when application is rested after crash
+            {
+                var intent = new Intent(this, typeof(SplashActivity));
+                intent.AddFlags(ActivityFlags.ClearTop | ActivityFlags.NewTask);
+                StartActivity(intent);
+                Finish(); 
+            }
 
+            base.OnResume();
             this.CreateFragments();
         }
 
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-
             this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
         }
 
