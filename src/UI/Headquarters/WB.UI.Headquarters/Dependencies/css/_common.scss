@@ -134,12 +134,24 @@ h5{
     }
     h1 + .maintenance-mode{
     	margin-top: 15px;
-    }
-    &>div{
+	}
+	.neighbor-block-to-search{
+		padding-right: 365px; 
+		// &:after{
+		// 	display: table;
+		// 	content: "";
+		// 	clear: both;
+		// }
+		&.row-without-padding{
+			padding-right: 0;
+		}
+	}
+    .topic-with-button{
+		overflow: hidden;
 		h1{
 			float: left;
 			margin-right: 30px;
-			margin-bottom: 15px;
+			// margin-bottom: 15px;
 		}
 		.btn{
 			float: left;
@@ -519,6 +531,11 @@ main.hidden.display-block{
 	.main-information-no-filter{
 		padding: 0 10px;
 	}
+	.page-header {
+		.neighbor-block-to-search{
+			padding-right: 255px;
+		}
+	}
 }
 @media (max-width: $screen-sm-min){
 	html body {
@@ -534,6 +551,9 @@ main.hidden.display-block{
 	}
 	.interviews-large-screen{
 		display: none;
+	}
+	.page-header .neighbor-block-to-search{
+		padding-right: 0;
 	}
 	.screen-small-resolution{
 		//padding: 15px;

@@ -361,7 +361,7 @@
 .dataTables_wrapper{
     position: relative;
     .dataTables_filter{
-        @include absolute(-50px, -10px);
+        @include absolute(-65px, -10px);
         z-index: 2;
         label{
             font-size: 0;
@@ -420,6 +420,7 @@
         clear: both;
         float: right;
         padding-top: 0.755em;
+        padding-bottom: 10px;
         font: 13px/15px "TrebuchetMSBold";
         padding-left: 20px;
         text-align: right;
@@ -477,11 +478,11 @@
         }
     }
 }
-.table-wrapper{
-    .dataTables_filter{
-        top: -40px;
-    }
-}
+// .table-wrapper{
+//     .dataTables_filter{
+//         top: -40px;
+//     }
+// }
 @media only screen and (max-width: 1450px){
     .table-ordered{
         thead{
