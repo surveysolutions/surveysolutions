@@ -98,8 +98,9 @@
         self.SearchBy("");
         if (self.Pager().CurrentPage() !== 1) {
             self.Pager().CurrentPage(1);
+        } else { // becouse after set 1 to CurrentPage will be raised event with search
+            self.search();
         }
-        self.search();
     };
 
     self.SelectedItems = ko.computed(function () {
