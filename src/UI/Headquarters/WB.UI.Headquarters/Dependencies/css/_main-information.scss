@@ -2,25 +2,6 @@
 	margin-left: $filter-width - $margin-container + 12px +15px;
 	padding: 0 0 0 30px;
 	@include transition(margin, 0.3s);
-	.page-header{
-		.neighbor-block-to-search{
-			h1{
-				padding: 0;
-			}
-			padding-right: 365px; 
-			&:after{
-				display: table;
-				content: "";
-				clear: both;
-			}
-			&.row-without-padding{
-				padding-right: 0;
-			}
-		}
-		.topic-with-button{
-			overflow: hidden;
-		}
-	} 
 	.panel-table{
 		left: $filter-width + 12px;
 		@include transition(left, 0.3s);
@@ -100,11 +81,6 @@
 	.main-information {
 		margin-left: $filter-width - $margin-container-md-screen + 15px;
 		padding-right: 15px;
-		.page-header {
-			.neighbor-block-to-search{
-				padding-right: 255px;
-			}
-		}
 		.panel-table{
 			left: $filter-width+ 12px;
 		}
@@ -128,9 +104,6 @@
 	.main-information{
 		margin-left: 0;
 		padding: 0 10px;
-		.page-header .neighbor-block-to-search{
-			padding-right: 0;
-		}
 		.panel-table{
 			left:  12px;
 		}
