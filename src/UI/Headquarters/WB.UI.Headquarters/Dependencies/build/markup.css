@@ -9077,14 +9077,19 @@ h5, .preset-filters-container a, .preset-filters-container .export-queue {
   padding-bottom: 15px; }
   .page-header h1 + .maintenance-mode {
     margin-top: 15px; }
-  .page-header .topic-with-button h1 {
-    float: left;
-    margin-right: 30px;
-    margin-bottom: 15px; }
-  .page-header .topic-with-button .btn {
-    float: left;
-    padding: 8px;
-    margin-bottom: 10px; }
+  .page-header .neighbor-block-to-search {
+    padding-right: 365px; }
+    .page-header .neighbor-block-to-search.row-without-padding {
+      padding-right: 0; }
+  .page-header .topic-with-button {
+    overflow: hidden; }
+    .page-header .topic-with-button h1 {
+      float: left;
+      margin-right: 30px; }
+    .page-header .topic-with-button .btn {
+      float: left;
+      padding: 8px;
+      margin-bottom: 10px; }
   .page-header p {
     font-family: "RobotoRegular"; }
   .page-header ul {
@@ -9428,7 +9433,9 @@ main.hidden.display-block {
   .view-mode {
     top: 70px; }
   .main-information-no-filter {
-    padding: 0 10px; } }
+    padding: 0 10px; }
+  .page-header .neighbor-block-to-search {
+    padding-right: 255px; } }
 
 @media (max-width: 880px) {
   html body {
@@ -9441,6 +9448,8 @@ main.hidden.display-block {
     top: 60px; }
   .interviews-large-screen {
     display: none; }
+  .page-header .neighbor-block-to-search {
+    padding-right: 0; }
   .screen-small-resolution {
     display: block;
     font: 14px/16px Arial, sans-serif; }
@@ -10410,18 +10419,6 @@ body.no-cookies div.no-cookies {
   padding: 0 0 0 30px;
   -webkit-transition: margin 0.3s linear 0s;
   transition: margin 0.3s linear 0s; }
-  .main-information .page-header .neighbor-block-to-search {
-    padding-right: 365px; }
-    .main-information .page-header .neighbor-block-to-search h1 {
-      padding: 0; }
-    .main-information .page-header .neighbor-block-to-search:after {
-      display: table;
-      content: "";
-      clear: both; }
-    .main-information .page-header .neighbor-block-to-search.row-without-padding {
-      padding-right: 0; }
-  .main-information .page-header .topic-with-button {
-    overflow: hidden; }
   .main-information .panel-table {
     left: 282px;
     -webkit-transition: left 0.3s linear 0s;
@@ -10485,8 +10482,6 @@ body.no-cookies div.no-cookies {
   .main-information {
     margin-left: 250px;
     padding-right: 15px; }
-    .main-information .page-header .neighbor-block-to-search {
-      padding-right: 255px; }
     .main-information .panel-table {
       left: 282px; }
   .fullscreen-hidden-filters .main-information {
@@ -10501,8 +10496,6 @@ body.no-cookies div.no-cookies {
   .main-information {
     margin-left: 0;
     padding: 0 10px; }
-    .main-information .page-header .neighbor-block-to-search {
-      padding-right: 0; }
     .main-information .panel-table {
       left: 12px; }
   .fullscreen-hidden-filters .main-information {
