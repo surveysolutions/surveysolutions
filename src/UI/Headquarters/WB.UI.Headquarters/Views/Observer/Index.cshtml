@@ -58,25 +58,23 @@
                         <h1>@Html.Raw(string.Format(Users.ObserversCountDescription, @"<span data-bind='text: UsersCount'></span>"))</h1>
                         <a class="btn btn-success" href="@Url.Action("Create", "Observer", new {area = string.Empty})">@Users.AddObserver</a>
                     </div>
-                    <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">
-                        <ol class="list-unstyled">
-                            <li>@Pages.Users_Observers_Instruction1</li>
-                            <li>@Pages.Users_Observers_Instruction2</li>
-                        </ol>
-                    </div>
+                    <ol class="list-unstyled">
+                        <li>@Pages.Users_Observers_Instruction1</li>
+                        <li>@Pages.Users_Observers_Instruction2</li>
+                    </ol>
                 </div>
             </div>
-        </div>
 
-        <table id="data_holder" class="table table-striped table-bordered table-condensed table-hover table-ordered" 
-               data-order="[[ 0, &quot;asc&quot; ]]" data-searching="true">
-            <thead>
-            <tr>
-                <th>@Users.UserName</th>
-                <th title="@Users.AccountCreationDateTooltip">@Users.CreationDate</th>
-                <th>@Users.ObserversEmail</th>
-            </tr>
-            </thead>
-        </table>
+            <table id="data_holder" class="table table-striped table-bordered table-condensed table-hover table-ordered"
+                   data-order="[[ 0, &quot;asc&quot; ]]" data-searching="true">
+                <thead>
+                    <tr>
+                        <th>@Users.UserName</th>
+                        <th title="@Users.AccountCreationDateTooltip">@Users.CreationDate</th>
+                        <th>@Users.ObserversEmail</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
     </div>
 </main>
