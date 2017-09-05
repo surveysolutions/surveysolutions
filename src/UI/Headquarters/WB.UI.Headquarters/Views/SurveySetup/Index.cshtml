@@ -158,16 +158,16 @@
         <div class="row">
             @Html.Partial("_alerts")
             <div class="page-header clearfix">
-                <div>
-                    <h1>@MainMenu.SurveySetup</h1>
-                    @if (!isObserver)
-                    {
-                        <a class="btn btn-success" href="@Url.Action("Import", "Template")">@Dashboard.ImportTemplate</a>
-                    }
+                <div class="neighbor-block-to-search">
+                    <div class="topic-with-button">                    
+                        <h1>@MainMenu.SurveySetup</h1>
+                        @if (!isObserver)
+                        {
+                            <a class="btn btn-success" href="@Url.Action("Import", "Template")">@Dashboard.ImportTemplate</a>
+                        }
+                    </div>
                 </div>
-            </div>
-            <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">
-                <ol  class="list-unstyled">
+                <ol class="list-unstyled">
                     <li>@Dashboard.SurveySetupIntroMessage1</li>
                     <li>@Dashboard.SurveySetupIntroMessage2</li>
                 </ol>
