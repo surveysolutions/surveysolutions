@@ -50,9 +50,6 @@
     "html5shiv": "^3.7.3",
     "angular-ui-ace": "^0.2.3"
   },
-  "resolutions": {
-    "angular": "^1.6.4"
-  },
   "overrides": {
     "prettycheckable": {
       "main": [
