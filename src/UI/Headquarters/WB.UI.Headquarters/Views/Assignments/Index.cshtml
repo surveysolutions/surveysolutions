@@ -108,7 +108,7 @@
                         data: "quantity",
                         name: "Quantity",
                         "class": "type-numeric",
-                        title: "@Assignments.InterviewsNeeded",
+                        title: "@Assignments.Size",
                         orderable: false,
                         searchable: false,
                         render: function (data, type, row) {
@@ -513,11 +513,11 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
-                        <h3>@string.Format(Assignments.ChangeQuantityModalTitle, "{{editedRowId}}")</h3>
+                        <h3>@string.Format(Assignments.ChangeSizeModalTitle, "{{editedRowId}}")</h3>
                     </div>
                     <div class="modal-body">
                         <p>
-                            @Assignments.QuantityExplanation
+                            @Assignments.SizeExplanation
                         </p>
                         <form onsubmit="return false;">
                             <div class="form-group" v-bind:class="{'has-error': errors.has('editedQuantity')}">

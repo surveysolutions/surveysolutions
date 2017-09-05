@@ -115,11 +115,11 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit quantity for assignment {0}.
+        ///   Looks up a localized string similar to Edit size for assignment {0}.
         /// </summary>
-        public static string ChangeQuantityModalTitle {
+        public static string ChangeSizeModalTitle {
             get {
-                return ResourceManager.GetString("ChangeQuantityModalTitle", resourceCulture);
+                return ResourceManager.GetString("ChangeSizeModalTitle", resourceCulture);
             }
         }
         
@@ -187,29 +187,11 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviews needed.
-        /// </summary>
-        public static string InterviewsNeeded {
-            get {
-                return ResourceManager.GetString("InterviewsNeeded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {0} Assignment(s) are going to be changed.
         /// </summary>
         public static string NumberOfAssignmentsAffected {
             get {
                 return ResourceManager.GetString("NumberOfAssignmentsAffected", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Specify maximum number of interviews to be generated for that assignment (Quantity). Permitted values: -1 is for Unlimited assignment, 0 is for Empty assignment, numbers for assignment size.
-        /// </summary>
-        public static string QuantityExplanation {
-            get {
-                return ResourceManager.GetString("QuantityExplanation", resourceCulture);
             }
         }
         
@@ -246,6 +228,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Size {
             get {
                 return ResourceManager.GetString("Size", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specify maximum number of interviews to be generated for that assignment. Permitted values: -1 is for Unlimited assignment, 0 is for Empty assignment, numbers for assignment size.
+        /// </summary>
+        public static string SizeExplanation {
+            get {
+                return ResourceManager.GetString("SizeExplanation", resourceCulture);
             }
         }
         

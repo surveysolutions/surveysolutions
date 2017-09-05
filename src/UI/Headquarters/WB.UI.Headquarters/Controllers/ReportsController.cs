@@ -350,11 +350,11 @@ namespace WB.UI.Headquarters.Controllers
                 case PeriodiceReportType.AverageInterviewDuration:
                     return PeriodicStatusReport.AverageInterviewDurationDescription;
                 case PeriodiceReportType.AverageSupervisorProcessingTime:
-                    return supervisorId.HasValue ? PeriodicStatusReport.AverageInterviewDuration : PeriodicStatusReport.AverageSupervisorProcessingTimeDescription;
+                    return supervisorId.HasValue ? PeriodicStatusReport.AverageInterviewDurationDescription : PeriodicStatusReport.AverageSupervisorProcessingTimeDescription;
                 case PeriodiceReportType.AverageHQProcessingTime:
-                    return supervisorId.HasValue ? PeriodicStatusReport.AverageInterviewDuration : PeriodicStatusReport.AverageHQProcessingTimeDescription;
+                    return supervisorId.HasValue ? PeriodicStatusReport.AverageInterviewDurationDescription : PeriodicStatusReport.AverageHQProcessingTimeDescription;
                 case PeriodiceReportType.AverageOverallCaseProcessingTime:
-                    return supervisorId.HasValue ? PeriodicStatusReport.AverageInterviewDuration : PeriodicStatusReport.AverageOverallCaseProcessingTimeDescription;
+                    return supervisorId.HasValue ? PeriodicStatusReport.AverageInterviewDurationDescription : PeriodicStatusReport.AverageOverallCaseProcessingTimeDescription;
             }
 
             return string.Empty;

@@ -50,8 +50,8 @@ export default {
                         title: this.$t("Strings.Days"),
                         orderable: true,
                         className: "nowrap",
-                        render: function(data, type, row, meta) {
-                            if (meta.row == 0)
+                        render: function(data, type, row) {
+                            if (data == 0 || row.DT_RowClass == "total-row")
                                 return `<span>${data}</span>`;
                             return data;
                         }
@@ -61,8 +61,8 @@ export default {
                         className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_SupervisorAssigned"),
                         orderable: false,
-                        render: function(data, type, row, meta) {
-                            return self.renderAssignmentsUrl(row, data, 'Supervisor', meta.row);
+                        render: function(data, type, row) {
+                            return self.renderAssignmentsUrl(row, data, 'Supervisor');
                         }
                     },
                     {
@@ -70,8 +70,8 @@ export default {
                         className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_InterviewerAssigned"),
                         orderable: false,
-                        render: function(data, type, row, meta) {
-                            return self.renderAssignmentsUrl(row, data, 'Interviewer', meta.row);
+                        render: function(data, type, row) {
+                            return self.renderAssignmentsUrl(row, data, 'Interviewer');
                         }
                     },
                     {
@@ -79,8 +79,8 @@ export default {
                         className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_Completed"),
                         orderable: false,
-                        render: function(data, type, row, meta) {
-                            return self.renderInterviewsUrl(row, data, 'Completed', meta.row);
+                        render: function(data, type, row) {
+                            return self.renderInterviewsUrl(row, data, 'Completed');
                         }
                     },
                     {
@@ -88,8 +88,8 @@ export default {
                         className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_RejectedBySupervisor"),
                         orderable: false,
-                        render: function(data, type, row, meta) {
-                            return self.renderInterviewsUrl(row, data, 'RejectedBySupervisor', meta.row);
+                        render: function(data, type, row) {
+                            return self.renderInterviewsUrl(row, data, 'RejectedBySupervisor');
                         }
                     },
                     {
@@ -97,8 +97,8 @@ export default {
                         className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_ApprovedBySupervisor"),
                         orderable: false,
-                        render: function(data, type, row, meta) {
-                            return self.renderInterviewsUrl(row, data, 'ApprovedBySupervisor', meta.row);
+                        render: function(data, type, row) {
+                            return self.renderInterviewsUrl(row, data, 'ApprovedBySupervisor');
                         }
                     },
                     {
@@ -106,8 +106,8 @@ export default {
                         className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_RejectedByHeadquarters"),
                         orderable: false,
-                        render: function(data, type, row, meta) {
-                            return self.renderInterviewsUrl(row, data, 'RejectedByHeadquarters', meta.row);
+                        render: function(data, type, row) {
+                            return self.renderInterviewsUrl(row, data, 'RejectedByHeadquarters');
                         }
                     },
                     {
@@ -115,8 +115,8 @@ export default {
                         className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_ApprovedByHeadquarters"),
                         orderable: false,
-                        render: function(data, type, row, meta) {
-                            return self.renderInterviewsUrl(row, data, 'ApprovedByHeadquarters', meta.row);
+                        render: function(data, type, row) {
+                            return self.renderInterviewsUrl(row, data, 'ApprovedByHeadquarters');
                         }
                     },
                     {
@@ -164,8 +164,8 @@ export default {
             data.timezone = new Date().getTimezoneOffset();
         },
 
-        renderAssignmentsUrl(row, data, userRole, rowIndex){
-            if(data === 0 || rowIndex === 0) 
+        renderAssignmentsUrl(row, data, userRole){
+            if(data === 0 || row.DT_RowClass == "total-row") 
                 return `<span>${data}</span>`;
 
             if (this.questionnaireId != undefined){
@@ -179,8 +179,8 @@ export default {
             return `<a href='${this.$config.assignmentsBaseUrl}?dateStart=${row.startDate}&dateEnd=${row.endDate}&userRole=${userRole}'>${data}</a>`;
         },
 
-        renderInterviewsUrl(row, data, status, rowIndex){
-            if(data === 0 || rowIndex === 0) 
+        renderInterviewsUrl(row, data, status){
+            if(data === 0 || row.DT_RowClass == "total-row") 
                 return `<span>${data}</span>`;
 
             var templateId = this.questionnaireId == undefined ? '' : this.formatGuid(this.questionnaireId.key.split('$')[0]);
