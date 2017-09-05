@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Criterion;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -235,7 +236,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         || (s.Status == InterviewExportedAction.RejectedBySupervisor && i.Status == InterviewStatus.RejectedBySupervisor)
                         || (s.Status == InterviewExportedAction.RejectedByHeadquarter && i.Status == InterviewStatus.RejectedByHeadquarters)
                     )
-                    .Max(s => s.Timestamp)
+                    .OrderByDescending(s => Projections.Property("position"))
+                    .Select(s => s.Timestamp)
+                    .First()
                 where (input.UnactiveDateStart <= statusChangeTime || input.UnactiveDateStart == null)
                    && (statusChangeTime <= input.UnactiveDateEnd || input.UnactiveDateEnd == null)
                 select i;
