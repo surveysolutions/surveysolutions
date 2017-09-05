@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views
 
         public int LowStorageCount { get; set; }
 
-        public int WrongDateOnTabletCount { get; set; }
+        // public int WrongDateOnTabletCount { get; set; }
 
         public int OldAndroidCount { get; set; }
 

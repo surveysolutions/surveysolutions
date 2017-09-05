@@ -10,7 +10,6 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
@@ -91,7 +90,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             string summarySql = $@"SELECT SUM(report.NeverSynchedCount) as NeverSynchedCount,
                                           SUM(report.OutdatedCount) as OutdatedCount,
                                           SUM(report.LowStorageCount) as LowStorageCount,
-                                          SUM(report.WrongDateOnTabletCount) as WrongDateOnTabletCount,
+                                          -- SUM(report.WrongDateOnTabletCount) as WrongDateOnTabletCount,
                                           SUM(report.OldAndroidCount) as OldAndroidCount,
                                           SUM(report.NeverUploadedCount) as NeverUploadedCount,
                                           SUM(report.ReassignedCount) as ReassignedCount,
@@ -137,22 +136,41 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             {
                 Headers = new[]
                 {
-                    Report.COLUMN_TEAMS, Report.COLUMN_NEVER_SYNCHED, Report.COLUMN_NO_ASSIGNMENTS_RECEIVED, Report.COLUMN_NEVER_UPLOADED,Report.COLUMN_TABLET_REASSIGNED,
-                    Report.COLUMN_OLD_VERSION, Report.COLUMN_ANDROID_4_4_OR_LOWER, Report.COLUMN_WRONG_TIME_ON_TABLET, Report.COLUMN_LESS_THAN_100MB_FREE_SPACE
-                       
+                    Report.COLUMN_TEAMS,
+                    Report.COLUMN_NEVER_SYNCHED,
+                    Report.COLUMN_NO_ASSIGNMENTS_RECEIVED,
+                    Report.COLUMN_NEVER_UPLOADED,
+                    Report.COLUMN_TABLET_REASSIGNED,
+                    Report.COLUMN_OLD_VERSION,
+                    Report.COLUMN_ANDROID_4_4_OR_LOWER,
+                    // Report.COLUMN_WRONG_TIME_ON_TABLET,
+                    Report.COLUMN_LESS_THAN_100MB_FREE_SPACE
                 },
                 Data = new[]
                 {
                     new object[]
                     {
-                        view.TotalRow.TeamName, view.TotalRow.NeverSynchedCount,  view.TotalRow.NoQuestionnairesCount, view.TotalRow.NeverUploadedCount, view.TotalRow.ReassignedCount, view.TotalRow.OutdatedCount,
-                        view.TotalRow.OldAndroidCount, view.TotalRow.WrongDateOnTabletCount, view.TotalRow.LowStorageCount
+                        view.TotalRow.TeamName,
+                        view.TotalRow.NeverSynchedCount,
+                        view.TotalRow.NoQuestionnairesCount,
+                        view.TotalRow.NeverUploadedCount,
+                        view.TotalRow.ReassignedCount,
+                        view.TotalRow.OutdatedCount,
+                        view.TotalRow.OldAndroidCount,
+                        // view.TotalRow.WrongDateOnTabletCount,
+                        view.TotalRow.LowStorageCount
                     }
                 }.Concat(view.Items.Select(x => new object[]
                 {
-                    x.TeamName, x.NeverSynchedCount,  x.NoQuestionnairesCount, x.NeverUploadedCount, x.ReassignedCount, x.OutdatedCount,
-                    x.OldAndroidCount, x.WrongDateOnTabletCount, x.LowStorageCount
-                    
+                    x.TeamName,
+                    x.NeverSynchedCount,
+                    x.NoQuestionnairesCount,
+                    x.NeverUploadedCount,
+                    x.ReassignedCount,
+                    x.OutdatedCount,
+                    x.OldAndroidCount,
+                    // x.WrongDateOnTabletCount,
+                    x.LowStorageCount
                 })).ToArray()
             };
         }
