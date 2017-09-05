@@ -186,4 +186,8 @@
   <data name="AllAssignments" xml:space="preserve">
     <value>Все задачи</value>
   </data>
+  <data name="InterviewsNeeded" xml:space="preserve">
+    <value>Необходимо интервью</value>
+    <comment>Необходимо интервью</comment>
+  </data>
 </root>
