@@ -63,7 +63,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                         SupervisorAssignedCount = GetCumulativeCountForStatusUpToSpecifiedDate(InterviewStatus.SupervisorAssigned, date, countsByStatusAndDate),
                         InterviewerAssignedCount = GetCumulativeCountForStatusUpToSpecifiedDate(InterviewStatus.InterviewerAssigned, date, countsByStatusAndDate),
                         CompletedCount = GetCumulativeCountForStatusUpToSpecifiedDate(InterviewStatus.Completed, date, countsByStatusAndDate),
-                        RestartedCount = GetCumulativeCountForStatusUpToSpecifiedDate(InterviewStatus.Restarted, date, countsByStatusAndDate),
                         ApprovedBySupervisorCount = GetCumulativeCountForStatusUpToSpecifiedDate(InterviewStatus.ApprovedBySupervisor, date, countsByStatusAndDate),
                         RejectedBySupervisorCount = GetCumulativeCountForStatusUpToSpecifiedDate(InterviewStatus.RejectedBySupervisor, date, countsByStatusAndDate),
                         ApprovedByHeadquartersCount = GetCumulativeCountForStatusUpToSpecifiedDate(InterviewStatus.ApprovedByHeadquarters, date, countsByStatusAndDate),

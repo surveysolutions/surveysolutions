@@ -24,11 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             questionId = Guid.Parse("43333333333333333333333333333333");
 
-            var questionnaire = Mock.Of<IQuestionnaire>();
-
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
-
-            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaire: Create.Entity.QuestionnaireDocumentWithOneChapter());
 
             interview.AssignInterviewer(supervisorId, userId, DateTime.Now);
             interview.Apply(Create.Event.InterviewStatusChanged(status: InterviewStatus.Completed));

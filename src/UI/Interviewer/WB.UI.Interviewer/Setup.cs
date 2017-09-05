@@ -5,43 +5,38 @@ using System.Reflection;
 using Android.Content;
 using Android.Support.V7.Widget;
 using Android.Widget;
+using Autofac;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Core.Views;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Converters;
 using MvvmCross.Platform.IoC;
-using Ninject;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
-using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.SurveyManagement;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Interviewer.Activities.Dashboard;
 using WB.UI.Interviewer.Converters;
 using WB.UI.Interviewer.CustomBindings;
-using WB.UI.Interviewer.Implementations.Services;
 using WB.UI.Interviewer.Infrastructure;
-using WB.UI.Interviewer.Ninject;
+using WB.UI.Interviewer.Infrastructure.Logging;
+using WB.UI.Interviewer.ServiceLocation;
 using WB.UI.Interviewer.Settings;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
-using WB.UI.Shared.Enumerator.Ninject;
+using WB.UI.Shared.Enumerator.Autofac;
 using WB.UI.Shared.Enumerator.Services;
-using WB.UI.Shared.Enumerator.Services.Internals.MapService;
-using WB.UI.Shared.Enumerator.Services.Ninject;
+using WB.UI.Shared.Enumerator.Services.Internals;
 using Xamarin;
 
 namespace WB.UI.Interviewer
@@ -97,7 +92,7 @@ namespace WB.UI.Interviewer
                 {typeof(InterviewerCompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
                 {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)},
 #if !EXCLUDEEXTENSIONS
-                {typeof (WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
+                {typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
 #endif
             };
 
@@ -134,53 +129,33 @@ namespace WB.UI.Interviewer
         
         protected override IMvxIoCProvider CreateIocProvider()
         {
-            return new NinjectMvxIocProvider(this.CreateAndInitializeIoc());
+            return new MvxIoCProvider(this.CreateAndInitializeIoc());
         }
 
-        private IKernel CreateAndInitializeIoc()
+        private IContainer CreateAndInitializeIoc()
         {
-            var kernel = new StandardKernel(
-                new NcqrsModule().AsNinject(),
-                new InfrastructureModuleMobile().AsNinject(),
-                new InterviewerInfrastructureModule(),
+            ContainerBuilder builder = new ContainerBuilder();
+            builder.RegisterModule(new NcqrsModule().AsAutofac());
+            builder.RegisterModule(new InfrastructureModuleMobile().AsAutofac());
+            builder.RegisterModule(new DataCollectionSharedKernelModule().AsAutofac());
+            builder.RegisterModule(new InterviewerInfrastructureModule().AsAutofac());
+            builder.RegisterModule(new EnumeratorUIModule().AsAutofac());
+            builder.RegisterModule(new EnumeratorSharedKernelModule().AsAutofac());
+            builder.RegisterModule(new InterviewerUIModule().AsAutofac());
+            builder.RegisterModule(new InterviewerLoggingModule());
 
-                new DataCollectionSharedKernelModule().AsNinject(),
-                new EnumeratorSharedKernelModule(),
-                new EnumeratorUIModule(),
-                new InterviewerUIModule(),
-                
-                new AndroidSharedModule());
+            builder.RegisterType<NLogLogger>().As<ILogger>();
 
-            kernel.Load(
-                new AndroidModelModule(),
-                new AndroidDataCollectionSharedKernelModule());
+            builder.RegisterType<InterviewerSettings>().As<IEnumeratorSettings>().As<IRestServiceSettings>().As<IInterviewerSettings>()
+                .WithParameter("backupFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Backup"))
+                .WithParameter("restoreFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Restore"));
 
-            kernel.Bind<IEnumeratorSettings, IRestServiceSettings, IInterviewerSettings>().To<InterviewerSettings>()
-                .WithConstructorArgument("backupFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Backup"))
-                .WithConstructorArgument("restoreFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Restore"));
-            kernel.Bind<ISynchronizationService>().To<SynchronizationService>();
-            kernel.Bind<IAssignmentSynchronizationApi>().To<SynchronizationService>();
-            kernel.Bind<IBattery>().To<AndroidBattery>();
-            kernel.Bind<IDeviceOrientation>().To<AndroidDeviceOrientation>();
-            kernel.Bind<IDeviceInformationService>().To<DeviceInformationService>();
-            kernel.Bind<IArchivePatcherService>().To<ArchivePatcherService>();
-            kernel.Bind<IInterviewFromAssignmentCreatorService>().To<InterviewFromAssignmentCreatorService>();
+            builder.RegisterType<InterviewerDashboardEventHandler>().SingleInstance();
 
-            kernel.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
-            kernel.Bind<IQuestionnaireContentVersionProvider>().To<QuestionnaireContentVersionProvider>().InSingletonScope();
+            var container = builder.Build();
+            ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
 
-            kernel.Bind<ISynchronizationProcess>().To<SynchronizationProcess>();
-            kernel.Bind<IQuestionnaireDownloader>().To<QuestionnaireDownloader>();
-            kernel.Bind<IAssignmentsSynchronizer>().To<AssignmentsSynchronizer>();
-            kernel.Bind<AttachmentsCleanupService>().ToSelf();
-
-            kernel.Bind<InterviewerDashboardEventHandler>().ToSelf().InSingletonScope();
-            kernel.Get<InterviewerDashboardEventHandler>();
-
-            kernel.Bind<IMapSynchronizer>().To<MapSynchronizer>();
-            kernel.Bind<IMapService>().To<MapService>();
-
-            return kernel;
+            return container;
         }
 
         protected override IEnumerable<Assembly> AndroidViewAssemblies
@@ -203,7 +178,7 @@ namespace WB.UI.Interviewer
                 typeof(Setup).Assembly,
                 typeof(LoginViewModel).Assembly,
 #if !EXCLUDEEXTENSIONS
-                typeof(WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel).Assembly
+                typeof(Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel).Assembly
 #endif
             });
         }

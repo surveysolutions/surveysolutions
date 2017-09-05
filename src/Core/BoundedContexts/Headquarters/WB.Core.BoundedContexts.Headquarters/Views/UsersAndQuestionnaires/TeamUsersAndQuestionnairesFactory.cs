@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires
             var allUsers =
                 this.interviewSummaryReader.Query(
                     _ =>
-                        _.Where(i => !i.IsDeleted && i.TeamLeadId == input.ViewerId)
+                        _.Where(i => i.TeamLeadId == input.ViewerId)
                             .GroupBy(x => new {x.ResponsibleId, x.ResponsibleName})
                             .Where(x => x.Count() > 0)
                             .Select(x => new UsersViewItem {UserId = x.Key.ResponsibleId, UserName = x.Key.ResponsibleName})

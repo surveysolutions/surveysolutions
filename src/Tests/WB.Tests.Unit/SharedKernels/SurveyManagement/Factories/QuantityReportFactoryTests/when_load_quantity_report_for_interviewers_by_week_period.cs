@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
-using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 
@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
 {
     internal class when_load_quantity_report_for_interviewers_by_week_period : QuantityReportFactoryTestContext
     {
-        Establish context = () =>
-        {
+        [OneTimeSetUp] public void context () {
             input = CreateQuantityByInterviewersReportInputModel(supervisorId: supervisorId, period: "w");
 
             var user = Guid.NewGuid();
@@ -26,39 +25,40 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
                     statuses: new[]
                     {
                         Create.Entity.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
-                            timestamp: input.From.Date.AddHours(1)),
+                            timestamp: input.From.Date.AddHours(-1)),
                         Create.Entity.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
-                            timestamp: input.From.Date.AddDays(15)),
+                            timestamp: input.From.Date.AddDays(-15)),
                         Create.Entity.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
-                            timestamp: input.From.Date.AddDays(-15))
+                            timestamp: input.From.Date.AddDays(15))
                     }), "2");
 
             quantityReportFactory = CreateQuantityReportFactory(interviewStatuses: interviewStatuses);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             result = quantityReportFactory.Load(input);
 
-        It should_return_one_row = () =>
-            result.Items.Count().ShouldEqual(1);
+        [Test] public void should_return_one_row () =>
+            result.Items.Should().HaveCount(1);
 
-        It should_return_first_row_with_1_interview_at_first_period_and_zero_interviews_at_second = () =>
-            result.Items.First().QuantityByPeriod.ShouldEqual(new long[] { 1, 0 });
+        [Test] public void should_return_first_row_with_0_interview_at_first_period_and_1_interviews_at_second () =>
+            result.Items.First().QuantityByPeriod.Should().Equal(0, 1);
 
-        It should_return_first_row_with_1_in_Total = () =>
-            result.Items.First().Total.ShouldEqual(1);
+        [Test] public void should_return_first_row_with_1_in_Total () =>
+            result.Items.First().Total.Should().Be(1);
 
-        It should_return_first_row_with_0_5_in_Average = () =>
-           result.Items.First().Average.ShouldEqual(0.5);
+        [Test] public void should_return_first_row_with_0_5_in_Average () =>
+           result.Items.First().Average.Should().Be(0.5);
 
-        It should_return_total_row_with_1_interview_at_first_period_and_zero_interviews_at_second = () =>
-            result.TotalRow.QuantityByPeriod.ShouldEqual(new long[] { 1, 0 });
+        [Test] public void should_return_total_row_with_0_interview_at_first_period_and_1_interviews_at_second () =>
+            result.TotalRow.QuantityByPeriod.Should().Equal(0, 1);
 
-        It should_return_total_row_with_1_in_Total = () =>
-            result.TotalRow.Total.ShouldEqual(1);
+        [Test] public void should_return_total_row_with_1_in_Total () =>
+            result.TotalRow.Total.Should().Be(1);
 
-        It should_return_total_row_with_0_5_in_Average = () =>
-            result.TotalRow.Average.ShouldEqual(0.5);
+        [Test] public void should_return_total_row_with_0_5_in_Average () =>
+            result.TotalRow.Average.Should().Be(0.5);
 
         private static QuantityReportFactory quantityReportFactory;
         private static QuantityByInterviewersReportInputModel input;

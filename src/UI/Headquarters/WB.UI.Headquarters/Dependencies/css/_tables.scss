@@ -326,10 +326,10 @@
     thead tr, tbody tr{
         td, th{
             &.checkbox-cell{
-                min-width: 40px !important;
-                width: 40px !important;
+                // min-width: 40px !important;
+                // width: 40px !important;
                 text-align: center;
-                padding: 0;
+                padding: 15px 3px 15px 10px;
                 outline: none;
             }
         }
@@ -361,7 +361,7 @@
 .dataTables_wrapper{
     position: relative;
     .dataTables_filter{
-        @include absolute(-53px, -10px);
+        @include absolute(-65px, -10px);
         z-index: 2;
         label{
             font-size: 0;
@@ -416,16 +416,18 @@
     }
 }
 .dataTables_wrapper {
-    .dataTables_info{
+    .dataTables_info, .download-report{
         clear: both;
         float: right;
         padding-top: 0.755em;
-        font-size: 13px;
-        line-height: 15px;
+        padding-bottom: 10px;
+        font: 13px/15px "TrebuchetMSBold";
         padding-left: 20px;
         text-align: right;
     }
-    
+    .download-report{
+        padding-top: 5px;
+    }
 }
 .dataTables_paginate{
         position: relative;
@@ -476,11 +478,11 @@
         }
     }
 }
-.table-wrapper{
-    .dataTables_filter{
-        top: -40px;
-    }
-}
+// .table-wrapper{
+//     .dataTables_filter{
+//         top: -40px;
+//     }
+// }
 @media only screen and (max-width: 1450px){
     .table-ordered{
         thead{
@@ -514,15 +516,18 @@
     }
 }
 @media (max-width: $screen-md-min){
-    .dataTables_wrapper .dataTables_filter label.active input{
-        width: 200px;
-    }
+    .dataTables_wrapper .dataTables_filter{
+        right: 0;
+        label.active input{
+            width: 200px;
+        }
+    } 
     .table-ordered thead th.padding-left-slide:first-child{
         padding-left: 265px;
     }
-    .dataTables_paginate{
-        margin-bottom: 30px;
-    }
+    // .dataTables_paginate{
+    //     margin-bottom: 30px;
+    // }
     .table-wrapper{
         .dataTables_paginate{
             margin-bottom: 0;
@@ -648,7 +653,13 @@
     .dataTables_wrapper {
         .dataTables_info{
             float: none;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+        .download-report{
+            float: none;
+            padding-top: 0;
+            text-align: left;
         }
         .dataTables_paginate{
             float: none;
@@ -724,4 +735,9 @@
   }
 .uploaded-to-hq{
     min-width: 150px;
+}
+.table{
+	.interviewer, .supervisor{
+		padding-left: 0;
+	}
 }

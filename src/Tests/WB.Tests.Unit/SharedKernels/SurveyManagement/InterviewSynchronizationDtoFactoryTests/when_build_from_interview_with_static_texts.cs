@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationDtoFactoryTests
@@ -83,13 +84,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
         private static InterviewData interviewData;
         private static InterviewSynchronizationDto result;
 
-        private static readonly Identity disabledStaticText1Id = new Identity(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty);
-        private static readonly Identity disabledStaticText2Id = new Identity(Guid.Parse("22222222222222222222222222222222"), new RosterVector(new decimal[]{1, 2, 3}));
+        private static readonly Identity disabledStaticText1Id = Create.Identity(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty);
+        private static readonly Identity disabledStaticText2Id = Create.Identity(Guid.Parse("22222222222222222222222222222222"), new RosterVector(new decimal[]{1, 2, 3}));
 
-        private static readonly Identity validStaticText1Id = new Identity(Guid.Parse("33333333333333333333333333333333"), RosterVector.Empty);
-        private static readonly Identity validStaticText2Id = new Identity(Guid.Parse("44444444444444444444444444444444"), new RosterVector(new decimal[] { 1, 2, 3 }));
+        private static readonly Identity validStaticText1Id = Create.Identity(Guid.Parse("33333333333333333333333333333333"), RosterVector.Empty);
+        private static readonly Identity validStaticText2Id = Create.Identity(Guid.Parse("44444444444444444444444444444444"), new RosterVector(new decimal[] { 1, 2, 3 }));
 
-        private static readonly Identity invalidStaticText1Id = new Identity(Guid.Parse("55555555555555555555555555555555"), RosterVector.Empty);
-        private static readonly Identity invalidStaticText2Id = new Identity(Guid.Parse("66666666666666666666666666666666"), new RosterVector(new decimal[] { 1, 2, 3 }));
+        private static readonly Identity invalidStaticText1Id = Create.Identity(Guid.Parse("55555555555555555555555555555555"), RosterVector.Empty);
+        private static readonly Identity invalidStaticText2Id = Create.Identity(Guid.Parse("66666666666666666666666666666666"), new RosterVector(new decimal[] { 1, 2, 3 }));
     }
 }

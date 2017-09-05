@@ -28,7 +28,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public Identity Identity { get; private set; }
         public SubstitutionText Title { get; private set; }
         public InterviewTree Tree { get; private set; }
-        public IInterviewTreeNode Parent { get; private set; }
+
+        public IInterviewTreeNode Parent
+        {
+            get;
+            private set;
+        }
         public IEnumerable<IInterviewTreeNode> Parents { get; private set; } = Enumerable.Empty<IInterviewTreeNode>();
 
         public IReadOnlyCollection<IInterviewTreeNode> Children => this.children;

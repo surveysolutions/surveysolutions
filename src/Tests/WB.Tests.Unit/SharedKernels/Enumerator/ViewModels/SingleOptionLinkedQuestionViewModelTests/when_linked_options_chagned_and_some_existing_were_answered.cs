@@ -53,7 +53,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
                     Create.Entity.RosterVector(1), Create.Entity.RosterVector(2), Create.Entity.RosterVector(3)
                 }),
             }));
-        };
+        };
+
         It should_not_remove_existing_selected_option = () => viewModel.Options.Second().Selected.ShouldBeTrue();
 
         It should_add_new_options_as_non_selected = () => viewModel.Options.First().Selected.ShouldBeFalse();

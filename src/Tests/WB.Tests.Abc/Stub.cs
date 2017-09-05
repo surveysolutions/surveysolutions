@@ -9,6 +9,8 @@ using WB.Core.SharedKernels.SurveySolutions;
 using WB.Tests.Abc.Storage;
 using WB.Tests.Abc.TestFactories;
 using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Tests.Abc
 {
@@ -74,9 +76,10 @@ namespace WB.Tests.Abc
         public static IInterviewExpressionStatePrototypeProvider InterviewExpressionStateProvider()
         {
             var expressionState = new InterviewExpressionStateStub();
-
-            return Mock.Of<IInterviewExpressionStatePrototypeProvider>(_ => 
-                _.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == expressionState);
+            var storage = new InterviewExpressionStorageStub();
+            return Mock.Of<IInterviewExpressionStatePrototypeProvider>(_ 
+                => _.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == expressionState
+                && _.GetExpressionStorage(Moq.It.IsAny<QuestionnaireIdentity>()) == storage);
         }
 
         internal class StubAggregateLock : IAggregateLock

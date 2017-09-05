@@ -205,7 +205,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var interview = this.interviewRepository.Get(interviewId);
             var areaQuestion = interview.GetAreaQuestion(this.questionIdentity);
-            if (areaQuestion.IsAnswered)
+            if (areaQuestion.IsAnswered())
             {
                 var questionAnswer = areaQuestion.GetAnswer().Value;
                 this.Answer = new Area(questionAnswer.Geometry, questionAnswer.MapName, questionAnswer.AreaSize, questionAnswer.Length, questionAnswer.DistanceToEditor);

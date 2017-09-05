@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     title: "separate fixed group", obsoleteFixedTitles: new[] {"I", "II"}));
 
             questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
-                new PlainQuestionnaire(questionnaire, 1));
+                Create.Entity.PlainQuestionnaire(questionnaire, 1));
 
             eventContext = new EventContext();
         };

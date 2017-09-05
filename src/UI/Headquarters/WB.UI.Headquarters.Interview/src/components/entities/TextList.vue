@@ -10,22 +10,21 @@
                 </div>
                 <div class="form-group" v-if="canAddNewItem">
                     <div class="field answered">
-                        <input autocomplete="off" type="text" class="field-to-fill" placeholder="Enter new item" title="Enter new item" v-blurOnEnterKey @blur="addRow"/>
+                        <input autocomplete="off" type="text" class="field-to-fill"
+                            :placeholder="$t('TextEnterNewItem')" :title="$t('TextEnterNewItem')" v-blurOnEnterKey @blur="addRow"/>
                     </div>
                 </div>
             </div>
         </div>
     </wb-question>
 </template>
-<script lang="ts">
+<script lang="js">
     import { entityDetails } from "components/mixins"
     import * as $ from "jquery"
     import modal from "../../modal"
 
-    class TextListAnswerRow implements ITextListAnswerRow {
-        value: number
-        text: string
-        constructor(value: number, text: string) {
+    class TextListAnswerRow {
+       constructor(value, text) {
             this.value = value
             this.text = text
         }
@@ -46,7 +45,7 @@
                     return
                 }
 
-                modal.confirm('Are you sure you want to remove related roster?', result => {
+                modal.confirm(this.$t('ConfirmRosterRemove'), result => {
                     if (result) {
                         this.removeRow(index)
                         return;
@@ -65,7 +64,7 @@
             },
             updateRow(evnt, item) {
                 const target = $(evnt.target)
-                let text: string = target.val()
+                let text = target.val()
 
                 if (item.text == text) return
 
@@ -77,11 +76,11 @@
             },
             addRow(evnt) {
                 const target = $(evnt.target)
-                let text: string = target.val()
+                let text = target.val()
 
                 if (!text || !text.trim()) return
 
-                let newRowValue: number = 1
+                let newRowValue = 1
                 if (this.$me.rows != undefined && this.$me.rows.length > 0)
                     newRowValue = this.$me.rows[this.$me.rows.length - 1].value + 1
 

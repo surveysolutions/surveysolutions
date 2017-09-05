@@ -132,10 +132,10 @@
   <data name="AssignmentsSelected" xml:space="preserve">
     <value>{0} Заданий выбрано </value>
   </data>
-  <data name="QuantityExplanation" xml:space="preserve">
-    <value>Изменение количества интервью, которые будут созданы согласно этому заданию</value>
+  <data name="SizeExplanation" xml:space="preserve">
+    <value>Изменение количества интервью, которые будут созданы согласно этому заданию. Разрешенные значения: -1 для не ограниченного задания, 0 для пустого, число для конкретного количества</value>
   </data>
-  <data name="ChangeQuantityModalTitle" xml:space="preserve">
+  <data name="ChangeSizeModalTitle" xml:space="preserve">
     <value>Редактировать количество интервью для задания {0}</value>
     <comment>{0} - id of the assignment</comment>
   </data>
@@ -145,14 +145,14 @@
   <data name="IdentifyingQuestions" xml:space="preserve">
     <value>Идентификационные вопросы</value>
   </data>
-  <data name="InterviewsCount" xml:space="preserve">
-    <value>Количество интервью</value>
+  <data name="Count" xml:space="preserve">
+    <value>Количество</value>
   </data>
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
     <value>{0} Заданий будет изменено</value>
   </data>
-  <data name="Quantity" xml:space="preserve">
-    <value>Количество</value>
+  <data name="Size" xml:space="preserve">
+    <value>Размер</value>
   </data>
   <data name="SelectResponsible" xml:space="preserve">
     <value>Выбор ответственного</value>
@@ -172,14 +172,8 @@
   <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
     <value>Заполните все или несколько идентификационных полей</value>
   </data>
-  <data name="CreateAssignment_QuantityInstruction" xml:space="preserve">
-    <value>Выберите ответственного (Супервизора или Интервьюера) для задания</value>
-  </data>
   <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
-    <value>Введите максимальное число интервью которое возможно создать на основе этого задания</value>
-  </data>
-  <data name="InterviewsNeeded" xml:space="preserve">
-    <value>Необходимо интервью</value>
+    <value>Выберите ответственного (Супервизора или Интервьюера) для задания</value>
   </data>
   <data name="CreateInterview" xml:space="preserve">
     <value>Начать новое интервью</value>
@@ -188,5 +182,12 @@
   <data name="Questionnaire" xml:space="preserve">
     <value>Опросник</value>
     <comment>Опросник</comment>
+  </data>
+  <data name="AllAssignments" xml:space="preserve">
+    <value>Все задачи</value>
+  </data>
+  <data name="InterviewsNeeded" xml:space="preserve">
+    <value>Необходимо интервью</value>
+    <comment>Необходимо интервью</comment>
   </data>
 </root>

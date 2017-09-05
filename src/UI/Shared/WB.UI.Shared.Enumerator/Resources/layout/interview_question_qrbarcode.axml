@@ -19,7 +19,8 @@
               local:MvxBind="HideKeyboardOnClick .; 
                            Click SaveAnswerCommand; 
                            Text Localization('Interview_Questions_QrBarcode_SaveAnswer'); 
-                           BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
+                           BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));
+                           Tag Format('Answer_{0}', Identity)" />
     </LinearLayout>
   </LinearLayout>
 </LinearLayout>

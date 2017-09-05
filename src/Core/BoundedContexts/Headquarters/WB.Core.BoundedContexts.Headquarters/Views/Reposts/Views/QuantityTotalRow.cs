@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views
         public QuantityTotalRow(long[] quantityByPeriod, long total)
         {
             this.QuantityByPeriod = quantityByPeriod;
-            this.Average = Math.Round(quantityByPeriod.Average(), 2);
+            this.Average = quantityByPeriod.Length > 0 ? Math.Round(quantityByPeriod.Average(), 2) : 0;
             this.Total = total;
         }
 

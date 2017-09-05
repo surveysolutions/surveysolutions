@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
@@ -18,6 +15,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
         Establish context = () =>
         {
             input = CreateSpeedBetweenStatusesBySupervisorsReportInputModel(period: "w");
+            var timestamp = input.From.Date.AddHours(-1);
+
+            var interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
+            interviewStatuses.Store(Create.Entity.InterviewStatuses(questionnaireId: input.QuestionnaireId,
+                questionnaireVersion: input.QuestionnaireVersion, statuses: new[]
+                {
+                    Create.Entity.InterviewCommentedStatus(timestamp: timestamp)
+                }), "1");
 
             var user = Create.Entity.UserDocument(supervisorId: supervisorId);
 
@@ -28,11 +33,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
                     timeSpans: new[]
                     {
                         Create.Entity.TimeSpanBetweenStatuses(interviewerId: user.PublicKey,
-                            timestamp: input.From.Date.AddHours(1),
+                            timestamp: timestamp,
                             timeSpanWithPreviousStatus: TimeSpan.FromMinutes(-35))
                     }), "2");
 
-            quantityReportFactory = CreateSpeedReportFactory(interviewStatusTimeSpans: interviewStatusTimeSpans);
+            quantityReportFactory = CreateSpeedReportFactory(interviewStatusTimeSpans: interviewStatusTimeSpans,
+                interviewStatuses: interviewStatuses);
         };
 
         Because of = () =>
@@ -42,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
             result.Items.Count().ShouldEqual(1);
 
         It should_return_first_row_with_positive_35_minutes_per_interview_at_first_period_and_null_minutes_per_interview_at_second = () =>
-            result.Items.First().SpeedByPeriod.ShouldEqual(new double?[] { 35, null });
+            result.Items.First().SpeedByPeriod.ShouldEqual(new double?[] { 35 });
 
         It should_return_first_row_with_positive_35_minutes_in_Total = () =>
             result.Items.First().Total.ShouldEqual(35);

@@ -29,16 +29,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
                     questionnaireVersion: input.QuestionnaireVersion,
                     statuses: new[]
                     {
-                        Create.Entity.InterviewCommentedStatus(supervisorId: user.PublicKey,
-                            status: InterviewExportedAction.Completed,
-                            timestamp: input.From.Date.AddHours(1), 
-                            timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
-                        Create.Entity.InterviewCommentedStatus(supervisorId: user.PublicKey,
-                            status: InterviewExportedAction.Completed,
-                            timestamp: input.From.Date.AddDays(1)),
-                        Create.Entity.InterviewCommentedStatus(supervisorId: user.PublicKey,
-                            status: InterviewExportedAction.Completed,
-                            timestamp: input.From.Date.AddMonths(-2))
+                        Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
+                            supervisorId: user.PublicKey, 
+                            timestamp: input.From.Date.AddDays(-33), timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
+                        Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
+                            supervisorId: user.PublicKey, timestamp: input.From.Date.AddDays(-11)),
+                        Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
+                            supervisorId: user.PublicKey, timestamp: input.From.Date.AddDays(-2))
                     }), "2");
 
             quantityReportFactory = CreateSpeedReportFactory(interviewStatuses: interviewStatuses);

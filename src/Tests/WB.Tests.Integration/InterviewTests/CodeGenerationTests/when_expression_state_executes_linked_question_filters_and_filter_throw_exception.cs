@@ -8,6 +8,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.V7;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
@@ -46,7 +47,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 var filterResults = state.ProcessLinkedQuestionFilters();
                 return new InvokeResults()
                 {
-                    CountOfOptions = filterResults.LinkedQuestionOptionsSet[new Identity(questionId, RosterVector.Empty)].Count()
+                    CountOfOptions = filterResults.LinkedQuestionOptionsSet[Create.Identity(questionId, RosterVector.Empty)].Count()
                 };
             });
 

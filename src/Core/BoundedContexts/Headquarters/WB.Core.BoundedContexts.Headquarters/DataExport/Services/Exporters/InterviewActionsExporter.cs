@@ -9,6 +9,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
@@ -25,7 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string interviewActionsFileName = "interview_actions";
-        private readonly string[] actionFileColumns = { "InterviewId", "Action", "Originator", "Role", "Date", "Time" };
+        private readonly string[] actionFileColumns = { "InterviewId", "Action", "Originator", "Role", "ResponsibleName", "ResponsibleRole", "Date", "Time" };
         private readonly string dataFileExtension = "tab";
         private readonly ICsvWriter csvWriter;
         private readonly ITransactionManagerProvider transactionManager;
@@ -71,7 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 var interviewIdsStrings = interviewsBatch.Select(x => x.FormatGuid()).ToArray();
                 Expression<Func<InterviewStatuses, bool>> whereClauseForAction = 
                     x => interviewIdsStrings.Contains(x.InterviewId);
-                var actionsChunk = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() => this.QueryActionsChunkFromReadSide(whereClauseForAction));
+                string[][] actionsChunk = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() => this.QueryActionsChunkFromReadSide(whereClauseForAction));
 
                 this.csvWriter.WriteData(actionFilePath, actionsChunk, ExportFileSettings.DataFileSeparator.ToString());
 
@@ -89,23 +90,21 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private string[][] QueryActionsChunkFromReadSide(Expression<Func<InterviewStatuses, bool>> queryActions)
         {
             var interviews =
-              this.interviewStatuses.Query(
-                  _ =>
-                      _.Where(queryActions)
-                          .SelectMany(
-                              interviewWithStatusHistory => interviewWithStatusHistory.InterviewCommentedStatuses,
-                              (interview, status) => new { interview.InterviewId, StatusHistory = status })
-                          .Select(
-                              i =>
-                                  new
-                                  {
-                                      i.InterviewId,
-                                      i.StatusHistory.Status,
-                                      i.StatusHistory.StatusChangeOriginatorName,
-                                      i.StatusHistory.StatusChangeOriginatorRole,
-                                      i.StatusHistory.Timestamp
-
-                                  }).OrderBy(i => i.Timestamp).ToList());
+              this.interviewStatuses.Query(_ => _
+                    .Where(queryActions)
+                    .SelectMany(interviewWithStatusHistory => interviewWithStatusHistory.InterviewCommentedStatuses,
+                               (interview, status) => new { interview.InterviewId, StatusHistory = status })
+                    .Select(i => new 
+                    {
+                        i.InterviewId,
+                        i.StatusHistory.Status,
+                        i.StatusHistory.StatusChangeOriginatorName,
+                        i.StatusHistory.StatusChangeOriginatorRole,
+                        i.StatusHistory.Timestamp,
+                        i.StatusHistory.SupervisorName,
+                        i.StatusHistory.InterviewerName
+                    })
+                    .OrderBy(i => i.Timestamp).ToList());
 
             var result = new List<string[]>();
 
@@ -117,12 +116,58 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     interview.Status.ToString(),
                     interview.StatusChangeOriginatorName,
                     this.GetUserRole(interview.StatusChangeOriginatorRole),
+                    this.GetResponsibleName(interview.Status, interview.InterviewerName, interview.SupervisorName, interview.StatusChangeOriginatorName),
+                    this.GetResponsibleRole(interview.Status, interview.StatusChangeOriginatorRole, interview.InterviewerName),
                     interview.Timestamp.ToString("d", CultureInfo.InvariantCulture),
                     interview.Timestamp.ToString("T", CultureInfo.InvariantCulture)
                 };
                 result.Add(resultRow.ToArray());
             }
             return result.ToArray();
+        }
+
+        private string GetResponsibleName(InterviewExportedAction status, string interviewerName, string supervisorName, string statusChangeOriginatorName)
+        {
+            switch (status)
+            {
+                case InterviewExportedAction.Created:
+                    return statusChangeOriginatorName;
+                case InterviewExportedAction.SupervisorAssigned:
+                case InterviewExportedAction.Completed:
+                case InterviewExportedAction.RejectedByHeadquarter:
+                case InterviewExportedAction.UnapprovedByHeadquarter:
+                    return supervisorName;
+                case InterviewExportedAction.ApprovedBySupervisor:
+                    return Strings.AnyHeadquarters;
+                case InterviewExportedAction.ApprovedByHeadquarter:
+                    return String.Empty;
+            }
+
+            return interviewerName;
+        }
+
+        private string GetResponsibleRole(InterviewExportedAction status, UserRoles statusChangeOriginatorRole, string interviewerName)
+        {
+            switch (status)
+            {
+                case InterviewExportedAction.Created:
+                    return GetUserRole(statusChangeOriginatorRole);
+                case InterviewExportedAction.SupervisorAssigned:
+                case InterviewExportedAction.Completed:
+                case InterviewExportedAction.RejectedByHeadquarter:
+                case InterviewExportedAction.UnapprovedByHeadquarter:
+                    return FileBasedDataExportRepositoryWriterMessages.Supervisor;
+                case InterviewExportedAction.ApprovedBySupervisor:
+                    return FileBasedDataExportRepositoryWriterMessages.Headquarter;
+                case InterviewExportedAction.ApprovedByHeadquarter:
+                    return String.Empty;
+                case InterviewExportedAction.InterviewerAssigned:
+                    if (string.IsNullOrWhiteSpace(interviewerName))
+                        return string.Empty;
+                    break;
+            }
+
+            return FileBasedDataExportRepositoryWriterMessages.Interviewer;
         }
 
         private string GetUserRole(UserRoles userRole)

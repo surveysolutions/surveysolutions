@@ -4,6 +4,7 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -164,6 +165,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     ParentValue = 2,
                     Title = "Опция значения 2"
                 }
+                && x.GetOptionsForQuestion(Moq.It.IsAny<QuestionnaireIdentity>(), cascadingIdentity.Id, 2, "", Moq.It.IsAny<Translation>()) == new CategoricalOption
+                {
+                    Value = 2,
+                    ParentValue = 2,
+                    Title = "Опция значения 2"
+                }.ToEnumerable()
             );
 
             Moq.Mock.Get(ServiceLocator.Current).Setup(_ => _.GetInstance<IQuestionOptionsRepository>()).Returns(optionsRepo);

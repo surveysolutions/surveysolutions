@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -49,6 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 answers: answersDtos,
                 disabledQuestions: new HashSet<InterviewItemId> { Create.Entity.InterviewItemId(disabledQuestionId, rosterVector) });
             interview.Synchronize(Create.Command.Synchronize(userId, interviewSynchronizationDto));
+            interview.Apply(Create.Event.QuestionsDisabled(new []{ Create.Identity(disabledQuestionId, rosterVector) }));
         };
 
         Because of = () =>
@@ -71,7 +73,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         private static readonly Guid disabledQuestionId = Guid.Parse("00000000000000000000000000000006");
         private static readonly Guid interQuestionId = Guid.Parse("00000000000000000000000000000007");
         private static readonly Guid repliedByInterQuestionId = Guid.Parse("00000000000000000000000000000008");
-        private static readonly decimal[] rosterVector = new decimal[] { 1m, 0m };
+        private static readonly RosterVector rosterVector = Create.RosterVector(1, 0);
         private static readonly Guid questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static readonly Guid userId = Guid.Parse("99999999999999999999999999999999");
     }

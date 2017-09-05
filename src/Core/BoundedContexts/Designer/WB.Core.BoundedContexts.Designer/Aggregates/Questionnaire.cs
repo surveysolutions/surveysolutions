@@ -2231,21 +2231,21 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(DomainExceptionType.StaticTextIsEmpty, "Static text is empty");
         }
 
-        private void ThrowDomainExceptionIfVariableNameIsInvalid(Guid questionPublicKey, string stataCaption, int variableLengthLimit)
+        private void ThrowDomainExceptionIfVariableNameIsInvalid(Guid questionPublicKey, string variable, int variableLengthLimit)
         {
-            if (string.IsNullOrEmpty(stataCaption))
+            if (string.IsNullOrEmpty(variable))
             {
                 return;
             }
             
-            bool isTooLong = stataCaption.Length > variableLengthLimit;
+            bool isTooLong = variable.Length > variableLengthLimit;
             if (isTooLong)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.VariableNameMaxLength, string.Format("This element's name or ID shouldn't be longer than {0} characters.", variableLengthLimit));
             }
 
-            bool containsInvalidCharacters = stataCaption.Any(c => !(c == '_' || Char.IsLetterOrDigit(c)));
+            bool containsInvalidCharacters = variable.Any(c => !(c == '_' || Char.IsLetterOrDigit(c)));
             if (containsInvalidCharacters)
             {
                 throw new QuestionnaireException(
@@ -2253,21 +2253,21 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     "Valid variable or roster ID name should contain only letters, digits and underscore character");
             }
 
-            bool startsWithDigitOrUnderscore = Char.IsDigit(stataCaption[0]) || stataCaption[0] == '_';
+            bool startsWithDigitOrUnderscore = Char.IsDigit(variable[0]) || variable[0] == '_';
             if (startsWithDigitOrUnderscore)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.VariableNameStartWithDigit, "Variable name or roster ID shouldn't start with digit or underscore");
             }
 
-            bool endsWithUnderscore = stataCaption[stataCaption.Length-1] == '_';
+            bool endsWithUnderscore = variable[variable.Length-1] == '_';
             if (endsWithUnderscore)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.VariableNameEndsWithUnderscore, "Variable name or roster ID shouldn't end with underscore");
             }
 
-            bool hasConsecutiveUnderscore = stataCaption.Contains("__");
+            bool hasConsecutiveUnderscore = variable.Contains("__");
             if (hasConsecutiveUnderscore)
             {
                 throw new QuestionnaireException(
@@ -2278,19 +2278,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 .Where(q => q.PublicKey != questionPublicKey)
                 .Select(q => q.StataExportCaption);
 
-            bool isNotUnique = captions.Contains(stataCaption);
+            bool isNotUnique = captions.Contains(variable);
             if (isNotUnique)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.VarialbeNameNotUnique, "Variable name or roster ID should be unique in questionnaire's scope");
             }
             
-            var keywords = this.variableNameValidator.GetAllReservedKeywords();
-
-            foreach (var keyword in keywords.Where(keyword => stataCaption.ToLower() == keyword)) {
+            if(this.variableNameValidator.IsReservedKeyword(variable))
+            { 
                 throw new QuestionnaireException(
                     DomainExceptionType.VariableNameShouldNotMatchWithKeywords,
-                    keyword + " is a keyword. Variable name or roster ID shouldn't match with keywords");
+                    variable + " is a keyword. Variable name or roster ID shouldn't match with keywords");
             }
         }
 

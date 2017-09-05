@@ -124,7 +124,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.CountOfDecimalPlaces = questionnaire.GetCountOfDecimalPlacesAllowedByQuestion(entityIdentity.Id);
 
             var doubleQuestion = interview.GetDoubleQuestion(entityIdentity);
-            if (doubleQuestion.IsAnswered)
+            if (doubleQuestion.IsAnswered())
             {
                 this.Answer = doubleQuestion.GetAnswer().Value;
             }

@@ -143,6 +143,9 @@ label.inactive{
 		@include box-shadow(0 3px 5px 0px rgba(0, 0, 0, 0.3));
 		.breadcrumb {
 			margin-bottom: 10px;
+			&:empty{
+				margin-bottom: 0;
+			}
 			li a{
 					color: rgba(255, 255, 255, 0.5);
 					font: 10px/12px "TrebuchetMS";
@@ -228,7 +231,7 @@ label.inactive{
 	.publication-date{
 		color: rgb(203, 203, 203);
 	}
-	.enumerators, .enumerators p{
+	.enumerators-comment, .enumerators-comment p, .enumerators-comment h6{
 		color: $pink;
 	}
 	.comment {
@@ -246,7 +249,7 @@ label.inactive{
 			}
 			.form-control{
 				@extend %form;
-				width: calc(100% + 12px);
+				width: calc(425px + 12px);
 				height: 40px;
 				padding: 10px 12px;
 				z-index: 0;
@@ -254,16 +257,11 @@ label.inactive{
 				color: $gray_text;
 				font-style: italic;
 			}
-			.btn-post-comment{
-				position: absolute;
-				top: 17px;
-				right: -65px;
-			}
 		}
 	}
 }
 .action-container{
-	padding: 20px 30px 20px 80px;
+	padding: 20px 40px 20px 80px;
 	a{
 		max-width: $width-question-editor - 20px;
 		white-space: normal;
@@ -657,6 +655,9 @@ label.inactive{
     color: $gray_light;
 }
 .details-interview{
+	.unit-title h3{
+		margin-bottom: 5px;
+	}
 	.wrapper-info{
 		h3{
 			margin-bottom: 20px;
@@ -910,11 +911,6 @@ label.inactive{
 	}
 }
 @media (max-width: $screen-md-min){
-	.details-interview{
-		.action-container, .wrapper-info{
-			padding-left: 60px;
-		}
-	}
 	.content{
         padding-top: 70px;
 		.questionnaire-content .breadcrumb{
@@ -960,9 +956,6 @@ label.inactive{
 			}
 
 		}
-		.question{
-			padding-left: 50px;
-		}
 		&.fullscreen-hidden-content{
 			.content{
 				left: -$content-width-small;
@@ -970,9 +963,6 @@ label.inactive{
 			}
 			.questionnaire.details-interview{
 				@include width-questionnaire($filter-width);
-			}
-			.question{
-				padding-left: 50px;
 			}
 			.filters{
 				left: 0;
@@ -996,12 +986,6 @@ label.inactive{
 			.questionnaire{
 				&.details-interview{
 					@include width-questionnaire($filter-width);
-				}
-				.question{
-					padding-left: 50px;
-				}
-				.action-container{
-					padding-left: 50px;
 				}
 				.unit-title{
 					padding-left: 60px;
@@ -1031,12 +1015,6 @@ label.inactive{
 			.questionnaire{
 				&.details-interview{
 					@include width-questionnaire($content-width-small);
-				}
-				.question{
-					padding-left: 50px;
-				}
-				.action-container{
-					padding-left: 50px;
 				}
 				.button-flag{
 					left: -20px;
@@ -1130,7 +1108,7 @@ label.inactive{
 	    }
 	}
 }
-@media only screen and (max-width: 940px){
+@media only screen and (max-width: 1040px){
 	.audio-question{
 		.recording{
 			.btn-clear{
@@ -1152,16 +1130,16 @@ label.inactive{
 			.comment .form-inline {
 				.form-group{
 					margin-bottom: 0;
-					width: calc(100% - 65px);
 					.input-group{
 						width: 100%;
+						.input-group-btn{
+							width: 1%;
+						}
 					}
 				}
 				.form-control{
-					width: calc(100% + 12px);
-				}
-				.btn-post-comment{
-					position: static;
+					width: 100%;
+					margin-left: 0;
 				}
 			}
 		}
@@ -1173,29 +1151,11 @@ label.inactive{
 			float: none;
 		}
 		.questionnaire {
-			.humburger-foldback-button{
-			 	top: 20px;
-			}
-			.comment .form-inline {
-				.form-group{
-					margin-bottom: 0;
-					width: calc(100% - 65px);
-					.input-group{
-						width: 100%;
-					}
-				}
-				.form-control{
-					width: calc(100% + 12px);
-				}
-				.btn-post-comment{
-					position: static;
-				}
-			}
 			.question{
 				padding-left: 35px;
 			}
 			 .unit-title{
-			 	padding-left: 45px;
+			 	padding-left: 35px;
 			}
 			.button-flag{
 				left: -20px;
@@ -1213,14 +1173,8 @@ label.inactive{
 			 	left: -27px;
 			}
 		}
-		.aside-menu{
-			right: 20px;
-		}
 		.action-container{
-			padding-left: 50px;
-			a{
-				max-width: 265px;
-			}
+			padding-left: 45px;
 		}
 		.lock{
 			left: -17px;
@@ -1229,8 +1183,9 @@ label.inactive{
 }
 @media (max-width: $screen-xs-min){
 	.web-interview{
-		.action-container, .wrapper-info{
+		.action-container{
 			padding-left: 25px;
+			padding-right: 20px;
 		}
 		.questionnaire{
 			.question{
@@ -1238,12 +1193,8 @@ label.inactive{
 				padding-right: 10px;
 			}
 			.unit-title{
-			 	padding-left: 25px;
+			 	padding-left: 35px;
 			 	padding-right: 10px;
-			 	.breadcrumb{
-			 		min-height: 42px;
-			 	  	padding-left: 25px;
-			 	}
 			}
 		}	
 	}

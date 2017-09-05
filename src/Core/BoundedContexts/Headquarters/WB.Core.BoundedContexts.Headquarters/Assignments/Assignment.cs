@@ -59,18 +59,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public virtual ISet<InterviewSummary> InterviewSummaries { get; protected set; }
 
         public virtual int InterviewsProvided =>
-            InterviewSummaries.Count(i => i.IsDeleted == false && (i.Status == InterviewStatus.InterviewerAssigned ||
-                                          i.Status == InterviewStatus.RejectedBySupervisor));
+            InterviewSummaries.Count(i => i.Status == InterviewStatus.InterviewerAssigned ||
+                                          i.Status == InterviewStatus.RejectedBySupervisor);
 
-        public virtual int? InterviewsNeeded
-        {
-            get
-            {
-                return this.Quantity.HasValue
-                    ? this.Quantity - this.InterviewSummaries.Count(x => !x.IsDeleted)
-                    : null;
-            }
-        }
+        public virtual int? InterviewsNeeded => this.Quantity.HasValue
+            ? this.Quantity - this.InterviewSummaries.Count
+            : null;
 
         public virtual bool IsCompleted => this.InterviewsNeeded <= 0;
 

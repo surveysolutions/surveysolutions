@@ -1,7 +1,12 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Entities.Composite;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Tests.Abc
 {
@@ -24,6 +29,28 @@ namespace WB.Tests.Abc
             var publishableEventMock = mock.As<IUncommittedEvent>();
             publishableEventMock.Setup(x => x.Payload).Returns(@event);
             return mock.Object;
+        }
+    }
+
+    internal static class QuestionnaireExtensions
+    {
+        public static ReadOnlyQuestionnaireDocument AssignMissingVariables(this ReadOnlyQuestionnaireDocument questionnaire)
+        {
+            var variables = new List<string>();
+            int i = 1;
+            foreach (var composite in questionnaire.Find<IComposite>())
+            {
+                var variable = composite.GetVariable();
+                var newVariable = string.IsNullOrWhiteSpace(variable) ? "var" + i : variable;
+                while (variables.Contains(newVariable))
+                {
+                    newVariable = "var" + i;
+                    i++;
+                }
+                composite.SetVariable(newVariable);
+                variables.Add(newVariable);
+            }
+            return questionnaire;
         }
     }
 }

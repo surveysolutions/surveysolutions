@@ -12,27 +12,22 @@
                     <button type="submit" class="btn btn-link btn-clear" @click="removeAnswer"><span></span></button>
                 </div>
                 <div class="action-btn-holder gps-question">
-                    <button type="button" class="btn btn-default btn-lg btn-action-questionnaire" @click="answerGpsQuestion">Record GPS</button>
+                    <button type="button" class="btn btn-default btn-lg btn-action-questionnaire" @click="answerGpsQuestion">{{ $t('GPSRecord') }}</button>
                 </div>
             </div>
         </div>
     </wb-question>
 </template>
-<script lang="ts">
+<script lang="js">
     import { entityDetails } from "components/mixins"
     import { googleApiKey } from "src/config"
 
-    class GpsAnswer implements IGpsAnswer {
-        latitude: number
-        longitude: number
-        accuracy: number
-        altitude: number
-        timestamp: number
-        constructor(latitude: number,
-            longitude: number,
-            accuracy: number,
-            altitude: number,
-            timestamp: number) {
+    class GpsAnswer {
+        constructor(latitude,
+            longitude,
+            accuracy,
+            altitude,
+            timestamp) {
             this.latitude = latitude
             this.longitude = longitude
             this.accuracy = accuracy
@@ -61,7 +56,7 @@
             },
             answerGpsQuestion() {
                 if (!('geolocation' in navigator)) {
-                    this.markAnswerAsNotSavedWithMessage('Your browser does not support receiving Geolocation')
+                    this.markAnswerAsNotSavedWithMessage(this.$t("GPSNotAvailable"))
                     return
                 }
 
@@ -91,15 +86,13 @@
                 // Check for known errors
                 switch (error.code) {
                     case error.PERMISSION_DENIED:
-                        message = "This website does not have permission to use " +
-                            "the Geolocation API"
+                        message = this.$t("GPSPermissionDenied")//"This website does not have permission to use the Geolocation API"
                         break;
                     case error.POSITION_UNAVAILABLE:
-                        message = "The current position could not be determined.";
+                        message = this.$t("GPSPositionUnavailable") //"The current position could not be determined.";
                         break
                     case error.TIMEOUT:
-                        message = "The current position could not be determined " +
-                            "within the specified timeout period."
+                        message = this.$t("GPSTimeout") //"The current position could not be determined within the specified timeout period."
                         break
                 }
                 // If it is an unknown error, build a message that includes
@@ -107,11 +100,10 @@
                 // the error handler can be updated.
                 if (message == "") {
                     var strErrorCode = error.code.toString();
-                    message = "The position could not be determined due to " +
-                        "an unknown error (Code: " + strErrorCode + ")."
+                    message = this.$t("GPSError", { strErrorCode })  //"The position could not be determined due to an unknown error (Code: " + strErrorCode + ")."
                 }
 
-                this.markAnswerAsNotSavedWithMessage(error.message)
+                this.markAnswerAsNotSavedWithMessage(message)
                 this.$store.dispatch("fetchProgress", -1)
                 this.isInProgress = false
             }

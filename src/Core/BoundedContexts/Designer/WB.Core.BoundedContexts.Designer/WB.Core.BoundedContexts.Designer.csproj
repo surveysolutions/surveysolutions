@@ -1,787 +1,110 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DCBFC3F0-8E8C-4529-B474-B6A79225450E}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WB.Core.BoundedContexts.Designer</RootNamespace>
-    <AssemblyName>WB.Core.BoundedContexts.Designer</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <TargetFramework>net462</TargetFramework>
+    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <TreatSpecificWarningsAsErrors />
+    <WarningLevel>3</WarningLevel>
+    <NoWarn>1701;1702;1705;618;1030</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AngleSharp, Version=0.9.9.0, Culture=neutral, PublicKeyToken=e83494dcdc6d31ea, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\AngleSharp.0.9.9\lib\net45\AngleSharp.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="CsQuery">
-      <HintPath>..\..\..\..\..\packages\CsQuery.1.3.4\lib\net40\CsQuery.dll</HintPath>
-    </Reference>
-    <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\CsvHelper.2.16.3.0\lib\net45\CsvHelper.dll</HintPath>
-    </Reference>
-    <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="HtmlSanitizer, Version=3.0.0.0, Culture=neutral, PublicKeyToken=61c49a1a9e79cc28, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\HtmlSanitizer.3.4.156\lib\net45\HtmlSanitizer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.Common.2.3.1\lib\netstandard1.3\Microsoft.CodeAnalysis.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.CSharp.2.3.1\lib\netstandard1.3\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="NHibernate, Version=4.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\NHibernate.4.1.1.4000\lib\net40\NHibernate.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
-    </Reference>
-    <Reference Include="Npgsql, Version=3.1.10.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Npgsql.3.1.10\lib\net451\Npgsql.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="SpreadsheetGear2012">
-      <HintPath>..\..\..\..\..\libs\SpreadsheetGear2012.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Collections.Immutable, Version=1.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.Collections.Immutable.1.3.1\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.ComponentModel.Composition" />
+    <PackageReference Include="AngleSharp" Version="0.9.9" />
+    <PackageReference Include="CsQuery" Version="1.3.4" />
+    <PackageReference Include="CsvHelper" Version="2.16.3" />
+    <PackageReference Include="EPPlus" Version="4.1.0" />
+    <PackageReference Include="HtmlSanitizer" Version="3.4.156" />
+    <PackageReference Include="Microsoft.AspNet.WebPages.Data" Version="3.2.3" />
+    <PackageReference Include="Microsoft.AspNet.WebPages.WebData" Version="3.2.3" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.3.1" />
+    <PackageReference Include="Ninject" Version="3.2.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj" />
+    <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj" />
+    <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Console, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Core" />
-    <Reference Include="System.Diagnostics.FileVersionInfo, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.Diagnostics.FileVersionInfo.4.3.0\lib\net46\System.Diagnostics.FileVersionInfo.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Diagnostics.StackTrace, Version=4.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.Diagnostics.StackTrace.4.3.0\lib\net46\System.Diagnostics.StackTrace.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
-    </Reference>
-    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.IO.FileSystem, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Reflection, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.Reflection.4.3.0\lib\net462\System.Reflection.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Reflection.Metadata, Version=1.4.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.Reflection.Metadata.1.4.2\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Runtime.Extensions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.Runtime.Extensions.4.3.0\lib\net462\System.Runtime.Extensions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Runtime.InteropServices, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.Runtime.InteropServices.4.3.0\lib\net462\System.Runtime.InteropServices.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Text.Encoding.CodePages, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.Text.Encoding.CodePages.4.3.0\lib\net46\System.Text.Encoding.CodePages.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Threading.Thread, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.Threading.Thread.4.3.0\lib\net46\System.Threading.Thread.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.ValueTuple, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.ValueTuple.4.3.1\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Xml.XmlDocument, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.Xml.XmlDocument.4.3.0\lib\net46\System.Xml.XmlDocument.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Xml.XPath, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.Xml.XPath.4.3.0\lib\net46\System.Xml.XPath.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Xml.XPath.XDocument, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.Xml.XPath.XDocument.4.3.0\lib\net46\System.Xml.XPath.XDocument.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="WebMatrix.WebData, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\Microsoft.AspNet.WebPages.WebData.3.2.3\lib\net45\WebMatrix.WebData.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aggregates\User.cs" />
-    <Compile Include="Aggregates\IAccountView.cs" />
-    <Compile Include="Aggregates\Questionnaire.cs" />
-    <Compile Include="Aggregates\Snapshots\QuestionnaireState.cs" />
-    <Compile Include="CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>InterviewExpressionStorageTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CodeGenerationV2\CodeTemplates\LookupTablesTemplate.cs">
-      <DependentUpon>LookupTablesTemplate.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="CodeGenerationV2\CodeTemplates\Extentions\LookupTablesTemplate.Extended.cs" />
-    <Compile Include="CodeGenerationV2\IQuestionTypeToCSharpTypeMapper.cs" />
-    <Compile Include="CodeGenerationV2\QuestionTypeToCSharpTypeMapper.cs" />
-    <Compile Include="Commands\Account\UserCommand.cs" />
-    <Compile Include="Commands\Account\AssignUserRole.cs" />
-    <Compile Include="Commands\Account\ChangeUserPassword.cs" />
-    <Compile Include="Commands\Account\ChangeSecurityQuestion.cs" />
-    <Compile Include="Commands\Account\SetPasswordResetToken.cs" />
-    <Compile Include="Commands\Account\ConfirmUserAccount.cs" />
-    <Compile Include="Commands\Account\DeleteUserAccount.cs" />
-    <Compile Include="Commands\Account\LockUserAccount.cs" />
-    <Compile Include="Commands\Account\RegisterFailedLogin.cs" />
-    <Compile Include="Commands\Account\RegisterUser.cs" />
-    <Compile Include="Commands\Account\RemoveUserRole.cs" />
-    <Compile Include="Commands\Account\ResetUserPassword.cs" />
-    <Compile Include="Commands\Account\UnlockUserAccount.cs" />
-    <Compile Include="Commands\Account\UpdateUserAccount.cs" />
-    <Compile Include="Commands\CommandUtils.cs" />
-    <Compile Include="Commands\Questionnaire\Attachments\DeleteAttachment.cs" />
-    <Compile Include="Commands\Questionnaire\Attachments\AddOrUpdateAttachment.cs" />
-    <Compile Include="Commands\Questionnaire\Base\AbstractUpdateQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Base\AbstractQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Base\CommonQuestionParameters.cs" />
-    <Compile Include="Commands\Questionnaire\Base\FullGroupDataCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Base\GroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Base\QuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Base\QuestionnaireEntityAddCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Base\QuestionnaireEntityCloneCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Base\QuestionnaireEntityMoveCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Base\QuestionnaireEntityCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Base\QuestionnaireCommandBase.cs" />
-    <Compile Include="Commands\Questionnaire\LookupTables\AddLookupTable.cs" />
-    <Compile Include="Commands\Questionnaire\LookupTables\DeleteLookupTable.cs" />
-    <Compile Include="Commands\Questionnaire\LookupTables\UpdateLookupTable.cs" />
-    <Compile Include="Commands\Questionnaire\Macros\AddMacro.cs" />
-    <Compile Include="Commands\Questionnaire\Macros\DeleteMacro.cs" />
-    <Compile Include="Commands\Questionnaire\PasteInto.cs" />
-    <Compile Include="Commands\Questionnaire\PasteAfter.cs" />
-    <Compile Include="Commands\Questionnaire\Macros\UpdateMacro.cs" />
-    <Compile Include="Commands\Questionnaire\CloneQuestionnaire.cs" />
-    <Compile Include="Commands\Questionnaire\AddSharedPersonToQuestionnaire.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateAudioQuestion.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateDateTimeQuestion.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateGpsCoordinatesQuestion.cs" />
-    <Compile Include="Commands\Questionnaire\Question\MigrateExpressionsToCSharp.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateAreaQuestion.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateMultimediaQuestion.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateMultiOptionQuestion.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateCascadingComboboxOptions.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateFilteredComboboxOptions.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateSingleOptionQuestion.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateQRBarcodeQuestion.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateTextListQuestion.cs" />
-    <Compile Include="Commands\Questionnaire\Question\DeleteQuestion.cs" />
-    <Compile Include="Commands\Questionnaire\Question\MoveQuestion.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateNumericQuestion.cs" />
-    <Compile Include="Commands\Questionnaire\Question\AddDefaultTypeQuestion.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateTextQuestion.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateValidatableQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\RemoveSharedPersonFromQuestionnaire.cs" />
-    <Compile Include="Commands\Questionnaire\CreateQuestionnaire.cs" />
-    <Compile Include="Commands\Questionnaire\DeleteQuestionnaire.cs" />
-    <Compile Include="Commands\Questionnaire\Group\AddGroup.cs" />
-    <Compile Include="Commands\Questionnaire\Group\DeleteGroup.cs" />
-    <Compile Include="Commands\Questionnaire\Group\MoveGroup.cs" />
-    <Compile Include="Commands\Questionnaire\Group\UpdateGroup.cs" />
-    <Compile Include="Commands\Questionnaire\ImportQuestionnaire.cs" />
-    <Compile Include="Commands\Questionnaire\Base\QuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\ReplaceTextsCommand.cs" />
-    <Compile Include="Commands\Questionnaire\RevertVersionQuestionnaire.cs" />
-    <Compile Include="Commands\Questionnaire\StaticText\DeleteStaticText.cs" />
-    <Compile Include="Commands\Questionnaire\StaticText\AddStaticText.cs" />
-    <Compile Include="Commands\Questionnaire\StaticText\MoveStaticText.cs" />
-    <Compile Include="Commands\Questionnaire\StaticText\UpdateStaticText.cs" />
-    <Compile Include="Commands\Questionnaire\Translations\AddOrUpdateTranslation.cs" />
-    <Compile Include="Commands\Questionnaire\Translations\DeleteTranslation.cs" />
-    <Compile Include="Commands\Questionnaire\UpdateQuestionnaire.cs" />
-    <Compile Include="Commands\Questionnaire\Variable\AddVariable.cs" />
-    <Compile Include="Commands\Questionnaire\Variable\DeleteVariable.cs" />
-    <Compile Include="Commands\Questionnaire\Variable\MoveVariable.cs" />
-    <Compile Include="Commands\Questionnaire\Variable\UpdateVariable.cs" />
-    <Compile Include="DispatcherRegistryHelper.cs" />
-    <Compile Include="Implementation\Repositories\UserRepository.cs" />
-    <Compile Include="CodeGenerationV2\Models\CodeGenerationModel.cs" />
-    <Compile Include="CodeGenerationV2\CodeGenerationModelsFactory.cs" />
-    <Compile Include="CodeGenerationV2\CodeGeneratorV2.cs" />
-    <Compile Include="CodeGenerationV2\Models\ConditionMethodModel.cs" />
-    <Compile Include="CodeGenerationV2\ICodeGenerationModelsFactory.cs" />
-    <Compile Include="CodeGenerationV2\ICodeGeneratorV2.cs" />
-    <Compile Include="CodeGenerationV2\Models\LevelModel.cs" />
-    <Compile Include="CodeGenerationV2\Models\LinkedFilterMethodModel.cs" />
-    <Compile Include="CodeGenerationV2\Models\OptionsFilterMethodModel.cs" />
-    <Compile Include="CodeGenerationV2\Models\QuestionModel.cs" />
-    <Compile Include="CodeGenerationV2\Models\RosterModel.cs" />
-    <Compile Include="CodeGenerationV2\Models\StaticTextModel.cs" />
-    <Compile Include="CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.cs">
-      <DependentUpon>ConditionMethodTemplate.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="CodeGenerationV2\CodeTemplates\Extentions\ConditionMethodTemplate.Extended.cs" />
-    <Compile Include="Implementation\Services\Accounts\AccountPasswordInfo.cs" />
-    <Compile Include="Implementation\Services\Accounts\DesignerMembershipUser.cs" />
-    <Compile Include="Implementation\Services\Accounts\MembershipEventType.cs" />
-    <Compile Include="Implementation\Services\Accounts\MembershipProvider.cs" />
-    <Compile Include="Implementation\Services\Accounts\Membership\IMembershipHelper.cs" />
-    <Compile Include="Implementation\Services\Accounts\Membership\IMembershipUserService.cs" />
-    <Compile Include="Implementation\Services\Accounts\Membership\IMembershipWebServiceUser.cs" />
-    <Compile Include="Implementation\Services\Accounts\Membership\IMembershipWebUser.cs" />
-    <Compile Include="Implementation\Services\Accounts\Membership\MembershipHelper.cs" />
-    <Compile Include="Implementation\Services\Accounts\Membership\MembershipUserService.cs" />
-    <Compile Include="Implementation\Services\Accounts\Membership\MembershipWebServiceUser.cs" />
-    <Compile Include="Implementation\Services\Accounts\Membership\MembershipWebUser.cs" />
-    <Compile Include="Implementation\Services\Accounts\PasswordExtensions.cs" />
-    <Compile Include="Implementation\Services\Accounts\PasswordStrategies\ClearTextStrategy.cs" />
-    <Compile Include="Implementation\Services\Accounts\PasswordStrategies\HashPasswordStrategy.cs" />
-    <Compile Include="Implementation\Services\Accounts\PasswordStrategies\PasswordPolicyExtensions.cs" />
-    <Compile Include="Implementation\Services\Accounts\PasswordStrategies\TripleDesStrategy.cs" />
-    <Compile Include="CodeGenerationV2\CodeTemplates\LevelTemplate.cs">
-      <DependentUpon>LevelTemplate.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="CodeGenerationV2\CodeTemplates\Extentions\InterviewExpressionStorageTemplate.Extended.cs" />
-    <Compile Include="CodeGenerationV2\CodeTemplates\LinkedFilterMethodTemplate.cs">
-      <DependentUpon>LinkedFilterMethodTemplate.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="CodeGenerationV2\CodeTemplates\Extentions\LinkedFilterMethodTemplate.Extended.cs" />
-    <Compile Include="CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.cs">
-      <DependentUpon>OptionsFilterMethodTemplate.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="CodeGenerationV2\CodeTemplates\Extentions\OptionsFilterMethodTemplate.Extended.cs" />
-    <Compile Include="CodeGenerationV2\Models\VariableModel.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\ExpressionsPlayOrderProvider.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Helpers\GuidExtensions.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Model\LazyHashSetGeneratedVariable.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Model\GeneratedVariable.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\InterviewExpressionStateTemplateV10.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>InterviewExpressionStateTemplateV10.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LookupTablesTemplateV5.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.Extended.cs" />
-    <Compile Include="Implementation\Services\FindReplaceService.cs" />
-    <Compile Include="Implementation\Services\IpAddressProvider.cs" />
-    <Compile Include="Implementation\Services\QuestionnireHistotyVersionsService.cs" />
-    <Compile Include="Mappings\AllowedAddressMap.cs" />
-    <Compile Include="Mappings\QuestionnaireCompilationVersionMap.cs" />
-    <Compile Include="MembershipProvider\Roles\IRoleRepository.cs" />
-    <Compile Include="MembershipProvider\Roles\IUserWithRoles.cs" />
-    <Compile Include="MembershipProvider\Roles\RoleProvider.cs" />
-    <Compile Include="MembershipProvider\Roles\SimpleRoleEnum.cs" />
-    <Compile Include="QuestionnaireCompilationForOldVersions\IQuestionnaireCompilationVersionService.cs" />
-    <Compile Include="QuestionnaireCompilationForOldVersions\QuestionnaireCompilationVersion.cs" />
-    <Compile Include="QuestionnaireCompilationForOldVersions\QuestionnaireCompilationVersionService.cs" />
-    <Compile Include="Services\Accounts\IAccountRepository.cs" />
-    <Compile Include="Services\Accounts\IMembershipAccount.cs" />
-    <Compile Include="Services\Accounts\IPasswordStrategy.cs" />
-    <Compile Include="Services\IAllowedAddressService.cs" />
-    <Compile Include="Services\IIpAddressProvider.cs" />
-    <Compile Include="Services\ITopologicalSorter.cs" />
-    <Compile Include="Services\TopologicalSorter\StronglyConnectedComponent.cs" />
-    <Compile Include="Services\TopologicalSorter\StronglyConnectedComponentList.cs" />
-    <Compile Include="Services\TopologicalSorter\TopologicalSorter.cs" />
-    <Compile Include="Services\TopologicalSorter\Vertex.cs" />
-    <Compile Include="ValueObjects\RosterScope.cs" />
-    <Compile Include="Services\IFindReplaceService.cs" />
-    <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
-    <Compile Include="Implementation\Services\AttachmentService\AttachmentContent.cs" />
-    <Compile Include="Implementation\Services\AttachmentService\AttachmentSize.cs" />
-    <Compile Include="Implementation\Services\AttachmentService\AttachmentMeta.cs" />
-    <Compile Include="Implementation\Services\AttachmentService\AttachmentService.cs" />
-    <Compile Include="Implementation\Services\AttachmentService\AttachmentDetails.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Model\LinkedQuestionFilterExpressionModel.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Model\LinkedQuestionVerifierModel.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Model\StaticTextTemplateModel.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Model\ValidationExpressionModel.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Model\VariableTemplateModel.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\LinkedFilterMethodTemplateV10.cs">
-      <DependentUpon>LinkedFilterMethodTemplateV10.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\LinkedFilterMethodTemplateV10.Extended.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\OptionsFilterMethodTemplateV10.Extended.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\InterviewExpressionStateTemplateV10.Extended.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\OptionsFilterMethodTemplateV10.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>OptionsFilterMethodTemplateV10.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>QuestionnaireLevelTemplateV10.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.Extended.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\RosterScopeTemplateV10.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>RosterScopeTemplateV10.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\RosterScopeTemplateV10.Extended.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\SharedTemplateV10.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SharedTemplateV10.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Implementation\Services\QuestionnaireDocumentExtensions.cs" />
-    <Compile Include="Implementation\Services\MultiLanguageQuestionnaireDocument.cs" />
-    <Compile Include="Implementation\Services\QuestionnairePostProcessors\ResourcesPostProcessor.cs" />
-    <Compile Include="Implementation\Services\QuestionnairePostProcessors\HistoryPostProcessor.cs" />
-    <Compile Include="Implementation\Services\QuestionnairePostProcessors\ListViewPostProcessor.cs" />
-    <Compile Include="Implementation\Services\TemplateModelExtensions.cs" />
-    <Compile Include="Implementation\Services\ReadOnlyQuestionnaireDocument.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\CodeGenerationSettings.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\DefaultDynamicCompilerSettings.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\DynamicCompilerSettingsProvider.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Model\ConditionMethodAndState.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Model\LookupTableTemplateModel.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Model\HierarchyReferenceModel.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\QuestionnaireExpressionStateModelFactory.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\RoslynCompiler.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Model\ConditionDescriptionModel.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Model\ITemplateModel.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\RoslynExpressionProcessor.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ExpressionMethodTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.Extended.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>InterviewExpressionStateTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>QuestionnaireLevelTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>RosterScopeTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Implementation\Services\DesignerEngineVersionService.cs" />
-    <Compile Include="Implementation\Services\LookupTableService\LookupTableContent.cs" />
-    <Compile Include="Implementation\Services\LookupTableService\LookupTableContentFile.cs" />
-    <Compile Include="Implementation\Services\LookupTableService\LookupTableRow.cs" />
-    <Compile Include="Implementation\Services\LookupTableService\LookupTableService.cs" />
-    <Compile Include="Services\IAttachmentService.cs" />
-    <Compile Include="Services\ILookupTableService.cs" />
-    <Compile Include="Services\IMacrosSubstitutionService.cs" />
-    <Compile Include="Implementation\Services\KeywordsProvider.cs" />
-    <Compile Include="Implementation\Services\MacrosSubstitutionService.cs" />
-    <Compile Include="Implementation\Services\QuestionnaireVerifier.cs" />
-    <Compile Include="DesignerBoundedContextModule.cs" />
-    <Compile Include="Exceptions\QuestionnaireException.cs" />
-    <Compile Include="Exceptions\DomainExceptionType.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\CodeGenerator.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Model\RosterScopeBaseModel.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Model\QuestionnaireLevelTemplateModel.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Model\RosterScopeTemplateModel.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.Extended.cs" />
-    <Compile Include="Implementation\Services\ExpressionReplacer.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Model\RosterTemplateModel.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Model\GroupTemplateModel.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Model\QuestionTemplateModel.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Model\QuestionnaireExpressionStateModel.cs" />
-    <Compile Include="Mappings\UserMap.cs" />
-    <Compile Include="Mappings\QuestionnaireChangeRecordMap.cs" />
-    <Compile Include="Mappings\QuestionnaireListViewItemMap.cs" />
-    <Compile Include="Resources\VerificationMessages.Designer.cs">
-      <DependentUpon>VerificationMessages.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="QuestionnaireVerificationModule.cs" />
-    <Compile Include="Services\CodeGeneration\IDynamicCompiler.cs" />
-    <Compile Include="Services\CodeGeneration\ICompilerSettings.cs" />
-    <Compile Include="Services\CodeGeneration\IDynamicCompilerSettingsProvider.cs" />
-    <Compile Include="Services\CodeGeneration\IDynamicCompilerSettings.cs" />
-    <Compile Include="Services\ExpressionLocation.cs" />
-    <Compile Include="Services\ExpressionLocationType.cs" />
-    <Compile Include="Services\GenerationResult.cs" />
-    <Compile Include="Services\ICodeGenerator.cs" />
-    <Compile Include="Services\IDesignerEngineVersionService.cs" />
-    <Compile Include="Services\IExpressionProcessor.cs" />
-    <Compile Include="Services\IExpressionProcessorGenerator.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\QuestionnaireExpressionProcessorGenerator.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.Extended.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.Extended.cs" />
-    <Compile Include="Services\IKeywordsProvider .cs" />
-    <Compile Include="Services\IQuestionnaireVerifier.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Roster.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Roster.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\ExceptionMessages.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ExceptionMessages.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Services\IExpressionReplacer.cs" />
-    <Compile Include="Services\ExpressionLocationItemType.cs" />
-    <Compile Include="Services\IQuestionnireHistotyVersionsService.cs" />
-    <Compile Include="Services\IRecipientNotifier.cs" />
-    <Compile Include="Translations\InvalidExcelFileException.cs" />
-    <Compile Include="Translations\ITranslationsService.cs" />
-    <Compile Include="Translations\TranslationFile.cs" />
-    <Compile Include="Translations\TranslationInstance.cs" />
-    <Compile Include="Translations\TranslationInstanceMap.cs" />
-    <Compile Include="Translations\TranslationsService.cs" />
-    <Compile Include="Translations\TranslationValidationError.cs" />
-    <Compile Include="ValueObjects\InconsistentVersionException.cs" />
-    <Compile Include="ValueObjects\QuestionnaireVerificationMessage.cs" />
-    <Compile Include="ValueObjects\QuestionnaireNodeReference.cs" />
-    <Compile Include="ValueObjects\QuestionnaireVerificationReferenceType.cs" />
-    <Compile Include="ValueObjects\VerificationMessageLevel.cs" />
-    <Compile Include="Views\Account\AccountListView.cs" />
-    <Compile Include="Views\Account\AccountListViewFactory.cs" />
-    <Compile Include="Views\Account\AccountListViewInputModel.cs" />
-    <Compile Include="Views\Account\AccountViewFactory.cs" />
-    <Compile Include="Views\Account\AccountViewInputModel.cs" />
-    <Compile Include="Views\Account\DesignerAccountRepository.cs" />
-    <Compile Include="Views\Account\CQRSRoleRepository.cs" />
-    <Compile Include="Views\AllowedAddresses\AllowedAddress.cs" />
-    <Compile Include="Implementation\Services\AllowedAddressService.cs" />
-    <Compile Include="Views\Questionnaire\ChangeHistory\IQuestionnaireChangeHistoryFactory.cs" />
-    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireActionType.cs" />
-    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistoricalRecord.cs" />
-    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistoricalRecordReference.cs" />
-    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistoryFactory.cs" />
-    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeRecord.cs" />
-    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistory.cs" />
-    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeReference.cs" />
-    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireItemType.cs" />
-    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireStateTracker.cs" />
-    <Compile Include="Views\Questionnaire\Edit\Breadcrumb.cs" />
-    <Compile Include="Views\Questionnaire\Edit\ChapterInfo\ChapterItemType.cs" />
-    <Compile Include="Views\Questionnaire\Edit\ChapterInfo\GroupInfoView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\ChapterInfo\IQuestionnaireItem.cs" />
-    <Compile Include="Views\Questionnaire\Edit\ChapterInfo\StaticTextInfoView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\ChapterInfo\QuestionInfoView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\FixedRosterTitleItem.cs" />
-    <Compile Include="Views\Questionnaire\Edit\GroupDetailsView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\ChapterInfo\IChapterInfoViewFactory.cs" />
-    <Compile Include="Views\Questionnaire\Edit\ICompositeView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\IQuestionnaireInfoFactory.cs" />
-    <Compile Include="Views\Questionnaire\Edit\DropdownQuestionView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\NewChapterView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\NewEditGroupView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\NewEditQuestionView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\NewEditRosterView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\NewEditStaticTextView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\CategoricalOption.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QualityOption.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfoFactory.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\TranslationView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\AttachmentView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\INameable.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\LookupTableView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\MacroView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\QuestionnaireInfoView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\ChapterInfoView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\IQuestionnaireInfoViewFactory.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\QuestionnaireInfoViewFactory.cs" />
-    <Compile Include="Views\Questionnaire\Edit\EditGroupView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\Edit\QuestionnaireEntityNode.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionnaireEntityType.cs" />
-    <Compile Include="Views\Questionnaire\Edit\ChapterInfo\ChapterInfoViewFactory.cs" />
-    <Compile Include="Views\Questionnaire\Edit\ChapterInfo\VariableView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionnaireItemLink.cs" />
-    <Compile Include="Views\Questionnaire\Edit\RosterType.cs" />
-    <Compile Include="Views\Questionnaire\Edit\VariableName.cs" />
-    <Compile Include="Views\Questionnaire\Pdf\DeskSettings.cs" />
-    <Compile Include="Views\Questionnaire\Pdf\PdfFactory.cs" />
-    <Compile Include="Views\Questionnaire\Pdf\PdfQuestionnaireModel.cs" />
-    <Compile Include="Views\Questionnaire\Pdf\PdfRenderExtensions.cs" />
-    <Compile Include="Views\Questionnaire\Pdf\PdfSettings.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireList\IQuestionnaireListViewFactory.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireList\QuestionnaireListViewInputModel.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\QuestionnaireList\QuestionnaireListView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\QuestionnaireList\QuestionnaireListViewFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\QuestionnaireList\QuestionnaireListViewItem.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\QuestionnaireList\QuestionnaireListViewItemSearchable.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\Edit\QuestionnaireStataMapView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\Edit\QuestionnaireView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\Edit\QuestionnaireViewFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\Edit\QuestionnaireViewInputModel.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\SharedPersons\SharedPerson.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\ShareChangeType.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
-      <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
-      <Name>WB.Infrastructure.Native</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
-      <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
-      <Name>WB.Core.GenericSubdomains.Portable</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
-      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
-      <Name>WB.Core.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
-      <Project>{553b4fc2-5fc7-4256-b14d-82758d64a3bd}</Project>
-      <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
-      <Project>{d6616c1d-7c3a-4576-b82b-098721cd4417}</Project>
-      <Name>WB.Core.SharedKernels.Questionnaire</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>InterviewExpressionStorageTemplate.cs</LastGenOutput>
-    </None>
-    <Compile Include="CodeGenerationV2\CodeTemplates\Extentions\LevelTemplate.Extended.cs" />
-    <None Include="Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>InterviewExpressionStateTemplate.cs</LastGenOutput>
-    </None>
-    <None Include="Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>QuestionnaireLevelTemplate.cs</LastGenOutput>
-    </None>
-    <None Include="Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>RosterScopeTemplate.cs</LastGenOutput>
-    </None>
-    <None Include="Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>ExpressionMethodTemplate.cs</LastGenOutput>
-      <TransformOnBuild>False</TransformOnBuild>
-    </None>
-    <Compile Include="Implementation\Services\QuestionnaireVerifier.Warnings.cs" />
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Roster.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Roster.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\VerificationMessages.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>VerificationMessages.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ExceptionMessages.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Implementation\Services\CodeGeneration\V10\Templates\InterviewExpressionStateTemplateV10.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>InterviewExpressionStateTemplateV10.cs</LastGenOutput>
-    </None>
-    <None Include="Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>QuestionnaireLevelTemplateV10.cs</LastGenOutput>
-    </None>
-    <None Include="Implementation\Services\CodeGeneration\V10\Templates\RosterScopeTemplateV10.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>RosterScopeTemplateV10.cs</LastGenOutput>
-    </None>
-    <None Include="Implementation\Services\CodeGeneration\V10\Templates\SharedTemplateV10.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>SharedTemplateV10.cs</LastGenOutput>
-    </None>
-    <None Include="Implementation\Services\CodeGeneration\V10\Templates\OptionsFilterMethodTemplateV10.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>OptionsFilterMethodTemplateV10.cs</LastGenOutput>
-    </None>
-    <None Include="Implementation\Services\CodeGeneration\V10\Templates\LinkedFilterMethodTemplateV10.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>LinkedFilterMethodTemplateV10.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\..\..\..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
-    <Analyzer Include="..\..\..\..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="CodeGenerationV2\CodeTemplates\LevelTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>LevelTemplate.cs</LastGenOutput>
-    </None>
-    <None Include="CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>OptionsFilterMethodTemplate.cs</LastGenOutput>
-    </None>
-    <None Include="CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt">
+    <None Update="CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>ConditionMethodTemplate.cs</LastGenOutput>
     </None>
-    <None Include="CodeGenerationV2\CodeTemplates\LinkedFilterMethodTemplate.tt">
+    <None Update="CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>InterviewExpressionStorageTemplate.cs</LastGenOutput>
+    </None>
+    <None Update="CodeGenerationV2\CodeTemplates\LevelTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>LevelTemplate.cs</LastGenOutput>
+    </None>
+    <None Update="CodeGenerationV2\CodeTemplates\LinkedFilterMethodTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>LinkedFilterMethodTemplate.cs</LastGenOutput>
     </None>
-    <Content Include="CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt">
+    <None Update="CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>LookupTablesTemplate.cs</LastGenOutput>
-    </Content>
-    <Content Include="Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.tt">
+    </None>
+    <None Update="CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>LookupTablesTemplateV5.cs</LastGenOutput>
-    </Content>
+      <LastGenOutput>OptionsFilterMethodTemplate.cs</LastGenOutput>
+    </None>
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ConditionMethodTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>InterviewExpressionStorageTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="CodeGenerationV2\CodeTemplates\LevelTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LevelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="CodeGenerationV2\CodeTemplates\LinkedFilterMethodTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LinkedFilterMethodTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="CodeGenerationV2\CodeTemplates\LookupTablesTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LookupTablesTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>OptionsFilterMethodTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Roster.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Roster.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Roster.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Roster.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

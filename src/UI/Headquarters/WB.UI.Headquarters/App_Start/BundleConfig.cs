@@ -14,14 +14,6 @@ namespace WB.UI.Headquarters
             bundles.IgnoreList.Ignore("*-vsdoc.js");
             bundles.IgnoreList.Ignore("*intellisense.js");
 
-            bundles.Add(new ScriptBundle("~/js/troubleshooting").Include(
-                "~/Dependencies/build/vue-libs.js",
-                "~/Dependencies/build/vue/troubleshooting.js",
-                "~/Dependencies/js/dataTables.conditionalPaging.js",
-                "~/Dependencies/js/searchHighlight.js"
-             ));
-
-
             bundles.Add(new ScriptBundle("~/js/assignments").Include(
                 "~/Dependencies/build/vue-libs.js",
                 "~/Dependencies/vendor/vee-validate/dist/vee-validate.min.js",
@@ -192,6 +184,7 @@ namespace WB.UI.Headquarters
                 "~/Scripts/viewmodels/pages/mapreport.js"
                 ));
             bundles.Add(new ScriptBundle("~/js/periodicstatusreport").Include(
+                "~/Dependencies/js/ajax.js",
                 "~/Scripts/ko.pager.js",
                 "~/Scripts/components/bindings.js",
                 "~/Scripts/viewmodels/listview.js",

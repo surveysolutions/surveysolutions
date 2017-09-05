@@ -26,10 +26,18 @@
 
     self.Pager().PageSize(20);
 
+    self.isNeedFireEventOnChangeCurrentPage = true;
+
     // Subscribe to current page changes.
-    self.Pager().CurrentPage.subscribe(function() {
-        self.search(self.SortOrder);
+    self.Pager().CurrentPage.subscribe(function () {
+        if (self.isNeedFireEventOnChangeCurrentPage)
+            self.search(self.SortOrder);
     });
+    self.SetCurrentPageWithoutRunSubscribers = function(value) {
+        self.isNeedFireEventOnChangeCurrentPage = false;
+        self.Pager().CurrentPage(value);
+        self.isNeedFireEventOnChangeCurrentPage = true;
+    };
 
     self.Pager().CanChangeCurrentPage = ko.computed(function() { return self.IsAjaxComplete(); });
 
@@ -58,17 +66,17 @@
         }
     };
 
-    self.filter = function () {
-        if (self.Pager().CurrentPage() !== 1) {
-            self.Pager().CurrentPage(1);
-        }
-        self.search();
+    self.filter = function (onSuccess, onDone) {
+        if (self.Pager().CurrentPage() !== 1) 
+            self.SetCurrentPageWithoutRunSubscribers(1);
+
+        self.search(onSuccess, onDone);
     };
 
     
     self.mappingOptions = {};
 
-    self.search = function() {
+    self.search = function(onSuccess, onDone) {
         var filter = {
             PageIndex: self.Pager().CurrentPage(),
             PageSize: self.Pager().PageSize(),
@@ -81,14 +89,24 @@
         $.extend(request, filter);
 
         self.SendRequest(self.ServiceUrl, request, function (data) {
+            self.setExportUrls();
             ko.mapping.fromJS(data, self.mappingOptions, self);
-        }, true);
+
+            if (self.Items().length > 0)
+                self.datatableColumnLength(Object.keys(self.Items()[0]).length);
+
+            if (!_.isUndefined(onSuccess) && !_.isNull(onSuccess)) {
+                onSuccess();
+            }
+
+        }, true, false, onDone);
     };
     self.clear = function() {
         self.SearchBy("");
-        if (self.Pager().CurrentPage() !== 1) {
-            self.Pager().CurrentPage(1);
-        }
+
+        if (self.Pager().CurrentPage() !== 1) 
+            self.SetCurrentPageWithoutRunSubscribers(1);
+
         self.search();
     };
 
@@ -134,11 +152,39 @@
         });
     };
 
+    self.unselectAll = function () {
+        ko.utils.arrayForEach(self.Items(), function (item) {
+            item.IsSelected(false);
+        });
+    };
+
+    self.ExportToExcelUrl = ko.observable("");
+    self.ExportToCsvUrl = ko.observable("");
+    self.ExportToTabUrl = ko.observable("");
+
+    self.setExportUrls = function()
+    {
+        var request = self.Filter() || {};
+
+        if ((self.Datatable || null) !=null)
+            $.extend(request, self.Datatable.ajax.params());
+
+        var requestUrl = self.ServiceUrl + "?" + decodeURIComponent($.param(request));
+
+        self.ExportToExcelUrl(requestUrl + "&exportType=excel");
+        self.ExportToCsvUrl(requestUrl + "&exportType=csv");
+        self.ExportToTabUrl(requestUrl + "&exportType=tab");
+    };
+
+    self.datatableColumnLength = ko.observable(0);
     
     self.initDataTable = function (onDataReceivedCallback, onTableInitComplete) {
         $.fn.dataTable.ext.errMode = 'none';
 
         var tableColumns = self.getDataTableColumns();
+
+        self.datatableColumnLength(tableColumns.length);
+
         var tableColumnDefs = [];
         for (var columnIndex = 0; columnIndex < tableColumns.length; columnIndex ++) {
             tableColumnDefs.push({
@@ -162,8 +208,15 @@
                 var request = self.Filter() || {};
 
                 $.extend(request, data);
+                _.map(data.columns, function (column) {
+                    delete (column.orderable);
+                    delete (column.search);
+                    delete (column.searchable);
+                });
 
                 self.SendRequest(serviceUrl, request, function (d) {
+                    self.setExportUrls();
+
                     if (!_.isUndefined(onDataReceivedCallback))
                         onDataReceivedCallback(d);
                     callback(d);
@@ -171,7 +224,7 @@
             },
             columns: tableColumns,
             columnDefs: tableColumnDefs,
-            pageLength: 50,
+            pageLength: 20,
             pagingType: "full_numbers",
             lengthChange: false,
             conditionalPaging: true,
@@ -201,6 +254,7 @@
             }
         });
     };
+
     self.reloadDataTable = function() {
         self.Datatable.ajax.reload();
     };

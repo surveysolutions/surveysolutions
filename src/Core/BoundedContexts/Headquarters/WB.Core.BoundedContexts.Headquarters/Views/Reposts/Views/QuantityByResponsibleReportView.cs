@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views
     public class QuantityByResponsibleReportView : IListView<QuantityByResponsibleReportRow>
     {
         public QuantityByResponsibleReportView(
-            QuantityByResponsibleReportRow[] items,
+            IEnumerable<QuantityByResponsibleReportRow> items,
             QuantityTotalRow totalRow,
             DateTimeRange[] dateTimeRanges, int totalCount)
         {

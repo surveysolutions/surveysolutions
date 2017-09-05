@@ -11,6 +11,7 @@ using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -113,6 +114,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 UpdateDate = eventTimeStamp,
                 QuestionnaireId = questionnaireId,
                 QuestionnaireVersion = questionnaireVersion,
+                QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString(),
                 QuestionnaireTitle = questionnarie.Title,
                 ResponsibleId = userId, // Creator is responsible
                 ResponsibleName = responsible != null ? responsible.UserName : "<UNKNOWN USER>",
@@ -156,11 +158,15 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewStatusChanged> @event)
         {
+            if (@event.Payload.Status == InterviewStatus.Deleted)
+            {
+                return null;
+            }
+
             return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
                 interview.Status = @event.Payload.Status;
                 interview.WasRejectedBySupervisor = interview.WasRejectedBySupervisor || @event.Payload.Status == InterviewStatus.RejectedBySupervisor;
-                interview.IsDeleted = @event.Payload.Status == InterviewStatus.Deleted;
 
                 if (interview.Status == @event.Payload.Status)
                 {
@@ -171,10 +177,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewHardDeleted> @event)
         {
-            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
-            {
-                interview.IsDeleted = true;
-            });
+            return null;
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<SupervisorAssigned> @event)

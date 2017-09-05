@@ -11,6 +11,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events;
 using Moq;
 using ReflectionMagic;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -22,7 +23,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
-using WB.Core.BoundedContexts.Headquarters.Troubleshooting.Views;
+using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.Views;
@@ -31,6 +32,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
@@ -308,7 +310,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewComment InterviewComment(string comment = null)
             => new InterviewComment { Comment = comment };
-
+        
         public InterviewCommentaries InterviewCommentaries(Guid? questionnaireId = null, long? questionnaireVersion = null, params InterviewComment[] comments)
             => new InterviewCommentaries
             {
@@ -318,12 +320,14 @@ namespace WB.Tests.Abc.TestFactories
             };
 
         public InterviewCommentedStatus InterviewCommentedStatus(
-            Guid? statusId = null,
-            Guid? interviewerId = null,
-            Guid? supervisorId = null,
-            DateTime? timestamp = null,
-            TimeSpan? timeSpanWithPreviousStatus = null,
-            InterviewExportedAction status = InterviewExportedAction.ApprovedBySupervisor)
+            InterviewExportedAction status = InterviewExportedAction.ApprovedBySupervisor,
+            string originatorName = "inter",
+            UserRoles originatorRole = UserRoles.Interviewer,
+            Guid? statusId = null, 
+            Guid? interviewerId = null, 
+            Guid? supervisorId = null, 
+            DateTime? timestamp = null, 
+            TimeSpan? timeSpanWithPreviousStatus = null)
             => new InterviewCommentedStatus
             {
                 Id = statusId ?? Guid.NewGuid(),
@@ -331,6 +335,10 @@ namespace WB.Tests.Abc.TestFactories
                 Timestamp = timestamp ?? DateTime.Now,
                 InterviewerId = interviewerId ?? Guid.NewGuid(),
                 SupervisorId = supervisorId ?? Guid.NewGuid(),
+                StatusChangeOriginatorRole = originatorRole,
+                StatusChangeOriginatorName = originatorName,
+                InterviewerName = "inter",
+                SupervisorName = "supervisor",
                 TimeSpanWithPreviousStatus = timeSpanWithPreviousStatus
             };
 
@@ -457,15 +465,17 @@ namespace WB.Tests.Abc.TestFactories
             UserRoles role = UserRoles.Interviewer,
             string key = null,
             DateTime? updateDate = null,
-            bool? wasCreatedOnClient= null,
-            bool isDeleted = false,
+            bool? wasCreatedOnClient = null,
             bool receivedByInterviewer = false,
             int? assignmentId = null)
-            => new InterviewSummary
+        {
+            var qId = questionnaireId ?? Guid.NewGuid();
+            var qVersion = questionnaireVersion ?? 1;
+            return new InterviewSummary
             {
                 InterviewId = interviewId ?? Guid.NewGuid(),
-                QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
-                QuestionnaireVersion = questionnaireVersion ?? 1,
+                QuestionnaireId = qId,
+                QuestionnaireVersion = qVersion,
                 Status = status.GetValueOrDefault(),
                 ResponsibleId = responsibleId.GetValueOrDefault(),
                 ResponsibleName = string.IsNullOrWhiteSpace(responsibleName) ? responsibleId.FormatGuid() : responsibleName,
@@ -475,10 +485,12 @@ namespace WB.Tests.Abc.TestFactories
                 Key = key,
                 UpdateDate = updateDate ?? new DateTime(2017, 3, 23),
                 WasCreatedOnClient = wasCreatedOnClient ?? false,
-                IsDeleted = isDeleted,
                 ReceivedByInterviewer = receivedByInterviewer,
-                AssignmentId = assignmentId
+                AssignmentId = assignmentId,
+                QuestionnaireIdentity = new QuestionnaireIdentity(qId, qVersion).ToString(),
+                InterviewCommentedStatuses = new List<InterviewCommentedStatus>()
             };
+        }
 
         public InterviewSynchronizationDto InterviewSynchronizationDto(
             Guid? questionnaireId = null,
@@ -730,8 +742,19 @@ namespace WB.Tests.Abc.TestFactories
         public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument questionnaireDocument)
             => Create.Entity.PlainQuestionnaire(document: questionnaireDocument);
 
-        public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document = null, long version = 19)
-            => new PlainQuestionnaire(document, version);
+        public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document = null, long version = 1)
+            => Create.Entity.PlainQuestionnaire(document, version, null);
+
+        public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document, long version, Translation translation = null)
+        {
+            if (document != null)
+            {
+                document.IsUsingExpressionStorage = true;
+                document.ExpressionsPlayOrder = document.ExpressionsPlayOrder ?? Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(
+                    document.AsReadOnly().AssignMissingVariables());
+            }
+            return new PlainQuestionnaire(document, version, translation);
+        }
 
         public QRBarcodeQuestion QRBarcodeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer, bool preFilled = false,
@@ -1585,21 +1608,6 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
-        public InterviewSyncLogSummary InterviewSyncLogSummary(
-            DateTime? firstDownloadInterviewDate = null,
-            DateTime? lastDownloadInterviewDate = null,
-            DateTime? lastLinkDate = null,
-            DateTime? lastUploadInterviewDate = null)
-        {
-            return new InterviewSyncLogSummary
-            {
-                FirstDownloadInterviewDate = firstDownloadInterviewDate,
-                LastDownloadInterviewDate = lastDownloadInterviewDate,
-                LastLinkDate = lastLinkDate,
-                LastUploadInterviewDate = lastUploadInterviewDate
-            };
-        }
-
         public AssignmentApiView AssignmentApiView(int id, int? quantity, QuestionnaireIdentity questionnaireIdentity = null)
         {
             return new AssignmentApiView
@@ -1786,6 +1794,34 @@ namespace WB.Tests.Abc.TestFactories
                 StataExportCaption = variable,
                 QuestionScope = QuestionScope.Interviewer,
                 QuestionType = QuestionType.Audio
+            };
+        }
+
+        public SampleImportSettings SampleImportSettings(int limit = 1) => new SampleImportSettings(limit);
+
+        public AssignmentImportData AssignmentImportData(Guid interviewerId, Guid? supervisorId = null, params PreloadedLevelDto[] levels)
+        {
+            return new AssignmentImportData
+            {
+                InterviewerId = interviewerId,
+                SupervisorId = supervisorId,
+                Quantity = 1,
+                PreloadedData = new PreloadedDataDto(levels ?? new PreloadedLevelDto[0])
+            };
+        }
+
+        public AssignmentImportData AssignmentImportData(Guid interviewerId, Guid? supervisorId = null, params InterviewAnswer[] answers)
+        {
+            var levels = answers.GroupBy(x => x.Identity.RosterVector)
+                .Select(x => new PreloadedLevelDto(x.Key, x.ToDictionary(a => a.Identity.Id, a => a.Answer)))
+                .ToArray();
+
+            return new AssignmentImportData
+            {
+                InterviewerId = interviewerId,
+                SupervisorId = supervisorId,
+                Quantity = 1,
+                PreloadedData = new PreloadedDataDto(levels)
             };
         }
     }

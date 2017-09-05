@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
             });
             questionnaireDocument.Title = dataFileName;
 
-            var questionnaire = new PlainQuestionnaire(questionnaireDocument, 1, null);
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null);
             var fileSystemAccessor = CreateFileSystemAccessor((c) => stataGeneratedContent = c);
              questionnaireExportStructure = new ExportViewFactory(fileSystemAccessor, 
                     new ExportQuestionService(),

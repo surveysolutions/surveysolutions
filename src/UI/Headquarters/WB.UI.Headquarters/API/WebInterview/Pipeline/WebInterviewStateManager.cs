@@ -18,6 +18,15 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
             return base.OnBeforeConnect(hub);
         }
 
+        protected override void OnAfterConnect(IHub hub)
+        {
+            var interviewId = hub.Context.QueryString[@"interviewId"];
+
+            hub.Clients.OthersInGroup(interviewId).closeInterview();
+
+            base.OnAfterConnect(hub);
+        }
+
         protected override bool OnBeforeReconnect(IHub hub)
         {
             this.ReloadIfOlderVersion(hub);

@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using NHibernate;
-using NHibernate.Criterion;
-using NHibernate.Transform;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Utils;
@@ -16,101 +13,103 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 {
     internal abstract class AbstractTeamsAndStatusesReport
     {
-        private readonly INativeReadSideStorage<InterviewSummary> interviewsReader;
+        protected readonly INativeReadSideStorage<InterviewSummary> interviewsReader;
 
         protected AbstractTeamsAndStatusesReport(INativeReadSideStorage<InterviewSummary> interviewsReader)
         {
             this.interviewsReader = interviewsReader;
         }
 
-        public TeamsAndStatusesReportView Load(TeamsAndStatusesInputModel input)
+        protected static IQueryable<InterviewSummary> FilterByQuestionnaireOrTeamLead(IQueryable<InterviewSummary> _, TeamsAndStatusesInputModel input)
         {
-            var filter = CreateFilterExpression(input);
-
-            var rowCount = this.interviewsReader.CountDistinctWithRecursiveIndex(_ => _.Where(filter)
-                .Select(this.ResponsibleIdSelector));
-
-            var statistics =
-                this.interviewsReader.QueryOver(
-                    _ => _.Where(filter).Select(
-                        this.AddCountsByStuses(Projections.ProjectionList())
-                            .Add(Projections.Group(this.ResponsibleIdSelector), "ResponsibleId")
-                            .Add(Projections.Min(Projections.Property(this.ResponsibleNameSelector)), "Responsible")));
-
-            var sorting = QueryableExtensions.ParseSortExpression(input.Order);
-            if (sorting != null)
-            {
-                foreach (var orderRequestItem in sorting)
-                {
-                    statistics.UnderlyingCriteria.AddOrder(new Order(orderRequestItem.Field,
-                        orderRequestItem.Direction == OrderDirection.Asc));
-                }
-            }
-
-            var currentPage =
-                statistics.TransformUsing(Transformers.AliasToBean<TeamsAndStatusesReportLine>())
-                    .Skip((input.Page - 1)*input.PageSize)
-                    .Take(input.PageSize).List<TeamsAndStatusesReportLine>();
-
-
-            var totalStatistics =
-                this.interviewsReader.QueryOver(
-                    _ => _.Where(filter)
-                    .Select(this.AddCountsByStuses(Projections.ProjectionList())))
-                    .TransformUsing(Transformers.AliasToBean<TeamsAndStatusesReportLine>())
-                    .SingleOrDefault<TeamsAndStatusesReportLine>();
-
-            return new TeamsAndStatusesReportView
-            {
-                TotalCount = rowCount,
-                Items = currentPage,
-                TotalRow = totalStatistics
-            };
-        }
-
-        private ProjectionList AddCountsByStuses(ProjectionList projectionList)
-        {
-            return projectionList
-                .Add(this.CountByStatus(InterviewStatus.SupervisorAssigned), "SupervisorAssignedCount")
-                .Add(this.CountByStatus(InterviewStatus.InterviewerAssigned), "InterviewerAssignedCount")
-                .Add(this.CountByStatus(InterviewStatus.Restarted), "RestartedCount")
-                .Add(this.CountByStatus(InterviewStatus.Completed), "CompletedCount")
-                .Add(this.CountByStatus(InterviewStatus.ApprovedBySupervisor), "ApprovedBySupervisorCount")
-                .Add(this.CountByStatus(InterviewStatus.RejectedBySupervisor), "RejectedBySupervisorCount")
-                .Add(this.CountByStatus(InterviewStatus.ApprovedByHeadquarters), "ApprovedByHeadquartersCount")
-                .Add(this.CountByStatus(InterviewStatus.RejectedByHeadquarters), "RejectedByHeadquartersCount")
-                .Add(Projections.RowCount(), "TotalCount");
-        }
-
-        private AggregateProjection CountByStatus(InterviewStatus status)
-        {
-            return Projections.Sum(Projections.Conditional(
-                    Restrictions.Where<InterviewSummary>(i => i.Status == status),
-                    Projections.Constant(1),
-                    Projections.Constant(0)));
-        }
-
-        protected virtual Expression<Func<InterviewSummary, bool>> CreateFilterExpression(TeamsAndStatusesInputModel input)
-        {
-            Expression<Func<InterviewSummary, bool>> result = (interview) => !interview.IsDeleted;
-
             if (input.TemplateId.HasValue)
             {
-                result = result.AndCondition(x => x.QuestionnaireId == input.TemplateId);
+                _ = _.Where(x => x.QuestionnaireId == input.TemplateId);
             }
 
             if (input.TemplateVersion.HasValue)
             {
-                result = result.AndCondition(x => x.QuestionnaireVersion == input.TemplateVersion);
+                _ = _.Where(x => x.QuestionnaireVersion == input.TemplateVersion);
             }
 
             if (input.ViewerId.HasValue)
             {
-                result = result.AndCondition(x => x.TeamLeadId == input.ViewerId);
+                _ = _.Where(x => x.TeamLeadId == input.ViewerId);
             }
-            return result;
+
+            return _;
         }
-        protected abstract Expression<Func<InterviewSummary, object>> ResponsibleIdSelector { get; }
-        protected abstract Expression<Func<InterviewSummary, object>> ResponsibleNameSelector { get; }
+
+        protected TeamsAndStatusesReportLine QueryReportTotalRow(TeamsAndStatusesInputModel input)
+        {
+            return this.interviewsReader.Query(_ =>
+                    FilterByQuestionnaireOrTeamLead(_, input).Select(x => new
+                        {
+                            SupervisorAssigned = x.Status == InterviewStatus.SupervisorAssigned ? 1 : 0,
+                            InterviewerAssigned = x.Status == InterviewStatus.InterviewerAssigned ? 1 : 0,
+                            Completed = x.Status == InterviewStatus.Completed ? 1 : 0,
+                            RejectedBySupervisor = x.Status == InterviewStatus.RejectedBySupervisor ? 1 : 0,
+                            ApprovedBySupervisor = x.Status == InterviewStatus.ApprovedBySupervisor ? 1 : 0,
+                            RejectedByHeadquarters = x.Status == InterviewStatus.RejectedByHeadquarters ? 1 : 0,
+                            ApprovedByHeadquarters = x.Status == InterviewStatus.ApprovedByHeadquarters ? 1 : 0
+                        })
+                        .GroupBy(x => 1)
+                        .Select(x => new TeamsAndStatusesReportLine
+                        {
+                            SupervisorAssignedCount = (int?)x.Sum(y => y.SupervisorAssigned) ?? 0,
+                            InterviewerAssignedCount = (int?)x.Sum(y => y.InterviewerAssigned) ?? 0,
+                            CompletedCount = (int?)x.Sum(y => y.Completed) ?? 0,
+                            RejectedBySupervisorCount = (int?)x.Sum(y => y.RejectedBySupervisor) ?? 0,
+                            ApprovedBySupervisorCount = (int?)x.Sum(y => y.ApprovedBySupervisor) ?? 0,
+                            RejectedByHeadquartersCount = (int?)x.Sum(y => y.RejectedByHeadquarters) ?? 0,
+                            ApprovedByHeadquartersCount = (int?)x.Sum(y => y.ApprovedByHeadquarters) ?? 0,
+                            TotalCount = x.Count()
+                        }))
+                .FirstOrDefault();
+        }
+
+        protected virtual Expression<Func<InterviewSummary, bool>> CreateFilterExpression(TeamsAndStatusesInputModel input)
+        {
+            Expression<Func<InterviewSummary, bool>> result = null;
+
+            if (input.TemplateId.HasValue)
+            {
+                result = x => x.QuestionnaireId == input.TemplateId && x.QuestionnaireVersion == input.TemplateVersion;
+            }
+
+            if (input.ViewerId.HasValue)
+            {
+                result = result == null 
+                    ? x => x.TeamLeadId == input.ViewerId
+                    : result.AndCondition(x => x.TeamLeadId == input.ViewerId);
+            }
+
+            return result ?? (x => x.SummaryId != null); 
+        }
+
+        public abstract TeamsAndStatusesReportView Load(TeamsAndStatusesInputModel input);
+
+        public ReportView GetReport(TeamsAndStatusesInputModel model)
+        {
+            var view = this.Load(model);
+            view.TotalRow.Responsible = Report.COLUMN_TOTAL;
+
+            return new ReportView
+            {
+                Headers = new[]
+                {
+                    Report.COLUMN_TEAM_MEMBER, Report.COLUMN_SUPERVISOR_ASSIGNED, Report.COLUMN_INTERVIEWER_ASSIGNED,
+                    Report.COLUMN_COMPLETED, Report.COLUMN_REJECTED_BY_SUPERVISOR,
+                    Report.COLUMN_APPROVED_BY_SUPERVISOR, Report.COLUMN_REJECTED_BY_HQ, Report.COLUMN_APPROVED_BY_HQ,
+                    Report.COLUMN_TOTAL
+                },
+                Data = new[] {view.TotalRow}.Concat(view.Items).Select(x => new object[]
+                {
+                    x.Responsible, x.SupervisorAssignedCount, x.InterviewerAssignedCount, x.CompletedCount,
+                    x.RejectedBySupervisorCount, x.ApprovedBySupervisorCount, x.RejectedByHeadquartersCount,
+                    x.ApprovedByHeadquartersCount, x.TotalCount
+                }).ToArray()
+            };
+        }
     }
 }

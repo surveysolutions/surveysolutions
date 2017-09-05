@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
     [TestOf(typeof(Interview))]
-    internal class when_applying_linked_options_changed_event_and_linked_question_from_removed_roster
+    internal class when_applying_linked_options_changed_event_and_linked_question_from_removed_roster : InterviewTestsContext
     {
         [Test]
         public void should_not_throw_exception()
@@ -28,7 +28,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                })
             });
 
-            var interview = IntegrationCreate.StatefulInterview(questionnaireDocument);
+            var interview = SetupStatefullInterview(questionnaireDocument);
 
             interview.AnswerTextListQuestion(userId: userId, questionId: textListQuestionId,
                 answerTime: DateTime.Now, rosterVector: new decimal[0],
