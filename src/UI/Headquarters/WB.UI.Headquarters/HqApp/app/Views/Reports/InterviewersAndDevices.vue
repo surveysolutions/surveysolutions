@@ -106,16 +106,16 @@ export default {
                             return self.renderCell(data, row, 'OldAndroid');
                         }
                      },
-                    {
-                        data: "wrongDateOnTabletCount",
-                        name: "WrongDateOnTabletCount",
-                        "class": "type-numeric",
-                        orderable: true,
-                        title: this.$t("DevicesInterviewers.WrongDateOnTablet"),
-                        render: function(data, type, row) {
-                            return self.renderCell(data, row, 'WrongTime');
-                        }
-                    },
+                    // {
+                    //     data: "wrongDateOnTabletCount",
+                    //     name: "WrongDateOnTabletCount",
+                    //     "class": "type-numeric",
+                    //     orderable: true,
+                    //     title: this.$t("DevicesInterviewers.WrongDateOnTablet"),
+                    //     render: function(data, type, row) {
+                    //         return self.renderCell(data, row, 'WrongTime');
+                    //     }
+                    // },
                     {
                         data: "lowStorageCount",
                         name: "LowStorageCount",
