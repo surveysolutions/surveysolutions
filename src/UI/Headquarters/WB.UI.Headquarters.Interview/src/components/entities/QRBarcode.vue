@@ -4,7 +4,8 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field" :class="{answered: $me.isAnswered}">
-                        <input autocomplete="off" type="text" class="field-to-fill" placeholder="Enter text" title="Enter text" :value="$me.answer"
+                        <input autocomplete="off" type="text" class="field-to-fill"
+                            :placeholder="$t('TextEnter')" :title="$t('TextEnter')" :value="$me.answer"
                             v-blurOnEnterKey @blur="answerQRBarcodeQuestion">
                             <wb-remove-answer />
                     </div>
@@ -13,7 +14,7 @@
         </div>
     </wb-question>
 </template>
-<script lang="ts">
+<script lang="js">
     import { entityDetails } from "components/mixins"
     import * as $ from "jquery"
 
@@ -23,7 +24,7 @@
         methods: {
             answerQRBarcodeQuestion(evnt) {
                 const target = $(evnt.target)
-                const answer: string = target.val()
+                const answer = target.val()
 
                 if(this.handleEmptyAnswer(answer)) {
                     return

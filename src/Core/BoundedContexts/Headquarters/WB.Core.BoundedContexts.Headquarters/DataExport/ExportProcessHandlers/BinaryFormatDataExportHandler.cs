@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using System.Linq;
+using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
-using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -11,33 +11,28 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 {
-    public class BinaryFormatDataExportHandler : IExportProcessHandler<DataExportProcessDetails>
+    internal class BinaryFormatDataExportHandler : AbstractDataExportHandler
     {
-        private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IImageFileStorage imageFileRepository;
         private readonly IAudioFileStorage audioFileStorage;
         
-        private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewDatas;
         private readonly ITransactionManager transactionManager;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
 
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
-        private readonly IDataExportFileAccessor dataExportFileAccessor;
-        private readonly IDataExportProcessesService dataExportProcessesService;
         private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
-
-        private const string temporaryTabularExportFolder = "TemporaryBinaryExport";
-        private readonly string pathToExportedData;
-
+        
         public BinaryFormatDataExportHandler(
             IFileSystemAccessor fileSystemAccessor, 
             IImageFileStorage imageFileRepository, 
@@ -50,82 +45,63 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
             IDataExportFileAccessor dataExportFileAccessor,
             IAudioFileStorage audioFileStorage,
-            IPlainTransactionManagerProvider plainTransactionManagerProvider)
+            IPlainTransactionManagerProvider plainTransactionManagerProvider,
+            ILogger logger)
+            : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, dataExportFileAccessor)
         {
-            this.fileSystemAccessor = fileSystemAccessor;
             this.imageFileRepository = imageFileRepository;
-            this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
             this.transactionManager = transactionManager;
             this.interviewSummaries = interviewSummaries;
             this.interviewDatas = interviewDatas;
-            this.dataExportProcessesService = dataExportProcessesService;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
-            this.dataExportFileAccessor = dataExportFileAccessor;
             this.audioFileStorage = audioFileStorage;
             this.plainTransactionManagerProvider = plainTransactionManagerProvider;
-
-            this.pathToExportedData = fileSystemAccessor.CombinePath(interviewDataExportSettings.DirectoryPath, temporaryTabularExportFolder);
-
-            if (!fileSystemAccessor.IsDirectoryExists(this.pathToExportedData))
-                fileSystemAccessor.CreateDirectory(this.pathToExportedData);
         }
 
-        public void ExportData(DataExportProcessDetails dataExportProcessDetails)
-        {
-            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
+        protected override DataExportFormat Format => DataExportFormat.Binary;
 
+        protected override void ExportDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity, InterviewStatus? status, string directoryPath,
+            IProgress<int> progress, CancellationToken cancellationToken)
+        {
             List<Guid> interviewIdsToExport =
                 this.transactionManager.ExecuteInQueryTransaction(() =>
                     this.interviewSummaries.Query(_ =>
-                        _.Where(x => x.QuestionnaireId == dataExportProcessDetails.Questionnaire.QuestionnaireId &&
-                                     x.QuestionnaireVersion == dataExportProcessDetails.Questionnaire.Version && !x.IsDeleted)
+                        _.Where(x => x.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
+                                     x.QuestionnaireVersion == questionnaireIdentity.Version)
                             .OrderBy(x => x.InterviewId)
                             .Select(x => x.InterviewId).ToList()));
 
-            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
 
-            string folderForDataExport = GetFolderPathOfDataByQuestionnaire(dataExportProcessDetails.Questionnaire);
+            QuestionnaireExportStructure questionnaire = this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(questionnaireIdentity);
 
-            this.ClearFolder(folderForDataExport);
+            var multimediaQuestionIds = questionnaire.HeaderToLevelMap.Values.SelectMany(
+                    x => x.HeaderItems.Values.Where(h => h.QuestionType == QuestionType.Multimedia)).Select(x => x.PublicKey).ToHashSet();
 
-            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
-
-            QuestionnaireExportStructure questionnaire =
-                this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
-                    new QuestionnaireIdentity(dataExportProcessDetails.Questionnaire.QuestionnaireId,
-                        dataExportProcessDetails.Questionnaire.Version));
-       
-            var multimediaQuestionIds =
-                questionnaire.HeaderToLevelMap.Values.SelectMany(
-                    x => x.HeaderItems.Values.Where(h => h.QuestionType == QuestionType.Multimedia)).Select(x=>x.PublicKey).ToHashSet();
-
-            var audioQuestionIds =
-                questionnaire.HeaderToLevelMap.Values.SelectMany(
-                    x => x.HeaderItems.Values.Where(h => h.QuestionType == QuestionType.Audio)).Select(x => x.PublicKey).ToHashSet(); 
-
-            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
-
+            var audioQuestionIds = questionnaire.HeaderToLevelMap.Values.SelectMany(
+                    x => x.HeaderItems.Values.Where(h => h.QuestionType == QuestionType.Audio)).Select(x => x.PublicKey).ToHashSet();
+            
             long totalInterviewsProcessed = 0;
             foreach (var interviewId in interviewIdsToExport)
             {
-                dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
+                cancellationToken.ThrowIfCancellationRequested();
 
-                var filesFolderForInterview = this.fileSystemAccessor.CombinePath(folderForDataExport, interviewId.FormatGuid());
+                var filesFolderForInterview = this.fileSystemAccessor.CombinePath(directoryPath, interviewId.FormatGuid());
 
                 var interviewDetails = this.transactionManager.ExecuteInQueryTransaction(() => interviewDatas.GetById(interviewId));
-                if (interviewDetails != null && !interviewDetails.IsDeleted)
+                if (interviewDetails != null)
                 {
                     var questionsWithAnswersOnMultimediaQuestions = interviewDetails.Levels.Values.SelectMany(
                         level =>
                             level.QuestionsSearchCache.Values.Where(
-                                question =>
-                                    question.IsAnswered() && !question.IsDisabled() &&
-                                    multimediaQuestionIds.Contains(question.Id))
+                                    question =>
+                                        question.IsAnswered() && !question.IsDisabled() &&
+                                        multimediaQuestionIds.Contains(question.Id))
                                 .Select(q => q.Answer.ToString())).ToArray();
-                        
+
                     if (questionsWithAnswersOnMultimediaQuestions.Any())
                     {
-                        if(!this.fileSystemAccessor.IsDirectoryExists(filesFolderForInterview))
+                        if (!this.fileSystemAccessor.IsDirectoryExists(filesFolderForInterview))
                             this.fileSystemAccessor.CreateDirectory(filesFolderForInterview);
 
                         foreach (var questionsWithAnswersOnMultimediaQuestion in questionsWithAnswersOnMultimediaQuestions)
@@ -133,7 +109,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                             var fileContent = imageFileRepository.GetInterviewBinaryData(interviewId,
                                 questionsWithAnswersOnMultimediaQuestion);
                             this.fileSystemAccessor.WriteAllBytes(
-                                this.fileSystemAccessor.CombinePath(filesFolderForInterview,questionsWithAnswersOnMultimediaQuestion),
+                                this.fileSystemAccessor.CombinePath(filesFolderForInterview, questionsWithAnswersOnMultimediaQuestion),
                                 fileContent);
                         }
                     }
@@ -167,31 +143,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 }
 
                 totalInterviewsProcessed++;
-                this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.NaturalId,
-                    totalInterviewsProcessed.PercentOf(interviewIdsToExport.Count));
+                progress.Report(totalInterviewsProcessed.PercentOf(interviewIdsToExport.Count));
             }
-
-            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
-
-            var archiveFilePath =
-                this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(dataExportProcessDetails.Questionnaire,
-                    DataExportFormat.Binary);
-
-            dataExportFileAccessor.RecreateExportArchive(folderForDataExport, archiveFilePath);
-        }
-
-        private string GetFolderPathOfDataByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
-        {
-            return this.fileSystemAccessor.CombinePath(this.pathToExportedData,
-                $"{questionnaireIdentity.QuestionnaireId}_{questionnaireIdentity.Version}");
-        }
-
-        private void ClearFolder(string folderName)
-        {
-            if (this.fileSystemAccessor.IsDirectoryExists(folderName))
-                this.fileSystemAccessor.DeleteDirectory(folderName);
-
-            this.fileSystemAccessor.CreateDirectory(folderName);
         }
     }
 }

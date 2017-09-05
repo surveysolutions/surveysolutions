@@ -10,6 +10,9 @@ var ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
 var env = config.env
 
 var webpackConfig = merge(baseWebpackConfig, {
+    entry: {
+        'babel-polyfill': 'babel-polyfill'
+    },
     module: {
         rules: utils.styleLoaders({
             sourceMap: config.cssSourceMap,
@@ -27,9 +30,6 @@ var webpackConfig = merge(baseWebpackConfig, {
     },
     plugins: [
         // http://vuejs.github.io/vue-loader/en/workflow/production.html
-        new webpack.DefinePlugin({
-            'process.env': env
-        }),
         new webpack.optimize.UglifyJsPlugin({
             compress: {
                 warnings: false
@@ -37,6 +37,7 @@ var webpackConfig = merge(baseWebpackConfig, {
             beautify: false, // Don't beautify output (uglier to read)
             comments: false // Eliminate comments
         }),
+        new webpack.HashedModuleIdsPlugin(),
         // extract css into its own file
         new ExtractTextPlugin(utils.assetsPath('css/[name].[contenthash].css')),
         // generate dist index.html with correct asset hash for caching.
@@ -56,6 +57,7 @@ var webpackConfig = merge(baseWebpackConfig, {
             // necessary to consistently work with multiple chunks via CommonsChunkPlugin
             chunksSortMode: 'dependency'
         }),
+       // new (require('inline-chunk-manifest-html-webpack-plugin'))(),
         new ScriptExtHtmlWebpackPlugin({
             defaultAttribute: 'defer'
         }),
@@ -106,7 +108,7 @@ if (config.bundleAnalyzerReport) {
         analyzerMode: 'static',
         reportFilename: 'stats.html',
         openAnalyzer: false,
-        statsOptions: { chunkModules: true, assets: true },
+        statsOptions: { chunkModules: true, assets: true , reasons: true},
     }))
 }
 

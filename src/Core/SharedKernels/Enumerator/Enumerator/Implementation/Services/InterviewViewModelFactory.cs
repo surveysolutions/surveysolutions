@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -103,11 +104,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.settings = settings;
         }
 
-        public IEnumerable<IInterviewEntityViewModel> GetEntities(string interviewId, Identity groupIdentity, NavigationState navigationState)
+        public List<IInterviewEntityViewModel> GetEntities(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
             if (groupIdentity == null) throw new ArgumentNullException(nameof(groupIdentity));
 
-            var interviewEntityViewModels = this.GenerateViewModels(interviewId, groupIdentity, navigationState).ToList();
+            var interviewEntityViewModels = this.GenerateViewModels(interviewId, groupIdentity, navigationState);
             return interviewEntityViewModels;
         }
 
@@ -127,7 +128,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return tasks;
         }
 
-        private IEnumerable<IInterviewEntityViewModel> GenerateViewModels(string interviewId, Identity groupIdentity, NavigationState navigationState)
+        private List<IInterviewEntityViewModel> GenerateViewModels(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
@@ -137,8 +138,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             IReadOnlyList<Guid> groupWithoutNestedChildren = questionnaire.GetAllUnderlyingInterviewerEntities(groupIdentity.Id);
 
-            IEnumerable<IInterviewEntityViewModel> viewmodels = groupWithoutNestedChildren
-                .Where(entityId => !questionnaire.HasVariable(entityId) || this.settings.ShowVariables)
+            List<IInterviewEntityViewModel> viewmodels = groupWithoutNestedChildren
+                .Where(entityId => this.settings.ShowVariables || !questionnaire.HasVariable(entityId))
                 .Select(questionnaireEntity => this.CreateInterviewEntityViewModel(
                     identity: new Identity(questionnaireEntity, groupIdentity.RosterVector),
                     entityModelType: GetEntityModelType(new Identity(questionnaireEntity, groupIdentity.RosterVector), questionnaire, interview),
@@ -149,7 +150,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return viewmodels;
         }
 
-        [Obsolete("Do not use it. It is for transition purpose only")]
         private static InterviewEntityType GetEntityModelType(Identity identity, IQuestionnaire questionnaire, IStatefulInterview interview)
         {
             Guid entityId = identity.Id;

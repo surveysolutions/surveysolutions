@@ -301,19 +301,19 @@
     <value>No</value>
   </data>
   <data name="HistoryOfStatuses_Title" xml:space="preserve">
-    <value>Interview change status history</value>
+    <value>Interview status history</value>
   </data>
   <data name="HistoryOfStatuses_State" xml:space="preserve">
     <value>State</value>
   </data>
   <data name="HistoryOfStatuses_Comment" xml:space="preserve">
-    <value>with comment</value>
+    <value>Comment</value>
   </data>
   <data name="HistoryOfStatuses_On" xml:space="preserve">
-    <value>on</value>
+    <value>Changed on</value>
   </data>
   <data name="HistoryOfStatuses_By" xml:space="preserve">
-    <value>by</value>
+    <value>By</value>
   </data>
   <data name="InterviewHistory_Header" xml:space="preserve">
     <value>Interview History</value>
@@ -588,10 +588,7 @@
     <value>Interviewer (team)</value>
   </data>
   <data name="SurveysAndStatuses_Overview" xml:space="preserve">
-    <value>Surveys and statuses</value>
-  </data>
-  <data name="SurveysAndStatuses_SupervisorStatisticsFormat" xml:space="preserve">
-    <value>{0} interviews</value>
+    <value>Surveys and Statuses</value>
   </data>
   <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
     <value>{0} interviews</value>
@@ -1033,5 +1030,44 @@
   </data>
   <data name="GetEsriExtraDescription" xml:space="preserve">
     <value>ESRI Map support is an experimental feature. Use it only if you need the advanced ESRI GIS functionality. Including this functionality will significantly increase application size and download time. </value>
+  </data>
+  <data name="Filters_Assignment" xml:space="preserve">
+    <value>Assignment</value>
+  </data>
+  <data name="InterviewersAndDevicesTitle" xml:space="preserve">
+    <value>Devices/Interviewers</value>
+  </data>
+  <data name="CountDaysOfInterviewInStatus" xml:space="preserve">
+    <value>Status Duration</value>
+  </data>  
+  <data name="CountDaysOfInterviewInStatusDescription">
+    <value>Number of days that interviews have stayed in their current status</value>
+  </data>
+  <data name="ExportToExcel" xml:space="preserve">
+    <value>Excel (.xlsx)</value>
+  </data>
+  <data name="ExportToCsv" xml:space="preserve">
+    <value>Comma separated values (.csv)</value>
+  </data>
+  <data name="ExportToTab" xml:space="preserve">
+    <value>Tab separated values (.tsv)</value>
+  </data>
+  <data name="ExportButton" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="HistoryOfStatuses_AssignedTo" xml:space="preserve">
+    <value>Assigned to</value>
+  </data>
+  <data name="HistoryOfStatuses_Interview" xml:space="preserve">
+    <value>Interview</value>
+  </data>
+  <data name="HistoryOfStatuses_ViewInterview" xml:space="preserve">
+    <value>View interview</value>
+  </data>
+  <data name="DownloadReport" xml:space="preserve">
+    <value>Download report as</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>or</value>
   </data>
 </root>

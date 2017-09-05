@@ -70,6 +70,60 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All interviewers.
+        /// </summary>
+        internal static string AllInterviewers {
+            get {
+                return ResourceManager.GetString("AllInterviewers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Questionnaires.
+        /// </summary>
+        internal static string AllQuestionnaires {
+            get {
+                return ResourceManager.GetString("AllQuestionnaires", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Responsibles.
+        /// </summary>
+        internal static string AllResponsible {
+            get {
+                return ResourceManager.GetString("AllResponsible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Statuses.
+        /// </summary>
+        internal static string AllStatuses {
+            get {
+                return ResourceManager.GetString("AllStatuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Supervisors.
+        /// </summary>
+        internal static string AllSupervisors {
+            get {
+                return ResourceManager.GetString("AllSupervisors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All teams.
+        /// </summary>
+        internal static string AllTeams {
+            get {
+                return ResourceManager.GetString("AllTeams", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All Rights Reserved.
         /// </summary>
         internal static string AlRightsReserved {
@@ -120,6 +174,15 @@ namespace Resources {
         internal static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        internal static string Confirm {
+            get {
+                return ResourceManager.GetString("Confirm", resourceCulture);
             }
         }
         
@@ -295,11 +358,38 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open.
+        /// </summary>
+        internal static string Open {
+            get {
+                return ResourceManager.GetString("Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open responsible&apos;s profile.
+        /// </summary>
+        internal static string OpenResponsiblesProfile {
+            get {
+                return ResourceManager.GetString("OpenResponsiblesProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Identifying Questions.
         /// </summary>
         internal static string PrefilledQuestions {
             get {
                 return ResourceManager.GetString("PrefilledQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire.
+        /// </summary>
+        internal static string Questionnaire {
+            get {
+                return ResourceManager.GetString("Questionnaire", resourceCulture);
             }
         }
         
@@ -390,6 +480,15 @@ namespace Resources {
         internal static string ShowIdentifying {
             get {
                 return ResourceManager.GetString("ShowIdentifying", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Status History.
+        /// </summary>
+        internal static string ShowStatusHistory {
+            get {
+                return ResourceManager.GetString("ShowStatusHistory", resourceCulture);
             }
         }
         

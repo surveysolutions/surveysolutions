@@ -73,7 +73,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
         protected override bool OnBeforeIncoming(IHubIncomingInvokerContext context)
         {
             var connId = context.Hub.Context.ConnectionId;
-            var key = $"{connId}|{Guid.NewGuid()}";
+            var key = $"{connId}|{Guid.NewGuid().ToString()}";
             context.Hub.Context.Request.Environment["server.reques.Id"] = key;
             
             this.messagesTotal.Labels("incoming").Inc();

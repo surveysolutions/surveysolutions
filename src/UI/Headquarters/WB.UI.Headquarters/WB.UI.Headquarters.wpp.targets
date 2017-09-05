@@ -14,36 +14,6 @@
         <AbsolutePath>\\App_Data$</AbsolutePath>
         <XPath></XPath>
       </MsDeploySkipRules>
-      <MsDeploySkipRules Include="SkipExportedData">
-        <SkipAction>Delete</SkipAction>
-        <ObjectName>filePath</ObjectName>
-        <AbsolutePath>\\App_Data\\ExportedData\\.*</AbsolutePath>
-        <XPath></XPath>
-      </MsDeploySkipRules>
-      <MsDeploySkipRules Include="SkipExportedDataFolder">
-        <SkipAction>Delete</SkipAction>
-        <ObjectName>dirPath</ObjectName>
-        <AbsolutePath>\\App_Data\\ExportedData$</AbsolutePath>
-        <XPath></XPath>
-      </MsDeploySkipRules>
-      <MsDeploySkipRules Include="SkipReadSideFolder">
-        <SkipAction>Delete</SkipAction>
-        <ObjectName>dirPath</ObjectName>
-        <AbsolutePath>\\App_Data\\ReadSide\\.*\\*</AbsolutePath>
-        <XPath></XPath>
-      </MsDeploySkipRules>
-      <MsDeploySkipRules Include="SkipIncomingData">
-        <SkipAction>Delete</SkipAction>
-        <ObjectName>filePath</ObjectName>
-        <AbsolutePath>\\App_Data\\IncomingData\\.*</AbsolutePath>
-        <XPath></XPath>
-      </MsDeploySkipRules>
-      <MsDeploySkipRules Include="SkipIncomingDataFolder">
-        <SkipAction>Delete</SkipAction>
-        <ObjectName>dirPath</ObjectName>
-        <AbsolutePath>\\App_Data\\IncomingData$</AbsolutePath>
-        <XPath></XPath>
-      </MsDeploySkipRules>
       <MsDeploySkipRules Include="Skiplogs">
         <SkipAction>Delete</SkipAction>
         <ObjectName>filePath</ObjectName>
@@ -54,78 +24,6 @@
         <SkipAction>Delete</SkipAction>
         <ObjectName>dirPath</ObjectName>
         <AbsolutePath>\\App_Data\\logs$</AbsolutePath>
-        <XPath></XPath>
-      </MsDeploySkipRules>
-      <MsDeploySkipRules Include="SkipquestionnaireExportStructureStorage">
-        <SkipAction>Delete</SkipAction>
-        <ObjectName>filePath</ObjectName>
-        <AbsolutePath>\\App_Data\\questionnaireExportStructureStorage\\.*</AbsolutePath>
-        <XPath></XPath>
-      </MsDeploySkipRules>
-      <MsDeploySkipRules Include="SkipquestionnaireExportStructureStorageFolder">
-        <SkipAction>Delete</SkipAction>
-        <ObjectName>dirPath</ObjectName>
-        <AbsolutePath>\\App_Data\\questionnaireExportStructureStorage$</AbsolutePath>
-        <XPath></XPath>
-      </MsDeploySkipRules>
-      <MsDeploySkipRules Include="SkipTabletInformationStorage">
-        <SkipAction>Delete</SkipAction>
-        <ObjectName>filePath</ObjectName>
-        <AbsolutePath>\\App_Data\\TabletInformationStorage\\.*</AbsolutePath>
-        <XPath></XPath>
-      </MsDeploySkipRules>
-      <MsDeploySkipRules Include="SkipTabletInformationStorageFolder">
-        <SkipAction>Delete</SkipAction>
-        <ObjectName>dirPath</ObjectName>
-        <AbsolutePath>\\App_Data\\TabletInformationStorage$</AbsolutePath>
-        <XPath></XPath>
-      </MsDeploySkipRules>
-       <MsDeploySkipRules Include="SkipQuestionnaireAssemblies">
-        <SkipAction>Delete</SkipAction>
-        <ObjectName>filePath</ObjectName>
-        <AbsolutePath>\\App_Data\\QuestionnaireAssemblies\\.*</AbsolutePath>
-        <XPath></XPath>
-      </MsDeploySkipRules>
-      <MsDeploySkipRules Include="SkipQuestionnaireAssembliesFolder">
-        <SkipAction>Delete</SkipAction>
-        <ObjectName>dirPath</ObjectName>
-        <AbsolutePath>\\App_Data\\QuestionnaireAssemblies$</AbsolutePath>
-        <XPath></XPath>
-      </MsDeploySkipRules>
-      <MsDeploySkipRules Include="SkipSYNC">
-        <SkipAction>Delete</SkipAction>
-        <ObjectName>filePath</ObjectName>
-        <AbsolutePath>\\App_Data\\SYNC\\.*</AbsolutePath>
-        <XPath></XPath>
-      </MsDeploySkipRules>
-      <MsDeploySkipRules Include="SkipSYNCFolder">
-        <SkipAction>Delete</SkipAction>
-        <ObjectName>dirPath</ObjectName>
-        <AbsolutePath>\\App_Data\\SYNC$</AbsolutePath>
-        <XPath></XPath>
-      </MsDeploySkipRules>
-      <MsDeploySkipRules Include="SkipDATA">
-        <SkipAction>Delete</SkipAction>
-        <ObjectName>filePath</ObjectName>
-        <AbsolutePath>\\App_Data\\DATA\\.*</AbsolutePath>
-        <XPath></XPath>
-      </MsDeploySkipRules>
-      <MsDeploySkipRules Include="SkipInterviewDataFolder">
-        <SkipAction>Delete</SkipAction>
-        <ObjectName>dirPath</ObjectName>
-        <AbsolutePath>\\App_Data\\InterviewData$</AbsolutePath>
-        <XPath></XPath>
-      </MsDeploySkipRules>
-      <MsDeploySkipRules Include="SkipExportedFiles">
-        <SkipAction>Delete</SkipAction>
-        <ObjectName>filePath</ObjectName>
-        <AbsolutePath>\\App_Data\\ExportedFiles\\.*</AbsolutePath>
-        <XPath></XPath>
-      </MsDeploySkipRules>
-      <MsDeploySkipRules Include="SkipExportedFilesFolder">
-        <SkipAction>Delete</SkipAction>
-        <ObjectName>dirPath</ObjectName>
-        <AbsolutePath>\\App_Data\\ExportedFiles$</AbsolutePath>
         <XPath></XPath>
       </MsDeploySkipRules>
     </ItemGroup>

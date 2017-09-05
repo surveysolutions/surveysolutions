@@ -19,7 +19,7 @@ namespace Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option or rebuild the Visual Studio project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Web.Application.StronglyTypedResourceProxyBuilder", "14.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Web.Application.StronglyTypedResourceProxyBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class DataExport {
@@ -160,7 +160,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can&apos;t change export settings, because export process is running..
+        ///   Looks up a localized string similar to You can&apos;t change the export settings because the export process is already running..
         /// </summary>
         internal static string ErrorThereAreRunningProcesses {
             get {
@@ -178,7 +178,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pressing Generate button creates a data archive of interviews available on the server at that time. The time of archive creation and the archive size is shown in a table. The latest generated data archive can be downloaded by pressing Download button. Press Generate button again to produce a new archive..
+        ///   Looks up a localized string similar to Pressing Generate button creates a data archive of interviews available on the server at that time. The time of archive creation and the archive size are shown in the table. The last generated data archive can be downloaded by pressing Download button. Press Generate button again to create a new archive..
         /// </summary>
         internal static string ExportExplanation {
             get {
@@ -358,7 +358,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to (version) Survey template .
+        ///   Looks up a localized string similar to (version) Survey questionnaire.
         /// </summary>
         internal static string SurveyTemplateTitle {
             get {

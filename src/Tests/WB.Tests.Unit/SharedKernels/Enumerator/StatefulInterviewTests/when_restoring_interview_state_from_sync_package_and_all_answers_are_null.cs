@@ -107,67 +107,67 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_integerQuestion = () =>
         {
             interview.GetIntegerQuestion(Identity.Create(integerQuestionId, rosterVector))
-                .IsAnswered.ShouldBeFalse();
+                .IsAnswered().ShouldBeFalse();
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_decimalQuestion = () =>
         {
             interview.GetDoubleQuestion(Identity.Create(decimalQuestionId, rosterVector))
-                .IsAnswered.ShouldBeFalse();
+                .IsAnswered().ShouldBeFalse();
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_dateTimeQuestion = () =>
         {
             interview.GetDateTimeQuestion(Identity.Create(dateTimeQuestionId, rosterVector))
-                .IsAnswered.ShouldBeFalse();
+                .IsAnswered().ShouldBeFalse();
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_singleOptionQuestion = () =>
         {
             interview.GetSingleOptionQuestion(Identity.Create(singleOptionQuestionId, rosterVector))
-                .IsAnswered.ShouldBeFalse();
+                .IsAnswered().ShouldBeFalse();
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_linkedSingleOptionQuestion = () =>
         {
             interview.GetLinkedSingleOptionQuestion(Identity.Create(linkedSingleOptionQuestionId, rosterVector))
-                .IsAnswered.ShouldBeFalse();
+                .IsAnswered().ShouldBeFalse();
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_multiOptionQuestion = () =>
         {
             interview.GetMultiOptionQuestion(Identity.Create(multiOptionQuestionId, rosterVector))
-                .IsAnswered.ShouldBeFalse();
+                .IsAnswered().ShouldBeFalse();
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_linkedMultiOptionQuestion = () =>
         {
             interview.GetLinkedMultiOptionQuestion(Identity.Create(linkedMultiOptionQuestionId, rosterVector))
-                .IsAnswered.ShouldBeFalse();
+                .IsAnswered().ShouldBeFalse();
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_listQuestion = () =>
         {
             interview.GetTextListQuestion(Identity.Create(listQuestionId, rosterVector))
-                .IsAnswered.ShouldBeFalse();
+                .IsAnswered().ShouldBeFalse();
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_textQuestion = () =>
         {
             interview.GetTextQuestion(Identity.Create(textQuestionId, rosterVector))
-                .IsAnswered.ShouldBeFalse();
+                .IsAnswered().ShouldBeFalse();
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_gpsQestionId = () =>
         {
             interview.GetGpsQuestion(Identity.Create(gpsQestionId, rosterVector))
-                .IsAnswered.ShouldBeFalse();
+                .IsAnswered().ShouldBeFalse();
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_multimediaQuestionId = () =>
         {
             interview.GetMultimediaQuestion(Identity.Create(multimediaQuestionId, rosterVector))
-                .IsAnswered.ShouldBeFalse();
+                .IsAnswered().ShouldBeFalse();
         };
         
         private static EventContext eventContext;

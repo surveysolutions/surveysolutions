@@ -148,7 +148,7 @@
     <value>History</value>
   </data>
   <data name="ImportTemplate" xml:space="preserve">
-    <value>Import template</value>
+    <value>Import questionnaire</value>
   </data>
   <data name="LastEntryDate" xml:space="preserve">
     <value>Last Entry Date</value>
@@ -178,7 +178,7 @@
     <value>Questionnaire</value>
   </data>
   <data name="SurveySetupIntroMessage1" xml:space="preserve">
-    <value>Click Import Template  button to load a questionnaire from Designer</value>
+    <value>Click Import Questionnaire button to load a questionnaire from Designer</value>
   </data>
   <data name="SurveySetupIntroMessage2" xml:space="preserve">
     <value>Click on a questionnaire from the list to create interview assignments</value>

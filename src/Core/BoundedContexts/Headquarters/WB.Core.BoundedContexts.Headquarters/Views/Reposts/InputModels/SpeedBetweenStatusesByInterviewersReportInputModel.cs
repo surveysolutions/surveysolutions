@@ -3,7 +3,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels
 {
-    public class SpeedBetweenStatusesByInterviewersReportInputModel : ListViewModelBase
+    public class SpeedBetweenStatusesByInterviewersReportInputModel : PeriodicReportInputModelBase
     {
         public SpeedBetweenStatusesByInterviewersReportInputModel()
         {
@@ -12,11 +12,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels
         }
 
         public Guid SupervisorId { get; set; }
-        public DateTime From { get; set; }
-        public Guid QuestionnaireId { get; set; }
-        public long QuestionnaireVersion { get; set; }
         public string Period { get; set; }
-        public int ColumnCount { get; set; }
         public InterviewExportedAction[] BeginInterviewStatuses { get; set; }
         public InterviewExportedAction[] EndInterviewStatuses { get; set; }
     }

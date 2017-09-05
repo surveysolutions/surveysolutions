@@ -102,7 +102,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.variableName = questionnaire.GetQuestionVariableName(entityIdentity.Id);
 
             var answerModel = interview.GetAudioQuestion(entityIdentity);
-            if (answerModel.IsAnswered)
+            if (answerModel.IsAnswered())
                 this.SetAnswer(answerModel.GetAnswer().Length);
 
             this.liteEventRegistry.Subscribe(this, interviewId);
@@ -110,7 +110,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task SendAnswerAsync()
         {
-            var audioDuration = this.audioService.GetLastRecordDuration();
+            var audioDuration = this.audioService.GetAudioRecordDuration();
 
             var command = new AnswerAudioQuestionCommand(
                 interviewId: this.interviewId,
@@ -184,7 +184,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.UnhandleDialog();
 
-            await this.SendAnswerAsync();
+            if (this.QuestionState.Enablement.Enabled)
+                await this.SendAnswerAsync();
         }
 
         private void UnhandleDialog()

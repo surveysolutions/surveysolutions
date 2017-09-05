@@ -253,4 +253,10 @@
   <data name="Error_UserNotAuthorised" xml:space="preserve">
     <value>User is not authorized</value>
   </data>
+  <data name="CompleteInterview" xml:space="preserve">
+    <value>Complete interview</value>
+  </data>
+  <data name="PoweredBy" xml:space="preserve">
+    <value>Powered by</value>
+  </data>
 </root>

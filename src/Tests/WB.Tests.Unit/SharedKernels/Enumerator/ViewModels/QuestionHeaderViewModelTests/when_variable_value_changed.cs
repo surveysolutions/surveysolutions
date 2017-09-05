@@ -17,12 +17,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
     {
         Establish context = () =>
         {
-            var substitutedVariable1Identity = new Identity(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty);
-            var substitutedVariable2Identity = new Identity(Guid.Parse("22222222222222222222222222222222"), RosterVector.Empty);;
+            var substitutedVariable1Identity = Create.Identity(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty);
+            var substitutedVariable2Identity = Create.Identity(Guid.Parse("22222222222222222222222222222222"), RosterVector.Empty);;
             var substitutedVariable1Name = "var1";
             var substitutedVariable2Name = "var2";
             
-            substitutionTargetQuestionIdentity = new Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Empty.RosterVector);
+            substitutionTargetQuestionIdentity = Create.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Empty.RosterVector);
 
             var questionnaireMock = Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]
             {

@@ -26,6 +26,8 @@
     self.IsVisiblePrefilledColumns = ko.observable(false);
 
     self.TemplateName = ko.observable();
+    self.UnactiveDateStart = ko.observable();
+    self.UnactiveDateEnd = ko.observable();
 
     self.getFormattedPrefilledQuestions = function(prefilledQuestions) {
         prefilledQuestions.forEach(function(prefilledQuestion) {
@@ -54,6 +56,8 @@
         self.Url.query['responsible'] = _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserName;
         self.Url.query['searchBy'] = self.SearchBy() || "";
         self.Url.query['assignmentId'] = self.AssignmentId() || "";
+        self.Url.query['unactiveDateStart'] = self.UnactiveDateStart() || "";
+        self.Url.query['unactiveDateEnd'] = self.UnactiveDateEnd() || "";
         
         if (Modernizr.history) {
             window.history.pushState({}, "Interviews", self.Url.toString());
@@ -65,7 +69,9 @@
             ResponsibleName: _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserName,
             Status: self.SelectedStatus,
             SearchBy: self.SearchBy,
-            AssignmentId: self.AssignmentId
+            AssignmentId: self.AssignmentId,
+            UnactiveDateStart: self.UnactiveDateStart,
+            UnactiveDateEnd: self.UnactiveDateEnd
         };
     };
 
@@ -79,6 +85,8 @@
         }
         self.AssignmentId(self.QueryString['assignmentId']);
         self.SearchBy(decodeURIComponent(self.QueryString['searchBy'] || ""));
+        self.UnactiveDateStart(self.QueryString['unactiveDateStart']);
+        self.UnactiveDateEnd(self.QueryString['unactiveDateEnd']);
 
         updateTemplateName(self.SelectedTemplate());
 
@@ -88,6 +96,8 @@
         self.Url.query['responsible'] = self.QueryString['responsible'] || "";
         self.Url.query['searchBy'] = self.QueryString['searchBy'] || "";
         self.Url.query['assignmentId'] = self.QueryString['assignmentId'] || "";
+        self.Url.query['unactiveDateStart'] = self.QueryString['unactiveDateStart'] || "";
+        self.Url.query['unactiveDateEnd'] = self.QueryString['unactiveDateEnd'] || "";
 
         self.SelectedTemplate.subscribe(
             function (value) {
@@ -179,6 +189,54 @@
         if (self.Url.query['searchBy'].length > 0) {
             $('.dataTables_filter label').addClass("active");
         }
+
+        var contextMenuOptions = {
+            autoHide: true,
+            build: function ($trigger, e) {
+                var selectedRow = ko.dataFor($trigger[0]);
+                self.unselectAll();
+                selectedRow.IsSelected(true);
+                var items = self.BuildMenuItem(selectedRow);
+                return { items: items };
+            },
+            zIndex: 999999,
+            trigger: 'left'
+        };
+
+
+        $.contextMenu(_.assign({ selector: "#interviews tr td:not(:first-child)" }, contextMenuOptions));
+        $.contextMenu(_.assign({ selector: ".row-unit" }, contextMenuOptions));
+    };
+
+    self.ShowStatusHistory = function (url, interview) {
+        var statusHistoryTemplateId = "#interview-status-history-template";
+        var modalId = '#statusHistoryModal';
+        
+        self.SendRequest(url,
+            { interviewId: interview.InterviewId() },
+            function(statusHistory) {
+
+                $(modalId).parent().remove();
+
+                var historyModalModel = {
+                    key: interview.Key(),
+                    interviewUrl: $detailsUrl + '/' + interview.InterviewId(),
+                    responsible: interview.ResponsibleName(),
+                    isResponsibleInterviewer: interview.ResponsibleRole() == 4,
+                    statusHistory: statusHistory,
+                    formatDate: function(date) {
+                        return moment.utc(date).local().format('MMM DD, YYYY HH:MM');
+                    }
+                };
+
+                $('body').append($("<div/>").html($(statusHistoryTemplateId).html())[0]);
+               
+                ko.applyBindings(historyModalModel, $(modalId)[0]);
+
+                $(modalId).modal('show', { backdrop: true });
+            },
+            false,
+            false);
     }
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.InterviewsBase, Supervisor.VM.ListView);

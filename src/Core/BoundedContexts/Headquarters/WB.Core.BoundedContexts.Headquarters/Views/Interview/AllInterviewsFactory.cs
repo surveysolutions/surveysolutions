@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Criterion;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -11,16 +13,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
     internal sealed class AllInterviewsFactory : IAllInterviewsFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> reader;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
 
-        public AllInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> reader)
+        public AllInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader)
         {
-            this.reader = reader;
+            this.interviewSummaryReader = interviewSummaryReader;
         }
 
         public AllInterviewsView Load(AllInterviewsInputModel input)
         {
-            var interviews = this.reader.Query(_ =>
+            var interviews = this.interviewSummaryReader.Query(_ =>
             {
                 var items = ApplyFilter(input, _);
                 items = this.DefineOrderBy(items, input);
@@ -37,7 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 return summaries;
             });
 
-            var totalCount = this.reader.Query(_ => ApplyFilter(input, _).Count());
+            var totalCount = this.interviewSummaryReader.Query(_ => ApplyFilter(input, _).Count());
 
             var result = new AllInterviewsView
             {
@@ -54,16 +56,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                             Type = a.Type
                         }).ToList(),
                     InterviewId = x.InterviewId,
-                    LastEntryDate = x.UpdateDate.ToShortDateString(),
+                    LastEntryDate = x.UpdateDate.FormatDateWithTime(),
                     ResponsibleId = x.ResponsibleId,
                     ResponsibleName = x.ResponsibleName,
                     ResponsibleRole = x.ResponsibleRole,
                     HasErrors = x.HasErrors,
                     Status = x.Status.ToString(),
-                    CanDelete =    x.Status == InterviewStatus.Created
+                    CanDelete = (x.Status == InterviewStatus.Created
                         || x.Status == InterviewStatus.SupervisorAssigned
                         || x.Status == InterviewStatus.InterviewerAssigned
-                        || x.Status == InterviewStatus.SentToCapi,
+                        || x.Status == InterviewStatus.SentToCapi) &&
+                        !x.ReceivedByInterviewer &&
+                        x.InterviewCommentedStatuses.Select(s => s.Status).All(s => s != InterviewExportedAction.Completed),
                     CanApprove = x.Status == InterviewStatus.ApprovedBySupervisor || x.Status == InterviewStatus.Completed,
                     CanReject = x.Status == InterviewStatus.ApprovedBySupervisor,
                     CanUnapprove = x.Status == InterviewStatus.ApprovedByHeadquarters,
@@ -90,7 +94,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             int totalCount;
             if (input.InterviewId.HasValue)
             {
-                var interviewSummary = this.reader.GetById(input.InterviewId.Value);
+                var interviewSummary = this.interviewSummaryReader.GetById(input.InterviewId.Value);
                 if (interviewSummary!=null)
                 {
                     interviews = interviewSummary.ToEnumerable().ToList();
@@ -99,7 +103,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             }
             else
             {
-                interviews = this.reader.Query(_ =>
+                interviews = this.interviewSummaryReader.Query(_ =>
                 {
                     var items = ApplyFilter(input, _);
                     if (input.Orders != null)
@@ -112,7 +116,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         .ToList();
                 });
 
-                totalCount = this.reader.Query(_ => ApplyFilter(input, _).Count());
+                totalCount = this.interviewSummaryReader.Query(_ => ApplyFilter(input, _).Count());
             }
             var result = new InterviewsWithoutPrefilledView
             {
@@ -138,7 +142,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         private static IQueryable<InterviewSummary> ApplyFilter(InterviewsWithoutPrefilledInputModel input, IQueryable<InterviewSummary> _)
         {
-            var items = _.Where(x => !x.IsDeleted);
+            var items = _;
 
             if (input.SupervisorId.HasValue)
             {
@@ -183,9 +187,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return items;
         }
 
-        private static IQueryable<InterviewSummary> ApplyFilter(AllInterviewsInputModel input, IQueryable<InterviewSummary> _)
+        private IQueryable<InterviewSummary> ApplyFilter(AllInterviewsInputModel input, IQueryable<InterviewSummary> _)
         {
-            var items = _.Where(x => !x.IsDeleted);
+            var items = _;
 
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
@@ -220,6 +224,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             if (input.AssignmentId.HasValue)
             {
                 items = items.Where(x => x.AssignmentId == input.AssignmentId);
+            }
+
+            if (input.UnactiveDateStart.HasValue || input.UnactiveDateEnd.HasValue)
+            {
+                items = from i in items
+                let statusChangeTime = i.InterviewCommentedStatuses
+                    .Where(s => 
+                        (s.Status == InterviewExportedAction.Completed && i.Status == InterviewStatus.Completed)
+                        || (s.Status == InterviewExportedAction.ApprovedBySupervisor && i.Status == InterviewStatus.ApprovedBySupervisor)
+                        || (s.Status == InterviewExportedAction.ApprovedByHeadquarter && i.Status == InterviewStatus.ApprovedByHeadquarters)
+                        || (s.Status == InterviewExportedAction.RejectedBySupervisor && i.Status == InterviewStatus.RejectedBySupervisor)
+                        || (s.Status == InterviewExportedAction.RejectedByHeadquarter && i.Status == InterviewStatus.RejectedByHeadquarters)
+                    )
+                    .OrderByDescending(s => Projections.Property("position"))
+                    .Select(s => s.Timestamp)
+                    .First()
+                where (input.UnactiveDateStart <= statusChangeTime || input.UnactiveDateStart == null)
+                   && (statusChangeTime <= input.UnactiveDateEnd || input.UnactiveDateEnd == null)
+                select i;
             }
 
             return items;

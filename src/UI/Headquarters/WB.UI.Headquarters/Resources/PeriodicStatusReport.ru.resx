@@ -196,7 +196,7 @@
     <value>Длительность</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
-    <value>Вопросник</value>
+    <value>Опросник</value>
   </data>
   <data name="Team" xml:space="preserve">
     <value>команда</value>
@@ -221,5 +221,15 @@
   </data>
   <data name="From" xml:space="preserve">
     <value>От</value>
+  </data>
+  <data name="OverTheLast" xml:space="preserve">
+    <value>За последние</value>
+  </data>
+  <data name="InterviewActions" xml:space="preserve">
+    <value>Действия</value>
+    <comment>Действия</comment>
+  </data>
+  <data name="PeriodUnit" xml:space="preserve">
+    <value>Длительность</value>
   </data>
 </root>

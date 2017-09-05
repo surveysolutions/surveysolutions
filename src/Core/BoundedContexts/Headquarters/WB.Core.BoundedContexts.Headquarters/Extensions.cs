@@ -5,10 +5,10 @@ namespace WB.Core.BoundedContexts.Headquarters
 {
     public static class Extensions
     {
-        public static string FormatDateWithTime(this DateTime dateTime)
-        {
-            string format = "MMM d, yyy HH:mm";
-            return dateTime.ToString(format, CultureInfo.CurrentUICulture);
-        }
+        public static string ClientDateTimeFormat = "MMM DD, YYYY HH:mm";
+        public static string ServerDateTimeFormat = "MMM dd, yyy HH:mm";
+
+        public static string FormatDateWithTime(this DateTime dateTime) 
+            => dateTime.ToString(ServerDateTimeFormat, CultureInfo.CurrentUICulture);
     }
 }

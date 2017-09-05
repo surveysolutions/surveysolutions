@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
@@ -19,9 +20,8 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFF1111111111");
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
 
-            emptyRosterVector = new decimal[] { };
-            var rosterInstanceId = 0m;
-            rosterVector = emptyRosterVector.Concat(new[] { rosterInstanceId }).ToArray();
+            var rosterInstanceId = 0;
+            rosterVector = Create.RosterVector(rosterInstanceId);
 
             questionId = Guid.Parse("11111111111111111111111111111111");
             var linkedToQuestionId = Guid.Parse("33333333333333333333333333333333");
@@ -29,9 +29,9 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             rosterAId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             rosterBId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-            var linkedOption1Vector = new decimal[] { 0 };
-            linkedOption2Vector = new decimal[] { 1 };
-            var linkedOption3Vector = new decimal[] { 2 };
+            var linkedOption1Vector = Create.RosterVector(0);
+            linkedOption2Vector = Create.RosterVector(1);
+            var linkedOption3Vector = Create.RosterVector(2);
             var linkedOption1Answer = new DateTime(2014, 2, 23);
             var linkedOption2Answer = new DateTime(2014, 3, 8);
             var linkedOption3Answer = new DateTime(2014, 5, 9);
@@ -40,7 +40,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             var triggerQuestionId = Guid.NewGuid();
             var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
             {
-                Abc.Create.Entity.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
+                Create.Entity.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
                 Abc.Create.Entity.Roster(rosterId: rosterAId, rosterSizeSourceType: RosterSizeSourceType.Question,
                     rosterSizeQuestionId: triggerQuestionId, rosterTitleQuestionId: questionId, variable: "ros1",
                     children: new IComposite[]
@@ -66,7 +66,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
             interview.Apply(new LinkedOptionsChanged(new[]
             {
-                new ChangedLinkedOptions(new Identity(questionId, rosterVector), new RosterVector[]
+                new ChangedLinkedOptions(Create.Identity(questionId, rosterVector), new RosterVector[]
                 {
                     linkedOption1Vector, linkedOption2Vector, linkedOption3Vector
                 })
@@ -96,7 +96,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
         It should_set_empty_outer_roster_vector_to_all_RosterRowTitleChanged_events = () =>
                 eventContext.GetEvents<RosterInstancesTitleChanged>()
-                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.RosterInstance.OuterRosterVector.SequenceEqual(emptyRosterVector)));
+                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.RosterInstance.OuterRosterVector.Length == 0));
 
         It should_set_last_element_of_roster_vector_to_roster_instance_id_in_all_RosterRowTitleChanged_events = () =>
             eventContext.GetEvents<RosterInstancesTitleChanged>()
@@ -111,11 +111,11 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         private static Interview interview;
         private static Guid userId;
         private static Guid questionId;
-        private static decimal[] rosterVector;
-        private static decimal[] emptyRosterVector;
+        private static int[] rosterVector;
+        private static int[] emptyRosterVector;
         private static Guid rosterAId;
         private static Guid rosterBId;
-        private static decimal[] linkedOption2Vector;
+        private static RosterVector linkedOption2Vector;
         private static string linkedOption2TextInvariantCulture;
     }
 }

@@ -167,15 +167,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             }
         }
 
-        private IEnumerable<PrefilledQuestion> GetPrefilledQuestions()
-        {
-            return this.prefilledQuestions.Where(_ => _.InterviewId == this.InterviewId)
-                                          .OrderBy(x => x.SortIndex)
-                                          .Select(fi => new PrefilledQuestion {
-                                              Answer = fi.Answer,
-                                              Question = fi.QuestionText
-                                          });
-        }
+        private IEnumerable<PrefilledQuestion> GetPrefilledQuestions() => this.prefilledQuestions
+            .Where(_ => _.InterviewId == this.InterviewId)
+            .OrderBy(x => x.SortIndex)
+            .Select(fi => new PrefilledQuestion {Answer = fi.Answer?.Trim(), Question = fi.QuestionText});
 
         private async Task RemoveInterviewAsync()
         {

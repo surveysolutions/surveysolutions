@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using Microsoft.AspNet.Identity;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;

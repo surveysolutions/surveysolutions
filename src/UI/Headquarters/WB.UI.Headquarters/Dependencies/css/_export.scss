@@ -1,5 +1,5 @@
 .export-types{
-	padding: 50px 30px 0;
+	padding: 0 0 0 30px;
 	position: relative;
 	margin-left: $filter-width - $margin-container + 15px + 12px;
 	max-width: 900px;
@@ -7,11 +7,15 @@
 	background-color: #fff;
 
 	.data{
+		h3{
+			margin-left: 15px;
+		}
 		width: 100%;
 		margin-bottom: 30px;
 		p{
 			@include font(14px, 16px);
 			margin-bottom: 0;
+			margin-left: 15px;
 			span{
 				display: block;
 			}
@@ -133,7 +137,7 @@
 	@include transition(padding, 0.3s);
 }
 .fullscreen-hidden-filters .export-types{
-	padding: 50px 30px 0;
+	padding: 0 30px 0;
 	margin-left: $filter-width - $margin-container + 15px + 12px;
 } 
 @media only screen and (max-width: 1300px){
@@ -145,8 +149,8 @@
 		padding-left: 12px;
 	} 
   	.export-types{
-  		padding: 50px 20px 0 30px;
-  		margin-left:  $filter-width - $margin-container-md-screen + 15px + 12px;
+		padding: 0 10px 0 30px;
+  		margin-left:  $filter-width - $margin-container-md-screen + 15px;
   		.size, .last-generated{
   			display: none;
   		}
@@ -187,7 +191,7 @@
 		}
   	}
   	.fullscreen-hidden-filters .export-types{
-  		padding: 55px 20px 0;
+  		padding: 0 10px 0;
   		width: 100%;
   		.size, .last-generated{
   			display: table-cell;
@@ -224,7 +228,7 @@
 @media (max-width: $screen-sm-min){
 	.export-types{
 		margin-left: 0;
-		padding: 55px 15px 0;
+		padding: 0 10px 0;
 		h2{
 			margin-bottom: 25px;
 			@include font(24px, 26px);
@@ -245,6 +249,8 @@
 }
 @media (max-width: $screen-xs-min){
 	.export-types{
+		padding-left: 5px;
+		padding-right: 5px;
 		.data{
 			.table-data{
 				padding: 10px;

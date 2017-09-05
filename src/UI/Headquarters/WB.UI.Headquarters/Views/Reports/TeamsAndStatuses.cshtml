@@ -42,11 +42,6 @@
                     }, {
                         className: "type-numeric",
                         render: function (data, type, row) {
-                            return model.getLinkToInterviews(data, row, '@InterviewStatus.Restarted', model.Url.query['templateId'], model.Url.query['templateVersion']);
-                        }
-                    }, {
-                        className: "type-numeric",
-                        render: function (data, type, row) {
                             return model.getLinkToInterviews(data, row, '@InterviewStatus.Completed', model.Url.query['templateId'], model.Url.query['templateVersion']);
                         }
                     }, {
@@ -94,13 +89,13 @@
                     <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
                 </div>
                 <div class="filters-container">
-                    <h4>@Pages.FilterTitle:</h4>
+                    <h4>@Pages.FilterTitle</h4>
                     <div class="block-filter">
-                        <h5>@Common.Template</h5>
+                        <h5>@Reports.Questionnaire</h5>
                         <select id="questionnaireSelector" data-bind="value: SelectedTemplate, selectPicker: {}" class="form-control">
                             @if (Model.Count() > 1)
                             {
-                                <option value="">@Common.Any</option>
+                                <option value="">@Common.AllQuestionnaires</option>
                             }
                             @foreach (var item in Model)
                             {
@@ -119,13 +114,12 @@
 
                 <div class="dataTables_wrapper">
                     <table id="data_holder" class="table table-striped table-ordered table-bordered table-hover table-mobile-devices dataTable"
-                           data-order="[[ 1, &quot;asc&quot;]]" data-searching="false" data-s-Dom="f<&quot;table-with-scroll&quot;t>ip">
+                           data-order="[[ 1, &quot;asc&quot;]]" data-searching="false" data-s-Dom="rf<&quot;table-with-scroll&quot;t>ip">
                         <thead>
                         <tr>
                             <th data-name="Responsible" data-data="responsible">@Users.Supervisors</th>
                             <th data-name="SupervisorAssignedCount" data-data="supervisorAssignedCount">@Reports.SupervisorAssigned</th>
                             <th data-name="InterviewerAssignedCount" data-data="interviewerAssignedCount">@Reports.InterviewerAssigned</th>
-                            <th data-name="RestartedCount" data-data="restartedCount">@Reports.Restarted</th>
                             <th data-name="CompletedCount" data-data="completedCount">@Reports.Completed</th>
                             <th data-name="RejectedBySupervisorCount" data-data="rejectedBySupervisorCount">@Reports.RejectedBySupervisor</th>
                             <th data-name="ApprovedBySupervisorCount" data-data="approvedBySupervisorCount">@Reports.ApprovedBySupervisor</th>
@@ -136,7 +130,9 @@
                         </thead>
                     </table>
                 </div>
+                @Html.Partial("_export-buttons")
             </div>
         </div>
     </div>
+    
 </main>

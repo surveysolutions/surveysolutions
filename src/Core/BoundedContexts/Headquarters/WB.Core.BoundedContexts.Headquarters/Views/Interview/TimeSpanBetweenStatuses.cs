@@ -36,7 +36,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual InterviewExportedAction BeginStatus { get; set; }
         public virtual InterviewExportedAction EndStatus { get; set; }
         public virtual DateTime EndStatusTimestamp { get; set; }
-        public virtual TimeSpan TimeSpan { get; set; }
+        public virtual TimeSpan TimeSpan
+        {
+            get => new TimeSpan(this.TimeSpanLong);
+            set => this.TimeSpanLong = value.Ticks;
+        }
+        public virtual long TimeSpanLong { get; protected set; }
 
         public virtual InterviewStatusTimeSpans InterviewStatusTimeSpans { get; set; }
     }

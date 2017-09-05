@@ -1,26 +1,26 @@
 <template>
     <div class="btn-group btn-input clearfix">
         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-            <span data-bind="label" v-if="value === null" class="gray-text">Click to answer</span>
+            <span data-bind="label" v-if="value === null" class="gray-text">{{ $t("ClickToAnswer") }}</span>
             <span data-bind="label" v-else>{{value.title}}</span>
         </button>
         <ul ref="dropdownMenu" class="dropdown-menu" role="menu">
             <li>
-                <input type="text" ref="searchBox" :id="searchBoxId" placeholder="Search" @input="updateOptionsList" @keyup.down="onSearchBoxDownKey" v-model="searchTerm" />
+                <input type="text" ref="searchBox" :id="searchBoxId" :placeholder="$t('Search')" @input="updateOptionsList" @keyup.down="onSearchBoxDownKey" v-model="searchTerm" />
             </li>
             <li v-for="option in options" :key="option.value">
                 <a href="javascript:void(0);" @click="selectOption(option.value)" v-html="highlight(option.title, searchTerm)" @keydown.up="onOptionUpKey"></a>
             </li>
             <li v-if="isLoading">
-                <a>Loading...</a>
+                <a>{{ $t("Loading") }}</a>
             </li>
             <li v-if="!isLoading && options.length === 0">
-                <a>No results found</a>
+                <a>{{ $t("NoResultsFound") }}</a>
             </li>
         </ul>
     </div>
 </template>
-<script lang="ts">
+<script lang="js">
 
     import * as $ from "jquery"
 
@@ -68,16 +68,16 @@
             updateOptionsList(e) {
                 this.loadOptions(e.target.value)
             },
-            async loadOptions(filter: string) {
+            async loadOptions(filter) {
                 this.isLoading = true
                 const options = await apiCaller(api => api.getTopFilteredOptionsForQuestion(this.questionId, filter, 30))
                 this.isLoading = false
                 this.options = options || []
             },
-            selectOption(value: string) {
+            selectOption(value) {
                 this.$emit('input', value)
             },
-            highlight(title: string, searchTerm: string) {
+            highlight(title, searchTerm) {
                 const encodedTitle = escape(title)
                 if (searchTerm) {
                     const safeSearchTerm = escape(escapeRegExp(searchTerm))

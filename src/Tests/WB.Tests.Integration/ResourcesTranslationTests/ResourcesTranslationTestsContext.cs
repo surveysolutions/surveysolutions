@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Xml;
 using System.Xml.Linq;
 using WB.Core.GenericSubdomains.Portable;
 
@@ -10,6 +11,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
 {
     internal class ResourcesTranslationTestsContext
     {
+
         private static readonly Regex StringFormatParameterRegex = new Regex(@"{(?!{)\S+?}", RegexOptions.Compiled);
 
         protected static IEnumerable<string> GetStringResourceNamesFromResX(string relativePathToResX)
@@ -86,6 +88,37 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
         private static string TrimEndAfterLastDot(string value)
         {
             return value.Substring(0, value.LastIndexOf('.'));
+        }
+
+        protected IEnumerable<string> GetAllLinkedResourceFiles(IEnumerable<string> csprojFiles)
+        {
+            foreach (var csproj in csprojFiles)
+            {
+                using (XmlReader reader = XmlReader.Create(csproj))
+                {
+                    while (reader.Read())
+                    {
+                        if (reader.NodeType == XmlNodeType.Element)
+                        {
+                            if (string.Equals(reader.Name, "Content", StringComparison.OrdinalIgnoreCase) ||
+                                string.Equals(reader.Name, "EmbeddedResource", StringComparison.OrdinalIgnoreCase))
+                            {
+                                while (reader.MoveToNextAttribute())
+                                {
+                                    if (string.Equals(reader.Name, "Include", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        if (reader.Value.EndsWith(".resx", StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            var fi = new FileInfo(csproj);
+                                            yield return Path.Combine(fi.DirectoryName, reader.Value);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

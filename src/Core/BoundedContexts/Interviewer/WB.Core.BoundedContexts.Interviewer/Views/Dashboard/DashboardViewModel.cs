@@ -3,11 +3,12 @@ using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.Properties;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
@@ -17,6 +18,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IPrincipal principal;
         private readonly IMvxMessenger messenger;
+        private readonly IPlainStorage<InterviewView> interviewsRepository;
 
         private MvxSubscriptionToken startingLongOperationMessageSubscriptionToken;
         private MvxSubscriptionToken stopLongOperationMessageSubscriptionToken;
@@ -33,13 +35,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             CreateNewViewModel createNewViewModel,
             StartedInterviewsViewModel startedInterviewsViewModel,
             CompletedInterviewsViewModel completedInterviewsViewModel,
-            RejectedInterviewsViewModel rejectedInterviewsViewModel)
+            RejectedInterviewsViewModel rejectedInterviewsViewModel,
+            IPlainStorage<InterviewView> interviewsRepository)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.principal = principal;
             this.messenger = messenger;
+            this.interviewsRepository = interviewsRepository;
             this.Synchronization = synchronization;
-            this.Synchronization.SyncCompleted += async (sender, args) => await this.RefreshDashboard();
+            this.Synchronization.SyncCompleted += (sender, args) => this.RefreshDashboard();
 
             this.CreateNew = createNewViewModel;
             this.StartedInterviews = startedInterviewsViewModel;
@@ -47,38 +51,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.RejectedInterviews = rejectedInterviewsViewModel;
         }
 
-        public override async Task Initialize(DashboardArgs parameter)
+        public override Task Initialize(DashboardArgs parameter)
         {
             startingLongOperationMessageSubscriptionToken = this.messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
             stopLongOperationMessageSubscriptionToken = this.messenger.Subscribe<StopingLongOperationMessage>(this.DashboardItemOnStopLongOperation);
             this.Synchronization.Init();
             this.StartedInterviews.OnInterviewRemoved += this.OnInterviewRemoved;
             this.CompletedInterviews.OnInterviewRemoved += this.OnInterviewRemoved;
+            this.StartedInterviews.OnItemsLoaded += this.OnItemsLoaded;
+            this.RejectedInterviews.OnItemsLoaded += this.OnItemsLoaded;
+            this.CompletedInterviews.OnItemsLoaded += this.OnItemsLoaded;
+            this.CreateNew.OnItemsLoaded += this.OnItemsLoaded;
 
-            await this.RefreshDashboard();
+            this.RefreshDashboard(parameter.LastVisitedInterviewId);
+            this.SelectTypeOfInterviewsByInterviewId(parameter.LastVisitedInterviewId);
 
-            this.TypeOfInterviews = this.CreateNew.InterviewStatus;
-            if (parameter.LastVisitedInterviewId.HasValue)
-            {
-                var lastVisitedInterviewId = parameter.LastVisitedInterviewId;
-
-                HighlightInterview(this.StartedInterviews, lastVisitedInterviewId);
-                HighlightInterview(this.RejectedInterviews, lastVisitedInterviewId);
-                HighlightInterview(this.CompletedInterviews, lastVisitedInterviewId);
-            }
-        }
-
-        private void HighlightInterview(BaseInterviewsViewModel target, Guid? lastVisitedInterviewId)
-        {
-            foreach (var interview in target.UiItems)
-            {
-                var dashboardItem = interview as InterviewDashboardItemViewModel;
-                if (dashboardItem?.InterviewId == lastVisitedInterviewId)
-                {
-                    this.TypeOfInterviews = target.InterviewStatus;
-                    target.HighLight(dashboardItem);
-                }
-            }
+            return Task.CompletedTask;
         }
 
         private IMvxCommand synchronizationCommand;
@@ -130,20 +118,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public SynchronizationViewModel Synchronization { get; set; }
 
-        private bool isLoaded;
-        public bool IsLoaded
-        {
-            get => this.isLoaded;
-            set
-            {
-                if (this.isLoaded != value)
-                {
-                    this.isLoaded = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
-
         public string DashboardTitle
             => InterviewerUIResources.Dashboard_Title.FormatString(this.NumberOfAssignedInterviews.ToString(),
                 this.principal.CurrentUserIdentity.Name);
@@ -154,22 +128,42 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.CreateNew.UpdateAssignment(e.AssignmentId);
         }
 
-        private async Task RefreshDashboard()
+        private void OnItemsLoaded(object sender, EventArgs e) =>
+            this.IsInProgress = !(this.StartedInterviews.IsItemsLoaded && this.RejectedInterviews.IsItemsLoaded &&
+                                  this.CompletedInterviews.IsItemsLoaded && this.CreateNew.IsItemsLoaded);
+
+        private void RefreshDashboard(Guid? lastVisitedInterviewId = null)
         {
             if (this.principal.CurrentUserIdentity == null)
                 return;
 
             this.IsInProgress = true;
 
-            await this.CreateNew.Load(this.Synchronization);
-            await this.StartedInterviews.Load();
-            await this.RejectedInterviews.Load();
-            await this.CompletedInterviews.Load();
+            this.CreateNew.Load(this.Synchronization);
+            this.StartedInterviews.Load(lastVisitedInterviewId);
+            this.RejectedInterviews.Load(lastVisitedInterviewId);
+            this.CompletedInterviews.Load(lastVisitedInterviewId);
 
             this.RaisePropertyChanged(() => this.DashboardTitle);
+        }
 
-            this.IsInProgress = false;
-            IsLoaded = true;
+        private void SelectTypeOfInterviewsByInterviewId(Guid? lastVisitedInterviewId)
+        {
+            if (!lastVisitedInterviewId.HasValue)
+                this.TypeOfInterviews = this.CreateNew.InterviewStatus;
+
+            var interviewView = this.interviewsRepository.GetById(lastVisitedInterviewId.FormatGuid());
+            if (interviewView == null) return;
+
+            if (interviewView.Status == InterviewStatus.RejectedBySupervisor)
+                this.TypeOfInterviews = this.RejectedInterviews.InterviewStatus;
+
+            if (interviewView.Status == InterviewStatus.Completed)
+                this.TypeOfInterviews = this.CompletedInterviews.InterviewStatus;
+
+            if (interviewView.Status == InterviewStatus.InterviewerAssigned ||
+                interviewView.Status == InterviewStatus.Restarted)
+                this.TypeOfInterviews = this.StartedInterviews.InterviewStatus;
         }
 
         private void RunSynchronization()
@@ -212,6 +206,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             messenger.Unsubscribe<StopingLongOperationMessage>(stopLongOperationMessageSubscriptionToken);
             this.StartedInterviews.OnInterviewRemoved -= this.OnInterviewRemoved;
             this.CompletedInterviews.OnInterviewRemoved -= this.OnInterviewRemoved;
+            this.StartedInterviews.OnItemsLoaded -= this.OnItemsLoaded;
+            this.RejectedInterviews.OnItemsLoaded -= this.OnItemsLoaded;
+            this.CompletedInterviews.OnItemsLoaded -= this.OnItemsLoaded;
+            this.CreateNew.OnItemsLoaded -= this.OnItemsLoaded;
         }
     }
 

@@ -1,9 +1,9 @@
-var path = require('path')
-var utils = require('./utils')
-var config = require('./config').current()
-var vueLoaderConfig = require('./vue-loader.conf')
-
-var projectRoot = path.resolve(__dirname, '../')
+const path = require('path')
+const utils = require('./utils')
+const config = require('./config').current()
+const vueLoaderConfig = require('./vue-loader.conf')
+const webpack = require('webpack')
+const projectRoot = path.resolve(__dirname, '../')
 
 function resolve(dir) {
     return path.join(__dirname, '..', dir)
@@ -11,15 +11,15 @@ function resolve(dir) {
 
 module.exports = {
     entry: {
-        app: './src/main.ts'
+        app: './src/main.js'
     },
     output: {
         path: config.assetsRoot,
-        filename: '[name].js',
+        filename: '[name].[hash].js',
         publicPath: config.assetsPublicPath
     },
     resolve: {
-        extensions: ['.js', '.ts', '.tsx', '.vue', '.json'],
+        extensions: ['.js', '.vue', '.json'],
         modules: [
             resolve('src'),
             resolve('node_modules')
@@ -30,24 +30,23 @@ module.exports = {
             'components': resolve('src/components')
         }
     },
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env': config.env
+        }),
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery',
+            "window.jQuery": 'jquery',
+            "window.$": 'jquery'
+        }),
+    ],
     module: {
         rules: [
             {
-                test: /\.(ts|tsx)$/,
-                loader: 'tslint-loader',
-                enforce: "pre",
-                options: {
-                    appendTsSuffixTo: [/\.vue$/]
-                }
-            },
-            {
-                test: /\.(ts|tsx)$/,
-                loader: 'ts-loader',
-                include: projectRoot,
-                exclude: /node_modules/,
-                options: {
-                    appendTsSuffixTo: [/\.vue$/]
-                }
+                test: /\.js$/,
+                exclude: /(node_modules)/,
+                use: { loader: 'babel-loader' }
             },
             {
                 test: /\.vue$/,
@@ -57,7 +56,7 @@ module.exports = {
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
                 loader: 'url-loader',
-                options:{
+                options: {
                     publicPath: config.assetsRelativePath,
                     limit: 10000,
                     name: utils.assetsPath('img/[name].[ext]')
@@ -66,7 +65,7 @@ module.exports = {
             {
                 test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
                 loader: 'url-loader',
-                options:{
+                options: {
                     publicPath: config.assetsRelativePath,
                     limit: 10000,
                     name: utils.assetsPath('fonts/[name].[ext]')

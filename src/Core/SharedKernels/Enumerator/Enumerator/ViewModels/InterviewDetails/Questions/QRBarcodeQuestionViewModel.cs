@@ -93,7 +93,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.InstructionViewModel.Init(interviewId, entityIdentity);
 
             var qrBarcodeQuestion = interview.GetQRBarcodeQuestion(entityIdentity);
-            if (qrBarcodeQuestion.IsAnswered)
+            if (qrBarcodeQuestion.IsAnswered())
             {
                 this.Answer = qrBarcodeQuestion.GetAnswer().DecodedText;
             }

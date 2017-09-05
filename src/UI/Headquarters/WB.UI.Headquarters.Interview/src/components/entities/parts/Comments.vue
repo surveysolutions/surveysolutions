@@ -2,24 +2,32 @@
     <div class="information-block comments-block">
 
         <template v-for="comment in $me.comments">
-            <h6>{{ getCommentTitle(comment) }}</h6>
-            <p>{{ comment.text }}</p>
+            <div :class="{'enumerators-comment': comment.userRole == 4 /*'Interviewer'*/}" :key="comment.commentTimeUtc">
+                <h6>{{ getCommentTitle(comment) }}</h6>
+                <p>{{ comment.text }}</p>
+            </div>
         </template>
 
         <div class="comment active" v-if="isShowingAddCommentDialog">
-            <div class="form-inline">
-                <label>Your comment</label>
+            <form class="form-inline" v-on:submit.prevent="onSubmit">
+                <label>{{ $t("CommentYours") }}</label>
                 <div class="form-group">
-                    <div class="input-group field">
-                        <input type="text" class="field-to-fill" v-on:keyup.enter="postComment" v-model="comment" placeholder="Enter your comment" />
+                    <div class="input-group comment-field">
+                         <input type="text" class="form-control" v-on:keyup.enter="postComment" v-model="comment"
+                            :placeholder='$t("CommentEnter")' />
+                        <div class="input-group-btn">
+                             <button type="button" class="btn btn-default btn-post-comment"
+                                :class="buttonClass" @click="postComment($event)">{{ $t("CommentPost") }}</button>
+                        </div>
                     </div>
                 </div>
-                <button type="button" class="btn btn-default btn-post-comment" :class="buttonClass" @click="postComment($event)">Post</button>
-            </div>
+            </form>
         </div>
     </div>
 </template>
-<script lang="ts">
+
+<script lang="js">
+
     import { entityPartial } from "components/mixins"
 
     export default {
@@ -36,24 +44,25 @@
         methods: {
             getCommentTitle(comment) {
                 if (comment.isOwnComment == true) {
-                    return "Your comment"
+                    return this.$t("CommentYours")
                 }
                 if (comment.userRole == 1 /*'Administrator'*/) {
-                    return "Admin comment"
+                    return this.$t("CommentAdmin") // "Admin comment"
                 }
                 if (comment.userRole == 2/*'Supervisor'*/) {
-                    return "Supervisor comment"
+                    return this.$t("CommentSupervisor") // "Supervisor comment"
                 }
                 if (comment.userRole == 4/*'Interviewer'*/) {
-                    return "Interviewer comment"
+                    return this.$t("CommentInterviewer") // "Interviewer comment"
                 }
                 if (comment.userRole == 6/*'Headquarter'*/) {
-                    return "Headquarters comment"
+                    return this.$t("CommentHeadquarters") // "Headquarters comment"
                 }
-                return 'Comment';
+
+                return this.$t("Comment") //'Comment';
             },
             postComment(evnt) {
-                const com: string = this.comment
+                const com = this.comment
 
                 if (!com || !com.trim())
                     return

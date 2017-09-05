@@ -9,6 +9,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Device
     {
         public virtual int Id { get; set; }
         public virtual DateTime SyncDate { get; set; }
+        [Index("devicesyncinfo_interviewerid_androidsdkversion_appbuildversion", Order = 1)]
         public virtual Guid InterviewerId { get; set; }
         public virtual string DeviceId { get; set; }
         public virtual string DeviceModel { get; set; }
@@ -21,9 +22,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Device
         public string DeviceBuildNumber { get; set; }
         public string DeviceSerialNumber { get; set; }
         public virtual string AndroidVersion { get; set; }
+        [Index("devicesyncinfo_interviewerid_androidsdkversion_appbuildversion", Order = 2)]
         public virtual int AndroidSdkVersion { get; set; }
         public string AndroidSdkVersionName { get; set; }
         public virtual string AppVersion { get; set; }
+        [Index("devicesyncinfo_interviewerid_androidsdkversion_appbuildversion", Order = 3)]
         public virtual int AppBuildVersion { get; set; }
         public virtual DateTime LastAppUpdatedDate { get; set; }
         public virtual string NetworkType { get; set; }

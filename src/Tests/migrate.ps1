@@ -1,4 +1,4 @@
-$files = Get-ChildItem -Path WB.Tests.Unit.Designer -Filter *.cs -Recurse -ErrorAction SilentlyContinue -Force
+$files = Get-ChildItem -Path E:\surveysolutions\src\Tests\WB.Tests.Unit\SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests -Force
 $itRegex = 'It\s+([^\s]+)\s+=\s*\(\s*\)\s*=>'
 $establishRegex = 'Establish\s+([^\s]+)\s+=\s*\(\s*\)\s*=>\s+{'
 $becauseRegex = 'Because\s+of\s+=\s*\(\s*\)\s*=>'

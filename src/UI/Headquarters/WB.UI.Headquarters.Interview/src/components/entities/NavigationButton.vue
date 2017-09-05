@@ -1,9 +1,11 @@
 <template>
     <div class="action-container" v-if="$me">
-        <a class="btn btn-lg" :class="css" @click="navigate"><span>{{ $me.title}}</span></a>
+        <a class="btn btn-lg" :class="css" @click="navigate">
+            <span v-html="buttonTitle"></span>
+        </a>
     </div>
 </template>
-<script lang="ts">
+<script lang="js">
     import { entityDetails } from "components/mixins"
     import { GroupStatus, ButtonType } from "components/entities"
 
@@ -30,6 +32,17 @@
             },
             isParentButton() {
                 return this.$me.type == ButtonType.Parent
+            },
+            buttonTitle() {
+                if(this.$me == null || this.$me.title == null)
+                    return "";
+
+                var title = this.$me.title;
+
+                if(this.$me.rosterTitle != null)
+                    title +=" - <i>" +  this.$me.rosterTitle + "</i>";
+
+                return title;
             }
         },
         watch: {

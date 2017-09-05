@@ -1,0 +1,6 @@
+{
+    "interviewer": "int",
+    "interviewer_pass": "1",
+    "baseUri" : "http://localhost/headquarters",
+    "interviewerApi" : "api/interviewer/v2"
+}

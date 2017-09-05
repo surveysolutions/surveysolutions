@@ -20,16 +20,15 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
-using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Troubleshooting;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -46,7 +45,6 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -258,8 +256,8 @@ namespace WB.Tests.Abc.TestFactories
             => new ImportDataParsingService(
                 new ExportViewFactory(new FileSystemIOAccessor(), 
                                       new ExportQuestionService(), 
-                                      Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire && 
-                                                                          _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == new PlainQuestionnaire(questionnaire, 1, null)),
+                                      Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaire && 
+                                                                          _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaire, 1, null)),
                                       new RosterStructureService())
                                     .CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaire.PublicKey, 1)),
                 new RosterStructureService().GetRosterScopes(questionnaire), 
@@ -458,19 +456,6 @@ namespace WB.Tests.Abc.TestFactories
             );
         }
 
-        public TroubleshootingService Troubleshooting(
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader = null,
-            IQuestionnaireBrowseViewFactory questionnaireFactory = null,
-            IInterviewLogSummaryReader syncLogFactory = null,
-            IBrokenInterviewPackagesViewFactory brokenPackagesFactory = null)
-        {
-            return new TroubleshootingService(
-                interviewSummaryReader ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(), 
-                questionnaireFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(), 
-                syncLogFactory ?? Mock.Of<IInterviewLogSummaryReader>(), 
-                brokenPackagesFactory ?? Mock.Of<IBrokenInterviewPackagesViewFactory>());
-        }
-
         public TesterImageFileStorage TesterPlainInterviewFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectory)
         {
             return new TesterImageFileStorage(fileSystemAccessor, rootDirectory);
@@ -537,6 +522,19 @@ namespace WB.Tests.Abc.TestFactories
         public IInterviewTreeBuilder InterviewTreeBuilder()
         {
             return new InterviewTreeBuilder(Create.Service.SubstitutionTextFactory());
+        }
+
+        public InterviewActionsExporter InterviewActionsExporter(ICsvWriter csvWriter = null,
+            IFileSystemAccessor fileSystemAccessor = null,
+            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses = null,
+            QuestionnaireExportStructure questionnaireExportStructure = null)
+        {
+            return new InterviewActionsExporter(new InterviewDataExportSettings(),
+                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                csvWriter ?? Mock.Of<ICsvWriter>(),
+                Create.Service.TransactionManagerProvider(),
+                interviewStatuses ?? new TestInMemoryWriter<InterviewStatuses>(),
+                Mock.Of<ILogger>());
         }
     }
 }

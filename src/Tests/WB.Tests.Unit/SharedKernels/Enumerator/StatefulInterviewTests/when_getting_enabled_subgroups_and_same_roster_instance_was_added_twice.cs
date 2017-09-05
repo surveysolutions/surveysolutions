@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
         static StatefulInterview statefulInterview;
         static Identity[] enabledSubgroupsIdentities;
-        static readonly Identity selectedGroupIdentity = new Identity(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty);
+        static readonly Identity selectedGroupIdentity = Create.Identity(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty);
         static readonly Guid questionId = Guid.Parse("22222222222222222222222222222222");
         static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111112");
         static readonly Guid rosterId = Guid.Parse("11111111111111111111111111111116");

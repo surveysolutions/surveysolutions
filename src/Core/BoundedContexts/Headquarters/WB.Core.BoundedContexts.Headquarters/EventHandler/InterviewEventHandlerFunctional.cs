@@ -357,7 +357,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             var responsible = this.users.GetUser(new UserViewInputModel(userId));
 
-            var interview = new InterviewData()
+            var interview = new InterviewData
             {
                 InterviewId = eventSourceId,
                 UpdateDate = eventTimeStamp,

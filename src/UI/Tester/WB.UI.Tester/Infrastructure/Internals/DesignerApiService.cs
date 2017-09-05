@@ -120,6 +120,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
                 LastEntryDate = questionnaireListItem.LastEntryDate,
                 IsPublic = questionnaireListItem.IsPublic,
                 OwnerName = questionnaireListItem.Owner,
+                IsOwner = questionnaireListItem.IsOwner,
                 IsShared = questionnaireListItem.IsShared
             }).ToArray();
         }

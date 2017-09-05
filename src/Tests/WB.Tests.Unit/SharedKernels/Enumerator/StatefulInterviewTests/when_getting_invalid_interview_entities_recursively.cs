@@ -56,6 +56,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         private static readonly Guid disabledQuestionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static IEnumerable<Identity> invalidEntitiesInInterview;
         private static Guid questionnaireId = Guid.Parse("99999999999999999999999999999999");
-        static readonly Identity group = new Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[0]);
+        static readonly Identity group = Create.Identity(Guid.Parse("11111111111111111111111111111111"));
     }
 }

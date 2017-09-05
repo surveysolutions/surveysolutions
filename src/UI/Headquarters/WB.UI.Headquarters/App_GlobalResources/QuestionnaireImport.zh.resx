@@ -168,9 +168,6 @@
   <data name="RegularImportSubTitle" xml:space="preserve">
     <value>这将允许您创建包含识别数据的单个任务。</value>
   </data>
-  <data name="RegularImportTitle" xml:space="preserve">
-    <value/>
-  </data>
   <data name="Rosters" xml:space="preserve">
     <value>登记表</value>
   </data>

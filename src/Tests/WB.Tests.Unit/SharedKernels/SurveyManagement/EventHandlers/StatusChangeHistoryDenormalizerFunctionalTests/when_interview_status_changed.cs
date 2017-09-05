@@ -35,8 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
             statusEventsToPublish.Add(Create.PublishedEvent.InterviewRestarted(interviewId: interviewId, comment: "comment Restarted"));
             statusEventsToPublish.Add(Create.PublishedEvent.SupervisorAssigned(interviewId: interviewId));
             statusEventsToPublish.Add(Create.PublishedEvent.InterviewRestored(interviewId: interviewId));
-            statusEventsToPublish.Add(Create.PublishedEvent.InterviewDeleted(interviewId: interviewId));
-            statusEventsToPublish.Add(Create.PublishedEvent.InterviewHardDeleted(interviewId: interviewId));
+      
 
             denormalizer = CreateDenormalizer(interviewStatuses: interviewStatusesStorage);
         };
@@ -60,8 +59,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
                     InterviewExportedAction.Restarted,
                     InterviewExportedAction.SupervisorAssigned,
                     InterviewExportedAction.Restored,
-                    InterviewExportedAction.Deleted,
-                    InterviewExportedAction.Deleted
                 });
 
         It should_store_comments_and_preserve_the_order_for_statuses_Completed_Rejected_Approved_RejectedByHQ_Restarted =
