@@ -35,7 +35,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 var summaries = DefineOrderBy(_, input)
                     .Where(x => ids.Contains(x.SummaryId))
                     .Fetch(x => x.AnswersToFeaturedQuestions)
-                    .Fetch(x => x.InterviewCommentedStatuses)
                     .ToList();
                 return summaries;
             });
