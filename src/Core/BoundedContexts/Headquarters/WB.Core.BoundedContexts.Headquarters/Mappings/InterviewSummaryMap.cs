@@ -60,6 +60,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                 listMap.Key(key => key.Column("interviewId"));
                 listMap.Lazy(CollectionLazy.Lazy);
                 listMap.Cascade(Cascade.None);
+            }, rel =>
+            {
+                rel.Component(cmp =>
+                {
+                    cmp.Property(x => x.TimespanWithPreviousStatusLong, clm =>
+                    {
+                        clm.Column("TimeSpanWithPreviousStatus");
+                    });
+                });
             });
         }
     }
