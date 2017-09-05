@@ -97,6 +97,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Count Days of interview in Status.
+        /// </summary>
+        internal static string CountDaysOfInterviewInStatus {
+            get {
+                return ResourceManager.GetString("CountDaysOfInterviewInStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cumulative Interview Chart.
         /// </summary>
         internal static string CumulativeInterviewChart {
@@ -160,6 +169,204 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Average case assignment duration.
+        /// </summary>
+        internal static string Report_Average_case_assignment_duration {
+            get {
+                return ResourceManager.GetString("Report_Average_case_assignment_duration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average HQ processing time.
+        /// </summary>
+        internal static string Report_Average_HQ_processing_time {
+            get {
+                return ResourceManager.GetString("Report_Average_HQ_processing_time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average interview duration.
+        /// </summary>
+        internal static string Report_Average_Interview_Duration {
+            get {
+                return ResourceManager.GetString("Report_Average_Interview_Duration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average overall case processing time.
+        /// </summary>
+        internal static string Report_Average_overall_case_processing_time {
+            get {
+                return ResourceManager.GetString("Report_Average_overall_case_processing_time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average supervisor processing time.
+        /// </summary>
+        internal static string Report_Average_supervisor_processing_time {
+            get {
+                return ResourceManager.GetString("Report_Average_supervisor_processing_time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Days by Interview Status.
+        /// </summary>
+        internal static string Report_Days_by_Interview_Status {
+            get {
+                return ResourceManager.GetString("Report_Days_by_Interview_Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Devices and Interviewers.
+        /// </summary>
+        internal static string Report_Devices_and_Interviewers {
+            get {
+                return ResourceManager.GetString("Report_Devices_and_Interviewers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of completed interviews.
+        /// </summary>
+        internal static string Report_Number_of_Completed_Interviews {
+            get {
+                return ResourceManager.GetString("Report_Number_of_Completed_Interviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of interviews approved by HQ.
+        /// </summary>
+        internal static string Report_Number_of_interviews_approved_by_HQ {
+            get {
+                return ResourceManager.GetString("Report_Number_of_interviews_approved_by_HQ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of interview transactions by HQ.
+        /// </summary>
+        internal static string Report_Number_of_interview_transactions_by_HQ {
+            get {
+                return ResourceManager.GetString("Report_Number_of_interview_transactions_by_HQ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of interview transactions by Supervisor.
+        /// </summary>
+        internal static string Report_Number_of_interview_transactions_by_Supervisor {
+            get {
+                return ResourceManager.GetString("Report_Number_of_interview_transactions_by_Supervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quantity By Interviewers.
+        /// </summary>
+        internal static string Report_Quantity_By_Interviewers {
+            get {
+                return ResourceManager.GetString("Report_Quantity_By_Interviewers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quantity By Supervisors.
+        /// </summary>
+        internal static string Report_Quantity_By_Supervisors {
+            get {
+                return ResourceManager.GetString("Report_Quantity_By_Supervisors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Speed Between Statuses By Interviewers.
+        /// </summary>
+        internal static string Report_Speed_Between_Statuses_By_Interviewers {
+            get {
+                return ResourceManager.GetString("Report_Speed_Between_Statuses_By_Interviewers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Speed Between Statuses By Supervisors.
+        /// </summary>
+        internal static string Report_Speed_Between_Statuses_By_Supervisors {
+            get {
+                return ResourceManager.GetString("Report_Speed_Between_Statuses_By_Supervisors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Speed By Interviewers.
+        /// </summary>
+        internal static string Report_Speed_By_Interviewers {
+            get {
+                return ResourceManager.GetString("Report_Speed_By_Interviewers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Speed By Supervisors.
+        /// </summary>
+        internal static string Report_Speed_By_Supervisors {
+            get {
+                return ResourceManager.GetString("Report_Speed_By_Supervisors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status Duration.
+        /// </summary>
+        internal static string Report_Status_Duration {
+            get {
+                return ResourceManager.GetString("Report_Status_Duration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisors And Statuses.
+        /// </summary>
+        internal static string Report_Supervisors_And_Statuses {
+            get {
+                return ResourceManager.GetString("Report_Supervisors_And_Statuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surveys and Statuses.
+        /// </summary>
+        internal static string Report_Surveys_and_Statuses {
+            get {
+                return ResourceManager.GetString("Report_Surveys_and_Statuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Teams and Statuses.
+        /// </summary>
+        internal static string Report_Teams_and_Statuses {
+            get {
+                return ResourceManager.GetString("Report_Teams_and_Statuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team Members and Statuses.
+        /// </summary>
+        internal static string Report_Team_Members_and_Statuses {
+            get {
+                return ResourceManager.GetString("Report_Team_Members_and_Statuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Restarted.
         /// </summary>
         internal static string Restarted {
@@ -187,7 +394,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire Template.
+        ///   Looks up a localized string similar to Questionnaire Title.
         /// </summary>
         internal static string SurveyName {
             get {
@@ -214,7 +421,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Template Version.
+        ///   Looks up a localized string similar to Questionnaire Version.
         /// </summary>
         internal static string TemplateVersion {
             get {

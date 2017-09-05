@@ -1,7 +1,9 @@
 using System;
 using System.Data.Entity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using DbConfiguration = WB.Core.BoundedContexts.Headquarters.Repositories.DbConfiguration;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
@@ -14,6 +16,8 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
         private const string SchemaName = "users";
 
+        public virtual IDbSet<DeviceSyncInfo> DeviceSyncInfos { get; set; }
+
         // Here you define your own DbSet's
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -25,6 +29,9 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             modelBuilder.Entity<HqUserLogin>().ToTable("userlogins", SchemaName);
             modelBuilder.Entity<HqUserClaim>().ToTable("userclaims", SchemaName);
             modelBuilder.Entity<HqUserProfile>().ToTable("userprofiles", SchemaName);
+
+            modelBuilder.Entity<DeviceSyncInfo>().ToTable("devicesyncinfo", DbConfiguration.SchemaName);
+            modelBuilder.Entity<SyncStatistics>().ToTable("devicesyncstatistics", DbConfiguration.SchemaName);
         }
     }
 }

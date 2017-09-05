@@ -45,7 +45,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.IsInstructionsHidden = questionnaire.GetHideInstructions(questionIdentity.Id);
             this.Instruction = questionnaire.GetQuestionInstruction(questionIdentity.Id);
+            this.Identity = questionIdentity;
         }
+
+        public Identity Identity { get; private set; }
 
         public ICommand ShowInstructions => new MvxCommand(() => this.IsInstructionsHidden = false);
     }

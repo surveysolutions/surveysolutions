@@ -6,7 +6,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views
     {
         public int TotalCount { get; set; }
         public IEnumerable<HeadquarterSurveysAndStatusesReportLine> Items { get; set; }
-        public int TotalResponsibleCount { get; set; }
-        public int TotalInterviewCount { get; set; }
+        public HeadquarterSurveysAndStatusesReportLine TotalRow { get; set; }
     }
 }

@@ -2,8 +2,8 @@
     Supervisor.VM.PeriodicStatusReport.superclass.constructor.apply(this, arguments);
 
     var self = this;
-
-    var dateFormat = "MM/DD/YYYY";
+    var defaultFromDate = moment();
+    var dateFormat = "YYYY-MM-DD";
 
     self.Url = new Url(window.location.href);
 
@@ -11,7 +11,7 @@
 
     self.SelectedType = ko.observable(null);
 
-    self.FromDate = ko.observable(null);
+    self.FromDate = ko.observable(defaultFromDate);
 
     self.Period = ko.observable(null);
 
@@ -30,11 +30,13 @@
     };
 
     self.getTotalAverage = function () {
-        return (self.TotalRow() || {}).Average || 0;
+        var average = (self.TotalRow() || {}).Average || null;
+        return (ko.isObservable(average)) ? average() : null;
     };
 
     self.getTotalCount = function () {
-        return (self.TotalRow() || {}).Total || 0;
+        var total = (self.TotalRow() || {}).Total || null;
+        return (ko.isObservable(total)) ? total() : null;
     };
 
     self.FormatSpeedPeriod = function(data) {
@@ -56,7 +58,7 @@
     }
 
     self.load = function () {
-        var todayMinus7Days = moment().add(-6, 'days').format(dateFormat);
+        var todayMinus7Days = defaultFromDate.format(dateFormat);
 
         self.Url.query['questionnaireId'] = self.QueryString['questionnaireId'] || "";
         self.Url.query['questionnaireVersion'] = self.QueryString['questionnaireVersion'] || "";
@@ -101,7 +103,14 @@
             self.initReport();
         });
 
-        self.Period.subscribe(function () {
+        self.Period.subscribe(function (newVal) {
+            if (newVal === "d") {
+                self.ColumnCount(7);
+            } else if (newVal === "w") {
+                self.ColumnCount(4);
+            } else if (newVal === "m") {
+                self.ColumnCount(3);
+            }
             self.initReport();
         });
 
@@ -134,12 +143,20 @@
             period: self.Period(),
             columnCount: self.ColumnCount(),
             supervisorId: self.Url.query['supervisorId'],
-            reportType: self.SelectedType()
+            reportType: self.SelectedType(),
+            timezoneOffsetMinutes: new Date().getTimezoneOffset()
         };
     };
 
-    self.initReport = function () {
-        self.search();
-    };
+    self.notifier = new Notifier();
+
+    self.initReport = _.throttle(function () {
+        self.notifier.showLoadingIndicator();
+        var onSuccess = function() {};
+        var onDone = function() {
+            self.notifier.hideLoadingIndicator();
+        };
+        self.filter(onSuccess, onDone);
+    }, 500, { leading: false });
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.PeriodicStatusReport, Supervisor.VM.ListView);

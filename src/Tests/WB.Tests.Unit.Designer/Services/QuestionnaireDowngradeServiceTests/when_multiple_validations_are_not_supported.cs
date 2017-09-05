@@ -8,7 +8,6 @@ using WB.UI.Designer.Services;
 
 namespace WB.Tests.Unit.Designer.Services.QuestionnaireDowngradeServiceTests
 {
-    [Subject(typeof(QuestionnaireDowngradeService))]
     internal class when_multiple_validations_are_not_supported
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {

@@ -8,10 +8,8 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
@@ -96,21 +94,51 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewStatuses Update(InterviewStatuses state, IPublishedEvent<InterviewOnClientCreated> @event)
         {
-            return this.CreateInterviewStatuses(@event.EventSourceId, @event.Payload.QuestionnaireId,
+            var interviewStatuses = this.CreateInterviewStatuses(@event.EventSourceId, @event.Payload.QuestionnaireId,
                 @event.Payload.QuestionnaireVersion);
+
+            return this.AddCommentedStatus(
+                @event.EventIdentifier,
+                interviewStatuses,
+                @event.Payload.UserId,
+                null,
+                null,
+                InterviewExportedAction.Created,
+                @event.EventTimeStamp,
+                string.Empty);
         }
 
         public InterviewStatuses Update(InterviewStatuses state, IPublishedEvent<InterviewCreated> @event)
         {
-            return this.CreateInterviewStatuses(@event.EventSourceId, @event.Payload.QuestionnaireId,
+            var interviewStatuses = this.CreateInterviewStatuses(@event.EventSourceId, @event.Payload.QuestionnaireId,
                 @event.Payload.QuestionnaireVersion);
+
+            return this.AddCommentedStatus(
+                @event.EventIdentifier,
+                interviewStatuses,
+                @event.Payload.UserId,
+                null,
+                null,
+                InterviewExportedAction.Created,
+                @event.EventTimeStamp,
+                string.Empty);
         }
 
         public InterviewStatuses Update(InterviewStatuses state,
             IPublishedEvent<InterviewFromPreloadedDataCreated> @event)
         {
-            return this.CreateInterviewStatuses(@event.EventSourceId, @event.Payload.QuestionnaireId,
-               @event.Payload.QuestionnaireVersion);
+            var interviewStatuses = this.CreateInterviewStatuses(@event.EventSourceId, @event.Payload.QuestionnaireId,
+                @event.Payload.QuestionnaireVersion);
+
+            return this.AddCommentedStatus(
+                @event.EventIdentifier,
+                interviewStatuses,
+                @event.Payload.UserId,
+                null,
+                null,
+                InterviewExportedAction.Created,
+                @event.EventTimeStamp,
+                string.Empty);
         }
 
         public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewRestarted> @event)
@@ -247,31 +275,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewDeleted> @event)
         {
-            if (@event.Origin == Constants.HeadquartersSynchronizationOrigin)
-                return interviewStatuses;
-
-            return this.AddCommentedStatus(
-                @event.EventIdentifier,
-                interviewStatuses,
-                @event.Payload.UserId,
-                null,
-                null,
-                InterviewExportedAction.Deleted,
-                @event.EventTimeStamp,
-                null);
+            return null;
         }
 
         public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewHardDeleted> @event)
         {
-            return this.AddCommentedStatus(
-                @event.EventIdentifier,
-                interviewStatuses,
-                @event.Payload.UserId,
-                null,
-                null,
-                InterviewExportedAction.Deleted,
-                @event.EventTimeStamp,
-                null);
+            return null;
         }
 
         public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewRestored> @event)

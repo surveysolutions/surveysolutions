@@ -3,26 +3,25 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
     internal class when_answering_linked_multiple_options_question_which_links_to_text_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1 : InterviewTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFF1111111111");
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
 
-            emptyRosterVector = new decimal[] { };
-            var rosterInstanceId = 0m;
-            rosterVector = emptyRosterVector.Concat(new[] { rosterInstanceId }).ToArray();
+            var rosterInstanceId = 0;
+            rosterVector = Create.RosterVector(rosterInstanceId);
 
             questionId = Guid.Parse("11111111111111111111111111111111");
             var linkedToQuestionId = Guid.Parse("33333333333333333333333333333333");
@@ -31,8 +30,8 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             rosterBId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             var linkedOption1Vector = new decimal[] { 0 };
-            linkedOption2Vector = new decimal[] { 1 };
-            linkedOption3Vector = new decimal[] { 2 };
+            linkedOption2Vector = Create.RosterVector(1);
+            linkedOption3Vector = Create.RosterVector(2);
             var linkedOption1Text = "linked option 1";
             linkedOption2Text = "linked option 2";
             linkedOption3Text = "linked option 3";
@@ -65,7 +64,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
             interview.Apply(new LinkedOptionsChanged(new[]
             {
-                new ChangedLinkedOptions(new Identity(questionId, rosterVector), new RosterVector[]
+                new ChangedLinkedOptions(Create.Identity(questionId, rosterVector), new RosterVector[]
                 {
                     linkedOption1Vector, linkedOption2Vector, linkedOption3Vector
                 })
@@ -95,7 +94,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
         It should_set_empty_outer_roster_vector_to_all_RosterRowTitleChanged_events = () =>
             eventContext.GetEvents<RosterInstancesTitleChanged>()
-                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.RosterInstance.OuterRosterVector.SequenceEqual(emptyRosterVector)));
+                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.RosterInstance.OuterRosterVector.Length == 0));
 
         It should_set_last_element_of_roster_vector_to_roster_instance_id_in_all_RosterRowTitleChanged_events = () =>
             eventContext.GetEvents<RosterInstancesTitleChanged>()
@@ -109,13 +108,12 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         private static Interview interview;
         private static Guid userId;
         private static Guid questionId;
-        private static decimal[] rosterVector;
-        private static decimal[] emptyRosterVector;
+        private static int[] rosterVector;
         private static Guid rosterAId;
         private static Guid rosterBId;
-        private static decimal[] linkedOption2Vector;
+        private static int[] linkedOption2Vector;
         private static string linkedOption2Text;
-        private static decimal[] linkedOption3Vector;
+        private static int[] linkedOption3Vector;
         private static string linkedOption3Text;
     }
 }

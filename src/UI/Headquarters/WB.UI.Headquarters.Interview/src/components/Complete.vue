@@ -2,26 +2,26 @@
     <div class="unit-section first-last-chapter" v-if="hasCompleteInfo" v-bind:class="{'section-with-error' : hasInvalidQuestions, 'complete-section' : isAllAnswered  }" >
         <div class="unit-title">
             <wb-humburger></wb-humburger>
-            <h3>Complete interview</h3>
+            <h3>{{ $t('Complete') }}</h3>
         </div>
         <div class="wrapper-info">
             <div class="container-info">
-                <h2>You are about to complete this interview</h2>
+                <h2>{{ $t('CompleteAbout') }}</h2>
             </div>
         </div>
         <div class="wrapper-info">
             <div class="container-info">
-                <h4 class="gray-uppercase">Questions status:</h4>
+                <h4 class="gray-uppercase">{{ $t('CompleteQuestionsStatus') }}</h4>
                 <div class="question-status">
                     <ul class="list-inline clearfix">
                         <li class="answered" v-bind:class="{'has-value' : hasAnsweredQuestions }">{{ answeredQuestionsCountString }}
-                            <span>Answered</span>
+                            <span>{{$t('CompleteQuestionsAnswered')}}</span>
                         </li>
                         <li class="unanswered" v-bind:class="{'has-value' : hasUnansweredQuestions }">{{ unansweredQuestionsCountString }}
-                            <span>Unanswered</span>
+                            <span>{{$t('CompleteQuestionsUnanswered')}}</span>
                         </li>
                         <li class="errors" v-bind:class="{'has-value' : hasInvalidQuestions }">{{ invalidQuestionsCountString }}
-                            <span>Error(s)</span>
+                            <span>{{$t('Error', { count: completeInfo.errorsCount })}}</span>
                         </li>
                     </ul>
                 </div>
@@ -29,7 +29,9 @@
         </div>
         <div class="wrapper-info" v-if="completeInfo.entitiesWithError.length > 0">
             <div class="container-info">
-                <h4 class="gray-uppercase">{{doesShowErrorsCommentWithCount ? 'First ' + completeInfo.entitiesWithError.length + ' entities with errors:' : 'Questions with errors:'}}</h4>
+                <h4 class="gray-uppercase">{{ doesShowErrorsCommentWithCount
+                    ? $t('CompleteFirstErrors', { count: completeInfo.entitiesWithError.length })
+                    : $t('CompleteErrors') }}</h4>
                 <ul class="list-unstyled marked-questions">
                     <li v-for="entity in completeInfo.entitiesWithError">
                         <a href="javascript:void(0);" @click="navigateTo(entity)">{{ entity.title }}</a>
@@ -39,9 +41,9 @@
         </div>
         <div class="wrapper-info">
             <div class="container-info">
-                <label class="gray-uppercase" for="comment-for-supervisor">Note for supervisor</label>
+                <label class="gray-uppercase" for="comment-for-supervisor">{{ $t('CompleteNoteToSupervisor')}}</label>
                 <div class="field">
-                    <textarea class="field-to-fill" id="comment-for-supervisor" placeholder="Enter text" v-model="comment"></textarea>
+                    <textarea class="field-to-fill" id="comment-for-supervisor" :placeholder="$t('TextEnter')" v-model="comment"></textarea>
                     <button type="submit" class="btn btn-link btn-clear">
                         <span></span>
                     </button>
@@ -50,13 +52,16 @@
         </div>
         <div class="wrapper-info">
             <div class="container-info">
-                <a href="javascript:void(0);" class="btn btn-lg" v-bind:class="{ 'btn-success': isAllAnswered, 'btn-primary' : hasUnansweredQuestions, 'btn-danger' : hasInvalidQuestions }" @click="completeInterview">Complete</a>
+                <a href="javascript:void(0);" class="btn btn-lg" v-bind:class="{
+                    'btn-success': isAllAnswered,
+                    'btn-primary' : hasUnansweredQuestions,
+                    'btn-danger' : hasInvalidQuestions }" @click="completeInterview">{{ $t("Complete")}}</a>
             </div>
         </div>
     </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
     export default {
         name: 'complete-view',
         beforeMount() {
@@ -81,19 +86,19 @@
                 return this.completeInfo.unansweredCount == 0 && this.completeInfo.errorsCount == 0
             },
             answeredQuestionsCountString() {
-                return this.hasAnsweredQuestions ? this.completeInfo.answeredCount : "No";
+                return this.hasAnsweredQuestions ? this.completeInfo.answeredCount : this.$t("No");
             },
             hasUnansweredQuestions() {
                 return this.completeInfo.unansweredCount > 0
             },
             unansweredQuestionsCountString() {
-                return this.hasUnansweredQuestions ? this.completeInfo.unansweredCount : "No";
+                return this.hasUnansweredQuestions ? this.completeInfo.unansweredCount : this.$t("No");
             },
             hasInvalidQuestions() {
                 return this.completeInfo.errorsCount > 0
             },
             invalidQuestionsCountString() {
-                return this.hasInvalidQuestions ? this.completeInfo.errorsCount : "No";
+                return this.hasInvalidQuestions ? this.completeInfo.errorsCount : this.$t("No");
             },
             doesShowErrorsCommentWithCount() {
                 return this.completeInfo.entitiesWithError.length < this.completeInfo.errorsCount

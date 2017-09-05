@@ -132,11 +132,11 @@
   <data name="AssignmentsSelected" xml:space="preserve">
     <value>{0} Assignment(s) selected</value>
   </data>
-  <data name="QuantityExplanation" xml:space="preserve">
-    <value>You can set number of interviews that should be created from this assignment</value>
+  <data name="SizeExplanation" xml:space="preserve">
+    <value>Specify maximum number of interviews to be generated for that assignment. Permitted values: -1 is for Unlimited assignment, 0 is for Empty assignment, numbers for assignment size</value>
   </data>
-  <data name="ChangeQuantityModalTitle" xml:space="preserve">
-    <value>Edit quantity for assignment {0}</value>
+  <data name="ChangeSizeModalTitle" xml:space="preserve">
+    <value>Edit size for assignment {0}</value>
     <comment>{0} - id of the assignment</comment>
   </data>
   <data name="CreatedAt" xml:space="preserve">
@@ -145,14 +145,14 @@
   <data name="IdentifyingQuestions" xml:space="preserve">
     <value>Identifying Questions</value>
   </data>
-  <data name="InterviewsCount" xml:space="preserve">
-    <value>Interviews quantity</value>
+  <data name="Count" xml:space="preserve">
+    <value>Count</value>
   </data>
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
     <value>{0} Assignment(s) are going to be changed</value>
   </data>
-  <data name="Quantity" xml:space="preserve">
-    <value>Quantity</value>
+  <data name="Size" xml:space="preserve">
+    <value>Size</value>
   </data>
   <data name="SelectResponsible" xml:space="preserve">
     <value>Select responsible</value>
@@ -166,6 +166,9 @@
   <data name="Unlimited" xml:space="preserve">
     <value>Unlimited</value>
   </data>
+  <data name="InterviewsNeeded" xml:space="preserve">
+    <value>Interviews needed</value>
+  </data>
   <data name="CreateInterview" xml:space="preserve">
     <value>Start new interview</value>
   </data>
@@ -175,16 +178,13 @@
   <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
     <value>Fill all or some of the identifying fields</value>
   </data>
-  <data name="CreateAssignment_QuantityInstruction" xml:space="preserve">
-    <value>Specify maximum number of interviews to be generated for that assignment (Quantity). Permitted values: -1 is for Unlimited assignment, 0 is for Empty assignment, numbers for assignment size.</value>
-  </data>
   <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
     <value>Select responsible (Supervisor or Interviewer) for this assignment</value>
-  </data>
-  <data name="InterviewsNeeded" xml:space="preserve">
-    <value>Interviews needed</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionnaire</value>
   </data>
+  <data name="AllAssignments" xml:space="preserve">
+    <value>All Assignments</value>
+  </data>  
 </root>

@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             IPreloadedDataRepository preloadedDataRepository = null,
             IPreloadedDataVerifier preloadedDataVerifier = null)
         {
-            var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, 1);
+            var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1);
             var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(_ 
                 => _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), It.IsAny<long>()) == questionnaireDocument
                 && _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), null) == plainQuestionnaire);
@@ -54,7 +54,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                         _ => _.GetPlainTransactionManager() == Mock.Of<IPlainTransactionManager>()),
                 transactionManagerProvider: Create.Service.TransactionManagerProvider(),
                 assignmentPlainStorageAccessor: Mock.Of<IPlainStorageAccessor<Assignment>>(),
-                questionnaireBrowseViewFactory: questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
                 userViewFactory : Mock.Of<IUserViewFactory>(),
                 interviewTreeBuilder: interviewTreeBuilder ?? Mock.Of<IInterviewTreeBuilder>(),
                 preloadedDataRepository: preloadedDataRepository ?? Mock.Of<IPreloadedDataRepository>(),

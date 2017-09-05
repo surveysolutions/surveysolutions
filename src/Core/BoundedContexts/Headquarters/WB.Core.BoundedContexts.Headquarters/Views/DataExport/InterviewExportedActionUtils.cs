@@ -32,6 +32,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
                     return InterviewStatus.Restored;
                 case InterviewExportedAction.UnapprovedByHeadquarter:
                     return InterviewStatus.ApprovedBySupervisor;
+                case InterviewExportedAction.Created:
+                    return InterviewStatus.Created;
             }
             return null;
         }

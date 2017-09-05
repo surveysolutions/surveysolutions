@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 
@@ -29,10 +30,17 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers
             return this.hasher.HashPassword(securityStamp); 
         }
 
+        private static readonly ConcurrentDictionary<(string stamp, string token), bool> HashCache 
+            = new ConcurrentDictionary<(string, string), bool>();
+
         public async Task<bool> ValidateTokenAsync(TKey userId, string token)
         {
             var securityStamp = await this.manager.GetSecurityStampAsync(userId);
-            return this.hasher.VerifyHashedPassword(token, securityStamp) == PasswordVerificationResult.Success;
+
+            if(HashCache.Count > 100_000) HashCache.Clear();
+
+            return HashCache.GetOrAdd((securityStamp, token), 
+                t => this.hasher.VerifyHashedPassword(t.token, t.stamp) == PasswordVerificationResult.Success);
         }
     }
 }

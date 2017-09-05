@@ -1,16 +1,25 @@
-﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Models
+﻿@using WB.Core.BoundedContexts.Headquarters.Resources
+@using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @using WB.UI.Headquarters.Resources
 @{
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
 }
 <ul class="nav navbar-nav">
-    <li class="dropdown @(page == MenuItem.MapReport || page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses || page == MenuItem.InterviewsChart ? "active" : "")">
+    <li class="dropdown @(page == MenuItem.MapReport || 
+                          page == MenuItem.Surveys || 
+                          page == MenuItem.Summary || 
+                          page == MenuItem.Statuses || 
+                          page == MenuItem.DevicesInterviewers ||
+                          page == MenuItem.CountDaysOfInterviewInStatus ||
+                          page == MenuItem.InterviewsChart ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.Reports">
             @MainMenu.Reports <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
             @Html.MainMenuItem("SurveysAndStatuses", "Reports", @MainMenu.SurveysAndStatuses, MenuItem.Surveys)
             @Html.MainMenuItem("SupervisorsAndStatuses", "Reports", @MainMenu.TeamsAndStatuses, MenuItem.Summary)
+            @Html.MainMenuItem("CountDaysOfInterviewInStatus", "Reports", @MainMenu.CountDaysOfInterviewInStatus, MenuItem.CountDaysOfInterviewInStatus)
+            @Html.MainMenuItem("InterviewersAndDevices", "Reports", @MainMenu.DevicesInterviewers, MenuItem.DevicesInterviewers)
             @Html.MainMenuItem("MapReport", "Reports", @MainMenu.MapReport, MenuItem.MapReport)
             @Html.MainMenuItem("InterviewsChart", "Reports", @MainMenu.CumulativeChart, MenuItem.InterviewsChart)
             @Html.MainMenuItem("QuantityBySupervisors", "Reports", @MainMenu.Quantity, MenuItem.NumberOfCompletedInterviews)
@@ -45,8 +54,7 @@
 </ul>
 <ul class="nav navbar-nav navbar-right">
     @Html.Partial("QueueIndicator")
-    @Html.MainMenuItem("Index", "Troubleshooting", @MainMenu.Troubleshooting, MenuItem.Troubleshooting)
-    <li><a href="http://docs.mysurvey.solutions/headquarters.pdf" target="_blank" title="Help">@MainMenu.Help</a></li>
+    <li><a href="http://docs.mysurvey.solutions/admin" target="_blank" title="Help">@MainMenu.Help</a></li>
     <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="@User.Identity.Name">@User.Identity.Name<span class="caret"></span></a>
         <ul class="dropdown-menu">

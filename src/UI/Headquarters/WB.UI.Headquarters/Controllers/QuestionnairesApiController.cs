@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
@@ -111,6 +112,24 @@ namespace WB.UI.Headquarters.Controllers
             {
                 PageSize = pageSize,
                 SearchFor = query,
+                IsAdminMode = true,
+                OnlyCensus = censusOnly
+            });
+
+            return new ComboboxModel(questionnaires.Items.Select(x => new ComboboxOptionModel(x.Id, $"(ver. {x.Version}) {x.Title}")).ToArray(), questionnaires.TotalCount);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        [CamelCase]
+        public ComboboxModel QuestionnairesComboboxById(string questionnaireIdentity, bool censusOnly = false)
+        {
+            var identity = QuestionnaireIdentity.Parse(questionnaireIdentity);
+
+            var questionnaires = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel
+            {
+                QuestionnaireId = identity.QuestionnaireId,
+                Version = identity.Version,
                 IsAdminMode = true,
                 OnlyCensus = censusOnly
             });

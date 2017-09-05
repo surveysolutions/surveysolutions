@@ -121,13 +121,13 @@
     <value>Average</value>
   </data>
   <data name="BackToSupervisors" xml:space="preserve">
-    <value> Back to supervisors</value>
+    <value>Back to supervisors</value>
   </data>
   <data name="Day" xml:space="preserve">
-    <value>Day</value>
+    <value>Days</value>
   </data>
   <data name="Month" xml:space="preserve">
-    <value>Month</value>
+    <value>Months</value>
   </data>
   <data name="NumberOfCompletedInterviews" xml:space="preserve">
     <value>Number of completed interviews</value>
@@ -141,8 +141,17 @@
   <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
     <value>Number of interview transactions by Supervisor</value>
   </data>
+  <data name="LastDateToShowLabel" xml:space="preserve">
+    <value>Starting from</value>
+  </data>
+  <data name="OverTheLast" xml:space="preserve">
+    <value>Over the last</value>
+  </data>
   <data name="Period" xml:space="preserve">
     <value>Period</value>
+  </data>
+  <data name="PeriodUnit" xml:space="preserve">
+    <value>Period unit</value>
   </data>
   <data name="PeriodCount" xml:space="preserve">
     <value>Period count</value>
@@ -165,11 +174,14 @@
   <data name="Type" xml:space="preserve">
     <value>Type</value>
   </data>
+  <data name="InterviewActions" xml:space="preserve">
+    <value>Interview actions</value>
+  </data>
   <data name="Version" xml:space="preserve">
     <value>ver.</value>
   </data>
   <data name="Week" xml:space="preserve">
-    <value>Week</value>
+    <value>Weeks</value>
   </data>
   <data name="AverageCaseAssignmentDuration" xml:space="preserve">
     <value>Average case assignment duration</value>
@@ -187,31 +199,31 @@
     <value>Average supervisor processing time</value>
   </data>
   <data name="AverageCaseAssignmentDurationDescription" xml:space="preserve">
-    <value>A time difference between the moment an interview is assigned to an interviewer and the moment when the complete button is pressed on a tablet.</value>
+    <value>Average time from when an interview is assigned to an interviewer to when the complete button is pressed on a tablet.</value>
   </data>
   <data name="AverageHQProcessingTimeDescription" xml:space="preserve">
-    <value>Time difference between the moment when a supervisor approves a questionnaire and when that questionnaire is either approved or rejected by HQ.</value>
+    <value>Average time from when a supervisor approves an interview to when that interview is either approved or rejected by HQ.</value>
   </data>
   <data name="AverageInterviewDurationDescription" xml:space="preserve">
-    <value>Time difference between the moment when the interviewer records the first answer and when the the interviewer presses the Complete button.</value>
+    <value>Average time from when an interviewer records the first answer on a tablet to when that interviewer presses the Complete button.</value>
   </data>
   <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
-    <value>Time difference between when the interview is first assignmed and when HQ approves the interview.</value>
+    <value>Average time from when the interview is first assigned to when HQ approves that interview.</value>
   </data>
   <data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
-    <value>Time difference between when the interviewer presses the the Complete button and when the supervisor either accepts or rejects that questionnaire.</value>
+    <value>Average time from when an interviewer presses the Complete button to when the supervisor either accepts or rejects that interview. </value>
   </data>
   <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
     <value>Number of interview completions by a team. Rejected and then completed interviews are counted as separate completion events.</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQDescription" xml:space="preserve">
-    <value>Number of interviews collected by a {0} that were approved by HQ.</value>
+    <value>Number of interviews collected by {0} approved by HQ.</value>
   </data>
   <data name="NumberOfInterviewTransactionsByHQDescription" xml:space="preserve">
-    <value>Number of approvals and rejections performed by a HQ on questionnaires collected by a {0}.</value>
+    <value>Number of approvals and rejections by HQ on interviews collected by {0}.</value>
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisorDescription" xml:space="preserve">
-    <value>Number of approvals and rejections performed by a supervisor on questionnaires collected by a {0}.</value>
+    <value>Number of approvals and rejections by a supervisor on interviews collected by {0}.</value>
   </data>
   <data name="By" xml:space="preserve">
     <value>By</value>

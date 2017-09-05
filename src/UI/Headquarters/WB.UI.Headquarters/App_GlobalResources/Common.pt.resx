@@ -141,9 +141,6 @@
   <data name="CreatedOnClient" xml:space="preserve">
     <value>Criado no cliente</value>
   </data>
-  <data name="CreateNewAssignment" xml:space="preserve">
-    <value/>
-  </data>
   <data name="Delete" xml:space="preserve">
     <value>Apagar</value>
   </data>
@@ -227,5 +224,8 @@
   </data>
   <data name="НasErrors" xml:space="preserve">
     <value>Erros de Нas</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Questionário</value>
   </data>
 </root>

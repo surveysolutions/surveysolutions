@@ -64,9 +64,9 @@ namespace WB.UI.Headquarters.Controllers
                 reqest.GetSortOrder(), 
                 reqest.Search.Value, 
                 reqest.Archived, 
-                reqest.InterviewerOptionFilter, 
                 interviewerApkVersion,
-                supervisorId);
+                supervisorId,
+                reqest.Facet);
             
             return new DataTableResponse<InterviewerListItem>
             {

@@ -1,76 +1,56 @@
 ﻿using System;
-using System.Linq;
-using AppDomainToolkit;
-using Machine.Specifications;
 using Main.Core.Documents;
-using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using NUnit.Framework;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
-    [Ignore("unignore when KP-6084 will be fixed")]
+    [TestOf(typeof(Interview))]
     internal class when_answer_on_question_disables_roster_size_question : InterviewTestsContext
     {
-        Establish context = () =>
+        [SetUp]
+        public void Context()
         {
-            appDomainContext = AppDomainContext.Create();
-            var questionnaireId = Guid.Parse("10000000000000000000000000000000");
-            userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
-            rosterId = Guid.Parse("21111111111111111111111111111111");
-            questionWhichIncreasesRosterSizeId = Guid.Parse("22222222222222222222222222222222");
-            questionWhichDisablesRosterSizeQuestion = Guid.NewGuid();
-            QuestionnaireDocument questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
-                children: new IComposite[]
-                {
-                    Abc.Create.Entity.NumericIntegerQuestion(id: questionWhichDisablesRosterSizeQuestion, variable: "num_disable"),
-                    Abc.Create.Entity.NumericIntegerQuestion(id: questionWhichIncreasesRosterSizeId, variable: "num_trigger", enablementCondition:"!num_disable.HasValue"),
-                    Abc.Create.Entity.Roster(rosterId: rosterId, variable: "ros",
-                        rosterSizeQuestionId: questionWhichIncreasesRosterSizeId,
-                        rosterSizeSourceType: RosterSizeSourceType.Question)
-                });
-            interview = SetupInterviewWithExpressionStorage(questionnaireDocument: questionnaire);
-           
-        };
+            QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.NumericIntegerQuestion(id: questionWhichDisablesRosterSizeQuestion, variable: "num_disable"),
+                Create.Entity.NumericIntegerQuestion(id: rosterSizeId, variable: "num_trigger", enablementCondition:"num_disable == 2"),
+                Create.Entity.NumericRoster(rosterId: rosterId, variable: "ros", rosterSizeQuestionId: rosterSizeId)
+            );
 
-        Cleanup stuff = () =>
+            interview = SetupStatefullInterview(questionnaire);
+
+            interview.AnswerNumericIntegerQuestion(userId, questionWhichDisablesRosterSizeQuestion, RosterVector.Empty, DateTime.Now, 2);
+            interview.AnswerNumericIntegerQuestion(userId, rosterSizeId, RosterVector.Empty, DateTime.Now, 2);
+
+            interview.AnswerNumericIntegerQuestion(userId, questionWhichDisablesRosterSizeQuestion, RosterVector.Empty, DateTime.Now, 1);
+        }
+
+        [TearDown]
+        public void Cleanup ()
         {
-            eventContext.Dispose();
-            eventContext = null;
-        };
+            interview = null;
+        }
 
-        Because of = () =>
+        [Test]
+        public void should_disable_first_roster_row()
         {
-            results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
-            {
-                interview.AnswerNumericIntegerQuestion(userId, questionWhichIncreasesRosterSizeId, new decimal[0],
-                    DateTime.Now, 2);
+            var roster = interview.GetRoster(Create.Identity(rosterId, 0));
+            Assert.That(roster.IsDisabled, Is.True);
+        }
 
-                eventContext = new EventContext();
-                interview.AnswerNumericIntegerQuestion(userId, questionWhichDisablesRosterSizeQuestion, new decimal[0],
-                    DateTime.Now, 2);
-                return true;
-            });
-        };
+        [Test]
+        public void should_disable_second_roster_row()
+        {
+            var roster = interview.GetRoster(Create.Identity(rosterId, 1));
+            Assert.That(roster.IsDisabled, Is.True);
+        }
 
-        It should_raise_RosterInstancesRemoved_event_for_first_roster_row = () =>
-            eventContext.ShouldContainEvent<RosterInstancesRemoved>(@event
-                => @event.Instances.Any(instance => instance.GroupId == rosterId && instance.RosterInstanceId == 0));
-
-        It should_raise_RosterInstancesRemoved_event_for_second_roster_row = () =>
-          eventContext.ShouldContainEvent<RosterInstancesRemoved>(@event
-              => @event.Instances.Any(instance => instance.GroupId == rosterId && instance.RosterInstanceId == 1));
-
-        private static EventContext eventContext;
-        private static Interview interview;
-        private static Guid userId;
-        private static Guid questionWhichIncreasesRosterSizeId;
-        private static Guid questionWhichDisablesRosterSizeQuestion;
-        private static Guid rosterId;
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;  
-        private static bool results;
+        private static StatefulInterview interview;
+        private static readonly Guid userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+        private static readonly Guid rosterSizeId = Guid.Parse("33333333333333333333333333333333");
+        private static readonly Guid questionWhichDisablesRosterSizeQuestion = Guid.Parse("22222222222222222222222222222222");
+        private static readonly Guid rosterId = Guid.Parse("11111111111111111111111111111111");
     }
 }

@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
     {
         Establish context = () =>
         {
-            input = CreateSpeedByInterviewersReportInputModel(supervisorId: supervisorId, period: "w");
+            input = CreateSpeedByInterviewersReportInputModel(supervisorId: supervisorId, period: "w", columnCount:2);
 
             var user = Create.Entity.UserDocument(supervisorId: supervisorId);
 
@@ -26,19 +26,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
                     questionnaireVersion: input.QuestionnaireVersion,
                     statuses: new[]
                     {
-                        Create.Entity.InterviewCommentedStatus(interviewerId: user.PublicKey,
-                            supervisorId:supervisorId,
-                            status: InterviewExportedAction.Completed,
-                            timestamp: input.From.Date.AddHours(1), 
-                            timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
-                        Create.Entity.InterviewCommentedStatus(interviewerId: user.PublicKey,
-                            status: InterviewExportedAction.Completed,
-                            supervisorId:supervisorId,
-                            timestamp: input.From.Date.AddDays(1)),
-                        Create.Entity.InterviewCommentedStatus(interviewerId: user.PublicKey,
-                            supervisorId:supervisorId,
-                            status: InterviewExportedAction.Completed,
-                            timestamp: input.From.Date.AddDays(-15))
+                        Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
+                            interviewerId: user.PublicKey, 
+                            supervisorId: supervisorId, timestamp: input.From.Date.AddDays(-9), timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
+                        Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
+                            interviewerId: user.PublicKey,
+                            supervisorId: supervisorId, timestamp: input.From.Date.AddDays(-3)),
+                        Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
+                            interviewerId: user.PublicKey, supervisorId: supervisorId, timestamp: input.From.Date.AddDays(5))
                     }), "2");
 
             quantityReportFactory = CreateSpeedReportFactory(interviewStatuses: interviewStatuses);

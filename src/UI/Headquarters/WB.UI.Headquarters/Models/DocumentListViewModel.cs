@@ -19,5 +19,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 
         public InterviewStatus? Status { get; set; }
         public string SearchBy { get; set; }
+
+        public DateTime? UnactiveDateStart { get; set; }
+        public DateTime? UnactiveDateEnd { get; set; }
     }
 }

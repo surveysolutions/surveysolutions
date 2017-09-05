@@ -162,6 +162,9 @@
   <data name="Speed" xml:space="preserve">
     <value>Speed</value>
   </data>
+  <data name="CountDaysOfInterviewInStatus" xml:space="preserve">
+    <value>Status Duration</value>
+  </data>
   <data name="Supervisors" xml:space="preserve">
     <value>Supervisors</value>
   </data>
@@ -191,6 +194,9 @@
   </data>
   <data name="TeamsAndStatuses" xml:space="preserve">
     <value>Teams and Statuses</value>
+  </data>
+  <data name="DevicesInterviewers" xml:space="preserve">
+    <value>Devices/Interviewers</value>
   </data>
   <data name="Troubleshooting" xml:space="preserve">
     <value>Troubleshooting</value>

@@ -20,10 +20,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
                 Create.Entity.InterviewStatuses(interviewid: interviewId, statuses:
                     new[]
                     {
-                        Create.Entity.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.InterviewerAssigned),
-                        Create.Entity.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.FirstAnswerSet),
-                        Create.Entity.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.Completed),
-                        Create.Entity.InterviewCommentedStatus(interviewId, status: InterviewExportedAction.Restarted)
+                        Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.InterviewerAssigned, statusId: interviewId),
+                        Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.FirstAnswerSet, statusId: interviewId),
+                        Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed, statusId: interviewId),
+                        Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Restarted, statusId: interviewId)
                     });
             interviewStatusesStorage.Store(interviewStatuses, interviewId.FormatGuid());
 

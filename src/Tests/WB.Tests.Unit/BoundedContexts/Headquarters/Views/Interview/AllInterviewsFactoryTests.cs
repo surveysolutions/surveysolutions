@@ -52,6 +52,21 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.Interview
             }
         }
 
+        [Test]
+        public void when_interview_received_by_interviewer_should_not_allow_to_delete_it()
+        {
+            var interviewSummaryStorage = Create.Storage.InMemoryReadeSideStorage<InterviewSummary>();
+            interviewSummaryStorage.Store(Create.Entity.InterviewSummary(status: InterviewStatus.InterviewerAssigned, receivedByInterviewer: true), Id.g1);
+
+            AllInterviewsFactory interviewsFactory = Create.Service.AllInterviewsFactory(interviewSummaryStorage);
+
+            var interviews = interviewsFactory.Load(new AllInterviewsInputModel());
+
+            var item = interviews.Items.First();
+
+            Assert.That(item, Has.Property(nameof(item.CanDelete)).EqualTo(false));
+        }
+
         [TestCase]
         public void When_loading_interviews_without_prefilled_questions()
         {

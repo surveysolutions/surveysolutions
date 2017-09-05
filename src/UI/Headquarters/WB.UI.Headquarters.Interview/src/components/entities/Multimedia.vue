@@ -9,12 +9,12 @@
                 <input name="file" ref="uploader" v-show="false" accept="image/*" type="file"
                     @change="onFileChange" class="btn btn-default btn-lg btn-action-questionnaire" />
                 <button type="button" class="btn btn-default btn-lg btn-action-questionnaire"
-                    v-if="!$me.isAnswered && !$me.fetchState" @click="$refs.uploader.click()">Upload a photo</button>
+                    v-if="!$me.isAnswered && !$me.fetchState" @click="$refs.uploader.click()">{{ $t("PhotoUpload") }}</button>
             </div>
         </div>
     </wb-question>
 </template>
-<script lang="ts">
+<script lang="js">
     import { entityDetails } from "components/mixins"
     import * as $ from 'jquery'
 
@@ -60,7 +60,8 @@
             },
             createImage(file) {
                 if (file.size > imageFileSizeLimit) {
-                    this.markAnswerAsNotSavedWithMessage("Image is too big to upload. Please, choose an image less than 30 Mb")
+                    // Image is too big to upload. Please, choose an image less than 30 Mb
+                    this.markAnswerAsNotSavedWithMessage(this.$t("PhotoTooBig"))
                     return
                 }
 
@@ -77,13 +78,14 @@
 
                         const reader = new FileReader()
                         reader.onload = (e) => {
-                            const imageUri = (e.target as any).result
+                            const imageUri = (e.target ).result
                             self.uploadingImage = imageUri
                         }
 
                         reader.readAsDataURL(file)
                     } else {
-                        self.markAnswerAsNotSavedWithMessage("Only image files are allowed to upload")
+                        // Only image files are allowed to upload
+                        self.markAnswerAsNotSavedWithMessage(this.$t("PhotoIsNotImage") )
                     }
                 };
 

@@ -120,7 +120,7 @@ gulp.task('styles', ['move-bootstrap-fonts'], wrapPipe(function (success, error)
         .pipe(gulp.dest(config.buildDir).on('error', error))
         .pipe(rename({ suffix: '.min' }).on('error', error))
         .pipe(plugins.rev().on('error', error))
-        .pipe(cssnano().on('error', error))
+        //.pipe(cssnano().on('error', error))
         .pipe(gulp.dest(config.buildDistDir));
 }));
 
@@ -157,10 +157,10 @@ gulp.task('bowerCss', wrapPipe(function (success, error) {
     return gulp.src('./bower.json')
         .pipe(mainBowerFiles('**/*.css').on('error', error))
         .pipe(autoprefixer('last 2 version').on('error', error))
+        //.pipe(cssnano().on('error', error))
         .pipe(concat('libs.css').on('error', error))
         .pipe(gulp.dest(config.buildDir).on('error', error))
         .pipe(rename({ suffix: '.min' }).on('error', error))
-        .pipe(cssnano().on('error', error))
         .pipe(plugins.rev().on('error', error))
         .pipe(gulp.dest(config.buildDistDir));
 }));
@@ -233,5 +233,5 @@ gulp.task('clean', function () {
 });
 
 gulp.task('default', ['clean'], function () {
-    gulp.start('move-bootstrap-fonts', 'styles', 'bowerCss', 'bowerJs', 'inject', 'vueify', 'vue-libs', 'watch-vue');
+    gulp.start('move-bootstrap-fonts', 'styles', 'bowerCss', 'bowerJs', 'inject', 'vueify', 'vue-libs' /*, 'watch-vue'*/);
 });

@@ -12,12 +12,14 @@
 
 <div id="vueApp" configuration="@JsonConvert.SerializeObject(
 new {
+    basePath = Url.Content(@"~/"),
     title = @MainMenu.CreateNew,
+    dateFormat = @WB.Core.BoundedContexts.Headquarters.Extensions.ClientDateTimeFormat,
     assignmentsEndpoint = Url.Content(@"~/api/Assignments"),
     interviewerHqEndpoint = Url.Content(@"~/interviewerHq"),
     authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>(),
     resources = new[] {MainMenu.ResourceManager, Assignments.ResourceManager, Common.ResourceManager, Pages.ResourceManager}.Translations()
 })"></div>
 
-@Html.StaticScipt("~/Dependencies/build/vendor.bundle.js")
-@Html.StaticScipt("~/Dependencies/build/interviewer_createNew.bundle.js")
+@Html.StaticScipt(@"~/HqApp/dist/vendor.bundle.js")
+@Html.StaticScipt(@"~/HqApp/dist/app.bundle.js")

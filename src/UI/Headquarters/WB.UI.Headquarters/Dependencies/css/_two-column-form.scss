@@ -143,7 +143,7 @@
     }
 }
 @media (max-width: $screen-sm-min){
-    .log-in, main .two-columns-form .left-column p, .hq-apps-wrapper{
+    .log-in, main .two-columns-form .left-column p, .hq-apps-wrapper, .two-columns-form form .form-group{
         text-align: left;
         max-width: 350px;
         margin: 0 auto;

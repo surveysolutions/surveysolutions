@@ -1,13 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Resources;
 using System.Web.Mvc;
-using Newtonsoft.Json;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.Core.BoundedContexts.Headquarters.Factories;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -16,32 +12,28 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Models.ComponentModels;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Utils;
 using CommonRes = Resources.Common;
-using ASP;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
+using WB.UI.Headquarters.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
-
     [LimitsFilter]
     [Authorize(Roles = "Interviewer")]
     public class InterviewerHqController : BaseController
     {
         private readonly ICommandService commandService;
         private readonly IAuthorizedUser authorizedUser;
-        private readonly IWebInterviewConfigProvider configProvider;
         private readonly IUserViewFactory usersRepository;
         private readonly IPlainStorageAccessor<InterviewSummary> interviewSummaryReader;
         private readonly IPlainStorageAccessor<Assignment> assignments;
@@ -59,28 +51,31 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.commandService = commandService;
             this.authorizedUser = authorizedUser;
-            this.configProvider = configProvider;
             this.usersRepository = usersRepository;
             this.interviewSummaryReader = interviewSummaryReader;
             this.assignments = assignments;
             this.keyGenerator = keyGenerator;
         }
 
+        [ActivePage(MenuItem.CreateNew)]
         public ActionResult CreateNew()
         {
             return View("Index", NewModel(MenuItem.CreateNew));
         }
 
+        [ActivePage(MenuItem.Started)]
         public ActionResult Started()
         {
             return View("Interviews", NewModel(MenuItem.Started, InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted));
         }
 
+        [ActivePage(MenuItem.Rejected)]
         public ActionResult Rejected()
         {
-            return View("Interviews", NewModel(MenuItem.Rejected, InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters));
+            return View("Interviews", NewModel(MenuItem.Rejected, InterviewStatus.RejectedBySupervisor));
         }
 
+        [ActivePage(MenuItem.Completed)]
         public ActionResult Completed()
         {
             return View("Interviews", NewModel(MenuItem.Completed, InterviewStatus.Completed));
@@ -92,14 +87,16 @@ namespace WB.UI.Headquarters.Controllers
             return new InterviewerHqModel
             {
                 Title = title.ToUiString(),
+                BasePath = Url.Content(@"~/"),
                 AllInterviews = Url.Content(@"~/api/InterviewApi/GetInterviews"),
                 InterviewerHqEndpoint = Url.Content(@"~/InterviewerHq"),
                 Statuses = statuses.Select(s => s.ToString()).ToArray(),
-                Resources = IntervewHqResources.Translations()
+                Resources = InterviewHqResources.Translations(),
+                Questionnaires = this.GetQuestionnaires(statuses)
             };
         }
 
-        private static readonly ResourceManager[] IntervewHqResources =
+        private static readonly ResourceManager[] InterviewHqResources =
         {
             MainMenu.ResourceManager,
             Assignments.ResourceManager,
@@ -163,52 +160,30 @@ namespace WB.UI.Headquarters.Controllers
 
             return Content(Url.Content(GenerateUrl(@"Cover", id.FormatGuid())));
         }
-
-        [HttpGet]
-        [Authorize(Roles = "Interviewer")]
-        public ActionResult QuestionnairesCombobox(string query = "", string statuses = null, int pageSize = 10)
+        
+        private ComboboxOptionModel[] GetQuestionnaires(InterviewStatus[] interviewStatuses)
         {
-            IEnumerable<InterviewStatus> ParseStatuses()
-            {
-                foreach (var statusString in statuses.Split(','))
-                {
-                    if (Enum.TryParse(statusString, out InterviewStatus status))
-                    {
-                        yield return status;
-                    }
-                }
-            }
-
-            var interviewStatuses = ParseStatuses().ToArray();
-
             var queryResult = this.interviewSummaryReader.Query(_ =>
             {
-                var filter = _
-                    .Where(summary =>
-                        !summary.IsDeleted
-                        && summary.ResponsibleId == this.authorizedUser.Id
-                        && summary.QuestionnaireTitle.Contains(query)
-                    );
+                var filter = _.Where(summary => summary.ResponsibleId == this.authorizedUser.Id);
 
-                if (statuses != null)
+                if (interviewStatuses != null)
                 {
                     filter = filter.Where(summary => interviewStatuses.Contains(summary.Status));
                 }
 
                 return filter.Select(s => new
-                {
-                    s.QuestionnaireTitle,
-                    s.QuestionnaireId,
-                    s.QuestionnaireVersion
-                })
-                    .Distinct().Take(pageSize).ToList();
+                    {
+                        s.QuestionnaireTitle,
+                        s.QuestionnaireId,
+                        s.QuestionnaireVersion
+                    })
+                    .Distinct().ToList();
             });
 
-            var result = new ComboboxModel(queryResult.Select(s => new ComboboxOptionModel(
+            return queryResult.Select(s => new ComboboxOptionModel(
                 new QuestionnaireIdentity(s.QuestionnaireId, s.QuestionnaireVersion).ToString(),
-                $@"(ver. {s.QuestionnaireVersion.ToString()}) {s.QuestionnaireTitle}")).ToArray());
-
-            return JsonCamelCase(result);
+                $@"(ver. {s.QuestionnaireVersion.ToString()}) {s.QuestionnaireTitle}")).ToArray();
         }
 
         private string GenerateUrl(string action, string interviewId, string sectionId = null) =>
