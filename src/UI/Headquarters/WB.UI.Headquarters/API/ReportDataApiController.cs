@@ -353,7 +353,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 Draw = request.Draw + 1,
                 RecordsTotal = data.TotalCount,
                 RecordsFiltered = data.TotalCount,
-                Data = data.Items
+                Data = data.Items,
+                TotalRow = data.TotalRow
             };
         }
 
@@ -395,9 +396,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             return new CountDaysOfInterviewInStatusDataTableResponse
             {
                 Draw = request.Draw + 1,
-                RecordsTotal = data.Length,
-                RecordsFiltered = data.Length,
-                Data = data,
+                RecordsTotal = data.TotalCount,
+                RecordsFiltered = data.TotalCount,
+                Data = data.Items,
+                TotalRow = data.TotalRow
             };
         }
 
@@ -410,6 +412,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         public class CountDaysOfInterviewInStatusDataTableResponse : DataTableResponse<CountDaysOfInterviewInStatusRow>
         {
+            public CountDaysOfInterviewInStatusRow TotalRow { get; set; }
         }
 
         public class DeviceInterviewersDataTableResponse : DataTableResponse<DeviceInterviewersReportLine>

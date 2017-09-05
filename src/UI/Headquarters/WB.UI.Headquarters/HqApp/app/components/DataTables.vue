@@ -121,6 +121,14 @@ export default {
             searching: !this.noSearch
         }, this.tableOptions);
 
+        options.ajax.dataSrc = (json) => {
+            if (json.data.length > 0) {
+                var totalRow = json.totalRow;
+                totalRow.DT_RowClass = "total-row";
+                json.data.unshift(totalRow);
+            }
+            return json.data;
+        };
         options.ajax.data = (d) => {
             this.addParamsToRequest(d);
 

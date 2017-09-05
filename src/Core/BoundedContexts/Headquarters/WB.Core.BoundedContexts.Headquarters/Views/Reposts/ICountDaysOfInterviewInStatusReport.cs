@@ -8,6 +8,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports
 {
     public interface ICountDaysOfInterviewInStatusReport : IAsyncReport<CountDaysOfInterviewInStatusInputModel>
     {
-        Task<CountDaysOfInterviewInStatusRow[]> LoadAsync(CountDaysOfInterviewInStatusInputModel input);
+        Task<CountDaysOfInterviewInStatusView> LoadAsync(CountDaysOfInterviewInStatusInputModel input);
     }
 }

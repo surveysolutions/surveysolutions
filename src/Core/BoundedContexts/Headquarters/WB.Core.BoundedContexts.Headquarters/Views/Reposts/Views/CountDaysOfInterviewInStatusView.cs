@@ -1,12 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using WB.Core.BoundedContexts.Headquarters.Views.Reports.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Views
 {
-    public class CountDaysOfInterviewInStatusView
-    {
-        public CountDaysOfInterviewInStatusRow[] Rows { get; set; }
-    }
-
     public class CountDaysOfInterviewInStatusRow
     {
         public int DaysCountStart { get; set; }
@@ -28,5 +25,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Views
         public int TotalCount => InterviewerAssignedCount + SupervisorAssignedCount +
                                  CompletedCount + ApprovedBySupervisorCount + RejectedBySupervisorCount +
                                  ApprovedByHeadquartersCount + RejectedByHeadquartersCount;
+    }
+
+    public class CountDaysOfInterviewInStatusView : IListView<CountDaysOfInterviewInStatusRow>
+    {
+        public CountDaysOfInterviewInStatusView()
+        {
+            this.Items = new List<CountDaysOfInterviewInStatusRow>();
+        }
+
+        public int TotalCount { get; set; }
+        public IEnumerable<CountDaysOfInterviewInStatusRow> Items { get; set; }
+
+        public CountDaysOfInterviewInStatusRow TotalRow { get; set; }
     }
 }
