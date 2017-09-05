@@ -139,10 +139,7 @@ export default {
                 bInfo : false,
                 footer: true,
                 responsive: false,
-                createdRow: function(row, data, dataIndex) {
-                    if (dataIndex == 0)
-                        $(row).addClass("total-row");
-
+                createdRow: function(row) {
                     $(row).find('td:eq(0)').attr('nowrap', 'nowrap');
                 }
             }
