@@ -132,11 +132,11 @@
   <data name="AssignmentsSelected" xml:space="preserve">
     <value>{0} Assignment(s) selected</value>
   </data>
-  <data name="QuantityExplanation" xml:space="preserve">
-    <value>Specify maximum number of interviews to be generated for that assignment (Quantity). Permitted values: -1 is for Unlimited assignment, 0 is for Empty assignment, numbers for assignment size</value>
+  <data name="SizeExplanation" xml:space="preserve">
+    <value>Specify maximum number of interviews to be generated for that assignment. Permitted values: -1 is for Unlimited assignment, 0 is for Empty assignment, numbers for assignment size</value>
   </data>
-  <data name="ChangeQuantityModalTitle" xml:space="preserve">
-    <value>Edit quantity for assignment {0}</value>
+  <data name="ChangeSizeModalTitle" xml:space="preserve">
+    <value>Edit size for assignment {0}</value>
     <comment>{0} - id of the assignment</comment>
   </data>
   <data name="CreatedAt" xml:space="preserve">
@@ -180,9 +180,6 @@
   </data>
   <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
     <value>Select responsible (Supervisor or Interviewer) for this assignment</value>
-  </data>
-  <data name="InterviewsNeeded" xml:space="preserve">
-    <value>Interviews needed</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionnaire</value>
