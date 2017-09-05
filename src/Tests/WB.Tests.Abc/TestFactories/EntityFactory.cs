@@ -487,7 +487,8 @@ namespace WB.Tests.Abc.TestFactories
                 WasCreatedOnClient = wasCreatedOnClient ?? false,
                 ReceivedByInterviewer = receivedByInterviewer,
                 AssignmentId = assignmentId,
-                QuestionnaireIdentity = new QuestionnaireIdentity(qId, qVersion).ToString()
+                QuestionnaireIdentity = new QuestionnaireIdentity(qId, qVersion).ToString(),
+                InterviewCommentedStatuses = new List<InterviewCommentedStatus>()
             };
         }
 
