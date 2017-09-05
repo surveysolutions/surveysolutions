@@ -61,8 +61,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
                 return new DeviceInterviewersReportView
                 {
-                    Items = totalRow.ToEnumerable().Concat(rows),
-                    TotalCount = totalCount
+                    Items = rows,
+                    TotalCount = totalCount,
+                    TotalRow = totalRow
                 };
             }
         }
@@ -140,12 +141,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     Report.COLUMN_OLD_VERSION, Report.COLUMN_ANDROID_4_4_OR_LOWER, Report.COLUMN_WRONG_TIME_ON_TABLET, Report.COLUMN_LESS_THAN_100MB_FREE_SPACE
                        
                 },
-                Data = view.Items.Select(x => new object[]
+                Data = new[]
+                {
+                    new object[]
+                    {
+                        view.TotalRow.TeamName, view.TotalRow.NeverSynchedCount,  view.TotalRow.NoQuestionnairesCount, view.TotalRow.NeverUploadedCount, view.TotalRow.ReassignedCount, view.TotalRow.OutdatedCount,
+                        view.TotalRow.OldAndroidCount, view.TotalRow.WrongDateOnTabletCount, view.TotalRow.LowStorageCount
+                    }
+                }.Concat(view.Items.Select(x => new object[]
                 {
                     x.TeamName, x.NeverSynchedCount,  x.NoQuestionnairesCount, x.NeverUploadedCount, x.ReassignedCount, x.OutdatedCount,
                     x.OldAndroidCount, x.WrongDateOnTabletCount, x.LowStorageCount
                     
-                }).ToArray()
+                })).ToArray()
             };
         }
     }

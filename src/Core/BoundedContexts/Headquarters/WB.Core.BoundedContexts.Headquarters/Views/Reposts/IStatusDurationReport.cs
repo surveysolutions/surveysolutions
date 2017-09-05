@@ -8,6 +8,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports
 {
     public interface IStatusDurationReport : IAsyncReport<StatusDurationInputModel>
     {
-        Task<StatusDurationRow[]> LoadAsync(StatusDurationInputModel input);
+        Task<StatusDurationView> LoadAsync(StatusDurationInputModel input);
     }
 }

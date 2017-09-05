@@ -11,7 +11,7 @@ export default {
     },
     methods: {
         renderCell: function(data, row, facet){
-            if (data === 0) {
+            if(data === 0 || row.DT_RowClass == "total-row") {
                 return `<span>${data}</span>`;
             }
             if (row.teamId === '00000000-0000-0000-0000-000000000000') {

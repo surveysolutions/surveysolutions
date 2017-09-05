@@ -28,10 +28,18 @@
 
     self.Pager().PageSize(20);
 
+    self.isNeedFireEventOnChangeCurrentPage = true;
+
     // Subscribe to current page changes.
-    self.Pager().CurrentPage.subscribe(function() {
-        self.search(self.SortOrder);
+    self.Pager().CurrentPage.subscribe(function () {
+        if (self.isNeedFireEventOnChangeCurrentPage)
+            self.search(self.SortOrder);
     });
+    self.SetCurrentPageWithoutRunSubscribers = function(value) {
+        self.isNeedFireEventOnChangeCurrentPage = false;
+        self.Pager().CurrentPage(value);
+        self.isNeedFireEventOnChangeCurrentPage = true;
+    };
 
     self.Pager().CanChangeCurrentPage = ko.computed(function() { return self.IsAjaxComplete(); });
 
@@ -60,11 +68,11 @@
         }
     };
 
-    self.filter = function () {
-        if (self.Pager().CurrentPage() !== 1) {
-            self.Pager().CurrentPage(1);
-        }
-        self.search();
+    self.filter = function (onSuccess, onDone) {
+        if (self.Pager().CurrentPage() !== 1) 
+            self.SetCurrentPageWithoutRunSubscribers(1);
+
+        self.search(onSuccess, onDone);
     };
 
     
@@ -97,9 +105,10 @@
     };
     self.clear = function() {
         self.SearchBy("");
-        if (self.Pager().CurrentPage() !== 1) {
-            self.Pager().CurrentPage(1);
-        }
+
+        if (self.Pager().CurrentPage() !== 1) 
+            self.SetCurrentPageWithoutRunSubscribers(1);
+
         self.search();
     };
 

@@ -156,7 +156,7 @@
         var onDone = function() {
             self.notifier.hideLoadingIndicator();
         };
-        self.search(onSuccess, onDone);
+        self.filter(onSuccess, onDone);
     }, 500, { leading: false });
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.PeriodicStatusReport, Supervisor.VM.ListView);
