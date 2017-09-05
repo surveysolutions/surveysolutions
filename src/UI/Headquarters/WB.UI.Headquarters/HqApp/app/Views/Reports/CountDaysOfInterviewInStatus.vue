@@ -54,8 +54,8 @@ export default {
                         title: this.$t("Strings.Days"),
                         orderable: true,
                         className: "nowrap",
-                        render: function(data, type, row, meta) {
-                            if (meta.row == 0 || row.DT_RowClass == "total-row")
+                        render: function(data, type, row) {
+                            if (data == 0 || row.DT_RowClass == "total-row")
                                 return `<span>${data}</span>`;
                             return data;
                         }
@@ -65,7 +65,7 @@ export default {
                         className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_SupervisorAssigned"),
                         orderable: false,
-                        render: function(data, type, row, meta) {
+                        render: function(data, type, row) {
                             return self.renderAssignmentsUrl(row, data, 'Supervisor');
                         }
                     },
@@ -74,7 +74,7 @@ export default {
                         className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_InterviewerAssigned"),
                         orderable: false,
-                        render: function(data, type, row, meta) {
+                        render: function(data, type, row) {
                             return self.renderAssignmentsUrl(row, data, 'Interviewer');
                         }
                     },
@@ -83,7 +83,7 @@ export default {
                         className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_Completed"),
                         orderable: false,
-                        render: function(data, type, row, meta) {
+                        render: function(data, type, row) {
                             return self.renderInterviewsUrl(row, data, 'Completed');
                         }
                     },
@@ -92,7 +92,7 @@ export default {
                         className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_RejectedBySupervisor"),
                         orderable: false,
-                        render: function(data, type, row, meta) {
+                        render: function(data, type, row) {
                             return self.renderInterviewsUrl(row, data, 'RejectedBySupervisor');
                         }
                     },
@@ -101,7 +101,7 @@ export default {
                         className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_ApprovedBySupervisor"),
                         orderable: false,
-                        render: function(data, type, row, meta) {
+                        render: function(data, type, row) {
                             return self.renderInterviewsUrl(row, data, 'ApprovedBySupervisor');
                         }
                     },
@@ -110,7 +110,7 @@ export default {
                         className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_RejectedByHeadquarters"),
                         orderable: false,
-                        render: function(data, type, row, meta) {
+                        render: function(data, type, row) {
                             return self.renderInterviewsUrl(row, data, 'RejectedByHeadquarters');
                         }
                     },
@@ -119,7 +119,7 @@ export default {
                         className: "type-numeric",
                         title: this.$t("Strings.InterviewStatus_ApprovedByHeadquarters"),
                         orderable: false,
-                        render: function(data, type, row, meta) {
+                        render: function(data, type, row) {
                             return self.renderInterviewsUrl(row, data, 'ApprovedByHeadquarters');
                         }
                     },
@@ -143,10 +143,7 @@ export default {
                 bInfo : false,
                 footer: true,
                 responsive: false,
-                createdRow: function(row, data, dataIndex) {
-                    if (dataIndex == 0)
-                        $(row).addClass("total-row");
-
+                createdRow: function(row) {
                     $(row).find('td:eq(0)').attr('nowrap', 'nowrap');
                 }
             }
