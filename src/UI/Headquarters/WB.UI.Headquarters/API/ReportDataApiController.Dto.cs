@@ -23,6 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         public class StatusDurationDataTableResponse : DataTableResponse<StatusDurationRow>
         {
+            public StatusDurationRow TotalRow { get; set; }
         }
 
         public class DeviceInterviewersDataTableResponse : DataTableResponse<DeviceInterviewersReportLine>

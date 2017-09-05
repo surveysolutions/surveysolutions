@@ -55,24 +55,22 @@
                         <h1>@Html.Raw(string.Format(Users.ApiUsersCountDescription, @"<span data-bind='text: UsersCount'></span>"))</h1>
                         <a class="btn btn-success" href="@Url.Action("Create", "ApiUser", new {area = string.Empty})">@Users.AddAPIUser</a>
                     </div>
-                    <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">
-                        <ol class="list-unstyled">
-                            <li>@Pages.Users_API_Instruction1</li>
-                            <li>@Pages.Users_API_Instruction2</li>
-                        </ol>
-                    </div>
+                    <ol class="list-unstyled">
+                        <li>@Pages.Users_API_Instruction1</li>
+                        <li>@Pages.Users_API_Instruction2</li>
+                    </ol>
                 </div>
             </div>
+            <table id="data_holder" class="table table-striped table-bordered table-condensed table-hover table-ordered"
+                   data-order="[[ 1, &quot;asc&quot; ]]" data-searching="true">
+                <thead>
+                    <tr>
+                        <th>@Users.UserName</th>
+                        <th title="@Users.AccountCreationDateTooltip">@Users.CreationDate</th>
+                        <th>@Users.Locked</th>
+                    </tr>
+                </thead>
+            </table>
         </div>
-        <table id="data_holder" class="table table-striped table-bordered table-condensed table-hover table-ordered"
-               data-order="[[ 1, &quot;asc&quot; ]]" data-searching="true">
-            <thead>
-            <tr>
-                <th>@Users.UserName</th>
-                <th title="@Users.AccountCreationDateTooltip">@Users.CreationDate</th>
-                <th>@Users.Locked</th>
-            </tr>
-            </thead>
-        </table>
     </div>
 </main>

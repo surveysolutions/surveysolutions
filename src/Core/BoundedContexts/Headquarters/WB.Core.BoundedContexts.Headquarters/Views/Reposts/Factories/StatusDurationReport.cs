@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             public int Days { get; set; }
         }
 
-        public async Task<StatusDurationRow[]> LoadAsync(StatusDurationInputModel input)
+        public async Task<StatusDurationView> LoadAsync(StatusDurationInputModel input)
         {
             var order = input.Orders.FirstOrDefault();
             if (order == null) throw new ArgumentNullException(nameof(order));
@@ -97,26 +97,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
 
             var data = SortData(order, rows);
             SetRowHeaderForEachRecord(data);
-            AddTotalRowAsFirstRow(data);
 
-            return data.ToArray();
-        }
-
-        private static void AddTotalRowAsFirstRow(List<StatusDurationRow> data)
-        {
-            var totalRow = new StatusDurationRow()
+            return new StatusDurationView
             {
-                InterviewerAssignedCount = data.Sum(r => r.InterviewerAssignedCount),
-                SupervisorAssignedCount = data.Sum(r => r.SupervisorAssignedCount),
-                CompletedCount = data.Sum(r => r.CompletedCount),
-                ApprovedBySupervisorCount = data.Sum(r => r.ApprovedBySupervisorCount),
-                RejectedBySupervisorCount = data.Sum(r => r.RejectedBySupervisorCount),
-                ApprovedByHeadquartersCount = data.Sum(r => r.ApprovedByHeadquartersCount),
-                RejectedByHeadquartersCount = data.Sum(r => r.RejectedByHeadquartersCount),
-                RowHeader = Strings.Total
+                Items = data.ToArray(),
+                TotalCount = data.Count,
+                TotalRow = new StatusDurationRow()
+                {
+                    InterviewerAssignedCount = data.Sum(r => r.InterviewerAssignedCount),
+                    SupervisorAssignedCount = data.Sum(r => r.SupervisorAssignedCount),
+                    CompletedCount = data.Sum(r => r.CompletedCount),
+                    ApprovedBySupervisorCount = data.Sum(r => r.ApprovedBySupervisorCount),
+                    RejectedBySupervisorCount = data.Sum(r => r.RejectedBySupervisorCount),
+                    ApprovedByHeadquartersCount = data.Sum(r => r.ApprovedByHeadquartersCount),
+                    RejectedByHeadquartersCount = data.Sum(r => r.RejectedByHeadquartersCount),
+                    RowHeader = Strings.Total
+                }
             };
-
-            data.Insert(0, totalRow);
         }
 
         private static void SetRowHeaderForEachRecord(List<StatusDurationRow> data)
@@ -220,12 +217,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                     Report.COLUMN_REJECTED_BY_SUPERVISOR, Report.COLUMN_APPROVED_BY_SUPERVISOR, Report.COLUMN_REJECTED_BY_HQ, Report.COLUMN_APPROVED_BY_HQ,
                     Report.COLUMN_TOTAL
                 },
-                Data = view.Select(x => new object[]
+                Data = new[]
+                {
+                    new object[]
+                    {
+                        view.TotalRow.RowHeader, view.TotalRow.SupervisorAssignedCount, view.TotalRow.InterviewerAssignedCount, view.TotalRow.CompletedCount,
+                        view.TotalRow.RejectedBySupervisorCount, view.TotalRow.ApprovedBySupervisorCount, view.TotalRow.RejectedByHeadquartersCount, view.TotalRow.ApprovedByHeadquartersCount,
+                        view.TotalRow.TotalCount
+                    }
+                }.Concat(view.Items.Select(x => new object[]
                 {
                     x.RowHeader, x.SupervisorAssignedCount, x.InterviewerAssignedCount, x.CompletedCount,
                     x.RejectedBySupervisorCount, x.ApprovedBySupervisorCount, x.RejectedByHeadquartersCount, x.ApprovedByHeadquartersCount,
                     x.TotalCount
-                }).ToArray()
+                })).ToArray()
             };
         }
     }
