@@ -122,7 +122,7 @@ export default {
         }, this.tableOptions);
 
         options.ajax.dataSrc = (json) => {
-            if (json.data.length > 0) {
+            if (json.data.length > 0 && json.totalRow) {
                 var totalRow = json.totalRow;
                 totalRow.DT_RowClass = "total-row";
                 json.data.unshift(totalRow);
