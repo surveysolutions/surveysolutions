@@ -3,8 +3,8 @@
        SUM(case when up."DeviceId" IS NULL then 1 else 0 end) NeverSynchedCount, 
        SUM(case when up."DeviceAppBuildVersion" IS NOT NULL AND up."DeviceAppBuildVersion" < @latestAppBuildVersion then 1 else 0 end) OutdatedCount, 
        SUM(case when lastSync."StorageFreeInBytes" < @neededFreeStorageInBytes then 1 else 0 end) LowStorageCount, 
-       SUM(case when lastSync."DeviceDate" = '0001-01-01T00:00:00' OR 
-					 abs(extract(epoch from date_trunc('minute', lastSync."SyncDate") - date_trunc('minute', lastSync."DeviceDate"))) / 60 > @minutesMismatch then 1 else 0 end) WrongDateOnTabletCount,
+       --SUM(case when lastSync."DeviceDate" = '0001-01-01T00:00:00' OR 
+		--			 abs(extract(epoch from date_trunc('minute', lastSync."SyncDate") - date_trunc('minute', lastSync."DeviceDate"))) / 60 > @minutesMismatch then 1 else 0 end) WrongDateOnTabletCount,
        SUM(case when lastSync."AndroidSdkVersion" < @targetAndroidSdkVersion then 1 else 0 end) OldAndroidCount,
        SUM(case when anySync."InterviewerId" IS NULL then 1 else 0 end) NeverUploadedCount,
        SUM(case when wasReassign."InterviewerId" IS NOT NULL then 1 else 0 end) ReassignedCount,
