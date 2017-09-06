@@ -48,7 +48,9 @@
     "xss": "^0.3.3",
     "perfect-scrollbar": "^0.6.16",
     "html5shiv": "^3.7.3",
-    "angular-ui-ace": "^0.2.3"
+    "angular-ui-ace": "^0.2.3",
+    "jquery.validate.unobtrusive.bootstrap": "sandrocaseiro/jquery.validate.unobtrusive.bootstrap",
+    "jquery-validation": "^1.17.0"
   },
   "overrides": {
     "prettycheckable": {
@@ -86,5 +88,8 @@
         "js/perfect-scrollbar.jquery.js"
       ]
     }
+  },
+  "resolutions": {
+    "angular": "1.6.6"
   }
 }
