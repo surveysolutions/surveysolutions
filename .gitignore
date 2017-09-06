@@ -88,3 +88,4 @@ src/UI/Designer/WB.UI.Designer/questionnaire/vendor/ace-builds/src*/theme-*.js
 src/UI/Designer/WB.UI.Designer/questionnaire/vendor/ace-builds/src*/ext-*.js
 src/*v3.ncrunchsolution
 **/HqApp/dist/*
+/src/UI/Designer/WB.UI.Designer/questionnaire/vendor
