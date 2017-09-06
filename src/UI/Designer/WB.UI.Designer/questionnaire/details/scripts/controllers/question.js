@@ -353,14 +353,14 @@
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = true;
 
                 window.open("../../questionnaire/editoptions/" + $state.params.questionnaireId + "?questionid=" + $scope.activeQuestion.itemId,
-                  "", "scrollbars=yes, center=yes, modal=yes, width=960", true);
+                    "", "scrollbars=yes, center=yes, modal=yes, width=960, height=500, left=100, top=100", true);
             };
 
             var openCascadeOptionsEditor = function () {
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = true;
 
                 window.open("../../questionnaire/editcascadingoptions/" + $state.params.questionnaireId + "?questionid=" + $scope.activeQuestion.itemId,
-                  "", "scrollbars=yes, center=yes, modal=yes, width=960", true);
+                    "", "scrollbars=yes, center=yes, modal=yes, width=960, height=500, left=100, top=100", true);
             };
 
             $scope.removeOption = function (index) {
