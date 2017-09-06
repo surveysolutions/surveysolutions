@@ -216,17 +216,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             if (interviewKeyEvent != null)
             {
                 var stringKey = interviewKeyEvent.Key.ToString();
-                var existingInterview = this.interviews.Query(_ => _.FirstOrDefault(x => x.Key == stringKey));
+                var existingInterview = this.interviews.Query(_ => _.FirstOrDefault(x => x.Key == stringKey && x.InterviewId != interviewId));
 
-                if (existingInterview != null && existingInterview.InterviewId != interviewId)
+                if (existingInterview != null)
                 {
                     return  true;
                 }
 
                 return false;
             }
-
-            return true;
+            var interview = this.interviews.Query(_ => _.Where(x => x.SummaryId == interviewId.FormatGuid()).Select(x => x.Key).FirstOrDefault());
+            return interview == null;
         }
     }
 }
