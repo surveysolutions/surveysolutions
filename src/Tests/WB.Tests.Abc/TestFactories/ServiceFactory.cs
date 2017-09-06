@@ -78,6 +78,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
+using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc.Storage;
 using WB.UI.Shared.Web.Captcha;
@@ -114,13 +115,13 @@ namespace WB.Tests.Abc.TestFactories
                 attachmentContentPlainStorage ?? Mock.Of<IPlainStorageAccessor<AttachmentContent>>());
 
         public CumulativeChartDenormalizer CumulativeChartDenormalizer(
-            IReadSideKeyValueStorage<LastInterviewStatus> lastStatusesStorage = null,
+            INativeReadSideStorage<CumulativeReportStatusChange> cumulativeReportReader = null,
             IReadSideRepositoryWriter<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage = null,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferencesStorage = null)
             => new CumulativeChartDenormalizer(
-                lastStatusesStorage ?? Mock.Of<IReadSideKeyValueStorage<LastInterviewStatus>>(),
                 cumulativeReportStatusChangeStorage ?? Mock.Of<IReadSideRepositoryWriter<CumulativeReportStatusChange>>(),
-                interviewReferencesStorage ?? new TestInMemoryWriter<InterviewSummary>());
+                interviewReferencesStorage ?? new TestInMemoryWriter<InterviewSummary>(),
+                cumulativeReportReader ?? Mock.Of<INativeReadSideStorage<CumulativeReportStatusChange>>() );
 
         public InterviewerDashboardEventHandler DashboardDenormalizer(
             IPlainStorage<InterviewView> interviewViewRepository = null,

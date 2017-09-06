@@ -327,10 +327,10 @@ namespace WB.Tests.Integration
                     rnd.Next(1, 10000000), DateTime.UtcNow, rnd.Next(1, 1000000), evnt));
         }
 
-        public static CumulativeReportStatusChange CumulativeReportStatusChange(Guid? questionnaireId=null, long? questionnaireVersion=null, DateTime? date = null)
+        public static CumulativeReportStatusChange CumulativeReportStatusChange(Guid? questionnaireId=null, long? questionnaireVersion=null, DateTime? date = null, Guid? interviewId = null, long eventSequence = 1)
         {
             return new CumulativeReportStatusChange(Guid.NewGuid().FormatGuid(), questionnaireId ?? Guid.NewGuid(),
-                questionnaireVersion ?? 1, date??DateTime.Now, InterviewStatus.Completed, 1);
+                questionnaireVersion ?? 1, date??DateTime.Now, InterviewStatus.Completed, 1, interviewId ?? Guid.NewGuid(), eventSequence);
         }
 
         public static DesignerEngineVersionService DesignerEngineVersionService()
