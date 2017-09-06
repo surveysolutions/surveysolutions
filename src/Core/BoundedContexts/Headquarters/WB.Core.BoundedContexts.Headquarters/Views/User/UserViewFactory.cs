@@ -30,7 +30,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         
         public UserView GetUser(UserViewInputModel input)
         {
-
             var repository = this.UserRepository;
             var query = repository.Users.Select(user => new UserQueryItem
             {

@@ -4,15 +4,12 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
-using WB.Core.BoundedContexts.Headquarters.Documents;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Code;
@@ -29,16 +26,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
 
         public DevicesApiV2Controller(
             ISyncProtocolVersionProvider syncVersionProvider,
-            ICommandService commandService,
-            IReadSideRepositoryReader<TabletDocument> devicesRepository,
             IAuthorizedUser authorizedUser,
             IDeviceSyncInfoRepository deviceSyncInfoRepository,
             IPlainStorageAccessor<SynchronizationLogItem> syncLogRepository,
             HqUserManager userManager) : base(
                 authorizedUser: authorizedUser,
                 syncVersionProvider: syncVersionProvider,
-                commandService: commandService,
-                devicesRepository: devicesRepository,
                 userManager: userManager)
         {
             this.deviceSyncInfoRepository = deviceSyncInfoRepository;
