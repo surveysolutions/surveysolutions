@@ -135,8 +135,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsExportDenormalize
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage = null)
         {
             var interviewData = Create.Entity.InterviewData();
-            var interviewReferenceStorage = new TestInMemoryWriter<InterviewReferences>();
-            interviewReferenceStorage.Store(new InterviewReferences(interviewId, Guid.NewGuid(), 1),
+            var interviewReferenceStorage = new TestInMemoryWriter<InterviewSummary>();
+            interviewReferenceStorage.Store(Create.Entity.InterviewSummary(interviewId, Guid.NewGuid(), 1),
                 interviewId);
             var interviewDataStorage = new TestInMemoryWriter<InterviewData>();
             interviewDataStorage.Store(interviewData, interviewId);
