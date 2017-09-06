@@ -225,7 +225,7 @@
                     isResponsibleInterviewer: interview.ResponsibleRole() == 4,
                     statusHistory: statusHistory,
                     formatDate: function(date) {
-                        return moment.utc(date).local().format('MMM DD, YYYY HH:MM');
+                        return moment.utc(date).local().format('MMM DD, YYYY HH:mm');
                     }
                 };
 
