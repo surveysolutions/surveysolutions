@@ -316,7 +316,6 @@
     <Compile Include="IntegrationCreate.cs" />
     <Compile Include="EventContext.cs" />
     <Compile Include="EventContextExtensions.cs" />
-    <Compile Include="EventHandler\when_event_handlers_are_created.cs" />
     <Compile Include="EventHandler\when_using_AnswerNotifier.cs" />
     <Compile Include="Execute.cs" />
     <Compile Include="FileSystemIOAccessorTests\when_creating_not_existing_folder_and_it_s_parent_folders_also_do_not_exist.cs" />
