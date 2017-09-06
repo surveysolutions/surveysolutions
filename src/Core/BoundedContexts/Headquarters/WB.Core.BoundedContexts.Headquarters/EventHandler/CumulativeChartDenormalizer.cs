@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             this.cumulativeReportReader = cumulativeReportReader;
         }
 
-        public override object[] Readers => new object[] { this.interviewReferencesStorage };
+        public override object[] Readers => new object[] { this.cumulativeReportReader, this.interviewReferencesStorage };
 
         public override object[] Writers => new object[] { this.cumulativeReportStatusChangeStorage };
 

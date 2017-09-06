@@ -1827,5 +1827,13 @@ namespace WB.Tests.Abc.TestFactories
                 PreloadedData = new PreloadedDataDto(levels)
             };
         }
+
+        public CumulativeReportStatusChange CumulativeReportStatusChange(string entryId, 
+            Guid questionnaireId, long questionnaireVersion, DateTime date, InterviewStatus status, int changeValue,
+            Guid interviewId, long eventSequence)
+        {
+            return new CumulativeReportStatusChange(entryId, questionnaireId, questionnaireVersion, date, status,
+                changeValue, interviewId, eventSequence);
+        }
     }
 }
