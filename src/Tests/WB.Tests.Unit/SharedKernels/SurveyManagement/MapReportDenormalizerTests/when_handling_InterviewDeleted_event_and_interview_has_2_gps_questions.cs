@@ -24,14 +24,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTest
                 Create.Entity.GpsCoordinateQuestion(variable: gpsVariable2),
             });
 
-            IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage = Setup.ReadSideKeyValueStorageWithSameEntityForAnyGet(Create.Entity.InterviewReferences());
+            var interviews = new TestInMemoryWriter<InterviewSummary>();
+            interviews.Store(Create.Entity.InterviewSummary(interviewId, questionnaireId: Id.gA, questionnaireVersion: 1), interviewId);
 
             mapReportPointStorage.Store(Create.Entity.MapReportPoint(markerId1, 1, 3), markerId1);
             mapReportPointStorage.Store(Create.Entity.MapReportPoint(markerId2, 2, 4), markerId2);
 
             denormalizer = Create.Service.MapReportDenormalizer(
                 mapReportPointStorage: mapReportPointStorage,
-                interviewReferencesStorage: interviewReferencesStorage,
+                interviewReferencesStorage: interviews,
                 questionnaireDocument: questionnaireDocument);
         };
 

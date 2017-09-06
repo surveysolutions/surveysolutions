@@ -8,6 +8,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
+using WB.Tests.Abc.Storage;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.CumulativeChartDenormalizerTests
@@ -23,10 +24,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.C
             var lastStatusesStorage = Mock.Of<IReadSideKeyValueStorage<LastInterviewStatus>>(_ =>
                 _.GetById(interviewStringId) == null as LastInterviewStatus);
 
-            var interviewReferences = Create.Entity.InterviewReferences(questionnaireId: questionnaireId, questionnaireVersion: questionnaireVersion);
-            var interviewReferencesStorage = Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>(_ =>
-                _.GetById(interviewStringId) == interviewReferences);
-
+            var interviewReferences = Create.Entity.InterviewSummary(@event.EventSourceId, questionnaireId: questionnaireId, questionnaireVersion: questionnaireVersion);
+            var interviewReferencesStorage = new TestInMemoryWriter<InterviewSummary>("1", interviewReferences);
+            
             denormalizer = Create.Service.CumulativeChartDenormalizer(
                 lastStatusesStorage: lastStatusesStorage,
                 cumulativeReportStatusChangeStorage: cumulativeReportStatusChangeStorageMock.Object,
