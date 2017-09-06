@@ -159,11 +159,23 @@ function BuildStaticContent($blockName, $targetLocation) {
         if (Test-Path "bower.json") {
             Write-Host "Running bower install --force"
             &node_modules\.bin\bower install --force | Write-Host
+
+            $wasBuildSuccessfull = $LASTEXITCODE -eq 0
+            if (-not $wasBuildSuccessfull) {
+                Write-Host "##teamcity[message status='ERROR' text='Failed to run bower install --force']"
+                return $wasBuildSuccessfull
+            }
         }
 
         if (Test-Path "gulpfile.js") {
             Write-Host "Running gulp --production"
             &node_modules\.bin\gulp --production | Write-Host
+
+            $wasBuildSuccessfull = $LASTEXITCODE -eq 0
+            if (-not $wasBuildSuccessfull) {
+                Write-Host "##teamcity[message status='ERROR' text='Failed to run &Running gulp --production']"
+                return $wasBuildSuccessfull
+            }
         }
         else {
             Write-Host "Running npm run production"
