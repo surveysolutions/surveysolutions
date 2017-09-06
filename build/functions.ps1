@@ -158,7 +158,17 @@ function BuildStaticContent($blockName, $targetLocation) {
 
         if (Test-Path "bower.json") {
             Write-Host "Running bower install --force"
-            &node_modules\.bin\bower install --force | Write-Host
+
+            if(Test-Path ".bowerrc") {
+                
+                $bowerSettings =Get-Content -Raw -Path ".bowerrc" | ConvertFrom-Json
+                Write-Host "Cleaning up bower_components folder - $($bowerSettings.directory)"
+                Remove-Item $bowerSettings.directory -Recurse -ErrorAction SilentlyContinue
+            } else {
+                Remove-Item "bower_components" -Recurse -ErrorAction SilentlyContinue
+            }
+
+            &node_modules\.bin\bower install | Write-Host
         }
 
         if (Test-Path "gulpfile.js") {
