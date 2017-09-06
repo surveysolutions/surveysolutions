@@ -86,7 +86,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public IMvxCommand OpenSyncEndPointCommand => new MvxCommand(() =>
         {
-            this.webBrowser.ShowWebPage(this.interviewerSettings.Endpoint);
+            if (Uri.TryCreate(this.interviewerSettings.Endpoint, UriKind.Absolute, out Uri _))
+            {
+                this.webBrowser.ShowWebPage(this.interviewerSettings.Endpoint);
+            }
+            else
+            {
+                this.IsBandwidthTested = true;
+                this.IsConnectionAbsent = true;
+                this.ConnectionDescription = InterviewerUIResources.InvalidEndpoint;
+            }
         });
 
         private async Task TestConnectionAsync()
