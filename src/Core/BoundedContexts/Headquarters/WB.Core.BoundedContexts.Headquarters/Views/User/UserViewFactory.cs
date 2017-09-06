@@ -27,65 +27,58 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public UserViewFactory()
         {
         }
-
-        // intended to be not static, so cache is working per request
-        private readonly ConcurrentDictionary<string, object> cache = new ConcurrentDictionary<string, object>();
         
         public UserView GetUser(UserViewInputModel input)
         {
-            var key = input.PublicKey?.ToString() ?? input.UserName;
 
-            return cache.GetOrAdd(key, _ =>
+            var repository = this.UserRepository;
+            var query = repository.Users.Select(user => new UserQueryItem
             {
-                var repository = this.UserRepository;
-                var query = repository.Users.Select(user => new UserQueryItem
-                {
-                    PublicKey = user.Id,
-                    UserName = user.UserName,
-                    Email = user.Email,
-                    PersonName = user.FullName,
-                    PhoneNumber = user.PhoneNumber,
-                    IsArchived = user.IsArchived,
-                    IsLockedByHQ = user.IsLockedByHeadquaters,
-                    IsLockedBySupervisor = user.IsLockedBySupervisor,
-                    CreationDate = user.CreationDate,
-                    RoleId = user.Roles.FirstOrDefault().RoleId,
-                    DeviceId = user.Profile.DeviceId,
-                    SupervisorId = user.Profile.SupervisorId,
-                    SupervisorName = repository.Users.Select(x => new { x.Id, Name = x.UserName })
-                        .FirstOrDefault(x => user.Profile.SupervisorId == x.Id)
-                        .Name
-                });
+                PublicKey = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
+                PersonName = user.FullName,
+                PhoneNumber = user.PhoneNumber,
+                IsArchived = user.IsArchived,
+                IsLockedByHQ = user.IsLockedByHeadquaters,
+                IsLockedBySupervisor = user.IsLockedBySupervisor,
+                CreationDate = user.CreationDate,
+                RoleId = user.Roles.FirstOrDefault().RoleId,
+                DeviceId = user.Profile.DeviceId,
+                SupervisorId = user.Profile.SupervisorId,
+                SupervisorName = repository.Users.Select(x => new { x.Id, Name = x.UserName })
+                    .FirstOrDefault(x => user.Profile.SupervisorId == x.Id)
+                    .Name
+            });
 
-                if (input.PublicKey != null)
-                    query = query.Where(x => x.PublicKey == input.PublicKey);
-                else if (!string.IsNullOrEmpty(input.UserName))
-                    query = query.Where(x => x.UserName.ToLower() == input.UserName.ToLower());
-                else if (!string.IsNullOrEmpty(input.UserEmail))
-                    query = query.Where(x => x.Email.ToLower() == input.UserEmail.ToLower());
-                else if (!string.IsNullOrEmpty(input.DeviceId))
-                    query = query.Where(x => x.DeviceId == input.DeviceId);
+            if (input.PublicKey != null)
+                query = query.Where(x => x.PublicKey == input.PublicKey);
+            else if (!string.IsNullOrEmpty(input.UserName))
+                query = query.Where(x => x.UserName.ToLower() == input.UserName.ToLower());
+            else if (!string.IsNullOrEmpty(input.UserEmail))
+                query = query.Where(x => x.Email.ToLower() == input.UserEmail.ToLower());
+            else if (!string.IsNullOrEmpty(input.DeviceId))
+                query = query.Where(x => x.DeviceId == input.DeviceId);
 
-                var dbUser = query.FirstOrDefault();
-                if (dbUser == null) return null;
+            var dbUser = query.FirstOrDefault();
+            if (dbUser == null) return null;
 
-                return new UserView
-                {
-                    PublicKey = dbUser.PublicKey,
-                    UserName = dbUser.UserName,
-                    Email = dbUser.Email,
-                    PersonName = dbUser.PersonName,
-                    PhoneNumber = dbUser.PhoneNumber,
-                    IsArchived = dbUser.IsArchived,
-                    IsLockedByHQ = dbUser.IsLockedByHQ,
-                    IsLockedBySupervisor = dbUser.IsLockedBySupervisor,
-                    CreationDate = dbUser.CreationDate,
-                    Supervisor = dbUser.SupervisorId.HasValue
-                        ? new UserLight(dbUser.SupervisorId.Value, dbUser.SupervisorName)
-                        : null,
-                    Roles = new HashSet<UserRoles>(new[] { dbUser.RoleId.ToUserRole() })
-                };
-            }) as UserView;
+            return new UserView
+            {
+                PublicKey = dbUser.PublicKey,
+                UserName = dbUser.UserName,
+                Email = dbUser.Email,
+                PersonName = dbUser.PersonName,
+                PhoneNumber = dbUser.PhoneNumber,
+                IsArchived = dbUser.IsArchived,
+                IsLockedByHQ = dbUser.IsLockedByHQ,
+                IsLockedBySupervisor = dbUser.IsLockedBySupervisor,
+                CreationDate = dbUser.CreationDate,
+                Supervisor = dbUser.SupervisorId.HasValue
+                    ? new UserLight(dbUser.SupervisorId.Value, dbUser.SupervisorName)
+                    : null,
+                Roles = new HashSet<UserRoles>(new[] { dbUser.RoleId.ToUserRole() })
+            };
         }
 
         public UserListView GetUsersByRole(int pageIndex, int pageSize, string orderBy, string searchBy, bool archived, UserRoles role)
@@ -185,7 +178,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                                                 (
                                                 deviceSyncInfo.DeviceDate == DateTime.MinValue ||
                                                 Math.Abs((long)DbFunctions.DiffMinutes(
-                                                    deviceSyncInfo.DeviceDate, deviceSyncInfo.SyncDate)) > 
+                                                    deviceSyncInfo.DeviceDate, deviceSyncInfo.SyncDate)) >
                                                     InterviewerIssuesConstants.MinutesForWrongTime
                                                     )
                                        select i;
