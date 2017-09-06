@@ -29,7 +29,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (question.IsInteger) return question.GetAsInterviewTreeIntegerQuestion().GetAnswer().Value.To<T>(); //"int?"
             if (question.IsDouble) return question.GetAsInterviewTreeDoubleQuestion().GetAnswer().Value.To<T>(); // double?
 
-            if (question.IsSingleFixedOption || question.IsCascading) return question.GetAsInterviewTreeSingleOptionQuestion().GetAnswer().SelectedValue.To<T>();//int?
+            if (question.IsSingleFixedOption) return question.GetAsInterviewTreeSingleOptionQuestion().GetAnswer().SelectedValue.To<T>();//int?
+            if (question.IsCascading) return question.GetAsInterviewTreeCascadingQuestion().GetAnswer().SelectedValue.To<T>();//int?
             if (question.IsMultiFixedOption) return question.GetAsInterviewTreeMultiOptionQuestion().GetAnswer().ToInts().ToArray().To<T>();//int[]
             if (question.IsYesNo)
             {
