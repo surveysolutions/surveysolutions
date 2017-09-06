@@ -116,11 +116,11 @@ namespace WB.Tests.Abc.TestFactories
         public CumulativeChartDenormalizer CumulativeChartDenormalizer(
             IReadSideKeyValueStorage<LastInterviewStatus> lastStatusesStorage = null,
             IReadSideRepositoryWriter<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage = null,
-            IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage = null)
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferencesStorage = null)
             => new CumulativeChartDenormalizer(
                 lastStatusesStorage ?? Mock.Of<IReadSideKeyValueStorage<LastInterviewStatus>>(),
                 cumulativeReportStatusChangeStorage ?? Mock.Of<IReadSideRepositoryWriter<CumulativeReportStatusChange>>(),
-                interviewReferencesStorage ?? Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>());
+                interviewReferencesStorage ?? new TestInMemoryWriter<InterviewSummary>());
 
         public InterviewerDashboardEventHandler DashboardDenormalizer(
             IPlainStorage<InterviewView> interviewViewRepository = null,
@@ -217,10 +217,6 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewEventStreamOptimizer InterviewEventStreamOptimizer()
             => new InterviewEventStreamOptimizer();
 
-        public InterviewReferencesDenormalizer InterviewReferencesDenormalizer()
-            => new InterviewReferencesDenormalizer(
-                Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>());
-
         public KeywordsProvider KeywordsProvider()
             => new KeywordsProvider(Create.Service.SubstitutionService());
 
@@ -234,11 +230,11 @@ namespace WB.Tests.Abc.TestFactories
 
         public MapReportDenormalizer MapReportDenormalizer(
             IReadSideRepositoryWriter<MapReportPoint> mapReportPointStorage = null,
-            IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage = null,
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferencesStorage = null,
             QuestionnaireQuestionsInfo questionnaireQuestionsInfo = null,
             QuestionnaireDocument questionnaireDocument = null)
             => new MapReportDenormalizer(
-                interviewReferencesStorage ?? new TestInMemoryWriter<InterviewReferences>(),
+                interviewReferencesStorage ?? new TestInMemoryWriter<InterviewSummary>(),
                 mapReportPointStorage ?? new TestInMemoryWriter<MapReportPoint>(),
                 Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()) == questionnaireDocument),
                 Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>(_ => _.GetById(It.IsAny<string>()) == questionnaireQuestionsInfo));

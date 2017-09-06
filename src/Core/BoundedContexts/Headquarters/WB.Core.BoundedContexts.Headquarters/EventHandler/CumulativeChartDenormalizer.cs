@@ -1,4 +1,5 @@
 ﻿using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
@@ -14,12 +15,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
     {
         private readonly IReadSideKeyValueStorage<LastInterviewStatus> lastStatusesStorage;
         private readonly IReadSideRepositoryWriter<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage;
-        private readonly IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferencesStorage;
 
         public CumulativeChartDenormalizer(
             IReadSideKeyValueStorage<LastInterviewStatus> lastStatusesStorage,
             IReadSideRepositoryWriter<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage,
-            IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage)
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferencesStorage)
         {
             this.lastStatusesStorage = lastStatusesStorage;
             this.cumulativeReportStatusChangeStorage = cumulativeReportStatusChangeStorage;
@@ -37,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             InterviewStatus? oldStatus = this.lastStatusesStorage.GetById(interviewId)?.Status;
             InterviewStatus newStatus = @event.Payload.Status;
 
-            InterviewReferences interviewReferences = this.interviewReferencesStorage.GetById(@event.EventSourceId);
+            var questionnaireIdentity = this.interviewReferencesStorage.GetQuestionnaireIdentity(@event.EventSourceId);
 
             var lastInterviewStatus = new LastInterviewStatus(interviewId, newStatus);
             this.lastStatusesStorage.Store(lastInterviewStatus, lastInterviewStatus.EntryId);
@@ -46,8 +47,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             {
                 var minusChange = new CumulativeReportStatusChange(
                     $"{@event.EventIdentifier.FormatGuid()}-minus",
-                    interviewReferences.QuestionnaireId,
-                    interviewReferences.QuestionnaireVersion,
+                    questionnaireIdentity.QuestionnaireId,
+                    questionnaireIdentity.Version,
                     @event.EventTimeStamp.Date,
                     oldStatus.Value,
                     -1);
@@ -57,8 +58,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
             var plusChange = new CumulativeReportStatusChange(
                 $"{@event.EventIdentifier.FormatGuid()}-plus",
-                interviewReferences.QuestionnaireId,
-                interviewReferences.QuestionnaireVersion,
+                questionnaireIdentity.QuestionnaireId,
+                questionnaireIdentity.Version,
                 @event.EventTimeStamp.Date,
                 newStatus,
                 +1);

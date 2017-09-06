@@ -417,14 +417,6 @@ namespace WB.Tests.Abc.TestFactories
             return interviewQuestion;
         }
 
-        public InterviewReferences InterviewReferences(
-            Guid? questionnaireId = null,
-            long? questionnaireVersion = null)
-            => new InterviewReferences(
-                Guid.NewGuid(),
-                questionnaireId ?? Guid.NewGuid(),
-                questionnaireVersion ?? 301);
-
         public InterviewStatuses InterviewStatuses(Guid? interviewid = null, Guid? questionnaireId = null, 
             long? questionnaireVersion = null, params InterviewCommentedStatus[] statuses)
             => new InterviewStatuses

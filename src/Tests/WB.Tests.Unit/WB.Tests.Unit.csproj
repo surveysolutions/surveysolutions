@@ -1037,9 +1037,6 @@
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_StaticTextsEnabled_received.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_StaticTextsDeclaredValid_received.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_StaticTextsDeclaredInvalid_received.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewReferencesDenormalizerTests\when_applying_InterviewCreated_event.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewReferencesDenormalizerTests\when_applying_InterviewFromPreloadedDataCreated_event.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewReferencesDenormalizerTests\when_applying_InterviewOnClientCreated_event.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_received_by_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\LinkedOptionsDenormalizerTests\LinkedOptionsDenormalizerNUnitTests.cs" />
