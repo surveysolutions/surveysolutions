@@ -97,10 +97,8 @@
         </ModalFrame>
 
         <ModalFrame ref="editQuantityModal"
-                    :title="$t('Assignments.ChangeQuantityModalTitle', [ editedRowId ])">
-            <p>
-                {{ $t("Assignments.QuantityExplanation")}}
-            </p>
+                    :title="$t('Assignments.ChangeSizeModalTitle', [ editedRowId ])">
+            <p>{{ $t("Assignments.SizeExplanation")}}</p>
             <form onsubmit="return false;">
                 <div class="form-group"
                      v-bind:class="{'has-error': errors.has('editedQuantity')}">
