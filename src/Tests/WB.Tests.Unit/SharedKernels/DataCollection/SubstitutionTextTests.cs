@@ -63,6 +63,38 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         }
 
         [Test]
+        public void when_substitution_question_contains_non_existing_question_should_not_fail()
+        {
+            var targetEntityId = Create.Entity.Identity(Guid.Parse("11111111111111111111111111111111"), Create.Entity.RosterVector(1));
+            
+            var substitutedVariableId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+
+            SubstitutionText text = CreateSubstitutionText(targetEntityId, "%rostertitle% %question% %variable%",
+                ByQuestions: new List<SubstitutionVariable>
+                {
+                    new SubstitutionVariable
+                    {
+                        Id = substitutedVariableId,
+                        Name = "question"
+                    }
+                }
+            );
+            
+            var variableRawValue = "<b>variable value</b>";
+            
+            var sourceTreeMainSection = Create.Entity.InterviewTreeSection(children: new IInterviewTreeNode[]
+            {
+                Create.Entity.InterviewTreeVariable(Create.Entity.Identity(substitutedVariableId), value: variableRawValue)
+            });
+
+            var tree = Create.Entity.InterviewTree(sections: sourceTreeMainSection);
+
+            text.SetTree(tree);
+
+            Assert.DoesNotThrow(() => text.ReplaceSubstitutions(), "KP-10048 hrvs2: error on interview details");
+        }
+
+        [Test]
         public void when_replacing_text_with_answer_containing_html_Should_html_encode_answer()
         {
             var targetEntityId = Create.Entity.Identity(Guid.Parse("11111111111111111111111111111111"), Create.Entity.RosterVector(1));
@@ -73,11 +105,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
             SubstitutionText text = CreateSubstitutionText(targetEntityId,
                 "%rostertitle% %question% %variable%",
-                new SubstitutionVariable
+                new List<SubstitutionVariable>
                 {
-                    Id = substitutedQuestionId,
-                    Name = "question"
-                }.ToEnumerable().ToList(),
+                    new SubstitutionVariable
+                    {
+                        Id = substitutedQuestionId, 
+                        Name = "question"
+                    }
+                },
                 new SubstitutionVariable()
                 {
                     Id = substitutedRosterId,
@@ -124,16 +159,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Identity id,
             string template,
             List<SubstitutionVariable> ByQuestions,
-            List<SubstitutionVariable> ByRosters,
-            List<SubstitutionVariable> ByVariables)
+            List<SubstitutionVariable> ByRosters = null,
+            List<SubstitutionVariable> ByVariables = null)
         {
             SubstitutionText text = new SubstitutionText(id,
                 template,
                 new SubstitutionVariables
                 {
                     ByQuestions = ByQuestions,
-                    ByRosters = ByRosters,
-                    ByVariables = ByVariables
+                    ByRosters = ByRosters ?? new List<SubstitutionVariable>(),
+                    ByVariables = ByVariables ?? new List<SubstitutionVariable>()
                 },
                 Create.Service.SubstitutionService(),
                 Create.Service.VariableToUIStringService());
