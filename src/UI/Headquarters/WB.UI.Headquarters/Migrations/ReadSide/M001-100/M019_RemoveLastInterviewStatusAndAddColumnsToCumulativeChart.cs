@@ -15,23 +15,29 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
         {
             if (Schema.Table("lastinterviewstatuses").Exists())
                 Delete.Table("lastinterviewstatuses");
-            
+
             Alter.Table(CumulativeReportStatusChangesTable).AddColumn(QuestionnaireIdentityColumn).AsString().Nullable();
             Alter.Table(CumulativeReportStatusChangesTable).AddColumn(InterviewIdColumn).AsGuid().Nullable();
             Alter.Table(CumulativeReportStatusChangesTable).AddColumn(EventSequenceColumn).AsInt32().Nullable();
             Alter.Table(CumulativeReportStatusChangesTable).AddColumn(TempEntryraw).AsGuid().Nullable();
 
             Execute.Sql($@"UPDATE readside.{CumulativeReportStatusChangesTable} 
-                SET {
-                        QuestionnaireIdentityColumn
-                    }=concat(replace(questionnaireid::text, '-', ''), '$', questionnaireversion),
-                {TempEntryraw}=uuid(substr(entryid, 0, 33))");
+                SET {QuestionnaireIdentityColumn}=concat(replace(questionnaireid::text, '-', ''), '$', questionnaireversion),
+                    {TempEntryraw}=uuid(substr(entryid, 0, 33))");
 
-                Execute.Sql($@"UPDATE readside.{CumulativeReportStatusChangesTable}
-                SET ({InterviewIdColumn}, {EventSequenceColumn}) = (
-                    SELECT eventsourceid, globalsequence
-                    FROM events.events                    
-                    WHERE readside.{CumulativeReportStatusChangesTable}.{TempEntryraw} = events.events.id)");
+            Execute.Sql($@"DO $$
+                DECLARE doesEventsTableExists integer;
+                BEGIN
+                    SELECT count(tablename) FROM pg_tables WHERE schemaname = 'events' AND tablename = 'events' INTO doesEventsTableExists;
+                    IF doesEventsTableExists > 0 THEN
+                        UPDATE readside.{CumulativeReportStatusChangesTable}
+                        SET ({InterviewIdColumn}, {EventSequenceColumn}) = (
+                            SELECT eventsourceid, globalsequence
+                            FROM events.events                    
+                            WHERE readside.{CumulativeReportStatusChangesTable}.{TempEntryraw} = events.events.id);
+                    END IF;
+                END
+                $$");
             
             Delete.Column(TempEntryraw).FromTable(CumulativeReportStatusChangesTable);
             Delete.Column("questionnaireid").FromTable(CumulativeReportStatusChangesTable);
