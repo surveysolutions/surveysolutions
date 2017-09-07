@@ -9,6 +9,8 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
         private static readonly string QuestionnaireIdentityColumn = "questionnaireidentity";
         private static readonly string InterviewIdColumn = "interviewid";
         private static readonly string EventSequenceColumn = "eventsequence";
+        private static readonly string TempEntryraw = "tempentryraw";
+
         public override void Up()
         {
             Delete.Table("lastinterviewstatuses");
@@ -17,15 +19,19 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
             Alter.Table(CumulativeReportStatusChangesTable).AddColumn(InterviewIdColumn).AsGuid().Nullable();
             Alter.Table(CumulativeReportStatusChangesTable).AddColumn(EventSequenceColumn).AsInt32().Nullable();
 
-            Execute.Sql($@"UPDATE readside.{CumulativeReportStatusChangesTable} 
-                           SET {QuestionnaireIdentityColumn}=concat(replace(questionnaireid::text, '-', ''), '$', questionnaireversion)");
+            Alter.Table(CumulativeReportStatusChangesTable).AddColumn(TempEntryraw).AsGuid().Nullable();
 
+            Execute.Sql($@"UPDATE readside.{CumulativeReportStatusChangesTable} 
+                SET {QuestionnaireIdentityColumn}=concat(replace(questionnaireid::text, '-', ''), '$', questionnaireversion),
+                {TempEntryraw}=uuid(substr(entryid, 0, 33))");
+            
             Execute.Sql($@"UPDATE readside.{CumulativeReportStatusChangesTable}
                 SET ({InterviewIdColumn}, {EventSequenceColumn}) = (
                     SELECT eventsourceid, globalsequence
-                    FROM events.events
-                    WHERE substr(readside.{CumulativeReportStatusChangesTable}.entryid, 0, 33) = replace(events.events.id::text, '-', ''))");
+                    FROM events.events                    
+                    WHERE readside.{CumulativeReportStatusChangesTable}.entryraw = events.events.id)");
 
+            Delete.Column(TempEntryraw).FromTable(CumulativeReportStatusChangesTable);
             Delete.Column("questionnaireid").FromTable(CumulativeReportStatusChangesTable);
             Delete.Column("questionnaireversion").FromTable(CumulativeReportStatusChangesTable);
         }
