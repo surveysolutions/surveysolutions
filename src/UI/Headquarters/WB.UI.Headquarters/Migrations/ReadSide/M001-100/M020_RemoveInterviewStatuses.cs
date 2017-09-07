@@ -1,4 +1,5 @@
-﻿using FluentMigrator;
+﻿using System.Data;
+using FluentMigrator;
 
 namespace WB.UI.Headquarters.Migrations.ReadSide
 {
@@ -12,9 +13,14 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
 
             Delete.Table("interviewstatuses");
 
+            Execute.Sql($@" DELETE FROM readside.interviewcommentedstatuses st WHERE NOT EXISTS (
+                              SELECT 1 FROM readside.interviewsummaries isum WHERE st.InterviewId = isum.SummaryId
+                            ); ");
+
             Create.ForeignKey("FK_InterviewSummary_InterviewCommentedStatuses")
                 .FromTable("interviewcommentedstatuses").ForeignColumn("interviewid")
-                .ToTable("interviewsummaries").PrimaryColumn("summaryid");
+                .ToTable("interviewsummaries").PrimaryColumn("summaryid")
+                .OnDelete(Rule.Cascade);
         }
 
         public override void Down()
