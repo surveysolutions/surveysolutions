@@ -21,11 +21,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
     public class QuantityReportFactory : IQuantityReportFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewstatusStorage;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewstatusStorage;
         private readonly IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage;
 
         public QuantityReportFactory(
-            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewstatusStorage,
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewstatusStorage,
             IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage)
         {
             this.interviewstatusStorage = interviewstatusStorage;

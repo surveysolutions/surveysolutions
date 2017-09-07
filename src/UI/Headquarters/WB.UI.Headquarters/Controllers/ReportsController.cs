@@ -34,7 +34,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAuthorizedUser authorizedUser;
         private readonly IUserViewFactory userViewFactory;
         private readonly ITeamUsersAndQuestionnairesFactory teamUsersAndQuestionnairesFactory;
-        private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses;
 
         public ReportsController(
             IMapReport mapReport, 
@@ -42,7 +42,7 @@ namespace WB.UI.Headquarters.Controllers
             IAuthorizedUser authorizedUser, 
             IUserViewFactory userViewFactory, 
             ITeamUsersAndQuestionnairesFactory teamUsersAndQuestionnairesFactory, 
-            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses)
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses)
         {
             this.mapReport = mapReport;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
