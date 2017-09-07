@@ -29,7 +29,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 SET ({InterviewIdColumn}, {EventSequenceColumn}) = (
                     SELECT eventsourceid, globalsequence
                     FROM events.events                    
-                    WHERE readside.{CumulativeReportStatusChangesTable}.entryraw = events.events.id)");
+                    WHERE readside.{CumulativeReportStatusChangesTable}.{TempEntryraw} = events.events.id)");
 
             Delete.Column(TempEntryraw).FromTable(CumulativeReportStatusChangesTable);
             Delete.Column("questionnaireid").FromTable(CumulativeReportStatusChangesTable);
