@@ -480,6 +480,7 @@
     <Compile Include="BoundedContexts\Headquarters\Assignments\when_filter_assignments_list.cs" />
     <Compile Include="BoundedContexts\Headquarters\Assignments\when_getting_assignments_for_web_interview.cs" />
     <Compile Include="BoundedContexts\Headquarters\Assignments\when_getting_assignments_ready_for_web_interview.cs" />
+    <Compile Include="BoundedContexts\Headquarters\BinaryFormatDataExportHandlerTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\ExtensionsTest.cs" />
     <Compile Include="BoundedContexts\Headquarters\InterviewPackagesServiceTests\InterviewPackagesServiceTestsContext.cs" />
     <Compile Include="BoundedContexts\Headquarters\InterviewPackagesServiceTests\when_sync_package_contains_interview_key_of_another_existing_interview.cs" />
