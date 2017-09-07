@@ -43,6 +43,9 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
             Delete.Column(QuestionnaireIdentityColumn).FromTable(CumulativeReportStatusChangesTable);
             Delete.Column(InterviewIdColumn).FromTable(CumulativeReportStatusChangesTable);
             Delete.Column(EventSequenceColumn).FromTable(CumulativeReportStatusChangesTable);
+
+            Alter.Table(CumulativeReportStatusChangesTable).AddColumn("questionnaireid").AsGuid().Nullable();
+            Alter.Table(CumulativeReportStatusChangesTable).AddColumn("questionnaireversion").AsInt64().Nullable();
             // Table is going to be created on first use
         }
     }
