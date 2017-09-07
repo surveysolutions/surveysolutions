@@ -15,7 +15,7 @@
     <RootNamespace>WB.UI.Headquarters</RootNamespace>
     <AssemblyName>WB.UI.Headquarters</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -1727,6 +1727,7 @@
     <Compile Include="Migrations\ReadSide\M001-100\M018_RemoveInterviewReferencesTable.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M019_RemoveLastInterviewStatusAndAddColumnsToCumulativeChart.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M020_RemoveInterviewStatuses.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201709071637_AddIndexToCumulativeReportStatusChangesTable.cs" />
     <Compile Include="Migrations\Users\M005_AddDeviceAppVersionToProfile.cs" />
     <Compile Include="Models\InterviewsDataTableRequest.cs" />
     <Compile Include="Models\Reports\StatusDurationModel.cs" />
@@ -2178,7 +2179,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50491</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/headquarters</IISUrl>
+          <IISUrl>http://localhost:50491/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
