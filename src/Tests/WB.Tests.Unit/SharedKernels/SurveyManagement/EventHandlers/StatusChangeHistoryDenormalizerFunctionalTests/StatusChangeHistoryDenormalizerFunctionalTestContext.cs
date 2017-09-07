@@ -10,12 +10,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
 {
     internal class StatusChangeHistoryDenormalizerFunctionalTestContext
     {
-        public static StatusChangeHistoryDenormalizerFunctional CreateDenormalizer(IReadSideRepositoryWriter<InterviewStatuses> interviewStatuses = null)
+        public static StatusChangeHistoryDenormalizerFunctional CreateDenormalizer(IReadSideRepositoryWriter<InterviewSummary> interviewStatuses = null)
         {
             var defaultUserView = Create.Entity.UserView(supervisorId: Guid.NewGuid());
             return
                 new StatusChangeHistoryDenormalizerFunctional(
-                    interviewStatuses ?? Mock.Of<IReadSideRepositoryWriter<InterviewStatuses>>(),
+                    interviewStatuses ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
                     Mock.Of<IUserViewFactory>(_ => _.GetUser(Moq.It.IsAny<UserViewInputModel>()) == defaultUserView),
                     Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(
                         _ => _.GetById(Moq.It.IsAny<string>()) == new InterviewSummary()));

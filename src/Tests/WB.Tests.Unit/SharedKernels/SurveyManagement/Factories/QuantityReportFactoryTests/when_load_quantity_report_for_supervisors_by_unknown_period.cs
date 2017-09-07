@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
         public void should_throw_ArgumentException() {
             var input = CreateQuantityByInterviewersReportInputModel(supervisorId: Id.g1, period: "abr");
 
-            var interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
+            var interviewStatuses = new TestInMemoryWriter<InterviewSummary>();
 
             var quantityReportFactory = CreateQuantityReportFactory(interviewStatuses: interviewStatuses);
 

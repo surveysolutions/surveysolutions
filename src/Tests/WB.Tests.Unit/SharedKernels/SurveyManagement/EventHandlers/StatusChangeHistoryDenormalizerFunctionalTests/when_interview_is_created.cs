@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
     {
         Establish context = () =>
         {
-            interviewStatusesStorage = new TestInMemoryWriter<InterviewStatuses>();
+            interviewStatusesStorage = new TestInMemoryWriter<InterviewSummary>();
             statusEventsToPublish = new List<IPublishableEvent>();
 
             statusEventsToPublish.Add(Create.PublishedEvent.InterviewOnClientCreated(interviewId: Guid.NewGuid()));
@@ -43,6 +43,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
 
         private static StatusChangeHistoryDenormalizerFunctional denormalizer;
         private static List<IPublishableEvent> statusEventsToPublish;
-        private static TestInMemoryWriter<InterviewStatuses> interviewStatusesStorage;
+        private static TestInMemoryWriter<InterviewSummary> interviewStatusesStorage;
     }
 }
