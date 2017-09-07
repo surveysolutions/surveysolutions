@@ -23,12 +23,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
     internal class InterviewSynchronizationDtoFactory : IInterviewSynchronizationDtoFactory
     {
         private readonly IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore;
-        private readonly IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository;
+        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewsRepository;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IRosterStructureService rosterStructureService;
 
         public InterviewSynchronizationDtoFactory(
-            IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository,
+            IReadSideRepositoryWriter<InterviewSummary> interviewsRepository,
             IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore, 
             IQuestionnaireStorage questionnaireStorage,
             IRosterStructureService rosterStructureService)

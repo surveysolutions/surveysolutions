@@ -4,6 +4,7 @@ using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -18,7 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
     {
         private readonly IReadSideRepositoryWriter<InterviewStatusTimeSpans> interviewCustomStatusTimestampStorage;
-        private readonly IReadSideRepositoryWriter<InterviewStatuses> statuses;
+        private readonly IReadSideRepositoryWriter<InterviewSummary> statuses;
 
         private readonly InterviewExportedAction[] beginStatusesForCompleteStatus = new[]
         {
@@ -27,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewStatusTimeSpanDenormalizer(
             IReadSideRepositoryWriter<InterviewStatusTimeSpans> interviewCustomStatusTimestampStorage,
-            IReadSideRepositoryWriter<InterviewStatuses> statuses)
+            IReadSideRepositoryWriter<InterviewSummary> statuses)
         {
             this.interviewCustomStatusTimestampStorage = interviewCustomStatusTimestampStorage;
             this.statuses = statuses;
@@ -64,7 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             {
                 interviewCustomStatusTimestamps = new InterviewStatusTimeSpans()
                 {
-                    InterviewId = statusHistory.InterviewId,
+                    InterviewId = statusHistory.InterviewId.FormatGuid(),
                     QuestionnaireId = statusHistory.QuestionnaireId,
                     QuestionnaireVersion = statusHistory.QuestionnaireVersion
                 };
@@ -88,7 +89,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 interviewCustomStatusTimestamps.InterviewId);
         }
 
-        private InterviewCommentedStatus[] GetStausesAfterLastAssignOrReject(InterviewStatuses statusHistory, InterviewCommentedStatus lastAssignOfRejectStatus)
+        private InterviewCommentedStatus[] GetStausesAfterLastAssignOrReject(InterviewSummary statusHistory, InterviewCommentedStatus lastAssignOfRejectStatus)
         {
             return statusHistory.InterviewCommentedStatuses.SkipWhile(s => s.Id != lastAssignOfRejectStatus.Id)
                   .Skip(1)
@@ -142,7 +143,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             {
                 interviewCustomStatusTimestamps = new InterviewStatusTimeSpans()
                 {
-                    InterviewId = statusHistory.InterviewId,
+                    InterviewId = statusHistory.InterviewId.FormatGuid(),
                     QuestionnaireId = statusHistory.QuestionnaireId,
                     QuestionnaireVersion = statusHistory.QuestionnaireVersion
                 };

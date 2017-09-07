@@ -27,11 +27,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
     public class SpeedReportFactory: ISpeedReportFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatusesStorage;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatusesStorage;
 
         private readonly IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage;
 
-        public SpeedReportFactory(IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatusesStorage, 
+        public SpeedReportFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatusesStorage, 
             IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage)
         {
             this.interviewStatusesStorage = interviewStatusesStorage;

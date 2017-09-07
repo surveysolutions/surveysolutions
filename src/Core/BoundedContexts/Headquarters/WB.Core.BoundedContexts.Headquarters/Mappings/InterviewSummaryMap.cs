@@ -54,22 +54,43 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                 });
 
             List(x => x.InterviewCommentedStatuses, listMap =>
-            {
-                listMap.Table("InterviewCommentedStatuses");
-                listMap.Index(index => index.Column("Position"));
-                listMap.Key(key => key.Column("interviewId"));
-                listMap.Lazy(CollectionLazy.Lazy);
-                listMap.Cascade(Cascade.None);
-            }, rel =>
-            {
-                rel.Component(cmp =>
                 {
-                    cmp.Property(x => x.TimespanWithPreviousStatusLong, clm =>
+                    listMap.Table("InterviewCommentedStatuses");
+                    listMap.Index(index => index.Column("Position"));
+                    listMap.Key(keyMap =>
                     {
-                        clm.Column("TimeSpanWithPreviousStatus");
+                        keyMap.Column(clm =>
+                        {
+                            clm.Name("InterviewId");
+                            clm.Index("InterviewSummary_InterviewCommentedStatuses");
+                        });
+                        keyMap.ForeignKey("FK_InterviewSummary_InterviewCommentedStatuses");
                     });
-                });
-            });
+                    listMap.Lazy(CollectionLazy.Lazy);
+                    listMap.Cascade(Cascade.All | Cascade.DeleteOrphans);
+                },
+                rel =>
+                {
+                    rel.Component(cmp =>
+                    {
+                        cmp.Property(x => x.Id);
+                        cmp.Property(x => x.SupervisorId);
+                        cmp.Property(x => x.InterviewerId);
+                        cmp.Property(x => x.StatusChangeOriginatorId);
+                        cmp.Property(x => x.Timestamp);
+                        cmp.Property(x => x.StatusChangeOriginatorName);
+                        cmp.Property(x => x.StatusChangeOriginatorRole);
+                        cmp.Property(x => x.Status);
+                        cmp.Property(x => x.Comment);
+                        cmp.Property(x => x.TimespanWithPreviousStatusLong, clm =>
+                        {
+                            clm.Column("TimeSpanWithPreviousStatus");
+                        });
+                        cmp.Property(x => x.SupervisorName);
+                        cmp.Property(x => x.InterviewerName);
+                    });
+                }
+            );
         }
     }
 

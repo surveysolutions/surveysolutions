@@ -12,6 +12,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public InterviewSummary()
         {
             this.AnswersToFeaturedQuestions = new List<QuestionAnswer>();
+            this.InterviewCommentedStatuses = new List<InterviewCommentedStatus>();
         }
 
         public InterviewSummary(QuestionnaireDocument questionnaire) : this()

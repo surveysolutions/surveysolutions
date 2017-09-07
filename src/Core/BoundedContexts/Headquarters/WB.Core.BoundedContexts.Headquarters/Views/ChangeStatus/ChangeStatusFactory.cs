@@ -18,9 +18,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus
 
     public class ChangeStatusFactory : IChangeStatusFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviews;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
 
-        public ChangeStatusFactory(IQueryableReadSideRepositoryReader<InterviewStatuses> interviews)
+        public ChangeStatusFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviews)
         {
             this.interviews = interviews;
         }
