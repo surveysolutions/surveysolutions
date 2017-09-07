@@ -9,8 +9,11 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
     {
         public override void Up()
         {
-            Delete.Table("userdocuments");
+            Delete.ForeignKey("FK_deviceinfos_User_userdocuments_id").OnTable("deviceinfos");
+            Delete.ForeignKey("FK_deviceinfos_userid_userdocuments_id").OnTable("deviceinfos");
+
             Delete.Table("roles");
+            Delete.Table("userdocuments");
         }
 
         public override void Down()
