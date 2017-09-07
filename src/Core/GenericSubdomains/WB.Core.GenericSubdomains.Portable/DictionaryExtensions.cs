@@ -23,9 +23,7 @@ namespace WB.Core.GenericSubdomains.Portable
 
         public static TValue GetOrAdd<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, Func<TValue> valueInit)
         {
-            TValue value;
-
-            if (dict.TryGetValue(key, out value))
+            if (dict.TryGetValue(key, out var value))
                 return value;
 
             value = valueInit.Invoke();
@@ -35,9 +33,7 @@ namespace WB.Core.GenericSubdomains.Portable
 
         public static TValue GetOrUpdate<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, Func<TValue> valueInit)
         {
-            TValue value;
-
-            if (dict.TryGetValue(key, out value))
+            if (dict.TryGetValue(key, out var value))
                 return value;
 
             value = valueInit.Invoke();
@@ -48,8 +44,7 @@ namespace WB.Core.GenericSubdomains.Portable
         public static TValue GetOrNull<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
             where TValue : class
         {
-            TValue value;
-            return dictionary.TryGetValue(key, out value) ? value : null;
+            return dictionary.TryGetValue(key, out var value) ? value : null;
         }
 
         public static List<TValue> GetOrEmpty<TKey, TValue>(this IDictionary<TKey, List<TValue>> dictionary, TKey key)
@@ -59,8 +54,7 @@ namespace WB.Core.GenericSubdomains.Portable
 
         public static bool TryRemove<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> dictionary, TKey key)
         {
-            TValue _;
-            return dictionary.TryRemove(key, out _);
+            return dictionary.TryRemove(key, out var _);
         }
     }
 }
