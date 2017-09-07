@@ -40,15 +40,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
             DateTimeRange[] dateTimeRangesLocal =
                 Enumerable.Range(0, columnCount)
-                    .Select(i => new DateTimeRange(AddPeriod(localFrom, period, i), AddPeriod(localFrom, period, i + 1)))
+                    .Select(i => new DateTimeRange(AddPeriod(from.Date, period, i), AddPeriod(from.Date, period, i + 1)))
                     .Where(i => localMinDate.HasValue && i.To >= localMinDate)
                     .ToArray();
 
-
-
             DateTimeRange[] dateTimeRangesUtc =
-                dateTimeRangesLocal.Select(x => new DateTimeRange(x.From.AddMinutes(timezoneAdjastmentMins), x.To.AddMinutes(timezoneAdjastmentMins)))
+                Enumerable.Range(0, columnCount)
+                    .Select(i => new DateTimeRange(AddPeriod(utcFrom, period, i), AddPeriod(utcFrom, period, i + 1)))
+                    .Where(i => utcMinDate.HasValue && i.To >= utcMinDate)
                     .ToArray();
+
 
             return new ReportTimeline
             {
