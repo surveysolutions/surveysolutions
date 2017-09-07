@@ -283,7 +283,7 @@ namespace WB.Tests.Abc
         {
             var questionnaire = Create.Entity.PlainQuestionnaire(document, 1, null);
             return new InterviewSynchronizationDtoFactory(
-                Mock.Of<IReadSideRepositoryWriter<InterviewStatuses>>(),
+                Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
                 Mock.Of<IReadSideKeyValueStorage<InterviewLinkedQuestionOptions>>(),
                 Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == document &&
                     _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == questionnaire),

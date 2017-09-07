@@ -15,9 +15,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
         Establish context = () =>
         {
             interviewStatusTimeSpansStorage = new TestInMemoryWriter<InterviewStatusTimeSpans>();
-            interviewStatusesStorage = new TestInMemoryWriter<InterviewStatuses>();
+            interviewStatusesStorage = new TestInMemoryWriter<InterviewSummary>();
             interviewStatuses =
-                Create.Entity.InterviewStatuses(interviewid: interviewId, statuses:
+                Create.Entity.InterviewSummary(interviewId: interviewId, statuses:
                     new[]
                     {
                         Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.InterviewerAssigned, statusId: interviewId),
@@ -53,10 +53,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
                    .BeginStatus.ShouldEqual(InterviewExportedAction.InterviewerAssigned);
 
         private static InterviewStatusTimeSpanDenormalizer denormalizer;
-        private static TestInMemoryWriter<InterviewStatuses> interviewStatusesStorage;
+        private static TestInMemoryWriter<InterviewSummary> interviewStatusesStorage;
         private static TestInMemoryWriter<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage;
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
-        private static InterviewStatuses interviewStatuses;
+        private static InterviewSummary interviewStatuses;
 
     }
 }

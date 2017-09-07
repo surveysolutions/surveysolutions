@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
         {
             input = CreateSpeedByInterviewersReportInputModel(supervisorId: supervisorId, period: "abr");
 
-            interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
+            interviewStatuses = new TestInMemoryWriter<InterviewSummary>();
 
             quantityReportFactory = CreateSpeedReportFactory(interviewStatuses: interviewStatuses);
         };
@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
         private static SpeedReportFactory quantityReportFactory;
         private static SpeedByInterviewersReportInputModel input;
         private static ArgumentException exception;
-        private static TestInMemoryWriter<InterviewStatuses> interviewStatuses;
+        private static TestInMemoryWriter<InterviewSummary> interviewStatuses;
         private static Guid supervisorId = Guid.Parse("11111111111111111111111111111111");
     }
 }

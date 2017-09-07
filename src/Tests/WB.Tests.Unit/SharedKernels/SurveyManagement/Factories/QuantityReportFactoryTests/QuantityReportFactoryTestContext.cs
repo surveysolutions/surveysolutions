@@ -16,11 +16,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
     internal class QuantityReportFactoryTestContext
     {
         protected static QuantityReportFactory CreateQuantityReportFactory(
-            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses = null,
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses = null,
             IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage=null)
         {
             return new QuantityReportFactory(
-                interviewStatuses ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatuses>>(), interviewStatusTimeSpansStorage??new TestInMemoryWriter<InterviewStatusTimeSpans>());
+                interviewStatuses ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(), interviewStatusTimeSpansStorage??new TestInMemoryWriter<InterviewStatusTimeSpans>());
         }
 
         protected static QuantityByInterviewersReportInputModel CreateQuantityByInterviewersReportInputModel(

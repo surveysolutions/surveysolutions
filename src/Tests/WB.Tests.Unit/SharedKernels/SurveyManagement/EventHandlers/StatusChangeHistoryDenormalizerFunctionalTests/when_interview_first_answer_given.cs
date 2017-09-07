@@ -18,8 +18,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
     {
         Establish context = () =>
         {
-            interviewStatusesStorage = new TestInMemoryWriter<InterviewStatuses>();
-            interviewStatuses = Create.Entity.InterviewStatuses(statuses:Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.InterviewerAssigned, statusId: interviewId));
+            interviewStatusesStorage = new TestInMemoryWriter<InterviewSummary>();
+            interviewStatuses = Create.Entity.InterviewSummary(statuses: new [] { Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.InterviewerAssigned, statusId: interviewId) } );
             denormalizer = CreateDenormalizer(interviewStatuses: interviewStatusesStorage);
         };
 
@@ -29,9 +29,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
             () => result.InterviewCommentedStatuses.Last().Status.ShouldEqual(InterviewExportedAction.FirstAnswerSet);
 
         private static StatusChangeHistoryDenormalizerFunctional denormalizer;
-        private static TestInMemoryWriter<InterviewStatuses> interviewStatusesStorage;
+        private static TestInMemoryWriter<InterviewSummary> interviewStatusesStorage;
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
-        private static InterviewStatuses interviewStatuses;
-        private static InterviewStatuses result;
+        private static InterviewSummary interviewStatuses;
+        private static InterviewSummary result;
     }
 }

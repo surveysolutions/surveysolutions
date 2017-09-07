@@ -23,8 +23,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
 
             var user = Create.Entity.UserDocument(supervisorId: supervisorId);
 
-            var interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
-            interviewStatuses.Store(Create.Entity.InterviewStatuses(questionnaireId: input.QuestionnaireId, 
+            var interviewStatuses = new TestInMemoryWriter<InterviewSummary>();
+            interviewStatuses.Store(Create.Entity.InterviewSummary(questionnaireId: input.QuestionnaireId, 
                 questionnaireVersion: input.QuestionnaireVersion, statuses: new[]
                 {
                     Create.Entity.InterviewCommentedStatus(timestamp: initialStatusChangeDate)

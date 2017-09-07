@@ -20,9 +20,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
 
             var user = Create.Entity.UserDocument(supervisorId: supervisorId);
 
-            interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
+            interviewStatuses = new TestInMemoryWriter<InterviewSummary>();
             interviewStatuses.Store(
-                Create.Entity.InterviewStatuses(questionnaireId: input.QuestionnaireId,
+                Create.Entity.InterviewSummary(questionnaireId: input.QuestionnaireId,
                     questionnaireVersion: input.QuestionnaireVersion,
                     statuses: new[]
                     {
@@ -69,7 +69,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
         private static SpeedReportFactory speedReportFactory;
         private static SpeedByInterviewersReportInputModel input;
         private static SpeedByResponsibleReportView result;
-        private static TestInMemoryWriter<InterviewStatuses> interviewStatuses;
+        private static TestInMemoryWriter<InterviewSummary> interviewStatuses;
         private static Guid supervisorId = Guid.Parse("11111111111111111111111111111111");
     }
 }
