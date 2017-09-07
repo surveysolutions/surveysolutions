@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             int columnCount,
             int timezoneAdjastmentMins,
             QuestionnaireIdentity identity,
-            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewstatusStorage)
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewstatusStorage)
         {
             var localTo = from.Date.AddDays(1);
             var localFrom = AddPeriod(localTo, period, -columnCount);
@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             throw new ArgumentException($"period '{period}' can't be recognized");
         }
 
-        private static DateTime? GetFirstInterviewCreatedDate(QuestionnaireIdentity questionnaire, IQueryableReadSideRepositoryReader<InterviewStatuses> interviewstatusStorage)
+        private static DateTime? GetFirstInterviewCreatedDate(QuestionnaireIdentity questionnaire, IQueryableReadSideRepositoryReader<InterviewSummary> interviewstatusStorage)
         {
             DateTime? minDate;
             if (questionnaire != null && questionnaire.QuestionnaireId != Guid.Empty)
