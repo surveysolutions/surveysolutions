@@ -94,6 +94,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             foreach (var substitution in this.substitutionVariables.ByQuestions)
             {
                 var question = this.tree.FindEntityInQuestionBranch(substitution.Id, this.identity) as InterviewTreeQuestion;
+
                 string answerString = question?.GetAnswerAsString(CultureInfo.CurrentCulture);
 
                 answerString = string.IsNullOrEmpty(answerString)
@@ -102,10 +103,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
                 var htmlReadyAnswer = shouldAddBrowserTags ? WebUtility.HtmlEncode(answerString) : answerString;
 
-                if (shouldAddBrowserTags && question.IsDateTime && question.IsAnswered() == true)
+                if (shouldAddBrowserTags && question != null && question.IsDateTime && question.IsAnswered() == true)
                 {
                 	var asDateTime = question.GetAsInterviewTreeDateTimeQuestion();
                     var dateTime = question.GetAsInterviewTreeDateTimeQuestion().GetAnswer().Value;
+
                     if (asDateTime.IsTimestamp)
                     {
                         htmlReadyAnswer = $"<time datetime=\"{dateTime:s}Z\">{dateTime.ToLocalTime().ToString(asDateTime.UiFormatString)}</time>";
