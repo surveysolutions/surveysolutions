@@ -111,6 +111,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     InvalidCount = interview.CountAllInvalidEntities(),
                     SupervisorsCount = interview.CountEnabledSupervisorQuestions(),
                     HiddenCount = interview.CountEnabledHiddenQuestions(),
+                    UnansweredCount = interview.CountAllEnabledUnansweredQuestions()
                 },
                 History = this.changeStatusFactory.Load(new ChangeStatusInputModel {InterviewId = interviewId}),
                 HasUnprocessedSyncPackages = this.incomingSyncPackagesQueue.HasPendingPackageByInterview(interviewId),
@@ -545,21 +546,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 switch (filter)
                 {
                     case InterviewDetailsFilter.Answered:
-                        return question.IsAnswered();
+                        return !question.IsHidden && !question.IsDisabled() && question.IsAnswered();
                     case InterviewDetailsFilter.Unanswered:
-                        return !question.IsDisabled() && !question.IsAnswered();
+                        return !question.IsHidden && !question.IsDisabled() && !question.IsAnswered();
                     case InterviewDetailsFilter.Commented:
-                        return question.AnswerComments?.Any() ?? false;
+                        return !question.IsHidden && !question.IsDisabled() && (question.AnswerComments?.Any() ?? false);
                     case InterviewDetailsFilter.Enabled:
-                        return !question.IsDisabled();
+                        return !question.IsHidden && !question.IsDisabled();
                     case InterviewDetailsFilter.Flagged:
-                        return GetIsFlagged(question, flaggedQuestionIds);
+                        return !question.IsHidden && !question.IsDisabled() && GetIsFlagged(question, flaggedQuestionIds);
                     case InterviewDetailsFilter.Invalid:
-                        return !question.IsValid;
+                        return !question.IsHidden && !question.IsDisabled() && !question.IsValid;
                     case InterviewDetailsFilter.Supervisors:
-                        return question.IsSupervisors;
+                        return !question.IsHidden && !question.IsDisabled() && question.IsSupervisors;
                     case InterviewDetailsFilter.Hidden:
-                        return question.IsHidden;
+                        return !question.IsDisabled() && question.IsHidden;
                 }
             }
 

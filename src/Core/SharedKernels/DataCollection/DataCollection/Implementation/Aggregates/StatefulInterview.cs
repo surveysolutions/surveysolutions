@@ -396,11 +396,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public int GetGroupsInGroupCount(Identity group) => this.GetGroupsAndRostersInGroup(group).Count();
 
-        private IEnumerable<InterviewTreeQuestion> GetEnabledQuestions()
-            => this.Tree.FindQuestions().Where(question => !question.IsDisabled());
+        private IEnumerable<InterviewTreeQuestion> GetEnabledNotHiddenQuestions() 
+            => this.Tree.FindQuestions().Where(question => !question.IsDisabled() && !question.IsHidden);
 
         private IEnumerable<InterviewTreeQuestion> GetEnabledInterviewerQuestions()
-            => this.GetEnabledQuestions().Where(question =>
+            => this.GetEnabledNotHiddenQuestions().Where(question =>
                 question.IsInterviewer && !question.IsReadonly);
 
         public int CountActiveAnsweredQuestionsInInterview()
@@ -408,15 +408,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public int CountActiveQuestionsInInterview() => this.GetEnabledInterviewerQuestions().Count();
 
+        public int CountAllEnabledUnansweredQuestions()
+            => this.GetEnabledNotHiddenQuestions().Count(question => !question.IsAnswered());
+
         public int CountAllEnabledAnsweredQuestions()
-            => this.GetEnabledQuestions().Count(question => question.IsAnswered());
-        public int CountAllEnabledQuestions() => this.GetEnabledQuestions().Count();
+            => this.GetEnabledNotHiddenQuestions().Count(question => question.IsAnswered());
+        public int CountAllEnabledQuestions() => this.GetEnabledNotHiddenQuestions().Count();
         public int CountAllInvalidEntities() => this.GetAllInvalidEntitiesInInterview().Count();
 
         public int CountEnabledSupervisorQuestions()
-            => this.GetEnabledQuestions().Count(question => question.IsSupervisors);
+            => this.GetEnabledNotHiddenQuestions().Count(question => question.IsSupervisors);
 
-        public int CountEnabledHiddenQuestions() => this.GetEnabledQuestions().Count(question => question.IsHidden);
+        public int CountEnabledHiddenQuestions() => 
+            this.Tree.FindQuestions().Where(question => !question.IsDisabled()).Count(question => question.IsHidden);
 
         public int CountInvalidEntitiesInInterview() => this.GetInvalidEntitiesInInterview().Count();
 
