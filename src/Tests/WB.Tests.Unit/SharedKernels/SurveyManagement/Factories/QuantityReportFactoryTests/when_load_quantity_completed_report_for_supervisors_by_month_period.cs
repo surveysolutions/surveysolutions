@@ -41,9 +41,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
                             timestamp: input.From.Date.AddMonths(2), endStatus: InterviewExportedAction.Completed)
                     }), "2");
 
-            var interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
+            var interviewStatuses = new TestInMemoryWriter<InterviewSummary>();
             interviewStatuses.Store(
-                Create.Entity.InterviewStatuses(questionnaireId: input.QuestionnaireId,
+                Create.Entity.InterviewSummary(questionnaireId: input.QuestionnaireId,
                     questionnaireVersion: input.QuestionnaireVersion,
                     statuses: new[]
                     {

@@ -18,9 +18,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
 
             var user = Guid.NewGuid();
 
-            interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
+            interviewStatuses = new TestInMemoryWriter<InterviewSummary>();
             interviewStatuses.Store(
-                Create.Entity.InterviewStatuses(questionnaireId: input.QuestionnaireId,
+                Create.Entity.InterviewSummary(questionnaireId: input.QuestionnaireId,
                     questionnaireVersion: input.QuestionnaireVersion,
                     statuses: new[]
                     {
@@ -63,6 +63,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
         private static QuantityReportFactory quantityReportFactory;
         private static QuantityBySupervisorsReportInputModel input;
         private static QuantityByResponsibleReportView result;
-        private static TestInMemoryWriter<InterviewStatuses> interviewStatuses;
+        private static TestInMemoryWriter<InterviewSummary> interviewStatuses;
     }
 }

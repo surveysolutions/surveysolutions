@@ -374,7 +374,7 @@ namespace WB.Tests.Abc.TestFactories
             IFileSystemAccessor fileSystemAccessor = null,
             ICsvWriterService csvWriterService = null,
             ICsvWriter csvWriter = null,
-            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses = null,
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses = null,
             QuestionnaireExportStructure questionnaireExportStructure = null,
             IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentaries = null)
             => new ReadSideToTabularFormatExportService(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
@@ -517,14 +517,14 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewActionsExporter InterviewActionsExporter(ICsvWriter csvWriter = null,
             IFileSystemAccessor fileSystemAccessor = null,
-            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses = null,
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses = null,
             QuestionnaireExportStructure questionnaireExportStructure = null)
         {
             return new InterviewActionsExporter(new InterviewDataExportSettings(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 csvWriter ?? Mock.Of<ICsvWriter>(),
                 Create.Service.TransactionManagerProvider(),
-                interviewStatuses ?? new TestInMemoryWriter<InterviewStatuses>(),
+                interviewStatuses ?? new TestInMemoryWriter<InterviewSummary>(),
                 Mock.Of<ILogger>());
         }
     }

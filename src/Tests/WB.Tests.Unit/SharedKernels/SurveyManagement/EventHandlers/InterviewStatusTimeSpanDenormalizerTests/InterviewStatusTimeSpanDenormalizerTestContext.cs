@@ -15,9 +15,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
     internal class InterviewStatusTimeSpanDenormalizerTestContext
     {
         protected static InterviewStatusTimeSpanDenormalizer CreateInterviewStatusTimeSpanDenormalizer(IReadSideRepositoryWriter<InterviewStatusTimeSpans> interviewCustomStatusTimestampStorage=null,
-            IReadSideRepositoryWriter<InterviewStatuses> statuses = null)
+            IReadSideRepositoryWriter<InterviewSummary> statuses = null)
         {
-            return new InterviewStatusTimeSpanDenormalizer(interviewCustomStatusTimestampStorage ?? Mock.Of<IReadSideRepositoryWriter<InterviewStatusTimeSpans>>(), statuses ?? Mock.Of<IReadSideRepositoryWriter<InterviewStatuses>>());
+            return new InterviewStatusTimeSpanDenormalizer(interviewCustomStatusTimestampStorage ?? Mock.Of<IReadSideRepositoryWriter<InterviewStatusTimeSpans>>(), statuses ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>());
         }
     }
 }

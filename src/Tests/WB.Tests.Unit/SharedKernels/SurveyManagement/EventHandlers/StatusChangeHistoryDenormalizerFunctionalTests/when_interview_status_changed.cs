@@ -16,10 +16,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
     {
         Establish context = () =>
         {
-            history = new InterviewStatuses() { InterviewId = interviewId.FormatGuid() };
+            history = new InterviewSummary() { SummaryId = interviewId.FormatGuid() };
 
-            var interviewStatusesStorage = new TestInMemoryWriter<InterviewStatuses>();
-            interviewStatusesStorage.Store(history, history.InterviewId);
+            var interviewStatusesStorage = new TestInMemoryWriter<InterviewSummary>();
+            interviewStatusesStorage.Store(history, history.SummaryId);
 
             statusEventsToPublish = new List<IPublishableEvent>();
             statusEventsToPublish.Add(Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId));
@@ -87,7 +87,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
                 });
 
         private static StatusChangeHistoryDenormalizerFunctional denormalizer;
-        private static InterviewStatuses history;
+        private static InterviewSummary history;
         private static List<IPublishableEvent> statusEventsToPublish;
         private static Guid interviewId=Guid.Parse("11111111111111111111111111111111");
     }
