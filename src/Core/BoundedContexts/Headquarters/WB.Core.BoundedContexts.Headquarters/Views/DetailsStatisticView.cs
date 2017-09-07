@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
         public int SupervisorsCount { get; set; }
         public int AnsweredCount { get; set; }
         public int AllCount { get; set; }
-        public int UnansweredCount => AllCount - AnsweredCount;
+        public int UnansweredCount { get; set; }
         public int HiddenCount { get; set; }
     }
 }
