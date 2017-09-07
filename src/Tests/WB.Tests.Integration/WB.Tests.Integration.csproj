@@ -319,6 +319,7 @@
     <Compile Include="EventHandler\when_using_AnswerNotifier.cs" />
     <Compile Include="Execute.cs" />
     <Compile Include="FileSystemIOAccessorTests\when_creating_not_existing_folder_and_it_s_parent_folders_also_do_not_exist.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_cascading_question_used_in_conditions.cs" />
     <Compile Include="ReportTests\ReportContext.cs" />
     <Compile Include="ReportTests\SurveyAndStatusesTests\HqSurveysAndStatusesReportTests.cs" />
     <Compile Include="ReportTests\SurveyAndStatusesTests\SvSurveysAndStatusesReportTests.cs" />
