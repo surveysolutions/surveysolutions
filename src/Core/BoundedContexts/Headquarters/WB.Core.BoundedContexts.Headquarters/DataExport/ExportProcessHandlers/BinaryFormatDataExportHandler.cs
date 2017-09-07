@@ -32,7 +32,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
-        
+        private readonly ILogger logger;
+
         public BinaryFormatDataExportHandler(
             IFileSystemAccessor fileSystemAccessor, 
             IImageFileStorage imageFileRepository, 
@@ -56,6 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.audioFileStorage = audioFileStorage;
             this.plainTransactionManagerProvider = plainTransactionManagerProvider;
+            this.logger = logger;
         }
 
         protected override DataExportFormat Format => DataExportFormat.Binary;
@@ -92,25 +94,28 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 if (interviewDetails != null)
                 {
                     var questionsWithAnswersOnMultimediaQuestions = interviewDetails.Levels.Values.SelectMany(
-                        level =>
-                            level.QuestionsSearchCache.Values.Where(
-                                    question =>
-                                        question.IsAnswered() && !question.IsDisabled() &&
-                                        multimediaQuestionIds.Contains(question.Id))
-                                .Select(q => q.Answer.ToString())).ToArray();
+                        level => level.QuestionsSearchCache.Values.Where(
+                                question => question.IsAnswered() && !question.IsDisabled() &&
+                                            multimediaQuestionIds.Contains(question.Id))).ToArray();
 
                     if (questionsWithAnswersOnMultimediaQuestions.Any())
                     {
                         if (!this.fileSystemAccessor.IsDirectoryExists(filesFolderForInterview))
                             this.fileSystemAccessor.CreateDirectory(filesFolderForInterview);
 
-                        foreach (var questionsWithAnswersOnMultimediaQuestion in questionsWithAnswersOnMultimediaQuestions)
+                        foreach (var answeredImageQuestion in questionsWithAnswersOnMultimediaQuestions)
                         {
-                            var fileContent = imageFileRepository.GetInterviewBinaryData(interviewId,
-                                questionsWithAnswersOnMultimediaQuestion);
-                            this.fileSystemAccessor.WriteAllBytes(
-                                this.fileSystemAccessor.CombinePath(filesFolderForInterview, questionsWithAnswersOnMultimediaQuestion),
-                                fileContent);
+                            var imageFileName = answeredImageQuestion.Answer.ToString();
+
+                            var fileContent = imageFileRepository.GetInterviewBinaryData(interviewId, imageFileName);
+
+                            if (fileContent == null)
+                                this.logger.Error($"Binary export. Image {imageFileName} not found. Interview [{interviewId}]. Question [{answeredImageQuestion.Id}]");
+                            else
+                            {
+                                var pathToFile = this.fileSystemAccessor.CombinePath(filesFolderForInterview, imageFileName);
+                                this.fileSystemAccessor.WriteAllBytes(pathToFile, fileContent);
+                            }
                         }
                     }
 
