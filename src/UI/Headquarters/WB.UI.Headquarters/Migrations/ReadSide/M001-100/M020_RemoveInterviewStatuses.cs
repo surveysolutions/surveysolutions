@@ -7,6 +7,9 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
     {
         public override void Up()
         {
+            Delete.ForeignKey("interviewcommentedstatuses")
+                .OnTable("interviewcommentedstatuses");
+
             Delete.Table("interviewstatuses");
 
             Create.ForeignKey("FK_InterviewSummary_InterviewCommentedStatuses")
