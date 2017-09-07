@@ -7,7 +7,8 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
     {
         public override void Up()
         {
-            Delete.Table("interviewreferences");
+            if (Schema.Table("interviewreferences").Exists())
+                this.Delete.Table("interviewreferences");
         }
 
         public override void Down()
