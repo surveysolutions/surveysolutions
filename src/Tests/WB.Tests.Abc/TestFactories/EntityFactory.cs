@@ -1457,9 +1457,9 @@ namespace WB.Tests.Abc.TestFactories
 
         public SubstitutionText SubstitutionText(Identity identity, 
             string title,
-            SubstitutionVariables variables = null)
+            List<SubstitutionVariable> variables = null)
         {
-            return new SubstitutionText(identity, title, variables ?? new SubstitutionVariables(), Mock.Of<ISubstitutionService>(), Mock.Of<IVariableToUIStringService>());
+            return new SubstitutionText(identity, title, variables ?? new List<SubstitutionVariable>(), Mock.Of<ISubstitutionService>(), Mock.Of<IVariableToUIStringService>());
         }
 
         public InterviewTree InterviewTree(Guid? interviewId = null, IQuestionnaire questionnaire = null,
