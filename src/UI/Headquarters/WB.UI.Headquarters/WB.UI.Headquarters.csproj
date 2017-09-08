@@ -2097,7 +2097,7 @@
     <Exec Command="yarn --version" ContinueOnError="true">
       <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
     </Exec>
-    <Exec Command="yarn" WorkingDirectory="HqApp" Condition="'$(ErrorCode)' == '0'" />
+    <Exec Command="yarn --ignore-scripts" WorkingDirectory="HqApp" Condition="'$(ErrorCode)' == '0'" />
     <Exec Command="npm install" WorkingDirectory="HqApp" Condition="'$(ErrorCode)' != '0'" />
   </Target>
   <Target Name="RunWebpackDev" AfterTargets="AfterBuild" Condition=" '$(Configuration)' == 'Debug' And !Exists('HqApp\dist\app.bundle.js') ">
