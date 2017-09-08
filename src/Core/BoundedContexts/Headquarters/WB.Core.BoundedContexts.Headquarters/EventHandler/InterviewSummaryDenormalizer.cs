@@ -19,7 +19,7 @@ using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
-    public class InterviewSummaryDenormalizer : AbstractFunctionalEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>,
+    public class InterviewSummaryDenormalizer : ICompositeFunctionalPartEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>,
         IUpdateHandler<InterviewSummary, InterviewCreated>,
         IUpdateHandler<InterviewSummary, InterviewFromPreloadedDataCreated>,
         IUpdateHandler<InterviewSummary, InterviewOnClientCreated>,
@@ -49,16 +49,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IUserViewFactory users;
 
-        public InterviewSummaryDenormalizer(IReadSideRepositoryWriter<InterviewSummary> interviewSummary,
+        public InterviewSummaryDenormalizer(
             IUserViewFactory users, 
             IQuestionnaireStorage questionnaireStorage)
-            : base(interviewSummary)
         {
             this.users = users;
             this.questionnaireStorage = questionnaireStorage;
         }
-
-        public override object[] Readers => new object[0];
 
         private InterviewSummary UpdateInterviewSummary(InterviewSummary interviewSummary, DateTime updateDateTime, Action<InterviewSummary> update)
         {
