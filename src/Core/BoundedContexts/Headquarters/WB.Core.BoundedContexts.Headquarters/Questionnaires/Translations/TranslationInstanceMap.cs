@@ -14,6 +14,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations
             {
                 cmp.Property(x => x.Id, m =>
                 {
+                    m.Update(false);
+                    m.Insert(false);
                     m.Access(Accessor.None);
                 });
                 
