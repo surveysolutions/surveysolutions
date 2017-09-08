@@ -1729,6 +1729,7 @@
     <Compile Include="Migrations\ReadSide\M001-100\M020_RemoveInterviewStatuses.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709071637_AddIndexToCumulativeReportStatusChangesTable.cs" />
     <Compile Include="Migrations\Users\M005_AddDeviceAppVersionToProfile.cs" />
+    <Compile Include="Migrations\Users\M201709081340_RemovedUserDocumentAndRolesTables.cs" />
     <Compile Include="Models\InterviewsDataTableRequest.cs" />
     <Compile Include="Models\Reports\StatusDurationModel.cs" />
     <Compile Include="Models\Reports\DevicesInterviewersModel.cs" />
