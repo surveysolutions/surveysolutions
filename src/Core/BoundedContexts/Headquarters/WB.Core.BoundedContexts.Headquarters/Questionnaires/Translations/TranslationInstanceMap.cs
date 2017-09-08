@@ -12,6 +12,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations
             this.Id(x => x.Id, IdMapper => IdMapper.Generator(Generators.HighLow));
             this.Component(x => x.QuestionnaireId, cmp =>
             {
+                cmp.Property(x => x.Id, m =>
+                {
+                    m.Insert(false);
+                });
                 cmp.Property(x => x.QuestionnaireId);
                 cmp.Property(x => x.Version, ptp => ptp.Column("QuestionnaireVersion"));
             });
