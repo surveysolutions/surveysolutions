@@ -14,12 +14,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations
             {
                 cmp.Property(x => x.Id, m =>
                 {
-                    m.Insert(false);
+                    m.Access(Accessor.None);
                 });
+                
                 cmp.Property(x => x.QuestionnaireId);
                 cmp.Property(x => x.Version, ptp => ptp.Column("QuestionnaireVersion"));
             });
-
+            
             this.Property(x => x.Type, ptp => ptp.NotNullable(true));
             this.Property(x => x.QuestionnaireEntityId, ptp => ptp.NotNullable(true));
             this.Property(x => x.TranslationIndex);
