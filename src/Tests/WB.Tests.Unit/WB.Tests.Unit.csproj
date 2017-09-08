@@ -497,6 +497,7 @@
     <Compile Include="BoundedContexts\Headquarters\WebInterview\WebInterviewAllowServiceTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\AnswerToStringConverterTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\CompanyLogoSynchronizerTests.cs" />
+    <Compile Include="BoundedContexts\Interviewer\Services\InterviewDetailsViewFactoryTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\SynchronizationProcessTests\AssignmentTests\AssignmentDocumentStorageTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\SynchronizationProcessTests\AssignmentTests\when_query_for_assignment_from_synchronization_service.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\SynchronizationProcessTests\AssignmentTests\when_synchronize_assignments.cs" />
