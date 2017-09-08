@@ -182,9 +182,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
         protected static InterviewSummaryDenormalizer CreateInterviewSummaryEventHandlerFunctional(QuestionnaireDocument questionnaire = null)
         {
-            var mockOfInterviewSummary = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
             return new InterviewSummaryDenormalizer(
-                mockOfInterviewSummary.Object,
                 new Mock<IUserViewFactory>().Object,
                 Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == questionnaire));
         }
