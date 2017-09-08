@@ -13,6 +13,7 @@ using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFactoryTests
 {
+    [TestFixture]
     internal class when_load_speed_report_for_interview_duration : SpeedReportFactoryTestContext
     {
         [Test]
