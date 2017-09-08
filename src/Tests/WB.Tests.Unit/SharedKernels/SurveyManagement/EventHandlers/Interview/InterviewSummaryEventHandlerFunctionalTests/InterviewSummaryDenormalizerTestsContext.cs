@@ -37,7 +37,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             var doc = new QuestionnaireDocument();
             return
                 new InterviewSummaryDenormalizer(
-                    interviewSummary: CreateInterviewSummaryWriter(),
                     users: users ?? CreateUsersWriterWith1User(new Guid(), new Guid().ToString()),
                     questionnaireStorage:
                         Mock.Of<IQuestionnaireStorage>(
@@ -46,10 +45,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                                 doc));
         }
 
-        private static IReadSideRepositoryWriter<InterviewSummary> CreateInterviewSummaryWriter()
-        {
-            return Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>();
-        }
 
         private static IUserViewFactory CreateUsersWriterWith1User(Guid userId, string userName)
         {

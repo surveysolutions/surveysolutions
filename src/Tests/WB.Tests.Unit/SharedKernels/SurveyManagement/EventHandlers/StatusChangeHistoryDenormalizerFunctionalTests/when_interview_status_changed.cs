@@ -86,7 +86,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
                     "comment Restarted"
                 });
 
-        private static StatusChangeHistoryDenormalizerFunctional denormalizer;
+        private static InterviewSummaryCompositeDenormalizer denormalizer;
         private static InterviewSummary history;
         private static List<IPublishableEvent> statusEventsToPublish;
         private static Guid interviewId=Guid.Parse("11111111111111111111111111111111");

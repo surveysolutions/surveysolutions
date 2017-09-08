@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
         It should_create_InterviewStatuses_for_3_interviews =
             () => statusEventsToPublish.TrueForAll(s => interviewStatusesStorage.GetById(s.EventSourceId.FormatGuid())!=null).ShouldBeTrue();
 
-        private static StatusChangeHistoryDenormalizerFunctional denormalizer;
+        private static InterviewSummaryCompositeDenormalizer denormalizer;
         private static List<IPublishableEvent> statusEventsToPublish;
         private static TestInMemoryWriter<InterviewSummary> interviewStatusesStorage;
     }
