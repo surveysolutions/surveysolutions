@@ -892,12 +892,10 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
 
   <!-- questionnaire -->
+
   <Target Name="CleanupQuestionnaire" BeforeTargets="BeforeRebuild">
     <Message Text="Cleaning up questionnaire" />
-    <ItemGroup>
-      <FilesToDelete Include="questionnaire\vendor" />
-    </ItemGroup>
-    <Delete Files="@(FilesToDelete)" />
+    <RemoveDir  Directories="questionnaire\vendor" />
   </Target>
   
   <Target Name="RestoreNodeModules" BeforeTargets="BowerInstall" Condition=" '$(Configuration)' == 'Debug'">
@@ -905,7 +903,7 @@
     <Exec Command="yarn --version" ContinueOnError="true">
       <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
     </Exec>
-    <Exec Command="yarn" WorkingDirectory="questionnaire" Condition="'$(ErrorCode)' == '0'" />
+    <Exec Command="yarn --ignore-scripts" WorkingDirectory="questionnaire" Condition="'$(ErrorCode)' == '0'" />
     <Exec Command="npm install" WorkingDirectory="questionnaire" Condition="'$(ErrorCode)' != '0'" />
   </Target>
 
