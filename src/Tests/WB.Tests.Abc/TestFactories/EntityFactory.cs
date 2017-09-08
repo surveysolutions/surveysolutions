@@ -417,21 +417,8 @@ namespace WB.Tests.Abc.TestFactories
             return interviewQuestion;
         }
 
-
-
-        public InterviewStatusTimeSpans InterviewStatusTimeSpans(Guid? questionnaireId = null,
-            long? questionnaireVersion = null, string interviewId = null, params TimeSpanBetweenStatuses[] timeSpans)
-            => new InterviewStatusTimeSpans
-            {
-                QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
-                QuestionnaireVersion = questionnaireVersion ?? 1,
-                TimeSpansBetweenStatuses = timeSpans.ToHashSet(),
-                InterviewId = interviewId
-            };
-
         public InterviewSummary InterviewSummary()
             => new InterviewSummary();
-
 
 
         public InterviewSummary InterviewSummary(
@@ -450,7 +437,8 @@ namespace WB.Tests.Abc.TestFactories
             bool receivedByInterviewer = false,
             int? assignmentId = null,
             bool wasCompleted = false,
-            IEnumerable<InterviewCommentedStatus> statuses = null)
+            IEnumerable<InterviewCommentedStatus> statuses = null,
+            IEnumerable<TimeSpanBetweenStatuses> timeSpans = null)
         {
             var qId = questionnaireId ?? Guid.NewGuid();
             var qVersion = questionnaireVersion ?? 1;
@@ -473,6 +461,7 @@ namespace WB.Tests.Abc.TestFactories
                 QuestionnaireIdentity = new QuestionnaireIdentity(qId, qVersion).ToString(),
                 WasCompleted = wasCompleted,
                 InterviewCommentedStatuses = statuses?.ToList() ?? new List<InterviewCommentedStatus>(),
+                TimeSpansBetweenStatuses = timeSpans?.ToHashSet() ?? new HashSet<TimeSpanBetweenStatuses>()
             };
         }
 
