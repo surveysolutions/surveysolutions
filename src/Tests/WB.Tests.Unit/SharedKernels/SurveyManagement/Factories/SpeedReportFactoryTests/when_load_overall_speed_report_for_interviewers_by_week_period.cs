@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -28,26 +25,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
                 questionnaireVersion: input.QuestionnaireVersion, statuses: new[]
                 {
                     Create.Entity.InterviewCommentedStatus(timestamp: initialStatusChangeDate)
+                }, timeSpans: new[]
+                {
+                    Create.Entity.TimeSpanBetweenStatuses(interviewerId: user.PublicKey,
+                        supervisorId:supervisorId,
+                        timestamp: initialStatusChangeDate,
+                        timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
+                    Create.Entity.TimeSpanBetweenStatuses(interviewerId: Guid.NewGuid(),
+                        supervisorId:Guid.NewGuid(),
+                        timestamp: initialStatusChangeDate,
+                        timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35))
                 }), "1");
 
-            interviewStatusTimeSpans = new TestInMemoryWriter<InterviewStatusTimeSpans>();
-            interviewStatusTimeSpans.Store(
-                Create.Entity.InterviewStatusTimeSpans(questionnaireId: input.QuestionnaireId,
-                    questionnaireVersion: input.QuestionnaireVersion,
-                    timeSpans: new[]
-                    {
-                        Create.Entity.TimeSpanBetweenStatuses(interviewerId: user.PublicKey,
-                            supervisorId:supervisorId,
-                            timestamp: initialStatusChangeDate, 
-                            timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
-                          Create.Entity.TimeSpanBetweenStatuses(interviewerId: Guid.NewGuid(),
-                            supervisorId:Guid.NewGuid(),
-                            timestamp: initialStatusChangeDate,
-                            timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35))
-                    }), "2");
-
-            quantityReportFactory = CreateSpeedReportFactory(interviewStatusTimeSpans: interviewStatusTimeSpans,
-                interviewStatuses: interviewStatuses);
+            quantityReportFactory = CreateSpeedReportFactory(interviewStatuses: interviewStatuses);
         };
 
         Because of = () =>
@@ -68,7 +58,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
         private static SpeedReportFactory quantityReportFactory;
         private static SpeedBetweenStatusesByInterviewersReportInputModel input;
         private static SpeedByResponsibleReportView result;
-        private static TestInMemoryWriter<InterviewStatusTimeSpans> interviewStatusTimeSpans;
         private static Guid supervisorId = Guid.Parse("11111111111111111111111111111111");
     }
 }

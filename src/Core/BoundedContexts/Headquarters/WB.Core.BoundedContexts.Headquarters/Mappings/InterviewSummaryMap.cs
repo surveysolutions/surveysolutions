@@ -91,6 +91,39 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                     });
                 }
             );
+
+            Set(x => x.TimeSpansBetweenStatuses, set => {
+                    set.Table("timespanbetweenstatuses");
+                    set.Key(key =>
+                    {
+                        key.Column(cm =>
+                        {
+                            cm.Name("InterviewId");
+                            cm.Index("InterviewSummary_InterviewStatusTimeSpans");
+                        });
+                        key.ForeignKey("FK_InterviewSummary_TimeSpansBetweenStatuses");
+                    });
+                    set.Lazy(CollectionLazy.Lazy);
+                    set.Cascade(Cascade.All | Cascade.DeleteOrphans);
+                },
+                relation =>
+                {
+                    relation.Component(cmp =>
+                    {
+                        cmp.Property(x => x.Id);
+                        cmp.Property(x => x.SupervisorId);
+                        cmp.Property(x => x.SupervisorName);
+                        cmp.Property(x => x.InterviewerId);
+                        cmp.Property(x => x.InterviewerName);
+                        cmp.Property(x => x.BeginStatus);
+                        cmp.Property(x => x.EndStatus);
+                        cmp.Property(x => x.EndStatusTimestamp);
+                        cmp.Property(x => x.TimeSpanLong, clm =>
+                        {
+                            clm.Column("TimeSpan");
+                        });
+                    });
+                });
         }
     }
 

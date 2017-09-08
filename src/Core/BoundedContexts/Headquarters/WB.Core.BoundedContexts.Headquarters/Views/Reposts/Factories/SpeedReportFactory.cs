@@ -29,13 +29,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatusesStorage;
 
-        private readonly IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage;
-
-        public SpeedReportFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatusesStorage, 
-            IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage)
+        public SpeedReportFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatusesStorage)
         {
             this.interviewStatusesStorage = interviewStatusesStorage;
-            this.interviewStatusTimeSpansStorage = interviewStatusTimeSpansStorage;
         }
 
         private class StatusChangeRecord
@@ -147,7 +143,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         {
             if (questionnaireId != Guid.Empty)
             {
-                return this.interviewStatusTimeSpansStorage.Query(_ =>
+                return this.interviewStatusesStorage.Query(_ =>
                     _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
                         .SelectMany(x => x.TimeSpansBetweenStatuses)
                         .Where(ics =>
@@ -158,7 +154,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             }
             else
             {
-                return this.interviewStatusTimeSpansStorage.Query(_ =>
+                return this.interviewStatusesStorage.Query(_ =>
                     _.SelectMany(x => x.TimeSpansBetweenStatuses)
                         .Where(ics =>
                             ics.EndStatusTimestamp >= from &&

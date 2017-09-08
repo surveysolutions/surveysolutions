@@ -1,62 +1,46 @@
 ﻿using System;
 using Machine.Specifications;
-using WB.Core.GenericSubdomains.Portable;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Tests.Abc;
-using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewStatusTimeSpanDenormalizerTests
 {
-    internal class when_interview_completed_event_received_after_restart : InterviewStatusTimeSpanDenormalizerTestContext
+    [Subject(typeof(InterviewStatusTimeSpanDenormalizer))]
+    internal class when_interview_completed_event_received_after_restart
     {
         Establish context = () =>
         {
-            interviewStatusTimeSpansStorage = new TestInMemoryWriter<InterviewStatusTimeSpans>();
-            interviewStatusesStorage = new TestInMemoryWriter<InterviewSummary>();
-            interviewStatuses =
-                Create.Entity.InterviewSummary(interviewId: interviewId, statuses:
-                    new[]
+            interviewSummary =
+                Create.Entity.InterviewSummary(interviewId: interviewId, 
+                    statuses: new[]
                     {
                         Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.InterviewerAssigned, statusId: interviewId),
                         Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.FirstAnswerSet, statusId: interviewId),
                         Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed, statusId: interviewId),
                         Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Restarted, statusId: interviewId)
+                    }, 
+                    timeSpans: new[]
+                    {
+                        Create.Entity.TimeSpanBetweenStatuses(interviewerId: interviewId, endStatus: InterviewExportedAction.Completed)
                     });
-            interviewStatusesStorage.Store(interviewStatuses, interviewId.FormatGuid());
 
-            interviewStatusTimeSpansStorage.Store(
-                Create.Entity.InterviewStatusTimeSpans(interviewId: interviewId.FormatGuid(),
-                    timeSpans:
-                        new[]
-                        {
-                            Create.Entity.TimeSpanBetweenStatuses(interviewerId: interviewId,
-                                endStatus: InterviewExportedAction.Completed)
-                        }), interviewId.FormatGuid());
-
-            denormalizer = CreateInterviewStatusTimeSpanDenormalizer(statuses: interviewStatusesStorage, interviewCustomStatusTimestampStorage: interviewStatusTimeSpansStorage);
+            denormalizer = Create.Service.InterviewStatusTimeSpanDenormalizer();
         };
 
-        Because of = () => denormalizer.Handle(Create.PublishedEvent.InterviewCompleted(interviewId: interviewId));
+        Because of = () => denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewCompleted(interviewId: interviewId));
 
-        It should_contain_only_one_complete_record =
-            () =>
-                interviewStatusTimeSpansStorage.GetById(interviewId.FormatGuid())
-                    .TimeSpansBetweenStatuses.Count(ts=>ts.EndStatus== InterviewExportedAction.Completed).ShouldEqual(1);
+        It should_contain_only_one_complete_record = () =>
+            interviewSummary.TimeSpansBetweenStatuses.Count(ts=>ts.EndStatus== InterviewExportedAction.Completed).ShouldEqual(1);
 
-        It should_record_interviewer_assign_as_begin_status =
-           () =>
-               interviewStatusTimeSpansStorage.GetById(interviewId.FormatGuid())
-                   .TimeSpansBetweenStatuses.First()
-                   .BeginStatus.ShouldEqual(InterviewExportedAction.InterviewerAssigned);
+        It should_record_interviewer_assign_as_begin_status = () =>
+            interviewSummary.TimeSpansBetweenStatuses.First().BeginStatus.ShouldEqual(InterviewExportedAction.InterviewerAssigned);
 
         private static InterviewStatusTimeSpanDenormalizer denormalizer;
-        private static TestInMemoryWriter<InterviewSummary> interviewStatusesStorage;
-        private static TestInMemoryWriter<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage;
-        private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
-        private static InterviewSummary interviewStatuses;
+        private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
+        private static InterviewSummary interviewSummary;
 
     }
 }

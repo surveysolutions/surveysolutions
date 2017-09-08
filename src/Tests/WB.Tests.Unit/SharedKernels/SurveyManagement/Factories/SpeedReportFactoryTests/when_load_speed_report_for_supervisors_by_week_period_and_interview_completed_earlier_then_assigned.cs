@@ -16,29 +16,20 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
         {
             input = CreateSpeedBetweenStatusesBySupervisorsReportInputModel(period: "w");
             var timestamp = input.From.Date.AddHours(-1);
-
+            var user = Create.Entity.UserDocument(supervisorId: supervisorId);
             var interviewStatuses = new TestInMemoryWriter<InterviewSummary>();
             interviewStatuses.Store(Create.Entity.InterviewSummary(questionnaireId: input.QuestionnaireId,
                 questionnaireVersion: input.QuestionnaireVersion, statuses: new[]
                 {
                     Create.Entity.InterviewCommentedStatus(timestamp: timestamp)
+                }, timeSpans: new[]
+                {
+                    Create.Entity.TimeSpanBetweenStatuses(interviewerId: user.PublicKey,
+                        timestamp: timestamp,
+                        timeSpanWithPreviousStatus: TimeSpan.FromMinutes(-35))
                 }), "1");
 
-            var user = Create.Entity.UserDocument(supervisorId: supervisorId);
-
-            interviewStatusTimeSpans = new TestInMemoryWriter<InterviewStatusTimeSpans>();
-            interviewStatusTimeSpans.Store(
-                Create.Entity.InterviewStatusTimeSpans(questionnaireId: input.QuestionnaireId,
-                    questionnaireVersion: input.QuestionnaireVersion,
-                    timeSpans: new[]
-                    {
-                        Create.Entity.TimeSpanBetweenStatuses(interviewerId: user.PublicKey,
-                            timestamp: timestamp,
-                            timeSpanWithPreviousStatus: TimeSpan.FromMinutes(-35))
-                    }), "2");
-
-            quantityReportFactory = CreateSpeedReportFactory(interviewStatusTimeSpans: interviewStatusTimeSpans,
-                interviewStatuses: interviewStatuses);
+            quantityReportFactory = CreateSpeedReportFactory(interviewStatuses: interviewStatuses);
         };
 
         Because of = () =>
@@ -59,7 +50,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
         private static SpeedReportFactory quantityReportFactory;
         private static SpeedBetweenStatusesBySupervisorsReportInputModel input;
         private static SpeedByResponsibleReportView result;
-        private static TestInMemoryWriter<InterviewStatusTimeSpans> interviewStatusTimeSpans;
-        private static Guid supervisorId = Guid.Parse("11111111111111111111111111111111");
+        private static readonly Guid supervisorId = Guid.Parse("11111111111111111111111111111111");
     }
 }

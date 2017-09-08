@@ -15,7 +15,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
     internal class when_load_quantity_completed_report_for_supervisors_by_month_period : QuantityReportFactoryTestContext
     {
         private QuantityBySupervisorsReportInputModel input;
-        private TestInMemoryWriter<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage;
 
         private QuantityReportFactory quantityReportFactory;
         private QuantityByResponsibleReportView result;
@@ -27,10 +26,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
             input.InterviewStatuses = new[] {InterviewExportedAction.Completed};
             var user = Guid.NewGuid();
 
-            interviewStatusTimeSpansStorage = new TestInMemoryWriter<InterviewStatusTimeSpans>();
-            interviewStatusTimeSpansStorage.Store(
-                Create.Entity.InterviewStatusTimeSpans(input.QuestionnaireId,
-                    input.QuestionnaireVersion,
+            var interviewStatuses = new TestInMemoryWriter<InterviewSummary>();
+            interviewStatuses.Store(
+                Create.Entity.InterviewSummary(questionnaireId: input.QuestionnaireId,
+                    questionnaireVersion: input.QuestionnaireVersion,
+                    statuses: new[]
+                    {
+                        Create.Entity.InterviewCommentedStatus(timestamp: input.From.AddMonths(-2)),
+                    },
                     timeSpans: new[]
                     {
                         Create.Entity.TimeSpanBetweenStatuses(supervisorId: user,
@@ -41,17 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
                             timestamp: input.From.Date.AddMonths(2), endStatus: InterviewExportedAction.Completed)
                     }), "2");
 
-            var interviewStatuses = new TestInMemoryWriter<InterviewSummary>();
-            interviewStatuses.Store(
-                Create.Entity.InterviewSummary(questionnaireId: input.QuestionnaireId,
-                    questionnaireVersion: input.QuestionnaireVersion,
-                    statuses: new[]
-                    {
-                        Create.Entity.InterviewCommentedStatus(timestamp: input.From.AddMonths(-2)),
-                    }), "2");
-
-            quantityReportFactory = CreateQuantityReportFactory(interviewStatusTimeSpansStorage: interviewStatusTimeSpansStorage,
-                                                                interviewStatuses: interviewStatuses);
+            quantityReportFactory = CreateQuantityReportFactory(interviewStatuses: interviewStatuses);
 
             result = quantityReportFactory.Load(input);
         }

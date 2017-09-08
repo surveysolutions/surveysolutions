@@ -527,5 +527,10 @@ namespace WB.Tests.Abc.TestFactories
                 interviewStatuses ?? new TestInMemoryWriter<InterviewSummary>(),
                 Mock.Of<ILogger>());
         }
+
+        public InterviewStatusTimeSpanDenormalizer InterviewStatusTimeSpanDenormalizer()
+        {
+            return new InterviewStatusTimeSpanDenormalizer();
+        }
     }
 }
