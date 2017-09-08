@@ -395,18 +395,6 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewItemId InterviewItemId(Guid id, decimal[] rosterVector = null)
             => new InterviewItemId(id, rosterVector);
 
-        public InterviewLinkedQuestionOptions InterviewLinkedQuestionOptions(params ChangedLinkedOptions[] options)
-        {
-            var result = new InterviewLinkedQuestionOptions();
-
-            foreach (var changedLinkedQuestion in options)
-            {
-                result.LinkedQuestionOptions[changedLinkedQuestion.QuestionId.ToString()] = changedLinkedQuestion.Options;
-            }
-
-            return result;
-        }
-
         public InterviewQuestion InterviewQuestion(Guid? questionId = null, object answer = null)
         {
             var interviewQuestion = new InterviewQuestion(questionId ?? Guid.NewGuid()) { Answer = answer };

@@ -198,7 +198,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             //commented because auto registered somewhere 
             //this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
             this.Bind<IRecordsAccessorFactory>().To<CsvRecordsAccessorFactory>();
-            this.Bind<IInterviewSynchronizationDtoFactory>().To<InterviewSynchronizationDtoFactory>();
             this.Bind<IPreloadedDataServiceFactory>().To<PreloadedDataServiceFactory>();
             this.Bind<IBrokenInterviewPackagesViewFactory>().To<BrokenInterviewPackagesViewFactory>();
             this.Bind<ISynchronizationLogViewFactory>().To<SynchronizationLogViewFactory>();
@@ -264,7 +263,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Kernel.RegisterDenormalizer<InterviewEventHandlerFunctional>();
             this.Kernel.RegisterDenormalizer<InterviewLifecycleEventHandler>();
             this.Kernel.RegisterDenormalizer<InterviewExportedCommentariesDenormalizer>();
-            this.Kernel.RegisterDenormalizer<LinkedOptionsDenormalizer>();
 
             this.Kernel.Load(new QuartzNinjectModule());
 

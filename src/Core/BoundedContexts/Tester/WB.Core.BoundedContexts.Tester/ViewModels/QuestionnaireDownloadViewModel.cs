@@ -1,12 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Net;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Humanizer;
 using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Properties;
@@ -15,15 +11,11 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.WriteSide;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -43,7 +35,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IUserInteractionService userInteractionService;
         private readonly ILogger logger;
         private readonly IAttachmentContentStorage attachmentContentStorage;
-        private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
         public QuestionnaireDownloadViewModel(
@@ -55,8 +46,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IFriendlyErrorMessageService friendlyErrorMessageService,
             IUserInteractionService userInteractionService,
             ILogger logger,
-            IAttachmentContentStorage attachmentContentStorage,
-            IStatefulInterviewRepository statefulInterviewRepository)
+            IAttachmentContentStorage attachmentContentStorage)
         {
             this.principal = principal;
             this.designerApiService = designerApiService;
@@ -67,7 +57,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.userInteractionService = userInteractionService;
             this.logger = logger;
             this.attachmentContentStorage = attachmentContentStorage;
-            this.statefulInterviewRepository = statefulInterviewRepository;
         }
 
         public async Task<bool> LoadQuestionnaireAsync(string questionnaireId, string questionnaireTitle,
