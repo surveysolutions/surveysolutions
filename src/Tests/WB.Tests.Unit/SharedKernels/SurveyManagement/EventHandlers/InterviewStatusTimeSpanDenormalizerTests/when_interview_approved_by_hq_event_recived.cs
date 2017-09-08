@@ -9,7 +9,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewStatusTimeSpanDenormalizerTests
 {
-    [TestFixture(typeof(InterviewStatusTimeSpanDenormalizer))]
+    [TestFixture]
     internal class when_interview_approved_by_hq_event_recived
     {
         [SetUp]
