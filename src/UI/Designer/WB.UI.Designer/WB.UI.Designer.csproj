@@ -892,6 +892,13 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
 
   <!-- questionnaire -->
+  <Target Name="CleanupQuestionnaire" BeforeTargets="BeforeRebuild">
+    <Message Text="Cleaning up questionnaire" />
+    <ItemGroup>
+      <FilesToDelete Include="questionnaire\vendor" />
+    </ItemGroup>
+    <Delete Files="@(FilesToDelete)" />
+  </Target>
   
   <Target Name="RestoreNodeModules" BeforeTargets="BowerInstall" Condition=" '$(Configuration)' == 'Debug'">
     <Message Importance="High" Text="Restoring node_modules" />
