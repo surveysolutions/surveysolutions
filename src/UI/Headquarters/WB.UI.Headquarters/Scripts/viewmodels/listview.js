@@ -97,7 +97,7 @@
             if (self.Items().length > 0)
                 self.datatableColumnLength(Object.keys(self.Items()[0]).length);
 
-            if (!_.isUndefined(onSuccess) && !_.isNull(onSuccess)) {
+            if (!_.isUndefined(onSuccess) && !_.isNull(onSuccess) && _.isFunction(onSuccess)) {
                 onSuccess();
             }
 
