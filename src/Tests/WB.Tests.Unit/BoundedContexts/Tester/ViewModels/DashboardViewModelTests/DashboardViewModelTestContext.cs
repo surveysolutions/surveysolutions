@@ -13,7 +13,6 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -76,8 +75,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                     friendlyErrorMessageService: friendlyErrorMessageService,
                     userInteractionService: userInteractionService,
                     logger: logger ?? Mock.Of<ILogger>(),
-                    attachmentContentStorage: attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>(),
-                    statefulInterviewRepository: Mock.Of<IStatefulInterviewRepository>()
+                    attachmentContentStorage: attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>()
                 ));
         }
 
