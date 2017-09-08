@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Machine.Specifications;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -8,10 +9,11 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewStatusTimeSpanDenormalizerTests
 {
-    [Subject(typeof(InterviewStatusTimeSpanDenormalizer))]
+    [TestFixture(typeof(InterviewStatusTimeSpanDenormalizer))]
     internal class when_interview_unapproved_by_headquarters_event_recived
     {
-        private Establish context = () =>
+        [SetUp]
+        public void Establish()
         {
             interviewSummary = Create.Entity.InterviewSummary(
                 questionnaireId: questionnaireId,
@@ -26,14 +28,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
         
             
             denormalizer = Create.Service.InterviewStatusTimeSpanDenormalizer();
-        };
+        }
 
-        Because of = () => denormalizer.Update(interviewSummary, Create.PublishedEvent.UnapprovedByHeadquarters(interviewId: interviewId));
+        [Test]
+        public void should_remove_ApprovedByHeadquarter_as_end_status ()
+        {
+            //act
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.UnapprovedByHeadquarters(interviewId: interviewId));
 
-        It should_remove_ApprovedByHeadquarter_as_end_status = () =>
+            //assert
             interviewSummary.TimeSpansBetweenStatuses.Count(x => x.EndStatus == InterviewExportedAction.ApprovedByHeadquarter).ShouldEqual(0);
-
-        
+        }
 
         private static InterviewStatusTimeSpanDenormalizer denormalizer;
         private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");

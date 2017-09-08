@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Machine.Specifications;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
@@ -12,9 +13,11 @@ using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFactoryTests
 {
+    [TestFixture]
     internal class when_load_speed_report_for_interviewers_by_month_period : SpeedReportFactoryTestContext
     {
-        Establish context = () =>
+        [SetUp]
+        public void Establish()
         {
             input = CreateSpeedByInterviewersReportInputModel(supervisorId: supervisorId, period: "m");
 
@@ -35,22 +38,37 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
                     }), "2");
 
             quantityReportFactory = CreateSpeedReportFactory(interviewStatuses: interviewStatuses);
-        };
+        }
 
-        Because of = () =>
+
+        [Test]
+        public void should_return_one_row()
+        {
             result = quantityReportFactory.Load(input);
-
-        It should_return_one_row = () =>
             result.Items.Count().ShouldEqual(1);
+        }
 
-        It should_return_first_row_with_35_minutes_per_interview_at_first_period_and_null_minutes_per_interview_at_second = () =>
-            result.Items.First().SpeedByPeriod.ShouldEqual(new double?[] { 35, null });
+        [Test]
+        public void
+            should_return_first_row_with_35_minutes_per_interview_at_first_period_and_null_minutes_per_interview_at_second()
+        {
+            result = quantityReportFactory.Load(input);
+            result.Items.First().SpeedByPeriod.ShouldEqual(new double?[] {35, null});
+        }
 
-        It should_return_first_row_with_35_minutes_in_Total = () =>
+        [Test]
+        public void should_return_first_row_with_35_minutes_in_Total()
+        {
+            result = quantityReportFactory.Load(input);
             result.Items.First().Total.ShouldEqual(35);
+        }
 
-        It should_return_first_row_with_35_minutes_in_Average = () =>
-           result.Items.First().Average.ShouldEqual(35);
+        [Test]
+        public void should_return_first_row_with_35_minutes_in_Average()
+        {
+            result = quantityReportFactory.Load(input);
+            result.Items.First().Average.ShouldEqual(35);
+        }
 
         private static SpeedReportFactory quantityReportFactory;
         private static SpeedByInterviewersReportInputModel input;
