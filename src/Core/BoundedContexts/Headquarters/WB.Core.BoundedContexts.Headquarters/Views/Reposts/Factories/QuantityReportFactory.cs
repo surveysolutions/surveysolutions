@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using NHibernate.Criterion;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -21,15 +20,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
     public class QuantityReportFactory : IQuantityReportFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewstatusStorage;
-        private readonly IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
 
-        public QuantityReportFactory(
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewstatusStorage,
-            IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage)
+        public QuantityReportFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage)
         {
-            this.interviewstatusStorage = interviewstatusStorage;
-            this.interviewStatusTimeSpansStorage = interviewStatusTimeSpansStorage;
+            this.interviewSummaryStorage = interviewSummaryStorage;
         }
 
         private QuantityByResponsibleReportView Load<T>(
@@ -45,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             Expression<Func<T, UserAndTimestamp>> selectUserAndTimestamp)
         {
             var ranges = ReportHelpers.BuildColumns(reportStartDate, period, columnCount, timezoneAdjastmentMins,
-                questionnaire, this.interviewstatusStorage);
+                questionnaire, this.interviewSummaryStorage);
 
             var interviewStatusesByDateRange = queryInterviewStatusesByDateRange(ranges.FromUtc, ranges.ToUtc);
 
@@ -144,14 +139,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         {
             if (questionnaireId != Guid.Empty)
             {
-                return this.interviewStatusTimeSpansStorage.Query(_ =>
+                return this.interviewSummaryStorage.Query(_ =>
                     _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
                         .SelectMany(x => x.TimeSpansBetweenStatuses)
                         .Where(ics => ics.EndStatusTimestamp >= from && ics.EndStatusTimestamp < to && ics.EndStatus == InterviewExportedAction.Completed));
             }
             else
             {
-                return this.interviewStatusTimeSpansStorage.Query(_ =>
+                return this.interviewSummaryStorage.Query(_ =>
                         _.SelectMany(x => x.TimeSpansBetweenStatuses)
                         .Where(ics => ics.EndStatusTimestamp >= from && ics.EndStatusTimestamp < to && ics.EndStatus == InterviewExportedAction.Completed));
 
@@ -167,7 +162,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         {
             if (questionnaireId != Guid.Empty)
             {
-                return this.interviewstatusStorage.Query(
+                return this.interviewSummaryStorage.Query(
                     _ =>
                         _.Where(x => x.QuestionnaireId == questionnaireId &&
                                      x.QuestionnaireVersion == questionnaireVersion)
@@ -178,7 +173,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             }
             else
             {
-                return this.interviewstatusStorage.Query(
+                return this.interviewSummaryStorage.Query(
                     _ =>
                         _.SelectMany(x => x.InterviewCommentedStatuses)
                             .Where(ics =>
