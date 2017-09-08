@@ -25,7 +25,17 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
 
         public override void Down()
         {
-            // Table is going to be created on first use
+            Delete.ForeignKey("FK_InterviewSummary_InterviewCommentedStatuses")
+                .OnTable("interviewcommentedstatuses");
+
+            Create.Table("interviewstatuses")
+                .WithColumn("id").AsString(255).PrimaryKey()
+                .WithColumn("questionnaireid").AsGuid().Nullable()
+                .WithColumn("questionnaireversion").AsInt64().Nullable();
+
+            Create.ForeignKey("interviewcommentedstatuses")
+                .FromTable("interviewcommentedstatuses").ForeignColumn("interviewid")
+                .ToTable("interviewstatuses").PrimaryColumn("id");
         }
     }
 }
