@@ -570,7 +570,6 @@
     <Compile Include="Infrastructure\IdentityJsonConverterTests.cs" />
     <Compile Include="Infrastructure\LiteEventBusTests\when_publishing_event_declared_in_base_handler_types.cs" />
     <Compile Include="Infrastructure\Native\JsonAllTypesSerializerTests.cs" />
-    <Compile Include="Infrastructure\Native\EntitySerializerTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\Eventing\ConventionBasedEventHandlerMappingStrategyTests.cs" />
     <Compile Include="Infrastructure\PlainPostgresTransactionManagerTests.cs" />
     <Compile Include="Infrastructure\ZipArchiveUtilsTests.cs" />
@@ -720,8 +719,6 @@
     <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\when_creating_InterviewQuestionView_for_Single_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\when_creating_InterviewQuestionView_for_Timestamp_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewPackagesServiceTests\InterviewPackagesServiceTests.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewSynchronizationDtoFactoryTests\InterviewSynchronizationDtoFactoryTests.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewSynchronizationDtoFactoryTests\when_generating_for_interview_with_key_and_assignment_id.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataServiceTests\when_CreatePreloadedDataDtoFromSampleData_and_some_anwers_is_null.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataServiceTests\when_CreatePreloadedDataDtosFromPanelData_and_some_answers_is_null.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataServiceTests\when_GetAvalibleIdListForParent_is_called_for_file_corresponding_to_roster_triggered_by_yesno_question.cs" />
@@ -1041,7 +1038,6 @@
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_StaticTextsDeclaredInvalid_received.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_received_by_supervisor.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\LinkedOptionsDenormalizerTests\LinkedOptionsDenormalizerNUnitTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_with_multi_option_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_creating_interview_export_view_by_interview_with_1_answerd_double_question_in_russian_culture.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_creating_interview_export_view_by_interview_with_1_answerd_datetime_question.cs" />
@@ -1071,9 +1067,6 @@
     <Compile Include="SharedKernels\SurveyManagement\InterviewPackagesServiceTests\when_getting_queue_length.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\when_creating_view_for_question_with_multiple_failed_validation_conditions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\when_creating_view_for_supervisor_question_and_interview_approved_by_hq.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewSynchronizationDtoFactoryTests\when_build_from_interview_with_static_texts.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewSynchronizationDtoFactoryTests\when_build_from_interview_with_linked_questions.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewSynchronizationDtoFactoryTests\when_build_from_interview_with_variables.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportDenormalizerTests\when_answer_removed_from_gps_qestion.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportDenormalizerTests\when_gps_question_answered.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportDenormalizerTests\when_handling_InterviewDeleted_event_and_interview_has_2_gps_questions.cs" />
@@ -1114,7 +1107,6 @@
     <Compile Include="SharedKernels\SurveyManagement\TeamUsersAndQuestionnairesFactoryTests\when_questionnaire_is_deleted.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\when_getting_all_supervisors.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\when_getting_all_not_locked_supervisors.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewerInterviewsFactoryTests\InterviewerInterviewsFactoryNUnitTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryTests\InterviewSummaryTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryTests\when_create_interview_summary_with_GPS_prefilled.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_questionnaire_document_with_json_utils.cs" />
@@ -1523,9 +1515,6 @@
     <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\when_creating_view_for_question_which_is_invalid_and_disabled.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\when_creating_view_for_question_which_not_answered_and_parent_group_is_enabled.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\when_creating_view_for_supervisor_question_which_not_answered_and_parent_group_is_enabled.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewSynchronizationDtoFactoryTests\InterviewSynchronizationDtoFactoryTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewSynchronizationDtoFactoryTests\when_build_from_interview_created_onclient.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewSynchronizationDtoFactoryTests\when_build_from_interview_with_nested_rosters.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportTests\MapReportTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportTests\when_map_report_data_is_being_queried_and_where_is_answer_collection.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportTests\when_map_report_data_is_being_queried_and_where_is_no_answer_collection.cs" />
@@ -1664,6 +1653,7 @@
     <Folder Include="SharedKernels\DataCollection\InterviewTests\Validation\" />
     <Folder Include="SharedKernels\Enumerator\Services\QuestionnaireModelBuilderTests\" />
     <Folder Include="SharedKernels\SurveyManagement\Factories\ChangeStatusFactoryTests\" />
+    <Folder Include="SharedKernels\SurveyManagement\ViewsTests\InterviewerInterviewsFactoryTests\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

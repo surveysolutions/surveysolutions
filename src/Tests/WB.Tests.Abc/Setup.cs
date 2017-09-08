@@ -8,11 +8,7 @@ using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Headquarters.Factories;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -277,17 +273,6 @@ namespace WB.Tests.Abc
             var questionnaireRepository = Create.Fake.QuestionnaireRepository(questionnaireDocuments.ToArray());
 
             return Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaireRepository);
-        }
-
-        public static IInterviewSynchronizationDtoFactory InterviewSynchronizationDtoFactory(QuestionnaireDocument document)
-        {
-            var questionnaire = Create.Entity.PlainQuestionnaire(document, 1, null);
-            return new InterviewSynchronizationDtoFactory(
-                Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
-                Mock.Of<IReadSideKeyValueStorage<InterviewLinkedQuestionOptions>>(),
-                Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == document &&
-                    _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == questionnaire),
-                new RosterStructureService());
         }
     }
 }
