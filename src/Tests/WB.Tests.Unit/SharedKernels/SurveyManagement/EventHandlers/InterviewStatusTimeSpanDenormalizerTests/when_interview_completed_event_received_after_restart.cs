@@ -1,6 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 using System.Linq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -8,10 +9,11 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewStatusTimeSpanDenormalizerTests
 {
-    [Subject(typeof(InterviewStatusTimeSpanDenormalizer))]
+    [TestFixture(typeof(InterviewStatusTimeSpanDenormalizer))]
     internal class when_interview_completed_event_received_after_restart
     {
-        Establish context = () =>
+        [SetUp]
+        public void Establish()
         {
             interviewSummary =
                 Create.Entity.InterviewSummary(interviewId: interviewId, 
@@ -28,15 +30,27 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
                     });
 
             denormalizer = Create.Service.InterviewStatusTimeSpanDenormalizer();
-        };
+        }
 
-        Because of = () => denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewCompleted(interviewId: interviewId));
+        [Test]
+        public void should_contain_only_one_complete_record()
+        {
+            //act
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewCompleted(interviewId: interviewId));
 
-        It should_contain_only_one_complete_record = () =>
-            interviewSummary.TimeSpansBetweenStatuses.Count(ts=>ts.EndStatus== InterviewExportedAction.Completed).ShouldEqual(1);
+            //assert
+            interviewSummary.TimeSpansBetweenStatuses.Count(ts => ts.EndStatus == InterviewExportedAction.Completed).ShouldEqual(1);
+        }
 
-        It should_record_interviewer_assign_as_begin_status = () =>
+        [Test]
+        public void should_record_interviewer_assign_as_begin_status()
+        {
+            //act
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewCompleted(interviewId: interviewId));
+
+            //assert
             interviewSummary.TimeSpansBetweenStatuses.First().BeginStatus.ShouldEqual(InterviewExportedAction.InterviewerAssigned);
+        }
 
         private static InterviewStatusTimeSpanDenormalizer denormalizer;
         private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
