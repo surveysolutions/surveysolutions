@@ -330,20 +330,22 @@ export default {
             this.$router.push({ query: queryString });
         },
 
-        archiveSelected() {
-            this.$http.delete(this.$config.Api.Assignments, {
-                body: this.selectedRows
-            }).then(function() {
-                this.reloadTable();
-            });
+        async archiveSelected() {
+            await this.$http({
+                method: 'delete',
+                url: this.$config.Api.Assignments,
+                data: this.selectedRows
+            })
+
+            this.reloadTable();
         },
 
-        unarchiveSelected() {
-            this.$http.post(this.$config.Api.Assignments + "/Unarchive",
+        async unarchiveSelected() {
+            await this.$http.post(this.$config.Api.Assignments + "/Unarchive",
                 this.selectedRows
-            ).then(function() {
-                this.reloadTable();
-            });
+            )
+
+            this.reloadTable();
         },
 
         assignSelected() {
@@ -352,15 +354,15 @@ export default {
             });
         },
 
-        assign() {
-            this.$http.post(this.$config.Api.Assignments + "/Assign", {
+        async assign() {
+            await this.$http.post(this.$config.Api.Assignments + "/Assign", {
                 responsibleId: this.newResponsibleId.key,
                 ids: this.selectedRows
-            }).then(() => {
-                this.$refs.assignModal.hide();
-                this.newResponsibleId = null;
-                this.reloadTable();
-            });
+            })
+
+            this.$refs.assignModal.hide();
+            this.newResponsibleId = null;
+            this.reloadTable();
         },
 
         cellClicked(columnName, rowId, cellData) {
@@ -371,61 +373,63 @@ export default {
             }
         },
 
-        updateQuantity() {
-            var self = this;
-            this.$validator.validateAll().then(() => {
-                const patchQuantityUrl = this.$config.Api.Assignments + "/" + self.editedRowId + "/SetQuantity";
+        async updateQuantity() {
+            await this.$validator.validateAll()
+            
+            const patchQuantityUrl = this.$config.Api.Assignments + "/" + this.editedRowId + "/SetQuantity";
 
-                let targetQuantity = null;
-                if (self.editedQuantity == null || self.editedQuantity === "") {
-                    targetQuantity = 1;
-                } else if (self.editedQuantity == -1) {
-                    targetQuantity = null;
-                } else {
-                    targetQuantity = self.editedQuantity;
-                }
+            let targetQuantity = null;
 
-                self.$http.patch(patchQuantityUrl, {
-                    quantity: targetQuantity
-                }).then(() => {
-                    self.$refs.editQuantityModal.hide();
-                    self.editedQuantity = self.editedRowId = null;
-                    self.reloadTable();
-                });
-            });
+            if (this.editedQuantity == null || this.editedQuantity === "") {
+                targetQuantity = 1;
+            } else if (this.editedQuantity == -1) {
+                targetQuantity = null;
+            } else {
+                targetQuantity = this.editedQuantity;
+            }
+
+            await this.$http.patch(patchQuantityUrl, {
+                quantity: targetQuantity
+            })
+
+            this.$refs.editQuantityModal.hide();
+            this.editedQuantity = this.editedRowId = null;
+            this.reloadTable();
+
             return false;
         },
 
-        loadResponsibleIdByName(onDone) {
+        async loadResponsibleIdByName(onDone) {
             if (this.$route.query.responsible != undefined) {
-                const requestParams = $.extend({ query: this.$route.query.responsible, pageSize: 1, cache: false },
-                    this.ajaxParams);
-                this.$http.get(this.$config.Api.Responsible, { params: requestParams })
-                    .then(function(response) {
-                        onDone(response.data.options.length > 0 ? response.data.options[0].key : undefined);
-                    });
+
+                const requestParams = Object.assign({
+                    query: this.$route.query.responsible, pageSize: 1, cache: false
+                }, this.ajaxParams);
+
+                const response = await this.$http.get(this.$config.Api.Responsible, { params: requestParams })
+
+                onDone(response.data.options.length > 0 ? response.data.options[0].key : undefined);
             } else onDone();
         },
 
-        loadQuestionnaireId(onDone) {
+        async loadQuestionnaireId(onDone) {
             let requestParams = null;
 
             if (this.$route.query.questionnaire != undefined) {
-                requestParams = $.extend({ query: this.$route.query.questionnaire, pageSize: 1, cache: false }, this.ajaxParams);
-                this.$http.get(this.$config.Api.Questionnaire, { params: requestParams })
-                    .then(function(response) {
-                        if (response.data.options.length > 0) {
-                            onDone(response.data.options[0].key, response.data.options[0].value);
-                        }
-                    });
+                requestParams = Object.assign({ query: this.$route.query.questionnaire, pageSize: 1, cache: false }, this.ajaxParams);
+                const response = await this.$http.get(this.$config.Api.Questionnaire, { params: requestParams })
+
+                if (response.data.options.length > 0) {
+                    onDone(response.data.options[0].key, response.data.options[0].value);
+                }
+
             } else if (this.$route.query.questionnaireId != undefined) {
-                requestParams = $.extend({ questionnaireIdentity: this.$route.query.questionnaireId, cache: false }, this.ajaxParams);
-                this.$http.get(this.$config.Api.QuestionnaireById, { params: requestParams })
-                    .then(function(response) {
-                        if (response.data.options.length > 0) {
-                            onDone(response.data.options[0].key, response.data.options[0].value);
-                        }
-                    });
+                requestParams = Object.assign({ questionnaireIdentity: this.$route.query.questionnaireId, cache: false }, this.ajaxParams);
+                const response = await this.$http.get(this.$config.Api.QuestionnaireById, { params: requestParams })
+
+                if (response.data.options.length > 0) {
+                    onDone(response.data.options[0].key, response.data.options[0].value);
+                }
             } else onDone();
         }
     },
