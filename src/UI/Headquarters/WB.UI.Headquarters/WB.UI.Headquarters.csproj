@@ -1501,7 +1501,6 @@
     <Content Include="Views\Shared\Profile\UpdateOwnPassword.cshtml" />
     <Content Include="Views\Shared\_ListDataTablePagingScript.cshtml" />
     <Content Include="Views\TabletReport\_ListViewStatusesScript.cshtml" />
-    <Content Include="Views\Assignments\Index.cshtml" />
     <Content Include="Views\Shared\typeahead.cshtml" />
     <Content Include="Views\Shared\_MainLayoutVue.cshtml" />
     <Content Include="Views\Assignments\assignmentslist.cshtml" />
