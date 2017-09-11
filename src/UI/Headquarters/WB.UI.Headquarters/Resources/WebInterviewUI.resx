@@ -234,7 +234,7 @@
     <value>Enter date</value>
   </data>
   <data name="DecimalTooBig" xml:space="preserve">
-    <value>Entered value is bigger. Allow only 15 digits</value>
+    <value>Entered value is too large. Less than 15 digits allowed</value>
   </data>
   <data name="DecimalCannotParse" xml:space="preserve">
     <value>Entered value can not be parsed as decimal value</value>
