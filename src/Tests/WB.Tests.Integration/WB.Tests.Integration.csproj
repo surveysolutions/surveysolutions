@@ -550,7 +550,6 @@
     <Compile Include="UtilsTest\GuidExtensionsTests.cs" />
     <Compile Include="UtilsTest\UtilTests.cs" />
     <Compile Include="Versions\when_request_questionnaire_content_versions_of_designer_and_interviewer.cs" />
-    <Compile Include="Versions\when_request_versions_of_designer_hq_and_tester.cs" />
     <Compile Include="ZipUtilsTests\ZipUtilsTestsFixture.cs" />
   </ItemGroup>
   <ItemGroup>
