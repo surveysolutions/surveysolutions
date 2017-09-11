@@ -72,17 +72,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             => this.brokenInterviewPackageStorage.Query(packages => packages.Count());
 
         public virtual bool HasPendingPackageByInterview(Guid interviewId)
-            => this.interviewPackageStorage.Query(packages => packages.Any(package => package.InterviewId == interviewId));
+            => this.interviewPackageStorage.Query(
+                packages => packages.Any(package => package.InterviewId == interviewId));
 
         public void ReprocessAllBrokenPackages()
         {
             List<BrokenInterviewPackage> chunkOfBrokenInterviewPackages;
             do
             {
-                chunkOfBrokenInterviewPackages = this.brokenInterviewPackageStorage.Query(brokenPackages => brokenPackages.Take(10).ToList());
+                chunkOfBrokenInterviewPackages =
+                    this.brokenInterviewPackageStorage.Query(brokenPackages => brokenPackages.Take(10).ToList());
                 foreach (var brokenInterviewPackage in chunkOfBrokenInterviewPackages)
                 {
-                    this.interviewPackageStorage.Store(new InterviewPackage
+                    var interviewPackage = new InterviewPackage
                     {
                         ResponsibleId = brokenInterviewPackage.ResponsibleId,
                         InterviewId = brokenInterviewPackage.InterviewId,
@@ -92,7 +94,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                         QuestionnaireId = brokenInterviewPackage.QuestionnaireId,
                         QuestionnaireVersion = brokenInterviewPackage.QuestionnaireVersion,
                         Events = brokenInterviewPackage.Events
-                    }, null);
+                    };
+
+                    if (this.syncSettings.UseBackgroundJobForProcessingPackages)
+                    {
+                        this.interviewPackageStorage.Store(interviewPackage, null);
+                    }
+                    else
+                    {
+                        this.ProcessPackage(interviewPackage);
+                    }
+
                     this.brokenInterviewPackageStorage.Remove(brokenInterviewPackage.Id);
                 }
             } while (chunkOfBrokenInterviewPackages.Any());
@@ -103,7 +115,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             packageIds.ForEach(packageId =>
             {
                 var brokenInterviewPackage = this.brokenInterviewPackageStorage.GetById(packageId);
-                this.interviewPackageStorage.Store(new InterviewPackage
+
+                var interviewPackage = new InterviewPackage
                 {
                     ResponsibleId = brokenInterviewPackage.ResponsibleId,
                     InterviewId = brokenInterviewPackage.InterviewId,
@@ -113,7 +126,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     QuestionnaireId = brokenInterviewPackage.QuestionnaireId,
                     QuestionnaireVersion = brokenInterviewPackage.QuestionnaireVersion,
                     Events = brokenInterviewPackage.Events
-                }, null);
+                };
+
+                if (this.syncSettings.UseBackgroundJobForProcessingPackages)
+                {
+                    this.interviewPackageStorage.Store(interviewPackage, null);
+                }
+
+
+                else
+                {
+                    this.ProcessPackage(interviewPackage);
+                }
+
                 this.brokenInterviewPackageStorage.Remove(packageId);
             });
         }
@@ -121,20 +146,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
         public virtual IReadOnlyCollection<string> GetAllPackagesInterviewIds()
         {
             var count = int.MaxValue;
-            return this.interviewPackageStorage.Query(packages => packages.Select(package => package.InterviewId).Take(count).ToList())
-                    .Select(id => id.FormatGuid())
-                    .ToReadOnlyCollection();
+            return this.interviewPackageStorage
+                .Query(packages => packages.Select(package => package.InterviewId).Take(count).ToList())
+                .Select(id => id.FormatGuid())
+                .ToReadOnlyCollection();
         }
 
         public virtual IReadOnlyCollection<string> GetTopPackageIds(int count)
-            => this.interviewPackageStorage.Query(packages => packages.Select(package => package.Id).Take(count).ToList())
-                    .Select(packageId => packageId.ToString())
-                    .ToReadOnlyCollection();
+            => this.interviewPackageStorage
+                .Query(packages => packages.Select(package => package.Id).Take(count).ToList())
+                .Select(packageId => packageId.ToString())
+                .ToReadOnlyCollection();
 
         public virtual void ProcessPackage(string sPackageId)
         {
             int packageId;
-            if(int.TryParse(sPackageId, out packageId))
+            if (int.TryParse(sPackageId, out packageId))
                 this.ProcessPackage(packageId);
             else
                 this.logger.Warn($"Package {sPackageId}. Unknown package id");
@@ -148,7 +175,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
             this.logger.Debug($"Package {package.InterviewId} loaded from db. Took {innerwatch.Elapsed:g}.");
             innerwatch.Restart();
-            
+
             this.ProcessPackage(package);
             this.interviewPackageStorage.Remove(packageId);
 
@@ -166,10 +193,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     .Select(e => e.Payload)
                     .ToArray();
 
-                this.logger.Debug($"Interview events by {interview.InterviewId} deserialized. Took {innerwatch.Elapsed:g}.");
+                this.logger.Debug(
+                    $"Interview events by {interview.InterviewId} deserialized. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
 
-                bool shouldChangeInterviewKey = CheckIfInterviewKeyNeedsToBeChanged(interview.InterviewId, serializedEvents);
+                bool shouldChangeInterviewKey =
+                    CheckIfInterviewKeyNeedsToBeChanged(interview.InterviewId, serializedEvents);
 
                 this.commandService.Execute(new SynchronizeInterviewEventsCommand(
                     interviewId: interview.InterviewId,
@@ -183,7 +212,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             }
             catch (Exception exception)
             {
-                this.logger.Error($"Interview events by {interview.InterviewId} processing failed. Reason: '{exception.Message}'", exception);
+                this.logger.Error(
+                    $"Interview events by {interview.InterviewId} processing failed. Reason: '{exception.Message}'",
+                    exception);
 
                 this.brokenInterviewPackageStorage.Store(new BrokenInterviewPackage
                 {
@@ -204,7 +235,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                             exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message} {ex.StackTrace}"))
                 }, null);
 
-                this.logger.Debug($"Interview events by {interview.InterviewId} moved to broken packages. Took {innerwatch.Elapsed:g}.");
+                this.logger.Debug(
+                    $"Interview events by {interview.InterviewId} moved to broken packages. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
             }
             innerwatch.Stop();
@@ -216,16 +248,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             if (interviewKeyEvent != null)
             {
                 var stringKey = interviewKeyEvent.Key.ToString();
-                var existingInterview = this.interviews.Query(_ => _.FirstOrDefault(x => x.Key == stringKey && x.InterviewId != interviewId));
+                var existingInterview =
+                    this.interviews.Query(
+                        _ => _.FirstOrDefault(x => x.Key == stringKey && x.InterviewId != interviewId));
 
                 if (existingInterview != null)
                 {
-                    return  true;
+                    return true;
                 }
 
                 return false;
             }
-            var interview = this.interviews.Query(_ => _.Where(x => x.SummaryId == interviewId.FormatGuid()).Select(x => x.Key).FirstOrDefault());
+            var interview = this.interviews.Query(_ => _.Where(x => x.SummaryId == interviewId.FormatGuid())
+                .Select(x => x.Key).FirstOrDefault());
             return interview == null;
         }
     }
