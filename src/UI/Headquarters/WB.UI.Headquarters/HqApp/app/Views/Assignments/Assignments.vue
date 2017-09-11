@@ -211,6 +211,7 @@ export default {
                     orderable: false,
                     searchable: false,
                     render(data, type, row) {
+                        if (row.quantity < 0) return row.quantity;
                         return row.quantity - row.interviewsCount;
                     },
                     defaultContent: "<span>" + this.$t("Assignments.Unlimited") + "</span>",
