@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                             ? DateTime.Parse((string) answer)
                             : (DateTime) answer;
                         var isTimestamp = questionnaire.IsTimestampQuestion(questionId);
-                        var localTime = dateTimeAnswer.ToLocalTime();
+                        var localTime = isTimestamp ? dateTimeAnswer.ToLocalTime() : dateTimeAnswer;
                         answer = isTimestamp
                             ? localTime.ToString(CultureInfo.CurrentCulture)
                             : localTime.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
