@@ -56,7 +56,7 @@ namespace WB.UI.Headquarters.Controllers
                 Profile = Url.Action("Profile", "Interviewer")
             };
 
-            return View("list", model);
+            return View(model);
         }
 
         private static readonly ResourceManager[] Resources =
