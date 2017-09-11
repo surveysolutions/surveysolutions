@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using NHibernate.Hql.Ast.ANTLR.Tree;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
