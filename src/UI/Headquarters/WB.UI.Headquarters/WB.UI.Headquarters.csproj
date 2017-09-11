@@ -1515,7 +1515,7 @@
     <Content Include="Views\Reports\StatusDuration.cshtml" />
     <Content Include="Views\Shared\_export-buttons.cshtml" />
     <Content Include="Views\Shared\_MainLayoutHq.cshtml" />
-    <Content Include="Views\Assignments\list.cshtml" />
+    <Content Include="Views\Assignments\index.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
