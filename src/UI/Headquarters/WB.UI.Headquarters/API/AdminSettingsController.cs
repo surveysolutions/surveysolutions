@@ -10,8 +10,6 @@ namespace WB.UI.Headquarters.API
     [Authorize(Roles = "Administrator")]
     public class AdminSettingsController : ApiController
     {
-        internal const string settingsKey = "settings";
-
         public class GlobalNoticeModel
         {
             public string Message { get; set; }
@@ -26,7 +24,7 @@ namespace WB.UI.Headquarters.API
 
         public HttpResponseMessage Get()
         {
-            var globalNotice = this.noticeStorage.GetById(settingsKey);
+            var globalNotice = this.noticeStorage.GetById(GlobalNotice.GlobalNoticeKey);
             if (globalNotice == null)
             {
                 return Request.CreateResponse(new GlobalNoticeModel());
@@ -39,13 +37,13 @@ namespace WB.UI.Headquarters.API
         {
             if (string.IsNullOrEmpty(message?.Message))
             {
-                this.noticeStorage.Remove(settingsKey);
+                this.noticeStorage.Remove(GlobalNotice.GlobalNoticeKey);
             }
             else
             {
-                var globalNotice = this.noticeStorage.GetById(settingsKey) ?? new GlobalNotice();
+                var globalNotice = this.noticeStorage.GetById(GlobalNotice.GlobalNoticeKey) ?? new GlobalNotice();
                 globalNotice.Message = message.Message.Length > 1000 ? message.Message.Substring(0, 1000) : message.Message;
-                this.noticeStorage.Store(globalNotice, settingsKey);
+                this.noticeStorage.Store(globalNotice, GlobalNotice.GlobalNoticeKey);
             }
 
             return Request.CreateResponse(HttpStatusCode.OK, new {sucess = true});

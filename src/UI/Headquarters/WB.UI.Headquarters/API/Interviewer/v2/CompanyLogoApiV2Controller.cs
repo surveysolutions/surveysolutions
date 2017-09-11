@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         public HttpResponseMessage Get()
         {
             var incomingEtag = Request.Headers.IfNoneMatch.FirstOrDefault()?.Tag ?? "";
-            var companyLogo = this.logoStorage.GetById(CompanyLogo.StorageKey);
+            var companyLogo = this.logoStorage.GetById(CompanyLogo.CompanyLogoStorageKey);
 
             if (companyLogo == null) return Request.CreateResponse(HttpStatusCode.NoContent);
 

@@ -6,30 +6,28 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
     public class SupportedVersionProvider : ISupportedVersionProvider
     {
-        private readonly IPlainStorageAccessor<SupportedQuestionnaireVersion> supportedVersionStorage;
-        private const string id = "MinVersion";
+        private readonly IPlainKeyValueStorage<QuestionnaireVersion> questionnaireVersionStorage;
         private static bool versionRemembered;
 
-        public SupportedVersionProvider(IPlainStorageAccessor<SupportedQuestionnaireVersion> supportedVersionStorage)
+        public SupportedVersionProvider(IPlainKeyValueStorage<QuestionnaireVersion> questionnaireVersionStorage)
         {
-            this.supportedVersionStorage = supportedVersionStorage;
+            this.questionnaireVersionStorage = questionnaireVersionStorage;
         }
 
         public int GetSupportedQuestionnaireVersion() => ApiVersion.MaxQuestionnaireVersion;
-        public int? GetMinVerstionSupportedByInterviewer() => this.supportedVersionStorage.GetById(id)?.MinQuestionnaireVersionSupportedByInterviewer;
+        public int? GetMinVerstionSupportedByInterviewer() => this.questionnaireVersionStorage.GetById(QuestionnaireVersion.QuestionnaireVersionKey)?.MinQuestionnaireVersionSupportedByInterviewer;
 
         public void RememberMinSupportedVersion()
         {
             if (!versionRemembered)
             {
-                var supportedQuestionnaireVersion = this.supportedVersionStorage.GetById(id);
+                var supportedQuestionnaireVersion = this.questionnaireVersionStorage.GetById(QuestionnaireVersion.QuestionnaireVersionKey);
                 if (supportedQuestionnaireVersion == null)
                 {
-                    this.supportedVersionStorage.Store(new SupportedQuestionnaireVersion
+                    this.questionnaireVersionStorage.Store(new QuestionnaireVersion
                     {
-                        Id = id,
                         MinQuestionnaireVersionSupportedByInterviewer = this.GetSupportedQuestionnaireVersion()
-                    }, id);
+                    }, QuestionnaireVersion.QuestionnaireVersionKey);
                 }
 
                 versionRemembered = true;

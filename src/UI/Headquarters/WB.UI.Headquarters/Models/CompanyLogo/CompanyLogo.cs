@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Security.Cryptography;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 
 namespace WB.UI.Headquarters.Models.CompanyLogo
 {
-    public class CompanyLogo
+    public class CompanyLogo : AppSetting
     {
         public byte[] Logo { get; set; }
-
-        public static readonly string StorageKey = "company logo";
 
         public string GetEtagValue()
         {

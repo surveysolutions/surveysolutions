@@ -54,7 +54,7 @@ namespace WB.UI.Headquarters.Services
             {
                 if (AvailableVersion == null)
                 {
-                    AvailableVersion = this.versionCheckInfoStorage.GetById(VersionCheckingInfo.StorageKey);
+                    AvailableVersion = this.versionCheckInfoStorage.GetById(VersionCheckingInfo.VersionCheckingInfoKey);
                 }
 
                 var isCacheExpired = (DateTime.Now - LastLoadedAt)?.Seconds > SecondsForCacheIsValid;
@@ -82,7 +82,7 @@ namespace WB.UI.Headquarters.Services
                 ErrorOccuredAt = null;
                 
                 this.plainTransactionManager.ExecuteInPlainTransaction(() 
-                    => this.versionCheckInfoStorage.Store(versionInfo, VersionCheckingInfo.StorageKey));
+                    => this.versionCheckInfoStorage.Store(versionInfo, VersionCheckingInfo.VersionCheckingInfoKey));
             }
             catch (Exception)
             {
