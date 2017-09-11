@@ -30,7 +30,7 @@ namespace WB.UI.Headquarters.API.Resources
         [HttpGet]
         public HttpResponseMessage Thumbnail()
         {
-            var companyLogo = this.logoStorage.GetById(CompanyLogo.StorageKey);
+            var companyLogo = this.logoStorage.GetById(CompanyLogo.CompanyLogoStorageKey);
 
             if (companyLogo != null)
             {

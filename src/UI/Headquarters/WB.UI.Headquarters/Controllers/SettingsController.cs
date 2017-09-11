@@ -62,7 +62,7 @@ namespace WB.UI.Headquarters.Controllers
                                 this.logoStorage.Store(new CompanyLogo
                                 {
                                     Logo = array
-                                }, CompanyLogo.StorageKey);
+                                }, CompanyLogo.CompanyLogoStorageKey);
                                 WriteToTempData(Alerts.SUCCESS, Settings.LogoUpdated);
                             }
                             catch (ImageCorruptedException)
@@ -80,7 +80,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         public ActionResult RemoveLogo()
         {
-            this.logoStorage.Remove(CompanyLogo.StorageKey);
+            this.logoStorage.Remove(CompanyLogo.CompanyLogoStorageKey);
             WriteToTempData(Alerts.SUCCESS, Settings.LogoUpdated);
             return RedirectToAction("Index");
         }
