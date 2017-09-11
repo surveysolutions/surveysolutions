@@ -47,8 +47,9 @@ namespace WB.UI.Shared.Enumerator.CustomControls.MaskedEditTextControl
             this.maskedText.Init();
 
             this.selection = this.maskedText.FindFirstValidMaskPosition();
-
             this.lastValidMaskPosition = this.maskedText.FindLastValidMaskPosition();
+            this.LongClickable = string.IsNullOrEmpty(this.maskedText?.Mask);
+
             this.initialized = true;
         }
 
