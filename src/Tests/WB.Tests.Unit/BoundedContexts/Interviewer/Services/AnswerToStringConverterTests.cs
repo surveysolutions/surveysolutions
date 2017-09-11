@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Moq;
-using NSubstitute;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
-using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
