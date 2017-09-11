@@ -33,11 +33,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories
             DateTimeRange lastUtcTimeSpan = reportTimeline.ColumnRangesUtc.Last();
             var expectedUtcFrom = userSelectedFrom.AddMinutes(userTimeZoneAdjastsment).AddDays(1).AddDays(-7);
             var expectedUtcTo = userSelectedFrom.AddMinutes(userTimeZoneAdjastsment).AddDays(1);
-            Assert.That(lastUtcTimeSpan, Has.Property(nameof(DateTimeRange.From)).EqualTo(expectedUtcFrom));
-            Assert.That(lastUtcTimeSpan, Has.Property(nameof(DateTimeRange.To)).EqualTo(expectedUtcTo));
 
-            Assert.That(reportTimeline.ColumnRangesLocal.Last().From, Is.EqualTo(userSelectedFrom.AddDays(-7)));
-            Assert.That(reportTimeline.ColumnRangesLocal.Last().To, Is.EqualTo(userSelectedFrom));
+            Assert.Multiple(() =>
+            {
+                Assert.That(lastUtcTimeSpan, Has.Property(nameof(DateTimeRange.From)).EqualTo(expectedUtcFrom));
+                Assert.That(lastUtcTimeSpan, Has.Property(nameof(DateTimeRange.To)).EqualTo(expectedUtcTo));
+            });
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(reportTimeline.ColumnRangesLocal.Last(), Has.Property(nameof(DateTimeRange.From)).EqualTo(userSelectedFrom.AddDays(-6)));
+                Assert.That(reportTimeline.ColumnRangesLocal.Last(), Has.Property(nameof(DateTimeRange.To)).EqualTo(userSelectedFrom.AddDays(1)));
+            });
         }
 
         [Test]
@@ -49,17 +56,25 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories
             var queryableReadSideRepositoryReader = new TestInMemoryWriter<InterviewSummary>();
             queryableReadSideRepositoryReader.Store(Create.Entity.InterviewSummary(statuses: new List<InterviewCommentedStatus>
             {
-                Create.Entity.InterviewCommentedStatus(timestamp: userSelectedFrom.AddMinutes(10))
+                Create.Entity.InterviewCommentedStatus(timestamp: userSelectedFrom.AddMinutes(timezoneAdjastmentMins + 10))
             }), "1");
             var reportTimeline = ReportHelpers.BuildColumns(userSelectedFrom, "d", 2, timezoneAdjastmentMins, null, queryableReadSideRepositoryReader);
 
-            var lastLocalTimeSpan = reportTimeline.ColumnRangesLocal.Last();
-            Assert.That(lastLocalTimeSpan.From, Is.EqualTo(userSelectedFrom));
-            Assert.That(lastLocalTimeSpan.To, Is.EqualTo(userSelectedFrom.AddDays(1)));
+            Assert.That(reportTimeline.ColumnRangesUtc, Has.Length.EqualTo(1), "First timespan is completely before of first interview created date and should not be counted");
 
             DateTimeRange lastUtcTimeSpan = reportTimeline.ColumnRangesUtc.Last();
-            Assert.That(lastUtcTimeSpan, Has.Property(nameof(DateTimeRange.From)).EqualTo(userSelectedFrom.AddMinutes(timezoneAdjastmentMins)));
-            Assert.That(lastUtcTimeSpan, Has.Property(nameof(DateTimeRange.To)).EqualTo(userSelectedFrom.AddDays(1).AddMinutes(timezoneAdjastmentMins)));
+            Assert.Multiple(() =>
+            {
+                Assert.That(lastUtcTimeSpan, Has.Property(nameof(DateTimeRange.From)).EqualTo(userSelectedFrom.AddMinutes(timezoneAdjastmentMins)));
+                Assert.That(lastUtcTimeSpan, Has.Property(nameof(DateTimeRange.To)).EqualTo(userSelectedFrom.AddDays(1).AddMinutes(timezoneAdjastmentMins)));
+            });
+
+            var lastLocalTimeSpan = reportTimeline.ColumnRangesLocal.Last();
+            Assert.Multiple(() =>
+            {
+                Assert.That(lastLocalTimeSpan, Has.Property(nameof(DateTimeRange.From)).EqualTo(userSelectedFrom));
+                Assert.That(lastLocalTimeSpan, Has.Property(nameof(DateTimeRange.To)).EqualTo(userSelectedFrom.AddDays(1)));
+            });
         }
     }
 }
