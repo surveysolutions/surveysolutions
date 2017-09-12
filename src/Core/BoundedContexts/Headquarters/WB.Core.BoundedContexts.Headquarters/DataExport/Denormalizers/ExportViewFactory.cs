@@ -213,7 +213,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             var result = new List<string[]>();
             foreach (var headerItem in headerStructureForLevel.HeaderItems.Values)
             {
-                var questionHeaderItem = headerItem as ExportedHeaderItem;
+                var questionHeaderItem = headerItem as ExportedQuestionHeaderItem;
                 var variableHeaderItem = headerItem as ExportedVariableHeaderItem;
 
                 if (questionHeaderItem != null)
@@ -282,9 +282,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             return exportedHeaderItem;
         }
 
-        protected ExportedHeaderItem CreateExportedHeaderItem(IQuestion question, int? lengthOfRosterVectorWhichNeedToBeExported)
+        protected ExportedQuestionHeaderItem CreateExportedHeaderItem(IQuestion question, int? lengthOfRosterVectorWhichNeedToBeExported)
         {
-            var exportedHeaderItem = new ExportedHeaderItem();
+            var exportedHeaderItem = new ExportedQuestionHeaderItem();
 
             exportedHeaderItem.PublicKey = question.PublicKey;
             exportedHeaderItem.QuestionType = question.QuestionType;
@@ -340,7 +340,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             return exportedHeaderItem;
         }
 
-        protected ExportedHeaderItem CreateExportedHeaderItem(IQuestion question, int columnCount,
+        protected ExportedQuestionHeaderItem CreateExportedHeaderItem(IQuestion question, int columnCount,
             int? lengthOfRosterVectorWhichNeedToBeExported)
         {
             var exportedHeaderItem = this.CreateExportedHeaderItem(question, lengthOfRosterVectorWhichNeedToBeExported);

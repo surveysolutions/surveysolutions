@@ -77,7 +77,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                                 HeaderItems =
                                     new Dictionary<Guid, IExportedHeaderItem>()
                                     {
-                                        {questionId, new ExportedHeaderItem() {VariableName = variableName}}
+                                        {questionId, new ExportedQuestionHeaderItem() {VariableName = variableName}}
                                     }
                             }
                         }

@@ -393,7 +393,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 {
                     var questionId = Guid.Parse(parameters["questionId"]);
                     var question = questionnaire.HeaderToLevelMap.SelectMany(h => h.Value.HeaderItems).FirstOrDefault(q => q.Key == questionId);
-                    if (!question.Equals(new KeyValuePair<Guid, ExportedHeaderItem>()))
+                    if (!question.Equals(new KeyValuePair<Guid, ExportedQuestionHeaderItem>()))
                     {
                         newParameters["question"] = question.Value.VariableName;
                         if (action == InterviewHistoricalAction.CommentSet)

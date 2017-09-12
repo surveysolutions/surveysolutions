@@ -216,8 +216,8 @@ namespace WB.Tests.Abc.TestFactories
                 DisabledEventHandlerTypes = new Type[] {},
             };
 
-        public ExportedHeaderItem ExportedHeaderItem(Guid? questionId = null, string variableName = "var")
-            => new ExportedHeaderItem
+        public ExportedQuestionHeaderItem ExportedHeaderItem(Guid? questionId = null, string variableName = "var")
+            => new ExportedQuestionHeaderItem
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ColumnNames = new[] { variableName },

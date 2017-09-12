@@ -39,10 +39,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         It should_fill_yesno_question_subtype = () =>
         {
             HeaderStructureForLevel headerStructureForLevel = questionnaaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()];
-            ExportedHeaderItem exportedHeaderItem = headerStructureForLevel.HeaderItems[questionId] as ExportedHeaderItem;
+            ExportedQuestionHeaderItem exportedQuestionHeaderItem = headerStructureForLevel.HeaderItems[questionId] as ExportedQuestionHeaderItem;
 
-            exportedHeaderItem.ColumnValues.Length.ShouldEqual(2);
-            exportedHeaderItem.QuestionSubType.ShouldEqual(QuestionSubtype.MultyOption_YesNo);
+            exportedQuestionHeaderItem.ColumnValues.Length.ShouldEqual(2);
+            exportedQuestionHeaderItem.QuestionSubType.ShouldEqual(QuestionSubtype.MultyOption_YesNo);
         };
 
         static ExportViewFactory exportViewFactory;

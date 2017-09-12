@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
             };
             decimal columnIndex = 0;
             var columnValues = columnNames.Select(v => columnIndex++).ToArray();
-            ExportedHeaderItem headerItem = new ExportedHeaderItem()
+            ExportedQuestionHeaderItem headerItem = new ExportedQuestionHeaderItem()
             {
                 QuestionType = questionType,
                 QuestionSubType = questionSubType,
