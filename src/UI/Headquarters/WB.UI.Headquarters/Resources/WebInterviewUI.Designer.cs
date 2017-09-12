@@ -592,7 +592,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter Number.
+        ///   Looks up a localized string similar to Enter number.
         /// </summary>
         internal static string NumberEnter {
             get {
@@ -655,7 +655,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload Photo.
+        ///   Looks up a localized string similar to Upload photo.
         /// </summary>
         internal static string PhotoUpload {
             get {
