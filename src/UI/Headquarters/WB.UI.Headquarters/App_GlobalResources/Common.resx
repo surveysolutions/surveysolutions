@@ -183,6 +183,9 @@
   <data name="AllQuestionnaires" xml:space="preserve">
     <value>All Questionnaires</value>
   </data>
+  <data name="AllAssignments" xml:space="preserve">
+    <value>All Assignments</value>
+  </data>
   <data name="NoResultsFound" xml:space="preserve">
     <value>No results found</value>
   </data>
