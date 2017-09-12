@@ -1,9 +1,10 @@
 {
     "baseUri": "http://localhost/headquarters",
     "interviewers": [
-        {"name": "int", "pass": "1", "assignment": "6845"},
-        {"name": "int1", "pass": "1", "assignment": "6849"},
-        {"name": "int2", "pass": "1", "assignment": "6850"}
+        {"name": "int", "pass": "1", "assignment": "6939"},
+        {"name": "int1", "pass": "1", "assignment": "6940"},
+        {"name": "int2", "pass": "1", "assignment": "6941"}
     ],
-    "questionnaireId": "b69017ab-3d34-4a0e-b569-62c7b1bf1d83$1"
+    "questionnaireId": "b69017ab-3d34-4a0e-b569-62c7b1bf1d83$3",
+    "questionnaireVersion": 3
 }
