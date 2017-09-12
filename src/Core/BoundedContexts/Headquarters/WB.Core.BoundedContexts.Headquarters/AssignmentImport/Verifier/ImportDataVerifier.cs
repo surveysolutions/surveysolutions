@@ -803,8 +803,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                     if (levelExportStructure == null)
                         continue;
 
-                    var exportedQuestions =
-                        levelExportStructure.HeaderItems.Values.Where(h => h.QuestionType == questionType);
+                    var exportedQuestions = levelExportStructure.HeaderItems.Values
+                        .OfType<ExportedHeaderItem>()
+                        .Where(h => h.QuestionType == questionType);
 
                     foreach (var exportedQuestion in exportedQuestions)
                     {

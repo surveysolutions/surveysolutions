@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         };
 
         Because of = () =>
-            gpsExportedHeaderItem = exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument.PublicKey, 1).HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[gpsQuestionId];
+            gpsExportedHeaderItem = exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument.PublicKey, 1).HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[gpsQuestionId] as ExportedHeaderItem;
 
         It should_create_header_with_5_columns_wich_corresponds_to_gps_properties = () =>
             gpsExportedHeaderItem.ColumnNames.ShouldEqual(new[] { "gps__Latitude", "gps__Longitude", "gps__Accuracy", "gps__Altitude" , "gps__Timestamp"});

@@ -117,7 +117,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             };
 
             if (dataFormat == DataExportFormat.Binary && 
-                !questionnaire.HeaderToLevelMap.Values.SelectMany(l => l.HeaderItems.Values.Where(q => q.QuestionType == QuestionType.Multimedia || q.QuestionType == QuestionType.Audio)).Any())
+                !questionnaire.HeaderToLevelMap.Values.SelectMany(l => l.HeaderItems.Values.OfType<ExportedHeaderItem>().Where(q => q.QuestionType == QuestionType.Multimedia || q.QuestionType == QuestionType.Audio)).Any())
             {
                 dataExportView.CanRefreshBeRequested = false;
                 dataExportView.HasAnyDataToBePrepared = false;

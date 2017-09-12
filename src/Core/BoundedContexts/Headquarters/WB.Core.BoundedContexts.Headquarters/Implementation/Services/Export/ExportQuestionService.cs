@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
 {
@@ -25,7 +26,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
 
             return answers;
         }
-        
+
+        public string[] GetExportedVariable(object variable, ExportedVariableHeaderItem header)
+        {
+            switch (header.VariableType)
+            {
+                case VariableType.String:
+                    return new string[] { (string)variable ?? ExportFormatSettings.MissingStringQuestionValue };
+                case VariableType.LongInteger:
+                    return new string[] { ((long?)variable)?.ToString(CultureInfo.InvariantCulture) ?? ExportFormatSettings.MissingNumericQuestionValue };
+                case VariableType.Boolean:
+                    return new string[] { (bool?)variable == true ? "1" : (bool?)variable == false ? "0" : ExportFormatSettings.MissingNumericQuestionValue };
+                case VariableType.Double:
+                    return new string[] { ((double?)variable)?.ToString(CultureInfo.InvariantCulture) ?? ExportFormatSettings.MissingNumericQuestionValue };
+                case VariableType.DateTime:
+                    return new string[] { ((DateTime?)variable)?.ToString(ExportFormatSettings.ExportDateTimeFormat) ?? ExportFormatSettings.MissingStringQuestionValue };
+
+                default:
+                    throw new ArgumentException("Unknown variable type");
+            }
+        }
+
         private string[] GetAnswers(InterviewQuestion question, ExportedHeaderItem header)
         {
             if (question == null)
