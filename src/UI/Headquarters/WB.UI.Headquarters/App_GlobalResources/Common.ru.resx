@@ -289,4 +289,7 @@
   <data name="AllSupervisors" xml:space="preserve">
     <value>Все супервизоры</value>
   </data>
+  <data name="AllAssignments" xml:space="preserve">
+    <value>Все задания</value>
+  </data>
 </root>
