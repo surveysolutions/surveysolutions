@@ -94,7 +94,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 ReceivedByInterviewer = false
             }, interviewId.FormatGuid());
 
+            var interviewQuestion = new InterviewDbEntity
+            {
+                InterviewId = interviewId,
+                Identity = questionIdentity,
+                HasFlag = false
+            };
+
             var mockOfInterviewEntitiesRepository = new Mock<IPlainStorageAccessor<InterviewDbEntity>>();
+            mockOfInterviewEntitiesRepository
+                .Setup(x => x.Query(Moq.It.IsAny<Func<IQueryable<InterviewDbEntity>, InterviewDbEntity>>()))
+                .Returns(interviewQuestion);
 
             var factory = CreateInterviewFactory(mockOfInterviewEntitiesRepository.Object, interviewSummaryRepository);
 
