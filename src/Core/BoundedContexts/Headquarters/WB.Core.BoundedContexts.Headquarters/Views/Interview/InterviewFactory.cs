@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -21,14 +23,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         }
 
         public Identity[] GetFlaggedQuestionIds(Guid interviewId) => this.entitiesRepository.Query(_
-            => _.Where(x => x.InterviewId == interviewId && x.HasFlag).Select(x => x.QuestionIdentity).ToArray());
+            => _.Where(x => x.InterviewId == interviewId && x.HasFlag).Select(x => x.Identity).ToArray());
 
         public void SetFlagToQuestion(Guid interviewId, Identity questionIdentity)
         {
             this.ThrowIfInterviewDeletedOrReadOnly(interviewId);
 
-            var flaggedQuestion = this.entitiesRepository.Query(_ => _.FirstOrDefault(x => x.InterviewId == interviewId && x.QuestionIdentity == questionIdentity)) ??
-                                  new InterviewDbEntity {InterviewId = interviewId, QuestionIdentity = questionIdentity};
+            var flaggedQuestion = this.entitiesRepository.Query(
+                _ => _.FirstOrDefault(x => x.InterviewId == interviewId && x.Identity == questionIdentity));
 
             ThrowIfQuestionNotFound(flaggedQuestion);
 
@@ -42,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.ThrowIfInterviewDeletedOrReadOnly(interviewId);
 
             var flaggedQuestion = this.entitiesRepository.Query(_ =>
-                _.FirstOrDefault(x => x.InterviewId == interviewId && x.QuestionIdentity == questionIdentity));
+                _.FirstOrDefault(x => x.InterviewId == interviewId && x.Identity == questionIdentity));
 
             ThrowIfQuestionNotFound(flaggedQuestion);
 
@@ -55,6 +57,71 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             var removedEntities = this.entitiesRepository.Query(x => x.Where(y => y.InterviewId == interviewId));
             this.entitiesRepository.Remove(removedEntities);
+        }
+
+        public void UpdateAnswer(Guid interviewId, Identity questionIdentity, object answer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void MakeEntitiesValid(Guid interviewId, Identity[] entityIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void MakeEntitiesInvalid(Guid interviewId, IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> entityIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EnableEntities(Guid interviewId, Identity[] entityIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DisableEntities(Guid interviewId, Identity[] entityIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateVariables(Guid interviewId, ChangedVariable[] variables)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void MarkQuestionsAsReadOnly(Guid interviewId, Identity[] questionIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddRosters(Guid interviewId, Identity[] rosterIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveRosters(Guid interviewId, Identity[] rosterIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveAnswers(Guid interviewId, Identity[] questionIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public InterviewDbEntity GetQuestion(Guid interviewId, Identity questionIdentity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public InterviewDbEntity CreateQuestion(Guid interviewId, Identity questionIdentity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateQuestion(InterviewDbEntity entity)
+        {
+            throw new NotImplementedException();
         }
 
         private void ThrowIfInterviewDeletedOrReadOnly(Guid interviewId)
@@ -84,7 +151,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             if (question == null)
                 throw new InterviewException(
-                    $"Question is missing. Question Id: {question.QuestionIdentity}. Interview Id: {question.InterviewId}.");
+                    $"Question is missing. Question Id: {question.Identity}. Interview Id: {question.InterviewId}.");
         }
     }
 }
