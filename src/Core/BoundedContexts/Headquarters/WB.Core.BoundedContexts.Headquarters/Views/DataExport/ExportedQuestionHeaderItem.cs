@@ -1,19 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
-using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
 {
-    public interface IExportedHeaderItem
-    {
-        Guid PublicKey { get; set; }
-        string[] Titles { get; set; }
-        string[] ColumnNames { get; set; }
-        string VariableName { get; set; }
-    }
-
-    public class ExportedHeaderItem : IExportedHeaderItem
+    public class ExportedQuestionHeaderItem : IExportedHeaderItem
     {
         public Guid PublicKey { get; set; }
         public QuestionType QuestionType { get; set; }
@@ -41,14 +32,5 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
         public Guid PublicKey { get; set; }
         public string Caption { get; set; }
         public string Title { get; set; }
-    }
-
-    public class ExportedVariableHeaderItem : IExportedHeaderItem
-    {
-        public Guid PublicKey { get; set; }
-        public VariableType VariableType { get; set; }
-        public string[] ColumnNames { get; set; }
-        public string[] Titles { get; set; }
-        public string VariableName { get; set; }
     }
 }

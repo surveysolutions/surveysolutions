@@ -78,10 +78,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             QuestionnaireExportStructure questionnaire = this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(questionnaireIdentity);
 
             var multimediaQuestionIds = questionnaire.HeaderToLevelMap.Values.SelectMany(
-                    x => x.HeaderItems.Values.OfType<ExportedHeaderItem>().Where(h => h.QuestionType == QuestionType.Multimedia)).Select(x => x.PublicKey).ToHashSet();
+                    x => x.HeaderItems.Values.OfType<ExportedQuestionHeaderItem>().Where(h => h.QuestionType == QuestionType.Multimedia)).Select(x => x.PublicKey).ToHashSet();
 
             var audioQuestionIds = questionnaire.HeaderToLevelMap.Values.SelectMany(
-                    x => x.HeaderItems.Values.OfType<ExportedHeaderItem>().Where(h => h.QuestionType == QuestionType.Audio)).Select(x => x.PublicKey).ToHashSet();
+                    x => x.HeaderItems.Values.OfType<ExportedQuestionHeaderItem>().Where(h => h.QuestionType == QuestionType.Audio)).Select(x => x.PublicKey).ToHashSet();
             
             long totalInterviewsProcessed = 0;
             foreach (var interviewId in interviewIdsToExport)
