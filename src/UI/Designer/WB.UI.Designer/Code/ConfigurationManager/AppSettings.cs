@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Designer
@@ -21,44 +20,21 @@ namespace WB.UI.Designer
 
         public static readonly AppSettings Instance = new AppSettings();
 
-        public bool IsReCaptchaEnabled
-        {
-            get { return ConfigurationManager.AppSettings.GetBool("IsReCaptchaEnabled", true); }
-        }
+        public bool IsReCaptchaEnabled => ConfigurationManager.AppSettings.GetBool("IsReCaptchaEnabled", true);
 
-        public string WKHtmlToPdfExecutablePath
-        {
-            get { return ConfigurationManager.AppSettings.GetString("WKHtmlToPdfExecutablePath"); }
-        }
+        public string WKHtmlToPdfExecutablePath => ConfigurationManager.AppSettings.GetString("WKHtmlToPdfExecutablePath");
 
-        public bool IsTrackingEnabled
-        {
-            get { return ConfigurationManager.AppSettings.GetBool("IsTrackingEnabled", false); }
-        }
+        public bool IsTrackingEnabled => ConfigurationManager.AppSettings.GetBool("IsTrackingEnabled", false);
 
-        public int StorageLoadingChunkSize
-        {
-            get { return ConfigurationManager.AppSettings.GetInt("StorageLoadingChunkSize", 1024); }
-        }
+        public int StorageLoadingChunkSize => ConfigurationManager.AppSettings.GetInt("StorageLoadingChunkSize", 1024);
 
-        public string SupportEmail
-        {
-            get { return ConfigurationManager.AppSettings.GetString("SupportEmail"); }
-        }
+        public string SupportEmail => ConfigurationManager.AppSettings.GetString("SupportEmail");
 
-        public bool IsApiSslVerificationEnabled
-        {
-            get { return ConfigurationManager.AppSettings.GetBool("IsApiSSLVerificationEnabled", true); }
-        }
-        public int CountOfFailedLoginAttemptsBeforeCaptcha
-        {
-            get { return ConfigurationManager.AppSettings.GetInt("CountOfFailedLoginAttemptsBeforeCaptcha", 5); }
-        }
+        public bool IsApiSslVerificationEnabled => ConfigurationManager.AppSettings.GetBool("IsApiSSLVerificationEnabled", true);
 
-        public TimeSpan TimespanInMinutesCaptchaWillBeShownAfterFailedLoginAttempt
-        {
-            get { return TimeSpan.FromMinutes(ConfigurationManager.AppSettings.GetInt("TimespanInMinutesCaptchaWillBeShownAfterFailedLoginAttempt", 5)); }
-        }
+        public int CountOfFailedLoginAttemptsBeforeCaptcha => ConfigurationManager.AppSettings.GetInt("CountOfFailedLoginAttemptsBeforeCaptcha", 5);
 
+        public TimeSpan TimespanInMinutesCaptchaWillBeShownAfterFailedLoginAttempt => TimeSpan.FromMinutes(
+            ConfigurationManager.AppSettings.GetInt("TimespanInMinutesCaptchaWillBeShownAfterFailedLoginAttempt", 5));
     }
 }

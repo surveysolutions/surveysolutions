@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.UI.Designer.Code.ConfigurationManager;
@@ -23,8 +24,9 @@ namespace WB.UI.Designer.Code
     {
         private readonly PdfSettings pdfSettings;
         private readonly DeskSettings deskSettings;
+        private readonly QuestionnaireHistorySettings historySettings;
 
-        public DesignerRegistry(PdfConfigSection pdfConfigSettings, DeskConfigSection deskSettings)
+        public DesignerRegistry(PdfConfigSection pdfConfigSettings, DeskConfigSection deskSettings, int questionnaireChangeHistoryLimit)
         {
             this.pdfSettings = new PdfSettings(
                 pdfConfigSettings.InstructionsExcerptLength.Value,
@@ -39,6 +41,8 @@ namespace WB.UI.Designer.Code
                 deskSettings.MultipassKey.Value, 
                 deskSettings.ReturnUrlFormat.Value, 
                 deskSettings.SiteKey.Value);
+
+            this.historySettings = new QuestionnaireHistorySettings(questionnaireChangeHistoryLimit);
         }
 
         public override void Load()
@@ -60,6 +64,7 @@ namespace WB.UI.Designer.Code
             this.Bind<IQuestionnaireInfoFactory>().To<QuestionnaireInfoFactory>();
             this.Bind<PdfSettings>().ToConstant(pdfSettings);
             this.Bind<DeskSettings>().ToConstant(deskSettings);
+            this.Bind<QuestionnaireHistorySettings>().ToConstant(historySettings);
             this.Bind<IPdfFactory>().To<PdfFactory>();
             this.Bind<IDeskAuthenticationService>().To<DeskAuthenticationService>();
         }
