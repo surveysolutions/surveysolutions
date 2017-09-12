@@ -64,15 +64,18 @@
                                  Visible Comment;
                                  TextColor InterviewStatusToColor(Status);"
               app:layout_constraintTop_toBottomOf="@id/date_comment"
-              app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
-              />
+              app:layout_constraintLeft_toLeftOf="@+id/left_guideline" />
 
     <MvxLinearLayout
       android:id="@+id/prefilledQuestions"
       style="@style/Dashboard_InterviewItem_PrefilledQuestions"
       app:MvxBind="ItemsSource PrefilledQuestions;"
       app:MvxItemTemplate="@layout/dashboard_item_prefilled_question"
+      
+      android:divider="@drawable/list_divider_material"
       android:orientation="vertical"
+      android:showDividers="middle"
+      
       android:layout_marginTop="@dimen/dashboard_card_base_margin"
       app:layout_goneMarginBottom="@dimen/dashboard_card_base_margin"
       app:layout_constraintRight_toRightOf="parent"
