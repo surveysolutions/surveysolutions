@@ -16,13 +16,11 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors
@@ -87,6 +85,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         private IQuestionnireHistoryVersionsService questionnireHistoryVersionsService 
             => ServiceLocator.Current.GetInstance<IQuestionnireHistoryVersionsService>();
+
+        private QuestionnaireHistorySettings questionnaireHistorySettings 
+            => ServiceLocator.Current.GetInstance<QuestionnaireHistorySettings>();
 
         #region Questionnaire
 
@@ -627,12 +628,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         {
             var sQuestionnaireId = questionnaireId.FormatGuid();
 
-            var maxSequenceByQuestionnaire = this.questionnaireChangeItemStorage.Query(x => x.
-                    Where(y => y.QuestionnaireId == sQuestionnaireId).
-                    Select(y => (int?)y.Sequence).
-                    Max());
+            var maxSequenceByQuestionnaire = this.questionnaireChangeItemStorage.Query(x => x
+                .Where(y => y.QuestionnaireId == sQuestionnaireId).Select(y => (int?) y.Sequence).Max());
 
-            var questionnaireChangeItem = new QuestionnaireChangeRecord()
+            var questionnaireChangeItem = new QuestionnaireChangeRecord
             {
                 QuestionnaireChangeRecordId = Guid.NewGuid().FormatGuid(),
                 QuestionnaireId = questionnaireId.FormatGuid(),
@@ -654,6 +653,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             questionnaireChangeItem.ResultingQuestionnaireDocument = questionnireHistoryVersionsService.GetResultingQuestionnaireDocument(questionnaireDocument);
 
             this.questionnaireChangeItemStorage.Store(questionnaireChangeItem, questionnaireChangeItem.QuestionnaireChangeRecordId);
+
+            var minSequence = (maxSequenceByQuestionnaire ?? 0) -
+                              questionnaireHistorySettings.QuestionnaireChangeHistoryLimit + 2;
+            if (minSequence < 0) return;
+
+            List<string> changeRecordIdsToRemove = this.questionnaireChangeItemStorage.Query(_ => _
+                    .Where(x => x.Sequence < minSequence)
+                    .Select(x => x.QuestionnaireChangeRecordId)
+                    .ToList());
+
+            foreach (var changeRecordIdToRemove in changeRecordIdsToRemove)
+            {
+                this.questionnaireChangeItemStorage.Remove(changeRecordIdToRemove);
+            }
         }
 
         private string GetUserName(Guid? userId)
