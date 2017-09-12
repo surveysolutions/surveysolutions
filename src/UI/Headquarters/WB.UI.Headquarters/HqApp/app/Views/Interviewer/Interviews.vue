@@ -2,7 +2,7 @@
     <Layout :title="title"
             :hasFilter="true">
         <Filters slot="filters">
-            <FilterBlock :title="$t('Pages.Template')">
+            <FilterBlock :title="$t('Pages.Questionnaire')">
                 <Typeahead :placeholder="$t('Common.AllQuestionnaires')"
                            :values="questionnaires"
                            :value="questionnaireId"
@@ -12,7 +12,7 @@
             <FilterBlock :title="$t('Pages.Filters_Assignment')">
                 <div class="input-group">
                     <input class="form-control with-clear-btn"
-                           :placeholder="$t('Common.Any')"
+                           :placeholder="$t('Common.AllAssignments')"
                            type="text"
                            v-model="assignmentId" />
                     <div class="input-group-btn"

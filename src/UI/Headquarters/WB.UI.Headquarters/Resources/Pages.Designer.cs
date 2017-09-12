@@ -313,24 +313,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Status Duration.
-        /// </summary>
-        public static string StatusDuration {
-            get {
-                return ResourceManager.GetString("StatusDuration", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Number of days that interviews have stayed in their current status.
-        /// </summary>
-        public static string StatusDurationDescription {
-            get {
-                return ResourceManager.GetString("StatusDurationDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Create.
         /// </summary>
         public static string Create {
@@ -2406,6 +2388,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string Status {
             get {
                 return ResourceManager.GetString("Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status Duration.
+        /// </summary>
+        public static string StatusDuration {
+            get {
+                return ResourceManager.GetString("StatusDuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of days that interviews have stayed in their current status.
+        /// </summary>
+        public static string StatusDurationDescription {
+            get {
+                return ResourceManager.GetString("StatusDurationDescription", resourceCulture);
             }
         }
         

@@ -75,7 +75,10 @@
         app:MvxItemTemplate="@layout/dashboard_item_prefilled_question"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+		    android:divider="@drawable/list_divider_material"
+		    android:orientation="vertical"
+		    android:showDividers="middle"
+		    
 		    app:layout_goneMarginBottom="@dimen/dashboard_card_base_margin"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/subtitle"
