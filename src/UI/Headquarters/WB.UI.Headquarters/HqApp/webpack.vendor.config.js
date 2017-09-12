@@ -12,22 +12,26 @@ module.exports = {
     entry: {
         "vendor": [
             "axios",
+            "babel-runtime/helpers/asyncToGenerator.js",
             "bootstrap/js/dropdown.js",
             "bootstrap/js/modal.js",
             "bootstrap-select",
-            "core-js/es6/promise", 
+            "core-js/es6/promise",
             "core-js/modules/es6.object.assign",
-            "datatables.net-select", 
-            "datatables.net", 
-            "i18next", 
-            "jquery-contextmenu", 
+            "core-js/library/modules/es6.promise.js",
+            "core-js/library/modules/es6.array.iterator.js",
+            "datatables.net-select",
+            "datatables.net",
+            "i18next",
+            "jquery-contextmenu",
             "jquery",
-            "lodash", 
+            "lodash",
             "moment",
-            "pnotify", 
+            "pnotify",
+            "regenerator-runtime",
             "vee-validate",
             "vue-router",
-            "vue", 
+            "vue",
             "vuex"
         ]
     },
@@ -58,7 +62,7 @@ module.exports = {
             'moment': 'moment'
         }),
         new webpack.optimize.ModuleConcatenationPlugin(),
-        
+
         // https://webpack.js.org/guides/production/
         devMode ? null : new webpack.optimize.UglifyJsPlugin({
             sourceMap: true
