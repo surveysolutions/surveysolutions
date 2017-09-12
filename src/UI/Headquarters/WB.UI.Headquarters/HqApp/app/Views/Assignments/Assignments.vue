@@ -179,17 +179,6 @@ export default {
                         return resultString;
                     }
                 }, {
-                    data: "quantity",
-                    name: "Quantity",
-                    class: "type-numeric",
-                    title: this.$t("Assignments.Count"),
-                    orderable: true,
-                    searchable: false,
-                    defaultContent: "<span>" + this.$t("Assignments.Unlimited") + "</span>",
-                    if() {
-                        return self.$config.IsHeadquarter;
-                    }
-                }, {
                     data: "interviewsCount",
                     name: "InterviewsCount",
                     class: "type-numeric",
@@ -200,6 +189,17 @@ export default {
                         var result = "<a href='" + self.$config.Api.Interviews + "?assignmentId=" + row.id + "'>" + data + "</a>";
                         return result;
                     },
+                    if() {
+                        return self.$config.IsHeadquarter;
+                    }
+                }, {
+                    data: "quantity",
+                    name: "Quantity",
+                    class: "type-numeric",
+                    title: this.$t("Assignments.Count"),
+                    orderable: true,
+                    searchable: false,
+                    defaultContent: "<span>" + this.$t("Assignments.Unlimited") + "</span>",
                     if() {
                         return self.$config.IsHeadquarter;
                     }
