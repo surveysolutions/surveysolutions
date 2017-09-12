@@ -117,7 +117,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var interviewQuestion = new InterviewDbEntity
             {
                 InterviewId = interviewId,
-                QuestionIdentity = questionIdentity,
+                Identity = questionIdentity,
                 HasFlag = true
             };
 
