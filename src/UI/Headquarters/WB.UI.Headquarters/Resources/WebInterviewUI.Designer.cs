@@ -655,7 +655,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload photo.
+        ///   Looks up a localized string similar to Upload a photo.
         /// </summary>
         internal static string PhotoUpload {
             get {

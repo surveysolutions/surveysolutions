@@ -257,7 +257,7 @@
   <data name="GPSPermissionDenied" xml:space="preserve">
     <value>This website does not have permission to use the Geolocation API</value>
   </data>
-  <data name="GPSPositionUnavailable" xml:space="preserve">
+  <data name="GPSPositionUnavailable" xml:space="preserve">'
     <value>The current position could not be determined.</value>
   </data>
   <data name="GPSTimeout" xml:space="preserve">
@@ -286,7 +286,7 @@
     <comment>Do not translate parts inside {{}}: {{amountOfRostersToRemove}}</comment>
   </data>
   <data name="PhotoUpload" xml:space="preserve">
-    <value>Upload photo</value>
+    <value>Upload a photo</value>
   </data>
   <data name="PhotoTooBig" xml:space="preserve">
     <value>Image is too big to upload. Please, choose an image less than 30 Mb</value>
