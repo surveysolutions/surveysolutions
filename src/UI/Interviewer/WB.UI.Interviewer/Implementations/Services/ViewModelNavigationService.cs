@@ -8,12 +8,12 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Interviewer.ViewModel;
+using WB.UI.Shared.Enumerator.Services;
 
 namespace WB.UI.Interviewer.Implementations.Services
 {
@@ -31,7 +31,7 @@ namespace WB.UI.Interviewer.Implementations.Services
             IPrincipal principal,
             IJsonAllTypesSerializer jsonSerializer,
             IMvxNavigationService navigationService)
-            : base(commandService, userInteractionService, userInterfaceStateService, principal)
+            : base(commandService, userInteractionService, userInterfaceStateService, androidCurrentTopActivity, principal)
         {
             this.androidCurrentTopActivity = androidCurrentTopActivity;
             this.jsonSerializer = jsonSerializer;
@@ -49,6 +49,11 @@ namespace WB.UI.Interviewer.Implementations.Services
         }
 
         public void NavigateToPrefilledQuestions(string interviewId) => this.NavigateTo<PrefilledQuestionsViewModel>(new { interviewId = interviewId });
+
+        public void NavigateToSplashScreen()
+        {
+            base.RestartApp(typeof(SplashActivity));
+        }
 
         public void NavigateToInterview(string interviewId, NavigationIdentity navigationIdentity)
             => this.NavigateTo<InterviewViewModel>(new

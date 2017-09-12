@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Android.OS;
-using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
 using MvvmCross.Core.ViewModels;
@@ -10,8 +9,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
-    public abstract class SingleInterviewActivity<TViewModel> : BaseActivity<TViewModel>
-        where TViewModel : SingleInterviewViewModel
+    public abstract class SingleInterviewActivity<TViewModel> : AuthorizedUserActivity<TViewModel> where TViewModel : SingleInterviewViewModel
     {
         #region Subclasses
 
