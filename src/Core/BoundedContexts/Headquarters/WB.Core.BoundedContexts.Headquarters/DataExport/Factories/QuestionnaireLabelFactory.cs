@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
 
             foreach (IExportedHeaderItem headerItem in level.HeaderItems.Values)
             {
-                bool hasLabels = (headerItem as ExportedHeaderItem)?.Labels?.Count > 0 && ((ExportedHeaderItem)headerItem).QuestionType!=QuestionType.MultyOption;
+                bool hasLabels = (headerItem as ExportedQuestionHeaderItem)?.Labels?.Count > 0 && ((ExportedQuestionHeaderItem)headerItem).QuestionType!=QuestionType.MultyOption;
 
                 for (int i = 0; i < headerItem.ColumnNames.Length; i++)
                 {
@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
 
                     if (hasLabels)
                     {
-                        variableValueLabel = ((ExportedHeaderItem)headerItem).Labels.Values.Select(label => new VariableValueLabel(label.Caption, label.Title?.RemoveHtmlTags() ?? string.Empty)).ToArray();
+                        variableValueLabel = ((ExportedQuestionHeaderItem)headerItem).Labels.Values.Select(label => new VariableValueLabel(label.Caption, label.Title?.RemoveHtmlTags() ?? string.Empty)).ToArray();
                     }
 
                     variableLabels.Add(new LabeledVariable(headerItem.ColumnNames[i],

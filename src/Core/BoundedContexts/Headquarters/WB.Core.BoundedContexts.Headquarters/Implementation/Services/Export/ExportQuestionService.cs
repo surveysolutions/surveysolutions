@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
     {
         private static readonly CultureInfo exportCulture = CultureInfo.InvariantCulture;
         
-        public string[] GetExportedQuestion(InterviewQuestion question, ExportedHeaderItem header)
+        public string[] GetExportedQuestion(InterviewQuestion question, ExportedQuestionHeaderItem header)
         {
             var answers = this.GetAnswers(question, header);
 
@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
             }
         }
 
-        private string[] GetAnswers(InterviewQuestion question, ExportedHeaderItem header)
+        private string[] GetAnswers(InterviewQuestion question, ExportedQuestionHeaderItem header)
         {
             if (question == null)
                 return BuildMissingValueAnswer(header);
@@ -92,7 +92,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
             
         }
 
-        private static string[] BuildMissingValueAnswer(ExportedHeaderItem header)
+        private static string[] BuildMissingValueAnswer(ExportedQuestionHeaderItem header)
         {
             if (header.QuestionType == QuestionType.GpsCoordinates)
                 return new[] {ExportFormatSettings.MissingNumericQuestionValue, ExportFormatSettings.MissingNumericQuestionValue, ExportFormatSettings.MissingNumericQuestionValue, ExportFormatSettings.MissingNumericQuestionValue, ExportFormatSettings.MissingStringQuestionValue };
@@ -130,7 +130,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
             return listOfAnswers;
         }
 
-        private string ConvertAnswerToStringValue(object answer, ExportedHeaderItem header)
+        private string ConvertAnswerToStringValue(object answer, ExportedQuestionHeaderItem header)
         {
             if (answer == null)
                 return ExportFormatSettings.MissingStringQuestionValue;
@@ -160,7 +160,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
             return this.ConvertAnswerToString(answer, header.QuestionType, header.QuestionSubType);
         }
 
-        private string[] BuildAnswerListForQuestionByHeader(object answer, ExportedHeaderItem header)
+        private string[] BuildAnswerListForQuestionByHeader(object answer, ExportedQuestionHeaderItem header)
         {
             if (header.ColumnNames.Length == 1)
                 return new string[] { this.ConvertAnswerToStringValue(answer, header)};
@@ -205,7 +205,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
             return result;
         }
 
-        private static void FillMultioptionAnswers(object[] answers, ExportedHeaderItem header, string[] result)
+        private static void FillMultioptionAnswers(object[] answers, ExportedQuestionHeaderItem header, string[] result)
         {
             bool isMissingQuestion = answers.Length == 0;
 
@@ -223,7 +223,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
             }
         }
 
-        private static void FillMultioptionOrderedAnswers(object[] answers, ExportedHeaderItem header, string[] result)
+        private static void FillMultioptionOrderedAnswers(object[] answers, ExportedQuestionHeaderItem header, string[] result)
         {
             bool isMissingQuestion = answers.Length == 0;
 
@@ -241,7 +241,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
             }
         }
 
-        private void PutAnswersAsStringValuesIntoResultArray(object[] answers, ExportedHeaderItem header, string[] result)
+        private void PutAnswersAsStringValuesIntoResultArray(object[] answers, ExportedQuestionHeaderItem header, string[] result)
         {
             for (int i = 0; i < result.Length; i++)
             {
@@ -249,7 +249,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
             }
         }
 
-        private static void FillYesNoAnswers(object[] answers, ExportedHeaderItem header, string[] result, bool ordered)
+        private static void FillYesNoAnswers(object[] answers, ExportedQuestionHeaderItem header, string[] result, bool ordered)
         {
             AnsweredYesNoOption[] typedAnswers = answers.Cast<AnsweredYesNoOption>().ToArray();
             for (int i = 0; i < result.Length; i++)

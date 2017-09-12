@@ -90,9 +90,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             };
         }
 
-        protected static ExportedHeaderItem CreateExportedHeaderItem(
+        protected static ExportedQuestionHeaderItem CreateExportedHeaderItem(
             QuestionType type = QuestionType.Text, string[] columnNames = null, string variableName = "varname")
-            => new ExportedHeaderItem
+            => new ExportedQuestionHeaderItem
             {
                 PublicKey = Guid.NewGuid(),
                 ColumnNames = columnNames ?? new[] { "1" },
