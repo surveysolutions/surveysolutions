@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
                 IsTextListScope = referenceNames != null,
                 ReferencedNames = referenceNames,
                 HeaderItems =
-                    new Dictionary<Guid, ExportedHeaderItem>
+                    new Dictionary<Guid, IExportedHeaderItem>
                     {
                         { Guid.NewGuid(), CreateExportedHeaderItem() },
                         { Guid.NewGuid(), CreateExportedHeaderItem(QuestionType.Numeric, new[] { "a" }) }

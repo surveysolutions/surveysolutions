@@ -366,6 +366,14 @@ namespace WB.Tests.Abc.TestFactories
             return interviewData;
         }
 
+        public InterviewData InterviewData(Guid variableId, object topLevelVariable)
+        {
+            var interviewData = new InterviewData { InterviewId = Guid.NewGuid() };
+            interviewData.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(), null, new decimal[0]));
+            interviewData.Levels["#"].Variables.Add(variableId, topLevelVariable);
+            return interviewData;
+        }
+
         public InterviewDataExportLevelView InterviewDataExportLevelView(Guid interviewId, params InterviewDataExportRecord[] records)
             => new InterviewDataExportLevelView(new ValueVector<Guid>(), "test", records);
 
