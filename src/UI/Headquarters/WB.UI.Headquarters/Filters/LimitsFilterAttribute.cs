@@ -51,11 +51,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
 
         private int QueryInterviewsCount()
         {
-            var shouldUseOwnTransaction = !TransactionManagerProvider.GetTransactionManager().IsQueryTransactionStarted;
+            var shouldUseOwnTransaction = !TransactionManagerProvider.GetTransactionManager().TransactionStarted;
 
             if (shouldUseOwnTransaction)
             {
-                this.TransactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
+                this.TransactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
             }
             try
             {
@@ -65,7 +65,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
             {
                 if (shouldUseOwnTransaction)
                 {
-                    this.TransactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
+                    this.TransactionManagerProvider.GetTransactionManager().RollbackCommandTransaction();
                 }
             }
         }
