@@ -10,14 +10,22 @@ namespace WB.UI.Shared.Web.Filters
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            this.TransactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
+            this.TransactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
         }
 
         public override void OnResultExecuted(ResultExecutedContext filterContext)
         {
-            var transactionManager = this.TransactionManagerProvider.GetTransactionManager();
-            if (transactionManager.IsQueryTransactionStarted)
-                transactionManager.RollbackQueryTransaction();
+            if (TransactionManagerProvider.GetTransactionManager().TransactionStarted)
+            {
+                if (filterContext.Exception != null)
+                {
+                    TransactionManagerProvider.GetTransactionManager().RollbackCommandTransaction();
+                }
+                else
+                {
+                    TransactionManagerProvider.GetTransactionManager().CommitCommandTransaction();
+                }
+            }
         }
     }
 }

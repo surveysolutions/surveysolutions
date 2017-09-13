@@ -99,7 +99,7 @@ namespace WB.Tests.Unit.Infrastructure
             var transactionManager = Create.Service.CqrsPostgresTransactionManager(sessionFactory: sessionFactoryMock.Object);
 
             // act
-            transactionManager.BeginQueryTransaction();
+            transactionManager.BeginCommandTransaction();
 
             // assert
             sessionFactoryMock.Verify(factory => factory.OpenSession(), Times.Never);
@@ -112,7 +112,7 @@ namespace WB.Tests.Unit.Infrastructure
             var sessionFactoryMock = new Mock<ISessionFactory> { DefaultValue = DefaultValue.Mock };
             var transactionManager = Create.Service.CqrsPostgresTransactionManager(sessionFactory: sessionFactoryMock.Object);
 
-            transactionManager.BeginQueryTransaction();
+            transactionManager.BeginCommandTransaction();
 
             sessionFactoryMock.ResetCalls();
 
@@ -130,7 +130,7 @@ namespace WB.Tests.Unit.Infrastructure
             var sessionFactoryMock = new Mock<ISessionFactory> { DefaultValue = DefaultValue.Mock };
             var transactionManager = Create.Service.CqrsPostgresTransactionManager(sessionFactory: sessionFactoryMock.Object);
 
-            transactionManager.BeginQueryTransaction();
+            transactionManager.BeginCommandTransaction();
             transactionManager.GetSession();
 
             sessionFactoryMock.ResetCalls();
@@ -150,8 +150,8 @@ namespace WB.Tests.Unit.Infrastructure
             var transactionManager = Create.Service.CqrsPostgresTransactionManager(sessionFactory: sessionFactoryMock.Object);
 
             // act
-            transactionManager.BeginQueryTransaction();
-            transactionManager.RollbackQueryTransaction();
+            transactionManager.BeginCommandTransaction();
+            transactionManager.RollbackCommandTransaction();
 
             // assert
             sessionFactoryMock.Verify(factory => factory.OpenSession(), Times.Never);

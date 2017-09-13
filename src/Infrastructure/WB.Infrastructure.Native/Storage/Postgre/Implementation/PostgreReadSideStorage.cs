@@ -66,7 +66,16 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         public virtual void Store(TEntity entity, string id)
         {
             ISession session = this.sessionProvider.GetSession();
-            session.SaveOrUpdate(null, entity, id);
+
+            var storedEntity = session.Get<TEntity>(id);
+            if (!object.ReferenceEquals(storedEntity, entity) && storedEntity != null)
+            {
+                session.Merge(storedEntity);
+            }
+            else
+            {
+                session.SaveOrUpdate(entity);
+            }
         }
 
         public virtual void BulkStore(List<Tuple<TEntity, string>> bulk)

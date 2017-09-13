@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -29,6 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
         private readonly IInterviewUniqueKeyGenerator uniqueKeyGenerator;
         private readonly SyncSettings syncSettings;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
+        private readonly ITransactionManager transactionManager;
 
         public InterviewPackagesService(
             IPlainStorageAccessor<InterviewPackage> interviewPackageStorage,
@@ -38,7 +40,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             ICommandService commandService,
             IInterviewUniqueKeyGenerator uniqueKeyGenerator,
             SyncSettings syncSettings,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviews)
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviews,
+            ITransactionManager transactionManager)
         {
             this.interviewPackageStorage = interviewPackageStorage;
             this.brokenInterviewPackageStorage = brokenInterviewPackageStorage;
@@ -48,6 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             this.uniqueKeyGenerator = uniqueKeyGenerator;
             this.syncSettings = syncSettings;
             this.interviews = interviews;
+            this.transactionManager = transactionManager;
         }
 
         [Obsolete("Since v 5.8")]
@@ -133,7 +137,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     this.interviewPackageStorage.Store(interviewPackage, null);
                 }
 
-
                 else
                 {
                     this.ProcessPackage(interviewPackage);
@@ -160,8 +163,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
         public virtual void ProcessPackage(string sPackageId)
         {
-            int packageId;
-            if (int.TryParse(sPackageId, out packageId))
+            if (int.TryParse(sPackageId, out var packageId))
                 this.ProcessPackage(packageId);
             else
                 this.logger.Warn($"Package {sPackageId}. Unknown package id");
@@ -193,12 +195,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     .Select(e => e.Payload)
                     .ToArray();
 
-                this.logger.Debug(
-                    $"Interview events by {interview.InterviewId} deserialized. Took {innerwatch.Elapsed:g}.");
+                this.logger.Debug($"Interview events by {interview.InterviewId} deserialized. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
 
-                bool shouldChangeInterviewKey =
-                    CheckIfInterviewKeyNeedsToBeChanged(interview.InterviewId, serializedEvents);
+                bool startedOwnTransaction = false;
+                if (!this.transactionManager.TransactionStarted)
+                {
+                    startedOwnTransaction = true;
+                    transactionManager.BeginCommandTransaction();
+                }
+
+                bool shouldChangeInterviewKey = CheckIfInterviewKeyNeedsToBeChanged(interview.InterviewId, serializedEvents);
 
                 this.commandService.Execute(new SynchronizeInterviewEventsCommand(
                     interviewId: interview.InterviewId,
@@ -209,12 +216,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     createdOnClient: interview.IsCensusInterview,
                     interviewKey: shouldChangeInterviewKey ? this.uniqueKeyGenerator.Get() : null,
                     synchronizedEvents: serializedEvents), this.syncSettings.Origin);
+
+                if (startedOwnTransaction)
+                {
+                    this.transactionManager.CommitCommandTransaction();
+                }
             }
             catch (Exception exception)
             {
                 this.logger.Error(
                     $"Interview events by {interview.InterviewId} processing failed. Reason: '{exception.Message}'",
                     exception);
+                this.transactionManager.RollbackCommandTransaction();
 
                 this.brokenInterviewPackageStorage.Store(new BrokenInterviewPackage
                 {
@@ -235,8 +248,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                             exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message} {ex.StackTrace}"))
                 }, null);
 
-                this.logger.Debug(
-                    $"Interview events by {interview.InterviewId} moved to broken packages. Took {innerwatch.Elapsed:g}.");
+                this.logger.Debug($"Interview events by {interview.InterviewId} moved to broken packages. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
             }
             innerwatch.Stop();

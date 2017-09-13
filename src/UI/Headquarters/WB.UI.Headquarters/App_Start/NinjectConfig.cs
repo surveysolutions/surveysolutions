@@ -296,7 +296,6 @@ namespace WB.UI.Headquarters
                 eventBusConfigSection.GetSettings(),
                 kernel.Get<ILogger>());
 
-            bus.TransactionManager = kernel.Get<ITransactionManagerProvider>();
             kernel.Bind<IEventBus>().ToConstant(bus);
             kernel.Bind<ILiteEventBus>().ToConstant(bus);
             kernel.Bind<IEventDispatcher>().ToConstant(bus);
