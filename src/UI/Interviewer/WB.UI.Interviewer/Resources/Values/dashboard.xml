@@ -99,6 +99,7 @@
   <style name="Dashboard_InterviewItem_PrefilledQuestions">
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_width">0dp</item>
+    <item name="android:layout_marginRight">@dimen/dashboard_card_base_margin</item>
     <item name="android:focusable">false</item>
     <item name="android:layout_marginTop">@dimen/dashboard_card_base_margin</item>
     <item name="android:focusableInTouchMode">false</item>
