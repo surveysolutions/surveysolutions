@@ -16,7 +16,7 @@
 
     <script type="text/javascript">
         var $interviewsUrl = '@Url.Action("Interviews", "HQ")';
-        var $totalTitle = '@HttpUtility.JavaScriptStringEncode(Common.Total)';
+        var $allQuestionnaires = '@HttpUtility.JavaScriptStringEncode(Common.AllQuestionnaires)';
         var totalRowClass = 'total-row';
         $(function() {
             var $surveyAndStatusesReportUrl =
@@ -125,11 +125,11 @@
                 </div>
                 <div class="dataTables_wrapper no-footer">
                     <table id="data_holder" class="table table-striped table-ordered table-bordered table-hover table-mobile-devices dataTable no-footer"
-                           data-order="[[ 1, &quot;asc&quot; ]]" data-searching="false" data-s-Dom="rf<&quot;table-with-scroll&quot;t>ip">
+                           data-order="[[ 0, &quot;asc&quot; ]]" data-searching="false" data-s-Dom="rf<&quot;table-with-scroll&quot;t>ip">
                         <thead>
                         <tr>
-                            <th class="version" data-class="type-numeric version" data-name="QuestionnaireVersion" data-data="questionnaireVersion" data-th="@Reports.TemplateVersion">@Reports.TemplateVersion</th>
                             <th class="without-break changed-recently" data-class="without-break changed-recently" data-name="QuestionnaireTitle" data-data="questionnaireTitle">@Reports.SurveyName</th>
+                            <th class="version" data-class="type-numeric version" data-name="QuestionnaireVersion" data-data="questionnaireVersion" data-th="@Reports.TemplateVersion">@Reports.TemplateVersion</th>
                             <th data-class="type-numeric" data-name="SupervisorAssignedCount" data-data="supervisorAssignedCount">@Reports.SupervisorAssigned</th>
                             <th data-class="type-numeric" data-name="InterviewerAssignedCount" data-data="interviewerAssignedCount">@Reports.InterviewerAssigned</th>
                             <th data-class="type-numeric" data-name="CompletedCount" data-data="completedCount">@Reports.Completed</th>
