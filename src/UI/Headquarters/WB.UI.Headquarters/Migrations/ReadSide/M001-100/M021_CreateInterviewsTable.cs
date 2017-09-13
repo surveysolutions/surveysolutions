@@ -54,6 +54,8 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 .OnColumn("entityid").Ascending()
                 .OnColumn("rostervector").Ascending();
 
+            Create.UniqueConstraint("uk_interview").OnTable("interviews").Columns("interviewid", "entityid", "rostervector");
+
             Execute.WithConnection((connection, transaction) =>
             {
                 var interviewIds = connection.Query<string>("SELECT id FROM \"readside\".\"interviewdatas\"", transaction).ToList();
@@ -133,7 +135,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     IsEnabled = !question.Value.IsDisabled(),
                     IsReadonly = question.Value.IsReadonly(),
                     HasFlag = question.Value.IsFlagged(),
-                    AnswerType = InterviewDbEntity.GetQuestionAnswerType(question.Value.Answer),
+                    AnswerType = InterviewDbEntity.GetAnswerType(question.Value.Answer),
                     FailedValidationIndexes = question.Value.FailedValidationConditions?.Select(x => x.FailedConditionIndex)?.ToArray() ?? new int[] { },
 
                     AsIntArray = question.Value.Answer as int[] ??
@@ -178,7 +180,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 yield return new InterviewDbEntity
                 {
                     EntityType = EntityType.Variable,
-                    AnswerType = InterviewDbEntity.GetVariableAnswerType(variable.Value),
+                    AnswerType = InterviewDbEntity.GetAnswerType(variable.Value),
                     InterviewId = interviewId,
                     Identity = Identity.Create(variable.Key, lvl.RosterVector),
                     IsEnabled = true,

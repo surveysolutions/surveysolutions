@@ -1,4 +1,6 @@
-﻿namespace WB.Core.Infrastructure.Transactions
+﻿using System.Data;
+
+namespace WB.Core.Infrastructure.Transactions
 {
     public interface ITransactionManager
     {
@@ -9,5 +11,6 @@
         void BeginQueryTransaction();
         void RollbackQueryTransaction();
         bool IsQueryTransactionStarted { get; }
+        IDbTransaction GetTransaction();
     }
 }
