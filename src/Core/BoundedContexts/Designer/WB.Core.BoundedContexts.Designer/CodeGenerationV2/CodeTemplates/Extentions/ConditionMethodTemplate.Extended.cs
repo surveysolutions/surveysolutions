@@ -4,11 +4,11 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
 {
     public partial class ConditionMethodTemplate
     {
-        public ConditionMethodTemplate(ConditionMethodModel model)
+        public ConditionMethodTemplate(GroupedModel<ConditionMethodModel> model)
         {
             this.Model = model;
         }
 
-        protected ConditionMethodModel Model { get; set; }
+        protected GroupedModel<ConditionMethodModel> Model { get; set; }
     }
 }
