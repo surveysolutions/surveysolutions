@@ -3,6 +3,7 @@ import 'core-js/modules/es6.object.assign'
 import 'bootstrap/js/dropdown.js'
 import 'bootstrap/js/modal.js'
 import 'bootstrap-select'
+import "babel-polyfill"
 
 import Vue from 'vue'
 import Vuei18n from "./plugins/locale"
