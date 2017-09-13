@@ -7,6 +7,8 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
@@ -34,7 +36,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
                     new ExportQuestionService(),
                     Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == questionnaire &&
                                                         _.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument),
-                    new RosterStructureService())
+                    new RosterStructureService(),
+                    Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>())
                  .CreateQuestionnaireExportStructure(new QuestionnaireIdentity());
 
             stataEnvironmentContentService = CreateStataEnvironmentContentGenerator(fileSystemAccessor);

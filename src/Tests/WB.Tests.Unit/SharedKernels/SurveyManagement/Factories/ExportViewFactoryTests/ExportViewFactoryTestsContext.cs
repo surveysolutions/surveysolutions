@@ -18,7 +18,9 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
@@ -34,7 +36,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                 Mock.Of<IFileSystemAccessor>(),
                 exportQuestionService ?? new ExportQuestionService(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                rosterStructureService ?? new RosterStructureService());
+                rosterStructureService ?? new RosterStructureService(),
+                Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter( params IComposite[] chapterChildren)

@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.V4.CustomFunctions;
@@ -20,6 +21,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -35,17 +37,20 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         private readonly IExportQuestionService exportQuestionService;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IRosterStructureService rosterStructureService;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage;
 
         public ExportViewFactory(
             IFileSystemAccessor fileSystemAccessor,
             IExportQuestionService exportQuestionService,
             IQuestionnaireStorage questionnaireStorage,
-            IRosterStructureService rosterStructureService)
+            IRosterStructureService rosterStructureService,
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.exportQuestionService = exportQuestionService;
             this.questionnaireStorage = questionnaireStorage;
             this.rosterStructureService = rosterStructureService;
+            this.questionnaireBrowseItemStorage = questionnaireBrowseItemStorage;
         }
 
         public QuestionnaireExportStructure CreateQuestionnaireExportStructure(Guid id, long version)
@@ -70,16 +75,19 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 Version = id.Version
             };
 
+            var questionnaireBrowseItem = questionnaireBrowseItemStorage.GetById(id);
+            var supportVariables = questionnaireBrowseItem != null && questionnaireBrowseItem.AllowExportVariables;
+
             var rosterScopes = this.rosterStructureService.GetRosterScopes(questionnaire);
             var maxValuesForRosterSizeQuestions = GetMaxValuesForRosterSizeQuestions(questionnaire);
 
             result.HeaderToLevelMap.Add(new ValueVector<Guid>(),
-                this.BuildHeaderByTemplate(questionnaire, new ValueVector<Guid>(), rosterScopes, maxValuesForRosterSizeQuestions));
+                this.BuildHeaderByTemplate(questionnaire, supportVariables, new ValueVector<Guid>(), rosterScopes, maxValuesForRosterSizeQuestions));
 
             foreach (var rosterScopeDescription in rosterScopes)
             {
                 result.HeaderToLevelMap.Add(rosterScopeDescription.Key,
-                    this.BuildHeaderByTemplate(questionnaire, rosterScopeDescription.Key, rosterScopes, maxValuesForRosterSizeQuestions));
+                    this.BuildHeaderByTemplate(questionnaire, supportVariables, rosterScopeDescription.Key, rosterScopes, maxValuesForRosterSizeQuestions));
             }
 
             return result;
@@ -251,6 +259,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             string levelTitle,
             IEnumerable<IGroup> groupsInLevel,
             QuestionnaireDocument questionnaire,
+            bool supportVariables,
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions,
             ValueVector<Guid> levelVector)
         {
@@ -262,7 +271,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
             foreach (var rootGroup in groupsInLevel)
             {
-                this.FillHeaderWithQuestionsInsideGroup(headerStructureForLevel, rootGroup, questionnaire,
+                this.FillHeaderWithQuestionsInsideGroup(headerStructureForLevel, rootGroup, questionnaire, supportVariables,
                     maxValuesForRosterSizeQuestions);
             }
 
@@ -428,7 +437,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             return collectedMaxValues;
         }
 
-        private HeaderStructureForLevel BuildHeaderByTemplate(QuestionnaireDocument questionnaire, ValueVector<Guid> levelVector,
+        private HeaderStructureForLevel BuildHeaderByTemplate(QuestionnaireDocument questionnaire, bool supportVariables, ValueVector<Guid> levelVector,
             Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes, Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
         {
             IEnumerable<IGroup> rootGroups = this.GetRootGroupsForLevel(questionnaire, rosterScopes, levelVector);
@@ -439,7 +448,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             var firstRootGroup = rootGroups.First();
             var levelTitle = firstRootGroup.VariableName ?? this.fileSystemAccessor.MakeStataCompatibleFileName(firstRootGroup.Title);
 
-            var structures = this.CreateHeaderStructureForLevel(levelTitle, rootGroups, questionnaire,
+            var structures = this.CreateHeaderStructureForLevel(levelTitle, rootGroups, questionnaire, supportVariables,
                 maxValuesForRosterSizeQuestions, levelVector);
 
             if (rosterScopes.ContainsKey(levelVector) &&
@@ -478,8 +487,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             return new HashSet<Guid>(rosterScopes[levelVector].RosterIdToRosterTitleQuestionIdMap.Keys);
         }
 
-        private void FillHeaderWithQuestionsInsideGroup(HeaderStructureForLevel headerStructureForLevel, IGroup @group,
+        private void FillHeaderWithQuestionsInsideGroup(HeaderStructureForLevel headerStructureForLevel, 
+            IGroup @group,
             QuestionnaireDocument questionnaire,
+            bool supportVariables,
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
         {
             if (@group.RosterSizeSource == RosterSizeSourceType.FixedTitles && headerStructureForLevel.LevelLabels == null)
@@ -533,7 +544,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 var variable = groupChild as IVariable;
                 if (variable != null)
                 {
-                    AddHeadersForVariable(headerStructureForLevel.HeaderItems, variable);
+                    if (supportVariables)
+                        AddHeadersForVariable(headerStructureForLevel.HeaderItems, variable);
+
                     continue;
                 }
 
@@ -542,7 +555,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 {
                     if (innerGroup.IsRoster)
                         continue;
-                    this.FillHeaderWithQuestionsInsideGroup(headerStructureForLevel, innerGroup, questionnaire,
+                    this.FillHeaderWithQuestionsInsideGroup(headerStructureForLevel, innerGroup, questionnaire, supportVariables,
                         maxValuesForRosterSizeQuestions);
                 }
             }
