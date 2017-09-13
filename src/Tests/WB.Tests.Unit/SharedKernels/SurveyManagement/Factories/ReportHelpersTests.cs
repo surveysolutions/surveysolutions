@@ -42,8 +42,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories
 
             Assert.Multiple(() =>
             {
-                Assert.That(reportTimeline.ColumnRangesLocal.Last(), Has.Property(nameof(DateTimeRange.From)).EqualTo(userSelectedFrom.AddDays(-6)));
-                Assert.That(reportTimeline.ColumnRangesLocal.Last(), Has.Property(nameof(DateTimeRange.To)).EqualTo(userSelectedFrom.AddDays(1)));
+                Assert.That(reportTimeline.ColumnRangesLocal.Last(), Has.Property(nameof(DateTimeRange.To)).EqualTo(userSelectedFrom));
+                Assert.That(reportTimeline.ColumnRangesLocal.Last(), Has.Property(nameof(DateTimeRange.From)).EqualTo(userSelectedFrom.AddDays(-7)));
             });
         }
 
@@ -72,8 +72,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories
             var lastLocalTimeSpan = reportTimeline.ColumnRangesLocal.Last();
             Assert.Multiple(() =>
             {
-                Assert.That(lastLocalTimeSpan, Has.Property(nameof(DateTimeRange.From)).EqualTo(userSelectedFrom));
-                Assert.That(lastLocalTimeSpan, Has.Property(nameof(DateTimeRange.To)).EqualTo(userSelectedFrom.AddDays(1)));
+                Assert.That(lastLocalTimeSpan, Has.Property(nameof(DateTimeRange.To)).EqualTo(userSelectedFrom));
+                Assert.That(lastLocalTimeSpan, Has.Property(nameof(DateTimeRange.From)).EqualTo(userSelectedFrom.AddDays(-1)));
             });
         }
     }
