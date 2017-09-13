@@ -30,7 +30,7 @@
     self.onDataTableDataReceived = function (data) {
         if (data.data.length > 0) {
             var totalRow = data.totalRow;
-            totalRow.responsible = $totalTitle;
+            totalRow.responsible = $allTeams;
             totalRow.DT_RowClass = totalRowClass;
             data.data.unshift(totalRow);
         }

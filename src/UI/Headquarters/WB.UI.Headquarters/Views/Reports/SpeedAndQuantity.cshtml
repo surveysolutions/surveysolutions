@@ -146,7 +146,7 @@
                             @if (Model.TotalRowPresent)
                             {
                                 <tr class="total-row">
-                                    <td><span><b>@(isSpeedReport? PeriodicStatusReport.Average: PeriodicStatusReport.Total)</b></span></td>
+                                    <td><span><b>@PeriodicStatusReport.AllTeams</b></span></td>
                                     <!-- ko foreach: ((TotalRow() || {}).@(Model.ReportName)ByPeriod || []) -->
                                     <td class="type-numeric"><span data-bind='text: $root.Format@(Model.ReportName)Period($data)'></span></td>
                                     <!-- /ko -->
