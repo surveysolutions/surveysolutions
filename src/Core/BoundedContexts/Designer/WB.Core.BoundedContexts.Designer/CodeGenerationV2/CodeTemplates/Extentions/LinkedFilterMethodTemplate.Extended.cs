@@ -4,11 +4,11 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
 {
     public partial class LinkedFilterMethodTemplate
     {
-        public LinkedFilterMethodTemplate(LinkedFilterMethodModel model)
+        public LinkedFilterMethodTemplate(GroupedModel<LinkedFilterMethodModel> model)
         {
             this.Model = model;
         }
 
-        protected LinkedFilterMethodModel Model { get; set; }
+        protected GroupedModel<LinkedFilterMethodModel> Model { get; set; }
     }
 }

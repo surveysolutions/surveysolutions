@@ -21,19 +21,18 @@ using WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions;
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
 	internal partial class <#=Model.ClassName#>
-	{  
-		private <#=Model.UseObjectBoxing ? "object": Model.ReturnType#> <#=Model.MethodName#>()
+	{<# foreach(var model in Model.Models) { #> 
+		private <#=model.UseObjectBoxing ? "object": model.ReturnType#> <#=model.MethodName#>()
 		{
 <# 
-			if(Model.GenerateSelf) 
+			if(model.GenerateSelf) 
 			{
 #>
-			var self = <#=Model.Variable#>;
-<# 
-			} 
-#>
-			<#=Model.ReturnType#> __result = <#=Model.Expression#>;
-			return __result <#=Model.UseObjectBoxing ? "as object": ""#>;
+			var self = <#=model.Variable#>;
+<# } #>
+			<#=model.ReturnType#> __result = <#=model.Expression#>;
+			return __result <#=model.UseObjectBoxing ? "as object": ""#>;
 		}
+<# } #>
 	}
 }

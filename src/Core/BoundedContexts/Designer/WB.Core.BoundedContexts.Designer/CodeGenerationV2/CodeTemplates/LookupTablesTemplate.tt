@@ -20,6 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 		{
 			get { return <#= table.TableNameField #>; }
 		}
+
 <# 
 	}
 #>

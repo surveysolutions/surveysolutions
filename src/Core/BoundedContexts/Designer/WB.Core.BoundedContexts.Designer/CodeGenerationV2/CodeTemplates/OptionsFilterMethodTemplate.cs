@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "E:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
+    #line 1 "D:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "15.0.0.0")]
     public partial class OptionsFilterMethodTemplate : OptionsFilterMethodTemplateBase
     {
@@ -47,40 +47,54 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 {
 	internal partial class ");
             
-            #line 23 "E:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
+            #line 23 "D:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ClassName));
             
             #line default
             #line hidden
-            this.Write("\r\n\t{   \r\n\t\tprivate ");
+            this.Write("\r\n\t{   ");
             
-            #line 25 "E:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Model.ReturnType));
+            #line 24 "D:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
+ foreach(var model in Model.Models) { 
+            
+            #line default
+            #line hidden
+            this.Write(" \r\n\t\tprivate ");
+            
+            #line 25 "D:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(model.ReturnType));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 25 "E:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Model.MethodName));
+            #line 25 "D:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(model.MethodName));
             
             #line default
             #line hidden
             this.Write("(int optioncode)\r\n\t\t{\r\n\t\t\tvar self = ");
             
-            #line 27 "E:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Model.Variable));
+            #line 27 "D:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(model.Variable));
             
             #line default
             #line hidden
             this.Write("; \r\n\t\t\treturn ");
             
-            #line 28 "E:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Model.Expression));
+            #line 28 "D:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(model.Expression));
             
             #line default
             #line hidden
-            this.Write(";\r\n\t\t}\r\n\t}\r\n}");
+            this.Write(";\r\n\t\t}\r\n\t\t");
+            
+            #line 30 "D:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\OptionsFilterMethodTemplate.tt"
+ } 
+            
+            #line default
+            #line hidden
+            this.Write("\t}\r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }
