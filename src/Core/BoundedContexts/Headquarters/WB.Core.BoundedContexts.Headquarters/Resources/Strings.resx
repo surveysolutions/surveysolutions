@@ -207,4 +207,7 @@
   <data name="Days" xml:space="preserve">
     <value>Days</value>
   </data>
+  <data name="AllTeams" xml:space="preserve">
+    <value>All Teams</value>
+  </data>
 </root>

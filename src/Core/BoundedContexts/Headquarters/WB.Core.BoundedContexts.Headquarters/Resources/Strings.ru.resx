@@ -212,4 +212,7 @@
     <value>Среднее</value>
     <comment>Среднее</comment>
   </data>
+  <data name="AllTeams" xml:space="preserve">
+    <value>Все команды</value>
+  </data>
 </root>
