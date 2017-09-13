@@ -26,7 +26,7 @@
     this.ReportTypeName = ko.observable();
 
     self.GetPeriodName = function (period) {
-        return moment(period.From()).format(dateFormat);
+        return moment(period.To()).format(dateFormat);
     };
 
     self.getTotalAverage = function () {

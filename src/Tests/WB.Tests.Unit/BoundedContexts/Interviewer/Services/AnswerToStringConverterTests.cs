@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Globalization;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
@@ -33,6 +36,44 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
 
             // assert
             Assert.That(stringAnswer, Is.EqualTo(result));
+        }
+
+        [Test]
+        public void should_not_change_timezone_of_date_question()
+        {
+            DateTime dt = new DateTime(2010, 4, 15);
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.DateTimeQuestion(Id.g1, isTimestamp: false))
+                );
+            var converter = Create.Service.AnswerToStringConverter();
+
+            // act
+            var stringAnswer = converter.Convert(dt, Id.g1, questionnaire);
+
+            // assert
+            Assert.That(stringAnswer, Is.EqualTo("2010-04-15"));
+        }
+
+
+        [Test]
+        public void should_use_local_user_timezone_of_date_question_for_timestamp_question()
+        {
+            TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+            DateTime dt =TimeZoneInfo.ConvertTimeBySystemTimeZoneId(new DateTime(2010, 4, 15, 14, 30, 0), tzi.StandardName);
+            
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.DateTimeQuestion(Id.g1, isTimestamp: true))
+            );
+            var converter = Create.Service.AnswerToStringConverter();
+
+            // act
+            var stringAnswer = converter.Convert(dt, Id.g1, questionnaire);
+
+            // assert
+            Assert.That(stringAnswer, Is.EqualTo(dt.ToLocalTime().ToString(DateTimeFormat.DateWithTimeFormat)));
         }
     }
 }

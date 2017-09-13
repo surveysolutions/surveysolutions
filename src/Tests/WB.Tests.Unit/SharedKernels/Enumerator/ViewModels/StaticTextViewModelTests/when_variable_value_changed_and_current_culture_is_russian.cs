@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             Create.Other.CommittedEvent(payload: Create.Event.SubstitutionTitlesChanged(staticTexts: new [] { staticTextIdentity }), eventSourceId: interview.EventSourceId)));
 
         It should_change_item_title = () => 
-            viewModel.Text.PlainText.ShouldEqual("Your first variable is 31.01.2016 and second is 7,77");
+            viewModel.Text.PlainText.ShouldEqual("Your first variable is 2016-01-31 and second is 7,77");
 
         Cleanup cleanup = () => changedCulture.Dispose();
 

@@ -732,7 +732,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public override BaseInterviewQuestion Clone() => (InterviewTreeDateTimeQuestion) this.MemberwiseClone();
 
-        public string UiFormatString => IsTimestamp ? "yyyy-MM-dd HH:mm:ss" : "yyyy-MM-dd";
+        public string UiFormatString => IsTimestamp ? DateTimeFormat.DateWithTimeFormat : DateTimeFormat.DateFormat;
 
         public override string ToString() => this.answer?.Value.ToString(UiFormatString) ?? "NO ANSWER";
 

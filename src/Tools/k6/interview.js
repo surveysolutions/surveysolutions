@@ -19,7 +19,8 @@ const data = {
     dunumber: null,
     interviewId: null,
     interviewKey: null,
-    assignmentId: interviewer.assignment
+    assignmentId: interviewer.assignment,
+    questionnaireVersion: config.questionnaireVersion
 }
 
 // authToken will be passed here
@@ -53,7 +54,7 @@ export default () => {
         group("Sending interviews", () => {
             data.interviewId = uuid();
             data.dunumber = Math.floor(Math.random() * 1000);
-            data.interviewKey = Math.floor(Math.random() * 1000000000);
+            data.interviewKey = Math.floor(Math.random() * 100000000);
 
             var r = post("interviews/" + data.interviewId, interviewTemplate(data), {
                 "interview": "upload"

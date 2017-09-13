@@ -84,3 +84,6 @@ src/UI/Headquarters/WB.UI.Headquarters.Interview/npm-debug.log*
 src/*v3.ncrunchsolution
 **/HqApp/dist/*
 /src/UI/Designer/WB.UI.Designer/questionnaire/vendor
+src/UI/Designer/WB.UI.Designer/questionnaire/build/*.js
+src/UI/Designer/WB.UI.Designer/questionnaire/build/*.css
+
