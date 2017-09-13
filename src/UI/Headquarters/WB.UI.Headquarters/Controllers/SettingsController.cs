@@ -21,16 +21,16 @@ namespace WB.UI.Headquarters.Controllers
     [ObserverNotAllowed]
     public class SettingsController : BaseController
     {
-        private readonly IPlainKeyValueStorage<CompanyLogo> logoStorage;
+        private readonly IPlainKeyValueStorage<CompanyLogo> appSettingsStorage;
         private readonly IImageProcessingService imageProcessingService;
 
         public SettingsController(ICommandService commandService,
-            IPlainKeyValueStorage<CompanyLogo> logoStorage,
+            IPlainKeyValueStorage<CompanyLogo> appSettingsStorage,
             IImageProcessingService imageProcessingService,
             ILogger logger)
             : base(commandService, logger)
         {
-            this.logoStorage = logoStorage;
+            this.appSettingsStorage = appSettingsStorage;
             this.imageProcessingService = imageProcessingService;
         }
 
@@ -59,7 +59,7 @@ namespace WB.UI.Headquarters.Controllers
                             {
                                 this.imageProcessingService.ValidateImage(array);
 
-                                this.logoStorage.Store(new CompanyLogo
+                                this.appSettingsStorage.Store(new CompanyLogo
                                 {
                                     Logo = array
                                 }, CompanyLogo.CompanyLogoStorageKey);
@@ -80,7 +80,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         public ActionResult RemoveLogo()
         {
-            this.logoStorage.Remove(CompanyLogo.CompanyLogoStorageKey);
+            this.appSettingsStorage.Remove(CompanyLogo.CompanyLogoStorageKey);
             WriteToTempData(Alerts.SUCCESS, Settings.LogoUpdated);
             return RedirectToAction("Index");
         }

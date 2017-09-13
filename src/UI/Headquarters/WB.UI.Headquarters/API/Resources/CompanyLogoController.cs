@@ -16,21 +16,21 @@ namespace WB.UI.Headquarters.API.Resources
     [AllowAnonymous]
     public class CompanyLogoController : ApiController
     {
-        private readonly IPlainKeyValueStorage<CompanyLogo> logoStorage;
+        private readonly IPlainKeyValueStorage<CompanyLogo> appSettingsStorage;
         private readonly IImageProcessingService imageProcessingService;
         private const int defaultImageHeightToScale = 329;
         private const int defaultImageWidthToScale = 365;
 
-        public CompanyLogoController(IPlainKeyValueStorage<CompanyLogo> logoStorage, IImageProcessingService imageProcessingService)
+        public CompanyLogoController(IPlainKeyValueStorage<CompanyLogo> appSettingsStorage, IImageProcessingService imageProcessingService)
         {
-            this.logoStorage = logoStorage;
+            this.appSettingsStorage = appSettingsStorage;
             this.imageProcessingService = imageProcessingService;
         }
 
         [HttpGet]
         public HttpResponseMessage Thumbnail()
         {
-            var companyLogo = this.logoStorage.GetById(CompanyLogo.CompanyLogoStorageKey);
+            var companyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey);
 
             if (companyLogo != null)
             {
