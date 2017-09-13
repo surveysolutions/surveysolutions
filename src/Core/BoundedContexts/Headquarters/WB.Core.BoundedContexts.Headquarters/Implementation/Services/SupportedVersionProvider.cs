@@ -6,25 +6,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
     public class SupportedVersionProvider : ISupportedVersionProvider
     {
-        private readonly IPlainKeyValueStorage<QuestionnaireVersion> questionnaireVersionStorage;
+        private readonly IPlainKeyValueStorage<QuestionnaireVersion> appSettingsStorage;
         private static bool versionRemembered;
 
-        public SupportedVersionProvider(IPlainKeyValueStorage<QuestionnaireVersion> questionnaireVersionStorage)
+        public SupportedVersionProvider(IPlainKeyValueStorage<QuestionnaireVersion> appSettingsStorage)
         {
-            this.questionnaireVersionStorage = questionnaireVersionStorage;
+            this.appSettingsStorage = appSettingsStorage;
         }
 
         public int GetSupportedQuestionnaireVersion() => ApiVersion.MaxQuestionnaireVersion;
-        public int? GetMinVerstionSupportedByInterviewer() => this.questionnaireVersionStorage.GetById(QuestionnaireVersion.QuestionnaireVersionKey)?.MinQuestionnaireVersionSupportedByInterviewer;
+        public int? GetMinVerstionSupportedByInterviewer() => this.appSettingsStorage.GetById(QuestionnaireVersion.QuestionnaireVersionKey)?.MinQuestionnaireVersionSupportedByInterviewer;
 
         public void RememberMinSupportedVersion()
         {
             if (!versionRemembered)
             {
-                var supportedQuestionnaireVersion = this.questionnaireVersionStorage.GetById(QuestionnaireVersion.QuestionnaireVersionKey);
+                var supportedQuestionnaireVersion = this.appSettingsStorage.GetById(QuestionnaireVersion.QuestionnaireVersionKey);
                 if (supportedQuestionnaireVersion == null)
                 {
-                    this.questionnaireVersionStorage.Store(new QuestionnaireVersion
+                    this.appSettingsStorage.Store(new QuestionnaireVersion
                     {
                         MinQuestionnaireVersionSupportedByInterviewer = this.GetSupportedQuestionnaireVersion()
                     }, QuestionnaireVersion.QuestionnaireVersionKey);
