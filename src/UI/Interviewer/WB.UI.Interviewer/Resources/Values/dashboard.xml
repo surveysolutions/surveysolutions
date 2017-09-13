@@ -116,13 +116,13 @@
   <style name="Dashboard_InterviewItem_PrefilledQuestion_Question" parent="AppTheme">
     <item name="android:layout_width">0dp</item>
     <item name="android:layout_weight">34</item>
-    <item name="android:layout_gravity">left</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:fontFamily">Roboto</item>
-    <item name="android:singleLine">true</item>
     <item name="android:textStyle">italic</item>
     <item name="android:textSize">@dimen/textsize_14</item>
     <item name="android:textColor">@color/dashboard_prefilled_question</item>
+    <item name="android:singleLine">true</item>
+    
     <item name="android:maxWidth">@dimen/Dashboard_PrefilledQuestion_Width</item>
   </style>
 
@@ -131,9 +131,8 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_gravity">left</item>
     <item name="android:layout_weight">55</item>
-    <item name="android:inputType">textMultiLine</item>
-    <item name="android:maxLines">3</item>
     <item name="android:fontFamily">Roboto</item>
+    
     <item name="android:textSize">@dimen/textsize_14</item>
     <item name="android:textColor">@color/dashboard_interview_title</item>
     <item name="android:textStyle">bold</item>
