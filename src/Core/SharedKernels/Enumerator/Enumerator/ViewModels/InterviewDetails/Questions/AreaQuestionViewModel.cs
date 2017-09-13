@@ -128,19 +128,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         answerArea.DistanceToEditor);
                 }
             }
-            catch (MissingPermissionsException)
-            {
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.MissingPermissions_Storage);
-            }
+      
             catch (InterviewException ex)
             {
                 this.QuestionState.Validity.ProcessException(ex);
             }
-            catch (NotImplementedException)
+            catch (Exception e) when (e.InnerException is MissingPermissionsException)
+            {
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.MissingPermissions_Storage);
+            }
+            catch (Exception e) when (e.InnerException is NotImplementedException)
             {
                 userInteractionService.ShowToast(UIResources.Version_Not_Supports);
             }
-            catch (NotSupportedException)
+            catch (Exception e) when (e.InnerException is NotSupportedException)
             {
                 userInteractionService.ShowToast(UIResources.Device_Does_Not_Support);
             }

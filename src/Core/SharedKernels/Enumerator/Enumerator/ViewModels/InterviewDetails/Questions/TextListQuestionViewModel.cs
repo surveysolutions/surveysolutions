@@ -183,7 +183,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
                 this.questionState.Validity.ExecutedWithoutExceptions();
                 this.mainThreadDispatcher.RequestMainThreadAction(this.ShowOrHideAddNewItem);
-        }
+            }
             catch (InterviewException ex)
             {
                 this.questionState.Validity.ProcessException(ex);
