@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var factory = CreateInterviewFactory(interviewSummaryRepository: interviewSummaryRepository);
 
             //act
-            var exception = Assert.Catch<InterviewException>(() => factory.SetFlagToQuestion(interviewId, questionIdentity));
+            var exception = Assert.Catch<InterviewException>(() => factory.FlagQuestion(interviewId, questionIdentity));
             //assert
             Assert.That(exception, Is.Not.Null); 
             Assert.That(exception.Message, Is.EqualTo($"Can't modify Interview {interviewId} on server, because it received by interviewer."));
@@ -109,7 +109,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var factory = CreateInterviewFactory(mockOfInterviewEntitiesRepository.Object, interviewSummaryRepository);
 
             //act
-            factory.SetFlagToQuestion(interviewId, questionIdentity);
+            factory.FlagQuestion(interviewId, questionIdentity);
 
             //assert
             mockOfInterviewEntitiesRepository.Verify(

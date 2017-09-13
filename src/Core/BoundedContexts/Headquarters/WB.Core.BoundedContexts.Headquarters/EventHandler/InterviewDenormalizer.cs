@@ -120,34 +120,34 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             => this.repository.RemoveAnswers(evnt.EventSourceId, evnt.Payload.Questions);
 
         public void Handle(IPublishedEvent<GroupsDisabled> evnt)
-            => this.repository.DisableEntities(evnt.EventSourceId, evnt.Payload.Groups);
+            => this.repository.EnableEntities(evnt.EventSourceId, evnt.Payload.Groups, EntityType.Section, false);
 
         public void Handle(IPublishedEvent<GroupsEnabled> evnt)
-            => this.repository.EnableEntities(evnt.EventSourceId, evnt.Payload.Groups);
+            => this.repository.EnableEntities(evnt.EventSourceId, evnt.Payload.Groups, EntityType.Section, true);
 
         public void Handle(IPublishedEvent<StaticTextsEnabled> evnt)
-            => this.repository.EnableEntities(evnt.EventSourceId, evnt.Payload.StaticTexts);
+            => this.repository.EnableEntities(evnt.EventSourceId, evnt.Payload.StaticTexts, EntityType.StaticText, true);
 
         public void Handle(IPublishedEvent<StaticTextsDisabled> evnt)
-            => this.repository.DisableEntities(evnt.EventSourceId, evnt.Payload.StaticTexts);
+            => this.repository.EnableEntities(evnt.EventSourceId, evnt.Payload.StaticTexts, EntityType.StaticText, false);
 
         public void Handle(IPublishedEvent<StaticTextsDeclaredInvalid> evnt)
-            => this.repository.MakeEntitiesInvalid(evnt.EventSourceId, evnt.Payload.GetFailedValidationConditionsDictionary());
+            => this.repository.MakeEntitiesInvalid(evnt.EventSourceId, evnt.Payload.GetFailedValidationConditionsDictionary(), EntityType.StaticText);
 
         public void Handle(IPublishedEvent<StaticTextsDeclaredValid> evnt)
-            => this.repository.MakeEntitiesValid(evnt.EventSourceId, evnt.Payload.StaticTexts);
+            => this.repository.MakeEntitiesValid(evnt.EventSourceId, evnt.Payload.StaticTexts, EntityType.StaticText);
 
         public void Handle(IPublishedEvent<QuestionsDisabled> evnt)
-            => this.repository.DisableEntities(evnt.EventSourceId, evnt.Payload.Questions);
+            => this.repository.EnableEntities(evnt.EventSourceId, evnt.Payload.Questions, EntityType.Question, false);
 
         public void Handle(IPublishedEvent<QuestionsEnabled> evnt)
-            => this.repository.EnableEntities(evnt.EventSourceId, evnt.Payload.Questions);
+            => this.repository.EnableEntities(evnt.EventSourceId, evnt.Payload.Questions, EntityType.Question, true);
 
         public void Handle(IPublishedEvent<AnswersDeclaredInvalid> evnt)
-            => this.repository.MakeEntitiesInvalid(evnt.EventSourceId, evnt.Payload.FailedValidationConditions);
+            => this.repository.MakeEntitiesInvalid(evnt.EventSourceId, evnt.Payload.FailedValidationConditions, EntityType.Question);
 
         public void Handle(IPublishedEvent<AnswersDeclaredValid> evnt)
-            => this.repository.MakeEntitiesValid(evnt.EventSourceId, evnt.Payload.Questions);
+            => this.repository.MakeEntitiesValid(evnt.EventSourceId, evnt.Payload.Questions, EntityType.Question);
 
         public void Handle(IPublishedEvent<InterviewHardDeleted> evnt) 
             => this.repository.RemoveInterview(evnt.EventSourceId);
@@ -162,9 +162,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             => this.repository.UpdateVariables(evnt.EventSourceId, evnt.Payload.ChangedVariables);
 
         public void Handle(IPublishedEvent<VariablesDisabled> evnt)
-            => this.repository.DisableEntities(evnt.EventSourceId, evnt.Payload.Variables);
+            => this.repository.EnableEntities(evnt.EventSourceId, evnt.Payload.Variables, EntityType.Variable, false);
 
         public void Handle(IPublishedEvent<VariablesEnabled> evnt)
-            => this.repository.EnableEntities(evnt.EventSourceId, evnt.Payload.Variables);
+            => this.repository.EnableEntities(evnt.EventSourceId, evnt.Payload.Variables, EntityType.Variable, true);
     }
 }

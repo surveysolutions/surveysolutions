@@ -68,11 +68,11 @@ namespace WB.UI.Headquarters.Controllers
                     {
                         case SetFlagToAnswerCommand setFlagCommand:
                             this._interviewFactory.SetFlagToQuestion(setFlagCommand.InterviewId,
-                                Identity.Create(setFlagCommand.QuestionId, setFlagCommand.RosterVector));
+                                Identity.Create(setFlagCommand.QuestionId, setFlagCommand.RosterVector), true);
                             break;
                         case RemoveFlagFromAnswerCommand removeFlagCommand:
-                            this._interviewFactory.RemoveFlagFromQuestion(removeFlagCommand.InterviewId,
-                                Identity.Create(removeFlagCommand.QuestionId, removeFlagCommand.RosterVector));
+                            this._interviewFactory.SetFlagToQuestion(removeFlagCommand.InterviewId,
+                                Identity.Create(removeFlagCommand.QuestionId, removeFlagCommand.RosterVector), false);
                             break;
                         case HardDeleteInterview deleteInterview:
                             this.CommandService.Execute(transformedCommand);
