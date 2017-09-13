@@ -42,6 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 Enumerable.Range(0, columnCount)
                     .Select(i => new DateTimeRange(AddPeriod(localFrom, period, i), AddPeriod(localFrom, period, i + 1)))
                     .Where(i => localMinDate.HasValue && i.To >= localMinDate)
+                    .Select(i => new DateTimeRange(i.From.AddDays(-1), i.To.AddDays(-1)))
                     .ToArray();
 
             DateTimeRange[] dateTimeRangesUtc =
