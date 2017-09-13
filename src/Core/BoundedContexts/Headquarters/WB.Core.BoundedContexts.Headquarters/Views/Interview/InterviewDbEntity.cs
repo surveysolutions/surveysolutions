@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual AudioAnswer AsAudio { get; set; }
         public virtual Area AsArea { get; set; }
 
-        public static AnswerType? GetQuestionAnswerType(object answer)
+        public static AnswerType? GetAnswerType(object answer)
         {
             switch (answer)
             {
@@ -61,26 +61,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     return Interview.AnswerType.Audio;
                 case Area asarea:
                     return Interview.AnswerType.Area;
-                default:
-                    return null;
-            }
-        }
-
-        public static AnswerType? GetVariableAnswerType(object variable)
-        {
-            switch (variable)
-            {
                 case bool asbool:
                     return Interview.AnswerType.Bool;
-                case decimal asdecimal:
-                case double asdouble:
-                    return Interview.AnswerType.Double;
-                case string asstring:
-                    return Interview.AnswerType.String;
-                case long aslong:
-                    return Interview.AnswerType.Long;
-                case DateTime asdatetime:
-                    return Interview.AnswerType.Datetime;
                 default:
                     return null;
             }

@@ -227,7 +227,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IUserViewFactory>().ToMethod(context => new UserViewFactory());
             this.Bind<ITeamUsersAndQuestionnairesFactory>().To<TeamUsersAndQuestionnairesFactory>();
             this.Bind<IInterviewDetailsViewFactory>().To<InterviewDetailsViewFactory>();
-            this.Bind<IInterviewFactory>().To<InterviewFactory>();
+            this.Bind<IInterviewFactory>().To<InterviewFactory>().WithConstructorArgument("dbTransaction", x => null);
             this.Bind<IInterviewSummaryViewFactory>().To<InterviewSummaryViewFactory>();
             this.Bind<IChartStatisticsViewFactory>().To<ChartStatisticsViewFactory>();
             this.Bind<IQuestionnaireBrowseViewFactory>().To<QuestionnaireBrowseViewFactory>();
