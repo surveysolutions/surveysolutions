@@ -45,9 +45,9 @@ namespace WB.Tests.Integration.PostgreSQLTests
 
             storage = IntegrationCreate.PostgresReadSideRepository<TestRemoveStartsFrom>(sessionProvider: sessionProvider, idColumnName: "EntityId");
 
-            storage.Store(new TestRemoveStartsFrom { Value = "test1" }, $"{nastya}1");
-            storage.Store(new TestRemoveStartsFrom { Value = "test2" }, $"{nastya}2");
-            storage.Store(new TestRemoveStartsFrom { Value = "test3" }, "vitaliy");
+            storage.Store(new TestRemoveStartsFrom { Value = "test1", EntityId = $"{nastya}1" }, $"{nastya}1");
+            storage.Store(new TestRemoveStartsFrom { Value = "test2", EntityId = $"{nastya}2" }, $"{nastya}2");
+            storage.Store(new TestRemoveStartsFrom { Value = "test3", EntityId = $"vitaliy" }, "vitaliy");
         };
 
         Because of = () => { storage.RemoveIfStartsWith(nastya); };

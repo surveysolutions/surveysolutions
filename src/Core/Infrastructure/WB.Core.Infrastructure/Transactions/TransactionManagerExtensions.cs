@@ -1,5 +1,4 @@
 using System;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.Infrastructure.Transactions
@@ -50,13 +49,12 @@ namespace WB.Core.Infrastructure.Transactions
 
         public static T ExecuteInQueryTransaction<T>(this ITransactionManager transactionManager, Func<T> func)
         {
-            bool shouldStartTransaction = !transactionManager.IsQueryTransactionStarted;
+            bool shouldStartTransaction = !transactionManager.TransactionStarted;
             try
             {
-
                 if (shouldStartTransaction)
                 {
-                    transactionManager.BeginQueryTransaction();
+                    transactionManager.BeginCommandTransaction();
                 }
 
                 return func.Invoke();
@@ -65,7 +63,7 @@ namespace WB.Core.Infrastructure.Transactions
             {
                 if (shouldStartTransaction)
                 {
-                    transactionManager.RollbackQueryTransaction();
+                    transactionManager.RollbackCommandTransaction();
                 }
             }
         }

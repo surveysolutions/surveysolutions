@@ -91,7 +91,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
         [Test]
         public void should_return_total_row_with_21_interview_at_first_period_and_zero_interviews_at_second()
         {
-            result.TotalRow.QuantityByPeriod.Should().Equal(21, 0);
+            result.TotalRow.QuantityByPeriod.Should().Equal(0, 21);
         }
 
         [Test]

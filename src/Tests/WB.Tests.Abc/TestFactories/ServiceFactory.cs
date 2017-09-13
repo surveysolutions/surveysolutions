@@ -244,10 +244,7 @@ namespace WB.Tests.Abc.TestFactories
             => new NcqrCompatibleEventDispatcher(
                 eventStore: Mock.Of<IEventStore>(),
                 eventBusSettings: eventBusSettings ?? Create.Entity.EventBusSettings(),
-                logger: logger ?? Mock.Of<ILogger>())
-            {
-                TransactionManager = Mock.Of<ITransactionManagerProvider>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>())
-            };
+                logger: logger ?? Mock.Of<ILogger>());
 
         public ImportDataParsingService PreloadedDataService(QuestionnaireDocument questionnaire)
             => new ImportDataParsingService(
