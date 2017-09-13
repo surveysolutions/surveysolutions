@@ -895,7 +895,7 @@
 
   <Target Name="CleanupQuestionnaire" BeforeTargets="BeforeRebuild">
     <Message Text="Cleaning up questionnaire" />
-    <RemoveDir  Directories="questionnaire\vendor" />
+    <RemoveDir Directories="questionnaire\vendor" ContinueOnError="true" />
   </Target>
   
   <Target Name="RestoreNodeModules" BeforeTargets="BowerInstall" Condition=" '$(Configuration)' == 'Debug'">

@@ -124,13 +124,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.Answer = scanCode.Code;
                 }
             }
-            catch (MissingPermissionsException)
-            {
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.MissingPermissions_Camera);
-            }
+
             catch (InterviewException ex)
             {
                 this.QuestionState.Validity.ProcessException(ex);
+            }
+            catch (Exception e) when (e.InnerException is MissingPermissionsException)
+            {
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.MissingPermissions_Camera);
             }
             finally
             {
