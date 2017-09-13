@@ -21,11 +21,12 @@ using WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions;
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
 	internal partial class <#=Model.ClassName#>
-	{   
-		private <#=Model.ReturnType#> <#=Model.MethodName#>(int optioncode)
+	{   <# foreach(var model in Model.Models) { #> 
+		private <#=model.ReturnType#> <#=model.MethodName#>(int optioncode)
 		{
-			var self = <#=Model.Variable#>; 
-			return <#=Model.Expression#>;
+			var self = <#=model.Variable#>; 
+			return <#=model.Expression#>;
 		}
+		<# } #>
 	}
 }
