@@ -156,9 +156,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     }
                 }
             }
-            catch (MissingPermissionsException e)
+            catch (Exception e ) when (e.InnerException is MissingPermissionsException mpe)
             {
-                switch (e.Permission)
+                switch (mpe.Permission)
                 {
                     case Permission.Camera:
                         this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.MissingPermissions_Camera);
