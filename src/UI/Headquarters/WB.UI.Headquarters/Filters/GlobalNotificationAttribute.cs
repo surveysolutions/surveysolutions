@@ -7,7 +7,7 @@ namespace WB.UI.Headquarters.Filters
 {
     public class GlobalNotificationAttribute : ActionFilterAttribute
     {
-        private IPlainKeyValueStorage<GlobalNotice> NoticeStorage => 
+        private IPlainKeyValueStorage<GlobalNotice> AppSettingsStorage => 
             ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<GlobalNotice>>();
 
         public override void OnResultExecuting(ResultExecutingContext filterContext)
@@ -18,7 +18,7 @@ namespace WB.UI.Headquarters.Filters
 
             if (viewResult != null)
             {
-                var globalNotice = this.NoticeStorage.GetById(GlobalNotice.GlobalNoticeKey);
+                var globalNotice = this.AppSettingsStorage.GetById(GlobalNotice.GlobalNoticeKey);
                 viewResult.ViewBag.GlobalNotice = string.IsNullOrEmpty(globalNotice?.Message) ? null : globalNotice.Message;
             }
         }
