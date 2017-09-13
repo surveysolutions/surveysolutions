@@ -11,6 +11,7 @@ using Main.Core.Events;
 using Moq;
 using ReflectionMagic;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -1805,6 +1806,11 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new CumulativeReportStatusChange(entryId, questionnaireId, questionnaireVersion, date, status,
                 changeValue, interviewId, eventSequence);
+        }
+
+        public SyncSettings SyncSettings(bool useBackgroundJobForProcessingPackages = false)
+        {
+            return new SyncSettings("hq", useBackgroundJobForProcessingPackages);
         }
     }
 }
