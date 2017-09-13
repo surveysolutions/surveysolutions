@@ -585,19 +585,25 @@ namespace WB.Tests.Unit.Designer
 
 
         public static QuestionnaireChangeRecord QuestionnaireChangeRecord(
+            string questionnaireChangeRecordId = null,
             string questionnaireId = null,
             QuestionnaireActionType? action = null,
             Guid? targetId = null,
             QuestionnaireItemType? targetType = null,
+            string resultingQuestionnaireDocument = null,
+            int? sequence = null,
             params QuestionnaireChangeReference[] reference)
         {
             return new QuestionnaireChangeRecord()
             {
+                QuestionnaireChangeRecordId = questionnaireChangeRecordId ?? Guid.NewGuid().FormatGuid(),
                 QuestionnaireId = questionnaireId,
                 ActionType = action ?? QuestionnaireActionType.Add,
                 TargetItemId = targetId ?? Guid.NewGuid(),
                 TargetItemType = targetType ?? QuestionnaireItemType.Group,
-                References = reference.ToHashSet()
+                References = reference.ToHashSet(),
+                Sequence = sequence ?? 1,
+                ResultingQuestionnaireDocument = resultingQuestionnaireDocument
             };
         }
 
