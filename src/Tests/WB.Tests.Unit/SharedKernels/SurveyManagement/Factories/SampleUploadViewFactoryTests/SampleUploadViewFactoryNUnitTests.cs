@@ -101,7 +101,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SampleUploadVie
             var headerStructure = Create.Entity.HeaderStructureForLevel();
             exportStructure.HeaderToLevelMap.Add(new ValueVector<Guid>(), headerStructure);
             headerStructure.HeaderItems.Add(prefilledTxtQuestion.PublicKey,
-                Create.Entity.ExportedHeaderItem(questionId: prefilledTxtQuestion.PublicKey,
+                Create.Entity.ExportedQuestionHeaderItem(questionId: prefilledTxtQuestion.PublicKey,
                     variableName: prefiledQuestionVarName));
 
             var sampleUploadViewFactory =
