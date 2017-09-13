@@ -7,7 +7,10 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
     {
         public override void Up()
         {
-            Delete.Table("interviewlinkedquestionoptions");
+            if (Schema.Table("interviewlinkedquestionoptions").Exists())
+            {
+                Delete.Table("interviewlinkedquestionoptions");
+            }
         }
 
         public override void Down()
