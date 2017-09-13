@@ -252,7 +252,8 @@ namespace WB.Tests.Abc.TestFactories
                                       new ExportQuestionService(), 
                                       Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaire && 
                                                                           _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaire, 1, null)),
-                                      new RosterStructureService())
+                                      new RosterStructureService(),
+                                      Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>())
                                     .CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaire.PublicKey, 1)),
                 new RosterStructureService().GetRosterScopes(questionnaire), 
                 questionnaire,
