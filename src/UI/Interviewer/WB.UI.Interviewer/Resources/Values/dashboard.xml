@@ -81,19 +81,29 @@
     <item name="android:layout_marginBottom">@dimen/textsize_10</item>
   </style>
   
+  <style name="Dashboard_InterviewItem_Id">
+    <item name="android:layout_width">0dp</item>
+    <item name="android:layout_height">wrap_content</item>
+
+    <item name="android:fontFamily">Roboto</item>
+    <item name="android:textSize">@dimen/textsize_22</item>
+    <item name="android:textColor">@color/dashboard_interview_title</item>
+  </style>
+    
   <style name="Dashboard_InterviewItem_Title">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:textColor">@color/recordedAnswerText</item>
+    <item name="android:textColor">@color/dashboard_interview_title</item>
     <item name="android:textStyle">bold</item>
     <item name="android:textSize">@dimen/textsize_20</item>
   </style>
+
   <style name="Dashboard_InterviewItem_SubTitle">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">@dimen/textsize_16</item>
     <item name="android:textStyle">bold</item>
-    <item name="android:textColor">@color/recordedAnswerText</item>
+    <item name="android:textColor">@color/dashboard_interview_subtitle</item>
   </style>
   
   <style name="Dashboard_InterviewItem_PrefilledQuestions">

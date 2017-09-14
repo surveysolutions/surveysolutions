@@ -98,29 +98,38 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to № {0}: {1}.
+        ///   Looks up a localized string similar to id {0}.
         /// </summary>
-        public static string Dashboard_Assignment_CardTitle {
+        public static string Dashboard_Assignment_CardTitleFormat {
             get {
-                return ResourceManager.GetString("Dashboard_Assignment_CardTitle", resourceCulture);
+                return ResourceManager.GetString("Dashboard_Assignment_CardTitleFormat", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} interview(s).
+        ///   Looks up a localized string similar to Interview {0} of  unlimited for this assignment.
         /// </summary>
-        public static string Dashboard_AssignmentCard_TitleCountdown {
+        public static string Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat {
             get {
-                return ResourceManager.GetString("Dashboard_AssignmentCard_TitleCountdown", resourceCulture);
+                return ResourceManager.GetString("Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unlimited.
+        ///   Looks up a localized string similar to Interview {0} of {1} for this assignment.
         /// </summary>
-        public static string Dashboard_AssignmentCard_TitleCountdown_Unlimited {
+        public static string Dashboard_AssignmentCard_SubTitleCountdownFormat {
             get {
-                return ResourceManager.GetString("Dashboard_AssignmentCard_TitleCountdown_Unlimited", resourceCulture);
+                return ResourceManager.GetString("Dashboard_AssignmentCard_SubTitleCountdownFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Single interview assignment.
+        /// </summary>
+        public static string Dashboard_AssignmentCard_SubTitleSingleInterivew {
+            get {
+                return ResourceManager.GetString("Dashboard_AssignmentCard_SubTitleSingleInterivew", resourceCulture);
             }
         }
         
