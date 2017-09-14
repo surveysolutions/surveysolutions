@@ -225,7 +225,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
                     postProcessor.Invoke(aggregate, command);
                 }
             }
-            catch (AggregateException)
+            catch (Exception)
             {
                 aggregateRootCacheCleaner.Evict(aggregateId);
                 throw;
