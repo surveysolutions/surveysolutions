@@ -15,6 +15,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         void NavigateToLogin();
         void NavigateToInterview(string interviewId, NavigationIdentity navigationIdentity);
         void NavigateToPrefilledQuestions(string interviewId);
+        void NavigateToSplashScreen();
         void ShowWaitMessage();
         bool HasPendingOperations { get; }
     }

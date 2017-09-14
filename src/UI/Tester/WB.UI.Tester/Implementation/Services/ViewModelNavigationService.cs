@@ -6,13 +6,11 @@ using MvvmCross.Platform.Droid.Platform;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
-using WB.UI.Shared.Enumerator.CustomServices.AreaEditor;
+using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Tester.Activities;
 
 namespace WB.UI.Tester.Implementation.Services
@@ -29,7 +27,7 @@ namespace WB.UI.Tester.Implementation.Services
             IMvxAndroidCurrentTopActivity androidCurrentTopActivity,
             IPrincipal principal,
             IJsonAllTypesSerializer jsonSerializer)
-            : base(commandService, userInteractionService, userInterfaceStateService, principal)
+            : base(commandService, userInteractionService, userInterfaceStateService, androidCurrentTopActivity,principal)
         {
             this.androidCurrentTopActivity = androidCurrentTopActivity;
             this.jsonSerializer = jsonSerializer;
@@ -41,6 +39,11 @@ namespace WB.UI.Tester.Implementation.Services
         {
             this.NavigateTo<DashboardViewModel>();
             return Task.CompletedTask;
+        }
+
+        public void NavigateToSplashScreen()
+        {
+            base.RestartApp(typeof(SplashActivity));
         }
 
         public void NavigateToPrefilledQuestions(string interviewId) => this.NavigateTo<PrefilledQuestionsViewModel>(new { interviewId = interviewId });
