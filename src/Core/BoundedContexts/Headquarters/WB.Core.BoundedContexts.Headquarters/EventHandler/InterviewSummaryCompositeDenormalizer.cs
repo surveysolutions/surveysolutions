@@ -8,12 +8,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
     {
         public InterviewSummaryCompositeDenormalizer(IReadSideRepositoryWriter<InterviewSummary> readSideStorage,
             InterviewSummaryDenormalizer interviewSummaryDenormalizer,
-            StatusChangeHistoryDenormalizerFunctional historyDenormalizerFunctional) : base(readSideStorage)
+            StatusChangeHistoryDenormalizerFunctional historyDenormalizerFunctional,
+            InterviewStatusTimeSpanDenormalizer statusTimeSpanDenormalizer) : base(readSideStorage)
         {
             Handlers = new ICompositeFunctionalPartEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>[]
             {
                 interviewSummaryDenormalizer,
                 historyDenormalizerFunctional,
+                statusTimeSpanDenormalizer
             };
         }
 
