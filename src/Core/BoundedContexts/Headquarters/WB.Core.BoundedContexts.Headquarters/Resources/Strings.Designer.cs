@@ -61,6 +61,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All peroids.
+        /// </summary>
+        public static string AllPeriods {
+            get {
+                return ResourceManager.GetString("AllPeriods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All Teams.
         /// </summary>
         public static string AllTeams {
