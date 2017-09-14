@@ -10,6 +10,7 @@
   <color name="login_Input_border_invalid_color">#FFE32102</color>
 
   <color name="dashboard_interview_title">#000000</color>
+  <color name="dashboard_interview_delimeter">#CCCCCC</color>
   <color name="dashboard_interview_background">#FFFFFF</color>
   <color name="dashboard_new_tab">#6D6D6D</color>
   <color name="dashboard_prefilled_question">#747474</color>
