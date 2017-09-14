@@ -30,7 +30,7 @@
                     },
                     {
                         render: function (data, type, row) {
-                            return getLinkToInterviews(model, data === "" ? data : "(" + data + ")", row);
+                            return "<span>" + (data === "" ? data : "(" + data + ")") + "</span>";
                         }
                     },
                     {
