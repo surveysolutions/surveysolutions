@@ -10,9 +10,9 @@ namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
     [TestFixture()]
     public class ExportQuestion_Variable_Tests
     {
-        [TestCase(789, VariableType.LongInteger, "789")]
+        [TestCase(789L, VariableType.LongInteger, "789")]
         [TestCase(789.56, VariableType.Double, "789.56")]
-        [TestCase(true, VariableType.Boolean, "True")]
+        [TestCase(true, VariableType.Boolean, "1")]
         [TestCase("it is string", VariableType.String, "it is string")]
         public void when_export_variable(object variable, VariableType variableType, string exportResult)
         {

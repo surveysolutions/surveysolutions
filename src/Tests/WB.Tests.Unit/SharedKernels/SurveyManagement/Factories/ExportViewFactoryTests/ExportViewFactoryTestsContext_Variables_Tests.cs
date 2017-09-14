@@ -48,9 +48,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         }
 
         [TestCase("it is string", VariableType.String, "it is string")]
-        [TestCase(789, VariableType.LongInteger, "789")]
+        [TestCase(789L, VariableType.LongInteger, "789")]
         [TestCase(789.56, VariableType.Double, "789.56")]
-        [TestCase(true, VariableType.Boolean, "True")]
+        [TestCase(true, VariableType.Boolean, "1")]
         public void when_creating_interview_export_view_by_interview_with_1_variable(object variable, VariableType variableType, string exportResult)
         {
             var interviewData = Create.Entity.InterviewData(variableId, variable);
