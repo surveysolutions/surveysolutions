@@ -22,7 +22,7 @@
       <Button style="@style/Interview_Question_InputButton"
               local:MvxBind="HideKeyboardOnClick .; 
                           Click RecordAudioCommand; 
-                          Tag Format('Answer_{0}', Identity);
+                          Tag Format('btnAnswer_{0}', Identity);
                           Text If(QuestionState.IsAnswered, Localization('Interview_Questions_Audio_RecordNew'), Localization('Interview_Questions_Audio_SaveAnswer'));
                           BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
     </LinearLayout>
