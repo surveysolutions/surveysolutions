@@ -15,7 +15,7 @@
                    local:MvxBind="Visible QuestionState.IsAnswered">
         <TableRow>
           <TextView style="@style/Interview_Question_RecordedAnswer"
-                    local:MvxBind="Text Answer;" />
+                    local:MvxBind="Text Answer; Tag Format('Answer_{0}', Identity)" />
           <include layout="@layout/interview_question__remove_button_recorded" />
         </TableRow>
       </TableLayout>

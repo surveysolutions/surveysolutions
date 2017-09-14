@@ -16,7 +16,7 @@
                       android:layout_height="wrap_content"
                       android:text="Area: " />          
             <TextView style="@style/Interview_Question_RecordedAnswer"
-                    local:MvxBind="Text Answer.AreaSize; Visible QuestionState.IsAnswered" />
+                    local:MvxBind="Text Answer.AreaSize; Tag Format('Answer_{0}', Identity); Visible QuestionState.IsAnswered" />
         </TableRow>
 
         <TableRow local:MvxBind="Visible QuestionState.IsAnswered">
@@ -26,7 +26,7 @@
                       android:textStyle="bold"
                       android:text="Length: " />            
             <TextView style="@style/Interview_Question_RecordedAnswer"
-                    local:MvxBind="Text Answer.Length; Visible QuestionState.IsAnswered" />
+                    local:MvxBind="Text Answer.Length; Tag Format('Answer_{0}', Identity); Visible QuestionState.IsAnswered" />
           <include layout="@layout/interview_question__remove_button_recorded" />
         </TableRow>
       </TableLayout>
