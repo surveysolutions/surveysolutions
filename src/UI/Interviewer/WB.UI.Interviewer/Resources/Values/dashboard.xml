@@ -109,8 +109,11 @@
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:orientation">horizontal</item>
+    <item name="android:fontFamily">Roboto</item>
     <item name="android:textSize">@dimen/textsize_20</item>
     <item name="android:singleLine">true</item>
+    <item name="android:layout_marginTop">2dp</item>
+    <item name="android:layout_marginBottom">2dp</item>
   </style>
 
   <style name="Dashboard_InterviewItem_PrefilledQuestion_Question" parent="AppTheme">
