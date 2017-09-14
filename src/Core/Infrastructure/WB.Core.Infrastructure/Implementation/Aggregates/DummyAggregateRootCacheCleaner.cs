@@ -1,7 +1,6 @@
 ﻿using System;
-using WB.Core.Infrastructure.Implementation.Aggregates;
 
-namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
+namespace WB.Core.Infrastructure.Implementation.Aggregates
 {
     public class DummyAggregateRootCacheCleaner : IAggregateRootCacheCleaner
     {

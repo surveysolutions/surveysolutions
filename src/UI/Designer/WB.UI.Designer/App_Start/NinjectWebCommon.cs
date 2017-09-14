@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Logging;
@@ -112,6 +113,8 @@ namespace WB.UI.Designer.App_Start
                 new FileInfrastructureModule(),
                 new ProductVersionModule(typeof(MvcApplication).Assembly)
                 );
+
+            kernel.Bind<IAggregateRootCacheCleaner>().To<DummyAggregateRootCacheCleaner>().InSingletonScope();
 
             kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(FilterScope.Controller)
                 .WhenControllerHas<ApiValidationAntiForgeryTokenAttribute>()
