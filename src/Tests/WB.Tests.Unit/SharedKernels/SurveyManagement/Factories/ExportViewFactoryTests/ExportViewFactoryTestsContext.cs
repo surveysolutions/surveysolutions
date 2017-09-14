@@ -21,6 +21,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
@@ -30,14 +31,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         protected static ExportViewFactory CreateExportViewFactory(
             IQuestionnaireStorage questionnaireStorage = null,
             IExportQuestionService exportQuestionService = null,
-            IRosterStructureService rosterStructureService = null)
+            IRosterStructureService rosterStructureService = null,
+            bool supportExportVariables = true)
         {
+            var questionnaireBrowseItem = Create.Entity.QuestionnaireBrowseItem(questionnaireId: Guid.NewGuid(), allowExportVariables: supportExportVariables);
             return new ExportViewFactory(
                 Mock.Of<IFileSystemAccessor>(),
                 exportQuestionService ?? new ExportQuestionService(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 rosterStructureService ?? new RosterStructureService(),
-                Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
+                Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(s => s.GetById(Moq.It.IsAny<object>()) == questionnaireBrowseItem));
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter( params IComposite[] chapterChildren)
