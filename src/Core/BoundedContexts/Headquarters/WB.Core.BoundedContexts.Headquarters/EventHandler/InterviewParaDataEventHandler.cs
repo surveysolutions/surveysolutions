@@ -60,7 +60,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewHistoryView, InterviewReceivedByInterviewer>,
         IUpdateHandler<InterviewHistoryView, InterviewReceivedBySupervisor>,
         IUpdateHandler<InterviewHistoryView, AreaQuestionAnswered>,
-        IUpdateHandler<InterviewHistoryView, AudioQuestionAnswered>
+        IUpdateHandler<InterviewHistoryView, AudioQuestionAnswered>,
+        IUpdateHandler<InterviewHistoryView, VariablesChanged>,
+        IUpdateHandler<InterviewHistoryView, VariablesEnabled>,
+        IUpdateHandler<InterviewHistoryView, VariablesDisabled>
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IUserViewFactory userReader;
@@ -411,7 +414,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     }
                 }
                 return new InterviewHistoricalRecordView(0, action, userName, userRole, newParameters, timestamp);
-
             }
             if (action == InterviewHistoricalAction.GroupDisabled || action == InterviewHistoricalAction.GroupEnabled)
             {
@@ -430,6 +432,34 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                         new Dictionary<string, string> { { "responsible", this.GetUserName(this.GetUserDocument(responsibleId)) } },
                         timestamp);
                 }
+            }
+            if (action == InterviewHistoricalAction.VariableSet 
+                || action == InterviewHistoricalAction.VariableEnabled 
+                || action == InterviewHistoricalAction.VariableDisabled)
+            {
+                var newParameters = new Dictionary<string, string>();
+                if (parameters.ContainsKey("variableId"))
+                {
+                    var variableId = Guid.Parse(parameters["variableId"]);
+                    var variable = questionnaire.HeaderToLevelMap.SelectMany(h => h.Value.HeaderItems).FirstOrDefault(q => q.Key == variableId);
+
+                    if (variable.Value == null)
+                        return null;
+
+                    if (!variable.Equals(new KeyValuePair<Guid, ExportedVariableHeaderItem>()))
+                    {
+                        newParameters["variable"] = variable.Value.VariableName;
+                        if (action == InterviewHistoricalAction.AnswerSet)
+                        {
+                            newParameters["value"] = parameters["value"];
+                        }
+                        if (parameters.ContainsKey("roster"))
+                        {
+                            newParameters["roster"] = parameters["roster"];
+                        }
+                    }
+                }
+                return new InterviewHistoricalRecordView(0, action, userName, userRole, newParameters, timestamp);
             }
             return new InterviewHistoricalRecordView(0, action, userName, userRole, parameters, timestamp);
         }
@@ -649,6 +679,62 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, @event.Payload.AnswerTimeUtc,
             this.CreateAnswerParameters(@event.Payload.QuestionId, $"{@event.Payload.FileName}, {@event.Payload.Length}", @event.Payload.RosterVector));
             return view;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<VariablesChanged> @event)
+        {
+            foreach (var variable in @event.Payload.ChangedVariables)
+            {
+                this.AddHistoricalRecord(view, InterviewHistoricalAction.VariableSet, null, null,
+                    this.CreateNewVariableValueParameters(variable.Identity.Id, variable.NewValue, variable.Identity.RosterVector));
+            }
+            return view;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<VariablesEnabled> @event)
+        {
+            foreach (var variable in @event.Payload.Variables)
+            {
+                this.AddHistoricalRecord(view, InterviewHistoricalAction.VariableEnabled, null, null,
+                    this.CreateVariableParameters(variable.Id, variable.RosterVector));
+            }
+            return view;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<VariablesDisabled> @event)
+        {
+            foreach (var variable in @event.Payload.Variables)
+            {
+                this.AddHistoricalRecord(view, InterviewHistoricalAction.VariableDisabled, null, null,
+                    this.CreateVariableParameters(variable.Id, variable.RosterVector));
+            }
+            return view;
+        }
+
+        private Dictionary<string, string> CreateVariableParameters(Guid variableId, decimal[] propagationVector)
+        {
+            var result = new Dictionary<string, string>()
+            {
+                { "variableId", variableId.FormatGuid() }
+            };
+
+            if (propagationVector.Length > 0)
+            {
+                result.Add("roster", string.Join(",", propagationVector));
+            }
+            else
+            {
+                result.Add("roster", string.Empty);
+            }
+            return result;
+        }
+
+        private Dictionary<string, string> CreateNewVariableValueParameters(Guid variableId, object newValue,
+            decimal[] propagationVector)
+        {
+            var result = this.CreateVariableParameters(variableId, propagationVector);
+            result.Add("value", newValue?.ToString() ?? string.Empty);
+            return result;
         }
     }
 }
