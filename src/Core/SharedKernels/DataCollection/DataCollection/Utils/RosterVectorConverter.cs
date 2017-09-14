@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
         {
             var vector = (RosterVector)value;
 
-            if (serializer.TypeNameHandling == TypeNameHandling.All)
+            if (serializer.TypeNameHandling == TypeNameHandling.All || serializer.TypeNameHandling == TypeNameHandling.Auto)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("$type");
