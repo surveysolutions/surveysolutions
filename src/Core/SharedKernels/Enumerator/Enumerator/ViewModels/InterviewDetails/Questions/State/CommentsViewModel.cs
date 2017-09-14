@@ -155,9 +155,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task SendCommentQuestionCommandAsync()
         {
-            if ((this.InterviewerComment?.ToLower() ?? String.Empty) == "throw")
-                throw new Exception("This is testing excetion to help QA to reproduce IN app crash.");
-
             await this.commandService.ExecuteAsync(
                 new CommentAnswerCommand(
                     interviewId: Guid.Parse(this.interviewId),
