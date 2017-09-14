@@ -229,7 +229,8 @@ namespace WB.Tests.Integration
                 eventBus ?? Mock.Of<ILiteEventBus>(),
                 snapshooter ?? Mock.Of<IAggregateSnapshotter>(), Mock.Of<IServiceLocator>(),
                 Mock.Of<IPlainAggregateRootRepository>(),
-                new AggregateLock());
+                new AggregateLock(),
+                Mock.Of<IAggregateRootCacheCleaner>());
         }
 
         public static Answer Answer(string answer, decimal value, decimal? parentValue = null)
