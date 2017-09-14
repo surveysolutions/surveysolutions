@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         }
         
         public int AssignmentId => this.assignment.Id;
-        public MvxColor ColorStatus => MvxColors.Black;
+
         public string QuestionnaireName { get; private set; }
         public string ReceivedDate { get; private set; }
         public string ReceivedTime { get; private set; }
@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public string Comment => InterviewerUIResources.DashboardItem_AssignmentCreatedComment.FormatString(this.interviewsByAssignmentCount);
 
-        public string IdLabel => InterviewerUIResources.Dashboard_Assignment_CardTitleFormat.FormatString(this.AssignmentId);
+        public string IdLabel => InterviewerUIResources.Dashboard_CardIdTitleFormat.FormatString(this.AssignmentId);
 
         public string Title => this.QuestionnaireName;
 

@@ -98,15 +98,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to id {0}.
-        /// </summary>
-        public static string Dashboard_Assignment_CardTitleFormat {
-            get {
-                return ResourceManager.GetString("Dashboard_Assignment_CardTitleFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Interview {0} of  unlimited for this assignment.
         /// </summary>
         public static string Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat {
@@ -139,6 +130,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Dashboard_AssignmentsTabTitle {
             get {
                 return ResourceManager.GetString("Dashboard_AssignmentsTabTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to id {0}.
+        /// </summary>
+        public static string Dashboard_CardIdTitleFormat {
+            get {
+                return ResourceManager.GetString("Dashboard_CardIdTitleFormat", resourceCulture);
             }
         }
         
@@ -190,11 +190,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to № {0}, interview {1}.
+        ///   Looks up a localized string similar to Assignment #{0}.
         /// </summary>
-        public static string Dashboard_InterviewCard_Title {
+        public static string Dashboard_Interview_AssignmentLabelFormat {
             get {
-                return ResourceManager.GetString("Dashboard_InterviewCard_Title", resourceCulture);
+                return ResourceManager.GetString("Dashboard_Interview_AssignmentLabelFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} questions answered.
+        /// </summary>
+        public static string Dashboard_Interview_QuestionsAnsweredFormat {
+            get {
+                return ResourceManager.GetString("Dashboard_Interview_QuestionsAnsweredFormat", resourceCulture);
             }
         }
         

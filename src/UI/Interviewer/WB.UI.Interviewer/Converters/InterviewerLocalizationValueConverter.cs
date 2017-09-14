@@ -23,11 +23,16 @@ namespace WB.UI.Interviewer.Converters
                     culture = indonesianCultureInfo;
             }
 
-            var localizeString = InterviewerUIResources.ResourceManager.GetString(value, culture);
-            if (!localizeString.IsNullOrEmpty())
-                return localizeString;
-
+            try
+            {
+                var localizeString = InterviewerUIResources.ResourceManager.GetString(value, culture);
+                if (!localizeString.IsNullOrEmpty())
+                    return localizeString;
+            
             return UIResources.ResourceManager.GetString(value, culture);
+            }
+            catch { }
+            return value;
         }
     }
 }
