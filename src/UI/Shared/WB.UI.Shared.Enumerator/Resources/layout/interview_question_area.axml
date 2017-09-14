@@ -33,6 +33,7 @@
       <Button style="@style/Interview_Question_InputButton"
               local:MvxBind="HideKeyboardOnClick .; 
                            Click SaveAnswerCommand; 
+                           Tag Format('Answer_{0}', Identity);
                            Text Localization('Interview_Questions_Area_SaveAnswer'); 
                            BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
     </LinearLayout>
