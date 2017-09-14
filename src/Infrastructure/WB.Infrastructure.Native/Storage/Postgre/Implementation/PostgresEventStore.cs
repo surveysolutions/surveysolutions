@@ -23,6 +23,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         private static int BatchSize = 4096;
         private static string tableNameWithSchema;
         private readonly string tableName;
+        private readonly string[] obsoleteEvents = new[] { "tabletregistered" };
 
         public PostgresEventStore(PostgreConnectionSettings connectionSettings, 
             IEventTypeResolver eventTypeResolver,
@@ -72,7 +73,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     {
                         while (reader.Read())
                         {
-                            yield return this.ReadSingleEvent(reader);
+                            var singleEvent = this.ReadSingleEvent(reader);
+                            if (singleEvent != null)
+                                yield return singleEvent;
                         }
                     }
                 }
@@ -240,7 +243,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 {
                     while (reader.Read())
                     {
-                        yield return this.ReadSingleEvent(reader);
+                        var singleEvent = this.ReadSingleEvent(reader);
+                        if (singleEvent != null)
+                            yield return singleEvent;
                     }
                 }
             }
@@ -278,7 +283,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     {
                         while (reader.Read())
                         {
-                            events.Add(this.ReadSingleEvent(reader));
+                            var singleEvent = this.ReadSingleEvent(reader);
+                            if (singleEvent != null)
+                                events.Add(singleEvent);
                         }
                     }
 
@@ -321,6 +328,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             string value = (string) npgsqlDataReader["value"];
 
             string eventType = (string) npgsqlDataReader["eventtype"];
+
+            if (obsoleteEvents.Contains(eventType.ToLower()))
+                return null;
+
             var resolvedEventType = this.eventTypeResolver.ResolveType(eventType);
             IEvent typedEvent = JsonConvert.DeserializeObject(value, resolvedEventType, EventSerializerSettings.BackwardCompatibleJsonSerializerSettings) as IEvent;
 
