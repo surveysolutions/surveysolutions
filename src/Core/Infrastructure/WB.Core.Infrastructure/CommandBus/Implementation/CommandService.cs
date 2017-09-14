@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -19,6 +20,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
         private readonly ILiteEventBus eventBus;
         private readonly IAggregateSnapshotter snapshooter;
         private readonly IServiceLocator serviceLocator;
+        private readonly IAggregateRootCacheCleaner aggregateRootCacheCleaner;
 
         private int executingCommandsCount = 0;
         private readonly object executionCountLock = new object();
@@ -31,7 +33,8 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             IAggregateSnapshotter snapshooter,
             IServiceLocator serviceLocator,
             IPlainAggregateRootRepository plainRepository,
-            IAggregateLock aggregateLock)
+            IAggregateLock aggregateLock, 
+            IAggregateRootCacheCleaner aggregateRootCacheCleaner)
         {
             this.eventSourcedRepository = eventSourcedRepository;
             this.eventBus = eventBus;
@@ -39,6 +42,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             this.serviceLocator = serviceLocator;
             this.plainRepository = plainRepository;
             this.aggregateLock = aggregateLock;
+            this.aggregateRootCacheCleaner = aggregateRootCacheCleaner;
         }
 
         public Task ExecuteAsync(ICommand command, string origin, CancellationToken cancellationToken)
@@ -195,7 +199,16 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            commandHandler.Invoke(command, aggregate);
+            try
+            {
+                commandHandler.Invoke(command, aggregate);
+            }
+            catch (OnEventApplyException)
+            {
+                // evict AR only if exception occured on event apply
+                aggregateRootCacheCleaner.Evict(aggregateId);
+                throw;
+            }
 
             if (!aggregate.HasUncommittedChanges())
                 return;
@@ -211,6 +224,11 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
                 {
                     postProcessor.Invoke(aggregate, command);
                 }
+            }
+            catch (AggregateException)
+            {
+                aggregateRootCacheCleaner.Evict(aggregateId);
+                throw;
             }
             finally
             {
