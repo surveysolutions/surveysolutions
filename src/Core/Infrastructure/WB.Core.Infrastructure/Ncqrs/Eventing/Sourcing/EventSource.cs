@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
-using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace Ncqrs.Eventing.Sourcing
 {
