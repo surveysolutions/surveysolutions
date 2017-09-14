@@ -483,8 +483,8 @@ namespace WB.Tests.Abc.TestFactories
             IMacrosSubstitutionService macrosSubstitutionService = null)
         {
             return new ExpressionsPlayOrderProvider(
-                expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
-                macrosSubstitutionService ?? Create.Service.DefaultMacrosSubstitutionService());
+                    new ExpressionsGraphProvider(expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
+                        macrosSubstitutionService ?? Create.Service.DefaultMacrosSubstitutionService()));
         }
 
         public IMacrosSubstitutionService DefaultMacrosSubstitutionService()
