@@ -29,6 +29,7 @@ namespace WB.Tests.Unit.Designer.Api.Tester.QuestionnairesControllerTests
                 viewFactory: viewFactory ?? Substitute.For<IQuestionnaireListViewFactory>(),
                 engineVersionService: engineVersionService ?? Substitute.For<IDesignerEngineVersionService>(),
                 expressionsPlayOrderProvider: expressionsPlayOrderProvider ?? Substitute.For<IExpressionsPlayOrderProvider>(),
+                
                 questionnaireCompilationVersionService: questionnaireCompilationVersionService ?? Mock.Of<IQuestionnaireCompilationVersionService>());
         }
     }
