@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform.UI;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -32,10 +33,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             var questionnaire = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
             this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title,
                 this.assignment.Title, questionnaire.Version);
-
-            this.ReceivedDate = assignment.ReceivedDateUtc.ToLocalTime().ToString("MMM d");
-            this.ReceivedTime = assignment.ReceivedDateUtc.ToLocalTime().ToString("HH:mm");
-
+            
             if (assignmentDocument.LocationQuestionId.HasValue && assignmentDocument.LocationLatitude.HasValue && assignmentDocument.LocationLongitude.HasValue)
                 this.GpsLocation = new InterviewGpsCoordinatesView
                 {
@@ -53,22 +51,43 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         }
         
         public int AssignmentId => this.assignment.Id;
-
+        public MvxColor ColorStatus => MvxColors.Black;
         public string QuestionnaireName { get; private set; }
         public string ReceivedDate { get; private set; }
         public string ReceivedTime { get; private set; }
         public InterviewGpsCoordinatesView GpsLocation { get; private set; }
 
-        private int interviewsLeftByAssignmentCount => this.assignment.Quantity.GetValueOrDefault() - this.interviewsByAssignmentCount;
+        private int InterviewsLeftByAssignmentCount => 
+            this.assignment.Quantity.GetValueOrDefault() - this.interviewsByAssignmentCount;
 
         public string Comment => InterviewerUIResources.DashboardItem_AssignmentCreatedComment.FormatString(this.interviewsByAssignmentCount);
 
-        public string Title => InterviewerUIResources.Dashboard_Assignment_CardTitle.FormatString(this.assignment.Id,
-            this.assignment.Quantity.HasValue
-                ? InterviewerUIResources.Dashboard_AssignmentCard_TitleCountdown.FormatString(interviewsLeftByAssignmentCount)
-                : InterviewerUIResources.Dashboard_AssignmentCard_TitleCountdown_Unlimited);
+        public string IdLabel => InterviewerUIResources.Dashboard_Assignment_CardTitleFormat.FormatString(this.AssignmentId);
 
-        public bool AllowToCreateNewInterview => !this.assignment.Quantity.HasValue || Math.Max(0, interviewsLeftByAssignmentCount) > 0;
+        public string Title => this.QuestionnaireName;
+
+        public string SubTitle
+        {
+            get
+            {
+                if (this.assignment.Quantity.HasValue)
+                {
+                    if (InterviewsLeftByAssignmentCount == 1)
+                    {
+                        return InterviewerUIResources.Dashboard_AssignmentCard_SubTitleSingleInterivew;
+                    }
+
+                    return InterviewerUIResources.Dashboard_AssignmentCard_SubTitleCountdownFormat
+                        .FormatString(this.assignment.Quantity.GetValueOrDefault(), this.assignment.Quantity);
+                }
+                else
+                {
+                    return InterviewerUIResources.Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat.FormatString(this.assignment.Quantity.GetValueOrDefault());
+                }
+            }
+        }
+          
+        public bool AllowToCreateNewInterview => !this.assignment.Quantity.HasValue || Math.Max(0, InterviewsLeftByAssignmentCount) > 0;
 
         public bool HasGpsLocation => this.GpsLocation != null;
 
@@ -90,7 +109,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private void UpdateTitle()
         {
             this.RaisePropertyChanged(() => this.AllowToCreateNewInterview);
-            this.RaisePropertyChanged(() => this.Title);
+            this.RaisePropertyChanged(() => this.SubTitle);
             this.RaisePropertyChanged(() => this.Comment);
         }
 
