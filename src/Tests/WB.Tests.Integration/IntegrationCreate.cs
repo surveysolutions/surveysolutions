@@ -84,8 +84,9 @@ namespace WB.Tests.Integration
             IMacrosSubstitutionService macrosSubstitutionService = null)
         {
             return new ExpressionsPlayOrderProvider(
+                new ExpressionsGraphProvider(
                 expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
-                macrosSubstitutionService ?? DefaultMacrosSubstitutionService());
+                macrosSubstitutionService ?? DefaultMacrosSubstitutionService()));
         }
 
         private static ICompilerSettings GetCompilerSettingsStub()
